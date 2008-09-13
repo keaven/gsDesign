@@ -1,0 +1,8 @@
+Package: gsDesign
+Version: 1.17.07
+Title: Group Sequential Design
+Author: Keaven Anderson 
+Maintainer: Keaven Anderson <keaven_anderson@merck.com>
+Description: gsDesign is a package that derives group sequential designs and describes their properties.
+License: GPL (version 2 or later)
+Packaged: Mon Jan 14 15:39:21 2008; Anderkea
