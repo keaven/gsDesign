@@ -1,0 +1,3 @@
+useDynLib(gsDesign)
+export(gsDesign,gsProbability,gsCP,gsBoundCP,print.gsDesign,plot.gsDesign,print.gsProbability,plot.gsProbability,SSizeLF,norpts,sfpower,sfHSD,sfexp,sfbetadist,sfLDOF,sfLDPocock,sfpoints,sflogistic,sfexval,sfexval2,sfcauchy,sfnorm,sfTDist,SpendingFunction,MandNsim,MandNtest,FarrMannSS)
+
