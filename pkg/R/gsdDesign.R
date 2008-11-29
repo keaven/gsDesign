@@ -1,80 +1,134 @@
-#---------------------------------------------------------------------------------
+##################################################################################
+#  File gsDesign.R
+#  Part of the R package gsDesign
+#
+#  Functions:
+#  gsDesign:          calculate boundaries and total information required 
+#                     for a group sequential design
+#  gsProbability:     calculate boundary crossing probabilities for a group
+#                     sequential design
+#
+#  Author(s):         Keaven Anderson, PhD. timing/ Jennifer Sun, MS.
+#
+#  Date Completed:    1JAN2007 
+#
+#  Date Updated:      17NOV2008
+#  Revisions:
+#                     17NOV2008: updated code formatting per B. Constantine 
+#                                recommendations
+#
+#  R Version:         2.7.2
+#
+##################################################################################
 
-#Program:            gsDesign.R
-
-#Function:           gsDesign:      calculate boundaries and total information required 
-#                                   for a group sequential design
-#                    gsProbability: calculate boundary crossing probabilities for a group
-#                                   sequential design
-
-#Author(s):          Keaven Anderson, PhD. timing/ Jennifer Sun, MS.
-
-#Date Completed:     1JAN2007 
-
-#Date Updated:	   13SEP2008
-
-#R Version:          2.7.2
-
-#---------------------------------------------------------------------------------*/
-# Derive a group sequential design and return in a gsDesign structure
-gsDesign<-function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
-                   delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
-                   sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I=0, maxn.IPlan=0) 
+"gsDesign"<-function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
+                     delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
+                     sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I=0, maxn.IPlan=0) 
 {
-# set up class variable x for gsDesign being requested
-      x<-list(k=as.integer(k),test.type=as.integer(test.type),alpha=as.real(alpha),beta=as.real(beta),astar=as.real(astar),
-              delta=as.real(delta),n.fix=as.real(n.fix),timing=as.vector(timing),
-              tol=as.real(tol),r=as.integer(r),n.I=n.I,maxn.IPlan=maxn.IPlan)
-	class(x)<-"gsDesign"
-# check parameters other than spending functions
-	x<-gsDErrorCheck(x)
-      if (x$errcode>0) return(x)
-# set up spending for upper bound
-	if (is.character(sfu))
-	{   upper<-list(sf=sfu,name=sfu,parname="Delta",param=sfupar,errcode=0,errmsg="No errors detected")
-	    class(upper)<-"spendfn"
-	    if (upper$name!="OF" && upper$name!="Pocock" && upper$name != "WT")
-             upper<-gsReturnError(upper,errcode=8,errmsg="Character specification of upper spending may only be WT, OF or Pocock")
-          if (upper$name=="OF") upper$param<-NULL
-          else if (upper$name=="Pocock") upper$param<-NULL
-      }
-      else if (!is.function(sfu))
-      {   upper<-list(errcode=8,errmsg="Upper spending function mis-specified")
-          class(upper)<-"spendfn"
-      }
-      else
-	{	upper<-sfu(x$alpha,x$timing,sfupar)
-		upper$sf<-sfu
-	}
-      x$upper<-upper
-	if (x$upper$errcode>0) return(gsReturnError(x,errcode=8,errmsg=upper$errmsg))
-# set up spending for lower bound
-      if (x$test.type==1) x$lower<-NULL
-      else if (x$test.type==2) x$lower<-x$upper
-      else
-      {   if (!is.function(sfl))
-          {   x$lower<-list(errcode=9,errmsg="Lower spending function must be a built-in or user-defined function that returns object with class spendfn")
-              class(x$lower)<-"spendfn"
-          }
-          else if (max(test.type==3:4)==1) x$lower<-sfl(x$beta,x$timing,sflpar)
-	    else if (max(test.type==5:6)==1) 
-          {   if (x$astar==0) x$astar<-1-x$alpha
-              x$lower<-sfl(x$astar,x$timing,sflpar)
-          }
-	    x$lower$sf<-sfl
-	    if (x$lower$errcode>0) return(gsReturnError(x,errcode=8,errmsg=x$lower$errmsg))
-      }
+    # Derive a group sequential design and return in a gsDesign structure
 
-# debugging call to check structure set up
-#return(x)}
-# call appropriate calculation routine according to test.type
-      if (x$test.type==1)     return(gsDType1(x))
-      else if(x$test.type==2) return(gsDType2and5(x))
-      else if(x$test.type==3) return(gsDType3(x))
-      else if(x$test.type==4) return(gsDType4(x))
-      else if(x$test.type==5) return(gsDType2and5(x))
-      else if(x$test.type==6) return(gsDType6(x))
+    # set up class variable x for gsDesign being requested
+    x <- list(k = as.integer(k), test.type = as.integer(test.type), alpha =as.real(alpha),
+              beta = as.real(beta), astar = as.real(astar),
+              delta = as.real(delta), n.fix = as.real(n.fix), timing = as.vector(timing),
+              tol = as.real(tol), r = as.integer(r), n.I = n.I, maxn.IPlan = maxn.IPlan)
+			  
+    class(x) <- "gsDesign"
+	
+    # check parameters other than spending functions
+    x <- gsDErrorCheck(x)
+	
+    if (x$errcode > 0) 
+    {
+        return(x)
+    }
+
+    # set up spending for upper bound
+    if (is.character(sfu))
+    {  
+        upper <- list(sf = sfu, name = sfu, parname = "Delta", param = sfupar,
+                      errcode = 0, errmsg = "No errors detected")
+        
+        class(upper) <- "spendfn"
+		
+        if (upper$name != "OF" && upper$name != "Pocock" && upper$name != "WT")
+        {
+             upper <- gsReturnError(upper, errcode=8, 
+                                    errmsg="Character specification of upper spending may only be WT, OF or Pocock")
+        }
+		
+        if (upper$name == "OF" || upper$name == "Pocock") 
+        {    
+            upper$param <- NULL
+        }
+    }
+    else if (!is.function(sfu))
+    {   
+        upper <- list(errcode = 8, errmsg = "Upper spending function mis-specified")
+        class(upper) <- "spendfn"
+    }
+    else
+    {	
+        upper <- sfu(x$alpha, x$timing, sfupar)
+        upper$sf <- sfu
+    }
+	
+    x$upper <- upper
+    
+	if (x$upper$errcode > 0)
+    {
+         return(gsReturnError(x, errcode=8, errmsg=upper$errmsg))
+    }
+
+    # set up spending for lower bound
+    if (x$test.type == 1) 
+    {
+        x$lower <- NULL
+    }
+    else if (x$test.type == 2) 
+    {
+        x$lower <- x$upper
+    }
+    else
+    {   
+        if (!is.function(sfl))
+        {     
+            x$lower <- list(errcode=9,
+                errmsg="Lower spending function must be a built-in or user-defined function that returns object with class spendfn")
+            class(x$lower) <- "spendfn"
+        }
+        else if (max(test.type == 3:4) == 1) 
+        {
+            x$lower <- sfl(x$beta,x$timing,sflpar)
+        }
+        else if (max(test.type == 5:6) == 1) 
+        {   
+            if (x$astar == 0) 
+            {
+                x$astar <- 1 - x$alpha
+            }
+            x$lower <- sfl(x$astar, x$timing, sflpar)
+         }
+		 
+         x$lower$sf <- sfl
+	 
+         if (x$lower$errcode > 0) 
+         { 
+            return(gsReturnError(x, errcode=8, errmsg=x$lower$errmsg))
+         }
+    }
+
+    # debugging call to check structure set up
+    # return(x)}
+    # call appropriate calculation routine according to test.type
+    if (x$test.type==1)     return(gsDType1(x))
+    else if(x$test.type==2) return(gsDType2and5(x))
+    else if(x$test.type==3) return(gsDType3(x))
+    else if(x$test.type==4) return(gsDType4(x))
+    else if(x$test.type==5) return(gsDType2and5(x))
+    else if(x$test.type==6) return(gsDType6(x))
 }
+
 ###### gsDType1: calculate bound assuming one-sided rule (only upper bound)
 gsDType1<-function(x,ss=1)
 {	# set lower bound
@@ -123,9 +177,9 @@ gsDType2and5<-function(x)
 {	if (max(x$upper$name==c("WT","Pocock","OF"))>0)
 	{	if (x$test.type==5)
                 return(gsReturnError(x,errcode=8,errmsg="Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing"))
-            if (x$upper$name=="WT") Delta=x$upper$param
-            else if (x$upper$name=="Pocock") Delta=.5
-            else Delta=0
+            if (x$upper$name=="WT") Delta<-x$upper$param
+            else if (x$upper$name=="Pocock") Delta<-.5
+            else Delta<-0
             c<-WT(Delta,x$alpha,1,x$timing,x$tol,x$r)
 		x$upper$bound<-c*x$timing^(Delta-.5)
 		x$upper$spend<-as.vector(gsprob(0.,x$timing,-x$upper$bound,x$upper$bound,x$r)$probhi)
