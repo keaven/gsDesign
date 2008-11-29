@@ -113,18 +113,18 @@ which \code{p10} and \code{p20} are used under the null hypothesis.
 
 \examples{
 # Compute chi-square test statistic comparing 39/500 to 13/500
-x<-MandNtest(x1=39,x2=13,n1=500,n2=500)
+x<-MandNtest(x1=39,x2=23,n1=500,n2=500)
 x
 pchisq(x,1,lower.tail=FALSE)
 
 # Compute with unadjusted variance
-x0<-MandNtest(x1=39,x2=13,n1=500,n2=500,adj=0)
+x0<-MandNtest(x1=39,x2=23,n1=500,n2=500,adj=0)
 x0
 pchisq(x0,1,lower.tail=FALSE)
 
-# Perform 5 million simulations to evaluate how valid the above asymptotic p-values are 
-sum(x<=MandNsim(p1=.078,p2=.078,n1=500,n2=500,nsim=5000000))/5000000
-sum(x<=MandNsim(p1=.052,p2=.052,n1=500,n2=500,nsim=5000000))/5000000
+# Perform 5 mhundred thousand simulations to evaluate how valid the above asymptotic p-values are 
+sum(x<=MandNsim(p1=.078,p2=.078,n1=500,n2=500,nsim=500000))/500000
+sum(x<=MandNsim(p1=.052,p2=.052,n1=500,n2=500,nsim=500000))/500000
 
 # Perform a non-inferiority test to see if p2=400/500 is within 5% of p1=410/500
 # use a z-statistic with unadjusted variance
