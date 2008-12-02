@@ -1,56 +1,89 @@
-\name{FarrMannSS}
-\alias{FarrMannSS}
-\alias{MandNtest}
-\alias{MandNsim}
-\alias{Sample Size for Two-Sample Binomial Test}
-\title{3.2: Two-sample binomial sample size}
-\description{\code{FarrMannSS()} computes sample size using the method of Farrington and Manning (1990) to derive sample size
-required to power a trial to test the difference 
-in event rates between two binomial event rates. The routine can be used for a test of superiority or non-inferiority.
-For a design that tests for superiority \code{FarrMannSS()} is consistent with the method of Fleiss, Tytun, and Ury 
-(but without the continuity correction) to test for no difference between event rates.
+\name{nBinomial}
+\alias{testBinomial}
+\alias{ciBinomial}
+\alias{nBinomial}
+\alias{simBinomial}
+\title{3.2: Testing, Confidence Intervals and Sample Size for Comparing Two Binomial Rates}
+\description{Support is provided for sample size estimation, testing confidence intervals and simulation for fixed sample size trials 
+(i.e., not group sequential or adaptive) with two arms and binary outcomes. 
+Both superiority and non-inferiority trials are considered.
+While all routines default to comparisons of risk-difference, 
+computations based on risk-ratio and odds-ratio are also provided. 
+
+\code{nBinomial()} computes sample size using the method of Farrington and Manning (1990) to derive sample size
+required to power a trial to test the difference between two binomial event rates. 
+The routine can be used for a test of superiority or non-inferiority.
+For a design that tests for superiority \code{nBinomial()} is consistent with the method of Fleiss, Tytun, and Ury 
+(but without the continuity correction) to test for differences between event rates.
 This routine is consistent with the Hmisc package routine bsamsize for superiority designs.
+Vector arguments allow computing sample sizes for multiple scenarios for comparative purposes.
 
-\code{MandNtest()} computes a Z- or Chi-square-statistic that compares two binomial event rates using 
+\code{testBinomial()} computes a Z- or Chi-square-statistic that compares two binomial event rates using 
 the method of Miettinen and Nurminen (1980). This can be used for superiority or non-inferiority testing.
+Vector arguments allow easy incorporation into simulation routines for fixed, group sequential and adaptive designs.
 
-\code{MandNsim()} performs simulations to estimate the power for a Miettinin and Nurminen (1980) test
+\code{ciBinomial()} computes confidence intervals for 1) the difference between two rates, 2) the risk-ratio for two rates 
+or the odds-ratio for two rates. This procedure provides inference that is consistent with \code{testBinomial} in that 
+the confidence intervals are produced by inverting the testing procedures in \code{testBinomial}.
+
+\code{simBinomial()} performs simulations to estimate the power for a Miettinin and Nurminen (1980) test
 comparing two binomial rates for superiority or non-inferiority. 
-As noted in documentation for \code{bpower.sim()}, by using \code{MandNsim()} you can see that the formulas 
+As noted in documentation for \code{bpower.sim()}, by using \code{testBinomial()} you can see that the formulas 
 without any continuity correction are quite accurate. 
-In fact, a continuity-corrected test is significantly lower (Gordon and Watson, 1996). 
-Thus, no continuity corrections are implemented here.
+In fact, Type I error for a continuity-corrected test is significantly lower (Gordon and Watson, 1996)
+than the nominal rate. 
+Thus, as a default no continuity corrections are performed.
 }
 
 \usage{
-FarrMannSS(p1, p2, fraction = 0.5, alpha = 0.05, power = 0.8, beta=0, 
-           delta0=0, ratio=0, sided=2, outtype=2) 
-MandNtest(x1,x2,n1,n2,delta0=0,testtype="Chisq",adj=1)
-MandNsim(p1, p2, n1, n2, alpha = 0.05, delta0=0, nsim = 10000, 
-           testtype="Chisq", adj=1)
+nBinomial(p1, p2, alpha=.025, beta=0.1, delta0=0, ratio=1, sided=1, outtype=1,
+          scale="Difference") 
+testBinomial(x1, x2, n1, n2, delta0=0, chisq=0, adj=0,
+             scale="Difference", tol=.1e-10)
+ciBinomial(x1, x2, n1, n2, alpha=.05, adj=0, scale="Difference")
+simBinomial(p1, p2, n1, n2, delta0=0, nsim=10000, chisq=0, adj=0,
+            scale="Difference")
 }
 \arguments{
+For \code{simBinomial()} all arguments must have length 1.
+In general, arguments for \code{nBinomial()}, \code{testBinomial()} and \code{ciBinomial} may be scalars or vectors, 
+in which case they return a vector of sample sizes and powers, respectively.
+There can be a mix of scalar and vector arguments. 
+All arguments specified using vectors must have the same length.  
 
-\item{p1}{event rate in group 1}  
-\item{p2}{event rate in group 2}  
-\item{fraction}{fraction of observations in group 1}  
+\item{p1}{event rate in group 1 under the alternative hypothesis}  
+\item{p2}{event rate in group 2 under the alternative hypothesis}  
 \item{alpha}{type I error; see \code{sided} below to distinguish between 1- and 2-sided tests}
-\item{power}{the desired probability of detecting a difference}  
-\item{beta}{type II error; used instead of \code{power} when non-zero}
-\item{delta0}{The absolute difference in event rates that is considered unacceptable.}
-\item{ratio}{sample size ratio for group 2 divided by group 1; used instead of \code{fraction} when non-zero}
+\item{beta}{type II error}
+\item{delta0}{A value of 0 (the default) always represents no difference between treatment groups under the null hypothesis.
+\code{delta0} is interpreted differently depending on the value of the parameter \code{scale}. 
+If \code{scale="Difference"} (the default), 
+\code{delta0} is the difference in event rates under the null hypothesis.
+If \code{scale="RR"}, 
+\code{delta0} is the relative risk of event rates under the null hypothesis minus 1 (\code{p2 / p1 - 1}).
+If \code{scale="LNOR"}, 
+\code{delta0} is the difference in natural logarithm of the odds-ratio under the null hypothesis
+\code{log(p2 / (1 - p2)) - log(p1 / (1 - p1))}.
+}
+\item{ratio}{sample size ratio for group 2 divided by group 1}
 \item{sided}{2 for 2-sided test, 1 for 1-sided test}
-\item{outtype}{2 (default) returns sample size for each group (\code{n1, n2}); otherwise returns \code{n1+n2}}
+\item{outtype}{1 (default) returns total sample size; 2 returns sample size for each group (\code{n1, n2}); 
+}
 \item{x1}{Number of "successes" in the control group}
 \item{x2}{Number of "successes" in the experimental group}
 \item{n1}{Number of observations in the control group}
 \item{n2}{Number of observations in the experimental group}
-\item{testtype}{If "Chisq" (default), a Miettinen and Nurminen chi-square statistic for a 2x2 table (no continuity correction) is used. 
-Otherwise, the difference in event rates divided by its standard error under the null hypothesis is used.}
-\item{adj}{With \code{adj=1}, the standard variance for a Miettinen and Nurminen test statistic is used. 
-This includes a factor of n/(n-1) where n is the total sample size. If \code{adj} is not 1, 
-this factor is not applied. See details.}
-\item{nsim}{The number of simulations to be performed in \code{MandNSim()}}
+\item{chisq}{An indicator character string (vector of character strings
+If 0 (default), the difference in event rates divided by its standard error under the null hypothesis is used. 
+Otherwise, a Miettinen and Nurminen chi-square statistic for a 2 x 2 table is used.}
+\item{adj}{With \code{adj=1}, the standard variance with a continuity correction is used for a Miettinen and Nurminen test statistic 
+This includes a factor of n / (n - 1) where n is the total sample size. If \code{adj} is not 1, 
+this factor is not applied. The default is \code{adj=0} since nominal Type I error is generally conservative with \code{adj=1}
+(Gordon and Watson, 1996).}
+\item{scale}{"Difference", "RR", "OR"; see the \code{scale} parameter documentation above and Details. 
+This is a scalar argument.}
+\item{nsim}{The number of simulations to be performed in \code{simBinomial()}}
+\item{tol}{Default should probably be used; this is used to deal with a rounding issue in interim calculations}
 }
 
 \references{
@@ -70,11 +103,6 @@ Testing is 2-sided when a Chi-square statistic is used and 1-sided when a Z-stat
 Thus, these 2 options will produce substantially different results, in general.
 For non-inferiority, 1-sided testing is appropriate.
 
-For \code{MandNsim()} all arguments must be of length 1.
-In general, arguments for \code{FarrMannSS()} and \code{MandNtest()} may be scalars or vectors, 
-in which case they return a vector of sample sizes and powers, respectively. 
-There can be a mix of scalar and vector arguments. 
-All arguments specified using vectors must have the same length.  
 You may wish to round sample sizes up using \code{ceiling()}.
 
 Farrington and Manning (1990) begin with event rates \code{p1} and \code{p2} under the alternative hypothesis
@@ -86,13 +114,13 @@ which \code{p10} and \code{p20} are used under the null hypothesis.
 }
 
 \value{
-  \code{MandNtest} and \code{MandNsim} each return a vector of either Chi-square or Z test statistics. 
+  \code{testBinomial} and \code{simBinomial} each return a vector of either Chi-square or Z test statistics. 
   These may be compared to an appropriate cutoff point (e.g., \code{qnorm(.975)} or \code{qchisq(.95,1)}).
  
-  With the default \code{outtype=2}, \code{FarrMannSS()} returns a list containing two vectors \code{n1} and \code{n2} containing
+  With the default \code{outtype=2}, \code{nBinomial()} returns a list containing two vectors \code{n1} and \code{n2} containing
   sample sizes for groups 1 and 2, respectively.
   With \code{outtype=1}, a vector of total sample sizes is returned.
-  With \code{outtype=3}, \code{FarrMannSS()} returns a list as follows:
+  With \code{outtype=3}, \code{nBinomial()} returns a list as follows:
   \item{n}{A vector with total samples size required for each event rate comparison specified}
   \item{n1}{A vector of sample sizes for group 1 for each event rate comparison specified}
   \item{n2}{A vector of sample sizes for group 2 for each event rate comparison specified}
@@ -112,63 +140,68 @@ which \code{p10} and \code{p20} are used under the null hypothesis.
 \author{Keaven Anderson \email{keaven\_anderson@merck.com}}
 
 \examples{
-# Compute chi-square test statistic comparing 39/500 to 13/500
-x<-MandNtest(x1=39,x2=23,n1=500,n2=500)
+# Compute z-test test statistic comparing 39/500 to 13/500
+# use continuity correction in variance
+x <- testBinomial(x1=39, x2=13, n1=500, n2=500, adj=1)
 x
-pchisq(x,1,lower.tail=FALSE)
+pnorm(x, lower.tail=FALSE)
 
 # Compute with unadjusted variance
-x0<-MandNtest(x1=39,x2=23,n1=500,n2=500,adj=0)
+x0 <- testBinomial(x1=39, x2=23, n1=500, n2=500)
 x0
-pchisq(x0,1,lower.tail=FALSE)
+pnorm(x0, lower.tail=FALSE)
 
-# Perform 5 mhundred thousand simulations to evaluate how valid the above asymptotic p-values are 
-sum(x<=MandNsim(p1=.078,p2=.078,n1=500,n2=500,nsim=500000))/500000
-sum(x<=MandNsim(p1=.052,p2=.052,n1=500,n2=500,nsim=500000))/500000
+# Perform 500k simulations to test validity of the above asymptotic p-values 
+sum(as.real(x0) <= simBinomial(p1=.078, p2=.078, n1=500, n2=500, nsim=500000)) / 500000
+sum(as.real(x0) <= simBinomial(p1=.052, p2=.052, n1=500, n2=500, nsim=500000)) / 500000
 
-# Perform a non-inferiority test to see if p2=400/500 is within 5% of p1=410/500
-# use a z-statistic with unadjusted variance
-x<-MandNtest(x1=410,x2=400,n1=500,n2=500,delta0=-.05,testtype="Z",adj=0)
+# Perform a non-inferiority test to see if p2=400 / 500 is within 5% of 
+# p1=410 / 500 use a z-statistic with unadjusted variance
+x <- testBinomial(x1=410, x2=400, n1=500, n2=500, delta0= -.05)
 x
-pnorm(x,lower.tail=FALSE)
+pnorm(x, lower.tail=FALSE)
 
 # since chi-square tests equivalence (a 2-sided test) rather than non-inferiority (a 1-sided test), 
 # the result is quite different
-pchisq(MandNtest(x1=410,x2=400,n1=500,n2=500,delta0=-.05),1,lower.tail=FALSE)
+pchisq(testBinomial(x1=410, x2=400, n1=500, n2=500, delta0= -.05, chisq=1, 
+                    adj=1), 1, lower.tail=FALSE)
 
-# now simulate the z-statistic
-sum(x<=MandNsim(p1=.8,p2=.8,n1=500,n2=500,nsim=1000000,testtype="Z",adj=0))/1000000
+# now simulate the z-statistic witthout continuity corrected variance
+sum(qnorm(.975) <= simBinomial(p1=.8, p2=.8, n1=500, n2=500, nsim=1000000)) / 1000000
 
 # compute a sample size to show non-inferiority with 5% margin, 90% power
-FarrMannSS(p1=.2,p2=.2,delta0=.05,alpha=.025,sided=1,beta=.1)
+nBinomial(p1=.2, p2=.2, delta0=.05, alpha=.025, sided=1, beta=.1)
 
 # assuming a slight advantage in the experimental group lowers sample size requirement
-FarrMannSS(p1=.2,p2=.19,delta0=.05,alpha=.025,sided=1,beta=.1)
+nBinomial(p1=.2, p2=.19, delta0=.05, alpha=.025, sided=1, beta=.1)
 
 # compute a sample size for comparing 15% vs 10% event rates with 1 to 2 randomization
-FarrMannSS(p1=.15,p2=.1,beta=.2,ratio=2,alpha=.05)
+nBinomial(p1=.15, p2=.1, beta=.2, ratio=2, alpha=.05)
 
 # now look at total sample size using 1-1 randomization
-FarrMannSS(p1=.15,p2=.1,beta=.2,alpha=.05)
+nBinomial(p1=.15, p2=.1, beta=.2, alpha=.05)
 
 # look at power plot under different control event rate and
 # relative risk reductions
-p1<-seq(.075,.2,.000625)
-p2<-p1*2/3
-y1<-FarrMannSS(p1,p2,beta=.2,outtype=1,alpha=.025,sided=1)
-p2<-p1*.75
-y2<-FarrMannSS(p1,p2,beta=.2,outtype=1,alpha=.025,sided=1)
-p2<-p1*.6
-y3<-FarrMannSS(p1,p2,beta=.2,outtype=1,alpha=.025,sided=1)
-p2<-p1*.5
-y4<-FarrMannSS(p1,p2,beta=.2,outtype=1,alpha=.025,sided=1)
-plot(p1,y1,type="l",ylab="Sample size",xlab="Control group event rate",ylim=c(0,6000),lwd=2)
+p1 <- seq(.075, .2, .000625)
+p2 <- p1 * 2 / 3
+y1 <- nBinomial(p1, p2, beta=.2, outtype=1, alpha=.025, sided=1)
+p2 <- p1 * .75
+y2 <- nBinomial(p1, p2, beta=.2, outtype=1, alpha=.025, sided=1)
+p2 <- p1 * .6
+y3 <- nBinomial(p1, p2, beta=.2, outtype=1, alpha=.025, sided=1)
+p2 <- p1 * .5
+y4 <- nBinomial(p1, p2, beta=.2, outtype=1, alpha=.025, sided=1)
+plot(p1, y1, type="l", ylab="Sample size", xlab="Control group event rate",
+     ylim=c(0, 6000), lwd=2)
 title(main="Binomial sample size computation for 80 pct power")
-lines(p1,y2,lty=2,lwd=2)
-lines(p1,y3,lty=3,lwd=2)
-lines(p1,y4,lty=4,lwd=2)
-legend(x=c(.15,.2),y=c(4500,6000),lty=c(2,1,3,4),lwd=2,legend=c("25 pct reduction","33 pct reduction","40 pct reduction","50 pct reduction"))
-
+lines(p1, y2, lty=2, lwd=2)
+lines(p1, y3, lty=3, lwd=2)
+lines(p1, y4, lty=4, lwd=2)
+legend(x=c(.15, .2),y=c(4500, 6000),lty=c(2, 1, 3, 4), lwd=2,
+       legend=c("25 pct reduction", "33 pct reduction", "40 pct reduction",
+                "50 pct reduction"))
 }
 
 \keyword{design}
+
