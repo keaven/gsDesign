@@ -12,9 +12,12 @@ WTdiff<-function(c,alpha,a,b,timing,r)
 # for 2-sided, a=1 (set in gsDType2and5); otherwise, a set in gsDType1
 WT<-function(d,alpha,a,timing,tol=0.000001,r=18)
 {	b<-timing^(d-.5)
-	i<-0
-	while (WTdiff(2^i,alpha,a,b,timing,r)>=0.) i<-i-1
-	c0<-2^i
+	if (length(a)==1) c0<-0
+	else
+	{   i<-0
+	    while (WTdiff(i,alpha,a,b,timing,r)>=0.) i<-i-1
+	    c0<-i
+	}
 	i<-2
 	while(WTdiff(i,alpha,a,b,timing,r)<=0.) i<-i+1
 	c1<-i
