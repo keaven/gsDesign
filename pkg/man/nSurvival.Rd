@@ -1,13 +1,13 @@
-\name{SSizeLF}
-\alias{SSizeLF}
+\name{nSurvival}
+\alias{nSurvival}
 \alias{Survival sample size}
 \title{3.3: Time-to-event sample size calculation (Lachin-Foulkes)}
-\description{\code{SSizeLF()} is used to calculate the sample size for a clinical trial with 
+\description{\code{nSurvival()} is used to calculate the sample size for a clinical trial with 
 time-to-event endpoint. The Lachin and Faulkes (1986) method is used.
 }
 
 \usage{
-SSizeLF(lambda.0, lambda.1, eta = 0, rand.ratio = 1, Ts, Tr,
+nSurvival(lambda.0, lambda.1, eta = 0, rand.ratio = 1, Ts, Tr,
       alpha = 0.05, beta = 0.10, sided = 2, approx = FALSE, type = c("rr", "rd"),
       entry = c("unif", "expo"), gamma = NA)
 }
@@ -34,7 +34,7 @@ SSizeLF(lambda.0, lambda.1, eta = 0, rand.ratio = 1, Ts, Tr,
 }
 
 \details{
-  \code{SSizeLF} produces the number of subjects and events for a set of
+  \code{nSurvival} produces the number of subjects and events for a set of
   pre-specified trial parameters, such as accrual duration and follow-up
   period. The calculation is based on Lachin and Faulkes method and can
   be used for risk ratio or risk difference. The function also consider
@@ -49,7 +49,7 @@ SSizeLF(lambda.0, lambda.1, eta = 0, rand.ratio = 1, Ts, Tr,
 }
 
 \value{
-  \code{SSizeLF} produces a list with the following component returned:
+  \code{nSurvival} produces a list with the following component returned:
   \item{Method}{As input.}
   \item{Entry}{As input.}
   \item{Sample.size}{Number of subjects.}
@@ -96,7 +96,7 @@ gamma <- NA
 alpha <- 0.05    
 beta <- 0.1      
 
-ss <- SSizeLF(h0, h1, eta = eta, rand.ratio = rand.ratio,
+ss <- nSurvival(h0, h1, eta = eta, rand.ratio = rand.ratio,
              Ts = tm1, Tr = tm2,
              alpha = alpha, beta = beta, sided = 1,
              type = "rd", entry = "unif", gamma = gamma)
