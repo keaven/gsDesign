@@ -1,6 +1,6 @@
 \name{Spending Functions}
 \alias{Spending Functions}
-\alias{SpendingFunction}
+\alias{spendingFunction}
 \title{4.0: Spending functions}
 \description{Spending functions are used to set boundaries for group sequential designs.
 Using the spending function approach to design offers a natural way to provide interim testing boundaries
@@ -9,7 +9,7 @@ Many standard and investigational spending functions are provided in the gsDesig
 These offer a great deal of flexibility in setting up stopping boundaries for a design.
 }
 
-\usage{SpendingFunction(alpha,t,param)}
+\usage{spendingFunction(alpha,t,param)}
 \arguments{
 	\item{alpha}{Real value > 0 and no more than 1. Defaults in calls to \code{gsDesign()} are 
 	alpha=0.025 for one-sided Type I error specification and 0.1 for Type II error specification. 
@@ -48,8 +48,8 @@ See examples.
 Another somewhat flexible approach to 1-sided and symmetric 2-sided designs is using Wang-Tsiatis boundaries
 which include O'Brien-Fleming and Pocock designs.}
 
-\seealso{\code{\link{gsDesign}}, \code{\link{sfHSD}}, \code{\link{sfpower}}, 
-\code{\link{sflogistic}}, \code{\link{sfexp}}, \link{Wang-Tsiatis Bounds}, \link{gsDesign-package}
+\seealso{\code{\link{gsDesign}}, \code{\link{sfHSD}}, \code{\link{sfPower}}, 
+\code{\link{sfLogistic}}, \code{\link{sfExponential}}, \link{Wang-Tsiatis Bounds}, \link{gsDesign-package}
 }
 
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf

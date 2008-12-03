@@ -163,13 +163,13 @@ Boca Raton: Chapman and Hall.
 	sfup<-c(.033333,.063367,.1)
 	sflp<-c(.25,.5,.75)
 	timing<-c(.1,.4,.7)
-	x<-gsDesign(k=4,timing=timing,sfu=sfpoints,sfupar=sfup,sfl=sfpoints,
+	x<-gsDesign(k=4,timing=timing,sfu=sfPoints,sfupar=sfup,sfl=sfPoints,
 	            sflpar=sflp,n.fix=1000) 
 	x
 	plot(x)
 	plot(x,plottype=2)
 
 ## same design, but with relative sample sizes
-	gsDesign(k=4,timing=timing,sfu=sfpoints,sfupar=sfup,sfl=sfpoints,sflpar=sflp)
+	gsDesign(k=4,timing=timing,sfu=sfPoints,sfupar=sfup,sfl=sfPoints,sflpar=sflp)
 }
 \keyword{design}

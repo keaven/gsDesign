@@ -32,7 +32,7 @@ The Lan-DeMets spending function to approximate a Pocock design is implemented i
 \deqn{\alpha(t)=ln(1+(e-1)t).}{%
 alpha(t)=ln(1+(e-1)t).}
 As shown in examples below, other spending functions can be used to get as good or better approximations to Pocock and
-O'Brien-Fleming bounds. In particular, O'Brien-Fleming bounds can be closely approximated using \code{\link{sfexp}}.
+O'Brien-Fleming bounds. In particular, O'Brien-Fleming bounds can be closely approximated using \code{\link{sfExponential}}.
 }
 \seealso{\link{Spending Functions}, \code{\link{gsDesign}}, \link{gsDesign-package}}
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
@@ -72,6 +72,6 @@ x$upper$bound
 x$upper$param
 
 # use 'best' exponential approximation for k=6 (see manual for details)
-gsDesign(k=6,sfu=sfexp,sfupar=0.7849295,test.type=2)$upper$bound
+gsDesign(k=6,sfu=sfExponential,sfupar=0.7849295,test.type=2)$upper$bound
 }
 \keyword{design}

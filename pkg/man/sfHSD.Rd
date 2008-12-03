@@ -25,7 +25,7 @@ in examples.
 A Hwang-Shih-DeCani spending function takes the form
 \deqn{
 \alpha(1-e^{-\gamma t})/(1-e^{-\gamma})} where \eqn{\gamma} is the value passed in \code{param}.
-A value of \eqn{\gamma=-4} is used to approximate an O'Brien-Fleming design (see \link{sfexp} for a better fit), 
+A value of \eqn{\gamma=-4} is used to approximate an O'Brien-Fleming design (see \link{sfExponential} for a better fit), 
 while a value of \eqn{gamma=1} approximates a Pocock design well.
 }
 \seealso{\link{Spending Functions}, \code{\link{gsDesign}}, \link{gsDesign-package}}

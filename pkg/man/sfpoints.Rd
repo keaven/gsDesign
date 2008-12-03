@@ -1,16 +1,16 @@
-\name{sfpoints}
-\alias{sfpoints}
+\name{sfPoints}
+\alias{sfPoints}
 \title{4.5: Pointwise Spending Function}
 \description{
-The function \code{sfpoints} implements a spending function with values specified for an arbitrary set of specified points.
+The function \code{sfPoints} implements a spending function with values specified for an arbitrary set of specified points.
 Normally \code{sfpoint} will be passed to \code{gsDesign} in the parameter \code{sfu} for the upper bound or
 \code{sfl} for the lower bound to specify a spending function family for a design.
 In this case, the user does not need to know the calling sequence, just the points they wish to specify.
-Given the wide variety of flexible spending functions provided in this package, \code{sfpoints} is not generally recommended
+Given the wide variety of flexible spending functions provided in this package, \code{sfPoints} is not generally recommended
 since no interpolation function is provided to adjust boundaries if timing of interims changes from the original plan (see example).
 }
 
-\usage{sfpoints(alpha,t,param)}
+\usage{sfPoints(alpha,t,param)}
 \arguments{
 	\item{alpha}{Real value > 0 and no more than 1. Normally, alpha=0.025 for one-sided Type I error specification
 	or 0.1 for Type II error specification. However, this could be set to 1 if for descriptive purposes
@@ -34,7 +34,7 @@ Boca Raton: Chapman and Hall.
 
 \examples{
 # example to specify spending on a pointwise basis
-x<-gsDesign(k=6,sfu=sfpoints,sfupar=c(.01,.05,.1,.25,.5,1),test.type=2)
+x<-gsDesign(k=6,sfu=sfPoints,sfupar=c(.01,.05,.1,.25,.5,1),test.type=2)
 x
 # get proportion of upper spending under null hypothesis at each analysis
 y<-x$upper$prob[,1]/.025

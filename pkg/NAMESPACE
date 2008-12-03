@@ -1,3 +1,5 @@
 useDynLib(gsDesign)
-export(gsDesign,gsProbability,gsCP,gsBoundCP,print.gsDesign,plot.gsDesign,print.gsProbability,plot.gsProbability,SSizeLF,norpts,sfpower,sfHSD,sfexp,sfbetadist,sfLDOF,sfLDPocock,sfpoints,sflogistic,sfexval,sfexval2,sfcauchy,sfnorm,sfTDist,SpendingFunction,simBinomial,testBinomial,nBinomial,gsbound,gsbound1)
-
+export(gsDesign,gsProbability,gsCP,gsBoundCP,print.gsDesign,plot.gsDesign,print.gsProbability,plot.gsProbability)
+export(nSurvival,normalGrid,sfPower,sfHSD,sfExponential,sfBetaDist,sfLDOF,sfLDPocock,sfPoints,sfLogistic,sfExtremeValue,sfExtremeValue2,sfCauchy,sfNormal,sfTDist,spendingFunction)
+export(MandNsim,MandNtest,FarrMannSS)
+export(checkScalar,checkVector,checkRange,checkLengths,isInteger)

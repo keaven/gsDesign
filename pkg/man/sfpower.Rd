@@ -1,7 +1,7 @@
-\name{sfpower}
-\alias{sfpower}
+\name{sfPower}
+\alias{sfPower}
 \title{4.2: Kim-DeMets (power) Spending Function}
-\description{The function \code{sfpower()} implements a Kim-DeMets (power) spending function.
+\description{The function \code{sfPower()} implements a Kim-DeMets (power) spending function.
 This is a flexible, one-parameter spending function recommended by Jennison and Turnbull (2000).
 Normally it will be passed to \code{gsDesign()} in the parameter \code{sfu} for the upper bound or
 \code{sfl} for the lower bound to specify a spending function family for a design.
@@ -10,7 +10,7 @@ The calling sequence is useful, however, when the user wishes to plot a spending
 in examples.
 }
 
-\usage{sfpower(alpha,t,param)}
+\usage{sfPower(alpha,t,param)}
 \arguments{
 	\item{alpha}{Real value > 0 and no more than 1. Normally, alpha=0.025 for one-sided Type I error specification
 	or 0.1 for Type II error specification. However, this could be set to 1 if for descriptive purposes
@@ -38,7 +38,7 @@ Boca Raton: Chapman and Hall.
 
 \examples{
 # design a 4-analysis trial using a Kim-DeMets spending function for both lower and upper bounds 
-x<-gsDesign(k=4,sfu=sfpower,sfupar=3,sfl=sfpower,sflpar=1.5)
+x<-gsDesign(k=4,sfu=sfPower,sfupar=3,sfl=sfPower,sflpar=1.5)
 # print the design
 x
 
@@ -46,12 +46,12 @@ x
 # show rho=3 for approximation to O'Brien-Fleming and rho=.75 for approximation to Pocock design.
 # Also show rho=2 for an intermediate spending.
 # Compare these to Hwang-Shih-DeCani spending with gamma=-4, -2, 1
-plot(0:100/100, sfpower(0.025,0:100/100,3)$spend,xlab="Proportion of sample size",
+plot(0:100/100, sfPower(0.025,0:100/100,3)$spend,xlab="Proportion of sample size",
 ylab="Cumulative Type I error spending",
 main="Kim-DeMets (rho) versus Hwang-Shih-DeCani (gamma) Spending",
 type="l",cex.main=.9)
-lines(0:100/100,sfpower(0.025,0:100/100,2)$spend,lty=2)
-lines(0:100/100,sfpower(0.025,0:100/100,0.75)$spend,lty=3)
+lines(0:100/100,sfPower(0.025,0:100/100,2)$spend,lty=2)
+lines(0:100/100,sfPower(0.025,0:100/100,0.75)$spend,lty=3)
 lines(0:100/100,sfHSD(0.025,0:100/100,1)$spend,lty=3,col=2)
 lines(0:100/100,sfHSD(0.025,0:100/100,-2)$spend,lty=2,col=2)
 lines(0:100/100,sfHSD(0.025,0:100/100,-4)$spend,lty=1,col=2)

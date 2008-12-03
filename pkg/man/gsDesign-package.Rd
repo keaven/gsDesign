@@ -23,17 +23,17 @@ gsProbability           2.2: Boundary Crossing Probabilities
 plot.gsDesign           2.3: Plots for group sequential designs
 gsCP                    2.4: Conditional Power Computation
 gsBoundCP               2.5: Conditional Power at Interim Boundaries
-norpts                  3.1: Normal Density Grid
+normalGrid                  3.1: Normal Density Grid
 MandNtest               3.2: Two-sample binomial sample size
 Survival sample size    3.3: Time-to-event sample size calculation
                         (Lachin-Foulkes)
 Spending Functions      4.0: Spending functions
 sfHSD                   4.1: Hwang-Shih-DeCani Spending Function
-sfpower                 4.2: Kim-DeMets (power) Spending Function
-sfexp                   4.3: Exponential Spending Function
+sfPower                 4.2: Kim-DeMets (power) Spending Function
+sfExponential                   4.3: Exponential Spending Function
 sfLDPocock              4.4: Lan-DeMets Spending Functions
-sfpoints                4.5: Pointwise Spending Function
-sflogistic              4.6: 2-parameter Spending Function Families
+sfPoints                4.5: Pointwise Spending Function
+sfLogistic              4.6: 2-parameter Spending Function Families
 sfTDist                 4.7: t-distribution Spending Function
 Wang-Tsiatis Bounds     5.0: Wang-Tsiatis Bounds
 }

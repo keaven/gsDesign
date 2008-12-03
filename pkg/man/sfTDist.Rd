@@ -66,13 +66,13 @@ sfTDist(1,1:3/4,c(.25,.5,.75,.1,.2,.5))$spend
 
 # Example of error message when the 3-points specified 
 # in the 6-parameter version cannot be fit
-sfTDist(1,1:3/4,c(.25,.5,.75,.1,.2,.3))$errmsg
+try(sfTDist(1,1:3/4,c(.25,.5,.75,.1,.2,.3))$errmsg)
 
-# sfcauchy (sfTDist with 1 df) and sfnorm (sfTDist with infinite df)
+# sfCauchy (sfTDist with 1 df) and sfNormal (sfTDist with infinite df)
 # show the limits of what sfTdist can fit 
 # for the third point are u3 from 0.344 to 0.6 when t3=0.75
-sfnorm(1,1:3/4,c(.25,.5,.1,.2))$spend[3]
-sfcauchy(1,1:3/4,c(.25,.5,.1,.2))$spend[3]
+sfNormal(1,1:3/4,c(.25,.5,.1,.2))$spend[3]
+sfCauchy(1,1:3/4,c(.25,.5,.1,.2))$spend[3]
 
 # plot a few t-distribution spending functions fitting t=0.25, 5 and u=0.1, 0.2
 # to demonstrate the range of flexibility

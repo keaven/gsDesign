@@ -69,7 +69,7 @@ the square root of n.I at that analysis.
 
 Spending functions are plotted for a continuous set of values from 0 to 1. 
 This option should not be used if a boundary is used or a pointwise spending function is used
-(\code{sfu} or \code{sfl="WT", "OF", "Pocock"} or \code{sfpoints}). 
+(\code{sfu} or \code{sfl="WT", "OF", "Pocock"} or \code{sfPoints}). 
 
 Conditional power is computed using the function \code{gsBoundCP()}. 
 The default input for this routine is \code{theta="thetahat"} which will compute the conditional power
