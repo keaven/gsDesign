@@ -219,9 +219,10 @@
     
     plot(t, x$upper$sf(x$alpha, t, x$upper$param)$spend, type="l", ylab=ylab, xlab=xlab, ...)
     
-    if (x$test.type>2)
+    if (x$test.type > 2)
     {	
-        if (is.character(legtext) && legtext != "") 
+#        if (is.character(legtext) && legtext != "") 
+#        if (legtext != "") 
             legend(x=c(.0, .43), y=x$alpha * c(.85, 1), lty=lty, legend=legtext)
         par(new=TRUE)
         plot(t, x$lower$sf(x$beta, t, x$lower$param)$spend, ylim=c(0, x$beta), type="l", ylab="", main="", yaxt="n", xlab=xlab, lty=2)
