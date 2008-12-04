@@ -195,7 +195,6 @@
 		return(gsReturnError(x, errcode=.11, errmsg="Numeric user-specified spending levels not given"))
 	}    
     
-# ??? see GSD-29
 	incspend <- x$param - c(0, x$param[1:k-1])
 	
 	if (min(incspend) <=  0.)

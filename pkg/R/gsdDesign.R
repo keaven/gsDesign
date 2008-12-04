@@ -265,7 +265,13 @@
 }
 
 "gsDType3" <- function(x)
-{	
+{
+    # Check added by K. Wills 12/4/2008
+	if (is.element(x$upper$name, c("WT","Pocock","OF")))
+    {	
+        return(gsReturnError(x,errcode=8,errmsg="Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing"))            
+	}
+	
     # gsDType3: calculate bound assuming binding stopping rule and beta spending
     # this routine should get a thorough check for error handling!!!    
     if (max(x$n.I) == 0) gsDType3ss(x) else gsDType3a(x)
@@ -436,7 +442,13 @@
 # asymmetric, non-binding, beta spending
 
 "gsDType4" <- function(x)
-{	
+{
+    # Check added by K. Wills 12/4/2008
+	if (is.element(x$upper$name, c("WT","Pocock","OF")))
+    {	
+        return(gsReturnError(x,errcode=8,errmsg="Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing"))            
+	}
+	
     if (max(x$n.I) == 0) gsDType4ss(x) else gsDType4a(x)
 }
 
@@ -521,6 +533,12 @@
 
 "gsDType6" <- function(x)
 {
+    # Check added by K. Wills 12/4/2008
+	if (is.element(x$upper$name, c("WT","Pocock","OF")))
+    {	
+        return(gsReturnError(x,errcode=8,errmsg="Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing"))            
+	}
+	
     # compute upper bounds with non-binding assumption 
 	falsepos <- x$upper$spend
 	falsepos <- falsepos-c(0, falsepos[1:x$k-1])
