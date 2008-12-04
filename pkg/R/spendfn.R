@@ -1,4 +1,4 @@
-sfPower <- function(alpha, t, param)
+"sfPower" <- function(alpha, t, param)
 {  
     x <- list(name="Kim-DeMets (power)", param=param, parname="rho", sf=sfPower, spend=NULL,
             bound=NULL, prob=NULL, errcode=0, errmsg="No error")  
@@ -25,7 +25,7 @@ sfPower <- function(alpha, t, param)
 	return(x)
 }
 
-sfHSD <- function(alpha, t, param)
+"sfHSD" <- function(alpha, t, param)
 {  
     x<-list(name="Hwang-Shih-DeCani", param=param, parname="gamma", sf=sfHSD, spend=NULL,
             bound=NULL, prob=NULL, errcode=0, errmsg="No error")  
@@ -60,7 +60,7 @@ sfHSD <- function(alpha, t, param)
 	return(x)
 }
 
-sfExponential <- function(alpha, t, param)
+"sfExponential" <- function(alpha, t, param)
 {  
 	x <- list(name="Exponential", param=param, parname="nu", sf=sfExponential, spend=NULL, 
            bound=NULL, prob=NULL, errcode=0, errmsg="No error")  
@@ -87,7 +87,7 @@ sfExponential <- function(alpha, t, param)
 	return(x)
 }
 
-sfBetaDist <- function(alpha, t, param)
+"sfBetaDist" <- function(alpha, t, param)
 {  
 	x<-list(name="Beta distribution", param=param, parname=c("a","b"), sf=sfBetaDist, spend=NULL,
             bound=NULL, prob=NULL, errcode=0, errmsg="No error")  
@@ -137,14 +137,14 @@ sfBetaDist <- function(alpha, t, param)
 	return(x)
 }
 
-diffbetadist <- function(aval, xval, uval)
+"diffbetadist" <- function(aval, xval, uval)
 {   
     if (min(aval) <= 0.) return(1000)
     diff <- uval - pbeta(xval, aval[1], aval[2])
     return(sum(diff ^ 2))
 }
 
-sfLDOF <- function(alpha, t, param)
+"sfLDOF" <- function(alpha, t, param)
 {  
     x<-list(name="Lan-DeMets O'brien-Fleming approximation", param=NULL, parname="none", sf=sfLDOF, spend=NULL,
             bound=NULL, prob=NULL, errcode=0, errmsg="No error")  
@@ -157,20 +157,20 @@ sfLDOF <- function(alpha, t, param)
 	return(x)
 }
 
-sfLDPocock <- function(alpha, t, param)
+"sfLDPocock" <- function(alpha, t, param)
 {  
     x <- list(name="Lan-DeMets Pocock approximation", param=NULL, parname="none", sf=sfLDPocock, spend=NULL,
             bound=NULL, prob=NULL, errcode=0, errmsg="No error")  
     class(x) <- "spendfn"
    
-	e < -exp(1)
+	e <- exp(1)
 	t[t > 1] <- 1
     x$spend <- alpha * log(1 + (e-1) * t)
    
 	return(x)
 }
 
-sfPoints <- function(alpha, t, param)
+"sfPoints" <- function(alpha, t, param)
 {  
 	x <- list(name="User-specified", param=param, parname="Points", sf=sfPoints, spend=NULL, 
            bound=NULL, prob=NULL, errcode=0, errmsg="No error")
@@ -218,7 +218,7 @@ sfPoints <- function(alpha, t, param)
 	return(x)
 }
 
-sfLogistic <- function(alpha, t, param)
+"sfLogistic" <- function(alpha, t, param)
 {  
     x <- list(name="Logistic", param=param, parname=c("a", "b"), sf=sfLogistic, spend=NULL, 
            bound=NULL, prob=NULL, errcode=0, errmsg="No error")
@@ -273,7 +273,7 @@ sfLogistic <- function(alpha, t, param)
 	return(x)
 }
 
-sfExtremeValue <- function(alpha, t, param)
+"sfExtremeValue" <- function(alpha, t, param)
 {  
 	x <- list(name="Extreme value", param=param, parname=c("a", "b"), sf=sfExtremeValue, spend=NULL, 
            bound=NULL, prob=NULL, errcode=0, errmsg="No error")
@@ -328,7 +328,7 @@ sfExtremeValue <- function(alpha, t, param)
 	return(x)
 }
 
-sfExtremeValue2 <- function(alpha, t, param)
+"sfExtremeValue2" <- function(alpha, t, param)
 {  
 	x <- list(name="Extreme value 2", param=param, parname=c("a", "b"), sf=sfExtremeValue2, spend=NULL, 
            bound=NULL, prob=NULL, errcode=0, errmsg="No error")
@@ -375,7 +375,7 @@ sfExtremeValue2 <- function(alpha, t, param)
 	return(x)
 }
 
-sfCauchy <- function(alpha, t, param)
+"sfCauchy" <- function(alpha, t, param)
 {  
 	x <- list(name="Cauchy", param=param, parname=c("a", "b"), sf=sfCauchy, spend=NULL, 
            bound=NULL, prob=NULL, errcode=0, errmsg="No error")
@@ -430,7 +430,7 @@ sfCauchy <- function(alpha, t, param)
 	return(x)
 }
 
-sfNormal <- function(alpha, t, param)
+"sfNormal" <- function(alpha, t, param)
 {  
 	x <- list(name="Normal", param=param, parname=c("a", "b"), sf=sfNormal, spend=NULL, 
            bound=NULL, prob=NULL, errcode=0, errmsg="No error")
@@ -485,7 +485,7 @@ sfNormal <- function(alpha, t, param)
 	return(x)
 }
 
-sfTDist <- function(alpha, t, param)
+"sfTDist" <- function(alpha, t, param)
 {  
     x <- list(name="t-distribution", param=param, parname=c("a", "b", "df"), sf=sfTDist, spend=NULL, 
            bound=NULL, prob=NULL, errcode=0, errmsg="No error")
@@ -580,7 +580,7 @@ sfTDist <- function(alpha, t, param)
 	return(x)
 }
 
-Tdistdiff <- function(x, t0, p0)
+"Tdistdiff" <- function(x, t0, p0)
 {  
 	xv <- qt(t0, x)
 	y <- qt(p0, x)
@@ -590,7 +590,7 @@ Tdistdiff <- function(x, t0, p0)
 	return(a + b * xv[3] - y[3])
 }
 
-spendingFunction <- function(alpha, t, param)
+"spendingFunction" <- function(alpha, t, param)
 {  
 	x <- list(name="Linear", param=param, parname="none", sf=spendingFunction, spend=NULL, 
            bound=NULL, prob=NULL, errcode=0, errmsg="No error")  
