@@ -13,6 +13,6 @@
 
 "test.sfcauchy.4-param" <- function()
 {
-	 checkException(sfcauchy(4-param=c(.1, .6, .2, .05), k=5, timing=c(.1, .25, .4, .6), msg="Checking for out-of-order input sequence", silent=TRUE)) 
+	 checkException(sfcauchy(param=c(.1, .6, .2, .05), k=5, timing=c(.1, .25, .4, .6), msg="Checking for out-of-order input sequence", silent=TRUE)) 
 }
 

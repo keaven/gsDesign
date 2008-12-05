@@ -47,7 +47,7 @@
 	 checkException(gsDesign(astar=0.5, alpha=0.5, test.type=5, msg="Checking for out-of-range variable value", silent=TRUE)) 
 	 checkException(gsDesign(astar=1, alpha=0, test.type=5, msg="Checking for out-of-range variable value", silent=TRUE)) 
 	 checkException(gsDesign(astar=-1, test.type=6, msg="Checking for out-of-range variable value", silent=TRUE)) 
-	 checkException(gsDesign(astar=rep(0.1, 2), alpha=0 .5, test.type=5, msg="Checking for incorrect variable length", silent=TRUE)) 
+	 checkException(gsDesign(astar=rep(0.1, 2), alpha=0.5, test.type=5, msg="Checking for incorrect variable length", silent=TRUE)) 
 }
 
 "test.gsDesign.delta" <- function()
