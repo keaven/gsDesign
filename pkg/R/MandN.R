@@ -1,6 +1,18 @@
 "simBinomial" <- function(p1, p2, n1, n2, delta0=0, nsim=10000, chisq=0, adj=0, 
         scale="Difference")
 {
+    # check input arguments
+    checkVector(p1, "numeric", c(0, 1), c(FALSE, FALSE))
+    checkVector(p2, "numeric", c(0, 1), c(FALSE, FALSE))    
+    checkScalar(n1, "integer", c(0, Inf))
+    checkScalar(n2, "integer", c(0, Inf))
+    checkScalar(delta0, "numeric")
+    checkScalar(nsim, "integer", c(1, Inf))
+    checkScalar(chisq, "numeric")
+    checkScalar(adj, "numeric")
+    checkScalar(scale, "character")
+    scale <- match.arg(tolower(scale), c("difference", "rr", "or"))
+    
     x1 <- rbinom(p=p1, size=n1, n=nsim)
     x2 <- rbinom(p=p2, size=n2, n=nsim)
     
@@ -69,11 +81,23 @@
 "testBinomial" <- function(x1, x2, n1, n2, delta0=0, chisq=0, adj=0,
         scale="Difference",tol=.1e-10)
 {
+    # check input arguments
+    checkVector(x1, "integer", c(1, Inf))
+    checkVector(x2, "integer", c(1, Inf))
+    checkScalar(n1, "integer", c(1, Inf))
+    checkScalar(n2, "integer", c(1, Inf))
+    checkScalar(delta0, "numeric")
+    checkScalar(chisq, "numeric")
+    checkScalar(adj, "numeric")
+    checkScalar(scale, "character")
+    scale <- match.arg(tolower(scale), c("difference", "rr", "or"))
+    checkScalar(tol, "numeric", c(0, Inf))
+    
     ntot <- n1 + n2
     xtot <- x1 + x2
     
     # risk difference test - from Miettinen and Nurminen eqn (9)
-    if (scale == "Difference")
+    if (scale == "difference")
     {   
         L2 <- (n2 + 2 * n1) * delta0 - ntot - xtot
         L1 <- (n1 * delta0 - ntot - 2 * x1) * delta0 + xtot
@@ -93,7 +117,7 @@
         z <- x1 / n1 - x2 / n2 - delta0
     }
     # relative risk test - from Miettinen and Nurminen eqn (10)
-    else if (scale=="RR")
+    else if (scale=="rr")
     {   
         delta0 <- delta0 + 1 # value of 0 input represents equal rates
         A  <- delta0 * ntot
