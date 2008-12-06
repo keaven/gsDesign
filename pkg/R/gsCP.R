@@ -1,23 +1,23 @@
 "gsCP" <- function(x, theta=NULL, i=1, zi=0, r=18)
-{	
+{    
     # conditional power for remaining trial is returned (including each interim)
     # as a gsProbability object
     # Inputs: interim theta value and which interim is considered
     
     if (!(is(x, "gsProbability") || is(x, "gsDesign")))
-    {	
+    {    
         gsReturnError(x, 1, "gsCP must be called with class of x either gsProbability or gsDesign")
     }
     
     if (i < 1 || i >= x$k)
-    {	
+    {    
         gsReturnError(x, 2, "gsCP must be called with i from 1 to x$k-1")
     }
     
     test.type <- ifelse(is(x, "gsProbability"), 3, x$test.type)
     
     if (zi > x$upper$bound[i])
-    {	
+    {    
         gsReturnError(x, 3, "gsCP must have x$lower$bound[i] <= zi <= x$upper$bound[i]")
     }
     else if (test.type > 1 && zi < x$lower$bound[i])
@@ -45,13 +45,13 @@
 }
 
 "gsBoundCP" <- function(x, theta="thetahat", r=18)
-{	
+{    
     len <- x$k-1
     test.type <- ifelse(is(x, "gsProbability"), 3, x$test.type)
     
     
     if (!is(x, "gsDesign")  || theta != "thetahat")
-    {	
+    {    
         thetahi <- array(theta, len)
         
         if (test.type > 1)
@@ -60,7 +60,7 @@
         }
     }
     else
-    {	
+    {    
         if (test.type>1)
         {
             thetalow <- x$lower$bound[1:len]/sqrt(x$n.I[1:len])
@@ -76,9 +76,9 @@
     }
     
     for(i in 1:len)
-    {	
+    {    
         if (test.type > 1)
-        {	
+        {    
             xlow <- gsCP(x, thetalow[i], i, x$lower$bound[i])
             CPlo[i] <- sum(xlow$upper$prob)
         }

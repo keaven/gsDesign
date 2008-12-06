@@ -1,8 +1,8 @@
 "gsReturnError" <- function(x, errcode, errmsg)
-{	
+{    
     x$errcode <- errcode
-	x$errmsg <- errmsg
-	
+    x$errmsg <- errmsg
+    
     if (errcode > 0){
         stop("Error code ", errcode, " : ", errmsg)
     }

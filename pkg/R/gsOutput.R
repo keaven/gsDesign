@@ -1,60 +1,60 @@
 "print.gsProbability" <- function(x, ...)
-{	
+{    
     # check for error
-	if (x$errcode>0)
+    if (x$errcode>0)
     {
         cat("gsProbability error: ", x$errcode, x$errmsg, "\n")
     }
-	ntxt <- "N "
-	nval <- ceiling(x$n.I)
-	nspace <- log10(x$n.I[x$k])
-	for (i in 1:nspace)
+    ntxt <- "N "
+    nval <- ceiling(x$n.I)
+    nspace <- log10(x$n.I[x$k])
+    for (i in 1:nspace)
     {
         cat(" ")
     }
     
     cat("            ")
-	if (min(x$lower$bound) < 0)
+    if (min(x$lower$bound) < 0)
     {
         cat(" ")
     }
     cat("Lower bounds   Upper bounds")
-	y <- cbind(1:x$k, nval, round(x$lower$bound, 2), round(pnorm(x$lower$bound), 4), round(x$upper$bound, 2), 
+    y <- cbind(1:x$k, nval, round(x$lower$bound, 2), round(pnorm(x$lower$bound), 4), round(x$upper$bound, 2), 
             round(pnorm(-x$upper$bound), 4))
-	colnames(y) <- c("Analysis", ntxt, "Z  ", "Nominal p", "Z  ", "Nominal p")
-	rownames(y) <- array(" ", x$k)
-	cat("\n")
-	print(y)
-	cat("\nBoundary crossing probabilities and expected sample size assuming any cross stops the trial\n\n")
-	j <- length(x$theta)
-	sump <- 1:j
-	for (m in 1:j)
+    colnames(y) <- c("Analysis", ntxt, "Z  ", "Nominal p", "Z  ", "Nominal p")
+    rownames(y) <- array(" ", x$k)
+    cat("\n")
+    print(y)
+    cat("\nBoundary crossing probabilities and expected sample size assuming any cross stops the trial\n\n")
+    j <- length(x$theta)
+    sump <- 1:j
+    for (m in 1:j)
     {
         sump[m] <- sum(x$upper$prob[, m])
     }
     y <- round(cbind(x$theta, t(x$upper$prob), sump, x$en), 4)
-	y[, x$k+3] <- round(y[, x$k+3], 1)
-	rownames(y) <- array(" ", j)
-	colnames(y) <- c("Theta", 1:x$k, "Total", "E{N}")
-	cat("Upper boundary (power or Type I Error)\n")
-	cat("          Analysis\n")
-	print(y)
-	
+    y[, x$k+3] <- round(y[, x$k+3], 1)
+    rownames(y) <- array(" ", j)
+    colnames(y) <- c("Theta", 1:x$k, "Total", "E{N}")
+    cat("Upper boundary (power or Type I Error)\n")
+    cat("          Analysis\n")
+    print(y)
+    
     for (m in 1:j) 
     {
         sump[m] <- sum(x$lower$prob[, m])
     }
     
     y <- round(cbind(x$theta, t(x$lower$prob), sump), 4)
-	rownames(y) <- array(" ", j)
-	colnames(y) <- c("Theta", 1:x$k, "Total")
-	cat("\nLower boundary (futility or Type II Error)\n")
-	cat("          Analysis\n")
-	print(y)
+    rownames(y) <- array(" ", j)
+    colnames(y) <- c("Theta", 1:x$k, "Total")
+    cat("\nLower boundary (futility or Type II Error)\n")
+    cat("          Analysis\n")
+    print(y)
 }
 
 "print.gsDesign" <- function(x, ...)
-{	
+{    
     # check for error
     if (x$errcode > 0) 
     {   
@@ -77,7 +77,7 @@
     
     cat(" group sequential design with", 100 * (1 - x$beta), "% power and", 100 * x$alpha, "% Type I Error.\n")
     if (x$test.type>1)
-    {	
+    {    
         if (x$test.type==4 || x$test.type==6)
         {
             cat("Upper bound spending computations assume trial continues if lower bound is crossed.\n\n")            
@@ -88,7 +88,7 @@
         }
     }
     if (x$n.fix != 1)
-    {	
+    {    
         ntxt <- "N "
         nval <- ceiling(x$n.I)
         nspace <- log10(x$n.I[x$k])
@@ -99,14 +99,14 @@
         cat("            ")
     }
     else
-    {	
+    {    
         ntxt <- "Ratio*"
         nval <- round(x$n.I, 3)
         cat("           Sample\n")
         cat("            Size ")
     }
     if (x$test.type > 2) 
-    {	
+    {    
         if (min(x$lower$bound) < 0)
         {
             cat(" ")
@@ -118,7 +118,7 @@
         colnames(y) <- c("Analysis", ntxt, "Z  ", "Nominal p", "Spend+", "Z  ", "Nominal p", "Spend++")
     }
     else
-    {	y <- cbind(1:x$k, nval, round(x$upper$bound, 2), round(pnorm(-x$upper$bound), 4), 
+    {    y <- cbind(1:x$k, nval, round(x$upper$bound, 2), round(pnorm(-x$upper$bound), 4), 
                 round(x$upper$spend, 4))
         colnames(y) <- c("Analysis", ntxt, "Z  ", "Nominal p", "Spend")
     }
@@ -127,7 +127,7 @@
     print(y)
     cat("     Total")
     if (x$n.fix != 1)
-    {	
+    {    
         for (i in 1:nspace)
         {
             cat(" ")
@@ -140,7 +140,7 @@
     cat("                  ")
     
     if (x$test.type>2)
-    {	
+    {    
         if (min(x$lower$bound) < 0)
         {
             cat(" ")
@@ -192,7 +192,7 @@
     cat("          Analysis\n")
     print(y)
     if (x$test.type>1)
-    {	
+    {    
         for (m in 1:j) 
         {
             sump[m] <- sum(x$lower$prob[, m])
@@ -207,7 +207,7 @@
 }
 
 "sfprint" <- function(x)
-{	
+{    
     # print spending function information    
     if (x$name == "OF")
     {

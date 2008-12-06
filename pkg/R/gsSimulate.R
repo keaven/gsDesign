@@ -1,5 +1,5 @@
 "gsSimulate" <- function(nstage=0, SimStage, IniSim, TrialPar, SimPar)
-{	
+{    
     if (nstage == 0) 
     {
         nstage <- TrialPar$gsx$k
@@ -7,7 +7,7 @@
     x <- IniSim(TrialPar, SimPar)
     nim1 <- 0
     for (i in 1:nstage)
-    {	
+    {    
         x <- SimStage(x$gsx$n.I[i], x)
         x$outcome <- x$outcome + (x$outcome == 0) * i *
                 ((x$z >= x$gsx$upper$bound[i]) - (x$z < x$gsx$lower$bound[i]))
@@ -64,7 +64,7 @@
     ncp[thetacp > 0] <- as.integer(ceiling(((bnew[thetacp > 0] + qnorm(cp)) / thetacp[thetacp > 0])^2))
     
     if (maxn > 0)
-    {	
+    {    
         maxn <- maxn - x$nc - x$ne
         if (length(maxn) == 1)
         {
@@ -91,9 +91,9 @@
     
     # simulate data for final stage
     for (j in 1:x$nsim)
-    {	
+    {    
         if (x$outcome[j] == 0)
-        {	
+        {    
             y$xc[j] <- rbinom(1, nnewc[j], x$pcsim)
             y$xe[j] <- rbinom(1, nnewe[j], x$pesim)
             x$xc[j] <- x$xc[j] + y$xc[j]
@@ -101,10 +101,10 @@
         }
         # this is just to avoid 0 divide in zStat later
         else
-        {	
+        {    
             y$xc[j] <- y$nc[j] / 2
             y$xe[j] <- y$ne[j] / 2
-        }	
+        }    
     }
     
     if (length(x$nc) == 1)
