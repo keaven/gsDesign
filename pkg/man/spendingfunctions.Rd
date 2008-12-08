@@ -9,7 +9,9 @@ Many standard and investigational spending functions are provided in the gsDesig
 These offer a great deal of flexibility in setting up stopping boundaries for a design.
 }
 
-\usage{spendingFunction(alpha,t,param)}
+\usage{
+spendingFunction(alpha, t, param)
+}
 \arguments{
 	\item{alpha}{Real value > 0 and no more than 1. Defaults in calls to \code{gsDesign()} are 
 	alpha=0.025 for one-sided Type I error specification and 0.1 for Type II error specification. 
@@ -66,50 +68,60 @@ Boca Raton: Chapman and Hall.
 
 # design a 4-analysis trial using a Hwang-Shih-DeCani spending function 
 # for both lower and upper bounds 
-x<-gsDesign(k=4,sfu=sfHSD,sfupar=-2,sfl=sfHSD,sflpar=1)
+x <- gsDesign(k=4, sfu=sfHSD, sfupar=-2, sfl=sfHSD, sflpar=1)
+
 # print the design
 x
+
 # plot the alpha- and beta-spending functions
-plot(x,plottype=5)
+plot(x, plottype=5)
 
 # Example 2: advance example: writing a new spending function  
 # Most users may ignore this!
 
 # implementation of 2-parameter version of beta distribution spending function
 # assumes t and alpha are appropriately specified (does not check!) 
-sfbdist<-function(alpha,t,param)
-# set up return list and its class
-{  x<-list(name="B-dist example",param=param,parname=c("a","b"),sf=sfbdist,spend=NULL,
-           bound=NULL,prob=NULL,errcode=0,errmsg="No error")  
-   class(x)<-"spendfn"
-# check for errors in specification of a and b
-# gsReturnError is a simple function available from the package for
-# saving errors in the returned value
-   if (length(param)!=2) return(gsReturnError(x,errcode=.3,
-     errmsg="b-dist example spending function parameter must be of length 2"))
-   if (!is.numeric(param)) return(gsReturnError(x,errcode=.1,
-     errmsg="Beta distribution spending function parameter must be numeric"))
-   if (param[1]<=0.) return(gsReturnError(x,errcode=.12,
-     errmsg="1st Beta distribution spending function parameter must be > 0."))
-   if (param[2]<=0.) return(gsReturnError(x,errcode=.13,
-     errmsg="2nd Beta distribution spending function parameter must be > 0."))
-# set spending using cumulative beta distribution function and return
-   x$spend<-alpha*pbeta(t,x$param[1],x$param[2])
-   return(x)
+sfbdist <- function(alpha,  t,  param)
+{  
+
+   x <- list(name="B-dist example", param=param, parname=c("a", "b"), sf=sfbdist, spend=NULL, 
+           bound=NULL, prob=NULL, errcode=0, errmsg="No error")  
+   class(x) <- "spendfn"
+
+   # check for errors in specification of a and b
+   # gsReturnError is a simple function available from the package for
+   # saving errors in the returned value
+   if (length(param) !=2 ) 
+       return(gsReturnError(x, errcode=.3, 
+           errmsg="b-dist example spending function parameter must be of length 2"))
+   if (!is.numeric(param)) 
+       return(gsReturnError(x, errcode=.1, 
+           errmsg="Beta distribution spending function parameter must be numeric"))
+   if (param[1] <= 0.) 
+       return(gsReturnError(x, errcode=.12, 
+           errmsg="1st Beta distribution spending function parameter must be > 0."))
+   if (param[2] <= 0.) 
+        return(gsReturnError(x, errcode=.13, 
+           errmsg="2nd Beta distribution spending function parameter must be > 0."))
+
+   # set spending using cumulative beta distribution function and return
+   x$spend <- alpha * pbeta(t, x$param[1], x$param[2])
+
+   x
 }
 
 # now try it out!
 # plot some example beta (lower bound) spending functions using 
 # the beta distribution spending function 
-plot(0:100/100,sfbdist(1,0:100/100,c(2,1))$spend,type="l",
-xlab="Proportion of information",
-ylab="Cumulative proportion of total spending",
-main="Beta distribution Spending Function Example")
-lines(0:100/100,sfbdist(1,0:100/100,c(6,4))$spend,lty=2)
-lines(0:100/100,sfbdist(1,0:100/100,c(.5,.5))$spend,lty=3)
-lines(0:100/100,sfbdist(1,0:100/100,c(.6,2))$spend,lty=4)
-legend(x=c(.65,1),y=1*c(0,.25),lty=1:4,
-legend=c("a=2, b=1","a=6, b=4","a=0.5, b=0.5","a=0.6, b=2"))
+plot(0:100/100, sfbdist(1, 0:100/100, c(2, 1))$spend, type="l", 
+    xlab="Proportion of information", 
+    ylab="Cumulative proportion of total spending", 
+    main="Beta distribution Spending Function Example")
+lines(0:100/100, sfbdist(1, 0:100/100, c(6, 4))$spend, lty=2)
+lines(0:100/100, sfbdist(1, 0:100/100, c(.5, .5))$spend, lty=3)
+lines(0:100/100, sfbdist(1, 0:100/100, c(.6, 2))$spend, lty=4)
+legend(x=c(.65, 1), y=1 * c(0, .25), lty=1:4, 
+    legend=c("a=2, b=1","a=6, b=4","a=0.5, b=0.5","a=0.6, b=2"))
 }
 
 \keyword{design}

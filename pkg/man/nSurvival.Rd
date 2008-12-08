@@ -78,13 +78,13 @@ nSurvival(lambda.0, lambda.1, eta = 0, rand.ratio = 1, Ts, Tr,
 
 \examples{
 
-## consider a trial with 
-## 2 year maximum follow-up
-## 6 month uniform enrollment
-## Treatment/placebo hazards = 0.1/0.2 per 1 person-year
-## drop out hazard 0.1 per 1 person-year
-## alpha = 0.025 (one-sided)
-## power = 0.9
+# consider a trial with 
+# 2 year maximum follow-up
+# 6 month uniform enrollment
+# Treatment/placebo hazards = 0.1/0.2 per 1 person-year
+# drop out hazard 0.1 per 1 person-year
+# alpha = 0.025 (one-sided)
+# power = 0.9
 
 h0 <- 0.2        
 h1 <- 0.1        
@@ -101,13 +101,13 @@ ss <- nSurvival(h0, h1, eta = eta, rand.ratio = rand.ratio,
              alpha = alpha, beta = beta, sided = 1,
              type = "rd", entry = "unif", gamma = gamma)
 
-##  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
-##  lower bound is non-binding (ignored in Type I error computation)
-##  sample size is computed based on a fixed design requiring n=100
+#  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
+#  lower bound is non-binding (ignored in Type I error computation)
+#  sample size is computed based on a fixed design requiring n=100
 	x<-gsDesign(k = 5, test.type = 2, n.fix = ss$Sample.size)
 	x
 	plot(x)
-	plot(x,plottype = 2)
+	plot(x, plottype = 2)
 }
 
 \keyword{design}

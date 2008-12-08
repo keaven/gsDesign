@@ -46,7 +46,7 @@ If any of the values are outside the specified interval, a \code{FALSE} is retur
 \code{checkLength} is used to check whether all of the supplied inputs have equal lengths.
 }
 \examples{
-## check whether input is an integer
+# check whether input is an integer
 isInteger(1)
 isInteger(1:5)
 try(isInteger("abc")) # expect error

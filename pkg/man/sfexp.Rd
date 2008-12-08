@@ -11,7 +11,10 @@ The calling sequence is useful, however, when the user wishes to plot a spending
 in examples.
 }
 
-\usage{sfExponential(alpha,t,param)}
+\usage{
+sfExponential(alpha, t, param)
+}
+
 \arguments{
 	\item{alpha}{Real value > 0 and no more than 1. Normally, alpha=0.025 for one-sided Type I error specification
 	or 0.1 for Type II error specification. However, this could be set to 1 if for descriptive purposes
@@ -55,25 +58,24 @@ Lan, KKG and DeMets, DL (1983), Discrete sequential boundaries for clinical tria
 \examples{
 # use 'best' exponential approximation for k=6 to O'Brien-Fleming design
 # (see manual for details)
-gsDesign(k=6,sfu=sfExponential,sfupar=0.7849295,test.type=2)$upper$bound
+gsDesign(k=6, sfu=sfExponential, sfupar=0.7849295, test.type=2)$upper$bound
 
 # show actual O'Brien-Fleming bound
-gsDesign(k=6,sfu="OF",test.type=2)$upper$bound
+gsDesign(k=6, sfu="OF", test.type=2)$upper$bound
 
 # show Lan-DeMets approximation (not as close as sfExponential approximation)
-gsDesign(k=6,sfu=sfLDOF,test.type=2)$upper$bound
+gsDesign(k=6, sfu=sfLDOF, test.type=2)$upper$bound
 
 # plot exponential spending function across a range of values of interest
-plot(0:100/100, sfExponential(0.025,0:100/100,0.8)$spend,xlab="Proportion of final sample size",
-ylab="Cumulative Type I error spending",
-main="Exponential Spending Function Example",type="l")
-lines(0:100/100,sfExponential(0.025,0:100/100,0.5)$spend,lty=2)
-lines(0:100/100,sfExponential(0.025,0:100/100,0.3)$spend,lty=3)
-lines(0:100/100,sfExponential(0.025,0:100/100,0.2)$spend,lty=4)
-lines(0:100/100,sfExponential(0.025,0:100/100,0.15)$spend,lty=5)
-legend(x=c(.0,.3),y=.025*c(.7,1),lty=1:5,
-legend=c("nu = 0.8","nu = 0.5","nu = 0.3","nu = 0.2","nu = 0.15"))
-text(x=.59,y=.95*.025,labels="<--approximates O'Brien-Fleming")
-
+plot(0:100/100, sfExponential(0.025, 0:100/100, 0.8)$spend, xlab="Proportion of final sample size", 
+   ylab="Cumulative Type I error spending", 
+   main="Exponential Spending Function Example", type="l")
+lines(0:100/100, sfExponential(0.025, 0:100/100, 0.5)$spend, lty=2)
+lines(0:100/100, sfExponential(0.025, 0:100/100, 0.3)$spend, lty=3)
+lines(0:100/100, sfExponential(0.025, 0:100/100, 0.2)$spend, lty=4)
+lines(0:100/100, sfExponential(0.025, 0:100/100, 0.15)$spend, lty=5)
+legend(x=c(.0, .3), y=.025*c(.7, 1), lty=1:5, 
+    legend=c("nu = 0.8", "nu = 0.5", "nu = 0.3", "nu = 0.2", "nu = 0.15"))
+text(x=.59, y=.95*.025, labels="<--approximates O'Brien-Fleming")
 }
 \keyword{design}

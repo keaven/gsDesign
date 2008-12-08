@@ -10,7 +10,10 @@ The calling sequence is useful, however, when the user wishes to plot a spending
 in examples.
 }
 
-\usage{sfHSD(alpha,t,param)}
+\usage{
+sfHSD(alpha, t, param)
+}
+
 \arguments{
 	\item{alpha}{Real value > 0 and no more than 1. Normally, alpha=0.025 for one-sided Type I error specification
 	or 0.1 for Type II error specification. However, this could be set to 1 if for descriptive purposes
@@ -41,24 +44,27 @@ Boca Raton: Chapman and Hall.
 \examples{
 # design a 4-analysis trial using a Hwang-Shih-DeCani spending function 
 # for both lower and upper bounds 
-x<-gsDesign(k=4,sfu=sfHSD,sfupar=-2,sfl=sfHSD,sflpar=1)
+x <- gsDesign(k=4, sfu=sfHSD, sfupar=-2, sfl=sfHSD, sflpar=1)
+
 # print the design
 x
-# since sfHSD is the default for both sfu and sfl, this could have been written as
-x<-gsDesign(k=4,sfupar=-2,sflpar=1)
+
+# since sfHSD is the default for both sfu and sfl,  this could have been written as
+x <- gsDesign(k=4, sfupar=-2, sflpar=1)
+
 # print again
 x
 
 # plot the spending function using many points to obtain a smooth curve
 # show default values of gamma to see how the spending function changes
 # also show gamma=1 which is supposed to approximate a Pocock design
-plot(0:100/100, sfHSD(0.025,0:100/100,-4)$spend,xlab="Proportion of final sample size",
-ylab="Cumulative Type I error spending",
-main="Hwang-Shih-DeCani Spending Function Example",type="l")
-lines(0:100/100,sfHSD(0.025,0:100/100,-2)$spend,lty=2)
-lines(0:100/100,sfHSD(0.025,0:100/100,1)$spend,lty=3)
-legend(x=c(.0,.375),y=.025*c(.8,1),lty=1:3,
-legend=c("gamma= -4","gamma= -2","gamma= 1"))
+plot(0:100/100,  sfHSD(0.025, 0:100/100, -4)$spend, xlab="Proportion of final sample size", 
+   ylab="Cumulative Type I error spending", 
+   main="Hwang-Shih-DeCani Spending Function Example", type="l")
+lines(0:100/100, sfHSD(0.025, 0:100/100, -2)$spend, lty=2)
+lines(0:100/100, sfHSD(0.025, 0:100/100, 1)$spend, lty=3)
+legend(x=c(.0, .375), y=.025*c(.8, 1), lty=1:3, 
+    legend=c("gamma= -4", "gamma= -2", "gamma= 1"))
 }
 \keyword{design}
 

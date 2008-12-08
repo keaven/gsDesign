@@ -10,8 +10,9 @@ Both of these spending functions are available here, mainly for historical purpo
 Neither requires a parameter.
 }
 
-\usage{sfLDOF(alpha,t,param)
-sfLDPocock(alpha,t,param)
+\usage{
+sfLDOF(alpha, t, param)
+sfLDPocock(alpha, t, param)
 }
 \arguments{
 	\item{alpha}{Real value > 0 and no more than 1. Normally, alpha=0.025 for one-sided Type I error specification
@@ -47,31 +48,31 @@ Lan, KKG and DeMets, DL (1983), Discrete sequential boundaries for clinical tria
 }
 
 \examples{
-# 2-sided, symmetric 6-analysis trial Pocock spending function approximation 
-gsDesign(k=6,sfu=sfLDPocock,test.type=2)$upper$bound
+# 2-sided,  symmetric 6-analysis trial Pocock spending function approximation 
+gsDesign(k=6, sfu=sfLDPocock, test.type=2)$upper$bound
 
 # show actual Pocock design
-gsDesign(k=6,sfu="Pocock",test.type=2)$upper$bound
+gsDesign(k=6, sfu="Pocock", test.type=2)$upper$bound
 
 # approximate Pocock again using a standard Hwang-Shih-DeCani approximation
-gsDesign(k=6,sfu=sfHSD,sfupar=1,test.type=2)$upper$bound
+gsDesign(k=6, sfu=sfHSD, sfupar=1, test.type=2)$upper$bound
 
-# use 'best' Hwang-Shih-DeCani approximation for Pocock, k=6 (see manual for details)
-gsDesign(k=6,sfu=sfHSD,sfupar=1.3354376,test.type=2)$upper$bound
+# use 'best' Hwang-Shih-DeCani approximation for Pocock,  k=6 (see manual for details)
+gsDesign(k=6, sfu=sfHSD, sfupar=1.3354376, test.type=2)$upper$bound
 
-# 2-sided, symmetric 6-analysis trial O'Brien-Fleming spending function approximation 
-gsDesign(k=6,sfu=sfLDOF,test.type=2)$upper$bound
+# 2-sided,  symmetric 6-analysis trial O'Brien-Fleming spending function approximation 
+gsDesign(k=6, sfu=sfLDOF, test.type=2)$upper$bound
 
 # show actual O'Brien-Fleming bound
-gsDesign(k=6,sfu="OF",test.type=2)$upper$bound
+gsDesign(k=6, sfu="OF", test.type=2)$upper$bound
 
 # approximate again using a standard Hwang-Shih-DeCani 
 # approximation to O'Brien-Fleming
-x<-gsDesign(k=6,test.type=2)
+x<-gsDesign(k=6, test.type=2)
 x$upper$bound
 x$upper$param
 
 # use 'best' exponential approximation for k=6 (see manual for details)
-gsDesign(k=6,sfu=sfExponential,sfupar=0.7849295,test.type=2)$upper$bound
+gsDesign(k=6, sfu=sfExponential, sfupar=0.7849295, test.type=2)$upper$bound
 }
 \keyword{design}

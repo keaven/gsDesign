@@ -10,7 +10,9 @@ assumes an interim test statistic at the boundary and
 computes the probability of crossing any of the later upper boundaries.
 }
 
-\usage{gsBoundCP(x,theta="thetahat",r=18)}
+\usage{
+gsBoundCP(x, theta="thetahat", r=18)
+}
 \arguments{
 	\item{x}{An object of type gsDesign or gsProbability}
 	\item{theta}{if \code{"thetahat"} and \code{class(x)!="gsDesign"}), conditional power computations for
@@ -48,15 +50,15 @@ combining the advantages of adaptive and classical group sequential approaches. 
 }
 
 \examples{
-## set up a group sequential design
-x<-gsDesign(k=5)
+# set up a group sequential design
+x <- gsDesign(k=5)
 x
 
-## compute conditional power based on interim treatment effects
+# compute conditional power based on interim treatment effects
 gsBoundCP(x)
 
-## compute conditional power based on original x$delta
-gsBoundCP(x,theta=x$delta)
+# compute conditional power based on original x$delta
+gsBoundCP(x, theta=x$delta)
 }
 \seealso{\code{\link{gsDesign}}, \code{\link{gsProbability}}, \code{\link{gsCP}}}
 \keyword{design}

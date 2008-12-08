@@ -7,7 +7,7 @@ at a specified interim analysis and computes boundary crossing probabilities at 
 }
 
 \usage{
-gsCP(x,theta=NULL,i=1,zi=0,r=18)
+gsCP(x, theta=NULL, i=1, zi=0, r=18)
 }
 \arguments{
 	\item{x}{An object of type gsDesign or gsProbability}
@@ -46,21 +46,21 @@ combining the advantages of adaptive and classical group sequential approaches. 
 }
 
 \examples{
-## set up a group sequential design
-x<-gsDesign(k=5)
+# set up a group sequential design
+x <- gsDesign(k=5)
 x
 
-## assuming a z-value of .5 at analysis 2, what are conditional 
-## boundary crossing probabilities for future analyses
-## assuming theta values from x as well as a value based on the interim
-## observed z
-CP<-gsCP(x,i=2,zi=.5)
+# assuming a z-value of .5 at analysis 2, what are conditional 
+# boundary crossing probabilities for future analyses
+# assuming theta values from x as well as a value based on the interim
+# observed z
+CP <- gsCP(x, i=2, zi=.5)
 CP
 
-## summing values for crossing future upper bounds gives overall
-## conditional power for each theta value
+# summing values for crossing future upper bounds gives overall
+# conditional power for each theta value
 CP$theta
-CP$upper$prob%*%c(1,1,1)
+CP$upper$prob %*% c(1,1,1)
 }
 \seealso{\code{\link{gsDesign}}, \code{\link{gsProbability}}, \code{\link{gsBoundCP}}}
 \keyword{design}
