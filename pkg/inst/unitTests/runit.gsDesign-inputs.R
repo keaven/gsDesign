@@ -86,16 +86,16 @@
 	 checkException(gsDesign(sfupar=rep(-4,2), msg="Checking for incorrect variable length", silent=TRUE)) 
 }
 
-"test.gsDesign.sf1" <- function()
+"test.gsDesign.sfl" <- function()
 {
-	 checkException(gsDesign(sf1="abc", msg="Checking for incorrect variable type", silent=TRUE)) 
-	 checkException(gsDesign(sf1=rep(sfHSD, 2), msg="Checking for incorrect variable length", silent=TRUE)) 
+	 checkException(gsDesign(sfl="abc", msg="Checking for incorrect variable type", silent=TRUE)) 
+	 checkException(gsDesign(sfl=rep(sfHSD, 2), msg="Checking for incorrect variable length", silent=TRUE)) 
 }
 
-"test.gsDesign.sf1par" <- function()
+"test.gsDesign.sflpar" <- function()
 {
-	 checkException(gsDesign(sf1par="abc", msg="Checking for incorrect variable type", silent=TRUE)) 
-	 checkException(gsDesign(sf1par=rep(-2,2), msg="Checking for incorrect variable length", silent=TRUE)) 
+	 checkException(gsDesign(sflpar="abc", msg="Checking for incorrect variable type", silent=TRUE)) 
+	 checkException(gsDesign(sflpar=rep(-2,2), msg="Checking for incorrect variable length", silent=TRUE)) 
 }
 
 "test.gsDesign.tol" <- function()
@@ -124,20 +124,5 @@
 	 checkException(gsDesign(maxn.I="abc", msg="Checking for incorrect variable type", silent=TRUE)) 
 }
 
-## kpMatch - checks for appropriate error
-## when length of sfPoints param p does not match k 
-## for all test types
 
-# Run with expected results by KW 11/26
-
-kpMatch <- function()
-{   
-    for (tt in 1:6)
-    {
-        
-        checkException(gsDesign(test.type=tt, k=3, sfu=sfPoints, sfupar=c(.05, .1,  .15,  .2, 1)), 
-                msg=paste("kpMatch tt= ", tt))
-        
-    }
-}
 
