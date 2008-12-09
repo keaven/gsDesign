@@ -26,7 +26,7 @@
 
 
 
-"stress.sfExp.type1" <- function()
+"test.stress.sfExp.type1" <- function()
 {	
 	no.errors <- TRUE
 	
