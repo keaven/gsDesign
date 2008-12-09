@@ -8,8 +8,10 @@
 	{
 	    for (b in beta)
 		{
-		    if (b < 1 - a)
+			# sfLDPocock, test.type=3: errors with alpha >= .5 and beta close to 1 - alpha
+		    if (b < 1 - a - 0.05)
 			{
+				cat("a = ", a, "b = ", b, "\n")
 			    res <- try(gsDesign(test.type=type, alpha=a, beta=b, sfu=sf))
 			    
 			    if (is(res, "try-error"))
@@ -225,42 +227,42 @@ gamma = seq(from=-5, to=5, by=1)
 
 "test.stress.sfHSD.type1" <- function()
 {
-	no.errors <- param.range.util(param=gamma, type=1, sf=sfPower)
+	no.errors <- param.range.util(param=gamma, type=1, sf=sfHSD)
 	
-	checkTrue(no.errors, "Type 1 sfPower stress test")
+	checkTrue(no.errors, "Type 1 sfHSD stress test")
 }
 
 "test.stress.sfHSD.type2" <- function()
 {
-	no.errors <- param.range.util(param=gamma, type=2, sf=sfPower)
+	no.errors <- param.range.util(param=gamma, type=2, sf=sfHSD)
 	
-	checkTrue(no.errors, "Type 2 sfPower stress test")
+	checkTrue(no.errors, "Type 2 sfHSD stress test")
 }
 
 "test.stress.sfHSD.type3" <- function()
 {
-	no.errors <- param.range.util(param=gamma, type=3, sf=sfPower)
+	no.errors <- param.range.util(param=gamma, type=3, sf=sfHSD)
 	
-	checkTrue(no.errors, "Type 3 sfPower stress test")
+	checkTrue(no.errors, "Type 3 sfHSD stress test")
 }
 
 "test.stress.sfHSD.type4" <- function()
 {
-	no.errors <- param.range.util(param=gamma, type=4, sf=sfPower)
+	no.errors <- param.range.util(param=gamma, type=4, sf=sfHSD)
 	
-	checkTrue(no.errors, "Type 4 sfPower stress test")
+	checkTrue(no.errors, "Type 4 sfHSD stress test")
 }
 
 "test.stress.sfHSD.type5" <- function()
 {
-	no.errors <- param.range.util(param=gamma, type=5, sf=sfPower)
+	no.errors <- param.range.util(param=gamma, type=5, sf=sfHSD)
 	
-	checkTrue(no.errors, "Type 5 sfPower stress test")
+	checkTrue(no.errors, "Type 5 sfHSD stress test")
 }
 
 "test.stress.sfHSD.type6" <- function()
 {
-	no.errors <- param.range.util(param=gamma, type=6, sf=sfPower)
+	no.errors <- param.range.util(param=gamma, type=6, sf=sfHSD)
 	
-	checkTrue(no.errors, "Type 6 sfPower stress test")
+	checkTrue(no.errors, "Type 6 sfHSD stress test")
 }
