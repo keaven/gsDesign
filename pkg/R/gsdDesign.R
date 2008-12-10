@@ -820,7 +820,11 @@
         stop("Lengths of n.I, a, and b must all equal k")
     }
 
+    # cast integer scalars
     ntheta <- as.integer(length(theta))
+    k <- as.integer(k)
+    r <- as.integer(r)
+    
     phi <- as.double(c(1:(k * ntheta)))
     plo <- as.double(c(1:(k * ntheta)))
     xx <- .C("probrej", k, ntheta, as.double(theta), as.double(n.I), 
@@ -831,7 +835,7 @@
     futile <- array(1, k) %*% plo
     en <- as.vector(n.I %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
     x <- list(k=xx[[1]], theta=xx[[3]], n.I=xx[[4]], lower=list(bound=xx[[5]], prob=plo), 
-                    upper=list(bound=xx[[6]], prob=phi), en=en, r=r, errcode=0, errmsg="No error")
+                    upper=list(bound=xx[[6]], prob=phi), en=en, r=r, errcode=0, errmsg="No errors detected")
     
     class(x) <- "gsProbability"
     
