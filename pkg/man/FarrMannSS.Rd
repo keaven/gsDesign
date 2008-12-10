@@ -175,7 +175,7 @@ nBinomial(p1=.2, p2=.2, delta0=.05, alpha=.025, sided=1, beta=.1)
 # assuming a slight advantage in the experimental group lowers sample size requirement
 nBinomial(p1=.2, p2=.19, delta0=.05, alpha=.025, sided=1, beta=.1)
 
-# compute a sample size for comparing 15% vs 10% event rates with 1 to 2 randomization
+# compute a sample size for comparing 15\% vs 10\% event rates with 1 to 2 randomization
 nBinomial(p1=.15, p2=.1, beta=.2, ratio=2, alpha=.05)
 
 # now look at total sample size using 1-1 randomization
