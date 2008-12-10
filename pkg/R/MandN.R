@@ -1,17 +1,13 @@
 "simBinomial" <- function(p1, p2, n1, n2, delta0=0, nsim=10000, chisq=0, adj=0, 
         scale="Difference")
 {
-    # check input arguments
+    # check input arguments 
+    # Note: delta0, chisq, adj, and scale checked by testBinomial() function
     checkVector(p1, "numeric", c(0, 1), c(FALSE, FALSE))
     checkVector(p2, "numeric", c(0, 1), c(FALSE, FALSE))    
-    checkScalar(n1, "integer", c(0, Inf))
-    checkScalar(n2, "integer", c(0, Inf))
-    checkScalar(delta0, "numeric")
+    checkScalar(n1, "integer", c(1, Inf))
+    checkScalar(n2, "integer", c(1, Inf))
     checkScalar(nsim, "integer", c(1, Inf))
-    checkScalar(chisq, "numeric")
-    checkScalar(adj, "numeric")
-    checkScalar(scale, "character")
-    scale <- match.arg(tolower(scale), c("difference", "rr", "or"))
     
     x1 <- rbinom(p=p1, size=n1, n=nsim)
     x2 <- rbinom(p=p2, size=n2, n=nsim)
@@ -22,7 +18,17 @@
 
 "ciBinomial" <- function(x1, x2, n1, n2, alpha=.05, adj=0, scale="Difference")
 {
-    if (scale == "Difference")
+    # check input arguments
+    checkScalar(n1, "integer", c(1, Inf))
+    checkScalar(n2, "integer", c(1, Inf))
+    checkVector(x1, "integer", c(0, n1))
+    checkVector(x2, "integer", c(0, n2))
+    checkScalar(alpha, "numeric", c(0, 1), c(FALSE, FALSE))    
+    checkScalar(adj, "integer", c(0, 1))
+    checkScalar(scale, "character")
+    scale <- match.arg(tolower(scale), c("difference"))
+    
+    if (scale == "difference")
     {    
         delta <- x1 / n1 - x2 / n2
         
@@ -79,19 +85,19 @@
 }
 
 "testBinomial" <- function(x1, x2, n1, n2, delta0=0, chisq=0, adj=0,
-        scale="Difference",tol=.1e-10)
+        scale="Difference", tol=.1e-10)
 {
     # check input arguments
-    checkVector(x1, "integer", c(1, Inf))
-    checkVector(x2, "integer", c(1, Inf))
     checkScalar(n1, "integer", c(1, Inf))
     checkScalar(n2, "integer", c(1, Inf))
-    checkScalar(delta0, "numeric")
-    checkScalar(chisq, "numeric")
-    checkScalar(adj, "numeric")
+    checkVector(x1, "integer", c(0, n1))
+    checkVector(x2, "integer", c(0, n2))
+    checkScalar(delta0, "numeric", c(-1, 1), c(FALSE, FALSE))
+    checkScalar(chisq, "integer", c(0, 1))
+    checkScalar(adj, "integer", c(0, 1))
     checkScalar(scale, "character")
-    scale <- match.arg(tolower(scale), c("difference", "rr", "or"))
-    checkScalar(tol, "numeric", c(0, Inf))
+    scale <- match.arg(tolower(scale), c("difference", "rr", "or", "lnor"))
+    checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
     
     ntot <- n1 + n2
     xtot <- x1 + x2
@@ -117,7 +123,7 @@
         z <- x1 / n1 - x2 / n2 - delta0
     }
     # relative risk test - from Miettinen and Nurminen eqn (10)
-    else if (scale=="rr")
+    else if (scale == "rr")
     {   
         delta0 <- delta0 + 1 # value of 0 input represents equal rates
         A  <- delta0 * ntot
@@ -145,8 +151,9 @@
         ntem<-(delta0==delta0)*ntot
         R0[delta0 == 1] <- xtem[delta0 == 1] / ntem[delta0 == 1]
         R1[delta0 == 1] <- R0[delta0 == 1]
+        
         # odds-ratio test - from Miettinen and Nurminen eqn (13)
-        if (scale == "OR")
+        if (scale == "or")
         {   
             V <- 1 / (1 / n2 / R1 / (1-R1) + 1 / n1 / R0 / (1 - R0))
             V[xtot == 0 || xtot == ntot] <- 1
@@ -154,7 +161,7 @@
         }
         # log-odds ratio - based on asymptotic distribution of log-odds
         # see vignette
-        else
+        else if (scale == "lnor")
         {   
             V <- 1 / n2 / R1 / (1-R1) + 1 / n1 / R0 / (1-R0)
             V[xtot == 0 || xtot == ntot] <- 1

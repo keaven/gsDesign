@@ -609,6 +609,15 @@
 {    
     # gsbound: assuming theta=0, derive lower and upper crossing boundaries given 
     #          timing of interims, false positive rates and true negative rates
+    
+    # check input arguments
+    checkVector(I, "numeric", c(0, Inf), c(FALSE, TRUE))
+    checkVector(trueneg, "numeric", c(0,1), c(FALSE, FALSE))
+    checkVector(falsepos, "numeric", c(0,1), c(FALSE, FALSE))
+    checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
+    checkScalar(r, "integer", c(1, 80))
+    checkLengths(trueneg, falsepos, I)    
+    
     k <- as.integer(length(I))
     storage.mode(I) <- "double"
     storage.mode(trueneg) <- "double"
@@ -660,11 +669,22 @@
         rates=rates, futilitybnd="Binding", tol=x$tol, r=x$r, error=x$error)
 }
 
-"gsbound1" <- function(theta, I, a, probhi,tol=0.000001,r=18,printerr=0)
+"gsbound1" <- function(theta, I, a, probhi, tol=0.000001, r=18, printerr=0)
 {   
     # gsbound1: derive upper bound to match specified upper bound crossing probability given
     #           a value of theta, a fixed lower bound and information at each analysis   
  
+    # check input arguments
+    checkScalar(theta, "numeric")
+    checkVector(I, "numeric", c(0, Inf), c(FALSE, TRUE))
+    checkVector(a, "numeric")
+    checkVector(probhi, "numeric", c(0,1), c(FALSE, FALSE))
+    checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
+    checkScalar(r, "integer", c(1, 80))
+    checkScalar(printerr, "integer")
+    checkLengths(a, probhi, I)
+    
+    # coerce type
     k <- as.integer(length(I))
     storage.mode(theta) <- "double"
     storage.mode(I) <- "double"

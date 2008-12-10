@@ -4,14 +4,18 @@
     # check input arguments
     checkVector(p1, "numeric", c(0, 1), c(FALSE, FALSE))
     checkVector(p2, "numeric", c(0, 1), c(FALSE, FALSE))    
-    checkScalar(alpha, "numeric")
-    checkScalar(beta, "numeric")
+    checkScalar(sided, "integer", c(1, 2))    
+    checkScalar(alpha, "numeric", c(0, 1 / sided), c(FALSE, FALSE))
+    checkScalar(beta, "numeric", c(0, 1 - alpha / sided), c(FALSE, FALSE))
     checkScalar(delta0, "numeric")
     checkScalar(ratio, "numeric", c(0, Inf), c(FALSE, TRUE))
-    checkScalar(sided, "integer", c(1, 2))
     checkScalar(outtype, "integer", c(1, 2))
     checkScalar(scale, "character")
     scale <- match.arg(tolower(scale), c("difference", "rr", "or"))
+    if (p1 >= p2 + delta0)
+    {
+      #  stop("The condition p1 < p2 + delta0 not met")
+    }
     
     # get z-values needed 
     z.beta  <- qnorm(1 - beta)    
