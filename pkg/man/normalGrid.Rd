@@ -22,8 +22,6 @@ normalGrid(r=18, bounds=c(0,0), mu=0, sigma=1)
 \value{
 	\item{z}{Grid points for numerical integration.}
 	\item{wgts}{Weights to be used with grid points in \code{z}.}
-	\item{errcode}{returned as 0 if no error detected in call, > 0 otherwise.}
-	\item{errmsg}{A text string corresponding to \code{errcode}; for no error, this is "No errors detected"} 
 }
 \seealso{\code{\link{gsProbability}}, \code{\link{gsDesign}}, \link{Group Sequential Plots}.}
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf

@@ -75,8 +75,6 @@ sample size \code{n.fix}.}
 \item{timing}{As input.}
 \item{tol}{As input.}
 \item{r}{As input.}
-\item{errcode}{Error code. 0 if no error; > 0 otherwise.}
-\item{errmsg}{Error message. If errcode > 0, this may clue you in to the problem.}
 \item{upper}{Upper bound spending function, boundary and boundary crossing probabilities under the NULL and
 alternate hypotheses. See \link{Spending Functions} and manual for further details.}
 \item{lower}{Lower bound spending function, boundary and boundary crossing probability probabilities at each analysis.

@@ -35,8 +35,6 @@ Contains z-values for bounds of a design.}
 but is set in \code{gsDesign()} if the spending function is called from there. 
 Contains probabilities of boundary crossing at \code{i}-th analysis for \code{j}-th theta value 
 input to \code{gsDesign()} in \code{prob[i,j]}.}
-\item{errcode}{0 if no error; non-zero if an error occurs.}
-\item{errmsg}{"No error" if errcode=0; otherwise, a character string describing the error.}
 }
 \details{Spending functions have three arguments as noted above and return an object of type \code{spendfn}.
 Normally a spending function will be passed to \code{gsDesign()} in the parameter \code{sfu} for the upper bound and
@@ -83,30 +81,17 @@ plot(x, plottype=5)
 # assumes t and alpha are appropriately specified (does not check!) 
 sfbdist <- function(alpha,  t,  param)
 {  
-
-   x <- list(name="B-dist example", param=param, parname=c("a", "b"), sf=sfbdist, spend=NULL, 
-           bound=NULL, prob=NULL, errcode=0, errmsg="No error")  
-   class(x) <- "spendfn"
-
-   # check for errors in specification of a and b
-   # gsReturnError is a simple function available from the package for
-   # saving errors in the returned value
-   if (length(param) !=2 ) 
-       return(gsReturnError(x, errcode=.3, 
-           errmsg="b-dist example spending function parameter must be of length 2"))
-   if (!is.numeric(param)) 
-       return(gsReturnError(x, errcode=.1, 
-           errmsg="Beta distribution spending function parameter must be numeric"))
-   if (param[1] <= 0.) 
-       return(gsReturnError(x, errcode=.12, 
-           errmsg="1st Beta distribution spending function parameter must be > 0."))
-   if (param[2] <= 0.) 
-        return(gsReturnError(x, errcode=.13, 
-           errmsg="2nd Beta distribution spending function parameter must be > 0."))
+   # check inputs
+   checkVector(param, "numeric", c(0, Inf), c(FALSE, TRUE))
+   if (length(param) !=2) 
+       stop("b-dist example spending function parameter must be of length 2")
 
    # set spending using cumulative beta distribution function and return
-   x$spend <- alpha * pbeta(t, x$param[1], x$param[2])
-
+   x <- list(name="B-dist example", param=param, parname=c("a", "b"), sf=sfbdist, 
+           spend=alpha * pbeta(t, param[1], param[2]), bound=NULL, prob=NULL)  
+           
+   class(x) <- "spendfn"
+   
    x
 }
 

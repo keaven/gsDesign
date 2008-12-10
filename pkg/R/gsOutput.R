@@ -1,10 +1,5 @@
 "print.gsProbability" <- function(x, ...)
 {    
-    # check for error
-    if (x$errcode>0)
-    {
-        cat("gsProbability error: ", x$errcode, x$errmsg, "\n")
-    }
     ntxt <- "N "
     nval <- ceiling(x$n.I)
     nspace <- log10(x$n.I[x$k])
@@ -55,12 +50,6 @@
 
 "print.gsDesign" <- function(x, ...)
 {    
-    # check for error
-    if (x$errcode > 0) 
-    {   
-        cat("gsDesign error: ", x$errcode, x$errmsg, "\n")
-        return()
-    }
     
     if (x$test.type == 1) 
     {
@@ -76,7 +65,7 @@
     }
     
     cat(" group sequential design with", 100 * (1 - x$beta), "% power and", 100 * x$alpha, "% Type I Error.\n")
-    if (x$test.type>1)
+    if (x$test.type > 1)
     {    
         if (x$test.type==4 || x$test.type==6)
         {

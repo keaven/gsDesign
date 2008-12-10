@@ -45,8 +45,6 @@ design is characterized.
 	\item{en}{A vector of the same length as \code{theta} containing expected sample sizes for the trial design
 	corresponding to each value in the vector \code{theta}.}
 	\item{r}{As input.}
-	\item{errcode}{0 if no error detected in call, > 0 otherwise.}
-	\item{errmsg}{A text string corresponding to \code{errcode}; for no error, this is "No errors detected"} 
 }
 \seealso{\link{Group Sequential Plots}, \code{\link{gsDesign}}, \link{gsDesign-package}}
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf

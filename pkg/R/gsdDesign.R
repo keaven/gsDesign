@@ -33,24 +33,17 @@
     
     # check parameters other than spending functions
     x <- gsDErrorCheck(x)
-    
-    if (x$errcode > 0) 
-    {
-        return(x)
-    }
 
     # set up spending for upper bound
     if (is.character(sfu))
     {  
-        upper <- list(sf = sfu, name = sfu, parname = "Delta", param = sfupar,
-                errcode = 0, errmsg = "No errors detected")
+        upper <- list(sf = sfu, name = sfu, parname = "Delta", param = sfupar)
         
         class(upper) <- "spendfn"
         
         if (!is.element(upper$name,c("OF", "Pocock" , "WT")))           
         {
-            upper <- gsReturnError(upper, errcode=8, 
-                    errmsg="Character specification of upper spending may only be WT, OF or Pocock")
+            stop("Character specification of upper spending may only be WT, OF or Pocock")
         }
         
         if (is.element(upper$name, c("OF", "Pocock")))
@@ -60,8 +53,7 @@
     }
     else if (!is.function(sfu))
     {   
-        upper <- list(errcode = 8, errmsg = "Upper spending function mis-specified")
-        class(upper) <- "spendfn"
+        stop("Upper spending function mis-specified")
     }
     else
     {   
@@ -70,11 +62,6 @@
     }
     
     x$upper <- upper
-
-    if (x$upper$errcode > 0)
-    {
-        return(gsReturnError(x, errcode=8, errmsg=upper$errmsg))
-    }
     
     # set up spending for lower bound
     if (x$test.type == 1) 
@@ -89,9 +76,7 @@
     {   
         if (!is.function(sfl))
         {     
-            x$lower <- list(errcode=9,
-                    errmsg="Lower spending function must be a built-in or user-defined function that returns object with class spendfn")
-            class(x$lower) <- "spendfn"
+            stop("Lower spending function must be a built-in or user-defined function that returns object with class spendfn")
         }
         else if (is.element(test.type, 3:4)) 
         {
@@ -107,11 +92,6 @@
         }
         
         x$lower$sf <- sfl
-        
-        if (x$lower$errcode > 0) 
-        { 
-            return(gsReturnError(x, errcode=8, errmsg=x$lower$errmsg))
-        }
     }
     
     # call appropriate calculation routine according to test.type
@@ -171,7 +151,7 @@
     # return error if boundary crossing probabilities do not meet desired tolerance
     if (max(abs(falsepos - y$probhi[,1])) > x$tol)
     {
-        return(gsReturnError(x,errcode=101,errmsg="False positive rates not achieved"))        
+        stop("False positive rates not achieved")   
     }
 
     x
@@ -185,7 +165,7 @@
     {    
         if (x$test.type == 5)
         {
-            return(gsReturnError(x,errcode=8,errmsg="Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing"))            
+            stop("Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing")          
         }
 
         Delta <- switch(x$upper$name, WT = x$upper$param, Pocock = 0.5, 0) 
@@ -253,12 +233,12 @@
     # return error if boundary crossing probabilities to not meet desired tolerance
     if (max(abs(falsepos - x$upper$prob[,1])) > x$tol)
     {
-        return(gsReturnError(x,errcode=errno,errmsg="False positive rates not achieved"))        
+        stop("False positive rates not achieved")        
     }
 
     if (max(abs(trueneg - x$lower$prob[,1])) > x$tol)
     {
-        return(gsReturnError(x,errcode=errno,errmsg="False negative rates not achieved"))        
+        stop("False negative rates not achieved")
     }
 
     x
@@ -269,7 +249,7 @@
     # Check added by K. Wills 12/4/2008
     if (is.element(x$upper$name, c("WT","Pocock","OF")))
     {    
-        return(gsReturnError(x,errcode=8,errmsg="Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing"))            
+        stop("Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing")  
     }
     
     # gsDType3: calculate bound assuming binding stopping rule and beta spending
@@ -329,12 +309,12 @@
     # return error if boundary crossing probabilities do not meet desired tolerance
     if (max(abs(falsepos - x3$probhi)) > x$tol)
     {
-        return(gsReturnError(x, errcode=103, errmsg="False positive rates not achieved"))        
+        stop("False positive rates not achieved")       
     }
 
     if (max(abs(falseneg - x2$problo)) > x$tol)
     {
-        return(gsReturnError(x, errcode=103.1, errmsg="False negative rates not achieved"))        
+        stop("False negative rates not achieved")       
     }
 
     x
@@ -402,7 +382,7 @@
     {
         # get initial lower bound
           x2 <- gsbound1(theta = -x$delta, I = x$n.I, a = -x1$b, probhi = falseneg, tol = x$tol, r = x$r)
-        x2$b[x2$k] <- -x1$b[x1$k]
+          x2$b[x2$k] <- -x1$b[x1$k]
           x2 <- gsprob(x$delta, x$n.I, -x2$b, x1$b, r=x$r)
 
           # set up x3 for loop and set flag so loop runs 1st time
@@ -446,7 +426,7 @@
     # Check added by K. Wills 12/4/2008
     if (is.element(x$upper$name, c("WT","Pocock","OF")))
     {    
-        return(gsReturnError(x,errcode=8,errmsg="Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing"))            
+        stop("Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing")       
     }
     
     if (max(x$n.I) == 0) gsDType4ss(x) else gsDType4a(x)
@@ -518,12 +498,12 @@
     # return error if boundary crossing probabilities do not meet desired tolerance
     if (max(abs(falsepos-x$falseposnb)) > x$tol)
     {
-        return(gsReturnError(x,errcode=104,errmsg="False positive rates not achieved"))        
+        stop("False positive rates not achieved")
     }
 
     if (max(abs(falseneg-x$lower$prob[,2])) > x$tol)
     {
-        return(gsReturnError(x,errcode=104.1,errmsg="False negative rates not achieved"))        
+        stop("False negative rates not achieved")      
     }
 
     x
@@ -536,7 +516,7 @@
     # Check added by K. Wills 12/4/2008
     if (is.element(x$upper$name, c("WT","Pocock","OF")))
     {    
-        return(gsReturnError(x,errcode=8,errmsg="Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing"))            
+        stop("Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing")          
     }
     
     # compute upper bounds with non-binding assumption 
@@ -595,11 +575,12 @@
     # return error if boundary crossing probabilities do not meet desired tolerance
     if (max(abs(falsepos-x$falseposnb)) > x$tol)
     {
-        return(gsReturnError(x,errcode=106,errmsg="False positive rates not achieved"))        
+        stop("False positive rates not achieved")       
     }
 
-    if (max(abs(trueneg[1:x$k-1] - x$lower$prob[1:x$k-1,1])) > x$tol){
-        return(gsReturnError(x,errcode=106.1,errmsg="True negative rates not achieved"))        
+    if (max(abs(trueneg[1:x$k-1] - x$lower$prob[1:x$k-1,1])) > x$tol)
+    {
+        stop("True negative rates not achieved")    
     }
 
     x
@@ -619,6 +600,7 @@
     checkLengths(trueneg, falsepos, I)    
     
     k <- as.integer(length(I))
+    r <- as.integer(r)
     storage.mode(I) <- "double"
     storage.mode(trueneg) <- "double"
     storage.mode(falsepos) <- "double"
@@ -626,7 +608,7 @@
     a <- falsepos
     b <- falsepos
     retval <- as.integer(0)
-    xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, as.integer(r), retval)
+    xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval)
     rates <- list(falsepos=xx[[6]], trueneg=xx[[5]])
     
     list(k=xx[[1]],theta=0.,I=xx[[2]],a=xx[[3]],b=xx[[4]],rates=rates,tol=xx[[7]],
@@ -686,6 +668,9 @@
     
     # coerce type
     k <- as.integer(length(I))
+    r <- as.integer(r)
+    printerr <- as.integer(printerr)
+    
     storage.mode(theta) <- "double"
     storage.mode(I) <- "double"
     storage.mode(a) <- "double"
@@ -694,10 +679,12 @@
     problo <- a
     b <- a
     retval <- as.integer(0)
-    xx <- .C("gsbound1", k, theta, I, a, b, problo, probhi, tol, as.integer(r), retval, 
-          as.integer(printerr))
+  
+    xx <- .C("gsbound1", k, theta, I, a, b, problo, probhi, tol, r, retval, printerr)
+    
     y <- list(k=xx[[1]], theta=xx[[2]], I=xx[[3]], a=xx[[4]], b=xx[[5]], 
             problo=xx[[6]], probhi=xx[[7]], tol=xx[[8]], r=xx[[9]], error=xx[[10]])
+    
     if (y$error==0 && min(y$b-y$a) < 0)
     {   
         indx <- (y$b - y$a < 0)
@@ -768,12 +755,6 @@
     ntheta <- as.integer(length(theta))
     theta <- as.real(theta)
     
-    if (!is.real(theta))
-    {    
-        errcode <- 2
-        errmsg <- "theta must be real-valued"
-    }
-    
     phi <- as.double(c(1:(k*ntheta)))
     plo <- as.double(c(1:(k*ntheta)))
     xx <- .C("probrej", k, ntheta, as.double(theta), as.double(n.I), 
@@ -835,7 +816,7 @@
     futile <- array(1, k) %*% plo
     en <- as.vector(n.I %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
     x <- list(k=xx[[1]], theta=xx[[3]], n.I=xx[[4]], lower=list(bound=xx[[5]], prob=plo), 
-                    upper=list(bound=xx[[6]], prob=phi), en=en, r=r, errcode=0, errmsg="No errors detected")
+                    upper=list(bound=xx[[6]], prob=phi), en=en, r=r)
     
     class(x) <- "gsProbability"
     

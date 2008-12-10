@@ -6,23 +6,23 @@
     
     if (!(is(x, "gsProbability") || is(x, "gsDesign")))
     {    
-        gsReturnError(x, 1, "gsCP must be called with class of x either gsProbability or gsDesign")
+        stop("gsCP must be called with class of x either gsProbability or gsDesign")
     }
     
     if (i < 1 || i >= x$k)
     {    
-        gsReturnError(x, 2, "gsCP must be called with i from 1 to x$k-1")
+        stop("gsCP must be called with i from 1 to x$k-1")
     }
     
     test.type <- ifelse(is(x, "gsProbability"), 3, x$test.type)
     
     if (zi > x$upper$bound[i])
     {    
-        gsReturnError(x, 3, "gsCP must have x$lower$bound[i] <= zi <= x$upper$bound[i]")
+        stop("gsCP must have x$lower$bound[i] <= zi <= x$upper$bound[i]")
     }
     else if (test.type > 1 && zi < x$lower$bound[i])
     {
-        gsReturnError(x, 3, "gsCP must have x$lower$bound[i]<=zi<=x$upper$bound[i]")            
+        stop("gsCP must have x$lower$bound[i]<=zi<=x$upper$bound[i]")            
     }
   
     if (!is.real(theta) || is.na(theta))

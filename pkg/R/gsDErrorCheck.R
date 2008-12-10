@@ -1,15 +1,3 @@
-"gsReturnError" <- function(x, errcode, errmsg)
-{    
-    x$errcode <- errcode
-    x$errmsg <- errmsg
-    
-    if (errcode > 0){
-        stop("Error code ", errcode, " : ", errmsg)
-    }
-    
-    x
-}
-
 "gsDErrorCheck" <- function(x)
 {
     # check input arguments for type, range, and length
@@ -52,7 +40,7 @@
         checkRange(length(x$n.I), c(2,Inf))
         if (!(all(sort(x$n.I) == x$n.I) && all(x$n.I > 0)))
         {
-            return(gsReturnError(x, errcode=11.3, errmsg="n.I must be an increasing, positive sequence"))
+            stop("n.I must be an increasing, positive sequence")
         }
         
         if (x$maxn.IPlan <= 0) 
@@ -61,22 +49,21 @@
         }
         else if (x$test.type < 3 && is.character(x$sfu))
         {
-            return(gsReturnError(x,errcode=11.31,
-                            errmsg="maxn.IPlan can only be > 0 if spending functions are used for boundaries"))
+            stop("maxn.IPlan can only be > 0 if spending functions are used for boundaries")
         }
         
         x$timing <- x$n.I[1:(x$k-1)] / x$maxn.IPlan
         
         if (x$n.I[x$k-1] >= x$maxn.IPlan)
         {
-            return(gsReturnError(x, errcode=12, errmsg="maxn.IPlan must be > n.I[k-1]"))            
+            stop("maxn.IPlan must be > n.I[k-1]")        
         }
     }
     else if (x$maxn.IPlan > 0)
     {   
         if (length(x$n.I) == 1)
         {
-            return(gsReturnError(x, errcode=11.4, errmsg="If maxn.IPlan is specified, n.I must be specified"))
+            stop("If maxn.IPlan is specified, n.I must be specified")
         }
     }    
 
@@ -95,17 +82,17 @@
         }
         else if (x$timing[x$k]!=1)
         {
-            return(gsReturnError(x, errcode=8, errmsg="if analysis timing for final analysis is input, it must be 1"))            
+            stop("if analysis timing for final analysis is input, it must be 1")           
         }
 
         if (min(x$timing - c(0,x$timing[1:x$k-1])) <= 0)
         {
-            return(gsReturnError(x, errcode=8.1, errmsg="input timing of interim analyses must be increasing strictly between 0 and 1"))            
+            stop("input timing of interim analyses must be increasing strictly between 0 and 1")           
         }
     }
     else
     {
-        return(gsReturnError(x, errcode=8.2, errmsg="value input for timing must be length 1, k-1 or k"))
+        stop("value input for timing must be length 1, k-1 or k")
     }
 
     # check input values for tol, r
@@ -118,18 +105,6 @@
     x$k <- as.integer(x$k)
     x$test.type <- as.integer(x$test.type)
     x$r <- as.integer(x$r)
-    
-    #if you get here, no error found
-    return(gsReturnError(x, errcode=0, errmsg="No errors detected"))
-}
-
-"gsCheckSpend" <- function(x)
-{   
-    if (class(x) != "spend")
-    {   
-        x <- gsReturnError(x, errcode=1, errmsg="Spending function must return a value of class 'spend'")
-        return(x)
-    }
     
     x
 }
