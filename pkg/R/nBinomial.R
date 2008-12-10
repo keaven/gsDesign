@@ -9,7 +9,7 @@
     checkScalar(beta, "numeric", c(0, 1 - alpha / sided), c(FALSE, FALSE))
     checkScalar(delta0, "numeric")
     checkScalar(ratio, "numeric", c(0, Inf), c(FALSE, TRUE))
-    checkScalar(outtype, "integer", c(1, 2, 3))
+    checkScalar(outtype, "integer", c(1, 3))
     checkScalar(scale, "character")
     scale <- match.arg(tolower(scale), c("difference", "rr", "or"))
     if (p1 >= p2 + delta0)
