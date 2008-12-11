@@ -10,7 +10,7 @@
 test.Deming.OFbound <- function()
 {
 	x <- gsDesign(k=4, test.type=2, sfu="OF", n.fix=1372, beta=.2)
-	checkEquals(round(x$upper$bound), c(4.05, 2.86, 2.34, 2.02), msg="Checking O'Brien-Fleming bounds")
+	checkEquals(round(x$upper$bound, 2), c(4.05, 2.86, 2.34, 2.02), msg="Checking O'Brien-Fleming bounds")
 }
 
 
