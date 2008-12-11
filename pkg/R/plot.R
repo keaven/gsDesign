@@ -209,7 +209,19 @@
         legtext=if (x$test.type > 4) c("Upper bound", "Lower bound") else c(expression(paste(alpha, "-spending")), 
                             expression(paste(beta, "-spending"))), 
         mai=c(.85, .75, .5, .5), lty=1:2, xmax=1, ...)
-{    
+{
+	# K. Wills (GSD-31)
+	if (is(x, "gsProbability"))
+	{
+		stop("Spending function plot not available for gsProbability object")
+	}
+	
+	# K. Wills (GSD-30)
+	if (x$upper$name %in% c("WT", "OF", "Pocock") || x$upper$parname=="Points")
+	{
+		stop("Spending function plot not available for pointwise spending functions")
+	}
+	
     t <- 0:40 / 40 * xmax
             
     if (x$test.type > 2)
