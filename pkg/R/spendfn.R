@@ -1,6 +1,8 @@
 "sfPower" <- function(alpha, t, param)
-{  
-    checkScalar(param, "numeric", c(0, Inf), c(FALSE, TRUE))
+{
+	# K. Wills 12/11/08: restrict param range
+	# checkScalar(param, "numeric", c(0, Inf), c(FALSE, TRUE))
+	checkScalar(param, "numeric", c(0, 15), c(FALSE, TRUE))
 
     t[t > 1] <- 1
 
@@ -29,7 +31,9 @@
 
 "sfExponential" <- function(alpha, t, param)
 {  
-    checkScalar(param, "numeric", c(0, 10), c(FALSE, TRUE))
+	# K. Wills 12/11/08: restrict param range
+	# checkScalar(param, "numeric", c(0, 10), c(FALSE, TRUE))
+	checkScalar(param, "numeric", c(0, 1.5), c(FALSE, TRUE))
     
     t[t > 1] <- 1
     

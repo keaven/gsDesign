@@ -80,27 +80,64 @@
 	checkEquals(round(x$upper$bound[7], 3), 2.313, msg="Checking 2-sided WT bound, Delta=0.4, k=7, beta=0.2")	
 }
 
-# test.JT.Power
+# test.JT.Power.symm
 # JT p. 150-151
 
-"test.JT.Power" <- function()
+"test.JT.Power.symm" <- function()
 {
 	x <- gsDesign(k=3, test.type=2, sfu=sfPower, sfupar=1, beta=0.2)
 	checkEquals(round(x$n.I[3]*100, 1), 111.7, msg="Checking symm 2-sided sfPower (gsDesign n.I), k=3, rho=1")
 	checkEquals(round(x$en[1]*100, 1), 109.9, msg="Checking symm 2-sided sfPower (gsDesign en), k=15, beta=0.1")
 	y <- gsProbability(theta=x$delta*c(0, 0.5, 1, 1.5), d=x)
-	checkEquals(round(y$en*100, 1), c(109.9, 103.4, 81.2, 56.5), msg="Checking symm 2-sided sfPower (gsDesign), k=3, rho=1")
+	checkEquals(round(y$en*100, 1), c(109.9, 103.4, 81.2, 56.5), msg="Checking symm 2-sided sfPower (gsProb), k=3, rho=1")
 	
 	x <- gsDesign(k=10, test.type=2, sfu=sfPower, sfupar=2, beta=0.2)
 	checkEquals(round(x$n.I[10]*100, 1), 108.1, msg="Checking symm 2-sided sfPower (gsDesign), k=10, rho=2")
 	checkEquals(round(x$en[1]*100, 1), 106.6, msg="Checking symm 2-sided sfPower (gsDesign en), k=10, rho=2")
 	y <- gsProbability(theta=x$delta*c(0, 0.5, 1, 1.5), d=x)
-	checkEquals(round(y$en*100, 1), c(106.6, 99.7, 76.2, 51.0), msg="Checking symm 2-sided sfPower (gsDesign), k=10, rho=2")
+	checkEquals(round(y$en*100, 1), c(106.6, 99.7, 76.2, 51.0), msg="Checking symm 2-sided sfPower (gsProb), k=10, rho=2")
 	
 	x <- gsDesign(k=2, test.type=2, sfu=sfPower, sfupar=3, beta=0.2)
 	checkEquals(round(x$n.I[2]*100, 1), 101.0, msg="Checking symm 2-sided sfPower (gsDesign), k=2, rho=3")
 	checkEquals(round(x$en[1]*100, 1), 100.7, msg="Checking symm 2-sided sfPower (gsDesign en), k=2, rho=3")
 	y <- gsProbability(theta=x$delta*c(0, 0.5, 1, 1.5), d=x)
-	checkEquals(round(y$en*100, 1), c(100.7, 98.9, 89.5, 70.7), msg="Checking symm 2-sided sfPower (gsDesign), k=2, rho=3")
+	checkEquals(round(y$en*100, 1), c(100.7, 98.9, 89.5, 70.7), msg="Checking symm 2-sided sfPower (gsProb), k=2, rho=3")
 }
+
+# test.JT.Power.type3
+# JT p. 150-151
+
+"test.JT.Power.type3" <- function()
+{
+	x <- gsDesign(k=5, test.type=3, alpha=0.05, beta=0.05, sfu=sfPower, sfupar=2, sfl=sfPower, sflpar=2)
+	checkEquals(round(x$n.I[5]*100, 1), 110.1, msg="Checking type3 sfPower (gsDesign n.I), k=5, rho=2, beta=0.05")
+	checkEquals(round(x$en[1]*100, 1), 63.4, msg="Checking type3 sfPower (gsDesign en), k=5, rho=2, beta=0.05")
+	y <- gsProbability(theta=x$delta*c(0, 0.5, 1), d=x)
+	checkEquals(round(y$en*100, 1), c(63.4, 80.3, 63.4), msg="Checking type3 sfPower (gsProb), k=5, rho=2, beta=0.05")
+	
+	x <- gsDesign(k=10, test.type=3, alpha=0.05, beta=0.05, sfu=sfPower, sfupar=3, sfl=sfPower, sflpar=3)
+	checkEquals(round(x$n.I[10]*100, 1), 106.9, msg="Checking type3 sfPower (gsDesign n.I), k=10, rho=3, beta=0.05")
+	checkEquals(round(x$en[1]*100, 1), 63.1, msg="Checking type3 sfPower (gsDesign en), k=10, rho=3, beta=0.05")
+	y <- gsProbability(theta=x$delta*c(0, 0.5, 1), d=x)
+	checkEquals(round(y$en*100, 1), c(63.1, 79.5, 63.1), msg="Checking type3 sfPower (gsProb), k=10, rho=3, beta=0.05")
+	
+	x <- gsDesign(test.type=3, alpha=0.05, sfu=sfPower, sfupar=2, sfl=sfPower, sflpar=2)
+	checkEquals(round(x$n.I[3]*100, 1), 107.2, msg="Checking type3 sfPower (gsDesign n.I), k=3, rho=2, beta=0.1")
+	checkEquals(round(x$en[1]*100, 1), 68.1, msg="Checking type3 sfPower (gsDesign en), k=3, rho=2, beta=0.1")
+	y <- gsProbability(theta=x$delta*c(0, 0.5, 1), d=x)
+	checkEquals(round(y$en*100, 1), c(68.1, 83.9, 73.8), msg="Checking type3 sfPower (gsProb), k=3, rho=2, beta=0.1")
+	
+	x <- gsDesign(k=4, test.type=3, alpha=0.05, sfu=sfPower, sfupar=3, sfl=sfPower, sflpar=3)
+	checkEquals(round(x$n.I[4]*100, 1), 104.0, msg="Checking type3 sfPower (gsDesign n.I), k=4, rho=3, beta=0.1")
+	checkEquals(round(x$en[1]*100, 1), 69.2, msg="Checking type3 sfPower (gsDesign en), k=4, rho=3, beta=0.1")
+	y <- gsProbability(theta=x$delta*c(0, 0.5, 1), d=x)
+	checkEquals(round(y$en*100, 1), c(69.2, 84.2, 74.2), msg="Checking type3 sfPower (gsProb), k=3, rho=3, beta=0.1")
+	
+	x <- gsDesign(k=2, test.type=3, alpha=0.05, beta=0.2, sfu=sfPower, sfupar=2, sfl=sfPower, sflpar=2)
+	checkEquals(round(x$n.I[2]*100, 1), 104.3, msg="Checking type3 sfPower (gsDesign n.I), k=2, rho=2, beta=0.2")
+	checkEquals(round(x$en[1]*100, 1), 74.5, msg="Checking type3 sfPower (gsDesign en), k=2, rho=2, beta=0.2")
+	y <- gsProbability(theta=x$delta*c(0, 0.5, 1), d=x)
+	checkEquals(round(y$en*100, 1), c(74.5, 87.8, 84.6), msg="Checking type3 sfPower (gsProb), k=2, rho=2, beta=0.2")
+}	
+	
 
