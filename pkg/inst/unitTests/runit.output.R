@@ -31,7 +31,7 @@
 # Group Sequential Methods & Applications to Clinical Trials
 
 # test.JT.OFss
-# JT p. 38
+# JT Table 2.8 p. 38
 
 "test.JT.OFss" <- function()
 {
@@ -45,7 +45,7 @@
 }
 
 # test.JT.Pocock
-# JT p. 37
+# JT Table 2.7 p. 37
 
 "test.JT.Pocock" <- function()
 {
@@ -63,7 +63,8 @@
 }
 
 # test.JT.WT
-# JT p. 40-41
+# JT Table 2.9 p. 40
+# JT Table 2.10 p. 41
 
 "test.JT.WT" <- function()
 {
@@ -81,13 +82,13 @@
 }
 
 # test.JT.Power.symm
-# JT p. 150-151
+# JT Table 7.2 p. 151
 
 "test.JT.Power.symm" <- function()
 {
 	x <- gsDesign(k=3, test.type=2, sfu=sfPower, sfupar=1, beta=0.2)
 	checkEquals(round(x$n.I[3]*100, 1), 111.7, msg="Checking symm 2-sided sfPower (gsDesign n.I), k=3, rho=1")
-	checkEquals(round(x$en[1]*100, 1), 109.9, msg="Checking symm 2-sided sfPower (gsDesign en), k=15, beta=0.1")
+	checkEquals(round(x$en[1]*100, 1), 109.9, msg="Checking symm 2-sided sfPower (gsDesign en), k=3, rho=1")
 	y <- gsProbability(theta=x$delta*c(0, 0.5, 1, 1.5), d=x)
 	checkEquals(round(y$en*100, 1), c(109.9, 103.4, 81.2, 56.5), msg="Checking symm 2-sided sfPower (gsProb), k=3, rho=1")
 	
@@ -105,7 +106,9 @@
 }
 
 # test.JT.Power.type3
-# JT p. 150-151
+# JT Table 7.7 p. 165
+# JT Table 7.8 p. 166
+# JT Table 7.9 p. 167
 
 "test.JT.Power.type3" <- function()
 {
@@ -138,6 +141,12 @@
 	checkEquals(round(x$en[1]*100, 1), 74.5, msg="Checking type3 sfPower (gsDesign en), k=2, rho=2, beta=0.2")
 	y <- gsProbability(theta=x$delta*c(0, 0.5, 1), d=x)
 	checkEquals(round(y$en*100, 1), c(74.5, 87.8, 84.6), msg="Checking type3 sfPower (gsProb), k=2, rho=2, beta=0.2")
+	
+	x <- gsDesign(k=15, test.type=3, alpha=0.05, beta=0.2, sfu=sfPower, sfupar=3, sfl=sfPower, sflpar=3)
+	checkEquals(round(x$n.I[15]*100, 1), 106.9, msg="Checking type3 sfPower (gsDesign n.I), k=15, rho=3, beta=0.2")
+	checkEquals(round(x$en[1]*100, 1), 62.2, msg="Checking type3 sfPower (gsDesign en), k=15, rho=3, beta=0.2")
+	y <- gsProbability(theta=x$delta*c(0, 0.5, 1), d=x)
+	checkEquals(round(y$en*100, 1), c(62.2, 77.3, 73.0), msg="Checking type3 sfPower (gsProb), k=15, rho=3, beta=0.2")
 }	
 	
 
