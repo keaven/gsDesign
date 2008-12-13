@@ -2,6 +2,9 @@
 {    
     checkScalar(r,"integer", c(1, 80))
     checkVector(bounds,"numeric")
+    checkScalar(mu, "numeric")
+    checkScalar(sigma, "numeric", c(0, Inf), c(FALSE, TRUE))
+    
     if (length(bounds) != 2)
     {
         stop("bounds variable in normalGrid must be numeric and have length 2")

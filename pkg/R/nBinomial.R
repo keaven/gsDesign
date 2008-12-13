@@ -9,14 +9,26 @@
     checkScalar(beta, "numeric", c(0, 1 - alpha / sided), c(FALSE, FALSE))
     checkScalar(delta0, "numeric")
     checkScalar(ratio, "numeric", c(0, Inf), c(FALSE, TRUE))
-    checkScalar(outtype, "integer", c(1, 3))
+    checkScalar(outtype, "integer", c(1, 2))
     checkScalar(scale, "character")
     scale <- match.arg(tolower(scale), c("difference", "rr", "or"))
-    if (p1 >= p2 + delta0)
-    {
-      #  stop("The condition p1 < p2 + delta0 not met")
-    }
+    checkLengths(p1, p2)
     
+    if (delta0 == 0)
+    {
+        if (p1 == p2)
+        {
+            stop("p1 cannot equal p2 when delta0 is zero")
+        }
+    }
+    else
+    {
+        if (scale == "difference" && p1 + delta0 == p2)
+        {
+            stop("p2 cannot equal p1 + delta0 when scale is \"Difference\"")
+        }
+    }
+
     # get z-values needed 
     z.beta  <- qnorm(1 - beta)    
     

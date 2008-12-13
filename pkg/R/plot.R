@@ -23,12 +23,14 @@
 }
 
 "plot.gsDesign" <- function(x, plottype=1, ...)
-{    
+{   
+    checkScalar(plottype, "integer", c(1, 7))
     invisible(do.call(gsPlotName(plottype), list(x, ...)))
 }
 
 "plot.gsProbability" <- function(x, plottype=2, ...)
-{    
+{   
+    checkScalar(plottype, "integer", c(1, 7))    
     invisible(do.call(gsPlotName(plottype), list(x, ...)))
 }
 

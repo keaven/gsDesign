@@ -8,6 +8,7 @@
     checkScalar(n1, "integer", c(1, Inf))
     checkScalar(n2, "integer", c(1, Inf))
     checkScalar(nsim, "integer", c(1, Inf))
+    checkLengths(p1, p2)
     
     x1 <- rbinom(p=p1, size=n1, n=nsim)
     x2 <- rbinom(p=p2, size=n2, n=nsim)
@@ -27,6 +28,7 @@
     checkScalar(adj, "integer", c(0, 1))
     checkScalar(scale, "character")
     scale <- match.arg(tolower(scale), c("difference"))
+    checkLengths(x1, x2)
     
     if (scale == "difference")
     {    
@@ -98,6 +100,7 @@
     checkScalar(scale, "character")
     scale <- match.arg(tolower(scale), c("difference", "rr", "or", "lnor"))
     checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
+    checkLengths(x1, x2)
     
     ntot <- n1 + n2
     xtot <- x1 + x2
