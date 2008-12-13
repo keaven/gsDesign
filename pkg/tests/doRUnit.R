@@ -4,6 +4,7 @@ if(require("RUnit", quietly=TRUE)) {
   ## --- Setup ---
  
   pkg <- "gsDesign" # <-- Change to package name!
+  
   if(Sys.getenv("RCMDCHECK") == "FALSE") {
     ## Path to unit tests for standalone running under Makefile (not R CMD check)
     ## PKG/tests/../inst/unitTests
@@ -45,6 +46,7 @@ if(require("RUnit", quietly=TRUE)) {
  
   ## Report to HTML file
   printHTMLProtocol(tests, fileName=paste(pathReport, ".html", sep=""))
+#  printHTMLProtocol(tests, fileName=file.path(dirname(dirname(getwd())),pkg,"gsDesign-RUnit-Test-Summary.html")) #paste(pathReport, ".html", sep=""))  
  
   ## Return stop() to cause R CMD check stop in case of
   ##  - failures i.e. FALSE to unit tests or
