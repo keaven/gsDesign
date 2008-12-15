@@ -13,7 +13,7 @@ isInteger(x)
 checkScalar(x, isType = "numeric", ...)
 checkVector(x, isType = "numeric", ..., length=NULL) 
 checkRange(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = deparse(substitute(x)))
-checkLengths(...)
+checkLengths(..., allowSingle=FALSE)
 }
 \arguments{
   \item{x}{any object.}
@@ -31,6 +31,9 @@ checkLengths(...)
   \item{\dots}{For the \code{\link{checkScalar}} and \code{\link{checkVector}} functions, this input represents additional 
   arguments sent directly to the \code{\link{checkRange}} function. For the \code{\link{checkLengths}} function, this input
   represents the arguments to check for equal lengths.}
+  \item{allowSingle}{logical flag. If \code{TRUE}, arguments that are vectors comprised of a single element are not included in 
+  the comparative length test in the \code{\link{checkLengths}} function. Partial matching on the name of this argument is not
+  performed so you must specify 'allowSingle' in its entirety in the call.}
 }
 
 \details{
@@ -75,6 +78,10 @@ try(foo(1:5)) # expect error with function and argument name in message
 # check for equal lengths of various inputs
 checkLengths(1:2, 2:3, 3:4)
 try(checkLengths(1,2,3,4:5)) # expect error
+
+# check for equal length inputs but ignore single element vectors
+checkLengths(1,2,3,4:5,7:8, allowSingle=TRUE)
+
 }
 
 \keyword{programming}

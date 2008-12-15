@@ -90,17 +90,17 @@
         scale="Difference", tol=.1e-10)
 {
     # check input arguments
-    checkScalar(n1, "integer", c(1, Inf))
-    checkScalar(n2, "integer", c(1, Inf))
+    checkVector(n1, "integer", c(1, Inf))
+    checkVector(n2, "integer", c(1, Inf))
     checkVector(x1, "integer", c(0, n1))
     checkVector(x2, "integer", c(0, n2))
-    checkScalar(delta0, "numeric", c(-1, 1), c(FALSE, FALSE))
-    checkScalar(chisq, "integer", c(0, 1))
-    checkScalar(adj, "integer", c(0, 1))
+    checkVector(delta0, "numeric", c(-1, 1), c(FALSE, FALSE))
+    checkVector(chisq, "integer", c(0, 1))
+    checkVector(adj, "integer", c(0, 1))
     checkScalar(scale, "character")
     scale <- match.arg(tolower(scale), c("difference", "rr", "or", "lnor"))
     checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
-    checkLengths(x1, x2)
+    checkLengths(n1, n2, x1, x2, delta0, chisq, adj, allowSingle=TRUE)
     
     ntot <- n1 + n2
     xtot <- x1 + x2

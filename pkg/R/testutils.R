@@ -114,13 +114,19 @@
     invisible(NULL)
 }
 
-"checkLengths" <- function(...)
+"checkLengths" <- function(..., allowSingle=FALSE)
 {
     parent <- as.character(sys.call(-1)[[1]])
     err <- paste(if (length(parent) > 0) paste("In function", parent, ":") else "", 
                  "lengths of inputs are not all equal") 
     
     lens <- unlist(lapply(list(...),length))
+    
+    if (allowSingle)
+    {
+        lens <- lens[lens > 1]
+    }
+    
     if (length(lens) > 0 && length(unique(lens)) != 1)
     {
         stop(err)        
