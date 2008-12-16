@@ -1,6 +1,6 @@
 useDynLib(gsDesign)
 export(gsBoundCP, gsCP)
-export(gsbound, gsbound1, gsDesign, gsProbability)
+export(gsBound, gsBound1, gsDesign, gsProbability)
 export(ciBinomial, nBinomial, simBinomial, testBinomial)
 export(print.gsProbability, plot.gsDesign)
 export(nSurvival)

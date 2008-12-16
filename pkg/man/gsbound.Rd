@@ -1,26 +1,26 @@
-\name{gsbound}
-\alias{gsbound}
-\alias{gsbound1}
+\name{gsBound}
+\alias{gsBound}
+\alias{gsBound1}
 
 \title{Boundary derivation}
-\description{\code{gsbound()} and \code{gsbound1()} are lower-level functions used to find boundaries for a group sequential design.
-They are not recommended (especially \code{gsbound1()} for casual users.
+\description{\code{gsBound()} and \code{gsBound1()} are lower-level functions used to find boundaries for a group sequential design.
+They are not recommended (especially \code{gsBound1()} for casual users.
 These functions do not adjust sample size as \code{gsDesign()} does to ensure appropriate power for a design.
-The function \code{gsbound1()} requires special attention to detail and knowledge of behavior when a design corresponding to the input
+The function \code{gsBound1()} requires special attention to detail and knowledge of behavior when a design corresponding to the input
 parameters does not exist.
 
-\code{gsbound()} computes upper and lower bounds given boundary crossing probabilities assuming a mean of 0, the usual null hypothesis.
-\code{gsbound1()} computes the upper bound given a lower boundary, upper boundary crossing probabilities and an arbitrary mean 
+\code{gsBound()} computes upper and lower bounds given boundary crossing probabilities assuming a mean of 0, the usual null hypothesis.
+\code{gsBound1()} computes the upper bound given a lower boundary, upper boundary crossing probabilities and an arbitrary mean 
 (\code{theta}).}
 \usage{
-gsbound(I, trueneg, falsepos, tol=0.000001, r=18)
-gsbound1(theta, I, a, probhi, tol=0.000001, r=18, printerr=0)
+gsBound(I, trueneg, falsepos, tol=0.000001, r=18)
+gsBound1(theta, I, a, probhi, tol=0.000001, r=18, printerr=0)
 }
 \arguments{
 Note that all vector arguments should have the same length which will be denoted here as \code{k}.
 	\item{theta}{Scalar containing mean (drift) per unit of statistical information.}
 	\item{I}{Vector containing statistical information planned at each analysis.}
-	\item{a}{Vector containing lower bound that is fixed for use in \code{gsbound1}.}
+	\item{a}{Vector containing lower bound that is fixed for use in \code{gsBound1}.}
 	\item{trueneg}{Vector of desired probabilities for crossing upper bound assuming mean of 0.}
 	\item{falsepos}{Vector of desired probabilities for crossing lower bound assuming mean of 0.}
 	\item{probhi}{Vector of desired probabilities for crossing upper bound assuming mean of theta.}
@@ -42,7 +42,7 @@ Note that all vector arguments should have the same length which will be denoted
             problo=xx[[6]],probhi=xx[[7]],tol=xx[[8]],r=xx[[9]],error=xx[[10]])
 Both routines return a list. Common items returned by the two routines are: 
 \item{k}{The length of vectors input; a scalar.}
-\item{theta}{As input in \code{gsbound1()}; 0 for \code{gsbound()}.}
+\item{theta}{As input in \code{gsBound1()}; 0 for \code{gsBound()}.}
 \item{I}{As input.}
 \item{a}{}
 \item{b}{}
@@ -50,12 +50,12 @@ Both routines return a list. Common items returned by the two routines are:
 \item{r}{As input.}
 \item{error}{Error code. 0 if no error; > 0 otherwise.}
 
-\code{gsbound()} also returns the following items:
+\code{gsBound()} also returns the following items:
 \item{rates}{a list containing two items:}
 \item{falsepos}{vector of upper boundary crossing probabilities as input.}
 \item{trueneg}{vector of lower boundary crossing probabilities as input.}
 
-\code{gsbound1()} also returns the following items:
+\code{gsBound1()} also returns the following items:
 \item{problo}{vector of lower boundary crossing probabilities; computed using input lower bound
 and derived upper bound.}
 \item{probhi}{vector of upper boundary crossing probabilities as input.}
@@ -76,23 +76,23 @@ Boca Raton: Chapman and Hall.
 \examples{
 #  set boundaries so that probability is .01 of first crossing each upper boundary
 #  and .02 of crossing each lower boundary under null hypothesis
-x <- gsbound(I=c(1, 2, 3)/3, trueneg=array(.02, 3), falsepos=array(.01, 3))
+x <- gsBound(I=c(1, 2, 3)/3, trueneg=array(.02, 3), falsepos=array(.01, 3))
 x
 
-#  use gsbound1 to set up boundary for a 1-sided test
-x <- gsbound1(theta= 0, I=c(1, 2, 3) / 3, a=array(-20, 3), probhi=c(.001, .009, .015))
+#  use gsBound1 to set up boundary for a 1-sided test
+x <- gsBound1(theta= 0, I=c(1, 2, 3) / 3, a=array(-20, 3), probhi=c(.001, .009, .015))
 x$b
 
 # check boundary crossing probabilities with gsProbability 
 y <- gsProbability(k=3, theta=0, n.I=x$I, a=x$a, b=x$b)$upper$prob
 
-#  Note that gsbound1 only computes upper bound 
+#  Note that gsBound1 only computes upper bound 
 #  To get a lower bound under a parameter value theta:
 #      use minus the upper bound as a lower bound
 #      replace theta with -theta
 #      set probhi as desired lower boundary crossing probabilities 
 #  Here we let set lower boundary crossing at 0.05 at each analysis assuming theta=2.2 
-y <- gsbound1(theta=-2.2,  I=c(1,  2,  3)/3,  a= -x$b,  probhi=array(.05,  3))
+y <- gsBound1(theta=-2.2,  I=c(1,  2,  3)/3,  a= -x$b,  probhi=array(.05,  3))
 y$b
 
 #  Now use gsProbability to look at design

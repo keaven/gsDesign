@@ -3,8 +3,8 @@
 #
 #  Exported Functions:
 #                   
-#    gsbound
-#    gsbound1
+#    gsBound
+#    gsBound1
 #    gsDesign
 #    gsProbability
 #
@@ -40,9 +40,9 @@
 # Exported Functions
 ###
 
-"gsbound" <- function(I, trueneg, falsepos, tol=0.000001, r=18)
+"gsBound" <- function(I, trueneg, falsepos, tol=0.000001, r=18)
 {    
-    # gsbound: assuming theta=0, derive lower and upper crossing boundaries given 
+    # gsBound: assuming theta=0, derive lower and upper crossing boundaries given 
     #          timing of interims, false positive rates and true negative rates
     
     # check input arguments
@@ -69,9 +69,9 @@
             r=xx[[8]],error=xx[[9]])
 }
 
-"gsbound1" <- function(theta, I, a, probhi, tol=0.000001, r=18, printerr=0)
+"gsBound1" <- function(theta, I, a, probhi, tol=0.000001, r=18, printerr=0)
 {   
-    # gsbound1: derive upper bound to match specified upper bound crossing probability given
+    # gsBound1: derive upper bound to match specified upper bound crossing probability given
     #           a value of theta, a fixed lower bound and information at each analysis   
     
     # check input arguments
@@ -279,7 +279,7 @@
         x$upper$spend <- falsepos
     
         # compute upper bound and store in x
-        x$upper$bound <- gsbound1(0, x$timing, a, falsepos, x$tol, x$r)$b
+        x$upper$bound <- gsBound1(0, x$timing, a, falsepos, x$tol, x$r)$b
     }
 
     # set information to get desired power (only if sample size is being computed)
@@ -364,7 +364,7 @@
         }
         else
         {
-            x2 <- gsbound(I=x$n.I, trueneg=trueneg, falsepos=falsepos, tol=x$tol, r=x$r)
+            x2 <- gsBound(I=x$n.I, trueneg=trueneg, falsepos=falsepos, tol=x$tol, r=x$r)
         }
         
         x$upper$bound <- x2$b
@@ -412,7 +412,7 @@
     falsepos <- falsepos-c(0,falsepos[1:x$k-1])
     x$upper$spend <- falsepos
     trueneg <- array((1-x$alpha)/x$k,x$k)
-    x1 <- gsbound(x$timing,trueneg,falsepos,x$tol,x$r)
+    x1 <- gsBound(x$timing,trueneg,falsepos,x$tol,x$r)
 
     # get I(max) and lower bound
     I0 <- x$n.fix
@@ -432,7 +432,7 @@
     while (flag > x$tol && jj < 100)
       {    
         # if alpha <> power, go back to set upper bound, lower bound and I(max) 
-          x4 <- gsbound1(0, I, c(x2$a[1:k-1],-20), falsepos)
+          x4 <- gsBound1(0, I, c(x2$a[1:k-1],-20), falsepos)
           x2 <- gsI1(theta=x$delta, I=x$timing, beta=falseneg, b=x4$b, Ilow=I0/3,Ihigh=10*I0,x$tol,x$r)
           x3 <- gsprob(0,x2$I,x2$a,x2$b)
           gspowr <- x3$powr
@@ -517,7 +517,7 @@
 
     # compute initial upper bound under H0 
     trueneg <- array((1 - x$alpha) / x$k, x$k)
-    x1 <- gsbound(x$timing, trueneg, falsepos, x$tol, x$r)
+    x1 <- gsBound(x$timing, trueneg, falsepos, x$tol, x$r)
     
     # x$k==1 is a special case
     if (x$k == 1)
@@ -528,7 +528,7 @@
     else
     {
         # get initial lower bound
-          x2 <- gsbound1(theta = -x$delta, I = x$n.I, a = -x1$b, probhi = falseneg, tol = x$tol, r = x$r)
+          x2 <- gsBound1(theta = -x$delta, I = x$n.I, a = -x1$b, probhi = falseneg, tol = x$tol, r = x$r)
           x2$b[x2$k] <- -x1$b[x1$k]
           x2 <- gsprob(x$delta, x$n.I, -x2$b, x1$b, r=x$r)
 
@@ -543,8 +543,8 @@
             bold <- x2$b
             alphaold <- x3$powr
             a <- c(x2$a[1:(x2$k-1)], -20)
-            x4 <- gsbound1(0, x$n.I, a, falsepos)
-            x2 <- gsbound1(theta=-x$delta, I=x$n.I, a=-x4$b, probhi=falseneg, tol=x$tol, r=x$r)
+            x4 <- gsBound1(0, x$n.I, a, falsepos)
+            x2 <- gsBound1(theta=-x$delta, I=x$n.I, a=-x4$b, probhi=falseneg, tol=x$tol, r=x$r)
             x2$a[x2$k] <-  x2$b[x2$k]
             x2 <- gsprob(x$delta, x$n.I, -x2$b, x4$b, r=x$r)
             x3 <- gsprob(0, x2$I, x2$a, x2$b)
@@ -589,10 +589,10 @@
     x$upper$spend <- falsepos
 
     # compute upper bound under H0 
-    x1 <- gsbound1(theta = 0, I = x$timing, a = array(-20, x$k), probhi = falsepos, tol = x$tol, r = x$r)
+    x1 <- gsBound1(theta = 0, I = x$timing, a = array(-20, x$k), probhi = falsepos, tol = x$tol, r = x$r)
 
     # get lower bound
-      x2 <- gsbound1(theta = -x$delta, I = x$n.I, a = -x1$b, probhi = falseneg, tol = x$tol, r = x$r)
+      x2 <- gsBound1(theta = -x$delta, I = x$n.I, a = -x1$b, probhi = falseneg, tol = x$tol, r = x$r)
     if (-x2$b[x2$k] > x1$b[x1$k] - x$tol)
     {
         x2$b[x2$k] <- -x1$b[x1$k]
@@ -618,7 +618,7 @@
     falsepos <- x$upper$spend
     falsepos <- falsepos-c(0,falsepos[1:x$k-1])
     x$upper$spend <- falsepos
-    x0 <- gsbound1(0., x$timing, array(-20, x$k), falsepos, x$tol, x$r)
+    x0 <- gsBound1(0., x$timing, array(-20, x$k), falsepos, x$tol, x$r)
 
     # get beta spending (falseneg)
     falseneg <- x$lower$spend
@@ -666,7 +666,7 @@
     falsepos <- x$upper$spend
     falsepos <- falsepos-c(0, falsepos[1:x$k-1])
     x$upper$spend <- falsepos
-    x0 <- gsbound1(0., x$timing, array(-20, x$k), falsepos, x$tol, x$r)
+    x0 <- gsBound1(0., x$timing, array(-20, x$k), falsepos, x$tol, x$r)
     x$upper$bound <- x0$b
     
     if (x$astar == 1 - x$alpha)
@@ -681,7 +681,7 @@
         
         while (flag > x$tol && i < 10)
         {      
-            xx <- gsbound1(0, x$timing, -x$upper$bound, trueneg, x$tol, x$r)
+            xx <- gsBound1(0, x$timing, -x$upper$bound, trueneg, x$tol, x$r)
             alpha <- sum(xx$problo)
             trueneg <- (1 - alpha) * tn / x$astar
             xx2 <- gsprob(0, x$timing, c(-xx$b[1:x$k-1], x$upper$bound[x$k]), x$upper$bound, r=x$r)
@@ -697,7 +697,7 @@
           trueneg <- x$lower$spend
           trueneg <- trueneg - c(0, trueneg[1:x$k-1])
           x$lower$spend <- trueneg
-          xx <- gsbound1(0, x$timing, -x$upper$bound, x$lower$spend, x$tol, x$r)
+          xx <- gsBound1(0, x$timing, -x$upper$bound, x$lower$spend, x$tol, x$r)
           x$lower$bound <- -xx$b
       }
     # find information needed 
@@ -744,7 +744,7 @@
   
     k <- length(I)
     tx <- I/I[k]
-    x <- gsbound(I, trueneg, falsepos, tol, r)
+    x <- gsBound(I, trueneg, falsepos, tol, r)
     alpha <- sum(falsepos)
     I0 <- (qnorm(alpha)+qnorm(beta))/theta
     I0 <- I0*I0
@@ -769,7 +769,7 @@
     # gsbetadiff1: compute difference between desired and actual upper boundary
     #              crossing probability    
     I <- tx * Imax
-    x <- gsbound1(theta=-theta, I=I, a=-b, probhi=problo, tol=tol, r=r)
+    x <- gsBound1(theta=-theta, I=I, a=-b, probhi=problo, tol=tol, r=r)
     x <- gsprob(theta, I, -x$b, b, r=r)
     
     sum(problo) - 1 + x$powr
@@ -782,7 +782,7 @@
     tx <- I / I[k]
     xr <- uniroot(gsbetadiff1, lower=Ilow, upper=Ihigh, theta=theta, tx=tx, 
             problo=beta, b=b, tol=tol, r=r)
-    x <- gsbound1(-theta, xr$root*tx, -b, probhi=beta, tol=tol, r=r)
+    x <- gsBound1(-theta, xr$root*tx, -b, probhi=beta, tol=tol, r=r)
     error <- x$error
     x$b[k] <- -b[k]
     x <- gsprob(theta, xr$root*tx, -x$b, b, r=r)
