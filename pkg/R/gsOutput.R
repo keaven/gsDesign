@@ -1,3 +1,27 @@
+##################################################################################
+#  Print methods for the gsDesign package
+#
+#  Exported Functions:
+#                   
+#    print.gsDesign
+#    print.gsProbability
+#
+#  Hidden Functions:
+#
+#    sfprint
+#
+#  Author(s): Keaven Anderson, PhD.
+# 
+#  Reviewer(s): REvolution Computing 19DEC2008 v.1.3 - William Constantine, Kellie Wills 
+#
+#  R Version: 2.7.2
+#
+##################################################################################
+
+###
+# Exported Functions
+###
+
 "print.gsProbability" <- function(x, ...)
 {    
     ntxt <- "N "
@@ -194,6 +218,10 @@
         print(y)
     }
 }
+
+###
+# Hidden Functions
+###
 
 "sfprint" <- function(x)
 {    

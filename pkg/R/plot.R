@@ -1,3 +1,51 @@
+##################################################################################
+#  Plot methods for the gsDesign package
+#
+#  Exported Functions:
+#                   
+#    plot.gsDesign
+#    plot.gsProbability
+#
+#  Hidden Functions:
+#
+#    gsLegendText
+#    gsPlotName
+#    plotgsZ
+#    plotBval
+#    plotreleffect
+#    plotgsCP
+#    sfplot
+#    plotASN
+#    plotgsPower
+#
+#  Author(s): Keaven Anderson, PhD.
+# 
+#  Reviewer(s): REvolution Computing 19DEC2008 v.1.3 - William Constantine, Kellie Wills 
+#
+#  R Version: 2.7.2
+#
+##################################################################################
+
+###
+# Exported Functions
+###
+
+"plot.gsDesign" <- function(x, plottype=1, ...)
+{   
+    checkScalar(plottype, "integer", c(1, 7))
+    invisible(do.call(gsPlotName(plottype), list(x, ...)))
+}
+
+"plot.gsProbability" <- function(x, plottype=2, ...)
+{   
+    checkScalar(plottype, "integer", c(1, 7))    
+    invisible(do.call(gsPlotName(plottype), list(x, ...)))
+}
+
+###
+# Hidden Functions
+###
+
 "gsLegendText" <- function(test.type)
 {
     switch(as.character(test.type), 
@@ -20,18 +68,6 @@
     # perform partial matching on plot type and return name
     plottype <- match.arg(tolower(as.character(plottype)), as.vector(unlist(plots)))
     names(plots)[which(unlist(lapply(plots, function(x, type) is.element(type, x), type=plottype)))]    
-}
-
-"plot.gsDesign" <- function(x, plottype=1, ...)
-{   
-    checkScalar(plottype, "integer", c(1, 7))
-    invisible(do.call(gsPlotName(plottype), list(x, ...)))
-}
-
-"plot.gsProbability" <- function(x, plottype=2, ...)
-{   
-    checkScalar(plottype, "integer", c(1, 7))    
-    invisible(do.call(gsPlotName(plottype), list(x, ...)))
 }
 
 "plotgsZ" <- function(x, main="Group sequential stopping boundaries", ylab="Normal critical value", 

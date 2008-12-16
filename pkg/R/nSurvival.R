@@ -1,3 +1,22 @@
+##################################################################################
+#  Survival functionality for the gsDesign package
+#
+#  Exported Functions:
+#                   
+#    nSurvival
+#
+#  Hidden Functions:
+#
+#    pe
+#
+#  Author(s): Keaven Anderson, PhD., Shanhong Guan
+# 
+#  Reviewer(s): REvolution Computing 19DEC2008 v.1.3 - William Constantine, Kellie Wills 
+#
+#  R Version: 2.7.2
+#
+##################################################################################
+
 ############################################################
 ## Name: nSurvival.R                                         #
 ## Purpose: Calculate sample size for clinical trials      #
@@ -13,58 +32,9 @@
 ##         two-sided test                                  #
 ############################################################
 
-
-###########################################################
-#                                                         #
-# calculate prob. of event                                #
-#                                                         #
-###########################################################
-
-"pe" <- function(lam, eta = 0, Ts, Tr, unif = TRUE, gamma)
-{
-  q1 <- lam / (lam + eta)
-  
-  if (unif)
-  {    
-    q2 <- exp(-(lam + eta) * (Ts - Tr)) - exp(-(lam+eta) * Ts)
-    q3 <- (lam + eta) * Tr    
-    resu <- q1 * (1 - q2 / q3)
-  }
-  else
-  {
-    if (is.na(gamma))
-    {
-        stop("Exponential entry! gamma cannot be misssing")            
-    }
-
-    t2 <- lam * gamma * exp(-(lam + eta) * Ts) * (1 - exp((lam + eta - gamma) * Tr))
-    t3 <- (1 - exp(-gamma * Tr)) * (lam + eta) * (lam + eta - gamma)
-    resu <- q1 + t2 / t3
-  }
-  
-  resu                        
-}
-
-############################################################
-##                                                         #
-## calculate sample size                                   #
-## lambda.0 -- hazard rate for placebo group               #
-## lambda.1 -- hazard rate for treatment group             #
-## eta -- exponential dropout rate                         #
-## rand.ratio -- randomization ratio (T/P)                 #
-## Ts -- study duration                                    #
-## Tr -- accural duration                                  #
-## alpha -- type I error rate                              #
-## beta -- type II error rate                              #
-## sided -- one or two-sided test                          #
-## approx -- for rd, should approximation be used?         #
-##           Default = F                                   #
-## type -- risk ratio or risk difference                   #
-## entry -- uniform or exponential                         #
-## gamma -- exponential entry rate                         #
-##         = NA if uniform entry                           #
-##                                                         #
-############################################################
+###
+# Exported Functions
+###
 
 "nSurvival" <- function(lambda.0, lambda.1, eta = 0,
         rand.ratio = 1, Ts, Tr,
@@ -73,6 +43,27 @@
         type = c("rr", "rd"),
         entry = c("unif", "expo"), gamma = NA)
 {
+    ############################################################
+    ##                                                         #
+    ## calculate sample size                                   #
+    ## lambda.0 -- hazard rate for placebo group               #
+    ## lambda.1 -- hazard rate for treatment group             #
+    ## eta -- exponential dropout rate                         #
+    ## rand.ratio -- randomization ratio (T/P)                 #
+    ## Ts -- study duration                                    #
+    ## Tr -- accural duration                                  #
+    ## alpha -- type I error rate                              #
+    ## beta -- type II error rate                              #
+    ## sided -- one or two-sided test                          #
+    ## approx -- for rd, should approximation be used?         #
+    ##           Default = F                                   #
+    ## type -- risk ratio or risk difference                   #
+    ## entry -- uniform or exponential                         #
+    ## gamma -- exponential entry rate                         #
+    ##         = NA if uniform entry                           #
+    ##                                                         #
+    ############################################################
+    
     type <- match.arg(type)
     entry <- match.arg(entry)
     
@@ -101,7 +92,7 @@
     
     haz.ratio <- log(lambda.0 / lambda.1)
     haz.diff <- lambda.0 - lambda.1
-
+    
     if (method == 1){  # risk ratio
         power <- zalpha/sqrt(prob.e[3]*xi0*xi1) +
                 zbeta*sqrt((xi0*prob.e[1])^(-1) + 
@@ -136,3 +127,40 @@
             Study.dura = Ts, Accural = Tr)
     outd
 }
+
+###
+# Hidden Functions
+###
+
+"pe" <- function(lam, eta = 0, Ts, Tr, unif = TRUE, gamma)
+{
+    ###########################################################
+    #                                                         #
+    # calculate prob. of event                                #
+    #                                                         #
+    ###########################################################
+    
+    q1 <- lam / (lam + eta)
+    
+    if (unif)
+    {    
+        q2 <- exp(-(lam + eta) * (Ts - Tr)) - exp(-(lam+eta) * Ts)
+        q3 <- (lam + eta) * Tr    
+        resu <- q1 * (1 - q2 / q3)
+    }
+    else
+    {
+        if (is.na(gamma))
+        {
+            stop("Exponential entry! gamma cannot be misssing")            
+        }
+        
+        t2 <- lam * gamma * exp(-(lam + eta) * Ts) * (1 - exp((lam + eta - gamma) * Tr))
+        t3 <- (1 - exp(-gamma * Tr)) * (lam + eta) * (lam + eta - gamma)
+        resu <- q1 + t2 / t3
+    }
+    
+    resu                        
+}
+
+

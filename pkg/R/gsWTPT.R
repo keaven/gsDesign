@@ -1,19 +1,30 @@
-"WTdiff" <- function(c, alpha, a, b, timing, r)
-{   
-    # Wang-Tsiatis boundary alpha comparison
-    # for a timing vector,  scalar a,  and vector b,  
-    # compute upper crossing probability using upper bound of c*b
-    # a is used to control one- or 2-sided bound    
-    
-    if (length(a) == 1)
-    {
-        a <- -c * b
-    }
-    
-    x <- gsProbability(k=length(b), theta=0., n.I=timing, a=a, b=c * b, r=r)
-    
-    alpha - sum(x$upper$prob)
-}
+##################################################################################
+#  Wang-Tsiatis functionality for the gsDesign package
+#
+#  Exported Functions:
+#                   
+#    (none)
+#
+#  Hidden Functions:
+#
+#    WT
+#    WTdiff
+#
+#  Author(s): Keaven Anderson, PhD.
+# 
+#  Reviewer(s): REvolution Computing 19DEC2008 v.1.3 - William Constantine, Kellie Wills 
+#
+#  R Version: 2.7.2
+#
+##################################################################################
+
+###
+# Exported Functions
+###
+
+###
+# Hidden Functions
+###
 
 "WT" <- function(d, alpha, a, timing, tol=0.000001, r=18)
 {   
@@ -49,5 +60,22 @@
     c1 <- i
     
     uniroot(WTdiff, lower=c0, upper=c1, alpha=alpha, a=a, b=b, timing=timing, tol=tol, r=r)$root
+}
+
+"WTdiff" <- function(c, alpha, a, b, timing, r)
+{   
+    # Wang-Tsiatis boundary alpha comparison
+    # for a timing vector,  scalar a,  and vector b,  
+    # compute upper crossing probability using upper bound of c*b
+    # a is used to control one- or 2-sided bound    
+    
+    if (length(a) == 1)
+    {
+        a <- -c * b
+    }
+    
+    x <- gsProbability(k=length(b), theta=0., n.I=timing, a=a, b=c * b, r=r)
+    
+    alpha - sum(x$upper$prob)
 }
 

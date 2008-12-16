@@ -1,3 +1,26 @@
+##################################################################################
+#  Normal density grid functionality for the gsDesign package
+#
+#  Exported Functions:
+#                   
+#    normalGrid
+#
+#  Hidden Functions:
+#
+#    (none)
+#
+#  Author(s): Keaven Anderson, PhD.
+# 
+#  Reviewer(s): REvolution Computing 19DEC2008 v.1.3 - William Constantine, Kellie Wills 
+#
+#  R Version: 2.7.2
+#
+##################################################################################
+
+###
+# Exported Functions
+###
+
 "normalGrid" <- function(r=18, bounds=c(0, 0), mu=0, sigma=1)
 {    
     checkScalar(r,"integer", c(1, 80))

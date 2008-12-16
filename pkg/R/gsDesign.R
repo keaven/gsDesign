@@ -1,23 +1,119 @@
 ##################################################################################
-#  File gsDesign.R
-#  Part of the R package gsDesign
+#  Binomial functionality for the gsDesign package
 #
-#  Functions:
-#  
-#    gsDesign:          calculate boundaries and total information required 
-#                       for a group sequential design
-#    gsProbability:     calculate boundary crossing probabilities for a group
-#                       sequential design
+#  Exported Functions:
+#                   
+#    gsbound
+#    gsbound1
+#    gsDesign
+#    gsProbability
 #
-#  Author(s):         Keaven Anderson, PhD. timing/ Jennifer Sun, MS.
+#  Hidden Functions:
 #
-#  Date Completed:    1JAN2007 
+#    gsDType1
+#    gsDType2and5
+#    gsDType3
+#    gsDType3ss
+#    gsDType3a
+#    gsDType3b
+#    gsDType4
+#    gsDType4a
+#    gsDType4ss
+#    gsDType6
+#    gsbetadiff
+#    gsI
+#    gsbetadiff1
+#    gsI1
+#    gsprob
+#    gsDProb
+#    gsDErrorCheck
 #
-#  Date Updated:      13SEP2008
+#  Author(s): Keaven Anderson, PhD. timing/ Jennifer Sun, MS.
+# 
+#  Reviewer(s): REvolution Computing 19DEC2008 v.1.3 - William Constantine, Kellie Wills 
 #
-#  R Version:         2.7.2
+#  R Version: 2.7.2
 #
 ##################################################################################
+
+###
+# Exported Functions
+###
+
+"gsbound" <- function(I, trueneg, falsepos, tol=0.000001, r=18)
+{    
+    # gsbound: assuming theta=0, derive lower and upper crossing boundaries given 
+    #          timing of interims, false positive rates and true negative rates
+    
+    # check input arguments
+    checkVector(I, "numeric", c(0, Inf), c(FALSE, TRUE))
+    checkVector(trueneg, "numeric", c(0,1), c(FALSE, FALSE))
+    checkVector(falsepos, "numeric", c(0,1), c(FALSE, FALSE))
+    checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
+    checkScalar(r, "integer", c(1, 80))
+    checkLengths(trueneg, falsepos, I)    
+    
+    k <- as.integer(length(I))
+    r <- as.integer(r)
+    storage.mode(I) <- "double"
+    storage.mode(trueneg) <- "double"
+    storage.mode(falsepos) <- "double"
+    storage.mode(tol) <- "double"
+    a <- falsepos
+    b <- falsepos
+    retval <- as.integer(0)
+    xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval)
+    rates <- list(falsepos=xx[[6]], trueneg=xx[[5]])
+    
+    list(k=xx[[1]],theta=0.,I=xx[[2]],a=xx[[3]],b=xx[[4]],rates=rates,tol=xx[[7]],
+            r=xx[[8]],error=xx[[9]])
+}
+
+"gsbound1" <- function(theta, I, a, probhi, tol=0.000001, r=18, printerr=0)
+{   
+    # gsbound1: derive upper bound to match specified upper bound crossing probability given
+    #           a value of theta, a fixed lower bound and information at each analysis   
+    
+    # check input arguments
+    checkScalar(theta, "numeric")
+    checkVector(I, "numeric", c(0, Inf), c(FALSE, TRUE))
+    checkVector(a, "numeric")
+    checkVector(probhi, "numeric", c(0,1), c(FALSE, FALSE))
+    checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
+    checkScalar(r, "integer", c(1, 80))
+    checkScalar(printerr, "integer")
+    checkLengths(a, probhi, I)
+    
+    # coerce type
+    k <- as.integer(length(I))
+    r <- as.integer(r)
+    printerr <- as.integer(printerr)
+    
+    storage.mode(theta) <- "double"
+    storage.mode(I) <- "double"
+    storage.mode(a) <- "double"
+    storage.mode(probhi) <- "double"
+    storage.mode(tol) <- "double"
+    problo <- a
+    b <- a
+    retval <- as.integer(0)
+    
+    xx <- .C("gsbound1", k, theta, I, a, b, problo, probhi, tol, r, retval, printerr)
+    
+    y <- list(k=xx[[1]], theta=xx[[2]], I=xx[[3]], a=xx[[4]], b=xx[[5]], 
+            problo=xx[[6]], probhi=xx[[7]], tol=xx[[8]], r=xx[[9]], error=xx[[10]])
+    
+    if (y$error==0 && min(y$b-y$a) < 0)
+    {   
+        indx <- (y$b - y$a < 0)
+        y$b[indx] <- y$a[indx]
+        z <- gsprob(theta=theta, I=I, a=a, b=y$b, r=r)
+        y$probhi <- z$probhi
+        y$problo <- z$problo
+    }
+    
+    y
+}
 
 "gsDesign"<-function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
         delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
@@ -103,6 +199,57 @@
             gsDType2and5(x),
             gsDType6(x))
 }
+
+"gsProbability" <- function(k=0, theta, n.I, a, b, r=18, d=NULL)
+{
+    # compute boundary crossing probabilities and return in a gsProbability structure
+    
+    # check input arguments
+    checkScalar(k, "integer", c(0,30))
+    checkVector(theta, "numeric")
+    
+    if (k == 0)
+    {   
+        if (!is(d,"gsDesign"))
+        {
+            stop("d should be an object of class gsDesign")
+        }
+        return(gsDProb(theta=theta, d=d))
+    }
+    
+    # check remaingin input arguments
+    checkScalar(r, "integer", c(1,80))
+    checkLengths(n.I, a, b)
+    if (k != length(a))
+    {
+        stop("Lengths of n.I, a, and b must all equal k")
+    }
+    
+    # cast integer scalars
+    ntheta <- as.integer(length(theta))
+    k <- as.integer(k)
+    r <- as.integer(r)
+    
+    phi <- as.double(c(1:(k * ntheta)))
+    plo <- as.double(c(1:(k * ntheta)))
+    xx <- .C("probrej", k, ntheta, as.double(theta), as.double(n.I), 
+            as.double(a), as.double(b), plo, phi, r)
+    plo <- matrix(xx[[7]], k, ntheta)
+    phi <- matrix(xx[[8]], k, ntheta)
+    powr <- as.vector(array(1, k) %*% phi)
+    futile <- array(1, k) %*% plo
+    en <- as.vector(n.I %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
+    x <- list(k=xx[[1]], theta=xx[[3]], n.I=xx[[4]], lower=list(bound=xx[[5]], prob=plo), 
+            upper=list(bound=xx[[6]], prob=phi), en=en, r=r)
+    
+    class(x) <- "gsProbability"
+    
+    x
+}
+
+###
+# Hidden Functions
+###
 
 "gsDType1" <- function(x, ss=1)
 {    
@@ -419,8 +566,6 @@
     x
 }
 
-# asymmetric, non-binding, beta spending
-
 "gsDType4" <- function(x)
 {
     # Check added by K. Wills 12/4/2008
@@ -509,8 +654,6 @@
     x
 }
 
-# asymmetric, non-binding, lower spending under H0
-
 "gsDType6" <- function(x)
 {
     # Check added by K. Wills 12/4/2008
@@ -586,35 +729,6 @@
     x
 }
 
-"gsbound" <- function(I, trueneg, falsepos, tol=0.000001, r=18)
-{    
-    # gsbound: assuming theta=0, derive lower and upper crossing boundaries given 
-    #          timing of interims, false positive rates and true negative rates
-    
-    # check input arguments
-    checkVector(I, "numeric", c(0, Inf), c(FALSE, TRUE))
-    checkVector(trueneg, "numeric", c(0,1), c(FALSE, FALSE))
-    checkVector(falsepos, "numeric", c(0,1), c(FALSE, FALSE))
-    checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
-    checkScalar(r, "integer", c(1, 80))
-    checkLengths(trueneg, falsepos, I)    
-    
-    k <- as.integer(length(I))
-    r <- as.integer(r)
-    storage.mode(I) <- "double"
-    storage.mode(trueneg) <- "double"
-    storage.mode(falsepos) <- "double"
-    storage.mode(tol) <- "double"
-    a <- falsepos
-    b <- falsepos
-    retval <- as.integer(0)
-    xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval)
-    rates <- list(falsepos=xx[[6]], trueneg=xx[[5]])
-    
-    list(k=xx[[1]],theta=0.,I=xx[[2]],a=xx[[3]],b=xx[[4]],rates=rates,tol=xx[[7]],
-            r=xx[[8]],error=xx[[9]])
-}
-
 "gsbetadiff" <- function(Imax, theta, beta, time, a, b, tol=0.000001, r=18)
 {    
     # compute difference between actual and desired Type II error     
@@ -623,7 +737,6 @@
 
     beta - 1 + sum(x$probhi)
 }
-
 
 "gsI" <- function(I, theta, beta, trueneg, falsepos, symmetric, tol=0.000001, r=18)
 {   
@@ -649,52 +762,6 @@
           
     list(k=x$k, theta0=0, theta1=theta, I=x$I, a=x$a, b=x$b, alpha=alpha, beta=beta, 
         rates=rates, futilitybnd="Binding", tol=x$tol, r=x$r, error=x$error)
-}
-
-"gsbound1" <- function(theta, I, a, probhi, tol=0.000001, r=18, printerr=0)
-{   
-    # gsbound1: derive upper bound to match specified upper bound crossing probability given
-    #           a value of theta, a fixed lower bound and information at each analysis   
- 
-    # check input arguments
-    checkScalar(theta, "numeric")
-    checkVector(I, "numeric", c(0, Inf), c(FALSE, TRUE))
-    checkVector(a, "numeric")
-    checkVector(probhi, "numeric", c(0,1), c(FALSE, FALSE))
-    checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
-    checkScalar(r, "integer", c(1, 80))
-    checkScalar(printerr, "integer")
-    checkLengths(a, probhi, I)
-    
-    # coerce type
-    k <- as.integer(length(I))
-    r <- as.integer(r)
-    printerr <- as.integer(printerr)
-    
-    storage.mode(theta) <- "double"
-    storage.mode(I) <- "double"
-    storage.mode(a) <- "double"
-    storage.mode(probhi) <- "double"
-    storage.mode(tol) <- "double"
-    problo <- a
-    b <- a
-    retval <- as.integer(0)
-  
-    xx <- .C("gsbound1", k, theta, I, a, b, problo, probhi, tol, r, retval, printerr)
-    
-    y <- list(k=xx[[1]], theta=xx[[2]], I=xx[[3]], a=xx[[4]], b=xx[[5]], 
-            problo=xx[[6]], probhi=xx[[7]], tol=xx[[8]], r=xx[[9]], error=xx[[10]])
-    
-    if (y$error==0 && min(y$b-y$a) < 0)
-    {   
-        indx <- (y$b - y$a < 0)
-        y$b[indx] <- y$a[indx]
-        z <- gsprob(theta=theta, I=I, a=a, b=y$b, r=r)
-        y$probhi <- z$probhi
-        y$problo <- z$problo
-    }
-    
-    y
 }
 
 "gsbetadiff1" <- function(Imax, theta, tx, problo, b, tol=0.000001, r=18)
@@ -774,53 +841,6 @@
     }
         
     d
-}
-
-"gsProbability" <- function(k=0, theta, n.I, a, b, r=18, d=NULL)
-{
-    # compute boundary crossing probabilities and return in a gsProbability structure
-    
-    # check input arguments
-    checkScalar(k, "integer", c(0,30))
-    checkVector(theta, "numeric")
-    
-    if (k == 0)
-    {   
-        if (!is(d,"gsDesign"))
-        {
-            stop("d should be an object of class gsDesign")
-        }
-        return(gsDProb(theta=theta, d=d))
-    }
-    
-    # check remaingin input arguments
-    checkScalar(r, "integer", c(1,80))
-    checkLengths(n.I, a, b)
-    if (k != length(a))
-    {
-        stop("Lengths of n.I, a, and b must all equal k")
-    }
-
-    # cast integer scalars
-    ntheta <- as.integer(length(theta))
-    k <- as.integer(k)
-    r <- as.integer(r)
-    
-    phi <- as.double(c(1:(k * ntheta)))
-    plo <- as.double(c(1:(k * ntheta)))
-    xx <- .C("probrej", k, ntheta, as.double(theta), as.double(n.I), 
-            as.double(a), as.double(b), plo, phi, r)
-    plo <- matrix(xx[[7]], k, ntheta)
-    phi <- matrix(xx[[8]], k, ntheta)
-    powr <- as.vector(array(1, k) %*% phi)
-    futile <- array(1, k) %*% plo
-    en <- as.vector(n.I %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
-    x <- list(k=xx[[1]], theta=xx[[3]], n.I=xx[[4]], lower=list(bound=xx[[5]], prob=plo), 
-                    upper=list(bound=xx[[6]], prob=phi), en=en, r=r)
-    
-    class(x) <- "gsProbability"
-    
-    x
 }
 
 "gsDErrorCheck" <- function(x)

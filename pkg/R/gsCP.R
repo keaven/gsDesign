@@ -1,3 +1,27 @@
+##################################################################################
+#  Conditional power computation functionality for the gsDesign package
+#
+#  Exported Functions:
+#                   
+#    gsCP
+#    gsBoundCP
+#
+#  Hidden Functions:
+#
+#    (none)
+#
+#  Author(s): Keaven Anderson, PhD.
+# 
+#  Reviewer(s): REvolution Computing 19DEC2008 v.1.3 - William Constantine, Kellie Wills 
+#
+#  R Version: 2.7.2
+#
+##################################################################################
+
+###
+# Exported Functions
+###
+
 "gsCP" <- function(x, theta=NULL, i=1, zi=0, r=18)
 {    
     # conditional power for remaining trial is returned (including each interim)
@@ -88,3 +112,7 @@
     
     if (test.type > 1) cbind(CPlo, CPhi) else CPhi
 }
+
+###
+# Hidden Functions
+###
