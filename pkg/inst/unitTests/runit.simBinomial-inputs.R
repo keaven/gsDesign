@@ -51,7 +51,7 @@
 	 checkException(simBinomial(adj="abc", p1=0.1, p2=0.2, n1=1, n2=1), msg="Checking for incorrect variable type", silent=TRUE) 
 	 checkException(simBinomial(adj=c(-1), p1=0.1, p2=0.2, n1=1, n2=1), msg="Checking for out-of-range variable value", silent=TRUE) 
 	 checkException(simBinomial(adj=2, p1=0.1, p2=0.2, n1=1, n2=1), msg="Checking for out-of-range variable value", silent=TRUE) 
-	 checkException(simBinomial(adj=rep(1,2), p1=0.1, p2=0.2, n1=1, n2=1), msg="Checking for incorrect variable length", silent=TRUE) 
+	 checkException(simBinomial(adj=rep(1,2), p1=0.1, p2=0.2, n1=rep(1,3), n2=1), msg="Checking for incorrect variable length", silent=TRUE) 
 }
 
 "test.simBinomial.scale" <- function()

@@ -12,7 +12,7 @@
 isInteger(x)
 checkScalar(x, isType = "numeric", ...)
 checkVector(x, isType = "numeric", ..., length=NULL) 
-checkRange(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = deparse(substitute(x)))
+checkRange(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = deparse(substitute(x)), tol=0)
 checkLengths(..., allowSingle=FALSE)
 }
 \arguments{
@@ -28,6 +28,7 @@ checkLengths(..., allowSingle=FALSE)
   \item{varname}{character string defining the name of the input variable as sent into the function by the caller. 
   This is used primarily as a mechanism to specify the name of the variable being tested when \code{checkRange} is being called
   within a function.}
+  \item{tol}{numeric scalar defining the tolerance to use in testing the intervals of the \code{\link{checkRange}} function.}
   \item{\dots}{For the \code{\link{checkScalar}} and \code{\link{checkVector}} functions, this input represents additional 
   arguments sent directly to the \code{\link{checkRange}} function. For the \code{\link{checkLengths}} function, this input
   represents the arguments to check for equal lengths.}

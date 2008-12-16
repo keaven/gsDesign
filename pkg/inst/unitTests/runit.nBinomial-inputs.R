@@ -28,7 +28,7 @@
 	 checkException(nBinomial(beta="abc", p1=0.1, p2=0.2), msg="Checking for incorrect variable type", silent=TRUE) 
 	 checkException(nBinomial(beta=0.7, p1=0.1, p2=0.2, sided=1, alpha=0.3), msg="Checking for out-of-range variable value", silent=TRUE) 
 	 checkException(nBinomial(beta=0, p1=0.1, p2=0.2), msg="Checking for out-of-range variable value", silent=TRUE) 
-	 checkException(nBinomial(beta=rep(0.1,2), p1=0.1, p2=0.2), msg="Checking for incorrect variable length", silent=TRUE) 
+	 checkException(nBinomial(beta=rep(0.1,2), p1=0.1, p2=rep(0.2, 3)), msg="Checking for incorrect variable length", silent=TRUE) 
 }
 
 "test.nBinomial.delta0" <- function()
@@ -43,7 +43,7 @@
 {
 	 checkException(nBinomial(ratio="abc", p1=0.1, p2=0.2), msg="Checking for incorrect variable type", silent=TRUE) 
 	 checkException(nBinomial(ratio=0, p1=0.1, p2=0.2), msg="Checking for out-of-range variable value", silent=TRUE) 
-	 checkException(nBinomial(ratio=rep(0.5,2), p1=0.1, p2=0.2), msg="Checking for incorrect variable length", silent=TRUE) 
+	 checkException(nBinomial(ratio=rep(0.5,2), p1=0.1, p2=rep(0.2, 3)), msg="Checking for incorrect variable length", silent=TRUE) 
 }
 
 "test.nBinomial.sided" <- function()

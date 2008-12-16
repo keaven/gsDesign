@@ -195,15 +195,15 @@
     # check input arguments
     checkVector(p1, "numeric", c(0, 1), c(FALSE, FALSE))
     checkVector(p2, "numeric", c(0, 1), c(FALSE, FALSE))    
-    checkScalar(sided, "integer", c(1, 2))    
-    checkScalar(alpha, "numeric", c(0, 1 / sided), c(FALSE, FALSE))
-    checkScalar(beta, "numeric", c(0, 1 - alpha / sided), c(FALSE, FALSE))
+    checkVector(sided, "integer", c(1, 2))    
+    checkVector(alpha, "numeric", c(0, 1 / sided), c(FALSE, FALSE))
+    checkVector(beta, "numeric", c(0, 1 - alpha / sided), c(FALSE, FALSE))
     checkScalar(delta0, "numeric")
-    checkScalar(ratio, "numeric", c(0, Inf), c(FALSE, TRUE))
+    checkVector(ratio, "numeric", c(0, Inf), c(FALSE, TRUE))
     checkScalar(outtype, "integer", c(1, 2))
     checkScalar(scale, "character")
     scale <- match.arg(tolower(scale), c("difference", "rr", "or"))
-    checkLengths(p1, p2)
+    checkLengths(p1, p2, sided, alpha, beta, ratio, allowSingle=TRUE)
     
     if (delta0 == 0)
     {
@@ -223,10 +223,8 @@
     # get z-values needed 
     z.beta  <- qnorm(1 - beta)    
     
-    if (sided != 2)
-    {
-        sided <- 1
-    }
+    # coerce all sided values not equal to 2 to 1
+    sided[sided != 2] <- 1
     
     z.alpha <- qnorm(1 - alpha / sided)
     

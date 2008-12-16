@@ -88,7 +88,8 @@
     invisible(NULL)
 }
 
-"checkRange" <- function(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = deparse(substitute(x))) 
+"checkRange" <- function(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = deparse(substitute(x)), 
+        tol=0) 
 {
     # check inputs
     checkVector(interval, "numeric")
@@ -102,8 +103,8 @@
     inclusion <- if (length(inclusion) == 1) rep(inclusion, 2) else inclusion[1:2]
     
     xrange <- range(x)
-    left   <- ifelse(inclusion[1], xrange[1] >= interval[1], xrange[1] > interval[1])
-    right  <- ifelse(inclusion[2], xrange[2] <= interval[2], xrange[2] < interval[2])
+    left   <- ifelse(inclusion[1], xrange[1] >= interval[1] - tol, xrange[1] > interval[1] - tol)
+    right  <- ifelse(inclusion[2], xrange[2] <= interval[2] + tol, xrange[2] < interval[2] + tol)
     
     if (!(left && right))
     {
