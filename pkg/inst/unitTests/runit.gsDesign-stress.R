@@ -42,16 +42,18 @@
 	no.err
 }
 
-a1 = seq(from=0.05, to=0.95, by=0.05)
-a2 = seq(from=0.05, to=0.45, by=0.05)
-b = seq(from=0.05, to=0.95, by=0.05)
+a1 <- round(seq(from=0.05, to=0.95, by=0.05), 2)
+a2 <- round(seq(from=0.05, to=0.45, by=0.05), 2)
+b <- round(seq(from=0.05, to=0.95, by=0.05), 2)
 
 # nu: sfExponential parameter
-nu = seq(from=0.1, to=1.5, by=0.1)
+nu <- round(seq(from=0.1, to=1.5, by=0.1), 1)
+
 # rho: sfPower parameter
-rho = seq(from=1, to=15, by=1)
+rho <- round(seq(from=1, to=15, by=1), 0)
+
 # gamma: sfHSD parameter
-gamma = seq(from=-5, to=5, by=1)
+gamma <- round(seq(from=-5, to=5, by=1), 0)
 
 ##################################
 
