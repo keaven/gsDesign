@@ -178,7 +178,7 @@
     xx <- sub("^([0-9a-fA-F]*)(.*)", "\\1", inlines)
     nmxx <- names(xx) <- sub("^[0-9a-fA-F]* [ |*](.*)", "\\1", inlines)
     
-    nmxx <- nmxx[!(names(x) %in% ignore)]
+    nmxx <- nmxx[!(nmxx %in% ignore)]
     
     dot <- getwd()
     setwd(dir)
