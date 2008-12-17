@@ -172,7 +172,8 @@
     if (!file.exists(md5file)) 
         return(NA)
     
-    ignore <- c("MD5", "DESCRIPTION")    
+    ignore <- c("MD5", "DESCRIPTION", "Meta/package.rds", "R/gsDesign.rdb", "R/gsDesign.rdx", 
+            "libs/i386/gsDesign.so", "libs/ppc/gsDesign.so")    
     
     inlines <- readLines(md5file)
     xx <- sub("^([0-9a-fA-F]*)(.*)", "\\1", inlines)
