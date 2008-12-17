@@ -1,0 +1,49 @@
+\BOOKMARK [1][-]{section.1}{Overview}{}
+\BOOKMARK [1][-]{section.2}{Basic Features}{}
+\BOOKMARK [1][-]{section.3}{Installation and Online Help}{}
+\BOOKMARK [1][-]{section.4}{Detailed Examples}{}
+\BOOKMARK [1][-]{section.5}{Syntax}{}
+\BOOKMARK [2][-]{subsection.5.1}{gsDesign\(\) syntax}{section.5}
+\BOOKMARK [2][-]{subsection.5.2}{gsProbability\(\) syntax}{section.5}
+\BOOKMARK [2][-]{subsection.5.3}{Conditional power: gsCP\(\) and gsBoundCP\(\) syntax}{section.5}
+\BOOKMARK [2][-]{subsection.5.4}{Binomial distribution: FarrMannSS\(\), MandNtest\(\), MandNsim\(\) syntax}{section.5}
+\BOOKMARK [1][-]{section.6}{The gsDesign and gsProbability Object Types}{}
+\BOOKMARK [2][-]{subsection.6.1}{The spendfn Class}{section.6}
+\BOOKMARK [2][-]{subsection.6.2}{The gsProbability Class}{section.6}
+\BOOKMARK [2][-]{subsection.6.3}{The gsDesign Class}{section.6}
+\BOOKMARK [1][-]{section.7}{Formatted Output}{}
+\BOOKMARK [1][-]{section.8}{Spending Functions}{}
+\BOOKMARK [2][-]{subsection.8.1}{Spending Function Basics}{section.8}
+\BOOKMARK [2][-]{subsection.8.2}{Spending Function Details}{section.8}
+\BOOKMARK [2][-]{subsection.8.3}{Investigational Spending Functions}{section.8}
+\BOOKMARK [2][-]{subsection.8.4}{Resetting timing of analyses}{section.8}
+\BOOKMARK [2][-]{subsection.8.5}{Optimized Spending Functions}{section.8}
+\BOOKMARK [2][-]{subsection.8.6}{Writing Code for a New Spending Function}{section.8}
+\BOOKMARK [1][-]{section.9}{Statistical Methods}{}
+\BOOKMARK [1][-]{section.10}{Function and Class Reference}{}
+\BOOKMARK [2][-]{subsection.10.1}{gsDesign Package}{section.10}
+\BOOKMARK [2][-]{subsection.10.1}{gsDesign-package}{section.10}
+\BOOKMARK [2][-]{subsection.10.2}{gsDesign main functions}{section.10}
+\BOOKMARK [2][-]{subsection.10.2}{gsDesign}{section.10}
+\BOOKMARK [2][-]{section*.23}{gsProbability}{section.10}
+\BOOKMARK [2][-]{section*.33}{plot.gsDesign}{section.10}
+\BOOKMARK [2][-]{section*.43}{gsCP}{section.10}
+\BOOKMARK [2][-]{section*.53}{gsBoundCP}{section.10}
+\BOOKMARK [2][-]{subsection.10.3}{Binomial trial functions}{section.10}
+\BOOKMARK [2][-]{subsection.10.3}{normalGrid}{section.10}
+\BOOKMARK [2][-]{section*.72}{nBinomial}{section.10}
+\BOOKMARK [2][-]{section*.80}{nSurvival}{section.10}
+\BOOKMARK [2][-]{subsection.10.4}{Spending Functions}{section.10}
+\BOOKMARK [2][-]{subsection.10.4}{Spending Functions}{section.10}
+\BOOKMARK [2][-]{section*.98}{sfHSD}{section.10}
+\BOOKMARK [2][-]{section*.108}{sfPower}{section.10}
+\BOOKMARK [2][-]{section*.118}{sfExponential}{section.10}
+\BOOKMARK [2][-]{section*.128}{sfLDOF}{section.10}
+\BOOKMARK [2][-]{section*.138}{sfPoints}{section.10}
+\BOOKMARK [2][-]{section*.147}{sfLogistic}{section.10}
+\BOOKMARK [2][-]{section*.157}{sfTDist}{section.10}
+\BOOKMARK [2][-]{subsection.10.5}{Other Files}{section.10}
+\BOOKMARK [2][-]{subsection.10.5}{Wang-Tsiatis Bounds}{section.10}
+\BOOKMARK [2][-]{section*.174}{checkScalar}{section.10}
+\BOOKMARK [2][-]{section*.179}{gsbound}{section.10}
+\BOOKMARK [1][-]{section.11}{Contacts}{}

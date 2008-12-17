@@ -1,0 +1,81 @@
+\section{Formatted Output\label{sec:formatted}}
+
+\texttt{gsDesign()} returns an object of the class \texttt{gsDesign}.
+\texttt{gsProbability()} returns an object of class gsDesign if a \texttt{gsDesign} class object is passed in or of class \texttt{gsProbability}, if not. 
+The standard R functions \texttt{print()}, and \texttt{plot()} are extended 
+to work for both the \texttt{gsDesign} and the \texttt{gsProbability} classes. 
+Note also that \texttt{summary()} prints a brief summary of either object 
+type if you need a reminder of what is
+in a class. The \texttt{print()} function for each object class has a single
+argument and is implemented through the functions \texttt{print.gsDesign()}
+and \texttt{print.gsProbability()}. The \texttt{plot()} functions for 
+\texttt{gsDesign} and \texttt{gsProbability} objects have a second argument 
+that specifies which type of
+plot is to be made; these functions are implemented with the functions
+\texttt{plot.gsDesign()} and \texttt{plot.gsProbability()}, respectively.
+There are seven plot types, six of which are available for both classes, 
+that are specified through the input variable \texttt{plottype}:
+
+\bigskip
+
+\begin{itemize}
+\item \texttt{1} or \texttt{"Z"}: boundary plots (default if
+\texttt{class(x)="gsDesign"})
+
+\item \texttt{2} or \texttt{"power"}: boundary crossing probability plots
+(default if \texttt{class(x)="gsProbability"})
+
+\item \texttt{3} or \texttt{"thetahat"}: estimated treatment effect at boundaries
+
+\item \texttt{4 }or\texttt{\ "CP"}: conditional power at boundaries
+
+\item \texttt{5} or \texttt{"sf"}: spending function plot (available only if
+\texttt{class(x)=="gsDesign"})
+
+\item \texttt{6} or \texttt{"ASN"} or \texttt{"N"}: expected sample size
+plot
+
+\item \texttt{7"B"} or \texttt{"B-val"} or \texttt{"B-value"}:  B-values at boundaries
+\end{itemize}
+
+\bigskip
+
+
+Further details of the \texttt{print()}, and \texttt{plot()} functions are
+provided in Section~\ref{sec:detailedex}, Detailed Examples, and in the help 
+file for plotting in the gsDesign
+package. Since the plot functions have multiple arguments, the use of these
+arguments is formally specified here.
+
+\bigskip
+
+\texttt{plot.gsDesign(x,plottype=1, main="Default", ylab="Default",
+xlab="Default")}
+
+\texttt{plot.gsProbability(x,plottype=2, xval="Default", main="Default",}
+
+\texttt{\qquad ylab="Default", xlab="Default")}
+
+\bigskip
+
+\begin{itemize}
+\item \texttt{x}: for \texttt{plot.gsDesign()}, this is an object in the
+\texttt{gsDesign} class; for \texttt{plot.gsProbability()}, this is an 
+object in the \texttt{gsProbability} class.
+
+\item \texttt{plottype}: described above.
+
+\item \texttt{theta}: used for \texttt{plottype} equal to 2, 4, or 6; normally 
+defaults are adequate. See the help files for details.
+
+\item \texttt{ses=TRUE}: applies only when \texttt{plottype = 3} and 
+\texttt{class(x) == "gsDesign"};
+indicates that estimated standardized effect size at the boundary
+($\hat{\theta}/\delta$) is to be plotted rather than the actual estimate
+($\hat{\theta}$.
+
+\item \texttt{xval="Default"}: effective only when \texttt{plottype} equals 2 
+or 6.  Appropriately scaled (reparameterized) values for x-axis for power and
+expected sample size graphs; see the help file for details.
+\end{itemize}
+

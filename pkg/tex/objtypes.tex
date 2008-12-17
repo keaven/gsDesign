@@ -1,0 +1,162 @@
+\section{The gsDesign and gsProbability Object Types\label{sec:objtypes}}
+
+This package creates three object (storage) classes to store the structured
+information returned by \texttt{gsDesign()}, \texttt{gsProbability()} and
+spending function routines. Thus, a single variable name can be used to
+access, print or plot a set of returned values. \bigskip
+
+\subsection{The spendfn Class\label{sec:spendfn}}
+
+\bigskip
+
+The first class, \texttt{spendfn}, is used to store information about either 
+the upper or the lower bound of a design: the spending function, z-values for 
+the stopping bounds, spending at each analysis and boundary crossing 
+probabilities under parameter values of interest. The \texttt{spendfn} class
+contains the following members:
+
+\begin{itemize}
+\item \texttt{sf}: a spending function or character value. Normally this
+is a spending function, but if Wang-Tsiatis ("WT"), Pocock ("Pocock"), or
+O'Brien-Fleming ("OF") are specified (these are not spending function
+designs), then \texttt{sf} is a character string. This is useful if you
+later wish to plot the spending function for a larger set of values than
+specified in an original call. ({\bf Note for writers of new spending 
+functions:} this is not set in the spending function itself, but in 
+\texttt{gsDesign()})
+
+\item \texttt{name}: a character string specifying the spending function used.
+
+\item \texttt{param}: parameter value or values to fully specify the
+spending function using the spending function family specified in \texttt{sf}.
+
+\item \texttt{parname}: a text string or vector of text strings (matching
+the length of \texttt{param}) supplying the names of parameters.
+
+\item \texttt{spend}: a vector containing the amount of $\alpha$- or $\beta
+$-spending at each analysis; this is determined in a call to
+\texttt{gsDesign()}.
+
+\item \texttt{bound}: this is null when returned from the spending function,
+but is set in \texttt{gsDesign()} if the spending function is called from
+there. Contains z-values for bounds of a design.
+
+\item \texttt{prob}: this is null when returned from the spending function,
+but is set in \texttt{gsDesign()} if the spending function is called from
+there. Contains a \texttt{k}$\times$\texttt{n} matrix of probabilities of
+boundary crossing at\texttt{\ i}-th analysis for \texttt{j}-th \texttt{theta}
+value in \texttt{prob[i,j]}. Upon return from \texttt{gsDesign()},
+\texttt{n}=2 and the values of theta considered are 0 and \texttt{delta}. More
+values of \texttt{theta} can be added by a call to \texttt{gsProbability()}.
+Columns correspond to the values specified by \texttt{theta}. All boundary
+crossing is assumed to be binding for this computation; that is, the trial
+must stop if a boundary is crossed.
+
+\item \texttt{errcode}: 0 if no error in spending function specification,
+%TCIMACRO{\TEXTsymbol{>} }%
+%BeginExpansion
+$>$
+%EndExpansion
+0 otherwise.
+
+\item \texttt{errmsg}: a text string corresponding to \texttt{errcode}; for
+no error, this is "No error."
+\end{itemize}
+
+\subsection{The gsProbability Class}
+
+\bigskip
+
+The second object class is \texttt{gsProbability}. The members of this class 
+on output from \texttt{gsProbability()} are: \texttt{k}, \texttt{n.I}, 
+\texttt{lower}, \texttt{upper}, \texttt{r}, \texttt{theta}, \texttt{errcode}, 
+and \texttt{errmsg}. Most of these are described in the input to
+\texttt{gsProbability()}. The exceptions are as follows:
+
+\begin{itemize}
+\item \texttt{upper}: on output, contains information on upper spending;
+this is a member of the \texttt{spendfn} class described above. Values of
+\texttt{upper} returning in a \texttt{gsProbability} class contain only the
+elements \texttt{bound} and \texttt{prob}.
+
+\item \texttt{lower}: on output, contains information on lower spending;
+this is a member of the \texttt{spendfn} class described above. Values of
+\texttt{lower} returning in a \texttt{gsProbability} class contain only the
+elements \texttt{bound} and \texttt{prob}.
+
+\item \texttt{en}: a vector of the same length as \texttt{theta} containing
+expected sample sizes for the trial design corresponding to each value in the
+vector \texttt{theta}.
+
+\item \texttt{errcode}: 0 if no error detected in call to
+\texttt{gsDesign()} or \texttt{gsProbability()},
+%TCIMACRO{\TEXTsymbol{>} }%
+%BeginExpansion
+$>$
+%EndExpansion
+0 otherwise.
+
+\item \texttt{errmsg}: a text string corresponding to \texttt{errcode}; for
+no error, this is "No errors detected."
+\end{itemize}
+
+\subsection{The gsDesign Class}
+
+The third and final object class is \texttt{gsDesign}. This inherits the class
+\texttt{gsProbability} and, in addition, has the following members on output from
+\texttt{gsDesign()}: \texttt{test.type}, \texttt{alpha}, \texttt{beta},
+\texttt{delta}, \texttt{n.fix}, \texttt{timing}, \texttt{tol}, 
+\texttt{maxn.IPlan}. In
+addition, all elements of the class 
+\text{spendfn} are returned in \texttt{upper} and
+\texttt{lower}. Most of these variables are as described in the input to
+\texttt{gsDesign()} or in the \texttt{spendfn} or \texttt{gsProbability} 
+class description. The exceptions are as follows:
+
+\begin{itemize}
+\item \texttt{timing}: when this is input as 1, the output is transformed to
+a vector of equally spaced analyses as follows: (1, 2, \ldots, \texttt{k}%
+)/\texttt{k}. Otherwise, this should be a vector of length \texttt{k}, with
+increasing values greater than 0 and the greatest value equal to 1. A value of
+\texttt{timing[2] = 0.4} is translated as the second interim analysis being performed
+after 40\% of the total observations planned for the final analysis.
+
+\item \texttt{delta}: the standardized effect size; if this was input as 0,
+it is recomputed with the following formula:%
+\[
+\delta=\frac{\Phi^{-1}(1-\alpha)+\Phi^{-1}(1-\beta)}{\sqrt{N_{fix}}}
+\]
+
+
+where $\delta$=\texttt{delta}, $N_{fix}$=\texttt{n.fix}, $\alpha
+$=\texttt{alpha}, and $\beta$=\texttt{beta}.
+
+\item \texttt{n.I}: this is the sample size or information required at each
+analysis, depending on how \texttt{gsDesign()} is called. In addition to the
+following descriptions, see Section~\ref{sec:detailedex}, Detailed Examples.
+
+\begin{enumerate}
+\item If \texttt{n.I} was input, the same value remains on output
+
+\item If input to \texttt{gsDesign()} was \texttt{n.fix} = 1 and
+\texttt{delta}=0, this results in returning a sample-size multiplier in
+\texttt{n.I} that can be used to set sample size at interim analyses according
+to the sample size required for a fixed design without interim analysis. That
+is, use a formula for a fixed design that matches the type of data you are
+collecting, and multiply this fixed design sample size by \texttt{n.I} to
+obtain sample sizes at interim and final analyses for the desired group
+sequential design.
+
+\item Similarly, if you have a fixed design sample size which you wish to
+modify using \texttt{gsDesign()} to obtain an appropriate group sequential
+design, input \texttt{n.fix} as the fixed sample size design and input
+\texttt{delta}=0. In this case \texttt{n.I} returns with sample sizes for
+each analysis in the group sequential design.
+\end{enumerate}
+
+\item \texttt{upper}, \texttt{lower}: these are output as class 
+\texttt{spendfn}, as described above. All elements of the 
+\texttt{spendfn} class are returned when these are
+generated from a call to \texttt{gsDesign()}.
+\end{itemize}
+

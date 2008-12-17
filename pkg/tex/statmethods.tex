@@ -1,0 +1,296 @@
+\section{Statistical Methods\label{sec:statmethods}}
+
+\bigskip
+
+\textbf{Distributional assumptions. }We begin with a sequence of normal random
+variates and later generalize to other situations. Let $X_{1}$, $X_{2}%
+$,... be independent and identically distributed normal random variables with
+mean $\theta$ and variance 1. For some positive integer $k$, let $n_{1}%
+<n_{2}...<n_{k}$ represent fixed sample sizes where data will be analyzed and
+inference surrounding $\theta$ will be examined. This is referred to as a
+group sequential design. The first $k-1$ analyses are referred to as interim
+analyses, while the $k^{th}$ analysis is referred to as the final analysis.
+For $i=1,$ $2,...k$ consider the test statistic%
+\[
+Z_{i}=%
+%TCIMACRO{\tsum \limits_{i=1}^{n_{i}}}%
+%BeginExpansion
+{\textstyle\sum\limits_{i=1}^{n_{i}}}
+%EndExpansion
+X_{i}/\sqrt{n_{i}}
+\]
+and let $I_{i}=n_{i}$. The values $0<I_{1}<I_{2}<\ldots<I_{k}$ represent the
+statistical information available at analyses 1 through $k$, respectively. The
+test statistics $Z_{1}$, $Z_{2}$,...,$Z_{k}$ follow a multivariate normal
+distribution with, for $1\leq j\leq i\leq k$,%
+
+\begin{equation}
+E\{Z_{i}\}=\theta\sqrt{I_{i}}\label{Canonical mean}%
+\end{equation}
+%
+
+\begin{equation}
+Cov(Z_{j},Z_{i})=\sqrt{I_{j}/I_{i}}\label{Canonical cov}%
+\end{equation}
+Jennison and Turnbull \cite{JTBook} refer to (\ref{Canonical mean}) and
+(\ref{Canonical cov}) as the canonical form and present several types of
+outcomes (\textit{e.g.}, binomial, time-to-event) for which.test statistics
+for comparison of treatment groups take this form asymptotically. Examples of
+how this is applied to a binomial trial are above in the DETAILED EXAMPLES
+section. Computational methods follow Chapter 19 of Jennison and Turnbull
+\cite{JTBook} and are not provided here. Note that other software programs
+such as EAST and the University of Wisconsin software use this distributional
+assumption as primary tools for group sequential design.
+
+While we will work primarily with $Z_{1}$, $Z_{2}$,...,$Z_{k}$, we also define
+variables representing incremental sets of observations between analyses.
+Letting $I_{0}=n_{0}=0$ we define $Y_{i}=\sum_{j=n_{i-1}+1}^{n_{i}}X_{j}%
+/\sqrt{I_{i}-I_{i-1}}$ for $i=1,2,\ldots,K$. This implies $Y_{1}%
+,Y_{2},...,Y_{k}$ are independent and normally distributed with
+\begin{equation}
+Y_{i}\symbol{126}N(\sqrt{I_{i}-I_{i-1}}\theta,1),\text{ }%
+i=1,2,...,k.\label{Yi joint dist}%
+\end{equation}
+For $i=1,2,...,k$ if we let $w_{i}=\sqrt{I_{i}-I_{i-1}}$, note that
+\begin{equation}
+Z_{i}=\frac{\sum_{j=1}^{i}\sqrt{I_{j}-I_{j-1}}Y_{j}}{\sqrt{I_{i}}}=\frac
+{\sum_{j=1}^{i}w_{j}Y_{j}}{\sqrt{\sum_{j=1}^{i}w_{j}^{2}}}%
+.\label{Z sum of ind Y}%
+\end{equation}
+Finally, we define notation for independent increments between arbitrary
+analyses. Select $i$ and $j$ with $1\leq i<j\leq k$ and let $Z_{i,j}%
+=\sum_{m=n_{i}+1}^{n_{j}}X_{m}/\sqrt{I_{_{j}}-I_{i}}$. Thus, $Z_{i,j}\sim
+N(\sqrt{I_{j}-I_{i}}\theta,1)$ is independent of $Z_{i}$\ and
+\begin{equation}
+Z_{j}=\frac{\sqrt{I_{i}}Z_{i}+\sqrt{I_{j}-I_{i}}Z_{i,j}}{\sqrt{I_{j}}%
+}.\label{Zj as ind inc}%
+\end{equation}
+By definition, for $i=2,3,...k$,
+\begin{equation}
+Y_{i}=Z_{i-1,i}.\label{Yi=Zi-1,i}%
+\end{equation}
+\bigskip
+
+For the more general canonical form not defined using $X_{1},X_{2},...$ we
+define $Y_{1}=Z_{1}$ and for $1\leq j<i\leq k$
+\begin{equation}
+Z_{j,i}=\frac{\sqrt{I_{i}}Z_{i}-\sqrt{I_{j}}Z_{j}}{\sqrt{I_{i}-I_{j}}%
+}.\label{Zij implicit}%
+\end{equation}
+\bigskip The variables $Z_{j,i}$ and $Z_{j}$ are independent, as before, for
+any $1\leq j<i\leq k$. We use (\ref{Yi=Zi-1,i}) to define $Y_{i}$,
+$i=2,3,...,k.$ As before $Y_{i}\symbol{126}N(\sqrt{I_{i}-I_{i-1}}\theta,1)$,
+$1<i\leq k,$ and these random variables are independent of each other.
+
+\textbf{Hypotheses and testing.} We assume that the primary interest is to
+test the null hypothesis $H_{0}$:~$\theta=0$ against the alternative $H_{1}$:
+$\theta=\delta$ for a fixed $\delta>0$ . We assume further that there is
+interest in stopping early if there is good evidence to reject one hypothesis
+in favor of the other. For $i=1,2,\ldots,K-1$, interim cutoffs $l_{i}<u_{i}$
+are set; final cutoffs $l_{K}\leq u_{K}$ are also set. For $i=1,2,\ldots,K$,
+the trial is stopped at analysis $i$ to reject $H_{0}$ if $l_{j}<Z_{j}<u_{j}$,
+$j=1,2,\dots,i-1$ and $Z_{i}\geq u_{i}$. If the trial continues until stage
+$i$, $H_{0}$ is not rejected at stage $i$, and $Z_{i}\leq l_{i}$ then $H_{1}$
+is rejected in favor of $H_{0}$, $i=1,2,\ldots,K$. Thus, $3K$ parameters
+define a group sequential design: $l_{i}$, $u_{i}$, and $I_{i}$,
+$i=1,2,\ldots,K$. Note that if $l_{K}<u_{K}$ there is the possibility of
+completing the trial without rejecting $H_{0}$ or $H_{1}$. We will generally
+restrict $l_{K}=u_{K}$ so that one hypothesis is rejected.
+
+\textbf{Sample size ratio for a group sequential design compared to a fixed
+design.} Consider a trial with a fixed design with power 100(1--$\beta$)\% and
+level $\alpha$ (1-sided). Denote the sample size as $N_{fix}$ and statistical
+information for this design as $I_{fix}$. For a group sequential design as
+noted above, we denote the information ratio (inflation factor) comparing
+the information planned for the final analysis of a group sequential design
+compared to a fixed design as
+\begin{equation}
+r=I_{K}/I_{fix}=N_{K}/N_{fix}.\label{sample size ratio}%
+\end{equation}
+This ratio is independent of the $\theta$-value $\delta$ for which the trial
+is powered as long as the information (sample size) available at each analysis
+increases proportionately with $I_{fix}$ and the boundaries for the group
+sequential design remain unchanged. Let $\Phi^{-1}()$ denote the inverse of
+the cumulative standard normal distribution function. In order for the fixed
+design with level $\alpha$ (1-sided), to have power 100(1--$\beta$)\% to
+reject $\theta$=0 when in fact $\theta=\delta$, we must have
+\begin{equation}
+I_{fix}=\left(  \frac{\Phi^{-1}(1-\alpha)+\Phi^{-1}(1-\beta)}{\delta}\right)
+^{2}.\label{fixed design sample size}%
+\end{equation}
+From (\ref{sample size ratio}) and (\ref{fixed design sample size}), if we let
+$\delta=\Phi^{-1}(1-\alpha)+\Phi^{-1}(1-\beta)$ then $r=I_{K}$. Because of
+this relation, this is the value of $\delta$ that is used and displayed when
+information ratios are computed in \texttt{gsDesign()}.
+
+\textbf{Spending functions.} For $i=1,2,\ldots,K$ denote the probability of
+stopping and rejecting the null hypothesis at analysis $i$ as a function of
+$\theta$ by
+\begin{equation}
+\alpha_{i}(\theta)=P_{\theta}\{\{Z_{i}\geq u_{i}\}\cap_{j=1}^{i-1}%
+\{l_{j}<Z_{j}<u_{j}\}\}.\label{alpha(theta)}%
+\end{equation}
+The value $\alpha_{i}(0)$ is commonly referred to as the amount of $\alpha$
+(Type I error rate) spent at analysis $i$, $1\leq i\leq K$. The total Type I
+error rate for a trial is denoted by $\alpha\equiv\sum_{i=1}^{K}%
+\alpha_{i}(0)$. We define a continuously increasing spending function
+$\alpha(t)$ , $0\leq t\leq1$ with $\alpha\left(  0\right)  =0$ and
+$\alpha\left(  1\right)  =\alpha$ that is used to set $\alpha_{i}(0)$,
+for $i=1,2,...K$ using the relation
+\begin{equation}
+\alpha(I_{i}/I_{K})=\sum_{j=1}^{i}\alpha_{j}(0).\label{alpha spending}%
+\end{equation}
+The function $\alpha(t)$ may be generalized to a family of spending functions
+using one or more parameters. For instance, the default Hwang-Shih-DeCani
+spending function family is defined for $0\leq t\leq1$ and any real $\gamma$
+by
+\[
+\alpha(t;\gamma)=%
+\begin{array}
+[c]{cc}%
+\alpha\frac{1-\exp(-\gamma t)}{1-\exp(-\gamma)}, & \gamma\neq0\\
+\alpha t, & \gamma=0
+\end{array}
+.
+\]
+
+
+For one-sided testing (\texttt{test.type}=1) and for non-binding lower bounds
+(\texttt{test.type}=4 or 6), (\ref{alpha(theta)}) is not used for computing
+Type I error. In these cases, $\alpha_{i}(\theta)$ is replaced for
+$i=1,2,...K$ by
+\begin{equation}
+\alpha_{i}^{+}(\theta)=P_{\theta}\{\{Z_{i}\geq u_{i}\}\cap_{j=1}^{i-1}%
+\{Z_{j}<u_{j}\}\}\label{alpha+(theta)}%
+\end{equation}
+and a spending function $\alpha^{+}(t)$, $0\leq t\leq1$ is used to set
+boundaries using the relation%
+\begin{equation}
+\alpha^{+}(I_{i}/I_{K})=\sum_{j=1}^{i}\alpha_{j}^{+}%
+(0).\label{alpha+ spending}%
+\end{equation}
+
+
+Next, we consider analogous notation for the lower bound. For $i=1,2,\ldots,K$
+denote
+\begin{equation}
+\beta_{i}(\theta)=P_{\theta}\{\{Z_{i}\leq l_{i}\}\cap_{j=1}^{i-1}\{l_{j}%
+<Z_{j}<u_{j}\}\}.\label{beta(theta)}%
+\end{equation}
+The total lower boundary crossing probability in this case is written as
+$\beta(\theta)=%
+%TCIMACRO{\tsum \limits_{i=1}^{K}}%
+%BeginExpansion
+{\textstyle\sum\limits_{i=1}^{K}}
+%EndExpansion
+\beta_{i}(\theta).$ The total Type II error rate for a trial is denoted
+by $\beta\equiv\sum_{i=1}^{K}\beta_{i}(\delta)$. For a specified value of
+$\theta$ we define an increasing function $\beta(t;\theta)$ on the interval
+$[0,1]$ with $\beta(0;\theta)=0$ and $\beta(1;\theta)=\beta(\theta)$ where
+$\beta(\theta)$ is the desired total probability for crossing a lower boundary
+at any analysis when $\theta$ is the true parameter value. We now wish to set
+lower bounds using this spending function to obtain%
+\begin{equation}
+\beta(I_{i}/I_{K};\theta)=\sum_{j=1}^{i}\beta_{j}(\theta
+).\label{beta spending}%
+\end{equation}
+There are two options for how to use (\ref{beta spending}) to set lower
+bounds. For \texttt{test.type}=2, 5 and 6, we set lower boundary values under
+the null hypothesis by specifying $\beta(t;0),$ $0\leq t\leq1$. For
+\texttt{test.type}=3 and 4, we compute lower boundary values under the
+alternative hypothesis by specifying $\beta(t;\delta)$, $0\leq t\leq1$.
+$\beta(t;\delta)$ is referred to as the $\beta$-spending function and the
+value $\beta_{i}(\delta)$ is referred to as the amount of $\beta$ (Type
+II error rate) spent at analysis $i$, $1\leq i\leq K$.
+
+We now have four ways of specifying bounds using spending functions. For upper
+bounds, we can use spending functions $\alpha(t)$ or $\alpha^{+}(t)$ while for
+lower spending we can use spending functions $\beta(t;0)$ or $\beta
+(t;\theta).$These are summarized in the following table:
+
+\begin{center}
+\bigskip Table 2. Spending functions by \texttt{test.type}.
+
+\bigskip%
+
+\begin{tabular}
+[c]{ccc}%
+Upper bound & Lower bound & \\
+spending function & spending function & \texttt{test.type}\\\hline
+$\alpha^{+}(t)$ & None & 1\\
+$\alpha(t)$ & $\beta(t;\delta)$ & 3\\
+$\alpha^{+}(t)$ & $\beta(t;\delta)$ & 4\\
+$\alpha(t)$ & $\beta(t;0)$ & 2, 5\\
+$\alpha^{+}(t)$ & $\beta(t;0)$ & 6
+\end{tabular}
+
+
+\bigskip
+\end{center}
+
+For \texttt{test.type}=1, 2 and 5, boundaries can be computed in a single step
+as outlined by Jennison and Turnbull \cite{JTBook}, Chapter 19 just by knowing
+the proportion of the total planned sampling at each analysis that is
+specified using the \texttt{timing} input variable. For \texttt{test.type}=6,
+the upper and lower boundaries are computed separately and independently using
+these same methods. In these cases, the total sample size is then set to
+obtain the desired power under the alternative hypothesis using a root finding algorithm.
+
+For \texttt{test.type}=3 and 4 the sample size and bounds are all set
+simultaneously using an iterative algorithm. This computation is relatively
+straightforward, but more complex than the above. This does not make any
+noticeable difference in normal use of the \texttt{gsDesign()}. However, for
+user-developed routines that require repeated calls to \texttt{gsDesign()}%
+\ (e.g., finding an optimal design), there may be noticeably slower
+performance when test.type=3 or 4 is used.
+
+\textbf{Conditional power. }As an alternative to $\beta$-spending, stopping
+rules for futility are interpreted by considering the conditional power of a
+positive trial given the value of a test statistic at an interim analysis.
+Thus, we consider the conditional probabities of boundary crossing for a group
+sequential design given an interim result. Assume $1\leq$ $i<m\leq j\leq k$
+and let $z_{i}$\ be any real value. Define%
+\begin{equation}
+u_{m,j}(z_{i})=\frac{u_{j}\sqrt{I_{j}}-z_{i}\sqrt{I_{m}}}{\sqrt{(I_{j}-I_{m}%
+)}}\label{umj}%
+\end{equation}
+and
+\begin{equation}
+l_{m,j}(z_{i})=\frac{l_{j}\sqrt{I_{j}}-z_{i}\sqrt{I_{m}}}{\sqrt{(I_{j}-I_{m}%
+)}}.\label{lmj}%
+\end{equation}
+Recall (\ref{Zj as ind inc}) and consider the conditional probabilities%
+\begin{align}
+\alpha_{i,j}(\theta|z_{i})  & =P_{\theta}\{\{Z_{j}\geqslant u_{j}%
+\}\cap_{m=i+1}^{j-1}\{l_{m}<Z_{m}<u_{m}\}|Z_{i}=z_{i}%
+\}\label{Cond lower bound prob}\\
+& =P_{\theta}\left\{  \left\{  \frac{\sqrt{I_{i}}z_{i}+\sqrt{I_{j}-I_{i}%
+}Z_{i,j}}{\sqrt{I_{j}}}\geqslant u_{j}\right\}  \cap_{m=i+1}^{j-1}\left\{
+l_{m}<\frac{\sqrt{I_{i}}z_{i}+\sqrt{I_{j}-I_{i}}Z_{i,m}}{\sqrt{I_{j}}%
+}\right\}  <u_{m}\right\} \nonumber\\
+& =P_{\theta}\{\{Z_{i,j}\geqslant u_{i,j}(z_{i})\}\cap_{m=i+1}^{j-1}%
+\{l_{m,j}(z_{i})<Z_{m,j}<u_{m,j}(z_{i})\}\}.\nonumber
+\end{align}
+This last line is of the same general form as $\alpha_{i}(\theta)$ and can
+thus be computed in a similar fashion. For a non-binding bound, the same logic
+applied ignoring the lower bound yields%
+
+\begin{align}
+\alpha_{i,j}^{+}(\theta|z_{i})  & =P_{\theta}\{\{Z_{j}\geqslant u_{j}%
+\}\cap_{m=i+1}^{j-1}\{Z_{m}<u_{m}\}|Z_{i}=z_{i}\}\label{alphaij+}\\
+& =P_{\theta}\{\{Z_{i,j}\geqslant u_{i,j}(z_{i})\}\cap_{m=i+1}^{j-1}%
+\{Z_{m,j}<u_{m,j}(z_{i})\}\}.\nonumber
+\end{align}
+Finally, the conditional probability of crossing a lower bound at analysis $j
+$ given a test statistic $z_{i}$ at analysis $i$ is denoted by%
+\begin{align}
+\beta_{i,j}(\theta|z_{i})  & =P_{\theta}\{\{Z_{j}\leq l_{j}\}\cap
+_{m=i+1}^{j-1}\{l_{m}<Z_{m}<u_{m}\}|Z_{i}=z_{i}\}\label{Conditional power}\\
+& =P_{\theta}\{\{Z_{i,j}\leq l_{i,j}(z_{i})\}\cap_{m=i+1}^{j-1}\{l_{m,j}%
+(z_{i})<Z_{m,j}<u_{m,j}(z_{i})\}\}.\nonumber
+\end{align}
+Since $\alpha_{i,j}^{+}(\theta|z_{i})$ and $\beta_{i,j}(\theta|z_{i})$\ are of
+the same general form as $\alpha_{i}^{+}(\theta)$ and $\beta_{i}(\theta)$,
+respectively, they can be computed using the same tools.
+
+\bigskip

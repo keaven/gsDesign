@@ -1,0 +1,80 @@
+\name{checkScalar}
+\alias{checkScalar}
+\alias{checkVector}
+\alias{checkRange}
+\alias{checkLengths}
+\alias{isInteger}
+\title{verify variable properties}
+\description{Utility functions to verify an objects's properties including whether it is a scalar or vector,
+ the class, the length, and (if numeric) whether the range of values is on a specified interval. Additionally,
+ the \code{checkLengths} function can be used to ensure that all the supplied inputs have equal lengths.}
+\usage{
+isInteger(x)
+checkScalar(x, isType = "numeric", ...)
+checkVector(x, isType = "numeric", ..., length=NULL) 
+checkRange(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = deparse(substitute(x)))
+checkLengths(...)
+}
+\arguments{
+  \item{x}{any object.}
+  \item{isType}{character string defining the class that the input object is expected to be.}
+  \item{length}{integer specifying the expected length of the object in the case it is a vector. If \code{length=NULL}, the default,
+  then no length check is performed.}
+  \item{interval}{two-element numeric vector defining the interval over which the input object is expected to be contained. 
+  Use the \code{inclusion} argument to define the boundary behavior.}
+  \item{inclusion}{two-element logical vector defining the boundary behavior of the specified interval. A \code{TRUE} value
+  denotes inclusion of the corresponding boundary. For example, if \code{interval=c(3,6)} and \code{inclusion=c(FALSE,TRUE)},
+  then all the values of the input object are verified to be on the interval (3,6].} 
+  \item{varname}{character string defining the name of the input variable as sent into the function by the caller. 
+  This is used primarily as a mechanism to specify the name of the variable being tested when \code{checkRange} is being called
+  within a function.}
+  \item{\dots}{For the \code{\link{checkScalar}} and \code{\link{checkVector}} functions, this input represents additional 
+  arguments sent directly to the \code{\link{checkRange}} function. For the \code{\link{checkLengths}} function, this input
+  represents the arguments to check for equal lengths.}
+}
+
+\details{
+\code{isInteger} is similar to \code{\link{is.integer}} except that \code{isInteger(1)} returns \code{TRUE} whereas \code{is.integer(1)} returns \code{FALSE}.
+
+\code{checkScalar} is used to verify that the input object is a scalar as well as the other properties specified above. 
+
+\code{checkVector} is used to verify that the input object is an atomic vector as well as the other properties as defined above.
+
+\code{checkRange} is used to check whether the numeric input object's values reside on the specified interval. 
+If any of the values are outside the specified interval, a \code{FALSE} is returned.
+
+\code{checkLength} is used to check whether all of the supplied inputs have equal lengths.
+}
+\examples{
+# check whether input is an integer
+isInteger(1)
+isInteger(1:5)
+try(isInteger("abc")) # expect error
+
+# check whether input is an integer scalar
+checkScalar(3, "integer")
+
+# check whether input is an integer scalar that resides 
+# on the interval on [3, 6]. Then test for interval (3, 6].
+checkScalar(3, "integer", c(3,6))
+try(checkScalar(3, "integer", c(3,6), c(FALSE, TRUE))) # expect error
+
+# check whether the input is an atomic vector of class numeric,
+# of length 3, and whose value all reside on the interval [1, 10)
+x <- c(3, pi, exp(1))
+checkVector(x, "numeric", c(1, 10), c(TRUE, FALSE), length=3)
+
+# do the same but change the expected length
+try(checkVector(x, "numeric", c(1, 10), c(TRUE, FALSE), length=2)) # expect error
+
+# create faux function to check input variable
+foo <- function(moo) checkVector(moo, "character")
+foo(letters)
+try(foo(1:5)) # expect error with function and argument name in message
+
+# check for equal lengths of various inputs
+checkLengths(1:2, 2:3, 3:4)
+try(checkLengths(1,2,3,4:5)) # expect error
+}
+
+\keyword{programming}

@@ -1,0 +1,88 @@
+\HeaderA{sfExponential}{4.3: Exponential Spending Function}{sfExponential}
+\keyword{design}{sfExponential}
+\begin{Description}\relax
+The function \code{sfExponential} implements an investigational (unpublished) spending function called the exponential
+spending function.
+Normally \code{sfExponential} will be passed to \code{gsDesign} in the parameter \code{sfu} for the upper bound or
+\code{sfl} for the lower bound to specify a spending function family for a design.
+In this case, the user does not need to know the calling sequence.
+The calling sequence is useful, however, when the user wishes to plot a spending function as demonstrated below
+in examples.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+sfExponential(alpha, t, param)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{alpha}] Real value \eqn{> 0}{} and no more than 1. Normally, 
+\code{alpha=0.025} for one-sided Type I error specification
+or \code{alpha=0.1} for Type II error specification. However, this could be set to 1 if for descriptive purposes
+you wish to see the proportion of spending as a function of the proportion of sample size/information.
+\item[\code{t}] A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 
+sample size/information for which the spending function will be computed.
+\item[\code{param}] A single positive value specifying the nu parameter for which the exponential spending
+is to be computed.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+An  exponential spending function is defined for any positive \code{nu} and \eqn{0\le t\le 1}{} as
+\deqn{\alpha(t)=\alpha^{t^{-\nu}}.}{alpha(t)=alpha^(t^(-nu)).}
+A value of \code{nu=0.8} approximates an O'Brien-Fleming spending function well.
+
+The general class of spending functions this family is derived from requires a continuously increasing 
+cumulative distribution function defined for \eqn{x>0}{} and is defined as
+\deqn{\alpha(t)=1-F\left(F^{-1}(1-\alpha)/ t^\nu\right).}{alpha(t)=1-F(F^(-1)(1-alpha)/ t^nu).}
+The exponential spending function can be derived by letting \eqn{F(x)=1-exp(-x)}{}, the exponential cumulative distribution function.
+This function was derived as a generalization of the Lan-DeMets (1983) spending function used to approximate an
+O'Brien-Fleming spending function (\code{sfLDOF()}),
+\deqn{\alpha(t)=2-2\Phi \left( \Phi^{-1}(1-\alpha/2)/ t^{1/2} \right).}{alpha(t)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(1/2)).}
+\end{Details}
+\begin{Value}
+An object of type \code{spendfn}. See \LinkA{Spending Functions}{Spending Functions} for further details.
+\end{Value}
+\begin{Note}\relax
+The manual shows how to closely approximate an O'Brien-Fleming design using \code{sfExponential()}.
+An example is given below.
+The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+in the directory where R is installed.
+\end{Note}
+\begin{Author}\relax
+Keaven Anderson \email{keaven\_anderson@merck.com}
+\end{Author}
+\begin{References}\relax
+Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
+Boca Raton: Chapman and Hall.
+
+Lan, KKG and DeMets, DL (1983), Discrete sequential boundaries for clinical trials. \emph{Biometrika};70:659-663.
+\end{References}
+\begin{SeeAlso}\relax
+\LinkA{Spending Functions}{Spending Functions}, \code{\LinkA{gsDesign}{gsDesign}}, \LinkA{gsDesign-package}{gsDesign.Rdash.package}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+# use 'best' exponential approximation for k=6 to O'Brien-Fleming design
+# (see manual for details)
+gsDesign(k=6, sfu=sfExponential, sfupar=0.7849295, test.type=2)$upper$bound
+
+# show actual O'Brien-Fleming bound
+gsDesign(k=6, sfu="OF", test.type=2)$upper$bound
+
+# show Lan-DeMets approximation (not as close as sfExponential approximation)
+gsDesign(k=6, sfu=sfLDOF, test.type=2)$upper$bound
+
+# plot exponential spending function across a range of values of interest
+plot(0:100/100, sfExponential(0.025, 0:100/100, 0.8)$spend, xlab="Proportion of final sample size", 
+   ylab="Cumulative Type I error spending", 
+   main="Exponential Spending Function Example", type="l")
+lines(0:100/100, sfExponential(0.025, 0:100/100, 0.5)$spend, lty=2)
+lines(0:100/100, sfExponential(0.025, 0:100/100, 0.3)$spend, lty=3)
+lines(0:100/100, sfExponential(0.025, 0:100/100, 0.2)$spend, lty=4)
+lines(0:100/100, sfExponential(0.025, 0:100/100, 0.15)$spend, lty=5)
+legend(x=c(.0, .3), y=.025*c(.7, 1), lty=1:5, 
+    legend=c("nu = 0.8", "nu = 0.5", "nu = 0.3", "nu = 0.2", "nu = 0.15"))
+text(x=.59, y=.95*.025, labels="<--approximates O'Brien-Fleming")
+\end{ExampleCode}
+\end{Examples}
+

@@ -1,0 +1,54 @@
+\section{Basic Features\label{sec:basicfeatures}}
+
+There are several key design features common to \texttt{gsDesign()},
+\texttt{gsProbability()}, and \texttt{gsCP()}:
+
+\begin{enumerate}
+\item Computations are based on asymptotic approximations as provided by
+Jennison and Turnbull \cite{JTBook}.
+
+\item Power plots and boundary plots are available, in addition to various
+printing formats for summarization.
+\end{enumerate}
+
+In addition, the following apply to \texttt{gsDesign()}:
+
+\begin{enumerate}
+\item Rather than supporting a wide variety of endpoint or design types (e.g.,
+normal, binomial, time to event), the \texttt{gsDesign()} routine allows input
+of the sample size for a fixed design with no interim analysis and adjusts the
+sample size appropriately for a group sequential design.
+
+\item Two-sided symmetric and asymmetric designs are supported, as well as
+one-sided designs.
+
+\item The spending function approach to group sequential design first
+published by Lan and DeMets \cite{LanDeMets} is implemented. Commonly used
+spending functions published by Hwang, Shih, and DeCani \cite{HwangShihDeCani}
+and by Kim and DeMets \cite{KimDeMets} are provided. Other built-in spending
+functions are included. Two- and three-parameter spending functions are
+particularly flexible. There is also point-wise specification of spending
+available. Finally, specifications are given for users to write their own
+spending functions.
+
+\item As an alternative to the spending function approach, the Wang and
+Tsiatis \cite{WangTsiatis} family of boundaries is also available for
+symmetric or one-sided designs. This family includes O'Brien-Fleming and
+Pocock boundaries as members.
+
+\item For asymmetric designs, lower bound spending functions may be used to
+specify lower boundary crossing probabilities under the alternative hypothesis
+(beta spending) or null hypothesis (recommended when number of analyses is
+large or when faster computing is required---e.g., for optimization).
+
+\item Normally it is assumed that when a boundary is crossed at the time of an
+analysis, the clinical trial must stop without a positive finding. In this
+case, the boundary is referred to as binding. For asymmetric designs, a user
+option is available to ignore lower bounds when computing Type I error. Under
+this assumption the lower bound is referred to as non-binding. That is, the
+trial may continue rather than absolutely requiring stopping when the lower
+bound is crossed. This is a conservative design option sometimes requested by
+regulators to preserve Type I error when they assume a sponsor may choose to
+ignore an aggressive futility (lower) bound if it is crossed.
+\end{enumerate}
+
