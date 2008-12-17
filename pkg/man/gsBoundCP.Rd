@@ -2,8 +2,7 @@
 \alias{gsBoundCP}
 \title{2.5: Conditional Power at Interim Boundaries}
 \description{
-\code{
-gsBoundCP()} computes the total probability of crossing future upper bounds
+\code{gsBoundCP()} computes the total probability of crossing future upper bounds
 given an interim test statistic at an interim bound.
 For each interim boundary
 assumes an interim test statistic at the boundary and
@@ -14,7 +13,7 @@ computes the probability of crossing any of the later upper boundaries.
 gsBoundCP(x, theta="thetahat", r=18)
 }
 \arguments{
-	\item{x}{An object of type gsDesign or gsProbability}
+	\item{x}{An object of type \code{gsDesign} or \code{gsProbability}}
 	\item{theta}{if \code{"thetahat"} and \code{class(x)!="gsDesign"}), conditional power computations for
 	each boundary value are computed using estimated treatment effect assuming a test statistic at that boundary
 	(\code{zi/sqrt(x$n.I[i]} at analysis \code{i}, interim test statistic \code{zi} and interim 

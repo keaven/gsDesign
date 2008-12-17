@@ -13,8 +13,9 @@ These offer a great deal of flexibility in setting up stopping boundaries for a 
 spendingFunction(alpha, t, param)
 }
 \arguments{
-	\item{alpha}{Real value > 0 and no more than 1. Defaults in calls to \code{gsDesign()} are 
-	alpha=0.025 for one-sided Type I error specification and 0.1 for Type II error specification. 
+	\item{alpha}{Real value \eqn{> 0} and no more than 1. Defaults in calls to \code{gsDesign()} are 
+	\code{alpha=0.025} for one-sided Type I error specification and 
+	\code{alpha=0.1} for Type II error specification. 
 	However, this could be set to 1 if, for descriptive purposes,
 	you wish to see the proportion of spending as a function of the proportion of sample size/information.}
 	\item{t}{A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 

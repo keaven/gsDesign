@@ -16,12 +16,12 @@ Wang-Tsiatis bounds are defined as follows.
 Assume \eqn{k} analyses and let \eqn{Z_i} represent the upper bound and \eqn{t_i} the proportion of the
 total planned sample size for the \eqn{i}-th analysis, 
 \eqn{i=1,2,\ldots,k}.
-Let \eqn{\Delta} be a real-value. 
-Typically \eqn{\Delta} will range from 0 (O'Brien-Fleming design) to 0.5 (Pocock design).
+Let \eqn{\Delta}{Delta} be a real-value. 
+Typically \eqn{\Delta}{Delta} will range from 0 (O'Brien-Fleming design) to 0.5 (Pocock design).
 The upper boundary is defined by 
 \deqn{ct_i^{\Delta-0.5}}
 for \eqn{i= 1,2,\ldots,k} where \eqn{c} depends on the other parameters.
-The parameter \eqn{\Delta} is supplied to \code{gsDesign()} in the parameter \code{sfupar}.
+The parameter \eqn{\Delta}{Delta} is supplied to \code{gsDesign()} in the parameter \code{sfupar}.
 For O'Brien-Fleming and Pocock designs there is also a calling sequence that does not require a parameter.
 See examples.}
 

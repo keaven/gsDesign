@@ -2,8 +2,7 @@
 \alias{nSurvival}
 \alias{Survival sample size}
 \title{3.3: Time-to-event sample size calculation (Lachin-Foulkes)}
-\description{\code{nSurvival()} is used to calculate the sample size for a clinical trial with 
-time-to-event endpoint. The Lachin and Faulkes (1986) method is used.
+\description{\code{nSurvival()} is used to calculate the sample size for a clinical trial with time-to-event endpoint. The Lachin and Faulkes (1986) method is used.
 }
 
 \usage{
@@ -24,13 +23,13 @@ nSurvival(lambda.0, lambda.1, eta = 0, rand.ratio = 1, Ts, Tr,
   \item{sided}{one or two-sided test? Default is two-sided test.}
   \item{approx}{logical. If \code{TRUE}, the approximation sample size
     formula for risk difference is used.}
-  \item{type}{type of sample size calculation: risk ratio ("rr") or risk
-    difference ("rd").}
-  \item{entry}{patient entry type: uniform entry (unif) or exponential
-    entry (expo).}
+  \item{type}{type of sample size calculation: risk ratio (\dQuote{rr}) or risk
+    difference (\dQuote{rd}).}
+  \item{entry}{patient entry type: uniform entry (\code{"unif"}) or exponential
+    entry (\code{"expo"}).}
   \item{gamma}{rate parameter for exponential entry. \code{NA} if entry type is
-    "unif" (uniform). A non-zero value is supplied if entry type is
-    "expo" (exponential).} 
+    \code{"unif"} (uniform). A non-zero value is supplied if entry type is
+    \code{"expo"} (exponential).} 
 }
 
 \details{

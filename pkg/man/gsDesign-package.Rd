@@ -23,14 +23,14 @@ gsProbability           2.2: Boundary Crossing Probabilities
 plot.gsDesign           2.3: Plots for group sequential designs
 gsCP                    2.4: Conditional Power Computation
 gsBoundCP               2.5: Conditional Power at Interim Boundaries
-normalGrid                  3.1: Normal Density Grid
+normalGrid              3.1: Normal Density Grid
 MandNtest               3.2: Two-sample binomial sample size
 Survival sample size    3.3: Time-to-event sample size calculation
                         (Lachin-Foulkes)
 Spending Functions      4.0: Spending functions
 sfHSD                   4.1: Hwang-Shih-DeCani Spending Function
 sfPower                 4.2: Kim-DeMets (power) Spending Function
-sfExponential                   4.3: Exponential Spending Function
+sfExponential           4.3: Exponential Spending Function
 sfLDPocock              4.4: Lan-DeMets Spending Functions
 sfPoints                4.5: Pointwise Spending Function
 sfLogistic              4.6: 2-parameter Spending Function Families
@@ -38,7 +38,7 @@ sfTDist                 4.7: t-distribution Spending Function
 Wang-Tsiatis Bounds     5.0: Wang-Tsiatis Bounds
 }
 The gsDesign package supports group sequential clinical trial design. 
-While there is a strong focus on designs using \eqn{\alpha}- and \eqn{\beta}-spending functions, Wang-Tsiatis designs, 
+While there is a strong focus on designs using \eqn{\alpha}{alpha}- and \eqn{\beta}{beta}-spending functions, Wang-Tsiatis designs, 
 including O'Brien-Fleming and Pocock designs, are also available.
 The ability to design with non-binding futility rules 
 controls Type I error in a manner acceptable to regulatory authorities when futility bounds are employed. 

@@ -11,43 +11,45 @@ gsDesign(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,
 print.gsDesign(x,...)}
 \arguments{
 	\item{k}{Number of analyses planned, including interim and final.}
-	\item{test.type}{1=one-sided, 2=two-sided symmetric, 3, 4, 5, 6=two-sided, asymmetric: 
-	3=beta-spending with binding lower bound, 4=beta-spending with non-binding lower bound, 
-	5=lower bound spending under the null hypothesis with binding lower bound,
-	6=lower bound spending under the null hypothesis with non-binding lower bound.
-	See details, examples and manual.}
+	\item{test.type}{\code{1=}one-sided \cr
+		\code{2=}two-sided symmetric \cr
+		\code{3=}two-sided, asymmetric, beta-spending with binding lower bound \cr
+		\code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound \cr
+		\code{5=}two-sided, asymmetric, lower bound spending under the null hypothesis with binding lower bound \cr
+		\code{6=}two-sided, asymmetric, lower bound spending under the null hypothesis with non-binding lower bound. \cr See details, examples and manual.}
 	\item{alpha}{Type I error, always one-sided. Default value is 0.025.}
 	\item{beta}{Type II error, default value is 0.1 (90\% power).}
-	\item{astar}{Normally not specified. If test.type=5 or 6, astar specifies the total
+	\item{astar}{Normally not specified. If \code{test.type=5} or \code{6}, \code{astar} specifies the total
 	probability of crossing a lower bound at all analyses combined. 
-	This will be changed to 1-\code{alpha} when default value of 0 is used. 
-	Since this is the expected usage, normally \code{astar} will not be specified by the user.}
+	This will be changed to \eqn{1 - }\code{alpha} when default value of 0 is used. 
+	Since this is the expected usage, normally \code{astar} is not specified by the user.}
 	\item{delta}{Standardized effect size. See details and examples.}
 	\item{n.fix}{Sample size for fixed design with no interim; used to find maximum group sequential sample size.
 	See details and examples.}
 	\item{timing}{Sets relative timing of interim analyses. Default of 1 produces equally spaced analyses. 
 	Otherwise, this is a vector of length \code{k} or \code{k-1}.
-	The values should satisfy \code{0<timing[1]<timing[2]<...<timing[k-1]<timing[k]=1}.}
+	The values should satisfy \code{0 < timing[1] < timing[2] < ... < timing[k-1]< timing[k]=1}.}
 	\item{sfu}{A spending function or a character string indicating a boundary type 
-	(i. e., "WT" for Wang-Tsiatis bounds, "OF" for O'Brien-Fleming bounds and "Pocock" for Pocock bounds). 
+	(that is, \dQuote{WT} for Wang-Tsiatis bounds, \dQuote{OF} for O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds). 
 	For one-sided and symmetric two-sided testing (\code{test.type=1, 2}), 
 	\code{sfu} is used to completely specify spending. 
 	The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function.
 	See details, \link{Spending Functions}, manual and examples.}
-	\item{sfupar}{Real value, default is -4 which is an O'Brien-Fleming-like conservative bound when used
+	\item{sfupar}{Real value, default is \eqn{-4} which is an O'Brien-Fleming-like conservative bound when used
 	with the default Hwang-Shih-DeCani spending function. This is a real-vector for many spending functions.
 	The parameter \code{sfupar} specifies any parameters needed for the spending function specified by sfu. 
 	\code{sfupar} will be ignored for spending functions (\code{sfLDOF}, \code{sfLDPocock}) 
-	or bound types ("OF", "Pocock") that do not require parameters.}
+	or bound types (\dQuote{OF}, \dQuote{Pocock}) that do not require parameters.}
 	\item{sfl}{Specifies the spending function for lower boundary crossing probabilities when
-	asymmetric, two-sided testing is performed (test.type = 3, 4, 5, or 6). 
+	asymmetric, two-sided testing is performed (\code{test.type = 3}, 
+\code{4}, \code{5}, or \code{6}). 
 	Unlike the upper bound, only spending functions are used to specify the lower bound.
 	The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function.
-	The parameter \code{sfl} is ignored for one-sided testing (test.type=1) 
-	or symmetric 2-sided testing (\code{test.type=2}). 
+	The parameter \code{sfl} is ignored for one-sided testing (
+	\code{test.type=1}) or symmetric 2-sided testing (\code{test.type=2}). 
 	See details, spending functions, manual and examples.}
-	\item{sflpar}{Real value, default is -2, which, with the default Hwang-Shih-DeCani spending function, 
-	specifies a less conservative spending rate 	than the default for the upper bound.}
+	\item{sflpar}{Real value, default is \eqn{-2}, which, with the default Hwang-Shih-DeCani spending function, 
+	specifies a less conservative spending rate than the default for the upper bound.}
 	\item{tol}{Tolerance for error (default is 0.000001). Normally this will not be changed by the user.
 	This does not translate directly to number of digits of accuracy, so use extra decimal places.}
 	\item{r}{Integer value controlling grid for numerical integration as in Jennison and Turnbull (2000); 
@@ -66,7 +68,7 @@ An object of the class \code{gsDesign}. This class has the following elements an
 \item{test.type}{As input.}
 \item{alpha}{As input.}
 \item{beta}{As input.}
-\item{astar}{As input, except when \code{test.type}=5 or 6 and \code{astar} is input as 0; in this case
+\item{astar}{As input, except when \code{test.type=5} or \code{6} and \code{astar} is input as 0; in this case
 \code{astar} is changed to \code{1-alpha}.}
 \item{delta}{The standardized effect size for which the design is powered. Will be as input to \code{gsDesign()}
 unless it was input as 0; in that case, value will be computed to give desired power for fixed design with input
@@ -78,11 +80,11 @@ sample size \code{n.fix}.}
 \item{upper}{Upper bound spending function, boundary and boundary crossing probabilities under the NULL and
 alternate hypotheses. See \link{Spending Functions} and manual for further details.}
 \item{lower}{Lower bound spending function, boundary and boundary crossing probability probabilities at each analysis.
-Lower spending is under alternative hypothesis (beta spending) for \code{test.type}=3 or 4. 
-For \code{test.type}=2, 5 or 6, lower spending is under the null hypothesis.
-For \code{test.type}=1, output value is NULL. See \link{Spending Functions} and manual.}
+Lower spending is under alternative hypothesis (beta spending) for \code{test.type=3} or \code{4}. 
+For \code{test.type=2}, \code{5} or \code{6}, lower spending is under the null hypothesis.
+For \code{test.type=1}, output value is \code{NULL}. See \link{Spending Functions} and manual.}
 \item{n.I}{Vector of length \code{k}. If values are input, same values are output.
-Otherwise, n.I will contain the sample size required at each analysis 
+Otherwise, \code{n.I} will contain the sample size required at each analysis 
 to achieve desired \code{timing} and \code{beta} for the output value of \code{delta}. 
 If \code{delta=0} was input, then this is the sample size required for the specified group sequential design
 when a fixed design requires a sample size of \code{n.fix}.
@@ -106,11 +108,11 @@ The user may ignore the structure of the value returned by \code{gsDesign()} if 
 printing and plotting suffice; see examples.
 
 \code{delta} and \code{n.fix} are used together to determine what sample size output options the user seeks.
-The default, \code{delta}=0 and \code{n.fix}=1, results in a 'generic' design that may be used with any sampling
+The default, \code{delta=0} and \code{n.fix=1}, results in a \sQuote{generic} design that may be used with any sampling
 situation. Sample size ratios are provided and the user multiplies these times the sample size for a fixed design
 to obtain the corresponding group sequential analysis times. If \code{delta}>0, \code{n.fix} is ignored, and 
 \code{delta} is taken as the standardized effect size - the signal to noise ratio for a single observation;
-\emph{e.g.}, the mean divided by the standard deviation for a one-sample normal problem. 
+for example, the mean divided by the standard deviation for a one-sample normal problem. 
 In this case, the sample size at each analysis is computed. 
 When \code{delta}=0 and \code{n.fix}>1, \code{n.fix} is assumed to be the sample size for a fixed design
 with no interim analyses. See examples below. 

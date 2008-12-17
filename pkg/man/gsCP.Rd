@@ -10,9 +10,9 @@ at a specified interim analysis and computes boundary crossing probabilities at 
 gsCP(x, theta=NULL, i=1, zi=0, r=18)
 }
 \arguments{
-	\item{x}{An object of type gsDesign or gsProbability}
-	\item{theta}{theta value(s) at which conditional power is to be computed; if NULL, 
-	an estimated value of theta based on the interim test statistic (\code{zi/sqrt(x$n.I[i])}) as well as at \code{x$theta}
+	\item{x}{An object of type \code{gsDesign} or \code{gsProbability}}
+	\item{theta}{\eqn{\theta}{theta} value(s) at which conditional power is to be computed; if \code{NULL}, 
+	an estimated value of \eqn{\theta}{theta} based on the interim test statistic (\code{zi/sqrt(x$n.I[i])}) as well as at \code{x$theta}
 	is computed.}
 	\item{i}{analysis at which interim z-value is given}
 	\item{zi}{interim z-value at analysis i}
@@ -24,9 +24,10 @@ gsCP(x, theta=NULL, i=1, zi=0, r=18)
 \value{
 An object of the class \code{gsProbability}.
 Based on the input design and the interim test statistic, the output object has bounds for test statistics
-computed based on observations after interim i that are equivalent to the original design crossing boundaries conditional
+computed based on observations after interim \code{i} that are equivalent to the original design crossing boundaries conditional
 on the interim test statistic value input. 
-Boundary crossing probabilities are computed for the input theta values.
+Boundary crossing probabilities are computed for the input 
+\eqn{\theta}{theta} values.
 }
 
 

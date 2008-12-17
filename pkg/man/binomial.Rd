@@ -5,17 +5,17 @@
 \alias{simBinomial}
 \title{3.2: Testing, Confidence Intervals and Sample Size for Comparing Two Binomial Rates}
 \description{Support is provided for sample size estimation, testing confidence intervals and simulation for fixed sample size trials 
-(i.e., not group sequential or adaptive) with two arms and binary outcomes. 
+(that is, not group sequential or adaptive) with two arms and binary outcomes. 
 Both superiority and non-inferiority trials are considered.
 While all routines default to comparisons of risk-difference, 
 computations based on risk-ratio and odds-ratio are also provided. 
 
-\code{nBinomial()} computes sample size using the method of Farrington and Manning (1990) to derive sample size
-required to power a trial to test the difference between two binomial event rates. 
+\code{nBinomial()} computes sample size using the method of Farrington and 
+Manning (1990) to derive sample size required to power a trial to test the difference between two binomial event rates. 
 The routine can be used for a test of superiority or non-inferiority.
 For a design that tests for superiority \code{nBinomial()} is consistent with the method of Fleiss, Tytun, and Ury 
 (but without the continuity correction) to test for differences between event rates.
-This routine is consistent with the Hmisc package routine bsamsize for superiority designs.
+This routine is consistent with the Hmisc package routine \code{bsamsize} for superiority designs.
 Vector arguments allow computing sample sizes for multiple scenarios for comparative purposes.
 
 \code{testBinomial()} computes a Z- or Chi-square-statistic that compares two binomial event rates using 
@@ -23,8 +23,8 @@ the method of Miettinen and Nurminen (1980). This can be used for superiority or
 Vector arguments allow easy incorporation into simulation routines for fixed, group sequential and adaptive designs.
 
 \code{ciBinomial()} computes confidence intervals for 1) the difference between two rates, 2) the risk-ratio for two rates 
-or the odds-ratio for two rates. This procedure provides inference that is consistent with \code{testBinomial} in that 
-the confidence intervals are produced by inverting the testing procedures in \code{testBinomial}.
+or the odds-ratio for two rates. This procedure provides inference that is consistent with \code{testBinomial()} in that 
+the confidence intervals are produced by inverting the testing procedures in \code{testBinomial()}.
 
 \code{simBinomial()} performs simulations to estimate the power for a Miettinin and Nurminen (1980) test
 comparing two binomial rates for superiority or non-inferiority. 
@@ -69,18 +69,18 @@ If \code{scale="LNOR"},
 \item{sided}{2 for 2-sided test, 1 for 1-sided test}
 \item{outtype}{1 (default) returns total sample size; 2 returns sample size for each group (\code{n1, n2}); 
 }
-\item{x1}{Number of "successes" in the control group}
-\item{x2}{Number of "successes" in the experimental group}
+\item{x1}{Number of \dQuote{successes} in the control group}
+\item{x2}{Number of \dQuote{successes} in the experimental group}
 \item{n1}{Number of observations in the control group}
 \item{n2}{Number of observations in the experimental group}
 \item{chisq}{An indicator character string (vector of character strings
 If 0 (default), the difference in event rates divided by its standard error under the null hypothesis is used. 
 Otherwise, a Miettinen and Nurminen chi-square statistic for a 2 x 2 table is used.}
 \item{adj}{With \code{adj=1}, the standard variance with a continuity correction is used for a Miettinen and Nurminen test statistic 
-This includes a factor of n / (n - 1) where n is the total sample size. If \code{adj} is not 1, 
+This includes a factor of \eqn{n / (n - 1)} where \eqn{n} is the total sample size. If \code{adj} is not 1, 
 this factor is not applied. The default is \code{adj=0} since nominal Type I error is generally conservative with \code{adj=1}
 (Gordon and Watson, 1996).}
-\item{scale}{"Difference", "RR", "OR"; see the \code{scale} parameter documentation above and Details. 
+\item{scale}{\dQuote{Difference}, \dQuote{RR}, \dQuote{OR}; see the \code{scale} parameter documentation above and Details. 
 This is a scalar argument.}
 \item{nsim}{The number of simulations to be performed in \code{simBinomial()}}
 \item{tol}{Default should probably be used; this is used to deal with a rounding issue in interim calculations}
@@ -114,7 +114,7 @@ which \code{p10} and \code{p20} are used under the null hypothesis.
 }
 
 \value{
-  \code{testBinomial} and \code{simBinomial} each return a vector of either Chi-square or Z test statistics. 
+  \code{testBinomial()} and \code{simBinomial()} each return a vector of either Chi-square or Z test statistics. 
   These may be compared to an appropriate cutoff point (e.g., \code{qnorm(.975)} or \code{qchisq(.95,1)}).
  
   With the default \code{outtype=2}, \code{nBinomial()} returns a list containing two vectors \code{n1} and \code{n2} containing
@@ -204,4 +204,3 @@ legend(x=c(.15, .2),y=c(4500, 6000),lty=c(2, 1, 3, 4), lwd=2,
 }
 
 \keyword{design}
-

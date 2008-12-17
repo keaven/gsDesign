@@ -29,7 +29,7 @@ design is characterized.
 	\item{b}{Upper bound cutoffs (z-values) for futility at each analysis; vector of length k.}
 	\item{r}{Control for grid as in Jennison and Turnbull (2000); default is 18, range is 1 to 80.
 	Normally this will not be changed by the user.}
-   \item{d}{If non-NULL, this should be an object of type \code{gsDesign} returned by a call to \code{gsDesign()}. 
+   \item{d}{If not \code{NULL}, this should be an object of type \code{gsDesign} returned by a call to \code{gsDesign()}. 
 	When this is specified, the values of \code{k}, \code{n.I}, \code{a}, \code{b}, and \code{r} will be obtained from \code{d} and
 	only \code{theta} needs to be specified by the user.}
 }

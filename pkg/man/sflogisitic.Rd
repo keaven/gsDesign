@@ -6,9 +6,9 @@
 \alias{sfCauchy}
 \alias{sfBetaDist}
 
-\title{4.6: 2-parameter Spending Function Families}
+\title{4.6: Two-parameter Spending Function Families}
 \description{The functions \code{sfLogistic()}, \code{sfNormal()}, \code{sfExtremeValue()}, \code{sfExtremeValue2()}, \code{sfCauchy()}, 
-and\\ \code{sfBetaDist()} are all 2-parameter spending function families.
+and \code{sfBetaDist()} are all 2-parameter spending function families.
 These provide increased flexibility in some situations where the flexibility of a one-parameter spending function 
 family is not sufficient.
 These functions all allow fitting of two points on a cumulative spending function curve; in this case, four parameters
@@ -17,8 +17,7 @@ Normally each of these functions will be passed to \code{gsDesign()} in the para
 \code{sfu} for the upper bound or
 \code{sfl} for the lower bound to specify a spending function family for a design.
 In this case, the user does not need to know the calling sequence.
-The calling sequence is useful, however, when the user wishes to plot a spending function as demonstrated below
-in examples; note, however, that an automatic alpha- and beta-spending function plot is also available.
+The calling sequence is useful, however, when the user wishes to plot a spending function as demonstrated in the examples; note, however, that an automatic \eqn{\alpha}{alpha}- and \eqn{\beta}{beta}-spending function plot is also available.
 }
 
 \usage{
@@ -30,8 +29,9 @@ sfCauchy(alpha, t, param)
 sfBetaDist(alpha, t, param)
 }
 \arguments{
-	\item{alpha}{Real value > 0 and no more than 1. Normally, alpha=0.025 for one-sided Type I error specification
-	or 0.1 for Type II error specification. However, this could be set to 1 if for descriptive purposes
+	\item{alpha}{Real value \eqn{> 0} and no more than 1. Normally, 
+\code{alpha=0.025} for one-sided Type I error specification
+	or \code{alpha=0.1} for Type II error specification. However, this could be set to 1 if for descriptive purposes
 	you wish to see the proportion of spending as a function of the proportion of sample size or information.}
 	\item{t}{A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 
 	sample size or information for which the spending function will be computed.}
@@ -50,7 +50,7 @@ function with parameters
 
 The other spending functions take the form
 \deqn{\alpha F(a+bF^{-1}(t))}
-where \eqn{F()} is a cumulative distribution function with values >0 on the real line (logistic for \code{sfLogistic()}, 
+where \eqn{F()} is a cumulative distribution function with values \eqn{> 0} on the real line (logistic for \code{sfLogistic()}, 
 normal for \code{sfNormal()}, extreme value for \code{sfExtremeValue()} and Cauchy for \code{sfCauchy()}) and
 \eqn{F^{-1}()} is its inverse.
 
@@ -93,7 +93,7 @@ plot(0:100/100,  sfLogistic(1, 0:100/100, c(.1, .4, .01, .1))$spend,
     xlab="Proportion of final sample size", 
     ylab="Cumulative Type I error spending", 
     main="Logistic Spending Function Examples", 
-type="l", cex.main=.9)
+    type="l", cex.main=.9)
 lines(0:100/100, sfLogistic(1, 0:100/100, c(.01, .1, .1, .4))$spend, lty=2)
 
 # now just give a=0 and b=1 as 3rd parameters for sfLogistic 
@@ -107,7 +107,7 @@ legend=c("Fit (.1, 01) and (.4, .1)", "Fit (.01, .1) and (.1, .4)",
     "a=0,  b=1", "Fit (.4, .1) and (.6, .7)", "Fit (.1, .4) and (.7, .6)"))
 
 # set up a function to plot comparsons of all 2-parameter spending functions
-plotsf<-function(alpha, t, param)
+plotsf <- function(alpha, t, param)
 {   
     plot(t, sfCauchy(alpha, t, param)$spend, xlab="Proportion of enrollment", 
     ylab="Cumulative spending", type="l", lty=2)
@@ -122,7 +122,7 @@ plotsf<-function(alpha, t, param)
 }
 # do comparison for a design with conservative early spending
 # note that Cauchy spending function is quite different from the others
-param<-c(.25, .5, .05, .1)
+param <- c(.25, .5, .05, .1)
 plotsf(.025, t=seq(0, 1, .01), param)
 }
 \keyword{design}

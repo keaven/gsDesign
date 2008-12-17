@@ -3,8 +3,8 @@
 \alias{plot.gsProbability}
 \alias{Group Sequential Plots}
 \title{2.3: Plots for group sequential designs}
-\description{The \code{plot()} function has been extended to work with objects in the gsDesign
-and gsProbability classes (\emph{i.e.}, objects returned by the functions \code{gsDesign} and
+\description{The \code{plot()} function has been extended to work with objects in the \code{gsDesign}
+and \code{gsProbability} classes (that is, objects returned by the functions \code{gsDesign} and
 \code{gsProbability}, respectively). 
 For objects of type \code{gsDesign}, seven types of plots are provided: z-values at boundaries (default), power, 
 estimated treatment effects at boundaries, 
@@ -30,14 +30,17 @@ plot.gsDesign(x, plottype=1, ...)
 	(only available if \code{class(x)=="gsDesign"}), 
 	6=expected sample size plot, and 
 	7=B-values at boundaries. 
-	Character values for \code{plottype} may also be entered: 1<==>"Z", 2<==>"power", 3<==>"thetahat",
-	4<==>"CP", 5<==>"sf", 6<==>"ASN" or "N" or "n", 7<==>"B" or "B-val" or "B-value".}
+	Character values for \code{plottype} may also be entered: \code{"Z"} for plot
+type 1,\code{"power"} for plot type 2, \code{"thetahat"} for plot type 3,
+	\code{"CP"} for plot type 4, \code{"sf"} for plot type 5, \code{"ASN"}, 
+\code{"N"} or \code{"n"} for plot type 6, and \code{"B"}, \code{"B-val"} or 
+\code{"B-value"} for plot type 7.}
 	\item{...}{This allows many optional arguments that are standard when calling \code{plot}.
 	Other arguments include: 
-	1) \code{theta} which is used for \code{plottype=2, 4, 6}; normally defaults will be adequate; see details. 
+	1) \code{theta} which is used for \code{plottype=2}, \code{4}, \code{6}; normally defaults will be adequate; see details. 
 	2) \code{ses=TRUE} which applies only when \code{plottype=3} and \code{class(x)=="gsDesign"}; indicates that estimated standardized effect size
 	at the boundary (\eqn{hat(theta)/delta)}) is to be plotted rather than the actual estimate (\eqn{hat(theta)} if \code{ses==FALSE}).
-	3) \code{xval="Default"} which is only effective when \code{plottype=2, 6}. Appropriately scaled (reparameterized) values 
+	3) \code{xval="Default"} which is only effective when \code{plottype=2} or \code{6}. Appropriately scaled (reparameterized) values 
 	for x-axis for power and expected sample size graphs; see details.}
 	}
 
@@ -65,7 +68,7 @@ as \eqn{theta} values, values of \eqn{theta / delta} are plotted in this case.
 See examples below.
 
 Estimated treatment effects at boundaries are computed multiplying the Z-values at the boundaries by
-the square root of n.I at that analysis. 
+the square root of \code{n.I} at that analysis. 
 
 Spending functions are plotted for a continuous set of values from 0 to 1. 
 This option should not be used if a boundary is used or a pointwise spending function is used
@@ -77,7 +80,7 @@ at each bound using the estimated treatment effect at that bound.
 Otherwise, conditional power is computed assuming \code{theta=x$delta}, 
 the original effect size for which the trial was planned.
 
-Average sample number/expected sample size is computed using n.I at each analysis times 
+Average sample number/expected sample size is computed using \code{n.I} at each analysis times 
 the probability of crossing a boundary at that analysis.
 If no boundary is crossed at any analysis, this is counted as stopping at the final analysis.
 

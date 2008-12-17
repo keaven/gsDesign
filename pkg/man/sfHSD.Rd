@@ -15,8 +15,9 @@ sfHSD(alpha, t, param)
 }
 
 \arguments{
-	\item{alpha}{Real value > 0 and no more than 1. Normally, alpha=0.025 for one-sided Type I error specification
-	or 0.1 for Type II error specification. However, this could be set to 1 if for descriptive purposes
+	\item{alpha}{Real value \eqn{> 0} and no more than 1. Normally, 
+\code{alpha=0.025} for one-sided Type I error specification
+	or \code{alpha=0.1} for Type II error specification. However, this could be set to 1 if for descriptive purposes
 	you wish to see the proportion of spending as a function of the proportion of sample size/information.}
 	\item{t}{A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 
 	sample size/information for which the spending function will be computed.}

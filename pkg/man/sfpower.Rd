@@ -15,19 +15,20 @@ sfPower(alpha, t, param)
 }
 
 \arguments{
-	\item{alpha}{Real value > 0 and no more than 1. Normally, alpha=0.025 for one-sided Type I error specification
-	or 0.1 for Type II error specification. However, this could be set to 1 if for descriptive purposes
+	\item{alpha}{Real value \eqn{> 0} and no more than 1. Normally, 
+\code{alpha=0.025} for one-sided Type I error specification
+	or \code{alpha=0.1} for Type II error specification. However, this could be set to 1 if for descriptive purposes
 	you wish to see the proportion of spending as a function of the proportion of sample size/information.}
 	\item{t}{A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 
 	sample size/information for which the spending function will be computed.}
-	\item{param}{A single, positive value specifying the rho parameter for which Kim-DeMets spending
+	\item{param}{A single, positive value specifying the \eqn{\rho}{rho} parameter for which Kim-DeMets spending
 	is to be computed}
 }
 \value{An object of type \code{spendfn}. See \link{Spending Functions} for further details.}
 \details{
 A Kim-DeMets spending function takes the form
-\deqn{\alpha t^\rho} where \eqn{\rho} is the value passed in \code{param}.
-See examples below for a range of values of \code{rho} that may be of interest (\code{rho}=0.75 to 3 are documented there).
+\deqn{\alpha t^\rho}{alpha t^rho} where \eqn{\rho}{rho} is the value passed in \code{param}.
+See examples below for a range of values of \eqn{\rho}{rho} that may be of interest (\code{param=0.75} to \code{3} are documented there).
 }
 \seealso{\link{Spending Functions}, \code{\link{gsDesign}}, \link{gsDesign-package}}
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
