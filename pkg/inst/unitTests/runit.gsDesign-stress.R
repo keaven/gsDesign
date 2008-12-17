@@ -9,7 +9,7 @@
 	    for (b in beta)
 		{
 			# sfLDPocock, test.type=3: errors with alpha >= .5 and beta close to 1 - alpha
-		    if (b < 1 - a - 0.05)
+		    if (b < 1 - a - 0.1)
 			{
 				cat("a = ", a, "b = ", b, "\n")
 			    res <- try(gsDesign(test.type=type, alpha=a, beta=b, sfu=sf))
