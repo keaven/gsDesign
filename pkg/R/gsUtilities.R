@@ -1,5 +1,5 @@
 ##################################################################################
-#  Input argument test functionality for the gsDesign package
+#  Validation functionality for the gsDesign package
 #
 #  Exported Functions:
 #                   
@@ -11,7 +11,7 @@
 #
 #  Hidden Functions:
 #
-#    (none)
+#    checkMD5
 #
 #  Author(s): William Constantine, Ph.D.
 # 
@@ -161,3 +161,45 @@
 ###
 # Hidden Functions
 ###
+
+"checkMD5" <- function (package="gsDesign", dir) 
+{
+    if (missing(dir)) 
+        dir <- .find.package(package, quiet = TRUE)
+    if (!length(dir)) 
+        return(NA)
+    md5file <- file.path(dir, "MD5")
+    if (!file.exists(md5file)) 
+        return(NA)
+    
+    ignore <- c("MD5", "DESCRIPTION")    
+    
+    inlines <- readLines(md5file)
+    xx <- sub("^([0-9a-fA-F]*)(.*)", "\\1", inlines)
+    nmxx <- names(xx) <- sub("^[0-9a-fA-F]* [ |*](.*)", "\\1", inlines)
+    
+    nmxx <- nmxx[!(names(x) %in% ignore)]
+    
+    dot <- getwd()
+    setwd(dir)
+    x <- tools:::md5sum(dir(dir, recursive = TRUE))
+    setwd(dot)
+    
+    x <- x[!(names(x) %in% ignore)]
+    nmx <- names(x)
+    res <- TRUE
+    not.here <- !(nmxx %in% nmx)
+    if (any(not.here)) {
+        res <- FALSE
+        cat("files", paste(nmxx[not.here], collapse = ", "), 
+                "are missing\n", sep = " ")
+    }
+    nmxx <- nmxx[!not.here]
+    diff <- xx[nmxx] != x[nmxx]
+    if (any(diff)) {
+        res <- FALSE
+        cat("files", paste(nmxx[diff], collapse = ", "), "have the wrong MD5 checksums\n", 
+                sep = " ")
+    }
+    return(res)
+}
