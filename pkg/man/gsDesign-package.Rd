@@ -9,11 +9,10 @@ Many plots are available for describing design properties.
 }
 \details{
 \tabular{ll}{
+\tabular{ll}{
 Package: \tab gsDesign\cr
-Version: \tab 1.17.05\cr
+Version: \tab 1.3\cr
 License: \tab GPL (version 2 or later)\cr
-Packaged: \tab Sun Aug 17 17:41:35 2008; Anderkea\cr
-Built: \tab R 2.7.0; i386-pc-mingw32; 2008-08-17 17:41:36; windows\cr
 }
 
 Index:
