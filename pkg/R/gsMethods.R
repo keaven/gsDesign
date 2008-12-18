@@ -23,7 +23,7 @@
 #
 #  Author(s): Keaven Anderson, PhD.
 # 
-#  Reviewer(s): REvolution Computing 19DEC2008 v.1.3 - William Constantine, Kellie Wills 
+#  Reviewer(s): REvolution Computing 19DEC2008 v.2.0 - William Constantine, Kellie Wills 
 #
 #  R Version: 2.7.2
 #

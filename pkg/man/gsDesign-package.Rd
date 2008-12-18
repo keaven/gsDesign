@@ -9,9 +9,8 @@ Many plots are available for describing design properties.
 }
 \details{
 \tabular{ll}{
-\tabular{ll}{
 Package: \tab gsDesign\cr
-Version: \tab 1.3\cr
+Version: \tab 2.0\cr
 License: \tab GPL (version 2 or later)\cr
 }
 
