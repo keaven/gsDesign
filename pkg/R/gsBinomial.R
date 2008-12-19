@@ -354,7 +354,7 @@
     {   
         delta0 <- exp(delta0) # change from log odds-ratio to odds-ratio
         A <- n1 * (delta0 - 1)
-        B < -n2 * delta0 + n1 - xtot * (delta0 - 1)
+        B <- n2 * delta0 + n1 - xtot * (delta0 - 1)
         C <- -xtot
         R0 <- ( - B + sqrt(B ^ 2 - 4 * A * C)) / 2 / A
         R1 <- R0 * delta0 / (1 + R0 * (delta0 - 1))
@@ -377,7 +377,7 @@
         {   
             V <- 1 / n2 / R1 / (1-R1) + 1 / n1 / R0 / (1-R0)
             V[xtot == 0 || xtot == ntot] <- 1
-            z <- log(x2 / (n2 - x2) / x1 * (n1 - x1)) - delta0
+            z <- log(x1 / (n1 - x1) / x2 * (n2 - x2) / delta0)
             z[xtot == 0 || xtot == ntot] <- 0
             z[xtot > 0 && xtot < ntot] <- z[xtot > 0 && xtot < ntot]
         }   
