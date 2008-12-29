@@ -136,20 +136,20 @@
         else
         {   
             a <- 1 + ratio
-            b <- -(a + p1 + ratio * p2 - delta0 * (ratio + 2))
-            c <- delta0 ^ 2 - delta0 * (2 * p1 + a) + p1 + ratio * p2
-            d <- p1 * delta0 * (1 - delta0)
+            b <- -(a + p1 + ratio * p2 + delta0 * (ratio + 2))
+            c <- delta0 ^ 2 + delta0 * (2 * p1 + a) + p1 + ratio * p2
+            d <- -p1 * delta0 * (1 + delta0)
             v <- (b / (3 * a)) ^ 3 - b * c / 6 / a ^ 2 + d / 2 / a
             u <- sign(v) * sqrt((b / 3 / a) ^ 2 - c / 3 / a)
             w <- (pi + acos(v /u ^ 3)) / 3
             p10 <- 2 * u * cos(w) - b / 3 / a
-            p20 <- p10 + delta0
+            p20 <- p10 - delta0
             sigma0 <- sqrt((p10 * (1 - p10) + p20 * (1 - p20) / ratio) 
                             * (ratio + 1))
         }
         
         sigma1 <- sqrt((p1 * (1 - p1) + p2 * (1 - p2) / ratio) * (ratio + 1))
-        n <- ((z.alpha * sigma0 + z.beta * sigma1) / (p2 - p1 - delta0)) ^ 2
+        n <- ((z.alpha * sigma0 + z.beta * sigma1) / (p1 - p2 - delta0)) ^ 2
         
         if (outtype == 2)
         {
@@ -317,17 +317,17 @@
     # risk difference test - from Miettinen and Nurminen eqn (9)
     if (scale == "difference")
     {   
-        L2 <- (n2 + 2 * n1) * delta0 - ntot - xtot
-        L1 <- (n1 * delta0 - ntot - 2 * x1) * delta0 + xtot
-        L0 <- x1 * delta0 * (1 - delta0)
-        p  <- sqrt((L2 / (3 * ntot)) ^ 2 - L1 / (3 * ntot))
+        L2 <- (n1 + 2 * n2) * delta0 - ntot - xtot
+        L1 <- (n2 * delta0 - ntot - 2 * x2) * delta0 + xtot
+        L0 <- x2 * delta0 * (1 - delta0)
         q  <- (L2 / (3 * ntot)) ^ 3 - L1 * L2 / 6 / ntot ^ 2 + L0 / 2 / ntot
+        p  <- sign(q) * sqrt((L2 / (3 * ntot)) ^ 2 - L1 / (3 * ntot))
         a  <- q / p ^ 3
         a[a > 1] <- 1
         a  <- (pi + acos(a)) / 3
         R0 <- 2 * p * cos(a) - L2 / 3 / ntot
         R1 <- R0 + delta0
-        V  <- (R1 * (1 - R1) / n2 + R0 * (1 - R0) / n1)
+        V  <- (R1 * (1 - R1) / n1 + R0 * (1 - R0) / n2)
         # V=0 only if no or all events and delta0=0
         # in which case test statistic will be 0 
         V[V <= tol] <- 1
