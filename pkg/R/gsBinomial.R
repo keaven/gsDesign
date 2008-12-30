@@ -186,17 +186,17 @@
         }
         else
         {   
-            a <- (1 + ratio) * RR
-            b <- -(RR * ratio + p2 * ratio + 1 + p1 * RR)
-            c <- ratio * p2 + p1
+            a <- (1 + ratio)
+            b <- -(RR * (1 + ratio * p2) + ratio + p1)
+            c <- RR * (p1 + ratio * p2)
             p10 <- (-b - sqrt(b ^ 2 - 4 * a * c)) / 2 / a
-            p20 <- RR * p10
+            p20 <- p10 / RR
             sigma0 <- sqrt((ratio + 1) * 
-                            (p10 * (1 - p10) * RR ^ 2 + p20 * (1 - p20) / ratio))
+                            (p10 * (1 - p10) + RR ^ 2 * p20 * (1 - p20) / ratio))
         }
         sigma1 <- sqrt((ratio + 1) * 
-                        (p1 * (1 - p1) * RR ^ 2 + p2 * (1 - p2) / ratio))
-        n <- ((z.alpha * sigma0 + z.beta * sigma1) / (p2 - p1 * RR)) ^ 2
+                        (p1 * (1 - p1) + RR ^ 2 * p2 * (1 - p2) / ratio))
+        n <- ((z.alpha * sigma0 + z.beta * sigma1) / (p1 - p2 * RR)) ^ 2
         
         if (outtype == 2)
         {
@@ -339,15 +339,15 @@
     {   
         delta0 <- delta0 + 1 # value of 0 input represents equal rates
         A  <- delta0 * ntot
-        B  <- -(n2 * delta0 + x2 + n1 + x1 * delta0)
+        B  <- -(n1 * delta0 + x1 + n2 + x2 * delta0)
         C  <- xtot
         R0 <- ( - B - sqrt(B ^ 2 - 4 * A * C)) / 2 / A
         R1 <- R0 * delta0
-        V  <- R1 * (1 - R1) / n2 + delta0 ^ 2 * R0 * (1 - R0) / n1
+        V  <- R1 * (1 - R1) / n1 + delta0 ^ 2 * R0 * (1 - R0) / n2
         # V=0 only if no events or (all events and delta0=1)
         # in which case test statistic will be 0
         V[V <= 0 || is.na(V)] <- 1
-        z <- x2 / n2 - x1 / n1 * delta0
+        z <- x1 / n1 - x2 / n2 * delta0
     }
     # odds-ratio and log-odds-ratio
     else
