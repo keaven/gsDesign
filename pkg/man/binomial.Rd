@@ -67,7 +67,11 @@ If \code{scale="LNOR"},
 }
 \item{ratio}{sample size ratio for group 2 divided by group 1}
 \item{sided}{2 for 2-sided test, 1 for 1-sided test}
-\item{outtype}{1 (default) returns total sample size; 2 returns sample size for each group (\code{n1, n2}); 
+\item{outtype}{1 (default) returns total sample size; 2 returns sample size for each group (\code{n1, n2});
+3 and \code{delta0=0} returns a list with total sample size (\code{n}), sample size in each group (\code{n1, n2}),
+null and alternate hypothesis variance (\code{sigma0, sigma1}), input event rates (\code{p1, p2} and average event
+rate (\code{pbar}; 3 and \code{delta0!=0} is the same as 3 and \code{delta0=0} except that instead of \code{pbar}, \code{\delta0} and
+null hypothesis event rates (\code{p10, p20}) are in the list returned. 
 }
 \item{x1}{Number of \dQuote{successes} in the control group}
 \item{x2}{Number of \dQuote{successes} in the experimental group}
@@ -110,7 +114,11 @@ and a difference between these rates under the null hypothesis, \code{delta0}.
 From these values, actual rates under the null hypothesis are computed, which are labeled \code{p10} and \code{p20}
 when \code{outtype=3}.
 The rates \code{p1} and \code{p2} are used to compute a variance for a Z-test comparing rates under the alternative hypothesis,
-which \code{p10} and \code{p20} are used under the null hypothesis.  
+which \code{p10} and \code{p20} are used under the null hypothesis.
+
+Sample size with \code{scale="Difference"} produces an error if \code{p1-p2=delta0}. 
+Normally, the alternative hypothesis under consideration would be \code{p1-p2-delta0}$>0$.
+However, the alternative can have \code{p1-p2-delta0}$<0$.
 }
 
 \value{
