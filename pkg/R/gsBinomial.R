@@ -99,7 +99,7 @@
     checkVector(ratio, "numeric", c(0, Inf), c(FALSE, TRUE))
     checkScalar(outtype, "integer", c(1, 2))
     checkScalar(scale, "character")
-    scale <- match.arg(tolower(scale), c("difference", "rr", "or"))
+    scale <- match.arg(tolower(scale), c("difference", "rr", "lnor"))
     checkLengths(p1, p2, sided, alpha, beta, ratio, allowSingle=TRUE)
     
     if (delta0 == 0)
@@ -235,7 +235,7 @@
         }
         else
         {   
-            OR <- exp(delta0)
+            OR <- exp(-delta0)
             a <- OR - 1
             b <- 1 + ratio * OR + (1 - OR) * (ratio * p2 + p1)
             c <- -(ratio * p2 + p1)
@@ -353,8 +353,8 @@
     else
     {   
         delta0 <- exp(delta0) # change from log odds-ratio to odds-ratio
-        A <- n1 * (delta0 - 1)
-        B <- n2 * delta0 + n1 - xtot * (delta0 - 1)
+        A <- n2 * (delta0 - 1)
+        B <- n1 * delta0 + n2 - xtot * (delta0 - 1)
         C <- -xtot
         R0 <- ( - B + sqrt(B ^ 2 - 4 * A * C)) / 2 / A
         R1 <- R0 * delta0 / (1 + R0 * (delta0 - 1))
@@ -367,15 +367,15 @@
         # odds-ratio test - from Miettinen and Nurminen eqn (13)
         if (scale == "or")
         {   
-            V <- 1 / (1 / n2 / R1 / (1-R1) + 1 / n1 / R0 / (1 - R0))
+            V <- 1 / (1 / n1 / R1 / (1-R1) + 1 / n2 / R0 / (1 - R0))
             V[xtot == 0 || xtot == ntot] <- 1
-            z <- x2 * (x2 / n2 - R1)
+            z <- n1 * (x1 / n1 - R1)
         }
         # log-odds ratio - based on asymptotic distribution of log-odds
         # see vignette
         else if (scale == "lnor")
         {   
-            V <- 1 / n2 / R1 / (1-R1) + 1 / n1 / R0 / (1-R0)
+            V <- 1 / n1 / R1 / (1-R1) + 1 / n2 / R0 / (1-R0)
             V[xtot == 0 || xtot == ntot] <- 1
             z <- log(x1 / (n1 - x1) / x2 * (n2 - x2) / delta0)
             z[xtot == 0 || xtot == ntot] <- 0
