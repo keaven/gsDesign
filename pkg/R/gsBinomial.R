@@ -29,12 +29,12 @@
     # check input arguments
     checkScalar(n1, "integer", c(1, Inf))
     checkScalar(n2, "integer", c(1, Inf))
-    checkVector(x1, "integer", c(0, n1))
-    checkVector(x2, "integer", c(0, n2))
+    checkScalar(x1, "integer", c(0, n1))
+    checkScalar(x2, "integer", c(0, n2))
     checkScalar(alpha, "numeric", c(0, 1), c(FALSE, FALSE))    
     checkScalar(adj, "integer", c(0, 1))
     checkScalar(scale, "character")
-    scale <- match.arg(tolower(scale), c("difference"))
+    scale <- match.arg(tolower(scale), c("difference", "rr", "or"))
     checkLengths(x1, x2)
     
     if (scale == "difference")
@@ -71,19 +71,44 @@
                     x1=x1, x2=x2, n1=n1, n2=n2, adj=adj,
                     alpha=alpha)$root
         }
-        
-        return(list(lower=lower,upper=upper))
     }
-#   else if (scale=="RR")
-#   {   if (x1 + x2 == 0) return(list(lower=NA, upper=NA))
-#       if (x2 == 0) upper <- NA
-#       else if (testBinomial(delta0=1000, x1=x1, x2=x2, n1=n1, n2=n2, adj=adj)
-#
-#   }
-    else
+    else if (scale=="rr")
     {
-        return("Difference scale is currently the only option implemented")
+        if (x1 == 0) lower <- 0
+        else
+        {
+            lower <- uniroot(bpdiff, interval=c(-20, 20), x1=x1, x2=x2,
+                    n1=n1, n2=n2, adj=adj, scale="RR", alpha=alpha)$root
+            lower <- exp(lower)
+        }
+        if (x2 == 0) upper <- Inf
+        else
+        {
+            upper <- uniroot(bpdiff, interval=c(-20, 20), lower.tail=TRUE,
+                    x1=x1, x2=x2, n1=n1, n2=n2, adj=adj, scale="RR",
+                    alpha=alpha)$root
+            upper <- exp(upper)
+        }
     }
+    else
+    {   
+        if (x1 == 0 || x2 == n2) lower <- -Inf
+        else
+        {
+            lower <- uniroot(bpdiff, interval=c(-10, 10), x1=x1, x2=x2,
+                    n1=n1, n2=n2, adj=adj, scale=scale, alpha=alpha)$root
+            lower <- exp(lower)
+        }
+        if (x2 == 0 || x1 == n1) upper <- Inf
+        else
+        {
+            upper <- uniroot(bpdiff, interval=c(-10, 10), lower.tail=TRUE,
+                    x1=x1, x2=x2, n1=n1, n2=n2, adj=adj, scale=scale,
+                    alpha=alpha)$root
+            upper <- exp(upper)
+        }
+    }
+    list(lower=lower,upper=upper)
 }
 
 "nBinomial"<-function(p1, p2, alpha=0.025, beta=0.1, delta0=0, ratio=1, 
@@ -99,7 +124,7 @@
     checkVector(ratio, "numeric", c(0, Inf), c(FALSE, TRUE))
     checkScalar(outtype, "integer", c(1, 2))
     checkScalar(scale, "character")
-    scale <- match.arg(tolower(scale), c("difference", "rr", "lnor"))
+    scale <- match.arg(tolower(scale), c("difference", "rr", "or", "lnor"))
     checkLengths(p1, p2, sided, alpha, beta, ratio, allowSingle=TRUE)
     
     if (delta0 == 0)
@@ -177,7 +202,7 @@
     # sample size for risk ratio - Farrington and Manning
     else if (scale == "rr")
     {   
-        RR <- delta0 + 1
+        RR <- exp(delta0)
         
         if (delta0 == 0)
         {   
@@ -290,6 +315,7 @@
     
     x1 <- rbinom(p=p1, size=n1, n=nsim)
     x2 <- rbinom(p=p2, size=n2, n=nsim)
+    scale <- match.arg(tolower(scale), c("difference", "rr", "or", "lnor"))
     
     testBinomial(x1=x1, x2=x2, n1=n1, n2=n2, delta0=delta0, adj=adj,
                     chisq=chisq, scale=scale)
@@ -303,7 +329,6 @@
     checkVector(n2, "integer", c(1, Inf))
     checkVector(x1, "integer", c(0, n1))
     checkVector(x2, "integer", c(0, n2))
-    checkVector(delta0, "numeric", c(-1, 1), c(FALSE, FALSE))
     checkVector(chisq, "integer", c(0, 1))
     checkVector(adj, "integer", c(0, 1))
     checkScalar(scale, "character")
@@ -317,6 +342,7 @@
     # risk difference test - from Miettinen and Nurminen eqn (9)
     if (scale == "difference")
     {   
+        checkVector(delta0, "numeric", c(-1, 1), c(FALSE, FALSE))
         L2 <- (n1 + 2 * n2) * delta0 - ntot - xtot
         L1 <- (n2 * delta0 - ntot - 2 * x2) * delta0 + xtot
         L0 <- x2 * delta0 * (1 - delta0)
@@ -337,7 +363,8 @@
     # relative risk test - from Miettinen and Nurminen eqn (10)
     else if (scale == "rr")
     {   
-        delta0 <- delta0 + 1 # value of 0 input represents equal rates
+        checkVector(delta0, "numeric", c(-Inf, Inf), c(FALSE, FALSE))
+        delta0 <- exp(delta0) # value of 0 input represents equal rates
         A  <- delta0 * ntot
         B  <- -(n1 * delta0 + x1 + n2 + x2 * delta0)
         C  <- xtot
@@ -352,6 +379,7 @@
     # odds-ratio and log-odds-ratio
     else
     {   
+        checkVector(delta0, "numeric", c(-Inf, Inf), c(FALSE, FALSE))
         delta0 <- exp(delta0) # change from log odds-ratio to odds-ratio
         A <- n2 * (delta0 - 1)
         B <- n1 * delta0 + n2 - xtot * (delta0 - 1)
