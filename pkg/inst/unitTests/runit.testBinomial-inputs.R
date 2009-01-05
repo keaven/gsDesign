@@ -20,14 +20,12 @@
 {
 	 checkException(testBinomial(n1="abc", x1=2, x2=2, n2=2), msg="Checking for incorrect variable type", silent=TRUE) 
 	 checkException(testBinomial(n1=0, x1=0, x2=2, n2=2), msg="Checking for out-of-range variable value", silent=TRUE) 
-	 checkException(testBinomial(n1=rep(2,2), x1=2, x2=2, n2=2), msg="Checking for incorrect variable length", silent=TRUE) 
 }
 
 "test.testBinomial.n2" <- function()
 {
 	 checkException(testBinomial(n2="abc", x1=2, x2=2, n1=2), msg="Checking for incorrect variable type", silent=TRUE) 
 	 checkException(testBinomial(n2=0, x1=2, x2=0, n1=2), msg="Checking for out-of-range variable value", silent=TRUE) 
-	 checkException(testBinomial(n2=rep(2,2), x1=2, x2=2, n1=2), msg="Checking for incorrect variable length", silent=TRUE) 
 }
 
 "test.testBinomial.delta0" <- function()
