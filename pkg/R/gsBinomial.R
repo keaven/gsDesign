@@ -139,7 +139,7 @@
     }
     if (max(delta0 == 0) > 0 && max(p1[delta0 == 0] == p2[delta0 == 0]) > 0)
     {
-            stop("p1 cannot equal p2 when delta0 is zero")
+            stop("p1 may not equal p2 when delta0 is zero")
     }
 
     # get z-values needed 
@@ -154,9 +154,9 @@
     # sample size for risk difference - Farrington and Manning
     if (scale == "difference")
     {   
-        if (max(p1 + delta0 == p2)==1)
+        if (min(abs(p1 - p2 - delta0)) < .1e-10)
         {
-            stop("p2 cannot equal p1 + delta0 when scale is \"Difference\"")
+            stop("p1 - p2 may not equal delta0 when scale is \"Difference\"")
         }
         a <- 1 + ratio
         b <- -(a + p1 + ratio * p2 + delta0 * (ratio + 2))
@@ -193,6 +193,10 @@
     else if (scale == "rr")
     {   
         RR <- exp(delta0)
+        if (min(abs(p1 / p2 - RR)) < .1e-6)
+        {
+            stop("p1/p2 may not equal exp(delta0) when scale=\"RR\"")
+        }
         a <- (1 + ratio)
         b <- -(RR * (1 + ratio * p2) + ratio + p1)
         c <- RR * (p1 + ratio * p2)
@@ -227,8 +231,11 @@
     # likelihood estimate and asymptotic variance from, e.g., Lachin (2000)
     else
     {   
-        OR[d0] <- 1
         OR <- exp(-delta0)
+        if (min(abs(p1 / (1 - p1) / p2 * (1 - p2) * OR) - 1) < .1e-6)
+        {
+            stop("p1/(1-p1)/p2*(1-p2) may not equal exp(delta0) when scale=\"OR\"")
+        }
         a <- OR - 1
         b <- 1 + ratio * OR + (1 - OR) * (ratio * p2 + p1)
         c <- -(ratio * p2 + p1)
@@ -260,7 +267,6 @@
         }
     }
 }
-
 "simBinomial" <- function(p1, p2, n1, n2, delta0=0, nsim=10000, chisq=0, adj=0, 
         scale="Difference")
 {
