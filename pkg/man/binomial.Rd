@@ -45,10 +45,12 @@ simBinomial(p1, p2, n1, n2, delta0=0, nsim=10000, chisq=0, adj=0,
             scale="Difference")
 }
 \arguments{
-For \code{simBinomial()} all arguments must have length 1.
-In general, arguments for \code{nBinomial()}, \code{testBinomial()} and \code{ciBinomial} may be scalars or vectors, 
-in which case they return a vector of sample sizes and powers, respectively.
-There can be a mix of scalar and vector arguments. 
+For \code{simBinomial()} and \code{ciBinomial()} all arguments must have length 1.
+For \code{testBinomial()}, \code{x2, x2, n1, n2, delta0, chisq,} and \code{adj} may be vectors.
+For \code{nBinomial()}, \code(p1, p2, beta, delta0} and \code{ratio} may be vectors.
+When one or more arguments for \code{nBinomial()} or \code{testBinomial()} is a vector, 
+the routines return a vector of sample sizes and powers, respectively.
+Where vector arguments are allowed, there may be a mix of scalar and vector arguments. 
 All arguments specified using vectors must have the same length.  
 
 \item{p1}{event rate in group 1 under the alternative hypothesis}  
@@ -58,26 +60,25 @@ All arguments specified using vectors must have the same length.
 \item{delta0}{A value of 0 (the default) always represents no difference between treatment groups under the null hypothesis.
 \code{delta0} is interpreted differently depending on the value of the parameter \code{scale}. 
 If \code{scale="Difference"} (the default), 
-\code{delta0} is the difference in event rates under the null hypothesis.
+\code{delta0} is the difference in event rates under the null hypothesis (p10 - p20).
 If \code{scale="RR"}, 
-\code{delta0} is the relative risk of event rates under the null hypothesis minus 1 (\code{p2 / p1 - 1}).
+\code{delta0} is the logarithm of the relative risk of event rates (p10 / p20) under the null hypothesis.
 If \code{scale="LNOR"}, 
 \code{delta0} is the difference in natural logarithm of the odds-ratio under the null hypothesis
-\code{log(p2 / (1 - p2)) - log(p1 / (1 - p1))}.
+\code{log(p10 / (1 - p10)) - log(p20 / (1 - p20))}.
 }
 \item{ratio}{sample size ratio for group 2 divided by group 1}
 \item{sided}{2 for 2-sided test, 1 for 1-sided test}
 \item{outtype}{1 (default) returns total sample size; 2 returns sample size for each group (\code{n1, n2});
 3 and \code{delta0=0} returns a list with total sample size (\code{n}), sample size in each group (\code{n1, n2}),
-null and alternate hypothesis variance (\code{sigma0, sigma1}), input event rates (\code{p1, p2} and average event
-rate (\code{pbar}; 3 and \code{delta0!=0} is the same as 3 and \code{delta0=0} except that instead of \code{pbar}, \code{\delta0} and
-null hypothesis event rates (\code{p10, p20}) are in the list returned. 
+null and alternate hypothesis variance (\code{sigma0, sigma1}), input event rates (\code{p1, p2} and null hypothesis event
+rates (\code{p10, p20}). 
 }
 \item{x1}{Number of \dQuote{successes} in the control group}
 \item{x2}{Number of \dQuote{successes} in the experimental group}
 \item{n1}{Number of observations in the control group}
 \item{n2}{Number of observations in the experimental group}
-\item{chisq}{An indicator character string (vector of character strings
+\item{chisq}{An indicator of whether or not a chi-square (as opposed to Z) statistic is to be computed.
 If 0 (default), the difference in event rates divided by its standard error under the null hypothesis is used. 
 Otherwise, a Miettinen and Nurminen chi-square statistic for a 2 x 2 table is used.}
 \item{adj}{With \code{adj=1}, the standard variance with a continuity correction is used for a Miettinen and Nurminen test statistic 
