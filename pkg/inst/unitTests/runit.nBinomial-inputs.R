@@ -35,6 +35,7 @@
 {
 	 checkException(nBinomial(delta0="abc", p1=0.1, p2=0.2), msg="Checking for incorrect variable type", silent=TRUE) 
 	 checkException(nBinomial(delta0=0, p1=0.1, p2=0.1), msg="Checking for out-of-range variable value", silent=TRUE) 
+	 checkException(nBinomial(delta0=0.1, p1=0.2, p2=0.1), msg="Checking for out-of-range variable value", silent=TRUE) 
 }
 
 "test.nBinomial.ratio" <- function()
