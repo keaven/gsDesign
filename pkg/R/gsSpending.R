@@ -309,7 +309,7 @@
         y <- log(p0 / (1 - p0))
         b <- (y[2] - y[1]) / (xv[2] - xv[1])
         a <- y[2] - b * xv[2]
-        x$param <- c(a, b)
+        param <- c(a, b)
     }
     else
     {
