@@ -47,7 +47,7 @@ simBinomial(p1, p2, n1, n2, delta0=0, nsim=10000, chisq=0, adj=0,
 \arguments{
 For \code{simBinomial()} and \code{ciBinomial()} all arguments must have length 1.
 For \code{testBinomial()}, \code{x2, x2, n1, n2, delta0, chisq,} and \code{adj} may be vectors.
-For \code{nBinomial()}, \code(p1, p2, beta, delta0} and \code{ratio} may be vectors.
+For \code{nBinomial()}, \code{p1, p2, beta, delta0} and \code{ratio} may be vectors.
 When one or more arguments for \code{nBinomial()} or \code{testBinomial()} is a vector, 
 the routines return a vector of sample sizes and powers, respectively.
 Where vector arguments are allowed, there may be a mix of scalar and vector arguments. 
@@ -71,7 +71,7 @@ If \code{scale="LNOR"},
 \item{sided}{2 for 2-sided test, 1 for 1-sided test}
 \item{outtype}{1 (default) returns total sample size; 2 returns sample size for each group (\code{n1, n2});
 3 and \code{delta0=0} returns a list with total sample size (\code{n}), sample size in each group (\code{n1, n2}),
-null and alternate hypothesis variance (\code{sigma0, sigma1}), input event rates (\code{p1, p2} and null hypothesis event
+null and alternate hypothesis variance (\code{sigma0, sigma1}), input event rates (\code{p1, p2}) and null hypothesis event
 rates (\code{p10, p20}). 
 }
 \item{x1}{Number of \dQuote{successes} in the control group}
