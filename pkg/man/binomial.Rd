@@ -141,8 +141,8 @@ However, the alternative can have \code{p1-p2-delta0}$<0$.
   \code{n1} and \code{n2}}
 
   When \code{delta0=0}, instead of \code{pbar}, the following 2 vectors are returned (see details):
-  \item{p10}{group 1 treatment effect used for null hypothesis}
-  \item{p20}{group 2 treatment effect used for null hypothesis}
+  \item{p10}{group 1 event rate used for null hypothesis}
+  \item{p20}{group 2 event rate used for null hypothesis}
 
 }
 
