@@ -25,6 +25,7 @@ Vector arguments allow easy incorporation into simulation routines for fixed, gr
 \code{ciBinomial()} computes confidence intervals for 1) the difference between two rates, 2) the risk-ratio for two rates 
 or the odds-ratio for two rates. This procedure provides inference that is consistent with \code{testBinomial()} in that 
 the confidence intervals are produced by inverting the testing procedures in \code{testBinomial()}.
+The Type I error \code{alpha} input to \code{ciBinomial} is always interpreted as 2-sided.
 
 \code{simBinomial()} performs simulations to estimate the power for a Miettinin and Nurminen (1980) test
 comparing two binomial rates for superiority or non-inferiority. 
