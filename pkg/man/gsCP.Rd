@@ -15,7 +15,7 @@ gsCP(x, theta=NULL, i=1, zi=0, r=18)
 	an estimated value of \eqn{\theta}{theta} based on the interim test statistic (\code{zi/sqrt(x$n.I[i])}) as well as at \code{x$theta}
 	is computed.}
 	\item{i}{analysis at which interim z-value is given}
-	\item{zi}{interim z-value at analysis i}
+	\item{zi}{interim z-value at analysis i (scalar)}
 	\item{r}{Integer value controlling grid for numerical integration as in Jennison and Turnbull (2000); 
 	default is 18, range is 1 to 80. 
 	Larger values provide larger number of grid points and greater accuracy.
@@ -32,12 +32,11 @@ Boundary crossing probabilities are computed for the input
 
 
 \details{
-See Statistical Methods section of manual for further clarification. See also Muller and Schaffer (2001) for background theory.
+See Conditional power section of manual for further clarification. See also Muller and Schaffer (2001) for background theory.
 }
-\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
-in the directory where R is installed.}
+\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf in the directory where R is installed.}
 
-\author{Keaven Anderson \email{keaven\_anderson@merck.com}, Jennifer Sun, John Zhang}
+\author{Keaven Anderson \email{keaven\_anderson@merck.}}
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.

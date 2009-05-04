@@ -1,7 +1,7 @@
 \name{sfLDOF}
 \alias{sfLDOF}
 \alias{sfLDPocock}
-\title{4.4: Lan-DeMets Spending Functions}
+\title{4.4: Lan-DeMets Spending function overview}
 \description{
 Lan and DeMets (1983) first published the method of using spending functions to set boundaries for group sequential trials.
 In this publication they proposed two specific spending functions:
@@ -22,30 +22,29 @@ sfLDPocock(alpha, t, param)
 	\item{t}{A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 
 	sample size/information for which the spending function will be computed.}
 	\item{param}{This parameter is not used and need not be specified. It is here so that the calling sequence conforms 
-	the to the standard for spending functions used with the gsDesign package.}
+	the to the standard for spending functions used with \code{gsDesign()}.}
 }
 \value{An object of type \code{spendfn}. See spending functions for further details.}
 \details{
 The Lan-DeMets (1983) spending function to approximate an
-O'Brien-Fleming bound is implemented in (\code{sfLDOF}):
-\deqn{\alpha(t)=2-2\Phi\left(\Phi^{-1}(1-\alpha/2)/ t^{1/2}\right).}{%
-alpha(t)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(1/2)\right).}
-The Lan-DeMets spending function to approximate a Pocock design is implemented in {\code{sfLDPocock}}:
-\deqn{\alpha(t)=ln(1+(e-1)t).}{%
-alpha(t)=ln(1+(e-1)t).}
+O'Brien-Fleming bound is implemented in the function (\code{sfLDOF()}):
+\deqn{f(t; \alpha)=2-2\Phi\left(\Phi^{-1}(1-\alpha/2)/ t^{1/2}\right).}{%
+f(t; alpha)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(1/2)\right).}
+The Lan-DeMets (1983) spending function to approximate a Pocock design is implemented in the function {\code{sfLDPocock()}}:
+\deqn{f(t;\alpha)=ln(1+(e-1)t).}{f(t;alpha)=ln(1+(e-1)t).}
 As shown in examples below, other spending functions can be used to get as good or better approximations to Pocock and
 O'Brien-Fleming bounds. In particular, O'Brien-Fleming bounds can be closely approximated using \code{\link{sfExponential}}.
 }
-\seealso{\link{Spending Functions}, \code{\link{gsDesign}}, \link{gsDesign-package}}
-\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+\seealso{\link{Spending function overview}, \code{\link{gsDesign}}, \link{gsDesign package overview}}
+\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
 
-\author{Keaven Anderson \email{keaven\_anderson@merck.com}, Jennifer Sun, John Zhang}
+\author{Keaven Anderson \email{keaven\_anderson@merck.}}
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.
 
-Lan, KKG and DeMets, DL (1983), Discrete sequential boundaries for clinical trials.\\ \emph{Biometrika};70:659-663.
+Lan, KKG and DeMets, DL (1983), Discrete sequential boundaries for clinical trials. \emph{Biometrika};70: 659-663.
 }
 
 \examples{
@@ -61,7 +60,7 @@ gsDesign(k=6, sfu=sfHSD, sfupar=1, test.type=2)$upper$bound
 # use 'best' Hwang-Shih-DeCani approximation for Pocock,  k=6 (see manual for details)
 gsDesign(k=6, sfu=sfHSD, sfupar=1.3354376, test.type=2)$upper$bound
 
-# 2-sided,  symmetric 6-analysis trial O'Brien-Fleming spending function approximation 
+# 2-sided, symmetric 6-analysis trial O'Brien-Fleming spending function approximation 
 gsDesign(k=6, sfu=sfLDOF, test.type=2)$upper$bound
 
 # show actual O'Brien-Fleming bound

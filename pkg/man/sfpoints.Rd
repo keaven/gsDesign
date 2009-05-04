@@ -3,11 +3,11 @@
 \title{4.5: Pointwise Spending Function}
 \description{
 The function \code{sfPoints} implements a spending function with values specified for an arbitrary set of specified points.
-Normally \code{sfpoint} will be passed to \code{gsDesign} in the parameter \code{sfu} for the upper bound or
+Normally \code{sfPoints} will be passed to \code{gsDesign} in the parameter \code{sfu} for the upper bound or
 \code{sfl} for the lower bound to specify a spending function family for a design.
 In this case, the user does not need to know the calling sequence, just the points they wish to specify.
-Given the wide variety of flexible spending functions provided in this package, \code{sfPoints} is not generally recommended
-since no interpolation function is provided to adjust boundaries if timing of interims changes from the original plan (see example).
+If using \code{sfPoints()} in a design, it is recommended to specify how to interpolate between the specified points (e.g,, linear interpolation); also consider fitting smooth spending functions; see 
+\link{Spending function overview}.
 }
 
 \usage{
@@ -25,11 +25,11 @@ sfPoints(alpha, t, param)
 }
 \value{An object of type \code{spendfn}. See spending functions for further details.}
 
-\seealso{\link{Spending Functions}, \code{\link{gsDesign}}, \link{gsDesign-package}}
-\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+\seealso{\link{Spending function overview}, \code{\link{gsDesign}}, \link{gsDesign package overview}, \link{sfLogistic}}
+\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
 
-\author{Keaven Anderson \email{keaven\_anderson@merck.com}, Jennifer Sun, John Zhang}
+\author{Keaven Anderson \email{keaven\_anderson@merck.}}
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.
@@ -57,7 +57,7 @@ plot(1:6/6, y, main="Pointwise spending function example",
     type="p")
 
 # approximate this with a t-distribution spending function by fitting 3 points
-lines(0:100/100, sfTDist(1, 0:100/100, c(c(1, 3, 5)/6, .01, .1, .5))$spend)
+lines(t, sfTDist(1, t, c(c(1, 3, 5)/6, .01, .1, .5))$spend)
 text(x=.6, y=.9, labels="Pointwise Spending Approximated by")
 text(x=.6, y=.83, "t-Distribution Spending with 3-point interpolation")
 }

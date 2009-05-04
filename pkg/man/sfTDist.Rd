@@ -41,13 +41,13 @@ sfTDist(alpha, t, param)
 \value{An object of type \code{spendfn}. See spending functions for further details.}
 \details{
 The t-distribution spending function takes the form
-\deqn{\alpha F(a+bF^{-1}(t))}
+\deqn{f(t;\alpha)=\alpha F(a+bF^{-1}(t))}
 where \eqn{F()} is a cumulative t-distribution function with \code{df} degrees of freedom
 and \eqn{F^{-1}()} is its inverse.
 }
 
-\seealso{\link{Spending Functions}, \code{\link{gsDesign}}, \link{gsDesign-package}}
-\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+\seealso{\link{Spending function overview}, \code{\link{gsDesign}}, \link{gsDesign package overview}}
+\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
 
 \author{Keaven Anderson \email{keaven\_anderson@merck.com}}
@@ -79,14 +79,15 @@ sfCauchy(1, 1:3/4, c(.25, .5, .1, .2))$spend[3]
 
 # plot a few t-distribution spending functions fitting t=0.25,  5 and u=0.1,  0.2
 # to demonstrate the range of flexibility
-plot(0:100/100, sfTDist(0.025, 0:100/100, c(.25, .5, .1, .2, 1))$spend, 
+t <- 0:100/100
+plot(t, sfTDist(0.025, t, c(.25, .5, .1, .2, 1))$spend, 
     xlab="Proportion of final sample size", 
     ylab="Cumulative Type I error spending", 
     main="t-Distribution Spending Function Examples", type="l")
-lines(0:100/100, sfTDist(0.025, 0:100/100, c(.25, .5, .1, .2, 1.5))$spend, lty=2)
-lines(0:100/100, sfTDist(0.025, 0:100/100, c(.25, .5, .1, .2, 3))$spend, lty=3)
-lines(0:100/100, sfTDist(0.025, 0:100/100, c(.25, .5, .1, .2, 10))$spend, lty=4)
-lines(0:100/100, sfTDist(0.025, 0:100/100, c(.25, .5, .1, .2, 100))$spend, lty=5)
+lines(t, sfTDist(0.025, t, c(.25, .5, .1, .2, 1.5))$spend, lty=2)
+lines(t, sfTDist(0.025, t, c(.25, .5, .1, .2, 3))$spend, lty=3)
+lines(t, sfTDist(0.025, t, c(.25, .5, .1, .2, 10))$spend, lty=4)
+lines(t, sfTDist(0.025, t, c(.25, .5, .1, .2, 100))$spend, lty=5)
 legend(x=c(.0, .3), y=.025*c(.7, 1), lty=1:5, 
     legend=c("df = 1", "df = 1.5", "df = 3", "df = 10", "df = 100"))
 }

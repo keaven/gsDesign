@@ -1,7 +1,7 @@
-\name{Spending Functions}
-\alias{Spending Functions}
+\name{Spending functions}
+\alias{Spending function overview}
 \alias{spendingFunction}
-\title{4.0: Spending functions}
+\title{4.0: Spending function overview}
 \description{Spending functions are used to set boundaries for group sequential designs.
 Using the spending function approach to design offers a natural way to provide interim testing boundaries
 when unplanned interim analyses are added or when the timing of an interim analysis changes.
@@ -46,17 +46,15 @@ The calling sequence is useful when the user wishes to plot a spending function 
 in examples.
 In addition to using supplied spending functions, a user can write code for a spending function.
 See examples.
-Another somewhat flexible approach to 1-sided and symmetric 2-sided designs is using Wang-Tsiatis boundaries
-which include O'Brien-Fleming and Pocock designs.}
-
-\seealso{\code{\link{gsDesign}}, \code{\link{sfHSD}}, \code{\link{sfPower}}, 
-\code{\link{sfLogistic}}, \code{\link{sfExponential}}, \link{Wang-Tsiatis Bounds}, \link{gsDesign-package}
 }
 
-\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+\seealso{\code{\link{gsDesign}}, \code{\link{sfHSD}}, \code{\link{sfPower}}, 
+\code{\link{sfLogistic}}, \code{\link{sfExponential}}, \link{Wang-Tsiatis Bounds}, \link{gsDesign package overview}
+}
+\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
 
-\author{Keaven Anderson \email{keaven\_anderson@merck.com}, Jennifer Sun, John Zhang}
+\author{Keaven Anderson \email{keaven\_anderson@merck.}}
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.
@@ -99,13 +97,14 @@ sfbdist <- function(alpha,  t,  param)
 # now try it out!
 # plot some example beta (lower bound) spending functions using 
 # the beta distribution spending function 
-plot(0:100/100, sfbdist(1, 0:100/100, c(2, 1))$spend, type="l", 
+t <- 0:100/100
+plot(t, sfbdist(1, t, c(2, 1))$spend, type="l", 
     xlab="Proportion of information", 
     ylab="Cumulative proportion of total spending", 
     main="Beta distribution Spending Function Example")
-lines(0:100/100, sfbdist(1, 0:100/100, c(6, 4))$spend, lty=2)
-lines(0:100/100, sfbdist(1, 0:100/100, c(.5, .5))$spend, lty=3)
-lines(0:100/100, sfbdist(1, 0:100/100, c(.6, 2))$spend, lty=4)
+lines(t, sfbdist(1, t, c(6, 4))$spend, lty=2)
+lines(t, sfbdist(1, t, c(.5, .5))$spend, lty=3)
+lines(t, sfbdist(1, t, c(.6, 2))$spend, lty=4)
 legend(x=c(.65, 1), y=1 * c(0, .25), lty=1:4, 
     legend=c("a=2, b=1","a=6, b=4","a=0.5, b=0.5","a=0.6, b=2"))
 }

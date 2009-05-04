@@ -25,11 +25,11 @@ The parameter \eqn{\Delta}{Delta} is supplied to \code{gsDesign()} in the parame
 For O'Brien-Fleming and Pocock designs there is also a calling sequence that does not require a parameter.
 See examples.}
 
-\seealso{\code{\link{Spending Functions}, \link{gsDesign}}, \code{\link{gsProbability}}}
-\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+\seealso{\code{\link{Spending function overview}, \link{gsDesign}}, \code{\link{gsProbability}}}
+\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
 
-\author{Keaven Anderson \email{keaven\_anderson@merck.com}, Jennifer Sun, John Zhang}
+\author{Keaven Anderson \email{keaven\_anderson@merck.}}
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.

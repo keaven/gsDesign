@@ -21,20 +21,20 @@ sfPower(alpha, t, param)
 	you wish to see the proportion of spending as a function of the proportion of sample size/information.}
 	\item{t}{A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 
 	sample size/information for which the spending function will be computed.}
-	\item{param}{A single, positive value specifying the \eqn{\rho}{rho} parameter for which Kim-DeMets spending
-	is to be computed}
+	\item{param}{A single, positive value specifying the \eqn{\rho}{rho} parameter for which Kim-DeMets spending is to be computed; allowable range is (0,15]}
 }
-\value{An object of type \code{spendfn}. See \link{Spending Functions} for further details.}
+\value{An object of type \code{spendfn}. See \link{Spending function overview} for further details.}
 \details{
 A Kim-DeMets spending function takes the form
-\deqn{\alpha t^\rho}{alpha t^rho} where \eqn{\rho}{rho} is the value passed in \code{param}.
+\deqn{f(t;\alpha,\rho)=\alpha t^\rho}{f(t; alpha, rho) = alpha t^rho} 
+where \eqn{\rho}{rho} is the value passed in \code{param}.
 See examples below for a range of values of \eqn{\rho}{rho} that may be of interest (\code{param=0.75} to \code{3} are documented there).
 }
-\seealso{\link{Spending Functions}, \code{\link{gsDesign}}, \link{gsDesign-package}}
-\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+\seealso{\link{Spending function overview}, \code{\link{gsDesign}}, \link{gsDesign package overview}}
+\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
 
-\author{Keaven Anderson \email{keaven\_anderson@merck.com}, Jennifer Sun, John Zhang}
+\author{Keaven Anderson \email{keaven\_anderson@merck.}}
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.
@@ -51,15 +51,16 @@ x
 # show rho=3 for approximation to O'Brien-Fleming and rho=.75 for approximation to Pocock design.
 # Also show rho=2 for an intermediate spending.
 # Compare these to Hwang-Shih-DeCani spending with gamma=-4,  -2,  1
-plot(0:100/100,  sfPower(0.025, 0:100/100, 3)$spend, xlab="Proportion of sample size", 
+t <- 0:100/100
+plot(t,  sfPower(0.025, t, 3)$spend, xlab="Proportion of sample size", 
     ylab="Cumulative Type I error spending", 
     main="Kim-DeMets (rho) versus Hwang-Shih-DeCani (gamma) Spending", 
     type="l", cex.main=.9)
-lines(0:100/100, sfPower(0.025, 0:100/100, 2)$spend, lty=2)
-lines(0:100/100, sfPower(0.025, 0:100/100, 0.75)$spend, lty=3)
-lines(0:100/100, sfHSD(0.025, 0:100/100, 1)$spend, lty=3, col=2)
-lines(0:100/100, sfHSD(0.025, 0:100/100, -2)$spend, lty=2, col=2)
-lines(0:100/100, sfHSD(0.025, 0:100/100, -4)$spend, lty=1, col=2)
+lines(t, sfPower(0.025, t, 2)$spend, lty=2)
+lines(t, sfPower(0.025, t, 0.75)$spend, lty=3)
+lines(t, sfHSD(0.025, t, 1)$spend, lty=3, col=2)
+lines(t, sfHSD(0.025, t, -2)$spend, lty=2, col=2)
+lines(t, sfHSD(0.025, t, -4)$spend, lty=1, col=2)
 legend(x=c(.0, .375), y=.025*c(.65, 1), lty=1:3, legend=c("rho= 3", "rho= 2", "rho= 0.75"))
 legend(x=c(.0, .357), y=.025*c(.65, .85), lty=1:3, bty="n", col=2, 
     legend=c("gamma= -4", "gamma= -2", "gamma=1"))

@@ -1,16 +1,16 @@
-\name{gsDesign-package}
-\alias{gsDesign-package}
+\name{gsDesign package overview}
+\alias{gsDesign package overview}
 \docType{package}
 \title{1.0 Group Sequential Design}
 \description{
-gsDesign is a package that derives group sequential designs.
+gsDesign is a package for deriving and describing group sequential designs.
 The package allows particular flexibility for designs with alpha- and beta-spending.
 Many plots are available for describing design properties.
 }
 \details{
 \tabular{ll}{
 Package: \tab gsDesign\cr
-Version: \tab 2.0\cr
+Version: \tab 2\cr
 License: \tab GPL (version 2 or later)\cr
 }
 
@@ -25,11 +25,11 @@ normalGrid              3.1: Normal Density Grid
 MandNtest               3.2: Two-sample binomial sample size
 Survival sample size    3.3: Time-to-event sample size calculation
                         (Lachin-Foulkes)
-Spending Functions      4.0: Spending functions
+Spending function overview      4.0: Spending functions
 sfHSD                   4.1: Hwang-Shih-DeCani Spending Function
 sfPower                 4.2: Kim-DeMets (power) Spending Function
 sfExponential           4.3: Exponential Spending Function
-sfLDPocock              4.4: Lan-DeMets Spending Functions
+sfLDPocock              4.4: Lan-DeMets Spending function overview
 sfPoints                4.5: Pointwise Spending Function
 sfLogistic              4.6: 2-parameter Spending Function Families
 sfTDist                 4.7: t-distribution Spending Function
@@ -39,7 +39,7 @@ The gsDesign package supports group sequential clinical trial design.
 While there is a strong focus on designs using \eqn{\alpha}{alpha}- and \eqn{\beta}{beta}-spending functions, Wang-Tsiatis designs, 
 including O'Brien-Fleming and Pocock designs, are also available.
 The ability to design with non-binding futility rules 
-controls Type I error in a manner acceptable to regulatory authorities when futility bounds are employed. 
+allows control of Type I error in a manner acceptable to regulatory authorities when futility bounds are employed. 
 
 The routines are designed to provide simple access to commonly used designs
 using default arguments. 

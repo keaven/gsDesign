@@ -23,8 +23,7 @@ normalGrid(r=18, bounds=c(0,0), mu=0, sigma=1)
 	\item{z}{Grid points for numerical integration.}
 	\item{wgts}{Weights to be used with grid points in \code{z}.}
 }
-\seealso{\code{\link{gsProbability}}, \code{\link{gsDesign}}, \link{Group Sequential Plots}.}
-\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
 
 \author{Keaven Anderson \email{keaven\_anderson@merck.com}}

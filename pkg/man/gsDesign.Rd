@@ -9,6 +9,7 @@ gsDesign(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,
          sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I = 0, maxn.IPlan = 0) 
 
 print.gsDesign(x,...)}
+
 \arguments{
 	\item{k}{Number of analyses planned, including interim and final.}
 	\item{test.type}{\code{1=}one-sided \cr
@@ -29,24 +30,19 @@ print.gsDesign(x,...)}
 	\item{timing}{Sets relative timing of interim analyses. Default of 1 produces equally spaced analyses. 
 	Otherwise, this is a vector of length \code{k} or \code{k-1}.
 	The values should satisfy \code{0 < timing[1] < timing[2] < ... < timing[k-1]< timing[k]=1}.}
-	\item{sfu}{A spending function or a character string indicating a boundary type 
-	(that is, \dQuote{WT} for Wang-Tsiatis bounds, \dQuote{OF} for O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds). 
+	\item{sfu}{A spending function or a character string indicating a boundary type (that is, \dQuote{WT} for Wang-Tsiatis bounds, \dQuote{OF} for O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds). 
 	For one-sided and symmetric two-sided testing (\code{test.type=1, 2}), 
 	\code{sfu} is used to completely specify spending. 
 	The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function.
-	See details, \link{Spending Functions}, manual and examples.}
-	\item{sfupar}{Real value, default is \eqn{-4} which is an O'Brien-Fleming-like conservative bound when used
-	with the default Hwang-Shih-DeCani spending function. This is a real-vector for many spending functions.
-	The parameter \code{sfupar} specifies any parameters needed for the spending function specified by sfu. 
-	\code{sfupar} will be ignored for spending functions (\code{sfLDOF}, \code{sfLDPocock}) 
+	See details, \link{Spending function overview}, manual and examples.}
+	\item{sfupar}{Real value, default is \eqn{-4} which is an O'Brien-Fleming-like conservative bound when used with the default Hwang-Shih-DeCani spending function. This is a real-vector for many spending functions.
+	The parameter \code{sfupar} specifies any parameters needed for the spending function specified by \code{sfu}; this will be ignored for spending functions (\code{sfLDOF}, \code{sfLDPocock}) 
 	or bound types (\dQuote{OF}, \dQuote{Pocock}) that do not require parameters.}
-	\item{sfl}{Specifies the spending function for lower boundary crossing probabilities when
-	asymmetric, two-sided testing is performed (\code{test.type = 3}, 
+	\item{sfl}{Specifies the spending function for lower boundary crossing probabilities when asymmetric, two-sided testing is performed (\code{test.type = 3}, 
 \code{4}, \code{5}, or \code{6}). 
 	Unlike the upper bound, only spending functions are used to specify the lower bound.
 	The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function.
-	The parameter \code{sfl} is ignored for one-sided testing (
-	\code{test.type=1}) or symmetric 2-sided testing (\code{test.type=2}). 
+	The parameter \code{sfl} is ignored for one-sided testing (\code{test.type=1}) or symmetric 2-sided testing (\code{test.type=2}). 
 	See details, spending functions, manual and examples.}
 	\item{sflpar}{Real value, default is \eqn{-2}, which, with the default Hwang-Shih-DeCani spending function, 
 	specifies a less conservative spending rate than the default for the upper bound.}
@@ -74,26 +70,23 @@ An object of the class \code{gsDesign}. This class has the following elements an
 unless it was input as 0; in that case, value will be computed to give desired power for fixed design with input
 sample size \code{n.fix}.}
 \item{n.fix}{Sample size required to obtain desired power when effect size is \code{delta}.}
-\item{timing}{As input.}
+\item{timing}{A vector of length \code{k} containing the portion of the total planned information/sample size at each analysis.}
 \item{tol}{As input.}
 \item{r}{As input.}
 \item{upper}{Upper bound spending function, boundary and boundary crossing probabilities under the NULL and
-alternate hypotheses. See \link{Spending Functions} and manual for further details.}
-\item{lower}{Lower bound spending function, boundary and boundary crossing probability probabilities at each analysis.
+alternate hypotheses. See \link{Spending function overview} and manual for further details.}
+\item{lower}{Lower bound spending function, boundary and boundary crossing probabilities at each analysis.
 Lower spending is under alternative hypothesis (beta spending) for \code{test.type=3} or \code{4}. 
 For \code{test.type=2}, \code{5} or \code{6}, lower spending is under the null hypothesis.
-For \code{test.type=1}, output value is \code{NULL}. See \link{Spending Functions} and manual.}
+For \code{test.type=1}, output value is \code{NULL}. See \link{Spending function overview} and manual.}
 \item{n.I}{Vector of length \code{k}. If values are input, same values are output.
 Otherwise, \code{n.I} will contain the sample size required at each analysis 
 to achieve desired \code{timing} and \code{beta} for the output value of \code{delta}. 
-If \code{delta=0} was input, then this is the sample size required for the specified group sequential design
-when a fixed design requires a sample size of \code{n.fix}.
+If \code{delta=0} was input, then this is the sample size required for the specified group sequential design when a fixed design requires a sample size of \code{n.fix}.
 If \code{delta=0} and \code{n.fix=1} then this is the relative sample size compared to a fixed design; 
-see details and examples.
+see details and examples.}
 \item{maxn.IPlan}{As input.}
 }
-}
-
 
 \details{
 Many parameters normally take on default values and thus do not require explicit specification.
@@ -110,20 +103,18 @@ printing and plotting suffice; see examples.
 \code{delta} and \code{n.fix} are used together to determine what sample size output options the user seeks.
 The default, \code{delta=0} and \code{n.fix=1}, results in a \sQuote{generic} design that may be used with any sampling
 situation. Sample size ratios are provided and the user multiplies these times the sample size for a fixed design
-to obtain the corresponding group sequential analysis times. If \code{delta}>0, \code{n.fix} is ignored, and 
+to obtain the corresponding group sequential analysis times. If \code{delta>0}, \code{n.fix} is ignored, and 
 \code{delta} is taken as the standardized effect size - the signal to noise ratio for a single observation;
 for example, the mean divided by the standard deviation for a one-sample normal problem. 
 In this case, the sample size at each analysis is computed. 
-When \code{delta}=0 and \code{n.fix}>1, \code{n.fix} is assumed to be the sample size for a fixed design
+When \code{delta=0} and \code{n.fix>1}, \code{n.fix} is assumed to be the sample size for a fixed design
 with no interim analyses. See examples below. 
 
-Following are further comments on the input argument \code{test.type}.
-The manual may also be worth some review in order to see actual formulas for boundary crossing 
-probabilities for the various options. 
-Options 3 and 5 assume the trial stops if the lower bound is crossed for Type I and Type II error computation 
-(binding lower bound). 
-For the purpose of computing Type I error, options 4 and 6 assume the trial continues if the lower bound is crossed 
-(non-binding lower bound). Beta-spending refers to error spending for the lower bound crossing probabilities
+Following are further comments on the input argument \code{test.type} which is used to control what type of error measurements are used in trial design.
+The manual may also be worth some review in order to see actual formulas for boundary crossing probabilities for the various options. 
+Options 3 and 5 assume the trial stops if the lower bound is crossed for Type I and Type II error computation (binding lower bound). 
+For the purpose of computing Type I error, options 4 and 6 assume the trial continues if the lower bound is crossed (non-binding lower bound); that is a Type I error can be made by crossing an upper bound after crossing a previous lower bound. 
+Beta-spending refers to error spending for the lower bound crossing probabilities
 under the alternative hypothesis (options 3 and 4).
 In this case, the final analysis lower and upper boundaries are assumed to be the same.
 The appropriate total beta spending (power) is determined by adjusting the maximum sample size
@@ -132,12 +123,12 @@ Since options 3 and 4 must compute boundary crossing probabilities under both th
 deriving these designs can take longer than other options.
 Options 5 and 6 compute lower bound spending under the null hypothesis.
 }
-\seealso{\link{gsDesign-package}, \link{Group Sequential Plots}, \code{\link{gsProbability}}, 
-\link{Spending Functions}, \link{Wang-Tsiatis Bounds}}
-\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+\seealso{\link{gsDesign package overview}, \link{Plots for group sequential designs}, \code{\link{gsProbability}}, 
+\link{Spending function overview}, \link{Wang-Tsiatis Bounds}}
+\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
 
-\author{Keaven Anderson \email{keaven\_anderson@merck.com}, Jennifer Sun, John Zhang}
+\author{Keaven Anderson \email{keaven\_anderson@merck.}}
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.

@@ -2,13 +2,13 @@
 \alias{nSurvival}
 \alias{Survival sample size}
 \title{3.3: Time-to-event sample size calculation (Lachin-Foulkes)}
-\description{\code{nSurvival()} is used to calculate the sample size for a clinical trial with time-to-event endpoint. The Lachin and Faulkes (1986) method is used.
+\description{\code{nSurvival()} is used to calculate the sample size for a clinical trial with a time-to-event endpoint. The Lachin and Foulkes (1986) method is used.
 }
 
 \usage{
-nSurvival(lambda.0, lambda.1, eta = 0, rand.ratio = 1, Ts, Tr,
-      alpha = 0.05, beta = 0.10, sided = 2, approx = FALSE, type = c("rr", "rd"),
-      entry = c("unif", "expo"), gamma = NA)
+nSurvival(lambda.0, lambda.1, Ts, Tr, eta = 0, rand.ratio = 1,
+      alpha = 0.05, beta = 0.10, sided = 2, approx = FALSE,
+      type = c("rr", "rd"), entry = c("unif", "expo"), gamma = NA)
 }
 \arguments{
   \item{lambda.0, lambda.1}{event hazard rate for placebo and treatment
@@ -17,8 +17,8 @@ nSurvival(lambda.0, lambda.1, eta = 0, rand.ratio = 1, Ts, Tr,
   \item{rand.ratio}{randomization ratio between placebo and treatment
     group. Default is balanced design, i.e., randomization ratio is 1.}
   \item{Ts}{maximum study duration.}
-  \item{Tr}{accrual duration.}
-  \item{alpha}{type I error rate. Default is 0.025 for one-sided.}
+  \item{Tr}{accrual (recruitment) duration.}
+  \item{alpha}{type I error rate. Default is 0.05 since 2-sided testing is default.}
   \item{beta}{type II error rate. Default is 0.10 (90\% power).}
   \item{sided}{one or two-sided test? Default is two-sided test.}
   \item{approx}{logical. If \code{TRUE}, the approximation sample size
@@ -35,7 +35,7 @@ nSurvival(lambda.0, lambda.1, eta = 0, rand.ratio = 1, Ts, Tr,
 \details{
   \code{nSurvival} produces the number of subjects and events for a set of
   pre-specified trial parameters, such as accrual duration and follow-up
-  period. The calculation is based on Lachin and Faulkes method and can
+  period. The calculation is based on Lachin and Foulkes method and can
   be used for risk ratio or risk difference. The function also consider
   non-uniform entry as well as uniform entry. 
 
@@ -82,31 +82,24 @@ nSurvival(lambda.0, lambda.1, eta = 0, rand.ratio = 1, Ts, Tr,
 # 6 month uniform enrollment
 # Treatment/placebo hazards = 0.1/0.2 per 1 person-year
 # drop out hazard 0.1 per 1 person-year
-# alpha = 0.025 (one-sided)
-# power = 0.9
+# alpha = 0.05 (two-sided)
+# power = 0.9 (default beta=.1)
 
-h0 <- 0.2        
-h1 <- 0.1        
-eta <- 0.1       
-rand.ratio <- 1
-tm1 <- 2         
-tm2 <- 0.5       
-gamma <- NA      
-alpha <- 0.05    
-beta <- 0.1      
-
-ss <- nSurvival(h0, h1, eta = eta, rand.ratio = rand.ratio,
-             Ts = tm1, Tr = tm2,
-             alpha = alpha, beta = beta, sided = 1,
-             type = "rd", entry = "unif", gamma = gamma)
+ss <- nSurvival(lambda.0=.2 , lambda.1=.1, eta = .1, Ts = 2, Tr = .5,
+                sided=1, alpha=.025)
 
 #  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
-#  lower bound is non-binding (ignored in Type I error computation)
 #  sample size is computed based on a fixed design requiring n=100
-	x<-gsDesign(k = 5, test.type = 2, n.fix = ss$Sample.size)
+	x<-gsDesign(k = 5, test.type = 2)
 	x
+# boundary plot
 	plot(x)
+# power plot
 	plot(x, plottype = 2)
+# total sample size
+   ceiling(x$n.I[x$k] * ss$Sample.size)
+# number of events at analyses
+   ceiling(ss$Num.events * x$n.I)
 }
 
 \keyword{design}

@@ -41,15 +41,15 @@ design is characterized.
 	crossing probabilities. Element \code{i,j} contains the boundary crossing probability at analysis \code{i} for the \code{j}-th
 	element of \code{theta} input. All boundary crossing is assumed to be binding for this computation; 
 	that is, the trial must stop if a boundary is crossed.}
-	\item{upper}{An list of the same form as \code{lower} containing the upper bound and upper boundary crossing probabilities.}
+	\item{upper}{A list of the same form as \code{lower} containing the upper bound and upper boundary crossing probabilities.}
 	\item{en}{A vector of the same length as \code{theta} containing expected sample sizes for the trial design
 	corresponding to each value in the vector \code{theta}.}
 	\item{r}{As input.}
 }
-\seealso{\link{Group Sequential Plots}, \code{\link{gsDesign}}, \link{gsDesign-package}}
-\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+\seealso{\link{Plots for group sequential designs}, \code{\link{gsDesign}}, \link{gsDesign package overview}}
+\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
-\author{Keaven Anderson \email{keaven\_anderson@merck.com}, Jennifer Sun, John Zhang}
+\author{Keaven Anderson \email{keaven\_anderson@merck.}}
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.
@@ -89,7 +89,7 @@ class(z)
 z
 
 # default plottype is now 2
-# this is the same range for theta,  but plot now has theta on x axis
+# this is the same range for theta, but plot now has theta on x axis
 plot(z)
 }
 \keyword{design}

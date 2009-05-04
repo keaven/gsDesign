@@ -2,10 +2,8 @@
 \alias{gsBoundCP}
 \title{2.5: Conditional Power at Interim Boundaries}
 \description{
-\code{gsBoundCP()} computes the total probability of crossing future upper bounds
-given an interim test statistic at an interim bound.
-For each interim boundary
-assumes an interim test statistic at the boundary and
+\code{gsBoundCP()} computes the total probability of crossing future upper bounds given an interim test statistic at an interim bound.
+For each interim boundary, assumes an interim test statistic at the boundary and
 computes the probability of crossing any of the later upper boundaries.
 }
 
@@ -14,11 +12,8 @@ gsBoundCP(x, theta="thetahat", r=18)
 }
 \arguments{
 	\item{x}{An object of type \code{gsDesign} or \code{gsProbability}}
-	\item{theta}{if \code{"thetahat"} and \code{class(x)!="gsDesign"}), conditional power computations for
-	each boundary value are computed using estimated treatment effect assuming a test statistic at that boundary
-	(\code{zi/sqrt(x$n.I[i]} at analysis \code{i}, interim test statistic \code{zi} and interim 
-	sample size/statistical information of \code{x$n.I[i]}). Otherwise, conditional power is computed
-	assuming the input scalar value \code{theta}.
+	\item{theta}{if \code{"thetahat"} and \code{class(x)!="gsDesign"}, conditional power computations for each boundary value are computed using estimated treatment effect assuming a test statistic at that boundary
+	(\code{zi/sqrt(x$n.I[i])} at analysis \code{i}, interim test statistic \code{zi} and interim sample size/statistical information of \code{x$n.I[i]}). Otherwise, conditional power is computed assuming the input scalar value \code{theta}.
 	}
 	\item{r}{Integer value controlling grid for numerical integration as in Jennison and Turnbull (2000); 
 	default is 18, range is 1 to 80. 
@@ -33,13 +28,14 @@ given interim test statistics at each lower bound}
 given interim test statistics at each upper bound.}
 }
 
+
 \details{
-See Statistical Methods section of manual for further clarification. See also Muller and Schaffer (2001) for background theory.
+See Conditional power section of manual for further clarification. See also Muller and Schaffer (2001) for background theory.
 }
-\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+\note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
 
-\author{Keaven Anderson \email{keaven\_anderson@merck.com}, Jennifer Sun, John Zhang}
+\author{Keaven Anderson \email{keaven\_anderson@merck.}}
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.

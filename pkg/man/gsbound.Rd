@@ -2,16 +2,13 @@
 \alias{gsBound}
 \alias{gsBound1}
 
-\title{Boundary derivation}
+\title{2.6 Boundary derivation - low level}
 \description{\code{gsBound()} and \code{gsBound1()} are lower-level functions used to find boundaries for a group sequential design.
-They are not recommended (especially \code{gsBound1()} for casual users.
+They are not recommended (especially \code{gsBound1()}) for casual users.
 These functions do not adjust sample size as \code{gsDesign()} does to ensure appropriate power for a design.
-The function \code{gsBound1()} requires special attention to detail and knowledge of behavior when a design corresponding to the input
-parameters does not exist.
 
 \code{gsBound()} computes upper and lower bounds given boundary crossing probabilities assuming a mean of 0, the usual null hypothesis.
-\code{gsBound1()} computes the upper bound given a lower boundary, upper boundary crossing probabilities and an arbitrary mean 
-(\code{theta}).}
+\code{gsBound1()} computes the upper bound given a lower boundary, upper boundary crossing probabilities and an arbitrary mean (\code{theta}).}
 \usage{
 gsBound(I, trueneg, falsepos, tol=0.000001, r=18)
 gsBound1(theta, I, a, probhi, tol=0.000001, r=18, printerr=0)
@@ -31,24 +28,20 @@ Note that all vector arguments should have the same length which will be denoted
 	Larger values provide larger number of grid points and greater accuracy.
 	Normally \code{r} will not be changed by the user.}
 	\item{printerr}{If this scalar argument set to 1, this will print messages from underlying C program.
-	Mainly intended to print notify user when an output solution does not match input specifications.
+	Mainly intended to notify user when an output solution does not match input specifications.
 	This is not intended to stop execution as this often occurs when deriving a design in \code{gsDesign}
 	that uses beta-spending.}
 }
 \value{
-  list(k=xx[[1]],theta=0.,I=xx[[2]],a=xx[[3]],b=xx[[4]],rates=rates,tol=xx[[7]],
-        r=xx[[8]],error=xx[[9]])
-    y<-list(k=xx[[1]],theta=xx[[2]],I=xx[[3]],a=xx[[4]],b=xx[[5]],
-            problo=xx[[6]],probhi=xx[[7]],tol=xx[[8]],r=xx[[9]],error=xx[[10]])
 Both routines return a list. Common items returned by the two routines are: 
 \item{k}{The length of vectors input; a scalar.}
 \item{theta}{As input in \code{gsBound1()}; 0 for \code{gsBound()}.}
 \item{I}{As input.}
-\item{a}{}
-\item{b}{}
+\item{a}{For \code{gsbound1}, this is as input. For \code{gsbound} this is the derived lower boundary required to yield the input boundary crossing probabilities under the null hypothesis.}
+\item{b}{The derived upper boundary required to yield the input boundary crossing probabilities under the null hypothesis.}
 \item{tol}{As input.}
 \item{r}{As input.}
-\item{error}{Error code. 0 if no error; > 0 otherwise.}
+\item{error}{Error code. 0 if no error; greater than 0 otherwise.}
 
 \code{gsBound()} also returns the following items:
 \item{rates}{a list containing two items:}
@@ -56,18 +49,18 @@ Both routines return a list. Common items returned by the two routines are:
 \item{trueneg}{vector of lower boundary crossing probabilities as input.}
 
 \code{gsBound1()} also returns the following items:
-\item{problo}{vector of lower boundary crossing probabilities; computed using input lower bound
-and derived upper bound.}
+\item{problo}{vector of lower boundary crossing probabilities; computed using input lower bound and derived upper bound.}
 \item{probhi}{vector of upper boundary crossing probabilities as input.}
 }
 
-\details{Forthcoming...}
+\details{The function \code{gsBound1()} requires special attention to detail and knowledge of behavior when a design corresponding to the input parameters does not exist.
+}
 
-\seealso{\link{gsDesign-package}, \code{\link{gsDesign}}, \code{\link{gsProbability}}}
+\seealso{\link{gsDesign package overview}, \code{\link{gsDesign}}, \code{\link{gsProbability}}}
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
 
-\author{Keaven Anderson \email{keaven\_anderson@merck.com}, Jennifer Sun, John Zhang}
+\author{Keaven Anderson \email{keaven\_anderson@merck.}}
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.

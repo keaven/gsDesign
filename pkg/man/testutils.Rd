@@ -4,7 +4,7 @@
 \alias{checkRange}
 \alias{checkLengths}
 \alias{isInteger}
-\title{verify variable properties}
+\title{6.0 Utility functions to verify variable properties}
 \description{Utility functions to verify an objects's properties including whether it is a scalar or vector,
  the class, the length, and (if numeric) whether the range of values is on a specified interval. Additionally,
  the \code{checkLengths} function can be used to ensure that all the supplied inputs have equal lengths.}
