@@ -36,11 +36,10 @@
 # Exported Functions
 ###
 
-"nSurvival" <- function(lambda.0, lambda.1, eta = 0,
-        rand.ratio = 1, Ts, Tr,
+"nSurvival" <- function(lambda.0, lambda.1, Ts, Tr,
+        eta = 0, rand.ratio = 1,
         alpha = 0.05, beta = 0.10, sided = 2,
-        approx = FALSE,
-        type = c("rr", "rd"),
+        approx = FALSE, type = c("rr", "rd"),
         entry = c("unif", "expo"), gamma = NA)
 {
     ############################################################
@@ -48,10 +47,10 @@
     ## calculate sample size                                   #
     ## lambda.0 -- hazard rate for placebo group               #
     ## lambda.1 -- hazard rate for treatment group             #
+    ## Ts -- study duration                                    #
+    ## Tr -- accrual duration                                  #
     ## eta -- exponential dropout rate                         #
     ## rand.ratio -- randomization ratio (T/P)                 #
-    ## Ts -- study duration                                    #
-    ## Tr -- accural duration                                  #
     ## alpha -- type I error rate                              #
     ## beta -- type II error rate                              #
     ## sided -- one or two-sided test                          #
@@ -68,7 +67,7 @@
     entry <- match.arg(entry)
     
     method <- match(type, c("rr", "rd"))
-    accural <- match(entry, c("unif", "expo")) == 1
+    accrual <- match(entry, c("unif", "expo")) == 1
     
     xi0 <- 1 / (1 + rand.ratio)
     xi1 <- 1 - xi0 
@@ -85,7 +84,7 @@
     haz <- c(lambda.0, lambda.1, ave.haz)
     
     prob.e <- sapply(haz, pe, eta = eta, Ts = Ts, Tr = Tr,
-            gamma = gamma, unif = accural)
+            gamma = gamma, unif = accrual)
     
     zalpha <- qnorm(1 - alpha / sided)
     zbeta <- qnorm(1 - beta)
@@ -124,7 +123,7 @@
             Hazard.p = lambda.0, Hazard.t = lambda.1,
             Dropout = eta, Frac.p = xi0, Frac.t = xi1,
             Gamma = gamma, Alpha = alpha, Beta = beta, Sided = sided,
-            Study.dura = Ts, Accural = Tr)
+            Study.dura = Ts, Accrual = Tr)
     outd
 }
 
@@ -162,5 +161,3 @@
     
     resu                        
 }
-
-

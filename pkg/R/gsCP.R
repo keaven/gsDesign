@@ -56,9 +56,11 @@
     
     knew <- x$k-i
     Inew <- x$n.I[(i+1):x$k]-x$n.I[i]
-    bnew <- (x$upper$bound[(i+1):x$k]-zi*sqrt(x$n.I[i]/x$n.I[(i+1):x$k]))/sqrt(Inew/x$n.I[(i+1):x$k])
+    bnew <- (x$upper$bound[(i+1):x$k] - zi * sqrt(x$n.I[i] / x$n.I[(i+1):x$k]))/ 
+            sqrt(Inew/x$n.I[(i+1):x$k])
     if (test.type > 1){
-        anew <- (x$lower$bound[(i+1):x$k]-zi*sqrt(x$n.I[i]/x$n.I[(i+1):x$k]))/sqrt(Inew/x$n.I[(i+1):x$k])        
+        anew <- (x$lower$bound[(i+1):x$k]-zi*sqrt(x$n.I[i]/x$n.I[(i+1):x$k]))/
+                sqrt(Inew/x$n.I[(i+1):x$k])        
     }
     else
     {
@@ -74,30 +76,19 @@
     test.type <- ifelse(is(x, "gsProbability"), 3, x$test.type)
     
     
-    if (!is(x, "gsDesign")  || theta != "thetahat")
+    if (is(x, "gsDesign")  || theta != "thetahat")
     {    
-        thetahi <- array(theta, len)
-        
-        if (test.type > 1)
-        {
-            thetalow <- theta
-        }
+        thetahi <- x$delta
+        if (test.type > 1) thetalow <- thetahi
     }
     else
     {    
-        if (test.type>1)
-        {
-            thetalow <- x$lower$bound[1:len]/sqrt(x$n.I[1:len])
-        }
-        
+        if (test.type>1) thetalow <- x$lower$bound[1:len]/sqrt(x$n.I[1:len])
         thetahi <- x$upper$bound[1:len]/sqrt(x$n.I[1:len])
     }
     CPhi <- array(0, len)
     
-    if (test.type > 1)
-    {
-        CPlo <- CPhi
-    }
+    if (test.type > 1) CPlo <- CPhi
     
     for(i in 1:len)
     {    

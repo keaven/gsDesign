@@ -35,13 +35,13 @@
 
 "plot.gsDesign" <- function(x, plottype=1, ...)
 {   
-    checkScalar(plottype, "integer", c(1, 7))
+#   checkScalar(plottype, "integer", c(1, 7))
     invisible(do.call(gsPlotName(plottype), list(x, ...)))
 }
 
 "plot.gsProbability" <- function(x, plottype=2, ...)
 {   
-    checkScalar(plottype, "integer", c(1, 7))    
+#   checkScalar(plottype, "integer", c(1, 7))    
     invisible(do.call(gsPlotName(plottype), list(x, ...)))
 }
 
@@ -567,18 +567,11 @@
         else
         {    
             xval <- theta
-            
-            if (is.null(xlab))
-            {
-                xlab <- expression(theta)    
-            }
+            if (is.null(xlab)) xlab <- expression(theta)    
         }    
     }
 
-    if (is.null(xlab))
-    {
-        xlab <- ""
-    }
+    if (is.null(xlab)) xlab <- ""
     
     x <- if (is(x, "gsDesign")) gsProbability(d=x, theta=theta) else 
                 gsProbability(k=x$k, a=x$lower$bound, b=x$upper$bound, n.I=x$n.I, theta=theta)

@@ -255,7 +255,6 @@
     z <- - qnorm(alpha / 2)
     
     t[t > 1] <- 1
-    
     x <- list(name="Lan-DeMets O'brien-Fleming approximation", param=NULL, parname="none", sf=sfLDOF, 
             spend=2 * (1 - pnorm(z / sqrt(t))), bound=NULL, prob=NULL)  
     
@@ -297,6 +296,7 @@
     }
     else if (len == 4)
     {   
+        checkRange(param, inclusion=c(FALSE, FALSE))
         t0 <- param[1:2]
         p0 <- param[3:4]
         
