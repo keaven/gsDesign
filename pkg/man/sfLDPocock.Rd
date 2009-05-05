@@ -30,7 +30,7 @@ The Lan-DeMets (1983) spending function to approximate an
 O'Brien-Fleming bound is implemented in the function (\code{sfLDOF()}):
 \deqn{f(t; \alpha)=2-2\Phi\left(\Phi^{-1}(1-\alpha/2)/ t^{1/2}\right).}{%
 f(t; alpha)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(1/2)\right).}
-The Lan-DeMets (1983) spending function to approximate a Pocock design is implemented in the function {\code{sfLDPocock()}}:
+The Lan-DeMets (1983) spending function to approximate a Pocock design is implemented in the function \code{sfLDPocock()}:
 \deqn{f(t;\alpha)=ln(1+(e-1)t).}{f(t;alpha)=ln(1+(e-1)t).}
 As shown in examples below, other spending functions can be used to get as good or better approximations to Pocock and
 O'Brien-Fleming bounds. In particular, O'Brien-Fleming bounds can be closely approximated using \code{\link{sfExponential}}.

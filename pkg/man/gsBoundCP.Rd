@@ -24,7 +24,7 @@ gsBoundCP(x, theta="thetahat", r=18)
 A list containing two vectors, \code{CPlo} and \code{CPhi}.
 \item{CPlo}{A vector of length \code{x$k-1} with conditional powers of crossing upper bounds
 given interim test statistics at each lower bound}
-\code{CPhi}{A vector of length \code{x$k-1} with conditional powers of crossing upper bounds
+\item{CPhi}{A vector of length \code{x$k-1} with conditional powers of crossing upper bounds
 given interim test statistics at each upper bound.}
 }
 

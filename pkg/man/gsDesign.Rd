@@ -83,11 +83,9 @@ For \code{test.type=1}, output value is \code{NULL}. See \link{Spending function
 Otherwise, \code{n.I} will contain the sample size required at each analysis 
 to achieve desired \code{timing} and \code{beta} for the output value of \code{delta}. 
 If \code{delta=0} was input, then this is the sample size required for the specified group sequential design when a fixed design requires a sample size of \code{n.fix}.
-If \code{delta=0} and \code{n.fix=1} then this is the relative sample size compared to a fixed design; 
-see details and examples.}
+If \code{delta=0} and \code{n.fix=1} then this is the relative sample size compared to a fixed design; see details and examples.}
 \item{maxn.IPlan}{As input.}
 }
-
 \details{
 Many parameters normally take on default values and thus do not require explicit specification.
 One- and two-sided designs are supported. Two-sided designs may be symmetric or asymmetric.
