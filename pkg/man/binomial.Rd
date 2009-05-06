@@ -153,11 +153,12 @@ x0 <- testBinomial(x1=39, x2=23, n1=500, n2=500)
 x0
 pnorm(x0, lower.tail=FALSE)
 
-# Perform 500k simulations to test validity of the above asymptotic p-values 
+# Perform 50k simulations to test validity of the above asymptotic p-values 
+# (you may want to perform more to reduce standard error of estimate)
 sum(as.real(x0) <= 
-    simBinomial(p1=.078, p2=.078, n1=500, n2=500, nsim=500000)) / 500000
+    simBinomial(p1=.078, p2=.078, n1=500, n2=500, nsim=50000)) / 50000
 sum(as.real(x0) <= 
-    simBinomial(p1=.052, p2=.052, n1=500, n2=500, nsim=500000)) / 500000
+    simBinomial(p1=.052, p2=.052, n1=500, n2=500, nsim=50000)) / 50000
 
 # Perform a non-inferiority test to see if p2=400 / 500 is within 5% of 
 # p1=410 / 500 use a z-statistic with unadjusted variance
@@ -172,7 +173,7 @@ pchisq(testBinomial(x1=410, x2=400, n1=500, n2=500, delta0= -.05, chisq=1,
 
 # now simulate the z-statistic witthout continuity corrected variance
 sum(qnorm(.975) <= 
-    simBinomial(p1=.8, p2=.8, n1=500, n2=500, nsim=1000000)) / 1000000
+    simBinomial(p1=.8, p2=.8, n1=500, n2=500, nsim=100000)) / 100000
 
 # compute a sample size to show non-inferiority with 5% margin, 90% power
 nBinomial(p1=.2, p2=.2, delta0=.05, alpha=.025, sided=1, beta=.1)

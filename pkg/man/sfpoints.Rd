@@ -56,8 +56,10 @@ plot(1:6/6, y, main="Pointwise spending function example",
     ylab="Cumulative proportion of spending", 
     type="p")
 
+# following lines produce error when compiling package on some systems
 # approximate this with a t-distribution spending function by fitting 3 points
-lines(t, sfTDist(1, t, c(c(1, 3, 5)/6, .01, .1, .5))$spend)
+tx <- 0:100/100
+lines(tx, sfTDist(1, tx, c(c(1, 3, 5)/6, .01, .1, .5))$spend)
 text(x=.6, y=.9, labels="Pointwise Spending Approximated by")
 text(x=.6, y=.83, "t-Distribution Spending with 3-point interpolation")
 }
