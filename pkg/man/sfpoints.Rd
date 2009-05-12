@@ -37,10 +37,12 @@ Boca Raton: Chapman and Hall.
 
 \examples{
 # example to specify spending on a pointwise basis
-x <- gsDesign(k=6, sfu=sfPoints, sfupar=c(.01, .05, .1, .25, .5, 1), test.type=2)
+x <- gsDesign(k=6, sfu=sfPoints, sfupar=c(.01, .05, .1, .25, .5, 1),
+              test.type=2)
 x
 
-# get proportion of upper spending under null hypothesis at each analysis
+# get proportion of upper spending under null hypothesis
+# at each analysis
 y <- x$upper$prob[, 1] / .025
 
 # change to cumulative proportion of spending
@@ -56,8 +58,8 @@ plot(1:6/6, y, main="Pointwise spending function example",
     ylab="Cumulative proportion of spending", 
     type="p")
 
-# following lines produce error when compiling package on some systems
-# approximate this with a t-distribution spending function by fitting 3 points
+# approximate this with a t-distribution spending function
+# by fitting 3 points
 tx <- 0:100/100
 lines(tx, sfTDist(1, tx, c(c(1, 3, 5)/6, .01, .1, .5))$spend)
 text(x=.6, y=.9, labels="Pointwise Spending Approximated by")

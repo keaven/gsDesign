@@ -36,7 +36,9 @@ sfBetaDist(alpha, t, param)
 	\item{t}{A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 
 	sample size or information for which the spending function will be computed.}
 	\item{param}{In the two-parameter specification, \code{sfBetaDist()} requires 2 positive values, while
-	\code{sfLogistic()}, \code{sfNormal()}, \code{sfExtremeValue()}, \code{sfExtremeValue2()} and \code{sfCauchy()} require the first parameter 
+	\code{sfLogistic()}, \code{sfNormal()}, \code{sfExtremeValue()},
+
+ \code{sfExtremeValue2()} and \code{sfCauchy()} require the first parameter 
 	to be any real value and the second to be a positive value. 
 	The four parameter specification is \code{c(t1,t2,u1,u2)}
 	where the objective is that \code{sf(t1)=alpha*u1} and \code{sf(t2)=alpha*u2}.
@@ -100,24 +102,29 @@ lines(t, sfLogistic(1, t, c(.01, .1, .1, .4))$spend, lty=2)
 # now just give a=0 and b=1 as 3rd parameters for sfLogistic 
 lines(t, sfLogistic(1, t, c(0, 1))$spend, lty=3)
 
-# try a couple with unconventional shapes again using the xy form in the 3rd parameter
+# try a couple with unconventional shapes again using
+# the xy form in the 3rd parameter
 lines(t, sfLogistic(1, t, c(.4, .6, .1, .7))$spend, lty=4)
 lines(t, sfLogistic(1, t, c(.1, .7, .4, .6))$spend, lty=5)
 legend(x=c(.0, .475), y=c(.76, 1.03), lty=1:5, 
 legend=c("Fit (.1, 01) and (.4, .1)", "Fit (.01, .1) and (.1, .4)", 
-    "a=0,  b=1", "Fit (.4, .1) and (.6, .7)", "Fit (.1, .4) and (.7, .6)"))
+    "a=0,  b=1", "Fit (.4, .1) and (.6, .7)",
+     "Fit (.1, .4) and (.7, .6)"))
 
-# set up a function to plot comparsons of all 2-parameter spending functions
+# set up a function to plot comparsons of all
+# 2-parameter spending functions
 plotsf <- function(alpha, t, param)
 {   
-    plot(t, sfCauchy(alpha, t, param)$spend, xlab="Proportion of enrollment", 
+    plot(t, sfCauchy(alpha, t, param)$spend,
+    xlab="Proportion of enrollment", 
     ylab="Cumulative spending", type="l", lty=2)
     lines(t, sfExtremeValue(alpha, t, param)$spend, lty=5)
     lines(t, sfLogistic(alpha, t, param)$spend, lty=1)
     lines(t, sfNormal(alpha, t, param)$spend, lty=3)
     lines(t, sfExtremeValue2(alpha, t, param)$spend, lty=6, col=2)
     lines(t, sfBetaDist(alpha, t, param)$spend, lty=7, col=3)
-    legend(x=c(.05, .475), y=.025*c(.55, .9), lty=c(1, 2, 3, 5, 6, 7), 
+    legend(x=c(.05, .475), y=.025*c(.55, .9),
+             lty=c(1, 2, 3, 5, 6, 7), 
              col=c(1, 1, 1, 1, 2, 3), 
         legend=c("Logistic", "Cauchy", "Normal", "Extreme value", 
         "Extreme value 2", "Beta distribution"))

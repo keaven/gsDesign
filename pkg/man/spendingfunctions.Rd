@@ -76,18 +76,20 @@ plot(x, plottype=5)
 # Example 2: advance example: writing a new spending function  
 # Most users may ignore this!
 
-# implementation of 2-parameter version of beta distribution spending function
+# implementation of 2-parameter version of
+# beta distribution spending function
 # assumes t and alpha are appropriately specified (does not check!) 
 sfbdist <- function(alpha,  t,  param)
 {  
    # check inputs
    checkVector(param, "numeric", c(0, Inf), c(FALSE, TRUE))
-   if (length(param) !=2) 
-       stop("b-dist example spending function parameter must be of length 2")
+   if (length(param) !=2) stop(
+   "b-dist example spending function parameter must be of length 2")
 
-   # set spending using cumulative beta distribution function and return
-   x <- list(name="B-dist example", param=param, parname=c("a", "b"), sf=sfbdist, 
-           spend=alpha * pbeta(t, param[1], param[2]), bound=NULL, prob=NULL)  
+   # set spending using cumulative beta distribution and return
+   x <- list(name="B-dist example", param=param, parname=c("a", "b"), 
+             sf=sfbdist, spend=alpha * 
+           pbeta(t, param[1], param[2]), bound=NULL, prob=NULL)  
            
    class(x) <- "spendfn"
    

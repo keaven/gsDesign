@@ -60,11 +60,16 @@ Boca Raton: Chapman and Hall.
 # 3-parameter specification: a,  b,  df
 sfTDist(1, 1:5/6, c(-1, 1.5, 4))$spend
 
-# 5-parameter specification fits 2 points,  in this case the 1st 2 interims
+# 5-parameter specification fits 2 points,  in this case
+# the 1st 2 interims are at 25\% and 50\% of observations with
+# cumulative error spending of 10\% and 20\%, respectively
 # final parameter is df
 sfTDist(1, 1:3/4, c(.25, .5, .1, .2, 4))$spend
 
-# 6-parameter specification fits 3 points,  in this case all of the interims
+# 6-parameter specification fits 3 points
+# Interims are at 25\%. 50\% and 75\% of observations
+# with cumulative spending of 10\%, 20\% and 50\%, respectively
+# Note: not all 3 point combinations can be fit
 sfTDist(1, 1:3/4, c(.25, .5, .75, .1, .2, .5))$spend
 
 # Example of error message when the 3-points specified 
@@ -77,7 +82,8 @@ try(sfTDist(1, 1:3/4, c(.25, .5, .75, .1, .2, .3))$errmsg)
 sfNormal(1, 1:3/4, c(.25, .5, .1, .2))$spend[3]
 sfCauchy(1, 1:3/4, c(.25, .5, .1, .2))$spend[3]
 
-# plot a few t-distribution spending functions fitting t=0.25,  5 and u=0.1,  0.2
+# plot a few t-distribution spending functions fitting
+# t=0.25, .5 and u=0.1, 0.2
 # to demonstrate the range of flexibility
 t <- 0:100/100
 plot(t, sfTDist(0.025, t, c(.25, .5, .1, .2, 1))$spend, 

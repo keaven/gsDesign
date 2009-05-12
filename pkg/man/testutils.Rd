@@ -12,7 +12,8 @@
 isInteger(x)
 checkScalar(x, isType = "numeric", ...)
 checkVector(x, isType = "numeric", ..., length=NULL) 
-checkRange(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = deparse(substitute(x)), tol=0)
+checkRange(x, interval = 0:1, inclusion = c(TRUE, TRUE), 
+   varname = deparse(substitute(x)), tol=0)
 checkLengths(..., allowSingle=FALSE)
 }
 \arguments{
@@ -68,8 +69,8 @@ try(checkScalar(3, "integer", c(3,6), c(FALSE, TRUE))) # expect error
 x <- c(3, pi, exp(1))
 checkVector(x, "numeric", c(1, 10), c(TRUE, FALSE), length=3)
 
-# do the same but change the expected length
-try(checkVector(x, "numeric", c(1, 10), c(TRUE, FALSE), length=2)) # expect error
+# do the same but change the expected length; expect error
+try(checkVector(x, "numeric", c(1, 10), c(TRUE, FALSE), length=2))
 
 # create faux function to check input variable
 foo <- function(moo) checkVector(moo, "character")

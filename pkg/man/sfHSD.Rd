@@ -23,15 +23,14 @@ sfHSD(alpha, t, param)
 \value{An object of type \code{spendfn}. See \link{Spending function overview} for further details.}
 \details{
 A Hwang-Shih-DeCani spending function takes the form
-\deqn{f(t;\alpha, \gamma)=\alpha(1-e^{-\gamma t})/(1-e^{-\gamma})} 
-{f(t; alpha, gamma) = alpha * (1-exp(-gamma * t))/(1 - exp(-gamma))}
+\deqn{f(t;\alpha, \gamma)=\alpha(1-e^{-\gamma t})/(1-e^{-\gamma})}{f(t; alpha, gamma) = alpha * (1-exp(-gamma * t))/(1 - exp(-gamma))}
 where \eqn{\gamma}{gamma} is the value passed in \code{param}.
-A value of \eqn{\gamma=-4}{gamma=-4) is used to approximate an O'Brien-Fleming design (see \code{\link{sfExponential}} for a better fit), 
+A value of \eqn{\gamma=-4}{gamma=-4} is used to approximate an O'Brien-Fleming design (see \code{\link{sfExponential}} for a better fit), 
 while a value of \eqn{\gamma=1}{gamma=1} approximates a Pocock design well.
 }
 \seealso{\link{Spending function overview}, \code{\link{gsDesign}}, \link{gsDesign package overview}}
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
-in the directory where R is installed.}}
+in the directory where R is installed.}
 
 \author{Keaven Anderson \email{keaven\_anderson@merck.com}}
 \references{
@@ -47,7 +46,8 @@ x <- gsDesign(k=4, sfu=sfHSD, sfupar=-2, sfl=sfHSD, sflpar=1)
 # print the design
 x
 
-# since sfHSD is the default for both sfu and sfl,  this could have been written as
+# since sfHSD is the default for both sfu and sfl,
+# this could have been written as
 x <- gsDesign(k=4, sfupar=-2, sflpar=1)
 
 # print again
@@ -57,7 +57,8 @@ x
 # show default values of gamma to see how the spending function changes
 # also show gamma=1 which is supposed to approximate a Pocock design
 t <- 0:100/100
-plot(t,  sfHSD(0.025, t, -4)$spend, xlab="Proportion of final sample size", 
+plot(t,  sfHSD(0.025, t, -4)$spend,
+   xlab="Proportion of final sample size", 
    ylab="Cumulative Type I error spending", 
    main="Hwang-Shih-DeCani Spending Function Example", type="l")
 lines(t, sfHSD(0.025, t, -2)$spend, lty=2)

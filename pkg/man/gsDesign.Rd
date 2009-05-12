@@ -6,7 +6,8 @@
 \usage{
 gsDesign(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
          delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
-         sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I = 0, maxn.IPlan = 0) 
+         sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I = 0,
+         maxn.IPlan = 0) 
 
 print.gsDesign(x,...)}
 
@@ -29,10 +30,10 @@ print.gsDesign(x,...)}
 	See details and examples.}
 	\item{timing}{Sets relative timing of interim analyses. Default of 1 produces equally spaced analyses. 
 	Otherwise, this is a vector of length \code{k} or \code{k-1}.
-	The values should satisfy \code{0 < timing[1] < timing[2] < ... < timing[k-1]< timing[k]=1}.}
+	The values should satisfy \code{0 < timing[1] < timing[2] < ... < timing[k-1] < 
+timing[k]=1}.}
 	\item{sfu}{A spending function or a character string indicating a boundary type (that is, \dQuote{WT} for Wang-Tsiatis bounds, \dQuote{OF} for O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds). 
-	For one-sided and symmetric two-sided testing (\code{test.type=1, 2}), 
-	\code{sfu} is used to completely specify spending. 
+	For one-sided and symmetric two-sided testing is used to completely specify spending (\code{test.type=1, 2}), \code{sfu}. 
 	The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function.
 	See details, \link{Spending function overview}, manual and examples.}
 	\item{sfupar}{Real value, default is \eqn{-4} which is an O'Brien-Fleming-like conservative bound when used with the default Hwang-Shih-DeCani spending function. This is a real-vector for many spending functions.
@@ -70,7 +71,7 @@ An object of the class \code{gsDesign}. This class has the following elements an
 unless it was input as 0; in that case, value will be computed to give desired power for fixed design with input
 sample size \code{n.fix}.}
 \item{n.fix}{Sample size required to obtain desired power when effect size is \code{delta}.}
-\item{timing}{A vector of length \code{k} containing the portion of the total planned information/sample size at each analysis.}
+\item{timing}{A vector of length \code{k} containing the portion of the total planned information or sample size at each analysis.}
 \item{tol}{As input.}
 \item{r}{As input.}
 \item{upper}{Upper bound spending function, boundary and boundary crossing probabilities under the NULL and

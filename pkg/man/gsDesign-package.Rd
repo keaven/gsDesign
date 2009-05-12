@@ -71,8 +71,8 @@ New York: Springer.
 \seealso{\code{\link{gsDesign}}, \code{\link{gsProbability}}
 }
 \examples{
-# assume a fixed design (no interim) trial with the same endpoint requires 200 subjects
-# for 90\% power at alpha=.025, one-sided
+# assume a fixed design (no interim) trial with the same endpoint
+# requires 200 subjects for 90\% power at alpha=.025, one-sided
 x <- gsDesign(n.fix=200)
 plot(x)
 }

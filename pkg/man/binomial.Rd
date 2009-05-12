@@ -34,8 +34,8 @@ Thus, as a default no continuity corrections are performed.
 }
 
 \usage{
-nBinomial(p1, p2, alpha=.025, beta=0.1, delta0=0, ratio=1, sided=1, outtype=1,
-          scale="Difference") 
+nBinomial(p1, p2, alpha=.025, beta=0.1, delta0=0, ratio=1,
+          sided=1, outtype=1, scale="Difference") 
 testBinomial(x1, x2, n1, n2, delta0=0, chisq=0, adj=0,
              scale="Difference", tol=.1e-10)
 ciBinomial(x1, x2, n1, n2, alpha=.05, adj=0, scale="Difference")
@@ -44,8 +44,11 @@ simBinomial(p1, p2, n1, n2, delta0=0, nsim=10000, chisq=0, adj=0,
 }
 \arguments{
 For \code{simBinomial()} and \code{ciBinomial()} all arguments must have length 1.
+
 For \code{testBinomial()}, \code{x2, x2, n1, n2, delta0, chisq,} and \code{adj} may be vectors.
+
 For \code{nBinomial()}, \code{p1, p2, beta, delta0} and \code{ratio} may be vectors.
+
 For \code{nBinomial()} or \code{testBinomial()}, when one or more arguments is a vector, the routines return a vector of sample sizes and powers, respectively.
 Where vector arguments are allowed, there may be a mix of scalar and vector arguments. 
 All arguments specified using vectors must have the same length.  
@@ -92,9 +95,9 @@ of non-zero risk difference or non-unity relative risk. \emph{Statistics in Medi
 Fleiss, JL, Tytun, A and Ury (1980), A simple approximation for calculating sample sizes for comparing independent proportions.
 \emph{Biometrics};36:343-346.
 
-Gordon, I and Watson R (1985), The myth of continuity-corrected sample size formulae. \emph{Biometrics};52:71-76.
+Gordon, I and Watson R (1985), The myth of continuity-corrected sample size formulae. \emph{Biometrics}; 52: 71-76.
 
-Miettinin, O and Nurminen, M (1980), Comparative analysis of two rates. \emph{Statistics in Medicine};4:213-226.
+Miettinin, O and Nurminen, M (1980), Comparative analysis of two rates. \emph{Statistics in Medicine}; 4 : 213-226.
 }
 
 \details{
@@ -117,7 +120,7 @@ However, the alternative can have \code{p1-p2-delta0}$<0$.
 
 \value{
   \code{testBinomial()} and \code{simBinomial()} each return a vector of either Chi-square or Z test statistics. 
-  These may be compared to an appropriate cutoff point (e.g., \code{qnorm(.975)} or \code{qchisq(.95,1)}).
+  These may be compared to an appropriate cutoff point (e.g., \code{qnorm(.975)} for normal or \code{qchisq(.95,1)} for chi-square).
  
   With the default \code{outtype=2}, \code{nBinomial()} returns a list containing two vectors \code{n1} and \code{n2} containing
   sample sizes for groups 1 and 2, respectively.
@@ -153,7 +156,8 @@ x0 <- testBinomial(x1=39, x2=23, n1=500, n2=500)
 x0
 pnorm(x0, lower.tail=FALSE)
 
-# Perform 50k simulations to test validity of the above asymptotic p-values 
+# Perform 50k simulations to test validity of the above
+# asymptotic p-values 
 # (you may want to perform more to reduce standard error of estimate)
 sum(as.real(x0) <= 
     simBinomial(p1=.078, p2=.078, n1=500, n2=500, nsim=50000)) / 50000
@@ -166,22 +170,26 @@ x <- testBinomial(x1=410, x2=400, n1=500, n2=500, delta0= -.05)
 x
 pnorm(x, lower.tail=FALSE)
 
-# since chi-square tests equivalence (a 2-sided test) rather than non-inferiority (a 1-sided test), 
+# since chi-square tests equivalence (a 2-sided test) rather than
+# non-inferiority (a 1-sided test), 
 # the result is quite different
-pchisq(testBinomial(x1=410, x2=400, n1=500, n2=500, delta0= -.05, chisq=1, 
-                    adj=1), 1, lower.tail=FALSE)
+pchisq(testBinomial(x1=410, x2=400, n1=500, n2=500, delta0= -.05, 
+                    chisq=1, adj=1), 1, lower.tail=FALSE)
 
 # now simulate the z-statistic witthout continuity corrected variance
 sum(qnorm(.975) <= 
     simBinomial(p1=.8, p2=.8, n1=500, n2=500, nsim=100000)) / 100000
 
-# compute a sample size to show non-inferiority with 5% margin, 90% power
+# compute a sample size to show non-inferiority
+# with 5\% margin, 90\% power
 nBinomial(p1=.2, p2=.2, delta0=.05, alpha=.025, sided=1, beta=.1)
 
-# assuming a slight advantage in the experimental group lowers sample size requirement
+# assuming a slight advantage in the experimental group lowers
+# sample size requirement
 nBinomial(p1=.2, p2=.19, delta0=.05, alpha=.025, sided=1, beta=.1)
 
-# compute a sample size for comparing 15\% vs 10\% event rates with 1 to 2 randomization
+# compute a sample size for comparing 15\% vs 10\% event rates
+# with 1 to 2 randomization
 nBinomial(p1=.15, p2=.1, beta=.2, ratio=2, alpha=.05)
 
 # now look at total sample size using 1-1 randomization
@@ -198,15 +206,15 @@ p2 <- p1 * .6
 y3 <- nBinomial(p1, p2, beta=.2, outtype=1, alpha=.025, sided=1)
 p2 <- p1 * .5
 y4 <- nBinomial(p1, p2, beta=.2, outtype=1, alpha=.025, sided=1)
-plot(p1, y1, type="l", ylab="Sample size", xlab="Control group event rate",
-     ylim=c(0, 6000), lwd=2)
+plot(p1, y1, type="l", ylab="Sample size",
+     xlab="Control group event rate", ylim=c(0, 6000), lwd=2)
 title(main="Binomial sample size computation for 80 pct power")
 lines(p1, y2, lty=2, lwd=2)
 lines(p1, y3, lty=3, lwd=2)
 lines(p1, y4, lty=4, lwd=2)
 legend(x=c(.15, .2),y=c(4500, 6000),lty=c(2, 1, 3, 4), lwd=2,
-       legend=c("25 pct reduction", "33 pct reduction", "40 pct reduction",
-                "50 pct reduction"))
+       legend=c("25 pct reduction", "33 pct reduction",
+                "40 pct reduction", "50 pct reduction"))
 }
 
 \keyword{design}

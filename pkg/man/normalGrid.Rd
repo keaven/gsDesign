@@ -60,10 +60,13 @@ x <- gsDesign(n.fix=1000)
 x
 
 y <- normalGrid(r=3, mu=x$theta[2], sigma=x$theta[2] / 1.5)
-z <- gsProbability(k=3, theta=y$z, n.I=x$n.I, a=x$lower$bound, b=x$upper$bound)
+z <- gsProbability(k=3, theta=y$z, n.I=x$n.I, a=x$lower$bound,
+                   b=x$upper$bound)
 z <- gsProbability(d=x, theta=y$z)
-cat("Expected sample size averaged over normal prior distribution for theta with mu=", 
-   x$theta[2], "sigma=", x$theta[2]/1.5, ":", round(sum(z$en*y$wgt), 1), "\n")
+cat("Expected sample size averaged over normal ")
+cat("prior distribution for theta with mu=", 
+   x$theta[2], "sigma=", x$theta[2]/1.5, ":",
+   round(sum(z$en*y$wgt), 1), "\n")
 plot(y$z, z$en, xlab="theta", ylab="E{N}", 
    main="Expected sample size for different theta values")
 }
