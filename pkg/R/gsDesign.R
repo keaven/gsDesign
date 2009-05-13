@@ -419,27 +419,47 @@
     falseneg <- x$lower$spend
     falseneg <- falseneg-c(0, falseneg[1:x$k-1])
     x$lower$spend <- falseneg
-      x2 <- gsI1(theta=x$delta, I=x$timing, beta=falseneg, b=x1$b, Ilow=I0/3, Ihigh=10*I0, x$tol, x$r)
+    Ilow <- x$n.fix / 3
+    Ihigh <- 1.2 * x$n.fix
+    while (0 > gsbetadiff1(Imax=Ihigh, theta=x$delta, tx=x$timing, 
+                         problo=falseneg, b=x1$b, tol=x$tol, r=x$r))
+    {   if (Ihigh > 5 * x$n.fix)
+            stop("Unable to derive sample size")
+        Ilow <- Ihigh
+        Ihigh <- Ihigh * 1.2
+    }
+    x2 <- gsI1(theta=x$delta, I=x$timing, beta=falseneg, b=x1$b, Ilow=Ilow,
+               Ihigh=Ihigh, x$tol, x$r)
     
-      #check alpha
-      x3 <- gsprob(0, x2$I, x2$a, x2$b)
-      gspowr <- x3$powr
-      I <- x2$I
-      flag <- abs(gspowr - x$alpha)
+    #check alpha
+    x3 <- gsprob(0, x2$I, x2$a, x2$b)
+    gspowr <- x3$powr
+    I <- x2$I
+    flag <- abs(gspowr - x$alpha)
  
     # iterate until Type I error is correct
     jj <- 0
     while (flag > x$tol && jj < 100)
-      {    
+    {    
         # if alpha <> power, go back to set upper bound, lower bound and I(max) 
-          x4 <- gsBound1(0, I, c(x2$a[1:k-1],-20), falsepos)
-          x2 <- gsI1(theta=x$delta, I=x$timing, beta=falseneg, b=x4$b, Ilow=I0/3,Ihigh=10*I0,x$tol,x$r)
-          x3 <- gsprob(0,x2$I,x2$a,x2$b)
-          gspowr <- x3$powr
-          I <- x2$I
-          flag <- abs(gspowr-x$alpha)
+        x4 <- gsBound1(0, I, c(x2$a[1:k-1],-20), falsepos)
+        Ilow <- x$n.fix / 3
+        Ihigh <- 1.2 * x$n.fix
+        while (0 > gsbetadiff1(Imax=Ihigh, theta=x$delta, tx=x$timing, 
+                         problo=falseneg, b=x4$b, tol=x$tol, r=x$r))
+        {   if (Ihigh > 5 * x$n.fix)
+                stop("Unable to derive sample size")
+            Ilow <- Ihigh
+            Ihigh <- Ihigh * 1.2
+        }
+        x2 <- gsI1(theta=x$delta, I=x$timing, beta=falseneg, b=x4$b, 
+                   Ilow=Ilow,Ihigh=Ihigh,x$tol,x$r)
+        x3 <- gsprob(0,x2$I,x2$a,x2$b)
+        gspowr <- x3$powr
+        I <- x2$I
+        flag <- abs(gspowr-x$alpha)
         jj <- jj + 1
-      }
+    }
 
     # add bounds and information to x
     x$upper$bound <- x2$b
@@ -453,7 +473,8 @@
     x$lower$prob <- x4$problo
     x$en <- as.vector(x4$en)
 
-    # return error if boundary crossing probabilities do not meet desired tolerance
+    # return error if boundary crossing probabilities 
+    # do not meet desired tolerance
     if (max(abs(falsepos - x3$probhi)) > x$tol)
     {
         stop("False positive rates not achieved")       
@@ -627,7 +648,16 @@
 
     # find information and boundaries needed 
     I0 <- x$n.fix
-    xx <- gsI1(theta = x$delta, I = x$timing, beta = falseneg, b = x0$b, Ilow = I0/3, Ihigh = 10*I0, x$tol, x$r)
+    Ilow <- .98 * I0
+    Ihigh <- 1.2 * I0
+    while (0 > gsbetadiff1(Imax=Ihigh, theta=x$delta, tx=x$timing, 
+                         problo=falseneg, b=x0$b, tol=x$tol, r=x$r))
+    {   if (Ihigh > 5 * I0)
+            stop("Unable to derive sample size")
+        Ilow <- Ihigh
+        Ihigh <- Ihigh * 1.2
+    }
+    xx <- gsI1(theta = x$delta, I = x$timing, beta = falseneg, b = x0$b, Ilow = Ilow, Ihigh = Ihigh, x$tol, x$r)
     x$lower$bound <- xx$a
     x$upper$bound <- xx$b
     x$n.I <- xx$I
@@ -746,8 +776,7 @@
     tx <- I/I[k]
     x <- gsBound(I, trueneg, falsepos, tol, r)
     alpha <- sum(falsepos)
-    I0 <- (qnorm(alpha)+qnorm(beta))/theta
-    I0 <- I0*I0
+    I0 <- ((qnorm(alpha)+qnorm(beta))/theta)^2
     x$I <- uniroot(gsbetadiff, lower=I0, upper=10*I0, theta=theta, beta=beta, time=tx, 
                  a=x$a, b=x$b, tol=tol, r=r)$root*tx 
          
@@ -771,7 +800,7 @@
     I <- tx * Imax
     x <- gsBound1(theta=-theta, I=I, a=-b, probhi=problo, tol=tol, r=r)
     x <- gsprob(theta, I, -x$b, b, r=r)
-    
+
     sum(problo) - 1 + x$powr
 }
 
