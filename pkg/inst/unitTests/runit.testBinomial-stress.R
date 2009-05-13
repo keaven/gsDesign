@@ -125,32 +125,32 @@
 {  
     checkEqualsNumeric(tolerance=.01, target=.813,
             current=sum(-qnorm(.05) < simBinomial(p1=.4, p2=.05, delta0=.2,
-                            n1=80, n2=80, nsim=1000000))/1000000,
+                            n1=80, n2=80, nsim=100000))/100000,
             msg="simBinomial check #1 failed (F&M bottom p 1451)")
     
     checkEqualsNumeric(tolerance=.01, target=.916,
             current=sum(-qnorm(.05) < simBinomial(p1=.1, p2=.1, delta0=-.2,
-                            n1=63, n2=42, nsim=1000000))/1000000,
+                            n1=63, n2=42, nsim=100000))/100000,
             msg="simBinomial check #2 failed (F&M Table 1)")
     
     checkEqualsNumeric(tolerance=.01, target=.906,
             current=sum(-qnorm(.05) < simBinomial(p1=.25, p2=.05, delta0=.1,
-                            n1=173, n2=260, nsim=1000000))/1000000,
+                            n1=173, n2=260, nsim=100000))/100000,
             msg="simBinomial check #3 failed (F&M Table 1)")
     
     checkEqualsNumeric(tolerance=.01, target=.79875,
             current=sum(-qnorm(.025) < simBinomial(p1=.15, p2=.1, delta0=log(1.1),
-                            n1=901, n2=1351, scale="lnor", nsim=1000000))/1000000,
+                            n1=901, n2=1351, scale="lnor", nsim=100000))/100000,
             msg="simBinomial check #4 failed")
     
     checkEqualsNumeric(tolerance=.01, target=.8056,
             current=sum(-qnorm(.025) < simBinomial(p1=.15, p2=.1, delta0=log(1.1),
-                            n1=901, n2=1351, scale="or", nsim=1000000))/1000000,
+                            n1=901, n2=1351, scale="or", nsim=100000))/100000,
             msg="simBinomial check #5 failed")
     
     checkEqualsNumeric(tolerance=.01, target=.9078,
             current=sum(-qnorm(.05) < simBinomial(p1=.25, p2=.05, delta0=log(2),
-                            n1=134, n2=201, scale="rr", nsim=1000000))/1000000,
+                            n1=134, n2=201, scale="rr", nsim=100000))/100000,
             msg="simBinomial check #6 failed (F&M Table 1)")
 }
 
