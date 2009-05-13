@@ -41,7 +41,7 @@ O'Brien-Fleming spending function (\code{sfLDOF()}),
 f(t; alpha)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(1/2)).}
 }
 \seealso{\link{Spending function overview}, \code{\link{gsDesign}}, \link{gsDesign package overview}}
-\note{The manual shows how to closely approximate an O'Brien-Fleming design using \code{sfExponential()}.
+\note{The manual shows how to use \code{sfExponential()} to closely approximate an O'Brien-Fleming design.
 An example is given below.
 The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}

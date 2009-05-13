@@ -162,6 +162,7 @@ plot(x)
 plot(x, plottype=2)
 
 # same design, but with relative sample sizes
-gsDesign(k=4, timing=timing, sfu=sfPoints, sfupar=sfup, sfl=sfPoints, sflpar=sflp)
+gsDesign(k=4, timing=timing, sfu=sfPoints, sfupar=sfup, sfl=sfPoints,
+sflpar=sflp)
 }
 \keyword{design}

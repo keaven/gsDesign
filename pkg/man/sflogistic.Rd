@@ -130,7 +130,8 @@ plotsf <- function(alpha, t, param)
         "Extreme value 2", "Beta distribution"))
 }
 # do comparison for a design with conservative early spending
-# note that Cauchy spending function is quite different from the others
+# note that Cauchy spending function is quite different
+# from the others
 param <- c(.25, .5, .05, .1)
 plotsf(.025, t, param)
 }

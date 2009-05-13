@@ -35,7 +35,8 @@ plot.gsDesign(x, plottype=1, ...)
 	7=B-values at boundaries. 
 
 	Character values for \code{plottype} may also be entered: \code{"Z"} for plot
-type 1,\code{"power"} for plot type 2, \code{"thetahat"} for plot type 3,
+type 1,
+\code{"power"} for plot type 2, \code{"thetahat"} for plot type 3,
 	\code{"CP"} for plot type 4, \code{"sf"} for plot type 5, \code{"ASN"}, 
 \code{"N"} or \code{"n"} for plot type 6, and \code{"B"}, \code{"B-val"} or 
 \code{"B-value"} for plot type 7.}

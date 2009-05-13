@@ -29,9 +29,13 @@ checkLengths(..., allowSingle=FALSE)
   \item{varname}{character string defining the name of the input variable as sent into the function by the caller. 
   This is used primarily as a mechanism to specify the name of the variable being tested when \code{checkRange} is being called
   within a function.}
-  \item{tol}{numeric scalar defining the tolerance to use in testing the intervals of the \code{\link{checkRange}} function.}
+  \item{tol}{numeric scalar defining the tolerance to use in testing the intervals of the 
+
+\code{\link{checkRange}} function.}
   \item{\dots}{For the \code{\link{checkScalar}} and \code{\link{checkVector}} functions, this input represents additional 
-  arguments sent directly to the \code{\link{checkRange}} function. For the \code{\link{checkLengths}} function, this input
+  arguments sent directly to the \code{\link{checkRange}} function. For the 
+
+\code{\link{checkLengths}} function, this input
   represents the arguments to check for equal lengths.}
   \item{allowSingle}{logical flag. If \code{TRUE}, arguments that are vectors comprised of a single element are not included in 
   the comparative length test in the \code{\link{checkLengths}} function. Partial matching on the name of this argument is not
