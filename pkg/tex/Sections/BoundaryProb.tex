@@ -1,0 +1,245 @@
+\section{Group sequential testing\label{sec:testing}} 
+While the primary purpose of the \texttt{gsDesign} package is to design group sequential trials, computing boundary crossing probabilities is the essential first step. Thus, we begin a summary of theory and computation of boundary crossing probabilities. 
+\subsection{Distributional assumptions\label{sec:assumptions}}
+We illustrate the distribution theory with a sequence of normal random
+variates. Let $X_{1}$, $X_{2}$,... be independent and identically distributed normal random variables with mean $\theta$ and variance 1. For some positive integer $k$, let $n_{1}<n_{2}...<n_{k}$ represent fixed sample sizes where data will be analyzed and inference surrounding $\theta$ will be examined. This is referred to as a group sequential design. The first $k-1$ analyses are referred to as interim analyses, while the $k^{th}$ analysis is referred to as the final analysis.
+For $i=1,$ $2,...k$ consider the test statistic
+\[
+Z_{i}=%
+%TCIMACRO{\tsum \limits_{i=1}^{n_{i}}}%
+%BeginExpansion
+{\textstyle\sum\limits_{j=1}^{n_{i}}}
+%EndExpansion
+X_{j}/\sqrt{n_{i}}.
+\]
+The variance of $\bar{X}_i$ is $1/n_i$ and the corresponding statistical information is its reciprocal: $I_{i}=n_{i}$, $i=1,2,\ldots,k$. The
+test statistics $Z_{1}$, $Z_{2}$,...,$Z_{k}$ follow a multivariate normal
+distribution with, for $1\leq j\leq i\leq k$,
+
+\begin{equation}
+E\{Z_{i}\}=\theta\sqrt{I_{i}}\label{CanonicalMean}
+\end{equation}
+
+\begin{equation}
+Cov(Z_{j},Z_{i})=\sqrt{I_{j}/I_{i}}\label{CanonicalCov}
+\end{equation}
+
+Jennison and Turnbull \cite{JTBook} refer to (\ref{CanonicalMean}) and
+(\ref{CanonicalCov}) as the canonical form and present several types of
+outcomes for which test statistics
+for comparing treatment groups take this form asymptotically. 
+Specific examples in this manual consider 2-arm trials with binary or time-to-event outcomes.
+Note that when $\theta=0$, the mulitivariate normal distribution expressed in (\ref{CanonicalMean}) and (\ref{CanonicalCov}) depends only on $I_i/I_k$, $i=1,2,\ldots,k-1$.
+
+Computational methods for the \texttt{gsDesign} package related to the above multivariate normal distribution are described in Chapter 19 of Jennison and Turnbull \cite{JTBook} and are not provided here. Note that other software programs such as EAST and the University of Wisconsin software use this distributional assumption for group sequential design computations.
+
+\subsection{Hypotheses and testing}
+We assume that the primary
+test the null hypothesis $H_{0}$:~$\theta=0$ against the alternative $H_{1}$:
+$\theta=\delta$ for a fixed $\delta>0$. The value of $\theta$ will be referred to as a treatment effect here since that is what clinical trials are normally set up to examine. We have arbitrarily assume that $\theta>0$ represents a treatment benefit and will refer to this case as a positive treatment effect. 
+We assume further that there is
+interest in stopping early if there is good evidence to reject one hypothesis
+in favor of the other. For $i=1,2,\ldots,k-1$, interim cutoffs $a_{i}<b_{i}$
+are set; final cutoffs $a_{k}\leq b_{k}$ are also set. For $i=1,2,\ldots,k$,
+the trial is stopped at analysis $i$ to reject $H_{0}$ if $a_{j}<Z_{j}<b_{j}$,
+$j=1,2,\dots,i-1$ and $Z_{i}\geq b_{i}$. If the trial continues until stage
+$i$, $H_{0}$ is not rejected at stage $i$, and $Z_{i}\leq a_{i}$ then $H_{1}$
+is rejected in favor of $H_{0}$, $i=1,2,\ldots,k$. Thus, $3k$ parameters
+define a group sequential design: $a_{i}$, $b_{i}$, and $I_{i}$,
+$i=1,2,\ldots,k$. Note that if $a_{k}<b_{k}$ there is the possibility of
+completing the trial without rejecting $H_{0}$ or $H_{1}$. We will generally
+restrict $a_{k}=b_{k}$ so that one hypothesis is rejected.
+
+
+\subsection{Boundary crossing probabilities: \texttt{gsProbability()}\label{sec:gsProbability}}
+\subsubsection{One-sided testing\label{sec:1sidedtest}}
+We begin with a one-sided test. 
+In this case there is no interest in stopping early for a lower bound and thus $a_i= -\infty$, $i=1,2,\ldots,k$.
+The probability of first crossing an upper bound at analysis $i$, $i=1,2,\ldots,k$, is
+
+\begin{equation}
+\alpha_{i}^{+}(\theta)=P_{\theta}\{\{Z_{i}\geq b_{i}\}\cap_{j=1}^{i-1}%
+\{Z_{j}<b_{j}\}\}\label{alphai+(theta)}%
+\end{equation}
+
+The Type I error is the probability of ever crossing the upper bound when $\theta=0$. The value $\alpha^+_{i}(0)$ is commonly referred to as the amount of 
+Type I error spent at analysis $i$, $1\leq i\leq k$. The total upper boundary crossing probability for a trial is denoted in this one-sided scenario by 
+\begin{equation}
+\alpha^+(\theta) \equiv\sum_{i=1}^{k}\alpha^+_{i}(\theta)\label{alpha+(theta)}
+\end{equation}
+and the total Type I error by $\alpha^+(0)$.
+Assuming $\alpha^+(0)=\alpha$ the design will be said to provide a one-sided group sequential test at level $\alpha$.
+
+As an example, assume $k=3$, $n_i=100\times i$, and $b_i=\Phi^{-1}(.975)=1.96$, $i=1,2,3$. Thus, we are testing 3 times at a nominal .025 level at three equally spaced analyses. The function \texttt{gsProbability()} is designed to compute the probability of crossing the upper boundary at each analysis as follows. \texttt{gsProbability()} requires a lower bound; we let $a_i= -20$, $i=1,2,3$ to effectively make the probability of crossing a lower bound 0.
+\bigskip
+\begin{verbatim}
+> x<-gsProbability(k=3, theta=0, n.I=c(100, 200, 300), a=array(-20,3),
++ b=array(qnorm(.975),3))
+> x
+               Lower bounds   Upper bounds
+  Analysis  N  Z   Nominal p  Z   Nominal p
+         1 100 -20         0 1.96     0.025
+         2 200 -20         0 1.96     0.025
+         3 300 -20         0 1.96     0.025
+
+Boundary crossing probabilities and expected sample size assuming any cross
+stops the trial
+
+Upper boundary (power or Type I Error)
+          Analysis
+  Theta     1      2      3  Total  E{N}
+      0 0.025 0.0166 0.0121 0.0536 293.3
+
+Lower boundary (futility or Type II Error)
+          Analysis
+  Theta 1 2 3 Total
+      0 0 0 0     0
+\end{verbatim}
+
+In the table at the top of the output, we see the sample size at each test along with the upper boundary of 1.96 that is used for each test and its associated nominal significance level of .025. The lower part of the output shows the actual probabilities of first crossing the upper boundary at each test. Recall first that since \texttt{theta=0} we would get the same boundary crossing probabilities whether the statistical information \texttt{n.I=c(1,2,3)} or \texttt{n.I=c(100,200,300)}. That is, the boundary crossing probabilities under the null hypothesis depend only on the correlation structure of $Z_i$, $i=1,2,\ldots,k$. When the nominal .025 upper bound was used repeatedly at 3 equally spaced intervals in group sequential testing, the first test had a probability of $\alpha_1^+(0)=.025$ of crossing the upper bound. The probability computed for crossing the upper bound at the second test excludes cases where the boundary was crossed at the first test and is thus $\alpha_2^+(0)=.0166<.025$. The total probability of crossing the upper bound using all 3 tests is $\alpha^+(0)=.053>.025$ which illustrates the multiplicity issue of testing multiple times at the overall significance level normally specified for a test. The expected sample size indicated in the lower part of the output will be discussed in detail in section \ref{sec:ASN} below.
+
+A Bonferroni adjustment maintains a Type I error of $\leq .025$. For $i=1,2,3$ this would use the upper bound $b_i=\Phi^{-1}(1~-~.025/3)$. Substituting \texttt{qnorm(1-.025/3)} for \texttt{qnorm(.975)} in the above call to \texttt{gsProbability()} yields an upper bound of 2.39 and total Type I error of .0192. Thus, the Bonferroni adjustment is overly conservative for this case. We will return to this example later to show how to set equal bounds that yield a total Type I error of .025.
+
+In the above code, the call to \texttt{gsProbability()} returned a value into \texttt{x} which was then printed. The command \texttt{class(x)} following the above code will indicate that \texttt{x} has class \texttt{gsProbability}. The  elements of this class are displayed as follows:
+\bigskip\begin{verbatim}
+> summary(x)
+      Length Class  Mode   
+k     1      -none- numeric
+theta 1      -none- numeric
+n.I   3      -none- numeric
+lower 2      -none- list   
+upper 2      -none- list   
+en    1      -none- numeric
+r     1      -none- numeric
+\end{verbatim}
+Briefly, \texttt{k} is $k$, \texttt{theta} a vector of $\theta$-values, and \code{n.I} is a vector containing $I_i$, $i=1,2,\ldots,K$. The value in $r$ is a positive integer input to \texttt{gsProbability} that is used to define how fine of a grid is used for numerical integration when computing boundary crossing probabilities; this is the same as input and will normally not be changed from the default of 18. 
+The value of \texttt{en} will be discussed below in Section \ref{sec:ASN}.
+This leaves the lists \texttt{lower} and \texttt{upper}, which have identical structure. We examine \texttt{upper} by
+\bigskip\begin{verbatim}
+> x$upper
+$bound
+[1] 1.959964 1.959964 1.959964
+
+$prob
+           [,1]
+[1,] 0.02500000
+[2,] 0.01655891
+[3,] 0.01207016
+\end{verbatim}
+to see that it contains a vector \texttt{bound} which contains the values for $b_i$ and upper boundary crossing probabilities in \texttt{prob[i,j]} for analysis $i$ and the $\theta$-value in \code{theta[j]} for \texttt{i=1,2,...,k} and \texttt{j} from 1 to the length of \texttt{theta}.
+Further documentation is in the online help file displayed using \texttt{help(gsProbability)}.
+
+\subsubsection{Two-sided testing\label{sec:binding}}
+With both lower and upper bounds for testing and any real value $\theta$ representing treatment effect we denote the probability of crossing the upper boundary at analysis $i$ without previously crossing a bound by
+\begin{equation}
+\alpha_{i}(\theta)=P_{\theta}\{\{Z_{i}\geq b_{i}\}\cap_{j=1}^{i-1}%
+\{a_{j}<Z_{j}<b_{j}\}\},\label{alphai(theta)}
+\end{equation}
+$i=1,2,\ldots,k.$
+The total probability of crossing an upper bound prior to crossing a lower bound is denoted by 
+\begin{equation}
+\alpha(\theta)\equiv\sum_{i=1}^{k}\alpha_{i}(\theta)\label{alpha(theta)}.
+\end{equation}
+
+Next, we consider analogous notation for the lower bound. For $i=1,2,\ldots,k$
+denote the probability of crossing a lower bound at analysis $i$ without previously crossing any bound by
+\begin{equation}
+\beta_{i}(\theta)=P_{\theta}\{\{Z_{i}\leq a_{i}\}\cap_{j=1}^{i-1}\{a_{j}%
+<Z_{j}<b_{j}\}\}.\label{beta(theta)}%
+\end{equation}
+For symmetric testing for analysis $i$ we would have $a_i=-b_i$, $\beta_i(0)=\alpha_i(0),$ $i=1,2,\ldots,k$. 
+The total lower boundary crossing probability in this case is written as
+$\beta(\theta)=%
+%TCIMACRO{\tsum \limits_{i=1}^{k}}%
+%BeginExpansion
+{\textstyle\sum\limits_{i=1}^{k}}
+%EndExpansion
+\beta_{i}(\theta).$ 
+The total lower boundary crossing probability for a trial is denoted by 
+\begin{equation}
+\beta(\theta)\equiv\sum_{i=1}^{k}\beta_{i}(\theta).
+\end{equation} 
+
+To extend the one-sided example using repeated testing at a .025 level to two-sided testing at the .05 level, try the commands
+\bigskip
+\begin{verbatim}
+b<-array(qnorm(.975),3)
+x2<-gsProbability(k=3, theta=0, n.I=c(100, 200, 300), a=-b, b=b)
+x2
+\end{verbatim}
+The fact that a lower bound can be crossed before crossing an upper bound means that after the first interim analysis the upper boundary crossing probability here should be less than it was for the one-sided computation performed previously. 
+To examine this further, we print the upper boundary crossing probability at each analysis for the above one-sided and two-sided examples, respectively, to see that there is a small difference:
+\bigskip\begin{verbatim}
+> x$upper$prob
+           [,1]
+[1,] 0.02500000
+[2,] 0.01655891
+[3,] 0.01207016
+> x2$upper$prob
+           [,1]
+[1,] 0.02500000
+[2,] 0.01655890
+[3,] 0.01206929
+\end{verbatim} 
+
+Group sequential designs most often employ more stringent bounds at early interim analyses than later. We modify the above example to demonstrate this.
+\bigskip\begin{verbatim}
+> b<-qnorm(.975)/sqrt(c(1,2,3)/3)
+> b
+[1] 3.394757 2.400456 1.959964
+> x2b<-gsProbability(k=3, theta=0, n.I=c(100, 200, 300), a=-b,b=b)
+> x2b
+               Lower bounds   Upper bounds
+  Analysis  N    Z   Nominal p  Z   Nominal p
+         1 100 -3.39    0.0003 3.39    0.0003
+         2 200 -2.40    0.0082 2.40    0.0082
+         3 300 -1.96    0.0250 1.96    0.0250
+
+Boundary crossing probabilities and expected sample size assuming any cross 
+stops the trial
+
+Upper boundary (power or Type I Error)
+          Analysis
+  Theta     1     2      3  Total  E{N}
+      0 3e-04 0.008 0.0195 0.0279 298.3
+
+Lower boundary (futility or Type II Error)
+          Analysis
+  Theta     1     2      3  Total
+      0 3e-04 0.008 0.0195 0.0279
+\end{verbatim}
+
+By setting the interim boundaries to be substantially higher than $\Phi^{-1}(.975)=1.96$ we have drastically reduced the excess Type I error caused by multiple testing while still testing at the nominal .05 (2-sided) level at the final analysis. Thus, minimal adjustment to the final boundary should be required when employing such a strategy.
+Precise control of Type I error when using either equal bounds or adjusting relative sizes of bounds using the square root of sample size is discussed further in section \ref{sec:boundfam}. 
+
+\subsection{Expected sample size\label{sec:ASN}}
+We denote the sample size at analysis $i$ by $n_i$, $i=1,2,\ldots,k$ and the sample size at the time a boundary is crossed by $N$. 
+The average sample number (ASN) or expected sample size is defined by
+\begin{equation}
+\hbox{ASN}(\theta)=E_\theta \{N\}=\sum_{i=1}^k n_i\times(\alpha_i(\theta)+\beta_i(\theta)).\label{eqn:ASN}
+\end{equation}
+Values of ASN$(\theta)$ corresponding to $\theta$-values input to \texttt{gsProbability} in \texttt{theta} are output in the vector \texttt{en} returned by that function. In the one- and two-sided examples above we only had a single element 0 in \texttt{theta} and the expected sample sizes rounded to 293 and 286, respectively; these were labeled \texttt{E\{N\}} in the printed output. Since the probability of crossing a boundary at an interim analysis was small, the trial usually proceeds to the final analysis with 300 observations. We consider an additional $\theta$-value to demonstrate that the average sample number can be substantially smaller than the maximum sample size:
+\begin{verbatim}
+> x2c<-gsProbability(k=3, theta=c(0,.3), n.I=c(100, 200, 300), a=-b, b=b)
+> x2c
+               Lower bounds   Upper bounds
+  Analysis  N    Z   Nominal p  Z   Nominal p
+         1 100 -3.39    0.0003 3.39    0.0003
+         2 200 -2.40    0.0082 2.40    0.0082
+         3 300 -1.96    0.0250 1.96    0.0250
+
+Boundary crossing probabilities and expected sample size assuming any cross stops the trial
+
+Upper boundary (power or Type I Error)
+          Analysis
+  Theta      1      2      3  Total  E{N}
+    0.0 0.0003 0.0080 0.0195 0.0279 298.3
+    0.3 0.3465 0.6209 0.0320 0.9994 168.6
+
+Lower boundary (futility or Type II Error)
+          Analysis
+  Theta     1     2      3  Total
+    0.0 3e-04 0.008 0.0195 0.0279
+    0.3 0e+00 0.000 0.0000 0.0000
+\end{verbatim}
+Thus, assuming a positive treatment effect, the average sample number was approximately 169 compared to almost 300 when there was no treatment difference.

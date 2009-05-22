@@ -1,0 +1,146 @@
+\section{Bayesian design properties\label{sec:Bayes}}
+All of the properties of group sequential designs we have considered so far have depended on knowing an exact value $\theta$ measuring treatment effect.
+Answering some important questions requires taking into account the uncertainty of {\it a priori} knowledge of $\theta$:
+\begin{itemize}
+\item What is the probability of success of the trial?
+\item For a sponsor who remains blinded to interim results, how is this probability of success modified by knowing only that boundaries have not been crossed at a given interim analysis?
+\item Predictive power is conditional power given an exact interim result averaged over values of $\theta$ by a prior distribution. 
+\item In decision theory, we would want to express the value of a trial in that we should give up on experimental agents that do not work with a minimal investment and get drugs to market as quickly as possible with an appropriate  evaluation of risk and benefit.
+\end{itemize}
+Examples in this section compute answers to all of these questions when framed in terms of a particular trial.
+\subsection{Probability of success}
+\index{probability of success}
+The probability of a positive trial depends on the distribution of outcomes in the control and experimental groups.
+The probability of a positive trial given a particular parameter value $\theta$ was defined in (\ref{alphai(theta)}) and  (\ref{alpha(theta)}) as
+\begin{equation}
+\alpha(\theta)=\sum_{i=1}^{K}
+P_{\theta}\{\{Z_{i}\geq b_{i}\}\cap_{j=1}^{i-1}
+\{a_{j}<Z_{j}<b_{j}\}\}.\label{POS(theta)}
+\end{equation}
+If we consider $\theta$ to have a given prior distribution at the beginning of the trial, we can compute an unconditional probability of success for the trial. 
+In essence, since we do not know if the experimental treatment works better than control treatment, we assign some prior beliefs about the likelihood that experimental is better than control and use those along with the size of the trial to compute the probability of success.
+The prior distribution for $\theta$ can be discrete or continuous.
+If the distribution is discrete, we define $m+1$ values $\theta_0<\theta_2\ldots<\theta_m$ and assign prior probabilities $P\{\theta=\theta_j\}$, $0\leq j\leq m$ such that $\sum_{j=1}^m P\{\theta_j\}=1$. 
+The probability of success for the trial is then defined as
+\begin{equation}
+POS=\sum_{j=0}^m P\{\theta=\theta_j\} \alpha(\theta_j)\label{POS}
+\end{equation}
+The simplest practical example is perhaps assuming a 2-point prior where the prior probability of the difference specified in the alternate hypothesis used to power the trial is $p$ and the prior probability of no treatment difference is $1-p$. 
+Suppose the trial is designed to have power $1-\beta=\alpha(\delta)$ when $\theta=\delta$ and Type I error $\alpha=\alpha(0)$ when $\theta=0$.
+Then the probability of success for the trial is
+$$\hbox{POS}=p\times (1-\beta) + (1-p) \times \alpha.$$
+Assuming a 70\% prior probability of a treatment effect $\delta$, a 30\% prior probability of no treatment effect, power of 90\% and Type I error of 2.5\%  results in an unconditional probability of a positive trial of $.7\times .9 + .3\times .025=.6375$.
+In this case, it is arguable that POS should be defined as $.7\times .9=.63$ since the probability of a positive trial when $\theta=0$ should not be considered a success.
+This alternative definition becomes ambigous when the prior distribution for $\theta$ becomes more diffuse.
+We will address this issue below in the discussion of the value of a trial design.
+
+We consider a slightly more ambitious example and show how to use \code{gsProbability()} to compute (\ref{POS}). 
+We derive a design using \code{gsDesign()}, in this case using default parameters. 
+We assume the possible parameter values are $\theta_i = i \times \delta$ where $\delta$ is the value of $\theta$ for which the trial is powered and $i=0,2,\ldots,6$. 
+The respective prior probabilities for these $\theta_i$ values are assumed to be $1/20$, $2/20$, $2/20$, $3/20$, $7/20$, $3/20$ and $2/20$.
+We show the calculation and then explain in detail.
+\begin{verbatim}
+y <- gsDesign()
+theta <- y$theta[2] * array(0:6)/4
+ptheta <- c(1, 2, 2, 3, 7, 3, 2) / 20
+x <- gsProbability(theta = theta, d=y)
+one <- array(1, 3)
+pos <- one %*% x$upper$prob %*% ptheta
+pos
+\end{verbatim}
+Note that \code{theta[2]} is the value $\delta$ for which the trial is powered as noted in the first example in the introduction [check this!]. 
+This calculation could be written as a short macro:
+
+\index{probability of success!\code{pos()}}
+\begin{verbatim}
+"pos" <- function(x, theta, ptheta)
+{  x <- gsProbability(theta = theta, d=x)
+   one <- array(1, x$k)
+   as.real(one %*% x$upper$prob %*% ptheta)
+}    
+\end{verbatim}
+which would reduce the last 4 lines of code above to \code{pos(x, theta, ptheta)}.
+For those not familiar with it \code{\%*\%} represents matrix multiplication, and thus the code \code{one \%*\% x\$upper\$prob \%*\% ptheta} is doing the computation
+$$\sum_{j=0}^m P\{\theta_j\} \sum_{i=0}^K \alpha_i(\theta_j).$$
+
+For a prior distribution that is continuous with density $f(\theta)$ we define
+\begin{equation}
+POS=\int_{-\infty}^\infty f(\theta) \alpha(\theta)d\theta.\label{POSc}
+\end{equation}
+
+Numerical integration is required to implement this calculation, but we can still use the \code{pos()} function just defined.
+For instance, assuming $\theta\sim N(\mu=\delta, \sigma^2=(\delta/2)^2)$ we can use \code{normalGrid()} from the \code{gsDesign} package to generate a grid and normal densities on that grid that can be used to perform numerical integration.
+For this particular case
+\begin{verbatim}
+y <- gsDesign()
+delta <- y$theta[2]
+g <- normalGrid(mu=delta, sigma=delta / 2)
+plot(g$z, g$wgts)
+pos(y, g$z, g$wgts)
+\end{verbatim}
+\index{\code{normalGrid}}
+This computation yields a probability of success of .748. 
+The \code{normalGrid()} function is a lower-level function used by \code{gsProbability()} and \code{gsDesign()} that is normally obscured from the user.
+For Bayesian computations with a normal prior distribution, such as here, it can be quite useful as in the above example.
+The values returned above in \code{g\$wgts} are the normal density multiplied by weights generated using Simpson's rule.
+The plot generated by the above code shows that these values alternate as higher and lower values about a smooth function. 
+If you compute \code{sum(g\$wgts)} you will confirm that the approximated integral over the real line of this density is 1, as desired.
+
+To practice with this, assume a more pessimistic prior with $\mu=\sigma=\delta/2$ to obtain a probability of success of .428.   
+
+We generalize (\ref{POS}) and (\ref{POSc}) by letting $F()$ denote the cumulative distribution function for $\theta$ and write
+\begin{equation}
+POS=\int_{-\infty}^\infty \alpha(\theta)dF(\theta).\label{POSg}
+\end{equation}
+This notation will be used in further discussions to provide formulas applicable to both continuous and discrete distributions.
+
+\subsection{Updating probability of success based on blinded results}
+Futility bounds are often set up to be informative about emerging treatment effects.
+That is, a positive trend is often required to pass a futility bound.
+Efficacy bounds usually are only informative to a lesser extent, but knowing that an efficacy bound has not been crossed at an interim analysis generally rules out an extremely positive effect after early interim analyses and a moderately positive effect later in the trial. 
+Thus, knowing that a trial has not crossed a futility or efficacy bound at an interim analysis can be helpful in updating the probability of success we have computed above.
+In this subsection we will restrict consideration to the probability of ultimate trial success.
+For $1\leq i< K$ we denote the event that no boundary has been crossed at or before analysis $i$ by
+\begin{equation}
+A_i=\cap_{j=1}^{i-1}\{a_{j}<Z_{j}<b_{j}\}
+\end{equation} 
+The probability of observing $A_i$ is
+\begin{equation}
+P\{A_i\}= 1 - \int \sum_{j=1}^i(\alpha_j(\theta)+\beta_j(\theta))dF(\theta)
+\end{equation}
+Letting $B$ denote the event that the trial crosses an upper bound at or before the end of the trial and before crossing a lower bound compute
+\begin{equation}
+P\{A_i\cap B\}=\int \sum_{j=i+1}^K\alpha_j(\theta)dF(\theta)
+\end{equation}
+Based on these 2 equations, we can now compute for $1\leq i< K$ the conditional probability of a positive trial given that no boundary has been crossed by interim $i$ as
+\begin{equation}
+P\{B | A_i\} = P\{A_i\cap B\} / P\{A_i\}.
+\end{equation}
+Calculations for the 2 probabilities needed are quite similar to the \code{pos()} function considered in the previous subsection.
+We write a function to compute this conditional probability of success based on not crossing a boundary at or before analysis \code{i} for a design \code{x} derived from \code{gsDesign()} or \code{gsProbability()} and a prior distribution expressed by a vector \code{theta} and its associated probabilities in \code{ptheta}:
+\begin{verbatim}
+"cpos" <- function(i, x, theta, ptheta) 
+{   x <- gsProbability(theta = theta, d=x)
+    v <- c(array(1, i), array(0, (x$k - i)))
+    pAi <- 1 - as.real(v %*% (x$upper$prob + x$lower$prob) %*% ptheta)
+    v <- 1 - v
+    pAiB <- as.real(v %*% x$upper$prob %*% ptheta)
+    pAiB / pAi
+}
+\end{verbatim}
+For the case considered previously with $\theta\sim N(\mu=\delta, \sigma=\delta/2)$ and a default design we had a probability of success of .748. 
+The following code shows that if neither trial boundary is crossed at the first interim, the updated (posterior) probability of success is .733. 
+After 2 analyses, the posterior probability of success is .669.
+\begin{verbatim}
+y <- gsDesign()
+delta <- y$theta[2]
+g <- normalGrid(bounds=c(-30, 30) * delta / 2, mu=delta, sigma=delta / 2)
+pos(y, theta=g$z, ptheta=g$wgts)
+cpos(1, y, theta=g$z, ptheta=g$wgts)
+cpos(2, y, theta=g$z, ptheta=g$wgts)
+\end{verbatim} 
+To ensure a higher conditional probability of success for the trial, a more aggressive futility bound could be employed at the expense of requiring an increased sample size to maintain the desired power. 
+The code \code{y\$n.I} shows that the default design requires an inflation factor of 1.07 for the sample size compared to a fixed design with the same Type I error and power.
+By employing an aggressive Hwang-Shih-DeCani spending function with $\gamma = 1$ for the futility bound, the sample size inflation factor is increased to 1.23 (\code(y <- gsDesign(sflpar=1))).
+The probability of success for this design at the beginning of the trial using the same prior distribution as above is still .748, but the conditional probability of success after not hitting a boundary by interim 1 (interim 2) is now .788 (.761). 
+While there are many other considerations in choosing a futility bound and other prior distributions give other results, this example suggests that something more aggressive than the default futility bound in \code{gsDesign()} may be desirable. 

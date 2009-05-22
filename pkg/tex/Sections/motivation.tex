@@ -1,0 +1,25 @@
+
+\subsection{The CAPTURE trial: binary endpoint example}
+The CAPTURE investigators \cite{CAPTURE} presented the results of a randomized trial in patients with unstable angina who required treatment with angioplasty, an invasive procedure where a balloon is inflated in one or more coronary arteries to reduce blockages. In the process of opening a coronary artery, the balloon can injure the artery which may lead to thrombotic complications. Standard treatment at the time the trial was run included treatment with heparin and aspirin before and during angioplasty to reduce the thrombotic complications such as the primary composite endpoint comprising myocardial infarction, recurrent urgent coronary intervention and death over the course of 30 days. This trial compared this standard therapy to the same therapy plus abciximab, a platelet inhibitor. While the original primary analysis used a logrank statistic to compare treatment groups, for this presentation we will consider the outcome binary. Approximately 15\% of patients in the control group were expected to experience a primary endpoint, but rates from 7.5\% to 20\% could not be ruled out. There was an expectation that the experimental treatment would reduce incidence of the primary endpoint by at least 1/3, but possibly by as much as 1/2 or 2/3. Since a 1/3 reduction was felt to be conservative, the trial was planned to have 80\% power. Given these various possibilities, the desirable sample size for a trial with a fixed design had over a 10-fold range from 202 to 2942; see Table~\ref{tab:capture}.  
+
+\bigskip 
+\begin{table}
+\begin{center}
+\caption{Fixed design sample size possibilities for the CAPTURE trial by control group event rate and relative treatment effect.\label{tab:capture}}
+\begin{tabular}
+[c]{cccc}\hline
+Control   &\multicolumn{3}{c}{Event rate reduction}\\
+rate    &1/3    & 1/2     &2/3 \\ \hline
+7.5\%   &2942   &1184     &594 \\
+10\%    &2158   &870      &438 \\
+15\%    &1372   &556      &282 \\
+20\%    &980    &398      &202 \\ \hline
+\multicolumn{4}{l}{80\% power, $\alpha=.05$, 2-sided}
+\end{tabular}
+\end{center}
+\end{table}
+\bigskip
+The third line in the above table can be generated using the call \begin{verbatim}
+nBinomial(p1=.15, p2=.15 * c(2/3, 1/2, 1/3), beta=.2)
+\end{verbatim}
+and rounding the results up to the nearest even number. The function \texttt{nBinomial()} in the \texttt{gsDesign} package is designed to be a flexible tool for deriving sample size for two-arm binomial trials for both superiority and non-inferiority. Type \code{help(nBinomial)} at the command prompt to see background on sample size, simulation, testing and confidence interval routines for fixed (non-group sequential) binomial trials. These routines will be used with this and other examples throughout the manual.

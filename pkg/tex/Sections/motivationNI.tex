@@ -1,0 +1,52 @@
+\subsection{A non-inferiority study for a new drug\label{sec:motivationNI}}
+The \texttt{nBinomial()} function presented above was specifically designed to work for noninferiority trial design as well as superiority designs.
+We consider a new treatment that is to be compared to a standard that has a successful treatment rate of 67.7\%.
+An absolute margin of 7\% is considered an acceptable noninferiority margin.
+The trial is to be powered at 90\% with 2.5\% Type I error (one-sided) using methods presented by Farrington and Manning \cite{FarringtonManning}.
+The function call \texttt{nBinomial(p1=.677, p2=.677, delta0=.07)} shows that a fixed sample size of 1874 is adequate for this purpose.
+There are some concerns about these assumptions, however. 
+First, the control group event rate may be incorrect.
+As the following code using event rates from .55 to .75 demonstrates, the required sample size may range from 1600 to over 2100.
+\begin{verbatim}
+> p <- c(.55, .6, .65, .7, .75)
+> ceiling(nBinomial(p1=p,p2=p,delta0=.07))
+[1] 2117 2054 1948 1800 1611
+\end{verbatim}
+More importantly, if the experimental group therapy does not work quite as well as control, there is a considerable dropoff in power to demonstrate non-inferiority.
+Thus, there may be value in planning an interim futility analysis to stop the trial if the success rate with experimental therapy is trending substantially worse than with control.
+
+\subsection{A diabetes outcomes trial example\label{sec:motivationDiab}}
+Current regulatory standards for chronic therapies of diabetes require ensuring that a new drug in a treatment class does not have substantially inferior cardiovascular outcomes compared to an approved treatment or treatments \cite{DiabetesCV}.
+While we do not claim the designs for this example presented here would be acceptable to regulators, the specifics of the guidance provide a nice background for the use of the \texttt{gsDesign} package to derive group sequential designs that fit a given problem.
+The initial reason for presenting this example is that there is likely to be a genuine public health interest in showing any of the following for the two treatment arms compared:
+\begin{itemize}
+\item The two treatment arms are similar (equivalence).
+\item One arm is similar to or better than the other (non-inferiority).
+\item Either arm is superior to the other (2-sided testing of no difference).
+\end{itemize}
+The example is somewhat simplified here.
+We assume patients with diabetes have a risk of a cardiovascular event of about 1.5\% per year and a 15\% dropout rate per year.
+If each arm has the same cardiovascular risk as the other, we would like to have 90\% power to rule out a hazard ratio of 1.3 in either direction.
+Type I error if one arm has an elevated hazard ratio of 1.3 compared to the other should be 2.5\%.
+The trial is to enroll in 2 years and have a minimum follow-up of 4 years, leading to a total study time of 6 years.
+The sample size routine \texttt{nSurvival()} is currently set up to have no treatment difference as the null hypothesis, whereas here we wish to use this as the alternative hypothesis.
+Thus, in using \texttt{nSurvival()} we switch the role of Type I error \texttt{alpha} and Type II error \texttt{beta}
+\begin{verbatim}
+x <- nSurvival(lambda.0=-log(.985), lambda.1=-log(.985) * 1.3, eta=-log(.85),
+        alpha=.2, beta=.025, Tr=2, Ts=6, type="rr", entry="unif")
+x$Sample.size
+x$Num.events
+\end{verbatim}
+Since the default in \texttt{nSurvival()} is 2-sided testing we have set \texttt{alpha=.2} to ensure there is a 10\% probability of rejecting no difference when there is a hazard ratio of 1.3 or 1/1.3 for control versus experimental treatment.
+The above code suggests 10,800 patients should be enrolled and final analysis conducted when 617 cardiovascular events have been observed.
+Generally, a confidence interval for the hazard ratio of experimental to control is used to express treatment differences at the end of this type of trial.
+A confidence interval will rule out the specified treatment differences consistently with testing if, for example, the same proportional hazards regression model is used for both the a Wald test and the corresponding confidence interval.
+The terminology of "control" and "experimental" is generally inappropriate when both therapies are approved.
+However, for this example it is generally the case that a new therapy is being compared to an established one and there may be some asymmetry when considering the direction of inference.
+Various questions arise concerning early stopping in a trial of this nature:
+\begin{itemize}
+\item While it would be desirable to stop early if the new therapy has a significantly lower cardiovascular event rate, a minimum amount of follow-up may be valuable to ensure longer-term safety and general acceptance of the results.
+\item If a trend emerges in favor of the experimental treatment, it will likely be possible to demonstrate non-inferiority prior to being able to demonstrate superiority. If the trial remains blinded until superiority is demonstrated or until the final planned analysis, full acceptance of a useful new therapy may be delayed. 
+As noted above, the value of long-term safety data may be more important than an early stop based on "short-term" endpoint.
+\item From a sponsor's standpoint, it may be desirable to stop the trial if it becomes futile to demonstrate the experimental therapy is non-inferior to control; that is, there is an interim trend favoring control. However, if both treatment groups represent marketed products then from a public health standpoint it may be desirable to continue the trial to demonstrate a statistically significant advantage for the control treatment.
+\end{itemize}

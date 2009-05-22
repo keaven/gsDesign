@@ -1,0 +1,38 @@
+\subsection{A time to event endpoint in a cancer trial \label{sec:CAex}}
+As a second example we consider comparing a new treatment to a standard treatment for a cancer trial.  Lachin and Foulkes \cite{LachinFoulkes} provide a method of computing sample size assuming the following distributions are known:
+\begin{itemize} 
+\item the time to a primary endpoint in each treatment group,
+\item the time until dropout in each group,
+\item enrollment over time.
+\end{itemize}
+Statistical testing is performed using the logrank test statistic.
+The methods allow different assumptions in different strata.
+Enrollment time and total study duration are assumed fixed, and the sample size and number of events required during those periods, respectively, to achieve a desired power and Type I error are computed.
+Here we apply the simplest form of this method, assuming an expontential distribution in each case with no stratification. 
+The routine \code{nSurvival} can be used to derive the sample size and number of events required.
+This routine works with failure rates rather than distribution medians or dropout rates per year.
+An exponential distribution with failure rate $\lambda$ has cumulative probability of failure at or before time $t$ of
+\begin{equation}
+F(t)=1-e^{-\lambda t}.
+\end{equation}
+If the cumulative failure rate is known to be $p_0$ at time $t_0$ then the value of $\lambda$ is
+\begin{equation}
+\lambda= -\ln(1-p_0) / t_0.
+\end{equation}
+
+We assume for the trial of interest that the primary endpoint is the time from randomization until the first of disease progression or death (progression free survival or PFS). Patients on the standard treatment are assumed to have an exponential failure rate with a median PFS of 6 months, yielding $\lambda_C= -\ln(.5)/6=.1155$ with $t$ measured in months. The trial is to be powered at 90\% to detect a reduction in the hazard rate for PFS of 30\% in the experimental group compared to standard treatment. This yields an experimental group failure rate of $\lambda_E=.7\lambda_C=.0809$. Patients are assumed to drop out at a rate of 5\% per year of follow-up which implies an exponential rate $\eta=-\ln(.95)/12=.00427$. 
+Enrollment is assumed to be uniform over 30 months with patients followed for a minimum of 6 months, yielding a total study time of 36 months. 
+
+The function \code{nSurvival()} is included in the package to compute sample size using the Lachin and Foulkes \cite{LachinFoulkes} method. 
+The code 
+\begin{verbatim}
+x <- nSurvival(lambda.0=-log(.5) / 6, lambda.1=-log(.5) / 6 * .7, 
+        eta=-log(.95)/12, Tr=30 ,Ts=36, type="rr", entry="unif")
+x$Sample.size
+x$Num.events
+\end{verbatim}
+shows that 418 patients and 330 events are required to obtain 90\% power with a 2.5\% one-sided Type I error.
+A major issue with this type of study is that many experimental cancer therapies have toxic side-effects  and, at the same time, do not provide benefit. 
+For such drugs, it is desirable to minimize the number of patients exposed to the experimental regimen and further to minimize the duration of exposure for those who are exposed. 
+Thus, it is highly desirable to do an early evaluation of data to stop the trial if no treatment benefit is emerging during the course of the trial. 
+Such an evaluation must be carefully planned to 1) avoid an unplanned impact on the power of the study, and 2) to allow a realistic assessment of the emerging treatment effect.

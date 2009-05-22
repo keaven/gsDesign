@@ -1,0 +1,67 @@
+% upquote.sty
+
+% Copyright 2000 Michael A. Covington.
+% This file may be redistributed freely provided the author's identifying information
+% is kept intact, and provided that, if you distribute a modified version, you change its
+% name (not upquote.sty or upquote.cls) and add comments explaining what you've changed.
+
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesClass{upquote}[2000/12/11 Covington's upright-quote modification to verbatim and verb]
+
+% Bug fix, 2000/12/11: previously, '0 (or ' and any digit) would print as a nonexistent character.
+%   (The reason:  \char13 or \char18 was combining with the digit to make \char130, etc.)
+%   Fixed by adding curly brackets.
+
+% Problem:  Computer Modern Typewriter is the best font for program listings, *but*
+%           it prints ` ' as bent opening and closing single quotes.  Other fonts,
+%           and most programming languages, print ` as a grave accent and ' upright;
+%           ' is used both to open and to close quoted strings.
+
+%           See also M. Covington, "Computer Languages in Type," Journal of Scholarly
+%           Publishing 26.1:34-41 (1994).
+
+% Solution: This package switches the typewriter font to Computer Modern Typewriter 
+%           (regardless of other fonts in use, so long as this package is called afterward)
+%           and modifies the behavior of verbatim, verbatim*, verb, and verb* to
+%           print ` ' the desired way.  It does not affect \tt, \texttt, etc.
+
+% Author:   Michael A. Covington
+%           Artificial Intelligence Center
+%           The University of Georgia
+%           http://www.ai.uga.edu/~mc
+%
+%           and
+%
+%           Covington Innovations (Consulting and Typesetting)
+%           http://www.CovingtonInnovations.com
+
+% The modification is done by adding instructions to \@noligs, 
+% which is called by verbatim and verb in order to turn the 
+% characters ` < > , ' - into active characters that merely
+% print themselves rather than activating ligatures.
+%
+% What is added is code to redefine ` as grave and ' as upright single quote.
+%
+
+\renewcommand{\ttdefault}{cmtt}    % Pull in Computer Modern Typewriter
+
+\def\@noligs{\old@noligs\@defleft\@defright}  % Redefine \@noligs 
+
+\def\old@noligs{\let\do\do@noligs \verbatim@nolig@list}   % the original \@noligs
+
+% In each of the following groups, a character has to be reclassified so that 
+% a macro can be written that will define the character itself as a macro.  
+% (Recursive thinking in action!)
+
+\begingroup
+\catcode``=\active               
+\gdef\@defleft{\def`{{\char18}}}    % Left single quote is grave accent; already catcoded active
+\endgroup
+
+\begingroup
+\catcode`'=\active
+\gdef\@defright{\def'{{\char13}}}   % Right single quote is upright, not bent; already catcoded active
+\endgroup
+
+
+\endinput

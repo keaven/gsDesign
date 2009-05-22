@@ -1,0 +1,51 @@
+\section{Introduction}
+\subsection{Overview}
+The gsDesign package is intended to provide a flexible set of tools for designing and analyzing group sequential trials.
+There are other adaptive methods that can also be supported using this underlying toolset. 
+This manual is intended as an introduction to gsDesign.
+Many users may just want to apply basic, standard design methods.
+Others will be interested in applying the toolset to very ambitious adaptive designs. 
+We try to give some orientation to each of these sets of users, and to distinguish between the material needed by each.
+
+The remainder of this overview provides a quick review of topics covered in this manual.
+The introduction continues with some basic theory behind group sequential design to provide background for the routines.
+There is no attempt to fully develop the theory for statistical tests or for group sequential design in general since many statisticians will already be familiar with these and there are excellent texts available such as Jennison and Turnbull \cite{JTBook} and Proschan, Lan and Wittes \cite{PLWBook}.
+
+This section continues with a simple outline of the main routines provided in the gsDesign package followed by motivational examples that will be used later in the manual. Basic sample size calculations for 2-arm binomial outcome trials using the \texttt{nBinomial()} function and 2-arm time-to-event endpoint trials using \texttt{nSurvival()} are shown, including an example of a non-inferiority trial. Both superiority and noninferiority trials are considered.
+
+Further material is arranged by topic in subsequent sections.
+Section \ref{sec:testing} provides a minimal background in asymptotic probability theory for group sequential testing.
+The basic calculations involve computing boundary crossing probabilities for correlated normal random variables.
+We demonstrate the \code{gsProbability()} routine to compute boundary crossing probabilities and expected sample size for group sequential designs
+
+Setting boundaries for group sequential designs, particularly using spending functions is the main point of emphasis in the gsDesign package. 
+Sections \ref{sec:default} through \ref{sec:sfDetails} of the manual present the design and evaluation of designs for group sequential trials using the \code{gsDesign()} routine. 
+
+Default parameters for \code{gsDesign()} are demonstrated for the motivational examples in Section \ref{sec:default}.
+Basic computations for group sequential designs using boundary families and error spending are provided in Section \ref{sec:gsDesign}. The primary discussion of Wang-Tsiatis \cite{WangTsiatis} boundary families ({\it e.g.}, O'Brien-Fleming \cite{OF} and Pocock \cite{PocockBound} designs) is provided here in Section \ref{sec:boundfam}. 
+
+Next we proceed to a short discussion in Section \ref{sec:othpar} of \code{gsDesign()} parameters for setting Type I and II error rates and the number and timing of analyses.
+This section also explains how to use a measure of treatment effect to size trials, with specific discussion of event-based computations for trials with time-to-event analyses.
+
+The basics of standard spending functions are provided in Section \ref{sec:spendfn}.
+Subsections defining spending functions and spending function families are followed by a description of how to use built-in standard Hwang-Shih-DeCani \cite{HwangShihDeCani} and power \cite{KimDeMets} spending functions in \code{gsDesign()}.
+Section \ref{sec:reset} shows how to reset timing of interim analyses using \code{gsDesign()}.
+
+The final section on spending functions is Section \ref{sec:sfDetails} which presents details of how spending functions are defined for \code{gsDesign()} and other advanced topics that will probably not be needed by many users.
+The section will be of use to those interested in investigational spending functions and optimized spending function choice. 
+Recently published spending function families by Anderson and Clark \cite{AndClark} providing additional flexibility to standard one-parameter spending functions are detailed as part of a comprehensive list of built-in  
+spending functions. 
+This is followed by examples of how to derive optimal designs and how to implement new spending functions.
+
+Next comes Section \ref{sec:Analysis} on the basic analysis of group sequential trials. 
+This includes computing stagewise and repeated $p$-values as well as repeated confidence intervals.
+
+Conditional power and B-values are presented in Section \ref{sec:CPB}.
+These are methods used for evaluating interim trends in a group sequential design, but may also be used to adapt a trial design at an interim analysis using the methods of  Muller and Schaffer \cite{MullerSchafer01}. 
+The routine \code{gsCP()} provides the basis for applying these adaptive methods.
+
+We end with a discussion of Bayesian computions in Section \ref{sec:Bayes}.
+The gsDesign package can quite simply be used with decision theoretic methods to derive optimal designs. We also apply Bayesian computations to update the probability of succes a trial based on knowing a bound has not been crossed, but without knowledge of unblinded treatment results. 
+
+Future extenstions of the manual could further discuss implementation of information-based designs and additional adaptive design topics. 
+

@@ -1,0 +1,55 @@
+\subsection{Calculating the value of a clinical trial design}
+Here we generalize the concept of the probability of success of a trial given above to the value of a trial.
+We assume that a trial that stops with a positive result with information $I_i$ at analysis $i$ of a trial when the true treatment effect is $\theta$ can be given by a function $u(\theta, I_i)$, $1\leq i\leq K$.
+Now the formula for probability of success can be generalized to
+\begin{equation}
+U=\int_{-\infty}^\infty f(\theta) \sum_{i=1}^K \alpha_i(\theta)u(\theta,I_i)d\theta.\label{value}
+\end{equation}
+A more general formula that incorporates a costs that are incurred whether or not a trial is positive. 
+If this formula also discounted future costs and benefits to present-day values, it would be termed a net present value and can be defined in a simplified form as
+\begin{equation}
+NPV=\int_{-\infty}^\infty f(\theta) \sum_{i=1}^K \alpha_i(\theta)u(\theta,I_i)-(\alpha_i(\theta)+\beta_i(\theta))
+c(\theta,I_i)(d\theta.\label{NPV}
+\end{equation}
+While the underlying computations are not much more difficult to allow the utility and cost functions $u()$  and to depend on the test statistic at the time the trial stops, this capability has not been implemented in the package at this time. 
+Arguably, however, the true value of a treatment depends on its true benefit rather than exactly what is observed in a clinical trial.
+
+The following function computes the integral (\ref{value}).
+\begin{verbatim}
+value <- function(x, theta, ptheta, u)
+{  x <- gsProbability(theta = theta, d=x)
+   one <- array(1, x$k)
+   as.real(one %*% (u * x$upper$prob) %*% ptheta)
+}
+\end{verbatim}
+For this implementation, \code{u} must be a scalar, a vector of length \code{x\$k} or a matrix of the same dimension as \code{x\$upper\$prob} (\code{k} rows and \code{length(theta)} columns) rather than a function. 
+We return to an example from the previous section.
+Assuming $\theta\sim N(\mu=\delta, \sigma^2=(\delta/2)^2)$ we showed that the probability of success as defined in (\ref{POS}) is .748.
+We will now change this definition so that a trial is considered a success only if it is positive and the true value of $\theta > \delta/2.$
+This is computed as .521 as follows:
+\begin{verbatim}
+x <- gsDesign()
+delta <- x$theta[2]
+g <- normalGrid(mu=delta, sigma=delta / 2)
+u <- 1 * (g$z > delta/2)
+value(x, theta=g$z, ptheta=g$wgts, u=u)
+\end{verbatim}
+
+We finish with an example computing a futilty bound that optimizes the value of a design.
+We will assume a fixed efficacy bound is used and will select an optimal spending function for the lower bound from a one-parameter family. 
+We allow the user to specify the number of interim analyses as well as the desired Type I and Type II error and the prior distribution for the treatment effect.
+We will assume a function \code{f(n, theta)} provides the value of a trial that stops for a positive result after enrolling \code{n} patients when the true treatment effect is \code{theta}. 
+\begin{verbatim}
+gsDesign(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
+         delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
+         sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I = 0, maxn.IPlan = 0) 
+
+
+function lbValue(sflpar=-2, k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
+         delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
+         sfl=sfHSD, tol=0.000001, r=18, f, theta, ptheta)
+{   x <- gsDesign(
+    u <- f()
+    value(x, theta=theta, ptheta=ptheta, u=u)
+}
+\end{verbatim}

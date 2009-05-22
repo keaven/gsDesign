@@ -1,0 +1,78 @@
+\subsection{Quick start: installation and online help\label{sec:quickstart}}
+This brief section is meant to get you up and going. Those who really do not like manuals may read just this section and then use the online help files for futher instruction.
+
+The package comes in a binary format for a Windows platform in the file
+gsDesign-2.0.zip (may be updated to fix bugs in a file such as
+gsDesign-2.0.01.zip). This file includes a copy of this manual in the file
+gsDesignManual.pdf. 
+Binaries are also available for OS/X. For other platforms the source code is in the file gsDesign-2.0.tar.gz (may be updated to fix bugs in
+a file such as gsDesign-2.0.01.tar.gz). 
+
+Following are basic instructions for
+installing the binary version on a Windows machine. It is assumed that a
+`recent' version of R is installed. From the Windows interface of R, select
+the Packages menu line and from this menu select Install packages from local
+zip files\ldots. Browse to select gsDesign-2.0.zip. Once installed, you need
+to load the package by selecting the Packages menu line, selecting Load
+package\ldots\ from this menu, and then selecting gsDesign. You are now ready
+to use the routines in the package. The most up-to-date version of this manual
+and the code is also available at \texttt{http://r-forge.r-project.org}.
+
+\bigskip
+
+Online help can be obtained by entering the following on the command line:
+
+\bigskip
+\begin{verbatim}
+> help(gsDesign)
+\end{verbatim}
+\bigskip
+
+There are many help topics covered there which should be sufficient
+information to keep you from needing to use this document for day-to-day use or if you just generally prefer not using a manual.
+In the Window version of R, this brings up a "Contents" window and a
+documentation window. In the contents window, open the branch of documentation
+headed by "Package gsDesign: Titles." The help files are organized
+sequentially under this heading. 
+
+\subsection{The primary routines in the gsDesign package}
+ 
+As an overview to the R package, 3 R functions are supplied to provide basic computations related to designing and evaluating group sequential clinical trials:
+
+\begin{enumerate}
+\item The \texttt{gsDesign()} function provides sample size and
+boundaries for a group sequential design based on treatment effect, spending
+functions for boundary crossing probabilities, and relative timing of each
+analysis. Standard and user-specified spending functions may be used. In
+addition to spending function designs, the family of Wang-Tsiatis
+designs---including O'Brien-Fleming and Pocock designs---are also available.
+
+\item The \texttt{gsProbability()} function computes boundary crossing 
+probabilities and expected sample size of a design for arbitrary 
+user-specified treatment effects, bounds, and interim analysis sample sizes.
+
+\item The \texttt{gsCP()} function computes the conditional probability of 
+future boundary crossing given a result at an interim analysis. 
+The \texttt{gsCP()} function returns a value of the same type as 
+\texttt{gsProbability()}.
+\end{enumerate}
+
+The package design strategy should make its tools useful both as an
+everyday tool for simple group sequential design as well as a research tool
+for a wide variety of group sequential design problems. Both \texttt{print()}
+and \texttt{plot()} functions are available for both \texttt{gsDesign()} and
+\texttt{gsProbability()}. This should make it easy to incorporate design
+specification and properties into documents, as required.
+
+The most extensive set of supportive routines enables design and evaluation of binomial trials.
+We use the Farrington and Manning \cite{FarringtonManning} method for sample size estimation in \code{nBinomial()} and the corresponding Miettinen and Nurminen \cite{MandN} method for testing, confidence intervals and simulation. We also provide a basic Lachin and Foulkes \cite{LachinFoulkes} for sample size for survival studies. 
+The examples we present apply these methods to group sequential trial design for binomial and time-to-event endpoints.
+
+Functions are set up to be called directly from the R command line. Default
+arguments and output for \texttt{gsDesign()} are included to make initial use
+simple. Sufficient options are available, however, to make the routine very
+flexible. 
+
+Simple examples provide the best overall motivation for group sequential design. This manual does not attempt to comprehensively delineate all that the gsDesign package may accomplish. 
+The intent is to include enough detail to demonstrate a variety of approaches to group sequential design that provide the user with a useful tool and the understanding of ways that it may be applied and extended. 
+Examples that will reappear throughout the manual are introduced here.

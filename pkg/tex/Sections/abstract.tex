@@ -1,0 +1,35 @@
+\title{gsDesign: An R Package for Designing \\Group Sequential Clinical Trials\\Version 2.0 Manual}
+\author{Keaven M. Anderson\\Merck Research Laboratories}
+\maketitle
+
+\begin{abstract}
+The gsDesign package supports group sequential clinical trial design. While
+there is a strong focus on designs using $\alpha$- and $\beta$-spending
+functions, Wang-Tsiatis designs, including O'Brien-Fleming and Pocock designs,
+are also available. The ability to design with non-binding futility rules is
+an important feature to control Type I error in a manner acceptable to
+regulatory authorities.
+
+The routines are designed to provide simple access to commonly used designs
+using default arguments. Standard, published spending functions are supported
+as well as the ability to write custom spending functions. A \texttt{gsDesign}
+class is defined and returned by the \texttt{gsDesign()} function. A plot
+function for this class provides a wide variety of plots: boundaries, power,
+estimated treatment effect at boundaries, conditional power at boundaries,
+spending function plots, expected sample size plot, and B-values at
+boundaries. Using function calls to access the package routines provides a
+powerful capability to derive designs or output formatting that could not be
+anticipated through a gui interface. This enables the user to easily create
+designs with features they desire, such as designs with minimum expected
+sample size.
+
+In addition to straightforward group sequential design, the gsDesign package provides tools to effectively adapt clinical trials during execution. 
+First, the spending function approach to design allows altering timing of analyses during the course of the trial. 
+Information-based timing of analyses allows adaptation of sample size or number of events to ensure adequate power for a trial.
+Finally, gsDesign provides a routine that enable design adaptation using conditional power.
+
+In summary, the intent of the gsDesign package is to easily create, fully
+characterize, and even optimize routine group sequential trial designs, as well
+as to provide a tool to derive and evaluate innovative designs.
+
+\end{abstract}

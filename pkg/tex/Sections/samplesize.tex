@@ -1,0 +1,47 @@
+\section{Deriving group sequential designs \label{sec:gsDesign}}
+There are many ways to specify a group sequential design to obtain a desired power and Type I error. 
+For planning purposes, the number, $k$ and relative timing $0<t_1<...<t_k=1$ of interim analyses are fixed.
+Given these values, there are two general approaches to deriving boundaries for a group sequential trial:
+\begin{itemize}
+\item {\bf The error spending approach}. Specify boundary crossing probabilities at each analysis and derive a sample size and boundary values based on these values.
+This is most commonly done with the error spending function approach proposed by Lan and DeMets \cite{LanDeMets}, which is discussed at some length in Section \ref{sec:spendfn}. 
+We present this method in brief in Section \ref{sec:errspend} and follow this with simple examples.
+\item {\bf The boundary family approach.} Specify how big boundary values should be relative to each other and adjust these relative values by a constant multiple to control overall error rates. Sample size adjustment is also part of this derivation. The commonly applied boundary family approach uses the Wang-Tsiatis \cite{WangTsiatis} family which includes bounds by Pocock \cite{PocockBound} and O'Brien and Fleming \cite{OF}. This will be discussed in Section \ref{sec:boundfam}.
+\end{itemize}
+
+\subsection{Boundary derivation using boundary crossing probabilities \label{sec:errspend}}
+\subsubsection{Types of error probabilities used: \texttt{test.type}}
+Before starting a discussion of spending functions, different methods of computing Type I error are discussed.
+Boundary crossing probabilities for upper bounds may be specified to \texttt{gsDesign()} using either $\alpha_i(0)$ or $\alpha_i^+(0)$, $i=1,2,\ldots,k$.
+In the first case, it is assumed that a trial stops when either a lower or upper bound is crossed and the only Type I error occurs when the first time a boundary is crossed it is an upper bound.
+In the second case, it is assumed that a lower bound may be ignored if crossed and the Type I error is the probability of ever crossing an upper bound if the trial is never stopped for crossing a lower bound.
+As we have seen, the difference between these boundary crossing probabilities may be small.
+The differences can be meaningful, however, when agressive futility bounds are employed to require, say, an early positive treatment effect trend.
+
+For lower bounds, either $\beta_i(\delta)$ or $\beta_i(0)$, $i=1,2,\ldots,k$, may be specified. 
+
+Sample size and boundaries that have appropriate boundary crossing probabilities and power are derived numerically using computational methods given in detail in Chapter 19 of Jennison and Turnbull \cite{JTBook}. The \texttt{gsDesign()} parameter \texttt{test.type} specifies which boundary crossing probabilities are used as outlined in Table \ref{tab:testtype}.
+\begin{table}[t]
+\begin{center}
+\caption{Boundary crossing probabilities used to set boundaries in \texttt{gsDesign()} by \texttt{test.type}.}\label{tab:testtype}
+\begin{tabular}[c]{ccc}
+\texttt{test.type}&Upper bound & Lower bound\\\hline
+1& $\alpha_i^{+}(0)$ & None\\
+2&$\alpha(0)$ & $\beta_i(0)$\\
+3&$\alpha_i(0)$ & $\beta_i(\delta)$\\
+4&$\alpha_i^{+}(0)$ & $\beta_i(\delta)$\\
+5&$\alpha(0)$ & $\beta_i(0)$\\
+6&$\alpha^{+}(0)$ & $\beta_i(0)$
+\end{tabular}
+\end{center}
+\end{table}
+
+For \texttt{test.type}=1, 2 and 5, boundaries can be computed in a single step
+just by knowing the cumulative proportion of the final planned statistical information (sample size/number of events) at each analysis that is specified using the \texttt{timing} input variable. 
+For \texttt{test.type}=6, the upper and lower boundaries are computed separately and independently using these same methods. For \texttt{test.type}=1, 2, 5 or 6 the total sample size is then set to obtain the desired power under the alternative hypothesis by using a root finding algorithm.
+
+For \texttt{test.type}=3 and 4 sample size and bounds are set
+simultaneously using an iterative algorithm. 
+This computation is slightly more complex than the above. 
+This does not make any noticeable difference in normal use of the \texttt{gsDesign()}. 
+However, for user-developed routines that require repeated calls to \texttt{gsDesign()} ({\it e.g.}, finding an optimal design), there may be noticeably slower performance when test.type=3 or 4 is used.
