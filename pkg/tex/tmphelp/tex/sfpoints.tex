@@ -2,11 +2,11 @@
 \keyword{design}{sfPoints}
 \begin{Description}\relax
 The function \code{sfPoints} implements a spending function with values specified for an arbitrary set of specified points.
-Normally \code{sfpoint} will be passed to \code{gsDesign} in the parameter \code{sfu} for the upper bound or
+Normally \code{sfPoints} will be passed to \code{gsDesign} in the parameter \code{sfu} for the upper bound or
 \code{sfl} for the lower bound to specify a spending function family for a design.
 In this case, the user does not need to know the calling sequence, just the points they wish to specify.
-Given the wide variety of flexible spending functions provided in this package, \code{sfPoints} is not generally recommended
-since no interpolation function is provided to adjust boundaries if timing of interims changes from the original plan (see example).
+If using \code{sfPoints()} in a design, it is recommended to specify how to interpolate between the specified points (e.g,, linear interpolation); also consider fitting smooth spending functions; see 
+\LinkA{Spending function overview}{Spending function overview}.
 \end{Description}
 \begin{Usage}
 \begin{verbatim}
@@ -28,26 +28,28 @@ to corresponding to each point in \code{t}.
 An object of type \code{spendfn}. See spending functions for further details.
 \end{Value}
 \begin{Note}\relax
-The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.
 \end{Note}
 \begin{Author}\relax
-Keaven Anderson \email{keaven\_anderson@merck.com}, Jennifer Sun, John Zhang
+Keaven Anderson \email{keaven\_anderson@merck.}
 \end{Author}
 \begin{References}\relax
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.
 \end{References}
 \begin{SeeAlso}\relax
-\LinkA{Spending Functions}{Spending Functions}, \code{\LinkA{gsDesign}{gsDesign}}, \LinkA{gsDesign-package}{gsDesign.Rdash.package}
+\LinkA{Spending function overview}{Spending function overview}, \code{\LinkA{gsDesign}{gsDesign}}, \LinkA{gsDesign package overview}{gsDesign package overview}, \LinkA{sfLogistic}{sfLogistic}
 \end{SeeAlso}
 \begin{Examples}
 \begin{ExampleCode}
 # example to specify spending on a pointwise basis
-x <- gsDesign(k=6, sfu=sfPoints, sfupar=c(.01, .05, .1, .25, .5, 1), test.type=2)
+x <- gsDesign(k=6, sfu=sfPoints, sfupar=c(.01, .05, .1, .25, .5, 1),
+              test.type=2)
 x
 
-# get proportion of upper spending under null hypothesis at each analysis
+# get proportion of upper spending under null hypothesis
+# at each analysis
 y <- x$upper$prob[, 1] / .025
 
 # change to cumulative proportion of spending
@@ -63,8 +65,10 @@ plot(1:6/6, y, main="Pointwise spending function example",
     ylab="Cumulative proportion of spending", 
     type="p")
 
-# approximate this with a t-distribution spending function by fitting 3 points
-lines(0:100/100, sfTDist(1, 0:100/100, c(c(1, 3, 5)/6, .01, .1, .5))$spend)
+# approximate this with a t-distribution spending function
+# by fitting 3 points
+tx <- 0:100/100
+lines(tx, sfTDist(1, tx, c(c(1, 3, 5)/6, .01, .1, .5))$spend)
 text(x=.6, y=.9, labels="Pointwise Spending Approximated by")
 text(x=.6, y=.83, "t-Distribution Spending with 3-point interpolation")
 \end{ExampleCode}

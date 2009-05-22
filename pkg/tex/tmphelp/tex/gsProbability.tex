@@ -44,25 +44,25 @@ design is characterized.
 crossing probabilities. Element \code{i,j} contains the boundary crossing probability at analysis \code{i} for the \code{j}-th
 element of \code{theta} input. All boundary crossing is assumed to be binding for this computation; 
 that is, the trial must stop if a boundary is crossed.
-\item[\code{upper}] An list of the same form as \code{lower} containing the upper bound and upper boundary crossing probabilities.
+\item[\code{upper}] A list of the same form as \code{lower} containing the upper bound and upper boundary crossing probabilities.
 \item[\code{en}] A vector of the same length as \code{theta} containing expected sample sizes for the trial design
 corresponding to each value in the vector \code{theta}.
 \item[\code{r}] As input.
 \end{ldescription}
 \end{Value}
 \begin{Note}\relax
-The manual is not linked to this help file, but is available in library/gsdesign/doc/manual.pdf
+The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.
 \end{Note}
 \begin{Author}\relax
-Keaven Anderson \email{keaven\_anderson@merck.com}, Jennifer Sun, John Zhang
+Keaven Anderson \email{keaven\_anderson@merck.}
 \end{Author}
 \begin{References}\relax
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.
 \end{References}
 \begin{SeeAlso}\relax
-\LinkA{Group Sequential Plots}{Group Sequential Plots}, \code{\LinkA{gsDesign}{gsDesign}}, \LinkA{gsDesign-package}{gsDesign.Rdash.package}
+\LinkA{Plots for group sequential designs}{Plots for group sequential designs}, \code{\LinkA{gsDesign}{gsDesign}}, \LinkA{gsDesign package overview}{gsDesign package overview}
 \end{SeeAlso}
 \begin{Examples}
 \begin{ExampleCode}
@@ -83,23 +83,24 @@ plot(x, plottype=2)
 y <- gsProbability(d=x, theta=x$delta*seq(0, 2, .25))
 class(y)
 
-# note that "y" below is equivalent to print(y) and print.gsProbability(y)
+# note that "y" below is equivalent to print(y) and
+# print.gsProbability(y)
 y
 
-# the plot does not change from before since this is a gsDesign object
-# note that theta/delta is on x axis
+# the plot does not change from before since this is a
+# gsDesign object; note that theta/delta is on x axis
 plot(y, plottype=2)
 
 # now let's see what happens with a gsProbability object
-z <- gsProbability(k=3, a=x$lower$bound, b=x$upper$bound, n.I=x$n.I, 
-    theta=x$delta*seq(0, 2, .25))
+z <- gsProbability(k=3, a=x$lower$bound, b=x$upper$bound, 
+    n.I=x$n.I, theta=x$delta*seq(0, 2, .25))
 
 # with the above form,  the results is a gsProbability object
 class(z)
 z
 
 # default plottype is now 2
-# this is the same range for theta,  but plot now has theta on x axis
+# this is the same range for theta, but plot now has theta on x axis
 plot(z)
 \end{ExampleCode}
 \end{Examples}

@@ -1,101 +1,54 @@
-\documentclass{article}%
-\usepackage{Rd}
-\usepackage{amssymb}
-\usepackage{hyperref}
-\usepackage{geometry}
-\usepackage{caption}
-\usepackage[debugshow,pdftex]{graphicx}%
-\usepackage{amsmath}%
-\setcounter{MaxMatrixCols}{30}%
-\usepackage{amsfonts}
-%TCIDATA{OutputFilter=latex2.dll}
-%TCIDATA{Version=5.50.0.2953}
-%TCIDATA{CSTFile=40 LaTeX article.cst}
-%TCIDATA{Created=Wednesday, August 01, 2007 14:12:27}
-%TCIDATA{LastRevised=Sunday, December 07, 2008 07:20:01}
-%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
-%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
-%TCIDATA{BibliographyScheme=BibTeX}
-%TCIDATA{<META NAME="DocumentShell" CONTENT="Articles\SW\Standard LaTeX Article (hyperref)">}
-%TCIDATA{Language=American English}
-%BeginMSIPreambleData
-\providecommand{\U}[1]{\protect\rule{.1in}{.1in}}
-%EndMSIPreambleData
-\newtheorem{theorem}{Theorem}
-\newtheorem{acknowledgement}[theorem]{Acknowledgement}
-\newtheorem{algorithm}[theorem]{Algorithm}
-\newtheorem{axiom}[theorem]{Axiom}
-\newtheorem{case}[theorem]{Case}
-\newtheorem{claim}[theorem]{Claim}
-\newtheorem{conclusion}[theorem]{Conclusion}
-\newtheorem{condition}[theorem]{Condition}
-\newtheorem{conjecture}[theorem]{Conjecture}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{criterion}[theorem]{Criterion}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{exercise}[theorem]{Exercise}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{notation}[theorem]{Notation}
-\newtheorem{problem}[theorem]{Problem}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{remark}[theorem]{Remark}
-\newtheorem{solution}[theorem]{Solution}
-\newtheorem{summary}[theorem]{Summary}
-\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
-\geometry{left=108bp,right=72bp,top=90bp,bottom=90bp}
+\documentclass{article}
+\input{"./Sections/header.tex"}
 \begin{document}
-
-\title{gsDesign: An R Package for Designing \\Group Sequential Clinical Trials\\Version 2.0 Manual}
-\author{Keaven M. Anderson, Dan (Jennifer) Sun, Zhongxin (John) Zhang\\Merck Research Laboratories}
-\maketitle
-
-\begin{abstract}
-The gsDesign package supports group sequential clinical trial design. While
-there is a strong focus on designs using $\alpha-$ and $\beta-$spending
-functions, Wang-Tsiatis designs, including O'Brien-Fleming and Pocock designs,
-are also available. The ability to design with non-binding futility rules is
-an important feature to control Type I error in a manner acceptable to
-regulatory authorities when futility bounds are employed.
-
-The routines are designed to provide simple access to commonly used designs
-using default arguments. Standard, published spending functions are supported
-as well as the ability to write custom spending functions. A \texttt{gsDesign}
-class is defined and returned by the \texttt{gsDesign()} function. A plot
-function for this class provides a wide variety of plots: boundaries, power,
-estimated treatment effect at boundaries, conditional power at boundaries,
-spending function plots, expected sample size plot, and B-values at
-boundaries. Using function calls to access the package routines provides a
-powerful capability to derive designs or output formatting that could not be
-anticipated through a gui interface. This enables the user to easily create
-designs with features they desire, such as designs with minimum expected
-sample size.
-
-Thus, the intent of the gsDesign package is to easily create, fully
-characterize, and even optimize routine group sequential trial designs as well
-as provide a tool to evaluate innovative designs.
-
-\end{abstract}
+\input{"./Sections/abstract.tex"}
 \tableofcontents
-\input{overview.tex}
-\input{basicfeatures.tex}
-\input{install.tex}
-\input{detailedex.tex}
-\input{syntax.tex}
-\input{objtypes.tex}
-\input{output.tex}
-\input{spendfn.tex}
-\input{statmethods.tex}
+\input{"./Sections/overview.tex"}
+\input{"./Sections/install.tex"}
+\input{"./Sections/motivation.tex"}
+\input{"./Sections/motivationCA.tex"}
+\input{"./Sections/motivationNI.tex"}
+\input{"./Sections/BoundaryProb.tex"}
+\input{"./Sections/DefaultDesign.tex"}
+\input{"./Sections/samplesize.tex"}
+\input{"./Sections/sfPoints.tex"}
+\input{"./Sections/WangTsiatis.tex"}
+\input{"./Sections/OtherParameters.tex"}
+\input{"./Sections/spendfn.tex"}
+%\input{"./Sections/Noninferiority.tex"}
+\input{"./Sections/gsAnalysis.tex"}
+\input{"./Sections/ConditionalPower.tex"}
+\input{"./Sections/pos.tex"}
+\input{"./Sections/value.tex"}
+%\input{"./Sections/PredictivePower.tex"}
+%\input{"./Sections/InformationBasedDesign.tex"}
+%\input{"./Sections/CPAdaptation.tex"}
+%\input{"./Sections/Multiplicity.tex"}
 
-\input{gsDesign_package_doc.tex}
-\input{gsDesign_main_doc.tex}
-\input{bin_trial_doc.tex}
-\input{spending_functions_doc.tex}
-\input{other_doc.tex}
-
+\appendix
+\section{Package help files}
+\input{"./Rd/gsDesign-package.tex"}
+\input{"./Rd/gsDesign.tex"}
+\input{"./Rd/gsbound.tex"}
+\input{"./Rd/gsProbability.tex"}
+\input{"./Rd/plot.gsDesign.tex"}
+\input{"./Rd/gsCP.tex"}
+\input{"./Rd/gsBoundCP.tex"}
+\input{"./Rd/normalGrid.tex"}
+\input{"./Rd/binomial.tex"}
+\input{"./Rd/nSurvival.tex"}
+\input{"./Rd/spendingfunctions.tex"}
+\input{"./Rd/sfHSD.tex"}
+\input{"./Rd/sfpower.tex"}
+\input{"./Rd/sfexp.tex"}
+\input{"./Rd/sfLDPocock.tex"}
+\input{"./Rd/sfPoints.tex"}
+\input{"./Rd/sfLogistic.tex"}
+\input{"./Rd/sfTDist.tex"}
+\input{"./Rd/testutils.tex"}
+\input{"./Sections/acknowledgements.tex"}
 \bibliographystyle{plain}
 \bibliography{acompat,design}
-
 
 \section{Contacts}
 
