@@ -1,0 +1,81 @@
+\HeaderA{sfPower}{4.2: Kim-DeMets (power) Spending Function}{sfPower}
+\keyword{design}{sfPower}
+\begin{Description}\relax
+The function \code{sfPower()} implements a Kim-DeMets (power) spending function.
+This is a flexible, one-parameter spending function recommended by Jennison and Turnbull (2000).
+Normally it will be passed to \code{gsDesign()} in the parameter \code{sfu} for the upper bound or
+\code{sfl} for the lower bound to specify a spending function family for a design.
+In this case, the user does not need to know the calling sequence.
+The calling sequence is useful, however, when the user wishes to plot a spending function as demonstrated below
+in examples.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+sfPower(alpha, t, param)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{alpha}] Real value \eqn{> 0}{} and no more than 1. Normally, 
+\code{alpha=0.025} for one-sided Type I error specification
+or \code{alpha=0.1} for Type II error specification. However, this could be set to 1 if for descriptive purposes
+you wish to see the proportion of spending as a function of the proportion of sample size/information.
+\item[\code{t}] A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 
+sample size/information for which the spending function will be computed.
+\item[\code{param}] A single, positive value specifying the \eqn{\rho}{rho} parameter for which Kim-DeMets spending is to be computed; allowable range is (0,15]
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+A Kim-DeMets spending function takes the form
+\deqn{f(t;\alpha,\rho)=\alpha t^\rho}{f(t; alpha, rho) = alpha t^rho} 
+where \eqn{\rho}{rho} is the value passed in \code{param}.
+See examples below for a range of values of \eqn{\rho}{rho} that may be of interest (\code{param=0.75} to \code{3} are documented there).
+\end{Details}
+\begin{Value}
+An object of type \code{spendfn}. See \LinkA{Spending function overview}{Spending function overview} for further details.
+\end{Value}
+\begin{Note}\relax
+The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
+in the directory where R is installed.
+\end{Note}
+\begin{Author}\relax
+Keaven Anderson \email{keaven\_anderson@merck.}
+\end{Author}
+\begin{References}\relax
+Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
+Boca Raton: Chapman and Hall.
+\end{References}
+\begin{SeeAlso}\relax
+\LinkA{Spending function overview}{Spending function overview}, \code{\LinkA{gsDesign}{gsDesign}}, \LinkA{gsDesign package overview}{gsDesign package overview}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+# design a 4-analysis trial using a Kim-DeMets spending function 
+# for both lower and upper bounds 
+x <- gsDesign(k=4, sfu=sfPower, sfupar=3, sfl=sfPower, sflpar=1.5)
+
+# print the design
+x
+
+# plot the spending function using many points to obtain a smooth curve
+# show rho=3 for approximation to O'Brien-Fleming and rho=.75 for 
+# approximation to Pocock design.
+# Also show rho=2 for an intermediate spending.
+# Compare these to Hwang-Shih-DeCani spending with gamma=-4,  -2,  1
+t <- 0:100/100
+plot(t,  sfPower(0.025, t, 3)$spend, xlab="Proportion of sample size", 
+    ylab="Cumulative Type I error spending", 
+    main="Kim-DeMets (rho) versus Hwang-Shih-DeCani (gamma) Spending", 
+    type="l", cex.main=.9)
+lines(t, sfPower(0.025, t, 2)$spend, lty=2)
+lines(t, sfPower(0.025, t, 0.75)$spend, lty=3)
+lines(t, sfHSD(0.025, t, 1)$spend, lty=3, col=2)
+lines(t, sfHSD(0.025, t, -2)$spend, lty=2, col=2)
+lines(t, sfHSD(0.025, t, -4)$spend, lty=1, col=2)
+legend(x=c(.0, .375), y=.025*c(.65, 1), lty=1:3, 
+       legend=c("rho= 3", "rho= 2", "rho= 0.75"))
+legend(x=c(.0, .357), y=.025*c(.65, .85), lty=1:3, bty="n", col=2, 
+       legend=c("gamma= -4", "gamma= -2", "gamma=1"))
+\end{ExampleCode}
+\end{Examples}
+

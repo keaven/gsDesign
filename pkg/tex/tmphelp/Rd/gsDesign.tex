@@ -1,0 +1,180 @@
+\HeaderA{gsDesign}{2.1: Design Derivation}{gsDesign}
+\aliasA{print.gsDesign}{gsDesign}{print.gsDesign}
+\keyword{design}{gsDesign}
+\begin{Description}\relax
+\code{gsDesign()} is used to find boundaries and trial size required for a group sequential design.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+gsDesign(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
+         delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
+         sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I = 0,
+         maxn.IPlan = 0) 
+
+print.gsDesign(x,...)\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{k}] Number of analyses planned, including interim and final.
+\item[\code{test.type}] \code{1=}one-sided \\
+\code{2=}two-sided symmetric \\
+\code{3=}two-sided, asymmetric, beta-spending with binding lower bound \\
+\code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound \\
+\code{5=}two-sided, asymmetric, lower bound spending under the null hypothesis with binding lower bound \\
+\code{6=}two-sided, asymmetric, lower bound spending under the null hypothesis with non-binding lower bound. \\ See details, examples and manual.
+\item[\code{alpha}] Type I error, always one-sided. Default value is 0.025.
+\item[\code{beta}] Type II error, default value is 0.1 (90\% power).
+\item[\code{astar}] Normally not specified. If \code{test.type=5} or \code{6}, \code{astar} specifies the total
+probability of crossing a lower bound at all analyses combined. 
+This will be changed to \eqn{1 - }{}\code{alpha} when default value of 0 is used. 
+Since this is the expected usage, normally \code{astar} is not specified by the user.
+\item[\code{delta}] Standardized effect size. See details and examples.
+\item[\code{n.fix}] Sample size for fixed design with no interim; used to find maximum group sequential sample size.
+See details and examples.
+\item[\code{timing}] Sets relative timing of interim analyses. Default of 1 produces equally spaced analyses. 
+Otherwise, this is a vector of length \code{k} or \code{k-1}.
+The values should satisfy \code{0 < timing[1] < timing[2] < ... < timing[k-1] < 
+timing[k]=1}.
+\item[\code{sfu}] A spending function or a character string indicating a boundary type (that is, \dQuote{WT} for Wang-Tsiatis bounds, \dQuote{OF} for O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds). 
+For one-sided and symmetric two-sided testing is used to completely specify spending (\code{test.type=1, 2}), \code{sfu}. 
+The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function.
+See details, \LinkA{Spending function overview}{Spending function overview}, manual and examples.
+\item[\code{sfupar}] Real value, default is \eqn{-4}{} which is an O'Brien-Fleming-like conservative bound when used with the default Hwang-Shih-DeCani spending function. This is a real-vector for many spending functions.
+The parameter \code{sfupar} specifies any parameters needed for the spending function specified by \code{sfu}; this will be ignored for spending functions (\code{sfLDOF}, \code{sfLDPocock}) 
+or bound types (\dQuote{OF}, \dQuote{Pocock}) that do not require parameters.
+\item[\code{sfl}] Specifies the spending function for lower boundary crossing probabilities when asymmetric, two-sided testing is performed (\code{test.type = 3}, 
+\code{4}, \code{5}, or \code{6}). 
+Unlike the upper bound, only spending functions are used to specify the lower bound.
+The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function.
+The parameter \code{sfl} is ignored for one-sided testing (\code{test.type=1}) or symmetric 2-sided testing (\code{test.type=2}). 
+See details, spending functions, manual and examples.
+\item[\code{sflpar}] Real value, default is \eqn{-2}{}, which, with the default Hwang-Shih-DeCani spending function, 
+specifies a less conservative spending rate than the default for the upper bound.
+\item[\code{tol}] Tolerance for error (default is 0.000001). Normally this will not be changed by the user.
+This does not translate directly to number of digits of accuracy, so use extra decimal places.
+\item[\code{r}] Integer value controlling grid for numerical integration as in Jennison and Turnbull (2000); 
+default is 18, range is 1 to 80. 
+Larger values provide larger number of grid points and greater accuracy.
+Normally \code{r} will not be changed by the user.
+\item[\code{n.I}] Used for re-setting bounds when timing of analyses changes from initial design; see examples.
+\item[\code{maxn.IPlan}] Used for re-setting bounds when timing of analyses changes from initial design; see examples.
+\item[\code{x}] In \code{print.gsDesign} this is an object of class gsDesign.
+\item[\code{...}] This should allow optional arguments that are standard when calling \code{print}.
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+Many parameters normally take on default values and thus do not require explicit specification.
+One- and two-sided designs are supported. Two-sided designs may be symmetric or asymmetric.
+Wang-Tsiatis designs, including O'Brien-Fleming and Pocock designs can be generated.
+Designs with common spending functions as well as other built-in and user-specified functions for Type I error and 
+futility are supported.
+Type I error computations for asymmetric designs may assume binding or non-binding lower bounds.
+The print function has been extended using \code{print.gsDesign} to print \code{gsDesign} objects; see examples.
+
+The user may ignore the structure of the value returned by \code{gsDesign()} if the standard
+printing and plotting suffice; see examples.
+
+\code{delta} and \code{n.fix} are used together to determine what sample size output options the user seeks.
+The default, \code{delta=0} and \code{n.fix=1}, results in a \sQuote{generic} design that may be used with any sampling
+situation. Sample size ratios are provided and the user multiplies these times the sample size for a fixed design
+to obtain the corresponding group sequential analysis times. If \code{delta>0}, \code{n.fix} is ignored, and 
+\code{delta} is taken as the standardized effect size - the signal to noise ratio for a single observation;
+for example, the mean divided by the standard deviation for a one-sample normal problem. 
+In this case, the sample size at each analysis is computed. 
+When \code{delta=0} and \code{n.fix>1}, \code{n.fix} is assumed to be the sample size for a fixed design
+with no interim analyses. See examples below. 
+
+Following are further comments on the input argument \code{test.type} which is used to control what type of error measurements are used in trial design.
+The manual may also be worth some review in order to see actual formulas for boundary crossing probabilities for the various options. 
+Options 3 and 5 assume the trial stops if the lower bound is crossed for Type I and Type II error computation (binding lower bound). 
+For the purpose of computing Type I error, options 4 and 6 assume the trial continues if the lower bound is crossed (non-binding lower bound); that is a Type I error can be made by crossing an upper bound after crossing a previous lower bound. 
+Beta-spending refers to error spending for the lower bound crossing probabilities
+under the alternative hypothesis (options 3 and 4).
+In this case, the final analysis lower and upper boundaries are assumed to be the same.
+The appropriate total beta spending (power) is determined by adjusting the maximum sample size
+through an iterative process for all options.
+Since options 3 and 4 must compute boundary crossing probabilities under both the null and alternative hypotheses,
+deriving these designs can take longer than other options.
+Options 5 and 6 compute lower bound spending under the null hypothesis.
+\end{Details}
+\begin{Value}
+An object of the class \code{gsDesign}. This class has the following elements and upon return from 
+\code{gsDesign()} contains:
+\begin{ldescription}
+\item[\code{k}] As input.
+\item[\code{test.type}] As input.
+\item[\code{alpha}] As input.
+\item[\code{beta}] As input.
+\item[\code{astar}] As input, except when \code{test.type=5} or \code{6} and \code{astar} is input as 0; in this case
+\code{astar} is changed to \code{1-alpha}.
+\item[\code{delta}] The standardized effect size for which the design is powered. Will be as input to \code{gsDesign()}
+unless it was input as 0; in that case, value will be computed to give desired power for fixed design with input
+sample size \code{n.fix}.
+\item[\code{n.fix}] Sample size required to obtain desired power when effect size is \code{delta}.
+\item[\code{timing}] A vector of length \code{k} containing the portion of the total planned information or sample size at each analysis.
+\item[\code{tol}] As input.
+\item[\code{r}] As input.
+\item[\code{upper}] Upper bound spending function, boundary and boundary crossing probabilities under the NULL and
+alternate hypotheses. See \LinkA{Spending function overview}{Spending function overview} and manual for further details.
+\item[\code{lower}] Lower bound spending function, boundary and boundary crossing probabilities at each analysis.
+Lower spending is under alternative hypothesis (beta spending) for \code{test.type=3} or \code{4}. 
+For \code{test.type=2}, \code{5} or \code{6}, lower spending is under the null hypothesis.
+For \code{test.type=1}, output value is \code{NULL}. See \LinkA{Spending function overview}{Spending function overview} and manual.
+\item[\code{n.I}] Vector of length \code{k}. If values are input, same values are output.
+Otherwise, \code{n.I} will contain the sample size required at each analysis 
+to achieve desired \code{timing} and \code{beta} for the output value of \code{delta}. 
+If \code{delta=0} was input, then this is the sample size required for the specified group sequential design when a fixed design requires a sample size of \code{n.fix}.
+If \code{delta=0} and \code{n.fix=1} then this is the relative sample size compared to a fixed design; see details and examples.
+\item[\code{maxn.IPlan}] As input.
+\end{ldescription}
+\end{Value}
+\begin{Note}\relax
+The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
+in the directory where R is installed.
+\end{Note}
+\begin{Author}\relax
+Keaven Anderson \email{keaven\_anderson@merck.}
+\end{Author}
+\begin{References}\relax
+Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
+Boca Raton: Chapman and Hall.
+\end{References}
+\begin{SeeAlso}\relax
+\LinkA{gsDesign package overview}{gsDesign package overview}, \LinkA{Plots for group sequential designs}{Plots for group sequential designs}, \code{\LinkA{gsProbability}{gsProbability}}, 
+\LinkA{Spending function overview}{Spending function overview}, \LinkA{Wang-Tsiatis Bounds}{Wang.Rdash.Tsiatis Bounds}
+\end{SeeAlso}
+\begin{Examples}
+\begin{ExampleCode}
+#  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
+#  lower bound is non-binding (ignored in Type I error computation)
+#  sample size is computed based on a fixed design requiring n=800
+x <- gsDesign(k=5, test.type=2, n.fix=800)
+
+# note that "x" below is equivalent to print(x) and print.gsDesign(x)
+x
+plot(x)
+plot(x, plottype=2)
+
+# Assuming after trial was designed actual analyses occurred after
+# 300, 600, and 860 patients, reset bounds 
+y <- gsDesign(k=3, test.type=2, n.fix=800, n.I=c(300,600,860),
+   maxn.IPlan=x$n.I[x$k])
+y
+
+#  asymmetric design with user-specified spending that is non-binding
+#  sample size is computed relative to a fixed design with n=1000
+sfup <- c(.033333, .063367, .1)
+sflp <- c(.25, .5, .75)
+timing <- c(.1, .4, .7)
+x <- gsDesign(k=4, timing=timing, sfu=sfPoints, sfupar=sfup, sfl=sfPoints,
+                    sflpar=sflp,n.fix=1000) 
+x
+plot(x)
+plot(x, plottype=2)
+
+# same design, but with relative sample sizes
+gsDesign(k=4, timing=timing, sfu=sfPoints, sfupar=sfup, sfl=sfPoints,
+sflpar=sflp)
+\end{ExampleCode}
+\end{Examples}
+
