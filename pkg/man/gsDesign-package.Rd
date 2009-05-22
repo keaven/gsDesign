@@ -21,10 +21,12 @@ gsProbability           2.2: Boundary Crossing Probabilities
 plot.gsDesign           2.3: Plots for group sequential designs
 gsCP                    2.4: Conditional Power Computation
 gsBoundCP               2.5: Conditional Power at Interim Boundaries
+gsbound                 2.6: Boundary derivation - low level
 normalGrid              3.1: Normal Density Grid
-MandNtest               3.2: Two-sample binomial sample size
+binomial                3.2: Testing, Confidence Intervals and Sample Size
+                             for Comparing Two Binomial Rates
 Survival sample size    3.3: Time-to-event sample size calculation
-                        (Lachin-Foulkes)
+                             (Lachin-Foulkes)
 Spending function overview      4.0: Spending functions
 sfHSD                   4.1: Hwang-Shih-DeCani Spending Function
 sfPower                 4.2: Kim-DeMets (power) Spending Function
@@ -34,6 +36,7 @@ sfPoints                4.5: Pointwise Spending Function
 sfLogistic              4.6: 2-parameter Spending Function Families
 sfTDist                 4.7: t-distribution Spending Function
 Wang-Tsiatis Bounds     5.0: Wang-Tsiatis Bounds
+checkScalar             6.0: Utility functions to verify variable properties
 }
 The gsDesign package supports group sequential clinical trial design. 
 While there is a strong focus on designs using \eqn{\alpha}{alpha}- and \eqn{\beta}{beta}-spending functions, Wang-Tsiatis designs, 

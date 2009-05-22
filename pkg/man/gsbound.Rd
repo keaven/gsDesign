@@ -2,7 +2,7 @@
 \alias{gsBound}
 \alias{gsBound1}
 
-\title{2.6 Boundary derivation - low level}
+\title{2.6: Boundary derivation - low level}
 \description{\code{gsBound()} and \code{gsBound1()} are lower-level functions used to find boundaries for a group sequential design.
 They are not recommended (especially \code{gsBound1()}) for casual users.
 These functions do not adjust sample size as \code{gsDesign()} does to ensure appropriate power for a design.
