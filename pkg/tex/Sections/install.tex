@@ -35,6 +35,11 @@ documentation window. In the contents window, open the branch of documentation
 headed by "Package gsDesign: Titles." The help files are organized
 sequentially under this heading. 
 
+\subsection{Installation qualification}
+This brief note is for more advanced users. Installation qualification routines are included in the subdirectory {\tt inst/unitTests}. The file {\tt doRUnit.R} may be run to do testing of the compiled package. 
+Alternatively, this file may be moved to the {\tt tests} directory prior to running {\tt R CMD check} for the package, and the tests will be run automatically.
+While these tests were originally designed to run at the time the package is checked for an operating system, they were removed from the {\tt tests} directory so that they would not run automatically at CRAN where the duration of package checking is an issue due to the large number of packages there that are recompiled frequently. 
+
 \subsection{The primary routines in the gsDesign package}
  
 As an overview to the R package, 3 R functions are supplied to provide basic computations related to designing and evaluating group sequential clinical trials:

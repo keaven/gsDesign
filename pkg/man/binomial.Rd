@@ -160,9 +160,9 @@ pnorm(x0, lower.tail=FALSE)
 # asymptotic p-values 
 # (you may want to perform more to reduce standard error of estimate)
 sum(as.real(x0) <= 
-    simBinomial(p1=.078, p2=.078, n1=500, n2=500, nsim=50000)) / 50000
+    simBinomial(p1=.078, p2=.078, n1=500, n2=500, nsim=10000)) / 10000
 sum(as.real(x0) <= 
-    simBinomial(p1=.052, p2=.052, n1=500, n2=500, nsim=50000)) / 50000
+    simBinomial(p1=.052, p2=.052, n1=500, n2=500, nsim=10000)) / 10000
 
 # Perform a non-inferiority test to see if p2=400 / 500 is within 5% of 
 # p1=410 / 500 use a z-statistic with unadjusted variance
