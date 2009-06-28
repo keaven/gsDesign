@@ -133,7 +133,7 @@ However, the alternative can have \code{p1-p2-delta0}$<0$.
   \item{sigma1}{A vector containing the variance of the treatment effect difference under the alternative hypothesis}
   \item{p1}{As input}
   \item{p2}{As input}
-  \item{pbar}{Returned only for superiority testing (\code{\delta0=0}), the weighted average of \code{p1} and \code{p2} using weights
+  \item{pbar}{Returned only for superiority testing (\code{delta0=0}), the weighted average of \code{p1} and \code{p2} using weights
   \code{n1} and \code{n2}}
 
   When \code{delta0=0}, instead of \code{pbar}, the following 2 vectors are returned (see details):
