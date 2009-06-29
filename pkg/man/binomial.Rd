@@ -76,7 +76,7 @@ rates (\code{p10, p20}).
 \item{n1}{Number of observations in the control group}
 \item{n2}{Number of observations in the experimental group}
 \item{chisq}{An indicator of whether or not a chi-square (as opposed to Z) statistic is to be computed.
-If \code{delta=0} (default), the difference in event rates divided by its standard error under the null hypothesis is used. 
+If \code{delta0=0} (default), the difference in event rates divided by its standard error under the null hypothesis is used. 
 Otherwise, a Miettinen and Nurminen chi-square statistic for a 2 x 2 table is used.}
 \item{adj}{With \code{adj=1}, the standard variance with a continuity correction is used for a Miettinen and Nurminen test statistic 
 This includes a factor of \eqn{n / (n - 1)} where \eqn{n} is the total sample size. If \code{adj} is not 1, 
