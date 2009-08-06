@@ -6,7 +6,7 @@
 \alias{sfCauchy}
 \alias{sfBetaDist}
 
-\title{4.6: Two-parameter Spending Function Families}
+\title{4.7: Two-parameter Spending Function Families}
 \description{The functions \code{sfLogistic()}, \code{sfNormal()}, \code{sfExtremeValue()}, \code{sfExtremeValue2()}, \code{sfCauchy()}, 
 and \code{sfBetaDist()} are all 2-parameter spending function families.
 These provide increased flexibility in some situations where the flexibility of a one-parameter spending function 

@@ -378,6 +378,55 @@
     
     x
 }
+"sfLinear" <- function(alpha, t, param)
+{  
+    x <- list(name="Piecewise linear", param=param, parname="line points", sf=sfLinear, spend=NULL, 
+            bound=NULL, prob=NULL)
+    
+    class(x) <- "spendfn"
+    
+    if (!is.numeric(param))
+    { 
+        stop("sfLinear parameter param must be numeric")
+    }    
+
+    j <- length(param)
+    if (floor(j / 2) * 2 != j)
+    {
+       stop("sfLinear parameter param must have even length")
+    }
+    k <- j/2
+
+    if (max(param) >= 1 || min(param) <= 0)
+    {
+       stop("Timepoints and cumulative proportion of spending must be > 0 and < 1 in sfLinear")
+    }
+    if (k > 1)
+    {   inctime <- x$param[1:k] - c(0, x$param[1:(k-1)])
+        incspend <- x$param[(k+1):j]-c(0, x$param[(k+1):(j-1)])
+        if ((j > 2) && (min(inctime) <= 0 || min(incspend)<= 0))
+        {
+           stop("Timepoints specified and cumulative spending must be strictly increasing in sfLinear")
+        }
+    }
+    s <- t
+    s[t<=0]<-0
+    s[t>=1]<-1
+    ind <- (0 < t) & (t <= param[1])
+    s[ind] <- param[k + 1] * t[ind] / param[1]
+    ind <- (1 > t) & (t >= param[k])
+    s[ind] <- param[j] + (t[ind] - param[k]) / (1 - param[k]) * (1  - param[j])
+    if (k > 1)
+    {   for (i in 2:k)        
+        {   ind <- (param[i - 1] < t) & (t <= param[i])
+            s[ind] <- param[k + i - 1] + (t[ind] - param[i - 1]) /
+                    (param[i] - param[i-1]) *
+                    (param[k + i] - param[k + i - 1])
+        }
+    }    
+    x$spend <- alpha * s
+    x
+}
 
 "sfPoints" <- function(alpha, t, param)
 {  

@@ -1,6 +1,6 @@
 \name{sfTDist}
 \alias{sfTDist}
-\title{4.7: t-distribution Spending Function}
+\title{4.8: t-distribution Spending Function}
 \description{The function \code{sfTDist()} provides perhaps the maximum flexibility among spending functions
 provided in the \code{gsDesign} package.
 This function allows fitting of three points on a cumulative spending function curve; in this case, six parameters

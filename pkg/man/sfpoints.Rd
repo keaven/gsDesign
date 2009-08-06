@@ -3,6 +3,7 @@
 \title{4.5: Pointwise Spending Function}
 \description{
 The function \code{sfPoints} implements a spending function with values specified for an arbitrary set of specified points.
+It is now recommended to use sfLinear rather than sfPoints.
 Normally \code{sfPoints} will be passed to \code{gsDesign} in the parameter \code{sfu} for the upper bound or
 \code{sfl} for the lower bound to specify a spending function family for a design.
 In this case, the user does not need to know the calling sequence, just the points they wish to specify.

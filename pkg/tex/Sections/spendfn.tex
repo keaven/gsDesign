@@ -333,10 +333,14 @@ Function & Spending Function & Functional & Parameter\\
 \texttt{sfLDOF } & O'Brien-Fleming & $2\left(  1-\Phi\left(  \frac{\Phi
 ^{-1}(\alpha/2)}{\sqrt{t}}\right)  \right)  $ & None\\
 \texttt{(none)} & approximation &  & \\\hline
-\texttt{sfPoints} & Pointwise & Specified points & Cumulative proportion of\\
-\texttt{(p}$_{1}$,\texttt{p}$_{2}$,...,\texttt{p}$_{K}$\texttt{)} &
-specification & $0<p_{1}\ldots<p_{K}=1$ & total boundary crossing\\
-&  &  & probability for each analysis\\\hline
+\texttt{sfLinear} & Piecewise linear & Specified points & Cumulative proportion of\\
+\texttt{(t}$_{1}$,\texttt{t}$_{2}$,...,\texttt{t}$_{m}$\texttt{)}
+&specification 
+& $0<t_{1}\ldots<t_{m}<1$ 
+& information and error\\
+\texttt{(p}$_{1}$,\texttt{p}$_{2}$,...,\texttt{p}$_{m}$\texttt{)} 
+&& $0<p_{1}\ldots<p_{m}<1$
+& spending for given timepoints\\\hline
 \texttt{sfExponential} &  &  & $(0,10]$\\
 \texttt{(nu)} & Exponential & $\alpha^{t^{-\nu}}$ & Recommend $\nu<1$\\
 &  &  & $0.75=$O'Brien-Fleming-like\\\hline
