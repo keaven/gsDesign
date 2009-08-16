@@ -37,10 +37,14 @@
 "sfBetaDist" <- function(alpha, t, param)
 {  
     x <- list(name="Beta distribution", param=param, parname=c("a","b"), sf=sfBetaDist, spend=NULL,
-            bound=NULL, prob=NULL)  
-    
+            bound=NULL, prob=NULL)
+  
     class(x) <- "spendfn"
     
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+
     len <- length(param)
     
     if (len == 2)
@@ -77,8 +81,12 @@
     x <- list(name="Cauchy", param=param, parname=c("a", "b"), sf=sfCauchy, spend=NULL, 
             bound=NULL, prob=NULL)
     
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
     class(x) <- "spendfn"
     
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+
     checkVector(param, "numeric")
     len <- length(param)
     
@@ -123,11 +131,13 @@
 
 "sfExponential" <- function(alpha, t, param)
 {  
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
     # K. Wills 12/11/08: restrict param range
     # checkScalar(param, "numeric", c(0, 10), c(FALSE, TRUE))
     checkScalar(param, "numeric", c(0, 1.5), c(FALSE, TRUE))
     
-    t[t > 1] <- 1
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
     
     x <- list(name="Exponential", param=param, parname="nu", sf=sfExponential, 
             spend=alpha ^ (t ^ (-param)), bound=NULL, prob=NULL)  
@@ -144,6 +154,10 @@
     
     class(x) <- "spendfn"
     
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+
     checkVector(param, "numeric")
     len <- length(param)
     
@@ -193,6 +207,10 @@
     
     class(x) <- "spendfn"
     
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+
     checkVector(param, "numeric")
     len <- length(param)
     
@@ -237,9 +255,11 @@
 
 "sfHSD" <- function(alpha, t, param)
 {
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
     checkScalar(param, "numeric", c(-40, 40))
     
-    t[t > 1] <- 1
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
     
     x <- list(name="Hwang-Shih-DeCani", param=param, parname="gamma", sf=sfHSD, 
             spend=if (param == 0) t * alpha else alpha * (1. - exp(-t * param)) / (1 - exp(-param)),
@@ -252,9 +272,12 @@
 
 "sfLDOF" <- function(alpha, t, param)
 {    
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+
     z <- - qnorm(alpha / 2)
     
-    t[t > 1] <- 1
     x <- list(name="Lan-DeMets O'brien-Fleming approximation", param=NULL, parname="none", sf=sfLDOF, 
             spend=2 * (1 - pnorm(z / sqrt(t))), bound=NULL, prob=NULL)  
     
@@ -265,7 +288,10 @@
 
 "sfLDPocock" <- function(alpha, t, param)
 {  
-    t[t > 1] <- 1
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+
     
     x <- list(name="Lan-DeMets Pocock approximation", param=NULL, parname="none", sf=sfLDPocock, 
             spend=alpha * log(1 + (exp(1) - 1) * t), bound=NULL, prob=NULL)  
@@ -277,6 +303,9 @@
 
 "sfLogistic" <- function(alpha, t, param)
 {  
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
     checkVector(param, "numeric")
     len <- length(param)
     
@@ -337,6 +366,9 @@
     
     class(x) <- "spendfn"
     
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
     checkVector(param, "numeric")
     len <- length(param)
     
@@ -384,6 +416,9 @@
             bound=NULL, prob=NULL)
     
     class(x) <- "spendfn"
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
     
     if (!is.numeric(param))
     { 
@@ -435,6 +470,10 @@
     
     class(x) <- "spendfn"
     
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+
     k <- length(t)
     j <- length(param)
     
@@ -477,7 +516,9 @@
     # checkScalar(param, "numeric", c(0, Inf), c(FALSE, TRUE))
     checkScalar(param, "numeric", c(0, 15), c(FALSE, TRUE))
     
-    t[t > 1] <- 1
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
     
     x <- list(name="Kim-DeMets (power)", param=param, parname="rho", sf=sfPower, 
             spend=alpha * t ^ param, bound=NULL, prob=NULL)  
@@ -494,6 +535,9 @@
     
     class(x) <- "spendfn"
     
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
     checkVector(param, "numeric")
     len <- length(param)
     
@@ -569,21 +613,11 @@
     x
 }
 
-"diffbetadist" <- function(aval, xval, uval)
-{   
-    if (min(aval) <= 0.)
-    {
-        return(1000)
-    }
-    
-    diff <- uval - pbeta(xval, aval[1], aval[2])
-    
-    sum(diff ^ 2)
-}
-
 "spendingFunction" <- function(alpha, t, param)
 {      
-    t[t > 1] <- 1
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
     
     x <- list(name="Linear", param=param, parname="none", sf=spendingFunction, spend=alpha * t, 
             bound=NULL, prob=NULL)
@@ -596,6 +630,18 @@
 ###
 # Hidden Functions
 ###
+
+"diffbetadist" <- function(aval, xval, uval)
+{   
+    if (min(aval) <= 0.)
+    {
+        return(1000)
+    }
+    
+    diff <- uval - pbeta(xval, aval[1], aval[2])
+    
+    sum(diff ^ 2)
+}
 
 "Tdistdiff" <- function(x, t0, p0)
 {  

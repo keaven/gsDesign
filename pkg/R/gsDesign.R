@@ -172,11 +172,11 @@
     {   
         if (!is.function(sfl))
         {     
-            stop("Lower spending function must be a built-in or user-defined function that returns object with class spendfn")
+            stop("Lower spending function must return object with class spendfn")
         }
         else if (is.element(test.type, 3:4)) 
         {
-            x$lower <- sfl(x$beta,x$timing,sflpar)
+            x$lower <- sfl(x$beta, x$timing, sflpar)
         }
         else if (is.element(test.type, 5:6)) 
         {   
@@ -277,7 +277,7 @@
         falsepos <- x$upper$spend
         falsepos <- falsepos - c(0, falsepos[1:x$k-1])
         x$upper$spend <- falsepos
-    
+
         # compute upper bound and store in x
         x$upper$bound <- gsBound1(0, x$timing, a, falsepos, x$tol, x$r)$b
     }
@@ -291,7 +291,7 @@
     
     # add boundary crossing probabilities for theta to x
     x$theta <- c(0,x$delta)
-    y <- gsprob(x$theta,x$n.I,a,x$upper$bound,r=x$r)
+    y <- gsprob(x$theta, x$n.I, a, x$upper$bound, r=x$r)
     x$upper$prob <- y$probhi
     x$en <- as.vector(y$en)
 
@@ -340,12 +340,12 @@
         falsepos <- falsepos - c(0,falsepos[1:x$k-1])
         x$upper$spend <- falsepos
         if (x$test.type == 5)
-        {    trueneg <- x$lower$spend
+        {   trueneg <- x$lower$spend
             trueneg <- trueneg - c(0,trueneg[1:x$k-1])
             errno <- 0
         }
         else 
-        {    trueneg <- falsepos
+        {   trueneg <- falsepos
             errno <- 0
         }
         
@@ -409,10 +409,10 @@
     # compute starting bounds under H0 
     k <- x$k
     falsepos <- x$upper$spend
-    falsepos <- falsepos-c(0,falsepos[1:x$k-1])
+    falsepos <- falsepos-c(0, falsepos[1:x$k-1])
     x$upper$spend <- falsepos
-    trueneg <- array((1-x$alpha)/x$k,x$k)
-    x1 <- gsBound(x$timing,trueneg,falsepos,x$tol,x$r)
+    trueneg <- array((1 - x$alpha) / x$k, x$k)
+    x1 <- gsBound(x$timing, trueneg, falsepos, x$tol, x$r)
 
     # get I(max) and lower bound
     I0 <- x$n.fix
@@ -595,7 +595,8 @@
         stop("Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing")       
     }
     
-    if (max(x$n.I) == 0) gsDType4ss(x) else gsDType4a(x)
+    if (length(x$n.I) < x$k) gsDType4ss(x) 
+    else gsDType4a(x)
 }
 
 "gsDType4a" <- function(x)
@@ -610,10 +611,10 @@
     x$upper$spend <- falsepos
 
     # compute upper bound under H0 
-    x1 <- gsBound1(theta = 0, I = x$timing, a = array(-20, x$k), probhi = falsepos, tol = x$tol, r = x$r)
+    x1 <- gsBound1(theta = 0, I = x$n.I, a = array(-20, x$k), probhi = falsepos, tol = x$tol, r = x$r)
 
     # get lower bound
-      x2 <- gsBound1(theta = -x$delta, I = x$n.I, a = -x1$b, probhi = falseneg, tol = x$tol, r = x$r)
+    x2 <- gsBound1(theta = -x$delta, I = x$n.I, a = -x1$b, probhi = falseneg, tol = x$tol, r = x$r)
     if (-x2$b[x2$k] > x1$b[x1$k] - x$tol)
     {
         x2$b[x2$k] <- -x1$b[x1$k]
@@ -692,6 +693,8 @@
         stop("Wang-Tsiatis, Pocock and O'Brien-Fleming bounds not available for asymmetric testing")          
     }
     
+    if (length(x$n.I) == x$k) x$timing <- x$n.I / x$maxn.IPlan
+
     # compute upper bounds with non-binding assumption 
     falsepos <- x$upper$spend
     falsepos <- falsepos-c(0, falsepos[1:x$k-1])
@@ -926,7 +929,7 @@
             stop("maxn.IPlan can only be > 0 if spending functions are used for boundaries")
         }
         
-        x$timing <- x$n.I[1:(x$k-1)] / x$maxn.IPlan
+        x$timing <- x$n.I / x$maxn.IPlan
         
         if (x$n.I[x$k-1] >= x$maxn.IPlan)
         {
@@ -954,10 +957,11 @@
         {
             x$timing <- c(x$timing, 1)
         }
-        else if (x$timing[x$k]!=1)
-        {
-            stop("if analysis timing for final analysis is input, it must be 1")           
-        }
+ # Allowed final analysis timing to be != 1 ; KA 2009/08/15
+ #       else if (x$timing[x$k]!=1)
+ #       {
+ #           stop("if analysis timing for final analysis is input, it must be 1")           
+ #       }
         
         if (min(x$timing - c(0,x$timing[1:x$k-1])) <= 0)
         {

@@ -163,7 +163,7 @@
         c <- delta0 ^ 2 + delta0 * (2 * p1 + a) + p1 + ratio * p2
         d <- -p1 * delta0 * (1 + delta0)
         v <- (b / (3 * a)) ^ 3 - b * c / 6 / a ^ 2 + d / 2 / a
-        u <- sign(v) * sqrt((b / 3 / a) ^ 2 - c / 3 / a)
+        u <- (sign(v) + (v==0)) * sqrt((b / 3 / a) ^ 2 - c / 3 / a)
         w <- (pi + acos(v /u ^ 3)) / 3
         p10 <- 2 * u * cos(w) - b / 3 / a
         p20 <- p10 - delta0
@@ -326,7 +326,7 @@
         L1 <- (n2 * delta0 - ntot - 2 * x2) * delta0 + xtot
         L0 <- x2 * delta0 * (1 - delta0)
         q  <- (L2 / (3 * ntot)) ^ 3 - L1 * L2 / 6 / ntot ^ 2 + L0 / 2 / ntot
-        p  <- sign(q) * sqrt((L2 / (3 * ntot)) ^ 2 - L1 / (3 * ntot))
+        p  <- (sign(q) + (q==0)) * sqrt((L2 / (3 * ntot)) ^ 2 - L1 / (3 * ntot))
         a  <- q / p ^ 3
         a[a > 1] <- 1
         a  <- (pi + acos(a)) / 3
