@@ -7,7 +7,7 @@ This provides complete flexibility in setting spending at desired timepoints in 
 Normally this function will be passed to \code{gsDesign()} in the parameter 
 \code{sfu} for the upper bound or
 \code{sfl} for the lower bound to specify a spending function family for a design.
-When passed to \texttt{gsDesign()}, the value of \texttt{param} would be passed to \texttt{sfLinear} through the \texttt{gsDesign()} arguments \texttt{sfupar} for the upper bound and \texttt{sflpar} for the lower bound.
+When passed to \code{gsDesign()}, the value of \code{param} would be passed to \code{sfLinear} through the \code{gsDesign()} arguments \code{sfupar} for the upper bound and \code{sflpar} for the lower bound.
 }
 
 \usage{
@@ -20,8 +20,8 @@ sfLinear(alpha, t, param)
 	\item{t}{A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 
 	sample size or information for which the spending function will be computed.}
 	\item{param}{A vector with a positive, even length. All values must be strictly between 0 and 1.
-Letting \texttt{k <- length(param/2)}, the first \texttt{k} points in param specify increasing values strictly between 0 and 1 where the proportion of total spending is specified. 
-The last k points in param specify increasing values strictly between 0 and 1 with the cumulative proportion of spending at the timepoints in the first part of the vector.}
+Letting \code{m <- length(param/2)}, the first \code{m} points in param specify increasing values strictly between 0 and 1 where the proportion of total spending is specified. 
+The last \code{m} points in param specify increasing values strictly between 0 and 1 with the cumulative proportion of spending at the timepoints in the first part of the vector.}
 }
 \value{An object of type \code{spendfn}. 
 The cumulative spending returned in \code{sfLinear$spend} is 0 for \code{t=0} and \code{alpha} for \code{t>=1}. 
