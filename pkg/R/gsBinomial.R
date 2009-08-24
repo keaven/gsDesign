@@ -122,7 +122,7 @@
     checkVector(beta, "numeric", c(0, 1 - alpha / sided), c(FALSE, FALSE))
     checkVector(delta0, "numeric")
     checkVector(ratio, "numeric", c(0, Inf), c(FALSE, FALSE))
-    checkScalar(outtype, "integer", c(1, 2))
+    checkScalar(outtype, "integer", c(1, 2, 3))
     checkScalar(scale, "character")
     scale <- match.arg(tolower(scale), c("difference", "rr", "or", "lnor"))
     checkLengths(p1, p2, beta, delta0, ratio, allowSingle=TRUE)
