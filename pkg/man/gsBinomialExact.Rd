@@ -1,6 +1,7 @@
 \name{gsBinomialExact}
 \alias{gsBinomialExact}
-\title{2.7: One-Sample Exact Binomial Boundary Crossing Probabilities}
+\alias{print.gsBinomialExact}
+\title{3.4: One-Sample Exact Binomial Boundary Crossing Probabilities}
 \description{Computes power/Type I error and expected sample size for a group sequential design
 in a single-arm trial with a binary outcome.
 The print function has been extended using \code{print.gsBinomialExact} to print \code{gsBinomialExact} objects; see examples.
@@ -15,6 +16,7 @@ gsBinomialExact(k=2, theta=c(.1, .2), n.I=c(50, 100), a=c(3, 7), b=c(20,30))
 	\item{n.I}{Sample size at analyses (increasing positive integers); vector of length k.}
 	\item{a}{Number of "successes" required to cross lower bound cutoffs for futility or harm at each analysis; vector of length k; -1 means no lower bound.}
 	\item{b}{Number of "successes" required to cross upper bound cutoffs for futility or harm at each analysis; vector of length k.}
+
 }
 \details{
 Based on the book "Group Sequential Methods with Applications to Clinical Trials,"
@@ -29,6 +31,8 @@ For final analysis, set a[k] equal to b[k]-1 to incorporate all possibilities in
 }
 
 \value{
+\code{gsBinomialExact()} returns a list of class \code{gsBinomialExact} and \code{gsProbability} (see example); when displaying one of these objects, the default function to print is \code{print.gsProbability()}. 
+The object returned from \code{gsBinomialExact()} contains the following elements: 
 	\item{k}{As input.}
 	\item{theta}{As input.}
 	\item{n.I}{As input.}
@@ -51,6 +55,12 @@ Boca Raton: Chapman and Hall.
 
 zz <- gsBinomialExact(k=3,theta=seq(0,1,0.1), n.I=c(12,24,36),
         a=c(-1, 0, 11),  b=c( 5, 9, 12))
+
+# let's see what class this is
+class(zz)
+
+# because of "gsProbability" class above, following is equivalent to 
+# print.gsProbability(zz)
 zz
 }
 \keyword{design}
