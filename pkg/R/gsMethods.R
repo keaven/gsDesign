@@ -60,14 +60,22 @@
     {
         cat(" ")
     }
-    cat("Lower bounds   Upper bounds")
-    y <- cbind(1:x$k, nval, round(x$lower$bound, 2), round(pnorm(x$lower$bound), 4), round(x$upper$bound, 2), 
-            round(pnorm(-x$upper$bound), 4))
-    colnames(y) <- c("Analysis", ntxt, "Z  ", "Nominal p", "Z  ", "Nominal p")
+    if (max(class(x) == "gsBinomialExact")==1)
+    {   cat("Bounds")
+        y <- cbind(1:x$k, nval, x$lower$bound, round(x$upper$bound, 2))
+        colnames(y) <- c("Analysis", "  N", "  a", "  b")
+    }
+    else
+    {   cat("Lower bounds   Upper bounds")
+        y <- cbind(1:x$k, nval, round(x$lower$bound, 2), round(pnorm(x$lower$bound), 4), 
+                   round(x$upper$bound, 2), round(pnorm(-x$upper$bound), 4))
+        colnames(y) <- c("Analysis", ntxt, "Z  ", "Nominal p", "Z  ", "Nominal p")
+    }
     rownames(y) <- array(" ", x$k)
     cat("\n")
     print(y)
-    cat("\nBoundary crossing probabilities and expected sample size assuming any cross stops the trial\n\n")
+    cat("\nBoundary crossing probabilities and expected sample size assume\n")
+    cat("any cross stops the trial\n\n")
     j <- length(x$theta)
     sump <- 1:j
     for (m in 1:j)
@@ -111,16 +119,17 @@
         cat("Asymmetric two-sided")
     }
     
-    cat(" group sequential design with", 100 * (1 - x$beta), "% power and", 100 * x$alpha, "% Type I Error.\n")
+    cat(" group sequential design with\n")
+    cat(100 * (1 - x$beta), "% power and", 100 * x$alpha, "% Type I Error.\n")
     if (x$test.type > 1)
     {    
         if (x$test.type==4 || x$test.type==6)
         {
-            cat("Upper bound spending computations assume trial continues if lower bound is crossed.\n\n")            
+            cat("Upper bound spending computations assume\ntrial continues if lower bound is crossed.\n\n")            
         }
         else
         {
-            cat("Spending computations assume trial stops if a bound is crossed.\n\n")
+            cat("Spending computations assume trial stops\nif a bound is crossed.\n\n")
         }
     }
     if (x$n.fix != 1)
@@ -188,11 +197,11 @@
     
     if (x$test.type > 4)
     {
-        cat("+ lower bound spending (under H0): ")
+        cat("+ lower bound spending (under H0):\n ")
     }
     else if (x$test.type > 2)
     {
-        cat("+ lower bound beta spending (under H1): ")
+        cat("+ lower bound beta spending (under H1):\n ")
     }
     
     if (x$test.type>2) 
@@ -200,15 +209,15 @@
         sfprint(x$lower)
     }
     
-    cat("++ alpha spending: ")
+    cat("++ alpha spending:\n ")
     sfprint(x$upper) 
     
     if (x$n.fix==1)
     {
-        cat("* Sample size ratio compared to fixed non-group sequential design\n")
+        cat("* Sample size ratio compared to fixed design with no interim\n")
     }
     
-    cat("\nBoundary crossing probabilities and expected sample size assuming any cross stops the trial\n\n")
+    cat("\nBoundary crossing probabilities and expected sample size\nassume any cross stops the trial\n\n")
     j <- length(x$theta)
     sump <- 1:j
     
@@ -241,6 +250,7 @@
         print(y)
     }
 }
+
 
 ###
 # Hidden Functions
