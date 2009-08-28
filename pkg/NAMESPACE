@@ -1,7 +1,7 @@
 useDynLib(gsDesign)
 export(gsBoundCP, gsCP)
 export(gsBound, gsBound1, gsDesign, gsProbability)
-export(ciBinomial, nBinomial, simBinomial, testBinomial)
+export(ciBinomial, nBinomial, simBinomial, testBinomial, gsBinomialExact)
 export(nSurvival)
 export(normalGrid)
 export(plot.gsDesign, plot.gsProbability, print.gsProbability, print.gsDesign)

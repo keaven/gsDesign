@@ -66,7 +66,7 @@ If \code{scale="LNOR"}, \code{delta0} is the difference in natural logarithm of 
 }
 \item{ratio}{sample size ratio for group 2 divided by group 1}
 \item{sided}{2 for 2-sided test, 1 for 1-sided test}
-\item{outtype}{\code{nBinomial} only; (default) returns total sample size; 2 returns sample size for each group (\code{n1, n2});
+\item{outtype}{\code{nBinomial} only; (default) returns total sample size; 2 returns sample size for each group (\code{n1, n2}; 3 returns additional interim calculations);
 3 and \code{delta0=0} returns a list with total sample size (\code{n}), sample size in each group (\code{n1, n2}),
 null and alternate hypothesis variance (\code{sigma0, sigma1}), input event rates (\code{p1, p2}) and null hypothesis event
 rates (\code{p10, p20}). 

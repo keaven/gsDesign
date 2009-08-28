@@ -1,7 +1,7 @@
 \name{nSurvival}
 \alias{nSurvival}
 \alias{Survival sample size}
-\title{3.3: Time-to-event sample size calculation (Lachin-Foulkes)}
+\title{3.4: Time-to-event sample size calculation (Lachin-Foulkes)}
 \description{\code{nSurvival()} is used to calculate the sample size for a clinical trial with a time-to-event endpoint. The Lachin and Foulkes (1986) method is used.
 }
 
