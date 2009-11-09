@@ -1,0 +1,8 @@
+Package: gsDesignGUI
+Version: 1.0-0
+Title: Group Sequential Design GUI
+Author: REvolution Computing
+Maintainer: REvolution Computing <packages@revolution-computing.com>
+Description: Graphical user interface for the gsDesign package.
+Depends: R (>= 2.6.2), RUnit, Revobase, tools
+License: GPL-2
