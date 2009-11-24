@@ -14,6 +14,7 @@
 #    sfLogistic
 #    sfNormal
 #    sfPoints
+#    sfLinear
 #    sfPower
 #    sfTDist
 #    spendingFunction
