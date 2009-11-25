@@ -176,6 +176,9 @@ pnorm(x, lower.tail=FALSE)
 pchisq(testBinomial(x1=410, x2=400, n1=500, n2=500, delta0= -.05, 
                     chisq=1, adj=1), 1, lower.tail=FALSE)
 
+# provide 95% CI (Miettinen and Nurminen method)
+ciBinomial(x1=410, x2=400, n1=500, n2=500)
+
 # now simulate the z-statistic witthout continuity corrected variance
 sum(qnorm(.975) <= 
     simBinomial(p1=.8, p2=.8, n1=500, n2=500, nsim=100000)) / 100000
