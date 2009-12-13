@@ -4,6 +4,7 @@
 #  Exported Functions:
 #                   
 #    gsCP
+#    gsPP
 #    gsBoundCP
 #
 #  Hidden Functions:
@@ -70,6 +71,63 @@
     gsProbability(k=knew, theta=theta, n.I=Inew, a=anew, b=bnew, r=r)
 }
 
+gsPP <- function(x, i=1, zi=0, theta=c(0,3), wgts=c(.5,.5), r=18, total=TRUE)
+{   if (!(is(x, "gsProbability") || is(x, "gsDesign")))
+    {    
+        stop("gsPP must be called with class of x either gsProbability or gsDesign")
+    }
+    
+    if (i < 1 || i >= x$k)
+    {    
+        stop("gsPP must be called with i from 1 to x$k-1")
+    }
+    
+    test.type <- ifelse(is(x, "gsProbability"), 3, x$test.type)
+    
+    if (zi > x$upper$bound[i])
+    {    
+        stop("gsPP must have x$lower$bound[i] <= zi <= x$upper$bound[i]")
+    }
+    else if (test.type > 1 && zi < x$lower$bound[i])
+    {
+        stop("gsPP must have x$lower$bound[i]<=zi<=x$upper$bound[i]")            
+    }
+  
+    if (!is.real(theta) || is.na(theta))
+    {
+        theta <- c(zi/sqrt(x$n.I[i]), x$theta)
+    }
+    
+    if (i < 1 || i >= x$k)
+    {    
+        stop("gsPP must be called with i from 1 to x$k-1")
+    }
+    
+    test.type <- ifelse(is(x, "gsProbability"), 3, x$test.type)
+    
+    if (zi > x$upper$bound[i])
+    {    
+        stop("gsCP must have x$lower$bound[i] <= zi <= x$upper$bound[i]")
+    }
+    else if (test.type > 1 && zi < x$lower$bound[i])
+    {
+        stop("gsCP must have x$lower$bound[i]<=zi<=x$upper$bound[i]")            
+    }
+  
+    if (!is.real(theta) || is.na(theta))
+    {
+        theta <- c(zi/sqrt(x$n.I[i]), x$theta)
+    }
+
+    cp <- gsCP(x = x, i = i, theta = theta, zi = zi, r = r)
+    cp$upper$prob %*% wgts   
+    gsDen <- gsDensity(x, theta=theta, i=i, zi=zi, r=r)
+    if (!total) return(cp$upper$prob %*% t(gsDen$density))
+    one <- array(1, x$k-i)
+    cpmarg <- one %*% cp$upper$prob
+    sum(gsDen$density * cpmarg)
+}
+
 "gsBoundCP" <- function(x, theta="thetahat", r=18)
 {    
     len <- x$k-1
@@ -78,10 +136,9 @@
     
     if (is(x, "gsDesign")  || theta != "thetahat")
     {    
-        thetahi <- x$delta
+        thetahi <- array(x$delta, len)
         if (test.type > 1) thetalow <- thetahi
-    }
-    else
+    }else
     {    
         if (test.type>1) thetalow <- x$lower$bound[1:len]/sqrt(x$n.I[1:len])
         thetahi <- x$upper$bound[1:len]/sqrt(x$n.I[1:len])

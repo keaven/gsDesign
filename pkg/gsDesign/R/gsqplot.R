@@ -1,0 +1,555 @@
+##################################################################################
+#  S3 methods for the gsDesign package
+#
+#  Exported Functions:
+#                   
+#    plot.gsDesign
+#    plot.gsProbability
+#
+#  Hidden Functions:
+#
+#    gsLegendText
+#    gsPlotName
+#    plotgsZ
+#    plotBval
+#    plotreleffect
+#    plotgsCP
+#    sfplot
+#    plotASN
+#    plotgsPower
+#    qplotit
+#
+#  Author(s): Keaven Anderson, PhD.
+# 
+#  Reviewer(s): 
+#
+#  R Version: 2.9.1
+#
+##################################################################################
+
+###
+# Exported Functions
+###
+
+"plot.gsDesign" <- function(x, plottype=1, base=FALSE,...)
+{   
+#   checkScalar(plottype, "integer", c(1, 7))
+   # if (base) invisible(do.call(gsPlotName(plottype), list(x, ...)))
+     do.call(gsPlotName(plottype), list(x, base=base,...))
+}
+
+"plot.gsProbability" <- function(x, plottype=2, base=FALSE,...)
+{   
+#   checkScalar(plottype, "integer", c(1, 7))    
+    invisible(do.call(gsPlotName(plottype), list(x, base=base,...)))
+}
+
+###
+# Hidden Functions
+###
+"gsPlotName" <- function(plottype)
+{
+    # define plots and associated valid plot types
+    plots <- list(plotgsZ=c("1","z"), 
+            plotgsPower=c("2","power"), 
+            plotreleffect=c("3","xbar","thetahat","theta"), 
+            plotgsCP=c("4","copp"),
+            plotsf=c("5","sf"), 
+            plotASN=c("6","asn", "e{n}","n"), 
+            plotBval=c("7","b","b-val","b-value"),
+		plotHR=c("8","hr","hazard"))
+    
+    # perform partial matching on plot type and return name
+    plottype <- match.arg(tolower(as.character(plottype)), as.vector(unlist(plots)))
+    names(plots)[which(unlist(lapply(plots, function(x, type) is.element(type, x), type=plottype)))]    
+}
+"plotgsZ" <- function(x, ylab="Normal critical value",...){qplotit(x,ylab=ylab,fn=function(z,...){z},...)}
+"plotBval" <- function(x, ylab="B-value",...){qplotit(x, fn=gsBvalue, ylab=ylab,...)}
+"plotreleffect" <- function(x, ylab=expression(hat(theta)/theta[1]), delta=1, delta0=0,...){qplotit(x, fn=gsDeltaHat, ylab=ylab, delta=delta, delta0=delta0,...)}
+"plotHR" <- function(x, ylab="Estimated hazard ratio",...){qplotit(x, fn=gsHRHat, ylab=ylab,...)}
+gsBvalue <- function(z,i,x,...)
+{   Bval <- z * sqrt(x$timing[i])
+    Bval
+}
+gsThetaHat <- function(z, i, x,...)
+{   thetaHat <- z / sqrt(x$n.I[i])/x$delta
+	thetaHat
+}
+gsDeltaHat <- function(z, i, x, delta, delta0=0,...)
+{   deltaHat <- z / sqrt(x$n.I[i]) * delta / x$delta - delta0
+    deltaHat
+}
+gsHRHat <- function(z, i, x, ratio,...)
+{    c <- 1 / (1 + ratio)
+     psi <- c * (1 - c)
+     hrHat <- exp(-z / sqrt(x$n.I[i] * psi))
+}
+gsCPfn <- function(z, i, x, theta, ...)
+{	cp <- array(0,length(z))
+	for(j in 1:length[z])
+	{	cp[i] <- sum(gsCP(x=x, theta=theta, i=j, zi=z[j])$upper$prob)
+	}
+	cp
+}
+# qplots for z-values and transforms of z-values
+"qplotit" <- function(x, xlim=NULL, ylim=NULL, geom=c("line", "text"), zround=2, lty=c(1,1), col=c(1,1),
+                     lwd=c(1,1), nlabel="TRUE", xlab="", ylab="", fn=function(z,i,x,...){z},
+                     ratio=1, delta0=0, delta=.05, cex=1, base=FALSE,...)
+{  if(x$n.I[x$k] < 3) 
+   {   nround <- 3 
+       ntx <- "r="
+       if (xlab=="") xlab <- "Information relative to fixed sample design"
+   } else 
+   {   nround <- 0
+       ntx <- "n="
+       if (xlab=="") xlab <- "N"
+   }
+   z <- fn(z=c(x$upper$bound,x$lower$bound), i=c(1:x$k, 1:x$k), x=x,
+               ratio=ratio, delta0=delta0, delta=delta)
+   y <- data.frame(
+           N=as.numeric(c(x$n.I,x$n.I)), 
+           Z=as.numeric(z), 
+           Bound=c(array("Upper", x$k), array("Lower", x$k)),
+           Ztxt=as.character(round(z, zround)))
+   if (!is.numeric(ylim))
+   {   ylim <- range(y$Z)
+       ylim[1] <- ylim[1]  -.1 * (ylim[2] - ylim[1])
+   }
+   if (!is.numeric(xlim))
+   {   xlim <- range(x$n.I)
+       xlim <- xlim + c(-.05,.05) * (xlim[2] - xlim[1])
+   }
+	if (base==TRUE)
+	{	plot(x=y$N[y$Bound=="Upper"], y=y$Z[y$Bound=="Upper"], type="l", xlim=xlim, ylim=ylim,
+			lty=lty[1], col=col[1], lwd=lwd[1], xlab=xlab, ylab=ylab,...)
+		lines(x=y$N[y$Bound=="Lower"], y=y$Z[y$Bound=="Lower"], lty=lty[2], col=col[2], lwd=lwd[2])
+	}else
+	{   p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y, 
+             group=Bound, geom=geom, label=Ztxt,
+             xlab=xlab, ylab=ylab,
+             ylim=ylim, xlim=xlim,...)
+	}
+	if (nlabel==TRUE)
+	{	y2 <- data.frame(
+					N=as.numeric(x$n.I), 
+					Z=as.numeric(array(ylim[1], x$k)), 
+					Bound=array("Ntxt", x$k),
+					Ztxt=as.character(round(x$n.I,nround)))
+		if (base)
+		{	text(x=y2$N, y=y$Z, y$Ztxt, cex=cex)
+		}
+		if (max(x$n.I) < 3)
+		{	if (base)
+			{	text(x=y2$N, y=y2$Z, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=cex)
+			}else
+			{	p <- p + geom_text(data=y2, label=paste(array("r=",x$k), y2$Ztxt, sep=""))
+			}
+		}else
+		{	if(base)
+			{	text(x=y2$N, y=y2$Z, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=cex)
+			}else
+			{	p <- p + geom_text(data=y2, label=paste(array("N=",x$k), y2$Ztxt, sep=""))
+			}
+	}	}
+	if (base)
+	{	invisible(x)
+	}else
+	{	return(p)
+	}
+}
+
+"plotgsCP" <- function(x, theta="thetahat", main="Conditional power at interim stopping boundaries", 
+        ylab=ifelse(theta == "thetahat",
+                       expression(paste("Conditional power at",
+                          theta, "=", hat(theta),sep=" ")),
+                       expression(paste("Conditional power at", theta, "=", delta))),
+					   geom="line",
+        xlab=ifelse(x$n.I[x$k] < 3, "Sample size relative to fixed design", "N"), xlim=NULL,
+        lty=1, col=1, pch=22, textcex=1, legtext=gsLegendText(test.type), zround=3, nlabel=TRUE, base=FALSE,...)
+{    
+	if (!is.numeric(xlim))
+	{	xlim <- range(x$n.I[1:(x$k-1)])
+		xlim <- xlim + c(-.05,.05) * (xlim[2] - xlim[1])
+	}
+	if(x$n.I[x$k] < 3) 
+	{	nround <- 3 
+		ntx <- "r="
+		if (xlab=="") xlab <- "Information relative to fixed sample design"
+	}else 
+	{	nround <- 0
+		ntx <- "n="
+		if (xlab=="") xlab <- "N"
+	}
+	test.type <- ifelse(is(x,"gsProbability"), 3, x$test.type)    
+	y <- gsBoundCP(x, theta=theta)
+	ymax <- 1.05
+	ymin <- - 0.1
+    
+    if (x$k > 3)
+    {
+        xtext <- x$n.I[2]
+    }else if (x$k == 3)
+    {
+        xtext <- (x$n.I[2] + x$n.I[1]) / 2
+    }else
+    {
+        xtext <- x$n.I[1]
+    }
+    
+    if (test.type > 1)
+    {
+        ymid <- (y[2, 2] + y[2, 1]) / 2
+    }
+    
+	if (base)
+    {	if (test.type == 1)
+		{    
+			plot(x$n.I[1:(x$k-1)], y,  xlab=xlab,  ylab=ylab,  main = main, 
+				ylim=c(ymin,  ymax),  xlim=xlim, type="l", ...)
+			points(x$n.I[1:(x$k-1)],  y, ...)
+			ymid <- ymin
+		}
+		else
+		{    
+			matplot(x$n.I[1:(x$k-1)],  y,  xlab=xlab,  ylab=ylab,  main = main, 
+				lty=lty, col=col, ylim=c(ymin,  ymax), xlim=xlim,  type="l", ...)
+				matpoints(x$n.I[1:(x$k-1)],  y, pch=pch, col=col, ...)
+				text(xtext, ymin, legtext[3], cex=textcex)
+		}
+		text(xtext, ymid, legtext[2], cex=textcex)
+		text(xtext, 1.03, legtext[1], cex=textcex)
+		invisible(x)
+	}else
+	{	N <- as.numeric(x$n.I[1:(x$k-1)])
+		CP <- y[,2] 
+		Bound <- array("Upper", x$k-1)
+		Ztxt <- as.character(round(CP[1:(x$k-1)], zround))
+		if (test.type > 1)
+		{	N <- c(N, N)
+			CP <- c(CP, y[,1])
+			Bound <- c(Bound, array("Lower", x$k-1))
+			Ztxt <- as.character(c(Ztxt ,round(y[,1],zround)))
+		}
+		y <- data.frame(N=N, CP=CP, Bound=Bound, Ztxt=Ztxt)
+		p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, 
+			group=Bound, geom=c("line","text"), label=Ztxt,
+			xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim,...)
+	}
+	if (nlabel==TRUE)
+	{	y2 <- data.frame(
+					N=x$n.I[1:(x$k-1)], 
+					CP=array(ymin/2, x$k-1), 
+					Bound=array("Ntxt", x$k-1),
+					Ztxt=as.character(round(x$n.I[1:(x$k-1)],nround)))
+		if (base)
+		{	text(x=y2$N, y=y$CP, y2$Ztxt, cex=textcex)
+		}
+		if (max(x$n.I) < 3)
+		{	if (base)
+			{	text(x=y2$N, y=y2$CP, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=textcex)
+			}else
+			{	p <- p + geom_text(data=y2,label=paste(array("r=",x$k), y2$Ztxt, sep=""))
+			}
+		}else
+		{	if(base)
+			{	text(x=y2$N, y=y2$Z, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=textcex)
+			}else
+			{	p <- p + geom_text(data=y2,label=paste(array("N=",x$k-1), y2$Ztxt, sep=""))
+			}
+	}	}
+	if (base)
+	{	invisible(x)
+	}else
+	{	return(p)
+	}
+}
+"plotsf" <- function(x, 
+	xlab="Proportion of total sample size", 
+	ylab=expression(paste(alpha, "-spending")), 
+	ylab2=expression(paste(beta, "-spending")), oma=c(2, 2, 2, 2),
+	legtext=if (x$test.type > 4) c("Upper bound", "Lower bound") else c(expression(paste(alpha, "-spending")), 
+                            expression(paste(beta, "-spending"))),
+	col=c(1,1), lwd=c(.5,.5), lty=c(1,2),
+	mai=c(.85, .75, .5, .5), xmax=1, base=FALSE,...)
+{
+	# K. Wills (GSD-31)
+	if (is(x, "gsProbability"))
+	{
+		stop("Spending function plot not available for gsProbability object")
+	}
+	
+	# K. Wills (GSD-30)
+	if (x$upper$name %in% c("WT", "OF", "Pocock"))
+	{
+		stop("Spending function plot not available for boundary families")
+	}
+	if (x$upper$parname == "Points"){x$sfupar <- sfLinear} 
+
+	t <- 0:40 / 40 * xmax
+            
+	if (x$test.type > 2 && base)
+	{
+		par(mai=mai, oma=oma) 
+	}
+	if (base) 
+	{	plot(t, x$upper$sf(x$alpha, t, x$upper$param)$spend, type="l", ylab=ylab, xlab=xlab, lty=lty[1],
+           lwd=lwd[1], col=col[1],...)
+	}
+	else if (x$test.type < 3)
+	{	spend <- x$upper$sf(x$alpha, t, x$upper$param)$spend
+		q <- data.frame(t=t, spend=spend)
+		p <- qplot(x=t, y=spend, data=q, geom="line", ylab=ylab, xlab=xlab,...)
+		return(p)
+	}
+
+	if (x$test.type > 2)
+	{    
+		if (base)
+		{	legend(x=c(.0, .43), y=x$alpha * c(.85, 1), lty=lty, col=col, lwd=lwd, legend=legtext)
+			par(new=TRUE)
+			plot(t, x$lower$sf(x$beta, t, x$lower$param)$spend,
+					ylim=c(0, x$beta), type="l", ylab="", main="",
+					yaxt="n", xlab=xlab, lty=lty[2], lwd=lwd[2], col=col[2],...)
+			axis(4)
+			mtext(text=ylab2,  side = 4, outer=TRUE)
+		}
+		else
+		{	spenda <- x$upper$sf(x$alpha, t, x$upper$param)$spend/x$alpha
+			if (x$test.type < 5)
+			{	spendb <- x$lower$sf(x$beta, t, x$lower$param)$spend/x$beta
+			}else
+			{	spendb <- x$lower$sf(x$alphastar, t, x$lower$param)$spend/x$alphastar
+			}
+			group <- array(1, length(t))
+			q <- data.frame(t=c(t,t), spend=c(spenda, spendb), group=c(group,2*group))
+			ylab <- "Proportion of spending"
+			p <- qplot(x=t, y=spend, data=q, geom="line", ylab=ylab, xlab=xlab, group=factor(group),
+				linetype=factor(group),
+				colour=factor(group)) +
+				scale_colour_manual(name="Spending",values=col, labels=c(expression(alpha),expression(beta))) +
+				scale_linetype_manual(name="Spending",values=lty, labels=c(expression(alpha),expression(beta)))
+			return(p)
+		}
+	}
+}
+
+
+"plotASN" <- function(x, xlab=NULL, ylab=NULL, main=NULL, theta=NULL, xval=NULL, type="l", base=FALSE,...)
+{    
+    if (is(x, "gsDesign") && x$n.fix == 1) 
+    {    
+        if (is.null(ylab))
+        {
+            ylab <- "E{N} relative to fixed design"
+        }
+    
+        if (is.character(main) && main == "Default")
+        {
+            main <- "Expected sample size relative to fixed design"
+        }
+    }
+    
+    
+    if (is.null(main)) 
+    {
+        main <- "Expected sample size by treatment difference"
+    }
+    
+    if (is.null(theta))
+    {    
+        if (is(x,"gsDesign"))
+        {
+            theta <- seq(0, 2, .05) * x$delta
+        }
+        else
+        {
+            theta <- x$theta
+        }
+    }
+
+    if (is.null(xval))
+    {    
+        if (is(x, "gsDesign") && is.null(xlab))
+        {    
+            xval <- theta / x$delta
+        
+            if (is.null(xlab))
+            {
+                xlab <- expression(theta / theta[1])
+            }
+        }
+        else
+        {    
+            xval <- theta
+            
+            if (is.null(xlab))
+            {
+                xlab <- expression(theta)
+            }
+        }    
+    }
+    
+    if (is.null(xlab))
+    {
+        xlab <- ""
+    }
+    
+    x <- if (is(x, "gsDesign")) gsProbability(d=x, theta=theta) else 
+                gsProbability(k=x$k, a=x$lower$bound, b=x$upper$bound, n.I=x$n.I, theta=theta)
+    
+    if (is.null(ylab))
+    {
+		if (max(x$n.I) < 3) ylab <- "E{N} relative to fixed design"
+		else ylab <- "Expected sample size"
+    }
+    if (base) 
+    {  plot(xval, x$en, type=type, ylab=ylab, xlab=xlab, main=main, ...)
+       return(invisible(x))
+    }
+    else
+    {  q <- data.frame(x=xval, y=x$en)
+       p <- qplot(x=x, y=y, data=q, geom="line", ylab=ylab, xlab=xlab, main=main,...)
+       return(p)
+    }
+}
+"plotgsPower" <- function(x, main="Group sequential power plot",
+	ylab="Cumulative Boundary Crossing Probality",
+	xlab=NULL, title="Boundary", legtext=c("Upper", "Lower"), lty=c(1, 2), col=c(1, 2), lwd=1, cex=1,
+	theta=if (is(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta, xval=NULL, base=FALSE,...)
+{
+	if (is.null(xval))
+	{    
+		if (is(x, "gsDesign") && is.null(xlab))
+		{    
+			xval <- theta / x$delta
+			xlab <- expression(theta/theta[1])
+		}
+		else
+		{    
+			xval <- theta
+			if (is.null(xlab)) xlab <- expression(theta)    
+		}    
+	}
+	x <- if (is(x, "gsDesign")) gsProbability(d=x, theta=theta) else 
+                gsProbability(k=x$k, a=x$lower$bound, b=x$upper$bound, n.I=x$n.I, theta=theta)
+	test.type <- ifelse(is(x,"gsProbability"), 3, x$test.type)
+	if (is.null(xlab)) xlab <- ""
+# a real R programmer could do the following much better...
+	theta <- xval
+	interim <- array(1,length(xval))
+	colr <- array(col[1],length(xval)*x$k)
+	boundprob <- x$upper$prob[1,]
+	prob <- boundprob
+	yval <- min(mean(range(x$upper$prob[1,])))
+	xv <- min(xval[boundprob>=yval])
+	for(j in 2:x$k)
+	{	theta <- c(theta, xval)
+		interim <- c(interim, array(j, length(xval)))
+		boundprob <- boundprob + x$upper$prob[j,]
+		prob <- c(prob, boundprob)
+		ymid <- mean(range(boundprob))
+		yval <- c(yval, min(boundprob[boundprob >= ymid]))
+		xv <- c(xv, min(xval[boundprob >= ymid]))
+	}
+	itxt <- array("Interim",x$k-1)
+	itxt <- paste(itxt,1:(x$k-1),sep=" ")
+
+	if ((is(x, "gsDesign") && test.type > 1) || !is(x, "gsDesign"))
+	{
+		itxt <- c(itxt,"Final",itxt)
+		boundprob <- array(1, length(xval))
+		colr <- c(colr, array(col[2],length(xval)*(x$k-1)))
+		for(j in 1:(x$k-1))
+		{	theta <- c(theta, xval)
+			interim <- c(interim, array(j, length(xval)))
+			boundprob <- boundprob - x$lower$prob[j,]
+			prob <- c(prob, boundprob)
+			ymid <- mean(range(boundprob))
+			yval <- c(yval, min(boundprob[boundprob >= ymid]))
+			xv <- c(xv, min(xval[boundprob >= ymid]))
+		}
+	}else {itxt <- c(itxt,"Final")}
+	y <- data.frame(theta=as.numeric(theta), interim=interim, col=colr, prob=as.numeric(prob),
+				itxt=as.character(round(prob,2)))
+	y$group=(y$col==2)*x$k + y$interim
+	colr <- array(1, x$k)
+	interim <- 1:x$k
+	if (test.type > 1)
+	{	colr <- c(colr, array(2, x$k-1))
+		interim <- c(interim, 1:(x$k-1))
+	}
+	yt <- data.frame(theta=xv, interim=interim, col=colr, prob=yval, itxt=itxt)
+	colr <- array(1, x$k)
+	interim <- 1:x$k
+	if (test.type > 1)
+	{	colr <- c(colr, array(2, x$k-1))
+		interim <- c(interim, 1:(x$k-1))
+	}
+	yt <- data.frame(theta=xv, interim=interim, col=colr, prob=yval, itxt=itxt)
+	if (base)    
+	{	col2 <- ifelse(length(col) > 1, col[2], col)
+		lwd2 <- ifelse(length(lwd) > 1, lwd[2], lwd)
+		lty2 <- ifelse(length(lty) > 1, lty[2], lty)    
+
+		ylim <- if (is(x, "gsDesign") && test.type<=2) c(0, 1) else c(0, 1.25)
+    
+		plot(xval, x$upper$prob[1, ], xlab=xlab, main=main, ylab=ylab, 
+			ylim=ylim, type="l", col=col[1], lty=lty[1], lwd=lwd[1], yaxt = "n")
+
+		if (is(x, "gsDesign") && test.type <= 2)
+		{    
+			axis(2, seq(0, 1, 0.1))
+			axis(4, seq(0, 1, 0.1))
+		}
+		else
+		{    
+			axis(4, seq(0, 1, by=0.1))
+			axis(2, seq(0, 1, .1), labels=1 - seq(0, 1, .1), col.axis=col2, col=col2)
+		}
+
+		if (x$k == 1)
+		{
+			return(invisible(x))
+		}
+
+		if ((is(x, "gsDesign") && test.type > 2) || !is(x, "gsDesign"))
+		{    
+			lines(xval, 1-x$lower$prob[1, ], lty=lty2,  col=col2,  lwd=lwd2)
+			plo <- x$lower$prob[1, ]
+
+			for (i in 2:x$k)
+			{    
+				plo  <-  plo + x$lower$prob[i, ]
+				lines(xval, 1 - plo, lty=lty2,  col=col2,  lwd=lwd2)
+			}
+        
+			temp <- legend("topleft",  legend = c(" ",  " "),  col=col, 
+							text.width = strwidth("Lower"),  lwd=lwd, 
+							lty = lty,  xjust = 1,  yjust = 1, 
+							title = title)
+        
+			text(temp$rect$left  +  temp$rect$w,  temp$text$y, 
+					legtext,  col=col,  pos=2)
+		}
+
+		phi <- x$upper$prob[1, ]
+
+		for (i in 2:x$k)
+		{    
+			phi <- phi + x$upper$prob[i, ]
+			lines(xval, phi, col=col[1], lwd=lwd[1], lty=lty[1])
+		}
+		text(x=yt$theta, y=yt$prob, col=yt$col, yt$itxt, cex=cex)
+		invisible(x)
+	}
+	else
+	{
+		p <- qplot(x=theta, y=prob, data=y,
+					colour=factor(col), geom="line", xlab = xlab, ylab = ylab, ylim=c(0,1),
+					group=factor(group))
+		p <- p + geom_text(data=yt, label=as.character(itxt), aes(theta, prob, colour=factor(col), group=1)) +
+				scale_colour_manual(name= "Probability", values=c("black", "red"),
+											labels=c("Upper bound","1-Lower bound"))
+		return(p)
+	}
+}

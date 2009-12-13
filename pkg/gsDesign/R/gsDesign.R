@@ -7,6 +7,9 @@
 #    gsBound1
 #    gsDesign
 #    gsProbability
+#    gsDensity
+#    gsPOS
+#    gsCPOS
 #
 #  Hidden Functions:
 #
@@ -246,6 +249,63 @@
     
     x
 }
+
+"gsPOS" <- function(x, theta, wgts)
+{
+    if (class(x) != "gsProbability" && class(x) != "gsDesign")
+        stop("x must have class gsProbability or gsDesign")
+    checkVector(theta, "numeric")
+    checkVector(wgts, "numeric")
+    checkLengths(theta, wgts)    
+    x <- gsProbability(theta = theta, d=x)
+    one <- array(1, x$k)
+    as.real(one %*% x$upper$prob %*% wgts)
+}
+
+"gsCPOS" <- function(i, x, theta, wgts)
+{
+    if (class(x) != "gsProbability" && class(x) != "gsDesign")
+        stop("x must have class gsProbability or gsDesign")
+    checkScalar(i, "integer", c(1, x$k), c(TRUE, FALSE))
+    checkVector(theta, "numeric")
+    checkVector(wgts, "numeric")
+    checkLengths(theta, wgts)    
+    x <- gsProbability(theta = theta, d=x)
+    v <- c(array(1, i), array(0, (x$k - i)))
+    pAi <- 1 - as.real(v %*% (x$upper$prob + x$lower$prob) %*% wgts)
+    v <- 1 - v
+    pAiB <- as.real(v %*% x$upper$prob %*% wgts)
+    pAiB / pAi
+}
+
+"gsDensity" <- function(x, theta=0, i=1, zi=0, r=18)
+{   if (class(x) != "gsDesign" && class(x) != "gsProbability")
+        stop("x must have class gsDesign or gsProbability.")
+    checkVector(theta, "numeric")
+    checkScalar(i, "integer", c(0,x$k), c(FALSE, TRUE))
+    checkVector(zi, "numeric")
+    checkScalar(r, "integer", c(1, 80)) 
+    den <- array(0, length(theta) * length(zi))
+    xx <- .C("gsdensity", den, as.integer(i), length(theta), 
+              as.double(theta), as.double(x$n.I), 
+              as.double(x$lower$bound), as.double(x$upper$bound),
+              as.double(zi), length(zi), as.integer(r))
+    list(zi=zi, theta=theta, density=matrix(xx[[1]], nrow=length(zi), ncol=length(theta)))
+}
+
+#"gsPosterior" <- function(x, theta=NULL, wgts=NULL, i=1, zi=0, r=18)
+#{   if (class(x) != "gsDesign" && class(x) != "gsProbability")
+#        stop("x must have class gsDesign or gsProbability.")
+#    checkVector(theta, "numeric")
+#    checkVector(wgts, "numeric")
+#    checkLengths(
+#    checkScalar(i, "integer", c(0,x$k), c(FALSE, TRUE))
+#    checkVector(zi, "numeric")
+#    checkScalar(r, "integer", c(1, 80)) 
+
+    
+#}
+
 
 ###
 # Hidden Functions

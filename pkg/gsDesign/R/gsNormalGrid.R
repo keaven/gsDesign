@@ -53,7 +53,7 @@
     xx <- .C("stdnorpts", r, b, z, w)
     len <- sum(xx[[3]] <= b[2])
     z <- xx[[3]][1:len] * sigma + mu
-    w <- xx[[4]][1:len] * sigma * dnorm(z, mean=mu, sd=sigma)
-    
-    list(z=z, wgts=w)
+    w <- xx[[4]][1:len] * sigma
+    d <- dnorm(z, mean=mu, sd=sigma)
+    list(z=z, density=d, gridwgts=w, wgts=d*w) 
 }

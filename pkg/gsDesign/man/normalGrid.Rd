@@ -21,7 +21,15 @@ normalGrid(r=18, bounds=c(0,0), mu=0, sigma=1)
 }
 \value{
 	\item{z}{Grid points for numerical integration.}
-	\item{wgts}{Weights to be used with grid points in \code{z}.}
+	\item{density}{The standard normal density function evaluated at the values in \code{z}; see examples.}
+	\item{gridwgts}{Simpson's rule weights for numerical integration on the grid in \code{z}; see examples.}
+	\item{wgts}{Weights to be used with the grid in \code{z} for integrating the normal density function; see examples. This is equal to \code{density * gridwgts}.}
+}
+\details{
+This is a utility function to provide a normal density function and a grid to integrate over as described by Jennison and Turnbull (2000), Chapter 19. 
+While integration can be performed over the real line or over any portion of it, the numerical integration does not extend beyond 6 standard deviations from the mean.
+The grid used for integration uses equally spaced points over the middle of the distribution function, and spreads points further apart in the tails.
+The values returned in \code{gridwgts} may be used to integrate any function over the given grid, although the user should take care that the function integrated is not large in the tails of the grid where points are spread further apart.
 }
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
@@ -52,22 +60,34 @@ sqrt(sigma2)
 
 # do it again with larger r to increase accuracy
 x <- normalGrid(r=22, mu=2, sigma=3)
-sqrt(sum((x$z-2)^2 * x$wgts))
+sqrt(sum((x$z - 2)^2 * x$wgts))
+
+# this can also be done by combining gridwgts and density
+sqrt(sum((x$z - 2)^2 * x$gridwgts * x$density))
+
+# integrate normal density and compare to built-in function
+# to compute probability of being within 1 standard deviation
+# of the mean
+pnorm(1)-pnorm(-1)
+x <- normalGrid(bounds=c(-1, 1))
+sum(x$wgts)
+sum(x$gridwgts * x$density)
 
 # find expected sample size for default design with
 # n.fix=1000
 x <- gsDesign(n.fix=1000)
 x
 
+# set a prior distribution for theta
 y <- normalGrid(r=3, mu=x$theta[2], sigma=x$theta[2] / 1.5)
 z <- gsProbability(k=3, theta=y$z, n.I=x$n.I, a=x$lower$bound,
                    b=x$upper$bound)
 z <- gsProbability(d=x, theta=y$z)
-cat("Expected sample size averaged over normal ")
-cat("prior distribution for theta with mu=", 
+cat("Expected sample size averaged over normal\n prior distribution for theta with \n mu=", 
    x$theta[2], "sigma=", x$theta[2]/1.5, ":",
    round(sum(z$en*y$wgt), 1), "\n")
 plot(y$z, z$en, xlab="theta", ylab="E{N}", 
    main="Expected sample size for different theta values")
+lines(y$z, z$en)
 }
 \keyword{design}
