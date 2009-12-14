@@ -5,5 +5,5 @@ Author: Keaven Anderson
 Maintainer: Keaven Anderson <keaven_anderson@merck.com>
 Depends: ggplot2
 Description: gsDesign is a package that derives group sequential designs and describes their properties.
-License: GPL (version 2 or later)
+License: GPL (>= 2)
 Packaged: Thu Aug  6 17:28:16 2009; anderkea
