@@ -236,6 +236,27 @@
         print(y)
     }
 }
+print.nSurvival <- function(x,y=0,med=F,timeunit="months", ...){
+	if (class(x) != "nSurvival") stop("print.nSurvival: primary argument must have class nSurvival")
+   cat("Two-arm trial with time-to-event outcome with fixed accrual and study duration.\n")
+	cat("Sample size computed using Lachin and Foulkes (1986) method.\n")
+	cat("Accrual duration ", x$Tr, " ", timeunit, " and minimum follow-up ", x$Ts-x$Tr, " ", 
+       timeunit, ".\n", sep="")
+   cat("Fixed design sample size n=", 2*ceiling(x$n/2), " subjects ", sep="")
+   cat("followed until nEvents=", ceiling(x$nEvents), " events occur to detect\n")
+   if (!med) cat("a reduction from a ", round(x$lambda1,3), " failure rate in the control group to a\n",
+                    "failure rate of ", round(x$lambda2,3), " in the experimental group\n", sep="")
+   else cat("an increase from", round(log(2)/x$lambda1,1), "median time-to-event in the control group\nto",
+            round(log(2)/x$lambda2,1), "in the experimental group\n")
+   cat("(hazard ratio =", round(x$lambda2/x$lambda1,3), ") with ", (1-x$beta)*100, "% power and ",
+       x$sided, "-sided Type I error =", 100*x$alpha, "%.\n", sep="")
+	if (class(y) == "gsDesign")
+	{	cat("The total sample size required for the group sequential design is ", 
+        ceiling(x$n * y$n.I[y$k] / y$n.fix /2) *2,".\n", sep="")
+   	cat("The group sequential design analysis plan is given in terms of the number\n",
+       "of events at each analysis below.\n", sep="")
+	}
+}
 
 
 ###
@@ -275,3 +296,4 @@
     }
     cat("\n")
 }
+

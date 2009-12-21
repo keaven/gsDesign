@@ -6,15 +6,15 @@
 }
 
 \usage{
-nSurvival(lambda.0, lambda.1, Ts, Tr, eta = 0, rand.ratio = 1,
-      alpha = 0.05, beta = 0.10, sided = 2, approx = FALSE,
+nSurvival(lambda1=1/12, lambda2=1/24, Ts=24, Tr=12, eta = 0, ratio = 1,
+      alpha = 0.025, beta = 0.10, sided = 1, approx = FALSE,
       type = c("rr", "rd"), entry = c("unif", "expo"), gamma = NA)
 }
 \arguments{
-  \item{lambda.0, lambda.1}{event hazard rate for placebo and treatment
+  \item{lambda1, lambda2}{event hazard rate for placebo and treatment
     group respectively.}
   \item{eta}{equal dropout hazard rate for both groups.}
-  \item{rand.ratio}{randomization ratio between placebo and treatment
+  \item{ratio}{randomization ratio between placebo and treatment
     group. Default is balanced design, i.e., randomization ratio is 1.}
   \item{Ts}{maximum study duration.}
   \item{Tr}{accrual (recruitment) duration.}
@@ -41,7 +41,7 @@ nSurvival(lambda.0, lambda.1, Ts, Tr, eta = 0, rand.ratio = 1,
 
   If the logical approx is \code{TRUE}, the variance under alternative
   hypothesis is used to replace the variance under null hypothesis.
-
+The 
   For non-uniform entry. a non-zero value of gamma for exponential entry
   must be supplied. For positive gamma, the entry distribution is
   convex, whereas for negative gamma, the entry distribution is concave.
@@ -49,21 +49,20 @@ nSurvival(lambda.0, lambda.1, Ts, Tr, eta = 0, rand.ratio = 1,
 
 \value{
   \code{nSurvival} produces a list with the following component returned:
-  \item{Method}{As input.}
-  \item{Entry}{As input.}
-  \item{Sample.size}{Number of subjects.}
-  \item{Num.events}{Number of events.}
-  \item{Hazard.p, Hazard.t}{hazard rate for placebo and treatment group. As input.}
-%  \item{Hazard.t}{hazard rate for treatment group. As input.}
-  \item{Dropout}{as input.}
-  \item{Frac.p, Frac.t}{randomization proportion for placebo and
-    treatment. As input.}
-  \item{Gamma}{as input.}
-  \item{Alpha}{as input.}
-  \item{Beta}{as input.}
-  \item{Sided}{as input.}
-  \item{Study.dura}{Study duration.}
-  \item{Accrual}{Accrual period.}
+  \item{type}{As input.}
+  \item{entry}{As input.}
+  \item{n}{Sample size required.}
+  \item{nEvents}{Number of events required.}
+  \item{lambda1}{As input.}
+  \item{lambda2}{As input.}
+  \item{eta}{As input.}
+  \item{ratio}{As input.}
+  \item{gamma}{As input.}
+  \item{alpha}{As input.}
+  \item{beta}{As input.}
+  \item{sided}{As input.}
+  \item{Ts}{As input.}
+  \item{Tr}{As input.}
 }
 
 \author{Shanhong Guan \email{shanhong\_guan@merck.com}}
@@ -85,8 +84,9 @@ nSurvival(lambda.0, lambda.1, Ts, Tr, eta = 0, rand.ratio = 1,
 # alpha = 0.05 (two-sided)
 # power = 0.9 (default beta=.1)
 
-ss <- nSurvival(lambda.0=.2 , lambda.1=.1, eta = .1, Ts = 2, Tr = .5,
+ss <- nSurvival(lambda1=.2 , lambda2=.1, eta = .1, Ts = 2, Tr = .5,
                 sided=1, alpha=.025)
+ss
 
 #  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
 #  sample size is computed based on a fixed design requiring n=100
@@ -97,9 +97,9 @@ ss <- nSurvival(lambda.0=.2 , lambda.1=.1, eta = .1, Ts = 2, Tr = .5,
 # power plot
 	plot(x, plottype = 2)
 # total sample size
-   ceiling(x$n.I[x$k] * ss$Sample.size)
+   ceiling(x$n.I[x$k] / 2 * ss$n) * 2
 # number of events at analyses
-   ceiling(ss$Num.events * x$n.I)
+   ceiling(ss$nEvents * x$n.I)
 }
 
 \keyword{design}

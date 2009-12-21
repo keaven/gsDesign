@@ -18,7 +18,7 @@
 ##################################################################################
 
 ############################################################
-## Name: nSurvival.R                                         #
+## Name: nSurvival.R                                       #
 ## Purpose: Calculate sample size for clinical trials      #
 ##          with time-to-event endpoint using LF method    # 
 ## Date: 09/28/2007                                        #
@@ -30,27 +30,35 @@
 ## Update: 1/14/2008                                       #
 ## Reason: add an "sided" argument to indicate one or      #
 ##         two-sided test                                  #
+## Upate: 12/20/2009                                       #
+## Reason: Changed so that output list is consistent with  #
+##         inputs. Also changed lambda.0 to lambda1,       #
+##         lambda.1 to lambda2, and rand.ratio to ratio    #
+##         to be consistent with nBinomial naming          #
+##         conventions.                                    #
+##         Added "nSurvival" as class name for nSurvival   #
+##         output and created print.nSurvival to print it  #
 ############################################################
 
 ###
 # Exported Functions
 ###
 
-"nSurvival" <- function(lambda.0, lambda.1, Ts, Tr,
-        eta = 0, rand.ratio = 1,
-        alpha = 0.05, beta = 0.10, sided = 2,
+"nSurvival" <- function(lambda1=1/12, lambda2=1/24, Ts=24, Tr=12,
+        eta = 0, ratio = 1,
+        alpha = 0.025, beta = 0.10, sided = 1,
         approx = FALSE, type = c("rr", "rd"),
         entry = c("unif", "expo"), gamma = NA)
 {
     ############################################################
     ##                                                         #
     ## calculate sample size                                   #
-    ## lambda.0 -- hazard rate for placebo group               #
-    ## lambda.1 -- hazard rate for treatment group             #
+    ## lambda1 -- hazard rate for placebo group                #
+    ## lambda2 -- hazard rate for treatment group              #
     ## Ts -- study duration                                    #
     ## Tr -- accrual duration                                  #
     ## eta -- exponential dropout rate                         #
-    ## rand.ratio -- randomization ratio (T/P)                 #
+    ## ratio -- randomization ratio (T/P)                      #
     ## alpha -- type I error rate                              #
     ## beta -- type II error rate                              #
     ## sided -- one or two-sided test                          #
@@ -69,19 +77,19 @@
     method <- match(type, c("rr", "rd"))
     accrual <- match(entry, c("unif", "expo")) == 1
     
-    xi0 <- 1 / (1 + rand.ratio)
+    xi0 <- 1 / (1 + ratio)
     xi1 <- 1 - xi0 
     
     if (is.na(method))
     {
-        stop("Only risk ratio or risk difference is valid!")
+        stop("Only rr (risk ratio) or rd (risk difference) is valid!")
     }
     
     # average hazard rate under H_1
-    ave.haz <- lambda.0 * xi0 + lambda.1 * xi1
+    ave.haz <- lambda1 * xi0 + lambda2 * xi1
     
     # vector of hazards: placebo, test, and average 
-    haz <- c(lambda.0, lambda.1, ave.haz)
+    haz <- c(lambda1, lambda2, ave.haz)
     
     prob.e <- sapply(haz, pe, eta = eta, Ts = Ts, Tr = Tr,
             gamma = gamma, unif = accrual)
@@ -89,8 +97,8 @@
     zalpha <- qnorm(1 - alpha / sided)
     zbeta <- qnorm(1 - beta)
     
-    haz.ratio <- log(lambda.0 / lambda.1)
-    haz.diff <- lambda.0 - lambda.1
+    haz.ratio <- log(lambda1 / lambda2)
+    haz.diff <- lambda1 - lambda2
     
     if (method == 1){  # risk ratio
         power <- zalpha/sqrt(prob.e[3]*xi0*xi1) +
@@ -103,14 +111,14 @@
     { # risk difference
         if (approx)
         { # use approximation
-            power <- (zalpha + zbeta) * sqrt((lambda.0^2 * (xi0 * prob.e[1])^(-1) +
-                                lambda.1^2 * (xi1 * prob.e[2])^(-1)))
+            power <- (zalpha + zbeta) * sqrt((lambda1^2 * (xi0 * prob.e[1])^(-1) +
+                                lambda2^2 * (xi1 * prob.e[2])^(-1)))
         }
         else
         { # use variance under H_0 and H_a
             power <- zalpha * (xi0 * xi1 * prob.e[3] / ave.haz^2)^(-1/2) +
-                    zbeta * sqrt((lambda.0^2 * (xi0 * prob.e[1])^(-1) +
-                                        lambda.1^2 * (xi1 * prob.e[2])^(-1)))
+                    zbeta * sqrt((lambda1^2 * (xi0 * prob.e[1])^(-1) +
+                                        lambda2^2 * (xi1 * prob.e[2])^(-1)))
         }
         N <- (power / haz.diff)^2
         E <- N * (xi0 * prob.e[1] + xi1 * prob.e[2])
@@ -118,12 +126,13 @@
     
     # output all the input parameters, including entry type and
     # method, and sample size
-    outd <- list(Method = type, Entry = entry, Sample.size = N,
-            Num.events = E, 
-            Hazard.p = lambda.0, Hazard.t = lambda.1,
-            Dropout = eta, Frac.p = xi0, Frac.t = xi1,
-            Gamma = gamma, Alpha = alpha, Beta = beta, Sided = sided,
-            Study.dura = Ts, Accrual = Tr)
+    outd <- list(type = type, entry = entry, n = N,
+            nEvents = E, 
+            lambda1 = lambda1, lambda2 = lambda2,
+            eta = eta, ratio=ratio, 
+            gamma = gamma, alpha = alpha, beta = beta, sided = sided,
+            Ts = Ts, Tr = Tr)
+    class(outd) <- "nSurvival"
     outd
 }
 
