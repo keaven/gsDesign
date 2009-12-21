@@ -91,6 +91,11 @@
 
 "print.gsDesign" <- function(x, ...)
 {    
+	if (x$nFixSurv > 0)
+	{	cat("Group sequential design sample size for time-to-event outcome\n", 
+        "with sample size ", x$nSurv, ". The analysis plan below shows events\n",
+        "at each analysis.\n", sep="")
+	}
     
     if (x$test.type == 1) 
     {
@@ -236,28 +241,45 @@
         print(y)
     }
 }
-print.nSurvival <- function(x,y=0,med=F,timeunit="months", ...){
+print.nSurvival <- function(x, med=FALSE, timeunit=""){
 	if (class(x) != "nSurvival") stop("print.nSurvival: primary argument must have class nSurvival")
-   cat("Two-arm trial with time-to-event outcome with fixed accrual and study duration.\n")
-	cat("Sample size computed using Lachin and Foulkes (1986) method.\n")
-	cat("Accrual duration ", x$Tr, " ", timeunit, " and minimum follow-up ", x$Ts-x$Tr, " ", 
-       timeunit, ".\n", sep="")
-   cat("Fixed design sample size n=", 2*ceiling(x$n/2), " subjects ", sep="")
-   cat("followed until nEvents=", ceiling(x$nEvents), " events occur to detect\n")
-   if (!med) cat("a reduction from a ", round(x$lambda1,3), " failure rate in the control group to a\n",
-                    "failure rate of ", round(x$lambda2,3), " in the experimental group\n", sep="")
-   else cat("an increase from", round(log(2)/x$lambda1,1), "median time-to-event in the control group\nto",
-            round(log(2)/x$lambda2,1), "in the experimental group\n")
-   cat("(hazard ratio =", round(x$lambda2/x$lambda1,3), ") with ", (1-x$beta)*100, "% power and ",
-       x$sided, "-sided Type I error =", 100*x$alpha, "%.\n", sep="")
-	if (class(y) == "gsDesign")
-	{	cat("The total sample size required for the group sequential design is ", 
-        ceiling(x$n * y$n.I[y$k] / y$n.fix /2) *2,".\n", sep="")
-   	cat("The group sequential design analysis plan is given in terms of the number\n",
-       "of events at each analysis below.\n", sep="")
+   cat("Fixed design, two-arm trial with time-to-event\n")
+	cat("outcome (Lachin and Foulkes, 1986).\n")
+	cat("Study duration (fixed):          Ts=", x$Ts, " ", timeunit, "\n", sep="")
+	cat("Accrual duration (fixed):        Tr=", x$Tr, " ", timeunit, "\n",sep="")
+	if (x$entry=="unif") cat('Uniform accrual:              entry="unif"\n')
+	else {
+		cat('Exponential accrual:          entry="expo"\n') 
+		cat("Accrual shape parameter:      gamma=", round(x$gamma,3), "\n",sep="")
 	}
+	if (med){
+		cat("Control median:      log(2)/lambda1=", round(log(2) / x$lambda1,1), " ", timeunit, "\n", sep="")
+		cat("Experimental median: log(2)/lambda2=", round(log(2) / x$lambda2,1), " ", timeunit, "\n", sep="")
+		if (x$eta > 0){
+			cat("Censoring only at study end (eta=0)\n")
+		}else{
+			cat("Censoring median:        log(2)/eta=", round(log(2) / x$eta, 1), " ", timeunit, "\n", sep="")
+		}
+	}else{
+		cat("Control failure rate:       lambda1=", round(x$lambda1,3), "\n", sep="") 
+		cat("Experimental failure rate:  lambda2=", round(x$lambda2,3), "\n", sep="")
+		cat("Censoring rate:                 eta=", round(x$eta,3),"\n", sep="")
+	}
+	cat("Power:                 100*(1-beta)=", (1-x$beta)*100, "%\n",sep="")
+   cat("Type I error (", x$sided, "-sided):   100*alpha=", 100*x$alpha, "%\n", sep="")
+	if (x$ratio==1) cat("Equal randomization:          ratio=1\n")
+	else cat("Randomization (Exp/Control):  ratio=", x$ratio, "\n", sep="")
+	if (x$type=="rr"){
+		cat("Sample size based on hazard ratio=", round(x$lambda2/x$lambda1,3), ' (type="rr")\n',sep="") 
+  	}else{
+		cat('Sample size based on risk difference=', round(x$lambda1 - x$lambda2,3), ' (type="rd")\n', sep="")
+		if (x$approx) cat("Sample size based on H1 variance only:  approx=TRUE\n")
+		else cat("Sample size based on H0 and H1 variance: approx=FALSE\n")
+	}
+   cat("Sample size (computed):           n=", 2*ceiling(x$n/2), "\n", sep="")
+   cat("Events required (computed): nEvents=", ceiling(x$nEvents), "\n",sep="")
+	invisible(x)
 }
-
 
 ###
 # Hidden Functions

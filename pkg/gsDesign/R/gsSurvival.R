@@ -131,7 +131,7 @@
             lambda1 = lambda1, lambda2 = lambda2,
             eta = eta, ratio=ratio, 
             gamma = gamma, alpha = alpha, beta = beta, sided = sided,
-            Ts = Ts, Tr = Tr)
+            Ts = Ts, Tr = Tr, approx=approx)
     class(outd) <- "nSurvival"
     outd
 }

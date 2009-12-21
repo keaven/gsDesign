@@ -7,7 +7,7 @@
 gsDesign(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
          delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
          sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I = 0,
-         maxn.IPlan = 0) 
+         maxn.IPlan = 0, nFixSurv=0) 
 
 print.gsDesign(x,...)}
 
@@ -26,7 +26,8 @@ print.gsDesign(x,...)}
 	This will be changed to \eqn{1 - }\code{alpha} when default value of 0 is used. 
 	Since this is the expected usage, normally \code{astar} is not specified by the user.}
 	\item{delta}{Standardized effect size. See details and examples.}
-	\item{n.fix}{Sample size for fixed design with no interim; used to find maximum group sequential sample size.
+	\item{n.fix}{Sample size for fixed design with no interim; used to find maximum group sequential sample size. For a time-to-event outcome, input number of events required for a fixed design rather than sample size
+and enter fixed design sample size (optional) in \code{nFixSurv}.
 	See details and examples.}
 	\item{timing}{Sets relative timing of interim analyses. Default of 1 produces equally spaced analyses. 
 	Otherwise, this is a vector of length \code{k} or \code{k-1}.
@@ -55,6 +56,8 @@ timing[k]=1}.}
 	Normally \code{r} will not be changed by the user.}
 	\item{n.I}{Used for re-setting bounds when timing of analyses changes from initial design; see examples.}
 	\item{maxn.IPlan}{Used for re-setting bounds when timing of analyses changes from initial design; see examples.}
+	\item{nFixSurv}{If a time-to-event variable is used, \code{nFixSurv} computed as the sample size from \code{nSurvival} may be entered to have \code{gsDesign}
+	compute the total sample size required as well as the number of events at each analysis that will be returned in \code{n.fix}; this is rounded up to an even number.}|
 	\item{x}{In \code{print.gsDesign} this is an object of class gsDesign.}
 	\item{...}{This should allow optional arguments that are standard when calling \code{print}.}
 }
