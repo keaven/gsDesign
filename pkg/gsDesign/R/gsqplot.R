@@ -53,11 +53,11 @@
     plots <- list(plotgsZ=c("1","z"), 
             plotgsPower=c("2","power"), 
             plotreleffect=c("3","xbar","thetahat","theta"), 
-            plotgsCP=c("4","copp"),
+            plotgsCP=c("4", "cp", "copp"),
             plotsf=c("5","sf"), 
             plotASN=c("6","asn", "e{n}","n"), 
             plotBval=c("7","b","b-val","b-value"),
-		plotHR=c("8","hr","hazard"))
+            plotHR=c("8","hr","hazard"))
     
     # perform partial matching on plot type and return name
     plottype <- match.arg(tolower(as.character(plottype)), as.vector(unlist(plots)))
@@ -65,15 +65,15 @@
 }
 "plotgsZ" <- function(x, ylab="Normal critical value",...){qplotit(x,ylab=ylab,fn=function(z,...){z},...)}
 "plotBval" <- function(x, ylab="B-value",...){qplotit(x, fn=gsBvalue, ylab=ylab,...)}
-"plotreleffect" <- function(x, ylab=expression(hat(theta)/theta[1]), delta=1, delta0=0,...){qplotit(x, fn=gsDeltaHat, ylab=ylab, delta=delta, delta0=delta0,...)}
+"plotreleffect" <- function(x, ylab=NULL, delta=1, delta0=0,...){qplotit(x, fn=gsDeltaHat, ylab=ifelse(ylab!=NULL, ylab, expression(hat(theta)/theta[1])), delta=delta, delta0=delta0,...)}
 "plotHR" <- function(x, ylab="Estimated hazard ratio",...){qplotit(x, fn=gsHRHat, ylab=ylab,...)}
-gsBvalue <- function(z,i,x,...)
+gsBvalue <- function(z,i,x,ylab="B-value",...)
 {   Bval <- z * sqrt(x$timing[i])
     Bval
 }
-gsThetaHat <- function(z, i, x,...)
+gsThetaHat <- function(z, i, x, ylab=NULL,...)
 {   thetaHat <- z / sqrt(x$n.I[i])/x$delta
-	thetaHat
+    thetaHat
 }
 gsDeltaHat <- function(z, i, x, delta, delta0=0,...)
 {   deltaHat <- z / sqrt(x$n.I[i]) * delta / x$delta - delta0
@@ -95,7 +95,10 @@ gsCPfn <- function(z, i, x, theta, ...)
 "qplotit" <- function(x, xlim=NULL, ylim=NULL, geom=c("line", "text"), zround=2, lty=c(1,1), col=c(1,1),
                      lwd=c(1,1), nlabel="TRUE", xlab="", ylab="", fn=function(z,i,x,...){z},
                      ratio=1, delta0=0, delta=.05, cex=1, base=FALSE,...)
-{  if(x$n.I[x$k] < 3) 
+{  lty <- lty * c(1,1)
+   col <- col * c(1,1)
+   lwd <- lwd * c(1,1)
+   if(x$n.I[x$k] < 3) 
    {   nround <- 3 
        ntx <- "r="
        if (xlab=="") xlab <- "Information relative to fixed sample design"
@@ -159,14 +162,17 @@ gsCPfn <- function(z, i, x, theta, ...)
 }
 
 "plotgsCP" <- function(x, theta="thetahat", main="Conditional power at interim stopping boundaries", 
-        ylab=ifelse(theta == "thetahat",
+        ylab=NULL, geom="line",
+        xlab=ifelse(x$n.I[x$k] < 3, "Sample size relative to fixed design", "N"), xlim=NULL,
+        lty=1, col=1, pch=22, textcex=1, legtext=gsLegendText(test.type), zround=3, nlabel=TRUE, 
+        base=FALSE, ...)
+{    
+	if (is.null(ylab))
+	{	ylab <- ifelse(theta == "thetahat",
                        expression(paste("Conditional power at",
                           theta, "=", hat(theta),sep=" ")),
-                       expression(paste("Conditional power at", theta, "=", delta))),
-					   geom="line",
-        xlab=ifelse(x$n.I[x$k] < 3, "Sample size relative to fixed design", "N"), xlim=NULL,
-        lty=1, col=1, pch=22, textcex=1, legtext=gsLegendText(test.type), zround=3, nlabel=TRUE, base=FALSE,...)
-{    
+                       expression(paste("Conditional power at", theta, "=", delta)))
+	}
 	if (!is.numeric(xlim))
 	{	xlim <- range(x$n.I[1:(x$k-1)])
 		xlim <- xlim + c(-.05,.05) * (xlim[2] - xlim[1])
@@ -242,7 +248,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 					Bound=array("Ntxt", x$k-1),
 					Ztxt=as.character(round(x$n.I[1:(x$k-1)],nround)))
 		if (base)
-		{	text(x=y2$N, y=y$CP, y2$Ztxt, cex=textcex)
+		{	text(x=x$n.I[1:(x$k-1)], y=array(ymin/2, x$k-1), as.character(round(x$n.I[1:(x$k-1)],nround)), cex=textcex)
 		}
 		if (max(x$n.I) < 3)
 		{	if (base)
@@ -265,13 +271,18 @@ gsCPfn <- function(z, i, x, theta, ...)
 }
 "plotsf" <- function(x, 
 	xlab="Proportion of total sample size", 
-	ylab=expression(paste(alpha, "-spending")), 
-	ylab2=expression(paste(beta, "-spending")), oma=c(2, 2, 2, 2),
+	ylab=NULL,  
+	ylab2=NULL, oma=c(2, 2, 2, 2),
 	legtext=if (x$test.type > 4) c("Upper bound", "Lower bound") else c(expression(paste(alpha, "-spending")), 
                             expression(paste(beta, "-spending"))),
 	col=c(1,1), lwd=c(.5,.5), lty=c(1,2),
 	mai=c(.85, .75, .5, .5), xmax=1, base=FALSE,...)
-{
+{	ylab <- expression(paste(alpha, "-spending"))
+	ylab2 <- expression(paste(beta, "-spending"))
+	lty <- c(1,1) * lty
+	col <- c(1,1) * col
+	lwd <- c(1,1) * lwd
+
 	# K. Wills (GSD-31)
 	if (is(x, "gsProbability"))
 	{
