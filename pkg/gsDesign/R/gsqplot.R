@@ -95,9 +95,9 @@ gsCPfn <- function(z, i, x, theta, ...)
 "qplotit" <- function(x, xlim=NULL, ylim=NULL, geom=c("line", "text"), zround=2, lty=c(1,1), col=c(1,1),
                      lwd=c(1,1), nlabel="TRUE", xlab=NULL, ylab=NULL, fn=function(z,i,x,...){z},
                      ratio=1, delta0=0, delta=.05, cex=1, base=FALSE,...)
-{  lty <- lty * c(1,1)
-   col <- col * c(1,1)
-   lwd <- lwd * c(1,1)
+{  if (length(lty)==1) lty <- array(lty, 2)
+   if (length(col)==1) col <- array(col, 2)
+   if (length(lwd)==1) lwd <- array(lwd, 2)
    if(x$n.I[x$k] < 3) 
    {   nround <- 3 
        ntx <- "r="
@@ -279,9 +279,9 @@ gsCPfn <- function(z, i, x, theta, ...)
 	mai=c(.85, .75, .5, .5), xmax=1, base=FALSE,...)
 {	ylab <- expression(paste(alpha, "-spending"))
 	ylab2 <- expression(paste(beta, "-spending"))
-	lty <- c(1,1) * lty
-	col <- c(1,1) * col
-	lwd <- c(1,1) * lwd
+	if (length(lty)==1) lty <- array(lty, 2)
+	if (length(col)==1) col <- array(col, 2)
+	if (length(lwd)==1) lwd <- array(lwd, 2)
 
 	# K. Wills (GSD-31)
 	if (is(x, "gsProbability"))
