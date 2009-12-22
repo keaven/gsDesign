@@ -270,7 +270,7 @@ print.nSurvival <- function(x, med=FALSE, timeunit=""){
 	if (x$ratio==1) cat("Equal randomization:          ratio=1\n")
 	else cat("Randomization (Exp/Control):  ratio=", x$ratio, "\n", sep="")
 	if (x$type=="rr"){
-		cat("Sample size based on hazard ratio=", round(x$lambda2/x$lambda1,3), ' (type="rr")\n',sep="") 
+		cat("Sample size based on hazard ratio=", round(x$lambda2/x$lambda1,3), ' (type="rr")\n', sep="") 
   	}else{
 		cat('Sample size based on risk difference=', round(x$lambda1 - x$lambda2,3), ' (type="rd")\n', sep="")
 		if (x$approx) cat("Sample size based on H1 variance only:  approx=TRUE\n")

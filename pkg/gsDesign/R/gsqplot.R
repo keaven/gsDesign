@@ -93,7 +93,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 }
 # qplots for z-values and transforms of z-values
 "qplotit" <- function(x, xlim=NULL, ylim=NULL, geom=c("line", "text"), zround=2, lty=c(1,1), col=c(1,1),
-                     lwd=c(1,1), nlabel="TRUE", xlab="", ylab="", fn=function(z,i,x,...){z},
+                     lwd=c(1,1), nlabel="TRUE", xlab=NULL, ylab=NULL, fn=function(z,i,x,...){z},
                      ratio=1, delta0=0, delta=.05, cex=1, base=FALSE,...)
 {  lty <- lty * c(1,1)
    col <- col * c(1,1)
@@ -101,11 +101,11 @@ gsCPfn <- function(z, i, x, theta, ...)
    if(x$n.I[x$k] < 3) 
    {   nround <- 3 
        ntx <- "r="
-       if (xlab=="") xlab <- "Information relative to fixed sample design"
+       if (is.null(xlab)) xlab <- "Information relative to fixed sample design"
    } else 
    {   nround <- 0
        ntx <- "n="
-       if (xlab=="") xlab <- "N"
+       if (is.null(xlab)) xlab <- "N"
    }
    z <- fn(z=c(x$upper$bound,x$lower$bound), i=c(1:x$k, 1:x$k), x=x,
                ratio=ratio, delta0=delta0, delta=delta)
@@ -180,11 +180,11 @@ gsCPfn <- function(z, i, x, theta, ...)
 	if(x$n.I[x$k] < 3) 
 	{	nround <- 3 
 		ntx <- "r="
-		if (xlab=="") xlab <- "Information relative to fixed sample design"
+		if (is.null(xlab)) xlab <- "Information relative to fixed sample design"
 	}else 
 	{	nround <- 0
 		ntx <- "n="
-		if (xlab=="") xlab <- "N"
+		if (is.null(xlab)) xlab <- "N"
 	}
 	test.type <- ifelse(is(x,"gsProbability"), 3, x$test.type)    
 	y <- gsBoundCP(x, theta=theta)
@@ -319,7 +319,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 		{	legend(x=c(.0, .43), y=x$alpha * c(.85, 1), lty=lty, col=col, lwd=lwd, legend=legtext)
 			par(new=TRUE)
 			plot(t, x$lower$sf(x$beta, t, x$lower$param)$spend,
-					ylim=c(0, x$beta), type="l", ylab="", main="",
+					ylim=c(0, x$beta), type="l", ylab=NULL, main=NULL,
 					yaxt="n", xlab=xlab, lty=lty[2], lwd=lwd[2], col=col[2],...)
 			axis(4)
 			mtext(text=ylab2,  side = 4, outer=TRUE)
