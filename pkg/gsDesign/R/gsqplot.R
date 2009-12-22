@@ -92,7 +92,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 	cp
 }
 # qplots for z-values and transforms of z-values
-"qplotit" <- function(x, xlim=NULL, ylim=NULL, geom=c("line", "text"), zround=2, lty=c(1,1), col=c(1,1),
+"qplotit" <- function(x, xlim=NULL, ylim=NULL, geom=c("line", "text"), zround=2, lty=c(2,1), col=c(1,1),
                      lwd=c(1,1), nlabel="TRUE", xlab=NULL, ylab=NULL, fn=function(z,i,x,...){z},
                      ratio=1, delta0=0, delta=.05, cex=1, base=FALSE,...)
 {  if (length(lty)==1) lty <- array(lty, 2)
@@ -127,17 +127,20 @@ gsCPfn <- function(z, i, x, theta, ...)
 			lty=lty[1], col=col[1], lwd=lwd[1], xlab=xlab, ylab=ylab,...)
 		lines(x=y$N[y$Bound=="Lower"], y=y$Z[y$Bound=="Lower"], lty=lty[2], col=col[2], lwd=lwd[2])
 	}else
-	{   p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y, 
-             group=Bound, geom=geom, label=Ztxt,
+	{	p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y, 
+             group=factor(Bound), colour=factor(Bound), geom=geom, label=Ztxt,
              xlab=xlab, ylab=ylab,
-             ylim=ylim, xlim=xlim,...)
+             ylim=ylim, xlim=xlim,...) + aes(lty=factor(Bound)) +
+				scale_colour_manual(name= "Bound", values=col, labels=c("Lower","Upper")) +
+				scale_linetype_manual(name= "Bound", values=lty, labels=c("Lower","Upper"))
 	}
 	if (nlabel==TRUE)
 	{	y2 <- data.frame(
 					N=as.numeric(x$n.I), 
 					Z=as.numeric(array(ylim[1], x$k)), 
-					Bound=array("Ntxt", x$k),
+					Bound=array("Lower", x$k),
 					Ztxt=as.character(round(x$n.I,nround)))
+#browser()
 		if (base)
 		{	text(x=y2$N, y=y$Z, y$Ztxt, cex=cex)
 		}
@@ -151,7 +154,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 		{	if(base)
 			{	text(x=y2$N, y=y2$Z, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
-			{	p <- p + geom_text(data=y2, label=paste(array("N=",x$k), y2$Ztxt, sep=""))
+			{	p <- p + geom_text(data=y2, aes(N,Z, group=factor(Bound)), label=paste(array("N=",x$k), y2$Ztxt, sep=""))
 			}
 	}	}
 	if (base)
@@ -419,15 +422,18 @@ gsCPfn <- function(z, i, x, theta, ...)
     }
     else
     {  q <- data.frame(x=xval, y=x$en)
-       p <- qplot(x=x, y=y, data=q, geom="line", ylab=ylab, xlab=xlab, main=main,...)
+#browser()
+       p <- qplot(x=x, y=y, data=q, geom="line", ylab=ylab, xlab=xlab, main=main)
        return(p)
     }
 }
 "plotgsPower" <- function(x, main="Group sequential power plot",
 	ylab="Cumulative Boundary Crossing Probality",
-	xlab=NULL, title="Boundary", legtext=c("Upper", "Lower"), lty=c(1, 2), col=c(1, 2), lwd=1, cex=1,
+	xlab=NULL, lty=c(1, 2), col=c(1, 2), lwd=1, cex=1,
 	theta=if (is(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta, xval=NULL, base=FALSE,...)
 {
+	if (length(col==1)) col=array(col,2)
+	if (length(lty==1)) lty=array(lty,2)
 	if (is.null(xval))
 	{    
 		if (is(x, "gsDesign") && is.null(xlab))
@@ -445,10 +451,9 @@ gsCPfn <- function(z, i, x, theta, ...)
                 gsProbability(k=x$k, a=x$lower$bound, b=x$upper$bound, n.I=x$n.I, theta=theta)
 	test.type <- ifelse(is(x,"gsProbability"), 3, x$test.type)
 	if (is.null(xlab)) xlab <- ""
-# a real R programmer could do the following much better...
 	theta <- xval
 	interim <- array(1,length(xval))
-	colr <- array(col[1],length(xval)*x$k)
+	bound <- array(1,length(xval)*x$k)
 	boundprob <- x$upper$prob[1,]
 	prob <- boundprob
 	yval <- min(mean(range(x$upper$prob[1,])))
@@ -469,7 +474,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 	{
 		itxt <- c(itxt,"Final",itxt)
 		boundprob <- array(1, length(xval))
-		colr <- c(colr, array(col[2],length(xval)*(x$k-1)))
+		bound <- c(bound, array(2, length(xval)*(x$k-1)))
 		for(j in 1:(x$k-1))
 		{	theta <- c(theta, xval)
 			interim <- c(interim, array(j, length(xval)))
@@ -480,23 +485,24 @@ gsCPfn <- function(z, i, x, theta, ...)
 			xv <- c(xv, min(xval[boundprob >= ymid]))
 		}
 	}else {itxt <- c(itxt,"Final")}
-	y <- data.frame(theta=as.numeric(theta), interim=interim, col=colr, prob=as.numeric(prob),
+	y <- data.frame(theta=as.numeric(theta), interim=interim, bound=bound, prob=as.numeric(prob),
 				itxt=as.character(round(prob,2)))
-	y$group=(y$col==2)*x$k + y$interim
-	colr <- array(1, x$k)
+	y$group=(y$bound==2)*x$k + y$interim
+	bound <- array(1, x$k)
 	interim <- 1:x$k
 	if (test.type > 1)
-	{	colr <- c(colr, array(2, x$k-1))
+	{	bound <- c(bound, array(2, x$k-1))
 		interim <- c(interim, 1:(x$k-1))
 	}
-	yt <- data.frame(theta=xv, interim=interim, col=colr, prob=yval, itxt=itxt)
-	colr <- array(1, x$k)
+	yt <- data.frame(theta=xv, interim=interim, bound=bound, prob=yval, itxt=itxt)
+	bound <- array(1, x$k)
 	interim <- 1:x$k
 	if (test.type > 1)
-	{	colr <- c(colr, array(2, x$k-1))
+	{	bound <- c(bound, array(2, x$k-1))
 		interim <- c(interim, 1:(x$k-1))
 	}
-	yt <- data.frame(theta=xv, interim=interim, col=colr, prob=yval, itxt=itxt)
+	yt <- data.frame(theta=xv, interim=interim, bound=bound, prob=yval, itxt=itxt)
+#browser()
 	if (base)    
 	{	col2 <- ifelse(length(col) > 1, col[2], col)
 		lwd2 <- ifelse(length(lwd) > 1, lwd[2], lwd)
@@ -514,7 +520,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 		}
 		else
 		{    
-			axis(4, seq(0, 1, by=0.1))
+			axis(4, seq(0, 1, by=0.1), col.axis=col[1], col=col[1])
 			axis(2, seq(0, 1, .1), labels=1 - seq(0, 1, .1), col.axis=col2, col=col2)
 		}
 
@@ -535,12 +541,12 @@ gsCPfn <- function(z, i, x, theta, ...)
 			}
         
 			temp <- legend("topleft",  legend = c(" ",  " "),  col=col, 
-							text.width = strwidth("Lower"),  lwd=lwd, 
+							text.width = max(strwidth(c("Upper","Lower"))),  lwd=lwd, 
 							lty = lty,  xjust = 1,  yjust = 1, 
-							title = title)
+							title = "Boundary")
         
 			text(temp$rect$left  +  temp$rect$w,  temp$text$y, 
-					legtext,  col=col,  pos=2)
+					c("Upper","Lower"),  col=col,  pos=2)
 		}
 
 		phi <- x$upper$prob[1, ]
@@ -550,17 +556,23 @@ gsCPfn <- function(z, i, x, theta, ...)
 			phi <- phi + x$upper$prob[i, ]
 			lines(xval, phi, col=col[1], lwd=lwd[1], lty=lty[1])
 		}
-		text(x=yt$theta, y=yt$prob, col=yt$col, yt$itxt, cex=cex)
+		colr <- array(col[1], x$k)
+		if (length(yt$theta)>x$k) colr<-c(colr,array(col[2],x$k-1))
+		text(x=yt$theta, y=yt$prob, col=colr, yt$itxt, cex=cex)
 		invisible(x)
 	}
 	else
-	{
-		p <- qplot(x=theta, y=prob, data=y,
-					colour=factor(col), geom="line", xlab = xlab, ylab = ylab, ylim=c(0,1),
-					group=factor(group))
-		p <- p + geom_text(data=yt, label=as.character(itxt), aes(theta, prob, colour=factor(col), group=1)) +
-				scale_colour_manual(name= "Probability", values=c("black", "red"),
-											labels=c("Upper bound","1-Lower bound"))
+	{	p <- qplot(x=theta, y=prob, data=subset(y,interim==1),
+					colour=factor(bound), geom="line", xlab = xlab, ylab = ylab, ylim=c(0,1),
+					group=factor(bound)) + aes(lty=factor(bound))
+		p <- p + scale_colour_manual(name= "Probability", values=col, labels=c("Upper bound","1-Lower bound")) +
+				 scale_linetype_manual(name="Probability", values=lty, labels=c("Upper bound","1-Lower bound"))
+		p <- p + geom_text(data=yt, label=as.character(itxt), aes(theta, prob, colour=factor(bound), group=1))
+		for(i in 1:x$k) p <- p + geom_line(data=subset(y,interim==i&bound==1), colour=col[1], lty=lty[1])
+		if (test.type > 2) for(i in 1:(x$k-1)) {
+			 p <- p + geom_line(data=subset(y,interim==i&bound==2), colour=col[2], lty=lty[2])
+		}
 		return(p)
 	}
 }
+
