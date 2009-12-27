@@ -63,10 +63,10 @@
     plottype <- match.arg(tolower(as.character(plottype)), as.vector(unlist(plots)))
     names(plots)[which(unlist(lapply(plots, function(x, type) is.element(type, x), type=plottype)))]    
 }
-"plotgsZ" <- function(x, ylab="Normal critical value",...){qplotit(x,ylab=ylab,fn=function(z,...){z},...)}
-"plotBval" <- function(x, ylab="B-value",...){qplotit(x, fn=gsBvalue, ylab=ylab,...)}
-"plotreleffect" <- function(x, ylab=NULL, delta=1, delta0=0,...){qplotit(x, fn=gsDeltaHat, ylab=ifelse(ylab!=NULL, ylab, expression(hat(theta)/theta[1])), delta=delta, delta0=delta0,...)}
-"plotHR" <- function(x, ylab="Estimated hazard ratio",...){qplotit(x, fn=gsHRHat, ylab=ylab,...)}
+"plotgsZ" <- function(x, ylab="Normal critical value",...){qplotit(x=x,ylab=ylab,fn=function(z,...){z},...)}
+"plotBval" <- function(x, ylab="B-value",...){qplotit(x=x, fn=gsBvalue, ylab=ylab,...)}
+"plotreleffect" <- function(x=x, ylab=NULL, delta=1, delta0=ifelse(is.null(x$delta0),0,x$delta0),...){qplotit(x, fn=gsDeltaHat, ylab=ifelse(!is.null(ylab), ylab, expression(hat(theta)/theta[1])), delta=delta, delta0=delta0,...)}
+"plotHR" <- function(x=x, ylab="Estimated hazard ratio",...){qplotit(x, fn=gsHRHat, ylab=ylab,...)}
 gsBvalue <- function(z,i,x,ylab="B-value",...)
 {   Bval <- z * sqrt(x$timing[i])
     Bval
@@ -75,11 +75,11 @@ gsThetaHat <- function(z, i, x, ylab=NULL,...)
 {   thetaHat <- z / sqrt(x$n.I[i])/x$delta
     thetaHat
 }
-gsDeltaHat <- function(z, i, x, delta, delta0=0,...)
+gsDeltaHat <- function(z, i, x, delta, delta0=0, ylab=NULL,...)
 {   deltaHat <- z / sqrt(x$n.I[i]) * delta / x$delta - delta0
     deltaHat
 }
-gsHRHat <- function(z, i, x, ratio,...)
+gsHRHat <- function(z, i, x, ratio, ylab="Estimated hazard ratio",...)
 {    c <- 1 / (1 + ratio)
      psi <- c * (1 - c)
      hrHat <- exp(-z / sqrt(x$n.I[i] * psi))
@@ -92,20 +92,24 @@ gsCPfn <- function(z, i, x, theta, ...)
 	cp
 }
 # qplots for z-values and transforms of z-values
-"qplotit" <- function(x, xlim=NULL, ylim=NULL, geom=c("line", "text"), zround=2, lty=c(2,1), col=c(1,1),
+"qplotit" <- function(x, xlim=NULL, ylim=NULL, geom=c("line", "text"), dgt=2, lty=c(2,1), col=c(1,1),
                      lwd=c(1,1), nlabel="TRUE", xlab=NULL, ylab=NULL, fn=function(z,i,x,...){z},
                      ratio=1, delta0=0, delta=.05, cex=1, base=FALSE,...)
 {  if (length(lty)==1) lty <- array(lty, 2)
    if (length(col)==1) col <- array(col, 2)
    if (length(lwd)==1) lwd <- array(lwd, 2)
-   if(x$n.I[x$k] < 3) 
+   if(x$n.fix == 1) 
    {   nround <- 3 
        ntx <- "r="
        if (is.null(xlab)) xlab <- "Information relative to fixed sample design"
-   } else 
+   }else if (x$nFixSurv > 0)
+   {   ntx <- "d="
+       nround <- 0
+       if (is.null(xlab)) xlab <- "Number of events"
+   }else
    {   nround <- 0
        ntx <- "n="
-       if (is.null(xlab)) xlab <- "N"
+       if (is.null(xlab)) xlab <- "Sample size"
    }
    z <- fn(z=c(x$upper$bound,x$lower$bound), i=c(1:x$k, 1:x$k), x=x,
                ratio=ratio, delta0=delta0, delta=delta)
@@ -113,7 +117,7 @@ gsCPfn <- function(z, i, x, theta, ...)
            N=as.numeric(c(x$n.I,x$n.I)), 
            Z=as.numeric(z), 
            Bound=c(array("Upper", x$k), array("Lower", x$k)),
-           Ztxt=as.character(round(z, zround)))
+           Ztxt=as.character(round(z, dgt)))
    if (!is.numeric(ylim))
    {   ylim <- range(y$Z)
        ylim[1] <- ylim[1]  -.1 * (ylim[2] - ylim[1])
@@ -127,7 +131,8 @@ gsCPfn <- function(z, i, x, theta, ...)
 			lty=lty[1], col=col[1], lwd=lwd[1], xlab=xlab, ylab=ylab,...)
 		lines(x=y$N[y$Bound=="Lower"], y=y$Z[y$Bound=="Lower"], lty=lty[2], col=col[2], lwd=lwd[2])
 	}else
-	{	p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y, 
+	{	
+p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y, 
              group=factor(Bound), colour=factor(Bound), geom=geom, label=Ztxt,
              xlab=xlab, ylab=ylab,
              ylim=ylim, xlim=xlim,...) + aes(lty=factor(Bound)) +
@@ -139,7 +144,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 					N=as.numeric(x$n.I), 
 					Z=as.numeric(array(ylim[1], x$k)), 
 					Bound=array("Lower", x$k),
-					Ztxt=as.character(round(x$n.I,nround)))
+					Ztxt=ifelse(array(nround,x$k) > 0, as.character(round(x$n.I, nround)), ceiling(x$n.I)))
 #browser()
 		if (base)
 		{	text(x=y2$N, y=y$Z, y$Ztxt, cex=cex)
@@ -167,7 +172,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 "plotgsCP" <- function(x, theta="thetahat", main="Conditional power at interim stopping boundaries", 
         ylab=NULL, geom="line",
         xlab=ifelse(x$n.I[x$k] < 3, "Sample size relative to fixed design", "N"), xlim=NULL,
-        lty=1, col=1, pch=22, textcex=1, legtext=gsLegendText(test.type), zround=3, nlabel=TRUE, 
+        lty=1, col=1, pch=22, textcex=1, legtext=gsLegendText(test.type), dgt=3, nlabel=TRUE, 
         base=FALSE, ...)
 {    
 	if (is.null(ylab))
@@ -232,12 +237,12 @@ gsCPfn <- function(z, i, x, theta, ...)
 	{	N <- as.numeric(x$n.I[1:(x$k-1)])
 		CP <- y[,2] 
 		Bound <- array("Upper", x$k-1)
-		Ztxt <- as.character(round(CP[1:(x$k-1)], zround))
+		Ztxt <- as.character(round(CP[1:(x$k-1)], dgt))
 		if (test.type > 1)
 		{	N <- c(N, N)
 			CP <- c(CP, y[,1])
 			Bound <- c(Bound, array("Lower", x$k-1))
-			Ztxt <- as.character(c(Ztxt ,round(y[,1],zround)))
+			Ztxt <- as.character(c(Ztxt ,round(y[,1],dgt)))
 		}
 		y <- data.frame(N=N, CP=CP, Bound=Bound, Ztxt=Ztxt)
 		p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, 
