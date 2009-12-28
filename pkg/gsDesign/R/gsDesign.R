@@ -120,13 +120,14 @@
 
 "gsDesign"<-function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
         delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
-        sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I=0, maxn.IPlan=0) 
+        sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I=0, maxn.IPlan=0, nFixSurv=0) 
 {
     # Derive a group sequential design and return in a gsDesign structure
     
     # set up class variable x for gsDesign being requested
     x <- list(k=k, test.type=test.type, alpha=alpha, beta=beta, astar=astar,
-            delta=delta, n.fix=n.fix, timing=timing, tol=tol, r=r, n.I=n.I, maxn.IPlan=maxn.IPlan)
+            delta=delta, n.fix=n.fix, timing=timing, tol=tol, r=r, n.I=n.I, maxn.IPlan=maxn.IPlan,
+            nFixSurv=nFixSurv, nSurv=0)
     
     class(x) <- "gsDesign"
     
@@ -194,13 +195,15 @@
     }
     
     # call appropriate calculation routine according to test.type
-    switch(x$test.type,
+    x <- switch(x$test.type,
             gsDType1(x),
             gsDType2and5(x),
             gsDType3(x),
             gsDType4(x),
             gsDType2and5(x),
             gsDType6(x))
+    if (x$nFixSurv > 0) x$nSurv <- ceiling(x$nFixSurv * x$n.I[x$k] / n.fix / 2) * 2
+    x
 }
 
 "gsProbability" <- function(k=0, theta, n.I, a, b, r=18, d=NULL)

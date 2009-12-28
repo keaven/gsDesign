@@ -98,6 +98,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 {  if (length(lty)==1) lty <- array(lty, 2)
    if (length(col)==1) col <- array(col, 2)
    if (length(lwd)==1) lwd <- array(lwd, 2)
+   if (length(dgt)==1) dgt <- array(dgt, 2)
    if(x$n.fix == 1) 
    {   nround <- 3 
        ntx <- "r="
@@ -113,11 +114,13 @@ gsCPfn <- function(z, i, x, theta, ...)
    }
    z <- fn(z=c(x$upper$bound,x$lower$bound), i=c(1:x$k, 1:x$k), x=x,
                ratio=ratio, delta0=delta0, delta=delta)
+   Ztxt <- as.character(c(round(z[1:(x$k-1)],dgt[1]), round(z[x$k],max(dgt)), 
+                          round(z[(x$k+1):(2*x$k-1)], dgt[2]), round(z[2*x$k],max(dgt))))
    y <- data.frame(
            N=as.numeric(c(x$n.I,x$n.I)), 
            Z=as.numeric(z), 
            Bound=c(array("Upper", x$k), array("Lower", x$k)),
-           Ztxt=as.character(round(z, dgt)))
+           Ztxt=Ztxt)
    if (!is.numeric(ylim))
    {   ylim <- range(y$Z)
        ylim[1] <- ylim[1]  -.1 * (ylim[2] - ylim[1])
