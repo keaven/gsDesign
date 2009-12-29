@@ -63,10 +63,10 @@
     plottype <- match.arg(tolower(as.character(plottype)), as.vector(unlist(plots)))
     names(plots)[which(unlist(lapply(plots, function(x, type) is.element(type, x), type=plottype)))]    
 }
-"plotgsZ" <- function(x, ylab="Normal critical value",...){qplotit(x=x,ylab=ylab,fn=function(z,...){z},...)}
-"plotBval" <- function(x, ylab="B-value",...){qplotit(x=x, fn=gsBvalue, ylab=ylab,...)}
-"plotreleffect" <- function(x=x, ylab=NULL, delta=1, delta0=ifelse(is.null(x$delta0),0,x$delta0),...){qplotit(x, fn=gsDeltaHat, ylab=ifelse(!is.null(ylab), ylab, expression(hat(theta)/theta[1])), delta=delta, delta0=delta0,...)}
-"plotHR" <- function(x=x, ylab="Estimated hazard ratio",...){qplotit(x, fn=gsHRHat, ylab=ylab,...)}
+"plotgsZ" <- function(x, ylab="Normal critical value",main="Normal test statistics at bounds",...){qplotit(x=x,ylab=ylab,main=main,fn=function(z,...){z},...)}
+"plotBval" <- function(x, ylab="B-value",main="B-values at bounds",...){qplotit(x=x, fn=gsBvalue, ylab=ylab,main=main,...)}
+"plotreleffect" <- function(x=x, ylab=NULL, delta=1, main="Treatment effect at bounds", delta0=ifelse(is.null(x$delta0),0,x$delta0),...){qplotit(x, fn=gsDeltaHat, main=main, ylab=ifelse(!is.null(ylab), ylab, expression(hat(theta)/theta[1])), delta=delta, delta0=delta0,...)}
+"plotHR" <- function(x=x, ylab="Estimated hazard ratio",main="Hazard ratio at bounds",...){qplotit(x, fn=gsHRHat, ylab=ylab,main=main,...)}
 gsBvalue <- function(z,i,x,ylab="B-value",...)
 {   Bval <- z * sqrt(x$timing[i])
     Bval
@@ -92,7 +92,8 @@ gsCPfn <- function(z, i, x, theta, ...)
 	cp
 }
 # qplots for z-values and transforms of z-values
-"qplotit" <- function(x, xlim=NULL, ylim=NULL, geom=c("line", "text"), dgt=2, lty=c(2,1), col=c(1,1),
+"qplotit" <- function(x, xlim=NULL, ylim=NULL, main=main, geom=c("line", "text"), 
+                     dgt=2, lty=c(2,1), col=c(1,1),
                      lwd=c(1,1), nlabel="TRUE", xlab=NULL, ylab=NULL, fn=function(z,i,x,...){z},
                      ratio=1, delta0=0, delta=.05, cex=1, base=FALSE,...)
 {  if (length(lty)==1) lty <- array(lty, 2)
@@ -131,13 +132,12 @@ gsCPfn <- function(z, i, x, theta, ...)
    }
 	if (base==TRUE)
 	{	plot(x=y$N[y$Bound=="Upper"], y=y$Z[y$Bound=="Upper"], type="l", xlim=xlim, ylim=ylim,
-			lty=lty[1], col=col[1], lwd=lwd[1], xlab=xlab, ylab=ylab,...)
+			main=main, lty=lty[1], col=col[1], lwd=lwd[1], xlab=xlab, ylab=ylab,...)
 		lines(x=y$N[y$Bound=="Lower"], y=y$Z[y$Bound=="Lower"], lty=lty[2], col=col[2], lwd=lwd[2])
 	}else
-	{	
-p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y, 
+	{	p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y, 
              group=factor(Bound), colour=factor(Bound), geom=geom, label=Ztxt,
-             xlab=xlab, ylab=ylab,
+             xlab=xlab, ylab=ylab, main=main,
              ylim=ylim, xlim=xlim,...) + aes(lty=factor(Bound)) +
 				scale_colour_manual(name= "Bound", values=col, labels=c("Lower","Upper")) +
 				scale_linetype_manual(name= "Bound", values=lty, labels=c("Lower","Upper"))
@@ -248,7 +248,7 @@ p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y,
 			Ztxt <- as.character(c(Ztxt ,round(y[,1],dgt)))
 		}
 		y <- data.frame(N=N, CP=CP, Bound=Bound, Ztxt=Ztxt)
-		p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, 
+		p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
 			group=Bound, geom=c("line","text"), label=Ztxt,
 			xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim,...)
 	}
@@ -282,13 +282,16 @@ p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y,
 }
 "plotsf" <- function(x, 
 	xlab="Proportion of total sample size", 
-	ylab=NULL,  
+	ylab=NULL, main="Spending function plot",
 	ylab2=NULL, oma=c(2, 2, 2, 2),
-	legtext=if (x$test.type > 4) c("Upper bound", "Lower bound") else c(expression(paste(alpha, "-spending")), 
-                            expression(paste(beta, "-spending"))),
+	legtext=NULL, 
 	col=c(1,1), lwd=c(.5,.5), lty=c(1,2),
 	mai=c(.85, .75, .5, .5), xmax=1, base=FALSE,...)
-{	ylab <- expression(paste(alpha, "-spending"))
+{	if (is.null(legtext))
+	{	if (x$test.type > 4) legtext <- c("Upper bound", "Lower bound") 
+		else legtext <- c(expression(paste(alpha, "-spending")), expression(paste(beta, "-spending")))
+	}
+	ylab <- expression(paste(alpha, "-spending"))
 	ylab2 <- expression(paste(beta, "-spending"))
 	if (length(lty)==1) lty <- array(lty, 2)
 	if (length(col)==1) col <- array(col, 2)
@@ -315,12 +318,12 @@ p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y,
 	}
 	if (base) 
 	{	plot(t, x$upper$sf(x$alpha, t, x$upper$param)$spend, type="l", ylab=ylab, xlab=xlab, lty=lty[1],
-           lwd=lwd[1], col=col[1],...)
+           lwd=lwd[1], col=col[1], main=main,...)
 	}
 	else if (x$test.type < 3)
 	{	spend <- x$upper$sf(x$alpha, t, x$upper$param)$spend
 		q <- data.frame(t=t, spend=spend)
-		p <- qplot(x=t, y=spend, data=q, geom="line", ylab=ylab, xlab=xlab,...)
+		p <- qplot(x=t, y=spend, data=q, geom="line", ylab=ylab, xlab=xlab, main=main,...)
 		return(p)
 	}
 
@@ -330,8 +333,8 @@ p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y,
 		{	legend(x=c(.0, .43), y=x$alpha * c(.85, 1), lty=lty, col=col, lwd=lwd, legend=legtext)
 			par(new=TRUE)
 			plot(t, x$lower$sf(x$beta, t, x$lower$param)$spend,
-					ylim=c(0, x$beta), type="l", ylab=NULL, main=NULL,
-					yaxt="n", xlab=xlab, lty=lty[2], lwd=lwd[2], col=col[2],...)
+					ylim=c(0, x$beta), type="l", ylab=NULL,
+					yaxt="n", xlab=xlab, lty=lty[2], lwd=lwd[2], col=col[2], main=main,...)
 			axis(4)
 			mtext(text=ylab2,  side = 4, outer=TRUE)
 		}
@@ -345,9 +348,8 @@ p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y,
 			group <- array(1, length(t))
 			q <- data.frame(t=c(t,t), spend=c(spenda, spendb), group=c(group,2*group))
 			ylab <- "Proportion of spending"
-			p <- qplot(x=t, y=spend, data=q, geom="line", ylab=ylab, xlab=xlab, group=factor(group),
-				linetype=factor(group),
-				colour=factor(group)) +
+			p <- qplot(x=t, y=spend, data=q, geom="line", ylab=ylab, xlab=xlab, main=main, 
+							group=factor(group), linetype=factor(group), colour=factor(group)) +
 				scale_colour_manual(name="Spending",values=col, labels=c(expression(alpha),expression(beta))) +
 				scale_linetype_manual(name="Spending",values=lty, labels=c(expression(alpha),expression(beta)))
 			return(p)
@@ -365,14 +367,12 @@ p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y,
             ylab <- "E{N} relative to fixed design"
         }
     
-        if (is.character(main) && main == "Default")
+        if (is.null(main))
         {
             main <- "Expected sample size relative to fixed design"
         }
     }
-    
-    
-    if (is.null(main)) 
+    else if (is.null(main)) 
     {
         main <- "Expected sample size by treatment difference"
     }
@@ -435,11 +435,11 @@ p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y,
        return(p)
     }
 }
-"plotgsPower" <- function(x, main="Group sequential power plot",
-	ylab="Cumulative Boundary Crossing Probality",
+"plotgsPower" <- function(x, main=NULL,
+	ylab="Cumulative Boundary Crossing Probability",
 	xlab=NULL, lty=c(1, 2), col=c(1, 2), lwd=1, cex=1,
 	theta=if (is(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta, xval=NULL, base=FALSE,...)
-{
+{	if (is.null(main)) main <- "Boundary crossing probabilities by effect size"
 	if (length(col==1)) col=array(col,2)
 	if (length(lty==1)) lty=array(lty,2)
 	if (is.null(xval))
@@ -570,7 +570,7 @@ p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y,
 		invisible(x)
 	}
 	else
-	{	p <- qplot(x=theta, y=prob, data=subset(y,interim==1),
+	{	p <- qplot(x=theta, y=prob, data=subset(y,interim==1), main=main,
 					colour=factor(bound), geom="line", xlab = xlab, ylab = ylab, ylim=c(0,1),
 					group=factor(bound)) + aes(lty=factor(bound))
 		p <- p + scale_colour_manual(name= "Probability", values=col, labels=c("Upper bound","1-Lower bound")) +
@@ -583,4 +583,3 @@ p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y,
 		return(p)
 	}
 }
-
