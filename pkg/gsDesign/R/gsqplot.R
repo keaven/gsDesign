@@ -291,8 +291,14 @@ gsCPfn <- function(z, i, x, theta, ...)
 	{	if (x$test.type > 4) legtext <- c("Upper bound", "Lower bound") 
 		else legtext <- c(expression(paste(alpha, "-spending")), expression(paste(beta, "-spending")))
 	}
-	ylab <- expression(paste(alpha, "-spending"))
-	ylab2 <- expression(paste(beta, "-spending"))
+	if (is.null(ylab))
+	{  if (base==F &&  x$test.type > 2) ylab <- "Proportion of spending"
+		else ylab <- expression(paste(alpha, "-spending"))
+	}
+	if (is.null(ylab2)) 
+	{	if (x$test.type > 4) ylab2 <- "Proportion of spending"
+		else ylab2 <- expression(paste(beta, "-spending"))
+	}
 	if (length(lty)==1) lty <- array(lty, 2)
 	if (length(col)==1) col <- array(col, 2)
 	if (length(lwd)==1) lwd <- array(lwd, 2)
@@ -333,7 +339,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 		{	legend(x=c(.0, .43), y=x$alpha * c(.85, 1), lty=lty, col=col, lwd=lwd, legend=legtext)
 			par(new=TRUE)
 			plot(t, x$lower$sf(x$beta, t, x$lower$param)$spend,
-					ylim=c(0, x$beta), type="l", ylab=NULL,
+					ylim=c(0, x$beta), type="l", ylab=ylab,
 					yaxt="n", xlab=xlab, lty=lty[2], lwd=lwd[2], col=col[2], main=main,...)
 			axis(4)
 			mtext(text=ylab2,  side = 4, outer=TRUE)
@@ -347,7 +353,6 @@ gsCPfn <- function(z, i, x, theta, ...)
 			}
 			group <- array(1, length(t))
 			q <- data.frame(t=c(t,t), spend=c(spenda, spendb), group=c(group,2*group))
-			ylab <- "Proportion of spending"
 			p <- qplot(x=t, y=spend, data=q, geom="line", ylab=ylab, xlab=xlab, main=main, 
 							group=factor(group), linetype=factor(group), colour=factor(group)) +
 				scale_colour_manual(name="Spending",values=col, labels=c(expression(alpha),expression(beta))) +
