@@ -259,7 +259,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 					Bound=array("Ntxt", x$k-1),
 					Ztxt=as.character(round(x$n.I[1:(x$k-1)],nround)))
 		if (base)
-		{	text(x=x$n.I[1:(x$k-1)], y=array(ymin/2, x$k-1), as.character(round(x$n.I[1:(x$k-1)],nround)), cex=textcex)
+		{	#text(x=x$n.I[1:(x$k-1)], y=array(ymin/2, x$k-1), as.character(round(x$n.I[1:(x$k-1)],nround)), cex=textcex)
 		}
 		if (max(x$n.I) < 3)
 		{	if (base)
