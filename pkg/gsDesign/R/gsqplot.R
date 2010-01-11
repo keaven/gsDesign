@@ -174,8 +174,8 @@ gsCPfn <- function(z, i, x, theta, ...)
 
 "plotgsCP" <- function(x, theta="thetahat", main="Conditional power at interim stopping boundaries", 
         ylab=NULL, geom="line",
-        xlab=ifelse(x$n.I[x$k] < 3, "Sample size relative to fixed design", "N"), xlim=NULL,
-        lty=1, col=1, pch=22, textcex=1, legtext=gsLegendText(test.type), dgt=3, nlabel=TRUE, 
+        xlab=ifelse(x$n.fix == 1, "Sample size relative to fixed design", "N"), xlim=NULL,
+        lty=1, col=1, pch=22, textcex=1, legtext=NULL,  dgt=3, nlabel=TRUE, 
         base=FALSE, ...)
 {    
 	if (is.null(ylab))
@@ -187,8 +187,9 @@ gsCPfn <- function(z, i, x, theta, ...)
 	if (!is.numeric(xlim))
 	{	xlim <- range(x$n.I[1:(x$k-1)])
 		xlim <- xlim + c(-.05,.05) * (xlim[2] - xlim[1])
+		if (x$k==2) xlim=xlim+c(-1, 1)
 	}
-	if(x$n.I[x$k] < 3) 
+	if(x$n.fix == 1) 
 	{	nround <- 3 
 		ntx <- "r="
 		if (is.null(xlab)) xlab <- "Information relative to fixed sample design"
@@ -198,6 +199,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 		if (is.null(xlab)) xlab <- "N"
 	}
 	test.type <- ifelse(is(x,"gsProbability"), 3, x$test.type)    
+	if (is.null(legtext)) legtext <- gsLegendText(test.type)
 	y <- gsBoundCP(x, theta=theta)
 	ymax <- 1.05
 	ymin <- - 0.1
@@ -215,7 +217,8 @@ gsCPfn <- function(z, i, x, theta, ...)
     
     if (test.type > 1)
     {
-        ymid <- (y[2, 2] + y[2, 1]) / 2
+        if (x$k > 2) ymid <- (y[2, 2] + y[2, 1]) / 2
+        else ymid <- mean(y)
     }
     
 	if (base)
@@ -235,7 +238,6 @@ gsCPfn <- function(z, i, x, theta, ...)
 		}
 		text(xtext, ymid, legtext[2], cex=textcex)
 		text(xtext, 1.03, legtext[1], cex=textcex)
-		invisible(x)
 	}else
 	{	N <- as.numeric(x$n.I[1:(x$k-1)])
 		CP <- y[,2] 
@@ -261,7 +263,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 		if (base)
 		{	#text(x=x$n.I[1:(x$k-1)], y=array(ymin/2, x$k-1), as.character(round(x$n.I[1:(x$k-1)],nround)), cex=textcex)
 		}
-		if (max(x$n.I) < 3)
+		if (x$n.fix == 1)
 		{	if (base)
 			{	text(x=y2$N, y=y2$CP, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=textcex)
 			}else
@@ -269,7 +271,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 			}
 		}else
 		{	if(base)
-			{	text(x=y2$N, y=y2$Z, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=textcex)
+			{	text(x=y2$N, y=y2$CP, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=textcex)
 			}else
 			{	p <- p + geom_text(data=y2,label=paste(array("N=",x$k-1), y2$Ztxt, sep=""))
 			}

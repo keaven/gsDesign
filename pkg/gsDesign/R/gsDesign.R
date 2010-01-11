@@ -120,14 +120,14 @@
 
 "gsDesign"<-function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
         delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
-        sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I=0, maxn.IPlan=0, nFixSurv=0) 
+        sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I=0, maxn.IPlan=0, nFixSurv=0, endpoint=NULL) 
 {
     # Derive a group sequential design and return in a gsDesign structure
     
     # set up class variable x for gsDesign being requested
     x <- list(k=k, test.type=test.type, alpha=alpha, beta=beta, astar=astar,
             delta=delta, n.fix=n.fix, timing=timing, tol=tol, r=r, n.I=n.I, maxn.IPlan=maxn.IPlan,
-            nFixSurv=nFixSurv, nSurv=0)
+            nFixSurv=nFixSurv, nSurv=0, endpoint=endpoint)
     
     class(x) <- "gsDesign"
     
@@ -991,7 +991,7 @@
         {
             stop("maxn.IPlan can only be > 0 if spending functions are used for boundaries")
         }
-        
+
         x$timing <- x$n.I / x$maxn.IPlan
         
         if (x$n.I[x$k-1] >= x$maxn.IPlan)

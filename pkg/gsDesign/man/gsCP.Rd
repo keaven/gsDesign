@@ -5,9 +5,8 @@
 \alias{gsCPOS}
 \title{2.4: Conditional and Predictive Power, Overall and Conditional Probability of Success}
 \description{
-\code{gsCP()} takes a given group sequential design, assumes an interim z-statistic 
-at a specified interim analysis and computes boundary crossing probabilities at future planned analyses.
-\code{gsPP()} averages conditional power across a prior distribution to produce predictive power.
+\code{gsCP()} computes conditional boundary crossing probabilities at future planned analyses for a given group sequential design assuming an interim z-statistic at a specified interim analysis.
+\code{gsPP()} averages conditional power across a prior distribution to compute predictive power.
 \code{gsPOS()} computes the probability of success for a trial using a prior distribution to average power over a set of \code{theta} values of interest.
 \code{gsCPOS()} assumes no boundary has been crossed before and including an interim analysis of interest, and computes the probability of success based on this event.
 Note that \code{gsCP()} and \code{gsPP()} take only the interim test statistic into account in computing conditional probabilities, while \code{gsCPOS()} conditions on not crossing any bound through a specified interim analysis.
@@ -33,15 +32,15 @@ gsCPOS(i, x, theta, wgts)
 }
 \value{
 \code{gsCP()} returns an object of the class \code{gsProbability}. 
-Based on the input design and the interim test statistic, the output object has bounds for test statistics
-computed based on observations after interim \code{i} that are equivalent to the original design crossing boundaries conditional on the interim test statistic value input. 
+Based on the input design and the interim test statistic, the output gsDesign object has bounds for test statistics computed based on solely on observations after interim \code{i}. 
 Boundary crossing probabilities are computed for the input \eqn{\theta}{theta} values.
+See manual and examples.
 
-\code{gsPP()} returns a real value indicating the predictive power of the trial conditional on the interim test statistic \code{zi} at analysis \code{i}.
+\code{gsPP()} if total==TRUE, returns a real value indicating the predictive power of the trial conditional on the interim test statistic \code{zi} at analysis \code{i}; otherwise returns vector with predictive power for each future planned analysis.
 
 \code{gsPOS()} returns a real value indicating the probability of a positive study weighted by the prior distribution input for \code{theta}.
 
-\code{gsCPOS()} returns a real value indicating the probability of a positive study weighted by the prior distribution input for \code{theta} conditional on an interim test statistic \code{zi} at analysis \code{i}.
+\code{gsCPOS()} returns a real value indicating the probability of a positive study weighted by the prior distribution input for \code{theta} conditional on an interim test statistic \code{zi} in the continuation region at analysis \code{i}.
 }
 
 
@@ -64,17 +63,50 @@ combining the advantages of adaptive and classical group sequential approaches. 
 x <- gsDesign(k=5)
 x
 
-# assuming a z-value of .5 at analysis 2, what are conditional 
+# set up a prior distribution for the treatment effect
+# that is normal with mean .75*x$delta and standard deviation x$delta/2
+prior <- normalGrid(mu=.75*x$delta, sigma=x$delta/2)
+names(prior)
+
+# compute POS for the design given the above prior distribution for theta
+gsPOS(x=x, theta=prior$z, wgts=prior$wgts)
+
+# assume POS should only count cases in prior where theta >= x$delta/2
+gsPOS(x=x, theta=prior$z, wgts=prior$wgts*(prior$z>=x$delta/2))
+
+# assuming a z-value at lower bound at analysis 2, what are conditional 
 # boundary crossing probabilities for future analyses
 # assuming theta values from x as well as a value based on the interim
 # observed z
-CP <- gsCP(x, i=2, zi=.5)
+CP <- gsCP(x, i=2, zi=x$lower$bound[2])
 CP
 
 # summing values for crossing future upper bounds gives overall
 # conditional power for each theta value
 CP$theta
-CP$upper$prob %*% c(1,1,1)
+t(CP$upper$prob) %*% c(1,1,1)
+
+# compute predictive probability based on above assumptions
+gsPP(x, i=2, zi=x$lower$bound[2], theta=prior$z, wgts=prior$wgts)
+
+# if it is known that boundary not crossed at interim 2, use
+# gsCPOS to compute conditional POS based on this
+gsCPOS(x=x, i=2, theta=prior$z, wgts=prior$wgts)
 }
+
+# 2-stage example to compare results to direct computation
+x<-gsDesign(k=2)
+z1<- 0.5
+n1<-x$n.I[1]
+n2<-x$n.I[2]-x$n.I[1]
+thetahat<-z1/sqrt(n1)
+theta<-c(thetahat, 0 , x$delta)
+
+# conditional power direct computation
+pnorm((n2*theta+z1*sqrt(n1)-z*sqrt(n1+n2))/sqrt(n2))
+gsCP(x=x, zi=z1, i=1)$upper$prob
+
+
+
 \seealso{\code{\link{gsDesign}}, \code{\link{gsProbability}}, \code{\link{gsBoundCP}}}
 \keyword{design}

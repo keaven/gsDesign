@@ -50,9 +50,9 @@
         stop("gsCP must have x$lower$bound[i]<=zi<=x$upper$bound[i]")            
     }
   
-    if (!is.real(theta) || is.na(theta))
+    if (is.null(theta))
     {
-        theta <- c(zi/sqrt(x$n.I[i]), x$theta)
+        theta <- c(zi/sqrt(x$n.I[i]), 0, x$delta)
     }
     
     knew <- x$k-i
@@ -76,56 +76,19 @@ gsPP <- function(x, i=1, zi=0, theta=c(0,3), wgts=c(.5,.5), r=18, total=TRUE)
     {    
         stop("gsPP must be called with class of x either gsProbability or gsDesign")
     }
-    
-    if (i < 1 || i >= x$k)
-    {    
-        stop("gsPP must be called with i from 1 to x$k-1")
-    }
-    
     test.type <- ifelse(is(x, "gsProbability"), 3, x$test.type)
-    
-    if (zi > x$upper$bound[i])
-    {    
-        stop("gsPP must have x$lower$bound[i] <= zi <= x$upper$bound[i]")
-    }
-    else if (test.type > 1 && zi < x$lower$bound[i])
-    {
-        stop("gsPP must have x$lower$bound[i]<=zi<=x$upper$bound[i]")            
-    }
-  
-    if (!is.real(theta) || is.na(theta))
-    {
-        theta <- c(zi/sqrt(x$n.I[i]), x$theta)
-    }
-    
-    if (i < 1 || i >= x$k)
-    {    
-        stop("gsPP must be called with i from 1 to x$k-1")
-    }
-    
-    test.type <- ifelse(is(x, "gsProbability"), 3, x$test.type)
-    
-    if (zi > x$upper$bound[i])
-    {    
-        stop("gsCP must have x$lower$bound[i] <= zi <= x$upper$bound[i]")
-    }
-    else if (test.type > 1 && zi < x$lower$bound[i])
-    {
-        stop("gsCP must have x$lower$bound[i]<=zi<=x$upper$bound[i]")            
-    }
-  
-    if (!is.real(theta) || is.na(theta))
-    {
-        theta <- c(zi/sqrt(x$n.I[i]), x$theta)
-    }
+    checkScalar(i, "integer", c(1, x$k-1))
+    checkScalar(zi, "numeric", c(ifelse(test.type==1, -20, x$lower$bound[i]), x$upper$bound[i]), c(TRUE,TRUE))
+    checkVector(wgts, "numeric", c(-Inf, Inf), c(FALSE, FALSE))
+    checkVector(theta, "numeric", c(-Inf,Inf), c(FALSE, FALSE))
+    checkLengths(theta, wgts)
+    checkScalar(r, "integer", c(1, 80))
 
     cp <- gsCP(x = x, i = i, theta = theta, zi = zi, r = r)
-    cp$upper$prob %*% wgts   
     gsDen <- gsDensity(x, theta=theta, i=i, zi=zi, r=r)
-    if (!total) return(cp$upper$prob %*% t(gsDen$density))
-    one <- array(1, x$k-i)
-    cpmarg <- one %*% cp$upper$prob
-    sum(gsDen$density * cpmarg)
+	 pp <- cp$upper$prob %*% t(gsDen$density * wgts) / sum(gsDen$density * wgts)
+    if (total) return(sum(pp))
+    else return(pp)
 }
 
 "gsBoundCP" <- function(x, theta="thetahat", r=18)
