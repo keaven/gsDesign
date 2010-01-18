@@ -54,6 +54,8 @@ See Conditional power section of manual for further clarification. See also Mull
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.
 
+Proschan, Michael A., Lan, KK Gordon and Wittes, Janet Turk (2006), \emph{Statiscal Monitoring of Clinical Trials}. NY: Springer.
+
 Muller, Hans-Helge and Schaffer, Helmut (2001), Adaptive group sequential designs for clinical trials:
 combining the advantages of adaptive and classical group sequential approaches. \emph{Biometrics};57:886-891. 
 }
@@ -65,8 +67,9 @@ x
 
 # set up a prior distribution for the treatment effect
 # that is normal with mean .75*x$delta and standard deviation x$delta/2
-prior <- normalGrid(mu=.75*x$delta, sigma=x$delta/2)
-names(prior)
+mu0 <-.75*x$delta
+sigma0 <- x$delta/2
+prior <- normalGrid(mu=mu0, sigma=sigma0)
 
 # compute POS for the design given the above prior distribution for theta
 gsPOS(x=x, theta=prior$z, wgts=prior$wgts)
@@ -92,7 +95,6 @@ gsPP(x, i=2, zi=x$lower$bound[2], theta=prior$z, wgts=prior$wgts)
 # if it is known that boundary not crossed at interim 2, use
 # gsCPOS to compute conditional POS based on this
 gsCPOS(x=x, i=2, theta=prior$z, wgts=prior$wgts)
-}
 
 # 2-stage example to compare results to direct computation
 x<-gsDesign(k=2)
@@ -102,11 +104,26 @@ n2<-x$n.I[2]-x$n.I[1]
 thetahat<-z1/sqrt(n1)
 theta<-c(thetahat, 0 , x$delta)
 
-# conditional power direct computation
-pnorm((n2*theta+z1*sqrt(n1)-z*sqrt(n1+n2))/sqrt(n2))
+# conditional power direct computation - comparison w gsCP
+pnorm((n2*theta+z1*sqrt(n1)-x$upper$bound[2]*sqrt(n1+n2))/sqrt(n2))
+
 gsCP(x=x, zi=z1, i=1)$upper$prob
 
-
+# predictive power direct computation - comparison w gsPP
+# use same prior as above
+mu0 <- .75 * x$delta * sqrt(x$n.I[2])
+sigma2 <- (.5 * x$delta)^2 *  x$n.I[2]
+prior <- normalGrid(mu=.75 * x$delta, sigma=x$delta/2)
+gsPP(x=x, zi=z1, i=1, theta=prior$z, wgts=prior$wgts)
+t <- .5
+z1 <- .5
+b <- z1 * sqrt(t)
+# direct from Proschan, Lan and Wittes eqn 3.10
+# adjusted drift at n.I[2]
+pnorm(((b - x$upper$bound[2]) * (1 + t * sigma2) +
+        (1 - t) * (mu0 + b * sigma2)) /
+      sqrt((1 - t) * (1 + sigma2) * (1 + t * sigma2)))
+}
 
 \seealso{\code{\link{gsDesign}}, \code{\link{gsProbability}}, \code{\link{gsBoundCP}}}
 \keyword{design}

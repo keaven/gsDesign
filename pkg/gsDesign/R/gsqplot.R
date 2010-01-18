@@ -65,18 +65,19 @@
 }
 "plotgsZ" <- function(x, ylab="Normal critical value",main="Normal test statistics at bounds",...){qplotit(x=x,ylab=ylab,main=main,fn=function(z,...){z},...)}
 "plotBval" <- function(x, ylab="B-value",main="B-values at bounds",...){qplotit(x=x, fn=gsBvalue, ylab=ylab,main=main,...)}
-"plotreleffect" <- function(x=x, ylab=NULL, delta=1, main="Treatment effect at bounds", delta0=ifelse(is.null(x$delta0),0,x$delta0),...){qplotit(x, fn=gsDeltaHat, main=main, ylab=ifelse(!is.null(ylab), ylab, expression(hat(theta)/theta[1])), delta=delta, delta0=delta0,...)}
+"plotreleffect" <- function(x=x, ylab=NULL, main="Treatment effect at bounds",...){
+    qplotit(x, fn=gsDeltaHat, main=main, ylab=ifelse(!is.null(ylab), ylab, 
+            ifelse(tolower(x$endpoint)=="binomial",
+                   expression(hat(p)[C]-hat(p)[E]), 
+                   expression(hat(theta)/theta[1]))),...)
+}
 "plotHR" <- function(x=x, ylab="Estimated hazard ratio",main="Hazard ratio at bounds",...){qplotit(x, fn=gsHRHat, ylab=ylab,main=main,...)}
 gsBvalue <- function(z,i,x,ylab="B-value",...)
 {   Bval <- z * sqrt(x$timing[i])
     Bval
 }
-gsThetaHat <- function(z, i, x, ylab=NULL,...)
-{   thetaHat <- z / sqrt(x$n.I[i])/x$delta
-    thetaHat
-}
-gsDeltaHat <- function(z, i, x, delta, delta0=0, ylab=NULL,...)
-{   deltaHat <- z / sqrt(x$n.I[i]) * delta / x$delta - delta0
+gsDeltaHat <- function(z, i, x, ylab=NULL,...)
+{   deltaHat <- z / sqrt(x$n.I[i]) * x$delta1 / x$delta - x$delta0
     deltaHat
 }
 gsHRHat <- function(z, i, x, ratio, ylab="Estimated hazard ratio",...)

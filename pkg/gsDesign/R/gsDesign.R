@@ -120,14 +120,15 @@
 
 "gsDesign"<-function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
         delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
-        sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I=0, maxn.IPlan=0, nFixSurv=0, endpoint=NULL) 
+        sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I=0, maxn.IPlan=0, 
+        nFixSurv=0, endpoint=NULL, delta1=1, delta0=0) 
 {
     # Derive a group sequential design and return in a gsDesign structure
     
     # set up class variable x for gsDesign being requested
     x <- list(k=k, test.type=test.type, alpha=alpha, beta=beta, astar=astar,
             delta=delta, n.fix=n.fix, timing=timing, tol=tol, r=r, n.I=n.I, maxn.IPlan=maxn.IPlan,
-            nFixSurv=nFixSurv, nSurv=0, endpoint=endpoint)
+            nFixSurv=nFixSurv, nSurv=0, endpoint=endpoint, delta1=delta1, delta0=delta0)
     
     class(x) <- "gsDesign"
     
@@ -996,7 +997,7 @@
         
         if (x$n.I[x$k-1] >= x$maxn.IPlan)
         {
-            stop("maxn.IPlan must be > n.I[k-1]")        
+            stop("Only 1 n >= Planned Final n")        
         }
     }
     else if (x$maxn.IPlan > 0)
