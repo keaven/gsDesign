@@ -96,10 +96,9 @@ gsPP <- function(x, i=1, zi=0, theta=c(0,3), wgts=c(.5,.5), r=18, total=TRUE)
     len <- x$k-1
     test.type <- ifelse(is(x, "gsProbability"), 3, x$test.type)
     
-    
-    if (is(x, "gsDesign")  || theta != "thetahat")
+    if (theta != "thetahat")
     {    
-        thetahi <- array(x$delta, len)
+        thetahi <- array(theta, len)
         if (test.type > 1) thetalow <- thetahi
     }else
     {    

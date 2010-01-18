@@ -93,10 +93,10 @@ gsCPfn <- function(z, i, x, theta, ...)
 	cp
 }
 # qplots for z-values and transforms of z-values
-"qplotit" <- function(x, xlim=NULL, ylim=NULL, main=main, geom=c("line", "text"), 
+"qplotit" <- function(x, xlim=NULL, ylim=NULL, main=NULL, geom=c("line", "text"), 
                      dgt=2, lty=c(2,1), col=c(1,1),
                      lwd=c(1,1), nlabel="TRUE", xlab=NULL, ylab=NULL, fn=function(z,i,x,...){z},
-                     ratio=1, delta0=0, delta=.05, cex=1, base=FALSE,...)
+                     ratio=1, delta0=0, delta=1, cex=1, base=FALSE,...)
 {  if (length(lty)==1) lty <- array(lty, 2)
    if (length(col)==1) col <- array(col, 2)
    if (length(lwd)==1) lwd <- array(lwd, 2)
@@ -136,12 +136,13 @@ gsCPfn <- function(z, i, x, theta, ...)
 			main=main, lty=lty[1], col=col[1], lwd=lwd[1], xlab=xlab, ylab=ylab,...)
 		lines(x=y$N[y$Bound=="Lower"], y=y$Z[y$Bound=="Lower"], lty=lty[2], col=col[2], lwd=lwd[2])
 	}else
-	{	p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y, 
-             group=factor(Bound), colour=factor(Bound), geom=geom, label=Ztxt,
-             xlab=xlab, ylab=ylab, main=main,
-             ylim=ylim, xlim=xlim,...) + aes(lty=factor(Bound)) +
-				scale_colour_manual(name= "Bound", values=col, labels=c("Lower","Upper")) +
-				scale_linetype_manual(name= "Bound", values=lty, labels=c("Lower","Upper"))
+	{	GeomText$guide_geom <- function(.) "blank"
+		p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y, 
+			group=factor(Bound), colour=factor(Bound), geom=geom, label=Ztxt,
+			xlab=xlab, ylab=ylab, main=main,
+			ylim=ylim, xlim=xlim,...) + aes(lty=factor(Bound)) +
+			scale_colour_manual(name= "Bound", values=col, labels=c("Lower","Upper")) +
+			scale_linetype_manual(name= "Bound", values=lty, labels=c("Lower","Upper"))
 	}
 	if (nlabel==TRUE)
 	{	y2 <- data.frame(
@@ -157,13 +158,13 @@ gsCPfn <- function(z, i, x, theta, ...)
 		{	if (base)
 			{	text(x=y2$N, y=y2$Z, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
-			{	p <- p + geom_text(data=y2, label=paste(array("r=",x$k), y2$Ztxt, sep=""))
+			{	p <- p + geom_text(data=y2, colour=1, label=paste(array("r=",x$k), y2$Ztxt, sep=""))
 			}
 		}else
 		{	if(base)
 			{	text(x=y2$N, y=y2$Z, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
-			{	p <- p + geom_text(data=y2, aes(N,Z, group=factor(Bound)), label=paste(array("N=",x$k), y2$Ztxt, sep=""))
+			{	p <- p + geom_text(data=y2, aes(N,Z, group=factor(Bound)), colour=1, label=paste(array("N=",x$k), y2$Ztxt, sep=""))
 			}
 	}	}
 	if (base)
@@ -174,16 +175,19 @@ gsCPfn <- function(z, i, x, theta, ...)
 }
 
 "plotgsCP" <- function(x, theta="thetahat", main="Conditional power at interim stopping boundaries", 
-        ylab=NULL, geom="line",
+        ylab=NULL, geom=c("line","text"),
         xlab=ifelse(x$n.fix == 1, "Sample size relative to fixed design", "N"), xlim=NULL,
-        lty=1, col=1, pch=22, textcex=1, legtext=NULL,  dgt=3, nlabel=TRUE, 
+        lty=1, col=1, lwd=1, pch=22, textcex=1, legtext=NULL,  dgt=3, nlabel=TRUE, 
         base=FALSE, ...)
-{    
+{  if (length(lty)==1) lty <- array(lty, 2)
+   if (length(col)==1) col <- array(col, 2)
+   if (length(lwd)==1) lwd <- array(lwd, 2)
+   if (length(dgt)==1) dgt <- array(dgt, 2)
 	if (is.null(ylab))
 	{	ylab <- ifelse(theta == "thetahat",
                        expression(paste("Conditional power at",
-                          theta, "=", hat(theta),sep=" ")),
-                       expression(paste("Conditional power at", theta, "=", delta)))
+                          theta, " = ", hat(theta),sep=" ")),
+                       "Conditional power")
 	}
 	if (!is.numeric(xlim))
 	{	xlim <- range(x$n.I[1:(x$k-1)])
@@ -233,7 +237,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 		else
 		{    
 			matplot(x$n.I[1:(x$k-1)],  y,  xlab=xlab,  ylab=ylab,  main = main, 
-				lty=lty, col=col, ylim=c(ymin,  ymax), xlim=xlim,  type="l", ...)
+				lty=lty, col=col, lwd=lwd, ylim=c(ymin,  ymax), xlim=xlim,  type="l", ...)
 				matpoints(x$n.I[1:(x$k-1)],  y, pch=pch, col=col, ...)
 				text(xtext, ymin, legtext[3], cex=textcex)
 		}
@@ -251,15 +255,18 @@ gsCPfn <- function(z, i, x, theta, ...)
 			Ztxt <- as.character(c(Ztxt ,round(y[,1],dgt)))
 		}
 		y <- data.frame(N=N, CP=CP, Bound=Bound, Ztxt=Ztxt)
+		GeomText$guide_geom <- function(.) "blank"
 		p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
-			group=Bound, geom=c("line","text"), label=Ztxt,
-			xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim,...)
+			group=factor(Bound), colour=factor(Bound), geom=geom, label=Ztxt, 
+			xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + aes(lty=factor(Bound)) +
+			scale_colour_manual(name= "Bound", values=col, labels=c("Lower","Upper")) +
+			scale_linetype_manual(name= "Bound", values=lty, labels=c("Lower","Upper"))
 	}
 	if (nlabel==TRUE)
 	{	y2 <- data.frame(
 					N=x$n.I[1:(x$k-1)], 
 					CP=array(ymin/2, x$k-1), 
-					Bound=array("Ntxt", x$k-1),
+					Bound=array("Lower", x$k-1),
 					Ztxt=as.character(round(x$n.I[1:(x$k-1)],nround)))
 		if (base)
 		{	#text(x=x$n.I[1:(x$k-1)], y=array(ymin/2, x$k-1), as.character(round(x$n.I[1:(x$k-1)],nround)), cex=textcex)
@@ -268,13 +275,15 @@ gsCPfn <- function(z, i, x, theta, ...)
 		{	if (base)
 			{	text(x=y2$N, y=y2$CP, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=textcex)
 			}else
-			{	p <- p + geom_text(data=y2,label=paste(array("r=",x$k), y2$Ztxt, sep=""))
+			{	p <- p + geom_text(data=y2, aes(N,CP, group=factor(Bound)), colour=1, 
+					label=paste(array("r=",x$k), y2$Ztxt, sep=""))
 			}
 		}else
 		{	if(base)
 			{	text(x=y2$N, y=y2$CP, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=textcex)
 			}else
-			{	p <- p + geom_text(data=y2,label=paste(array("N=",x$k-1), y2$Ztxt, sep=""))
+			{	p <- p + geom_text(data=y2, aes(N,CP, group=factor(Bound)), colour=1, 
+					label=paste(array("N=",x$k), y2$Ztxt, sep=""))
 			}
 	}	}
 	if (base)
