@@ -77,7 +77,7 @@ gsBvalue <- function(z,i,x,ylab="B-value",...)
     Bval
 }
 gsDeltaHat <- function(z, i, x, ylab=NULL,...)
-{   deltaHat <- z / sqrt(x$n.I[i]) * x$delta1 / x$delta - x$delta0
+{   deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1-x$delta0) / x$delta + x$delta0
     deltaHat
 }
 gsHRHat <- function(z, i, x, ratio, ylab="Estimated hazard ratio",...)
@@ -177,12 +177,18 @@ gsCPfn <- function(z, i, x, theta, ...)
 "plotgsCP" <- function(x, theta="thetahat", main="Conditional power at interim stopping boundaries", 
         ylab=NULL, geom=c("line","text"),
         xlab=ifelse(x$n.fix == 1, "Sample size relative to fixed design", "N"), xlim=NULL,
-        lty=1, col=1, lwd=1, pch=22, textcex=1, legtext=NULL,  dgt=3, nlabel=TRUE, 
+        lty=c(1,2), col=c(1,1), lwd=c(1,1), pch=" ", textcex=1.25, legtext=NULL,  dgt=c(3,2), nlabel=TRUE, 
         base=FALSE, ...)
 {  if (length(lty)==1) lty <- array(lty, 2)
    if (length(col)==1) col <- array(col, 2)
    if (length(lwd)==1) lwd <- array(lwd, 2)
    if (length(dgt)==1) dgt <- array(dgt, 2)
+	if (x$k == 2) stop("No conditional power plot available for k=2")
+# switch order of parameters
+	lty <- lty[2:1]
+	col <- col[2:1]
+	lwd <- lwd[2:1]
+	dgt <- dgt[2:1]
 	if (is.null(ylab))
 	{	ylab <- ifelse(theta == "thetahat",
                        expression(paste("Conditional power at",
@@ -210,15 +216,10 @@ gsCPfn <- function(z, i, x, theta, ...)
 	ymin <- - 0.1
     
     if (x$k > 3)
-    {
-        xtext <- x$n.I[2]
+    {   xtext <- x$n.I[2]
     }else if (x$k == 3)
-    {
-        xtext <- (x$n.I[2] + x$n.I[1]) / 2
-    }else
-    {
-        xtext <- x$n.I[1]
-    }
+    {   xtext <- (x$n.I[2] + x$n.I[1]) / 2
+    }else xtext <- x$n.I[1]
     
     if (test.type > 1)
     {
@@ -230,8 +231,9 @@ gsCPfn <- function(z, i, x, theta, ...)
     {	if (test.type == 1)
 		{    
 			plot(x$n.I[1:(x$k-1)], y,  xlab=xlab,  ylab=ylab,  main = main, 
-				ylim=c(ymin,  ymax),  xlim=xlim, type="l", ...)
+				ylim=c(ymin,  ymax),  xlim=xlim, col=col[2], lwd=lwd[2], lty=lty[2], type="l", ...)
 			points(x$n.I[1:(x$k-1)],  y, ...)
+			text(x$n.I[1:(x$k-1)], y, as.character(round(y,dgt[2])), cex=textcex)
 			ymid <- ymin
 		}
 		else
@@ -240,37 +242,42 @@ gsCPfn <- function(z, i, x, theta, ...)
 				lty=lty, col=col, lwd=lwd, ylim=c(ymin,  ymax), xlim=xlim,  type="l", ...)
 				matpoints(x$n.I[1:(x$k-1)],  y, pch=pch, col=col, ...)
 				text(xtext, ymin, legtext[3], cex=textcex)
+				text(x$n.I[1:(x$k-1)], y[,1], as.character(round(y[,1],dgt[1])), col=col[1], cex=textcex)
+				text(x$n.I[1:(x$k-1)], y[,2], as.character(round(y[,2],dgt[2])), col=col[2], cex=textcex)
 		}
 		text(xtext, ymid, legtext[2], cex=textcex)
 		text(xtext, 1.03, legtext[1], cex=textcex)
 	}else
 	{	N <- as.numeric(x$n.I[1:(x$k-1)])
-		CP <- y[,2] 
+		if (test.type > 1) CP <- y[,2]
+		else CP <- y 
 		Bound <- array("Upper", x$k-1)
-		Ztxt <- as.character(round(CP[1:(x$k-1)], dgt))
+		Ztxt <- as.character(round(CP[1:(x$k-1)], dgt[2]))
 		if (test.type > 1)
 		{	N <- c(N, N)
 			CP <- c(CP, y[,1])
 			Bound <- c(Bound, array("Lower", x$k-1))
-			Ztxt <- as.character(c(Ztxt ,round(y[,1],dgt)))
+			Ztxt <- as.character(c(Ztxt ,round(y[,1],dgt[1])))
 		}
 		y <- data.frame(N=N, CP=CP, Bound=Bound, Ztxt=Ztxt)
-		GeomText$guide_geom <- function(.) "blank"
-		p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
-			group=factor(Bound), colour=factor(Bound), geom=geom, label=Ztxt, 
-			xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + aes(lty=factor(Bound)) +
-			scale_colour_manual(name= "Bound", values=col, labels=c("Lower","Upper")) +
-			scale_linetype_manual(name= "Bound", values=lty, labels=c("Lower","Upper"))
-	}
+		if (test.type > 1)
+		{	GeomText$guide_geom <- function(.) "blank"
+			p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
+				group=factor(Bound), colour=factor(Bound), geom=geom, label=Ztxt, 
+				xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + aes(lty=factor(Bound)) +
+				scale_colour_manual(name= "Bound", values=col, labels=c("Lower","Upper")) +
+				scale_linetype_manual(name= "Bound", values=lty, labels=c("Lower","Upper"))
+		}else 
+		{ p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
+				label=Ztxt, geom="text",
+				xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + geom_line(colour=col[2])
+	}	}
 	if (nlabel==TRUE)
 	{	y2 <- data.frame(
 					N=x$n.I[1:(x$k-1)], 
 					CP=array(ymin/2, x$k-1), 
 					Bound=array("Lower", x$k-1),
 					Ztxt=as.character(round(x$n.I[1:(x$k-1)],nround)))
-		if (base)
-		{	#text(x=x$n.I[1:(x$k-1)], y=array(ymin/2, x$k-1), as.character(round(x$n.I[1:(x$k-1)],nround)), cex=textcex)
-		}
 		if (x$n.fix == 1)
 		{	if (base)
 			{	text(x=y2$N, y=y2$CP, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=textcex)
