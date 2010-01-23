@@ -137,12 +137,13 @@ gsCPfn <- function(z, i, x, theta, ...)
 		lines(x=y$N[y$Bound=="Lower"], y=y$Z[y$Bound=="Lower"], lty=lty[2], col=col[2], lwd=lwd[2])
 	}else
 	{	GeomText$guide_geom <- function(.) "blank"
+		lbls <- c("Lower", "Upper")
 		p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y, 
 			group=factor(Bound), colour=factor(Bound), geom=geom, label=Ztxt,
 			xlab=xlab, ylab=ylab, main=main,
 			ylim=ylim, xlim=xlim,...) + aes(lty=factor(Bound)) +
-			scale_colour_manual(name= "Bound", values=col, labels=c("Lower","Upper")) +
-			scale_linetype_manual(name= "Bound", values=lty, labels=c("Lower","Upper"))
+			scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
+			scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
 	}
 	if (nlabel==TRUE)
 	{	y2 <- data.frame(
@@ -154,17 +155,19 @@ gsCPfn <- function(z, i, x, theta, ...)
 		if (base)
 		{	text(x=y2$N, y=y$Z, y$Ztxt, cex=cex)
 		}
-		if (max(x$n.I) < 3)
+		if (x$n.fix == 1)
 		{	if (base)
 			{	text(x=y2$N, y=y2$Z, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
-			{	p <- p + geom_text(data=y2, colour=1, label=paste(array("r=",x$k), y2$Ztxt, sep=""))
+			{	y2$Ztxt <- paste(array("r=",x$k), y2$Ztxt, sep="")
+				p <- p + geom_text(data=y2, aes(group=factor(Bound), label=Ztxt), colour=1)
 			}
 		}else
 		{	if(base)
 			{	text(x=y2$N, y=y2$Z, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
-			{	p <- p + geom_text(data=y2, aes(N,Z, group=factor(Bound)), colour=1, label=paste(array("N=",x$k), y2$Ztxt, sep=""))
+			{	y2$Ztxt <- paste(array("N=",x$k), y2$Ztxt, sep="")
+				p <- p + geom_text(data=y2, aes(group=factor(Bound),label=Ztxt), colour=1)
 			}
 	}	}
 	if (base)
@@ -262,11 +265,12 @@ gsCPfn <- function(z, i, x, theta, ...)
 		y <- data.frame(N=N, CP=CP, Bound=Bound, Ztxt=Ztxt)
 		if (test.type > 1)
 		{	GeomText$guide_geom <- function(.) "blank"
+                  lbls <- c("Lower","Upper")
 			p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
 				group=factor(Bound), colour=factor(Bound), geom=geom, label=Ztxt, 
 				xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + aes(lty=factor(Bound)) +
-				scale_colour_manual(name= "Bound", values=col, labels=c("Lower","Upper")) +
-				scale_linetype_manual(name= "Bound", values=lty, labels=c("Lower","Upper"))
+				scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
+				scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
 		}else 
 		{ p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
 				label=Ztxt, geom="text",
@@ -282,15 +286,15 @@ gsCPfn <- function(z, i, x, theta, ...)
 		{	if (base)
 			{	text(x=y2$N, y=y2$CP, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=textcex)
 			}else
-			{	p <- p + geom_text(data=y2, aes(N,CP, group=factor(Bound)), colour=1, 
-					label=paste(array("r=",x$k), y2$Ztxt, sep=""))
+			{	y2$Ztxt <- paste(array("r=",x$k-1), y2$Ztxt, sep="")
+				p <- p + geom_text(data=y2, aes(N,CP, group=factor(Bound),label=Ztxt), colour=1)
 			}
 		}else
 		{	if(base)
 			{	text(x=y2$N, y=y2$CP, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=textcex)
 			}else
-			{	p <- p + geom_text(data=y2, aes(N,CP, group=factor(Bound)), colour=1, 
-					label=paste(array("N=",x$k), y2$Ztxt, sep=""))
+			{	y2$Ztxt <- paste(array("N=",x$k-1), y2$Ztxt, sep="")
+				p <- p + geom_text(data=y2, aes(N,CP, group=factor(Bound),label=Ztxt), colour=1)
 			}
 	}	}
 	if (base)
@@ -362,8 +366,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 					yaxt="n", xlab=xlab, lty=lty[2], lwd=lwd[2], col=col[2], main=main,...)
 			axis(4)
 			mtext(text=ylab2,  side = 4, outer=TRUE)
-		}
-		else
+		}else
 		{	spenda <- x$upper$sf(x$alpha, t, x$upper$param)$spend/x$alpha
 			if (x$test.type < 5)
 			{	spendb <- x$lower$sf(x$beta, t, x$lower$param)$spend/x$beta
@@ -374,8 +377,8 @@ gsCPfn <- function(z, i, x, theta, ...)
 			q <- data.frame(t=c(t,t), spend=c(spenda, spendb), group=c(group,2*group))
 			p <- qplot(x=t, y=spend, data=q, geom="line", ylab=ylab, xlab=xlab, main=main, 
 							group=factor(group), linetype=factor(group), colour=factor(group)) +
-				scale_colour_manual(name="Spending",values=col, labels=c(expression(alpha),expression(beta))) +
-				scale_linetype_manual(name="Spending",values=lty, labels=c(expression(alpha),expression(beta)))
+				scale_colour_manual(name="Spending",values=col, labels=c(expression(alpha),expression(beta)), breaks=1:2) +
+				scale_linetype_manual(name="Spending",values=lty, labels=c(expression(alpha),expression(beta)), breaks=1:2)
 			return(p)
 		}
 	}
@@ -597,9 +600,9 @@ gsCPfn <- function(z, i, x, theta, ...)
 	{	p <- qplot(x=theta, y=prob, data=subset(y,interim==1), main=main,
 					colour=factor(bound), geom="line", xlab = xlab, ylab = ylab, ylim=c(0,1),
 					group=factor(bound)) + aes(lty=factor(bound))
-		p <- p + scale_colour_manual(name= "Probability", values=col, labels=c("Upper bound","1-Lower bound")) +
-				 scale_linetype_manual(name="Probability", values=lty, labels=c("Upper bound","1-Lower bound"))
-		p <- p + geom_text(data=yt, label=as.character(itxt), aes(theta, prob, colour=factor(bound), group=1))
+		p <- p + scale_colour_manual(name= "Probability", values=col, breaks=1:2, labels=c("Upper bound","1-Lower bound")) +
+				 scale_linetype_manual(name="Probability", values=lty, breaks=1:2, labels=c("Upper bound","1-Lower bound"))
+		p <- p + geom_text(data=yt, aes(theta, prob, colour=factor(bound), group=1, label=itxt))
 		for(i in 1:x$k) p <- p + geom_line(data=subset(y,interim==i&bound==1), colour=col[1], lty=lty[1])
 		if (test.type > 2) for(i in 1:(x$k-1)) {
 			 p <- p + geom_line(data=subset(y,interim==i&bound==2), colour=col[2], lty=lty[2])
