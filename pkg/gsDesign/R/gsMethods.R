@@ -241,30 +241,27 @@
         print(y)
     }
 }
-print.nSurvival <- function(x, med=FALSE, timeunit=""){
+print.nSurvival <- function(x,...){
 	if (class(x) != "nSurvival") stop("print.nSurvival: primary argument must have class nSurvival")
    cat("Fixed design, two-arm trial with time-to-event\n")
 	cat("outcome (Lachin and Foulkes, 1986).\n")
-	cat("Study duration (fixed):          Ts=", x$Ts, " ", timeunit, "\n", sep="")
-	cat("Accrual duration (fixed):        Tr=", x$Tr, " ", timeunit, "\n",sep="")
+	cat("Study duration (fixed):          Ts=", x$Ts, "\n", sep="")
+	cat("Accrual duration (fixed):        Tr=", x$Tr, "\n", sep="")
 	if (x$entry=="unif") cat('Uniform accrual:              entry="unif"\n')
 	else {
 		cat('Exponential accrual:          entry="expo"\n') 
 		cat("Accrual shape parameter:      gamma=", round(x$gamma,3), "\n",sep="")
 	}
-	if (med){
-		cat("Control median:      log(2)/lambda1=", round(log(2) / x$lambda1,1), " ", timeunit, "\n", sep="")
-		cat("Experimental median: log(2)/lambda2=", round(log(2) / x$lambda2,1), " ", timeunit, "\n", sep="")
-		if (x$eta > 0){
-			cat("Censoring only at study end (eta=0)\n")
-		}else{
-			cat("Censoring median:        log(2)/eta=", round(log(2) / x$eta, 1), " ", timeunit, "\n", sep="")
-		}
+	cat("Control median:      log(2)/lambda1=", round(log(2) / x$lambda1,1), "\n", sep="")
+	cat("Experimental median: log(2)/lambda2=", round(log(2) / x$lambda2,1), "\n", sep="")
+	if (x$eta > 0){
+		cat("Censoring only at study end (eta=0)\n")
 	}else{
-		cat("Control failure rate:       lambda1=", round(x$lambda1,3), "\n", sep="") 
-		cat("Experimental failure rate:  lambda2=", round(x$lambda2,3), "\n", sep="")
-		cat("Censoring rate:                 eta=", round(x$eta,3),"\n", sep="")
+		cat("Censoring median:        log(2)/eta=", round(log(2) / x$eta, 1), "\n", sep="")
 	}
+	cat("Control failure rate:       lambda1=", round(x$lambda1,3), "\n", sep="") 
+	cat("Experimental failure rate:  lambda2=", round(x$lambda2,3), "\n", sep="")
+	cat("Censoring rate:                 eta=", round(x$eta,3),"\n", sep="")
 	cat("Power:                 100*(1-beta)=", (1-x$beta)*100, "%\n",sep="")
    cat("Type I error (", x$sided, "-sided):   100*alpha=", 100*x$alpha, "%\n", sep="")
 	if (x$ratio==1) cat("Equal randomization:          ratio=1\n")
