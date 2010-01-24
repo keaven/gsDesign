@@ -94,7 +94,7 @@ gsCPfn <- function(z, i, x, theta, ...)
 }
 # qplots for z-values and transforms of z-values
 "qplotit" <- function(x, xlim=NULL, ylim=NULL, main=NULL, geom=c("line", "text"), 
-                     dgt=2, lty=c(2,1), col=c(1,1),
+                     dgt=c(2.2), lty=c(2,1), col=c(1,1),
                      lwd=c(1,1), nlabel="TRUE", xlab=NULL, ylab=NULL, fn=function(z,i,x,...){z},
                      ratio=1, delta0=0, delta=1, cex=1, base=FALSE,...)
 {  if (length(lty)==1) lty <- array(lty, 2)
@@ -116,8 +116,8 @@ gsCPfn <- function(z, i, x, theta, ...)
    }
    z <- fn(z=c(x$upper$bound,x$lower$bound), i=c(1:x$k, 1:x$k), x=x,
                ratio=ratio, delta0=delta0, delta=delta)
-   Ztxt <- as.character(c(round(z[1:(x$k-1)],dgt[1]), round(z[x$k],max(dgt)), 
-                          round(z[(x$k+1):(2*x$k-1)], dgt[2]), round(z[2*x$k],max(dgt))))
+   Ztxt <- as.character(c(round(z[1:(x$k-1)],dgt[2]), round(z[x$k],max(dgt)), 
+                          round(z[(x$k+1):(2*x$k-1)], dgt[1]), round(z[2*x$k],max(dgt))))
    y <- data.frame(
            N=as.numeric(c(x$n.I,x$n.I)), 
            Z=as.numeric(z), 
