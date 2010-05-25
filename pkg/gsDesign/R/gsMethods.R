@@ -5,6 +5,9 @@
 #                   
 #    print.gsDesign
 #    print.gsProbability
+#    print.nSurvival
+#    gsBoundSummary
+#    xtable.gsDesign
 #
 #  Hidden Functions:
 #
@@ -316,3 +319,67 @@ print.nSurvival <- function(x,...){
     cat("\n")
 }
 
+gsBoundSummary <- function(x, upper=TRUE, ratio=1)
+{   if (upper)
+    {   sn <- -1
+        bnd <- x$upper
+    }else
+    {   sn <- 1
+        bnd <- x$lower
+    }
+    p0 <- cumsum(bnd$prob[,1])
+    p1 <- cumsum(bnd$prob[,x$theta==x$delta])
+    CP <- p0
+    CP[x$k] <- NA
+    CPhat <- CP
+    for(i in 1:x$k)
+    {   if (i < x$k)
+        {   CPtem <- gsCP(zi=bnd$bound[i], i=i, x=x, theta=NULL)$upper$prob
+            CP[i] <- sum(CPtem[,3])
+            CPhat[i] <- sum(CPtem[,1])
+        }
+    }
+    if (is.null(x$endpoint) || tolower(x$endpoint)!="survival") 
+    {    effect <- gsDelta(bnd$bound, i=1:x$k, x=x)
+         ename <- "delta"
+    }else
+    {    effect <- gsHR(z=bnd$bound, i=1:x$k, x=x, ratio=1)
+         ename <- "HR"
+    }
+    nval <- x$n.I
+    if (x$n.fix != 1) nval <- ceiling(nval/2)*2 
+    tab <- cbind(100*x$timing, nval, bnd$bound, pnorm(sn * bnd$bound), p0, p1, CP, CPhat,
+              effect,
+                 gsBValue(bnd$bound, i=1:x$k, x=x))
+    rnames <- c(paste("IA",1:(x$k-1)), "Final")
+    cnames <- c("Timing (%)", ifelse(x$n.fix==1,"r","N"), "Z", "Nominal p", "H0 spend", "H1 spend",
+                "CP theta1", "CP thetahat", ename , "B-value")
+    dimnames(tab) <- list(rnames, cnames)
+    class(tab) <- "gsBoundSummary"
+    tab
+}
+xtable.gsDesign <- function(x, caption=NULL, label=NULL, align=NULL, digits=c(0,0,3,4,4,4,3,3,3,3),
+                             display=NULL, upper=TRUE, rnames=NULL, cnames=NULL, ratio=1,
+                             sanitize.text.function=function(x){x}, 
+                             sanitize.rownames.function=function(x){x},...)
+{  bnd <- round(t(gsBoundSummary(x, upper, ratio)), digits)
+   if (is.null(cnames)) cnames <- colnames(bnd)
+   if (is.null(rnames))
+   {   rnames <- rownames(bnd)
+       if (rnames[9] == "delta") ename <- "$\\hat{\\delta}$"
+       else if (rnames[9] == "HR") ename <- "HR"
+
+       if (x$n.fix==1) nname <- "r"
+       else if (!is.null(x$endpoint) && tolower(x$endpoint)=="survival") nname <- "Events"  
+       else nname <- "N"
+       rnames <- c("Timing (\\%)", nname, "Z", "Nominal p", "H$_0$-spend", "$\\beta$-spend",
+                   "$\\hbox{CP}(\\theta_1,\\hbox{Z})$", "$\\hbox{CP}(\\hat{\\theta}, \\hbox{Z})$",
+                   ename, "B-value")
+   }
+   b <- matrix(as.character(bnd), nrow=nrow(bnd), ncol=ncol(bnd),
+               dimnames=list(rnames,cnames))
+   b
+   print(xtable(b, caption=caption, label=label, display=display, align=align,
+                   sanitize.text.function=sanitize.text.function,...),
+                   sanitize.rownames.function=sanitize.rownames.function)
+}
