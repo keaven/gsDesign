@@ -257,7 +257,7 @@ print.nSurvival <- function(x,...){
 	}
 	cat("Control median:      log(2)/lambda1=", round(log(2) / x$lambda1,1), "\n", sep="")
 	cat("Experimental median: log(2)/lambda2=", round(log(2) / x$lambda2,1), "\n", sep="")
-	if (x$eta > 0){
+	if (x$eta == 0){
 		cat("Censoring only at study end (eta=0)\n")
 	}else{
 		cat("Censoring median:        log(2)/eta=", round(log(2) / x$eta, 1), "\n", sep="")
