@@ -6,7 +6,7 @@
 \title{2.4: Conditional and Predictive Power, Overall and Conditional Probability of Success}
 \description{
 \code{gsCP()} computes conditional boundary crossing probabilities at future planned analyses for a given group sequential design assuming an interim z-statistic at a specified interim analysis.
-\code{gsPP()} averages conditional power across a prior distribution to compute predictive power.
+\code{gsPP()} averages conditional power across a posterior distribution to compute predictive power.
 \code{gsPOS()} computes the probability of success for a trial using a prior distribution to average power over a set of \code{theta} values of interest.
 \code{gsCPOS()} assumes no boundary has been crossed before and including an interim analysis of interest, and computes the probability of success based on this event.
 Note that \code{gsCP()} and \code{gsPP()} take only the interim test statistic into account in computing conditional probabilities, while \code{gsCPOS()} conditions on not crossing any bound through a specified interim analysis.
@@ -40,7 +40,7 @@ See manual and examples.
 
 \code{gsPOS()} returns a real value indicating the probability of a positive study weighted by the prior distribution input for \code{theta}.
 
-\code{gsCPOS()} returns a real value indicating the probability of a positive study weighted by the prior distribution input for \code{theta} conditional on an interim test statistic \code{zi} in the continuation region at analysis \code{i}.
+\code{gsCPOS()} returns a real value indicating the probability of a positive study weighted by the posterior distribution derived from the interim test statistic and the prior distribution input for \code{theta} conditional on an interim test statistic .
 }
 
 

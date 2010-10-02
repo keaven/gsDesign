@@ -355,14 +355,15 @@ gsBoundSummary <- function(x, upper=TRUE, ratio=1)
     cnames <- c("Timing (%)", ifelse(x$n.fix==1,"r","N"), "Z", "Nominal p", "H0 spend", "H1 spend",
                 "CP theta1", "CP thetahat", ename , "B-value")
     dimnames(tab) <- list(rnames, cnames)
-    class(tab) <- "gsBoundSummary"
-    tab
+    gss <- list(upper=upper, tab=t(tab))
+    class(gss) <- "gsBoundSummary"
+    gss
 }
 xtable.gsDesign <- function(x, caption=NULL, label=NULL, align=NULL, digits=c(0,0,3,4,4,4,3,3,3,3),
                              display=NULL, upper=TRUE, rnames=NULL, cnames=NULL, ratio=1,
                              sanitize.text.function=function(x){x}, 
                              sanitize.rownames.function=function(x){x},...)
-{  bnd <- round(t(gsBoundSummary(x, upper, ratio)), digits)
+{  bnd <- round(gsBoundSummary(x, upper, ratio)$tab, digits)
    if (is.null(cnames)) cnames <- colnames(bnd)
    if (is.null(rnames))
    {   rnames <- rownames(bnd)
@@ -383,3 +384,14 @@ xtable.gsDesign <- function(x, caption=NULL, label=NULL, align=NULL, digits=c(0,
                    sanitize.text.function=sanitize.text.function,...),
                    sanitize.rownames.function=sanitize.rownames.function)
 }
+print.gsBoundSummary <- function(x, digits=c(0,0,3,4,4,4,3,3,3,3),cnames=NULL,
+   rnames=c("Timing (%)","N","Z","Nominal p","H0 spend","H1 spend",
+"CP theta1","CP thetahat","delta","B-value"),quote=F){
+	bnd <- round(x$tab,digits)
+	if (is.null(cnames)) cnames <- colnames(bnd)
+	b <- matrix(as.character(bnd), nrow=nrow(bnd), ncol=ncol(bnd),
+               dimnames=list(rnames,cnames))
+	print(ifelse(x$upper,"Upper bound","Lower bound"))
+	print(b,quote=quote)
+}
+
