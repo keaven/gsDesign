@@ -26,11 +26,7 @@
 ###
 
 "checkLengths" <- function(..., allowSingle=FALSE)
-{
-    parent <- as.character(sys.call(-1)[[1]])
-    err <- paste(if (length(parent) > 0) paste("In function", parent, ":") else "", 
-            "lengths of inputs are not all equal") 
-    
+{    
     lens <- unlist(lapply(list(...),length))
     
     if (allowSingle)
@@ -40,7 +36,9 @@
     
     if (length(lens) > 0 && length(unique(lens)) != 1)
     {
-        stop(err)        
+         parent <- as.character(sys.call(-1)[[1]])
+         stop(if (length(parent) > 0) paste("In function", parent, ":") else "", 
+             "lengths of inputs are not all equal")
     }
     
     invisible(NULL)  
@@ -81,24 +79,20 @@
         stop("isType must be an object of class character")
     }
     
-    # create error message    
-    parent <- as.character(sys.call(-1)[[1]])
-    varstr <- paste(if (length(parent) > 0) paste("In function", parent, ": variable") else "", deparse(substitute(x))) 
-    err <- paste(varstr, "must be scalar of class", isType) 
-    
     # check scalar type
     if (isType == "integer")
     {            
-        if (!isInteger(x) || length(x) > 1)
-        {
-          stop(err)
-        }
+        bad <- (!isInteger(x) || length(x) > 1)
     }
     else {
-        if (!eval(parse(text = paste("is.", isType, "(x)", sep = ""))) || length(x) > 1)
-        {
-          stop(err)
-        }
+        bad <- (!is(c(x), isType) || length(x) > 1)
+    }
+    if (bad)
+    {
+        # create error message    
+        parent <- as.character(sys.call(-1)[[1]])
+        varstr <- paste(if (length(parent) > 0) paste("In function", parent, ": variable") else "", deparse(substitute(x)))
+    stop(varstr, "must be scalar of class", isType)
     }
     
     # check if input is on specified interval    
@@ -122,25 +116,23 @@
     # define local functions
     "isVectorAtomic" <- function(x) 
         return(is.atomic(x) & any(c(NROW(x), NCOL(x)) == 1))
-    
-    # create error message
-    parent <- as.character(sys.call(-1)[[1]])
-    varstr <- paste(if (length(parent) > 0) paste("In function", parent, ": variable") else "", deparse(substitute(x))) 
-    err <- paste(varstr, "must be vector of class", isType) 
-    
+        
     # check vector type
-    if (isType == "integer")
+    bad <- if (isType == "integer")
     {
-       if (!isVectorAtomic(x) || !isInteger(x))
-       {
-         stop(err)
-       }
+        !isVectorAtomic(x) || !isInteger(x)
     }
-    else if (!isVectorAtomic(x) || !eval(parse(text = paste("is.", isType, "(x)", sep = ""))))
+    else
     {
-        stop(err)
+        !isVectorAtomic(x) || !is(c(x), isType)  # wrap "x" in c() to strip dimension(s)
     }
-
+    if (bad)
+    {
+        # create error message
+        parent <- as.character(sys.call(-1)[[1]])
+        varstr <- paste(if (length(parent) > 0) paste("In function", parent, ": variable") else "", deparse(substitute(x))) 
+        stop(paste(varstr, "must be vector of class", isType))
+    }
     # check vector length
     if (!is.null(length) && (length(x) != length))
     {
