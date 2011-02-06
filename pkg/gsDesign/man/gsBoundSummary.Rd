@@ -97,7 +97,7 @@ gsBValue(z=z, i=1:3, x=xs)
 gsHR(z=z, i=1:3, x=xs)
 # conditional power at observed treatment effect
 gsCPz(z=z[1:2], i=1:2, x=xs)
-# conditional pwoer at H1 treatment effect
+# conditional power at H1 treatment effect
 gsCPz(z=z[1:2], i=1:2, x=xs, theta=xs$delta)
 
 # now look at a binomial endpoint; specify H0 treatment difference as p1-p2=.05
