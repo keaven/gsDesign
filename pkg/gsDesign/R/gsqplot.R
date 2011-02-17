@@ -7,8 +7,10 @@
 #    plot.gsProbability
 #    gsCPz
 #    gsHR
+#    gsRR
 #    gsDelta
 #    gsBValue
+#    qplotit
 #
 #  Hidden Functions:
 #
@@ -21,7 +23,6 @@
 #    sfplot
 #    plotASN
 #    plotgsPower
-#    qplotit
 #
 #  Author(s): Keaven Anderson, PhD.
 # 
@@ -67,7 +68,8 @@
             plotsf=c("5","sf"), 
             plotASN=c("6","asn", "e{n}","n"), 
             plotBval=c("7","b","b-val","b-value"),
-            plotHR=c("8","hr","hazard"))
+            plotHR=c("8","hr","hazard"),
+            plotRR=c("9","rr"))
     
     # perform partial matching on plot type and return name
     plottype <- match.arg(tolower(as.character(plottype)), as.vector(unlist(plots)))
@@ -81,8 +83,9 @@
             plotgsCP=c("4", "cp", "copp"),
             plotASN=c("6","asn", "e{n}","n"), 
             plotBval=c("7","b","b-val","b-value"),
-            plotHR=c("8","hr","hazard"))
-    
+            plotHR=c("8","hr","hazard"),
+            plotRR=c("9","rr"))
+
     # perform partial matching on plot type and return name
     plottype <- match.arg(tolower(as.character(plottype)), as.vector(unlist(plots)))
     names(plots)[which(unlist(lapply(plots, function(x, type) is.element(type, x), type=plottype)))]    
@@ -96,6 +99,7 @@
                    expression(hat(theta)/theta[1]))),...)
 }
 "plotHR" <- function(x=x, ylab="Estimated hazard ratio",main="Hazard ratio at bounds",...){qplotit(x, fn=gsHR,  ylab=ylab, main=main, ratio=1, ...)}
+"plotRR" <- function(x=x, ylab="Estimated risk ratio",main="Risk ratio at bounds",...){qplotit(x, fn=gsRR,  ylab=ylab, main=main, ratio=1, ...)}
 gsBValue <- function(z,i,x,ylab="B-value",...)
 {   Bval <- z * sqrt(x$timing[i])
     Bval
@@ -103,6 +107,10 @@ gsBValue <- function(z,i,x,ylab="B-value",...)
 gsDelta <- function(z, i, x, ylab=NULL,...)
 {   deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1-x$delta0) / x$delta + x$delta0
     deltaHat
+}
+gsRR <- function(z, i, x, ratio=1, ylab="Estimated risk ratio",...)
+{   deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1-x$delta0) / x$delta + x$delta0
+    exp(deltaHat)
 }
 gsHR <- function(z, i, x, ratio=1, ylab="Estimated hazard ratio", ...)
 {    c <- 1 / (1 + ratio)
