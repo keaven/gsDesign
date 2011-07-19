@@ -1,12 +1,16 @@
 \name{gsCP}
 \alias{gsCP}
 \alias{gsPP}
+\alias{gsPI}
 \alias{gsPOS}
 \alias{gsCPOS}
+\alias{gsPosterior}
 \title{2.4: Conditional and Predictive Power, Overall and Conditional Probability of Success}
 \description{
 \code{gsCP()} computes conditional boundary crossing probabilities at future planned analyses for a given group sequential design assuming an interim z-statistic at a specified interim analysis.
 \code{gsPP()} averages conditional power across a posterior distribution to compute predictive power.
+\code{gsPI()} computes Bayesian prediction intervals for future analyses corresponding to results produced by \code{gsPP()}. 
+\code{gsPosterior()} computes the posterior density for the group sequential design parameter of interest given a prior density and an interim outcome that is exact or in an interval.
 \code{gsPOS()} computes the probability of success for a trial using a prior distribution to average power over a set of \code{theta} values of interest.
 \code{gsCPOS()} assumes no boundary has been crossed before and including an interim analysis of interest, and computes the probability of success based on this event.
 Note that \code{gsCP()} and \code{gsPP()} take only the interim test statistic into account in computing conditional probabilities, while \code{gsCPOS()} conditions on not crossing any bound through a specified interim analysis.
@@ -15,21 +19,27 @@ Note that \code{gsCP()} and \code{gsPP()} take only the interim test statistic i
 \usage{
 gsCP(x, theta=NULL, i=1, zi=0, r=18)
 gsPP(x, i=1, zi=0, theta=c(0,3), wgts=c(.5,.5), r=18, total=TRUE)
+gsPI(x, i=1, zi=0, j=2, level=.95, theta=c(0,3), wgts=c(.5,.5))
+gsPosterior(x=gsDesign(), i=1, zi=NULL, prior=normalGrid(), r=18)
 gsPOS(x, theta, wgts)
 gsCPOS(i, x, theta, wgts)
 }
 \arguments{
 	\item{x}{An object of type \code{gsDesign} or \code{gsProbability}}
-	\item{theta}{a vector with \eqn{\theta}{theta} value(s) at which conditional power is to be computed; for \code{gsCP()} if \code{NULL}, an estimated value of \eqn{\theta}{theta} based on the interim test statistic (\code{zi/sqrt(x$n.I[i])}) as well as at \code{x$theta} is computed.}
+	\item{theta}{a vector with \eqn{\theta}{theta} value(s) at which conditional power is to be computed; for \code{gsCP()} if \code{NULL}, an estimated value of \eqn{\theta}{theta} based on the interim test statistic (\code{zi/sqrt(x$n.I[i])}) as well as at \code{x$theta} is computed.
+For \code{gsPosterior}, this may be a scalar or an interval; for \code{gsPP} and \code{gsCP}, this must be a scalar.}
 	\item{wgts}{Weights to be used with grid points in \code{theta}. Length can be one if weights are equal, otherwise should be the same length as \code{theta}. Values should be positive, but do not need to sum to 1.}
 	\item{i}{analysis at which interim z-value is given; must be from 1 to \code{x$k-1}}
+	\item{prior}{provides a prior distribution in the form produced by \code{\link{normalGrid}}}
 	\item{zi}{interim z-value at analysis i (scalar)}
+	\item{j}{specific analysis for which prediction is being made; must be \code{>i} and no more than \code{x$k}}
 	\item{r}{Integer value controlling grid for numerical integration as in Jennison and Turnbull (2000);
 	default is 18, range is 1 to 80. 
 	Larger values provide larger number of grid points and greater accuracy.
 	Normally \code{r} will not be changed by the user.}
-	\item{total}{Needs documentation.}
-}
+	\item{total}{The default of \code{total=TRUE} produces the combined probability for all planned analyses after the interim analysis specified in \code{i}. Otherwise, information on each analysis is provided separately.}
+	\item{level}{The level to be used for Bayes credible intervals (which approach confidence intervals for vague priors). The default  \code{level=.95} corresponds to a 95\% credible interval. \code{level=0} provides a point estimate rather than an interval.
+}}
 \value{
 \code{gsCP()} returns an object of the class \code{gsProbability}. 
 Based on the input design and the interim test statistic, the output gsDesign object has bounds for test statistics computed based on solely on observations after interim \code{i}. 
@@ -38,16 +48,32 @@ See manual and examples.
 
 \code{gsPP()} if total==TRUE, returns a real value indicating the predictive power of the trial conditional on the interim test statistic \code{zi} at analysis \code{i}; otherwise returns vector with predictive power for each future planned analysis.
 
+\code{gsPI()}  returns an interval (or point estimate if \code{level=0}) indicating 100\code{level}\% credible interval for the z-statistic at analysis \code{j} conditional on the z-statistic at analysis \code{i<j}. 
+The interval does not consider intervending interim analyses.
+The probability estimate is based on the predictive distribution used for \code{gsPP()} and requires a prior distribution for the group sequential parameter \code{theta} specified in \code{theta} and \code{wgts}.
+
+\code{gsPosterior()} returns a posterior distribution containing the the vector \code{z} input in \code{prior$z}, the posterior density in \code{density}, grid weights for integrating the posterior density as input in \code{prior$gridwgts} or defaulted to a vector of ones, and the product of the output values in \code{density} and \code{gridwgts} in \code{wgts}.
+
 \code{gsPOS()} returns a real value indicating the probability of a positive study weighted by the prior distribution input for \code{theta}.
 
-\code{gsCPOS()} returns a real value indicating the probability of a positive study weighted by the posterior distribution derived from the interim test statistic and the prior distribution input for \code{theta} conditional on an interim test statistic .
+\code{gsCPOS()} returns a real value indicating the probability of a positive study weighted by the posterior distribution derived from the interim test statistic and the prior distribution input for \code{theta} conditional on an interim test statistic.
 }
 
 
 \details{
 See Conditional power section of manual for further clarification. See also Muller and Schaffer (2001) for background theory.
+
+For \code{gsPP()}, \code{gsPI()}, \code{gsPOS()} and \code{gsCPOS()}, the prior distribution for the standardized parameter \code{theta} () for a group sequential design specified through a gsDesign object is specified through the arguments \code{theta} and \code{wgts}. This can be a discrete or a continuous probability density function. For a discrete function, generally all weights would be 1. For a continuous density, the \code{wgts} would contain integration grid weights, such as those provided by \link{normalGrid}.
+
+For \code{gsPosterior}, a prior distribution in \code{prior} must be composed of the vectors \code{z} \code{density}. 
+The vector \code{z} contains points where the prior is evaluated and \code{density} the corresponding density or, for a discrete distribution, the probabilities of each point in \code{z}.
+Densities may be supplied as from \code{normalGrid()} where grid weights for numerical integration are supplied in \code{gridwgts}.
+If \code{gridwgts} are not supplied, they are defaulted to 1 (equal weighting).
+To ensure a proper prior distribution, you must have \code{sum(gridwgts * density)} equal to 1; this is NOT checked, however.
 }
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf in the directory where R is installed.}
+
+\seealso{\code{\link{normalGrid}}, \code{\link{gsDesign}}, \code{\link{gsProbability}}, \code{\link{gsBoundCP}}}
 
 \author{Keaven Anderson \email{keaven\_anderson@merck.}}
 \references{
@@ -123,7 +149,20 @@ b <- z1 * sqrt(t)
 pnorm(((b - x$upper$bound[2]) * (1 + t * sigma2) +
         (1 - t) * (mu0 + b * sigma2)) /
       sqrt((1 - t) * (1 + sigma2) * (1 + t * sigma2)))
-}
 
-\seealso{\code{\link{gsDesign}}, \code{\link{gsProbability}}, \code{\link{gsBoundCP}}}
+# plot prior then posterior distribution for unblinded analysis with i=1, zi=1
+xp <- gsPosterior(x=x,i=1,zi=1,prior=prior)
+plot(x=xp$z, y=xp$density, type="l", col=2, xlab=expression(theta), ylab="Density")
+points(x=x$z, y=x$density, col=1)
+
+# add posterior plot assuming only knowlede that interim bound has
+# not been crossed at interim 1
+xpb <- gsPosterior(x=x,i=1,zi=1,prior=prior)
+lines(x=xpb$z,y=xpb$density,col=4)
+
+# prediction interval based in interim 1 results
+# start with point estimate, followed by 90% prediction interval
+gsPI(x=x, i=1, zi=z1, j=2, theta=prior$z, wgts=prior$wgts, level=0)
+gsPI(x=x, i=1, zi=z1, j=2, theta=prior$z, wgts=prior$wgts, level=.9)
+}
 \keyword{design}

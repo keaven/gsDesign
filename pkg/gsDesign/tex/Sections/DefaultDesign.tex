@@ -1,51 +1,62 @@
 \section{Applying the default group sequential design\label{sec:default}}
 \subsection{Default parameters}
-We are now prepared to demonstrate derivation of group sequential designs using default parameters with the \code{gsDesign()} function.
+We are now prepared to demonstrate derivation of group sequential designs using default parameters with the \texttt{gsDesign()} function.
 Along with this, we discuss the \texttt{gsDesign} class returned by \texttt{gsDesign()} and its associated standard print and plot functions. 
 We then apply this default group sequential design to each of our motivational examples. 
-The main parameters in \code{gsDesign()} will be explained in more detail in sections \ref{sec:gsDesign} through \ref{sec:spendfn}.
+The main parameters in \texttt{gsDesign()} will be explained in more detail in sections \ref{sec:gsDesign} through \ref{sec:spendfn}.
 
 The main parameter defaults that you need to know about are as follows:
 
 \begin{enumerate}
-\item Overall Type I error $\alpha = 0.025$ (one-sided)
+\item Overall Type I error ($\alpha$, one-sided): \texttt{alpha = 0.025}
 
-\item Overall Type II error $\beta = 0.1$ (Power = $90\%$)
+\item Overall Type II error ($\beta=1-\hbox{power}$): \texttt{beta = 0.1}
 
-\item Two interim analyses equally spaced at 1/3 and 2/3 of the way through the trial plus the final analysis (\texttt{k=3})
+\item Two interim analyses equally spaced at 1/3 and 2/3 of the way through the trial plus the final analysis:  \texttt{k=3}
 
+\item {test.type=4}, which specifies all of the following:
+\begin{itemize}
 \item Asymmetric boundaries, which means we may stop the trial for futility or
-superiority at an interim analysis.
-
+superiority at an interim analysis
 \item $\beta$-spending is used to set the lower stopping
 boundary. This means that the spending function controls the incremental
 amount of Type II error at each analysis, $\beta_i(\delta)$, $i=1,2,\ldots,K$.
-
 \item Non-binding lower bound. Lower bounds are sometimes considered as
 guidelines, which may be ignored during the course of the trial. 
 Since Type I error is inflated if this is the case, regulators often demand that the lower bounds be ignored when computing Type I error.
 That is, Type I error is computed using $\alpha^+(\theta)$ from (\ref{alphai+(theta)}) and (\ref{alpha+(theta)}) rather than $\alpha(\theta)$ from (\ref{alphai(theta)}) and (\ref{alpha(theta)}). 
+\end{itemize}
 
-\item A Hwang-Shih-DeCani spending functions with $\gamma = -4$ for the upper
-bound and $\gamma = -2$ for the lower bound. This provides a conservative,
-O'Brien-Fleming-like superiority bound and a less conservative lower bound.
-Spending functions will be discussed in detail in \ref{sec:spendfn}.
+\item Hwang-Shih-DeCani spending functions for the upper bound (\texttt{sfu=sfHSD}) with $\gamma$-paramater \texttt{sfupar = -4} and lower bound (\texttt{sfl=sfHSD}) with $\gamma$-parameter \texttt{sflpar=-2}. 
+This provides a conservative, O'Brien-Fleming-like superiority bound and a less conservative lower bound.
+Spending functions will be discussed in detail in Section \ref{sec:spendfn}.
+\item The following parameters are related to numerical accuracy and will not be discussed further here as they generally would not be changed by the user: \texttt{tol=0.000001}, \texttt{r=18}. Further information is in the help file. 
+\item The input variable \texttt{endpoint} (default is NULL) at present impacts default options for plots approximating the treatment effect at a boundary. If \texttt{endpoint="binomial"} then the y-axis will change to a default label $\hat{p}_C-\hat{p}_E$; see also the \texttt{delta0} and \texttt{delta1} arguments below.
+Another option is to set \texttt{endpoint="survival"} which will cause the treatment effect plot to be on a hazard ratio scale.
+\item \texttt{delta1} (default 1) indicates the alternative hypothesis value on a scale of interest to you that is a linear transformation of the scale used for \texttt{theta}. This is used to scale the treatment effect plot.
+\item \texttt{delta0} is also a value on a linearly transformed scale from \texttt{theta} used to scale a plot of treatment effect. Generally, this will be 0, but may be changed if you are testing for noninferiority. 
+\item \texttt{nFixSurv} (defaul of 0) is used to indicate the sample size for a fixed design for a survival trial. In this case \texttt{n.fix} would indicate the number of endpoints for this trial to be powered as specified. By providing \texttt{nFixSurv}, printed output from a \texttt{gsDesign} object will include the total sample size as well as the number of events at interim and final analysis.
+\item The following parameters are used to reset bounds when timing of analyses are changed from the original design and will be discussed in \ref{sec:reset}:
+\begin{itemize}
+\item \texttt{maxn.IPlan = 0}, if resetting timing of analyses, this contains the statistical information/sample size/number of events at the originally planned final analysis.
+\item \texttt{n.I = 0}, if \texttt{maxn.IPlan > 0} this is a vector of length \texttt{k} containing actual statistical information/sample size/number of events at each analysis.
+\end{itemize}
 \end{enumerate}
 
 \subsection{Sample size ratio for a group sequential design compared to a fixed
 design.\label{sec:ssratio}}
 
-In section \ref{sec:testing} and its subsections we gave distributional assumptions, defined testing procedures and denoted probabilities for boundary crossing.
-Consider a trial with a fixed design (no interim analyses) with power 100(1--$\beta$) and level $\alpha$ (1-sided). Denote the sample size as $N_{fix}$ and statistical information for this design as $I_{fix}$. 
+In Section \ref{sec:testing} and its subsections we gave distributional assumptions, defined testing procedures and denoted probabilities for boundary crossing.
+Consider a trial with a fixed design (no interim analyses) with power 100(1--$\beta$) and level $\alpha$ (1-sided). Denote the sample size as $N_{fix}$ and statistical information for this design as $\mathcal{I}_{fix}$. 
 For a group sequential design as noted above, we denote the information ratio (inflation factor) comparing the information planned for the final analysis of a group sequential design compared to a fixed design as
 \begin{equation}
-r=I_{k}/I_{fix}=n_{k}/N_{fix}.\label{ssratio}%
+r=\mathcal{I}_{k}/\mathcal{I}_{fix}=n_{k}/N_{fix}.\label{ssratio}%
 \end{equation}
 This ratio is independent of the $\theta$-value $\delta$ for which the trial
 is powered as long as the information (sample size) available at each analysis
-increases proportionately with $I_{fix}$ and the boundaries for the group
+increases proportionately with $\mathcal{I}_{fix}$ and the boundaries for the group
 sequential design remain unchanged; see, for example, Jennison and Turnbull \cite{JTBook}. 
-Because of this, the default for \texttt{gsDesign()} is to print the sample size ratios $r_i=I_i/I_k$, $i=1,2,\ldots,k$ rather than an actual sample size at each interim analysis. 
+Because of this, the default for \texttt{gsDesign()} is to print the sample size ratios $r_i=\mathcal{I}_i/\mathcal{I}_k$, $i=1,2,\ldots,k$ rather than an actual sample size at each interim analysis. 
 This is implemented through by the default value of 1 for the input parameter \texttt{n.fix}. 
 We demonstrate in the following subsections how to set \texttt{n.fix} to apply to our motivating examples.
 
@@ -63,15 +74,16 @@ $0.0233$. Had the option
 been run, both of these numbers would assume the trial
 stops if the lower bound stopped and thus would both be $0.025$. 
 
-\bigskip
-
-\begin{verbatim}
+\begin{Schunk}
+\begin{Sinput}
 > x <- gsDesign()
 > x
-Asymmetric two-sided group sequential design with 90 % power and 2.5
-Type I Error.
-Upper bound spending computations assume trial continues if lower bound is
-crossed.
+\end{Sinput}
+\begin{Soutput}
+Asymmetric two-sided group sequential design with
+90 % power and 2.5 % Type I Error.
+Upper bound spending computations assume
+trial continues if lower bound is crossed.
 
            Sample
             Size    ----Lower bounds----  ----Upper bounds-----
@@ -80,13 +92,14 @@ crossed.
          2  0.713  0.94    0.8267 0.0289 2.55    0.0054  0.0049
          3  1.070  2.00    0.9772 0.0563 2.00    0.0228  0.0188
      Total                        0.1000                 0.0250 
-+ lower bound beta spending (under H1): Hwang-Shih-DeCani spending function 
-  with gamma = -2
-++ alpha spending: Hwang-Shih-DeCani spending function with gamma = -4
-* Sample size ratio compared to fixed non-group sequential design
++ lower bound beta spending (under H1):
+ Hwang-Shih-DeCani spending function with gamma = -2
+++ alpha spending:
+ Hwang-Shih-DeCani spending function with gamma = -4
+* Sample size ratio compared to fixed design with no interim
 
-Boundary crossing probabilities and expected sample size assuming any cross
-stops the trial
+Boundary crossing probabilities and expected sample size
+assume any cross stops the trial
 
 Upper boundary (power or Type I Error)
           Analysis
@@ -99,17 +112,12 @@ Lower boundary (futility or Type II Error)
    Theta      1      2      3  Total
   0.0000 0.4057 0.4290 0.1420 0.9767
   3.2415 0.0148 0.0289 0.0563 0.1000
-
+\end{Soutput}
+\begin{Sinput}
 > plot(x)
-\end{verbatim}
-\begin{figure}
-\begin{center}
-\includegraphics[width=.6\textwidth]{figs/boundplot.pdf}
-\end{center}
-\caption{Default plot for gsDesign object}
-\end{figure}%
-
-\bigskip
+\end{Sinput}
+\end{Schunk}
+\includegraphics{defaultdesign-pldef}
 
 Above we have seen standard output for \texttt{gsDesign()}. 
 To access individual items of information about what is returned from the above, use \texttt{summary(x)} to list the elements of \texttt{x}.
@@ -127,42 +135,65 @@ $\alpha$- and $\beta$-spending functions (\texttt{plottype=5})), expected sample
 
 \subsection{Applying the default design to the CAPTURE example}
 The sample size ratios from (\ref{ssratio}) can be obtained as follows:
-\begin{verbatim}
+
+\begin{Schunk}
+\begin{Sinput}
 > x <- gsDesign()
 > x$n.I
-[1] 0.3566277 0.7132554 1.0698832
-\end{verbatim}
+\end{Sinput}
+\begin{Soutput}
+[1] 0.3566277 0.7132555 1.0698832
+\end{Soutput}
+\end{Schunk}
+
 These will be applied to each of our examples.
 Recall from the CAPTURE trial that we had a binomial outcome and wished to detect a reduction in the primary endpoint from a 15\% event rate in the control group to a 10\% rate in the experimental group.
 While we consider 80\% power elsewhere, we stick with the default of 90\% here.
 A group sequential design with 90\% power and 2.5\% Type I error has the same bounds as shown previously. The sample size at each analysis is obtained as follows (continuing the code just above):
-\begin{verbatim}
-> n.I <- nBinomial(p1 = .15, p2 = .1)
+
+\begin{Schunk}
+\begin{Sinput}
+> n.I <- nBinomial(p1 = 0.15, p2 = 0.1)
 > n.I
-1834.641
+\end{Sinput}
+\begin{Soutput}
+[1] 1834.641
+\end{Soutput}
+\begin{Sinput}
 > n.I * x$n.I
-[1]  654.2839 1308.5679 1962.8518
-\end{verbatim}
+\end{Sinput}
+\begin{Soutput}
+[1]  654.284 1308.568 1962.852
+\end{Soutput}
+\end{Schunk}
+
 Rounding up to an even number in each case, we see from the above that a while a fixed design requires 1836 patients, employing the default group sequential design inflates the sample size requirement to 1964. 
 Interim analyses would be peformed after approximately 654 and 1308 patients.
 
 The group sequential design can be derived directly by replacing the input parameter \texttt{n.fix} with the sample size from a fixed design trial as follows:
 
-\begin{verbatim}
-> n.I <- nBinomial(p1 = .15, p2 = .1)
+\begin{Schunk}
+\begin{Sinput}
+> n.I <- nBinomial(p1 = 0.15, p2 = 0.1)
 > x <- gsDesign(n.fix = n.I)
 > x$n.I
+\end{Sinput}
+\begin{Soutput}
 [1]  654.2839 1308.5678 1962.8518
-\end{verbatim}
+\end{Soutput}
+\end{Schunk}
 
 Printing this design now replaces the sample size ratio with the actual sample sizes at each analysis. The only other difference from the design above in Section \ref{sec:default} is the second value of \texttt{theta} below.
 
-\begin{verbatim}
+\begin{Schunk}
+\begin{Sinput}
 > x
-Asymmetric two-sided group sequential design with 90 % power and 
-2.5 % Type I Error.
-Upper bound spending computations assume trial continues if lower 
-bound is crossed.
+\end{Sinput}
+\begin{Soutput}
+Asymmetric two-sided group sequential design with
+90 % power and 2.5 % Type I Error.
+Upper bound spending computations assume
+trial continues if lower bound is crossed.
 
                   ----Lower bounds----  ----Upper bounds-----
   Analysis   N    Z   Nominal p Spend+  Z   Nominal p Spend++
@@ -170,12 +201,13 @@ bound is crossed.
          2 1309  0.94    0.8267 0.0289 2.55    0.0054  0.0049
          3 1963  2.00    0.9772 0.0563 2.00    0.0228  0.0188
      Total                      0.1000                 0.0250 
-+ lower bound beta spending (under H1): Hwang-Shih-DeCani spending 
-function with gamma = -2
-++ alpha spending: Hwang-Shih-DeCani spending function with gamma = -4
++ lower bound beta spending (under H1):
+ Hwang-Shih-DeCani spending function with gamma = -2
+++ alpha spending:
+ Hwang-Shih-DeCani spending function with gamma = -4
 
-Boundary crossing probabilities and expected sample size assuming 
-any cross stops the trial
+Boundary crossing probabilities and expected sample size
+assume any cross stops the trial
 
 Upper boundary (power or Type I Error)
           Analysis
@@ -188,46 +220,107 @@ Lower boundary (futility or Type II Error)
    Theta      1      2      3  Total
   0.0000 0.4057 0.4290 0.1420 0.9767
   0.0757 0.0148 0.0289 0.0563 0.1000
-\end{verbatim}
-
-\bigskip
+\end{Soutput}
+\end{Schunk}
 
 \subsection{Applying the default design to the noninferiority example}
 The fixed noninferiority design for a binomial comparison is the same as above, only changing the \texttt{nBinomial()} call to 
-\bigskip
-\begin{verbatim}
-> n.fix <- nBinomial(p1=.677, p2=.677, delta0=.07)
+
+\begin{Schunk}
+\begin{Sinput}
+> n.fix <- nBinomial(p1 = 0.677, p2 = 0.677, delta0 = 0.07)
 > ceiling(gsDesign(n.fix = n.fix)$n.I)
+\end{Sinput}
+\begin{Soutput}
 [1]  668 1336 2004
->\end{verbatim}
-\bigskip
+\end{Soutput}
+\end{Schunk}
+
 Testing at each analysis can be peformed using the Miettinen and Nurminen \cite{MandN} method.
-Simulation to verify the normal approximation is adequate for comparing binomial event rates can be performed using the functions \code{simBinomial} and \code{testBinomial}.
+Simulation to verify the normal approximation is adequate for comparing binomial event rates can be performed using the functions \texttt{simBinomial} and \texttt{testBinomial}.
 
 \subsection{Applying the default design to the cancer trial example}
 For trials with time-to-event outcomes, the variable \texttt{n.fix} in \texttt{gsDesign()} needed is the number of events from a fixed design trial. 
 The reader may wish to refer to Jennison and Turnbull \cite{JTBook} for further background; we also discuss distributional assumptions further in Section \ref{sec:TTE}.
 We begin with the code from the fixed design trial for the cancer trial example from \ref{sec:CAex}.
-Next, we call to \code{gsDesign()} with \texttt{n.fix} equal to the number of events for a fixed trial design. 
-The value \code{ssratio}, the sample size ratio at each analysis compared to the fixed design sample size is then shown. Note that the values are the same as shown in the first output of this example above.
+Next, we call to \texttt{gsDesign()} with \texttt{n.fix} equal to the number of events for a fixed trial design. 
+The value \texttt{ssratio}, the sample size ratio at each analysis compared to the fixed design sample size is then shown. Note that the values are the same as shown in the first output of this example above.
 The inflation in the total sample size is the same as for the number of events required; that is, the sample size required for a group sequential design with the default interim analysis plan is inflated to 595 (or 596 for an even number) from 557 (or 558) from that of a fixed design by multiplying by 1.07. 
 
-\begin{verbatim}
-> x <- nSurvival(lambda.0=log(2)/6,lambda.1=log(2)/6*.7,eta=-log(.95),
-+         Tr=30,Ts=36,type="rr",entry="unif")
-> ceiling(x$Sample.size)
-[1] 557
-> ceiling(x$Num.events)
+\begin{Schunk}
+\begin{Sinput}
+> x <- nSurvival(lambda1 = log(2)/6, lambda2 = log(2)/6 * 0.7, 
++     eta = -log(0.95)/12, Tr = 30, Ts = 36, type = "rr", entry = "unif")
+> ceiling(x$n)
+\end{Sinput}
+\begin{Soutput}
+[1] 417
+\end{Soutput}
+\begin{Sinput}
+> ceiling(x$nEvents)
+\end{Sinput}
+\begin{Soutput}
 [1] 330
-> y <- gsDesign(n.fix=x$Num.events)
+\end{Soutput}
+\begin{Sinput}
+> y <- gsDesign(n.fix = x$nEvents, nFixSurv = x$n)
 > ceiling(y$n.I)
-[1] 118 236 353
-> ssratio <- (y$n.I / x$Num.events)
+\end{Sinput}
+\begin{Soutput}
+[1] 118 235 353
+\end{Soutput}
+\begin{Sinput}
+> ssratio <- (y$n.I/x$Num.events)
 > ssratio
-[1] 0.3566277 0.7132554 1.0698831
+\end{Sinput}
+\begin{Soutput}
+numeric(0)
+\end{Soutput}
+\begin{Sinput}
 > ceiling(ssratio[3] * x$Sample.size)
-[1] 595
-\end{verbatim}
+\end{Sinput}
+\begin{Soutput}
+numeric(0)
+\end{Soutput}
+\begin{Sinput}
+> y
+\end{Sinput}
+\begin{Soutput}
+Group sequential design sample size for time-to-event outcome
+with sample size 446. The analysis plan below shows events
+at each analysis.
+Asymmetric two-sided group sequential design with
+90 % power and 2.5 % Type I Error.
+Upper bound spending computations assume
+trial continues if lower bound is crossed.
+
+                 ----Lower bounds----  ----Upper bounds-----
+  Analysis  N    Z   Nominal p Spend+  Z   Nominal p Spend++
+         1 118 -0.24    0.4057 0.0148 3.01    0.0013  0.0013
+         2 235  0.94    0.8267 0.0289 2.55    0.0054  0.0049
+         3 353  2.00    0.9772 0.0563 2.00    0.0228  0.0188
+     Total                     0.1000                 0.0250 
++ lower bound beta spending (under H1):
+ Hwang-Shih-DeCani spending function with gamma = -2
+++ alpha spending:
+ Hwang-Shih-DeCani spending function with gamma = -4
+
+Boundary crossing probabilities and expected sample size
+assume any cross stops the trial
+
+Upper boundary (power or Type I Error)
+          Analysis
+   Theta      1      2      3  Total  E{N}
+  0.0000 0.0013 0.0049 0.0171 0.0233 205.6
+  0.1787 0.1412 0.4403 0.3185 0.9000 260.4
+
+Lower boundary (futility or Type II Error)
+          Analysis
+   Theta      1      2      3  Total
+  0.0000 0.4057 0.4290 0.1420 0.9767
+  0.1787 0.0148 0.0289 0.0563 0.1000
+\end{Soutput}
+\end{Schunk}
 
 \subsection{Using \texttt{gsProbability()} following \texttt{gsDesign()}}
 
@@ -239,16 +332,17 @@ Note that the $y$-axis shows the expected sample size relative to a fixed design
 Note further that the \texttt{plot()} function for the \texttt{gsDesign} class (used here) is an extension of the standard \texttt{plot()} function, and thus allows use of many of its parameters, such as line width (\texttt{lwd}), line type (\texttt{lty}), plot titles and axis labels.
 This plot demonstrates the ability of a group sequential design to appropriate adapt sample size to come to an appropriate conclusion depending on the true treatment effect. If the effect size is twice that for which the trial is powered, the expected sample size is about 40\% of that for a fixed design, compared to over 80\% in some cases when the true treatment effect is between the hypothesized values for the efficacy parameter $\theta$. 
 
-\bigskip
-
-\begin{verbatim}
+\begin{Schunk}
+\begin{Sinput}
 > x <- gsDesign()
-> y <- gsProbability(theta=x$delta*seq(0, 2, .25), d=x)
-> y 
-Asymmetric two-sided group sequential design with 90 % power and 
-2.5\% Type I Error.
-Upper bound spending computations assume trial continues if lower bound is 
-crossed.
+> y <- gsProbability(theta = x$delta * seq(0, 2, 0.25), d = x)
+> y
+\end{Sinput}
+\begin{Soutput}
+Asymmetric two-sided group sequential design with
+90 % power and 2.5 % Type I Error.
+Upper bound spending computations assume
+trial continues if lower bound is crossed.
 
            Sample
             Size    ----Lower bounds----  ----Upper bounds-----
@@ -257,13 +351,14 @@ crossed.
          2  0.713  0.94    0.8267 0.0289 2.55    0.0054  0.0049
          3  1.070  2.00    0.9772 0.0563 2.00    0.0228  0.0188
      Total                        0.1000                 0.0250 
-+ lower bound beta spending (under H1): Hwang-Shih-DeCani spending function
-with gamma = -2
-++ alpha spending: Hwang-Shih-DeCani spending function with gamma = -4
-* Sample size ratio compared to fixed non-group sequential design
++ lower bound beta spending (under H1):
+ Hwang-Shih-DeCani spending function with gamma = -2
+++ alpha spending:
+ Hwang-Shih-DeCani spending function with gamma = -4
+* Sample size ratio compared to fixed design with no interim
 
-Boundary crossing probabilities and expected sample size assuming any cross 
-stops the trial
+Boundary crossing probabilities and expected sample size
+assume any cross stops the trial
 
 Upper boundary (power or Type I Error)
           Analysis
@@ -290,11 +385,10 @@ Lower boundary (futility or Type II Error)
   4.8623 0.0008 0.0006 0.0009 0.0024
   5.6727 0.0001 0.0001 0.0000 0.0002
   6.4830 0.0000 0.0000 0.0000 0.0000
-> plot(y, plottype=6, lty=2, lwd=3)
-\end{verbatim}
-\begin{figure}
-\begin{center}
-\includegraphics[width=.6\textwidth]{figs/ASN.pdf}
-\end{center}
-\caption{Average sample size plot}
-\end{figure}
+\end{Soutput}
+\begin{Sinput}
+> plot(y, plottype = 6, lty = 2, lwd = 3)
+\end{Sinput}
+\end{Schunk}
+
+\includegraphics{defaultdesign-gsPlot}

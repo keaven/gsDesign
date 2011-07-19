@@ -1,5 +1,5 @@
 useDynLib(gsDesign)
-export(gsBoundCP, gsCP, gsPP, gsPOS, gsCPOS, gsDensity)
+export(gsBoundCP, gsCP, gsPP, gsPI, gsPOS, gsCPOS, gsDensity, gsPosterior)
 export(gsCPz, gsHR, gsDelta, gsBValue, gsRR)
 export(gsBound, gsBound1, gsDesign, gsProbability)
 export(ciBinomial, nBinomial, simBinomial, testBinomial, gsBinomialExact)

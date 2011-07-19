@@ -297,19 +297,6 @@
     list(zi=zi, theta=theta, density=matrix(xx[[1]], nrow=length(zi), ncol=length(theta)))
 }
 
-#"gsPosterior" <- function(x, theta=NULL, wgts=NULL, i=1, zi=0, r=18)
-#{   if (class(x) != "gsDesign" && class(x) != "gsProbability")
-#        stop("x must have class gsDesign or gsProbability.")
-#    checkVector(theta, "numeric")
-#    checkVector(wgts, "numeric")
-#    checkLengths(
-#    checkScalar(i, "integer", c(0,x$k), c(FALSE, TRUE))
-#    checkVector(zi, "numeric")
-#    checkScalar(r, "integer", c(1, 80)) 
-
-    
-#}
-
 
 ###
 # Hidden Functions
