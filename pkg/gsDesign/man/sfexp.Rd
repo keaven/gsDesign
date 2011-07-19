@@ -48,6 +48,8 @@ in the directory where R is installed.}
 
 \author{Keaven Anderson \email{keaven\_anderson@merck.com}}
 \references{
+Anderson KM and Clark JB (2009), Fitting spending functions. \emph{Statistics in Medicine}; 29:321-327.
+
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.
 
