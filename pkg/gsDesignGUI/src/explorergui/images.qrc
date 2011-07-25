@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/toolbar">
+        <file>images/toolbar/designDefault.png</file>
+        <file>images/toolbar/designDelete.png</file>
+        <file>images/toolbar/designNew.png</file>
+        <file>images/toolbar/fileSave.png</file>
+        <file>images/toolbar/help.png</file>
+        <file>images/toolbar/designExport.png</file>
+        <file>images/toolbar/designExecute.png</file>
+        <file>images/toolbar/designLoad.png</file>
+        <file>images/toolbar/plotExport.png</file>
+        <file>images/toolbar/edit.png</file>
+        <file>images/toolbar/home.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>images/splash/gsDesignSplash.png</file>
+    </qresource>
+</RCC>
