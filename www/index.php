@@ -43,9 +43,9 @@ echo $contents; } ?>
 
 <!-- end of project description -->
 
-<p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
+<p><a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/">Project summary page</a></p>
 
-<p><a href="build-instructions.html">Build Instructions</a></p>
+<p><a href="https://docs.google.com/document/pub?id=15qFHhqX_BL5GHBS9OwYAZyttcvyx4zetJDIt01gqqPQ">gsDesignExplorer Build Instructions</a></p>
 
 </body>
 </html>
