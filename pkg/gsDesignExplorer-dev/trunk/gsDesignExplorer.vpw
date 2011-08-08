@@ -1,0 +1,9 @@
+<!DOCTYPE Workspace SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpw.dtd">
+<Workspace Version="10.0" VendorName="SlickEdit">
+	<Environment>
+		<Set Name="__MINGW32__" Value=""/>
+	</Environment>
+	<Projects>
+		<Project File="gsDesignExplorer.vpj"/>
+	</Projects>
+</Workspace>
