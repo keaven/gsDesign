@@ -1,0 +1,10 @@
+useDynLib(libgsDesignExplorer, .registration=TRUE)
+
+export(gsDesignExplorer)
+export(runDesign)
+export(gsDesignPrint)
+export(exportDesign)
+export(exportDesignToRScript)
+export(QtDesignToRList)
+export(parseMathText)
+export(openGSDesignGUIManual)
