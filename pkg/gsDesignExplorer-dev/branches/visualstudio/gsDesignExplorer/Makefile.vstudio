@@ -1,0 +1,3 @@
+all:
+	cd ..
+	R CMD INSTALL --no-clean-on-error gsDesignExplorer
