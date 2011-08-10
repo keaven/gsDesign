@@ -44,6 +44,7 @@
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="Makefile.vstudio" />
     <None Include="readme.txt" />
     <None Include="src\CMakeLists.txt" />
     <None Include="src\Makefile" />
