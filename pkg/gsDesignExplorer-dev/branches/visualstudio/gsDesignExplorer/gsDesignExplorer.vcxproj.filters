@@ -16,6 +16,7 @@
     <None Include="src\mkdef.sh" />
     <None Include="src\CMakeLists.txt" />
     <None Include="src\Makefile.win" />
+    <None Include="Makefile.vstudio" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\gsdesign.h">
