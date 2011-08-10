@@ -1,3 +1,6 @@
-all:
+all: environment
 	cd ..
 	R CMD INSTALL --no-clean-on-error gsDesignExplorer
+
+environment:
+	environment.cmd
