@@ -5,8 +5,8 @@ rem http://www.uberullu.com/alias-in-windows-command-line-ms-dos-how-to/
 rem HKEY_CURRENT_USER\Software\Microsoft\Command Processor
 rem String value -> autorun = c:\dev\cmd\profile.cmd
 
-rem use %CWD% as a prefix to create fully-qualified paths
-set CWD=echo cd
+rem gsDesignExplorer project base directory
+set PROJECTROOT=%CD%
 
 rem PATH TO VISUAL STUDIO TOOLCHAIN
 rem ===============================
@@ -24,7 +24,7 @@ rem set QTDIR=C:\QtSDK\Desktop\Qt\4.7.3\MSVC2008
 
 rem PATH TO VERSIONED TOOLS
 rem =======================
-set QTDIR=%CWD%\libs\msvc\Qt\4.7.3\msvc2008
+set QTDIR=%PROJECTROOT%\libs\msvc\Qt\4.7.3\msvc2008
 
 
 
