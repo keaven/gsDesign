@@ -236,6 +236,7 @@
 		<Folder
 			Name="Other Files"
 			Filters="">
+			<F N="src/gsDesignExplorer.pro"/>
 			<F N="src/CMakeLists.txt"/>
 			<F N="src/gsdesign.ui"/>
 			<F N="src/images.qrc"/>

@@ -525,21 +525,6 @@
                       <attribute name="verticalHeaderStretchLastSection">
                        <bool>false</bool>
                       </attribute>
-                      <attribute name="horizontalHeaderStretchLastSection">
-                       <bool>true</bool>
-                      </attribute>
-                      <attribute name="horizontalHeaderCascadingSectionResizes">
-                       <bool>true</bool>
-                      </attribute>
-                      <attribute name="verticalHeaderCascadingSectionResizes">
-                       <bool>true</bool>
-                      </attribute>
-                      <attribute name="verticalHeaderStretchLastSection">
-                       <bool>false</bool>
-                      </attribute>
-                      <attribute name="horizontalHeaderDefaultSectionSize">
-                       <number>167</number>
-                      </attribute>
                       <row/>
                       <row/>
                       <row/>
@@ -1477,7 +1462,7 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>179</width>
+                      <width>161</width>
                       <height>71</height>
                      </rect>
                     </property>
@@ -1569,8 +1554,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>176</width>
-                      <height>59</height>
+                      <width>153</width>
+                      <height>58</height>
                      </rect>
                     </property>
                     <attribute name="label">
@@ -1681,8 +1666,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>234</width>
-                      <height>176</height>
+                      <width>210</width>
+                      <height>162</height>
                      </rect>
                     </property>
                     <attribute name="label">
@@ -1983,8 +1968,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>189</width>
-                      <height>171</height>
+                      <width>166</width>
+                      <height>151</height>
                      </rect>
                     </property>
                     <attribute name="label">
@@ -2268,7 +2253,7 @@
                       <x>0</x>
                       <y>0</y>
                       <width>340</width>
-                      <height>157</height>
+                      <height>135</height>
                      </rect>
                     </property>
                     <attribute name="label">
@@ -2410,21 +2395,6 @@
                            <attribute name="verticalHeaderStretchLastSection">
                             <bool>false</bool>
                            </attribute>
-                           <attribute name="horizontalHeaderStretchLastSection">
-                            <bool>true</bool>
-                           </attribute>
-                           <attribute name="horizontalHeaderCascadingSectionResizes">
-                            <bool>true</bool>
-                           </attribute>
-                           <attribute name="verticalHeaderCascadingSectionResizes">
-                            <bool>true</bool>
-                           </attribute>
-                           <attribute name="verticalHeaderStretchLastSection">
-                            <bool>false</bool>
-                           </attribute>
-                           <attribute name="horizontalHeaderDefaultSectionSize">
-                            <number>167</number>
-                           </attribute>
                            <row/>
                            <row/>
                            <row/>
@@ -2525,27 +2495,6 @@
                            </attribute>
                            <attribute name="verticalHeaderStretchLastSection">
                             <bool>false</bool>
-                           </attribute>
-                           <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-                            <bool>false</bool>
-                           </attribute>
-                           <attribute name="horizontalHeaderStretchLastSection">
-                            <bool>true</bool>
-                           </attribute>
-                           <attribute name="horizontalHeaderCascadingSectionResizes">
-                            <bool>true</bool>
-                           </attribute>
-                           <attribute name="verticalHeaderCascadingSectionResizes">
-                            <bool>true</bool>
-                           </attribute>
-                           <attribute name="verticalHeaderShowSortIndicator" stdset="0">
-                            <bool>false</bool>
-                           </attribute>
-                           <attribute name="verticalHeaderStretchLastSection">
-                            <bool>false</bool>
-                           </attribute>
-                           <attribute name="horizontalHeaderDefaultSectionSize">
-                            <number>167</number>
                            </attribute>
                            <row/>
                            <row/>
@@ -2650,8 +2599,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>430</width>
-                      <height>296</height>
+                      <width>161</width>
+                      <height>71</height>
                      </rect>
                     </property>
                     <attribute name="label">
@@ -2742,8 +2691,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>176</width>
-                      <height>59</height>
+                      <width>153</width>
+                      <height>58</height>
                      </rect>
                     </property>
                     <attribute name="label">
@@ -2854,8 +2803,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>245</width>
-                      <height>176</height>
+                      <width>216</width>
+                      <height>162</height>
                      </rect>
                     </property>
                     <attribute name="label">
@@ -3169,8 +3118,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>189</width>
-                      <height>171</height>
+                      <width>166</width>
+                      <height>151</height>
                      </rect>
                     </property>
                     <attribute name="label">
@@ -3472,8 +3421,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>272</width>
-                      <height>157</height>
+                      <width>239</width>
+                      <height>135</height>
                      </rect>
                     </property>
                     <attribute name="label">
@@ -3615,21 +3564,6 @@
                            <attribute name="verticalHeaderStretchLastSection">
                             <bool>false</bool>
                            </attribute>
-                           <attribute name="horizontalHeaderStretchLastSection">
-                            <bool>true</bool>
-                           </attribute>
-                           <attribute name="horizontalHeaderCascadingSectionResizes">
-                            <bool>true</bool>
-                           </attribute>
-                           <attribute name="verticalHeaderCascadingSectionResizes">
-                            <bool>true</bool>
-                           </attribute>
-                           <attribute name="verticalHeaderStretchLastSection">
-                            <bool>false</bool>
-                           </attribute>
-                           <attribute name="horizontalHeaderDefaultSectionSize">
-                            <number>50</number>
-                           </attribute>
                            <row/>
                            <row/>
                            <row/>
@@ -3730,27 +3664,6 @@
                            </attribute>
                            <attribute name="verticalHeaderStretchLastSection">
                             <bool>false</bool>
-                           </attribute>
-                           <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-                            <bool>false</bool>
-                           </attribute>
-                           <attribute name="horizontalHeaderStretchLastSection">
-                            <bool>true</bool>
-                           </attribute>
-                           <attribute name="horizontalHeaderCascadingSectionResizes">
-                            <bool>true</bool>
-                           </attribute>
-                           <attribute name="verticalHeaderCascadingSectionResizes">
-                            <bool>true</bool>
-                           </attribute>
-                           <attribute name="verticalHeaderShowSortIndicator" stdset="0">
-                            <bool>false</bool>
-                           </attribute>
-                           <attribute name="verticalHeaderStretchLastSection">
-                            <bool>false</bool>
-                           </attribute>
-                           <attribute name="horizontalHeaderDefaultSectionSize">
-                            <number>120</number>
                            </attribute>
                            <row/>
                            <row/>
@@ -4231,12 +4144,6 @@
                       </attribute>
                       <attribute name="horizontalHeaderStretchLastSection">
                        <bool>true</bool>
-                      </attribute>
-                      <attribute name="horizontalHeaderStretchLastSection">
-                       <bool>true</bool>
-                      </attribute>
-                      <attribute name="horizontalHeaderDefaultSectionSize">
-                       <number>160</number>
                       </attribute>
                       <row/>
                       <row/>
@@ -5156,7 +5063,7 @@
      <x>0</x>
      <y>0</y>
      <width>1338</width>
-     <height>24</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDesign">
@@ -5279,7 +5186,7 @@
   </widget>
   <action name="toolbarActionSaveDesign">
    <property name="icon">
-    <iconset>
+    <iconset resource="images.qrc">
      <normaloff>:/toolbar/images/toolbar/fileSave.png</normaloff>:/toolbar/images/toolbar/fileSave.png</iconset>
    </property>
    <property name="text">
@@ -5299,7 +5206,7 @@
   </action>
   <action name="toolbarActionLoadDesign">
    <property name="icon">
-    <iconset>
+    <iconset resource="images.qrc">
      <normaloff>:/toolbar/images/toolbar/designLoad.png</normaloff>:/toolbar/images/toolbar/designLoad.png</iconset>
    </property>
    <property name="text">
@@ -5311,7 +5218,7 @@
   </action>
   <action name="toolbarActionNewDesign">
    <property name="icon">
-    <iconset>
+    <iconset resource="images.qrc">
      <normaloff>:/toolbar/images/toolbar/designNew.png</normaloff>:/toolbar/images/toolbar/designNew.png</iconset>
    </property>
    <property name="text">
@@ -5326,7 +5233,7 @@
   </action>
   <action name="toolbarActionRunDesign">
    <property name="icon">
-    <iconset>
+    <iconset resource="images.qrc">
      <normaloff>:/toolbar/images/toolbar/designExecute.png</normaloff>:/toolbar/images/toolbar/designExecute.png</iconset>
    </property>
    <property name="text">
@@ -5359,7 +5266,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="images.qrc">
      <normaloff>:/toolbar/images/toolbar/help.png</normaloff>:/toolbar/images/toolbar/help.png</iconset>
    </property>
    <property name="text">
@@ -5376,7 +5283,7 @@
   </action>
   <action name="toolbarActionDeleteDesign">
    <property name="icon">
-    <iconset>
+    <iconset resource="images.qrc">
      <normaloff>:/toolbar/images/toolbar/designDelete.png</normaloff>:/toolbar/images/toolbar/designDelete.png</iconset>
    </property>
    <property name="text">
@@ -5406,7 +5313,7 @@
   </action>
   <action name="toolbarActionDefaultDesign">
    <property name="icon">
-    <iconset>
+    <iconset resource="images.qrc">
      <normaloff>:/toolbar/images/toolbar/designDefault.png</normaloff>:/toolbar/images/toolbar/designDefault.png</iconset>
    </property>
    <property name="text">
@@ -5436,7 +5343,7 @@
   </action>
   <action name="toolbarActionExportDesign">
    <property name="icon">
-    <iconset>
+    <iconset resource="images.qrc">
      <normaloff>:/toolbar/images/toolbar/designExport.png</normaloff>:/toolbar/images/toolbar/designExport.png</iconset>
    </property>
    <property name="text">
@@ -5464,7 +5371,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="images.qrc">
      <normaloff>:/toolbar/images/toolbar/edit.png</normaloff>:/toolbar/images/toolbar/edit.png</iconset>
    </property>
    <property name="text">
@@ -5479,7 +5386,7 @@
   </action>
   <action name="toolbarActionExportPlot">
    <property name="icon">
-    <iconset>
+    <iconset resource="images.qrc">
      <normaloff>:/toolbar/images/toolbar/plotExport.png</normaloff>:/toolbar/images/toolbar/plotExport.png</iconset>
    </property>
    <property name="text">
@@ -5507,7 +5414,7 @@
   </action>
   <action name="toolbarActionSetWorkingDirectory">
    <property name="icon">
-    <iconset>
+    <iconset resource="images.qrc">
      <normaloff>:/toolbar/images/toolbar/home.png</normaloff>:/toolbar/images/toolbar/home.png</iconset>
    </property>
    <property name="text">
@@ -5553,7 +5460,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../../gsDesignExplorer/gsDesignGUI/images.qrc"/>
+  <include location="images.qrc"/>
  </resources>
  <connections/>
  <slots>

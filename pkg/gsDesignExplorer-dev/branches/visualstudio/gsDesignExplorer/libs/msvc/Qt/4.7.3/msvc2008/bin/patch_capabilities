@@ -1,0 +1,2 @@
+#!/usr/bin/perl -w
+require "C:/ndk_buildrepos/qt-desktop/bin/patch_capabilities";
