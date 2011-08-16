@@ -1,0 +1,40 @@
+The system is: Windows - 6.1 - x86
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/bin/cl.exe 
+Build flags: 
+Id flags: -c
+
+The output was:
+0
+Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 15.00.21022.08 for 80x86
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+CMakeCCompilerId.c
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.obj"
+
+The C compiler identification is MSVC, found in "C:/dev/projects/merck/svn/pkg/gsDesignExplorer-dev/branches/visualstudio/gsDesignExplorer/qtcreator-build/CMakeFiles/CompilerIdC/CMakeCCompilerId.obj"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: C:/Program Files (x86)/Microsoft Visual Studio 9.0/VC/bin/cl.exe 
+Build flags: 
+Id flags: -c
+
+The output was:
+0
+Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 15.00.21022.08 for 80x86
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+CMakeCXXCompilerId.cpp
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.obj"
+
+The CXX compiler identification is MSVC, found in "C:/dev/projects/merck/svn/pkg/gsDesignExplorer-dev/branches/visualstudio/gsDesignExplorer/qtcreator-build/CMakeFiles/CompilerIdCXX/CMakeCXXCompilerId.obj"
+
+Determining the version of compiler passed with the following output:
+CMakeTestNMakeCLVersion.c
+
+VERSION=1500
+
