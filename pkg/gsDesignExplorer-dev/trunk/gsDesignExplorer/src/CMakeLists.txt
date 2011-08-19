@@ -36,7 +36,8 @@ IF(QT4_FOUND)
     c:/Qwt-5.2.2-svn/include
     c:/Qwt/include
     c:/Qwt-6.0.1-svn/include
-	c:/dev/libs/qwt/qwt-6.0/src
+    c:/dev/libs/qwt/qwt-6.0/src
+    /home/tony/Libraries/qwt/qwt-6.0/src
     )
 
     SET(QWT_NAMES ${QWT_NAMES} qwtd5 qwt libqwt)
