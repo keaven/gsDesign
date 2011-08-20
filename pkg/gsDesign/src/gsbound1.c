@@ -1,5 +1,6 @@
 #define DEBUG 0
-#define EXTREMEZ 2000
+#define EXTREMEZ 20
+#define MAXR 83
 #include "R.h"
 #include "Rmath.h"
 /* Group sequential probability computation per Jennison & Turnbull
@@ -32,21 +33,22 @@ void gsbound1(int *xnanal,double *xtheta,double *I,double *a,double *b,double *p
                                  int,double,double *, double *);
     int gridpts(int,double,double,double,double *, double *);
     r=xr[0]; nanal= xnanal[0]; theta= xtheta[0]; tol=xtol[0]; 
-    if (nanal < 1 || r<1 || r>83) 
+    if (nanal < 1 || r<1 || r>MAXR) 
 	 {	   retval[0]=1;
  	 		if (*printerr)
 			{	Rprintf("gsbound1 error: illegal argument");
 				if (nanal<1) Rprintf("; nanal=%d--must be > 0",nanal);
-				if (r<1 || r> 83) Rprintf("; r=%d--must be >0 and <84",r);
+				if (r<1 || r> MAXR) Rprintf("; r=%d--must be >0 and <84",r);
 				Rprintf("\n");
 			}
 	 		return;
 	 }
     rtIk=sqrt(I[0]);
-	 mu=rtIk*theta;							/* mean of normalized statistic at 1st interim */
-	 problo[0]=pnorm(mu-a[0],0.,1.,0,0);			/* probability of crossing lower bound at 1st interim */
-    b[0]=qnorm(probhi[0],mu,1,0,0);			/* upper bound at 1st interim */
-	 if (nanal==1) {retval[0]=0; return;}
+    mu=rtIk*theta;						/* mean of normalized statistic at 1st interim */
+    problo[0]=pnorm(mu-a[0],0.,1.,0,0);			/* probability of crossing lower bound at 1st interim */
+    if (probhi[0] <= 0.) b[0]=EXTREMEZ;
+    else b[0]=qnorm(probhi[0],mu,1,0,0);			/* upper bound at 1st interim */
+    if (nanal==1) {retval[0]=0; return;}
 /* set up work vectors */
     z1=zwk; w1=wwk; h=hwk;
     z2=zwk2; w2=wwk2; h2=hwk2;
@@ -57,7 +59,8 @@ void gsbound1(int *xnanal,double *xtheta,double *I,double *a,double *b,double *p
 	 retval[0]=0;
     for(i=1;i<nanal;i++)
     {   rtIkm1=rtIk; rtIk=sqrt(I[i]); mu=rtIk*theta; rtdeltak=sqrt(I[i]-I[i-1]);
-		  btem2=qnorm(probhi[i],mu,1.,0,0); bdelta=1.; j=0;
+        if (probhi[i] <= 0.) btem2=EXTREMEZ;
+        else btem2=qnorm(probhi[i],mu,1.,0,0); bdelta=1.; j=0;
         while((bdelta>tol) && j++ < 20)
 		  {   phi=0.; dphi=0.; plo=0.;
             btem=btem2;
@@ -85,8 +88,8 @@ void gsbound1(int *xnanal,double *xtheta,double *I,double *a,double *b,double *p
             bdelta=btem2-btem; if (bdelta<0) bdelta= -bdelta;
         }
         b[i]=btem;
-	problo[i]=plo;
-		/* if convergence did not occur, set flag for return value */
+        problo[i]=plo;
+	  /* if convergence did not occur, set flag for return value */
         if (bdelta > tol)
 		  {   if (*printerr) printf("gsbound1 error: No convergence for boundary for interim %d; I=%7.0lf; last 2 upper boundary values: %lf %lf\n",
 					i+1,I[i],btem,btem2);
@@ -100,6 +103,6 @@ void gsbound1(int *xnanal,double *xtheta,double *I,double *a,double *b,double *p
             tem=w1; w1=w2; w2=tem;
             tem=h;  h=h2;  h2=tem;
     }   }
-	 return;
+    return;
 }
 

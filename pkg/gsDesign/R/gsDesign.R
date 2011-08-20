@@ -50,13 +50,15 @@
     
     # check input arguments
     checkVector(I, "numeric", c(0, Inf), c(FALSE, TRUE))
-    checkVector(trueneg, "numeric", c(0,1), c(FALSE, FALSE))
-    checkVector(falsepos, "numeric", c(0,1), c(FALSE, FALSE))
+    checkVector(trueneg, "numeric", c(0,1), c(TRUE, FALSE))
+    checkVector(falsepos, "numeric", c(0,1), c(TRUE, FALSE))
     checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
     checkScalar(r, "integer", c(1, 80))
     checkLengths(trueneg, falsepos, I)    
     
     k <- as.integer(length(I))
+    if (trueneg[k]<=0.) stop("Final futility spend must be > 0")
+    if (falsepos[k]<=0.) stop("Final efficacy spend must be > 0")
     r <- as.integer(r)
     storage.mode(I) <- "double"
     storage.mode(trueneg) <- "double"
@@ -81,7 +83,7 @@
     checkScalar(theta, "numeric")
     checkVector(I, "numeric", c(0, Inf), c(FALSE, TRUE))
     checkVector(a, "numeric")
-    checkVector(probhi, "numeric", c(0,1), c(FALSE, FALSE))
+    checkVector(probhi, "numeric", c(0,1), c(TRUE, FALSE))
     checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
     checkScalar(r, "integer", c(1, 80))
     checkScalar(printerr, "integer")
@@ -89,6 +91,7 @@
     
     # coerce type
     k <- as.integer(length(I))
+    if (probhi[k]<=0.) stop("Final spend must be > 0")
     r <- as.integer(r)
     printerr <- as.integer(printerr)
     

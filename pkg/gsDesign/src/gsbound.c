@@ -1,5 +1,8 @@
 #define DEBUG 0
+/* note: EXTREMEZ > 3 + log(r) +  Z(1-alpha) + Z(1-beta)
+   per bottom of p 349 in Jennison and Turnbull */
 #define EXTREMEZ 20
+#define MAXR 83
 #include "R.h"
 #include "Rmath.h"
 /* Group sequential probability computation per Jennison & Turnbull
@@ -32,18 +35,20 @@ void gsbound(int *xnanal,double *I,double *a,double *b,double *problo,double *pr
     int gridpts(int, double,double,double,double *, double *);
     r=xr[0]; nanal= xnanal[0]; tol=xtol[0]; rt2pi=2.506628274631;
 /* compute bounds at 1st interim analysis using inverse normal */
-    if (nanal < 1 || r<1 || r>83) 
+    if (nanal < 1 || r<1 || r>MAXR) 
 	 {	   retval[0]=1;
  	 		if (*printerr)
 			{	Rprintf("gsbound1 error: illegal argument");
 				if (nanal<1) Rprintf("; nanal=%d--must be > 0",nanal);
-				if (r<1 || r> 83) Rprintf("; r=%d--must be >0 and <84",r);
+				if (r<1 || r> MAXR) Rprintf("; r=%d--must be >0 and <84",r);
 				Rprintf("\n");
 			}
 	 		return;
 	 }
-    a[0]=qnorm(problo[0],0.,1.,1,0);
-    b[0]=qnorm(probhi[0],0.,1.,0,0);
+    if (problo[0] <= 0) a[0] = -EXTREMEZ;
+    else a[0]=qnorm(problo[0],0.,1.,1,0);
+    if (probhi[0] <= 0) b[0] = EXTREMEZ;
+    else b[0]=qnorm(probhi[0],0.,1.,0,0);
 /* set up work vectors */
     z1=zwk; w1=wwk; h=hwk;
     z2=zwk2; w2=wwk2; h2=hwk2;
@@ -54,17 +59,20 @@ void gsbound(int *xnanal,double *I,double *a,double *b,double *problo,double *pr
     for(i=1;i<nanal;i++)
     {   /* set up constants */
         rtIkm1=rtIk; rtIk=sqrt(I[i]); rtdeltak=sqrt(I[i]-I[i-1]);
-        atem2=qnorm(problo[i],0.,1.,1,0); adelta=1.;
-        btem2=qnorm(probhi[i],0.,1.,0,0); bdelta=1.; 
-		  j=0;
-        while((adelta>tol || bdelta>tol) && j++ < 20)
-		  {   plo=0.; phi=0.; dplo=0.; dphi=0.;
+        if (problo[i]<=0.) atem2= -EXTREMEZ;
+        else atem2=qnorm(problo[i],0.,1.,1,0); 
+        if (probhi[i]<=0.) btem2= EXTREMEZ;
+        else btem2=qnorm(probhi[i],0.,1.,0,0);
+        adelta=1.; bdelta=1.; 
+	  j=0;
+        while((adelta>tol || bdelta>tol) && j++ < EXTREMEZ)
+	  {   plo=0.; phi=0.; dplo=0.; dphi=0.;
             atem=atem2; btem=btem2;
 	/* compute probability of crossing boundaries & their derivatives */
             for(ii=0;ii<=m1;ii++)
             {   xlo=(z1[ii]*rtIkm1-atem*rtIk)/rtdeltak;
                 xhi=(z1[ii]*rtIkm1-btem*rtIk)/rtdeltak;
-					 plo += h[ii]*pnorm(xlo,0.,1.,0,0);
+                plo += h[ii]*pnorm(xlo,0.,1.,0,0);
                 phi += h[ii]*pnorm(xhi,0.,1.,1,0);
                 dplo+=h[ii]*exp(-xlo*xlo/2)/rt2pi*rtIk/rtdeltak;
                 dphi-=h[ii]*exp(-xhi*xhi/2)/rt2pi*rtIk/rtdeltak;
@@ -89,10 +97,10 @@ void gsbound(int *xnanal,double *I,double *a,double *b,double *problo,double *pr
             bdelta=btem2-btem; if (bdelta<0) bdelta= -bdelta;
         }
         a[i]=atem; b[i]=btem;
-	/* if convergence did not occur, set flag for return value */
+/* if convergence did not occur, set flag for return value */
         if (adelta>tol ||bdelta > tol)
-		  {   if (*printerr) 
-		  		{	printf("gsbound1 error: No convergence for boundary for interim %d; I=%7.0lf",i+1,I[i]);
+        {   if (*printerr) 
+            {  printf("gsbound1 error: No convergence for boundary for interim %d; I=%7.0lf",i+1,I[i]);
 	   			if (bdelta>tol) printf("\n last 2 upper boundary values: %lf %lf\n",btem,btem2);
 					if (adelta>tol) printf("\n last 2 lower boundary values: %lf %lf\n",atem,atem);
 				}

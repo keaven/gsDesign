@@ -1,11 +1,10 @@
 Package: gsDesign
-Version: 2.5-02
+Version: 2.5-03
 Title: Group Sequential Design
 Author: Keaven Anderson 
 Maintainer: Keaven Anderson <keaven_anderson@merck.com>
 Depends: ggplot2, xtable
-Description: gsDesign is a package that derives group sequential designs and describes their properties. 2.5 additions focus on predictive power update and
-prediction intervals.
+Description: gsDesign is a package that derives group sequential designs and describes their properties.
 License: GPL (>= 2)
 Copyright: Copyright 2010, Merck Research Laboratories
 Packaged: Thu Aug  6 17:28:16 2009; anderkea
