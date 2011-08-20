@@ -14,9 +14,9 @@
 #    sfLogistic
 #    sfNormal
 #    sfPoints
-#    sfLinear
 #    sfPower
 #    sfTDist
+#    sfTruncated
 #    spendingFunction
 #
 #  Hidden Functions:
@@ -440,10 +440,15 @@
     if (k > 1)
     {   inctime <- x$param[1:k] - c(0, x$param[1:(k-1)])
         incspend <- x$param[(k+1):j]-c(0, x$param[(k+1):(j-1)])
-        if ((j > 2) && (min(inctime) <= 0 || min(incspend)<= 0))
+        if ((j > 2) && (min(inctime) <= 0))
         {
-           stop("Timepoints specified and cumulative spending must be strictly increasing in sfLinear")
+           stop("Timepoints must be strictly increasing in sfLinear")
         }
+        if ((j > 2) && (min(incspend) < 0))
+        {
+           stop("Spending must be non-decreasing in sfLinear")
+        }
+
     }
     s <- t
     s[t<=0]<-0
@@ -612,6 +617,31 @@
     x$spend <- alpha * (1 * (!is.element(t, 1)) * y + 1 * is.element(t, 1))
     
     x
+}
+
+"sfTruncated" <- function(alpha, t, param){
+   checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+   checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+   if (!is.list(param)) stop("param must be a list. See help(sfTruncated)")
+   if (!max(names(param)=="trange")) stop("param must include trange, sf, param. See help(sfTruncated)")
+   if (!max(names(param)=="sf")) stop("param must include trange, sf, param. See help(sfTruncated)")
+   if (!max(names(param)=="param")) stop("param must include trange, sf, param. See help(sfTruncated)")
+   if (!is.vector(param$trange)) stop("param$trange must be a vector of length 2 with 0 <= param$trange[1] <param$trange[2]<=1. See help(sfTruncated)") 
+   if (length(param$trange)!=2) stop("param$trange parameter must be a vector of length 2 with 0 <= param$trange[1] <param$trange[2]<=1. See help(sfTruncated)")
+   if (param$trange[1]>=1. | param$trange[2]<=param$trange[1] | param$trange[2]<=0)
+       stop("param$trange must be a vector of length 2 with 0 <= param$trange[1] < param$trange[2]<=1. See help(sfTruncated)")
+   if (class(param$sf) != "function") stop("param$sf must be a spending function") 
+   if (!is.numeric(param$param)) stop("param$param must be numeric")
+   spend<-array(0,length(t))
+   spend[t>=param$trange[2]]<-alpha
+   indx <- param$trange[1]<t & t<param$trange[2]
+   s <- param$sf(alpha=alpha,t=(t[indx]-param$trange[1])/(param$trange[2]-param$trange[1]),param$param)
+   spend[indx] <- s$spend
+   param$name <- s$name
+   x<-list(name="Truncated", param=param, parname=s$parname, 
+                  sf=sfTruncated, spend=spend, bound=NULL, prob=NULL)
+   class(x) <- "spendfn"
+   x
 }
 
 "spendingFunction" <- function(alpha, t, param)

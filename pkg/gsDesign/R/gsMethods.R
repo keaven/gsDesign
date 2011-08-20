@@ -94,11 +94,11 @@
 
 "print.gsDesign" <- function(x, ...)
 {    
-	if (x$nFixSurv > 0)
-	{	cat("Group sequential design sample size for time-to-event outcome\n", 
-        "with sample size ", x$nSurv, ". The analysis plan below shows events\n",
-        "at each analysis.\n", sep="")
-	}
+    if (x$nFixSurv > 0)
+    {    cat("Group sequential design sample size for time-to-event outcome\n", 
+         "with sample size ", x$nSurv, ". The analysis plan below shows events\n",
+         "at each analysis.\n", sep="")
+    }
     
     if (x$test.type == 1) 
     {
@@ -294,7 +294,7 @@ print.nSurvival <- function(x,...){
 }
 
 "sfprint" <- function(x)
-{    
+{   
     # print spending function information    
     if (x$name == "OF")
     {
@@ -307,6 +307,13 @@ print.nSurvival <- function(x,...){
     else if (x$name == "WT")
     {
         cat("Wang-Tsiatis boundary with Delta =", x$param)
+    }
+    else if (x$name == "Truncated")
+    {   cat(x$param$name,"spending function truncated at",x$param$trange)
+        if (!is.null(x$parname) && !is.null(x$param))
+        {
+            cat("\n with", x$parname, "=", x$param$param)
+        }
     }
     else 
     {   

@@ -149,20 +149,25 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
        ntx <- "n="
        if (is.null(xlab)) xlab <- "Sample size"
    }
-	if (x$test.type > 1)
-   {	z <- fn(z=c(x$upper$bound,x$lower$bound), i=c(1:x$k, 1:x$k), x=x,
-               ratio=ratio, delta0=delta0, delta=delta)
-		Ztxt <- as.character(c(round(z[1:(x$k-1)],dgt[2]), round(z[x$k],max(dgt)), 
-                          round(z[(x$k+1):(2*x$k-1)], dgt[1]), round(z[2*x$k],max(dgt))))
+   if (x$test.type > 1)
+   {  z <- fn(z=c(x$upper$bound, x$lower$bound), i=c(1:x$k,1:x$k), x=x,
+                  ratio=ratio, delta0=delta0, delta=delta)
+		Ztxt <- as.character(c(round(z[1:x$k],dgt[2]), round(z[x$k+(1:x$k)], dgt[1])))
+		# use maximum digits for equal final bounds
+		if (x$upper$bound[x$k]==x$lower$bound[x$k])
+		{	Ztxt[c(x$k,2*x$k)] <- round(z[x$k],max(dgt))
+		}
+      indxu <- (1:x$k)[x$upper$bound < 20]
+      indxl <- (1:x$k)[x$lower$bound > -20]
 		y <- data.frame(
-				N=as.numeric(c(x$n.I,x$n.I)), 
-				Z=as.numeric(z), 
-				Bound=c(array("Upper", x$k), array("Lower", x$k)),
-				Ztxt=Ztxt)
+				N=as.numeric(c(x$n.I[indxu],x$n.I[indxl])), 
+				Z=as.numeric(z[c(indxu,x$k+indxl)]), 
+				Bound=c(array("Upper", length(indxu)), array("Lower", length(indxl))),
+				Ztxt=Ztxt[c(indxu,x$k+indxl)])
 	}else{
 		z <- fn(z=x$upper$bound, i=1:x$k, x=x,
                ratio=ratio, delta0=delta0, delta=delta)
-		Ztxt <- as.character(round(z,dgt[1]))
+		Ztxt <- as.character(round(z),dgt[1])
 		y <- data.frame(
 				N=as.numeric(x$n.I), 
 				Z=as.numeric(z), 
