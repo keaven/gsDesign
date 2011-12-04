@@ -11,8 +11,8 @@ For objects of type \code{gsProbability} plots are available for z-values at bou
 }
 
 \usage{
-plot.gsProbability(x, plottype=2, base=FALSE, ...)
-plot.gsDesign(x, plottype=1, base=FALSE, ...)
+\method{plot}{gsProbability}(x, plottype=2, base=FALSE, ...)
+\method{plot}{gsDesign}(x, plottype=1, base=FALSE, ...)
 }
 
 \arguments{

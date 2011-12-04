@@ -1,18 +1,26 @@
 \name{nSurvival}
 \alias{nSurvival}
 \alias{nEvents}
+\alias{zn2hr}
+\alias{hrn2z}
+\alias{hrz2n}
 \alias{print.nSurvival}
 \alias{Survival sample size}
 \title{3.4: Time-to-event sample size calculation (Lachin-Foulkes)}
 \description{\code{nSurvival()} is used to calculate the sample size for a clinical trial with a time-to-event endpoint. The Lachin and Foulkes (1986) method is used.
+\code{nEvents} uses the Schoenfeld (1981) approximation to provide sample size and power in terms of the underlying hazard ratio and the number of events observed in a survival analysis.
+The functions \code{hrz2n()}, \code{hrn2z()} and \code{zn2hr()} also use the Schoenfeld approximation to provide simple translations between hazard ratios, z-values and the number of events in an analysis; input variables can be given as vectors.
 }
 
 \usage{
 nSurvival(lambda1=1/12, lambda2=1/24, Ts=24, Tr=12, eta = 0, ratio = 1,
       alpha = 0.025, beta = 0.10, sided = 1, approx = FALSE,
       type = c("rr", "rd"), entry = c("unif", "expo"), gamma = NA)
-print.nSurvival(x,...)
+\method{print}{nSurvival}(x,...)
 nEvents(hr = .6, alpha = .025, beta = .1, ratio = 1, sided = 1, hr0 =  1, n = 0, tbl = FALSE)
+hrn2z(hr, n, ratio=1)
+hrz2n(hr, z, ratio=1)
+zn2hr(z, n, ratio=1)
 }
 \arguments{
   \item{lambda1, lambda2}{event hazard rate for placebo and treatment
@@ -22,9 +30,9 @@ nEvents(hr = .6, alpha = .025, beta = .1, ratio = 1, sided = 1, hr0 =  1, n = 0,
     group. Default is balanced design, i.e., randomization ratio is 1.}
   \item{Ts}{maximum study duration.}
   \item{Tr}{accrual (recruitment) duration.}
-  \item{alpha}{type I error rate. Default is 0.05 since 2-sided testing is default.}
+  \item{alpha}{type I error rate. Default is 0.025 since 1-sided testing is default.}
   \item{beta}{type II error rate. Default is 0.10 (90\% power). Not needed for \code{nEvents()} if n is provided.}
-  \item{sided}{one or two-sided test? Default is two-sided test.}
+  \item{sided}{one or two-sided test? Default is one-sided test.}
   \item{approx}{logical. If \code{TRUE}, the approximation sample size
     formula for risk difference is used.}
   \item{type}{type of sample size calculation: risk ratio (\dQuote{rr}) or risk
@@ -36,10 +44,11 @@ nEvents(hr = .6, alpha = .025, beta = .1, ratio = 1, sided = 1, hr0 =  1, n = 0,
     \code{"expo"} (exponential).} 
   \item{x}{An object of class "nSurvival" returned by \code{nSurvival()}
    (optional: used for output; "months" or "years" would be the 'usual' choices).}
-  \item{hr}{Hazard ratio under the alternative hypothesis (>0).}
+  \item{hr}{Hazard ratio. For \code{nEvents}, this is the hazard ratio under the alternative hypothesis (>0).}
   \item{hr0}{Hazard ratio under the null hypothesis (>0, != \code{hr}).}
-  \item{n}{Number of events may be input to compute power rather than sample size.}
+  \item{n}{Number of events. For \code{nEvents} may be input to compute power rather than sample size.}
   \item{tbl}{Indicator of whether or not scalar (vector) or tabular output is desired for \code{nEvents()}.}
+  \item{z}{A z-statistic.}
   \item{...}{Allows additional arguments for \code{print.nSurvival()}.}
 }
 
@@ -51,13 +60,24 @@ nEvents(hr = .6, alpha = .025, beta = .1, ratio = 1, sided = 1, hr0 =  1, n = 0,
   be used for risk ratio or risk difference. The function also consider
   non-uniform (exponential) entry as well as uniform entry. 
 
-  If the logical approx is \code{TRUE}, the variance under alternative
+  If the logical \code{approx} is \code{TRUE}, the variance under alternative
   hypothesis is used to replace the variance under null hypothesis.
-  For non-uniform entry, a non-zero value of gamma for exponential entry
-  must be supplied. For positive gamma, the entry distribution is
-  convex, whereas for negative gamma, the entry distribution is concave.
+  For non-uniform entry, a non-zero value of \code{gamma} for exponential entry
+  must be supplied. For positive \code{gamma}, the entry distribution is
+  convex, whereas for negative \code{gamma}, the entry distribution is concave.
 
-  \code{nEvents()} uses the Schoenfeld (1981) method to approximate the number of events \code{n} (given \code{beta}) or the power (given \code{n}). Arguments may be vectors or scalars, but any vectors must have the same length.
+\code{nEvents()} uses the Schoenfeld (1981) method to approximate the number of events \code{n} (given \code{beta}) or the power (given \code{n}). Arguments may be vectors or scalars, but any vectors must have the same length.
+
+The functions \code{hrz2n}, \code{hrn2z} and \code{zn2hr} also all apply the Schoenfeld approximation for proportional hazards modelling. 
+This approximation is based on the asymptotic normal distribtuion of the logrank statistic as well as related statistics are asymptotically normal. 
+Let \eqn{\lambda} denote the underlying hazard ratio (\code{lambda1/lambda2} in terms of the arguments to \code{nSurvival}). Further, let \eqn{n} denote the number of events observed when computing the statistic of interest and \eqn{r} the ratio of the sample size in an experimental group relative to a control. The estimated natural logarithm of the hazard ratio from a proportional hazards ratio is approximately normal with a mean of \eqn{log{\lambda}} and variance \eqn{(1+r)^2/nr}.
+Let \eqn{z} denote a logrank statistic (or a Wald statistic or score statistic from a proportional hazards regression model).
+The same asymptotic theory implies \eqn{z} is asymptotically equivalent to a normalized estimate of the hazard ratio \eqn{\lambda} and thus \eqn{z} is asymptotically normal with variance 1 and mean \deqn{\frac{log{\lambda}r}{(1+r)^2}.}
+Plugging the estimated hazard ratio into the above equation allows approximating any one of the following based on the other two: the estimate hazard ratio, the number of events and the z-statistic.
+That is, 
+\deqn{\hat{\lambda}= \exp(z(1+r)/\sqrt{rn})}
+\deqn{z=log(\hat{\lambda})\sqrt{nr}/(1+r)}
+\deqn{n= (z(1+r)/log(\hat{\lambda}))^2/r.}
 }
 
 \value{
@@ -86,9 +106,14 @@ nEvents(hr = .6, alpha = .025, beta = .1, ratio = 1, sided = 1, hr0 =  1, n = 0,
   \item{delta}{Standardized effect size represented by input difference between null and alternative hypothesis hazard ratios.}
   \item{ratio}{Ratio of experimental to control sample size where 'experimental' is the same as the group with hazard represented in the numerator of the hazard ratio.}
   \item{se}{Estimated standard error for the observed log(hazard ratio) with the given sample size.}
+
+\code{hrz2n} outputs a number of events required to approximately have the input hazard ratio, z-statistic and sample size correspond.
+\code{hrn2z} outputs an approximate z-statistic corresponding to an input hazard ratio and number of events.
+\code{zn2hr} outputs an approximate hazard ratio corresponding to an input z-statistic and number of events.
+
 }
-\seealso{\link{gsDesign package overview}, \link{Plots for group sequential designs}, \link{gsDesign}} 
-\author{Shanhong Guan \email{shanhong\_guan@merck.com}}
+\seealso{\link{gsDesign package overview}, \link{Plots for group sequential designs}, \link{gsDesign}, \link{gsHR}}
+\author{Shanhong Guan \email{shanhong.guan@gmail.com}, Keaven Anderson \email{keaven_anderson@merck.com}}
 \references{
   Lachin JM and Foulkes MA (1986),
   Evaluation of Sample Size and Power for Analyses of Survival
@@ -139,6 +164,19 @@ nEvents(hr=c(.5, .6))
 nEvents(hr=.6, n=c(50, 100), tbl=TRUE)
 # vector output
 nEvents(hr=.6, n=c(50, 100))
-}
 
+# approximate hazard ratio corresponding to 100 events and z-statistic of 2
+zn2hr(n=100,z=2)
+
+# approximate number of events corresponding to z-statistic of 2 and 
+# estimated hazard ratio of .5 (or 2)
+hrz2n(hr=.5,z=2)
+hrz2n(hr=2,z=2)
+
+# approximate z statistic corresponding to 75 events
+# and estimated hazard ratio of .6 (or 1/.6)
+# assuming 2-to-1 randomization of experimental to control
+hrn2z(hr=.6,n=75,ratio=2)
+hrn2z(hr=1/.6,n=75,ratio=2)
+}
 \keyword{design}

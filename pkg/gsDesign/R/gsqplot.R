@@ -129,7 +129,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 }
 # qplots for z-values and transforms of z-values
 "qplotit" <- function(x, xlim=NULL, ylim=NULL, main=NULL, geom=c("line", "text"), 
-                     dgt=c(2.2), lty=c(2,1), col=c(1,1),
+                     dgt=c(2,2), lty=c(2,1), col=c(1,1),
                      lwd=c(1,1), nlabel="TRUE", xlab=NULL, ylab=NULL, fn=function(z,i,x,...){z},
                      ratio=1, delta0=0, delta=1, cex=1, base=FALSE,...)
 {  if (length(lty)==1) lty <- array(lty, 2)
@@ -167,7 +167,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	}else{
 		z <- fn(z=x$upper$bound, i=1:x$k, x=x,
                ratio=ratio, delta0=delta0, delta=delta)
-		Ztxt <- as.character(round(z),dgt[1])
+		Ztxt <- as.character(round(z,dgt[1]))
 		y <- data.frame(
 				N=as.numeric(x$n.I), 
 				Z=as.numeric(z), 
