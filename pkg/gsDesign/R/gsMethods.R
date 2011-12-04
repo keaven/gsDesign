@@ -34,7 +34,7 @@
 # Exported Functions
 ###
 
-"print.gsProbability" <- function(x, ...)
+"print.gsProbability" <- function(x,...)
 {    
     ntxt <- "N "
     nval <- ceiling(x$n.I)
@@ -90,6 +90,7 @@
     cat("\nLower boundary (futility or Type II Error)\n")
     cat("          Analysis\n")
     print(y)
+  invisible(x)
 }
 
 "print.gsDesign" <- function(x, ...)
@@ -243,6 +244,7 @@
         cat("          Analysis\n")
         print(y)
     }
+  invisible(x)
 }
 print.nSurvival <- function(x,...){
 	if (class(x) != "nSurvival") stop("print.nSurvival: primary argument must have class nSurvival")

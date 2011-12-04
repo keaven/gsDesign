@@ -16,3 +16,18 @@
         return(pwr)
     }
 }
+"zn2hr" <- function (z, n , ratio = 1) 
+{   c <- 1/(1 + ratio)
+    psi <- c * (1 - c)
+    exp(-z/sqrt(n * psi))
+}
+"hrn2z" <- function(hr, n, ratio=1)
+{   c <- 1/(1 + ratio)
+    psi <- c * (1 - c)
+    log(hr) * sqrt(n * psi)
+}
+"hrz2n" <- function(hr, z, ratio=1)
+{   c <- 1 / (1 + ratio)
+    psi <- c * (1 - c)
+    (z / log(hr))^2 / psi
+}

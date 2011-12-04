@@ -17,13 +17,13 @@ Individual transformation of z-value test statistics for interim and final analy
 }
 
 \usage{
-    gsBValue <- function(z, i, x, ylab="B-value", ...)
+    gsBValue(z, i, x, ylab="B-value", ...)
     gsDelta(z, i, x, ylab=NULL, ...)
     gsHR(z, i, x, ratio=1, ylab="Estimated hazard ratio", ...)
     gsRR(z, i, x, ratio=1, ylab="Estimated risk ratio",...)
     gsCPz(z, i, x, theta=NULL, ylab=NULL, ...)
     gsBoundSummary(x, upper=TRUE, ratio=1)
-    xtable.gsDesign(x, caption=NULL, label=NULL, align=NULL, digits=c(0,0,3,4,4,4,3,3,3,3),
+    \method{xtable}{gsDesign}(x, caption=NULL, label=NULL, align=NULL, digits=c(0,0,3,4,4,4,3,3,3,3),
                              display=NULL, upper=TRUE, rnames=NULL, cnames=NULL, ratio=1,
                              sanitize.text.function=function(x){x}, 
                              sanitize.rownames.function=function(x){x},...)

@@ -9,7 +9,7 @@ gsDesign(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,
          sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I = 0,
          maxn.IPlan = 0, nFixSurv=0, endpoint=NULL, delta1=1, delta0=0) 
 
-print.gsDesign(x,...)}
+\method{print}{gsDesign}(x,...)}
 
 \arguments{
 	\item{k}{Number of analyses planned, including interim and final.}
@@ -97,6 +97,7 @@ If \code{delta=0} and \code{n.fix=1} then this is the relative sample size compa
 \item{endpoint}{As input.}
 \item{delta1}{As input.}
 \item{delta0}{As input.}
+Note: \code{print.gsProbability()} returns the input \code{x}.
 }
 \details{
 Many parameters normally take on default values and thus do not require explicit specification.
