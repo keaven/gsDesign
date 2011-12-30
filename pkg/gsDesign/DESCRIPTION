@@ -1,5 +1,5 @@
 Package: gsDesign
-Version: 2.6-01
+Version: 2.6-02
 Title: Group Sequential Design
 Author: Keaven Anderson 
 Maintainer: Keaven Anderson <keaven_anderson@merck.com>
@@ -7,4 +7,4 @@ Depends: ggplot2, xtable
 Description: gsDesign is a package that derives group sequential designs and describes their properties.
 License: GPL (>= 2)
 Copyright: Copyright 2010, Merck Research Laboratories
-Packaged: Thu Aug  6 17:28:16 2009; anderkea
+Packaged: 2011-12-30 13:26:23 UTC; Anderkea

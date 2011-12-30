@@ -91,7 +91,7 @@ void gsbound1(int *xnanal,double *xtheta,double *I,double *a,double *b,double *p
         problo[i]=plo;
 	  /* if convergence did not occur, set flag for return value */
         if (bdelta > tol)
-		  {   if (*printerr) printf("gsbound1 error: No convergence for boundary for interim %d; I=%7.0lf; last 2 upper boundary values: %lf %lf\n",
+		  {   if (*printerr) Rprintf("gsbound1 error: No convergence for boundary for interim %d; I=%7.0lf; last 2 upper boundary values: %lf %lf\n",
 					i+1,I[i],btem,btem2);
 				retval[0]=1;
 		  }
