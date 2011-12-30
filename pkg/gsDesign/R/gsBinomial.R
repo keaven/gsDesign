@@ -279,8 +279,8 @@
     checkScalar(nsim, "integer", c(1, Inf))
     checkLengths(p1, p2)
     
-    x1 <- rbinom(p=p1, size=n1, n=nsim)
-    x2 <- rbinom(p=p2, size=n2, n=nsim)
+    x1 <- rbinom(prob=p1, size=n1, n=nsim)
+    x2 <- rbinom(prob=p2, size=n2, n=nsim)
     scale <- match.arg(tolower(scale), c("difference", "rr", "or", "lnor"))
     
     testBinomial(x1=x1, x2=x2, n1=n1, n2=n2, delta0=delta0, adj=adj,

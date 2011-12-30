@@ -49,7 +49,9 @@ See examples.
 }
 
 \seealso{\code{\link{gsDesign}}, \code{\link{sfHSD}}, \code{\link{sfPower}}, 
-\code{\link{sfLogistic}}, \code{\link{sfExponential}}, \link{Wang-Tsiatis Bounds}, \link{gsDesign package overview}
+\code{\link{sfLogistic}}, \code{\link{sfExponential}}, 
+\code{\link{sfTruncated}}, 
+\link{Wang-Tsiatis Bounds}, \link{gsDesign package overview}
 }
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
 in the directory where R is installed.}
