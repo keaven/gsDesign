@@ -19,10 +19,10 @@ sfPoints(alpha, t, param)
 	\item{alpha}{Real value \eqn{> 0} and no more than 1. Normally, \code{alpha=0.025} for one-sided Type I error specification
 	or \code{alpha=0.1} for Type II error specification. However, this could be set to 1 if for descriptive purposes
 	you wish to see the proportion of spending as a function of the proportion of sample size/information.}
-	\item{t}{A vector of points with increasing values from 0 to 1, inclusive. The last point should be 1.
+	\item{t}{A vector of points with increasing values from >0 and <=1. 
 	Values of the proportion of sample size/information for which the spending function will be computed.}
 	\item{param}{A vector of the same length as \code{t} specifying the cumulative proportion of spending
-	to corresponding to each point in \code{t}.}
+	to corresponding to each point in \code{t}; must be >=0 and <=1.}
 }
 \value{An object of type \code{spendfn}. See spending functions for further details.}
 
@@ -65,5 +65,12 @@ tx <- 0:100/100
 lines(tx, sfTDist(1, tx, c(c(1, 3, 5)/6, .01, .1, .5))$spend)
 text(x=.6, y=.9, labels="Pointwise Spending Approximated by")
 text(x=.6, y=.83, "t-Distribution Spending with 3-point interpolation")
+
+# example without lower spending at initial interim or 
+# upper spending at last interim
+x <- gsDesign(k=3, sfu=sfPoints, sfupar=c(.25, .25),
+              sfl=sfPoints, sflpar=c(0,.25))
+x
+
 }
 \keyword{design}
