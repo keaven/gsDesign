@@ -11,6 +11,7 @@
 #    sfHSD
 #    sfLDOF
 #    sfLDPocock
+#    sfLinear
 #    sfLogistic
 #    sfNormal
 #    sfPoints
@@ -433,9 +434,9 @@
     }
     k <- j/2
 
-    if (max(param) >= 1 || min(param) <= 0)
+    if (max(param) > 1 || min(param) < 0)
     {
-       stop("Timepoints and cumulative proportion of spending must be > 0 and < 1 in sfLinear")
+       stop("Timepoints and cumulative proportion of spending must be >= 0 and <= 1 in sfLinear")
     }
     if (k > 1)
     {   inctime <- x$param[1:k] - c(0, x$param[1:(k-1)])
@@ -501,14 +502,14 @@
     
     incspend <- x$param - c(0, x$param[1:k-1])
     
-    if (min(incspend) <=  0.)
+    if (min(incspend) <  0.)
     { 
-        stop("Cumulative user-specified spending levels must increase with each analysis")
+        stop("Cumulative user-specified spending levels must be non-decreasing with each analysis")
     }
     
     if (max(x$param) > 1.)
     { 
-        stop("Cumulative user-specified spending must be > 0 and <= 1")
+        stop("Cumulative user-specified spending must be >= 0 and <= 1")
     }
     
     x$spend <- alpha * x$param
@@ -632,7 +633,7 @@
        stop("param$trange must be a vector of length 2 with 0 <= param$trange[1] < param$trange[2]<=1. See help(sfTruncated)")
    if (class(param$sf) != "function") stop("param$sf must be a spending function") 
    if (!is.numeric(param$param)) stop("param$param must be numeric")
-   spend<-array(0,length(t))
+   spend<-as.vector(array(0,length(t)))
    spend[t>=param$trange[2]]<-alpha
    indx <- param$trange[1]<t & t<param$trange[2]
    s <- param$sf(alpha=alpha,t=(t[indx]-param$trange[1])/(param$trange[2]-param$trange[1]),param$param)

@@ -19,9 +19,11 @@ sfLinear(alpha, t, param)
 	or \code{alpha=0.1} for Type II error specification. However, this could be set to 1 if for descriptive purposes you wish to see the proportion of spending as a function of the proportion of sample size or information.}
 	\item{t}{A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 
 	sample size or information for which the spending function will be computed.}
-	\item{param}{A vector with a positive, even length. All values must be strictly between 0 and 1.
-Letting \code{m <- length(param/2)}, the first \code{m} points in param specify increasing values strictly between 0 and 1 where the proportion of total spending is specified. 
-The last \code{m} points in param specify increasing values strictly between 0 and 1 with the cumulative proportion of spending at the timepoints in the first part of the vector.}
+	\item{param}{A vector with a positive, even length. Values must range from 0 to 1, inclusive.
+Letting \code{m <- length(param/2)}, the first \code{m} points in param specify increasing values strictly between 0 and 1,
+where the proportion of total spending is specified. 
+The last \code{m} points in param specify non-decreasing values from 0 to 1, inclusive, 
+with the cumulative proportion of spending at the timepoints in the first part of the vector.}
 }
 \value{An object of type \code{spendfn}. 
 The cumulative spending returned in \code{sfLinear$spend} is 0 for \code{t=0} and \code{alpha} for \code{t>=1}. 
@@ -46,5 +48,12 @@ x <- gsDesign(sfu=sfLinear, sfl=sfLinear, sfupar=sfupar, sflpar=sflpar)
 plot(x, plottype="sf")
 x
 
+# now do an example where there is no lower-spending at interim 1
+# and no upper spending at interim 2
+sflpar<-c(1/3,2/3,0,.25)
+sfupar<-c(1/3,2/3,.1,.1)
+x <- gsDesign(sfu=sfLinear, sfl=sfLinear, sfupar=sfupar, sflpar=sflpar)
+plot(x, plottype="sf")
+x
 }
 \keyword{design}
