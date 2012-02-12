@@ -187,21 +187,16 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 			main=main, lty=lty[1], col=col[1], lwd=lwd[1], xlab=xlab, ylab=ylab,...)
 		lines(x=y$N[y$Bound=="Lower"], y=y$Z[y$Bound=="Lower"], lty=lty[2], col=col[2], lwd=lwd[2])
 	}else
-	{	GeomText$guide_geom <- function(.) "blank"
-		lbls <- c("Lower", "Upper")
+	{	lbls <- c("Lower", "Upper")
 		if (x$test.type > 1)
-		{	p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y, 
-				group=factor(Bound), colour=factor(Bound), geom=geom, label=Ztxt,
-				xlab=xlab, ylab=ylab, main=main,
-				ylim=ylim, xlim=xlim,...) + aes(lty=factor(Bound)) +
-				scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
-				scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls) 
+		{	p <- ggplot(data=y, aes(x=as.numeric(N), y=as.numeric(Z), group=factor(Bound),
+            col=factor(Bound), label=Ztxt, lty=factor(Bound))) +
+            geom_text(show_guide=F)+geom_line() + opts(title=main) +
+            scale_x_continuous(xlab)+scale_y_continuous(ylab) +
+  			    scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
+				    scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
 		}else{
-			p <- qplot(x=as.numeric(N), y=as.numeric(Z), data=y, 
-					aes(colour=col[1], lty=lty[1], lwd=lwd[1]), geom=geom, label=Ztxt,
-					xlab=xlab, ylab=ylab, main=main,
-					ylim=ylim, xlim=xlim,...)
-			p <- ggplot(aes(x=as.numeric(N), y=as.numeric(Z), label=Ztxt), data=y) + 
+			p <- ggplot(aes(x=as.numeric(N), y=as.numeric(Z), label=Ztxt, group=factor(Bound)), data=y) + 
 					geom_line(colour=col[1], lty=lty[1], lwd=lwd[1]) +
 					geom_text() +	xlab(xlab) + ylab(ylab) + opts(title=main)
 		}
@@ -324,18 +319,21 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 		}
 		y <- data.frame(N=N, CP=CP, Bound=Bound, Ztxt=Ztxt)
 		if (test.type > 1)
-		{	GeomText$guide_geom <- function(.) "blank"
-                  lbls <- c("Lower","Upper")
-			p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
-				group=factor(Bound), colour=factor(Bound), geom=geom, label=Ztxt, 
-				xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + aes(lty=factor(Bound)) +
-				scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
-				scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
+		{	lbls <- c("Lower","Upper")
+      p <- ggplot(data=y, aes(x=as.numeric(N), y=as.numeric(CP), group=factor(Bound),
+        col=factor(Bound), label=Ztxt, lty=factor(Bound))) +
+        geom_text(show_guide=F)+geom_line() + 
+        scale_x_continuous(xlab)+scale_y_continuous(ylab) + opts(title=main) +
+  	    scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
+		    scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
 		}else 
-		{ p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
-				label=Ztxt, geom="text",
-				xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + geom_line(colour=col[1],lty=lty[1],lwd=lwd[1])
-	}	}
+		{ #p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
+			#	label=Ztxt, geom="text",
+			#	xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + geom_line(colour=col[1],lty=lty[1],lwd=lwd[1])
+  		p <- ggplot(aes(x=as.numeric(N), y=as.numeric(CP), label=Ztxt, group=factor(Bound)), data=y) + 
+					geom_line(colour=col[1], lty=lty[1], lwd=lwd[1]) +
+					geom_text() +	xlab(xlab) + ylab(ylab) + opts(title=main)
+	}	}   
 	if (nlabel==TRUE)
 	{	y2 <- data.frame(
 					N=x$n.I[1:(x$k-1)], 
@@ -658,13 +656,16 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 		invisible(x)
 	}
 	else
-	{	GeomText$guide_geom <- function(.) "blank"
-		p <- qplot(x=theta, y=prob, data=subset(y,interim==1), main=main,
-				colour=factor(bound), lty=lty, geom="line", xlab = xlab, ylab = ylab, ylim=c(0,1),
-				group=factor(bound)) + aes(lty=factor(bound))
-		if(test.type == 1)
+	{	p <- ggplot(data=subset(y,interim==1), 
+            aes(x=theta, y=prob, group=factor(bound),
+            col=factor(bound), lty=factor(bound))) +
+            geom_line() + opts(title=main) +
+            scale_x_continuous(xlab)+scale_y_continuous(ylab) +
+    		    scale_colour_manual(name= "Bound", values=col) +
+				    scale_linetype_manual(name= "Bound",  values=lty)
+    if(test.type == 1)
 		{	p <- p + scale_colour_manual(name= "Probability", values=col, breaks=1,
-					labels="Upper bound") +
+					labels="Upper bound") + opts(title=main) +
 					scale_linetype_manual(name="Probability", values=lty[1], breaks=1,
 					labels="Upper bound")
 		}else{
@@ -673,7 +674,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 					scale_linetype_manual(name="Probability", values=lty, breaks=1:2,
 					labels=c("Upper bound","1-Lower bound"))
 		}
-		p <- p + geom_text(data=yt, aes(theta, prob, colour=factor(bound), group=1, label=itxt))
+		p <- p + geom_text(data=yt, aes(theta, prob, colour=factor(bound), group=1, label=itxt),show_guide=F)
 		for(i in 1:x$k) p <- p + geom_line(data=subset(y,interim==i&bound==1), 
 			colour=col[1], lty=lty[1], lwd=lwd[1])
 		if (test.type > 2) for(i in 1:(x$k-1)) {
