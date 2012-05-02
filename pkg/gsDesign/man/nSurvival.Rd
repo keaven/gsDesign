@@ -18,9 +18,9 @@ nSurvival(lambda1=1/12, lambda2=1/24, Ts=24, Tr=12, eta = 0, ratio = 1,
       type = c("rr", "rd"), entry = c("unif", "expo"), gamma = NA)
 \method{print}{nSurvival}(x,...)
 nEvents(hr = .6, alpha = .025, beta = .1, ratio = 1, sided = 1, hr0 =  1, n = 0, tbl = FALSE)
-hrn2z(hr, n, ratio=1)
-hrz2n(hr, z, ratio=1)
-zn2hr(z, n, ratio=1)
+hrn2z(hr, n, ratio=1, hr0=1, hr1=.7)
+hrz2n(hr, z, ratio=1, hr0=1)
+zn2hr(z, n, ratio=1, hr0=1, hr1=.7)
 }
 \arguments{
   \item{lambda1, lambda2}{event hazard rate for placebo and treatment
@@ -45,7 +45,8 @@ zn2hr(z, n, ratio=1)
   \item{x}{An object of class "nSurvival" returned by \code{nSurvival()}
    (optional: used for output; "months" or "years" would be the 'usual' choices).}
   \item{hr}{Hazard ratio. For \code{nEvents}, this is the hazard ratio under the alternative hypothesis (>0).}
-  \item{hr0}{Hazard ratio under the null hypothesis (>0, != \code{hr}).}
+  \item{hr0}{Hazard ratio under the null hypothesis (>0, for \code{nEvents}, \code{!= hr}).}
+  \item{hr1}{Hazard ratio under the alternate hypothesis for \code{hrn2z, zn2hr} (>0, \code{!= hr0})}
   \item{n}{Number of events. For \code{nEvents} may be input to compute power rather than sample size.}
   \item{tbl}{Indicator of whether or not scalar (vector) or tabular output is desired for \code{nEvents()}.}
   \item{z}{A z-statistic.}
@@ -167,6 +168,10 @@ nEvents(hr=.6, n=c(50, 100))
 
 # approximate hazard ratio corresponding to 100 events and z-statistic of 2
 zn2hr(n=100,z=2)
+# same when hr0 is 1.1
+zn2hr(n=100,z=2,hr0=1.1)
+# same when hr0 is .9 and hr1 is greater than hr0
+zn2hr(n=100,z=2,hr0=.9,hr1=1)
 
 # approximate number of events corresponding to z-statistic of 2 and 
 # estimated hazard ratio of .5 (or 2)
