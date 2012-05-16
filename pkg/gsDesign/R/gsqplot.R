@@ -45,7 +45,7 @@
 
 "plot.gsProbability" <- function(x, plottype=2, base=FALSE,...)
 {   
-#   checkScalar(plottype, "integer", c(1, 7))
+#   checkScalar(plottype, "integer", c(1, 9))
 	y <- x
 	if (max(x$n.I)>3) y$n.fix<-max(x$n.I)
 	else y$n.fix<-1
@@ -157,8 +157,8 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 		if (x$upper$bound[x$k]==x$lower$bound[x$k])
 		{	Ztxt[c(x$k,2*x$k)] <- round(z[x$k],max(dgt))
 		}
-      indxu <- (1:x$k)[x$upper$bound < 20]
-      indxl <- (1:x$k)[x$lower$bound > -20]
+      	indxu <- (1:x$k)[x$upper$bound < 20]
+      	indxl <- (1:x$k)[x$lower$bound > -20]
 		y <- data.frame(
 				N=as.numeric(c(x$n.I[indxu],x$n.I[indxl])), 
 				Z=as.numeric(z[c(indxu,x$k+indxl)]), 
@@ -189,16 +189,16 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	}else
 	{	lbls <- c("Lower", "Upper")
 		if (x$test.type > 1)
-		{	p <- ggplot(data=y, aes(x=as.numeric(N), y=as.numeric(Z), group=factor(Bound),
-            col=factor(Bound), label=Ztxt, lty=factor(Bound))) +
-            geom_text(show_guide=F)+geom_line() + opts(title=main) +
-            scale_x_continuous(xlab)+scale_y_continuous(ylab) +
-  			    scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
-				    scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
+		{ p <- ggplot(data=y, aes(x=as.numeric(N), y=as.numeric(Z), group=factor(Bound),
+            	col=factor(Bound), label=Ztxt, lty=factor(Bound))) +
+            	geom_text(show_guide=F,size=cex*5)+geom_line() + opts(title=main) +
+            	scale_x_continuous(xlab)+scale_y_continuous(ylab) +
+  			scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
+			scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
 		}else{
 			p <- ggplot(aes(x=as.numeric(N), y=as.numeric(Z), label=Ztxt, group=factor(Bound)), data=y) + 
 					geom_line(colour=col[1], lty=lty[1], lwd=lwd[1]) +
-					geom_text() +	xlab(xlab) + ylab(ylab) + opts(title=main)
+					geom_text(size=cex*5) + xlab(xlab) + ylab(ylab) + opts(title=main)
 		}
 	}
 	if (nlabel==TRUE)
@@ -215,14 +215,14 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 			{	text(x=y2$N, y=y2$Z, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
 			{	y2$Ztxt <- paste(array("r=",x$k), y2$Ztxt, sep="")
-				p <- p + geom_text(data=y2, aes(group=factor(Bound), label=Ztxt), colour=1)
+				p <- p + geom_text(data=y2, aes(group=factor(Bound), label=Ztxt), size=cex*5, show_guide=F, colour=1)
 			}
 		}else
 		{	if(base)
 			{	text(x=y2$N, y=y2$Z, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
 			{	y2$Ztxt <- paste(array("N=",x$k), y2$Ztxt, sep="")
-				p <- p + geom_text(data=y2, aes(group=factor(Bound),label=Ztxt), colour=1)
+				p <- p + geom_text(data=y2, aes(group=factor(Bound),label=Ztxt), size=cex*5, show_guide=F, colour=1)
 			}
 	}	}
 	if (base)
@@ -235,8 +235,8 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 "plotgsCP" <- function(x, theta="thetahat", main="Conditional power at interim stopping boundaries", 
         ylab=NULL, geom=c("line","text"),
         xlab=ifelse(x$n.fix == 1, "Sample size relative to fixed design", "N"), xlim=NULL,
-        lty=c(1,2), col=c(1,1), lwd=c(1,1), pch=" ", textcex=1.25, legtext=NULL,  dgt=c(3,2), nlabel=TRUE, 
-        base=FALSE, ...)
+        lty=c(1,2), col=c(1,1), lwd=c(1,1), pch=" ", cex=1, legtext=NULL,  dgt=c(3,2), nlabel=TRUE, 
+        base=FALSE,...)
 {  if (length(lty)==1) lty <- array(lty, 2)
    if (length(col)==1) col <- array(col, 2)
    if (length(lwd)==1) lwd <- array(lwd, 2)
@@ -291,7 +291,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 			plot(x$n.I[1:(x$k-1)], y,  xlab=xlab,  ylab=ylab,  main = main, 
 				ylim=c(ymin,  ymax),  xlim=xlim, col=col[1], lwd=lwd[1], lty=lty[1], type="l", ...)
 			points(x$n.I[1:(x$k-1)],  y, ...)
-			text(x$n.I[1:(x$k-1)], y, as.character(round(y,dgt[2])), cex=textcex)
+			text(x$n.I[1:(x$k-1)], y, as.character(round(y,dgt[2])), cex=cex)
 			ymid <- ymin
 		}
 		else
@@ -299,12 +299,12 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 			matplot(x$n.I[1:(x$k-1)],  y,  xlab=xlab,  ylab=ylab,  main = main, 
 				lty=lty, col=col, lwd=lwd, ylim=c(ymin,  ymax), xlim=xlim,  type="l", ...)
 				matpoints(x$n.I[1:(x$k-1)],  y, pch=pch, col=col, ...)
-				text(xtext, ymin, legtext[3], cex=textcex)
-				text(x$n.I[1:(x$k-1)], y[,1], as.character(round(y[,1],dgt[1])), col=col[1], cex=textcex)
-				text(x$n.I[1:(x$k-1)], y[,2], as.character(round(y[,2],dgt[2])), col=col[2], cex=textcex)
+				text(xtext, ymin, legtext[3], cex=cex)
+				text(x$n.I[1:(x$k-1)], y[,1], as.character(round(y[,1],dgt[1])), col=col[1], cex=cex)
+				text(x$n.I[1:(x$k-1)], y[,2], as.character(round(y[,2],dgt[2])), col=col[2], cex=cex)
 		}
-		text(xtext, ymid, legtext[2], cex=textcex)
-		text(xtext, 1.03, legtext[1], cex=textcex)
+		text(xtext, ymid, legtext[2], cex=cex)
+		text(xtext, 1.03, legtext[1], cex=cex)
 	}else
 	{	N <- as.numeric(x$n.I[1:(x$k-1)])
 		if (test.type > 1) CP <- y[,2]
@@ -322,7 +322,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 		{	lbls <- c("Lower","Upper")
       p <- ggplot(data=y, aes(x=as.numeric(N), y=as.numeric(CP), group=factor(Bound),
         col=factor(Bound), label=Ztxt, lty=factor(Bound))) +
-        geom_text(show_guide=F)+geom_line() + 
+        geom_text(show_guide=F, size=cex*5)+geom_line() + 
         scale_x_continuous(xlab)+scale_y_continuous(ylab) + opts(title=main) +
   	    scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
 		    scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
@@ -332,7 +332,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 			#	xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + geom_line(colour=col[1],lty=lty[1],lwd=lwd[1])
   		p <- ggplot(aes(x=as.numeric(N), y=as.numeric(CP), label=Ztxt, group=factor(Bound)), data=y) + 
 					geom_line(colour=col[1], lty=lty[1], lwd=lwd[1]) +
-					geom_text() +	xlab(xlab) + ylab(ylab) + opts(title=main)
+					geom_text(size=cex*5) +	xlab(xlab) + ylab(ylab) + opts(title=main)
 	}	}   
 	if (nlabel==TRUE)
 	{	y2 <- data.frame(
@@ -342,17 +342,17 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 					Ztxt=as.character(round(x$n.I[1:(x$k-1)],nround)))
 		if (x$n.fix == 1)
 		{	if (base)
-			{	text(x=y2$N, y=y2$CP, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=textcex)
+			{	text(x=y2$N, y=y2$CP, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
 			{	y2$Ztxt <- paste(array("r=",x$k-1), y2$Ztxt, sep="")
-				p <- p + geom_text(data=y2, aes(N,CP, group=factor(Bound),label=Ztxt), colour=1)
+				p <- p + geom_text(data=y2, aes(N,CP, group=factor(Bound),label=Ztxt), size=cex*5, colour=1)
 			}
 		}else
 		{	if(base)
-			{	text(x=y2$N, y=y2$CP, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=textcex)
+			{	text(x=y2$N, y=y2$CP, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
 			{	y2$Ztxt <- paste(array("N=",x$k-1), y2$Ztxt, sep="")
-				p <- p + geom_text(data=y2, aes(N,CP, group=factor(Bound),label=Ztxt), colour=1)
+				p <- p + geom_text(data=y2, aes(N,CP, group=factor(Bound),label=Ztxt), size=cex*5, colour=1)
 			}
 	}	}
 	if (base)
@@ -524,7 +524,8 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 "plotgsPower" <- function(x, main=NULL,
 	ylab="Cumulative Boundary Crossing Probability",
 	xlab=NULL, lty=c(1, 2), col=c(1, 2), lwd=1, cex=1,
-	theta=if (is(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta, xval=NULL, base=FALSE,...)
+	theta=if (is(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta, xval=NULL, base=FALSE,
+  ...)
 {	if (is.null(main)) main <- "Boundary crossing probabilities by effect size"
 	if (length(col==1)) col=array(col,2)
 	if (length(lty==1)) lty=array(lty,2)
@@ -674,7 +675,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 					scale_linetype_manual(name="Probability", values=lty, breaks=1:2,
 					labels=c("Upper bound","1-Lower bound"))
 		}
-		p <- p + geom_text(data=yt, aes(theta, prob, colour=factor(bound), group=1, label=itxt),show_guide=F)
+		p <- p + geom_text(data=yt, aes(theta, prob, colour=factor(bound), group=1, label=itxt), size=cex*5, show_guide=F)
 		for(i in 1:x$k) p <- p + geom_line(data=subset(y,interim==i&bound==1), 
 			colour=col[1], lty=lty[1], lwd=lwd[1])
 		if (test.type > 2) for(i in 1:(x$k-1)) {
