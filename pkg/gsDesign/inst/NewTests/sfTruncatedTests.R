@@ -1,0 +1,11 @@
+# test param failures
+s<-sfTruncated(alpha=.05,t=(0:100)/100,1)
+s<-sfTruncated(alpha=.05,t=(0:100)/100,param=list(x=1))
+s<-sfTruncated(alpha=.05,t=(0:100)/100,list(trange=1))
+s<-sfTruncated(alpha=.05,t=(0:100)/100,list(trange=1,sf="abc"))
+s<-sfTruncated(alpha=.05,t=(0:100)/100,list(trange=1,sf="abc",param="xyz"))
+s<-sfTruncated(alpha=.05,t=(0:100)/100,list(trange=c(1,2),sf="abc",param="xyz"))
+s<-sfTruncated(alpha=.05,t=(0:100)/100,list(trange=c(.4,.3),sf="abc",param="xyz"))
+s<-sfTruncated(alpha=.05,t=(0:100)/100,param=list(trange=c(-1,0),sf="abc",param="xyz"))
+s<-sfTruncated(alpha=.05,t=(0:100)/100,param=list(trange=c(0,1),sf="abc",param="xyz"))
+s<-sfTruncated(alpha=.05,t=(0:100)/100,param=list(trange=c(0,1),sf=sfHSD,param="xyz"))

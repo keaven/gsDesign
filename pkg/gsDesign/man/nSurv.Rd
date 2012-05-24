@@ -1,0 +1,248 @@
+\name{nSurv}
+\alias{nSurv}
+\alias{gsSurv}
+\alias{print.nSurv}
+\alias{print.gsSurv}
+\alias{xtable.gsSurv}
+\alias{tEventsIA}
+\alias{nEventsIA}
+\alias{Advanced survival sample size}
+\title{Advanced time-to-event sample size calculation}
+\description{\code{nSurv()} is used to calculate the sample size for a clinical trial with a time-to-event endpoint and an assumption of proportional hazards.
+This set of routines is new with version 2.7 and will continue to be modified and refined to improve input error checking and output format with subsequent versions.
+It allows both the Lachin and Foulkes (1986) method as well as the Kim and Tsiatis(1990) method.
+Piecewise exponential survival is supported as well as piecewise uniform enrollment.
+The methods are for a 2-arm trial with treatment groups referred to as experimental and control.
+A stratified population is allowed as in Lachin and Foulkes (1986); this method has been extended to derive non-inferiority as well as superiority trials.
+Stratification also allows power calculation for meta-analyses.
+The method used for calculation depends on which of the following values are \code{NULL} on input:
+study duration (\code{T}; this also derives total accrual duration), minimum follow-up (\code{minfup}), or power (\code{beta}).
+If none of the above variables are missing, then input accrual rates (\code{gamma}) are adjusted by a constant multiplier to achieve the desired power.
+Otherwise, the missing value is computed based on the other input values.
+The cases calculating \code{T} and \code{minfup} correspond to methods by Kim and Tsiatis (1990), but still use the underlying power equation from Lachin and Foulkes (1986).
+A print method is provided for the returned value from \code{nSurv()}, an object of class \code{nSurv}.
+
+\code{gsSurv()} combines \code{nSurv()} with \code{gsDesign()} to derive a group sequential design for a study with a time-to-event endpoint.
+A print method is provided for the returned value from \code{gsSurv()}, an object of class \code{gsSurv}.
+
+Both \code{nEventsIA} and \code{tEventsIA} require a group sequential design for a time-to-event endpoing of class \code{gsSurv} as input.
+\code{nEventsIA} calculates the expected number of events under the alternate hypothesis at a given interim time.
+\code{tEventsIA} calculates the time that the expected number of events under the alternate hypothesis is a given proportion of the total events planned for the final analysis. 
+}
+
+\usage{
+nSurv(lambdaC=log(2)/6, hr=.6, hr0=1, eta = 0, etaE=NULL, 
+  gamma=1, R=12, S=NULL, T=NULL,  minfup = NULL, ratio = 1,
+  alpha = 0.025, beta = 0.10,  sided = 1, tol = .Machine$double.eps^0.25)
+\method{print}{nSurv}(x,digits=4,...)
+gsSurv(k=3, test.type=4, alpha=0.025, sided=1,  
+  beta=0.1, astar=0, timing=1, sfu=sfHSD, sfupar=-4,
+  sfl=sfHSD, sflpar=-2, r=18,
+  lambdaC=log(2)/6, hr=.6, hr0=1, eta=0, etaE=NULL,
+  gamma=1, R=12, S=NULL, T=NULL, minfup=NULL, ratio=1,
+  tol = .Machine$double.eps^0.25)
+\method{print}{gsSurv}(x,digits=2,...)
+\method{xtable}{gsSurv}(x, caption=NULL, label=NULL, align=NULL, digits=NULL,
+       display=NULL, footnote=NULL, fnwid="9cm", timename="months",...)
+tEventsIA(x, timing=.25, tol = .Machine$double.eps^0.25)
+nEventsIA(tIA=5, x=NULL, target=0, simple=TRUE)
+}
+\arguments{
+  \item{x}{An object of class \code{nSurv} or \code{gsSurv}. \code{print.nSurv()} is used for an object of class \code{nSurv} which will generally be output from \code{nSurv()}. For \code{print.gsSurv()} is used for an object of class \code{gsSurv} which will generally be output from \code{gsSurv()}. \code{nEventsIA} and \code{tEventsIA} operate on both the \code{nSurv} and \code{gsSurv} class.}
+  \item{digits}{Number of digits past the decimal place to print (\code{print.gsSurv.}); also a pass through to generic \code{xtable()} from \code{xtable.gsSurv()}.}
+  \item{lambdaC}{scalar, vector or matrix of event hazard rates for the control group; rows represent time periods while columns represent strata; a vector implies a single stratum.}
+  \item{hr}{hazard ratio (experimental/control) under the alternate hypothesis (scalar).}
+  \item{hr0}{hazard ratio (experimental/control) under the null hypothesis (scalar).}
+  \item{eta}{scalar, vector or matrix of dropout hazard rates for the control group; rows represent time periods while columns represent strata; if entered as a scalar, rate is constant accross strata and time periods; if entered as a vector, rates are constant accross strata.}
+  \item{etaE}{matrix dropout hazard rates for the experimental group specified in like form as \code{eta}; if NULL, this is set equal to \code{eta}.}
+  \item{gamma}{a scalar, vector or matrix of rates of entry by time period (rows) and strata (columns); if entered as a scalar, rate is constant accross strata and time periods; if entered as a vector, rates are constant accross strata.}
+  \item{R}{a scalar or vector of durations of time periods for recruitment rates specified in rows of \code{gamma}. Length is the same as number of rows in \code{gamma}. Note that when variable enrollment duration is specified (input \code{T=NULL}), the final enrollment period is extended as long as needed.}
+  \item{S}{a scalar or vector of durations of piecewise constant event rates specified in rows of \code{lambda}, \code{eta} and \code{etaE}; this is NULL if there is a single event rate per stratum (exponential failure) or length of the number of rows in \code{lambda} minus 1, otherwise.}
+  \item{T}{study duration; if \code{T} is input as \code{NULL}, this will be computed on output; see details.}
+  \item{minfup}{follow-up of last patient enrolled; if \code{minfup} is input as \code{NULL}, this will be computed on output; see details.}
+  \item{ratio}{randomization ratio of experimental treatment divided by control; normally a scalar, but may be a vector with length equal to number of strata.}
+  \item{sided}{1 for 1-sided testing, 2 for 2-sided testing.}
+  \item{alpha}{type I error rate. Default is 0.025 since 1-sided testing is default.}
+  \item{beta}{type II error rate. Default is 0.10 (90\% power); NULL if power is to be computed based on other input values.}
+  \item{tol}{for cases when \code{T} or \code{minfup} values are derived through root finding (\code{T} or \code{minfup} input as \code{NULL}), \code{tol} provides the level of error input to the \code{uniroot()} root-finding function. The default is the same as for \code{\link{uniroot}}.}
+\item{k}{Number of analyses planned, including interim and final.}
+\item{test.type}{\code{1=}one-sided \cr
+		\code{2=}two-sided symmetric \cr
+		\code{3=}two-sided, asymmetric, beta-spending with binding lower bound \cr
+		\code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound \cr
+		\code{5=}two-sided, asymmetric, lower bound spending under the null hypothesis with binding lower bound \cr
+		\code{6=}two-sided, asymmetric, lower bound spending under the null hypothesis with non-binding lower bound. \cr See details, examples and manual.}
+\item{astar}{Normally not specified. If \code{test.type=5} or \code{6}, \code{astar} specifies the total
+	probability of crossing a lower bound at all analyses combined. 
+	This will be changed to \eqn{1 - }\code{alpha} when default value of 0 is used. 
+	Since this is the expected usage, normally \code{astar} is not specified by the user.}
+\item{timing}{Sets relative timing of interim analyses in \code{gsSurv}. Default of 1 produces equally spaced analyses. 
+	Otherwise, this is a vector of length \code{k} or \code{k-1}.
+	The values should satisfy \code{0 < timing[1] < timing[2] < ... < timing[k-1] < 
+timing[k]=1}. For \code{tEventsIA}, this is a scalar strictly between 0 and 1 that indicates the targeted proportion of final planned events available at an interim analysis.}
+\item{sfu}{A spending function or a character string indicating a boundary type (that is, \dQuote{WT} for Wang-Tsiatis bounds, \dQuote{OF} for O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds). 
+	For one-sided and symmetric two-sided testing is used to completely specify spending (\code{test.type=1, 2}), \code{sfu}. 
+	The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function.
+	See details, \link{Spending function overview}, manual and examples.}
+\item{sfupar}{Real value, default is \eqn{-4} which is an O'Brien-Fleming-like conservative bound when used with the default Hwang-Shih-DeCani spending function. This is a real-vector for many spending functions.
+	The parameter \code{sfupar} specifies any parameters needed for the spending function specified by \code{sfu}; this will be ignored for spending functions (\code{sfLDOF}, \code{sfLDPocock}) 
+	or bound types (\dQuote{OF}, \dQuote{Pocock}) that do not require parameters.}
+\item{sfl}{Specifies the spending function for lower boundary crossing probabilities when asymmetric, two-sided testing is performed (\code{test.type = 3}, 
+\code{4}, \code{5}, or \code{6}). 
+	Unlike the upper bound, only spending functions are used to specify the lower bound.
+	The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function.
+	The parameter \code{sfl} is ignored for one-sided testing (\code{test.type=1}) or symmetric 2-sided testing (\code{test.type=2}). 
+	See details, spending functions, manual and examples.}
+\item{sflpar}{Real value, default is \eqn{-2}, which, with the default Hwang-Shih-DeCani spending function, 
+	specifies a less conservative spending rate than the default for the upper bound.}
+\item{r}{Integer value controlling grid for numerical integration as in Jennison and Turnbull (2000); 
+	default is 18, range is 1 to 80. Larger values provide larger number of grid points and greater accuracy.
+	Normally \code{r} will not be changed by the user.}
+\item{tIA}{Timing of an interim analysis; should be between 0 and \code{y$T}.}
+\item{target}{The targeted proportion of events at an interim analysis. This is used for root-finding will be 0 for normal use.}
+\item{simple}{See output specification for \code{nEventsIA()}.}
+\item{footnote}{footnote for xtable output; may be useful for describing some of the design parameters.}
+\item{fnwid}{a text string controlling the width of footnote text at the bottom of the xtable output.}
+\item{timename}{character string with plural of time units (e.g., "months")}
+\item{caption}{passed through to generic \code{xtable()}.}
+\item{label}{passed through to generic \code{xtable()}.}
+\item{align}{passed through to generic \code{xtable()}.}
+\item{display}{passed through to generic \code{xtable()}.}
+\item{...}{other arguments that may be passed to the generic print or xtable function.}
+}
+
+\details{
+\code{nSurv()} produces an object of class \code{nSurv} with the number of subjects and events for a set of pre-specified trial parameters, such as accrual duration and follow-up period. The underlying power calculation is based on Lachin and Foulkes (1986) method for proportional hazards assuming a fixed underlying hazard ratio between 2 treatment groups. The method has been extended here to enable designs to test non-inferiority. Piecewise constant enrollment and failure rates are assumed and a stratified population is allowed. See also \code{\link{nSurvival}} for other Lachin and Foulkes (1986) methods assuming a constant hazard difference or exponential enrollment rate.
+
+When study duration (\code{T}) and follow-up duration (\code{minfup}) are fixed, \code{nSurv} applies exactly the Lachin and Foulkes (1986) method of computing sample size under the proportional hazards assumption when  
+For this computation, enrollment rates are altered proportionately to those input in \code{gamma} to achieve the power of interest.
+
+Given the specified enrollment rate(s) input in \code{gamma}, \code{nSurv} may also be used to derive enrollment duration required for a trial to have defined power if \code{T} is input as \code{NULL}; in this case, both \code{R} (enrollment duration for each specified enrollment rate) and \code{T} (study duration) will be computed on output.
+
+Alternatively and also using the fixed enrollment rate(s) in \code{gamma}, if minimum follow-up \code{minfup} is specified as \code{NULL}, then the enrollment duration(s) specified in \code{R} are considered fixed and \code{minfup} and \code{T} are computed to derive the desired power.
+This method will fail if the specified enrollment rates and durations either over-powers the trial with no additional follow-up or underpowers the trial with infinite follow-up. This method produces a corresponding error message in such cases.
+
+The input to \code{gsSurv} is a combination of the input to \code{nSurv()} and \code{gsDesign()}.
+While this routine may change in the future, it is likely to be backwards compatible with the current version.
+
+\code{nEventsIA()} is provided to compute the expected number of events at a given point in time given enrollment, event and censoring rates.
+The routine is used with a root finding routine to approximate the approximate timing of an interim analysis. It is also used to extend enrollment or follow-up of a fixed design to obtain a sufficient number of events to power a group sequential design.
+}
+
+\value{
+  \code{nSurv()} returns an object of type \code{nSurv} with the following components:
+  \item{alpha}{As input.}
+  \item{sided}{As input.}
+  \item{beta}{Type II error; if missing, this is computed.}
+  \item{power}{Power corresponding to input \code{beta} or computed if output \code{beta} is computed.}
+  \item{lambdaC}{As input.}
+  \item{etaC}{As input.}
+  \item{etaE}{As input.}
+  \item{gamma}{As input unless none of the following are \code{NULL}: \code{T}, \code{minfup}, \code{beta}; otherwise, this is a constant times the input value required to power the trial given the other input variables.}
+  \item{ratio}{As input.}
+  \item{R}{As input unless \code{T} was \code{NULL} on input.}
+  \item{S}{As input.}
+  \item{T}{As input.}
+  \item{minfup}{As input.}
+  \item{hr}{As input.}
+  \item{hr0}{As input.}
+  \item{n}{Total expected sample size corresponding to output accrual rates and durations.}
+  \item{d}{Total expected number of events under the alternate hypothesis.}
+  \item{tol}{As input, except when not used in computations in which case this is returned as \code{NULL}. 
+  This and the remaining output below are not printed by the \code{print()} extension for the \code{nSurv} class.}
+  \item{eDC}{A vector of expected number of events by stratum in the control group under the alternate hypothesis.}
+  \item{eDE}{A vector of expected number of events by stratum in the experimental group under the alternate hypothesis.}
+  \item{eDC0}{A vector of expected number of events by stratum in the control group under the null hypothesis.}
+  \item{eDE0}{A vector of expected number of events by stratum in the experimental group under the null hypothesis.}
+  \item{eNC}{A vector of the expected accrual in each stratum in the control group.}
+  \item{eNE}{A vector of the expected accrual in each stratum in the experimental group.}
+  \item{variable}{A text string equal to "Accrual rate" if a design was derived by varying the accrual rate, "Accrual duration" if a design was derived by varying the accrual duration, "Follow-up duration" if a design was derived by varying follow-up duration, or "Power" if accrual rates and duration as well as follow-up duration was specified and \code{beta=NULL} was input.}
+
+\code{gsSurv()} returns much of the above plus an object of class \code{gsDesign} in a variable named \code{gs}; see \code{\link{gsDesign}} for general documentation on what is returned in \code{gs}. 
+The value of \code{gs$n.I} represents the number of endpoints required at each analysis to adequately power the trial.
+Other items returned by \code{gsSurv()} are:
+  \item{gs}{A group sequential design (\code{gsDesign}) object.}
+  \item{lambdaC}{As input.}
+  \item{etaC}{As input.}
+  \item{etaE}{As input.}
+  \item{gamma}{As input unless none of the following are \code{NULL}: \code{T}, \code{minfup}, \code{beta}; otherwise, this is a constant times the input value required to power the trial given the other input variables.}
+  \item{ratio}{As input.}
+  \item{R}{As input unless \code{T} was \code{NULL} on input.}
+  \item{S}{As input.}
+  \item{T}{As input.}
+  \item{minfup}{As input.}
+  \item{hr}{As input.}
+  \item{hr0}{As input.}
+  \item{eNC}{Total expected sample size corresponding to output accrual rates and durations.}
+  \item{eNE}{Total expected sample size corresponding to output accrual rates and durations.}
+  \item{eDC}{Total expected number of events under the alternate hypothesis.}
+  \item{eDE}{Total expected number of events under the alternate hypothesis.}
+  \item{tol}{As input, except when not used in computations in which case this is returned as \code{NULL}. 
+  This and the remaining output below are not printed by the \code{print()} extension for the \code{nSurv} class.}
+  \item{eDC}{A vector of expected number of events by stratum in the control group under the alternate hypothesis.}
+  \item{eDE}{A vector of expected number of events by stratum in the experimental group under the alternate hypothesis.}
+  \item{eDC0}{A vector of expected number of events by stratum in the control group under the null hypothesis.}
+  \item{eDE0}{A vector of expected number of events by stratum in the experimental group under the null hypothesis.}
+  \item{eNC}{A vector of the expected accrual in each stratum in the control group.}
+  \item{eNE}{A vector of the expected accrual in each stratum in the experimental group.}
+  \item{variable}{A text string equal to "Accrual rate" if a design was derived by varying the accrual rate, "Accrual duration" if a design was derived by varying the accrual duration, "Follow-up duration" if a design was derived by varying follow-up duration, or "Power" if accrual rates and duration as well as follow-up duration was specified and \code{beta=NULL} was input.}
+
+\code{nEventsIA()} returns the expected proportion of the final planned events observed at the input analysis time minus \code{target} when \code{simple=TRUE}. When \code{simple=FALSE}, \code{nEventsIA} returns a list with following components:
+\item{T}{The input value \code{tIA}.}
+\item{eDC}{The expected number of events in the control group at time the output time \code{T}.}
+\item{eDE}{The expected number of events in the experimental group at the output time \code{T}.}
+\item{eNC}{The expected enrollment in the control group at the output time \code{T}.}
+\item{eNE}{The expected enrollment in the experimental group at the output time \code{T}.}
+
+\code{tEventsIA()} returns 
+
+}
+
+\seealso{\link{gsDesign package overview}, \link{Plots for group sequential designs}, \code{\link{gsDesign}}, \code{\link{gsHR}}, \code{\link{nSurvival}}}
+\author{Keaven Anderson \email{keaven_anderson@merck.com}}
+\references{
+Kim KM and Tsiatis AA (1990), Study duration for clinical trials with survival response and early stopping rule. \emph{Biometrics}, 46, 81-92
+
+Lachin JM and Foulkes MA (1986),  Evaluation of Sample Size and Power for Analyses of Survival
+  with Allowance for Nonuniform Patient Entry, Losses to Follow-Up,
+  Noncompliance, and Stratification. \emph{Biometrics}, 42, 507-519.
+
+Schoenfeld D (1981),
+The Asymptotic Properties of Nonparametric Tests for Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
+}
+
+\examples{
+# vary accrual rate to obtain power
+nSurv(lambdaC=log(2)/6, hr=.5, eta=log(2)/40,gamma=1, T=36,  minfup = 12)
+
+# vary accrual duration to obtain power
+nSurv(lambdaC=log(2)/6, hr=.5, eta=log(2)/40, gamma=6, minfup = 12)
+
+# vary follow-up duration to obtain power
+nSurv(lambdaC=log(2)/6, hr=.5, eta=log(2)/40, gamma=6, R=25)
+
+# piecewise constant enrollment rates (vary accrual duration)
+nSurv(lambdaC=log(2)/6, hr=.5, eta=log(2)/40, gamma=c(1,3,6), R=c(3,6,9), minfup=12)
+
+# stratified population (vary accrual duration)
+nSurv(lambdaC=matrix(log(2)/c(6,12),ncol=2), hr=.5, eta=log(2)/40, gamma=matrix(c(2,4),ncol=2), minfup=12)
+
+# piecewise exponential failure rates (vary accrual duration)
+nSurv(lambdaC=log(2)/c(6,12), hr=.5, eta=log(2)/40, S=3, gamma=6, minfup = 12)
+
+# combine it all: 2 strata, 2 failure rate periods
+nSurv(lambdaC=matrix(log(2)/c(6,12,18,24),ncol=2), hr=.5, 
+      eta=matrix(log(2)/c(40,50,45,55),ncol=2), S=3, 
+      gamma=matrix(c(3,6,5,7),ncol=2), R=c(5,10), minfup = 12)
+
+# group sequential design (vary accrual rate to obtain power)
+x<-gsSurv(k=4,sfl=sfPower,sflpar=.5,lambdaC=log(2)/6, hr=.5, eta=log(2)/40,gamma=1, T=36,  minfup = 12)
+x
+print(xtable(x,footnote="This is a footnote; note that it can be wide.", caption="Caption example."))
+# find expected number of events at time 12 in the above trial
+nEventsIA(x=x,tIA=10)
+
+# find time at which 1/4 of events are expected
+tEventsIA(x=x,timing=.25)
+}
+\keyword{design}
