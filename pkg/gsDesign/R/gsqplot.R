@@ -132,7 +132,8 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
                      dgt=c(2,2), lty=c(2,1), col=c(1,1),
                      lwd=c(1,1), nlabel="TRUE", xlab=NULL, ylab=NULL, fn=function(z,i,x,...){z},
                      ratio=1, delta0=0, delta=1, cex=1, base=FALSE,...)
-{  if (length(lty)==1) lty <- array(lty, 2)
+{  ggver <- as.numeric_version(packageVersion('ggplot2'))
+   if (length(lty)==1) lty <- array(lty, 2)
    if (length(col)==1) col <- array(col, 2)
    if (length(lwd)==1) lwd <- array(lwd, 2)
    if (length(dgt)==1) dgt <- array(dgt, 2)
@@ -191,14 +192,22 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 		if (x$test.type > 1)
 		{ p <- ggplot(data=y, aes(x=as.numeric(N), y=as.numeric(Z), group=factor(Bound),
             	col=factor(Bound), label=Ztxt, lty=factor(Bound))) +
-            	geom_text(show_guide=F,size=cex*5)+geom_line() + opts(title=main) +
+            	geom_text(show_guide=F,size=cex*5)+geom_line()  +
             	scale_x_continuous(xlab)+scale_y_continuous(ylab) +
   			scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
 			scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
+      if (ggver >= as.numeric_version("0.9.2"))
+      {  p <- p + ggtitle(title=main)}else{
+         p <- p + opts(title=main)
+      }
 		}else{
 			p <- ggplot(aes(x=as.numeric(N), y=as.numeric(Z), label=Ztxt, group=factor(Bound)), data=y) + 
 					geom_line(colour=col[1], lty=lty[1], lwd=lwd[1]) +
-					geom_text(size=cex*5) + xlab(xlab) + ylab(ylab) + opts(title=main)
+					geom_text(size=cex*5) + xlab(xlab) + ylab(ylab) 
+			if (ggver >= as.numeric_version("0.9.2"))
+			{  p <- p + ggtitle(title=main)}else{
+			  p <- p + opts(title=main)
+			}
 		}
 	}
 	if (nlabel==TRUE)
@@ -237,7 +246,8 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
         xlab=ifelse(x$n.fix == 1, "Sample size relative to fixed design", "N"), xlim=NULL,
         lty=c(1,2), col=c(1,1), lwd=c(1,1), pch=" ", cex=1, legtext=NULL,  dgt=c(3,2), nlabel=TRUE, 
         base=FALSE,...)
-{  if (length(lty)==1) lty <- array(lty, 2)
+{  ggver <- as.numeric_version(packageVersion('ggplot2'))
+   if (length(lty)==1) lty <- array(lty, 2)
    if (length(col)==1) col <- array(col, 2)
    if (length(lwd)==1) lwd <- array(lwd, 2)
    if (length(dgt)==1) dgt <- array(dgt, 2)
@@ -323,17 +333,25 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
       p <- ggplot(data=y, aes(x=as.numeric(N), y=as.numeric(CP), group=factor(Bound),
         col=factor(Bound), label=Ztxt, lty=factor(Bound))) +
         geom_text(show_guide=F, size=cex*5)+geom_line() + 
-        scale_x_continuous(xlab)+scale_y_continuous(ylab) + opts(title=main) +
+        scale_x_continuous(xlab)+scale_y_continuous(ylab)  +
   	    scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
 		    scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
+		  if (ggver >= as.numeric_version("0.9.2"))
+		  {  p <- p + ggtitle(title=main)}else{
+		    p <- p + opts(title=main)
+		  }
 		}else 
 		{ #p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
 			#	label=Ztxt, geom="text",
 			#	xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + geom_line(colour=col[1],lty=lty[1],lwd=lwd[1])
   		p <- ggplot(aes(x=as.numeric(N), y=as.numeric(CP), label=Ztxt, group=factor(Bound)), data=y) + 
 					geom_line(colour=col[1], lty=lty[1], lwd=lwd[1]) +
-					geom_text(size=cex*5) +	xlab(xlab) + ylab(ylab) + opts(title=main)
-	}	}   
+					geom_text(size=cex*5) +	xlab(xlab) + ylab(ylab) 
+  		if (ggver >= as.numeric_version("0.9.2"))
+  		{  p <- p + ggtitle(title=main)}else{
+  		  p <- p + opts(title=main)
+  		}
+		}	}   
 	if (nlabel==TRUE)
 	{	y2 <- data.frame(
 					N=x$n.I[1:(x$k-1)], 
@@ -368,7 +386,8 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	legtext=NULL, 
 	col=c(1,1), lwd=c(.5,.5), lty=c(1,2),
 	mai=c(.85, .75, .5, .5), xmax=1, base=FALSE,...)
-{	if (is.null(legtext))
+{ ggver <- as.numeric_version(packageVersion('ggplot2'))
+ 	if (is.null(legtext))
 	{	if (x$test.type > 4) legtext <- c("Upper bound", "Lower bound") 
 		else legtext <- c(expression(paste(alpha, "-spending")), expression(paste(beta, "-spending")))
 	}
@@ -526,7 +545,8 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	xlab=NULL, lty=c(1, 2), col=c(1, 2), lwd=1, cex=1,
 	theta=if (is(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta, xval=NULL, base=FALSE,
   ...)
-{	if (is.null(main)) main <- "Boundary crossing probabilities by effect size"
+{	ggver <- as.numeric_version(packageVersion('ggplot2'))
+	if (is.null(main)) main <- "Boundary crossing probabilities by effect size"
 	if (length(col==1)) col=array(col,2)
 	if (length(lty==1)) lty=array(lty,2)
 	if (length(lwd==1)) lwd=array(lwd,2)
@@ -660,26 +680,34 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	{	p <- ggplot(data=subset(y,interim==1), 
             aes(x=theta, y=prob, group=factor(bound),
             col=factor(bound), lty=factor(bound))) +
-            geom_line() + opts(title=main) +
+            geom_line() +
             scale_x_continuous(xlab)+scale_y_continuous(ylab) +
     		    scale_colour_manual(name= "Bound", values=col) +
 				    scale_linetype_manual(name= "Bound",  values=lty)
-    if(test.type == 1)
+		if (ggver >= as.numeric_version("0.9.2"))
+		{	p <- p + ggtitle(title=main)}else{
+			p <- p + opts(title=main)
+		}
+		if(test.type == 1)
 		{	p <- p + scale_colour_manual(name= "Probability", values=col, breaks=1,
-					labels="Upper bound") + opts(title=main) +
+					labels="Upper bound") +
 					scale_linetype_manual(name="Probability", values=lty[1], breaks=1,
 					labels="Upper bound")
-		}else{
-			p <- p + scale_colour_manual(name= "Probability", values=col, breaks=1:2,
+			if (ggver >= as.numeric_version("0.9.2"))
+			{	p <- p + ggtitle(title=main)}else{
+				p <- p + opts(title=main)
+			}
+			}else{
+				p <- p + scale_colour_manual(name= "Probability", values=col, breaks=1:2,
 					labels=c("Upper bound","1-Lower bound")) +
 					scale_linetype_manual(name="Probability", values=lty, breaks=1:2,
 					labels=c("Upper bound","1-Lower bound"))
-		}
-		p <- p + geom_text(data=yt, aes(theta, prob, colour=factor(bound), group=1, label=itxt), size=cex*5, show_guide=F)
-		for(i in 1:x$k) p <- p + geom_line(data=subset(y,interim==i&bound==1), 
-			colour=col[1], lty=lty[1], lwd=lwd[1])
-		if (test.type > 2) for(i in 1:(x$k-1)) {
-			p <- p + geom_line(data=subset(y,interim==i&bound==2), colour=col[2], lty=lty[2], lwd=lwd[2])
+			}
+			p <- p + geom_text(data=yt, aes(theta, prob, colour=factor(bound), group=1, label=itxt), size=cex*5, show_guide=F)
+			for(i in 1:x$k) p <- p + geom_line(data=subset(y,interim==i&bound==1), 
+				colour=col[1], lty=lty[1], lwd=lwd[1])
+			if (test.type > 2) for(i in 1:(x$k-1)) {
+				p <- p + geom_line(data=subset(y,interim==i&bound==2), colour=col[2], lty=lty[2], lwd=lwd[2])
 		}
 		return(p)
 	}
