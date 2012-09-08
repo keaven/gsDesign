@@ -197,7 +197,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
   			scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
 			scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
       if (ggver >= as.numeric_version("0.9.2"))
-      {  p <- p + ggtitle(title=main)}else{
+      {  p <- p + ggtitle(label=main)}else{
          p <- p + opts(title=main)
       }
 		}else{
@@ -205,7 +205,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 					geom_line(colour=col[1], lty=lty[1], lwd=lwd[1]) +
 					geom_text(size=cex*5) + xlab(xlab) + ylab(ylab) 
 			if (ggver >= as.numeric_version("0.9.2"))
-			{  p <- p + ggtitle(title=main)}else{
+			{  p <- p + ggtitle(label=main)}else{
 			  p <- p + opts(title=main)
 			}
 		}
@@ -337,7 +337,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
   	    scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
 		    scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
 		  if (ggver >= as.numeric_version("0.9.2"))
-		  {  p <- p + ggtitle(title=main)}else{
+		  {  p <- p + ggtitle(label=main)}else{
 		    p <- p + opts(title=main)
 		  }
 		}else 
@@ -685,7 +685,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
     		    scale_colour_manual(name= "Bound", values=col) +
 				    scale_linetype_manual(name= "Bound",  values=lty)
 		if (ggver >= as.numeric_version("0.9.2"))
-		{	p <- p + ggtitle(title=main)}else{
+		{	p <- p + ggtitle(label=main)}else{
 			p <- p + opts(title=main)
 		}
 		if(test.type == 1)
@@ -694,7 +694,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 					scale_linetype_manual(name="Probability", values=lty[1], breaks=1,
 					labels="Upper bound")
 			if (ggver >= as.numeric_version("0.9.2"))
-			{	p <- p + ggtitle(title=main)}else{
+			{	p <- p + ggtitle(label=main)}else{
 				p <- p + opts(title=main)
 			}
 			}else{
