@@ -348,7 +348,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 					geom_line(colour=col[1], lty=lty[1], lwd=lwd[1]) +
 					geom_text(size=cex*5) +	xlab(xlab) + ylab(ylab) 
   		if (ggver >= as.numeric_version("0.9.2"))
-  		{  p <- p + ggtitle(title=main)}else{
+  		{  p <- p + ggtitle(label=main)}else{
   		  p <- p + opts(title=main)
   		}
 		}	}   
