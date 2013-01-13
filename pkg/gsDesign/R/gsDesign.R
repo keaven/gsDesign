@@ -259,29 +259,29 @@
 
 "gsPOS" <- function(x, theta, wgts)
 {
-    if (class(x) != "gsProbability" && class(x) != "gsDesign")
-        stop("x must have class gsProbability or gsDesign")
+    if (!is(x,c("gsProbability","gsDesign")))
+      stop("x must have class gsProbability or gsDesign")
     checkVector(theta, "numeric")
     checkVector(wgts, "numeric")
     checkLengths(theta, wgts)    
     x <- gsProbability(theta = theta, d=x)
     one <- array(1, x$k)
-    as.real(one %*% x$upper$prob %*% wgts)
+    as.double(one %*% x$upper$prob %*% wgts)
 }
 
 "gsCPOS" <- function(i, x, theta, wgts)
 {
-    if (class(x) != "gsProbability" && class(x) != "gsDesign")
-        stop("x must have class gsProbability or gsDesign")
+    if (!is(x,c("gsProbability","gsDesign")))
+      stop("x must have class gsProbability or gsDesign")
     checkScalar(i, "integer", c(1, x$k), c(TRUE, FALSE))
     checkVector(theta, "numeric")
     checkVector(wgts, "numeric")
     checkLengths(theta, wgts)    
     x <- gsProbability(theta = theta, d=x)
     v <- c(array(1, i), array(0, (x$k - i)))
-    pAi <- 1 - as.real(v %*% (x$upper$prob + x$lower$prob) %*% wgts)
+    pAi <- 1 - as.double(v %*% (x$upper$prob + x$lower$prob) %*% wgts)
     v <- 1 - v
-    pAiB <- as.real(v %*% x$upper$prob %*% wgts)
+    pAiB <- as.double(v %*% x$upper$prob %*% wgts)
     pAiB / pAi
 }
 
@@ -906,7 +906,7 @@
     b <- d$upper$bound
     r <- d$r
     ntheta <- as.integer(length(theta))
-    theta <- as.real(theta)
+    theta <- as.double(theta)
     
     phi <- as.double(c(1:(k*ntheta)))
     plo <- as.double(c(1:(k*ntheta)))
