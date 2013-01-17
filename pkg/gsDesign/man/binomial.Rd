@@ -3,18 +3,18 @@
 \alias{ciBinomial}
 \alias{nBinomial}
 \alias{simBinomial}
-\title{3.2: Testing, Confidence Intervals and Sample Size for Comparing Two Binomial Rates}
-\description{Support is provided for sample size estimation, testing confidence intervals and simulation for fixed sample size trials 
+\title{3.2: Testing, Confidence Intervals, Sample Size and Power for Comparing Two Binomial Rates}
+\description{Support is provided for sample size estimation, power, testing, confidence intervals and simulation for fixed sample size trials 
 (that is, not group sequential or adaptive) with two arms and binary outcomes. 
 Both superiority and non-inferiority trials are considered.
 While all routines default to comparisons of risk-difference, 
 options to base computations on risk-ratio and odds-ratio are also included. 
 
-\code{nBinomial()} computes sample size using the method of Farrington and 
-Manning (1990) to derive sample size required to power a trial to test the difference between two binomial event rates. 
+\code{nBinomial()} computes sample size or power using the method of Farrington and 
+Manning (1990) for a trial to test the difference between two binomial event rates. 
 The routine can be used for a test of superiority or non-inferiority.
 For a design that tests for superiority \code{nBinomial()} is consistent with the method of Fleiss, Tytun, and Ury (but without the continuity correction) to test for differences between event rates.
-This routine is consistent with the Hmisc package routine \code{bsamsize} for superiority designs.
+This routine is consistent with the Hmisc package routines \code{bsamsize} and \code{bpower} for superiority designs.
 Vector arguments allow computing sample sizes for multiple scenarios for comparative purposes.
 
 \code{testBinomial()} computes a Z- or Chi-square-statistic that compares two binomial event rates using 
@@ -26,7 +26,7 @@ or 3) the odds-ratio for two rates. This procedure provides inference that is co
 the confidence intervals are produced by inverting the testing procedures in \code{testBinomial()}.
 The Type I error \code{alpha} input to \code{ciBinomial} is always interpreted as 2-sided.
 
-\code{simBinomial()} performs simulations to estimate the power for a Miettinin and Nurminen (1980) test
+\code{simBinomial()} performs simulations to estimate the power for a Miettinin and Nurminen (1985) test
 comparing two binomial rates for superiority or non-inferiority. 
 As noted in documentation for \code{bpower.sim()} in the HMisc package, by using \code{testBinomial()} you can see that the formulas without any continuity correction are quite accurate. 
 In fact, Type I error for a continuity-corrected test is significantly lower (Gordon and Watson, 1996) than the nominal rate. 
@@ -35,7 +35,7 @@ Thus, as a default no continuity corrections are performed.
 
 \usage{
 nBinomial(p1, p2, alpha=.025, beta=0.1, delta0=0, ratio=1,
-          sided=1, outtype=1, scale="Difference") 
+          sided=1, outtype=1, scale="Difference", n=NULL) 
 testBinomial(x1, x2, n1, n2, delta0=0, chisq=0, adj=0,
              scale="Difference", tol=.1e-10)
 ciBinomial(x1, x2, n1, n2, alpha=.05, adj=0, scale="Difference")
@@ -66,11 +66,11 @@ If \code{scale="LNOR"}, \code{delta0} is the difference in natural logarithm of 
 }
 \item{ratio}{sample size ratio for group 2 divided by group 1}
 \item{sided}{2 for 2-sided test, 1 for 1-sided test}
-\item{outtype}{\code{nBinomial} only; (default) returns total sample size; 2 returns sample size for each group (\code{n1, n2}; 3 returns additional interim calculations);
-3 and \code{delta0=0} returns a list with total sample size (\code{n}), sample size in each group (\code{n1, n2}),
-null and alternate hypothesis variance (\code{sigma0, sigma1}), input event rates (\code{p1, p2}) and null hypothesis event
-rates (\code{p10, p20}). 
+\item{outtype}{\code{nBinomial} only; 1 (default) returns total sample size; 2 returns a data frame with sample size for each group (\code{n1, n2}; if \code{n} is not input as \code{NULL}, power is returned in \code{Power};
+3 returns a data frame with total sample size (\code{n}), sample size in each group (\code{n1, n2}), Type I error (\code{alpha}), 1 or 2 (\code{sided}, as input), Type II error (\code{beta}), power (\code{Power}), 
+null and alternate hypothesis variance (\code{sigma0, sigma1}), input event rates (\code{p1, p2}), null hypothesis difference in treatment group meands (\code{delta0}) and null hypothesis event rates (\code{p10, p20}). 
 }
+\item{n}{If power is to be computed in \code{nBinomial()}, input total trial sample size in \code{n}.}
 \item{x1}{Number of \dQuote{successes} in the control group}
 \item{x2}{Number of \dQuote{successes} in the experimental group}
 \item{n1}{Number of observations in the control group}
@@ -97,7 +97,7 @@ Fleiss, JL, Tytun, A and Ury (1980), A simple approximation for calculating samp
 
 Gordon, I and Watson R (1985), The myth of continuity-corrected sample size formulae. \emph{Biometrics}; 52: 71-76.
 
-Miettinin, O and Nurminen, M (1980), Comparative analysis of two rates. \emph{Statistics in Medicine}; 4 : 213-226.
+Miettinin, O and Nurminen, M (1985), Comparative analysis of two rates. \emph{Statistics in Medicine}; 4 : 213-226.
 }
 
 \details{
@@ -120,26 +120,27 @@ However, the alternative can have \code{p1-p2-delta0}$<0$.
 
 \value{
   \code{testBinomial()} and \code{simBinomial()} each return a vector of either Chi-square or Z test statistics. 
-  These may be compared to an appropriate cutoff point (e.g., \code{qnorm(.975)} for normal or \code{qchisq(.95,1)} for chi-square).
- 
-  With the default \code{outtype=2}, \code{nBinomial()} returns a list containing two vectors \code{n1} and \code{n2} containing
-  sample sizes for groups 1 and 2, respectively.
-  With \code{outtype=1}, a vector of total sample sizes is returned.
-  With \code{outtype=3}, \code{nBinomial()} returns a list as follows:
+  These may be compared to an appropriate cutoff point (e.g., \code{qnorm(.975)} for normal or \code{qchisq(.95,1)} for chi-square). 
+  
+  \code{ciBinomial()} returns a vector with a confidence interval.
+  
+  With the default \code{outtype=1}, \code{nBinomial()} returns a vector of total sample sizes is returned.
+  With \code{outtype=2}, \code{nBinomial()} returns a data frame containing two vectors \code{n1} and \code{n2} containing
+  sample sizes for groups 1 and 2, respectively; if \code{n} is input, this option also returns the power in a third vector, \code{Power}.
+  With \code{outtype=3}, \code{nBinomial()} returns a data frame with the following columns:
   \item{n}{A vector with total samples size required for each event rate comparison specified}
   \item{n1}{A vector of sample sizes for group 1 for each event rate comparison specified}
   \item{n2}{A vector of sample sizes for group 2 for each event rate comparison specified}
-  \item{sigma0}{A vector containing the variance of the treatment effect difference under the null hypothesis}
+  \item{alpha}{As input}
+  \item{sided}{As input}
+  \item{beta}{As input; if \code{n} is input, this is computed}
+  \item{Power}{If \code{n=NULL} on input, this is \code{1-beta}; otherwise, the power is computed for each sample size input}
+\item{sigma0}{A vector containing the variance of the treatment effect difference under the null hypothesis}
   \item{sigma1}{A vector containing the variance of the treatment effect difference under the alternative hypothesis}
   \item{p1}{As input}
   \item{p2}{As input}
-  \item{pbar}{Returned only for superiority testing (\code{delta0=0}), the weighted average of \code{p1} and \code{p2} using weights
-  \code{n1} and \code{n2}}
-
-  When \code{delta0=0}, instead of \code{pbar}, the following 2 vectors are returned (see details):
   \item{p10}{group 1 event rate used for null hypothesis}
   \item{p20}{group 2 event rate used for null hypothesis}
-
 }
 
 \author{Keaven Anderson \email{keaven\_anderson@merck.com}}
@@ -176,9 +177,6 @@ pnorm(x, lower.tail=FALSE)
 pchisq(testBinomial(x1=410, x2=400, n1=500, n2=500, delta0= -.05, 
                     chisq=1, adj=1), 1, lower.tail=FALSE)
 
-# provide 95% CI (Miettinen and Nurminen method)
-ciBinomial(x1=410, x2=400, n1=500, n2=500)
-
 # now simulate the z-statistic witthout continuity corrected variance
 sum(qnorm(.975) <= 
     simBinomial(p1=.8, p2=.8, n1=500, n2=500, nsim=100000)) / 100000
@@ -196,7 +194,15 @@ nBinomial(p1=.2, p2=.19, delta0=.05, alpha=.025, sided=1, beta=.1)
 nBinomial(p1=.15, p2=.1, beta=.2, ratio=2, alpha=.05)
 
 # now look at total sample size using 1-1 randomization
-nBinomial(p1=.15, p2=.1, beta=.2, alpha=.05)
+n <- nBinomial(p1=.15, p2=.1, beta=.2, alpha=.05)
+n
+# check if inputing sample size returns the desired power
+nBinomial(p1=.15, p2=.1, beta=.2, alpha=.05,n=n)
+
+# re-do with alternate output types
+nBinomial(p1=.15, p2=.1, beta=.2, alpha=.05, outtype=2)
+nBinomial(p1=.15, p2=.1, beta=.2, alpha=.05, outtype=3)
+
 
 # look at power plot under different control event rate and
 # relative risk reductions
