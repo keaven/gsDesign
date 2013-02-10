@@ -6,7 +6,7 @@ gsBinomialExact <- function(k=2, theta=c(.1, .2), n.I=c(50, 100), a=c(3, 7), b=c
     checkVector(a, "integer", interval=c(-Inf, Inf), inclusion=c(FALSE, FALSE))
     checkVector(b, "integer", interval=c(1, Inf), inclusion=c(FALSE, FALSE))
     ntheta <- as.integer(length(theta))
-    theta <- as.real(theta)
+    theta <- as.double(theta)
     if (k != length(n.I) || k!=length(a) || k != length(b))
         stop("Lengths of n.I, a, and b must equal k on input")
     m <- c(n.I[1], diff(n.I))
