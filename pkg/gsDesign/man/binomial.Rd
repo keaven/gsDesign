@@ -160,9 +160,9 @@ pnorm(x0, lower.tail=FALSE)
 # Perform 50k simulations to test validity of the above
 # asymptotic p-values 
 # (you may want to perform more to reduce standard error of estimate)
-sum(as.real(x0) <= 
+sum(as.double(x0) <= 
     simBinomial(p1=.078, p2=.078, n1=500, n2=500, nsim=10000)) / 10000
-sum(as.real(x0) <= 
+sum(as.double(x0) <= 
     simBinomial(p1=.052, p2=.052, n1=500, n2=500, nsim=10000)) / 10000
 
 # Perform a non-inferiority test to see if p2=400 / 500 is within 5% of 
