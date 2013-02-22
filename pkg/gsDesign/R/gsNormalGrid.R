@@ -58,7 +58,7 @@
     list(z=z, density=d, gridwgts=w, wgts=d*w) 
 }
 
-invCDF  <- function(q, x, discrete=FALSE, upper=FALSE)
+invCDF  <- function(q, x, discrete=FALSE, upper=FALSE, tol=.000001)
 {   checkLengths(x$z, x$density, x$gridwgts, x$wgts)
     len <- length(x$z)
     checkVector(x$z[2:len]-x$z[1:(len-1)],"numeric",c(0,Inf), c(TRUE, FALSE))
