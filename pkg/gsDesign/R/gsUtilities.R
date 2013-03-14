@@ -157,7 +157,7 @@
 "checkMD5" <- function (package="gsDesign", dir) 
 {
     if (missing(dir)) 
-        dir <- .find.package(package, quiet = TRUE)
+        dir <- find.package(package, quiet = TRUE)
     if (!length(dir)) 
         return(NA)
     md5file <- file.path(dir, "MD5")
@@ -195,4 +195,55 @@
                 sep = " ")
     }
     return(res)
+}
+"checkMatrix" <- function(x, isType = "numeric", ..., nrows=NULL, ncols=NULL) 
+{
+  # check inputs
+  checkScalar(isType, "character")
+  if (!is.null(nrows))
+  {
+    checkScalar(nrows,"integer")
+  }
+  if (!is.null(ncols))
+  {
+    checkScalar(ncols,"integer")
+  }
+  
+  # define local functions
+  "isMatrixAtomic" <- function(x) 
+    return(is.atomic(x) & all(c(NROW(x), NCOL(x)) > 0))
+  
+  # check matrix type
+  bad <- if (isType == "integer")
+  {
+    !isMatrixAtomic(x) || !isInteger(x)
+  }
+  else
+  {
+    !isMatrixAtomic(x) || !is(c(x), isType)  # wrap "x" in c() to strip dimension(s)
+  }
+  if (bad)
+  {
+    # create error message
+    parent <- as.character(sys.call(-1)[[1]])
+    varstr <- paste(if (length(parent) > 0) paste("In function", parent, ": variable") else "", deparse(substitute(x))) 
+    stop(paste(varstr, "must be matrix of class", isType))
+  }
+  # check matrix dimensions
+  if (!is.null(nrows) && (NROW(x) != nrows))
+  {
+    stop(paste(varstr, "is a matrix with", NROW(x), "rows, but should have", nrows, "rows"))
+  }
+  if (!is.null(ncols) && (NCOL(x) != ncols))
+  {
+    stop(paste(varstr, "is a matrix with", NCOL(x), "columns, but should have", ncols, "columns"))
+  }
+  
+  # check if input is on specified interval
+  if (length(list(...)) > 0)
+  {
+    checkRange(x, ..., varname=varstr)
+  }
+  
+  invisible(NULL)
 }
