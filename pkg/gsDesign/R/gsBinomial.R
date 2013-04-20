@@ -218,7 +218,7 @@
         p10 <- (-b - sqrt(b ^ 2 - 4 * a * c)) / 2 / a
         p20 <- p10 / RR
         p10[d0] <- (p1[d0] + ratio[d0] * p2[d0]) / (1 + ratio[d0])
-        p20[d0] <- p1[d0]
+        p20[d0] <- p10[d0]
         sigma0 <- sqrt((ratio + 1) * 
                         (p10 * (1 - p10) + RR ^ 2 * p20 * (1 - p20) / ratio))
         sigma1 <- sqrt((ratio + 1) * 
