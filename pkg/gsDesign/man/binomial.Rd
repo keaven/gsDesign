@@ -26,7 +26,7 @@ or 3) the odds-ratio for two rates. This procedure provides inference that is co
 the confidence intervals are produced by inverting the testing procedures in \code{testBinomial()}.
 The Type I error \code{alpha} input to \code{ciBinomial} is always interpreted as 2-sided.
 
-\code{simBinomial()} performs simulations to estimate the power for a Miettinin and Nurminen (1985) test
+\code{simBinomial()} performs simulations to estimate the power for a Miettinen and Nurminen (1985) test
 comparing two binomial rates for superiority or non-inferiority. 
 As noted in documentation for \code{bpower.sim()} in the HMisc package, by using \code{testBinomial()} you can see that the formulas without any continuity correction are quite accurate. 
 In fact, Type I error for a continuity-corrected test is significantly lower (Gordon and Watson, 1996) than the nominal rate. 
@@ -68,7 +68,7 @@ If \code{scale="LNOR"}, \code{delta0} is the difference in natural logarithm of 
 \item{sided}{2 for 2-sided test, 1 for 1-sided test}
 \item{outtype}{\code{nBinomial} only; 1 (default) returns total sample size; 2 returns a data frame with sample size for each group (\code{n1, n2}; if \code{n} is not input as \code{NULL}, power is returned in \code{Power};
 3 returns a data frame with total sample size (\code{n}), sample size in each group (\code{n1, n2}), Type I error (\code{alpha}), 1 or 2 (\code{sided}, as input), Type II error (\code{beta}), power (\code{Power}), 
-null and alternate hypothesis variance (\code{sigma0, sigma1}), input event rates (\code{p1, p2}), null hypothesis difference in treatment group meands (\code{delta0}) and null hypothesis event rates (\code{p10, p20}). 
+null and alternate hypothesis standard deviations (\code{sigma0, sigma1}), input event rates (\code{p1, p2}), null hypothesis difference in treatment group meands (\code{delta0}) and null hypothesis event rates (\code{p10, p20}). 
 }
 \item{n}{If power is to be computed in \code{nBinomial()}, input total trial sample size in \code{n}.}
 \item{x1}{Number of \dQuote{successes} in the control group}
@@ -97,7 +97,7 @@ Fleiss, JL, Tytun, A and Ury (1980), A simple approximation for calculating samp
 
 Gordon, I and Watson R (1985), The myth of continuity-corrected sample size formulae. \emph{Biometrics}; 52: 71-76.
 
-Miettinin, O and Nurminen, M (1985), Comparative analysis of two rates. \emph{Statistics in Medicine}; 4 : 213-226.
+Miettinen, O and Nurminen, M (1985), Comparative analysis of two rates. \emph{Statistics in Medicine}; 4 : 213-226.
 }
 
 \details{
@@ -135,8 +135,8 @@ However, the alternative can have \code{p1-p2-delta0}$<0$.
   \item{sided}{As input}
   \item{beta}{As input; if \code{n} is input, this is computed}
   \item{Power}{If \code{n=NULL} on input, this is \code{1-beta}; otherwise, the power is computed for each sample size input}
-\item{sigma0}{A vector containing the variance of the treatment effect difference under the null hypothesis}
-  \item{sigma1}{A vector containing the variance of the treatment effect difference under the alternative hypothesis}
+\item{sigma0}{A vector containing the standard deviation of the treatment effect difference under the null hypothesis}
+  \item{sigma1}{A vector containing the standard deviation of the treatment effect difference under the alternative hypothesis}
   \item{p1}{As input}
   \item{p2}{As input}
   \item{p10}{group 1 event rate used for null hypothesis}
