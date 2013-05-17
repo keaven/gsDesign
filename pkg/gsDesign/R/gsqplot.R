@@ -115,7 +115,7 @@ gsRR <- function(z, i, x, ratio=1, ylab="Estimated risk ratio",...)
 gsHR <- function(z, i, x, ratio=1, ylab="Estimated hazard ratio", ...)
 {    c <- 1 / (1 + ratio)
      psi <- c * (1 - c)
-     hrHat <- exp(-z / sqrt(x$n.I[i] * psi))
+     hrHat <- exp(-z / sqrt(x$n.I[i] * psi)) * x$hr0
      hrHat
 }
 gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
@@ -414,7 +414,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	{
 		stop("Spending function plot not available for boundary families")
 	}
-	if (x$upper$parname == "Points"){x$sfupar <- sfLinear} 
+#	if (x$upper$parname == "Points"){x$sfupar <- sfLinear} 
 
 	t <- 0:40 / 40 * xmax
             
