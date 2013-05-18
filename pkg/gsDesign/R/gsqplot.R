@@ -115,6 +115,7 @@ gsRR <- function(z, i, x, ratio=1, ylab="Estimated risk ratio",...)
 gsHR <- function(z, i, x, ratio=1, ylab="Estimated hazard ratio", ...)
 {    c <- 1 / (1 + ratio)
      psi <- c * (1 - c)
+     if (is.null(x$hr0)) x$hr0 <- 1
      hrHat <- exp(-z / sqrt(x$n.I[i] * psi)) * x$hr0
      hrHat
 }
