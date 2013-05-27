@@ -60,3 +60,82 @@ gsBinomialExact <- function(k=2, theta=c(.1, .2), n.I=c(50, 100), a=c(3, 7), b=c
     class(x) <- c("gsBinomialExact", "gsProbability")
     return(x)
 }
+# see http://theriac.org/DeskReference/viewDocument.php?id=65&SectionsList=3
+binomialSPRT<-function(p0=.05,p1=.25,alpha=.1,beta=.15,minn=10,maxn=35){
+  lnA <- log((1-beta)/alpha)
+  lnB <- log(beta/(1-alpha))
+  a <- log((1-p1)/(1-p0))
+  b <- log(p1/p0)-a
+  slope <- -a / b
+  intercept <- c(lnA,lnB)/b
+  upper <- ceiling(slope*(minn:maxn)+intercept[1])
+  lower <- floor(slope*(minn:maxn)+intercept[2])
+  lower[lower< -1] <- -1
+  indx <- (minn:maxn >= upper)|(lower>=0)
+  # compute exact boundary crossing probabilities
+  y <- gsBinomialExact(k=sum(indx),n.I=(minn:maxn)[indx],
+                       theta=c(p0,p1),a=lower[indx],b=upper[indx])
+  y$intercept <- intercept
+  y$slope <- slope
+  y$alpha <- alpha
+  y$beta <- beta
+  y$p0 <- p0
+  y$p1 <- p1
+  class(y) <- c("binomialSPRT","gsBinomialExact","gsProbability")
+  return(y)
+}
+plot.gsBinomialExact <- function(x,plottype=1,...){
+  if (plottype==6){
+    theta<-(max(x$theta)-min(x$theta))*(0:50)/50+min(x$theta)
+    y <- gsBinomialExact(k=x$k,theta=theta,n.I=x$n.I,a=x$lower$bound,b=x$upper$bound)
+    xx <- data.frame(p=theta,EN=y$en)
+    p<-ggplot(data=xx,aes(x=p,y=EN)) + geom_line() + ylab("Expected sample size")
+  }else if(plottype==3){
+    xx <- data.frame(N=x$n.I,p=x$upper$bound/x$n.I,Bound="Upper")
+    xx <- rbind(xx, data.frame(N=x$n.I,p=x$lower$bound/x$n.I,Bound="Lower"))
+    p<-ggplot(data=xx,aes(x=N,y=p,group=Bound))+
+      geom_point() +
+      ylab("Rate at bound")
+  }else if (plottype==2){
+    theta<-(max(x$theta)-min(x$theta))*(0:50)/50+min(x$theta)
+    # compute exact boundary crossing probabilities
+    y <- gsBinomialExact(k=x$k,n.I=x$n.I,
+                         theta=theta,a=x$lower$bound,b=x$upper$bound)
+    # compute probability of crossing upper bound for each theta
+    Power <- data.frame(rr=theta,
+                        Percent=100*as.vector(matrix(1,ncol=length(y$n.I),nrow=1)%*%
+                                          y$upper$prob),
+                        Outcome="Reject H0")
+    # compute probability of crossing lower bound
+    futility <- data.frame(rr=theta,
+                           Percent=100*as.vector(matrix(1,ncol=length(y$n.I),nrow=1)%*%
+                                             y$lower$prob),
+                           Outcome="Reject H1")
+    # probability of no boundary crossing
+    indeterminate <- data.frame(rr=theta,Percent=100-Power$Percent-futility$Percent,
+                                Outcome="Indeterminate")
+    #combine and plot
+    outcome <- rbind(Power,futility,indeterminate)
+    p <- ggplot(data=outcome,aes(x=rr,y=Percent,lty=Outcome))+
+      geom_line()+
+      xlab("Underlying response rate")
+  }else{
+    xx <- data.frame(N=x$n.I,x=x$upper$bound,Bound="Upper")
+    xx <- rbind(xx, data.frame(N=x$n.I,x=x$lower$bound,Bound="Lower"))
+    p<-ggplot(data=xx,aes(x=N,y=x,group=Bound))+
+      geom_point() +
+      ylab("Number of responses")
+  }  
+  return(p)
+}
+plot.binomialSPRT <- function(x,plottype=1,...){
+  p <- plot.gsBinomialExact(x,plottype=plottype,...)
+  if (plottype==1){
+    p <- p + geom_abline(intercept=x$intercept[1], 
+                slope=x$slope) +
+    geom_abline(intercept=x$intercept[2], 
+                slope=x$slope)
+  }
+  return(p)
+}
+
