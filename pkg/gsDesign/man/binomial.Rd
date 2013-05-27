@@ -3,6 +3,7 @@
 \alias{ciBinomial}
 \alias{nBinomial}
 \alias{simBinomial}
+\alias{varBinomial}
 \title{3.2: Testing, Confidence Intervals, Sample Size and Power for Comparing Two Binomial Rates}
 \description{Support is provided for sample size estimation, power, testing, confidence intervals and simulation for fixed sample size trials 
 (that is, not group sequential or adaptive) with two arms and binary outcomes. 
@@ -31,6 +32,9 @@ comparing two binomial rates for superiority or non-inferiority.
 As noted in documentation for \code{bpower.sim()} in the HMisc package, by using \code{testBinomial()} you can see that the formulas without any continuity correction are quite accurate. 
 In fact, Type I error for a continuity-corrected test is significantly lower (Gordon and Watson, 1996) than the nominal rate. 
 Thus, as a default no continuity corrections are performed.
+
+\code{varBinomial} computes blinded estimates of the variance of the estimate of 1) event rate differences, 2) logarithm of the risk ratio, or 3) logarithm of the odds ratio. This is intended for blinded sample size re-estimation for comparative trials with a binary outcome.
+
 }
 
 \usage{
@@ -41,6 +45,7 @@ testBinomial(x1, x2, n1, n2, delta0=0, chisq=0, adj=0,
 ciBinomial(x1, x2, n1, n2, alpha=.05, adj=0, scale="Difference")
 simBinomial(p1, p2, n1, n2, delta0=0, nsim=10000, chisq=0, adj=0,
             scale="Difference")
+varBinomial(x,n,delta0=0,ratio=1,scale="Difference")
 }
 \arguments{
 For \code{simBinomial()} and \code{ciBinomial()} all arguments must have length 1.
@@ -49,7 +54,9 @@ For \code{testBinomial()}, \code{x2, x2, n1, n2, delta0, chisq,} and \code{adj} 
 
 For \code{nBinomial()}, \code{p1, p2, beta, delta0} and \code{ratio} may be vectors.
 
-For \code{nBinomial()} or \code{testBinomial()}, when one or more arguments is a vector, the routines return a vector of sample sizes and powers, respectively.
+For \code{varBinomial()}, \code{x} may be a vector.
+
+For \code{nBinomial()}, \code{testBinomial()} and \code{varBinomial()}, when one or more arguments is a vector, the routines return a vector of sample sizes or powers (\code{nBinomial}), test statistics (\code{testBinomial}), or variance estimates (\code{varBinomial}).
 Where vector arguments are allowed, there may be a mix of scalar and vector arguments. 
 All arguments specified using vectors must have the same length.  
 
@@ -70,7 +77,8 @@ If \code{scale="LNOR"}, \code{delta0} is the difference in natural logarithm of 
 3 returns a data frame with total sample size (\code{n}), sample size in each group (\code{n1, n2}), Type I error (\code{alpha}), 1 or 2 (\code{sided}, as input), Type II error (\code{beta}), power (\code{Power}), 
 null and alternate hypothesis standard deviations (\code{sigma0, sigma1}), input event rates (\code{p1, p2}), null hypothesis difference in treatment group meands (\code{delta0}) and null hypothesis event rates (\code{p10, p20}). 
 }
-\item{n}{If power is to be computed in \code{nBinomial()}, input total trial sample size in \code{n}.}
+\item{n}{If power is to be computed in \code{nBinomial()}, input total trial sample size in \code{n}; this may be a vector. This is also the sample size in \code{varBinomial}, in which case the argument must be a scalar.}
+\item{x}{Number of \dQuote{successes} in the combined control and experimental groups.}
 \item{x1}{Number of \dQuote{successes} in the control group}
 \item{x2}{Number of \dQuote{successes} in the experimental group}
 \item{n1}{Number of observations in the control group}
@@ -111,7 +119,7 @@ Farrington and Manning (1990) begin with event rates \code{p1} and \code{p2} und
 and a difference between these rates under the null hypothesis, \code{delta0}.
 From these values, actual rates under the null hypothesis are computed, which are labeled \code{p10} and \code{p20} when \code{outtype=3}.
 The rates \code{p1} and \code{p2} are used to compute a variance for a Z-test comparing rates under the alternative hypothesis,
-while \code{p10} and \code{p20} are used under the null hypothesis.
+while \code{p10} and \code{p20} are used under the null hypothesis. This computational method is also used to estimate variances in \code{varBinomial()} based on the overall event rate observed and the input treatment difference specified in \code{delta0}.
 
 Sample size with \code{scale="Difference"} produces an error if \code{p1-p2=delta0}. 
 Normally, the alternative hypothesis under consideration would be \code{p1-p2-delta0}$>0$.
@@ -124,6 +132,8 @@ However, the alternative can have \code{p1-p2-delta0}$<0$.
   
   \code{ciBinomial()} returns a vector with a confidence interval.
   
+  \code{varBinomial()} returns a vector of (blinded) variance estimates of the difference of event rates (\code{scale="Difference"}), logarithm of the odds-ratio (\code{scale="OR"}) or logarithm of the risk-ratio (\code{scale="RR"}).
+  
   With the default \code{outtype=1}, \code{nBinomial()} returns a vector of total sample sizes is returned.
   With \code{outtype=2}, \code{nBinomial()} returns a data frame containing two vectors \code{n1} and \code{n2} containing
   sample sizes for groups 1 and 2, respectively; if \code{n} is input, this option also returns the power in a third vector, \code{Power}.
@@ -135,8 +145,8 @@ However, the alternative can have \code{p1-p2-delta0}$<0$.
   \item{sided}{As input}
   \item{beta}{As input; if \code{n} is input, this is computed}
   \item{Power}{If \code{n=NULL} on input, this is \code{1-beta}; otherwise, the power is computed for each sample size input}
-\item{sigma0}{A vector containing the standard deviation of the treatment effect difference under the null hypothesis}
-  \item{sigma1}{A vector containing the standard deviation of the treatment effect difference under the alternative hypothesis}
+\item{sigma0}{A vector containing the standard deviation of the treatment effect difference under the null hypothesis times \code{sqrt(n)} when \code{scale="Difference"} or \code{scale="OR"}; when \code{scale="RR"}, this is the standard deviation time \code{sqrt(n)} for the numerator of the Farrington-Manning test statistic \code{x1-exp(delta0)*x2}.}
+  \item{sigma1}{A vector containing the values as \code{sigma0}, in this case estimated under the alternative hypothesis.}
   \item{p1}{As input}
   \item{p2}{As input}
   \item{p10}{group 1 event rate used for null hypothesis}
@@ -224,6 +234,17 @@ lines(p1, y4, lty=4, lwd=2)
 legend(x=c(.15, .2),y=c(4500, 6000),lty=c(2, 1, 3, 4), lwd=2,
        legend=c("25 pct reduction", "33 pct reduction",
                 "40 pct reduction", "50 pct reduction"))
+
+# compute blinded estimate of treatment effect difference
+x1 <- rbinom(n=1,size=100,p=.2)
+x2 <- rbinom(n=1,size=200,p=.1)
+# blinded estimate of risk difference variance
+varBinomial(x=x1+x2,n=300,ratio=2,delta0=0)
+# blnded estimate of log-risk-ratio
+varBinomial(x=x1+x2,n=300,ratio=2,delta0=0,scale="RR")
+# blinded estimate of log-odds-ratio
+varBinomial(x=x1+x2,n=300,ratio=2,delta0=0,scale="OR")
+
 }
 
 \keyword{design}

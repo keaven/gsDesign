@@ -111,209 +111,198 @@
     cbind(lower=lower,upper=upper)
 }
 
-"nBinomial"<-function(p1, p2, alpha=0.025, beta=0.1, delta0=0, ratio=1, 
-        sided=1, outtype=1, scale="Difference", n=NULL)
-{   
-    # check input arguments
-    checkVector(p1, "numeric", c(0, 1), c(FALSE, FALSE))
-    checkVector(p2, "numeric", c(0, 1), c(FALSE, FALSE))    
-    checkScalar(sided, "integer", c(1, 2))    
-    checkScalar(alpha, "numeric", c(0, 1 / sided), c(FALSE, FALSE))
-    checkVector(beta, "numeric", c(0, 1 - alpha / sided), c(FALSE, FALSE))
-    checkVector(delta0, "numeric")
-    checkVector(ratio, "numeric", c(0, Inf), c(FALSE, FALSE))
-    checkScalar(outtype, "integer", c(1, 3))
-    checkScalar(scale, "character")
-    if (!is.null(n)) checkVector(n, "numeric")
-    scale <- match.arg(tolower(scale), c("difference", "rr", "or", "lnor"))
-    if (is.null(n)) checkLengths(p1, p2, beta, delta0, ratio, allowSingle=TRUE)
-    else checkLengths(n, p1, p2, delta0, ratio, allowSingle=TRUE)
-    # make all vector arguments the same length
-    len<-max(sapply(list(p1, p2, beta, delta0, ratio),length))
-    if (len > 1)
-    {   if (length(p1) == 1) p1<-array(p1,len)
-        if (length(p2) == 1) p2<-array(p2,len)
-        if (length(alpha) == 1) alpha<-array(alpha,len)
-        if (length(beta) == 1) beta<-array(beta,len)
-        if (length(delta0) == 1) delta0<-array(delta0,len)
-        if (length(ratio) == 1) ratio<-array(ratio,len)
+"nBinomial" <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
+                       sided = 1, outtype = 1, scale = "Difference", n = NULL) 
+{
+  checkVector(p1, "numeric", c(0, 1), c(FALSE, FALSE))
+  checkVector(p2, "numeric", c(0, 1), c(FALSE, FALSE))
+  checkScalar(sided, "integer", c(1, 2))
+  checkScalar(alpha, "numeric", c(0, 1/sided), c(FALSE, FALSE))
+  checkVector(beta, "numeric", c(0, 1 - alpha/sided), c(FALSE, 
+                                                        FALSE))
+  checkVector(delta0, "numeric")
+  checkVector(ratio, "numeric", c(0, Inf), c(FALSE, FALSE))
+  checkScalar(outtype, "integer", c(1, 3))
+  checkScalar(scale, "character")
+  if (!is.null(n)) 
+    checkVector(n, "numeric")
+  scale <- match.arg(tolower(scale), c("difference", "rr", 
+                                       "or", "lnor"))
+  if (is.null(n)) 
+    checkLengths(p1, p2, beta, delta0, ratio, allowSingle = TRUE)
+  else checkLengths(n, p1, p2, delta0, ratio, allowSingle = TRUE)
+  len <- max(sapply(list(p1, p2, beta, delta0, ratio), length))
+  if (len > 1) {
+    if (length(p1) == 1) 
+      p1 <- array(p1, len)
+    if (length(p2) == 1) 
+      p2 <- array(p2, len)
+    if (length(alpha) == 1) 
+      alpha <- array(alpha, len)
+    if (length(beta) == 1) 
+      beta <- array(beta, len)
+    if (length(delta0) == 1) 
+      delta0 <- array(delta0, len)
+    if (length(ratio) == 1) 
+      ratio <- array(ratio, len)
+  }
+  if (max(delta0 == 0) > 0 && max(p1[delta0 == 0] == p2[delta0 == 
+                                                          0]) > 0) {
+    stop("p1 may not equal p2 when delta0 is zero")
+  }
+  z.beta <- qnorm(1 - beta)
+  sided[sided != 2] <- 1
+  z.alpha <- qnorm(1 - alpha/sided)
+  d0 <- (delta0 == 0)
+  if (scale == "difference") {
+    if (min(abs(p1 - p2 - delta0)) < 1e-11) {
+      stop("p1 - p2 may not equal delta0 when scale is \"Difference\"")
     }
-    if (max(delta0 == 0) > 0 && max(p1[delta0 == 0] == p2[delta0 == 0]) > 0)
-    {
-            stop("p1 may not equal p2 when delta0 is zero")
-    }
-
-    # get z-values needed 
-    z.beta  <- qnorm(1 - beta)    
-    
-    # coerce all sided values not equal to 2 to 1
-    sided[sided != 2] <- 1
-    
-    z.alpha <- qnorm(1 - alpha / sided)
-    d0 <- (delta0 == 0)
-    
-    # sample size for risk difference - Farrington and Manning
-    if (scale == "difference")
-    {   
-        if (min(abs(p1 - p2 - delta0)) < .1e-10)
-        {
-            stop("p1 - p2 may not equal delta0 when scale is \"Difference\"")
-        }
-        a <- 1 + ratio
-        b <- -(a + p1 + ratio * p2 + delta0 * (ratio + 2))
-        c <- delta0 ^ 2 + delta0 * (2 * p1 + a) + p1 + ratio * p2
-        d <- -p1 * delta0 * (1 + delta0)
-        v <- (b / (3 * a)) ^ 3 - b * c / 6 / a ^ 2 + d / 2 / a
-        u <- (sign(v) + (v==0)) * sqrt((b / 3 / a) ^ 2 - c / 3 / a)
-        w <- (pi + acos(v /u ^ 3)) / 3
-        p10 <- 2 * u * cos(w) - b / 3 / a
-        p20 <- p10 - delta0
-        p10[d0] <- (p1[d0] + ratio[d0] * p2[d0]) / (1 + ratio[d0])
-        p20[d0] <- p10[d0]
-        sigma0 <- sqrt((p10 * (1 - p10) + p20 * (1 - p20) / ratio) 
-                        * (ratio + 1))
-        sigma1 <- sqrt((p1 * (1 - p1) + p2 * (1 - p2) / ratio) * (ratio + 1))
-        if (is.null(n)){
-          n <- ((z.alpha * sigma0 + z.beta * sigma1) / (p1 - p2 - delta0)) ^ 2
-          if (outtype == 2)
-          {
-            return(data.frame(cbind(n1=n / (ratio + 1),  n2=ratio * n / (ratio + 1))))
-          }
-          else if (outtype == 3) 
-          {   
-            return(data.frame(cbind(n=n, n1=n / (ratio + 1), n2=ratio * n / (ratio + 1),
-                        alpha = alpha, sided=sided, beta = beta, Power = 1-beta,
-                        sigma0=sigma0, sigma1=sigma1, p1=p1 ,p2=p2, 
-                        delta0=delta0, p10=p10, p20=p20)))
-          }
-          else return(n=n)
-        }
-        else
-        {  pwr <- pnorm(-(qnorm(1-alpha/sided)-sqrt(n) * ((p1 - p2 - delta0)/sigma0))*sigma0/sigma1)
-           if (outtype == 2)
-           {
-               return(data.frame(cbind(n1=n / (ratio + 1),  n2=ratio * n / (ratio + 1), Power=pwr)))
-           }
-           else if (outtype == 3) 
-           {   
-               return(data.frame(cbind(n=n, n1=n / (ratio + 1), n2=ratio * n / (ratio + 1),
-                           alpha = alpha, sided=sided, beta = 1-pwr, Power = pwr,
-                           sigma0=sigma0, sigma1=sigma1, p1=p1 ,p2=p2, 
-                           delta0=delta0, p10=p10, p20=p20)))
-           }
-           else return(Power=pwr)
-        }
-    }
-    # sample size for risk ratio - Farrington and Manning
-    else if (scale == "rr")
-    {   
-        RR <- exp(delta0)
-        if (min(abs(p1 / p2 - RR)) < .1e-6)
-        {
-            stop("p1/p2 may not equal exp(delta0) when scale=\"RR\"")
-        }
-        a <- (1 + ratio)
-        b <- -(RR * (1 + ratio * p2) + ratio + p1)
-        c <- RR * (p1 + ratio * p2)
-        p10 <- (-b - sqrt(b ^ 2 - 4 * a * c)) / 2 / a
-        p20 <- p10 / RR
-        p10[d0] <- (p1[d0] + ratio[d0] * p2[d0]) / (1 + ratio[d0])
-        p20[d0] <- p10[d0]
-        sigma0 <- sqrt((ratio + 1) * 
-                        (p10 * (1 - p10) + RR ^ 2 * p20 * (1 - p20) / ratio))
-        sigma1 <- sqrt((ratio + 1) * 
-                        (p1 * (1 - p1) + RR ^ 2 * p2 * (1 - p2) / ratio))
-        if (is.null(n)){
-          n <- ((z.alpha * sigma0 + z.beta * sigma1) / (p1 - p2 * RR)) ^ 2
-          if (outtype == 2)
-          {
-            return(data.frame(data.frame(cbind(n1=n / (ratio + 1), 
-                        n2=ratio * n / (ratio + 1)))))
-          }
-          else if (outtype == 3) 
-          {   
-            return(data.frame(cbind(n=n, n1=n / (ratio + 1), n2=ratio * n / (ratio + 1),
-                        alpha = alpha, sided=sided, beta = 1-pwr, Power = pwr,
-                        sigma0=sigma0, sigma1=sigma1, p1=p1, p2=p2, 
-                        delta0=delta0, p10=p10, p20=p20)))
-          }
-          else return(n=n)
-        }
-        else
-        {  pwr <- pnorm(-(qnorm(1-alpha/sided)-sqrt(n) * ((p1 - p2 * RR)/sigma0))*sigma0/sigma1)
-           if (outtype == 2)
-           {
-             return(data.frame(cbind(n1=n / (ratio + 1),  n2=ratio * n / (ratio + 1), Power=pwr)))
-           }
-           else if (outtype == 3) 
-           {   
-             return(data.frame(cbind(n=n, n1=n / (ratio + 1), n2=ratio * n / (ratio + 1),
-                         alpha = alpha, sided=sided, beta = 1-pwr, Power = pwr,
-                         sigma0=sigma0, sigma1=sigma1, p1=p1 ,p2=p2, 
-                         delta0=delta0, p10=p10, p20=p20)))
-           }
-           else return(Power=pwr)
-        }
+    a <- 1 + ratio
+    b <- -(a + p1 + ratio * p2 + delta0 * (ratio + 2))
+    c <- delta0^2 + delta0 * (2 * p1 + a) + p1 + ratio * 
+      p2
+    d <- -p1 * delta0 * (1 + delta0)
+    v <- (b/(3 * a))^3 - b * c/6/a^2 + d/2/a
+    u <- (sign(v) + (v == 0)) * sqrt((b/3/a)^2 - c/3/a)
+    w <- (pi + acos(v/u^3))/3
+    p10 <- 2 * u * cos(w) - b/3/a
+    p20 <- p10 - delta0
+    p10[d0] <- (p1[d0] + ratio[d0] * p2[d0])/(1 + ratio[d0])
+    p20[d0] <- p10[d0]
+    sigma0 <- sqrt((p10 * (1 - p10) + p20 * (1 - p20)/ratio) * 
+                     (ratio + 1))
+    sigma1 <- sqrt((p1 * (1 - p1) + p2 * (1 - p2)/ratio) * 
+                     (ratio + 1))
+    if (is.null(n)) {
+      n <- ((z.alpha * sigma0 + z.beta * sigma1)/(p1 - p2 - delta0))^2
+      if (outtype == 2) {
+        return(data.frame(cbind(n1 = n/(ratio + 1), n2 = ratio * 
+                                  n/(ratio + 1))))
       }
-    
-    # sample size for log-odds-ratio - based on Miettinen and Nurminen max
-    # likelihood estimate and asymptotic variance from, e.g., Lachin (2000)
-    else
-    {   
-        OR <- exp(-delta0)
-        if (min(abs(p1 / (1 - p1) / p2 * (1 - p2) * OR) - 1) < .1e-6)
-        {
-            stop("p1/(1-p1)/p2*(1-p2) may not equal exp(delta0) when scale=\"OR\"")
-        }
-        a <- OR - 1
-        b <- 1 + ratio * OR + (1 - OR) * (ratio * p2 + p1)
-        c <- -(ratio * p2 + p1)
-        p10 <- (-b + sqrt(b ^ 2 - 4 * a * c)) / 2 / a
-        p20 <- OR * p10 / (1 + p10 * (OR - 1))
-        p10[d0] <- (p1[d0] + ratio[d0] * p2[d0]) / (1 + ratio[d0])
-        p20[d0] <- p10[d0]
-        sigma0 <- sqrt((ratio + 1) * 
-                        (1 / p10 / (1 - p10) + 1 / p20 / (1 - p20) / ratio))
-        sigma1 <- sqrt((ratio + 1) * 
-                        (1 / p1 / (1 - p1) + 1 / p2 / (1 - p2) / ratio))
-        
-        if (is.null(n)){
-          n <- ((z.alpha * sigma0 + z.beta * sigma1) / 
-                    log(OR / p2 * (1 - p2) * p1 / (1 - p1))) ^ 2
-        
-          if (outtype == 2)
-          {
-             return(data.frame(cbind(n1=n / (ratio + 1), n2=ratio * n / (ratio + 1))))
-          }
-          else if (outtype == 3) 
-          {   
-            return(data.frame(cbind(n=n, n1=n / (ratio+1), n2=ratio * n / (ratio + 1),
-                        alpha = alpha, sided=sided, beta = 1-pwr, Power = pwr,
-                        sigma0=sigma0, sigma1=sigma1, p1=p1, p2=p2, 
-                        delta0=delta0, p10=p10, p20=p20)))
-          }
-          else
-          {
-              return(n=n)
-          }
-        }
-        else
-        {  pwr <- pnorm(-(qnorm(1-alpha/sided)-sqrt(n) * 
-              (log(OR / p2 * (1 - p2) * p1 / (1 - p1))/sigma0))*sigma0/sigma1)
-           if (outtype == 2)
-           {
-             return(data.frame(cbind(n1=n / (ratio + 1),  n2=ratio * n / (ratio + 1), Power=pwr)))
-           }
-           else if (outtype == 3) 
-           {   
-             return(data.frame(cbind(n=n, n1=n / (ratio + 1), n2=ratio * n / (ratio + 1),
-                         alpha = alpha, sided=sided, beta = 1-pwr, Power = pwr,
-                         sigma0=sigma0, sigma1=sigma1, p1=p1 ,p2=p2, 
-                         delta0=delta0, p10=p10, p20=p20)))
-           }
-           else return(Power=pwr)
-        }
+      else if (outtype == 3) {
+        return(data.frame(cbind(n = n, n1 = n/(ratio + 1), 
+                                n2 = ratio * n/(ratio + 1), alpha = alpha, 
+                                sided = sided, beta = beta, Power = 1 - beta, 
+                                sigma0 = sigma0, sigma1 = sigma1, p1 = p1, 
+                                p2 = p2, delta0 = delta0, p10 = p10, p20 = p20)))
+      }
+      else return(n = n)
     }
+    else {
+      pwr <- pnorm(-(qnorm(1 - alpha/sided) - sqrt(n) * 
+                       ((p1 - p2 - delta0)/sigma0)) * sigma0/sigma1)
+      if (outtype == 2) {
+        return(data.frame(cbind(n1 = n/(ratio + 1), n2 = ratio * 
+                                  n/(ratio + 1), Power = pwr)))
+      }
+      else if (outtype == 3) {
+        return(data.frame(cbind(n = n, n1 = n/(ratio + 1), 
+                                n2 = ratio * n/(ratio + 1), alpha = alpha, 
+                                sided = sided, beta = 1 - pwr, Power = pwr, 
+                                sigma0 = sigma0, sigma1 = sigma1, p1 = p1, 
+                                p2 = p2, delta0 = delta0, p10 = p10, p20 = p20)))
+      }
+      else return(Power = pwr)
+    }
+  }
+  else if (scale == "rr") {
+    RR <- exp(delta0)
+    if (min(abs(p1/p2 - RR)) < 1e-07) {
+      stop("p1/p2 may not equal exp(delta0) when scale=\"RR\"")
+    }
+    a <- (1 + ratio)
+    b <- -(RR * (1 + ratio * p2) + ratio + p1)
+    c <- RR * (p1 + ratio * p2)
+    p10 <- (-b - sqrt(b^2 - 4 * a * c))/2/a
+    p20 <- p10/RR
+    p10[d0] <- (p1[d0] + ratio[d0] * p2[d0])/(1 + ratio[d0])
+    p20[d0] <- p10[d0]
+    sigma0 <- sqrt((ratio + 1) * (p10 * (1 - p10) + RR^2 * 
+                                    p20 * (1 - p20)/ratio))
+    sigma1 <- sqrt((ratio + 1) * (p1 * (1 - p1) + RR^2 * 
+                                    p2 * (1 - p2)/ratio))
+    if (is.null(n)) {
+      n <- ((z.alpha * sigma0 + z.beta * sigma1)/(p1 - p2 * RR))^2
+      if (outtype == 2) {
+        return(data.frame(cbind(n1 = n/(ratio + 1),
+                                n2 = ratio * n/(ratio + 1))))
+      }
+      else if (outtype == 3) {
+        return(data.frame(cbind(n = n, n1 = n/(ratio + 1), 
+                                n2 = ratio * n/(ratio + 1), alpha = alpha, 
+                                sided = sided, beta = beta, Power = 1-beta, 
+                                sigma0 = sigma0, sigma1 = sigma1, p1 = p1, 
+                                p2 = p2, delta0 = delta0, p10 = p10, p20 = p20)))
+      }
+      else return(n = n)
+    }
+    else {
+      pwr <- pnorm(-(qnorm(1 - alpha/sided) - sqrt(n) * 
+                       ((p1 - p2 * RR)/sigma0)) * sigma0/sigma1)
+      if (outtype == 2) {
+        return(data.frame(cbind(n1 = n/(ratio + 1), n2 = ratio * 
+                                  n/(ratio + 1), Power = pwr)))
+      }
+      else if (outtype == 3) {
+        return(data.frame(cbind(n = n, n1 = n/(ratio + 1), 
+                                n2 = ratio * n/(ratio + 1), alpha = alpha, 
+                                sided = sided, beta = 1 - pwr, Power = pwr, 
+                                sigma0 = sigma0, sigma1 = sigma1, p1 = p1, 
+                                p2 = p2, delta0 = delta0, p10 = p10, p20 = p20)))
+      }
+      else return(Power = pwr)
+    }
+  }
+  else {
+    OR <- exp(-delta0)
+    if (min(abs(p1/(1 - p1)/p2 * (1 - p2) * OR) - 1) < 1e-07) {
+      stop("p1/(1-p1)/p2*(1-p2) may not equal exp(delta0) when scale=\"OR\"")
+    }
+    a <- OR - 1
+    b <- 1 + ratio * OR + (1 - OR) * (ratio * p2 + p1)
+    c <- -(ratio * p2 + p1)
+    p10 <- (-b + sqrt(b^2 - 4 * a * c))/2/a
+    p20 <- OR * p10/(1 + p10 * (OR - 1))
+    p10[d0] <- (p1[d0] + ratio[d0] * p2[d0])/(1 + ratio[d0])
+    p20[d0] <- p10[d0]
+    sigma0 <- sqrt((ratio + 1) * (1/p10/(1 - p10) + 1/p20/(1 - p20)/ratio))
+    sigma1 <- sqrt((ratio + 1) * (1/p1/(1 - p1) + 1/p2/(1 - p2)/ratio))
+    if (is.null(n)) {
+      n <- ((z.alpha * sigma0 + z.beta * sigma1)/log(OR/p2 * (1 - p2) * p1/(1 - p1)))^2
+      if (outtype == 2) {
+        return(data.frame(cbind(n1 = n/(ratio + 1), n2 = ratio * 
+                                  n/(ratio + 1))))
+      }
+      else if (outtype == 3) {
+        return(data.frame(cbind(n = n, n1 = n/(ratio + 1), 
+                                n2 = ratio * n/(ratio + 1), alpha = alpha, 
+                                sided = sided, beta = beta, Power = 1-beta, 
+                                sigma0 = sigma0, sigma1 = sigma1, p1 = p1, 
+                                p2 = p2, delta0 = delta0, p10 = p10, p20 = p20)))
+      }
+      else {
+        return(n = n)
+      }
+    }
+    else {
+      pwr <- pnorm(-(qnorm(1 - alpha/sided) - sqrt(n) * 
+                       (log(OR/p2 * (1 - p2) * p1/(1 - p1))/sigma0)) * 
+                     sigma0/sigma1)
+      if (outtype == 2) {
+        return(data.frame(cbind(n1 = n/(ratio + 1), n2 = ratio * 
+                                  n/(ratio + 1), Power = pwr)))
+      }
+      else if (outtype == 3) {
+        return(data.frame(cbind(n = n, n1 = n/(ratio + 1), 
+                                n2 = ratio * n/(ratio + 1), alpha = alpha, 
+                                sided = sided, beta = 1 - pwr, Power = pwr, 
+                                sigma0 = sigma0, sigma1 = sigma1, p1 = p1, 
+                                p2 = p2, delta0 = delta0, p10 = p10, p20 = p20)))
+      }
+      else return(Power = pwr)
+    }
+  }
 }
 "simBinomial" <- function(p1, p2, n1, n2, delta0=0, nsim=10000, chisq=0, adj=0, 
         scale="Difference")
