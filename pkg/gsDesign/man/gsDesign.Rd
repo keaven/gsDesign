@@ -12,7 +12,8 @@ gsDesign(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,
 \method{print}{gsDesign}(x,\dots)
 \method{xtable}{gsDesign}(x, caption = NULL, label=NULL, align=NULL, digits=NULL, display=NULL,
                              footnote = NULL, fnwid = "9cm", deltaname="delta", 
-                             Nname="N",logdelta=FALSE, \dots)}
+                             Nname="N",logdelta=FALSE, \dots)
+}
 \arguments{
 	\item{k}{Number of analyses planned, including interim and final.}
 	\item{test.type}{\code{1=}one-sided \cr
