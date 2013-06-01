@@ -1,6 +1,5 @@
 \name{gsBoundSummary}
 \alias{gsBoundSummary}
-\alias{xtable.gsDesign}
 \alias{gsBValue}
 \alias{gsDelta}
 \alias{gsHR}
@@ -10,7 +9,7 @@
 \title{2.8: Bound Summary and Z-transformations}
 
 \description{Z-value test statistic transformations are commonly used as supplementary descriptions of bounds.
-\code{gsBoundSummary()} summarizes a bound for a group sequential design with by computing several of these design characteristics. \code{xtable.gsDesign} produces Latex output of boundary summary information; intended for use with \code{Sweave()}.
+\code{gsBoundSummary()} summarizes a bound for a group sequential design with by computing several of these design characteristics. 
 
 Individual transformation of z-value test statistics for interim and final analyses are obtained from
 \code{gsBValue()}, \code{gsDelta()}, \code{gsHR()} and \code{gsCPz()} for B-values, approximate treatment effect (see details), approximate hazard ratio and conditional power, respectively.
@@ -23,10 +22,6 @@ Individual transformation of z-value test statistics for interim and final analy
     gsRR(z, i, x, ratio=1, ylab="Estimated risk ratio",...)
     gsCPz(z, i, x, theta=NULL, ylab=NULL, ...)
     gsBoundSummary(x, upper=TRUE, ratio=1)
-    \method{xtable}{gsDesign}(x, caption=NULL, label=NULL, align=NULL, digits=c(0,0,3,4,4,4,3,3,3,3),
-                             display=NULL, upper=TRUE, rnames=NULL, cnames=NULL, ratio=1,
-                             sanitize.text.function=function(x){x}, 
-                             sanitize.rownames.function=function(x){x},...)
 }
 
 \arguments{
@@ -37,17 +32,7 @@ Individual transformation of z-value test statistics for interim and final analy
 	\item{theta}{A scalar value used for conditional power calculations; see \code{gsDesign}; if NULL, conditional power is computed at the estimated interim treatment effect based on \code{z}}
 	\item{ylab}{Used when functions are passed to \code{plot.gsDesign} to establish default y-axis labels}
 	\item{ratio}{Used only for time-to-event studies; randomization ratio for experimental versus control group}
-	\item{digits}{An integer vector containing the digits to be displayed for each row}
-	\item{rnames}{Allows user to override default row names for output matrix}
-	\item{cnames}{Allows user to override default column names for output matrix}
-	\item{...}{This allows many optional arguments that are standard when calling \code{xtable} and \code{plot}}
-	\item{caption}{See dcoumentation for \code{xtable}}
-	\item{label}{See dcoumentation for \code{xtable}}
-	\item{align}{See dcoumentation for \code{xtable}}
-	\item{display}{See dcoumentation for \code{xtable}}
-   \item{sanitize.text.function}{Should be able to use default; see documentation for \code{xtable}}, 
-   \item{sanitize.rownames.function}{Should be able to use default; see documentation for 
-\code{xtable} and \code{print}}
+	\item{...}{This allows many optional arguments that are standard when calling \code{plot}}
 }
 
 \value{
@@ -79,12 +64,6 @@ gsBoundSummary(x)
 
 # lower bound summary
 gsBoundSummary(x, upper=FALSE)
-
-# print upper bound summary in latex format
-xtable(x)
-
-# print lower bound summary in latex format
-xtable(x, upper=FALSE)
 
 # now derive a design with a time-to-event endpoint
 # note that by specifying endpoint="Survival", hazard ratio replaces treatment effect

@@ -1,0 +1,170 @@
+\documentclass{article}
+\usepackage[round]{natbib}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+% \VignetteIndexEntry{Template for time-to-event group sequential design}
+% \VignetteEngine{knitr}
+\begin{document}
+\title{Template for time-to-event group sequential design}
+\author{Keaven M. Anderson}
+\maketitle
+<<packages, echo=FALSE, results="hide", message=FALSE>>=
+options(width=58)
+@
+\section{Introduction}
+This vignette provides a template for time-to-event sample size calculations for fixed designs using \texttt{nSurv} and group sequential designs using \texttt{gsSurv}.
+Edit this template (from gsDesign R package source \verb@/inst/doc/gsSurvTemplate.rnw@) so that you can reuse it on a regular basis for sample size calculations for time-to-event study planning.
+The template only uses the simplest options with a single stratum and exponential failure and dropout rates.
+The template can be modified to accomodate multiple strata and/or piecewise exponential failure and dropout rates; this was not chose here since the more simplest options are a) often used and b) simplest to learn and apply for beginners. 
+Note that we produce tabular, textual and graphical output; examining the source file to see how this is done will enable you to easily customize to fit your purposes.
+You will need the knitr R package, which I find simpler to use than Sweave (although you could make minor edits and use Sweave).
+I have found using knitr and the RStudio development environment to be a good combination.
+Within this template, we suppress printing of all of the code used to generate results. 
+The file \verb@/inst/doc/gsSurvTemplateInstructions.pdf@ is an alternate version of this document that shows code associated with this template.
+
+
+We apply the \citet{LachinFoulkes} sample size method and extend it to group sequential design.
+This method fixes the duration of a study and varies enrollment rates to power a trial.
+{Alternate text: \em We use the \citet{LachinFoulkes} basic power equation to compute sample size along the lines of \citet{KimTsiatis} where enrollment rates are fixed and enrollment duration is allowed to vary to enroll a sufficient sample size to power a study.}
+The sample size method assumes proportional hazards between treatment groups.
+Accrual of events of events over time is approximated assuming failure rates are exponential.
+
+<<enrollment, message=FALSE, echo=FALSE, results="hide">>=
+# code here applies to both fixed and group sequential design sections below.
+require(gsDesign)
+# enrollment period durations; the last of these will be extended if T=NULL below
+R <- c(1,2,3,4)
+# relative enrollment rates during above periods
+gamma<-c(1,1.5,2.5,4)
+# study duration
+# T can be set to NULL if you want to 
+# fix enrollment and vary study duration
+T <- 36 
+# follow-up duration of last patient enrolled
+minfup <- 12
+# randomization ratio, experimental/control
+ratio <- 1
+# median control time-to-event
+median <- 12
+# exponential dropout rate per unit of time
+eta <- .001
+# hypothesized experimental/control hazard ratio
+hr <- .75
+# null hazard ratio (1 for superiority, >1 for non-inferiority)
+hr0 <- 1
+# Type I error (1-sided)
+alpha <-.025
+# Type II error (1-power)
+beta<-.2
+x <- nSurv(R=R,gamma=gamma,eta=eta,minfup=minfup,
+           T=T,lambdaC=log(2)/median,
+           hr=hr,hr0=hr0,beta=beta,alpha=alpha)
+# time units
+timename <- "months"
+timename1 <- "month"
+# endpoint name
+ep <-"overall survival" 
+# make a string with enrollment rates (assumes gamma is a single value or vector)
+nR <- length(x$R)
+if (nR==1){enrolrates <- paste("constant at a rate of ",round(gamma,1),"per",timename1,".")
+} else{
+enrolrates <- paste(c("piecewise constant at rates of ",
+ paste(round(as.vector(x$gamma),1)," for ",timename," ",cumsum(c(0,x$R[1:(nR-1)])),
+       "-",cumsum(x$R),collapse=", "),sep=""),collapse="")
+}
+@
+
+\subsection{Fixed design sample size}
+{\em This section can be deleted if you are only interested in group sequential design.}
+The median time-to-event is assumed to be \Sexpr{median} \Sexpr{timename} in the control group.
+\Sexpr{if (hr0==1) paste("The trial is designed to demonstrate superiority of experimental treatment over control with an assumed hazard ratio of ",hr)} \Sexpr{if (hr0 != 1) paste("The trial is designed to reject a null hypothesis hazard ratio of ",hr0," in favor of a hazard ratio of",hr)} with \Sexpr{100*(1-beta)}\% power and a one-sided Type I error rate of \Sexpr{100*alpha}.
+The total sample size is \Sexpr{2*ceiling(x$n/2)} and a
+total of \Sexpr{ceiling(x$d)} endpoints is required for analysis.
+Planned recruitment duration is \Sexpr{sum(x$R)} \Sexpr{timename} and the minimum follow-up planned is \Sexpr{round(x$minfup,1)} \Sexpr{timename}.
+Thus, the total expected study duration is \Sexpr{round(max(x$T),1)} \Sexpr{timename}.
+Enrollment is assumed to be \Sexpr{enrolrates}.
+The assumed dropout rate is \Sexpr{100*eta}\% per \Sexpr{timename1}.
+
+\section{Group sequential design}
+
+<<sf, echo=FALSE, results='hide'>>=
+# number of analyses (interim + final)
+k <- 2
+# timing of interim analyses (k-1 increasing numbers >0 and <1)
+timing <- c(.4)
+# efficacy bound spending function
+sfu <- sfHSD 
+# efficacy bound spending parameter specification
+sfupar <- -10
+# futility bound spending function
+sfl <- sfHSD 
+# futility bound spending parameter specification
+sflpar <- 2
+# footnote text for table
+footnote <- paste("P\\{Cross\\} is the probability of crossing the given bound (efficacy or futility) at or before the given analysis under the assumed hazard ratio (HR). Design assumes futility bound is discretionary (non-binding), but smaller upper boundary crossing probabilities shown here assume trial stops at first boundary crossing (binding bounds).")
+# caption text for table
+caption <- paste("Overall survival trial design with HR=",hr,", ",100*(1-beta),"\\% power and ",100*alpha,"\\% Type 1 error.",sep="")
+# generate design
+x <- gsSurv(k=k,timing=timing,R=R,gamma=gamma,eta=eta,
+            minfup=minfup,T=T,lambdaC=log(2)/median,
+            hr=hr,hr0=hr0,beta=beta,alpha=alpha,
+            sfu=sfu,sfupar=sfupar,sfl=sfl,sflpar=sflpar)
+# make a string with enrollment rates (assumes gamma is a single value or vector)
+nR <- length(x$R)
+if (nR==1){enrolrates <- paste("constant at a rate of ",round(gamma,1),"per",timename1,".")
+} else{
+enrolrates <- paste(c("piecewise constant at rates of ",
+ paste(round(as.vector(x$gamma),1)," for ",timename," ",cumsum(c(0,x$R[1:(nR-1)])),
+       "-",cumsum(x$R),collapse=", "),sep=""),collapse="")
+}
+@
+
+For a comparative trial we consider a 2-arm group sequential design with \Sexpr{ep} as the primary endpoint as shown in Table \ref{tab1}.
+Timing, number of events, sample size, boundaries (Z-values, nominal p-values, approximate hazard ratios) are shown as well as the probability of crossing study boundaries under the null and alternate hypotheses.
+Bounds are determined by Hwang-Shih-DeCani spending functions with $\gamma=\Sexpr{sfupar}$ ($\alpha$-spending) and $\gamma=\Sexpr{sflpar}$ ($\beta$-spending).
+The median time-to-event is assumed to be \Sexpr{median} \Sexpr{timename} in the control group.
+\Sexpr{if (hr0==1) paste("The trial is designed to demonstrate superiority of experimental treatment over control with an assumed hazard ratio of ",hr,".",sep="")}
+The total sample size is \Sexpr{ceiling(sum(x$eNE[k,]+x$eNC[k,]))} and a
+total of \Sexpr{ceiling(sum(x$eDE[k,]+x$eDC[k,]))} endpoints is required for the final analysis.
+Planned recruitment duration is \Sexpr{sum(x$R)} \Sexpr{timename} and the minimum follow-up planned is \Sexpr{round(x$minfup,1)} \Sexpr{timename}.
+Thus, the total expected study duration is \Sexpr{round(max(x$T),1)} \Sexpr{timename}.
+Enrollment is assumed to be \Sexpr{enrolrates}.
+The assumed dropout rate is \Sexpr{100*eta}\% per \Sexpr{timename1}.
+\Sexpr{if (x$k==2) paste("There is a single interim analysis planned after",ceiling(x$eDE[1,]+x$eDC[1,]),"events have accrued which is expected after approximately",round(x$T[1],1),timename,sep=" ")}.
+
+<<tab1, results="asis",echo=FALSE,message=FALSE,tidy=FALSE>>=
+print(xtable(x,footnote=footnote,caption=caption,
+             label="tab1"), 
+      include.rownames=F, 
+      sanitize.text.function=function(x) x)
+@
+Following are plots of the Z-values (Figure \ref{fig:p1}) and approximate hazard ratios (Figure \ref{fig:p2}) at the design bounds.
+<<p1, fig.height=3.5,tidy=FALSE,fig.cap="Z-value bound plot",echo=FALSE>>=
+plot(x,cex=.8,xlab="Number of events")
+@
+<<p2, fig.height=3.5,fig.cap="Hazard ratio bound plot",echo=FALSE>>=
+plot(x,plottype="hr",cex=.8,xlab="Number of events")
+@
+\newif\ifabfull\abfulltrue
+\begin{thebibliography}{2}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Kim and Tsiatis(1990)]{KimTsiatis}
+Kyungmann Kim and Anastasios~A. Tsiatis.
+\newblock Study duration for clinical trials with survival response and early
+  stopping rule.
+\newblock \emph{Biometrics}, 46:\penalty0 81--92, 1990.
+
+\bibitem[Lachin and Foulkes(1986)]{LachinFoulkes}
+John~M. Lachin and Mary~A. Foulkes.
+\newblock Evaluation of sample size and power for analyses of survival with
+  allowance for nonuniform patient entry, losses to follow-up, noncompliance,
+  and stratification.
+\newblock \emph{Biometrics}, 42:\penalty0 507--519, 1986.
+
+\end{thebibliography}
+
+\end{document}
