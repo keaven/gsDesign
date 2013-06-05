@@ -17,7 +17,8 @@ nSurvival(lambda1=1/12, lambda2=1/24, Ts=24, Tr=12, eta = 0, ratio = 1,
       alpha = 0.025, beta = 0.10, sided = 1, approx = FALSE,
       type = c("rr", "rd"), entry = c("unif", "expo"), gamma = NA)
 \method{print}{nSurvival}(x,...)
-nEvents(hr = .6, alpha = .025, beta = .1, ratio = 1, sided = 1, hr0 =  1, n = 0, tbl = FALSE)
+nEvents(hr = .6, alpha = .025, beta = .1, ratio = 1, sided = 1, 
+        hr0 =  1, n = 0, tbl = FALSE)
 hrn2z(hr, n, ratio=1, hr0=1, hr1=.7)
 hrz2n(hr, z, ratio=1, hr0=1)
 zn2hr(z, n, ratio=1, hr0=1, hr1=.7)
@@ -98,7 +99,7 @@ That is,
   \item{Ts}{As input.}
   \item{Tr}{As input.}
 
-  \code{nEvents} produces a scalar or vector of sample sizes (or powers) when \code{tbl=FALSE} or, when \code{tbl=TRUE} a matrix of values with the following columns:
+  \code{nEvents} produces a scalar or vector of sample sizes (or powers) when \code{tbl=FALSE} or, when \code{tbl=TRUE} a data frame of values with the following columns:
   \item{hr}{As input.}
   \item{n}{If \code{n[1]=0} on input (default), output contains the number of events need to obtain the input Type I and II error. If \code{n[1]>0} on input, the input value is returned.}
   \item{alpha}{As input.}

@@ -7,7 +7,9 @@ Either the estimated treatment effect at the interim analysis or any chosen effe
 If not done carefully, these designs can be very inefficient. It is probably a good idea to compare any design to a simpler group sequential design; see, for example, Jennison and Turnbull, Statistics in Medicine, 2003.
 Method assumes a small Type I error is included with the interim analysis and that the design is an adaptation from a 2-stage group sequential design (Lehmacher and Wassmer, Biometrics, 1999).}
 \usage{
-ssrCP(z, theta = NULL, maxinc = 2, overrun = 0, beta = 0.1, cpadj = c(0.5, 1 - beta), x = gsDesign(k = 2, timing = 0.5, beta = beta))
+ssrCP(z, theta = NULL, maxinc = 2, overrun = 0, beta = 0.1, 
+      cpadj = c(0.5, 1 - beta), 
+      x = gsDesign(k = 2, timing = 0.5, beta = beta))
 }
 \arguments{
   \item{z}{Scalar or vector with interim standardized Z-value(s). Input of multiple values makes it easy to plot the revised sample size as a function of the interim test statistic.}
@@ -65,10 +67,12 @@ betastar <- beta
 
 # generate a 2-stage group sequential design with 
 # desired planned sample size (first 2 lines set planned sample size to that from above; normally)
-x<-gsDesign(k=2,n.fix=n.fix,timing=timing,sfu=sfu,sfupar=sfupar,alpha=alpha,beta=beta)
+x<-gsDesign(k=2,n.fix=n.fix,timing=timing,sfu=sfu,sfupar=sfupar,
+            alpha=alpha,beta=beta)
 nalt <- maxinflation*(x$n.I[2])
 par(mar=c(7, 4, 4, 4)+.1)
-plot(z,ssrCP(x=x,z=z,overrun=overrun,beta=betastar,cpadj=cpadj),type="l",xlim=c(0,3.5),axes=FALSE,xlab="",ylab="")
+plot(z,ssrCP(x=x,z=z,overrun=overrun,beta=betastar,cpadj=cpadj),
+     type="l",xlim=c(0,3.5),axes=FALSE,xlab="",ylab="")
 lines(z,80+240*dnorm(z,mean=0),col=2)
 lines(z,80+240*dnorm(z,mean=sqrt(x$n.I[1])*x$theta[2]),col=3)
 lines(z,80+240*dnorm(z,mean=sqrt(x$n.I[1])*x$theta[2]/2),col=4)
@@ -80,7 +84,8 @@ mtext(side=4,expression(paste("Density for ",z[1])),line=2)
 lines(x=c(-3.5,3.5),y=c(nalt,nalt),lty=2)
 w <- x$timing[1]
 theta <- seq(.5,3.5,.5) / sqrt(x$n.I[1])
-CP <- pnorm(theta*sqrt(x$n.I[2]*(1-w))-(x$upper$bound[2]-seq(.5,3.5,.5)*sqrt(w))/sqrt(1-w))
+CP <- pnorm(theta*sqrt(x$n.I[2]*(1-w))-(x$upper$bound[2]-
+        seq(.5,3.5,.5)*sqrt(w))/sqrt(1-w))
 axis(side=1,line=3,at=seq(.5,3.5,.5),labels=as.character(round(CP,2)))
 mtext(side=1,"CP",line=3.5,at=.25)
 axis(side=1,line=1,at=seq(0,3.5,.5),labels=as.character(seq(0,3.5,.5)))
