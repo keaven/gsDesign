@@ -16,8 +16,8 @@
 #  Author(s): William Constantine, Ph.D.
 # 
 #  Reviewer(s): REvolution Computing 19DEC2008 v.2.0 - William Constantine, Kellie Wills 
-#
-#  R Version: 2.7.2
+#  Updated: Keaven Anderson, 16JUN2013 to fix error messages
+#  R Version: 3.0
 #
 ##################################################################################
 
@@ -65,14 +65,14 @@
     if (!(left && right))
     {
         stop(paste(varname, " not on interval ", if (inclusion[1]) "[" else "(", interval[1], ", ", 
-                        interval[2], if (inclusion[2]) "]" else ")", sep=""))
+                        interval[2], if (inclusion[2]) "]" else ")", sep=""), call.=TRUE)
     }
     
     invisible(NULL)
 }
 
 "checkScalar" <- function(x, isType = "numeric", ...) 
-{        
+{
     # check inputs
     if (!is.character(isType))
     {
@@ -92,13 +92,13 @@
         # create error message    
         parent <- as.character(sys.call(-1)[[1]])
         varstr <- paste(if (length(parent) > 0) paste("In function", parent, ": variable") else "", deparse(substitute(x)))
-    stop(varstr, "must be scalar of class", isType)
+        stop(varstr, " must be scalar of class ", isType)
     }
     
     # check if input is on specified interval    
     if (length(list(...)) > 0)
     {
-        checkRange(x, ..., varname=varstr)
+        checkRange(x, ..., varname=deparse(substitute(x)))
     }
     
     invisible(NULL)
@@ -131,18 +131,18 @@
         # create error message
         parent <- as.character(sys.call(-1)[[1]])
         varstr <- paste(if (length(parent) > 0) paste("In function", parent, ": variable") else "", deparse(substitute(x))) 
-        stop(paste(varstr, "must be vector of class", isType))
+        stop(paste(varstr, " must be vector of class ", isType))
     }
     # check vector length
     if (!is.null(length) && (length(x) != length))
     {
-        stop(paste(varstr, "is a vector of length", length(x), "but should be of length", length))
+        stop(paste(varstr, " is a vector of length ", length(x), " but should be of length", length))
     }
     
     # check if input is on specified interval
     if (length(list(...)) > 0)
     {
-        checkRange(x, ..., varname=varstr)
+        checkRange(x, ..., varname=deparse(substitute(x)))
     }
     
     invisible(NULL)
@@ -227,7 +227,7 @@
     # create error message
     parent <- as.character(sys.call(-1)[[1]])
     varstr <- paste(if (length(parent) > 0) paste("In function", parent, ": variable") else "", deparse(substitute(x))) 
-    stop(paste(varstr, "must be matrix of class", isType))
+    stop(paste(varstr, " must be matrix of class ", isType))
   }
   # check matrix dimensions
   if (!is.null(nrows) && (NROW(x) != nrows))
@@ -242,7 +242,7 @@
   # check if input is on specified interval
   if (length(list(...)) > 0)
   {
-    checkRange(x, ..., varname=varstr)
+    checkRange(x, ..., varname=deparse(substitute(x)))
   }
   
   invisible(NULL)
