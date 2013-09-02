@@ -577,7 +577,8 @@ gsSurv<-function(k=3, test.type=4, alpha=0.025, sided=1,
   alpha = alpha, beta = beta,  sided = sided, tol = tol)  
   y<-gsDesign(k=k,test.type=test.type,alpha=alpha/sided,
       beta=beta, astar=astar, n.fix=x$d, timing=timing,
-      sfu=sfu, sfupar=sfupar, sfl=sfl, sflpar=sflpar, tol=tol)
+      sfu=sfu, sfupar=sfupar, sfl=sfl, sflpar=sflpar, tol=tol,
+              delta1=log(hr), delta0=log(hr0))
   z<-gsnSurv(x,y$n.I[k])
   eDC <- NULL
   eDE <- NULL

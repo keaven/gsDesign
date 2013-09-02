@@ -139,11 +139,10 @@ That is,
 
 ss <- nSurvival(lambda1=.2 , lambda2=.1, eta = .1, Ts = 2, Tr = .5,
                 sided=1, alpha=.025)
-ss
 
-#  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
-#  sample size is computed based on a fixed design requiring n=100
-	x<-gsDesign(k = 5, test.type = 2, n.fix=ss$nEvents, nFixSurv=ss$n)
+#  group sequential translation with default bounds
+#  note that delta1 is log hazard ratio; used later in gsBoundSummary summary
+	x<-gsDesign(k = 5, test.type = 2, n.fix=ss$nEvents, nFixSurv=ss$n, delta1=log(ss$lambda2/ss$lambda1))
 # boundary plot
 	plot(x)
 # effect size plot
@@ -154,6 +153,12 @@ ss
    x$n.I
 # print the design
 x
+# overall design summary
+cat(summary(x))
+# tabular summary of bounds
+gsBoundSummary(x,deltaname="HR",Nname="Events",logdelta=TRUE)
+
+
 
 # approximate number of events required using Schoenfeld's method
 # for 2 different hazard ratios
