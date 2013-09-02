@@ -86,7 +86,7 @@
     print(y)
   invisible(x)
 }
-"summary.gsDesign" <- function(object, information=FALSE, ...){
+"summary.gsDesign" <- function(object, information=FALSE,...){
   out <- NULL
   if (object$test.type == 1){
     out<- paste(out,"One-sided group sequential design with ",sep="")
@@ -134,7 +134,8 @@
     }
   }
   out <- paste(out,".",sep="")
-  return(out)
+  cat(str_wrap(out,...))
+  invisible(out)
 }
 "print.gsDesign" <- function(x, ...)
 {    
