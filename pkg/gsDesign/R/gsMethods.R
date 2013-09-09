@@ -9,6 +9,7 @@
 #    print.nSurvival
 #    print.gsBoundSummary
 #    gsBoundSummary
+#    xprint
 #
 #  Hidden Functions:
 #
@@ -327,14 +328,12 @@ print.nSurvival <- function(x,...){
 	invisible(x)
 }
 gsBoundSummary <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits=4, ddigits=2, tdigits=0, timename="Month", 
-                           prior=normalGrid(mu=x$delta/2, sigma=10/x$n.I[x$k]), 
+                           prior=normalGrid(mu=x$delta/2, sigma=10/sqrt(x$n.fix)), 
                            POS=FALSE, ratio=NULL,exclude=c("B-value","Spending","CP","CP H1","PP"), r=18,...){
   k <- x$k
   if (is.null(Nname)){
     if(x$n.fix==1){
       Nname <- "N/Fixed design N"
-    }else if ("gsSurv" %in% class(x) || x$nFixSurv > 0){
-      Nname <-"Events"
     }else Nname="N"
   }
   # delta values corresponding to x$theta
@@ -368,7 +367,7 @@ gsBoundSummary <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits
     if ("gsSurv" %in% class(x) || x$nFixSurv>0){deltaname="HR"}else{deltaname="delta"}
   }
   # create delta names for boundary corssing probabilities
-  deltanames <- paste("P{Cross} if ",deltaname,"=",round(delta,ddigits),sep="")
+  deltanames <- paste("P(Cross) if ",deltaname,"=",round(delta,ddigits),sep="")
   pframe <- NULL
   for(i in 1:length(x$theta)) pframe <- rbind(pframe, data.frame("Value"=deltanames[i],"Efficacy"=cumsum(x$upper$prob[,i]),i=1:x$k))
   if(x$test.type>1){
@@ -447,7 +446,7 @@ gsBoundSummary <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits
     Time <- round(x$T,tdigits)
     statframe[statframe$Value==statframe$Value[4],]$Analysis <- paste(timename,": ",as.character(Time),sep="")
   }
-  statframe[statframe$Value==statframe$Value[2],]$Analysis <- paste(Nname,": ",N,sep="")
+  statframe[statframe$Value==statframe$Value[2],]$Analysis <- paste(Nname, ": ",N,sep="")
   # add POS and predicitive POS, if requested
   if (POS){
     ppos <- array("",x$k)
@@ -464,8 +463,8 @@ gsBoundSummary <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits
   class(rval)<-c("gsBoundSummary","data.frame")
   return(rval)
 }
-xprint <- function(x,include.rownames=FALSE,hline.after=c(-1,which(x$Value==x[1,]$Value)-1,nrow(x)),...){
-  print.xtable(xtable(x), hline.after=hline.after, include.rownames=include.rownames,...)
+xprint <- function(x, include.rownames=FALSE, hline.after=c(-1,which(x$Value==x[1,]$Value)-1,nrow(x)),...){
+  print.xtable(x, hline.after=hline.after, include.rownames=include.rownames,...)
 }
 print.gsBoundSummary <- function(x,row.names=FALSE,digits=4,...){
   print.data.frame(x,row.names=row.names,digits=digits,...)
