@@ -18,7 +18,7 @@ A brief description of the overall design can also be useful (\code{summary.gsDe
 A tabular summary of boundary characteristics oriented only towards LaTeX output is produced by \code{\link{xtable.gsSurv}}.
 More flexibility is provided by \code{gsBoundSummary()} which produces a tabular summary of a user-specifiable set of package-provided boundary properties in a data frame. 
 This can also be used to along with functions such as \code{\link{print.data.frame}()}, \code{\link{write.table}()}, \code{\link{write.csv}()}, \code{\link{write.csv2}()} or, from the RTF package, \code{addTable.RTF()} (from the rtf package) to produce console or R Markdown output or output to a variety of file types.
-\code{xprint()} is provided for LaTeX output, extending \code{\link{print.xtable}()} to output from \code{gsBoundSummary()}.
+\code{xprint()} is provided for LaTeX output by setting default options for \code{\link{print.xtable}()} when producing tables summarizing design bounds.
 
 Individual transformation of z-value test statistics for interim and final analyses are obtained from
 \code{gsBValue()}, \code{gsDelta()}, \code{gsHR()} and \code{gsCPz()} for B-values, approximate treatment effect (see details), approximate hazard ratio and conditional power, respectively.
@@ -29,7 +29,7 @@ Individual transformation of z-value test statistics for interim and final analy
     \method{summary}{gsDesign}(object, information=FALSE, ...)
     gsBoundSummary(x, deltaname=NULL, logdelta=FALSE, 
                   Nname=NULL, digits=4, ddigits=2, tdigits=0, timename="Month",
-                  prior=normalGrid(mu=x$delta/2, sigma=10/x$n.I[x$k]), POS=FALSE, ratio=NULL,
+                  prior=normalGrid(mu=x$delta/2, sigma=10/sqrt(x$n.fix)), POS=FALSE, ratio=NULL,
                   exclude=c("B-value","Spending","CP","CP H1","PP"), r=18, ...)
     \method{print}{gsBoundSummary}(x,row.names=FALSE,digits=4,...)
     xprint(x,include.rownames=FALSE,hline.after=c(-1,which(x$Value==x[1,]$Value)-1,nrow(x)), ...)
@@ -41,7 +41,7 @@ Individual transformation of z-value test statistics for interim and final analy
 }
 
 \arguments{
-	\item{x}{An item of class \code{gsDesign} or \code{gsSurv}, except for \code{print.gsBoundSummary()} and \code{xprinat()} where \code{x} is an object created by \code{gsBoundSummary()}}
+	\item{x}{An item of class \code{gsDesign} or \code{gsSurv}, except for \code{print.gsBoundSummary()} where \code{x} is an object created by \code{gsBoundSummary()} and \code{xprint()} which is used with \code{xtable} (see examples)}
   \item{object}{An item of class \code{gsDesign} or \code{gsSurv}}
   \item{information}{indicator of whether \code{n.I} in \code{object} represents statistical information rather than sample size or event counts.}
   \item{deltaname}{Natural parameter name. If default \code{NULL} is used, routine will default to \code{"HR"} when class is \code{gsSurv} or if \code{nFixSurv} was input when creating \code{x} with \code{gsDesign()}.}
@@ -174,5 +174,9 @@ plot(xrr,plottype="RR")
 n.fix<-nBinomial(p1=.3, p2=.15, scale="OR")
 xOR <- gsDesign(k=2,n.fix=n.fix,delta1=log(.15/.3/.85*.7),endpoint="Binomial")
 gsBoundSummary(xOR,deltaname="OR",logdelta=TRUE)
+
+# for nice LaTeX table output, use xprint
+xprint(xtable(gsBoundSummary(xOR, deltaname="OR", logdelta=TRUE), caption="Table caption."))
 }
+
 \keyword{design}
