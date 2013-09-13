@@ -19,8 +19,10 @@ The a assumes a small Type I error is included with the interim analysis and tha
 While the returned data frame should make general plotting easy, the function \code{plot.ssrCP()} prints a plot of study sample size by stage 1 outcome with multiple x-axis labels for stage 1 z-value, conditional power, and stage 1 effect size relative to the effect size for which the underlying group sequential design was powered.
 }
 \usage{
-ssrCP(z1, theta=NULL, maxinc=2, overrun=0, beta = x$beta, cpadj=c(.5,1-beta), x=gsDesign(k=2, timing=.5, beta=beta), z2=z2NC,...)
-\method{plot}{ssrCP}(x, z1ticks=NULL, mar=c(7, 4, 4, 4)+.1, ylab="Adapted sample size", xlaboffset=-.2, lty=1, col=1,...)
+ssrCP(z1, theta=NULL, maxinc=2, overrun=0, beta = x$beta, cpadj=c(.5,1-beta), 
+      x=gsDesign(k=2, timing=.5, beta=beta), z2=z2NC,...)
+\method{plot}{ssrCP}(x, z1ticks=NULL, mar=c(7, 4, 4, 4)+.1, 
+      ylab="Adapted sample size", xlaboffset=-.2, lty=1, col=1,...)
 Power.ssrCP(x, theta=NULL, delta=NULL, r=18)            
 condPower(z1, n2, z2=z2NC, theta=NULL, x=gsDesign(k=2, timing=.5, beta=beta), ...)
 z2NC(z1,x,...)
@@ -188,7 +190,8 @@ y3 <- rbind(
        data.frame(cbind(y1,"CP effect size"="Obs. at IA")),
        data.frame(cbind(y2,"CP effect size"="Alt. hypothesis")))
 # plot expected sample size by design and effect size
-ggplot(data=y3,aes(x=delta,y=en,col=CP.effect.size))+geom_line() + xlab(expression(delta)) + ylab("Expected sample size")
+ggplot(data=y3,aes(x=delta,y=en,col=CP.effect.size))+geom_line() + 
+        xlab(expression(delta)) + ylab("Expected sample size")
 # plot power by design and effect size
 ggplot(data=y3,aes(x=delta,y=Power,col=CP.effect.size))+geom_line() + xlab(expression(delta))
 

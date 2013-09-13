@@ -28,11 +28,12 @@ Individual transformation of z-value test statistics for interim and final analy
     \method{print}{gsDesign}(x,...)
     \method{summary}{gsDesign}(object, information=FALSE, ...)
     gsBoundSummary(x, deltaname=NULL, logdelta=FALSE, 
-                  Nname=NULL, digits=4, ddigits=2, tdigits=0, timename="Month",
-                  prior=normalGrid(mu=x$delta/2, sigma=10/sqrt(x$n.fix)), POS=FALSE, ratio=NULL,
-                  exclude=c("B-value","Spending","CP","CP H1","PP"), r=18, ...)
+      Nname=NULL, digits=4, ddigits=2, tdigits=0, timename="Month",
+      prior=normalGrid(mu=x$delta/2, sigma=10/sqrt(x$n.fix)), POS=FALSE, ratio=NULL,
+      exclude=c("B-value","Spending","CP","CP H1","PP"), r=18, ...)
     \method{print}{gsBoundSummary}(x,row.names=FALSE,digits=4,...)
-    xprint(x,include.rownames=FALSE,hline.after=c(-1,which(x$Value==x[1,]$Value)-1,nrow(x)), ...)
+    xprint(x,include.rownames=FALSE,
+      hline.after=c(-1,which(x$Value==x[1,]$Value)-1,nrow(x)), ...)
     gsBValue(z, i, x, ylab="B-value", ...)
     gsDelta(z, i, x, ylab=NULL, ...)
     gsHR(z, i, x, ratio=1, ylab="Estimated hazard ratio", ...)
