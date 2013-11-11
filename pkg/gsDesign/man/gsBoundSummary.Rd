@@ -26,7 +26,7 @@ Individual transformation of z-value test statistics for interim and final analy
 
 \usage{
     \method{print}{gsDesign}(x,...)
-    \method{summary}{gsDesign}(object, information=FALSE, ...)
+    \method{summary}{gsDesign}(object, information=FALSE, timeunit="months",...)
     gsBoundSummary(x, deltaname=NULL, logdelta=FALSE, 
       Nname=NULL, digits=4, ddigits=2, tdigits=0, timename="Month",
       prior=normalGrid(mu=x$delta/2, sigma=10/sqrt(x$n.fix)), POS=FALSE, ratio=NULL,
@@ -45,6 +45,7 @@ Individual transformation of z-value test statistics for interim and final analy
 	\item{x}{An item of class \code{gsDesign} or \code{gsSurv}, except for \code{print.gsBoundSummary()} where \code{x} is an object created by \code{gsBoundSummary()} and \code{xprint()} which is used with \code{xtable} (see examples)}
   \item{object}{An item of class \code{gsDesign} or \code{gsSurv}}
   \item{information}{indicator of whether \code{n.I} in \code{object} represents statistical information rather than sample size or event counts.}
+  \item{timeunit}{Text string with time units used for time-to-event designs created with \code{gsSurv()}}
   \item{deltaname}{Natural parameter name. If default \code{NULL} is used, routine will default to \code{"HR"} when class is \code{gsSurv} or if \code{nFixSurv} was input when creating \code{x} with \code{gsDesign()}.}
   \item{logdelta}{Indicates whether natural parameter is the natural logarithm of the actual parameter. For example, the relative risk or odds-ratio would be put on the logarithmic scale since the asymptotic behavior is 'more normal' than a non-transformed value. As with \code{deltaname}, the default will be changed to true if \code{x} has class \code{gsDesign} or if \code{nFixSurv>0} was input when \code{x} was created by \code{gsDesign()}; that is, the natural parameter for a time-to-event endpoint will be on the logarithmic scale.}
   \item{Nname}{This will normally be changed to \code{"N"} or, if a time-to-event endpoint is used, \code{"Events"}. Other immediate possibility are \code{"Deaths"} or \code{"Information"}.}

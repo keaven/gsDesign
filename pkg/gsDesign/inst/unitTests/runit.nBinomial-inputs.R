@@ -57,7 +57,7 @@
 {
 	 checkException(nBinomial(outtype="abc", p1=0.1, p2=0.2), msg="Checking for incorrect variable type", silent=TRUE) 
 	 checkException(nBinomial(outtype=0, p1=0.1, p2=0.2), msg="Checking for out-of-range variable value", silent=TRUE) 
-	 checkException(nBinomial(outtype=3, p1=0.1, p2=0.2), msg="Checking for out-of-range variable value", silent=TRUE) 
+	 checkException(nBinomial(outtype=4, p1=0.1, p2=0.2), msg="Checking for out-of-range variable value", silent=TRUE) 
 	 checkException(nBinomial(outtype=rep(1,2), p1=0.1, p2=0.2), msg="Checking for incorrect variable length", silent=TRUE) 
 }
 

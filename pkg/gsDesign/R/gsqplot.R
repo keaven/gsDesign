@@ -32,6 +32,11 @@
 #
 ##################################################################################
 
+#####
+# global variables used to eliminate warnings in R CMD check
+#####
+globalVariables(c("y","N","Z","Bound","thetaidx","Probability","delta","Analysis"))
+
 ###
 # Exported Functions
 ###
@@ -465,251 +470,261 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	}
 }
 "plotASN" <- function(x, xlab=NULL, ylab=NULL, main=NULL, theta=NULL, xval=NULL, type="l", 
-							base=FALSE,...)
+                      base=FALSE,...)
 {    
-    if (is(x, "gsDesign") && x$n.fix == 1) 
-    {    
-        if (is.null(ylab))
-        {
-            ylab <- "E{N} relative to fixed design"
-        }
-    
-        if (is.null(main))
-        {
-            main <- "Expected sample size relative to fixed design"
-        }
+  if (is(x, "gsDesign") && x$n.fix == 1) 
+  {    
+    if (is.null(ylab)) ylab <- "E{N} relative to fixed design"
+    if (is.null(main)) main <- "Expected sample size relative to fixed design"
+  }
+  else if (is(x, "gsSurv"))
+  {
+    if (is.null(ylab)) ylab <- "Expected number of events"
+    if (is.null(main)) main <- "Expected number of events by underlying hazard ratio"
+  }
+  else  
+  {
+    if (is.null(ylab)) ylab <- "Expected sample size"
+    if (is.null(main)) main <- "Expected sample size by underlying treatment difference"
+  }
+  
+  if (is.null(theta))
+  {    
+    if (is(x,"gsDesign")) theta <- seq(0, 2, .05) * x$delta
+    else theta <- x$theta
+  }
+  
+  if (is.null(xval)){
+    if (is(x, "gsDesign")){
+      xval <- x$delta0 + (x$delta1-x$delta0)*theta/x$delta
+      if (is(x, "gsSurv")){
+        xval <- exp(xval)
+        if (is.null(xlab)) xlab <- "Hazard ratio"
+      }else if (is.null(xlab)) xlab <- expression(delta)
+    }else{
+      xval <- theta
+      if (is.null(xlab)) xlab <- expression(theta)
     }
-    else if (is.null(main)) 
-    {
-        main <- "Expected sample size by treatment difference"
-    }
-    
-    if (is.null(theta))
-    {    
-        if (is(x,"gsDesign"))
-        {
-            theta <- seq(0, 2, .05) * x$delta
-        }
-        else
-        {
-            theta <- x$theta
-        }
-    }
-
-    if (is.null(xval))
-    {    
-        if (is(x, "gsDesign") && is.null(xlab))
-        {    
-            xval <- theta / x$delta
-        
-            if (is.null(xlab))
-            {
-                xlab <- expression(theta / theta[1])
-            }
-        }
-        else
-        {    
-            xval <- theta
-            
-            if (is.null(xlab))
-            {
-                xlab <- expression(theta)
-            }
-        }    
-    }
-    
-    if (is.null(xlab))
-    {
-        xlab <- ""
-    }
-    
-    x <- if (is(x, "gsDesign")) gsProbability(d=x, theta=theta) else 
-                gsProbability(k=x$k, a=x$lower$bound, b=x$upper$bound, n.I=x$n.I, theta=theta)
-    
-    if (is.null(ylab))
-    {
-		if (max(x$n.I) < 3) ylab <- "E{N} relative to fixed design"
-		else ylab <- "Expected sample size"
-    }
-    if (base) 
-    {  plot(xval, x$en, type=type, ylab=ylab, xlab=xlab, main=main,...)
-       return(invisible(x))
-    }
-    else
-    {  q <- data.frame(x=xval, y=x$en)
-       p <- qplot(x=x, y=y, data=q, geom="line", ylab=ylab, xlab=xlab, main=main)
-       return(p)
-    }
+  }
+  
+  x <- if (is(x, "gsDesign")) gsProbability(d=x, theta=theta) else 
+    gsProbability(k=x$k, a=x$lower$bound, b=x$upper$bound, n.I=x$n.I, theta=theta)
+  
+  if (is.null(ylab))
+  {
+    if (max(x$n.I) < 3) ylab <- "E{N} relative to fixed design"
+    else ylab <- "Expected sample size"
+  }
+  if (base) 
+  {  plot(xval, x$en, type=type, ylab=ylab, xlab=xlab, main=main,...)
+     return(invisible(x))
+  }
+  else
+  {  q <- data.frame(x=xval, y=x$en)
+     p <- qplot(x=x, y=y, data=q, geom="line", ylab=ylab, xlab=xlab, main=main)
+     return(p)
+  }
 }
-"plotgsPower" <- function(x, main=NULL,
-	ylab="Cumulative Boundary Crossing Probability",
-	xlab=NULL, lty=c(1, 2), col=c(1, 2), lwd=1, cex=1,
-	theta=if (is(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta, xval=NULL, base=FALSE,
-  ...)
-{	ggver <- as.numeric_version(packageVersion('ggplot2'))
-	if (is.null(main)) main <- "Boundary crossing probabilities by effect size"
-	if (length(col==1)) col=array(col,2)
-	if (length(lty==1)) lty=array(lty,2)
-	if (length(lwd==1)) lwd=array(lwd,2)
-	if (is.null(xval))
-	{    
-		if (is(x, "gsDesign") && is.null(xlab))
-		{    
-			xval <- theta / x$delta
-			xlab <- expression(theta/theta[1])
-		}
-		else
-		{    
-			xval <- theta
-			if (is.null(xlab)) xlab <- expression(theta)    
-		}    
-	}
-	x <- if (is(x, "gsDesign")) gsProbability(d=x, theta=theta) else 
-                gsProbability(k=x$k, a=x$lower$bound, b=x$upper$bound, n.I=x$n.I, theta=theta)
-	test.type <- ifelse(is(x,"gsProbability"), 3, x$test.type)
-	if (is.null(xlab)) xlab <- ""
-	theta <- xval
-	interim <- array(1,length(xval))
-	bound <- array(1,length(xval)*x$k)
-	boundprob <- x$upper$prob[1,]
-	prob <- boundprob
-	yval <- min(mean(range(x$upper$prob[1,])))
-	xv <- min(xval[boundprob>=yval])
-	for(j in 2:x$k)
-	{	theta <- c(theta, xval)
-		interim <- c(interim, array(j, length(xval)))
-		boundprob <- boundprob + x$upper$prob[j,]
-		prob <- c(prob, boundprob)
-		ymid <- mean(range(boundprob))
-		yval <- c(yval, min(boundprob[boundprob >= ymid]))
-		xv <- c(xv, min(xval[boundprob >= ymid]))
-	}
-	itxt <- array("Interim",x$k-1)
-	itxt <- paste(itxt,1:(x$k-1),sep=" ")
-
-	if (is(x, "gsProbability") || (is(x, "gsDesign") && test.type > 1))
-	{
-		itxt <- c(itxt,"Final",itxt)
-		boundprob <- array(1, length(xval))
-		bound <- c(bound, array(2, length(xval)*(x$k-1)))
-		for(j in 1:(x$k-1))
-		{	theta <- c(theta, xval)
-			interim <- c(interim, array(j, length(xval)))
-			boundprob <- boundprob - x$lower$prob[j,]
-			prob <- c(prob, boundprob)
-			ymid <- mean(range(boundprob))
-			yval <- c(yval, min(boundprob[boundprob >= ymid]))
-			xv <- c(xv, min(xval[boundprob >= ymid]))
-		}
-	}else {itxt <- c(itxt,"Final")}
-	y <- data.frame(theta=as.numeric(theta), interim=interim, bound=bound, prob=as.numeric(prob),
-				itxt=as.character(round(prob,2)))
-	y$group=(y$bound==2)*x$k + y$interim
-	bound <- array(1, x$k)
-	interim <- 1:x$k
-	if (test.type > 1)
-	{	bound <- c(bound, array(2, x$k-1))
-		interim <- c(interim, 1:(x$k-1))
-	}
-	yt <- data.frame(theta=xv, interim=interim, bound=bound, prob=yval, itxt=itxt)
-	bound <- array(1, x$k)
-	interim <- 1:x$k
-	if (test.type > 1)
-	{	bound <- c(bound, array(2, x$k-1))
-		interim <- c(interim, 1:(x$k-1))
-	}
-	yt <- data.frame(theta=xv, interim=interim, bound=bound, prob=yval, itxt=itxt)
-	if (base)    
-	{	col2 <- ifelse(length(col) > 1, col[2], col)
-		lwd2 <- ifelse(length(lwd) > 1, lwd[2], lwd)
-		lty2 <- ifelse(length(lty) > 1, lty[2], lty)    
-
-		ylim <- if (is(x, "gsDesign") && test.type<=2) c(0, 1) else c(0, 1.25)
-    
-		plot(xval, x$upper$prob[1, ], xlab=xlab, main=main, ylab=ylab, 
-			ylim=ylim, type="l", col=col[1], lty=lty[1], lwd=lwd[1], yaxt = "n")
-
-		if (is(x, "gsDesign") && test.type <= 2)
-		{    
-			axis(2, seq(0, 1, 0.1))
-			axis(4, seq(0, 1, 0.1))
-		}
-		else
-		{    
-			axis(4, seq(0, 1, by=0.1), col.axis=col[1], col=col[1])
-			axis(2, seq(0, 1, .1), labels=1 - seq(0, 1, .1), col.axis=col2, col=col2)
-		}
-
-		if (x$k == 1)
-		{
-			return(invisible(x))
-		}
-
-		if ((is(x, "gsDesign") && test.type > 2) || !is(x, "gsDesign"))
-		{    
-			lines(xval, 1-x$lower$prob[1, ], lty=lty2,  col=col2,  lwd=lwd2)
-			plo <- x$lower$prob[1, ]
-
-			for (i in 2:x$k)
-			{    
-				plo  <-  plo + x$lower$prob[i, ]
-				lines(xval, 1 - plo, lty=lty2,  col=col2,  lwd=lwd2)
-			}
-        
-			temp <- legend("topleft",  legend = c(" ",  " "),  col=col, 
-							text.width = max(strwidth(c("Upper","Lower"))),  lwd=lwd, 
-							lty = lty,  xjust = 1,  yjust = 1, 
-							title = "Boundary")
-        
-			text(temp$rect$left  +  temp$rect$w,  temp$text$y, 
-					c("Upper","Lower"),  col=col,  pos=2)
-		}
-
-		phi <- x$upper$prob[1, ]
-
-		for (i in 2:x$k)
-		{    
-			phi <- phi + x$upper$prob[i, ]
-			lines(xval, phi, col=col[1], lwd=lwd[1], lty=lty[1])
-		}
-		colr <- array(col[1], x$k)
-		if (length(yt$theta)>x$k) colr<-c(colr,array(col[2],x$k-1))
-		text(x=yt$theta, y=yt$prob, col=colr, yt$itxt, cex=cex)
-		invisible(x)
-	}
-	else
-	{	p <- ggplot(data=subset(y,interim==1), 
-            aes(x=theta, y=prob, group=factor(bound),
-            col=factor(bound), lty=factor(bound))) +
-            geom_line() +
-            scale_x_continuous(xlab)+scale_y_continuous(ylab) +
-    		    scale_colour_manual(name= "Bound", values=col) +
-				    scale_linetype_manual(name= "Bound",  values=lty)
-		if (ggver >= as.numeric_version("0.9.2"))
-		{	p <- p + ggtitle(label=main)}else{
-			p <- p + opts(title=main)
-		}
-		if(test.type == 1)
-		{	p <- p + scale_colour_manual(name= "Probability", values=col, breaks=1,
-					labels="Upper bound") +
-					scale_linetype_manual(name="Probability", values=lty[1], breaks=1,
-					labels="Upper bound")
-			if (ggver >= as.numeric_version("0.9.2"))
-			{	p <- p + ggtitle(label=main)}else{
-				p <- p + opts(title=main)
-			}
-			}else{
-				p <- p + scale_colour_manual(name= "Probability", values=col, breaks=1:2,
-					labels=c("Upper bound","1-Lower bound")) +
-					scale_linetype_manual(name="Probability", values=lty, breaks=1:2,
-					labels=c("Upper bound","1-Lower bound"))
-			}
-			p <- p + geom_text(data=yt, aes(theta, prob, colour=factor(bound), group=1, label=itxt), size=cex*5, show_guide=F)
-			for(i in 1:x$k) p <- p + geom_line(data=subset(y,interim==i&bound==1), 
-				colour=col[1], lty=lty[1], lwd=lwd[1])
-			if (test.type > 2) for(i in 1:(x$k-1)) {
-				p <- p + geom_line(data=subset(y,interim==i&bound==2), colour=col[2], lty=lty[2], lwd=lwd[2])
-		}
-		return(p)
-	}
+"plotgsPower" <- function(x, main="Boundary crossing probabilities by effect size",
+                          ylab="Cumulative Boundary Crossing Probability",
+                          xlab=NULL, lty=NULL, col=NULL, lwd=1, cex=1,
+                          theta=if (is(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta, 
+                          xval=NULL, base=FALSE, outtype=1,...)
+{  ggver <- as.numeric_version(packageVersion('ggplot2'))
+   if (is.null(xval)){
+     if (is(x, "gsDesign")){
+       xval <- x$delta0 + (x$delta1-x$delta0)*theta/x$delta
+       if (is(x, "gsSurv")){
+         xval <- exp(xval)
+         if (is.null(xlab)) xlab <- "Hazard ratio"
+       }else if (is.null(xlab)) xlab <- expression(delta)
+     }else{
+       xval <- theta
+       if (is.null(xlab)) xlab <- expression(theta)
+     }
+   }
+   if (is.null(xlab)) xlab <- ""
+   x <- if (is(x, "gsDesign")) gsProbability(d=x, theta=theta) else 
+     gsProbability(k=x$k, a=x$lower$bound, b=x$upper$bound, n.I=x$n.I, theta=theta)
+   test.type <- ifelse(is(x,"gsProbability"), 3, x$test.type)
+   theta <- xval
+   if (!base && outtype==1){
+     if (is.null(lty)) lty <- x$k:1
+     xu <-data.frame(x$upper$prob)
+     y <- cbind(reshape(xu, varying=names(xu), v.names="Probability", timevar="thetaidx",direction="long"), Bound="Upper bound")
+     if (is.null(col)) col<-1
+     if (is.null(x$test.type) || x$test.type > 1){
+       y <- rbind(
+         cbind(reshape(data.frame(x$lower$prob), varying=names(xu), v.names="Probability", timevar="thetaidx", direction="long"), Bound="1-Lower bound"),
+         y)
+       if (length(col)==1) col <- c(2,1)
+     }
+     y2 <- ddply(y, .(Bound, thetaidx),summarize,Probability=cumsum(Probability))
+     y2$Probability[y2$Bound=="1-Lower bound"]<-1-y2$Probability[y2$Bound=="1-Lower bound"]  
+     y2$Analysis <- factor(y$id)
+     y2$delta <- xval[y$thetaidx]
+     p <- ggplot(y2,aes(x=delta,y=Probability,col=Bound,lty=Analysis))+geom_line(size=lwd)+ylab(ylab) +
+       guides(color=guide_legend(title="Probability")) + xlab(xlab) +
+       scale_linetype_manual(values=lty) +
+       scale_color_manual(values=col) +
+       scale_y_continuous(breaks=seq(0,1,.2))
+     if (ggver >= as.numeric_version("0.9.2")) return(p+ggtitle(label=main))
+     else return(p + opts(title=main))
+   }
+   if (is.null(col)){
+     if (base || outtype==2) col <- c(1,2)
+     else col <- c(2,1)
+   }
+   if (length(col==1)) col=array(col,2)
+   if (is.null(lty)){
+     if(base || outtype==2) lty <- c(1,2)
+     else lty <- c(2,1)
+   }
+   if (length(lty==1)) lty=array(lty,2)
+   if (length(lwd==1)) lwd=array(lwd,2)
+   
+   
+   interim <- array(1,length(xval))
+   bound <- array(1,length(xval)*x$k)
+   boundprob <- x$upper$prob[1,]
+   prob <- boundprob
+   yval <- min(mean(range(x$upper$prob[1,])))
+   xv <- ifelse(xval[2]>xval[1],min(xval[boundprob>=yval]),max(xval[boundprob>=yval]))
+   for(j in 2:x$k)
+   {	theta <- c(theta, xval)
+     interim <- c(interim, array(j, length(xval)))
+     boundprob <- boundprob + x$upper$prob[j,]
+     prob <- c(prob, boundprob)
+     ymid <- mean(range(boundprob))
+     yval <- c(yval, min(boundprob[boundprob >= ymid]))
+     xv <- c(xv, ifelse(xval[2]>xval[1],min(xval[boundprob >= ymid]),max(xval[boundprob>=ymid])))
+   }
+   itxt <- array("Interim",x$k-1)
+   itxt <- paste(itxt,1:(x$k-1),sep=" ")
+   
+   if (is(x, "gsProbability") || (is(x, "gsDesign") && test.type > 1))
+   {
+     itxt <- c(itxt,"Final",itxt)
+     boundprob <- array(1, length(xval))
+     bound <- c(bound, array(2, length(xval)*(x$k-1)))
+     for(j in 1:(x$k-1))
+     {	theta <- c(theta, xval)
+       interim <- c(interim, array(j, length(xval)))
+       boundprob <- boundprob - x$lower$prob[j,]
+       prob <- c(prob, boundprob)
+       ymid <- mean(range(boundprob))
+       yval <- c(yval, min(boundprob[boundprob >= ymid]))
+       xv <- c(xv, ifelse(xval[2]>xval[1], min(xval[boundprob >= ymid]), max(xval[boundprob>=ymid])))
+     }
+   }else {itxt <- c(itxt,"Final")}
+   y <- data.frame(theta=as.numeric(theta), interim=interim, bound=bound, prob=as.numeric(prob),
+                   itxt=as.character(round(prob,2)))
+   y$group=(y$bound==2)*x$k + y$interim
+   bound <- array(1, x$k)
+   interim <- 1:x$k
+   if (test.type > 1)
+   {	bound <- c(bound, array(2, x$k-1))
+     interim <- c(interim, 1:(x$k-1))
+   }
+   yt <- data.frame(theta=xv, interim=interim, bound=bound, prob=yval, itxt=itxt)
+   bound <- array(1, x$k)
+   interim <- 1:x$k
+   if (test.type > 1)
+   {	bound <- c(bound, array(2, x$k-1))
+     interim <- c(interim, 1:(x$k-1))
+   }
+   yt <- data.frame(theta=xv, interim=interim, bound=bound, prob=yval, itxt=itxt)
+   if (base)    
+   {	col2 <- ifelse(length(col) > 1, col[2], col)
+     lwd2 <- ifelse(length(lwd) > 1, lwd[2], lwd)
+     lty2 <- ifelse(length(lty) > 1, lty[2], lty)    
+     
+     ylim <- if (is(x, "gsDesign") && test.type<=2) c(0, 1) else c(0, 1.25)
+     
+     plot(xval, x$upper$prob[1, ], xlab=xlab, main=main, ylab=ylab, 
+          ylim=ylim, type="l", col=col[1], lty=lty[1], lwd=lwd[1], yaxt = "n")
+     
+     if (is(x, "gsDesign") && test.type <= 2)
+     {    
+       axis(2, seq(0, 1, 0.1))
+       axis(4, seq(0, 1, 0.1))
+     }
+     else
+     {    
+       axis(4, seq(0, 1, by=0.1), col.axis=col[1], col=col[1])
+       axis(2, seq(0, 1, .1), labels=1 - seq(0, 1, .1), col.axis=col2, col=col2)
+     }
+     
+     if (x$k == 1)
+     {
+       return(invisible(x))
+     }
+     
+     if ((is(x, "gsDesign") && test.type > 2) || !is(x, "gsDesign"))
+     {    
+       lines(xval, 1-x$lower$prob[1, ], lty=lty2,  col=col2,  lwd=lwd2)
+       plo <- x$lower$prob[1, ]
+       
+       for (i in 2:x$k)
+       {    
+         plo  <-  plo + x$lower$prob[i, ]
+         lines(xval, 1 - plo, lty=lty2,  col=col2,  lwd=lwd2)
+       }
+       
+       temp <- legend("topleft",  legend = c(" ",  " "),  col=col, 
+                      text.width = max(strwidth(c("Upper","Lower"))),  lwd=lwd, 
+                      lty = lty,  xjust = 1,  yjust = 1, 
+                      title = "Boundary")
+       
+       text(temp$rect$left  +  temp$rect$w,  temp$text$y, 
+            c("Upper","Lower"),  col=col,  pos=2)
+     }
+     
+     phi <- x$upper$prob[1, ]
+     
+     for (i in 2:x$k)
+     {    
+       phi <- phi + x$upper$prob[i, ]
+       lines(xval, phi, col=col[1], lwd=lwd[1], lty=lty[1])
+     }
+     colr <- array(col[1], x$k)
+     if (length(yt$theta)>x$k) colr<-c(colr,array(col[2],x$k-1))
+     text(x=yt$theta, y=yt$prob, col=colr, yt$itxt, cex=cex)
+     invisible(x)
+   }
+   else
+   {	p <- ggplot(data=subset(y,interim==1), 
+                 aes(x=theta, y=prob, group=factor(bound),
+                     col=factor(bound), lty=factor(bound))) +
+       geom_line() +
+       scale_x_continuous(xlab)+scale_y_continuous(ylab) +
+       scale_colour_manual(name= "Bound", values=col) +
+       scale_linetype_manual(name= "Bound",  values=lty)
+     if (ggver >= as.numeric_version("0.9.2"))
+     {	p <- p + ggtitle(label=main)}else{
+       p <- p + opts(title=main)
+     }
+     if(test.type == 1)
+     {	p <- p + scale_colour_manual(name= "Probability", values=col, breaks=1,
+                                    labels="Upper bound") +
+         scale_linetype_manual(name="Probability", values=lty[1], breaks=1,
+                               labels="Upper bound")
+       if (ggver >= as.numeric_version("0.9.2"))
+       {	p <- p + ggtitle(label=main)}else{
+         p <- p + opts(title=main)
+       }
+     }else{
+       p <- p + scale_colour_manual(name= "Probability", values=col, breaks=1:2,
+                                    labels=c("Upper bound","1-Lower bound")) +
+         scale_linetype_manual(name="Probability", values=lty, breaks=1:2,
+                               labels=c("Upper bound","1-Lower bound"))
+     }
+     p <- p + geom_text(data=yt, aes(theta, prob, colour=factor(bound), group=1, label=itxt), size=cex*5, show_guide=F)
+     for(i in 1:x$k) p <- p + geom_line(data=subset(y,interim==i&bound==1), 
+                                        colour=col[1], lty=lty[1], lwd=lwd[1])
+     if (test.type > 2) for(i in 1:(x$k-1)) {
+       p <- p + geom_line(data=subset(y,interim==i&bound==2), colour=col[2], lty=lty[2], lwd=lwd[2])
+     }
+     return(p)
+   }
 }

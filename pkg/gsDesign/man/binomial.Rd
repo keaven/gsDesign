@@ -130,7 +130,7 @@ However, the alternative can have \code{p1-p2-delta0}$<0$.
   \code{testBinomial()} and \code{simBinomial()} each return a vector of either Chi-square or Z test statistics. 
   These may be compared to an appropriate cutoff point (e.g., \code{qnorm(.975)} for normal or \code{qchisq(.95,1)} for chi-square). 
   
-  \code{ciBinomial()} returns a vector with a confidence interval.
+  \code{ciBinomial()} returns a data frame with 1 row with a confidence interval; variable names are \code{lower} and \code{upper}.
   
   \code{varBinomial()} returns a vector of (blinded) variance estimates of the difference of event rates (\code{scale="Difference"}), logarithm of the odds-ratio (\code{scale="OR"}) or logarithm of the risk-ratio (\code{scale="RR"}).
   

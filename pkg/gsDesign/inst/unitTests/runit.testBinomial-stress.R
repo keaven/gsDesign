@@ -43,10 +43,12 @@
     checkEquals(target=-Inf,
             current=ciBinomial(scale="OR", x1=96, x2=100, n1=100, n2=100)$lower,
             msg="ciBinomial infinity check #4 failed")
-    checkEquals(target=list(lower=-Inf, upper=Inf),
+# changed targe to data.frame; KA 2013/11/02
+    checkEquals(target=data.frame(lower=-Inf, upper=Inf),
             current=ciBinomial(scale="OR", x1=0, x2=0, n1=100, n2=100),
             msg="ciBinomial infinity check #5 failed")
-    checkEquals(target=list(lower=-Inf, upper=Inf),
+# changed targe to data.frame; KA 2013/11/02
+    checkEquals(target=data.frame(lower=-Inf, upper=Inf),
             current=ciBinomial(scale="OR", x1=100, x2=100, n1=100, n2=100),
             msg="ciBinomial infinity check #6 failed")
 }

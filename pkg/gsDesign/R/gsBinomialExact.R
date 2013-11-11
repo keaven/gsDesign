@@ -1,3 +1,8 @@
+#####
+# global variables used to eliminate warnings in R CMD check
+#####
+globalVariables(c("N","EN","Bound","rr","Percent","Outcome"))
+
 gsBinomialExact <- function(k=2, theta=c(.1, .2), n.I=c(50, 100), a=c(3, 7), b=c(20,30))
 {
     checkScalar(k, "integer", c(2,Inf), inclusion=c(TRUE, FALSE))

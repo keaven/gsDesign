@@ -17,7 +17,9 @@ A stratified population is allowed as in Lachin and Foulkes (1986); this method 
 Stratification also allows power calculation for meta-analyses.
 \code{gsSurv()} combines \code{nSurv()} with \code{gsDesign()} to derive a group sequential design for a study with a time-to-event endpoint.
 
-\code{print()}, \code{xtable()} and \code{summary()} methods are provided to operate on the returned value from \code{gsSurv()}, an object of class \code{gsSurv}. \code{print()} is also extended to \code{nSurv} objects. See also \link{gsDesign print, summary and table summary functions} for output of tabular summaries of bounds for designs produced by \code{gsSurv()}.
+\code{print()}, \code{xtable()} and \code{summary()} methods are provided to operate on the returned value from \code{gsSurv()}, an object of class \code{gsSurv}. \code{print()} is also extended to \code{nSurv} objects.
+The functions \code{\link{gsBoundSummary}} (data frame for tabular output), \code{\link{xprint}} (application of \code{xtable} for tabular output) and \code{summary.gsSurv} (textual summary of \code{gsDesign} or \code{gsSurv} object) may be preferred summary functions; see example in vignettes.
+See also \link{gsDesign print, summary and table summary functions} for output of tabular summaries of bounds for designs produced by \code{gsSurv()}.
 
 Both \code{nEventsIA} and \code{tEventsIA} require a group sequential design for a time-to-event endpoing of class \code{gsSurv} as input.
 \code{nEventsIA} calculates the expected number of events under the alternate hypothesis at a given interim time.
@@ -192,7 +194,7 @@ Other items returned by \code{gsSurv()} are:
 
 }
 
-\seealso{\link{gsDesign package overview}, \link{Plots for group sequential designs}, \code{\link{gsDesign}}, \code{\link{gsHR}}, \code{\link{nSurvival}}}
+\seealso{\code{\link{gsBoundSummary}}, \code{\link{xprint}},\link{gsDesign package overview}, \link{Plots for group sequential designs}, \code{\link{gsDesign}}, \code{\link{gsHR}}, \code{\link{nSurvival}}}
 \author{Keaven Anderson \email{keaven_anderson@merck.com}}
 \references{
 Kim KM and Tsiatis AA (1990), Study duration for clinical trials with survival response and early stopping rule. \emph{Biometrics}, 46, 81-92
