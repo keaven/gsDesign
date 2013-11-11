@@ -31,7 +31,7 @@
 #    gsDProb
 #    gsDErrorCheck
 #
-#  Author(s): Keaven Anderson, PhD. timing/ Jennifer Sun, MS.
+#  Author(s): Keaven Anderson, PhD. / Jennifer Sun, MS.
 # 
 #  Reviewer(s): REvolution Computing 19DEC2008 v.2.0 - William Constantine, Kellie Wills 
 #
@@ -1000,33 +1000,35 @@
     
     # check input for timing of interim analyses
     # if timing not specified, make it equal spacing
-    if (length(x$timing) < 1 || (length(x$timing) == 1 && (x$k > 2 || (x$k == 2 && (x$timing[1] <= 0 || x$timing[1] >= 1)))))
-    {
-        x$timing <- seq(x$k) / x$k
-    }
-    # if timing specified, make sure it is done correctly
-    else if (length(x$timing) == x$k - 1 || length(x$timing) == x$k) 
-    {   
-        if (length(x$timing) == x$k - 1)
-        {
-            x$timing <- c(x$timing, 1)
-        }
- # Allowed final analysis timing to be != 1 ; KA 2009/08/15
- #       else if (x$timing[x$k]!=1)
- #       {
- #           stop("if analysis timing for final analysis is input, it must be 1")           
- #       }
-        
-        if (min(x$timing - c(0,x$timing[1:x$k-1])) <= 0)
-        {
+    # this only needs to be done if x$n.I==0; KA added 2013/11/02
+    if (max(x$n.I)==0){
+      if (length(x$timing) < 1 || (length(x$timing) == 1 && (x$k > 2 || (x$k == 2 && (x$timing[1] <= 0 || x$timing[1] >= 1)))))
+      {
+          x$timing <- seq(x$k) / x$k
+      }
+      # if timing specified, make sure it is done correctly
+      else if (length(x$timing) == x$k - 1 || length(x$timing) == x$k) 
+      {   
+  # put back requirement that final analysis timing must be 1, if specified; KA 2013/11/02
+          if (length(x$timing) == x$k - 1)
+          {
+              x$timing <- c(x$timing, 1)
+          }
+          else if (x$timing[x$k]!=1)
+          {
+            stop("if analysis timing for final analysis is input, it must be 1")           
+          }
+
+          if (min(x$timing - c(0,x$timing[1:(x$k-1)])) <= 0)
+          {
             stop("input timing of interim analyses must be increasing strictly between 0 and 1")           
-        }
+          }
+      }
+      else
+      {
+          stop("value input for timing must be length 1, k-1 or k")
+      }
     }
-    else
-    {
-        stop("value input for timing must be length 1, k-1 or k")
-    }
-    
     # check input values for tol, r
     checkScalar(x$tol, "numeric", c(0, 0.1), c(FALSE, TRUE))
     checkScalar(x$r, "integer", c(1,80))

@@ -11,14 +11,14 @@
 options(width=58)
 @
 \section{Introduction}
-This vignette provides a template for time-to-event sample size calculations for fixed designs using \texttt{nSurv} and group sequential designs using \texttt{gsSurv}.
-It may be useful to edit this template (found in the source for the gsDesign R package in \verb@/inst/doc/gsSurvTemplate.rnw@) so that you can reuse it on a regular basis for sample size calculations for time-to-event study planning.
+This vignette provides a instructions for a template for time-to-event sample size calculations for fixed designs using \texttt{nSurv} and group sequential designs using \texttt{gsSurv}.
+It may be useful to edit the template (found in the source for the gsDesign R package in \verb@/inst/doc/gsSurvTemplate.rnw@) so that you can reuse it on a regular basis for sample size calculations for time-to-event study planning.
 The template only uses the simplest options with a single stratum and exponential failure and dropout rates.
-The template can be modified to accomodate multiple strata and/or piecewise exponential failure and dropout rates; this was not chose here since the more simplest options are a) often used and b) simplest to learn and apply for beginners. 
+The template can be modified to accomodate multiple strata and/or piecewise exponential failure and dropout rates; this was not chosen here since the simplest options are a) often used and b) simplest to learn and apply for beginners. 
 Note that we produce tabular, textual and graphical output; examining the source file to see how this is done will enable you to easily customize to fit your purposes.
 You will need the knitr R package, which I find simpler to use than Sweave (although you could make minor edits and use Sweave).
 I have found using knitr and the RStudio development environment to be a good combination.
-Within this template, we generally show all of the code used to generate results. You will want to suppress this in your own template.
+Within this instruction vignette for the template, we generally show all of the code used to generate results. You will want to suppress this in your own template as demonstrated in \verb@/inst/doc/gsSurvTemplate.rnw@.
 
 
 We apply the \citet{LachinFoulkes} sample size method and extend it to group sequential design.
@@ -29,6 +29,7 @@ While \texttt{nSurv} and \texttt{gsSurv} allow stratified populations and piecew
 Some detail in specification comes with the flexibility allowed by the \citet{LachinFoulkes} method.
 Thus a template is helpful to simplify use. 
 
+\section{Introduction}
 We present a relatively simple example of time-to-event sample size calculation for a group sequential design.
 
 
@@ -73,7 +74,7 @@ x <- nSurv(R=R,gamma=gamma,eta=eta,minfup=minfup,
            T=T,lambdaC=log(2)/median,
            hr=hr,hr0=hr0,beta=beta,alpha=alpha)
 @
-Next we store some text for use in output; only need to edit \texttt{timename}, \texttt{timename1} and \texttt{ep} as the following code is used to format enrollment rate input from above. See the following paragraph below to see where this text is used.
+Next we store some text for use in output; only need to edit \texttt{timename}, \texttt{timename1} and \texttt{ep} as the following code is used to format enrollment rate input from above. See the following paragraph below to see where this text is used. Note that this code is not needed for Table \ref{tab2} produced using \texttt{xprint}.
 <<textstuff,echo=TRUE,results="hide">>=
 # time units
 timename <- "months"
@@ -138,17 +139,20 @@ x <- gsSurv(k=k,timing=timing,R=R,gamma=gamma,eta=eta,
             minfup=minfup,T=T,lambdaC=log(2)/median,
             hr=hr,hr0=hr0,beta=beta,alpha=alpha,
             sfu=sfu,sfupar=sfupar,sfl=sfl,sflpar=sflpar)
-# make a string with enrollment rates (assumes gamma is a single value or vector)
+# make a string with enrollment rates 
+# (assumes gamma is a single value or vector)
 nR <- length(x$R)
-if (nR==1){enrolrates <- paste("constant at a rate of ",round(gamma,1),"per",timename1,".")
+if (nR==1){enrolrates <- paste("constant at a rate of ",
+                          round(gamma,1),"per",timename1,".")
 } else{
 enrolrates <- paste(c("piecewise constant at rates of ",
- paste(round(as.vector(x$gamma),1)," for ",timename," ",cumsum(c(0,x$R[1:(nR-1)])),
+ paste(round(as.vector(x$gamma),1)," for ",timename," ",
+       cumsum(c(0,x$R[1:(nR-1)])),
        "-",cumsum(x$R),collapse=", "),sep=""),collapse="")
 }
 @
 
-For a comparative trial we consider a 2-arm group sequential design with \Sexpr{ep} as the primary endpoint as shown in Table \ref{tab1}.
+For a comparative trial we consider a 2-arm group sequential design with \Sexpr{ep} as the primary endpoint as shown in Table \ref{tab1}; an alternate of the table is demonstrated in \ref{tab2}.
 Timing, number of events, sample size, boundaries (Z-values, nominal p-values, approximate hazard ratios) are shown as well as the probability of crossing study boundaries under the null and alternate hypotheses.
 Bounds are determined by Hwang-Shih-DeCani spending functions with $\gamma=\Sexpr{sfupar}$ ($\alpha$-spending) and $\gamma=\Sexpr{sflpar}$ ($\beta$-spending).
 The median time-to-event is assumed to be \Sexpr{median} \Sexpr{timename} in the control group.
@@ -167,6 +171,13 @@ print(xtable(x,footnote=footnote,caption=caption,
       include.rownames=F, 
       sanitize.text.function=function(x) x)
 @
+
+<<tab2, results="asis",tidy=FALSE,message=FALSE,tidy=FALSE>>=
+xprint(xtable(gsBoundSummary(x, logdelta=TRUE), 
+              digits=4, label="tab2", 
+              caption=summary(x)))
+@
+
 Following are plots of the Z-values (Figure \ref{fig:p1}) and approximate hazard ratios (Figure \ref{fig:p2}) at the design bounds.
 <<p1, fig.height=3.5,tidy=FALSE,fig.cap="Z-value bound plot">>=
 plot(x,cex=.8,xlab="Number of events")

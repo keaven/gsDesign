@@ -87,7 +87,7 @@
     print(y)
   invisible(x)
 }
-"summary.gsDesign" <- function(object, information=FALSE,...){
+"summary.gsDesign" <- function(object, information=FALSE, timeunit="months",...){
   out <- NULL
   if (object$test.type == 1){
     out<- paste(out,"One-sided group sequential design with ",sep="")
@@ -108,11 +108,17 @@
                    " and ", ceiling(object$n.I[object$k]), " events required, ", sep="")
   }else if(information){out <- paste(out," total information ",round(object$n.I[object$k],2),", ",sep="")
   }else out <- paste(out, "sample size ", ceiling(object$n.I[object$k]), ", ",sep="")
-  out <- paste(out, 100 * (1 - object$beta), "% power, ", 100 * object$alpha, "% (1-sided) Type I error",sep="")
+  out <- paste(out, 100 * (1 - object$beta), " percent power, ", 100 * object$alpha, " percent (1-sided) Type I error",sep="")
+  if("gsSurv" %in% class(object)){
+    out <- paste(out," to detect a hazard ratio of ",round(object$hr,2),sep="")
+    if(object$hr0 != 1) out <- paste(out," with a null hypothesis hazard ratio of ",round(object$hr0,2),sep="")
+    out <- paste(out,". Enrollment and total study durations are assumed to be ",round(sum(object$R),1),
+          " and ",round(max(object$T),1)," ",timeunit,", respectively",sep="")
+  }
   if(is.character(object$upper$sf)){
     out <- paste(out, " and ",sep="")
     if(object$upper$sf=="WT"){
-      out <- paste(out, "Wang-Tsiatis bounds with Delta=",object$upper$param,sep="")
+      out <- paste(out, ". Wang-Tsiatis bounds with Delta=",object$upper$param,sep="")
     }else if(object$upper$sf=="Pocock"){
       out <- paste(out, "Pocock bounds")
     }else out <- paste(out, "O'Brien-Fleming bounds",sep="")
@@ -134,9 +140,7 @@
       }
     }
   }
-  out <- paste(out,".",sep="")
-  cat(str_wrap(out,...))
-  invisible(out)
+  return(paste(out,".",sep=""))
 }
 "print.gsDesign" <- function(x, ...)
 {    
@@ -338,7 +342,7 @@ gsBoundSummary <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits
   }
   # delta values corresponding to x$theta
   delta <- x$delta0 + (x$delta1-x$delta0)*x$theta/x$delta
-  if (logdelta) delta <- exp(delta)
+  if (logdelta || "gsSurv" %in% class(x)) delta <- exp(delta)
   # ratio is only used for RR and HR calculations at boundaries
   if("gsSurv" %in% class(x)){
     ratio <- x$ratio

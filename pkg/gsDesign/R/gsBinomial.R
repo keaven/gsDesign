@@ -108,7 +108,7 @@
             upper <- exp(upper)
         }
     }
-    cbind(lower=lower,upper=upper)
+    data.frame(lower=lower,upper=upper)
 }
 
 "nBinomial" <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 

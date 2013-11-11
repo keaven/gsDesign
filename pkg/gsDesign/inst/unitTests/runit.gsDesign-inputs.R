@@ -69,7 +69,7 @@
 	 checkException(gsDesign(timing="abc", k=1), msg="Checking for incorrect variable type", silent=TRUE) 
 	 checkException(gsDesign(timing=-1, k=1), msg="Checking for out-of-range variable value", silent=TRUE) 
 	 checkException(gsDesign(timing=2, k=1), msg="Checking for out-of-range variable value", silent=TRUE) 
-	 checkException(gsDesign(timing=c(0.1, 1.1), k=2), msg="Checking for out-of-range variable value", silent=TRUE) 
+   checkException(gsDesign(timing=c(.1,1.1), k=2), msg="Checking for out-of-range variable value", silent=TRUE) 
 	 checkException(gsDesign(timing=c(0.5, 0.1), k=2), msg="NA", silent=TRUE) 
 	 checkException(gsDesign(timing=c(0.1, 0.5, 1), k=2), msg="Checking for incorrect variable length", silent=TRUE) 
 }

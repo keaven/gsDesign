@@ -175,7 +175,7 @@
     
     dot <- getwd()
     setwd(dir)
-    x <- tools:::md5sum(dir(dir, recursive = TRUE))
+    x <- tools::md5sum(dir(dir, recursive = TRUE))
     setwd(dot)
     
     x <- x[!(names(x) %in% ignore)]
