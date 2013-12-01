@@ -28,13 +28,11 @@
                       target))
 }
 
-
-
 ssrCP <- function(z1, theta=NULL, maxinc=2, overrun=0, 
                   beta = x$beta, cpadj=c(.5,1-beta), 
-                  x=gsDesign(k=2, timing=.5, beta=beta),
+                  x=gsDesign(k=2, timing=.5),
                   z2=z2NC,...){
-  if (class(x)!="gsDesign") 
+  if (class(x)!="gsDesign")
     stop("x must be passed as an object of class gsDesign")
   if (2 != x$k) 
     stop("input group sequential design must have 2 stages (k=2)")
@@ -272,7 +270,7 @@ plot.ssrCP <- function(x, z1ticks=NULL, mar=c(7, 4, 4, 4)+.1, ylab="Adapted samp
             grid$gridwgts *
             pnorm(x$z2fn(grid$z, x=x$x, n2=n2) - 
                     theta[i] * sqrt(n2), lower.tail=FALSE))
-  }else changepoint3 <- x$x$lower$bound[1]
+  }else changepoint3 <- changepoint # changed from x$x$lower$bound[1], 20131201, K Anderson
   # finally, integrate en over area where conditional power is in  
   # range where we wish to increase to desired conditional power
   grid <- normalGrid(mu=(changepoint3+changepoint2)/2, 

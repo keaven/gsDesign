@@ -20,7 +20,7 @@ While the returned data frame should make general plotting easy, the function \c
 }
 \usage{
 ssrCP(z1, theta=NULL, maxinc=2, overrun=0, beta = x$beta, cpadj=c(.5,1-beta), 
-      x=gsDesign(k=2, timing=.5, beta=beta), z2=z2NC,...)
+      x=gsDesign(k=2, timing=.5), z2=z2NC,...)
 \method{plot}{ssrCP}(x, z1ticks=NULL, mar=c(7, 4, 4, 4)+.1, 
       ylab="Adapted sample size", xlaboffset=-.2, lty=1, col=1,...)
 Power.ssrCP(x, theta=NULL, delta=NULL, r=18)            
@@ -194,7 +194,5 @@ ggplot(data=y3,aes(x=delta,y=en,col=CP.effect.size))+geom_line() +
         xlab(expression(delta)) + ylab("Expected sample size")
 # plot power by design and effect size
 ggplot(data=y3,aes(x=delta,y=Power,col=CP.effect.size))+geom_line() + xlab(expression(delta))
-
-
 }
 \keyword{design}
