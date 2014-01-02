@@ -233,6 +233,10 @@ nSurv(lambdaC=matrix(log(2)/c(6,12,18,24),ncol=2), hr=.5,
       eta=matrix(log(2)/c(40,50,45,55),ncol=2), S=3, 
       gamma=matrix(c(3,6,5,7),ncol=2), R=c(5,10), minfup = 12)
 
+# example where only 1 month of follow-up is desired
+# set failure rate to 0 after 1 month using lambdaC and S
+nSurv(lambdaC=c(.4,0),hr=2/3,S=1,minfup=1)
+
 # group sequential design (vary accrual rate to obtain power)
 x<-gsSurv(k=4,sfl=sfPower,sflpar=.5,lambdaC=log(2)/6, hr=.5, 
           eta=log(2)/40,gamma=1, T=36,  minfup = 12)

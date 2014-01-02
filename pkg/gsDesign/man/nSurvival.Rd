@@ -80,6 +80,8 @@ That is,
 \deqn{\hat{\lambda}= \exp(z(1+r)/\sqrt{rn})}
 \deqn{z=log(\hat{\lambda})\sqrt{nr}/(1+r)}
 \deqn{n= (z(1+r)/log(\hat{\lambda}))^2/r.}
+
+\code{hrz2n()} translates an observed interim hazard ratio and interim z-value into the number of events required for the Z-value and hazard ratio to correspond to each other. \code{hrn2z()} translates a hazard ratio and number of events into an approximate corresponding Z-value. \code{zn2hr()} translates a Z-value and number of events into an approximate corresponding hazard ratio. Each of these functions has a default assumption of an underlying hazard ratio of 1 which can be changed using the argument \code{hr0}. \code{hrn2z()} and \code{zn2hr()} also have an argument \code{hr1} which is only used to compute the sign of the computed Z-value in the case of \code{hrn2z()} and whether or not a z-value > 0 corresponds to a hazard ratio > or < the null hazard ratio \code{hr0}.
 }
 
 \value{
