@@ -511,7 +511,7 @@
         x3 <- gsprob(0,x2$I,x2$a,x2$b)
         gspowr <- x3$powr
         I <- x2$I
-        flag <- abs(gspowr-x$alpha)
+        flag <- max(abs(c(gspowr-x$alpha,falsepos - x3$probhi))) # bug fix here, 20140221, KA
         jj <- jj + 1
     }
 
