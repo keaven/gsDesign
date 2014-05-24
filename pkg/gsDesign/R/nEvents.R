@@ -4,16 +4,18 @@
     delta <- -c * (log(hr) - log(hr0))
     if (n[1] == 0)
     {   n <- (qnorm(1-alpha/sided)+qnorm(1-beta))^2/delta^2
-        if (tbl) n <- cbind(hr = hr, n = ceiling(n), alpha = alpha, sided=sided, beta = beta, 
+        if (tbl) n <- data.frame(cbind(hr = hr, n = ceiling(n), alpha = alpha,
+									 sided=sided, beta = beta, 
                             Power = 1-beta, delta = delta, ratio = ratio, 
-                            hr0 = hr0, se = 1/c/sqrt(ceiling(n)))
+                            hr0 = hr0, se = 1/c/sqrt(ceiling(n))))
         return(n)
     }
     else
     {   pwr <- pnorm(-(qnorm(1-alpha/sided)-sqrt(n) * delta))
-        if (tbl) pwr <- cbind(hr = hr, n = n, alpha = alpha, sided=sided, beta = 1-pwr,
+        if (tbl) pwr <- data.frame(cbind(hr = hr, n = n, alpha = alpha,
+									 sided=sided, beta = 1-pwr,
                             Power = pwr, delta = delta, ratio = ratio,
-                            hr0 = hr0, se = sqrt(1/n)/c)
+                            hr0 = hr0, se = sqrt(1/n)/c))
         return(pwr)
     }
 }
