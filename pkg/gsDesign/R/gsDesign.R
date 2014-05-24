@@ -124,14 +124,14 @@
 "gsDesign"<-function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
         delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
         sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I=0, maxn.IPlan=0, 
-        nFixSurv=0, endpoint=NULL, delta1=1, delta0=0) 
+        nFixSurv=0, endpoint=NULL, delta1=1, delta0=0, overrun=0) 
 {
     # Derive a group sequential design and return in a gsDesign structure
     
     # set up class variable x for gsDesign being requested
     x <- list(k=k, test.type=test.type, alpha=alpha, beta=beta, astar=astar,
             delta=delta, n.fix=n.fix, timing=timing, tol=tol, r=r, n.I=n.I, maxn.IPlan=maxn.IPlan,
-            nFixSurv=nFixSurv, nSurv=0, endpoint=endpoint, delta1=delta1, delta0=delta0)
+            nFixSurv=nFixSurv, nSurv=0, endpoint=endpoint, delta1=delta1, delta0=delta0, overrun=overrun)
     
     class(x) <- "gsDesign"
     
@@ -210,14 +210,14 @@
     x
 }
 
-"gsProbability" <- function(k=0, theta, n.I, a, b, r=18, d=NULL)
+"gsProbability" <- function(k=0, theta, n.I, a, b, r=18, d=NULL, overrun=0)
 {
     # compute boundary crossing probabilities and return in a gsProbability structure
     
     # check input arguments
     checkScalar(k, "integer", c(0,30))
     checkVector(theta, "numeric")
-    
+
     if (k == 0)
     {   
         if (!is(d,"gsDesign"))
@@ -228,6 +228,7 @@
     }
     
     # check remaingin input arguments
+    checkVector(overrrun,length=k-1,interval=c(0,Inf),include=c(TRUE,FALSE))
     checkScalar(r, "integer", c(1,80))
     checkLengths(n.I, a, b)
     if (k != length(a))
@@ -248,9 +249,11 @@
     phi <- matrix(xx[[8]], k, ntheta)
     powr <- as.vector(array(1, k) %*% phi)
     futile <- array(1, k) %*% plo
-    en <- as.vector(n.I %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
+    nOver <- c(n.I[1:(k-1)]+overrun,n.I[k])
+    nOver[nOver>n.I[k]] <- n.I[k]
+    en <- as.vector(nOver %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
     x <- list(k=xx[[1]], theta=xx[[3]], n.I=xx[[4]], lower=list(bound=xx[[5]], prob=plo), 
-            upper=list(bound=xx[[6]], prob=phi), en=en, r=r)
+            upper=list(bound=xx[[6]], prob=phi), en=en, r=r, overrun=overrun)
     
     class(x) <- "gsProbability"
     
@@ -345,7 +348,7 @@
     
     # add boundary crossing probabilities for theta to x
     x$theta <- c(0,x$delta)
-    y <- gsprob(x$theta, x$n.I, a, x$upper$bound, r=x$r)
+    y <- gsprob(x$theta, x$n.I, a, x$upper$bound, r=x$r, overrun=x$overrun)
     x$upper$prob <- y$probhi
     x$en <- as.vector(y$en)
 
@@ -426,7 +429,7 @@
     }
     
     x$theta <- c(0, x$delta)
-    y <- gsprob(x$theta, x$n.I, x$lower$bound, x$upper$bound, r=x$r)
+    y <- gsprob(x$theta, x$n.I, x$lower$bound, x$upper$bound, r=x$r, overrun=overrun)
     x$upper$prob <- y$probhi
     x$lower$prob <- y$problo
     x$en <- as.vector(y$en)
@@ -522,7 +525,7 @@
 
     # add boundary crossing probabilities for theta to x
     x$theta <- c(0, x$delta)
-    x4 <- gsprob(x$theta, x2$I, x2$a, x2$b)
+    x4 <- gsprob(x$theta, x2$I, x2$a, x2$b, overrun=x$overrun)
     x$upper$prob <- x4$probhi
     x$lower$prob <- x4$problo
     x$en <- as.vector(x4$en)
@@ -633,7 +636,7 @@
     
     # add boundary crossing probabilities for theta to x
     x$theta <- c(0,x$delta)
-    x4 <- gsprob(x$theta,x$n.I,x$lower$bound,x$upper$bound)
+    x4 <- gsprob(x$theta,x$n.I,x$lower$bound,x$upper$bound,overrun=overrun)
     x$upper$prob <- x4$probhi
     x$lower$prob <- x4$problo
     x$en <- as.vector(x4$en)
@@ -680,7 +683,7 @@
 
     # add boundary crossing probabilities for theta to x
     x$theta <- c(0, x$delta)
-    x4 <- gsprob(x$theta, x$n.I, -x2$b, x1$b)
+    x4 <- gsprob(x$theta, x$n.I, -x2$b, x1$b, overrun=overrun)
     x$upper$prob <- x4$probhi
     x$lower$prob <- x4$problo
     x$en <- as.vector(x4$en)
@@ -720,7 +723,7 @@
     # compute additional error rates needed and add to x
     x$theta <- c(0, x$delta)
     x$falseposnb <- as.vector(gsprob(0, xx$I, array(-20, x$k), x0$b, r=x$r)$probhi)
-    x3 <- gsprob(x$theta, xx$I, xx$a, x0$b, r=x$r)
+    x3 <- gsprob(x$theta, xx$I, xx$a, x0$b, r=x$r, overrun=x$overrun)
     x$upper$prob <- x3$probhi
     x$lower$prob <- x3$problo
     x$en <- as.vector(x3$en)
@@ -797,7 +800,7 @@
     # compute error rates needed and add to x
     x$theta <- c(0,x$delta)
     x$falseposnb <- as.vector(gsprob(0, x$n.I, array(-20, x$k), x$upper$bound,r =x$r)$probhi)
-    x3 <- gsprob(x$theta, x$n.I, x$lower$bound, x$upper$bound, r=x$r)
+    x3 <- gsprob(x$theta, x$n.I, x$lower$bound, x$upper$bound, r=x$r, overrun=overrun)
     x$upper$prob <- x3$probhi
     x$lower$prob <- x3$problo
     x$en <- as.vector(x3$en)
@@ -877,7 +880,7 @@
     x
 }
 
-"gsprob" <- function(theta, I, a, b, r=18)
+"gsprob" <- function(theta, I, a, b, r=18, overrun=0)
 {     
     # gsprob: use call to C routine to compute upper and lower boundary crossing probabilities
     # given theta,  interim sample sizes (information: I),  lower bound (a) and upper bound (b)    
@@ -892,7 +895,9 @@
     phi <- matrix(xx[[8]], nanal, ntheta)
     powr <- array(1, nanal)%*%phi
     futile <- array(1, nanal)%*%plo
-    en <- I %*% (plo+phi) + I[nanal] * (t(array(1, ntheta)) - powr - futile)
+    IOver <- c(I[1:(nanal-1)]+overrun,I[nanal])
+    IOver[IOver>I[nanal]]<-nanal
+    en <- IOver %*% (plo+phi) + I[nanal] * (t(array(1, ntheta)) - powr - futile)
     list(k=xx[[1]], theta=xx[[3]], I=xx[[4]], a=xx[[5]], b=xx[[6]], problo=plo, 
             probhi=phi, powr=powr, en=en, r=r)
 }
@@ -1040,5 +1045,8 @@
     x$test.type <- as.integer(x$test.type)
     x$r <- as.integer(x$r)
     
+    # check overrun vector
+    checkVector(x$overrun,length(x$k-1),interval=c(0,Inf),inclusion=c(TRUE,FALSE))
+  
     x
 }
