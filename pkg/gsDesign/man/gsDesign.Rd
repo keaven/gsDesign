@@ -6,7 +6,7 @@
 gsDesign(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
          delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
          sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I = 0,
-         maxn.IPlan = 0, nFixSurv=0, endpoint=NULL, delta1=1, delta0=0)
+         maxn.IPlan = 0, nFixSurv=0, endpoint=NULL, delta1=1, delta0=0,overrun=0)
 }
 \arguments{
 	\item{k}{Number of analyses planned, including interim and final.}
@@ -60,6 +60,7 @@ timing[k]=1}.}
 
 	\item{delta1}{\code{delta1} and \code{delta0} may be used to store information about the natural parameter scale compared to \code{delta} that is a standardized effect size. \code{delta1} is the alternative hypothesis parameter value on the natural parameter scale (e.g., the difference in two binomial rates).}
   \item{delta0}{\code{delta0} is the null hypothesis parameter value on the natural parameter scale.}
+  \item{overrun}{Scalar or vector of length \code{k-1} with patients enrolled that are not included in each interim analysis.}
 }
 \value{
 An object of the class \code{gsDesign}. This class has the following elements and upon return from 
@@ -77,21 +78,27 @@ sample size \code{n.fix}.}
 \item{timing}{A vector of length \code{k} containing the portion of the total planned information or sample size at each analysis.}
 \item{tol}{As input.}
 \item{r}{As input.}
-\item{upper}{Upper bound spending function, boundary and boundary crossing probabilities under the NULL and
-alternate hypotheses. See \link{Spending function overview} and manual for further details.}
-\item{lower}{Lower bound spending function, boundary and boundary crossing probabilities at each analysis.
-Lower spending is under alternative hypothesis (beta spending) for \code{test.type=3} or \code{4}. 
-For \code{test.type=2}, \code{5} or \code{6}, lower spending is under the null hypothesis.
-For \code{test.type=1}, output value is \code{NULL}. See \link{Spending function overview} and manual.}
 \item{n.I}{Vector of length \code{k}. If values are input, same values are output.
 Otherwise, \code{n.I} will contain the sample size required at each analysis 
 to achieve desired \code{timing} and \code{beta} for the output value of \code{delta}. 
 If \code{delta=0} was input, then this is the sample size required for the specified group sequential design when a fixed design requires a sample size of \code{n.fix}.
 If \code{delta=0} and \code{n.fix=1} then this is the relative sample size compared to a fixed design; see details and examples.}
 \item{maxn.IPlan}{As input.}
+\item{nFixSurv}{As input.}
+\item{nSurv}{Sample size for Lachin and Foulkes method when \code{nSurvival} is used for fixed design input. If \code{nSurvival} is used to compute \code{n.fix}, then \code{nFixSurv} is inflated by the same amount as \code{n.fix} and stored in \code{nSurv}. Note that if you use \code{gsSurv} for time-to-event sample size, this is not needed and a more complete output summary is given.}
 \item{endpoint}{As input.}
 \item{delta1}{As input.}
 \item{delta0}{As input.}
+\item{overrun}{As input.}
+\item{upper}{Upper bound spending function, boundary and boundary crossing probabilities under the NULL and
+alternate hypotheses. See \link{Spending function overview} and manual for further details.}
+\item{lower}{Lower bound spending function, boundary and boundary crossing probabilities at each analysis.
+Lower spending is under alternative hypothesis (beta spending) for \code{test.type=3} or \code{4}. 
+For \code{test.type=2}, \code{5} or \code{6}, lower spending is under the null hypothesis.
+For \code{test.type=1}, output value is \code{NULL}. See \link{Spending function overview} and manual.}
+\item{theta}{Standarized effect size under null (0) and alternate hypothesis. If \code{delta} is input, \code{theta[1]=delta}. If \code{n.fix} is input, \code{theta[1]} is computed using a standard sample size formula (pseudocode): \code{((Zalpha+Zbeta)/theta[1])^2=n.fix}.}
+\item{falseprobnb}{For \code{test.type=4} or \code{6}, this contains false positive probabilities under the null hypothesis assuming that crossing a futility bound does not stop the trial.}
+\item{en}{Expected sample size accounting for early stopping. For time-to-event outcomes, this would be the expected number of events (although \code{gsSurv} will give expected sample size). For information-based-design, this would give the expected information when the trial stops. If \code{overrun} is specified, the expected sample size includes the overrun at each interim.}
 }
 \details{
 Many parameters normally take on default values and thus do not require explicit specification.

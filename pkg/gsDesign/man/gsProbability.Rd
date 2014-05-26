@@ -8,7 +8,7 @@ The print function has been extended using \code{print.gsProbability} to print \
 }
 
 \usage{
-gsProbability(k=0, theta, n.I, a, b, r=18, d=NULL)
+gsProbability(k=0, theta, n.I, a, b, r=18, d=NULL, overrun=0)
 \method{print}{gsProbability}(x,\dots)
 }
 \details{Depending on the calling sequence, an object of class \code{gsProbability} or class \code{gsDesign} is returned.
@@ -34,6 +34,7 @@ design is characterized.
 	When this is specified, the values of \code{k}, \code{n.I}, \code{a}, \code{b}, and \code{r} will be obtained from \code{d} and
 	only \code{theta} needs to be specified by the user.}
   \item{x}{An item of class \code{gsProbability}.}
+  \item{overrun}{Scalar or vector of length \code{k-1} with patients enrolled that are not included in each interim analysis.}
   \item{\dots}{Not implemented (here for compatibility with generic print input).}
 }
 \value{
