@@ -1,4 +1,5 @@
 useDynLib(gsDesign)
+import(RUnit,ggplot2,plyr,stringr,xtable)
 export(gsBoundCP, gsCP, gsPP, gsPI, gsPOS, gsCPOS, gsDensity, gsPosterior)
 export(gsCPz, gsHR, gsDelta, gsBValue, gsRR, hrn2z, hrz2n, zn2hr)
 export(gsBound, gsBound1, gsDesign, gsProbability)

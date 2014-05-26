@@ -227,8 +227,9 @@
         return(gsDProb(theta=theta, d=d))
     }
     
-    # check remaingin input arguments
-    checkVector(overrrun,length=k-1,interval=c(0,Inf),include=c(TRUE,FALSE))
+    # check remaining input arguments
+    checkVector(x=overrun,isType="numeric",interval=c(0,Inf),inclusion=c(TRUE,FALSE))
+    if(length(overrun)!= 1 && length(overrun)!= k-1) stop(paste("overrun length should be 1 or ",as.character(k-1)))
     checkScalar(r, "integer", c(1,80))
     checkLengths(n.I, a, b)
     if (k != length(a))
@@ -249,7 +250,9 @@
     phi <- matrix(xx[[8]], k, ntheta)
     powr <- as.vector(array(1, k) %*% phi)
     futile <- array(1, k) %*% plo
-    nOver <- c(n.I[1:(k-1)]+overrun,n.I[k])
+    if(k==1){nOver <- n.I[k]}else{
+      nOver <- c(n.I[1:(k-1)]+overrun,n.I[k])
+    }
     nOver[nOver>n.I[k]] <- n.I[k]
     en <- as.vector(nOver %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
     x <- list(k=xx[[1]], theta=xx[[3]], n.I=xx[[4]], lower=list(bound=xx[[5]], prob=plo), 
@@ -429,7 +432,7 @@
     }
     
     x$theta <- c(0, x$delta)
-    y <- gsprob(x$theta, x$n.I, x$lower$bound, x$upper$bound, r=x$r, overrun=overrun)
+    y <- gsprob(x$theta, x$n.I, x$lower$bound, x$upper$bound, r=x$r, overrun=x$overrun)
     x$upper$prob <- y$probhi
     x$lower$prob <- y$problo
     x$en <- as.vector(y$en)
@@ -636,7 +639,7 @@
     
     # add boundary crossing probabilities for theta to x
     x$theta <- c(0,x$delta)
-    x4 <- gsprob(x$theta,x$n.I,x$lower$bound,x$upper$bound,overrun=overrun)
+    x4 <- gsprob(x$theta,x$n.I,x$lower$bound,x$upper$bound,overrun=x$overrun)
     x$upper$prob <- x4$probhi
     x$lower$prob <- x4$problo
     x$en <- as.vector(x4$en)
@@ -683,7 +686,7 @@
 
     # add boundary crossing probabilities for theta to x
     x$theta <- c(0, x$delta)
-    x4 <- gsprob(x$theta, x$n.I, -x2$b, x1$b, overrun=overrun)
+    x4 <- gsprob(x$theta, x$n.I, -x2$b, x1$b, overrun=x$overrun)
     x$upper$prob <- x4$probhi
     x$lower$prob <- x4$problo
     x$en <- as.vector(x4$en)
@@ -800,7 +803,7 @@
     # compute error rates needed and add to x
     x$theta <- c(0,x$delta)
     x$falseposnb <- as.vector(gsprob(0, x$n.I, array(-20, x$k), x$upper$bound,r =x$r)$probhi)
-    x3 <- gsprob(x$theta, x$n.I, x$lower$bound, x$upper$bound, r=x$r, overrun=overrun)
+    x3 <- gsprob(x$theta, x$n.I, x$lower$bound, x$upper$bound, r=x$r, overrun=x$overrun)
     x$upper$prob <- x3$probhi
     x$lower$prob <- x3$problo
     x$en <- as.vector(x3$en)
@@ -896,8 +899,8 @@
     powr <- array(1, nanal)%*%phi
     futile <- array(1, nanal)%*%plo
     IOver <- c(I[1:(nanal-1)]+overrun,I[nanal])
-    IOver[IOver>I[nanal]]<-nanal
-    en <- IOver %*% (plo+phi) + I[nanal] * (t(array(1, ntheta)) - powr - futile)
+    IOver[IOver>I[nanal]]<-I[nanal]
+    en <- as.vector(IOver %*% (plo+phi) + I[nanal] * (t(array(1, ntheta)) - powr - futile))
     list(k=xx[[1]], theta=xx[[3]], I=xx[[4]], a=xx[[5]], b=xx[[6]], problo=plo, 
             probhi=phi, powr=powr, en=en, r=r)
 }
@@ -921,7 +924,12 @@
     phi <- matrix(xx[[8]], k, ntheta)
     powr <- as.vector(array(1, k) %*% phi)
     futile <- array(1, k) %*% plo
-    en <- as.vector(n.I %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
+    if (k==1){IOver <- n.I}else{
+      IOver <- c(n.I[1:(k-1)]+d$overrun,n.I[k])
+    }
+    IOver[IOver>n.I[k]]<-n.I[k]
+    en <- as.vector(IOver %*% (plo+phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
+
     d$en <- en
     d$theta <- theta
     d$upper$prob <- phi
@@ -1046,7 +1054,8 @@
     x$r <- as.integer(x$r)
     
     # check overrun vector
-    checkVector(x$overrun,length(x$k-1),interval=c(0,Inf),inclusion=c(TRUE,FALSE))
+    checkVector(x$overrun,interval=c(0,Inf),inclusion=c(TRUE,FALSE))
+    if(length(x$overrun)!= 1 && length(x$overrun)!= x$k-1) stop(paste("overrun length should be 1 or ",as.character(x$k-1)))
   
     x
 }

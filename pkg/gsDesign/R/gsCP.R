@@ -71,7 +71,7 @@
         anew <- array(-20, knew)
     }
     
-    gsProbability(k=knew, theta=theta, n.I=Inew, a=anew, b=bnew, r=r)
+    gsProbability(k=knew, theta=theta, n.I=Inew, a=anew, b=bnew, r=r, overrun=0)
 }
 
 gsPP <- function(x, i=1, zi=0, theta=c(0,3), wgts=c(.5,.5), r=18, total=TRUE)
