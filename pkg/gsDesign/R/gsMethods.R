@@ -104,7 +104,8 @@
               " and ", ceiling(object$n.I[object$k]), " events required, ", sep="")
   }else if ("gsSurv" %in% class(object)){
       out <- paste(out, "time-to-event outcome with sample size ", 
-                   ceiling(object$eNC+object$eNE)[object$k], 
+                   ifelse(object$ratio==1,2*ceiling(object$eNE)[object$k,1],ceiling(object$eNE+object$eNC)[object$k,1]),
+                   #ceiling(object$eNC+object$eNE)[object$k], 
                    " and ", ceiling(object$n.I[object$k]), " events required, ", sep="")
   }else if(information){out <- paste(out," total information ",round(object$n.I[object$k],2),", ",sep="")
   }else out <- paste(out, "sample size ", ceiling(object$n.I[object$k]), ", ",sep="")
