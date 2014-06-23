@@ -446,8 +446,8 @@ gsBoundSummary <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits
     nstat <- 2
   }else{
     nstat <- 4
-    statframe[statframe$Value==statframe$Value[3],]$Analysis <- paste("Events:",ceiling(x$eDC+x$eDE))
-    if (x$ratio==1) N <- 2*ceiling(x$eNE) else N <- ceiling(x$eNE+x$eNC)
+    statframe[statframe$Value==statframe$Value[3],]$Analysis <- paste("Events:",ceiling(rowSums(x$eDC+x$eDE)))
+    if (x$ratio==1) N <- 2*ceiling(rowSums(x$eNE)) else N <- ceiling(rowSums(x$eNE+x$eNC))
     Time <- round(x$T,tdigits)
     statframe[statframe$Value==statframe$Value[4],]$Analysis <- paste(timename,": ",as.character(Time),sep="")
   }
