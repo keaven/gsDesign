@@ -8,6 +8,7 @@
 \title{2.4: Conditional and Predictive Power, Overall and Conditional Probability of Success}
 \description{
 \code{gsCP()} computes conditional boundary crossing probabilities at future planned analyses for a given group sequential design assuming an interim z-statistic at a specified interim analysis.
+While \code{gsCP()} is designed toward computing conditional power for a variety of underlying parameter values, \code{\link{condpower}} is built to compute conditional power for a variety of interim test statistic values which is useful for sample size adaptation (see \code{\link{ssrCP}}).
 \code{gsPP()} averages conditional power across a posterior distribution to compute predictive power.
 \code{gsPI()} computes Bayesian prediction intervals for future analyses corresponding to results produced by \code{gsPP()}. 
 \code{gsPosterior()} computes the posterior density for the group sequential design parameter of interest given a prior density and an interim outcome that is exact or in an interval.
@@ -73,7 +74,7 @@ To ensure a proper prior distribution, you must have \code{sum(gridwgts * densit
 }
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf in the directory where R is installed.}
 
-\seealso{\code{\link{normalGrid}}, \code{\link{gsDesign}}, \code{\link{gsProbability}}, \code{\link{gsBoundCP}}}
+\seealso{\code{\link{normalGrid}}, \code{\link{gsDesign}}, \code{\link{gsProbability}}, \code{\link{gsBoundCP}}, \code{\link{ssrCP}}, \code{\link{condPower}}}
 
 \author{Keaven Anderson \email{keaven\_anderson@merck.}}
 \references{
