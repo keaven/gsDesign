@@ -244,12 +244,13 @@ plot.ssrCP <- function(x, z1ticks=NULL, mar=c(7, 4, 4, 4)+.1, ylab="Adapted samp
                             target=1-x$beta, x=x$x, 
                             n2=x$maxinc*x$x$n.I[2]-x$x$n.I[1],
                             z2=x$z2fn, theta=x$theta)$root
+  
     if (changepoint3 >= changepoint2){
       en <- en + x$maxinc*x$x$n.I[2]*(pnorm(changepoint2-mu)-
                                         pnorm(changepoint-mu))
       a <- changepoint
       b <- changepoint2
-      n2 <- x$x$n.I[2]-x$x$n.I[1]
+      n2 <- x$maxinc*x$x$n.I[2]-x$x$n.I[1]
       grid <- normalGrid(mu=(a+b)/2,bounds=c(a,b),r=r)
       for(i in 1:length(theta)) Power[i] <-  Power[i] +
         sum(dnorm(grid$z-sqrt(x$x$n.I[1])*theta[i]) * 
