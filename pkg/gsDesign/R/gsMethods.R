@@ -10,6 +10,7 @@
 #    print.gsBoundSummary
 #    gsBoundSummary
 #    xprint
+#    summary.spendfn
 #
 #  Hidden Functions:
 #
@@ -104,8 +105,8 @@
               " and ", ceiling(object$n.I[object$k]), " events required, ", sep="")
   }else if ("gsSurv" %in% class(object)){
       out <- paste(out, "time-to-event outcome with sample size ", 
-                   ifelse(object$ratio==1,2*ceiling(object$eNE)[object$k,1],ceiling(object$eNE+object$eNC)[object$k,1]),
-                   #ceiling(object$eNC+object$eNE)[object$k], 
+                   ifelse(object$ratio==1,2*ceiling(rowSums(object$eNE))[object$k],
+                                          (ceiling(rowSums(object$eNE))+ceiling(rowSums(object$eNC)))[object$k]),
                    " and ", ceiling(object$n.I[object$k]), " events required, ", sep="")
   }else if(information){out <- paste(out," total information ",round(object$n.I[object$k],2),", ",sep="")
   }else out <- paste(out, "sample size ", ceiling(object$n.I[object$k]), ", ",sep="")
@@ -116,32 +117,11 @@
     out <- paste(out,". Enrollment and total study durations are assumed to be ",round(sum(object$R),1),
           " and ",round(max(object$T),1)," ",timeunit,", respectively",sep="")
   }
-  if(is.character(object$upper$sf)){
-    out <- paste(out, " and ",sep="")
-    if(object$upper$sf=="WT"){
-      out <- paste(out, ". Wang-Tsiatis bounds with Delta=",object$upper$param,sep="")
-    }else if(object$upper$sf=="Pocock"){
-      out <- paste(out, "Pocock bounds")
-    }else out <- paste(out, "O'Brien-Fleming bounds",sep="")
-  }else{
-    out <- paste(out, ". ",sep="")
-    if(object$test.type < 3){
-      out <- paste(out, "Bounds derived using a ", object$upper$name," spending function",sep="")
-      if(length(object$upper$param)==1){
-        out <- paste(out, " with ", object$upper$parname,"=",object$upper$param,sep="")
-      }
-    }else{
-      out <- paste(out, "Efficacy bounds derived using a ", object$upper$name," spending function",sep="")
-      if(length(object$upper$param)==1){
-        out <- paste(out, " with ", object$upper$parname,"=",object$upper$param,sep="")
-      }
-      out <- paste(out, ". Futility bounds derived using a ", object$lower$name," spending function",sep="")
-      if(length(object$lower$param)==1){
-        out <- paste(out, " with ", object$lower$parname,"=",object$lower$param,sep="")
-      }
-    }
-  }
-  return(paste(out,".",sep=""))
+  if(object$test.type==2){out=paste(out,". Bounds derived using a ",sep="")
+  }else out <- paste(out,". Efficacy bounds derived using a",sep="")
+  out <- paste(out," ",summary(object$upper),".",sep="")
+  if (object$test.type>2) out <- paste(out," Futility bounds derived using a ",summary(object$lower),".",sep="")
+  return(out)
 }
 "print.gsDesign" <- function(x, ...)
 {    
@@ -251,11 +231,11 @@
     
     if (x$test.type>2) 
     {
-        sfprint(x$lower)
+        cat(summary(x$lower),".",sep="")
     }
     
-    cat("++ alpha spending:\n ")
-    sfprint(x$upper) 
+    cat("\n++ alpha spending:\n ")
+    cat(summary(x$upper),".\n",sep="") 
     
     if (x$n.fix==1)
     {
@@ -447,7 +427,7 @@ gsBoundSummary <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits
   }else{
     nstat <- 4
     statframe[statframe$Value==statframe$Value[3],]$Analysis <- paste("Events:",ceiling(rowSums(x$eDC+x$eDE)))
-    if (x$ratio==1) N <- 2*ceiling(rowSums(x$eNE)) else N <- ceiling(rowSums(x$eNE+x$eNC))
+    if (x$ratio==1) N <- 2*ceiling(rowSums(x$eNE)) else N <- ceiling(rowSums(x$eNE))+ceiling(rowSums(x$eNC))
     Time <- round(x$T,tdigits)
     statframe[statframe$Value==statframe$Value[4],]$Analysis <- paste(timename,": ",as.character(Time),sep="")
   }
@@ -502,10 +482,17 @@ print.gsBoundSummary <- function(x,row.names=FALSE,digits=4,...){
         cat("Wang-Tsiatis boundary with Delta =", x$param)
     }
     else if (x$name == "Truncated")
-    {   cat(x$param$name,"spending function truncated at",x$param$trange)
-        if (!is.null(x$parname) && !is.null(x$param))
+    {   cat(x$param$name," spending function compressed to ",x$param$trange[1],", ",x$param$trange[2],sep="")
+        if (!is.null(x$param$parname))
         {
-            cat("\n with", x$parname, "=", x$param$param)
+            cat(" with", x$param$parname, "=", x$param$param)
+        }
+    }
+    else if (x$name == "Trimmed")
+    {   cat(x$param$name," spending function trimmed at ",x$param$trange[1],", ",x$param$trange[2],sep="")
+        if (!is.null(x$param$parname))
+        {
+          cat(" with", x$param$parname, "=", x$param$param)
         }
     }
     else 
@@ -517,4 +504,49 @@ print.gsBoundSummary <- function(x,row.names=FALSE,digits=4,...){
         }
     }
     cat("\n")
+}
+"summary.spendfn" <- function(object,...)
+{   
+  # print spending function information    
+  if (object$name == "OF")
+  {
+    s <- "O'Brien-Fleming boundary"
+  }
+  else if (object$name == "Pocock")
+  {
+    s <- "Pocock boundary"
+  }
+  else if (object$name == "WT")
+  {
+    s <- paste("Wang-Tsiatis boundary with Delta =", object$param)
+  }
+  else if (object$name == "Truncated")
+  {   s <- paste(object$param$name," spending function compressed to ",object$param$trange[1],", ",object$param$trange[2],sep="")
+      if (!is.null(object$param$parname))
+      {
+        s <- paste(s," with", paste(object$param$parname,collapse=" "), "=", paste(object$param$param,collapse=" "))
+      }
+  }
+  else if (object$name == "Trimmed")
+  {   s <- paste(object$param$name," spending function trimmed at ",object$param$trange[1],", ",object$param$trange[2],sep="")
+      if (!is.null(object$param$parname))
+      {
+        s <- paste(s," with", paste(object$param$parname, collapse=" "), "=", paste(object$param$param,collapse=" "))
+      }
+  }
+  else if (object$name == "Gapped")
+  {   s <- paste(object$param$name," spending function no spending in ",object$param$trange[1],", ",object$param$trange[2],sep="")
+      if (!is.null(object$param$parname))
+      {
+        s <- paste(s," with", paste(object$param$parname, collapse=" "), "=", paste(object$param$param,collapse=" "))
+      }
+  }  else 
+  {   
+    s<- paste(object$name, "spending function")
+    if (!is.null(object$parname) && !is.null(object$param))
+    {
+      s<- paste(s,"with", paste(object$parname,collapse=" "), "=", paste(object$param,collapse=" "))
+    }
+  }
+  return(s)
 }

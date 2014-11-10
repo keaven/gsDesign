@@ -1,16 +1,20 @@
 \name{Spending functions}
 \alias{Spending function overview}
 \alias{spendingFunction}
+\alias{summary.spendfn}
 \title{4.0: Spending function overview}
 \description{Spending functions are used to set boundaries for group sequential designs.
 Using the spending function approach to design offers a natural way to provide interim testing boundaries
 when unplanned interim analyses are added or when the timing of an interim analysis changes.
 Many standard and investigational spending functions are provided in the gsDesign package.
 These offer a great deal of flexibility in setting up stopping boundaries for a design.
+
+The \code{summary()} function for \code{spendfn} objects provides a brief textual summary of a spending function or boundary used for a design.
 }
 
 \usage{
 spendingFunction(alpha, t, param)
+\method{summary}{spendfn}(object,...)
 }
 \arguments{
 	\item{alpha}{Real value \eqn{> 0} and no more than 1. Defaults in calls to \code{gsDesign()} are 
@@ -22,8 +26,10 @@ spendingFunction(alpha, t, param)
 	sample size/information for which the spending function will be computed.}
 	\item{param}{A single real value or a vector of real values specifying the spending function parameter(s); 
 	this must be appropriately matched to the spending function specified.}
+  \item{object}{A spendfn object to be summarized.}
+  \item{...}{Not currently used.}
 }
-\value{An object of type \code{spendfn}.
+\value{\code{spendingFunction} and spending functions in general produce an object of type \code{spendfn}.
 \item{name}{A character string with the name of the spending function.}
 \item{param}{any parameters used for the spending function.}
 \item{parname}{a character string or strings with the name(s) of the parameter(s) in \code{param}.}
@@ -71,11 +77,20 @@ x <- gsDesign(k=4, sfu=sfHSD, sfupar=-2, sfl=sfHSD, sflpar=1)
 
 # print the design
 x
+# summarize the spending functions
+summary(x$upper)
+summary(x$lower)
 
 # plot the alpha- and beta-spending functions
 plot(x, plottype=5)
 
-# Example 2: advance example: writing a new spending function  
+# what happens to summary if we used a boundary function design
+x <- gsDesign(test.type=2,sfu="OF")
+y <- gsDesign(test.type=1,sfu="WT",sfupar=.25)
+summary(x$upper)
+summary(y$upper)
+
+# Example 2: advanced example: writing a new spending function  
 # Most users may ignore this!
 
 # implementation of 2-parameter version of

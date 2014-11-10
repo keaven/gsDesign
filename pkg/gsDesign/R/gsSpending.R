@@ -12,12 +12,14 @@
 #    sfLDOF
 #    sfLDPocock
 #    sfLinear
+#    sfStep
 #    sfLogistic
 #    sfNormal
 #    sfPoints
 #    sfPower
 #    sfTDist
 #    sfTruncated
+#    sfTrimmed
 #    spendingFunction
 #
 #  Hidden Functions:
@@ -470,6 +472,62 @@
     x
 }
 
+"sfStep" <- function(alpha, t, param)
+{  
+  x <- list(name="Step ", param=param, parname="line points", sf=sfStep, spend=NULL, 
+            bound=NULL, prob=NULL)
+  
+  class(x) <- "spendfn"
+  checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+  checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+  t[t>1] <- 1
+  
+  if (!is.numeric(param))
+  { 
+    stop("sfStep parameter param must be numeric")
+  }    
+  
+  j <- length(param)
+  if (floor(j / 2) * 2 != j)
+  {
+    stop("sfStep parameter param must have even length")
+  }
+  k <- j/2
+  
+  if (max(param) > 1 || min(param) < 0)
+  {
+    stop("Timepoints and cumulative proportion of spending must be >= 0 and <= 1 in sfStep")
+  }
+  if (k > 1)
+  {   inctime <- x$param[1:k] - c(0, x$param[1:(k-1)])
+      incspend <- x$param[(k+1):j]-c(0, x$param[(k+1):(j-1)])
+      if ((j > 2) && (min(inctime) <= 0))
+      {
+        stop("Timepoints must be strictly increasing in sfStep")
+      }
+      if ((j > 2) && (min(incspend) < 0))
+      {
+        stop("Spending must be non-decreasing in sfStep")
+      }
+      
+  }
+  s <- t
+  s[t<=param[1]|t<0]<-0
+  s[t>=1] <- 1
+  ind <- (0 < t) & (t <= param[1])
+  s[ind] <- param[k + 1]
+  ind <- (1 > t) & (t >= param[k])
+  s[ind] <- param[j]
+  if (k > 1)
+  {   for (i in 2:k)        
+      {   ind <- (param[i - 1] < t) & (t <= param[i])
+          s[ind] <- param[k + i - 1] 
+      }
+  }
+  x$spend <- alpha * s
+  x
+}
+
 "sfPoints" <- function(alpha, t, param)
 {  
     x <- list(name="User-specified", param=param, parname="Points", sf=sfPoints, spend=NULL, 
@@ -636,14 +694,84 @@
    spend<-as.vector(array(0,length(t)))
    spend[t>=param$trange[2]]<-alpha
    indx <- param$trange[1]<t & t<param$trange[2]
-   s <- param$sf(alpha=alpha,t=(t[indx]-param$trange[1])/(param$trange[2]-param$trange[1]),param$param)
-   spend[indx] <- s$spend
-   param$name <- s$name
-   x<-list(name="Truncated", param=param, parname=s$parname, 
-                  sf=sfTruncated, spend=spend, bound=NULL, prob=NULL)
+   if(max(indx)){
+     s <- param$sf(alpha=alpha,t=(t[indx]-param$trange[1])/(param$trange[2]-param$trange[1]),param$param)
+     spend[indx] <- s$spend
+   }
+   # the following line is awkward, but necessary to get the input spending function name in some cases
+   param2 <- param$sf(alpha=alpha,t=.5,param=param$param)
+   param$name <- param2$name
+   param$parname <- param2$parname
+   x<-list(name="Truncated", param=param, parname="range", 
+           sf=sfTruncated, spend=spend, bound=NULL, prob=NULL)
    class(x) <- "spendfn"
    x
 }
+
+"sfTrimmed" <- function(alpha, t, param){
+  checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+  checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+  if (!is.list(param)) stop("param must be a list. See help(sfTrimmed)")
+  if (!max(names(param)=="trange")) stop("param must include trange, sf, param. See help(sfTrimmed)")
+  if (!max(names(param)=="sf")) stop("param must include trange, sf, param. See help(sfTrimmed)")
+  if (!max(names(param)=="param")) stop("param must include trange, sf, param. See help(sfTrimmed)")
+  if (!is.vector(param$trange)) stop("param$trange must be a vector of length 2 with 0 <= param$trange[1] <param$trange[2]<=1. See help(sfTrimmed)") 
+  if (length(param$trange)!=2) stop("param$trange parameter must be a vector of length 2 with 0 <= param$trange[1] <param$trange[2]<=1. See help(sfTrimmed)")
+  if (param$trange[1]>=1. | param$trange[2]<=param$trange[1] | param$trange[2]<=0)
+    stop("param$trange must be a vector of length 2 with 0 <= param$trange[1] < param$trange[2]<=1. See help(sfTrimmed)")
+  if (class(param$sf) != "function") stop("param$sf must be a spending function") 
+  if (!is.numeric(param$param)) stop("param$param must be numeric")
+  spend<-as.vector(array(0,length(t)))
+  spend[t>=param$trange[2]]<-alpha
+  indx <- param$trange[1]<t & t<param$trange[2]
+  if (max(indx)){
+    s <- param$sf(alpha=alpha,t=t[indx],param$param)
+    spend[indx] <- s$spend
+  }
+  # the following line is awkward, but necessary to get the input spending function name in some cases
+  param2 <- param$sf(alpha=alpha,t=.5,param=param$param)
+  param$name <- param2$name
+  param$parname <- param2$parname
+  x<-list(name="Trimmed", param=param, parname="range", 
+          sf=sfTrimmed, spend=spend, bound=NULL, prob=NULL)
+  class(x) <- "spendfn"
+  x
+}
+
+"sfGapped" <- function(alpha, t, param){
+  checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+  checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+  if (!is.list(param)) stop("param must be a list. See help(sfTrimmed)")
+  if (!max(names(param)=="trange")) stop("param must include trange, sf, param. See help(sfGapped)")
+  if (!max(names(param)=="sf")) stop("param must include trange, sf, param. See help(sfGapped)")
+  if (!max(names(param)=="param")) stop("param must include trange, sf, param. See help(sfGapped)")
+  if (!is.vector(param$trange)) stop("param$trange must be a vector of length 2 with 0 < param$trange[1] < param$trange[2]<=1. See help(sfGapped)") 
+  if (length(param$trange)!=2) stop("param$trange parameter must be a vector of length 2 with 0 < param$trange[1] <param$trange[2]<=1. See help(sfGapped)")
+  if (param$trange[1]>=1. | param$trange[2]<=param$trange[1] | param$trange[2]<=0 |param$trange[1]<=0)
+    stop("param$trange must be a vector of length 2 with 0 < param$trange[1] < param$trange[2]<=1. See help(sfTrimmed)")
+  if (class(param$sf) != "function") stop("param$sf must be a spending function") 
+  if (!is.numeric(param$param)) stop("param$param must be numeric")
+  spend<-as.vector(array(0,length(t)))
+  spend[t>=param$trange[2]]<-alpha
+  indx <- param$trange[1]>t
+  if (max(indx)){
+    s <- param$sf(alpha=alpha,t=t[indx],param$param)
+    spend[indx] <- s$spend
+  }
+  indx <- (param$trange[1]<=t & param$trange[2]>t)
+  if (max(indx)){
+     spend[indx] <- param$sf(alpha=alpha,t=param$trange[1],param$param)$spend
+  }
+  # the following line is awkward, but necessary to get the input spending function name in some cases
+  param2 <- param$sf(alpha=alpha,t=.5,param=param$param)
+  param$name <- param2$name
+  param$parname <- param2$parname
+  x<-list(name="Gapped", param=param, parname="range", 
+          sf=sfGapped, spend=spend, bound=NULL, prob=NULL)
+  class(x) <- "spendfn"
+  x
+}
+
 
 "spendingFunction" <- function(alpha, t, param)
 {      
