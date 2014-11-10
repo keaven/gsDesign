@@ -1,17 +1,22 @@
 \name{sfLinear}
 \alias{sfLinear}
+\alias{sfStep}
 
-\title{4.6: Piecewise Linear Spending Function}
+\title{4.6: Piecewise Linear and Step Function Spending Functions}
 \description{The function \code{sfLinear()} allows specification of a piecewise linear spending function.
-This provides complete flexibility in setting spending at desired timepoints in a group sequential design.
-Normally this function will be passed to \code{gsDesign()} in the parameter 
+The function \code{sfStep()} specifies a step function spending function.
+Both functions provide complete flexibility in setting spending at desired timepoints in a group sequential design.
+Normally these function will be passed to \code{gsDesign()} in the parameter 
 \code{sfu} for the upper bound or
 \code{sfl} for the lower bound to specify a spending function family for a design.
-When passed to \code{gsDesign()}, the value of \code{param} would be passed to \code{sfLinear} through the \code{gsDesign()} arguments \code{sfupar} for the upper bound and \code{sflpar} for the lower bound.
+When passed to \code{gsDesign()}, the value of \code{param} would be passed to \code{sfLinear()} or \code{sfStep()} through the \code{gsDesign()} arguments \code{sfupar} for the upper bound and \code{sflpar} for the lower bound.
+
+Note that \code{sfStep()} allows setting a particular level of spending when the timing is not strictly known; an example shows how this can inflate Type I error when timing of analyses are changed based on knowing the treatment effect at an interim.
 }
 
 \usage{
 sfLinear(alpha, t, param)
+sfStep(alpha, t, param)
 }
 \arguments{
 	\item{alpha}{Real value \eqn{> 0} and no more than 1. Normally, 
@@ -20,15 +25,24 @@ sfLinear(alpha, t, param)
 	\item{t}{A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 
 	sample size or information for which the spending function will be computed.}
 	\item{param}{A vector with a positive, even length. Values must range from 0 to 1, inclusive.
-Letting \code{m <- length(param/2)}, the first \code{m} points in param specify increasing values strictly between 0 and 1,
-where the interim timing (proportion of final total statistical information) where spending is to be specified is given. 
-The last \code{m} points in param specify non-decreasing values from 0 to 1, inclusive, 
-with the cumulative proportion of spending at the timepoints in the first part of the vector.}
+Letting \code{m <- length(param/2)}, the first \code{m} points in param specify increasing values strictly between 0 and 1
+corresponding to interim timing (proportion of final total statistical information).
+The last \code{m} points in \code{param} specify non-decreasing values from 0 to 1, inclusive, 
+with the cumulative proportion of spending at the specified timepoints.}
 }
 \value{An object of type \code{spendfn}. 
-The cumulative spending returned in \code{sfLinear$spend} is 0 for \code{t=0} and \code{alpha} for \code{t>=1}. 
+The cumulative spending returned in \code{sfLinear$spend} is 0 for \code{t <= 0} and \code{alpha} for \code{t>=1}. 
 For \code{t} between specified points, linear interpolation is used to determine \code{sfLinear$spend}. 
-See \code{\link{Spending function overview}} for further details.}
+
+The cumulative spending returned in \code{sfStep$spend} is 0 for \code{t<param[1]} and \code{alpha} for \code{t>=1}. 
+Letting \code{m <- length(param/2)}, 
+for \code{i=1,2,...m-1} and \code{ param[i]<= t < param[i+1]}, the cumulative spending is set at \code{alpha * param[i+m]} (also for \code{param[m]<=t<1}). 
+
+Note that if \code{param[2m]} is 1, then the first time an analysis is performed after the last proportion of final planned information (\code{param[m]}) will be the final analysis, using any remaining error that was not previously spent.
+
+See \code{\link{Spending function overview}} for further details.
+}
+
 
 \seealso{\link{Spending function overview}, \code{\link{gsDesign}}, \link{gsDesign package overview}}
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
@@ -55,5 +69,52 @@ sfupar<-c(1/3,2/3,.1,.1)
 x <- gsDesign(sfu=sfLinear, sfl=sfLinear, sfupar=sfupar, sflpar=sflpar)
 plot(x, plottype="sf")
 x
+
+# now do an example where timing of interims changes slightly, but error spending does not
+# also, spend all alpha when at least >=90 percent of final information is in the analysis
+sfupar=c(.2,.4,.9,((1:3)/3)^3)
+x <- gsDesign(k=3,n.fix=100,sfu=sfStep,sfupar=sfupar,test.type=1)
+plot(x,pl="sf")
+# original planned sample sizes
+ceiling(x$n.I)
+# cumulative spending planned at original interims
+cumsum(x$upper$spend)
+# change timing of analyses; 
+# note that cumulative spending "P(Cross) if delta=0" does not change from cumsum(x$upper$spend)
+# while full alpha is spent, power is reduced by reduced sample size
+y <- gsDesign(k=3, sfu=sfStep, sfupar=sfupar, test.type=1,
+              maxn.IPlan=x$n.I[x$k], n.I=c(30,70,95),
+              n.fix=x$n.fix)
+# note that full alpha is used, but power is reduced due to lowered sample size
+gsBoundSummary(y)
+
+# now show how step function can be abused by 'adapting' stage 2 sample size based on interim result
+x <- gsDesign(k=2,delta=.05,sfu=sfStep,sfupar=c(.02,.001),timing=.02,test.type=1)
+# spending jumps from miniscule to full alpha at first analysis after interim 1
+plot(x, pl="sf")
+# sample sizes at analyses:
+ceiling(x$n.I)
+# simulate 1 million stage 1 sum of 178 Normal(0,1) random variables 
+# Normal(0,Variance=178) under null hypothesis
+s1 <- rnorm(1000000,0,sqrt(178))
+# compute corresponding z-values
+z1 <- s1/sqrt(178)
+# set stage 2 sample size to 1 if z1 is over final bound, otherwise full sample size
+n2 <- array(1,1000000)
+n2[z1<1.96]<- ceiling(x$n.I[2])-ceiling(178)
+# now sample n2 observations for second stage
+s2 <- rnorm(1000000,0,sqrt(n2))
+# add sum and divide by standard deviation
+z2 <- (s1+s2)/(sqrt(178+n2))
+# By allowing full spending when final analysis is either 
+# early or late depending on observed interim z1, 
+# Type I error is now almost twice the planned .025
+sum(z1 >= x$upper$bound[1] | z2 >= x$upper$bound[2])/1000000
+# if stage 2 sample size is random and independent of z1 with same frequency, 
+# this is not a problem
+s1alt <- rnorm(1000000,0,sqrt(178))
+z1alt <- s1alt / sqrt(178)
+z2alt <- (s1alt+s2)/sqrt(178+n2)
+sum(z1alt >= x$upper$bound[1] | z2alt >= x$upper$bound[2])/1000000
 }
 \keyword{design}

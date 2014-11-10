@@ -666,8 +666,8 @@ xtable.gsSurv <- function(x, caption=NULL, label=NULL, align=NULL, digits=NULL,
   an[5*(0:(k-1))+1]<-c(paste("IA ",as.character(1:(k-1)),": ",
                              as.character(round(100*x$timing[1:(k-1)],1)), "\\%",sep=""), "Final analysis")
   an[5*(1:(k-1))+1] <- paste("\\hline",an[5*(1:(k-1))+1])
-  an[5*(0:(k-1))+2]<- paste("N:",ceiling(x$eNC[1:x$k]+x$eNE[1:x$k]))
-  an[5*(0:(k-1))+3]<- paste("Events:",ceiling((x$eDC)+(x$eDE)))
+  an[5*(0:(k-1))+2]<- paste("N:",ceiling(rowSums(x$eNC))+ceiling(rowSums(x$eNE)))
+  an[5*(0:(k-1))+3]<- paste("Events:",ceiling(rowSums(x$eDC+x$eDE)))
   an[5*(0:(k-1))+4]<- paste(round(x$T,1),timename,sep=" ")
   fut[5*(0:(k-1))+1]<- as.character(round(x$lower$bound,2))
   eff[5*(0:(k-1))+1]<- as.character(round(x$upper$bound,2)) 

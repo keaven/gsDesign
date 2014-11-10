@@ -1,16 +1,26 @@
 \name{sfTruncated}
 \alias{sfTruncated}
+\alias{sfTrimmed}
+\alias{sfGapped}
 
-\title{4.7a: Truncated spending functions}
-\description{The function \code{sfTruncated()} applies any other spending function over a restricted range.
-This allows eliminating spending for early interim analyses when you desire not to stop for the bound being specified.
-The truncation can come late in the trial.
+\title{4.7a: Truncated, trimmed and gapped spending functions}
+\description{The functions \code{sfTruncated()} and \code{sfTrimmed} apply any other spending function over a restricted range.
+This allows eliminating spending for early interim analyses when you desire not to stop for the bound being specified; this is usually applied to eliminate early tests for a positive efficacy finding.
+The truncation can come late in the trial
 if you desire to stop a trial any time after, say, 90 percent of information is available 
 and an analysis is performed.
+This allows full Type I error spending if the final analysis occurs early.
+Both functions set cumulative spending to 0 below a 'spending interval' in the interval [0,1], and set cumulative spending to 1 above this range.
+\code{sfTrimmed()} otherwise does not change an input spending function that is specified; probably the preferred and more intuitive method in most cases.
+\code{sfTruncated()} resets the time scale on which the input spending function is computed to the 'spending interval.'
+
+\code{sfGapped()} allows elimination of analyses after some time point in the trial; see details and examples.
 }
 
 \usage{
 sfTruncated(alpha, t, param)
+sfTrimmed(alpha, t, param)
+sfGapped(alpha, t, param)
 }
 \arguments{
 	\item{alpha}{Real value \eqn{> 0} and no more than 1. Normally, 
@@ -20,17 +30,25 @@ sfTruncated(alpha, t, param)
 	\item{t}{A vector of points with increasing values from 0 to 1, inclusive. Values of the proportion of 
 	sample size or information for which the spending function will be computed.}
 	\item{param}{a list containing the elements sf (a spendfn object such as sfHSD), trange (the range over which the 
-        spending function increases from 0 to 1; 0 <= trange[1]<trange[2] <=1), and param (null for a spending function with no parameters or a scalar or vector of parameters needed to fully specify the spending function in sf).}
+        spending function increases from 0 to 1; 0 <= trange[1]<trange[2] <=1; for sfGapped, trange[1] must be > 0), and param (null for a spending function with no parameters or a scalar or vector of parameters needed to fully specify the spending function in sf).}
 }
 
 \value{An object of type \code{spendfn}. See \code{\link{Spending function overview}} for further details.}
 \details{
+\code{sfTrimmed} simply computes the value of the input spending function and parameters in the sub-range of [0,1], sets spending to 0 below this range and sets spending to 1 above this range.
+
+\code{sfGapped} spends outside of the range provided in trange. Below trange, the input spending function is used.
+Above trange, full spending is used; i.e., the first analysis performed above the interval in trange is the final analysis.
+As long as the input spending function is strictly increasing, this means that the first interim in the interval trange is the final interim analysis for the bound being specified.
+
 \code{sfTruncated} compresses spending into a sub-range of [0,1].
 The parameter \code{param$trange} specifies the range over which spending is to occur.
 Within this range, spending is spent according to the spending function specified in
 \code{param$sf} along with the corresponding spending function parameter(s) in 
 \code{param$param}.
 See example using \code{sfLinear} that spends uniformly over specified range.
+
+
 }
 
 \seealso{\link{Spending function overview}, \code{\link{gsDesign}}, \link{gsDesign package overview}}
@@ -45,32 +63,67 @@ Boca Raton: Chapman and Hall.
 
 \examples{
 
-# Eliminate spending forany interim at or before 20 percent of information.
+# Eliminate efficacy spending forany interim at or before 20 percent of information.
 # Complete spending at first interim at or after 80 percent of information.
-s<-sfLinear(alpha=.05,t=(0:100)/100,param=c(.5,.5))
-plot((0:100)/100,s$spend,type="l",main="Accelerating spending with sfTruncated",
-xlab="Proportion of information",ylab="Spending")
-s<-sfTruncated(alpha=.05,t=(0:100)/100,param=list(sf=sfLinear,trange=c(.2,.8),param=c(.5,.5)))
-lines(col=2,(0:100)/100,s$spend)
-text("Accelerated (red) spending over interval (.2,.8)",x=.03,y=.045,pos=4)
+tx <- (0:100)/100
+s<-sfHSD(alpha=.05,t=tx,param=1)$spend
+x <- data.frame(t=tx,Spending=s,sf="Original spending")
+param <- list(trange=c(.2,.8),sf=sfHSD,param=1)
+s<-sfTruncated(alpha=.05,t=tx,param=param)$spend
+x <- rbind(x, data.frame(t=tx,Spending=s,sf="Truncated"))
+s<-sfTrimmed(alpha=.05,t=tx,param=param)$spend
+x <- rbind(x, data.frame(t=tx,Spending=s,sf="Trimmed"))
+s <- sfGapped(alpha=.05,t=tx,param=param)$spend
+x <- rbind(x, data.frame(t=tx,Spending=s,sf="Gapped"))
+ggplot(x,aes(x=t,y=Spending,col=sf))+geom_line()
 
-# now apply this in gsDesign
-# note how sfupar is set up to do as above
 
-# 1st version produces an error next to last interim must be before final spend
-# x<-gsDesign(k=5, sfu=sfTruncated, sfupar=list(sf=sfLinear, param=c(.5,.5), 
-# trange=c(.2,.8)))
+# now apply the sfTrimmed version in gsDesign
+# initially, eliminate the early efficacy analysis
+# note: final spend must occur at > next to last interim
+x<-gsDesign(k=4, n.fix=100, sfu=sfTrimmed, 
+            sfupar=list(sf=sfHSD, param=1, trange=c(.3,.9)))
 
-# now final spend occurs at > next to last interim
-x<-gsDesign(k=5, sfu=sfTruncated, sfupar=list(sf=sfLinear, param=c(.5,.5), trange=c(.2,.95)))
-x
+# first upper bound=20 means no testing there
+gsBoundSummary(x)
+
+# now, do not eliminate early efficacy analysis
+param <- list(sf=sfHSD, param=1, trange=c(0,.9))
+x<-gsDesign(k=4, n.fix=100, sfu=sfTrimmed, sfupar=param)
 
 # The above means if final analysis is done a little early, all spending can occur
-# Suppose we skip 4th interim due to fast enrollment and set calendar date
-# based on estimated full information, but come up with only 97 pct of plan
-xA <- gsDesign(k=x$k-1,n.I=c(x$n.I[1:3],.97*x$n.I[5]),test.type=x$test.type, 
-               maxn.IPlan=x$n.I[x$k],sfu=sfTruncated,
-               sfupar=list(sf=sfLinear,  param=c(.5,.5), trange=c(.2,.95)))
-xA
+# Suppose we set calendar date for final analysis based on 
+# estimated full information, but come up with only 97 pct of plan
+xA <- gsDesign(k=x$k, n.fix=100, n.I=c(x$n.I[1:3],.97*x$n.I[4]),
+               test.type=x$test.type, 
+               maxn.IPlan=x$n.I[x$k],
+               sfu=sfTrimmed, sfupar=param)
+# now accelerate without the trimmed spending function
+xNT<- gsDesign(k=x$k, n.fix=100, n.I=c(x$n.I[1:3],.97*x$n.I[4]),
+               test.type=x$test.type, 
+               maxn.IPlan=x$n.I[x$k],
+               sfu=sfHSD, sfupar=1)
+# Check last bound if analysis done at early time 
+x$upper$bound[4]
+# Now look at last bound if done at early time with trimmed spending function
+# that allows capture of full alpha
+xA$upper$bound[4]
+# With original spending function, we don't get full alpha and therefore have
+# unnecessarily stringent bound at final analysis
+xNT$upper$bound[4]
+
+# note that if the last analysis is LATE, all 3 approaches should give the same
+# final bound that has a little larger z-value
+xlate <- gsDesign(k=x$k, n.fix=100, n.I=c(x$n.I[1:3],1.25*x$n.I[4]),
+               test.type=x$test.type, 
+               maxn.IPlan=x$n.I[x$k],
+               sfu=sfHSD, sfupar=1)
+xlate$upper$bound[4]
+
+# eliminate futility after the first interim analysis
+# note that by setting trange[1] to .2, the spend at t=.2 is used for the first
+# interim at or after 20 percent of information
+x <- gsDesign(n.fix=100,sfl=sfGapped,sflpar=list(trange=c(.2,.9),sf=sfHSD,param=1))
+
 }
 \keyword{design}
