@@ -144,3 +144,37 @@ plot.binomialSPRT <- function(x,plottype=1,...){
   return(p)
 }
 
+# predictive probability bound
+binomialPP <- function(a=.2, b=.8, theta=c(.2,.4), p1=.4, PP=c(.025,.95), nIA){
+  # initiate bounds outside of range of possibility
+  upper <- nIA + 1
+  lower <- array(-1,length(nIA))
+  j <- 1
+  # set bounds for each analysis sample size specified
+  for(i in nIA){
+    q <- 0:i
+    # compute posterior probability for value > p1
+    # for each possible outcome at analysis i
+    post <- pbeta(p1, a + q, b + i - q, lower.tail=F)
+    # set upper bound where posterior probability is > PP[2]
+    # that response rate is > p1
+    upper[j] <- sum(post < PP[2])
+    # set lower bound were posterior probability is <= PP[1]
+    # that response rate is < p1
+    lower[j] <- sum(post <= PP[1])
+    j <- j+1
+  }
+  # compute boundary crossing probabilities under 
+  # response rates input in theta
+  y <- gsBinomialExact(k=length(nIA),n.I=nIA,
+                        theta=theta,a=lower,b=upper)
+  # add beta prior parameters to return value
+  y$abeta <- a
+  y$bbeta <- b
+  # add input predictive probability bounds to return value
+  y$PP <- PP
+  # define class for output
+  class(y) <- c("binomialPP","gsBinomialExact","gsProbability")
+  return(y)
+}
+
