@@ -1,12 +1,12 @@
 Package: gsDesign
-Version: 2.9-3
+Version: 2.9-4
 Title: Group Sequential Design
 Author: Keaven Anderson 
 Maintainer: Keaven Anderson <keaven_anderson@merck.com>
 Depends: R (>= 3.0.0), ggplot2, xtable, stringr, RUnit, plyr
-Suggests: knitr
+Suggests: knitr, scales
 VignetteBuilder: knitr 
-Description: gsDesign is a package that derives group sequential designs and describes their properties.
+Description: Derives group sequential designs and describes their properties
 License: GPL (>= 2)
 Copyright: Copyright 2010, Merck Research Laboratories
 Packaged: 2011-12-30 13:26:23 UTC; Anderkea

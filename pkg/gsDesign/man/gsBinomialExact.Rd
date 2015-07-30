@@ -4,7 +4,9 @@
 \alias{plot.gsBinomialExact}
 \alias{binomialSPRT}
 \alias{plot.binomialSPRT}
-\title{3.4: One-Sample Exact Binomial Boundary Crossing Probabilities}
+%\alias{gsBinomialPP}
+\alias{nBinomial1Sample}
+\title{3.4: One-Sample Binomial Routines}
 \description{
 
 \code{gsBinomialExact} computes power/Type I error and expected sample size for a group sequential design
@@ -14,14 +16,20 @@ The print function has been extended using \code{print.gsBinomialExact} to print
 Similarly, a plot function has been extended using \code{plot.gsBinomialExact} to plot \code{gsBinomialExact} objects; see examples.
 
 \code{binomialSPRT} computes a truncated binomial sequential probability ratio test (SPRT) which is a specific instance of an exact binomial group sequential design for a single arm trial with a binary outcome. See, for example, \url{http://theriac.org/DeskReference/viewDocument.php?id=65&SectionsList=3}.
+
+%\code{gsBinomialPP} computes a truncated binomial (group) sequential design based on predictive probability.
+
+\code{nBinomial1Sample} uses exact binomial calculations to compute power and sample size for single arm binomial experiments. 
 }
 
 \usage{
 gsBinomialExact(k=2, theta=c(.1, .2), n.I=c(50, 100), a=c(3, 7), b=c(20,30))
 binomialSPRT(p0,p1,alpha,beta,minn,maxn)
+nBinomial1Sample(p0 = 0.90, p1=0.95, 
+                 alpha = 0.025, beta=NULL, 
+                 n = 200:250, outtype=1, conservative=FALSE)
 \method{plot}{gsBinomialExact}(x,plottype=1,\dots)
 \method{plot}{binomialSPRT}(x,plottype=1,\dots)
-
 }
 \arguments{
 	\item{k}{Number of analyses planned, including interim and final.}
@@ -32,12 +40,15 @@ binomialSPRT(p0,p1,alpha,beta,minn,maxn)
   \item{p0}{Lower of the two response (event) rates hypothesized.}
   \item{p1}{Higher of the two response (event) rates hypothesized.}
   \item{alpha}{Nominal probability of rejecting response (event) rate \code{p0} when it is true (Type I error rate).}
-  \item{beta}{Nominal probability of rejecting response (event) rate \code{p1} when it is trun (Type II error rate).}
+  \item{beta}{Nominal probability of rejecting response (event) rate \code{p1} when it is true (Type II error rate).}
   \item{minn}{Minimum sample size at which sequential testing begins.}
   \item{maxn}{Maximum sample size.}
   \item{x}{Item of class \code{gsBinomialExact} or \code{binomialSPRT} for \code{print.gsBinomialExact}. Item of class \code{gsBinomialExact} for \code{plot.gsBinomialExact}. Item of class \code{binomialSPRT} for item of class \code{binomialSPRT}.}
   \item{plottype}{1 produces a plot with counts of response at bounds (for \code{binomialSPRT}, also produces linear SPRT bounds); 2 produces a plot with power to reject null and alternate response rates as well as the probability of not crossing a bound by the maximum sample size; 3 produces a plot with the response rate at the boundary as a function of sample size when the boundary is crossed; 6 produces a plot of the expected sample size by the underlying event rate (this assumes there is no enrollment beyond the sample size where the boundary is crossed).}
-\item{\dots}{arguments passed through to \code{ggplot}}
+\item{n}{sample sizes to be considered for \code{nBinomial1Sample}. These should be ordered from smallest to largest and be > 0.}
+\item{outtype}{Operative when \code{beta != NULL}. \code{1} means routine will return a single integer sample size while for \code{output=2} or \code{3} a data frame is returned (see Value).}
+\item{conservative}{operative when \code{outtype=1} or \code{2} and \code{beta != NULL}. Default \code{FALSE} selects minimum sample size for which power is at least \code{1-beta}. When \code{conservative=TRUE}, the minimum sample sample size for which power is at least \code{1-beta} and there is no larger sample size in the input \code{n} where power is less than \code{1-beta}.}
+\item{\dots}{arguments passed through to \code{ggplot}.}
 }
 \details{
 \code{gsBinomialExact} is based on the book "Group Sequential Methods with Applications to Clinical Trials,"
@@ -55,6 +66,9 @@ The sequential probability ratio test (SPRT) is a sequential testing scheme allo
 While the linear SPRT bounds are continuous, actual bounds are the integer number of response at or beyond each linear bound for each sample size where testing is performed. Because of the truncation and discretization of the bounds, power and Type I error achieve will be lower than the nominal levels specified by \code{alpha} and \code{beta} which can be altered to produce desired values that are achieved by the planned sample size. See also example that shows computation of Type I error when futility bound is considered non-binding.
 
 Plots produced include boundary plots, expected sample size, response rate at the boundary and power.
+
+\code{gsBinomial1Sample} uses exact binomial computations based on the base R functions \code{qbinom()} and \code{pbinom()}. The tabular output may be convenient for plotting. Note that input variables are largely not checked, so the user is largely responsible for results; it is a good idea to do a run with \code{outtype=3} to check that you have done things appropriately.
+If \code{n} is not ordered (a bad idea) or not sequential (maybe OK), be aware of possible consequences.
 }
 
 \value{
@@ -76,6 +90,18 @@ The object returned from \code{gsBinomialExact()} contains the following element
   \item{beta}{As input. Note that this will exceed the actual Type II error achieved by the design returned.}
   \item{p0}{As input.}
   \item{p1}{As input.}
+  
+\code{nBinomial1Sample} produces an integer if the input \code{outtype=1} and a data frame with the following values otherwise:
+\item{p0}{input null hypothesis event (or response) rate.}
+\item{p1}{input alternative hypothesis (or response) rate; must be \code{> p0}.}
+\item{alpha}{Type I error achieved for each output value of \code{n}; less than or equal to the input value \code{alpha}.}
+\item{beta}{Type II error achieved for each output value of \code{n}.}
+\item{Power}{\code{1} minus the output \code{beta} value.}
+\item{n}{sample size.}
+\item{b}{cutoff given \code{n} to control Type I error; value is \code{NULL} if no such value exists.}
+
+Note that when the input \code{1 > beta > alpha > 0} from the input \code{n} for which the power is at least \code{1-beta} or \code{NULL} if no input sample size satisfies the desired.
+
 }
 \seealso{\code{\link{gsProbability}}}
 \note{The manual is not linked to this help file, but is available in library/gsdesign/doc/gsDesignManual.pdf
@@ -84,6 +110,8 @@ in the directory where R is installed.}
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.
+
+Code for nBinomial1Sample was based on code developed by marc_schwartz@me.com. 
 } 
 
 \examples{
@@ -111,5 +139,28 @@ plot(x,plottype=2)
 plot(x,plottype=3)
 # Expect sample size at boundary crossing or end of trial
 plot(x,plottype=6)
+
+# sample size for single arm exact binomial
+
+# plot of table of power by sample size
+nb1 <- nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:40, outtype=3)
+nb1
+library(scales)
+ggplot(nb1,aes(x=n,y=Power))+geom_line()+geom_point()+scale_y_continuous(labels=percent)
+
+# simple call with same parameters to get minimum sample size yielding desired power
+nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:40)
+
+# change to 'conservative' if you want all larger sample
+# sizes to also provide adequate power
+nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:40, conservative=TRUE)
+
+# print out more information for the selected derived sample size
+nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:40, conservative=TRUE,outtype=2)
+
+# what happens if input sample sizes not sufficient?
+nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:30)
+
+
 }
 \keyword{design}
