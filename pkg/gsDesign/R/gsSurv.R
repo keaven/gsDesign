@@ -558,7 +558,9 @@ nEventsIA <- function(tIA=5, x=NULL, target=0, simple=TRUE)
     Tfinal=x$T[length(x$T)], minfup=x$minfup)
   if (simple) 
   {   if (class(x)[1] == "gsSize") d<-x$d
-      else d <- sum(x$eDC[length(x$eDC)]+x$eDE[length(x$eDE)])
+#OLD      else d <- sum(x$eDC[length(x$eDC)]+x$eDE[length(x$eDE)])
+      else if(!is.matrix(x$eDC)) d <- sum(x$eDC[length(x$eDC)]+x$eDE[length(x$eDE)])
+      else d <- sum(x$eDC[nrow(x$eDC),]+x$eDE[nrow(x$eDE),])
       return(sum(eDC$d+eDE$d)-target*d)
   }
   else return(list(T=tIA,eDC=eDC$d,eDE=eDE$d,eNC=eDC$n,eNE=eDE$n))
