@@ -35,12 +35,12 @@ nBinomial1Sample(p0 = 0.90, p1=0.95,
 	\item{k}{Number of analyses planned, including interim and final.}
 	\item{theta}{Vector of possible underling binomial probabilities for a single binomial sample.}
 	\item{n.I}{Sample size at analyses (increasing positive integers); vector of length k.}
-	\item{a}{Number of "successes" required to cross lower bound cutoffs for futility or harm at each analysis; vector of length k; -1 means no lower bound.}
-	\item{b}{Number of "successes" required to cross upper bound cutoffs for futility or harm at each analysis; vector of length k.}
+	\item{a}{Number of "successes" required to cross lower bound cutoffs to reject \code{p1} in favor of \code{p0} at each analysis; vector of length k; -1 means no lower bound.}
+	\item{b}{Number of "successes" required to cross upper bound cutoffs for rejecting \code{p0} in favor of \code{p1} at each analysis; vector of length k.}
   \item{p0}{Lower of the two response (event) rates hypothesized.}
   \item{p1}{Higher of the two response (event) rates hypothesized.}
-  \item{alpha}{Nominal probability of rejecting response (event) rate \code{p0} when it is true (Type I error rate).}
-  \item{beta}{Nominal probability of rejecting response (event) rate \code{p1} when it is true (Type II error rate).}
+  \item{alpha}{Nominal probability of rejecting response (event) rate \code{p0} when it is true.}
+  \item{beta}{Nominal probability of rejecting response (event) rate \code{p1} when it is true.}
   \item{minn}{Minimum sample size at which sequential testing begins.}
   \item{maxn}{Maximum sample size.}
   \item{x}{Item of class \code{gsBinomialExact} or \code{binomialSPRT} for \code{print.gsBinomialExact}. Item of class \code{gsBinomialExact} for \code{plot.gsBinomialExact}. Item of class \code{binomialSPRT} for item of class \code{binomialSPRT}.}
@@ -63,7 +63,9 @@ For final analysis, set a[k] equal to b[k]-1 to incorporate all possibilities in
 
 The sequential probability ratio test (SPRT) is a sequential testing scheme allowing testing after each observation. This likelihood ratio is used to determine upper and lower cutoffs which are linear and parallel in the number of responses as a function of sample size. 
 \code{binomialSPRT} produces a variation the the SPRT that tests only within a range of sample sizes.
-While the linear SPRT bounds are continuous, actual bounds are the integer number of response at or beyond each linear bound for each sample size where testing is performed. Because of the truncation and discretization of the bounds, power and Type I error achieve will be lower than the nominal levels specified by \code{alpha} and \code{beta} which can be altered to produce desired values that are achieved by the planned sample size. See also example that shows computation of Type I error when futility bound is considered non-binding.
+While the linear SPRT bounds are continuous, actual bounds are the integer number of response at or beyond each linear bound for each sample size where testing is performed. Because of the truncation and discretization of the bounds, power and Type I error achieve will be lower than the nominal levels specified by \code{alpha} and \code{beta} which can be altered to produce desired values that are achieved by the planned sample size. See also example that shows computation of Type I error when futility bound is considered non-binding. 
+
+Note that if the objective of a design is to demonstrate that a rate (e.g., failure rate) is lower than a certain level, two approaches can be taken. First, 1 minus the failure rate is the success rate and this can be used for planning. Second, the role of \code{beta} becomes to express Type I error and \code{alpha} is used to express Type II error.
 
 Plots produced include boundary plots, expected sample size, response rate at the boundary and power.
 
@@ -92,15 +94,15 @@ The object returned from \code{gsBinomialExact()} contains the following element
   \item{p1}{As input.}
   
 \code{nBinomial1Sample} produces an integer if the input \code{outtype=1} and a data frame with the following values otherwise:
-\item{p0}{input null hypothesis event (or response) rate.}
-\item{p1}{input alternative hypothesis (or response) rate; must be \code{> p0}.}
-\item{alpha}{Type I error achieved for each output value of \code{n}; less than or equal to the input value \code{alpha}.}
-\item{beta}{Type II error achieved for each output value of \code{n}.}
-\item{Power}{\code{1} minus the output \code{beta} value.}
+\item{p0}{Input null hypothesis event (or response) rate.}
+\item{p1}{Input alternative hypothesis (or response) rate; must be \code{> p0}.}
+\item{alpha}{Input Type I error.}
+\item{beta}{Input Type II error except when input is \code{NULL} in which case realized Type II error is computed.}
+\item{alphaR}{Type I error achieved for each output value of \code{n}; less than or equal to the input value \code{alpha}.}
+\item{Power}{Power achived for each output value of \code{n}.}
 \item{n}{sample size.}
 \item{b}{cutoff given \code{n} to control Type I error; value is \code{NULL} if no such value exists.}
 
-Note that when the input \code{1 > beta > alpha > 0} from the input \code{n} for which the power is at least \code{1-beta} or \code{NULL} if no input sample size satisfies the desired.
 
 }
 \seealso{\code{\link{gsProbability}}}

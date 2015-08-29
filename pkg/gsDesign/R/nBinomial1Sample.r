@@ -16,20 +16,19 @@ nBinomial1Sample <- function(p0 = 0.90, p1=0.95,
   # proportion
   Power <- pbinom(CritVal - 1, n, p1, lower.tail=FALSE)
   bta <- 1 - Power
-  if (outtype==3 || is.null(beta)) return(data.frame(p0=p0, p1=p1, 
-                                                     alpha=Alpha, beta=bta, 
-                                                     Power=Power, n=n, b=CritVal))
+  if (is.null(beta)) beta <- bta
+  if (outtype==3 || is.null(beta)) return(data.frame(p0=p0, p1=p1, alpha=alpha, beta=beta, 
+                                                     n=n, b=CritVal,
+                                                     alphaR=Alpha, Power=Power))
   if (max(Power)<Pow) return(NULL)
+  if (is.null(beta)) beta <- 1-Power
   # Find the smallest sample size yielding at least the required power
   if (!conservative){SampSize <- min(which(Power >= Pow))
   }else if (min(Power >= Pow)==1){SampSize=1
   }else SampSize <- max(which(Power < Pow)) + 1
 
-  if (outtype==2) return(data.frame(p0=p0, p1=p1, alpha=Alpha[SampSize],beta=beta,
-                                    n=SampSize,b=CritVal[SampSize],
-              alphaR=Alpha[SampSize], Power=Power[SampSize]))
+  if (outtype==2) return(data.frame(p0=p0, p1=p1, alpha=alpha, beta=beta,
+                                    n=n[SampSize], b=CritVal[SampSize],
+                                    alphaR=Alpha[SampSize], Power=Power[SampSize]))
   return(n[SampSize])
 }
-
-
-
