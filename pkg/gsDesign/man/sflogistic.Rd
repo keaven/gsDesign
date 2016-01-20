@@ -57,7 +57,7 @@ normal for \code{sfNormal()}, extreme value for \code{sfExtremeValue()} and Cauc
 \eqn{F^{-1}()} is its inverse.
 
 For the logistic spending function this simplifies to
-\deqn{f(t;\alpha,a,b)\alpha (1-(1+e^a(t/(1-t))^b)^{-1}).}
+\deqn{f(t;\alpha,a,b)=\alpha (1-(1+e^a(t/(1-t))^b)^{-1}).}
 
 For the extreme value distribution with \deqn{F(x)=\exp(-\exp(-x))} this simplifies to 
 \deqn{f(t;\alpha,a,b)=\alpha \exp(-e^a (-\ln t)^b).} 

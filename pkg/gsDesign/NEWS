@@ -10,3 +10,12 @@
 
 2.9-4, July, 2015
 - Added initial version of nBinomial1Sample to compute sample size and power for 1-sample binomial testing.
+
+3.0-0, December, 2015
+- Updated xtable extension to meet R standards for extensions. 
+- Fixed xtable.gsSurv and print.gsSurv to work with 1-sided designs
+- Update to calls to ggplot to replace show_guide (deprecated) with show.legend arguments where used in geom_text (function from ggplot2 package) calls; no user impact
+- Minor typo fixed in sfLogistic help file
+- Cleaned up "imports" and "depends" in an effort to be an R "good citizen"
+- Registered S3 methods in NAMESPACE
+
