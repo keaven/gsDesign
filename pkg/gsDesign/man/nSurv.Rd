@@ -39,7 +39,7 @@ gsSurv(k=3, test.type=4, alpha=0.025, sided=1,
   tol = .Machine$double.eps^0.25)
 \method{print}{gsSurv}(x,digits=2,...)
 \method{xtable}{gsSurv}(x, caption=NULL, label=NULL, align=NULL, digits=NULL,
-       display=NULL, footnote=NULL, fnwid="9cm", timename="months",...)
+       display=NULL, auto=FALSE, footnote=NULL, fnwid="9cm", timename="months",...)
 tEventsIA(x, timing=.25, tol = .Machine$double.eps^0.25)
 nEventsIA(tIA=5, x=NULL, target=0, simple=TRUE)
 }
@@ -104,6 +104,7 @@ timing[k]=1}. For \code{tEventsIA}, this is a scalar strictly between 0 and 1 th
 \item{label}{passed through to generic \code{xtable()}.}
 \item{align}{passed through to generic \code{xtable()}.}
 \item{display}{passed through to generic \code{xtable()}.}
+\item{auto}{passed through to generic \code{xtable()}.}
 \item{...}{other arguments that may be passed to generic functions underlying the methods here.}
 }
 

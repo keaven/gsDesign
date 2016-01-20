@@ -198,7 +198,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 		if (x$test.type > 1)
 		{ p <- ggplot(data=y, aes(x=as.numeric(N), y=as.numeric(Z), group=factor(Bound),
             	col=factor(Bound), label=Ztxt, lty=factor(Bound))) +
-            	geom_text(show_guide=F,size=cex*5)+geom_line()  +
+            	geom_text(show.legend=F,size=cex*5)+geom_line()  +
             	scale_x_continuous(xlab)+scale_y_continuous(ylab) +
   			scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
 			scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
@@ -230,14 +230,14 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 			{	text(x=y2$N, y=y2$Z, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
 			{	y2$Ztxt <- paste(array("r=",x$k), y2$Ztxt, sep="")
-				p <- p + geom_text(data=y2, aes(group=factor(Bound), label=Ztxt), size=cex*5, show_guide=F, colour=1)
+				p <- p + geom_text(data=y2, aes(group=factor(Bound), label=Ztxt), size=cex*5, show.legend=F, colour=1)
 			}
 		}else
 		{	if(base)
 			{	text(x=y2$N, y=y2$Z, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
 			{	y2$Ztxt <- paste(array("N=",x$k), y2$Ztxt, sep="")
-				p <- p + geom_text(data=y2, aes(group=factor(Bound),label=Ztxt), size=cex*5, show_guide=F, colour=1)
+				p <- p + geom_text(data=y2, aes(group=factor(Bound),label=Ztxt), size=cex*5, show.legend=F, colour=1)
 			}
 	}	}
 	if (base)
@@ -338,7 +338,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 		{	lbls <- c("Lower","Upper")
       p <- ggplot(data=y, aes(x=as.numeric(N), y=as.numeric(CP), group=factor(Bound),
         col=factor(Bound), label=Ztxt, lty=factor(Bound))) +
-        geom_text(show_guide=F, size=cex*5)+geom_line() + 
+        geom_text(show.legend=F, size=cex*5)+geom_line() + 
         scale_x_continuous(xlab)+scale_y_continuous(ylab)  +
   	    scale_colour_manual(name= "Bound", values=col, labels=lbls, breaks=lbls) +
 		    scale_linetype_manual(name= "Bound", values=lty, labels=lbls, breaks=lbls)
@@ -719,7 +719,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
          scale_linetype_manual(name="Probability", values=lty, breaks=1:2,
                                labels=c("Upper bound","1-Lower bound"))
      }
-     p <- p + geom_text(data=yt, aes(theta, prob, colour=factor(bound), group=1, label=itxt), size=cex*5, show_guide=F)
+     p <- p + geom_text(data=yt, aes(theta, prob, colour=factor(bound), group=1, label=itxt), size=cex*5, show.legend=F)
      for(i in 1:x$k) p <- p + geom_line(data=subset(y,interim==i&bound==1), 
                                         colour=col[1], lty=lty[1], lwd=lwd[1])
      if (test.type > 2) for(i in 1:(x$k-1)) {
