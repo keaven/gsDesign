@@ -15,7 +15,7 @@ This can also be used to compare event rates in two-arm studies.
 The print function has been extended using \code{print.gsBinomialExact} to print \code{gsBinomialExact} objects; see examples.
 Similarly, a plot function has been extended using \code{plot.gsBinomialExact} to plot \code{gsBinomialExact} objects; see examples.
 
-\code{binomialSPRT} computes a truncated binomial sequential probability ratio test (SPRT) which is a specific instance of an exact binomial group sequential design for a single arm trial with a binary outcome. See, for example, \url{http://theriac.org/DeskReference/viewDocument.php?id=65&SectionsList=3}.
+\code{binomialSPRT} computes a truncated binomial sequential probability ratio test (SPRT) which is a specific instance of an exact binomial group sequential design for a single arm trial with a binary outcome. 
 
 %\code{gsBinomialPP} computes a truncated binomial (group) sequential design based on predictive probability.
 
