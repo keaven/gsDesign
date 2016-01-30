@@ -1,10 +1,10 @@
 Package: gsDesign
-Version: 3.0-0
+Version: 3.0-1
 Title: Group Sequential Design
 Author: Keaven Anderson 
 Maintainer: Keaven Anderson <keaven_anderson@merck.com>
 Depends: R (>= 3.0.0), xtable, ggplot2
-Imports: plyr
+Imports: plyr, methods
 Suggests: knitr, scales
 VignetteBuilder: knitr 
 Description: Derives group sequential designs and describes their properties.
