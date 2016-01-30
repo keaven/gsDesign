@@ -1,5 +1,13 @@
 useDynLib(gsDesign)
 import(plyr, xtable, ggplot2)
+importFrom("graphics", "axis", "legend", "lines", "matplot",
+           "matpoints", "mtext", "par", "plot", "points", "strwidth",
+           "text")
+importFrom("methods", "is")
+importFrom("stats", "dbinom", "dnorm", "nlminb", "pbeta", "pbinom",
+          "pcauchy", "pchisq", "pnorm", "pt", "qbinom", "qcauchy",
+          "qchisq", "qnorm", "qt", "rbinom", "reshape", "uniroot")
+importFrom("utils", "packageVersion")
 export(gsBoundCP, gsCP, gsPP, gsPI, gsPOS, gsCPOS, gsDensity, gsPosterior)
 export(gsCPz, gsHR, gsDelta, gsBValue, gsRR, hrn2z, hrz2n, zn2hr)
 export(gsBound, gsBound1, gsDesign, gsProbability)
