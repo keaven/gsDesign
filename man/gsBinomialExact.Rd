@@ -171,7 +171,7 @@ nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:40, conservati
 nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:40, conservative=TRUE,outtype=2)
 
 # what happens if input sample sizes not sufficient?
-nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:30)
+# nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:30)
 
 
 }
