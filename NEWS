@@ -1,3 +1,5 @@
+3.0-4, July, 2017
+- Cleaned up documentation for nBinomial1Sample
 
 3.0-4, February, 2017
 - Updated documentation and code (including one default value for an argument) for nBinomial1Sample to improve error handling and clarity 

@@ -40,13 +40,13 @@ nBinomial1Sample(p0 = 0.90, p1=0.95,
   \item{p0}{Lower of the two response (event) rates hypothesized.}
   \item{p1}{Higher of the two response (event) rates hypothesized.}
   \item{alpha}{Nominal probability of rejecting response (event) rate \code{p0} when it is true.}
-  \item{beta}{Nominal probability of rejecting response (event) rate \code{p1} when it is true.}
+  \item{beta}{Nominal probability of rejecting response (event) rate \code{p1} when it is true. If NULL, Type II error will be computed for all input values of \code{n} and output will be in a data frame.}
   \item{minn}{Minimum sample size at which sequential testing begins.}
   \item{maxn}{Maximum sample size.}
   \item{x}{Item of class \code{gsBinomialExact} or \code{binomialSPRT} for \code{print.gsBinomialExact}. Item of class \code{gsBinomialExact} for \code{plot.gsBinomialExact}. Item of class \code{binomialSPRT} for item of class \code{binomialSPRT}.}
   \item{plottype}{1 produces a plot with counts of response at bounds (for \code{binomialSPRT}, also produces linear SPRT bounds); 2 produces a plot with power to reject null and alternate response rates as well as the probability of not crossing a bound by the maximum sample size; 3 produces a plot with the response rate at the boundary as a function of sample size when the boundary is crossed; 6 produces a plot of the expected sample size by the underlying event rate (this assumes there is no enrollment beyond the sample size where the boundary is crossed).}
 \item{n}{sample sizes to be considered for \code{nBinomial1Sample}. These should be ordered from smallest to largest and be > 0.}
-\item{outtype}{Operative when \code{beta != NULL}. \code{1} means routine will return a single integer sample size while for \code{output=2} or \code{3} a data frame is returned (see Value).}
+\item{outtype}{Operative when \code{beta != NULL}. \code{1} means routine will return a single integer sample size while for \code{output=2}a data frame is returned (see Value); note that this not operative is \code{beta} is \code{NULL} in which case a data table is returned with Type II error and power for each input value of \code{n}.}
 \item{conservative}{operative when \code{outtype=1} or \code{2} and \code{beta != NULL}. Default \code{FALSE} selects minimum sample size for which power is at least \code{1-beta}. When \code{conservative=TRUE}, the minimum sample sample size for which power is at least \code{1-beta} and there is no larger sample size in the input \code{n} where power is less than \code{1-beta}.}
 \item{\dots}{arguments passed through to \code{ggplot}.}
 }
@@ -148,13 +148,14 @@ plot(x)
 plot(x,plottype=2)
 # Response (event) rate at boundary
 plot(x,plottype=3)
-# Expect sample size at boundary crossing or end of trial
+# Expected sample size at boundary crossing or end of trial
 plot(x,plottype=6)
 
 # sample size for single arm exact binomial
 
 # plot of table of power by sample size
-nb1 <- nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:40, outtype=3)
+# note that outtype need no be specified if beta is NULL
+nb1 <- nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=NULL, n = 25:40)
 nb1
 library(scales)
 ggplot(nb1,aes(x=n,y=Power))+geom_line()+geom_point()+scale_y_continuous(labels=percent)
