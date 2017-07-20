@@ -53,19 +53,29 @@
         stop("gsCP must have x$lower$bound[i]<=zi<=x$upper$bound[i]")            
     }
   
-    if (is.null(theta))
-    {
-        theta <- c(zi/sqrt(x$n.I[i]), 0, x$delta)
-    }
-    
+    if (is.null(theta)) theta <- c(zi/sqrt(x$n.I[i]), 0, x$delta)
+
     knew <- x$k-i
     Inew <- x$n.I[(i+1):x$k]-x$n.I[i]
-    bnew <- (x$upper$bound[(i+1):x$k] - zi * sqrt(x$n.I[i] / x$n.I[(i+1):x$k]))/ 
-            sqrt(Inew/x$n.I[(i+1):x$k])
+    
+# update KA, 20160213
+    if (is.null(x$timing)) x$timing <- x$n.I/x$n.I[x$k]
+    bnew <- (x$upper$bound[(i+1):x$k]*sqrt(x$timing[(i+1):x$k]) - zi*sqrt(x$timing[i]))/
+            sqrt(x$timing[(i+1):x$k]-x$timing[i])
+# while equivalent, above code is simpler expression of what is in write-up    
+#    bnew <- (x$upper$bound[(i+1):x$k] - zi * sqrt(x$n.I[i] / x$n.I[(i+1):x$k]))/ 
+#            sqrt(Inew/x$n.I[(i+1):x$k])
+# end update
+    
     if (test.type > 1){
-        anew <- (x$lower$bound[(i+1):x$k]-zi*sqrt(x$n.I[i]/x$n.I[(i+1):x$k]))/
-                sqrt(Inew/x$n.I[(i+1):x$k])        
-    }
+# update KA, 20160213
+      anew <- (x$lower$bound[(i+1):x$k]*sqrt(x$timing[(i+1):x$k]) - zi*sqrt(x$timing[i]))/
+        sqrt(x$timing[(i+1):x$k]-x$timing[i])
+# while equivalent, above code is simpler expression of what is in write-up    
+#      anew <- (x$lower$bound[(i+1):x$k]-zi*sqrt(x$n.I[i]/x$n.I[(i+1):x$k]))/
+#            sqrt(Inew/x$n.I[(i+1):x$k])        
+# end update
+          }
     else
     {
         anew <- array(-20, knew)

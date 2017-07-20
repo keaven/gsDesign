@@ -44,7 +44,7 @@ eEvents(lambda=1, eta=0, gamma=1, R=1, S=NULL, T=2,
 \item{R}{as input.}
 \item{S}{as input.}
 \item{T}{as input.}
-\item{Tfinal}{lanned duration of study.}
+\item{Tfinal}{planned duration of study.}
 \item{minfup}{as input.}
 \item{d}{expected number of events.}
 \item{n}{expected sample size.}

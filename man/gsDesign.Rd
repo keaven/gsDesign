@@ -6,7 +6,8 @@
 gsDesign(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
          delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
          sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I = 0,
-         maxn.IPlan = 0, nFixSurv=0, endpoint=NULL, delta1=1, delta0=0,overrun=0)
+         maxn.IPlan = 0, nFixSurv=0, endpoint=NULL, delta1=1, delta0=0, overrun=0, 
+         usTime=NULL, lsTime=NULL)
 }
 \arguments{
 	\item{k}{Number of analyses planned, including interim and final.}
@@ -61,7 +62,10 @@ timing[k]=1}.}
 	\item{delta1}{\code{delta1} and \code{delta0} may be used to store information about the natural parameter scale compared to \code{delta} that is a standardized effect size. \code{delta1} is the alternative hypothesis parameter value on the natural parameter scale (e.g., the difference in two binomial rates).}
   \item{delta0}{\code{delta0} is the null hypothesis parameter value on the natural parameter scale.}
   \item{overrun}{Scalar or vector of length \code{k-1} with patients enrolled that are not included in each interim analysis.}
+  \item{usTime}{Default is NULL in which case upper bound spending time is determined by \code{timing}. Otherwise, this should be a vector of length \code{k} with the spending time (see Details) at each analysis.}
+  \item{lsTime}{Default is NULL in which case lower bound spending time is determined by \code{timing}. Otherwise, this should be a vector of length \code{k} with the spending time (see Details) at each analysis.}
 }
+
 \value{
 An object of the class \code{gsDesign}. This class has the following elements and upon return from 
 \code{gsDesign()} contains:
@@ -90,6 +94,8 @@ If \code{delta=0} and \code{n.fix=1} then this is the relative sample size compa
 \item{delta1}{As input.}
 \item{delta0}{As input.}
 \item{overrun}{As input.}
+\item{usTime}{As input.}
+\item{lsTime}{As input.}
 \item{upper}{Upper bound spending function, boundary and boundary crossing probabilities under the NULL and
 alternate hypotheses. See \link{Spending function overview} and manual for further details.}
 \item{lower}{Lower bound spending function, boundary and boundary crossing probabilities at each analysis.
@@ -134,6 +140,8 @@ through an iterative process for all options.
 Since options 3 and 4 must compute boundary crossing probabilities under both the null and alternative hypotheses,
 deriving these designs can take longer than other options.
 Options 5 and 6 compute lower bound spending under the null hypothesis.
+
+The variables \code{usTime} and \code{lsTime} may be used if the input to spending functions is to be determined by something other than the information time (e.g., statistical information, sample size, number of events). For instance, there may be a plan for how long a trial is to run and the spending time is the fraction of the final duration at the time of an analysis; see Lan and DeMets (1989). 
 }
 \seealso{\link{gsDesign package overview}, \link{gsDesign print, summary and table summary functions}, \link{Plots for group sequential designs}, \code{\link{gsProbability}}, 
 \link{Spending function overview}, \link{Wang-Tsiatis Bounds}}
@@ -144,6 +152,8 @@ in the directory where R is installed.}
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applications to Clinical Trials}.
 Boca Raton: Chapman and Hall.
+
+Lan KK, DeMets DL (1989). Group sequential procedures: calendar versus information time. \emph{Statistics in medicine} 8(10):1191-8.
 }
 
 \examples{

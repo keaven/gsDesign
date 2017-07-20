@@ -124,19 +124,24 @@
 "gsDesign"<-function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
         delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
         sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I=0, maxn.IPlan=0, 
-        nFixSurv=0, endpoint=NULL, delta1=1, delta0=0, overrun=0) 
+        nFixSurv=0, endpoint=NULL, delta1=1, delta0=0, overrun=0, 
+        usTime=NULL, lsTime=NULL) 
 {
     # Derive a group sequential design and return in a gsDesign structure
     
     # set up class variable x for gsDesign being requested
     x <- list(k=k, test.type=test.type, alpha=alpha, beta=beta, astar=astar,
             delta=delta, n.fix=n.fix, timing=timing, tol=tol, r=r, n.I=n.I, maxn.IPlan=maxn.IPlan,
-            nFixSurv=nFixSurv, nSurv=0, endpoint=endpoint, delta1=delta1, delta0=delta0, overrun=overrun)
+            nFixSurv=nFixSurv, nSurv=0, endpoint=endpoint, delta1=delta1, delta0=delta0, overrun=overrun,
+            usTime=usTime, lsTime=lsTime)
     
     class(x) <- "gsDesign"
     
     # check parameters other than spending functions
     x <- gsDErrorCheck(x)
+    # get upper spending time (usually will be x$timing)
+    if (is.null(x$usTime)) usTime <- x$timing
+    else usTime <- x$usTime
 
     # set up spending for upper bound
     if (is.character(sfu))
@@ -161,11 +166,15 @@
     }
     else
     {   
-        upper <- sfu(x$alpha, x$timing, sfupar)
+        upper <- sfu(x$alpha, usTime, sfupar)
         upper$sf <- sfu
     }
     
     x$upper <- upper
+    
+    # get upper spending time (usually will be x$timing)
+    if (is.null(x$lsTime)) lsTime <- x$timing
+    else lsTime <- x$lsTime
     
     # set up spending for lower bound
     if (x$test.type == 1) 
@@ -184,7 +193,7 @@
         }
         else if (is.element(test.type, 3:4)) 
         {
-            x$lower <- sfl(x$beta, x$timing, sflpar)
+            x$lower <- sfl(x$beta, lsTime, sflpar)
         }
         else if (is.element(test.type, 5:6)) 
         {   
@@ -192,7 +201,7 @@
             {
                 x$astar <- 1 - x$alpha
             }
-            x$lower <- sfl(x$astar, x$timing, sflpar)
+            x$lower <- sfl(x$astar, lsTime, sflpar)
         }
         
         x$lower$sf <- sfl
@@ -1041,6 +1050,28 @@
       {
           stop("value input for timing must be length 1, k-1 or k")
       }
+    }
+    # if usTime (upper spending time) is specified, check it; if not, set it to timing
+    if (!is.null(x$usTime)){
+      checkVector(x$usTime,"numeric",c(0,1),c(FALSE,TRUE))
+      if (length(x$usTime) < x$k - 1 || length(x$usTime)>x$k) stop("usTime, if specified, must have length k or k-1")
+      if (length(x$usTime)<x$k) x$usTime <- c(x$usTime,1)
+      if (min(x$usTime - c(0,x$usTime[1:(x$k-1)])) <= 0)
+      {
+        stop("input upper spending time at analyses must be increasing >0 and <=1 (<1 at any interim)")
+      }
+      if (x$usTime[x$k]<1) stop("upper spending time at final analysis, if specified, must be =1")
+    }
+    # if lsTime (lower spending time) is specified, check it; if not, set it to timing
+    if (!is.null(x$lsTime)){
+      checkVector(x$lsTime,"numeric",c(0,1),c(FALSE,TRUE))
+      if (length(x$lsTime) < x$k - 1 || length(x$lsTime)>x$k) stop("lsTime, if specified, must have length k or k-1")
+      if (length(x$lsTime)<x$k) x$lsTime <- c(x$lsTime,1)
+      if (min(x$lsTime - c(0,x$lsTime[1:(x$k-1)])) <= 0)
+      {
+        stop("input lower spending time at analyses must be increasing >0 and <=1 (<1 at any interim)")
+      }
+      if (x$lsTime[x$k]<1) stop("lower spending time at final analysis, if specified, must be =1")
     }
     # check input values for tol, r
     checkScalar(x$tol, "numeric", c(0, 0.1), c(FALSE, TRUE))

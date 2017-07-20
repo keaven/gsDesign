@@ -12,8 +12,8 @@
 \code{gsBinomialExact} computes power/Type I error and expected sample size for a group sequential design
 in a single-arm trial with a binary outcome.
 This can also be used to compare event rates in two-arm studies.
-The print function has been extended using \code{print.gsBinomialExact} to print \code{gsBinomialExact} objects; see examples.
-Similarly, a plot function has been extended using \code{plot.gsBinomialExact} to plot \code{gsBinomialExact} objects; see examples.
+The print function has been extended using \code{print.gsBinomialExact} to print \code{gsBinomialExact} objects.
+Similarly, a plot function has been extended using \code{plot.gsBinomialExact} to plot \code{gsBinomialExact} objects. 
 
 \code{binomialSPRT} computes a truncated binomial sequential probability ratio test (SPRT) which is a specific instance of an exact binomial group sequential design for a single arm trial with a binary outcome. 
 
@@ -71,6 +71,11 @@ Plots produced include boundary plots, expected sample size, response rate at th
 
 \code{gsBinomial1Sample} uses exact binomial computations based on the base R functions \code{qbinom()} and \code{pbinom()}. The tabular output may be convenient for plotting. Note that input variables are largely not checked, so the user is largely responsible for results; it is a good idea to do a run with \code{outtype=3} to check that you have done things appropriately.
 If \code{n} is not ordered (a bad idea) or not sequential (maybe OK), be aware of possible consequences.
+
+\code{nBinomial1Sample} is based on code from Marc Schwartz marc_schwartz@me.com. 
+The possible sample size vector \code{n} needs to be selected in such a fashion
+that it covers the possible range of values that include the true minima. 
+NOTE: the one-sided evaluation of significance is more conservative than using the 2-sided exact test in \code{binom.test}.
 }
 
 \value{
@@ -93,15 +98,19 @@ The object returned from \code{gsBinomialExact()} contains the following element
   \item{p0}{As input.}
   \item{p1}{As input.}
   
-\code{nBinomial1Sample} produces an integer if the input \code{outtype=1} and a data frame with the following values otherwise:
+\code{nBinomial1Sample} produces a data frame with power for each input value in \code{n} if \code{beta=NULL}. Otherwise, a sample size achieving the desired power is returned unless the minimum power for the values input in \code{n} is greater than or equal to the target or the maximum yields power less than the target, in which case an error message is shown. 
+The input variable \code{outtype} has no effect if \code{beta=NULL}. 
+Otherwise, \code{outtype=1} results in return of an integer sample size and \code{outtype=2} results in a data frame with one record which includes the desired sample size.
+When a data frame is returned, the variables include:
 \item{p0}{Input null hypothesis event (or response) rate.}
 \item{p1}{Input alternative hypothesis (or response) rate; must be \code{> p0}.}
 \item{alpha}{Input Type I error.}
 \item{beta}{Input Type II error except when input is \code{NULL} in which case realized Type II error is computed.}
-\item{alphaR}{Type I error achieved for each output value of \code{n}; less than or equal to the input value \code{alpha}.}
-\item{Power}{Power achived for each output value of \code{n}.}
 \item{n}{sample size.}
 \item{b}{cutoff given \code{n} to control Type I error; value is \code{NULL} if no such value exists.}
+\item{alphaR}{Type I error achieved for each output value of \code{n}; less than or equal to the input value \code{alpha}.}
+\item{Power}{Power achieved for each output value of \code{n}.}
+
 
 
 }
