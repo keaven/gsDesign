@@ -140,8 +140,11 @@
     # check parameters other than spending functions
     x <- gsDErrorCheck(x)
     # get upper spending time (usually will be x$timing)
-    if (is.null(x$usTime)) usTime <- x$timing
-    else usTime <- x$usTime
+    if (is.null(x$usTime)){
+      x$usTime <- x$timing
+      usTime <- x$timing
+    }else usTime <- x$usTime
+    if (usTime[length(usTime)-1] > 1) stop("All interim analyses must have spending time < 1 (usTime)")
 
     # set up spending for upper bound
     if (is.character(sfu))
@@ -175,6 +178,7 @@
     # get upper spending time (usually will be x$timing)
     if (is.null(x$lsTime)) lsTime <- x$timing
     else lsTime <- x$lsTime
+    if (lsTime[length(lsTime)-1] > 1) stop("All interim analyses must have spending time < 1 (lsTime)")
     
     # set up spending for lower bound
     if (x$test.type == 1) 
@@ -1007,10 +1011,12 @@
 
         x$timing <- x$n.I / x$maxn.IPlan
         
-        if (x$n.I[x$k-1] >= x$maxn.IPlan)
-        {
-            stop("Only 1 n >= Planned Final n")        
-        }
+        # Following check removed when spending time added (lsTime, usTime); KA 9/30/17
+        # Appropriate checking is done in gsDesign after return from this function
+        #if (x$n.I[x$k-1] >= x$maxn.IPlan)
+        #{
+        #    stop("Only 1 n >= Planned Final n")        
+        #}
     }
     else if (x$maxn.IPlan > 0)
     {   
@@ -1051,7 +1057,7 @@
           stop("value input for timing must be length 1, k-1 or k")
       }
     }
-    # if usTime (upper spending time) is specified, check it; if not, set it to timing
+    # if usTime (upper spending time) is specified, check it
     if (!is.null(x$usTime)){
       checkVector(x$usTime,"numeric",c(0,1),c(FALSE,TRUE))
       if (length(x$usTime) < x$k - 1 || length(x$usTime)>x$k) stop("usTime, if specified, must have length k or k-1")

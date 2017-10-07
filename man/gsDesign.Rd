@@ -62,8 +62,8 @@ timing[k]=1}.}
 	\item{delta1}{\code{delta1} and \code{delta0} may be used to store information about the natural parameter scale compared to \code{delta} that is a standardized effect size. \code{delta1} is the alternative hypothesis parameter value on the natural parameter scale (e.g., the difference in two binomial rates).}
   \item{delta0}{\code{delta0} is the null hypothesis parameter value on the natural parameter scale.}
   \item{overrun}{Scalar or vector of length \code{k-1} with patients enrolled that are not included in each interim analysis.}
-  \item{usTime}{Default is NULL in which case upper bound spending time is determined by \code{timing}. Otherwise, this should be a vector of length \code{k} with the spending time (see Details) at each analysis.}
-  \item{lsTime}{Default is NULL in which case lower bound spending time is determined by \code{timing}. Otherwise, this should be a vector of length \code{k} with the spending time (see Details) at each analysis.}
+  \item{usTime}{Default is NULL in which case upper bound spending time is determined by \code{timing}. Otherwise, this should be a vector of length \code{k} with the spending time at each analysis (see Details).}
+  \item{lsTime}{Default is NULL in which case lower bound spending time is determined by \code{timing}. Otherwise, this should be a vector of length \code{k} with the spending time at each analysis (see Details).}
 }
 
 \value{
@@ -141,7 +141,8 @@ Since options 3 and 4 must compute boundary crossing probabilities under both th
 deriving these designs can take longer than other options.
 Options 5 and 6 compute lower bound spending under the null hypothesis.
 
-The variables \code{usTime} and \code{lsTime} may be used if the input to spending functions is to be determined by something other than the information time (e.g., statistical information, sample size, number of events). For instance, there may be a plan for how long a trial is to run and the spending time is the fraction of the final duration at the time of an analysis; see Lan and DeMets (1989). 
+The variables \code{usTime} and \code{lsTime} may be used if the input to spending functions is to be determined by something other than the information time (e.g., statistical information, sample size, number of events). For instance, there may be a plan for how long a trial is to run and the spending time is the fraction of the final duration at the time of an analysis (Lan and DeMets, 1989) or something more complicated (Liu et al, 2012).
+This also be useful when one or more subpopulations are being studied for the same endpoint in a trial and full spending for all populations is desired at a single final analysis of the endpoint.
 }
 \seealso{\link{gsDesign package overview}, \link{gsDesign print, summary and table summary functions}, \link{Plots for group sequential designs}, \code{\link{gsProbability}}, 
 \link{Spending function overview}, \link{Wang-Tsiatis Bounds}}
@@ -154,6 +155,8 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with Applicati
 Boca Raton: Chapman and Hall.
 
 Lan KK, DeMets DL (1989). Group sequential procedures: calendar versus information time. \emph{Statistics in medicine} 8(10):1191-8.
+
+Liu, Q, Lim, P, Nuamah, I, and Li, Y (2012), On adaptive error spending approach for group sequential trials with random information levels. \emph{Journal of biopharmaceutical statistics}; 22(4), 687-699.
 }
 
 \examples{

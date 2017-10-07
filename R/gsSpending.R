@@ -274,20 +274,31 @@
     x
 }
 
-"sfLDOF" <- function(alpha, t, param)
-{    
-    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
-    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
-    t[t>1] <- 1
-
-    z <- - qnorm(alpha / 2)
-    
-    x <- list(name="Lan-DeMets O'brien-Fleming approximation", param=NULL, parname="none", sf=sfLDOF, 
-            spend=2 * (1 - pnorm(z / sqrt(t))), bound=NULL, prob=NULL)  
-    
-    class(x) <- "spendfn"
-    
-    x
+"sfLDOF" <- function(alpha, t, param=1){    
+  checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+  checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+  # Following 2 lines added 10/1/17 
+  # fix needed since default for gsDesign is param=-4 is out of range for LDOF
+  if (!is.null(param) && (param < .005 || param > 2)) param <- 1
+  checkScalar(param, "numeric", c(.005,20),c(TRUE,TRUE))
+  t[t>1] <- 1
+  if (param == 1){
+    rho <- 1
+    txt <- "Lan-DeMets O'Brien-Fleming approximation"
+    parname <- "none"
+  }else{
+    rho<-param
+    txt <- "Generalized Lan-DeMets O'Brien-Fleming"
+    parname <- "rho"
+  }
+  z <- - qnorm(alpha / 2)
+  
+  x <- list(name=txt, param=param, parname=parname, sf=sfLDOF, 
+            spend=2 * (1 - pnorm(z / t^(rho/2))), bound=NULL, prob=NULL)  
+  
+  class(x) <- "spendfn"
+  
+  x
 }
 
 "sfLDPocock" <- function(alpha, t, param)
