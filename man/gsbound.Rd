@@ -10,7 +10,7 @@ These functions do not adjust sample size as \code{gsDesign()} does to ensure ap
 \code{gsBound()} computes upper and lower bounds given boundary crossing probabilities assuming a mean of 0, the usual null hypothesis.
 \code{gsBound1()} computes the upper bound given a lower boundary, upper boundary crossing probabilities and an arbitrary mean (\code{theta}).}
 \usage{
-gsBound(I, trueneg, falsepos, tol=0.000001, r=18)
+gsBound(I, trueneg, falsepos, tol=0.000001, r=18, printerr=0)
 gsBound1(theta, I, a, probhi, tol=0.000001, r=18, printerr=0)
 }
 \arguments{

@@ -39,7 +39,7 @@ void gsbound(int *xnanal,double *I,double *a,double *b,double *problo,double *pr
     if (nanal < 1 || r<1 || r>MAXR) 
 	 {	   retval[0]=1;
  	 		if (*printerr)
-			{	Rprintf("gsbound1 error: illegal argument");
+			{	Rprintf("gsbound error: illegal argument");
 				if (nanal<1) Rprintf("; nanal=%d--must be > 0",nanal);
 				if (r<1 || r> MAXR) Rprintf("; r=%d--must be >0 and <84",r);
 				Rprintf("\n");
@@ -101,7 +101,7 @@ void gsbound(int *xnanal,double *I,double *a,double *b,double *problo,double *pr
 /* if convergence did not occur, set flag for return value */
         if (adelta>tol ||bdelta > tol)
         {   if (*printerr) 
-            {  Rprintf("gsbound1 error: No convergence for boundary for interim %d; I=%7.0lf",i+1,I[i]);
+            {  Rprintf("gsbound error: No convergence for boundary for interim %d; I=%7.0lf",i+1,I[i]);
 	   			if (bdelta>tol) Rprintf("\n last 2 upper boundary values: %lf %lf\n",btem,btem2);
 					if (adelta>tol) Rprintf("\n last 2 lower boundary values: %lf %lf\n",atem,atem);
 				}

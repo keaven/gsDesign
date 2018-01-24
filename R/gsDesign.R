@@ -43,7 +43,7 @@
 # Exported Functions
 ###
 
-"gsBound" <- function(I, trueneg, falsepos, tol=0.000001, r=18)
+"gsBound" <- function(I, trueneg, falsepos, tol=0.000001, r=18, printerr=0)
 {    
     # gsBound: assuming theta=0, derive lower and upper crossing boundaries given 
     #          timing of interims, false positive rates and true negative rates
@@ -54,12 +54,15 @@
     checkVector(falsepos, "numeric", c(0,1), c(TRUE, FALSE))
     checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
     checkScalar(r, "integer", c(1, 80))
+    checkScalar(printerr, "integer")
     checkLengths(trueneg, falsepos, I)    
     
     k <- as.integer(length(I))
     if (trueneg[k]<=0.) stop("Final futility spend must be > 0")
     if (falsepos[k]<=0.) stop("Final efficacy spend must be > 0")
     r <- as.integer(r)
+    printerr <- as.integer(printerr)
+    
     storage.mode(I) <- "double"
     storage.mode(trueneg) <- "double"
     storage.mode(falsepos) <- "double"
@@ -67,8 +70,10 @@
     a <- falsepos
     b <- falsepos
     retval <- as.integer(0)
-    xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval)
+    xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval, printerr)
     rates <- list(falsepos=xx[[6]], trueneg=xx[[5]])
+    
+    ## DSB question: do we need to do something here in case of an error? (similarly as in gsBound1)
     
     list(k=xx[[1]],theta=0.,I=xx[[2]],a=xx[[3]],b=xx[[4]],rates=rates,tol=xx[[7]],
             r=xx[[8]],error=xx[[9]])
