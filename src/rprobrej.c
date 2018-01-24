@@ -1,5 +1,6 @@
 #include "R.h"
 #include "Rmath.h"
+#include "gsDesign.h"
 /* Group sequential boundary crossing probability computation per Jennison & Turnbull
    This version uses all pointer arguments so that it can be called from R or Splus
    xnanal - # of possible analyses in the group-sequential designs

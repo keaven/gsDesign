@@ -35,7 +35,7 @@
 #####
 # global variables used to eliminate warnings in R CMD check
 #####
-globalVariables(c("y","N","Z","Bound","thetaidx","Probability","delta","Analysis"))
+globalVariables(c("y","N","Z","Bound","thetaidx","Probability","delta","Analysis", "opts"))
 
 ###
 # Exported Functions
