@@ -68,7 +68,7 @@
     }
     else
     {
-        anew <- array(-20, knew)
+        anew <- rep(-20, knew)
     }
     
     gsProbability(k=knew, theta=theta, n.I=Inew, a=anew, b=bnew, r=r, overrun=0)
@@ -125,14 +125,14 @@ gsPI<-function(x, i=1, zi=0, j=2, level=.95, theta=c(0,3), wgts=c(.5,.5)){
     
     if (theta != "thetahat")
     {    
-        thetahi <- array(theta, len)
+        thetahi <- rep(theta, len)
         if (test.type > 1) thetalow <- thetahi
     }else
     {    
         if (test.type>1) thetalow <- x$lower$bound[1:len]/sqrt(x$n.I[1:len])
         thetahi <- x$upper$bound[1:len]/sqrt(x$n.I[1:len])
     }
-    CPhi <- array(0, len)
+    CPhi <- rep(0, len)
     
     if (test.type > 1) CPlo <- CPhi
     
@@ -151,7 +151,7 @@ gsPI<-function(x, i=1, zi=0, j=2, level=.95, theta=c(0,3), wgts=c(.5,.5)){
 }
 gsPosterior <- function(x=gsDesign(), i=1, zi=NULL, prior=normalGrid(),
                         r=18)
-{   if (is.null(prior$gridwgts)) prior$gridwgts <- array(1,length(prior$z))
+{   if (is.null(prior$gridwgts)) prior$gridwgts <- rep(1,length(prior$z))
     checkLengths(prior$z, prior$density, prior$gridwgts)
     checkVector(prior$gridwgts, "numeric", c(0, Inf), c(TRUE, FALSE))
     checkVector(prior$density, "numeric", c(0, Inf), c(TRUE, FALSE))

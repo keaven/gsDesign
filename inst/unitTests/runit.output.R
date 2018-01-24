@@ -9,8 +9,8 @@
 {
 	w <- sum(gsProbability(k=2,theta=0,n.I=1:2,a=qnorm(.025)*c(1,1),b=qnorm(.975)*c(1,1))$upper$prob)
 	x <- sum(gsProbability(k=4,theta=0,n.I=1:4,a=qnorm(.025)*c(1,1,1,1),b=qnorm(.975)*c(1,1,1,1))$upper$prob)
-	y <- sum(gsProbability(k=10,theta=0,n.I=1:10,a=qnorm(.025)*array(1,10),b=qnorm(.975)*array(1,10))$upper$prob)
-	z <- sum(gsProbability(k=20,theta=0,n.I=1:20,a=qnorm(.025)*array(1,20),b=qnorm(.975)*array(1,20))$upper$prob)
+	y <- sum(gsProbability(k=10,theta=0,n.I=1:10,a=qnorm(.025)*rep(1,10),b=qnorm(.975)*rep(1,10))$upper$prob)
+	z <- sum(gsProbability(k=20,theta=0,n.I=1:20,a=qnorm(.025)*rep(1,20),b=qnorm(.975)*rep(1,20))$upper$prob)
 	
 	checkEquals(round(w, 3), 0.042, msg="Checking Type I error, k = 2") 
 	checkEquals(round(x, 3), 0.063, msg="Checking Type I error, k = 4")

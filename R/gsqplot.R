@@ -125,9 +125,9 @@ gsHR <- function(z, i, x, ratio=1, ylab="Estimated hazard ratio", ...)
      hrHat
 }
 gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
-{	cp <- array(0,length(z))
+{	cp <- rep(0,length(z))
 	if (is.null(theta)) theta <- z / sqrt(x$n.I[i])
-	if (length(theta)==1 && length(z)>1) theta <- array(theta,length(z))
+	if (length(theta)==1 && length(z)>1) theta <- rep(theta,length(z))
 	for(j in 1:length(z))
 	{	cp[j] <- sum(gsCP(x=x, theta=theta[j], i=i[j], zi=z[j])$upper$prob)
 	}
@@ -139,10 +139,10 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
                      lwd=c(1,1), nlabel="TRUE", xlab=NULL, ylab=NULL, fn=function(z,i,x,...){z},
                      ratio=1, delta0=0, delta=1, cex=1, base=FALSE,...)
 {  ggver <- as.numeric_version(packageVersion('ggplot2'))
-   if (length(lty)==1) lty <- array(lty, 2)
-   if (length(col)==1) col <- array(col, 2)
-   if (length(lwd)==1) lwd <- array(lwd, 2)
-   if (length(dgt)==1) dgt <- array(dgt, 2)
+   if (length(lty)==1) lty <- rep(lty, 2)
+   if (length(col)==1) col <- rep(col, 2)
+   if (length(lwd)==1) lwd <- rep(lwd, 2)
+   if (length(dgt)==1) dgt <- rep(dgt, 2)
    if(x$n.fix == 1) 
    {   nround <- 3 
        ntx <- "r="
@@ -169,7 +169,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 		y <- data.frame(
 				N=as.numeric(c(x$n.I[indxu],x$n.I[indxl])), 
 				Z=as.numeric(z[c(indxu,x$k+indxl)]), 
-				Bound=c(array("Upper", length(indxu)), array("Lower", length(indxl))),
+				Bound=c(rep("Upper", length(indxu)), rep("Lower", length(indxl))),
 				Ztxt=Ztxt[c(indxu,x$k+indxl)])
 	}else{
 		z <- fn(z=x$upper$bound, i=1:x$k, x=x,
@@ -178,7 +178,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 		y <- data.frame(
 				N=as.numeric(x$n.I), 
 				Z=as.numeric(z), 
-				Bound=array("Upper", x$k),
+				Bound=rep("Upper", x$k),
 				Ztxt=Ztxt)
 	}
    if (!is.numeric(ylim))
@@ -219,24 +219,24 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	if (nlabel==TRUE)
 	{	y2 <- data.frame(
 					N=as.numeric(x$n.I), 
-					Z=as.numeric(array(ylim[1], x$k)), 
-					Bound=array("Lower", x$k),
-					Ztxt=ifelse(array(nround,x$k) > 0, as.character(round(x$n.I, nround)), ceiling(x$n.I)))
+					Z=as.numeric(rep(ylim[1], x$k)), 
+					Bound=rep("Lower", x$k),
+					Ztxt=ifelse(rep(nround,x$k) > 0, as.character(round(x$n.I, nround)), ceiling(x$n.I)))
 		if (base)
 		{	text(x=y2$N, y=y$Z, y$Ztxt, cex=cex)
 		}
 		if (x$n.fix == 1)
 		{	if (base)
-			{	text(x=y2$N, y=y2$Z, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=cex)
+			{	text(x=y2$N, y=y2$Z, paste(rep("r=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
-			{	y2$Ztxt <- paste(array("r=",x$k), y2$Ztxt, sep="")
+			{	y2$Ztxt <- paste(rep("r=",x$k), y2$Ztxt, sep="")
 				p <- p + geom_text(data=y2, aes(group=factor(Bound), label=Ztxt), size=cex*5, show.legend=F, colour=1)
 			}
 		}else
 		{	if(base)
-			{	text(x=y2$N, y=y2$Z, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=cex)
+			{	text(x=y2$N, y=y2$Z, paste(rep("N=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
-			{	y2$Ztxt <- paste(array("N=",x$k), y2$Ztxt, sep="")
+			{	y2$Ztxt <- paste(rep("N=",x$k), y2$Ztxt, sep="")
 				p <- p + geom_text(data=y2, aes(group=factor(Bound),label=Ztxt), size=cex*5, show.legend=F, colour=1)
 			}
 	}	}
@@ -253,10 +253,10 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
         lty=c(1,2), col=c(1,1), lwd=c(1,1), pch=" ", cex=1, legtext=NULL,  dgt=c(3,2), nlabel=TRUE, 
         base=FALSE,...)
 {  ggver <- as.numeric_version(packageVersion('ggplot2'))
-   if (length(lty)==1) lty <- array(lty, 2)
-   if (length(col)==1) col <- array(col, 2)
-   if (length(lwd)==1) lwd <- array(lwd, 2)
-   if (length(dgt)==1) dgt <- array(dgt, 2)
+   if (length(lty)==1) lty <- rep(lty, 2)
+   if (length(col)==1) col <- rep(col, 2)
+   if (length(lwd)==1) lwd <- rep(lwd, 2)
+   if (length(dgt)==1) dgt <- rep(dgt, 2)
 	if (x$k == 2) stop("No conditional power plot available for k=2")
 # switch order of parameters
 	lty <- lty[2:1]
@@ -325,12 +325,12 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	{	N <- as.numeric(x$n.I[1:(x$k-1)])
 		if (test.type > 1) CP <- y[,2]
 		else CP <- y 
-		Bound <- array("Upper", x$k-1)
+		Bound <- rep("Upper", x$k-1)
 		Ztxt <- as.character(round(CP[1:(x$k-1)], dgt[2]))
 		if (test.type > 1)
 		{	N <- c(N, N)
 			CP <- c(CP, y[,1])
-			Bound <- c(Bound, array("Lower", x$k-1))
+			Bound <- c(Bound, rep("Lower", x$k-1))
 			Ztxt <- as.character(c(Ztxt ,round(y[,1],dgt[1])))
 		}
 		y <- data.frame(N=N, CP=CP, Bound=Bound, Ztxt=Ztxt)
@@ -361,21 +361,21 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	if (nlabel==TRUE)
 	{	y2 <- data.frame(
 					N=x$n.I[1:(x$k-1)], 
-					CP=array(ymin/2, x$k-1), 
-					Bound=array("Lower", x$k-1),
+					CP=rep(ymin/2, x$k-1), 
+					Bound=rep("Lower", x$k-1),
 					Ztxt=as.character(round(x$n.I[1:(x$k-1)],nround)))
 		if (x$n.fix == 1)
 		{	if (base)
-			{	text(x=y2$N, y=y2$CP, paste(array("r=",x$k), y2$Ztxt, sep=""), cex=cex)
+			{	text(x=y2$N, y=y2$CP, paste(rep("r=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
-			{	y2$Ztxt <- paste(array("r=",x$k-1), y2$Ztxt, sep="")
+			{	y2$Ztxt <- paste(rep("r=",x$k-1), y2$Ztxt, sep="")
 				p <- p + geom_text(data=y2, aes(N,CP, group=factor(Bound),label=Ztxt), size=cex*5, colour=1)
 			}
 		}else
 		{	if(base)
-			{	text(x=y2$N, y=y2$CP, paste(array("N=",x$k), y2$Ztxt, sep=""), cex=cex)
+			{	text(x=y2$N, y=y2$CP, paste(rep("N=",x$k), y2$Ztxt, sep=""), cex=cex)
 			}else
-			{	y2$Ztxt <- paste(array("N=",x$k-1), y2$Ztxt, sep="")
+			{	y2$Ztxt <- paste(rep("N=",x$k-1), y2$Ztxt, sep="")
 				p <- p + geom_text(data=y2, aes(N,CP, group=factor(Bound),label=Ztxt), size=cex*5, colour=1)
 			}
 	}	}
@@ -405,9 +405,9 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	{	if (x$test.type > 4) ylab2 <- "Proportion of spending"
 		else ylab2 <- expression(paste(beta, "-spending"))
 	}
-	if (length(lty)==1) lty <- array(lty, 2)
-	if (length(col)==1) col <- array(col, 2)
-	if (length(lwd)==1) lwd <- array(lwd, 2)
+	if (length(lty)==1) lty <- rep(lty, 2)
+	if (length(col)==1) col <- rep(col, 2)
+	if (length(lwd)==1) lwd <- rep(lwd, 2)
 
 	# K. Wills (GSD-31)
 	if (is(x, "gsProbability"))
@@ -456,7 +456,7 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 			}else
 			{	spendb <- x$lower$sf(x$astar, t, x$lower$param)$spend/x$astar
 			}
-			group <- array(1, length(t))
+			group <- rep(1, length(t))
 			q <- data.frame(t=c(t,t), spend=c(spenda, spendb), group=c(group,2*group))
 			p <- qplot(x=t, y=spend, data=q, geom="line", ylab=ylab, xlab=xlab, main=main, 
 							group=factor(group), linetype=factor(group), colour=factor(group)) 
@@ -575,41 +575,41 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
      if (base || outtype==2) col <- c(1,2)
      else col <- c(2,1)
    }
-   if (length(col==1)) col=array(col,2)
+   if (length(col==1)) col=rep(col,2)
    if (is.null(lty)){
      if(base || outtype==2) lty <- c(1,2)
      else lty <- c(2,1)
    }
-   if (length(lty==1)) lty=array(lty,2)
-   if (length(lwd==1)) lwd=array(lwd,2)
+   if (length(lty==1)) lty=rep(lty,2)
+   if (length(lwd==1)) lwd=rep(lwd,2)
    
    
-   interim <- array(1,length(xval))
-   bound <- array(1,length(xval)*x$k)
+   interim <- rep(1,length(xval))
+   bound <- rep(1,length(xval)*x$k)
    boundprob <- x$upper$prob[1,]
    prob <- boundprob
    yval <- min(mean(range(x$upper$prob[1,])))
    xv <- ifelse(xval[2]>xval[1],min(xval[boundprob>=yval]),max(xval[boundprob>=yval]))
    for(j in 2:x$k)
    {	theta <- c(theta, xval)
-     interim <- c(interim, array(j, length(xval)))
+     interim <- c(interim, rep(j, length(xval)))
      boundprob <- boundprob + x$upper$prob[j,]
      prob <- c(prob, boundprob)
      ymid <- mean(range(boundprob))
      yval <- c(yval, min(boundprob[boundprob >= ymid]))
      xv <- c(xv, ifelse(xval[2]>xval[1],min(xval[boundprob >= ymid]),max(xval[boundprob>=ymid])))
    }
-   itxt <- array("Interim",x$k-1)
+   itxt <- rep("Interim",x$k-1)
    itxt <- paste(itxt,1:(x$k-1),sep=" ")
    
    if (is(x, "gsProbability") || (is(x, "gsDesign") && test.type > 1))
    {
      itxt <- c(itxt,"Final",itxt)
-     boundprob <- array(1, length(xval))
-     bound <- c(bound, array(2, length(xval)*(x$k-1)))
+     boundprob <- rep(1, length(xval))
+     bound <- c(bound, rep(2, length(xval)*(x$k-1)))
      for(j in 1:(x$k-1))
      {	theta <- c(theta, xval)
-       interim <- c(interim, array(j, length(xval)))
+       interim <- c(interim, rep(j, length(xval)))
        boundprob <- boundprob - x$lower$prob[j,]
        prob <- c(prob, boundprob)
        ymid <- mean(range(boundprob))
@@ -620,17 +620,17 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
    y <- data.frame(theta=as.numeric(theta), interim=interim, bound=bound, prob=as.numeric(prob),
                    itxt=as.character(round(prob,2)))
    y$group=(y$bound==2)*x$k + y$interim
-   bound <- array(1, x$k)
+   bound <- rep(1, x$k)
    interim <- 1:x$k
    if (test.type > 1)
-   {	bound <- c(bound, array(2, x$k-1))
+   {	bound <- c(bound, rep(2, x$k-1))
      interim <- c(interim, 1:(x$k-1))
    }
    yt <- data.frame(theta=xv, interim=interim, bound=bound, prob=yval, itxt=itxt)
-   bound <- array(1, x$k)
+   bound <- rep(1, x$k)
    interim <- 1:x$k
    if (test.type > 1)
-   {	bound <- c(bound, array(2, x$k-1))
+   {	bound <- c(bound, rep(2, x$k-1))
      interim <- c(interim, 1:(x$k-1))
    }
    yt <- data.frame(theta=xv, interim=interim, bound=bound, prob=yval, itxt=itxt)
@@ -687,8 +687,8 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
        phi <- phi + x$upper$prob[i, ]
        lines(xval, phi, col=col[1], lwd=lwd[1], lty=lty[1])
      }
-     colr <- array(col[1], x$k)
-     if (length(yt$theta)>x$k) colr<-c(colr,array(col[2],x$k-1))
+     colr <- rep(col[1], x$k)
+     if (length(yt$theta)>x$k) colr<-c(colr,rep(col[2],x$k-1))
      text(x=yt$theta, y=yt$prob, col=colr, yt$itxt, cex=cex)
      invisible(x)
    }
