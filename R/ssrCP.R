@@ -49,7 +49,7 @@ ssrCP <- function(z1, theta=NULL, maxinc=2, overrun=0,
   if (cpadj[2]<=cpadj[1]) 
     stop(paste("cpadj must be an increasing pair", 
                "of numbers between 0 and 1"))
-  n2 <- array(x$n.I[1]+overrun,length(z1))
+  n2 <- rep(x$n.I[1]+overrun,length(z1))
   temtheta <- theta
   if (is.null(theta))theta <- z1 / sqrt(x$n.I[1])
   # compute conditional power for group sequential design
@@ -90,7 +90,7 @@ ssrCP <- function(z1, theta=NULL, maxinc=2, overrun=0,
     }
   }
   n2[indx2] <- n2i
-  if (length(theta)==1) theta <- array(theta,length(n2))
+  if (length(theta)==1) theta <- rep(theta,length(n2))
   rval <- list(x=x, z2fn=z2, theta=temtheta, maxinc=maxinc, 
                overrun=overrun, beta=beta, cpadj=cpadj, 
                dat=data.frame(z1=z1, 

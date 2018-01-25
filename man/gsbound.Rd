@@ -10,7 +10,7 @@ These functions do not adjust sample size as \code{gsDesign()} does to ensure ap
 \code{gsBound()} computes upper and lower bounds given boundary crossing probabilities assuming a mean of 0, the usual null hypothesis.
 \code{gsBound1()} computes the upper bound given a lower boundary, upper boundary crossing probabilities and an arbitrary mean (\code{theta}).}
 \usage{
-gsBound(I, trueneg, falsepos, tol=0.000001, r=18)
+gsBound(I, trueneg, falsepos, tol=0.000001, r=18, printerr=0)
 gsBound1(theta, I, a, probhi, tol=0.000001, r=18, printerr=0)
 }
 \arguments{
@@ -70,12 +70,12 @@ Boca Raton: Chapman and Hall.
 # set boundaries so that probability is .01 of first crossing
 # each upper boundary and .02 of crossing each lower boundary
 # under the null hypothesis
-x <- gsBound(I=c(1, 2, 3)/3, trueneg=array(.02, 3),
-             falsepos=array(.01, 3))
+x <- gsBound(I=c(1, 2, 3)/3, trueneg=rep(.02, 3),
+             falsepos=rep(.01, 3))
 x
 
 #  use gsBound1 to set up boundary for a 1-sided test
-x <- gsBound1(theta= 0, I=c(1, 2, 3) / 3, a=array(-20, 3),
+x <- gsBound1(theta= 0, I=c(1, 2, 3) / 3, a=rep(-20, 3),
               probhi=c(.001, .009, .015))
 x$b
 
@@ -90,7 +90,7 @@ y <- gsProbability(k=3, theta=0, n.I=x$I, a=x$a, b=x$b)$upper$prob
 #  Here we let set lower boundary crossing at 0.05 at each analysis
 #  assuming theta=2.2 
 y <- gsBound1(theta=-2.2, I=c(1, 2, 3)/3, a= -x$b, 
-              probhi=array(.05, 3))
+              probhi=rep(.05, 3))
 y$b
 
 #  Now use gsProbability to look at design

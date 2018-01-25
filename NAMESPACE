@@ -1,4 +1,4 @@
-useDynLib(gsDesign)
+useDynLib(gsDesign, .registration = TRUE)
 import(plyr, xtable, ggplot2)
 importFrom("graphics", "axis", "legend", "lines", "matplot",
            "matpoints", "mtext", "par", "plot", "points", "strwidth",
