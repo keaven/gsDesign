@@ -19,7 +19,7 @@ xtable.gsDesign <- function (x, caption = NULL, label=NULL, align=NULL, digits=N
                   deltavals[2],sep = ""))
   st <- stat
   for (i in 2:k) stat <- c(stat, st)
-  an <- array(" ", 5 * k)
+  an <- rep(" ", 5 * k)
   tim <- an
   enrol <- an
   fut <- an

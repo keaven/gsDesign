@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+*.o
+*.dll
+TODO
+gsDesign.Rproj
