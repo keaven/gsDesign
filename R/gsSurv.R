@@ -12,7 +12,7 @@ eEvents1<-function(lambda=1, eta=0, gamma=1, R=1, S=NULL,
   
   nlambda <- length(lambda)
   if (length(eta)==1 & nlambda > 1) 
-    eta <- array(eta,nlambda)
+    eta <- rep(eta,nlambda)
   T1 <- cumsum(S)
   T1 <- c(T1[T1<T],T)
   T2 <- T - cumsum(R)
@@ -25,9 +25,9 @@ eEvents1<-function(lambda=1, eta=0, gamma=1, R=1, S=NULL,
   nperiod <- length(T3)
   s <- T3-c(0,T3[1:(nperiod-1)])
   
-  lam <- array(lambda[nlambda],nperiod)
-  et <- array(eta[nlambda],nperiod)
-  gam <- array(0,nperiod)
+  lam <- rep(lambda[nlambda],nperiod)
+  et <- rep(eta[nlambda],nperiod)
+  gam <- rep(0,nperiod)
   
   for(i in length(T1):1)
   {  indx <- T3<=T1[i]
@@ -75,7 +75,7 @@ eEvents<-function(lambda=1, eta=0, gamma=1, R=1, S=NULL, T=2,
     eta <- matrix(eta,nrow=nrow(lambda),ncol=ncol(lambda))
 	if (!is.matrix(gamma))
     gamma<-matrix(gamma,nrow=length(R),ncol=ncol(lambda)) 
-	n <- array(0,ncol(lambda))
+	n <- rep(0,ncol(lambda))
 	d <- n 
 	for(i in 1:ncol(lambda))
 	{ # KA: updated following line with as.vector statements 10/16/2017
@@ -633,14 +633,14 @@ print.gsSurv<-function(x,digits=2,...){
   }
   print.gsDesign(x)
   if(x$test.type != 1){
-    y<-cbind(x$T,(x$eNC+x$eNE)%*%array(1,ncol(x$eNE)),
-            (x$eDC+x$eDE)%*%array(1,ncol(x$eNE)),
+    y<-cbind(x$T,(x$eNC+x$eNE)%*%rep(1,ncol(x$eNE)),
+            (x$eDC+x$eDE)%*%rep(1,ncol(x$eNE)),
             round(zn2hr(x$lower$bound,x$n.I,x$ratio,hr0=x$hr0,hr1=x$hr),3),
             round(zn2hr(x$upper$bound,x$n.I,x$ratio,hr0=x$hr0,hr1=x$hr),3))
     colnames(y)<-c("T","n","Events","HR futility","HR efficacy")
   }else{  
-    y<-cbind(x$T,(x$eNC+x$eNE)%*%array(1,ncol(x$eNE)),
-                   (x$eDC+x$eDE)%*%array(1,ncol(x$eNE)),
+    y<-cbind(x$T,(x$eNC+x$eNE)%*%rep(1,ncol(x$eNE)),
+                   (x$eDC+x$eDE)%*%rep(1,ncol(x$eNE)),
                    round(zn2hr(x$upper$bound,x$n.I,x$ratio,hr0=x$hr0,hr1=x$hr),3))
     colnames(y)<-c("T","n","Events","HR efficacy")
   }
@@ -670,7 +670,7 @@ xtable.gsSurv <- function(x, caption=NULL, label=NULL, align=NULL, digits=NULL,
             paste("P\\{Cross\\} if HR=",x$hr,sep=""))
   st <- stat
   for (i in 2:k) stat <- c(stat,st)
-  an <- array(" ",5*k)
+  an <- rep(" ",5*k)
   tim <- an
   enrol <- an
   fut <- an

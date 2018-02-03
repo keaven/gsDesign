@@ -43,7 +43,7 @@
 # Exported Functions
 ###
 
-"gsBound" <- function(I, trueneg, falsepos, tol=0.000001, r=18)
+"gsBound" <- function(I, trueneg, falsepos, tol=0.000001, r=18, printerr=0)
 {    
     # gsBound: assuming theta=0, derive lower and upper crossing boundaries given 
     #          timing of interims, false positive rates and true negative rates
@@ -54,12 +54,15 @@
     checkVector(falsepos, "numeric", c(0,1), c(TRUE, FALSE))
     checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
     checkScalar(r, "integer", c(1, 80))
+    checkScalar(printerr, "integer")
     checkLengths(trueneg, falsepos, I)    
     
     k <- as.integer(length(I))
     if (trueneg[k]<=0.) stop("Final futility spend must be > 0")
     if (falsepos[k]<=0.) stop("Final efficacy spend must be > 0")
     r <- as.integer(r)
+    printerr <- as.integer(printerr)
+    
     storage.mode(I) <- "double"
     storage.mode(trueneg) <- "double"
     storage.mode(falsepos) <- "double"
@@ -67,8 +70,10 @@
     a <- falsepos
     b <- falsepos
     retval <- as.integer(0)
-    xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval)
+    xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval, printerr)
     rates <- list(falsepos=xx[[6]], trueneg=xx[[5]])
+    
+    ## DSB question: do we need to do something here in case of an error? (similarly as in gsBound1)
     
     list(k=xx[[1]],theta=0.,I=xx[[2]],a=xx[[3]],b=xx[[4]],rates=rates,tol=xx[[7]],
             r=xx[[8]],error=xx[[9]])
@@ -261,13 +266,13 @@
             as.double(a), as.double(b), plo, phi, r)
     plo <- matrix(xx[[7]], k, ntheta)
     phi <- matrix(xx[[8]], k, ntheta)
-    powr <- as.vector(array(1, k) %*% phi)
-    futile <- array(1, k) %*% plo
+    powr <- as.vector(rep(1, k) %*% phi)
+    futile <- rep(1, k) %*% plo
     if(k==1){nOver <- n.I[k]}else{
       nOver <- c(n.I[1:(k-1)]+overrun,n.I[k])
     }
     nOver[nOver>n.I[k]] <- n.I[k]
-    en <- as.vector(nOver %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
+    en <- as.vector(nOver %*% (plo + phi) + n.I[k] * (t(rep(1, ntheta)) - powr - futile))
     x <- list(k=xx[[1]], theta=xx[[3]], n.I=xx[[4]], lower=list(bound=xx[[5]], prob=plo), 
             upper=list(bound=xx[[6]], prob=phi), en=en, r=r, overrun=overrun)
     
@@ -284,7 +289,7 @@
     checkVector(wgts, "numeric")
     checkLengths(theta, wgts)    
     x <- gsProbability(theta = theta, d=x)
-    one <- array(1, x$k)
+    one <- rep(1, x$k)
     as.double(one %*% x$upper$prob %*% wgts)
 }
 
@@ -297,7 +302,7 @@
     checkVector(wgts, "numeric")
     checkLengths(theta, wgts)    
     x <- gsProbability(theta = theta, d=x)
-    v <- c(array(1, i), array(0, (x$k - i)))
+    v <- c(rep(1, i), rep(0, (x$k - i)))
     pAi <- 1 - as.double(v %*% (x$upper$prob + x$lower$prob) %*% wgts)
     v <- 1 - v
     pAiB <- as.double(v %*% x$upper$prob %*% wgts)
@@ -311,7 +316,7 @@
     checkScalar(i, "integer", c(0,x$k), c(FALSE, TRUE))
     checkVector(zi, "numeric")
     checkScalar(r, "integer", c(1, 80)) 
-    den <- array(0, length(theta) * length(zi))
+    den <- rep(0, length(theta) * length(zi))
     xx <- .C("gsdensity", den, as.integer(i), length(theta), 
               as.double(theta), as.double(x$n.I), 
               as.double(x$lower$bound), as.double(x$upper$bound),
@@ -329,7 +334,7 @@
     # gsDType1: calculate bound assuming one-sided rule (only upper bound)
     
     # set lower bound
-    a <- array(-20, x$k)
+    a <- rep(-20, x$k)
 
     # get Wang-Tsiatis bound, if desired
     if (is.element(x$upper$name, c("WT", "Pocock", "OF")))
@@ -484,7 +489,7 @@
     falsepos <- x$upper$spend
     falsepos <- falsepos-c(0, falsepos[1:x$k-1])
     x$upper$spend <- falsepos
-    trueneg <- array((1 - x$alpha) / x$k, x$k)
+    trueneg <- rep((1 - x$alpha) / x$k, x$k)
     x1 <- gsBound(x$timing, trueneg, falsepos, x$tol, x$r)
 
     # get I(max) and lower bound
@@ -610,7 +615,7 @@
     x$upper$spend <- falsepos
 
     # compute initial upper bound under H0 
-    trueneg <- array((1 - x$alpha) / x$k, x$k)
+    trueneg <- rep((1 - x$alpha) / x$k, x$k)
     x1 <- gsBound(x$timing, trueneg, falsepos, x$tol, x$r)
     
     # x$k==1 is a special case
@@ -684,7 +689,7 @@
     x$upper$spend <- falsepos
 
     # compute upper bound under H0 
-    x1 <- gsBound1(theta = 0, I = x$n.I, a = array(-20, x$k), probhi = falsepos, tol = x$tol, r = x$r)
+    x1 <- gsBound1(theta = 0, I = x$n.I, a = rep(-20, x$k), probhi = falsepos, tol = x$tol, r = x$r)
 
     # get lower bound
     x2 <- gsBound1(theta = -x$delta, I = x$n.I, a = -x1$b, probhi = falseneg, tol = x$tol, r = x$r)
@@ -713,7 +718,7 @@
     falsepos <- x$upper$spend
     falsepos <- falsepos-c(0,falsepos[1:x$k-1])
     x$upper$spend <- falsepos
-    x0 <- gsBound1(0., x$timing, array(-20, x$k), falsepos, x$tol, x$r)
+    x0 <- gsBound1(0., x$timing, rep(-20, x$k), falsepos, x$tol, x$r)
 
     # get beta spending (falseneg)
     falseneg <- x$lower$spend
@@ -738,7 +743,7 @@
 
     # compute additional error rates needed and add to x
     x$theta <- c(0, x$delta)
-    x$falseposnb <- as.vector(gsprob(0, xx$I, array(-20, x$k), x0$b, r=x$r)$probhi)
+    x$falseposnb <- as.vector(gsprob(0, xx$I, rep(-20, x$k), x0$b, r=x$r)$probhi)
     x3 <- gsprob(x$theta, xx$I, xx$a, x0$b, r=x$r, overrun=x$overrun)
     x$upper$prob <- x3$probhi
     x$lower$prob <- x3$problo
@@ -772,7 +777,7 @@
     falsepos <- x$upper$spend
     falsepos <- falsepos-c(0, falsepos[1:x$k-1])
     x$upper$spend <- falsepos
-    x0 <- gsBound1(0., x$timing, array(-20, x$k), falsepos, x$tol, x$r)
+    x0 <- gsBound1(0., x$timing, rep(-20, x$k), falsepos, x$tol, x$r)
     x$upper$bound <- x0$b
     
     if (x$astar == 1 - x$alpha)
@@ -815,7 +820,7 @@
     
     # compute error rates needed and add to x
     x$theta <- c(0,x$delta)
-    x$falseposnb <- as.vector(gsprob(0, x$n.I, array(-20, x$k), x$upper$bound,r =x$r)$probhi)
+    x$falseposnb <- as.vector(gsprob(0, x$n.I, rep(-20, x$k), x$upper$bound,r =x$r)$probhi)
     x3 <- gsprob(x$theta, x$n.I, x$lower$bound, x$upper$bound, r=x$r, overrun=x$overrun)
     x$upper$prob <- x3$probhi
     x$lower$prob <- x3$problo
@@ -909,11 +914,11 @@
     
     plo <- matrix(xx[[7]], nanal, ntheta)
     phi <- matrix(xx[[8]], nanal, ntheta)
-    powr <- array(1, nanal)%*%phi
-    futile <- array(1, nanal)%*%plo
+    powr <- rep(1, nanal)%*%phi
+    futile <- rep(1, nanal)%*%plo
     IOver <- c(I[1:(nanal-1)]+overrun,I[nanal])
     IOver[IOver>I[nanal]]<-I[nanal]
-    en <- as.vector(IOver %*% (plo+phi) + I[nanal] * (t(array(1, ntheta)) - powr - futile))
+    en <- as.vector(IOver %*% (plo+phi) + I[nanal] * (t(rep(1, ntheta)) - powr - futile))
     list(k=xx[[1]], theta=xx[[3]], I=xx[[4]], a=xx[[5]], b=xx[[6]], problo=plo, 
             probhi=phi, powr=powr, en=en, r=r)
 }
@@ -923,7 +928,7 @@
     k <- d$k
     n.I <- d$n.I
     
-    a <- if (d$test.type != 1) d$lower$bound else array(-20, k)    
+    a <- if (d$test.type != 1) d$lower$bound else rep(-20, k)    
     b <- d$upper$bound
     r <- d$r
     ntheta <- as.integer(length(theta))
@@ -935,13 +940,13 @@
             as.double(a), as.double(b), plo, phi, r)
     plo <- matrix(xx[[7]], k, ntheta)
     phi <- matrix(xx[[8]], k, ntheta)
-    powr <- as.vector(array(1, k) %*% phi)
-    futile <- array(1, k) %*% plo
+    powr <- as.vector(rep(1, k) %*% phi)
+    futile <- rep(1, k) %*% plo
     if (k==1){IOver <- n.I}else{
       IOver <- c(n.I[1:(k-1)]+d$overrun,n.I[k])
     }
     IOver[IOver>n.I[k]]<-n.I[k]
-    en <- as.vector(IOver %*% (plo+phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
+    en <- as.vector(IOver %*% (plo+phi) + n.I[k] * (t(rep(1, ntheta)) - powr - futile))
 
     d$en <- en
     d$theta <- theta

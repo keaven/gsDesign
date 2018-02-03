@@ -1,3 +1,8 @@
+for 3.0-5, January, 2018
+- registered C routines
+- fix "gsbound"
+- replace "array" by "rep" calls to avoid R CMD check warnings
+
 3.0-4, September, 2017
 - First Github-based release
 - Cleaned up documentation for nBinomial1Sample
