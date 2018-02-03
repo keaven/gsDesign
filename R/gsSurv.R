@@ -78,8 +78,9 @@ eEvents<-function(lambda=1, eta=0, gamma=1, R=1, S=NULL, T=2,
 	n <- array(0,ncol(lambda))
 	d <- n 
 	for(i in 1:ncol(lambda))
-	{	a <- eEvents1(lambda=lambda[,i],eta=eta[,i],
-                    gamma=gamma[,i],R=R,S=S,T=T,
+	{ # KA: updated following line with as.vector statements 10/16/2017
+	  a <- eEvents1(lambda=as.vector(lambda[,i]),eta=as.vector(eta[,i]),
+                    gamma=as.vector(gamma[,i]),R=R,S=S,T=T,
                     Tfinal=Tfinal, minfup=minfup)
 		n[i]<-a$n
 		d[i]<-a$d
@@ -573,14 +574,16 @@ gsSurv<-function(k=3, test.type=4, alpha=0.025, sided=1,
   sfl=sfHSD, sflpar=-2, r=18,
   lambdaC=log(2)/6, hr=.6, hr0=1, eta=0, etaE=NULL,
   gamma=1, R=12, S=NULL, T=NULL, minfup=NULL, ratio=1,
-  tol = .Machine$double.eps^0.25)
+  tol = .Machine$double.eps^0.25, 
+  usTime = NULL, lsTime = NULL) # KA: last 2 arguments added 10/8/2017
 { x<-nSurv(lambdaC=lambdaC, hr=hr, hr0=hr0, eta = eta, etaE=etaE, 
   gamma=gamma, R=R, S=S, T=T,  minfup = minfup, ratio = ratio,
   alpha = alpha, beta = beta,  sided = sided, tol = tol)  
   y<-gsDesign(k=k,test.type=test.type,alpha=alpha/sided,
       beta=beta, astar=astar, n.fix=x$d, timing=timing,
       sfu=sfu, sfupar=sfupar, sfl=sfl, sflpar=sflpar, tol=tol,
-              delta1=log(hr), delta0=log(hr0))
+      delta1=log(hr), delta0=log(hr0), 
+      usTime=usTime, lsTime=lsTime) # KA: last 2 arguments added 10/8/2017
   z<-gsnSurv(x,y$n.I[k])
   eDC <- NULL
   eDE <- NULL

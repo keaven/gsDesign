@@ -36,7 +36,8 @@ gsSurv(k=3, test.type=4, alpha=0.025, sided=1,
   sfl=sfHSD, sflpar=-2, r=18,
   lambdaC=log(2)/6, hr=.6, hr0=1, eta=0, etaE=NULL,
   gamma=1, R=12, S=NULL, T=NULL, minfup=NULL, ratio=1,
-  tol = .Machine$double.eps^0.25)
+  tol = .Machine$double.eps^0.25,
+  usTime = NULL, lsTime = NULL)
 \method{print}{gsSurv}(x,digits=2,...)
 \method{xtable}{gsSurv}(x, caption=NULL, label=NULL, align=NULL, digits=NULL,
        display=NULL, auto=FALSE, footnote=NULL, fnwid="9cm", timename="months",...)
@@ -94,6 +95,8 @@ timing[k]=1}. For \code{tEventsIA}, this is a scalar strictly between 0 and 1 th
 \item{r}{Integer value controlling grid for numerical integration as in Jennison and Turnbull (2000); 
 	default is 18, range is 1 to 80. Larger values provide larger number of grid points and greater accuracy.
 	Normally \code{r} will not be changed by the user.}
+  \item{usTime}{Default is NULL in which case upper bound spending time is determined by \code{timing}. Otherwise, this should be a vector of length \code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
+  \item{lsTime}{Default is NULL in which case lower bound spending time is determined by \code{timing}. Otherwise, this should be a vector of length \code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
 \item{tIA}{Timing of an interim analysis; should be between 0 and \code{y$T}.}
 \item{target}{The targeted proportion of events at an interim analysis. This is used for root-finding will be 0 for normal use.}
 \item{simple}{See output specification for \code{nEventsIA()}.}
@@ -120,7 +123,6 @@ Alternatively and also using the fixed enrollment rate(s) in \code{gamma}, if mi
 This method will fail if the specified enrollment rates and durations either over-powers the trial with no additional follow-up or underpowers the trial with infinite follow-up. This method produces a corresponding error message in such cases.
 
 The input to \code{gsSurv} is a combination of the input to \code{nSurv()} and \code{gsDesign()}.
-While this routine may change in the future, it is likely to be backwards compatible with the current version.
 
 \code{nEventsIA()} is provided to compute the expected number of events at a given point in time given enrollment, event and censoring rates.
 The routine is used with a root finding routine to approximate the approximate timing of an interim analysis. It is also used to extend enrollment or follow-up of a fixed design to obtain a sufficient number of events to power a group sequential design.
@@ -249,5 +251,18 @@ nEventsIA(x=x,tIA=10)
 
 # find time at which 1/4 of events are expected
 tEventsIA(x=x,timing=.25)
+
+# example to emulate Haybittle-Peto design using spending time (usTime)
+x <- gsSurv(k=3,test.type=2,sfu=sfPower,sfupar=1,usTime=c(.0005,.00095,.025)/.025,
+            lambdaC=log(2)/6, hr=.65, eta=log(2)/40,gamma=1, T=36,  minfup = 12)
+gsBoundSummary(x)
+
+# update timing of above analysis based on actual events accrued
+# maintain .0005 p-value bounds in spite of changed timing using usTime
+y <- gsDesign(k=3,maxn.IPlan=x$n.I[x$k],n.I=c(60,90,150),
+              delta1=log(x$hr),
+              delta=x$delta,test.type=2,sfu=sfPower,sfupar=1,
+              usTime=c(.0005,.00095,.025)/.025)
+gsBoundSummary(y,nName="Events",logdelta=TRUE,deltaname="HR")
 }
 \keyword{design}

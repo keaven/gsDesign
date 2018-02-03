@@ -277,9 +277,9 @@
 "sfLDOF" <- function(alpha, t, param=1){    
   checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
   checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
-  # Following 2 lines added 10/1/17 
+  # Following 2 lines udated 10/11/17 
   # fix needed since default for gsDesign is param=-4 is out of range for LDOF
-  if (!is.null(param) && (param < .005 || param > 2)) param <- 1
+  if (is.null(param) || param < .005 || param > 20) param <- 1
   checkScalar(param, "numeric", c(.005,20),c(TRUE,TRUE))
   t[t>1] <- 1
   if (param == 1){

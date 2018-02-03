@@ -190,5 +190,8 @@ plot(x, plottype=2)
 # same design, but with relative sample sizes
 gsDesign(k=4, timing=timing, sfu=sfPoints, sfupar=sfup, sfl=sfPoints,
 sflpar=sflp)
+
+# example to emulate Haybittle-Peto design using spending time (usTime)
+gsDesign(k=3,n.fix=1000,test.type=2,sfu=sfPower,sfupar=1,usTime=c(.0005,.00095,.025)/.025)
 }
 \keyword{design}

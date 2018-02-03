@@ -175,11 +175,6 @@
     
     x$upper <- upper
     
-    # get upper spending time (usually will be x$timing)
-    if (is.null(x$lsTime)) lsTime <- x$timing
-    else lsTime <- x$lsTime
-    if (lsTime[length(lsTime)-1] > 1) stop("All interim analyses must have spending time < 1 (lsTime)")
-    
     # set up spending for lower bound
     if (x$test.type == 1) 
     {
@@ -188,9 +183,14 @@
     else if (x$test.type == 2) 
     {
         x$lower <- x$upper
+        x$lsTime <- x$usTime
     }
     else
     {   
+        # get lower spending time (usually will be x$timing)
+        if (is.null(x$lsTime)) lsTime <- x$timing
+        else lsTime <- x$lsTime
+        if (lsTime[length(lsTime)-1] > 1) stop("All interim analyses must have spending time < 1 (lsTime)")
         if (!is.function(sfl))
         {     
             stop("Lower spending function must return object with class spendfn")
