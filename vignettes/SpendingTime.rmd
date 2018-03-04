@@ -1,0 +1,125 @@
+---
+title: "Spending Time"
+author: "Keaven M. Anderson"
+date: "`r Sys.Date()`"
+output:
+    rmarkdown::html_vignette:
+      fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{Spending time concept and example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Introduction
+
+This vignette provides examples demonstrating uses of spending time, a concept introduced in version 3.0-4. 
+One simple example of this is by plugging a calendar time fraction \cite{LanDeMets1989} into an $\alpha$-spending function rather than an information fraction.
+However, the concept is more general than this and may apply to other situations that will be demonstrated below.
+The situations we will consider are:
+
+* Fixed spending at each interim analysis as demonstrated with an approximation to a Haybittle-Peto bound.
+* Spending time based on information fraction from a different population analyzed for the same endpoint where the final event count for the given hypothesis is unknown.
+* These examples will also be used to demonstrate how to deal with interim analysis event counts during the course that differ substantially from planned. 
+
+
+# Calendar Time
+
+# Haybittle-Peto Bound Approximation
+
+# Unknown Final Event Count
+
+```{r}
+# code here applies to both fixed and group sequential design sections below.
+require(gsDesign)
+# name of primary endpoint and time units
+ep <- "overall survival"
+timename <- "months"
+timename1 <- "month"
+# enrollment period durations; the last of these will be extended if T=NULL below
+R <- c(1,2,3,4)
+# relative enrollment rates during above periods
+gamma<-c(1,1.5,2.5,4)
+# study duration
+# T can be set to NULL if you want to 
+# fix enrollment and vary study duration
+T <- 36 
+# follow-up duration of last patient enrolled
+minfup <- 12
+# randomization ratio, experimental/control
+ratio <- 1
+# median control time-to-event
+median <- 12
+# exponential dropout rate per unit of time
+eta <- .001
+# hypothesized experimental/control hazard ratio
+hr <- .75
+# null hazard ratio (1 for superiority, >1 for non-inferiority)
+hr0 <- 1
+# Type I error (1-sided)
+alpha <-.025
+# Type II error (1-power)
+beta<-.2
+# number of analyses (interim + final)
+k <- 2
+# timing of interim analyses (k-1 increasing numbers >0 and <1)
+timing <- .7
+# efficacy bound spending function
+sfu <- sfLDOF 
+# efficacy bound spending parameter specification
+sfupar <- NULL
+# futility bound spending function
+sfl <- sfHSD 
+# futility bound spending parameter specification
+sflpar <- 2
+# generate design
+x <- gsSurv(k=k,timing=timing,R=R,gamma=gamma,eta=eta,
+            minfup=minfup,T=T,lambdaC=log(2)/median,
+            hr=hr,hr0=hr0,beta=beta,alpha=alpha,
+            sfu=sfu,sfupar=sfupar,sfl=sfl,sflpar=sflpar)
+
+```
+
+
+For a comparative trial we consider a 2-arm group sequential design with `r ep` as the primary endpoint as shown in Table \ref{tab1} (a second version of the table is in \ref{tab2}.
+Timing, number of events, sample size, boundaries (Z-values, nominal p-values, approximate hazard ratios) are shown as well as the probability of crossing study boundaries under the null and alternate hypotheses.
+Bounds are determined by an O'Brien-Fleming spending function for superiority ($\alpha$-spending) and a Hwang-Shih-DeCani spending function for futility with $\gamma=$ `r sflpar` ($\beta$-spending).
+The median time-to-event is assumed to be `r median` `r timename` in the control group.
+`r if (hr0==1) paste("The trial is designed to demonstrate superiority of experimental treatment over control with an assumed hazard ratio of ",hr,".",sep="")`
+The total sample size is `r ceiling(sum(x$eNE[k,]+x$eNC[k,]))` and a
+total of `r ceiling(sum(x$eDE[k,]+x$eDC[k,]))` endpoints is required for the final analysis.
+Planned recruitment duration is `r sum(x$R)` \Sexpr{timename} and the minimum follow-up planned is `r round(x$minfup,1)` `r timename`.
+Thus, the total expected study duration is `r round(max(x$T),1)` `r timename`.
+The assumed dropout rate is `r 100*eta`\% per `r timename1`.
+`r if (x$k==2) paste("There is a single interim analysis planned after",ceiling(x$eDE[1,]+x$eDC[1,]),"events have accrued which is expected after approximately",round(x$T[1],1),timename,sep=" ")`.
+
+
+```{r}
+knitr::kable(gsBoundSummary(x),digits=4,row.names=FALSE,
+             caption="Using kable to print a design summary.")
+```
+
+
+
+Following are plots of the Z-values and approximate hazard ratios at the design bounds.
+
+
+```{r p1 ,fig.width=6,fig.height=4}
+plot(x,cex=.8,xlab="Number of events")+
+  theme(legend.position = "bottom")
+```
+
+
+```{r p2 ,fig.width=6,fig.height=4}
+plot(x,plottype="hr",cex=.8,xlab="Number of events")+
+  theme(legend.position = "bottom")
+```
+

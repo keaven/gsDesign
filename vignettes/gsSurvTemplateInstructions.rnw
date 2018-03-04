@@ -2,8 +2,9 @@
 \usepackage[round]{natbib}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
 % \VignetteIndexEntry{Template instructions for time-to-event group sequential design}
-% \VignetteEngine{knitr}
+% \VignetteEngine{knitr::knitr}
 \begin{document}
+%\SweaveOpts{concordance=TRUE}
 \title{Template instructions for time-to-event group sequential design}
 \author{Keaven M. Anderson}
 \maketitle
