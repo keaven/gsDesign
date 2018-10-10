@@ -396,7 +396,7 @@ gsBoundSummary <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits
   if(x$test.type>2)tem <- data.frame(cbind(tem,"Futility"=pnorm(x$lower$bound,lower.tail=FALSE)))
   statframe <- rbind(statframe,tem)                 
   # delta values at bounds                 
-  tem <- data.frame("Value"=paste(deltaname,"at bound"),"Efficacy"=deltaefficacy,i=1:x$k)
+  tem <- data.frame("Value"=paste("~",deltaname," at bound",sep=""),"Efficacy"=deltaefficacy,i=1:x$k)
   if(x$test.type>1) tem$Futility <- deltafutility
   statframe <- rbind(statframe,tem)                 
   
