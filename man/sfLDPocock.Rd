@@ -6,7 +6,7 @@
 Lan and DeMets (1983) first published the method of using spending functions to set boundaries for group sequential trials.
 In this publication they proposed two specific spending functions:
 one to approximate an O'Brien-Fleming design and the other to approximate a Pocock design.
-The spending function to approximate O'Brien-Fleming has been generalized as proposed by Liu, et al (20) 
+The spending function to approximate O'Brien-Fleming has been generalized as proposed by Liu, et al (2012) 
 }
 
 \usage{
