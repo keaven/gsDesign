@@ -3,7 +3,8 @@
 \title{Normal distribution sample size (2-sample)}
 \description{\code{nNormal()} computes a fixed design sample size for comparing 2 means where variance is known. T
 The function allows computation of sample size for a non-inferiority hypothesis.
-Note that you may wish to investigate other R packages such as the \code{pwr} package which uses the t-distr
+Note that you may wish to investigate other R packages such as the \code{pwr} package which uses the t-distribution.
+In the examples below we show how to set up a 2-arm group sequential design with a normal outcome. 
 }
 \usage{
 nNormal(delta1=1,sd=1.7,sd2=NULL,alpha=.025,beta=.1,ratio=1, sided=1,
@@ -57,8 +58,20 @@ Iowa State University Press.
 \examples{
 # EXAMPLES
 # equal variances
-nNormal(delta1=.5,sd=1.1,alpha=.025,beta=.2)
-# unequal variances
+n=nNormal(delta1=.5,sd=1.1,alpha=.025,beta=.2)
+n
+# Set up a corresponding group sequential design.
+# Note the argument n.fix to represent fixed designs sample size for above difference
+# in means and standard deviation.
+# Note that the argument delta1 does NOT affect sample size approximation,
+# but DOES affect approximation of observed difference in means to achieve 
+# statistical significance when gsBoundSummary is run.
+x <- gsDesign(k = 3, n.fix = n, test.type = 4, alpha = 0.025, beta = 0.1, timing = c(.5,.75),
+              sfu = sfLDOF, sfl = sfHSD, sflpar = -1, delta1 = 0.5, endpoint = 'normal') 
+gsBoundSummary(x)
+summary(x)
+
+# unequal variances, fixed design
 nNormal(delta1=.5,sd=1.1,sd2=2,alpha=.025,beta=.2)
 # unequal sample sizes
 nNormal(delta1=.5,sd=1.1,alpha=.025,beta=.2, ratio=2)
