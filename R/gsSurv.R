@@ -264,8 +264,8 @@ LFPWE <- function(alpha=.025, sided=1, beta=.1,
   gamma=1, ratio=1, R=18, S=NULL, T=24, minfup=NULL){
   
   # set up parameters
-  zalpha <- -qnorm(alpha/sided)
-  zbeta <- -qnorm(beta)
+  zalpha <- -stats::qnorm(alpha/sided)
+  zbeta <- -stats::qnorm(beta)
   if (is.null(minfup)) minfup <- max(0,T-sum(R))
   if (length(R)==1) {R <- T-minfup
   }else if (sum(R) != T-minfup)
@@ -374,7 +374,7 @@ KTZ <- function(x=NULL, minfup=NULL, n1Target=NULL,
                 lambdaC=log(2) / 6, etaC=0, etaE=0,
                 gamma=1, ratio=1, R=18, S=NULL, beta=.1, 
                 alpha=.025, sided=1, hr0=1, hr=.5, simple=TRUE){ 
-  zalpha<- -qnorm(alpha/sided)
+  zalpha<- -stats::qnorm(alpha/sided)
   Qc <- 1/(1+ratio)
   Qe <- 1 - Qc
   # set minimum follow-up to x if that is missing and x is given
@@ -427,11 +427,11 @@ KTZ <- function(x=NULL, minfup=NULL, n1Target=NULL,
   # if that is all that is needed, return difference from
   # targeted value
   if (simple) 
-  { if (!is.null(beta)) return(zb + qnorm(beta))
-    else return(pnorm(-zb))
+  { if (!is.null(beta)) return(zb + stats::qnorm(beta))
+    else return(stats::pnorm(-zb))
   }
   # compute power
-  power <- pnorm(zb)
+  power <- stats::pnorm(zb)
   beta <- 1-power
   # set accrual period durations
   if (sum(R) != T-minfup)
@@ -497,7 +497,7 @@ KT <- function(alpha=.025, sided=1, beta=.1,
                   hr0=hr0, hr=hr)
      if (left>0) stop("Enrollment duration over-powers trial")
      if (right<0) stop("Enrollment duration insufficient to power trial")
-     y <- uniroot(f=KTZ,interval=c(.01,10000), lambdaC=lambdaC,
+     y <- stats::uniroot(f=KTZ,interval=c(.01,10000), lambdaC=lambdaC,
                   etaC=etaC, etaE=etaE, gamma=gamma, ratio=ratio,
                   R=R, S=S, beta=beta, alpha=alpha, sided=sided,
                   hr0=hr0, hr=hr, tol=tol, n1Target=n1Target)
@@ -509,7 +509,7 @@ KT <- function(alpha=.025, sided=1, beta=.1,
      xx$tol <- tol
      return(xx)
   }else 
-  {  y <- uniroot(f=KTZ, interval=minfup+c(.01,10000), lambdaC=lambdaC, 
+  {  y <- stats::uniroot(f=KTZ, interval=minfup+c(.01,10000), lambdaC=lambdaC, 
            n1Target=n1Target,
            etaC=etaC, etaE=etaE, gamma=gamma, ratio=ratio, 
            R=R, S=S, minfup=minfup, beta=beta,
@@ -858,6 +858,7 @@ KT <- function(alpha=.025, sided=1, beta=.1,
 #' # find time at which 1/4 of events are expected
 #' tEventsIA(x=x,timing=.25)
 #' 
+#' @export
 nSurv <- function(lambdaC=log(2)/6, hr=.6, hr0=1, eta = 0, etaE=NULL, 
   gamma=1, R=12, S=NULL, T=NULL,  minfup = NULL, ratio = 1,
   alpha = 0.025, beta = 0.10,  sided = 1, tol = .Machine$double.eps^0.25){ 
@@ -943,7 +944,7 @@ gsnSurv <- function(x,nEvents){
 
 tEventsIA<-function(x, timing=.25, tol = .Machine$double.eps^0.25){   
   T <- x$T[length(x$T)]
-    z <- uniroot(f=nEventsIA, interval=c(0.0001,T-.0001), x=x,
+    z <- stats::uniroot(f=nEventsIA, interval=c(0.0001,T-.0001), x=x,
           target=timing, tol=tol,simple=TRUE)
     return(nEventsIA(tIA=z$root,x=x,simple=FALSE))
 }
@@ -966,6 +967,7 @@ nEventsIA <- function(tIA=5, x=NULL, target=0, simple=TRUE){
   else return(list(T=tIA,eDC=eDC$d,eDE=eDE$d,eNC=eDC$n,eNE=eDE$n))
 }
 
+#' @export
 gsSurv <- function(k=3, test.type=4, alpha=0.025, sided=1,  
   beta=0.1, astar=0, timing=1, sfu=sfHSD, sfupar=-4,
   sfl=sfHSD, sflpar=-2, r=18,
@@ -1083,7 +1085,7 @@ xtable.gsSurv <- function(x, caption=NULL, label=NULL, align=NULL, digits=NULL,
   eff[5*(0:(k-1))+1]<- as.character(round(x$upper$bound,2)) 
   if (x$test.type != 1) fut[5*(0:(k-1))+2]<- as.character(round(gsHR(z=x$lower$bound,i=1:k,x,ratio=x$ratio)*x$hr0,2))
   eff[5*(0:(k-1))+2]<- as.character(round(gsHR(z=x$upper$bound,i=1:k,x,ratio=x$ratio)*x$hr0,2)) 
-  asp <- as.character(round(pnorm(-x$upper$bound),4))
+  asp <- as.character(round(stats::pnorm(-x$upper$bound),4))
   asp[asp=="0"]<-"$< 0.0001$"
   eff[5*(0:(k-1))+3] <- asp
   asp <- as.character(round(cumsum(x$upper$prob[,1]),4))
@@ -1093,7 +1095,7 @@ xtable.gsSurv <- function(x, caption=NULL, label=NULL, align=NULL, digits=NULL,
   asp[asp=="0"]<-"$< 0.0001$"
   eff[5*(0:(k-1))+5] <- asp
   if (x$test.type != 1) {
-    bsp <- as.character(round(pnorm(-x$lower$bound),4))
+    bsp <- as.character(round(stats::pnorm(-x$lower$bound),4))
     bsp[bsp=="0"]<-" $< 0.0001$"
     fut[5*(0:(k-1))+3] <- bsp
     bsp <- as.character(round(cumsum(x$lower$prob[,1]),4))
@@ -1113,6 +1115,6 @@ xtable.gsSurv <- function(x, caption=NULL, label=NULL, align=NULL, digits=NULL,
     xxtab <- data.frame(cbind(an,stat,eff))
     colnames(xxtab) <- c("Analysis","Value","Efficacy")
   }
-  return(xtable(xxtab, caption=caption, label=label, align=align, digits=digits,
+  return(xtable::xtable(xxtab, caption=caption, label=label, align=align, digits=digits,
                 display=display,auto=auto,...))
 }

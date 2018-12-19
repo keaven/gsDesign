@@ -126,7 +126,7 @@ normalGrid <- function(r=18, bounds=c(0, 0), mu=0, sigma=1){
     len <- sum(xx[[3]] <= b[2])
     z <- xx[[3]][1:len] * sigma + mu
     w <- xx[[4]][1:len] * sigma
-    d <- dnorm(z, mean=mu, sd=sigma)
+    d <- stats::dnorm(z, mean=mu, sd=sigma)
     list(z=z, density=d, gridwgts=w, wgts=d*w) 
 }
 

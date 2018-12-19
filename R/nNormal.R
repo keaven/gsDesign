@@ -80,7 +80,7 @@ nNormal <- function(delta1=1, sd=1.7, sd2=NULL, alpha=.025,
    theta1 <- (delta1-delta0)/se
    if (max(abs(theta1) == 0)) stop("delta1 may not equal delta0")
    if (is.null(n)){
-      n <-((qnorm(alpha/sided)+qnorm(beta))/theta1)^2
+      n <-((stats::qnorm(alpha/sided)+stats::qnorm(beta))/theta1)^2
       if (outtype == 2)
       {
         return(data.frame(cbind(n1=n / (ratio + 1),  n2=ratio * n / (ratio + 1))))
@@ -93,7 +93,7 @@ nNormal <- function(delta1=1, sd=1.7, sd2=NULL, alpha=.025,
       }
       else return(n=n)
    }else{
-      powr <- pnorm(sqrt(n)*theta1-qnorm(1-alpha/sided))
+      powr <- stats::pnorm(sqrt(n)*theta1-stats::qnorm(1-alpha/sided))
       if (outtype == 2) return(data.frame(cbind(n1=n / (ratio + 1),  n2=ratio * n / (ratio + 1), Power=powr)))
       else if (outtype == 3){
         return(data.frame(cbind(n=n, n1=n / (ratio + 1), n2=ratio * n / (ratio + 1),

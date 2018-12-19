@@ -3,7 +3,7 @@ condPower <- function(z1, n2, z2=z2NC, theta=NULL,
                 x=gsDesign(k=2, timing=.5, beta=beta),
                 ...){
   if (is.null(theta)) theta <- z1 / sqrt(x$n.I[1])
-  return(as.numeric(pnorm(sqrt(n2)*theta-
+  return(as.numeric(stats::pnorm(sqrt(n2)*theta-
                             z2(z1=z1,x=x,n2=n2))))
 }
 
@@ -13,7 +13,7 @@ condPowerDiff <- function(z1, target, n2, z2=z2NC,
                             theta=NULL,
                             x=gsDesign(k=2,timing=.5)){
   if (is.null(theta)) theta <- z1 / sqrt(x$n.I[1])
-  return(as.numeric(pnorm(sqrt(n2)*theta-
+  return(as.numeric(stats::pnorm(sqrt(n2)*theta-
                             z2(z1=z1,x=x,n2=n2))-target))
 }
 
@@ -24,7 +24,7 @@ n2sizediff <- function(z1, target, beta=.1, z2=z2NC,
                          x=gsDesign(k=2, timing=.5, beta=beta)){
   if (is.null(theta)) theta <- z1 / sqrt(x$n.I[1])
   return(as.numeric(((z2(z1=z1,x=x,n2=target-x$n.I[1]) - 
-                        qnorm(beta))/theta)^2 + x$n.I[1] - 
+                        stats::qnorm(beta))/theta)^2 + x$n.I[1] - 
                       target))
 }
 
@@ -313,9 +313,9 @@ ssrCP <- function(z1, theta=NULL, maxinc=2, overrun=0,
   # assuming original stage 2 sample size
   z2i <- z2(z1=z1[indx2], x=x, n2=x$n.I[2]-x$n.I[1],...)
   if (length(theta)==1){
-    n2i <- ((z2i - qnorm(beta)) / theta)^2 + x$n.I[1]
+    n2i <- ((z2i - stats::qnorm(beta)) / theta)^2 + x$n.I[1]
   }else{
-    n2i <- ((z2i - qnorm(beta)) / theta[indx2])^2 + x$n.I[1]
+    n2i <- ((z2i - stats::qnorm(beta)) / theta[indx2])^2 + x$n.I[1]
   }
   n2i[n2i/x$n.I[2] > maxinc] <- x$n.I[2]*maxinc
   # if conditional error depends on stage 2 sample size,
@@ -325,9 +325,9 @@ ssrCP <- function(z1, theta=NULL, maxinc=2, overrun=0,
     for(i in 1:6){
       z2i <- z2(z1=z1[indx2], x=x, n2=n2i-x$n.I[1], ...)
       if (length(theta)==1){
-        n2i <- ((z2i - qnorm(beta))/theta)^2 + x$n.I[1]
+        n2i <- ((z2i - stats::qnorm(beta))/theta)^2 + x$n.I[1]
       }else{
-        n2i <- ((z2i - qnorm(beta))/theta[indx2])^2 + 
+        n2i <- ((z2i - stats::qnorm(beta))/theta[indx2])^2 + 
           x$n.I[1]
       }
       n2i[n2i/x$n.I[2] > maxinc] <- x$n.I[2]*maxinc
@@ -346,22 +346,22 @@ ssrCP <- function(z1, theta=NULL, maxinc=2, overrun=0,
 }
 
 plot.ssrCP <- function(x, z1ticks=NULL, mar=c(7, 4, 4, 4)+.1, ylab="Adapted sample size", xlaboffset=-.2, lty=1, col=1,...){
-  par(mar=mar)
+  graphics::par(mar=mar)
   plot(x$dat$z1, x$dat$n2,type="l", axes=FALSE, xlab="", ylab="", lty=lty, col=col,...)
-  xlim <- par("usr")[1:2] # get x-axis range
-  axis(side=2, ...)
-  mtext(side=2, ylab, line=2,...)
+  xlim <- graphics::par("usr")[1:2] # get x-axis range
+  graphics::axis(side=2, ...)
+  graphics::mtext(side=2, ylab, line=2,...)
   w <- x$x$timing[1]
   if (is.null(z1ticks)) z1ticks <- seq(ceiling(2*xlim[1])/2, floor(2*xlim[2])/2, by=.5)
   theta <- z1ticks / sqrt(x$x$n.I[1])
-  CP <- pnorm(theta*sqrt(x$x$n.I[2]*(1-w))-(x$upper$bound[2]-z1ticks*sqrt(w))/sqrt(1-w))
+  CP <- stats::pnorm(theta*sqrt(x$x$n.I[2]*(1-w))-(x$upper$bound[2]-z1ticks*sqrt(w))/sqrt(1-w))
   CP <- condPower(z1=z1ticks,x=x$x,cpadj=x$cpadj,n2=x$x$n.I[2]-x$x$n.I[1])
-  axis(side=1,line=3,at=z1ticks,labels=as.character(round(CP,2)), ...)
-  mtext(side=1,"CP",line=3.5,at=xlim[1]+xlaboffset,...)
-  axis(side=1,line=1,at=z1ticks, labels=as.character(z1ticks),...)
-  mtext(side=1,expression(z[1]),line=.75,at=xlim[1]+xlaboffset,...)
-  axis(side=1,line=5,at=z1ticks, labels=as.character(round(theta/x$x$delta,2)),...)
-  mtext(side=1,expression(hat(theta)/theta[1]),line=5.5,at=xlim[1]+xlaboffset,...)
+  graphics::axis(side=1,line=3,at=z1ticks,labels=as.character(round(CP,2)), ...)
+  graphics::mtext(side=1,"CP",line=3.5,at=xlim[1]+xlaboffset,...)
+  graphics::axis(side=1,line=1,at=z1ticks, labels=as.character(z1ticks),...)
+  graphics::mtext(side=1,expression(z[1]),line=.75,at=xlim[1]+xlaboffset,...)
+  graphics::axis(side=1,line=5,at=z1ticks, labels=as.character(round(theta/x$x$delta,2)),...)
+  graphics::mtext(side=1,expression(stats::hat(theta)/theta[1]),line=5.5,at=xlim[1]+xlaboffset,...)
 }
 
 # normal combination test cutoff for z2
@@ -384,12 +384,12 @@ z2Z <- function(z1,x,n2=x$n.I[2]-x$n.I[1],...){
 # Fisher's combination text
 z2Fisher <- function(z1,x,...){
   z2 <- z1
-  indx <- pchisq(-2*log(pnorm(-z1)), 4, lower.tail=F) <= 
-    pnorm(-x$upper$bound[2])
+  indx <- stats::pchisq(-2*log(stats::pnorm(-z1)), 4, lower.tail=F) <= 
+    stats::pnorm(-x$upper$bound[2])
   z2[indx] <- -Inf
-  z2[!indx] <- qnorm(exp(-qchisq(pnorm(-x$upper$bound[2]), 
+  z2[!indx] <- stats::qnorm(exp(-stats::qchisq(stats::pnorm(-x$upper$bound[2]), 
                                  df=4, lower.tail=FALSE) /
-                           2-log(pnorm(-z1[!indx]))), 
+                           2-log(stats::pnorm(-z1[!indx]))), 
                      lower.tail=FALSE)
   class(z2) <- c("n2independent","numeric")
   return(z2)
@@ -407,9 +407,9 @@ Power.ssrCP <- function(x, theta=NULL, delta=NULL, r=18){
   Power <- en
   mu <- sqrt(x$x$n.I[1])*theta
   # probability of stopping at 1st interim
-  Power <- pnorm(x$x$upper$bound[1]-mu,lower.tail=FALSE)
+  Power <- stats::pnorm(x$x$upper$bound[1]-mu,lower.tail=FALSE)
   en <- (x$x$n.I[1]+x$overrun)*(Power + 
-                                  pnorm(x$x$lower$bound[1]-mu))
+                                  stats::pnorm(x$x$lower$bound[1]-mu))
   # get minimum and maximum conditional power at bounds
   cpmin <- condPower(z1=x$x$lower$bound[1], 
                      n2=x$x$n.I[2] - x$x$n.I[1], 
@@ -423,57 +423,57 @@ Power.ssrCP <- function(x, theta=NULL, delta=NULL, r=18){
   # is done or min conditional power >= upper cp for which 
   # adjustment is done, no adjustment required
   if (cpmax <= x$cpadj[1] || cpmin >=x$cpadj[2]){
-    en <- en + x$x$n.I[2] * (pnorm(x$x$upper$bound[1]-mu) - 
-                               pnorm(x$x$lower$bound[1]-mu))
+    en <- en + x$x$n.I[2] * (stats::pnorm(x$x$upper$bound[1]-mu) - 
+                               stats::pnorm(x$x$lower$bound[1]-mu))
     a <- x$x$lower$bound[1]
     b <- x$x$upper$bound[2]
     n2 <- x$x$n.I[2]-x$x$n.I[1]
     grid <- normalGrid(mu=(a+b)/2,bounds=c(a,b),r=r)
     for(i in 1:length(theta)) Power[i] <- Power[i] +
-      sum(dnorm(grid$z-sqrt(x$x$n.I[1])*theta[i]) * grid$gridwgts*
-            pnorm(x$z2fn(grid$z, x=x$x, n2=n2)-theta[i]*sqrt(n2), 
+      sum(stats::dnorm(grid$z-sqrt(x$x$n.I[1])*theta[i]) * grid$gridwgts*
+            stats::pnorm(x$z2fn(grid$z, x=x$x, n2=n2)-theta[i]*sqrt(n2), 
                   lower.tail=FALSE))
     return(data.frame(theta=theta,delta=delta,Power=Power,en=en))
   }
   # check if minimum conditional power met at interim lower bound,
   # if not, compute probability of no SSR and accumulate
   if (cpmin<x$cpadj[1]){
-    changepoint <- uniroot(condPowerDiff, 
+    changepoint <- stats::uniroot(condPowerDiff, 
                            interval=c(x$x$lower$bound[1], 
                                       x$x$upper$bound[1]), 
                            target=x$cpadj[1],
                            n2=x$x$n.I[2]-x$x$n.I[1], 
                            z2=x$z2fn, theta=x$theta, 
                            x=x$x)$root
-    en <- en + x$x$n.I[2]*(pnorm(changepoint-mu) - 
-                             pnorm(x$x$lower$bound[1]-mu))
+    en <- en + x$x$n.I[2]*(stats::pnorm(changepoint-mu) - 
+                             stats::pnorm(x$x$lower$bound[1]-mu))
     a <- x$x$lower$bound[1]
     b <- changepoint
     n2 <- x$x$n.I[2]-x$x$n.I[1]
     grid <- normalGrid(mu=(a+b)/2,
                        bounds=c(a,b),r=r)
     for(i in 1:length(theta)) Power[i] <- Power[i] +
-      sum(dnorm(grid$z-sqrt(x$x$n.I[1]) * theta[i])*grid$gridwgts*
-            pnorm(x$z2fn(grid$z, x=x$x, n2=n2)-theta[i]*
+      sum(stats::dnorm(grid$z-sqrt(x$x$n.I[1]) * theta[i])*grid$gridwgts*
+            stats::pnorm(x$z2fn(grid$z, x=x$x, n2=n2)-theta[i]*
                     sqrt(n2), lower.tail=FALSE))
   }else changepoint <- x$x$lower$bound[1]
   # check if max cp exceeded at interim upper bound
   # if it is, compute probability of no final sample 
   # size increase just below upper bound
   if (cpmax >x$cpadj[2]){
-    changepoint2 <- uniroot(condPowerDiff, 
+    changepoint2 <- stats::uniroot(condPowerDiff, 
                             interval=c(changepoint, x$x$upper$bound[1]), 
                             target=x$cpadj[2], n2=x$x$n.I[2]-x$x$n.I[1], 
                             z2=x$z2fn, theta=x$theta, x=x$x)$root
-    en <- en + x$x$n.I[2]*(pnorm(x$x$upper$bound[1]-mu)-
-                             pnorm(changepoint2-mu))
+    en <- en + x$x$n.I[2]*(stats::pnorm(x$x$upper$bound[1]-mu)-
+                             stats::pnorm(changepoint2-mu))
     a <- changepoint2
     b <- x$x$upper$bound[1]
     n2 <- x$x$n.I[2]-x$x$n.I[1]
     grid <- normalGrid(mu=(a+b)/2,bounds=c(a,b),r=r)
     for(i in 1:length(theta)) Power[i] <-  Power[i] +
-      sum(dnorm(grid$z-sqrt(x$x$n.I[1])*theta[i]) * grid$gridwgts*
-            pnorm(x$z2fn(grid$z, x=x$x, n2=n2)-theta[i]*sqrt(n2), 
+      sum(stats::dnorm(grid$z-sqrt(x$x$n.I[1])*theta[i]) * grid$gridwgts*
+            stats::pnorm(x$z2fn(grid$z, x=x$x, n2=n2)-theta[i]*sqrt(n2), 
                   lower.tail=FALSE))
   }else changepoint2 <- x$upper$bound[1]
   # next look if max sample size based on CP is greater than 
@@ -482,37 +482,37 @@ Power.ssrCP <- function(x, theta=NULL, delta=NULL, r=18){
                  beta=x$beta, z2=x$z2fn, theta=x$theta, x=x$x)>0){
     # find point at which sample size based on cp 
     # is same as max allowed
-    changepoint3 <- uniroot(condPowerDiff, 
+    changepoint3 <- stats::uniroot(condPowerDiff, 
                             interval=c(changepoint,15), 
                             target=1-x$beta, x=x$x, 
                             n2=x$maxinc*x$x$n.I[2]-x$x$n.I[1],
                             z2=x$z2fn, theta=x$theta)$root
   
     if (changepoint3 >= changepoint2){
-      en <- en + x$maxinc*x$x$n.I[2]*(pnorm(changepoint2-mu)-
-                                        pnorm(changepoint-mu))
+      en <- en + x$maxinc*x$x$n.I[2]*(stats::pnorm(changepoint2-mu)-
+                                        stats::pnorm(changepoint-mu))
       a <- changepoint
       b <- changepoint2
       n2 <- x$maxinc*x$x$n.I[2]-x$x$n.I[1]
       grid <- normalGrid(mu=(a+b)/2,bounds=c(a,b),r=r)
       for(i in 1:length(theta)) Power[i] <-  Power[i] +
-        sum(dnorm(grid$z-sqrt(x$x$n.I[1])*theta[i]) * 
+        sum(stats::dnorm(grid$z-sqrt(x$x$n.I[1])*theta[i]) * 
               grid$gridwgts *
-              pnorm(x$z2fn(grid$z, x=x$x, n2=n2)-
+              stats::pnorm(x$z2fn(grid$z, x=x$x, n2=n2)-
                       theta[i] * sqrt(n2), lower.tail=FALSE))
       return(data.frame(theta=theta, delta=delta, 
                         Power=Power, en=en))
     }
-    en <- en + x$maxinc*x$x$n.I[2]*(pnorm(changepoint3-mu) - 
-                                      pnorm(changepoint-mu))
+    en <- en + x$maxinc*x$x$n.I[2]*(stats::pnorm(changepoint3-mu) - 
+                                      stats::pnorm(changepoint-mu))
     a <- changepoint
     b <- changepoint3
     n2 <- x$maxinc*x$x$n.I[2]-x$x$n.I[1]
     grid <- normalGrid(mu=(a+b)/2,bounds=c(a,b),r=r)
     for(i in 1:length(theta)) Power[i] <-  Power[i] +
-      sum(dnorm(grid$z-sqrt(x$x$n.I[1])*theta[i]) * 
+      sum(stats::dnorm(grid$z-sqrt(x$x$n.I[1])*theta[i]) * 
             grid$gridwgts *
-            pnorm(x$z2fn(grid$z, x=x$x, n2=n2) - 
+            stats::pnorm(x$z2fn(grid$z, x=x$x, n2=n2) - 
                     theta[i] * sqrt(n2), lower.tail=FALSE))
   }else changepoint3 <- changepoint # changed from x$x$lower$bound[1], 20131201, K Anderson
   # finally, integrate en over area where conditional power is in  
@@ -523,10 +523,10 @@ Power.ssrCP <- function(x, theta=NULL, delta=NULL, r=18){
              beta=x$beta, x=x$x, cpadj=c(.05,.9999), 
              z2=x$z2fn)$dat
   for(i in 1:length(theta)){
-    grid$density <- dnorm(y$z1-sqrt(x$x$n.I[1])*theta[i])
+    grid$density <- stats::dnorm(y$z1-sqrt(x$x$n.I[1])*theta[i])
     Power[i] <- Power[i] + 
       sum(grid$density * grid$gridwgts * 
-            pnorm(y$z2 - theta[i]*sqrt(y$n2-x$x$n.I[1]), 
+            stats::pnorm(y$z2 - theta[i]*sqrt(y$n2-x$x$n.I[1]), 
                   lower.tail=FALSE))
     en[i] <- en[i] + sum(grid$density*grid$gridwgts*y$n2)
   }

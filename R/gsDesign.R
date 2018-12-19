@@ -607,7 +607,7 @@ gsProbability <- function(k=0, theta, n.I, a, b, r=18, d=NULL, overrun=0){
 
     if (k == 0)
     {   
-        if (!is(d,"gsDesign"))
+        if (!methods::is(d,"gsDesign"))
         {
             stop("d should be an object of class gsDesign")
         }
@@ -651,7 +651,7 @@ gsProbability <- function(k=0, theta, n.I, a, b, r=18, d=NULL, overrun=0){
 }
 
 gsPOS <- function(x, theta, wgts){
-    if (!is(x,c("gsProbability","gsDesign")))
+    if (!methods::is(x,c("gsProbability","gsDesign")))
       stop("x must have class gsProbability or gsDesign")
     checkVector(theta, "numeric")
     checkVector(wgts, "numeric")
@@ -662,7 +662,7 @@ gsPOS <- function(x, theta, wgts){
 }
 
 gsCPOS <- function(i, x, theta, wgts){
-    if (!is(x,c("gsProbability","gsDesign")))
+    if (!methods::is(x,c("gsProbability","gsDesign")))
       stop("x must have class gsProbability or gsDesign")
     checkScalar(i, "integer", c(1, x$k), c(TRUE, FALSE))
     checkVector(theta, "numeric")
@@ -822,7 +822,7 @@ gsDType1 <- function(x, ss=1){
     # set information to get desired power (only if sample size is being computed)
     if (max(x$n.I) == 0)
     {
-       x$n.I <- uniroot(gsbetadiff, lower=x$n.fix, upper=10*x$n.fix, theta=x$delta, beta=x$beta,
+       x$n.I <- stats::uniroot(gsbetadiff, lower=x$n.fix, upper=10*x$n.fix, theta=x$delta, beta=x$beta,
                         time=x$timing, a=a, b=x$upper$bound, tol=x$tol, r=x$r)$root * x$timing
     }
     
@@ -863,7 +863,7 @@ gsDType2and5 <- function(x){
         # set information to get desired power
         if (max(x$n.I) == 0)
         {    
-            x$n.I <- uniroot(gsbetadiff, lower=x$n.fix, upper=10*x$n.fix, theta=x$delta, beta=x$beta,
+            x$n.I <- stats::uniroot(gsbetadiff, lower=x$n.fix, upper=10*x$n.fix, theta=x$delta, beta=x$beta,
                              time=x$timing, a=x$lower$bound, b=x$upper$bound, tol=x$tol, r=x$r)$root * x$timing
         }
         
@@ -1264,7 +1264,7 @@ gsDType6 <- function(x){
     # find information needed 
     if (max(x$n.I) == 0)
     {    
-        x$n.I <- uniroot(gsbetadiff, lower=x$n.fix, upper=10 * x$n.fix, theta=x$delta, beta=x$beta, time=x$timing,
+        x$n.I <- stats::uniroot(gsbetadiff, lower=x$n.fix, upper=10 * x$n.fix, theta=x$delta, beta=x$beta, time=x$timing,
                a=x$lower$bound, b=x$upper$bound, tol=x$tol, r=x$r)$root * x$timing
     }
     
@@ -1305,8 +1305,8 @@ gsI <- function(I, theta, beta, trueneg, falsepos, symmetric, tol=0.000001, r=18
     tx <- I/I[k]
     x <- gsBound(I, trueneg, falsepos, tol, r)
     alpha <- sum(falsepos)
-    I0 <- ((qnorm(alpha)+qnorm(beta))/theta)^2
-    x$I <- uniroot(gsbetadiff, lower=I0, upper=10*I0, theta=theta, beta=beta, time=tx, 
+    I0 <- ((stats::qnorm(alpha)+stats::qnorm(beta))/theta)^2
+    x$I <- stats::uniroot(gsbetadiff, lower=I0, upper=10*I0, theta=theta, beta=beta, time=tx, 
                  a=x$a, b=x$b, tol=tol, r=r)$root*tx 
          
     if (symmetric==0)
@@ -1336,7 +1336,7 @@ gsI1 <- function(theta, I, beta, b, Ilow, Ihigh, tol=0.000001, r=18){
     # gsI1: get lower bound and maximum information (Imax)    
     k <- length(I)
     tx <- I / I[k]
-    xr <- uniroot(gsbetadiff1, lower=Ilow, upper=Ihigh, theta=theta, tx=tx, 
+    xr <- stats::uniroot(gsbetadiff1, lower=Ilow, upper=Ihigh, theta=theta, tx=tx, 
             problo=beta, b=b, tol=tol, r=r)
     x <- gsBound1(-theta, xr$root*tx, -b, probhi=beta, tol=tol, r=r)
     error <- x$error
@@ -1430,11 +1430,11 @@ gsDErrorCheck <- function(x){
     if (x$delta == 0)
     {
         checkScalar(x$n.fix, "numeric", c(0,Inf), c(FALSE,TRUE))
-        x$delta <- abs(qnorm(x$alpha) + qnorm(x$beta)) / sqrt(x$n.fix)
+        x$delta <- abs(stats::qnorm(x$alpha) + stats::qnorm(x$beta)) / sqrt(x$n.fix)
     }
     else
     {
-        x$n.fix <- ((qnorm(x$alpha) + qnorm(x$beta)) / x$delta)^2
+        x$n.fix <- ((stats::qnorm(x$alpha) + stats::qnorm(x$beta)) / x$delta)^2
     }
     
     # check n.I, maxn.IPlan

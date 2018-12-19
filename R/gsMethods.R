@@ -23,8 +23,8 @@ print.gsProbability  <- function(x,...){
     }
     else
     {   cat("Lower bounds   Upper bounds")
-        y <- cbind(1:x$k, nval, round(x$lower$bound, 2), round(pnorm(x$lower$bound), 4), 
-                   round(x$upper$bound, 2), round(pnorm(-x$upper$bound), 4))
+        y <- cbind(1:x$k, nval, round(x$lower$bound, 2), round(stats::pnorm(x$lower$bound), 4), 
+                   round(x$upper$bound, 2), round(stats::pnorm(-x$upper$bound), 4))
         colnames(y) <- c("Analysis", ntxt, "Z  ", "Nominal p", "Z  ", "Nominal p")
     }
     rownames(y) <- array(" ", x$k)
@@ -154,13 +154,13 @@ print.gsDesign       <- function(x, ...){
             cat(" ")
         }
         cat("  ----Lower bounds----  ----Upper bounds-----")
-        y <- cbind(1:x$k, nval, round(x$lower$bound, 2), round(pnorm(x$lower$bound), 4), 
-                round(x$lower$spend, 4), round(x$upper$bound, 2), round(pnorm(-x$upper$bound), 4), 
+        y <- cbind(1:x$k, nval, round(x$lower$bound, 2), round(stats::pnorm(x$lower$bound), 4), 
+                round(x$lower$spend, 4), round(x$upper$bound, 2), round(stats::pnorm(-x$upper$bound), 4), 
                 round(x$upper$spend, 4))
         colnames(y) <- c("Analysis", ntxt, "Z  ", "Nominal p", "Spend+", "Z  ", "Nominal p", "Spend++")
     }
     else
-    {    y <- cbind(1:x$k, nval, round(x$upper$bound, 2), round(pnorm(-x$upper$bound), 4), 
+    {    y <- cbind(1:x$k, nval, round(x$upper$bound, 2), round(stats::pnorm(-x$upper$bound), 4), 
                 round(x$upper$spend, 4))
         colnames(y) <- c("Analysis", ntxt, "Z  ", "Nominal p", "Spend")
     }
@@ -544,7 +544,8 @@ print.nSurvival      <- function(x,...){
 #' 
 #' # for nice LaTeX table output, use xprint
 #' xprint(xtable(gsBoundSummary(xOR, deltaname="OR", logdelta=TRUE), caption="Table caption."))
-#' 
+#'
+#' @export 
 gsBoundSummary       <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits=4, ddigits=2, tdigits=0, timename="Month", 
                            prior=normalGrid(mu=x$delta/2, sigma=10/sqrt(x$n.fix)), 
                            POS=FALSE, ratio=NULL,exclude=c("B-value","Spending","CP","CP H1","PP"), r=18,...){
@@ -624,9 +625,9 @@ gsBoundSummary       <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, 
   statframe <- data.frame("Value"="Z","Efficacy"=x$upper$bound,i=1:x$k)
   if (x$test.type>1) statframe<-data.frame(cbind(statframe,"Futility"=x$lower$bound))
   # add nominal p-values at each bound
-  tem <- data.frame("Value"="p (1-sided)","Efficacy"=pnorm(x$upper$bound,lower.tail=FALSE),i=1:x$k)
-  if(x$test.type==2)tem <- data.frame(cbind(tem,"Futility"=pnorm(x$lower$bound,lower.tail=TRUE)))
-  if(x$test.type>2)tem <- data.frame(cbind(tem,"Futility"=pnorm(x$lower$bound,lower.tail=FALSE)))
+  tem <- data.frame("Value"="p (1-sided)","Efficacy"=stats::pnorm(x$upper$bound,lower.tail=FALSE),i=1:x$k)
+  if(x$test.type==2)tem <- data.frame(cbind(tem,"Futility"=stats::pnorm(x$lower$bound,lower.tail=TRUE)))
+  if(x$test.type>2)tem <- data.frame(cbind(tem,"Futility"=stats::pnorm(x$lower$bound,lower.tail=FALSE)))
   statframe <- rbind(statframe,tem)                 
   # delta values at bounds                 
   tem <- data.frame("Value"=paste(deltaname,"at bound"),"Efficacy"=deltaefficacy,i=1:x$k)
@@ -683,7 +684,7 @@ gsBoundSummary       <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, 
 }
 
 xprint               <- function(x, include.rownames=FALSE, hline.after=c(-1,which(x$Value==x[1,]$Value)-1,nrow(x)),...){
-  print.xtable(x, hline.after=hline.after, include.rownames=include.rownames,...)
+  xtable::print.xtable(x, hline.after=hline.after, include.rownames=include.rownames,...)
 }
 
 print.gsBoundSummary <- function(x,row.names=FALSE,digits=4,...){

@@ -22,7 +22,7 @@ sfBetaDist <- function(alpha, t, param){
     {   
         checkVector(param, "numeric", c(0, 1), c(FALSE, FALSE))
         
-        tem <- nlminb(c(1, 1), diffbetadist, lower=c(0, 0), xval=param[1:2], uval=param[3:4])
+        tem <- stats::nlminb(c(1, 1), diffbetadist, lower=c(0, 0), xval=param[1:2], uval=param[3:4])
         
         if (tem$convergence != 0)
         { 
@@ -38,7 +38,7 @@ sfBetaDist <- function(alpha, t, param){
     
     t[t > 1] <- 1
     
-    x$spend <- alpha * pbeta(t, x$param[1], x$param[2])
+    x$spend <- alpha * stats::pbeta(t, x$param[1], x$param[2])
     
     x
 }
@@ -76,8 +76,8 @@ sfCauchy <- function(alpha, t, param){
             stop("4-parameter specification of Cauchy function incorrect")
         }
         
-        xv <- qcauchy(t0)
-        y <- qcauchy(p0)
+        xv <- stats::qcauchy(t0)
+        y <- stats::qcauchy(p0)
         b <- (y[2] - y[1]) / (xv[2] - xv[1])
         a <- y[2] - b * xv[2]
         x$param <- c(a, b)
@@ -88,8 +88,8 @@ sfCauchy <- function(alpha, t, param){
     }
     
     t[t > 1] <- 1
-    xv <- qcauchy(1 * (!is.element(t, 1)) * t)
-    y <- pcauchy(a + b * xv)
+    xv <- stats::qcauchy(1 * (!is.element(t, 1)) * t)
+    y <- stats::pcauchy(a + b * xv)
     x$spend <- alpha * (1 * (!is.element(t, 1)) * y + 1 * is.element(t, 1))
     
     x
@@ -373,6 +373,7 @@ sfExtremeValue2 <- function(alpha, t, param){
 #' legend(x=c(.0, .375), y=.025*c(.8, 1), lty=1:3, 
 #'     legend=c("gamma= -4", "gamma= -2", "gamma= 1"))
 #' 
+#' @export
 sfHSD <- function(alpha, t, param){
     checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
     checkScalar(param, "numeric", c(-40, 40))
@@ -477,10 +478,10 @@ sfLDOF <- function(alpha, t, param){
     checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
     t[t>1] <- 1
 
-    z <- - qnorm(alpha / 2)
+    z <- - stats::qnorm(alpha / 2)
     
     x <- list(name="Lan-DeMets O'brien-Fleming approximation", param=NULL, parname="none", sf=sfLDOF, 
-            spend=2 * (1 - pnorm(z / sqrt(t))), bound=NULL, prob=NULL)  
+            spend=2 * (1 - stats::pnorm(z / sqrt(t))), bound=NULL, prob=NULL)  
     
     class(x) <- "spendfn"
     
@@ -721,8 +722,8 @@ sfNormal <- function(alpha, t, param){
             stop("4-parameter specification of Normal function incorrect")
         }
         
-        xv <- qnorm(t0)
-        y <- qnorm(p0)
+        xv <- stats::qnorm(t0)
+        y <- stats::qnorm(p0)
         b <- (y[2] - y[1]) / (xv[2] - xv[1])
         a <- y[2] - b * xv[2]
         x$param <- c(a, b)
@@ -733,8 +734,8 @@ sfNormal <- function(alpha, t, param){
     }
     
     t[t > 1] <- 1
-    xv <- qnorm(1 * (!is.element(t, 1)) * t)
-    y <- pnorm(a + b * xv)
+    xv <- stats::qnorm(1 * (!is.element(t, 1)) * t)
+    y <- stats::pnorm(a + b * xv)
     x$spend <- alpha * (1 * (!is.element(t, 1)) * y + 1 * is.element(t, 1))
     
     x
@@ -1325,8 +1326,8 @@ sfTDist <- function(alpha, t, param){
             stop("5-parameter specification of t-distribution spending function incorrect")
         }
         
-        xv <- qt(t0, df)
-        y <- qt(p0, df)
+        xv <- stats::qt(t0, df)
+        y <- stats::qt(p0, df)
         b <- (y[2] - y[1]) / (xv[2] - xv[1])
         a <- y[2] - b * xv[2]
     }
@@ -1349,10 +1350,10 @@ sfTDist <- function(alpha, t, param){
             stop("6-parameter specification of t-distribution spending function did not produce a solution")
         }
         
-        sol <- uniroot(Tdistdiff, interval=c(1, 200), t0=t0, p0=p0)
+        sol <- stats::uniroot(Tdistdiff, interval=c(1, 200), t0=t0, p0=p0)
         df <- sol$root
-        xv <- qt(t0, df)
-        y <- qt(p0, df)
+        xv <- stats::qt(t0, df)
+        y <- stats::qt(p0, df)
         b <- (y[2] - y[1]) / (xv[2] - xv[1])
         a <- y[2] - b * xv[2]
     }
@@ -1363,8 +1364,8 @@ sfTDist <- function(alpha, t, param){
     
     x$param <- c(a, b, df)
     t[t > 1] <- 1
-    xv <- qt(1 * (!is.element(t, 1)) * t, df)
-    y <- pt(a + b * xv, df)
+    xv <- stats::qt(1 * (!is.element(t, 1)) * t, df)
+    y <- stats::pt(a + b * xv, df)
     x$spend <- alpha * (1 * (!is.element(t, 1)) * y + 1 * is.element(t, 1))
     
     x
@@ -1618,14 +1619,14 @@ diffbetadist <- function(aval, xval, uval){
         return(1000)
     }
     
-    diff <- uval - pbeta(xval, aval[1], aval[2])
+    diff <- uval - stats::pbeta(xval, aval[1], aval[2])
     
     sum(diff ^ 2)
 }
 
 Tdistdiff <- function(x, t0, p0){  
-    xv <- qt(t0, x)
-    y <- qt(p0, x)
+    xv <- stats::qt(t0, x)
+    y <- stats::qt(p0, x)
     b <- (y[2] - y[1]) / (xv[2] - xv[1])
     a <- y[2] - b * xv[2]
    

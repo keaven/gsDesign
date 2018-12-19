@@ -10,11 +10,11 @@ nBinomial1Sample <- function(p0 = 0.90, p1=0.95,
   Pow = 1-beta
   # Required number of events, given a vector of sample sizes (n)
   # to be considered at the null proportion, for the given alpha
-  CritVal <- qbinom(p = 1 - alpha, size = n, prob = p0) + 1
-  Alpha <- pbinom(q = CritVal - 1, size=n, prob=p0, lower.tail=FALSE)
+  CritVal <- stats::qbinom(p = 1 - alpha, size = n, prob = p0) + 1
+  Alpha <- stats::pbinom(q = CritVal - 1, size=n, prob=p0, lower.tail=FALSE)
   # Get the Power for each n at the alternate hypothesis
   # proportion
-  Power <- pbinom(CritVal - 1, n, p1, lower.tail=FALSE)
+  Power <- stats::pbinom(CritVal - 1, n, p1, lower.tail=FALSE)
   bta <- 1 - Power
   if (is.null(beta)) beta <- bta
   if (outtype==3 || is.null(beta)) return(data.frame(p0=p0, p1=p1, alpha=alpha, beta=beta, 

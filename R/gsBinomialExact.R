@@ -1,7 +1,7 @@
 #####
 # global variables used to eliminate warnings in R CMD check
 #####
-globalVariables(c("N","EN","Bound","rr","Percent","Outcome"))
+utils::globalVariables(c("N","EN","Bound","rr","Percent","Outcome"))
 
 #' 3.4: One-Sample Binomial Routines
 #' 
@@ -252,14 +252,14 @@ gsBinomialExact <- function(k=2, theta=c(.1, .2), n.I=c(50, 100), a=c(3, 7), b=c
         {
             if(i==1)
             {
-                c.mat[,1] <- dbinom(0:n.I[k], m[1], p)
+                c.mat[,1] <- stats::dbinom(0:n.I[k], m[1], p)
             }
             else
             {
                 no.stop <- (a[i-1]+1):(b[i-1]-1)
                 no.stop.mat <- matrix(no.stop, byrow=T, nrow=n.I[k]+1, ncol=length(no.stop))
                 succ.mat <- matrix(0:n.I[k], byrow=F, ncol=length(no.stop), nrow=n.I[k]+1)
-                bin.mat <- matrix(dbinom(succ.mat-no.stop.mat, m[i], p),byrow=F,ncol=length(no.stop), nrow=n.I[k]+1)
+                bin.mat <- matrix(stats::dbinom(succ.mat-no.stop.mat, m[i], p),byrow=F,ncol=length(no.stop), nrow=n.I[k]+1)
                 c.mat[,i] <- bin.mat %*% c.mat[no.stop+1,(i-1)] 
             }
             plo[i,h] <- sum(c.mat[(0:n.I[k]) <= a[i], i])
@@ -308,13 +308,13 @@ plot.gsBinomialExact <- function(x,plottype=1,...){
     theta<-(max(x$theta)-min(x$theta))*(0:50)/50+min(x$theta)
     y <- gsBinomialExact(k=x$k,theta=theta,n.I=x$n.I,a=x$lower$bound,b=x$upper$bound)
     xx <- data.frame(p=theta,EN=y$en)
-    p<-ggplot(data=xx,aes(x=p,y=EN)) + geom_line() + ylab("Expected sample size")
+    p<-ggplot2::ggplot(data=xx,ggplot2::aes(x=p,y=EN)) + ggplot2::geom_line() + ggplot2::ylab("Expected sample size")
   }else if(plottype==3){
     xx <- data.frame(N=x$n.I,p=x$upper$bound/x$n.I,Bound="Upper")
     xx <- rbind(xx, data.frame(N=x$n.I,p=x$lower$bound/x$n.I,Bound="Lower"))
-    p<-ggplot(data=xx,aes(x=N,y=p,group=Bound))+
-      geom_point() +
-      ylab("Rate at bound")
+    p<-ggplot2::ggplot(data=xx,ggplot2::aes(x=N,y=p,group=Bound))+
+      ggplot2::geom_point() +
+      ggplot2::ylab("Rate at bound")
   }else if (plottype==2){
     theta<-(max(x$theta)-min(x$theta))*(0:50)/50+min(x$theta)
     # compute exact boundary crossing probabilities
@@ -335,15 +335,15 @@ plot.gsBinomialExact <- function(x,plottype=1,...){
                                 Outcome="Indeterminate")
     #combine and plot
     outcome <- rbind(Power,futility,indeterminate)
-    p <- ggplot(data=outcome,aes(x=rr,y=Percent,lty=Outcome))+
-      geom_line()+
-      xlab("Underlying response rate")
+    p <- ggplot2::ggplot(data=outcome,ggplot2::aes(x=rr,y=Percent,lty=Outcome))+
+      ggplot2::geom_line()+
+      ggplot2::xlab("Underlying response rate")
   }else{
     xx <- data.frame(N=x$n.I,x=x$upper$bound,Bound="Upper")
     xx <- rbind(xx, data.frame(N=x$n.I,x=x$lower$bound,Bound="Lower"))
-    p<-ggplot(data=xx,aes(x=N,y=x,group=Bound))+
-      geom_point() +
-      ylab("Number of responses")
+    p<-ggplot2::ggplot(data=xx,ggplot2::aes(x=N,y=x,group=Bound))+
+      ggplot2::geom_point() +
+      ggplot2::ylab("Number of responses")
   }  
   return(p)
 }
@@ -351,9 +351,9 @@ plot.gsBinomialExact <- function(x,plottype=1,...){
 plot.binomialSPRT <- function(x,plottype=1,...){
   p <- plot.gsBinomialExact(x,plottype=plottype,...)
   if (plottype==1){
-    p <- p + geom_abline(intercept=x$intercept[1], 
+    p <- p + ggplot2::geom_abline(intercept=x$intercept[1], 
                 slope=x$slope) +
-    geom_abline(intercept=x$intercept[2], 
+    ggplot2::geom_abline(intercept=x$intercept[2], 
                 slope=x$slope)
   }
   return(p)
@@ -370,7 +370,7 @@ binomialPP <- function(a=.2, b=.8, theta=c(.2,.4), p1=.4, PP=c(.025,.95), nIA){
     q <- 0:i
     # compute posterior probability for value > p1
     # for each possible outcome at analysis i
-    post <- pbeta(p1, a + q, b + i - q, lower.tail=F)
+    post <- stats::pbeta(p1, a + q, b + i - q, lower.tail=F)
     # set upper bound where posterior probability is > PP[2]
     # that response rate is > p1
     upper[j] <- sum(post < PP[2])

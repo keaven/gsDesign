@@ -1,3 +1,4 @@
+#' @export
 xtable.gsDesign <- function (x, caption = NULL, label=NULL, align=NULL, digits=NULL, display=NULL,
                              footnote = NULL, fnwid = "9cm", deltaname="delta", 
                              Nname="N",logdelta=FALSE, ...) 
@@ -31,10 +32,10 @@ xtable.gsDesign <- function (x, caption = NULL, label=NULL, align=NULL, digits=N
   an[5 * (0:(k - 1)) + 2] <- paste(Nname,":", ceiling(x$n.I[1:k]))
   fut[5 * (0:(k - 1)) + 1] <- as.character(round(x$lower$bound,2))
   eff[5 * (0:(k - 1)) + 1] <- as.character(round(x$upper$bound,2))
-  asp <- as.character(round(pnorm(-x$upper$bound), 4))
+  asp <- as.character(round(stats::pnorm(-x$upper$bound), 4))
   asp[asp == "0"] <- "$< 0.0001$"
   eff[5 * (0:(k - 1)) + 2] <- asp
-  bsp <- as.character(round(pnorm(-x$lower$bound), 4))
+  bsp <- as.character(round(stats::pnorm(-x$lower$bound), 4))
   bsp[bsp == "0"] <- " $< 0.0001$"
   fut[5 * (0:(k - 1)) + 2] <- bsp
   asp <- as.character(round(deltafutility[1:x$k], 4))
@@ -59,5 +60,5 @@ xtable.gsDesign <- function (x, caption = NULL, label=NULL, align=NULL, digits=N
                        fnwid, "}}{\\footnotesize", footnote, "}")
   x <- data.frame(cbind(an, stat, fut, eff))
   colnames(x) <- c("Analysis", "Value", "Futility", "Efficacy")
-  xtable(x,caption = caption, label=label, align=align, digits=digits, display=display, ...)
+  xtable::xtable(x,caption = caption, label=label, align=align, digits=digits, display=display, ...)
 }

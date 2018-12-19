@@ -46,7 +46,7 @@ gsAdaptSim <- function(SimStage, IniSim, TrialPar, SimPar, cp=0, thetacp=-100, m
     
     # compute sample size to achieve desired conditional power
     ncp <- array(maxn, TrialPar$nsim)-x$nc-x$ne
-    ncp[thetacp > 0] <- as.integer(ceiling(((bnew[thetacp > 0] + qnorm(cp)) / thetacp[thetacp > 0])^2))
+    ncp[thetacp > 0] <- as.integer(ceiling(((bnew[thetacp > 0] + stats::qnorm(cp)) / thetacp[thetacp > 0])^2))
     
     if (maxn > 0)
     {    
@@ -79,8 +79,8 @@ gsAdaptSim <- function(SimStage, IniSim, TrialPar, SimPar, cp=0, thetacp=-100, m
     {    
         if (x$outcome[j] == 0)
         {    
-            y$xc[j] <- rbinom(1, nnewc[j], x$pcsim)
-            y$xe[j] <- rbinom(1, nnewe[j], x$pesim)
+            y$xc[j] <- stats::rbinom(1, nnewc[j], x$pcsim)
+            y$xe[j] <- stats::rbinom(1, nnewe[j], x$pesim)
             x$xc[j] <- x$xc[j] + y$xc[j]
             x$xe[j] <- x$xe[j] + y$xe[j]
         }

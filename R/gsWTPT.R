@@ -94,7 +94,7 @@ WT <- function(d, alpha, a, timing, tol=0.000001, r=18){
     
     c1 <- i
     
-    uniroot(WTdiff, lower=c0, upper=c1, alpha=alpha, a=a, b=b, timing=timing, tol=tol, r=r)$root
+    stats::uniroot(WTdiff, lower=c0, upper=c1, alpha=alpha, a=a, b=b, timing=timing, tol=tol, r=r)$root
 }
 
 WTdiff <- function(c, alpha, a, b, timing, r){   

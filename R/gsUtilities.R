@@ -156,7 +156,7 @@ checkScalar <- function(x, isType = "numeric", ...) {
         bad <- (!isInteger(x) || length(x) > 1)
     }
     else {
-        bad <- (!is(c(x), isType) || length(x) > 1)
+        bad <- (!methods::is(c(x), isType) || length(x) > 1)
     }
     if (bad)
     {
@@ -194,7 +194,7 @@ checkVector <- function(x, isType = "numeric", ..., length=NULL) {
     }
     else
     {
-        !isVectorAtomic(x) || !is(c(x), isType)  # wrap "x" in c() to strip dimension(s)
+        !isVectorAtomic(x) || !methods::is(c(x), isType)  # wrap "x" in c() to strip dimension(s)
     }
     if (bad)
     {
@@ -289,7 +289,7 @@ checkMatrix <- function(x, isType = "numeric", ..., nrows=NULL, ncols=NULL) {
   }
   else
   {
-    !isMatrixAtomic(x) || !is(c(x), isType)  # wrap "x" in c() to strip dimension(s)
+    !isMatrixAtomic(x) || !methods::is(c(x), isType)  # wrap "x" in c() to strip dimension(s)
   }
   if (bad)
   {

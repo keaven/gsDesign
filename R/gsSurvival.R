@@ -236,8 +236,8 @@ nSurvival <- function(lambda1=1/12, lambda2=1/24, Ts=24, Tr=12,
     prob.e <- sapply(haz, pe, eta = eta, Ts = Ts, Tr = Tr,
             gamma = gamma, unif = accrual)
     
-    zalpha <- qnorm(1 - alpha / sided)
-    zbeta <- qnorm(1 - beta)
+    zalpha <- stats::qnorm(1 - alpha / sided)
+    zbeta <- stats::qnorm(1 - beta)
     
     haz.ratio <- log(lambda1 / lambda2)
     haz.diff <- lambda1 - lambda2
