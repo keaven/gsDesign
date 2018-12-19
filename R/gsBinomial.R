@@ -1,30 +1,4 @@
-##################################################################################
-#  Binomial functionality for the gsDesign package
-#
-#  Exported Functions:
-#                   
-#    ciBinomial
-#    nBinomial
-#    simBinomial
-#    testBinomial
-#
-#  Hidden Functions:
-#
-#    bpdiff
-#
-#  Author(s): Keaven Anderson, PhD.
-# 
-#  Reviewer(s): REvolution Computing 19DEC2008 v.2.0 - William Constantine, Ph.D., Kellie Wills 
-#
-#  R Version: 2.7.2
-#
-##################################################################################
-
-###
-# Exported Functions
-###
-
-"ciBinomial" <- function(x1, x2, n1, n2, alpha=.05, adj=0, scale="Difference")
+ciBinomial <- function(x1, x2, n1, n2, alpha=.05, adj=0, scale="Difference")
 {
     # check input arguments
     checkScalar(n1, "integer", c(1, Inf))
@@ -46,13 +20,13 @@
             lower <- -1
         }
         else if (testBinomial(delta0=-.9999, x1=x1, x2=x2, n1=n1, n2=n2, adj=adj)
-                < qnorm(alpha / 2))
+                < stats::qnorm(alpha / 2))
         {
             lower <- -1
         }
         else
         {
-            lower <- uniroot(bpdiff, interval=c(-.9999, delta), x1=x1, x2=x2,
+            lower <- stats::uniroot(bpdiff, interval=c(-.9999, delta), x1=x1, x2=x2,
                     n1=n1, n2=n2, adj=adj, alpha=alpha)$root
         }
         
@@ -61,13 +35,13 @@
             upper <- 1
         }
         else if (testBinomial(delta0=.9999, x1=x1, x2=x2, n1=n1, n2=n2, adj=adj)
-                > -qnorm(alpha/2))
+                > -stats::qnorm(alpha/2))
         {
             upper<-1
         }
         else
         {
-            upper <- uniroot(bpdiff, interval=c(delta,.9999), lower.tail=TRUE,
+            upper <- stats::uniroot(bpdiff, interval=c(delta,.9999), lower.tail=TRUE,
                     x1=x1, x2=x2, n1=n1, n2=n2, adj=adj,
                     alpha=alpha)$root
         }
@@ -77,14 +51,14 @@
         if (x1 == 0) lower <- 0
         else
         {
-            lower <- uniroot(bpdiff, interval=c(-20, 20), x1=x1, x2=x2,
+            lower <- stats::uniroot(bpdiff, interval=c(-20, 20), x1=x1, x2=x2,
                     n1=n1, n2=n2, adj=adj, scale="RR", alpha=alpha)$root
             lower <- exp(lower)
         }
         if (x2 == 0) upper <- Inf
         else
         {
-            upper <- uniroot(bpdiff, interval=c(-20, 20), lower.tail=TRUE,
+            upper <- stats::uniroot(bpdiff, interval=c(-20, 20), lower.tail=TRUE,
                     x1=x1, x2=x2, n1=n1, n2=n2, adj=adj, scale="RR",
                     alpha=alpha)$root
             upper <- exp(upper)
@@ -95,14 +69,14 @@
         if (x1 == 0 || x2 == n2) lower <- -Inf
         else
         {
-            lower <- uniroot(bpdiff, interval=c(-10, 10), x1=x1, x2=x2,
+            lower <- stats::uniroot(bpdiff, interval=c(-10, 10), x1=x1, x2=x2,
                     n1=n1, n2=n2, adj=adj, scale=scale, alpha=alpha)$root
             lower <- exp(lower)
         }
         if (x2 == 0 || x1 == n1) upper <- Inf
         else
         {
-            upper <- uniroot(bpdiff, interval=c(-10, 10), lower.tail=TRUE,
+            upper <- stats::uniroot(bpdiff, interval=c(-10, 10), lower.tail=TRUE,
                     x1=x1, x2=x2, n1=n1, n2=n2, adj=adj, scale=scale,
                     alpha=alpha)$root
             upper <- exp(upper)
@@ -111,7 +85,8 @@
     data.frame(lower=lower,upper=upper)
 }
 
-"nBinomial" <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
+
+nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
                        sided = 1, outtype = 1, scale = "Difference", n = NULL) 
 {
   checkVector(p1, "numeric", c(0, 1), c(FALSE, FALSE))
@@ -150,9 +125,9 @@
                                                           0]) > 0) {
     stop("p1 may not equal p2 when delta0 is zero")
   }
-  z.beta <- qnorm(1 - beta)
+  z.beta <- stats::qnorm(1 - beta)
   sided[sided != 2] <- 1
-  z.alpha <- qnorm(1 - alpha/sided)
+  z.alpha <- stats::qnorm(1 - alpha/sided)
   d0 <- (delta0 == 0)
   if (scale == "difference") {
     if (min(abs(p1 - p2 - delta0)) < 1e-11) {
@@ -190,7 +165,7 @@
       else return(n = n)
     }
     else {
-      pwr <- pnorm(-(qnorm(1 - alpha/sided) - sqrt(n) * 
+      pwr <- stats::pnorm(-(stats::qnorm(1 - alpha/sided) - sqrt(n) * 
                        ((p1 - p2 - delta0)/sigma0)) * sigma0/sigma1)
       if (outtype == 2) {
         return(data.frame(cbind(n1 = n/(ratio + 1), n2 = ratio * 
@@ -238,7 +213,7 @@
       else return(n = n)
     }
     else {
-      pwr <- pnorm(-(qnorm(1 - alpha/sided) - sqrt(n) * 
+      pwr <- stats::pnorm(-(stats::qnorm(1 - alpha/sided) - sqrt(n) * 
                        ((p1 - p2 * RR)/sigma0)) * sigma0/sigma1)
       if (outtype == 2) {
         return(data.frame(cbind(n1 = n/(ratio + 1), n2 = ratio * 
@@ -286,7 +261,7 @@
       }
     }
     else {
-      pwr <- pnorm(-(qnorm(1 - alpha/sided) - sqrt(n) * 
+      pwr <- stats::pnorm(-(stats::qnorm(1 - alpha/sided) - sqrt(n) * 
                        (log(OR/p2 * (1 - p2) * p1/(1 - p1))/sigma0)) * 
                      sigma0/sigma1)
       if (outtype == 2) {
@@ -304,7 +279,8 @@
     }
   }
 }
-"simBinomial" <- function(p1, p2, n1, n2, delta0=0, nsim=10000, chisq=0, adj=0, 
+
+simBinomial <- function(p1, p2, n1, n2, delta0=0, nsim=10000, chisq=0, adj=0, 
         scale="Difference")
 {
     # check input arguments 
@@ -316,15 +292,16 @@
     checkScalar(nsim, "integer", c(1, Inf))
     checkLengths(p1, p2)
     
-    x1 <- rbinom(prob=p1, size=n1, n=nsim)
-    x2 <- rbinom(prob=p2, size=n2, n=nsim)
+    x1 <- stats::rbinom(prob=p1, size=n1, n=nsim)
+    x2 <- stats::rbinom(prob=p2, size=n2, n=nsim)
     scale <- match.arg(tolower(scale), c("difference", "rr", "or", "lnor"))
     
     testBinomial(x1=x1, x2=x2, n1=n1, n2=n2, delta0=delta0, adj=adj,
                     chisq=chisq, scale=scale)
 }
 
-"testBinomial" <- function(x1, x2, n1, n2, delta0=0, chisq=0, adj=0,
+
+testBinomial <- function(x1, x2, n1, n2, delta0=0, chisq=0, adj=0,
         scale="Difference", tol=.1e-10)
 {
     # check input arguments
@@ -442,13 +419,9 @@
     z
 }
 
-###
-# Hidden Functions
-###
-
-"bpdiff" <- function(delta, x1, x2, n1, n2, alpha=.05, adj=0, scale="Difference",
+bpdiff <- function(delta, x1, x2, n1, n2, alpha=.05, adj=0, scale="Difference",
         lower.tail=FALSE)
 {
-    pnorm(testBinomial(x1, x2, n1, n2, delta0=delta, adj=adj, scale=scale),
+    stats::pnorm(testBinomial(x1, x2, n1, n2, delta0=delta, adj=adj, scale=scale),
             lower.tail=lower.tail) - alpha / 2
 }

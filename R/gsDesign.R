@@ -1,50 +1,109 @@
-##################################################################################
-#  Binomial functionality for the gsDesign package
-#
-#  Exported Functions:
-#                   
-#    gsBound
-#    gsBound1
-#    gsDesign
-#    gsProbability
-#    gsDensity
-#    gsPOS
-#    gsCPOS
-#
-#  Hidden Functions:
-#
-#    gsDType1
-#    gsDType2and5
-#    gsDType3
-#    gsDType3ss
-#    gsDType3a
-#    gsDType3b
-#    gsDType4
-#    gsDType4a
-#    gsDType4ss
-#    gsDType6
-#    gsbetadiff
-#    gsI
-#    gsbetadiff1
-#    gsI1
-#    gsprob
-#    gsDProb
-#    gsDErrorCheck
-#
-#  Author(s): Keaven Anderson, PhD. / Jennifer Sun, MS.
-# 
-#  Reviewer(s): REvolution Computing 19DEC2008 v.2.0 - William Constantine, Kellie Wills 
-#
-#  R Version: 2.7.2
-#
-##################################################################################
-
-###
-# Exported Functions
-###
-
-"gsBound" <- function(I, trueneg, falsepos, tol=0.000001, r=18)
-{    
+#' 2.7: Boundary derivation - low level
+#' 
+#' \code{gsBound()} and \code{gsBound1()} are lower-level functions used to
+#' find boundaries for a group sequential design. They are not recommended
+#' (especially \code{gsBound1()}) for casual users. These functions do not
+#' adjust sample size as \code{gsDesign()} does to ensure appropriate power for
+#' a design.
+#' 
+#' \code{gsBound()} computes upper and lower bounds given boundary crossing
+#' probabilities assuming a mean of 0, the usual null hypothesis.
+#' \code{gsBound1()} computes the upper bound given a lower boundary, upper
+#' boundary crossing probabilities and an arbitrary mean (\code{theta}).
+#' 
+#' The function \code{gsBound1()} requires special attention to detail and
+#' knowledge of behavior when a design corresponding to the input parameters
+#' does not exist.
+#' 
+#' @aliases gsBound gsBound1
+#' @param theta Scalar containing mean (drift) per unit of statistical
+#' information.
+#' @param I Vector containing statistical information planned at each analysis.
+#' @param a Vector containing lower bound that is fixed for use in
+#' \code{gsBound1}.
+#' @param trueneg Vector of desired probabilities for crossing upper bound
+#' assuming mean of 0.
+#' @param falsepos Vector of desired probabilities for crossing lower bound
+#' assuming mean of 0.
+#' @param probhi Vector of desired probabilities for crossing upper bound
+#' assuming mean of theta.
+#' @param tol Tolerance for error (scalar; default is 0.000001). Normally this
+#' will not be changed by the user.  This does not translate directly to number
+#' of digits of accuracy, so use extra decimal places.
+#' @param r Single integer value controlling grid for numerical integration as
+#' in Jennison and Turnbull (2000); default is 18, range is 1 to 80.  Larger
+#' values provide larger number of grid points and greater accuracy.  Normally
+#' \code{r} will not be changed by the user.
+#' @param printerr If this scalar argument set to 1, this will print messages
+#' from underlying C program.  Mainly intended to notify user when an output
+#' solution does not match input specifications.  This is not intended to stop
+#' execution as this often occurs when deriving a design in \code{gsDesign}
+#' that uses beta-spending.
+#' @return Both routines return a list. Common items returned by the two
+#' routines are: \item{k}{The length of vectors input; a scalar.}
+#' \item{theta}{As input in \code{gsBound1()}; 0 for \code{gsBound()}.}
+#' \item{I}{As input.} \item{a}{For \code{gsbound1}, this is as input. For
+#' \code{gsbound} this is the derived lower boundary required to yield the
+#' input boundary crossing probabilities under the null hypothesis.}
+#' \item{b}{The derived upper boundary required to yield the input boundary
+#' crossing probabilities under the null hypothesis.} \item{tol}{As input.}
+#' \item{r}{As input.} \item{error}{Error code. 0 if no error; greater than 0
+#' otherwise.}
+#' 
+#' \code{gsBound()} also returns the following items: \item{rates}{a list
+#' containing two items:} \item{falsepos}{vector of upper boundary crossing
+#' probabilities as input.} \item{trueneg}{vector of lower boundary crossing
+#' probabilities as input.}
+#' 
+#' \code{gsBound1()} also returns the following items: \item{problo}{vector of
+#' lower boundary crossing probabilities; computed using input lower bound and
+#' derived upper bound.} \item{probhi}{vector of upper boundary crossing
+#' probabilities as input.}
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \link{gsDesign package overview}, \code{\link{gsDesign}},
+#' \code{\link{gsProbability}}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @examples
+#' 
+#' # set boundaries so that probability is .01 of first crossing
+#' # each upper boundary and .02 of crossing each lower boundary
+#' # under the null hypothesis
+#' x <- gsBound(I=c(1, 2, 3)/3, trueneg=array(.02, 3),
+#'              falsepos=array(.01, 3))
+#' x
+#' 
+#' #  use gsBound1 to set up boundary for a 1-sided test
+#' x <- gsBound1(theta= 0, I=c(1, 2, 3) / 3, a=array(-20, 3),
+#'               probhi=c(.001, .009, .015))
+#' x$b
+#' 
+#' # check boundary crossing probabilities with gsProbability 
+#' y <- gsProbability(k=3, theta=0, n.I=x$I, a=x$a, b=x$b)$upper$prob
+#' 
+#' #  Note that gsBound1 only computes upper bound 
+#' #  To get a lower bound under a parameter value theta:
+#' #      use minus the upper bound as a lower bound
+#' #      replace theta with -theta
+#' #      set probhi as desired lower boundary crossing probabilities 
+#' #  Here we let set lower boundary crossing at 0.05 at each analysis
+#' #  assuming theta=2.2 
+#' y <- gsBound1(theta=-2.2, I=c(1, 2, 3)/3, a= -x$b, 
+#'               probhi=array(.05, 3))
+#' y$b
+#' 
+#' #  Now use gsProbability to look at design
+#' #  Note that lower boundary crossing probabilities are as
+#' #  specified for theta=2.2, but for theta=0 the upper boundary
+#' #  crossing probabilities are smaller than originally specified
+#' #  above after first interim analysis
+#' gsProbability(k=length(x$b), theta=c(0, 2.2), n.I=x$I, b=x$b, a= -y$b)
+#' 
+gsBound <- function(I, trueneg, falsepos, tol=0.000001, r=18){    
     # gsBound: assuming theta=0, derive lower and upper crossing boundaries given 
     #          timing of interims, false positive rates and true negative rates
     
@@ -74,8 +133,7 @@
             r=xx[[8]],error=xx[[9]])
 }
 
-"gsBound1" <- function(theta, I, a, probhi, tol=0.000001, r=18, printerr=0)
-{   
+gsBound1 <- function(theta, I, a, probhi, tol=0.000001, r=18, printerr=0){   
     # gsBound1: derive upper bound to match specified upper bound crossing probability given
     #           a value of theta, a fixed lower bound and information at each analysis   
     
@@ -121,11 +179,237 @@
     y
 }
 
-"gsDesign"<-function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
+
+
+#' 2.1: Design Derivation
+#' 
+#' \code{gsDesign()} is used to find boundaries and trial size required for a
+#' group sequential design.
+#' 
+#' Many parameters normally take on default values and thus do not require
+#' explicit specification. One- and two-sided designs are supported. Two-sided
+#' designs may be symmetric or asymmetric. Wang-Tsiatis designs, including
+#' O'Brien-Fleming and Pocock designs can be generated. Designs with common
+#' spending functions as well as other built-in and user-specified functions
+#' for Type I error and futility are supported. Type I error computations for
+#' asymmetric designs may assume binding or non-binding lower bounds. The print
+#' function has been extended using \code{\link{print.gsDesign}()} to print
+#' \code{gsDesign} objects; see examples.
+#' 
+#' The user may ignore the structure of the value returned by \code{gsDesign()}
+#' if the standard printing and plotting suffice; see examples.
+#' 
+#' \code{delta} and \code{n.fix} are used together to determine what sample
+#' size output options the user seeks. The default, \code{delta=0} and
+#' \code{n.fix=1}, results in a \sQuote{generic} design that may be used with
+#' any sampling situation. Sample size ratios are provided and the user
+#' multiplies these times the sample size for a fixed design to obtain the
+#' corresponding group sequential analysis times. If \code{delta>0},
+#' \code{n.fix} is ignored, and \code{delta} is taken as the standardized
+#' effect size - the signal to noise ratio for a single observation; for
+#' example, the mean divided by the standard deviation for a one-sample normal
+#' problem.  In this case, the sample size at each analysis is computed.  When
+#' \code{delta=0} and \code{n.fix>1}, \code{n.fix} is assumed to be the sample
+#' size for a fixed design with no interim analyses. See examples below.
+#' 
+#' Following are further comments on the input argument \code{test.type} which
+#' is used to control what type of error measurements are used in trial design.
+#' The manual may also be worth some review in order to see actual formulas for
+#' boundary crossing probabilities for the various options.  Options 3 and 5
+#' assume the trial stops if the lower bound is crossed for Type I and Type II
+#' error computation (binding lower bound).  For the purpose of computing Type
+#' I error, options 4 and 6 assume the trial continues if the lower bound is
+#' crossed (non-binding lower bound); that is a Type I error can be made by
+#' crossing an upper bound after crossing a previous lower bound.
+#' Beta-spending refers to error spending for the lower bound crossing
+#' probabilities under the alternative hypothesis (options 3 and 4). In this
+#' case, the final analysis lower and upper boundaries are assumed to be the
+#' same. The appropriate total beta spending (power) is determined by adjusting
+#' the maximum sample size through an iterative process for all options. Since
+#' options 3 and 4 must compute boundary crossing probabilities under both the
+#' null and alternative hypotheses, deriving these designs can take longer than
+#' other options. Options 5 and 6 compute lower bound spending under the null
+#' hypothesis.
+#' 
+#' @param k Number of analyses planned, including interim and final.
+#' @param test.type \code{1=}one-sided \cr \code{2=}two-sided symmetric \cr
+#' \code{3=}two-sided, asymmetric, beta-spending with binding lower bound \cr
+#' \code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound
+#' \cr \code{5=}two-sided, asymmetric, lower bound spending under the null
+#' hypothesis with binding lower bound \cr \code{6=}two-sided, asymmetric,
+#' lower bound spending under the null hypothesis with non-binding lower bound.
+#' \cr See details, examples and manual.
+#' @param alpha Type I error, always one-sided. Default value is 0.025.
+#' @param beta Type II error, default value is 0.1 (90\% power).
+#' @param astar Normally not specified. If \code{test.type=5} or \code{6},
+#' \code{astar} specifies the total probability of crossing a lower bound at
+#' all analyses combined.  This will be changed to \eqn{1 - }\code{alpha} when
+#' default value of 0 is used.  Since this is the expected usage, normally
+#' \code{astar} is not specified by the user.
+#' @param delta Effect size for theta under alternative hypothesis. This can be
+#' set to the standardized effect size to generate a sample size if
+#' \code{n.fix=NULL}. See details and examples.
+#' @param n.fix Sample size for fixed design with no interim; used to find
+#' maximum group sequential sample size. For a time-to-event outcome, input
+#' number of events required for a fixed design rather than sample size and
+#' enter fixed design sample size (optional) in \code{nFixSurv}.  See details
+#' and examples.
+#' @param timing Sets relative timing of interim analyses. Default of 1
+#' produces equally spaced analyses.  Otherwise, this is a vector of length
+#' \code{k} or \code{k-1}.  The values should satisfy \code{0 < timing[1] <
+#' timing[2] < ... < timing[k-1] < timing[k]=1}.
+#' @param sfu A spending function or a character string indicating a boundary
+#' type (that is, \dQuote{WT} for Wang-Tsiatis bounds, \dQuote{OF} for
+#' O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds).  For
+#' one-sided and symmetric two-sided testing is used to completely specify
+#' spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
+#' \code{sfHSD} which is a Hwang-Shih-DeCani spending function.  See details,
+#' \link{Spending function overview}, manual and examples.
+#' @param sfupar Real value, default is \eqn{-4} which is an
+#' O'Brien-Fleming-like conservative bound when used with the default
+#' Hwang-Shih-DeCani spending function. This is a real-vector for many spending
+#' functions.  The parameter \code{sfupar} specifies any parameters needed for
+#' the spending function specified by \code{sfu}; this will be ignored for
+#' spending functions (\code{sfLDOF}, \code{sfLDPocock}) or bound types
+#' (\dQuote{OF}, \dQuote{Pocock}) that do not require parameters.
+#' @param sfl Specifies the spending function for lower boundary crossing
+#' probabilities when asymmetric, two-sided testing is performed
+#' (\code{test.type = 3}, \code{4}, \code{5}, or \code{6}).  Unlike the upper
+#' bound, only spending functions are used to specify the lower bound.  The
+#' default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending
+#' function.  The parameter \code{sfl} is ignored for one-sided testing
+#' (\code{test.type=1}) or symmetric 2-sided testing (\code{test.type=2}).  See
+#' details, spending functions, manual and examples.
+#' @param sflpar Real value, default is \eqn{-2}, which, with the default
+#' Hwang-Shih-DeCani spending function, specifies a less conservative spending
+#' rate than the default for the upper bound.
+#' @param tol Tolerance for error (default is 0.000001). Normally this will not
+#' be changed by the user.  This does not translate directly to number of
+#' digits of accuracy, so use extra decimal places.
+#' @param r Integer value controlling grid for numerical integration as in
+#' Jennison and Turnbull (2000); default is 18, range is 1 to 80.  Larger
+#' values provide larger number of grid points and greater accuracy.  Normally
+#' \code{r} will not be changed by the user.
+#' @param n.I Used for re-setting bounds when timing of analyses changes from
+#' initial design; see examples.
+#' @param maxn.IPlan Used for re-setting bounds when timing of analyses changes
+#' from initial design; see examples.
+#' @param nFixSurv If a time-to-event variable is used, \code{nFixSurv}
+#' computed as the sample size from \code{nSurvival} may be entered to have
+#' \code{gsDesign} compute the total sample size required as well as the number
+#' of events at each analysis that will be returned in \code{n.fix}; this is
+#' rounded up to an even number.
+#' @param endpoint An optional character string that should represent the type
+#' of endpoint used for the study. This may be used by output functions. Types
+#' most likely to be recognized initially are "TTE" for time-to-event outcomes
+#' with fixed design sample size generated by \code{nSurvival()} and "Binomial"
+#' for 2-sample binomial outcomes with fixed design sample size generated by
+#' \code{nBinomial()}.
+#' @param delta1 \code{delta1} and \code{delta0} may be used to store
+#' information about the natural parameter scale compared to \code{delta} that
+#' is a standardized effect size. \code{delta1} is the alternative hypothesis
+#' parameter value on the natural parameter scale (e.g., the difference in two
+#' binomial rates).
+#' @param delta0 \code{delta0} is the null hypothesis parameter value on the
+#' natural parameter scale.
+#' @param overrun Scalar or vector of length \code{k-1} with patients enrolled
+#' that are not included in each interim analysis.
+#' @return An object of the class \code{gsDesign}. This class has the following
+#' elements and upon return from \code{gsDesign()} contains: \item{k}{As
+#' input.} \item{test.type}{As input.} \item{alpha}{As input.} \item{beta}{As
+#' input.} \item{astar}{As input, except when \code{test.type=5} or \code{6}
+#' and \code{astar} is input as 0; in this case \code{astar} is changed to
+#' \code{1-alpha}.} \item{delta}{The standardized effect size for which the
+#' design is powered. Will be as input to \code{gsDesign()} unless it was input
+#' as 0; in that case, value will be computed to give desired power for fixed
+#' design with input sample size \code{n.fix}.} \item{n.fix}{Sample size
+#' required to obtain desired power when effect size is \code{delta}.}
+#' \item{timing}{A vector of length \code{k} containing the portion of the
+#' total planned information or sample size at each analysis.} \item{tol}{As
+#' input.} \item{r}{As input.} \item{n.I}{Vector of length \code{k}. If values
+#' are input, same values are output. Otherwise, \code{n.I} will contain the
+#' sample size required at each analysis to achieve desired \code{timing} and
+#' \code{beta} for the output value of \code{delta}.  If \code{delta=0} was
+#' input, then this is the sample size required for the specified group
+#' sequential design when a fixed design requires a sample size of
+#' \code{n.fix}. If \code{delta=0} and \code{n.fix=1} then this is the relative
+#' sample size compared to a fixed design; see details and examples.}
+#' \item{maxn.IPlan}{As input.} \item{nFixSurv}{As input.} \item{nSurv}{Sample
+#' size for Lachin and Foulkes method when \code{nSurvival} is used for fixed
+#' design input. If \code{nSurvival} is used to compute \code{n.fix}, then
+#' \code{nFixSurv} is inflated by the same amount as \code{n.fix} and stored in
+#' \code{nSurv}. Note that if you use \code{gsSurv} for time-to-event sample
+#' size, this is not needed and a more complete output summary is given.}
+#' \item{endpoint}{As input.} \item{delta1}{As input.} \item{delta0}{As input.}
+#' \item{overrun}{As input.} \item{upper}{Upper bound spending function,
+#' boundary and boundary crossing probabilities under the NULL and alternate
+#' hypotheses. See \link{Spending function overview} and manual for further
+#' details.} \item{lower}{Lower bound spending function, boundary and boundary
+#' crossing probabilities at each analysis. Lower spending is under alternative
+#' hypothesis (beta spending) for \code{test.type=3} or \code{4}.  For
+#' \code{test.type=2}, \code{5} or \code{6}, lower spending is under the null
+#' hypothesis. For \code{test.type=1}, output value is \code{NULL}. See
+#' \link{Spending function overview} and manual.} \item{theta}{Standarized
+#' effect size under null (0) and alternate hypothesis. If \code{delta} is
+#' input, \code{theta[1]=delta}. If \code{n.fix} is input, \code{theta[1]} is
+#' computed using a standard sample size formula (pseudocode):
+#' \code{((Zalpha+Zbeta)/theta[1])^2=n.fix}.} \item{falseprobnb}{For
+#' \code{test.type=4} or \code{6}, this contains false positive probabilities
+#' under the null hypothesis assuming that crossing a futility bound does not
+#' stop the trial.} \item{en}{Expected sample size accounting for early
+#' stopping. For time-to-event outcomes, this would be the expected number of
+#' events (although \code{gsSurv} will give expected sample size). For
+#' information-based-design, this would give the expected information when the
+#' trial stops. If \code{overrun} is specified, the expected sample size
+#' includes the overrun at each interim.}
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \link{gsDesign package overview}, \link{gsDesign print, summary and
+#' table summary functions}, \link{Plots for group sequential designs},
+#' \code{\link{gsProbability}}, \link{Spending function overview},
+#' \link{Wang-Tsiatis Bounds}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @examples
+#' 
+#' #  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
+#' #  lower bound is non-binding (ignored in Type I error computation)
+#' #  sample size is computed based on a fixed design requiring n=800
+#' x <- gsDesign(k=5, test.type=2, n.fix=800)
+#' 
+#' # note that "x" below is equivalent to print(x) and print.gsDesign(x)
+#' x
+#' plot(x)
+#' plot(x, plottype=2)
+#' 
+#' # Assuming after trial was designed actual analyses occurred after
+#' # 300, 600, and 860 patients, reset bounds 
+#' y <- gsDesign(k=3, test.type=2, n.fix=800, n.I=c(300,600,860),
+#'    maxn.IPlan=x$n.I[x$k])
+#' y
+#' 
+#' #  asymmetric design with user-specified spending that is non-binding
+#' #  sample size is computed relative to a fixed design with n=1000
+#' sfup <- c(.033333, .063367, .1)
+#' sflp <- c(.25, .5, .75)
+#' timing <- c(.1, .4, .7)
+#' x <- gsDesign(k=4, timing=timing, sfu=sfPoints, sfupar=sfup, sfl=sfPoints,
+#' 	            sflpar=sflp,n.fix=1000) 
+#' x
+#' plot(x)
+#' plot(x, plottype=2)
+#' 
+#' # same design, but with relative sample sizes
+#' gsDesign(k=4, timing=timing, sfu=sfPoints, sfupar=sfup, sfl=sfPoints,
+#' sflpar=sflp)
+#' 
+gsDesign <- function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
         delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
         sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I=0, maxn.IPlan=0, 
-        nFixSurv=0, endpoint=NULL, delta1=1, delta0=0, overrun=0) 
-{
+        nFixSurv=0, endpoint=NULL, delta1=1, delta0=0, overrun=0) {
     # Derive a group sequential design and return in a gsDesign structure
     
     # set up class variable x for gsDesign being requested
@@ -210,8 +494,111 @@
     x
 }
 
-"gsProbability" <- function(k=0, theta, n.I, a, b, r=18, d=NULL, overrun=0)
-{
+
+
+#' 2.2: Boundary Crossing Probabilities
+#' 
+#' Computes power/Type I error and expected sample size for a group sequential
+#' design across a selected set of parameter values for a given set of analyses
+#' and boundaries. The print function has been extended using
+#' \code{print.gsProbability} to print \code{gsProbability} objects; see
+#' examples.
+#' 
+#' Depending on the calling sequence, an object of class \code{gsProbability}
+#' or class \code{gsDesign} is returned. If it is of class \code{gsDesign} then
+#' the members of the object will be the same as described in
+#' \code{\link{gsDesign}}. If \code{d} is input as \code{NULL} (the default),
+#' all other arguments (other than \code{r}) must be specified and an object of
+#' class \code{gsProbability} is returned. If \code{d} is passed as an object
+#' of class \code{gsProbability} or \code{gsDesign} the only other argument
+#' required is \code{theta}; the object returned has the same class as the
+#' input \code{d}. On output, the values of \code{theta} input to
+#' \code{gsProbability} will be the parameter values for which the design is
+#' characterized.
+#' 
+#' @aliases gsProbability print.gsProbability
+#' @param k Number of analyses planned, including interim and final.
+#' @param theta Vector of standardized effect sizes for which boundary crossing
+#' probabilities are to be computed.
+#' @param n.I Sample size or relative sample size at analyses; vector of length
+#' k. See \code{\link{gsDesign}} and manual.
+#' @param a Lower bound cutoffs (z-values) for futility or harm at each
+#' analysis, vector of length k.
+#' @param b Upper bound cutoffs (z-values) for futility at each analysis;
+#' vector of length k.
+#' @param r Control for grid as in Jennison and Turnbull (2000); default is 18,
+#' range is 1 to 80.  Normally this will not be changed by the user.
+#' @param d If not \code{NULL}, this should be an object of type
+#' \code{gsDesign} returned by a call to \code{gsDesign()}.  When this is
+#' specified, the values of \code{k}, \code{n.I}, \code{a}, \code{b}, and
+#' \code{r} will be obtained from \code{d} and only \code{theta} needs to be
+#' specified by the user.
+#' @param x An item of class \code{gsProbability}.
+#' @param overrun Scalar or vector of length \code{k-1} with patients enrolled
+#' that are not included in each interim analysis.
+#' @param \dots Not implemented (here for compatibility with generic print
+#' input).
+#' @return \item{k}{As input.} \item{theta}{As input.} \item{n.I}{As input.}
+#' \item{lower}{A list containing two elements: \code{bound} is as input in
+#' \code{a} and \code{prob} is a matrix of boundary crossing probabilities.
+#' Element \code{i,j} contains the boundary crossing probability at analysis
+#' \code{i} for the \code{j}-th element of \code{theta} input. All boundary
+#' crossing is assumed to be binding for this computation; that is, the trial
+#' must stop if a boundary is crossed.} \item{upper}{A list of the same form as
+#' \code{lower} containing the upper bound and upper boundary crossing
+#' probabilities.} \item{en}{A vector of the same length as \code{theta}
+#' containing expected sample sizes for the trial design corresponding to each
+#' value in the vector \code{theta}.} \item{r}{As input.} Note:
+#' \code{print.gsProbability()} returns the input \code{x}.
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \link{Plots for group sequential designs}, \code{\link{gsDesign}},
+#' \link{gsDesign package overview}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @examples
+#' 
+#' # making a gsDesign object first may be easiest...
+#' x <- gsDesign()
+#' 
+#' # take a look at it
+#' x
+#' 
+#' # default plot for gsDesign object shows boundaries
+#' plot(x)
+#' 
+#' # plottype=2 shows boundary crossing probabilities
+#' plot(x, plottype=2)
+#' 
+#' # now add boundary crossing probabilities and 
+#' # expected sample size for more theta values
+#' y <- gsProbability(d=x, theta=x$delta*seq(0, 2, .25))
+#' class(y)
+#' 
+#' # note that "y" below is equivalent to print(y) and
+#' # print.gsProbability(y)
+#' y
+#' 
+#' # the plot does not change from before since this is a
+#' # gsDesign object; note that theta/delta is on x axis
+#' plot(y, plottype=2)
+#' 
+#' # now let's see what happens with a gsProbability object
+#' z <- gsProbability(k=3, a=x$lower$bound, b=x$upper$bound, 
+#'     n.I=x$n.I, theta=x$delta*seq(0, 2, .25))
+#' 
+#' # with the above form,  the results is a gsProbability object
+#' class(z)
+#' z
+#' 
+#' # default plottype is now 2
+#' # this is the same range for theta, but plot now has theta on x axis
+#' plot(z)
+#' 
+gsProbability <- function(k=0, theta, n.I, a, b, r=18, d=NULL, overrun=0){
     # compute boundary crossing probabilities and return in a gsProbability structure
     
     # check input arguments
@@ -263,8 +650,7 @@
     x
 }
 
-"gsPOS" <- function(x, theta, wgts)
-{
+gsPOS <- function(x, theta, wgts){
     if (!is(x,c("gsProbability","gsDesign")))
       stop("x must have class gsProbability or gsDesign")
     checkVector(theta, "numeric")
@@ -275,8 +661,7 @@
     as.double(one %*% x$upper$prob %*% wgts)
 }
 
-"gsCPOS" <- function(i, x, theta, wgts)
-{
+gsCPOS <- function(i, x, theta, wgts){
     if (!is(x,c("gsProbability","gsDesign")))
       stop("x must have class gsProbability or gsDesign")
     checkScalar(i, "integer", c(1, x$k), c(TRUE, FALSE))
@@ -291,8 +676,101 @@
     pAiB / pAi
 }
 
-"gsDensity" <- function(x, theta=0, i=1, zi=0, r=18)
-{   if (class(x) != "gsDesign" && class(x) != "gsProbability")
+
+
+#' 2.6: Group sequential design interim density function
+#' 
+#' Given an interim analysis \code{i} of a group sequential design and a vector
+#' of real values \code{zi}, \code{gsDensity()} computes an interim density
+#' function at analysis \code{i} at the values in \code{zi}.  For each value in
+#' \code{zi}, this interim density is the derivative of the probability that
+#' the group sequential trial does not cross a boundary prior to the
+#' \code{i}-th analysis and at the \code{i}-th analysis the interim Z-statistic
+#' is less than that value. When integrated over the real line, this density
+#' computes the probability of not crossing a bound at a previous analysis. It
+#' corresponds to the subdistribution function at analysis \code{i} that
+#' excludes the probability of crossing a bound at an earlier analysis.
+#' 
+#' The initial purpose of this routine was as a component needed to compute the
+#' predictive power for a trial given an interim result; see
+#' \code{\link{gsPP}}.
+#' 
+#' See Jennison and Turnbull (2000) for details on how these computations are
+#' performed.
+#' 
+#' @param x An object of type \code{gsDesign} or \code{gsProbability}
+#' @param theta a vector with \eqn{\theta}{theta} value(s) at which the interim
+#' density function is to be computed.
+#' @param i analysis at which interim z-values are given; must be from 1 to
+#' \code{x$k}
+#' @param zi interim z-value at analysis \code{i} (scalar)
+#' @param r Integer value controlling grid for numerical integration as in
+#' Jennison and Turnbull (2000); default is 18, range is 1 to 80.  Larger
+#' values provide larger number of grid points and greater accuracy.  Normally
+#' \code{r} will not be changed by the user.
+#' @return \item{zi}{The input vector \code{zi}.} \item{theta}{The input vector
+#' \code{theta}.} \item{density}{A matrix with \code{length(zi)} rows and
+#' \code{length(theta)} columns.  The subdensity function for \code{z[j]},
+#' \code{theta[m]} at analysis \code{i} is returned in \code{density[j,m]}. }
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \code{\link{gsDesign}}, \code{\link{gsProbability}},
+#' \code{\link{gsBoundCP}}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @examples
+#' 
+#' # set up a group sequential design
+#' x <- gsDesign()
+#' 
+#' # set theta values where density is to be evaluated
+#' theta <- x$theta[2] * c(0, .5, 1, 1.5)
+#' 
+#' # set zi values from -1 to 7 where density is to be evaluated
+#' zi <- seq(-3, 7, .05)
+#' 
+#' # compute subdensity values at analysis 2
+#' y <- gsDensity(x, theta=theta, i=2, zi=zi)
+#' 
+#' # plot sub-density function for each theta value
+#' plot(y$zi, y$density[,3], type="l", xlab="Z",
+#'      ylab="Interim 2 density", lty=3, lwd=2)
+#' lines(y$zi, y$density[,2], lty=2, lwd=2)
+#' lines(y$zi, y$density[,1], lwd=2)
+#' lines(y$zi, y$density[,4], lty=4, lwd=2)
+#' title("Sub-density functions at interim analysis 2")
+#' legend(x=c(3.85,7.2), y = c(.27,.385), lty=1:5, lwd=2, cex=1.5,
+#' legend=c(
+#' expression(paste(theta,"=0.0")),
+#' expression(paste(theta,"=0.5", delta)),
+#' expression(paste(theta,"=1.0", delta)),
+#' expression(paste(theta,"=1.5", delta))))
+#' 
+#' # add vertical lines with lower and upper bounds at analysis 2
+#' # to demonstrate how likely it is to continue, stop for futility
+#' # or stop for efficacy at analysis 2 by treatment effect
+#' lines(array(x$upper$bound[2],2), c(0,.4),col=2)
+#' lines(array(x$lower$bound[2],2), c(0,.4), lty=2, col=2)
+#' 
+#' # Replicate part of figures 8.1 and 8.2 of Jennison and Turnbull text book
+#' # O'Brien-Fleming design with four analyses
+#' 
+#' x <- gsDesign(k=4, test.type=2, sfu="OF", alpha=.1, beta=.2)
+#' 
+#' z <- seq(-4.2, 4.2, .05)
+#' d <- gsDensity(x=x, theta=x$theta, i=4, zi=z)
+#' 
+#' plot(z, d$density[,1], type="l", lwd=2, ylab=expression(paste(p[4],"(z,",theta,")")))
+#' lines(z, d$density[,2], lty=2, lwd=2)
+#' u <- x$upper$bound[4]
+#' text(expression(paste(theta,"=",delta)),x=2.2, y=.2, cex=1.5)
+#' text(expression(paste(theta,"=0")),x=.55, y=.4, cex=1.5)
+#' 
+gsDensity <- function(x, theta=0, i=1, zi=0, r=18){
+  if (class(x) != "gsDesign" && class(x) != "gsProbability")
         stop("x must have class gsDesign or gsProbability.")
     checkVector(theta, "numeric")
     checkScalar(i, "integer", c(0,x$k), c(FALSE, TRUE))
@@ -311,8 +789,7 @@
 # Hidden Functions
 ###
 
-"gsDType1" <- function(x, ss=1)
-{    
+gsDType1 <- function(x, ss=1){    
     # gsDType1: calculate bound assuming one-sided rule (only upper bound)
     
     # set lower bound
@@ -364,8 +841,7 @@
     x
 }
 
-"gsDType2and5" <- function(x)
-{    
+gsDType2and5 <- function(x){    
     # gsDType2and5: calculate bound assuming two-sided rule, binding, all alpha spending    
     
     if (is.element(x$upper$name, c("WT","Pocock","OF")))
@@ -451,8 +927,7 @@
     x
 }
 
-"gsDType3" <- function(x)
-{
+gsDType3 <- function(x){
     # Check added by K. Wills 12/4/2008
     if (is.element(x$upper$name, c("WT","Pocock","OF")))
     {    
@@ -464,8 +939,7 @@
     if (max(x$n.I) == 0) gsDType3ss(x) else gsDType3a(x)
 }
 
-"gsDType3ss" <- function(x)
-{    
+gsDType3ss <- function(x){    
     # compute starting bounds under H0 
     k <- x$k
     falsepos <- x$upper$spend
@@ -548,8 +1022,7 @@
     x
 }
 
-"gsDType3a" <- function(x)
-{    
+gsDType3a <- function(x){    
     aspend <- x$upper$spend
     bspend <- x$lower$spend
     
@@ -585,8 +1058,7 @@
     gsDType3b(x)
 }
 
-"gsDType3b" <- function(x)
-{    
+gsDType3b <- function(x){    
     # set I0, desired false positive and false negative rates
     I0 <- x$n.fix
     falseneg <- x$lower$spend
@@ -647,8 +1119,7 @@
     x
 }
 
-"gsDType4" <- function(x)
-{
+gsDType4 <- function(x){
     # Check added by K. Wills 12/4/2008
     if (is.element(x$upper$name, c("WT","Pocock","OF")))
     {    
@@ -659,8 +1130,7 @@
     else gsDType4a(x)
 }
 
-"gsDType4a" <- function(x)
-{    
+gsDType4a <- function(x){    
     # set I0, desired false positive and false negative rates
     I0 <- x$n.fix
     falseneg <- x$lower$spend
@@ -694,8 +1164,7 @@
     x
 }
 
-"gsDType4ss" <- function(x)
-{    
+gsDType4ss <- function(x){    
     # compute starting bounds under H0 
     falsepos <- x$upper$spend
     falsepos <- falsepos-c(0,falsepos[1:x$k-1])
@@ -745,8 +1214,7 @@
     x
 }
 
-"gsDType6" <- function(x)
-{
+gsDType6 <- function(x){
     # Check added by K. Wills 12/4/2008
     if (is.element(x$upper$name, c("WT","Pocock","OF")))
     {    
@@ -822,8 +1290,7 @@
     x
 }
 
-"gsbetadiff" <- function(Imax, theta, beta, time, a, b, tol=0.000001, r=18)
-{    
+gsbetadiff <- function(Imax, theta, beta, time, a, b, tol=0.000001, r=18){    
     # compute difference between actual and desired Type II error     
     I <- time * Imax
     x <- gsprob(theta, I, a, b, r)
@@ -831,8 +1298,7 @@
     beta - 1 + sum(x$probhi)
 }
 
-"gsI" <- function(I, theta, beta, trueneg, falsepos, symmetric, tol=0.000001, r=18)
-{   
+gsI <- function(I, theta, beta, trueneg, falsepos, symmetric, tol=0.000001, r=18){   
     # gsI: find gs design with falsepos and trueneg
   
     k <- length(I)
@@ -856,8 +1322,7 @@
         rates=rates, futilitybnd="Binding", tol=x$tol, r=x$r, error=x$error)
 }
 
-"gsbetadiff1" <- function(Imax, theta, tx, problo, b, tol=0.000001, r=18)
-{   
+gsbetadiff1 <- function(Imax, theta, tx, problo, b, tol=0.000001, r=18){   
     # gsbetadiff1: compute difference between desired and actual upper boundary
     #              crossing probability    
     I <- tx * Imax
@@ -867,8 +1332,7 @@
     sum(problo) - 1 + x$powr
 }
 
-"gsI1" <- function(theta, I, beta, b, Ilow, Ihigh, tol=0.000001, r=18)
-{
+gsI1 <- function(theta, I, beta, b, Ilow, Ihigh, tol=0.000001, r=18){
     # gsI1: get lower bound and maximum information (Imax)    
     k <- length(I)
     tx <- I / I[k]
@@ -883,8 +1347,7 @@
     x
 }
 
-"gsprob" <- function(theta, I, a, b, r=18, overrun=0)
-{     
+gsprob <- function(theta, I, a, b, r=18, overrun=0){     
     # gsprob: use call to C routine to compute upper and lower boundary crossing probabilities
     # given theta,  interim sample sizes (information: I),  lower bound (a) and upper bound (b)    
     nanal <- as.integer(length(I))
@@ -905,8 +1368,7 @@
             probhi=phi, powr=powr, en=en, r=r)
 }
 
-"gsDProb" <- function(theta, d)
-{    
+gsDProb <- function(theta, d){    
     k <- d$k
     n.I <- d$n.I
     
@@ -942,8 +1404,7 @@
     d
 }
 
-"gsDErrorCheck" <- function(x)
-{
+gsDErrorCheck <- function(x){
     # check input arguments for type, range, and length
     
     # check input value of k, test.type, alpha, beta, astar

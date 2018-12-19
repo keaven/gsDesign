@@ -1,5 +1,4 @@
-"nEvents" <- function(hr = .6, alpha = .025, beta = .1, ratio = 1, sided = 1, hr0 =  1, n = 0, tbl = FALSE)
-{   if (sided != 1 && sided != 2) stop("sided must be 1 or 2")
+nEvents <- function(hr = .6, alpha = .025, beta = .1, ratio = 1, sided = 1, hr0 =  1, n = 0, tbl = FALSE){   if (sided != 1 && sided != 2) stop("sided must be 1 or 2")
     c <- sqrt(ratio) / (1 + ratio)
     delta <- -c * (log(hr) - log(hr0))
     if (n[1] == 0)
@@ -19,18 +18,18 @@
         return(pwr)
     }
 }
-"zn2hr" <- function (z, n , ratio = 1, hr0=1, hr1=.7) 
-{   c <- 1/(1 + ratio)
+
+zn2hr <- function (z, n , ratio = 1, hr0=1, hr1=.7) {   c <- 1/(1 + ratio)
     psi <- c * (1 - c)
     exp(z * sign(hr1-hr0)/sqrt(n * psi)) * hr0
 }
-"hrn2z" <- function(hr, n, ratio=1, hr0=1, hr1=.7)
-{   c <- 1/(1 + ratio)
+
+hrn2z <- function(hr, n, ratio=1, hr0=1, hr1=.7){   c <- 1/(1 + ratio)
     psi <- c * (1 - c)
     log(hr/hr0) * sqrt(n * psi) * sign(hr0-hr1)
 }
-"hrz2n" <- function(hr, z, ratio=1, hr0=1)
-{   c <- 1 / (1 + ratio)
+
+hrz2n <- function(hr, z, ratio=1, hr0=1){   c <- 1 / (1 + ratio)
     psi <- c * (1 - c)
     (z / log(hr/hr0))^2 / psi
 }

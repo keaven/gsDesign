@@ -1,55 +1,158 @@
-##################################################################################
-#  S3 methods for the gsDesign package
-#
-#  Exported Functions:
-#                   
-#    plot.gsDesign
-#    plot.gsProbability
-#    gsCPz
-#    gsHR
-#    gsRR
-#    gsDelta
-#    gsBValue
-#    qplotit
-#
-#  Hidden Functions:
-#
-#    gsLegendText
-#    gsPlotName
-#    plotgsZ
-#    plotBval
-#    plotreleffect
-#    plotgsCP
-#    sfplot
-#    plotASN
-#    plotgsPower
-#
-#  Author(s): Keaven Anderson, PhD.
-# 
-#  Reviewer(s): 
-#
-#  R Version: 2.9.1
-#
-##################################################################################
-
-#####
-# global variables used to eliminate warnings in R CMD check
-#####
 globalVariables(c("y","N","Z","Bound","thetaidx","Probability","delta","Analysis"))
 
-###
-# Exported Functions
-###
 
-"plot.gsDesign" <- function(x, plottype=1, base=FALSE,...)
-{   
+
+#' 2.3: Plots for group sequential designs
+#' 
+#' The \code{plot()} function has been extended to work with objects returned
+#' by \code{gsDesign()} and \code{gsProbability()}.  For objects of type
+#' \code{gsDesign}, seven types of plots are provided: z-values at boundaries
+#' (default), power, estimated treatment effects at boundaries, conditional
+#' power at boundaries, spending functions, expected sample size, and B-values
+#' at boundaries. For objects of type \code{gsProbability} plots are available
+#' for z-values at boundaries, power (default), estimated treatment effects at
+#' boundaries, conditional power, expected sample size and B-values at
+#' boundaries.
+#' 
+#' The intent is that many standard \code{plot()} parameters will function as
+#' expected; exceptions to this rule exist. In particular, \code{main, xlab,
+#' ylab, lty, col, lwd, type, pch, cex} have been tested and work for most
+#' values of \code{plottype}; one exception is that \code{type="l"} cannot be
+#' overridden when \code{plottype=2}. Default values for labels depend on
+#' \code{plottype} and the class of \code{x}.
+#' 
+#' Note that there is some special behavior for values plotted and returned for
+#' power and expected sample size (ASN) plots for a \code{gsDesign} object. A
+#' call to \code{x<-gsDesign()} produces power and expected sample size for
+#' only two \code{theta} values: 0 and \code{x$delta}.  The call \code{plot(x,
+#' plottype="Power")} (or \code{plot(x,plottype="ASN"}) for a \code{gsDesign}
+#' object produces power (expected sample size) curves and returns a
+#' \code{gsDesign} object with \code{theta} values determined as follows.  If
+#' \code{theta} is non-null on input, the input value(s) are used. Otherwise,
+#' for a \code{gsProbability} object, the \code{theta} values from that object
+#' are used. For a \code{gsDesign} object where \code{theta} is input as
+#' \code{NULL} (the default), \code{theta=seq(0,2,.05)*x$delta}) is used.  For
+#' a \code{gsDesign} object, the x-axis values are rescaled to
+#' \code{theta/x$delta} and the label for the x-axis \eqn{theta / delta}. For a
+#' \code{gsProbability} object, the values of \code{theta} are plotted and are
+#' labeled as \eqn{theta}. See examples below.
+#' 
+#' Estimated treatment effects at boundaries are computed dividing the Z-values
+#' at the boundaries by the square root of \code{n.I} at that analysis.
+#' 
+#' Spending functions are plotted for a continuous set of values from 0 to 1.
+#' This option should not be used if a boundary is used or a pointwise spending
+#' function is used (\code{sfu} or \code{sfl="WT", "OF", "Pocock"} or
+#' \code{sfPoints}).
+#' 
+#' Conditional power is computed using the function \code{gsBoundCP()}.  The
+#' default input for this routine is \code{theta="thetahat"} which will compute
+#' the conditional power at each bound using the estimated treatment effect at
+#' that bound.  Otherwise, if the input is \code{gsDesign} object conditional
+#' power is computed assuming \code{theta=x$delta}, the original effect size
+#' for which the trial was planned.
+#' 
+#' Average sample number/expected sample size is computed using \code{n.I} at
+#' each analysis times the probability of crossing a boundary at that analysis.
+#' If no boundary is crossed at any analysis, this is counted as stopping at
+#' the final analysis.
+#' 
+#' B-values are Z-values multiplied by \code{sqrt(t)=sqrt(x$n.I/x$n.I[x$k])}.
+#' Thus, the expected value of a B-value at an analysis is the true value of
+#' \eqn{theta} multiplied by the proportion of total planned observations at
+#' that time. See Proschan, Lan and Wittes (2006).
+#' 
+#' @aliases plot.gsDesign plot.gsProbability Plots for group sequential designs
+#' @param x Object of class \code{gsDesign} for \code{plot.gsDesign()} or
+#' \code{gsProbability} for
+#' 
+#' \code{plot.gsProbability()}.
+#' @param plottype 1=boundary plot (default for \code{gsDesign}),
+#' 
+#' 2=power plot (default for \code{gsProbability}),
+#' 
+#' 3=estimated treatment effect at boundaries,
+#' 
+#' 4=conditional power at boundaries,
+#' 
+#' 5=spending function plot (only available if \code{class(x)=="gsDesign"}),
+#' 
+#' 6=expected sample size plot, and
+#' 
+#' 7=B-values at boundaries.
+#' 
+#' Character values for \code{plottype} may also be entered: \code{"Z"} for
+#' plot type 1, \code{"power"} for plot type 2, \code{"thetahat"} for plot type
+#' 3, \code{"CP"} for plot type 4, \code{"sf"} for plot type 5, \code{"ASN"},
+#' \code{"N"} or \code{"n"} for plot type 6, and \code{"B"}, \code{"B-val"} or
+#' \code{"B-value"} for plot type 7.
+#' @param base Default is FALSE, which means ggplot2 graphics are used. If
+#' true, base graphics are used for plotting.
+#' @param ... This allows many optional arguments that are standard when
+#' calling \code{plot}.
+#' 
+#' Other arguments include:
+#' 
+#' \code{theta} which is used for \code{plottype=2}, \code{4}, \code{6};
+#' normally defaults will be adequate; see details.
+#' 
+#' \code{ses=TRUE} which applies only when \code{plottype=3} and
+#' 
+#' \code{class(x)=="gsDesign"}; indicates that estimated standardized effect
+#' size at the boundary is to be plotted rather than the actual estimate.
+#' 
+#' \code{xval="Default"} which is only effective when \code{plottype=2} or
+#' \code{6}. Appropriately scaled (reparameterized) values for x-axis for power
+#' and expected sample size graphs; see details.
+#' @return An object of \code{class(x)}; in many cases this is the input value
+#' of \code{x}, while in others \code{x$theta} is replaced and corresponding
+#' characteristics computed; see details.
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
+#' @seealso \link{gsDesign package overview}, \code{\link{gsDesign}},
+#' \code{\link{gsProbability}}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' 
+#' Proschan, MA, Lan, KKG, Wittes, JT (2006), \emph{Statistical Monitoring of
+#' Clinical Trials. A Unified Approach}.  New York: Springer.
+#' @keywords design
+#' @examples
+#' 
+#' #  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
+#' #  lower bound is non-binding (ignored in Type I error computation)
+#' #  sample size is computed based on a fixed design requiring n=100
+#' x <- gsDesign(k=5, test.type=2, n.fix=100)
+#' x
+#' 
+#' # the following translate to calls to plot.gsDesign since x was
+#' # returned by gsDesign; run these commands one at a time
+#' plot(x)
+#' plot(x, plottype=2)
+#' plot(x, plottype=3)
+#' plot(x, plottype=4)
+#' plot(x, plottype=5)
+#' plot(x, plottype=6)
+#' plot(x, plottype=7)
+#' 
+#' #  choose different parameter values for power plot
+#' #  start with design in x from above
+#' y <- gsProbability(k=5, theta=seq(0, .5, .025), x$n.I,
+#'                    x$lower$bound, x$upper$bound)
+#' 
+#' # the following translates to a call to plot.gsProbability since
+#' # y has that type
+#' plot(y)
+#' 
+plot.gsDesign <- function(x, plottype=1, base=FALSE,...){   
 #   checkScalar(plottype, "integer", c(1, 7))
    # if (base) invisible(do.call(gsPlotName(plottype), list(x, ...)))
      do.call(gsPlotName(plottype), list(x, base=base,...))
 }
 
-"plot.gsProbability" <- function(x, plottype=2, base=FALSE,...)
-{   
+plot.gsProbability <- function(x, plottype=2, base=FALSE,...){   
 #   checkScalar(plottype, "integer", c(1, 9))
 	y <- x
 	if (max(x$n.I)>3) y$n.fix<-max(x$n.I)
@@ -63,8 +166,8 @@ globalVariables(c("y","N","Z","Bound","thetaidx","Probability","delta","Analysis
 ###
 # Hidden Functions
 ###
-"gsPlotName" <- function(plottype)
-{
+
+gsPlotName <- function(plottype){
     # define plots and associated valid plot types
     plots <- list(plotgsZ=c("1","z"), 
             plotgsPower=c("2","power"), 
@@ -80,8 +183,8 @@ globalVariables(c("y","N","Z","Bound","thetaidx","Probability","delta","Analysis
     plottype <- match.arg(tolower(as.character(plottype)), as.vector(unlist(plots)))
     names(plots)[which(unlist(lapply(plots, function(x, type) is.element(type, x), type=plottype)))]    
 }
-"gsPlotName2" <- function(plottype)
-{
+
+gsPlotName2 <- function(plottype){
     # define plots and associated valid plot types
     plots <- list(plotgsZ=c("1","z"), 
             plotgsPower=c("2","power"), 
@@ -95,50 +198,79 @@ globalVariables(c("y","N","Z","Bound","thetaidx","Probability","delta","Analysis
     plottype <- match.arg(tolower(as.character(plottype)), as.vector(unlist(plots)))
     names(plots)[which(unlist(lapply(plots, function(x, type) is.element(type, x), type=plottype)))]    
 }
-"plotgsZ" <- function(x, ylab="Normal critical value",main="Normal test statistics at bounds",...){qplotit(x=x,ylab=ylab,main=main,fn=function(z,...){z},...)}
-"plotBval" <- function(x, ylab="B-value", main="B-values at bounds",...){qplotit(x=x, fn=gsBValue, ylab=ylab, main=main, ...)}
-"plotreleffect" <- function(x=x, ylab=NULL, main="Treatment effect at bounds",...){
+
+plotgsZ <- function(x, ylab="Normal critical value",main="Normal test statistics at bounds",...){
+  qplotit(x=x,ylab=ylab,main=main,fn=function(z,...){z},...)
+}
+
+plotBval <- function(x, ylab="B-value", main="B-values at bounds",...){
+  qplotit(x=x, fn=gsBValue, ylab=ylab, main=main, ...)
+}
+
+plotreleffect <- function(x=x, ylab=NULL, main="Treatment effect at bounds",...){
     qplotit(x, fn=gsDelta, main=main, ylab=ifelse(!is.null(ylab), ylab, 
             ifelse(tolower(x$endpoint)=="binomial",
                    expression(hat(p)[C]-hat(p)[E]), 
                    expression(hat(theta)/theta[1]))),...)
 }
-"plotHR" <- function(x=x, ylab="Estimated hazard ratio",main="Hazard ratio at bounds",...){qplotit(x, fn=gsHR,  ylab=ylab, main=main, ratio=1, ...)}
-"plotRR" <- function(x=x, ylab="Estimated risk ratio",main="Risk ratio at bounds",...){qplotit(x, fn=gsRR,  ylab=ylab, main=main, ratio=1, ...)}
-gsBValue <- function(z,i,x,ylab="B-value",...)
-{   Bval <- z * sqrt(x$timing[i])
-    Bval
+
+plotHR <- function(x=x, ylab="Estimated hazard ratio",main="Hazard ratio at bounds",...){
+  qplotit(x, fn=gsHR,  ylab=ylab, main=main, ratio=1, ...)
 }
-gsDelta <- function(z, i, x, ylab=NULL,...)
-{   deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1-x$delta0) / x$delta + x$delta0
-    deltaHat
+
+plotRR <- function(x=x, ylab="Estimated risk ratio",main="Risk ratio at bounds",...){
+  qplotit(x, fn=gsRR,  ylab=ylab, main=main, ratio=1, ...)
 }
-gsRR <- function(z, i, x, ratio=1, ylab="Estimated risk ratio",...)
-{   deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1-x$delta0) / x$delta + x$delta0
-    exp(deltaHat)
+
+gsBValue <- function(z,i,x,ylab="B-value",...){   
+  Bval <- z * sqrt(x$timing[i])
+  Bval
 }
-gsHR <- function(z, i, x, ratio=1, ylab="Estimated hazard ratio", ...)
-{    c <- 1 / (1 + ratio)
-     psi <- c * (1 - c)
-     if (is.null(x$hr0)) x$hr0 <- 1
-     hrHat <- exp(-z / sqrt(x$n.I[i] * psi)) * x$hr0
-     hrHat
+
+gsDelta <- function(z, i, x, ylab=NULL,...){   
+  deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1-x$delta0) / x$delta + x$delta0
+  deltaHat
 }
-gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
-{	cp <- array(0,length(z))
-	if (is.null(theta)) theta <- z / sqrt(x$n.I[i])
-	if (length(theta)==1 && length(z)>1) theta <- array(theta,length(z))
-	for(j in 1:length(z))
-	{	cp[j] <- sum(gsCP(x=x, theta=theta[j], i=i[j], zi=z[j])$upper$prob)
+
+gsRR <- function(z, i, x, ratio=1, ylab="Estimated risk ratio",...){   
+  
+  deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1-x$delta0) / x$delta + x$delta0
+  exp(deltaHat)
+}
+
+gsHR <- function(z, i, x, ratio=1, ylab="Estimated hazard ratio", ...){
+  c <- 1 / (1 + ratio)
+  psi <- c * (1 - c)
+  
+  if (is.null(x$hr0)) 
+    x$hr0 <- 1
+  
+  hrHat <- exp(-z / sqrt(x$n.I[i] * psi)) * x$hr0
+  hrHat
+}
+gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...){	
+  
+  cp <- array(0,length(z))
+  
+	if (is.null(theta)) 
+	  theta <- z / sqrt(x$n.I[i])
+	
+	if (length(theta)==1 && length(z)>1) 
+	  theta <- array(theta,length(z))
+	
+	for(j in 1:length(z)){	
+	  cp[j] <- sum(gsCP(x=x, theta=theta[j], i=i[j], zi=z[j])$upper$prob)
 	}
+	
 	cp
 }
-# qplots for z-values and transforms of z-values
-"qplotit" <- function(x, xlim=NULL, ylim=NULL, main=NULL, geom=c("line", "text"), 
+
+qplotit <- function(x, xlim=NULL, ylim=NULL, main=NULL, geom=c("line", "text"), 
                      dgt=c(2,2), lty=c(2,1), col=c(1,1),
                      lwd=c(1,1), nlabel="TRUE", xlab=NULL, ylab=NULL, fn=function(z,i,x,...){z},
-                     ratio=1, delta0=0, delta=1, cex=1, base=FALSE,...)
-{  ggver <- as.numeric_version(packageVersion('ggplot2'))
+                     ratio=1, delta0=0, delta=1, cex=1, base=FALSE,...){ 
+  
+  ggver <- as.numeric_version(packageVersion('ggplot2'))
    if (length(lty)==1) lty <- array(lty, 2)
    if (length(col)==1) col <- array(col, 2)
    if (length(lwd)==1) lwd <- array(lwd, 2)
@@ -247,12 +379,12 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	}
 }
 
-"plotgsCP" <- function(x, theta="thetahat", main="Conditional power at interim stopping boundaries", 
+plotgsCP <- function(x, theta="thetahat", main="Conditional power at interim stopping boundaries", 
         ylab=NULL, geom=c("line","text"),
         xlab=ifelse(x$n.fix == 1, "Sample size relative to fixed design", "N"), xlim=NULL,
         lty=c(1,2), col=c(1,1), lwd=c(1,1), pch=" ", cex=1, legtext=NULL,  dgt=c(3,2), nlabel=TRUE, 
-        base=FALSE,...)
-{  ggver <- as.numeric_version(packageVersion('ggplot2'))
+        base=FALSE,...){  
+  ggver <- as.numeric_version(packageVersion('ggplot2'))
    if (length(lty)==1) lty <- array(lty, 2)
    if (length(col)==1) col <- array(col, 2)
    if (length(lwd)==1) lwd <- array(lwd, 2)
@@ -385,14 +517,16 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 	{	return(p)
 	}
 }
-"plotsf" <- function(x, 
+
+plotsf <- function(x, 
 	xlab="Proportion of total sample size", 
 	ylab=NULL, main="Spending function plot",
 	ylab2=NULL, oma=c(2, 2, 2, 2),
 	legtext=NULL, 
 	col=c(1,1), lwd=c(.5,.5), lty=c(1,2),
-	mai=c(.85, .75, .5, .5), xmax=1, base=FALSE,...)
-{ ggver <- as.numeric_version(packageVersion('ggplot2'))
+	mai=c(.85, .75, .5, .5), xmax=1, base=FALSE,...){
+  
+  ggver <- as.numeric_version(packageVersion('ggplot2'))
  	if (is.null(legtext))
 	{	if (x$test.type > 4) legtext <- c("Upper bound", "Lower bound") 
 		else legtext <- c(expression(paste(alpha, "-spending")), expression(paste(beta, "-spending")))
@@ -469,9 +603,9 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
 		}
 	}
 }
-"plotASN" <- function(x, xlab=NULL, ylab=NULL, main=NULL, theta=NULL, xval=NULL, type="l", 
-                      base=FALSE,...)
-{    
+
+plotASN <- function(x, xlab=NULL, ylab=NULL, main=NULL, theta=NULL, xval=NULL, type="l", 
+                      base=FALSE,...){    
   if (is(x, "gsDesign") && x$n.fix == 1) 
   {    
     if (is.null(ylab)) ylab <- "E{N} relative to fixed design"
@@ -525,12 +659,13 @@ gsCPz <- function(z, i, x, theta=NULL, ylab=NULL, ...)
      return(p)
   }
 }
-"plotgsPower" <- function(x, main="Boundary crossing probabilities by effect size",
+
+plotgsPower <- function(x, main="Boundary crossing probabilities by effect size",
                           ylab="Cumulative Boundary Crossing Probability",
                           xlab=NULL, lty=NULL, col=NULL, lwd=1, cex=1,
                           theta=if (is(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta, 
-                          xval=NULL, base=FALSE, outtype=1,...)
-{  ggver <- as.numeric_version(packageVersion('ggplot2'))
+                          xval=NULL, base=FALSE, outtype=1,...){
+  ggver <- as.numeric_version(packageVersion('ggplot2'))
    if (is.null(xval)){
      if (is(x, "gsDesign")){
        xval <- x$delta0 + (x$delta1-x$delta0)*theta/x$delta

@@ -1,33 +1,8 @@
-##################################################################################
-#  Simulation functionality for the gsDesign package
-#
-#  Exported Functions:
-#                   
-#    (none)
-#
-#  Hidden Functions:
-#
-#    gsAdaptSim
-#    gsSimulate
-#
-#  Author(s): Keaven Anderson, PhD.
-# 
-#  Reviewer(s): REvolution Computing 19DEC2008 v.2.0 - William Constantine, Kellie Wills 
-#
-#  R Version: 2.7.2
-#
-##################################################################################
-
-###
-# Exported Functions
-###
-
 ###
 # Hidden Functions
 ###
 
-"gsAdaptSim" <- function(SimStage, IniSim, TrialPar, SimPar, cp=0, thetacp=-100, maxn=100000, pdeltamin=0, ...)
-{
+gsAdaptSim <- function(SimStage, IniSim, TrialPar, SimPar, cp=0, thetacp=-100, maxn=100000, pdeltamin=0, ...){
     # simulate 1st k-1 stages of trial
     x <- gsSimulate(nstage=TrialPar$gsx$k-1, SimStage, IniSim, TrialPar, SimPar)
     
@@ -139,8 +114,7 @@
     x
 }
 
-"gsSimulate" <- function(nstage=0, SimStage, IniSim, TrialPar, SimPar)
-{    
+gsSimulate <- function(nstage=0, SimStage, IniSim, TrialPar, SimPar){    
     if (nstage == 0) 
     {
         nstage <- TrialPar$gsx$k
@@ -156,4 +130,3 @@
     
     x
 }
-
