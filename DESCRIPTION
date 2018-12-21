@@ -1,14 +1,16 @@
 Package: gsDesign
 Version: 4.0.0001
 Title: Group Sequential Design
-Author: Keaven Anderson 
-Maintainer: Keaven Anderson <keaven_anderson@merck.com>
+Description: Derives group sequential designs and describes their properties.
+Authors@R:
+    person(given = "Keaven",
+           family = "Anderson",
+           email = "keaven_anderson@merck.com",
+           role = c('aut','cre'))
 Depends: R (>= 3.0.0)
 Imports: plyr, methods, stats, utils, ggplot2, xtable,tools,graphics
-Suggests: knitr, scales,
-    rmarkdown
+Suggests: knitr, scales, rmarkdown, testthat
 VignetteBuilder: knitr 
-Description: Derives group sequential designs and describes their properties.
 License: GPL (>= 2)
 Copyright: Copyright 2010, Merck Research Laboratories
 RoxygenNote: 6.1.1
