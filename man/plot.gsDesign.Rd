@@ -3,14 +3,11 @@
 \name{plot.gsDesign}
 \alias{plot.gsDesign}
 \alias{plot.gsProbability}
-\alias{Plots}
-\alias{for}
-\alias{group}
-\alias{sequential}
-\alias{designs}
-\title{2.3: Plots for group sequential designs}
+\title{Plots for group sequential designs}
 \usage{
 \method{plot}{gsDesign}(x, plottype = 1, base = FALSE, ...)
+
+\method{plot}{gsProbability}(x, plottype = 2, base = FALSE, ...)
 }
 \arguments{
 \item{x}{Object of class \code{gsDesign} for \code{plot.gsDesign()} or
@@ -73,8 +70,7 @@ at boundaries. For objects of type \code{gsProbability} plots are available
 for z-values at boundaries, power (default), estimated treatment effects at
 boundaries, conditional power, expected sample size and B-values at
 boundaries.
-}
-\details{
+
 The intent is that many standard \code{plot()} parameters will function as
 expected; exceptions to this rule exist. In particular, \code{main, xlab,
 ylab, lty, col, lwd, type, pch, cex} have been tested and work for most
@@ -154,7 +150,6 @@ y <- gsProbability(k=5, theta=seq(0, .5, .025), x$n.I,
 # the following translates to a call to plot.gsProbability since
 # y has that type
 plot(y)
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -164,8 +159,7 @@ Proschan, MA, Lan, KKG, Wittes, JT (2006), \emph{Statistical Monitoring of
 Clinical Trials. A Unified Approach}.  New York: Springer.
 }
 \seealso{
-\link{gsDesign package overview}, \code{\link{gsDesign}},
-\code{\link{gsProbability}}
+\code{\link{gsDesign}}, \code{\link{gsProbability}}
 }
 \author{
 Keaven Anderson \email{keaven\_anderson@merck.com}

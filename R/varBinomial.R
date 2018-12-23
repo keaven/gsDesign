@@ -1,3 +1,4 @@
+# varBinomial roxy [sinew] ---- 
 #' 3.2: Testing, Confidence Intervals, Sample Size and Power for Comparing Two
 #' Binomial Rates
 #' 
@@ -262,6 +263,7 @@
 #' varBinomial(x=x1+x2,n=300,ratio=2,delta0=0,scale="RR")
 #' # blinded estimate of log-odds-ratio
 #' varBinomial(x=x1+x2,n=300,ratio=2,delta0=0,scale="OR")
+# varBinomial function [sinew] ----
 varBinomial <- function(x,n,delta0=0,ratio=1,scale="Difference")
 {	# check input arguments 
   checkVector(x, "integer", c(1, Inf))

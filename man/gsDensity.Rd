@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsDesign.R
 \name{gsDensity}
 \alias{gsDensity}
-\title{2.6: Group sequential design interim density function}
+\title{Group sequential design interim density function}
 \usage{
 gsDensity(x, theta = 0, i = 1, zi = 0, r = 18)
 }
@@ -39,8 +39,7 @@ is less than that value. When integrated over the real line, this density
 computes the probability of not crossing a bound at a previous analysis. It
 corresponds to the subdistribution function at analysis \code{i} that
 excludes the probability of crossing a bound at an earlier analysis.
-}
-\details{
+
 The initial purpose of this routine was as a component needed to compute the
 predictive power for a trial given an interim result; see
 \code{\link{gsPP}}.
@@ -100,7 +99,6 @@ lines(z, d$density[,2], lty=2, lwd=2)
 u <- x$upper$bound[4]
 text(expression(paste(theta,"=",delta)),x=2.2, y=.2, cex=1.5)
 text(expression(paste(theta,"=0")),x=.55, y=.4, cex=1.5)
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

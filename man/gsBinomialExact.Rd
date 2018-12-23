@@ -3,14 +3,21 @@
 \name{gsBinomialExact}
 \alias{gsBinomialExact}
 \alias{print.gsBinomialExact}
-\alias{plot.gsBinomialExact}
-\alias{binomialSPRT}
-\alias{plot.binomialSPRT}
 \alias{nBinomial1Sample}
-\title{3.4: One-Sample Binomial Routines}
+\alias{binomialSPRT}
+\alias{plot.gsBinomialExact}
+\alias{plot.binomialSPRT}
+\title{One-Sample Binomial Routines}
 \usage{
 gsBinomialExact(k = 2, theta = c(0.1, 0.2), n.I = c(50, 100),
   a = c(3, 7), b = c(20, 30))
+
+binomialSPRT(p0 = 0.05, p1 = 0.25, alpha = 0.1, beta = 0.15,
+  minn = 10, maxn = 35)
+
+\method{plot}{gsBinomialExact}(x, plottype = 1, ...)
+
+\method{plot}{binomialSPRT}(x, plottype = 1, ...)
 }
 \arguments{
 \item{k}{Number of analyses planned, including interim and final.}
@@ -57,6 +64,8 @@ when the boundary is crossed; 6 produces a plot of the expected sample size
 by the underlying event rate (this assumes there is no enrollment beyond the
 sample size where the boundary is crossed).}
 
+\item{\dots}{arguments passed through to \code{ggplot}.}
+
 \item{n}{sample sizes to be considered for \code{nBinomial1Sample}. These
 should be ordered from smallest to largest and be > 0.}
 
@@ -70,8 +79,6 @@ which power is at least \code{1-beta}. When \code{conservative=TRUE}, the
 minimum sample sample size for which power is at least \code{1-beta} and
 there is no larger sample size in the input \code{n} where power is less
 than \code{1-beta}.}
-
-\item{\dots}{arguments passed through to \code{ggplot}.}
 }
 \value{
 \code{gsBinomialExact()} returns a list of class
@@ -120,8 +127,7 @@ function has been extended using \code{print.gsBinomialExact} to print
 \code{gsBinomialExact} objects; see examples. Similarly, a plot function has
 been extended using \code{plot.gsBinomialExact} to plot
 \code{gsBinomialExact} objects; see examples.
-}
-\details{
+
 \code{binomialSPRT} computes a truncated binomial sequential probability
 ratio test (SPRT) which is a specific instance of an exact binomial group
 sequential design for a single arm trial with a binary outcome.
@@ -194,7 +200,7 @@ zz <- gsBinomialExact(k=3,theta=seq(0,1,0.1), n.I=c(12,24,36),
 # let's see what class this is
 class(zz)
 
-# because of "gsProbability" class above, following is equivalent to 
+# because of "gsProbability" class above, following is equivalent to
 # print.gsProbability(zz)
 zz
 # also plot (see also plots below for \\code{binomialSPRT})
@@ -233,8 +239,6 @@ nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:40, conservati
 # what happens if input sample sizes not sufficient?
 nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:30)
 
-
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -247,7 +251,6 @@ marc_schwartz@me.com.
 \code{\link{gsProbability}}
 }
 \author{
-Jon Hartzel, Yevgen Tymofyeyev and Keaven Anderson
-\email{keaven\_anderson@merck.}
+Jon Hartzel, Yevgen Tymofyeyev and Keaven Anderson \email{keaven\_anderson@merck.}
 }
 \keyword{design}

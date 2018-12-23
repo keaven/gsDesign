@@ -1,3 +1,4 @@
+# nSurvival roxy [sinew] ---- 
 #' 3.4: Time-to-event sample size calculation (Lachin-Foulkes)
 #' 
 #' \code{nSurvival()} is used to calculate the sample size for a clinical trial
@@ -206,6 +207,7 @@
 #' hrn2z(hr=.6,n=75,ratio=2)
 #' hrn2z(hr=1/.6,n=75,ratio=2)
 #' 
+# nSurvival function [sinew] ----
 nSurvival <- function(lambda1=1/12, lambda2=1/24, Ts=24, Tr=12,
         eta = 0, ratio = 1,
         alpha = 0.025, beta = 0.10, sided = 1,
@@ -282,6 +284,7 @@ nSurvival <- function(lambda1=1/12, lambda2=1/24, Ts=24, Tr=12,
 # Hidden Functions
 ###
 
+# pe function [sinew] ---- 
 pe <- function(lam, eta = 0, Ts, Tr, unif = TRUE, gamma){
 
     q1 <- lam / (lam + eta)

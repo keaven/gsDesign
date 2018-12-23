@@ -1,12 +1,6 @@
-###
-# Exported Functions
-###
-
-
-
-#' 3.1: Normal Density Grid
-#' 
-#' normalGrid() is intended to be used for computation of the expected value of
+# normalGrid roxy [sinew] ---- 
+#' @title Normal Density Grid
+#' @description normalGrid() is intended to be used for computation of the expected value of
 #' a function of a normal random variable.  The function produces grid points
 #' and weights to be used for numerical integration.
 #' 
@@ -36,13 +30,6 @@
 #' on the grid in \code{z}; see examples.} \item{wgts}{Weights to be used with
 #' the grid in \code{z} for integrating the normal density function; see
 #' examples. This is equal to \code{density * gridwgts}.}
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' @keywords design
 #' @examples
 #' 
 #' #  standard normal distribution
@@ -93,7 +80,17 @@
 #' plot(y$z, z$en, xlab="theta", ylab="E{N}", 
 #'    main="Expected sample size for different theta values")
 #' lines(y$z, z$en)
-#' 
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @export
+#' @rdname normalGrid
+#' @importFrom stats dnorm
+# normalGrid function [sinew] ----
 normalGrid <- function(r=18, bounds=c(0, 0), mu=0, sigma=1){    
     checkScalar(r,"integer", c(1, 80))
     checkVector(bounds,"numeric")
@@ -129,6 +126,27 @@ normalGrid <- function(r=18, bounds=c(0, 0), mu=0, sigma=1){
     d <- stats::dnorm(z, mean=mu, sd=sigma)
     list(z=z, density=d, gridwgts=w, wgts=d*w) 
 }
+
+# invCDF roxy [sinew] ---- 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param q PARAM_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param discrete PARAM_DESCRIPTION, Default: FALSE
+#' @param upper PARAM_DESCRIPTION, Default: FALSE
+#' @param tol PARAM_DESCRIPTION, Default: 1e-06
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname invCDF
+#' @export 
+#' @author Keaven Anderson, PhD
+# invCDF function [sinew] ----
 
 invCDF     <- function(q, x, discrete=FALSE, upper=FALSE, tol=.000001){   checkLengths(x$z, x$density, x$gridwgts, x$wgts)
     len <- length(x$z)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsCP.R
 \name{gsBoundCP}
 \alias{gsBoundCP}
-\title{2.5: Conditional Power at Interim Boundaries}
+\title{Conditional Power at Interim Boundaries}
 \usage{
 gsBoundCP(x, theta = "thetahat", r = 18)
 }
@@ -34,8 +34,7 @@ crossing upper bounds given interim test statistics at each upper bound.}
 bounds given an interim test statistic at an interim bound. For each interim
 boundary, assumes an interim test statistic at the boundary and computes the
 probability of crossing any of the later upper boundaries.
-}
-\details{
+
 See Conditional power section of manual for further clarification. See also
 Muller and Schaffer (2001) for background theory.
 }
@@ -55,7 +54,6 @@ gsBoundCP(x)
 
 # compute conditional power based on original x$delta
 gsBoundCP(x, theta=x$delta)
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

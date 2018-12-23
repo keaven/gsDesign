@@ -4,13 +4,25 @@
 \alias{gsCP}
 \alias{gsPP}
 \alias{gsPI}
+\alias{gsPosterior}
 \alias{gsPOS}
 \alias{gsCPOS}
-\alias{gsPosterior}
-\title{2.4: Conditional and Predictive Power, Overall and Conditional Probability
-of Success}
+\title{Conditional and Predictive Power, Overall and Conditional Probability of Success}
 \usage{
 gsCP(x, theta = NULL, i = 1, zi = 0, r = 18)
+
+gsPP(x, i = 1, zi = 0, theta = c(0, 3), wgts = c(0.5, 0.5),
+  r = 18, total = TRUE)
+
+gsPI(x, i = 1, zi = 0, j = 2, level = 0.95, theta = c(0, 3),
+  wgts = c(0.5, 0.5))
+
+gsPosterior(x = gsDesign(), i = 1, zi = NULL, prior = normalGrid(),
+  r = 18)
+
+gsPOS(x, theta, wgts)
+
+gsCPOS(i, x, theta, wgts)
 }
 \arguments{
 \item{x}{An object of type \code{gsDesign} or \code{gsProbability}}
@@ -36,20 +48,20 @@ values provide larger number of grid points and greater accuracy.  Normally
 be one if weights are equal, otherwise should be the same length as
 \code{theta}. Values should be positive, but do not need to sum to 1.}
 
-\item{prior}{provides a prior distribution in the form produced by
-\code{\link{normalGrid}}}
-
-\item{j}{specific analysis for which prediction is being made; must be
-\code{>i} and no more than \code{x$k}}
-
 \item{total}{The default of \code{total=TRUE} produces the combined
 probability for all planned analyses after the interim analysis specified in
 \code{i}. Otherwise, information on each analysis is provided separately.}
+
+\item{j}{specific analysis for which prediction is being made; must be
+\code{>i} and no more than \code{x$k}}
 
 \item{level}{The level to be used for Bayes credible intervals (which
 approach confidence intervals for vague priors). The default
 \code{level=.95} corresponds to a 95\% credible interval. \code{level=0}
 provides a point estimate rather than an interval.}
+
+\item{prior}{provides a prior distribution in the form produced by
+\code{\link{normalGrid}}}
 }
 \value{
 \code{gsCP()} returns an object of the class \code{gsProbability}.
@@ -106,8 +118,7 @@ probability of success based on this event. Note that \code{gsCP()} and
 \code{gsPP()} take only the interim test statistic into account in computing
 conditional probabilities, while \code{gsCPOS()} conditions on not crossing
 any bound through a specified interim analysis.
-}
-\details{
+
 See Conditional power section of manual for further clarification. See also
 Muller and Schaffer (2001) for background theory.
 
@@ -215,7 +226,6 @@ lines(x=xpb$z,y=xpb$density,col=4)
 # start with point estimate, followed by 90\% prediction interval
 gsPI(x=x, i=1, zi=z1, j=2, theta=prior$z, wgts=prior$wgts, level=0)
 gsPI(x=x, i=1, zi=z1, j=2, theta=prior$z, wgts=prior$wgts, level=.9)
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

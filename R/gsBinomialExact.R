@@ -1,11 +1,8 @@
-#####
-# global variables used to eliminate warnings in R CMD check
-#####
-utils::globalVariables(c("N","EN","Bound","rr","Percent","Outcome"))
+utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 
-#' 3.4: One-Sample Binomial Routines
-#' 
-#' 
+# gsBinomialExact roxy [sinew] ---- 
+#' @title One-Sample Binomial Routines
+#' @description
 #' \code{gsBinomialExact} computes power/Type I error and expected sample size
 #' for a group sequential design in a single-arm trial with a binary outcome.
 #' This can also be used to compare event rates in two-arm studies. The print
@@ -13,34 +10,34 @@ utils::globalVariables(c("N","EN","Bound","rr","Percent","Outcome"))
 #' \code{gsBinomialExact} objects; see examples. Similarly, a plot function has
 #' been extended using \code{plot.gsBinomialExact} to plot
 #' \code{gsBinomialExact} objects; see examples.
-#' 
+#'
 #' \code{binomialSPRT} computes a truncated binomial sequential probability
 #' ratio test (SPRT) which is a specific instance of an exact binomial group
 #' sequential design for a single arm trial with a binary outcome.
-#' 
+#'
 #' %\code{gsBinomialPP} computes a truncated binomial (group) sequential design
 #' based on predictive probability.
-#' 
+#'
 #' \code{nBinomial1Sample} uses exact binomial calculations to compute power
 #' and sample size for single arm binomial experiments.
-#' 
+#'
 #' \code{gsBinomialExact} is based on the book "Group Sequential Methods with
 #' Applications to Clinical Trials," Christopher Jennison and Bruce W.
 #' Turnbull, Chapter 12, Section 12.1.2 Exact Calculations for Binary Data.
 #' This computation is often used as an approximation for the distribution of
 #' the number of events in one treatment group out of all events when the
 #' probability of an event is small and sample size is large.
-#' 
+#'
 #' An object of class \code{gsBinomialExact} is returned. On output, the values
 #' of \code{theta} input to \code{gsBinomialExact} will be the parameter values
 #' for which the boundary crossing probabilities and expected sample sizes are
 #' computed.
-#' 
+#'
 #' Note that a[1] equal to -1 lower bound at n.I[1] means 0 successes continues
 #' at interim 1; a[2]==0 at interim 2 means 0 successes stops trial for
 #' futility at 2nd analysis.  For final analysis, set a[k] equal to b[k]-1 to
 #' incorporate all possibilities into non-positive trial; see example.
-#' 
+#'
 #' The sequential probability ratio test (SPRT) is a sequential testing scheme
 #' allowing testing after each observation. This likelihood ratio is used to
 #' determine upper and lower cutoffs which are linear and parallel in the
@@ -54,16 +51,16 @@ utils::globalVariables(c("N","EN","Bound","rr","Percent","Outcome"))
 #' be altered to produce desired values that are achieved by the planned sample
 #' size. See also example that shows computation of Type I error when futility
 #' bound is considered non-binding.
-#' 
+#'
 #' Note that if the objective of a design is to demonstrate that a rate (e.g.,
 #' failure rate) is lower than a certain level, two approaches can be taken.
 #' First, 1 minus the failure rate is the success rate and this can be used for
 #' planning. Second, the role of \code{beta} becomes to express Type I error
 #' and \code{alpha} is used to express Type II error.
-#' 
+#'
 #' Plots produced include boundary plots, expected sample size, response rate
 #' at the boundary and power.
-#' 
+#'
 #' \code{gsBinomial1Sample} uses exact binomial computations based on the base
 #' R functions \code{qbinom()} and \code{pbinom()}. The tabular output may be
 #' convenient for plotting. Note that input variables are largely not checked,
@@ -71,9 +68,7 @@ utils::globalVariables(c("N","EN","Bound","rr","Percent","Outcome"))
 #' run with \code{outtype=3} to check that you have done things appropriately.
 #' If \code{n} is not ordered (a bad idea) or not sequential (maybe OK), be
 #' aware of possible consequences.
-#' 
-#' @aliases gsBinomialExact print.gsBinomialExact plot.gsBinomialExact
-#' binomialSPRT plot.binomialSPRT nBinomial1Sample
+#'
 #' @param k Number of analyses planned, including interim and final.
 #' @param theta Vector of possible underling binomial probabilities for a
 #' single binomial sample.
@@ -133,7 +128,7 @@ utils::globalVariables(c("N","EN","Bound","rr","Percent","Outcome"))
 #' \item{en}{A vector of the same length as \code{theta} containing expected
 #' sample sizes for the trial design corresponding to each value in the vector
 #' \code{theta}.}
-#' 
+#'
 #' \code{binomialSPRT} produces an object of class \code{binomialSPRT} that is
 #' an extension of the \code{gsBinomialExact} class. The values returned in
 #' addition to those returned by \code{gsBinomialExact} are: \item{intercept}{A
@@ -143,7 +138,7 @@ utils::globalVariables(c("N","EN","Bound","rr","Percent","Outcome"))
 #' achieved by the design returned.} \item{beta}{As input. Note that this will
 #' exceed the actual Type II error achieved by the design returned.}
 #' \item{p0}{As input.} \item{p1}{As input.}
-#' 
+#'
 #' \code{nBinomial1Sample} produces an integer if the input \code{outtype=1}
 #' and a data frame with the following values otherwise: \item{p0}{Input null
 #' hypothesis event (or response) rate.} \item{p1}{Input alternative hypothesis
@@ -154,34 +149,22 @@ utils::globalVariables(c("N","EN","Bound","rr","Percent","Outcome"))
 #' value \code{alpha}.} \item{Power}{Power achived for each output value of
 #' \code{n}.} \item{n}{sample size.} \item{b}{cutoff given \code{n} to control
 #' Type I error; value is \code{NULL} if no such value exists.}
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Jon Hartzel, Yevgen Tymofyeyev and Keaven Anderson
-#' \email{keaven\_anderson@@merck.}
-#' @seealso \code{\link{gsProbability}}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' 
-#' Code for nBinomial1Sample was based on code developed by
-#' marc_schwartz@me.com.
-#' @keywords design
 #' @examples
-#' 
-#' 
+#'
+#'
 #' zz <- gsBinomialExact(k=3,theta=seq(0,1,0.1), n.I=c(12,24,36),
 #'         a=c(-1, 0, 11),  b=c( 5, 9, 12))
-#' 
+#'
 #' # let's see what class this is
 #' class(zz)
-#' 
-#' # because of "gsProbability" class above, following is equivalent to 
+#'
+#' # because of "gsProbability" class above, following is equivalent to
 #' # print.gsProbability(zz)
 #' zz
 #' # also plot (see also plots below for \code{binomialSPRT})
 #' # add lines using geom_line()
 #' plot(zz) + geom_line()
-#' 
+#'
 #' # now for SPRT examples
 #' x <- binomialSPRT(p0=.05,p1=.25,alpha=.1,beta=.2)
 #' # boundary plot
@@ -192,204 +175,251 @@ utils::globalVariables(c("N","EN","Bound","rr","Percent","Outcome"))
 #' plot(x,plottype=3)
 #' # Expect sample size at boundary crossing or end of trial
 #' plot(x,plottype=6)
-#' 
+#'
 #' # sample size for single arm exact binomial
-#' 
+#'
 #' # plot of table of power by sample size
 #' nb1 <- nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:40, outtype=3)
 #' nb1
 #' library(scales)
 #' ggplot(nb1,aes(x=n,y=Power))+geom_line()+geom_point()+scale_y_continuous(labels=percent)
-#' 
+#'
 #' # simple call with same parameters to get minimum sample size yielding desired power
 #' nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:40)
-#' 
+#'
 #' # change to 'conservative' if you want all larger sample
 #' # sizes to also provide adequate power
 #' nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:40, conservative=TRUE)
-#' 
+#'
 #' # print out more information for the selected derived sample size
 #' nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:40, conservative=TRUE,outtype=2)
-#' 
+#'
 #' # what happens if input sample sizes not sufficient?
 #' nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=.2, n = 25:30)
-#' 
-#' 
-#' 
-gsBinomialExact <- function(k=2, theta=c(.1, .2), n.I=c(50, 100), a=c(3, 7), b=c(20,30))
-{
-    checkScalar(k, "integer", c(2,Inf), inclusion=c(TRUE, FALSE))
-    checkVector(theta, "numeric", interval=0:1, inclusion=c(TRUE, TRUE))
-    checkVector(n.I, "integer", interval=c(1, Inf), inclusion=c(TRUE, FALSE))
-    checkVector(a, "integer", interval=c(-Inf, Inf), inclusion=c(FALSE, FALSE))
-    checkVector(b, "integer", interval=c(1, Inf), inclusion=c(FALSE, FALSE))
-    ntheta <- as.integer(length(theta))
-    theta <- as.double(theta)
-    if (k != length(n.I) || k!=length(a) || k != length(b))
-        stop("Lengths of n.I, a, and b must equal k on input")
-    m <- c(n.I[1], diff(n.I))
-    if (min(m) < 1) stop("n.I must must contain an increasing sequence of positive integers")
-    if (min(n.I-a) < 0) stop("Input a-vector must be less than n.I")
-    if (min(b-a) <= 0) stop("Input b-vector must be strictly greater than a")
-    if (min(diff(a)) < 0) stop("a must contain a non-decreasing sequence of integers")
-    if (min(diff(b)) < 0) stop("b must contain a non-decreasing sequence of integers")
-    if (min(diff(n.I-b)) < 0)  stop("n.I - b must be non-decreasing")
-      
-    plo <- matrix(nrow=k, ncol = ntheta)
-    rownames(plo) <- paste(array("Analysis ", k), 1:k)
-    colnames(plo) <- theta
-    phi <- plo
-    en <- numeric(ntheta)
+#'
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Jon Hartzel, Yevgen Tymofyeyev and Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \code{\link{gsProbability}}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#'
+#' Code for nBinomial1Sample was based on code developed by
+#' marc_schwartz@me.com.
+#' @keywords design
+#' @export
+#' @aliases print.gsBinomialExact nBinomial1Sample
+#' @rdname gsBinomialExact
+# gsBinomialExact function [sinew] ----
+gsBinomialExact <- function(k = 2, theta = c(.1, .2), n.I = c(50, 100), a = c(3, 7), b = c(20, 30)) {
+  checkScalar(k, "integer", c(2, Inf), inclusion = c(TRUE, FALSE))
+  checkVector(theta, "numeric", interval = 0:1, inclusion = c(TRUE, TRUE))
+  checkVector(n.I, "integer", interval = c(1, Inf), inclusion = c(TRUE, FALSE))
+  checkVector(a, "integer", interval = c(-Inf, Inf), inclusion = c(FALSE, FALSE))
+  checkVector(b, "integer", interval = c(1, Inf), inclusion = c(FALSE, FALSE))
+  ntheta <- as.integer(length(theta))
+  theta <- as.double(theta)
+  if (k != length(n.I) || k != length(a) || k != length(b)) {
+    stop("Lengths of n.I, a, and b must equal k on input")
+  }
+  m <- c(n.I[1], diff(n.I))
+  if (min(m) < 1) stop("n.I must must contain an increasing sequence of positive integers")
+  if (min(n.I - a) < 0) stop("Input a-vector must be less than n.I")
+  if (min(b - a) <= 0) stop("Input b-vector must be strictly greater than a")
+  if (min(diff(a)) < 0) stop("a must contain a non-decreasing sequence of integers")
+  if (min(diff(b)) < 0) stop("b must contain a non-decreasing sequence of integers")
+  if (min(diff(n.I - b)) < 0) stop("n.I - b must be non-decreasing")
 
-    for(h in 1:length(theta))
+  plo <- matrix(nrow = k, ncol = ntheta)
+  rownames(plo) <- paste(array("Analysis ", k), 1:k)
+  colnames(plo) <- theta
+  phi <- plo
+  en <- numeric(ntheta)
+
+  for (h in 1:length(theta))
+  {
+    p <- theta[h]
+
+    ### c.mat is the recursive function defined in (12.5)
+    ### plo and phi are the probabilities of crossing the lower and upper boundaries defined in (12.6)
+    c.mat <- matrix(0, ncol = k, nrow = n.I[k] + 1)
+    for (i in 1:k)
     {
-        p <- theta[h]
-
-        ### c.mat is the recursive function defined in (12.5)
-        ### plo and phi are the probabilities of crossing the lower and upper boundaries defined in (12.6)
-        c.mat <- matrix(0, ncol=k, nrow=n.I[k]+1)
-        for(i in 1:k)
-        {
-            if(i==1)
-            {
-                c.mat[,1] <- stats::dbinom(0:n.I[k], m[1], p)
-            }
-            else
-            {
-                no.stop <- (a[i-1]+1):(b[i-1]-1)
-                no.stop.mat <- matrix(no.stop, byrow=T, nrow=n.I[k]+1, ncol=length(no.stop))
-                succ.mat <- matrix(0:n.I[k], byrow=F, ncol=length(no.stop), nrow=n.I[k]+1)
-                bin.mat <- matrix(stats::dbinom(succ.mat-no.stop.mat, m[i], p),byrow=F,ncol=length(no.stop), nrow=n.I[k]+1)
-                c.mat[,i] <- bin.mat %*% c.mat[no.stop+1,(i-1)] 
-            }
-            plo[i,h] <- sum(c.mat[(0:n.I[k]) <= a[i], i])
-            phi[i,h] <- sum(c.mat[(0:n.I[k]) >= b[i], i])
-        }
+      if (i == 1) {
+        c.mat[, 1] <- stats::dbinom(0:n.I[k], m[1], p)
+      }
+      else {
+        no.stop <- (a[i - 1] + 1):(b[i - 1] - 1)
+        no.stop.mat <- matrix(no.stop, byrow = T, nrow = n.I[k] + 1, ncol = length(no.stop))
+        succ.mat <- matrix(0:n.I[k], byrow = F, ncol = length(no.stop), nrow = n.I[k] + 1)
+        bin.mat <- matrix(stats::dbinom(succ.mat - no.stop.mat, m[i], p), byrow = F, ncol = length(no.stop), nrow = n.I[k] + 1)
+        c.mat[, i] <- bin.mat %*% c.mat[no.stop + 1, (i - 1)]
+      }
+      plo[i, h] <- sum(c.mat[(0:n.I[k]) <= a[i], i])
+      phi[i, h] <- sum(c.mat[(0:n.I[k]) >= b[i], i])
     }
-  
-    powr <-   array(1, k) %*% phi
-    futile <- array(1, k) %*% plo
-    en <- as.vector(n.I %*% (plo + phi) + n.I[k] * (t(array(1,ntheta)) - powr - futile))
+  }
 
-    x <- list(k = k, theta = theta, n.I = n.I, 
-         lower = list(bound = a, prob = plo ),
-         upper = list(bound = b, prob = phi ), en=en)
+  powr <- array(1, k) %*% phi
+  futile <- array(1, k) %*% plo
+  en <- as.vector(n.I %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
 
-    class(x) <- c("gsBinomialExact", "gsProbability")
-    return(x)
+  x <- list(
+    k = k, theta = theta, n.I = n.I,
+    lower = list(bound = a, prob = plo),
+    upper = list(bound = b, prob = phi), en = en
+  )
+
+  class(x) <- c("gsBinomialExact", "gsProbability")
+  return(x)
 }
+
 # see http://theriac.org/DeskReference/viewDocument.php?id=65&SectionsList=3
-binomialSPRT<-function(p0=.05,p1=.25,alpha=.1,beta=.15,minn=10,maxn=35){
-  lnA <- log((1-beta)/alpha)
-  lnB <- log(beta/(1-alpha))
-  a <- log((1-p1)/(1-p0))
-  b <- log(p1/p0)-a
+
+# binomialSPRT roxy [sinew] ---- 
+#' @rdname gsBinomialExact
+#' @export
+# binomialSPRT function [sinew] ----
+binomialSPRT <- function(p0 = .05, p1 = .25, alpha = .1, beta = .15, minn = 10, maxn = 35) {
+  lnA <- log((1 - beta) / alpha)
+  lnB <- log(beta / (1 - alpha))
+  a <- log((1 - p1) / (1 - p0))
+  b <- log(p1 / p0) - a
   slope <- -a / b
-  intercept <- c(lnA,lnB)/b
-  upper <- ceiling(slope*(minn:maxn)+intercept[1])
-  lower <- floor(slope*(minn:maxn)+intercept[2])
-  lower[lower< -1] <- -1
-  indx <- (minn:maxn >= upper)|(lower>=0)
+  intercept <- c(lnA, lnB) / b
+  upper <- ceiling(slope * (minn:maxn) + intercept[1])
+  lower <- floor(slope * (minn:maxn) + intercept[2])
+  lower[lower < -1] <- -1
+  indx <- (minn:maxn >= upper) | (lower >= 0)
   # compute exact boundary crossing probabilities
-  y <- gsBinomialExact(k=sum(indx),n.I=(minn:maxn)[indx],
-                       theta=c(p0,p1),a=lower[indx],b=upper[indx])
+  y <- gsBinomialExact(
+    k = sum(indx), n.I = (minn:maxn)[indx],
+    theta = c(p0, p1), a = lower[indx], b = upper[indx]
+  )
   y$intercept <- intercept
   y$slope <- slope
   y$alpha <- alpha
   y$beta <- beta
   y$p0 <- p0
   y$p1 <- p1
-  class(y) <- c("binomialSPRT","gsBinomialExact","gsProbability")
+  class(y) <- c("binomialSPRT", "gsBinomialExact", "gsProbability")
   return(y)
 }
 
-plot.gsBinomialExact <- function(x,plottype=1,...){
-  if (plottype==6){
-    theta<-(max(x$theta)-min(x$theta))*(0:50)/50+min(x$theta)
-    y <- gsBinomialExact(k=x$k,theta=theta,n.I=x$n.I,a=x$lower$bound,b=x$upper$bound)
-    xx <- data.frame(p=theta,EN=y$en)
-    p<-ggplot2::ggplot(data=xx,ggplot2::aes(x=p,y=EN)) + ggplot2::geom_line() + ggplot2::ylab("Expected sample size")
-  }else if(plottype==3){
-    xx <- data.frame(N=x$n.I,p=x$upper$bound/x$n.I,Bound="Upper")
-    xx <- rbind(xx, data.frame(N=x$n.I,p=x$lower$bound/x$n.I,Bound="Lower"))
-    p<-ggplot2::ggplot(data=xx,ggplot2::aes(x=N,y=p,group=Bound))+
+# plot.gsBinomialExact roxy [sinew] ---- 
+#' @rdname gsBinomialExact
+#' @export
+#' @importFrom ggplot2 ggplot aes geom_line ylab geom_point xlab
+# plot.gsBinomialExact function [sinew] ----
+plot.gsBinomialExact <- function(x, plottype = 1, ...) {
+  if (plottype == 6) {
+    theta <- (max(x$theta) - min(x$theta)) * (0:50) / 50 + min(x$theta)
+    y <- gsBinomialExact(k = x$k, theta = theta, n.I = x$n.I, a = x$lower$bound, b = x$upper$bound)
+    xx <- data.frame(p = theta, EN = y$en)
+    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = p, y = EN)) + ggplot2::geom_line() + ggplot2::ylab("Expected sample size")
+  } else if (plottype == 3) {
+    xx <- data.frame(N = x$n.I, p = x$upper$bound / x$n.I, Bound = "Upper")
+    xx <- rbind(xx, data.frame(N = x$n.I, p = x$lower$bound / x$n.I, Bound = "Lower"))
+    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = N, y = p, group = Bound)) +
       ggplot2::geom_point() +
       ggplot2::ylab("Rate at bound")
-  }else if (plottype==2){
-    theta<-(max(x$theta)-min(x$theta))*(0:50)/50+min(x$theta)
+  } else if (plottype == 2) {
+    theta <- (max(x$theta) - min(x$theta)) * (0:50) / 50 + min(x$theta)
     # compute exact boundary crossing probabilities
-    y <- gsBinomialExact(k=x$k,n.I=x$n.I,
-                         theta=theta,a=x$lower$bound,b=x$upper$bound)
+    y <- gsBinomialExact(
+      k = x$k, n.I = x$n.I,
+      theta = theta, a = x$lower$bound, b = x$upper$bound
+    )
     # compute probability of crossing upper bound for each theta
-    Power <- data.frame(rr=theta,
-                        Percent=100*as.vector(matrix(1,ncol=length(y$n.I),nrow=1)%*%
-                                          y$upper$prob),
-                        Outcome="Reject H0")
+    Power <- data.frame(
+      rr = theta,
+      Percent = 100 * as.vector(matrix(1, ncol = length(y$n.I), nrow = 1) %*%
+        y$upper$prob),
+      Outcome = "Reject H0"
+    )
     # compute probability of crossing lower bound
-    futility <- data.frame(rr=theta,
-                           Percent=100*as.vector(matrix(1,ncol=length(y$n.I),nrow=1)%*%
-                                             y$lower$prob),
-                           Outcome="Reject H1")
+    futility <- data.frame(
+      rr = theta,
+      Percent = 100 * as.vector(matrix(1, ncol = length(y$n.I), nrow = 1) %*%
+        y$lower$prob),
+      Outcome = "Reject H1"
+    )
     # probability of no boundary crossing
-    indeterminate <- data.frame(rr=theta,Percent=100-Power$Percent-futility$Percent,
-                                Outcome="Indeterminate")
-    #combine and plot
-    outcome <- rbind(Power,futility,indeterminate)
-    p <- ggplot2::ggplot(data=outcome,ggplot2::aes(x=rr,y=Percent,lty=Outcome))+
-      ggplot2::geom_line()+
+    indeterminate <- data.frame(
+      rr = theta, Percent = 100 - Power$Percent - futility$Percent,
+      Outcome = "Indeterminate"
+    )
+    # combine and plot
+    outcome <- rbind(Power, futility, indeterminate)
+    p <- ggplot2::ggplot(data = outcome, ggplot2::aes(x = rr, y = Percent, lty = Outcome)) +
+      ggplot2::geom_line() +
       ggplot2::xlab("Underlying response rate")
-  }else{
-    xx <- data.frame(N=x$n.I,x=x$upper$bound,Bound="Upper")
-    xx <- rbind(xx, data.frame(N=x$n.I,x=x$lower$bound,Bound="Lower"))
-    p<-ggplot2::ggplot(data=xx,ggplot2::aes(x=N,y=x,group=Bound))+
+  } else {
+    xx <- data.frame(N = x$n.I, x = x$upper$bound, Bound = "Upper")
+    xx <- rbind(xx, data.frame(N = x$n.I, x = x$lower$bound, Bound = "Lower"))
+    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = N, y = x, group = Bound)) +
       ggplot2::geom_point() +
       ggplot2::ylab("Number of responses")
-  }  
-  return(p)
-}
-
-plot.binomialSPRT <- function(x,plottype=1,...){
-  p <- plot.gsBinomialExact(x,plottype=plottype,...)
-  if (plottype==1){
-    p <- p + ggplot2::geom_abline(intercept=x$intercept[1], 
-                slope=x$slope) +
-    ggplot2::geom_abline(intercept=x$intercept[2], 
-                slope=x$slope)
   }
   return(p)
 }
 
-# predictive probability bound
-binomialPP <- function(a=.2, b=.8, theta=c(.2,.4), p1=.4, PP=c(.025,.95), nIA){
+# plot.binomialSPRT roxy [sinew] ---- 
+#' @rdname gsBinomialExact
+#' @export
+#' @importFrom ggplot2 geom_abline
+# plot.binomialSPRT function [sinew] ----
+plot.binomialSPRT <- function(x, plottype = 1, ...) {
+  p <- plot.gsBinomialExact(x, plottype = plottype, ...)
+  if (plottype == 1) {
+    p <- p + ggplot2::geom_abline(
+      intercept = x$intercept[1],
+      slope = x$slope
+    ) +
+      ggplot2::geom_abline(
+        intercept = x$intercept[2],
+        slope = x$slope
+      )
+  }
+  return(p)
+}
+
+# @title predictive probability bound
+# binomialPP roxy [sinew] ---- 
+#' @importFrom stats pbeta
+# binomialPP function [sinew] ----
+binomialPP <- function(a = .2, b = .8, theta = c(.2, .4), p1 = .4, PP = c(.025, .95), nIA) {
   # initiate bounds outside of range of possibility
   upper <- nIA + 1
-  lower <- array(-1,length(nIA))
+  lower <- array(-1, length(nIA))
   j <- 1
   # set bounds for each analysis sample size specified
-  for(i in nIA){
+  for (i in nIA) {
     q <- 0:i
     # compute posterior probability for value > p1
     # for each possible outcome at analysis i
-    post <- stats::pbeta(p1, a + q, b + i - q, lower.tail=F)
+    post <- stats::pbeta(p1, a + q, b + i - q, lower.tail = F)
     # set upper bound where posterior probability is > PP[2]
     # that response rate is > p1
     upper[j] <- sum(post < PP[2])
     # set lower bound were posterior probability is <= PP[1]
     # that response rate is < p1
     lower[j] <- sum(post <= PP[1])
-    j <- j+1
+    j <- j + 1
   }
-  # compute boundary crossing probabilities under 
+  # compute boundary crossing probabilities under
   # response rates input in theta
-  y <- gsBinomialExact(k=length(nIA),n.I=nIA,
-                        theta=theta,a=lower,b=upper)
+  y <- gsBinomialExact(
+    k = length(nIA), n.I = nIA,
+    theta = theta, a = lower, b = upper
+  )
   # add beta prior parameters to return value
   y$abeta <- a
   y$bbeta <- b
   # add input predictive probability bounds to return value
   y$PP <- PP
   # define class for output
-  class(y) <- c("binomialPP","gsBinomialExact","gsProbability")
+  class(y) <- c("binomialPP", "gsBinomialExact", "gsProbability")
   return(y)
 }
-

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsNormalGrid.R
 \name{normalGrid}
 \alias{normalGrid}
-\title{3.1: Normal Density Grid}
+\title{Normal Density Grid}
 \usage{
 normalGrid(r = 18, bounds = c(0, 0), mu = 0, sigma = 1)
 }
@@ -32,8 +32,7 @@ examples. This is equal to \code{density * gridwgts}.}
 normalGrid() is intended to be used for computation of the expected value of
 a function of a normal random variable.  The function produces grid points
 and weights to be used for numerical integration.
-}
-\details{
+
 This is a utility function to provide a normal density function and a grid
 to integrate over as described by Jennison and Turnbull (2000), Chapter 19.
 While integration can be performed over the real line or over any portion of
@@ -100,7 +99,6 @@ cat("Expected sample size averaged over normal\\n prior distribution for theta w
 plot(y$z, z$en, xlab="theta", ylab="E{N}", 
    main="Expected sample size for different theta values")
 lines(y$z, z$en)
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

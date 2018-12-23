@@ -4,9 +4,13 @@
 \alias{sfTruncated}
 \alias{sfTrimmed}
 \alias{sfGapped}
-\title{4.7a: Truncated, trimmed and gapped spending functions}
+\title{Truncated, trimmed and gapped spending functions}
 \usage{
 sfTruncated(alpha, t, param)
+
+sfTrimmed(alpha, t, param)
+
+sfGapped(alpha, t, param)
 }
 \arguments{
 \item{alpha}{Real value \eqn{> 0} and no more than 1. Normally,
@@ -44,8 +48,7 @@ an input spending function that is specified; probably the preferred and
 more intuitive method in most cases. \code{sfTruncated()} resets the time
 scale on which the input spending function is computed to the 'spending
 interval.'
-}
-\details{
+
 \code{sfGapped()} allows elimination of analyses after some time point in
 the trial; see details and examples.
 
@@ -136,7 +139,6 @@ xlate$upper$bound[4]
 # note that by setting trange[1] to .2, the spend at t=.2 is used for the first
 # interim at or after 20 percent of information
 x <- gsDesign(n.fix=100,sfl=sfGapped,sflpar=list(trange=c(.2,.9),sf=sfHSD,param=1))
-
 
 }
 \references{

@@ -75,7 +75,6 @@ legend(x=c(.0, .375), y=.025*c(.65, 1), lty=1:3,
        legend=c("rho= 3", "rho= 2", "rho= 0.75"))
 legend(x=c(.0, .357), y=.025*c(.65, .85), lty=1:3, bty="n", col=2, 
        legend=c("gamma= -4", "gamma= -2", "gamma=1"))
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

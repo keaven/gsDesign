@@ -1,3 +1,4 @@
+# nNormal roxy [sinew] ---- 
 #' Normal distribution sample size (2-sample)
 #' 
 #' \code{nNormal()} computes a fixed design sample size for comparing 2 means
@@ -62,6 +63,7 @@
 #' # non-inferiority assuming a better effect than null
 #' nNormal(delta1=.5,delta0=-.1,sd=1.2)
 #' 
+# nNormal function [sinew] ----
 nNormal <- function(delta1=1, sd=1.7, sd2=NULL, alpha=.025,
                beta=.1, ratio=1, sided=1, n=NULL, delta0=0, outtype=1){ # check input arguments
   checkVector(delta1, "numeric", c(-Inf, Inf), c(FALSE, FALSE))

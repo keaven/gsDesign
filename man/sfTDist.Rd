@@ -103,7 +103,6 @@ lines(t, sfTDist(0.025, t, c(.25, .5, .1, .2, 10))$spend, lty=4)
 lines(t, sfTDist(0.025, t, c(.25, .5, .1, .2, 100))$spend, lty=5)
 legend(x=c(.0, .3), y=.025*c(.7, 1), lty=1:5, 
     legend=c("df = 1", "df = 1.5", "df = 3", "df = 10", "df = 100"))
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

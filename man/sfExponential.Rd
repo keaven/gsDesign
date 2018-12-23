@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsSpending.R
 \name{sfExponential}
 \alias{sfExponential}
-\title{4.3: Exponential Spending Function}
+\title{Exponential Spending Function}
 \usage{
 sfExponential(alpha, t, param)
 }
@@ -31,8 +31,7 @@ passed to \code{gsDesign} in the parameter \code{sfu} for the upper bound or
 design. In this case, the user does not need to know the calling sequence.
 The calling sequence is useful, however, when the user wishes to plot a
 spending function as demonstrated below in examples.
-}
-\details{
+
 An exponential spending function is defined for any positive \code{nu} and
 \eqn{0\le t\le 1} as
 \deqn{f(t;\alpha,\nu)=\alpha(t)=\alpha^{t^{-\nu}}.}{f(t;alpha,nu)=alpha^(t^(-nu)).}
@@ -86,7 +85,6 @@ legend(x=c(.0, .3), y=.025*c(.7, 1), lty=1:5,
     legend=c("nu = 0.8", "nu = 0.5", "nu = 0.3", "nu = 0.2",
              "nu = 0.15"))
 text(x=.59, y=.95*.025, labels="<--approximates O'Brien-Fleming")
-
 }
 \references{
 Anderson KM and Clark JB (2009), Fitting spending functions.

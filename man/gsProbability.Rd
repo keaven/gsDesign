@@ -3,7 +3,7 @@
 \name{gsProbability}
 \alias{gsProbability}
 \alias{print.gsProbability}
-\title{2.2: Boundary Crossing Probabilities}
+\title{Boundary Crossing Probabilities}
 \usage{
 gsProbability(k = 0, theta, n.I, a, b, r = 18, d = NULL,
   overrun = 0)
@@ -60,8 +60,7 @@ design across a selected set of parameter values for a given set of analyses
 and boundaries. The print function has been extended using
 \code{print.gsProbability} to print \code{gsProbability} objects; see
 examples.
-}
-\details{
+
 Depending on the calling sequence, an object of class \code{gsProbability}
 or class \code{gsDesign} is returned. If it is of class \code{gsDesign} then
 the members of the object will be the same as described in
@@ -117,7 +116,6 @@ z
 # default plottype is now 2
 # this is the same range for theta, but plot now has theta on x axis
 plot(z)
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

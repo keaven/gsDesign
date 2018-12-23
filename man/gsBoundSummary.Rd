@@ -4,26 +4,26 @@
 \alias{gsBoundSummary}
 \alias{print.gsDesign}
 \alias{summary.gsDesign}
-\alias{print.gsBoundSummary}
-\alias{xprint}
 \alias{gsBValue}
 \alias{gsDelta}
 \alias{gsHR}
 \alias{gsRR}
 \alias{gsCPz}
 \alias{gsDesign}
-\alias{print,}
-\alias{summary}
-\alias{and}
-\alias{table}
-\alias{functions}
-\title{2.8: Bound Summary and Z-transformations}
+\alias{xprint}
+\alias{print.gsBoundSummary}
+\title{Bound Summary and Z-transformations}
 \usage{
 gsBoundSummary(x, deltaname = NULL, logdelta = FALSE, Nname = NULL,
   digits = 4, ddigits = 2, tdigits = 0, timename = "Month",
   prior = normalGrid(mu = x$delta/2, sigma = 10/sqrt(x$n.fix)),
   POS = FALSE, ratio = NULL, exclude = c("B-value", "Spending", "CP",
   "CP H1", "PP"), r = 18, ...)
+
+xprint(x, include.rownames = FALSE, hline.after = c(-1, which(x$Value
+  == x[1, ]$Value) - 1, nrow(x)), ...)
+
+\method{print}{gsBoundSummary}(x, row.names = FALSE, digits = 4, ...)
 }
 \arguments{
 \item{x}{An item of class \code{gsDesign} or \code{gsSurv}, except for
@@ -95,6 +95,15 @@ be changed.}
 calling \code{plot} for \code{gsBValue}, \code{gsDelta}, \code{gsHR},
 \code{gsRR} and \code{gsCPz}}
 
+\item{include.rownames}{indicator of whether or not to include row names in
+output.}
+
+\item{hline.after}{table lines after which horizontal separation lines
+should be set; default is to put lines between each analysis as well as at
+the top and bottom of the table.}
+
+\item{row.names}{indicator of whether or not to print row names}
+
 \item{object}{An item of class \code{gsDesign} or \code{gsSurv}}
 
 \item{information}{indicator of whether \code{n.I} in \code{object}
@@ -102,15 +111,6 @@ represents statistical information rather than sample size or event counts.}
 
 \item{timeunit}{Text string with time units used for time-to-event designs
 created with \code{gsSurv()}}
-
-\item{row.names}{indicator of whether or not to print row names}
-
-\item{include.rownames}{indicator of whether or not to include row names in
-output.}
-
-\item{hline.after}{table lines after which horizontal separation lines
-should be set; default is to put lines between each analysis as well as at
-the top and bottom of the table.}
 
 \item{z}{A vector of z-statistics}
 
@@ -169,8 +169,7 @@ R Markdown output or output to a variety of file types. \code{xprint()} is
 provided for LaTeX output by setting default options for
 \code{\link{print.xtable}()} when producing tables summarizing design
 bounds.
-}
-\details{
+
 Individual transformation of z-value test statistics for interim and final
 analyses are obtained from \code{gsBValue()}, \code{gsDelta()},
 \code{gsHR()} and \code{gsCPz()} for B-values, approximate treatment effect
@@ -301,7 +300,6 @@ gsBoundSummary(xOR,deltaname="OR",logdelta=TRUE)
 
 # for nice LaTeX table output, use xprint
 xprint(xtable(gsBoundSummary(xOR, deltaname="OR", logdelta=TRUE), caption="Table caption."))
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

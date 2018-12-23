@@ -3,9 +3,11 @@
 \name{gsBound}
 \alias{gsBound}
 \alias{gsBound1}
-\title{2.7: Boundary derivation - low level}
+\title{Boundary derivation - low level}
 \usage{
 gsBound(I, trueneg, falsepos, tol = 1e-06, r = 18)
+
+gsBound1(theta, I, a, probhi, tol = 1e-06, r = 18, printerr = 0)
 }
 \arguments{
 \item{I}{Vector containing statistical information planned at each analysis.}
@@ -68,8 +70,7 @@ find boundaries for a group sequential design. They are not recommended
 (especially \code{gsBound1()}) for casual users. These functions do not
 adjust sample size as \code{gsDesign()} does to ensure appropriate power for
 a design.
-}
-\details{
+
 \code{gsBound()} computes upper and lower bounds given boundary crossing
 probabilities assuming a mean of 0, the usual null hypothesis.
 \code{gsBound1()} computes the upper bound given a lower boundary, upper

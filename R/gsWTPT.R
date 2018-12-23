@@ -1,6 +1,7 @@
 ###
 # Hidden Functions
 ###
+# WT roxy [sinew] ---- 
 #' 5.0: Wang-Tsiatis Bounds
 #' 
 #' \code{gsDesign} offers the option of using Wang-Tsiatis bounds as an
@@ -62,6 +63,7 @@
 #' # Wang-Tsiatis option and Delta=0
 #' gsDesign(test.type=1, sfu="WT", sfupar=0)
 #' 
+# WT function [sinew] ----
 WT <- function(d, alpha, a, timing, tol=0.000001, r=18){   
     # Wang-Tsiatis boundary
     # find constant for a Wang-Tsiatis bound to get appropriate alpha
@@ -97,6 +99,7 @@ WT <- function(d, alpha, a, timing, tol=0.000001, r=18){
     stats::uniroot(WTdiff, lower=c0, upper=c1, alpha=alpha, a=a, b=b, timing=timing, tol=tol, r=r)$root
 }
 
+# WTdiff function [sinew] ---- 
 WTdiff <- function(c, alpha, a, b, timing, r){   
     # Wang-Tsiatis boundary alpha comparison
     # for a timing vector,  scalar a,  and vector b,  

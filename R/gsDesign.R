@@ -1,6 +1,6 @@
-#' 2.7: Boundary derivation - low level
-#' 
-#' \code{gsBound()} and \code{gsBound1()} are lower-level functions used to
+# gsBound roxy [sinew] ---- 
+#' @title Boundary derivation - low level
+#' @description  \code{gsBound()} and \code{gsBound1()} are lower-level functions used to
 #' find boundaries for a group sequential design. They are not recommended
 #' (especially \code{gsBound1()}) for casual users. These functions do not
 #' adjust sample size as \code{gsDesign()} does to ensure appropriate power for
@@ -15,7 +15,6 @@
 #' knowledge of behavior when a design corresponding to the input parameters
 #' does not exist.
 #' 
-#' @aliases gsBound gsBound1
 #' @param theta Scalar containing mean (drift) per unit of statistical
 #' information.
 #' @param I Vector containing statistical information planned at each analysis.
@@ -103,6 +102,9 @@
 #' #  above after first interim analysis
 #' gsProbability(k=length(x$b), theta=c(0, 2.2), n.I=x$I, b=x$b, a= -y$b)
 #' 
+#' @export
+#' @rdname gsBound
+# gsBound function [sinew] ----
 gsBound <- function(I, trueneg, falsepos, tol=0.000001, r=18){    
     # gsBound: assuming theta=0, derive lower and upper crossing boundaries given 
     #          timing of interims, false positive rates and true negative rates
@@ -133,6 +135,10 @@ gsBound <- function(I, trueneg, falsepos, tol=0.000001, r=18){
             r=xx[[8]],error=xx[[9]])
 }
 
+# gsBound1 roxy [sinew] ---- 
+#' @export
+#' @rdname gsBound
+# gsBound1 function [sinew] ----
 gsBound1 <- function(theta, I, a, probhi, tol=0.000001, r=18, printerr=0){   
     # gsBound1: derive upper bound to match specified upper bound crossing probability given
     #           a value of theta, a fixed lower bound and information at each analysis   
@@ -179,11 +185,9 @@ gsBound1 <- function(theta, I, a, probhi, tol=0.000001, r=18, printerr=0){
     y
 }
 
-
-
-#' 2.1: Design Derivation
-#' 
-#' \code{gsDesign()} is used to find boundaries and trial size required for a
+# gsDesign roxy [sinew] ---- 
+#' @title Design Derivation
+#' @description  \code{gsDesign()} is used to find boundaries and trial size required for a
 #' group sequential design.
 #' 
 #' Many parameters normally take on default values and thus do not require
@@ -362,17 +366,6 @@ gsBound1 <- function(theta, I, a, probhi, tol=0.000001, r=18, printerr=0){
 #' information-based-design, this would give the expected information when the
 #' trial stops. If \code{overrun} is specified, the expected sample size
 #' includes the overrun at each interim.}
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{gsDesign package overview}, \link{gsDesign print, summary and
-#' table summary functions}, \link{Plots for group sequential designs},
-#' \code{\link{gsProbability}}, \link{Spending function overview},
-#' \link{Wang-Tsiatis Bounds}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' @keywords design
 #' @examples
 #' 
 #' #  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
@@ -405,7 +398,20 @@ gsBound1 <- function(theta, I, a, probhi, tol=0.000001, r=18, printerr=0){
 #' # same design, but with relative sample sizes
 #' gsDesign(k=4, timing=timing, sfu=sfPoints, sfupar=sfup, sfl=sfPoints,
 #' sflpar=sflp)
-#' 
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \link{gsDesign package overview}, \link{gsDesign print, summary and
+#' table summary functions}, \link{Plots for group sequential designs},
+#' \code{\link{gsProbability}}, \link{Spending function overview},
+#' \link{Wang-Tsiatis Bounds}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @export
+#' @rdname gsDesign
+# gsDesign function [sinew] ----
 gsDesign <- function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,  
         delta=0, n.fix=1, timing=1, sfu=sfHSD, sfupar=-4,
         sfl=sfHSD, sflpar=-2, tol=0.000001, r=18, n.I=0, maxn.IPlan=0, 
@@ -496,9 +502,9 @@ gsDesign <- function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,
 
 
 
-#' 2.2: Boundary Crossing Probabilities
-#' 
-#' Computes power/Type I error and expected sample size for a group sequential
+# gsProbability roxy [sinew] ---- 
+#' @title Boundary Crossing Probabilities
+#' @description  Computes power/Type I error and expected sample size for a group sequential
 #' design across a selected set of parameter values for a given set of analyses
 #' and boundaries. The print function has been extended using
 #' \code{print.gsProbability} to print \code{gsProbability} objects; see
@@ -516,7 +522,6 @@ gsDesign <- function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,
 #' \code{gsProbability} will be the parameter values for which the design is
 #' characterized.
 #' 
-#' @aliases gsProbability print.gsProbability
 #' @param k Number of analyses planned, including interim and final.
 #' @param theta Vector of standardized effect sizes for which boundary crossing
 #' probabilities are to be computed.
@@ -550,15 +555,6 @@ gsDesign <- function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,
 #' containing expected sample sizes for the trial design corresponding to each
 #' value in the vector \code{theta}.} \item{r}{As input.} Note:
 #' \code{print.gsProbability()} returns the input \code{x}.
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{Plots for group sequential designs}, \code{\link{gsDesign}},
-#' \link{gsDesign package overview}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' @keywords design
 #' @examples
 #' 
 #' # making a gsDesign object first may be easiest...
@@ -597,7 +593,20 @@ gsDesign <- function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,
 #' # default plottype is now 2
 #' # this is the same range for theta, but plot now has theta on x axis
 #' plot(z)
-#' 
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \link{Plots for group sequential designs}, \code{\link{gsDesign}},
+#' \link{gsDesign package overview}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @export
+#' @aliases print.gsProbability
+#' @rdname gsProbability
+#' @importFrom methods is
+# gsProbability function [sinew] ----
 gsProbability <- function(k=0, theta, n.I, a, b, r=18, d=NULL, overrun=0){
     # compute boundary crossing probabilities and return in a gsProbability structure
     
@@ -650,37 +659,9 @@ gsProbability <- function(k=0, theta, n.I, a, b, r=18, d=NULL, overrun=0){
     x
 }
 
-gsPOS <- function(x, theta, wgts){
-    if (!methods::is(x,c("gsProbability","gsDesign")))
-      stop("x must have class gsProbability or gsDesign")
-    checkVector(theta, "numeric")
-    checkVector(wgts, "numeric")
-    checkLengths(theta, wgts)    
-    x <- gsProbability(theta = theta, d=x)
-    one <- array(1, x$k)
-    as.double(one %*% x$upper$prob %*% wgts)
-}
-
-gsCPOS <- function(i, x, theta, wgts){
-    if (!methods::is(x,c("gsProbability","gsDesign")))
-      stop("x must have class gsProbability or gsDesign")
-    checkScalar(i, "integer", c(1, x$k), c(TRUE, FALSE))
-    checkVector(theta, "numeric")
-    checkVector(wgts, "numeric")
-    checkLengths(theta, wgts)    
-    x <- gsProbability(theta = theta, d=x)
-    v <- c(array(1, i), array(0, (x$k - i)))
-    pAi <- 1 - as.double(v %*% (x$upper$prob + x$lower$prob) %*% wgts)
-    v <- 1 - v
-    pAiB <- as.double(v %*% x$upper$prob %*% wgts)
-    pAiB / pAi
-}
-
-
-
-#' 2.6: Group sequential design interim density function
-#' 
-#' Given an interim analysis \code{i} of a group sequential design and a vector
+# gsDensity roxy [sinew] ---- 
+#' @title Group sequential design interim density function
+#' @description  Given an interim analysis \code{i} of a group sequential design and a vector
 #' of real values \code{zi}, \code{gsDensity()} computes an interim density
 #' function at analysis \code{i} at the values in \code{zi}.  For each value in
 #' \code{zi}, this interim density is the derivative of the probability that
@@ -712,15 +693,6 @@ gsCPOS <- function(i, x, theta, wgts){
 #' \code{theta}.} \item{density}{A matrix with \code{length(zi)} rows and
 #' \code{length(theta)} columns.  The subdensity function for \code{z[j]},
 #' \code{theta[m]} at analysis \code{i} is returned in \code{density[j,m]}. }
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \code{\link{gsDesign}}, \code{\link{gsProbability}},
-#' \code{\link{gsBoundCP}}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' @keywords design
 #' @examples
 #' 
 #' # set up a group sequential design
@@ -768,7 +740,18 @@ gsCPOS <- function(i, x, theta, wgts){
 #' u <- x$upper$bound[4]
 #' text(expression(paste(theta,"=",delta)),x=2.2, y=.2, cex=1.5)
 #' text(expression(paste(theta,"=0")),x=.55, y=.4, cex=1.5)
-#' 
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \code{\link{gsDesign}}, \code{\link{gsProbability}},
+#' \code{\link{gsBoundCP}}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @export
+#' @rdname gsDensity
+# gsDensity function [sinew] ----
 gsDensity <- function(x, theta=0, i=1, zi=0, r=18){
   if (class(x) != "gsDesign" && class(x) != "gsProbability")
         stop("x must have class gsDesign or gsProbability.")
@@ -789,6 +772,9 @@ gsDensity <- function(x, theta=0, i=1, zi=0, r=18){
 # Hidden Functions
 ###
 
+# gsDType1 roxy [sinew] ---- 
+#' @importFrom stats uniroot
+# gsDType1 function [sinew] ----
 gsDType1 <- function(x, ss=1){    
     # gsDType1: calculate bound assuming one-sided rule (only upper bound)
     
@@ -841,6 +827,9 @@ gsDType1 <- function(x, ss=1){
     x
 }
 
+# gsDType2and5 roxy [sinew] ---- 
+#' @importFrom stats uniroot
+# gsDType2and5 function [sinew] ----
 gsDType2and5 <- function(x){    
     # gsDType2and5: calculate bound assuming two-sided rule, binding, all alpha spending    
     
@@ -927,6 +916,7 @@ gsDType2and5 <- function(x){
     x
 }
 
+# gsDType3 function [sinew] ---- 
 gsDType3 <- function(x){
     # Check added by K. Wills 12/4/2008
     if (is.element(x$upper$name, c("WT","Pocock","OF")))
@@ -939,6 +929,7 @@ gsDType3 <- function(x){
     if (max(x$n.I) == 0) gsDType3ss(x) else gsDType3a(x)
 }
 
+# gsDType3ss function [sinew] ---- 
 gsDType3ss <- function(x){    
     # compute starting bounds under H0 
     k <- x$k
@@ -1022,6 +1013,7 @@ gsDType3ss <- function(x){
     x
 }
 
+# gsDType3a function [sinew] ---- 
 gsDType3a <- function(x){    
     aspend <- x$upper$spend
     bspend <- x$lower$spend
@@ -1058,6 +1050,7 @@ gsDType3a <- function(x){
     gsDType3b(x)
 }
 
+# gsDType3b function [sinew] ---- 
 gsDType3b <- function(x){    
     # set I0, desired false positive and false negative rates
     I0 <- x$n.fix
@@ -1119,6 +1112,7 @@ gsDType3b <- function(x){
     x
 }
 
+# gsDType4 function [sinew] ---- 
 gsDType4 <- function(x){
     # Check added by K. Wills 12/4/2008
     if (is.element(x$upper$name, c("WT","Pocock","OF")))
@@ -1130,6 +1124,7 @@ gsDType4 <- function(x){
     else gsDType4a(x)
 }
 
+# gsDType4a function [sinew] ---- 
 gsDType4a <- function(x){    
     # set I0, desired false positive and false negative rates
     I0 <- x$n.fix
@@ -1164,6 +1159,7 @@ gsDType4a <- function(x){
     x
 }
 
+# gsDType4ss function [sinew] ---- 
 gsDType4ss <- function(x){    
     # compute starting bounds under H0 
     falsepos <- x$upper$spend
@@ -1214,6 +1210,9 @@ gsDType4ss <- function(x){
     x
 }
 
+# gsDType6 roxy [sinew] ---- 
+#' @importFrom stats uniroot
+# gsDType6 function [sinew] ----
 gsDType6 <- function(x){
     # Check added by K. Wills 12/4/2008
     if (is.element(x$upper$name, c("WT","Pocock","OF")))
@@ -1290,6 +1289,7 @@ gsDType6 <- function(x){
     x
 }
 
+# gsbetadiff function [sinew] ---- 
 gsbetadiff <- function(Imax, theta, beta, time, a, b, tol=0.000001, r=18){    
     # compute difference between actual and desired Type II error     
     I <- time * Imax
@@ -1298,6 +1298,9 @@ gsbetadiff <- function(Imax, theta, beta, time, a, b, tol=0.000001, r=18){
     beta - 1 + sum(x$probhi)
 }
 
+# gsI roxy [sinew] ---- 
+#' @importFrom stats qnorm uniroot
+# gsI function [sinew] ----
 gsI <- function(I, theta, beta, trueneg, falsepos, symmetric, tol=0.000001, r=18){   
     # gsI: find gs design with falsepos and trueneg
   
@@ -1322,6 +1325,7 @@ gsI <- function(I, theta, beta, trueneg, falsepos, symmetric, tol=0.000001, r=18
         rates=rates, futilitybnd="Binding", tol=x$tol, r=x$r, error=x$error)
 }
 
+# gsbetadiff1 function [sinew] ---- 
 gsbetadiff1 <- function(Imax, theta, tx, problo, b, tol=0.000001, r=18){   
     # gsbetadiff1: compute difference between desired and actual upper boundary
     #              crossing probability    
@@ -1332,6 +1336,9 @@ gsbetadiff1 <- function(Imax, theta, tx, problo, b, tol=0.000001, r=18){
     sum(problo) - 1 + x$powr
 }
 
+# gsI1 roxy [sinew] ---- 
+#' @importFrom stats uniroot
+# gsI1 function [sinew] ----
 gsI1 <- function(theta, I, beta, b, Ilow, Ihigh, tol=0.000001, r=18){
     # gsI1: get lower bound and maximum information (Imax)    
     k <- length(I)
@@ -1347,6 +1354,7 @@ gsI1 <- function(theta, I, beta, b, Ilow, Ihigh, tol=0.000001, r=18){
     x
 }
 
+# gsprob function [sinew] ---- 
 gsprob <- function(theta, I, a, b, r=18, overrun=0){     
     # gsprob: use call to C routine to compute upper and lower boundary crossing probabilities
     # given theta,  interim sample sizes (information: I),  lower bound (a) and upper bound (b)    
@@ -1368,6 +1376,7 @@ gsprob <- function(theta, I, a, b, r=18, overrun=0){
             probhi=phi, powr=powr, en=en, r=r)
 }
 
+# gsDProb function [sinew] ---- 
 gsDProb <- function(theta, d){    
     k <- d$k
     n.I <- d$n.I
@@ -1404,6 +1413,9 @@ gsDProb <- function(theta, d){
     d
 }
 
+# gsDErrorCheck roxy [sinew] ---- 
+#' @importFrom stats qnorm
+# gsDErrorCheck function [sinew] ----
 gsDErrorCheck <- function(x){
     # check input arguments for type, range, and length
     

@@ -2,6 +2,7 @@
 # Exported Functions
 ###
 
+# checkLengths function [sinew] ---- 
 checkLengths <- function(..., allowSingle=FALSE){    
     lens <- unlist(lapply(list(...),length))
     
@@ -20,6 +21,7 @@ checkLengths <- function(..., allowSingle=FALSE){
     invisible(NULL)  
 }
 
+# checkRange function [sinew] ---- 
 checkRange <- function(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = deparse(substitute(x)), tol=0) {
     # check inputs
     checkVector(interval, "numeric")
@@ -47,6 +49,7 @@ checkRange <- function(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = d
 
 
 
+# checkScalar roxy [sinew] ---- 
 #' 6.0 Utility functions to verify variable properties
 #' 
 #' Utility functions to verify an objects's properties including whether it is
@@ -143,6 +146,7 @@ checkRange <- function(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = d
 #' checkLengths(1,2,3,4:5,7:8, allowSingle=TRUE)
 #' 
 #' 
+# checkScalar function [sinew] ----
 checkScalar <- function(x, isType = "numeric", ...) {
     # check inputs
     if (!is.character(isType))
@@ -175,6 +179,7 @@ checkScalar <- function(x, isType = "numeric", ...) {
     invisible(NULL)
 }
 
+# checkVector function [sinew] ---- 
 checkVector <- function(x, isType = "numeric", ..., length=NULL) {
     # check inputs
     checkScalar(isType, "character")
@@ -218,6 +223,7 @@ checkVector <- function(x, isType = "numeric", ..., length=NULL) {
     invisible(NULL)
 }
 
+# isInteger function [sinew] ---- 
 isInteger <- function(x) all(is.numeric(x)) && all(round(x,0) == x)
 
 ###
@@ -266,6 +272,7 @@ checkMD5 <- function (package="gsDesign", dir) {
     return(res)
 }
 
+# checkMatrix function [sinew] ---- 
 checkMatrix <- function(x, isType = "numeric", ..., nrows=NULL, ncols=NULL) {
   # check inputs
   checkScalar(isType, "character")

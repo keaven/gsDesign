@@ -1,512 +1,6 @@
-###
-# Exported Functions
-###
-
-sfBetaDist <- function(alpha, t, param){  
-    x <- list(name="Beta distribution", param=param, parname=c("a","b"), sf=sfBetaDist, spend=NULL,
-            bound=NULL, prob=NULL)
-  
-    class(x) <- "spendfn"
-    
-    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
-    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
-    t[t>1] <- 1
-
-    len <- length(param)
-    
-    if (len == 2)
-    {   
-        checkVector(param, "numeric", c(0, Inf), c(FALSE, TRUE))
-    }    
-    else if (len == 4)
-    {   
-        checkVector(param, "numeric", c(0, 1), c(FALSE, FALSE))
-        
-        tem <- stats::nlminb(c(1, 1), diffbetadist, lower=c(0, 0), xval=param[1:2], uval=param[3:4])
-        
-        if (tem$convergence != 0)
-        { 
-            stop("Solution to 4-parameter specification of Beta distribution spending function not found.")
-        }
-        
-        x$param <- tem$par
-    }
-    else
-    {
-        stop("Beta distribution spending function parameter must be of length 2 or 4")        
-    }
-    
-    t[t > 1] <- 1
-    
-    x$spend <- alpha * stats::pbeta(t, x$param[1], x$param[2])
-    
-    x
-}
-
-sfCauchy <- function(alpha, t, param){  
-    x <- list(name="Cauchy", param=param, parname=c("a", "b"), sf=sfCauchy, spend=NULL, 
-            bound=NULL, prob=NULL)
-    
-    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
-    class(x) <- "spendfn"
-    
-    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
-    t[t>1] <- 1
-
-    checkVector(param, "numeric")
-    len <- length(param)
-    
-    if (len == 2)    
-    {        
-        if (param[2] <= 0.) 
-        {
-            stop("Second Cauchy spending parameter param[2] must be real value > 0")
-        }
-        
-        a <- param[1]
-        b <- param[2]
-    }
-    else if (len == 4) 
-    {   
-        t0 <- param[1:2]
-        p0 <- param[3:4]
-        
-        if (t0[2] <= t0[1] || p0[2] <= p0[1]) 
-        {
-            stop("4-parameter specification of Cauchy function incorrect")
-        }
-        
-        xv <- stats::qcauchy(t0)
-        y <- stats::qcauchy(p0)
-        b <- (y[2] - y[1]) / (xv[2] - xv[1])
-        a <- y[2] - b * xv[2]
-        x$param <- c(a, b)
-    }
-    else
-    {
-        stop("Cauchy spending function parameter must be of length 2 or 4")
-    }
-    
-    t[t > 1] <- 1
-    xv <- stats::qcauchy(1 * (!is.element(t, 1)) * t)
-    y <- stats::pcauchy(a + b * xv)
-    x$spend <- alpha * (1 * (!is.element(t, 1)) * y + 1 * is.element(t, 1))
-    
-    x
-}
-
-
-
-#' 4.3: Exponential Spending Function
-#' 
-#' The function \code{sfExponential} implements the exponential spending
-#' function (Anderson and Clark, 2009). Normally \code{sfExponential} will be
-#' passed to \code{gsDesign} in the parameter \code{sfu} for the upper bound or
-#' \code{sfl} for the lower bound to specify a spending function family for a
-#' design. In this case, the user does not need to know the calling sequence.
-#' The calling sequence is useful, however, when the user wishes to plot a
-#' spending function as demonstrated below in examples.
-#' 
-#' An exponential spending function is defined for any positive \code{nu} and
-#' \eqn{0\le t\le 1} as
-#' \deqn{f(t;\alpha,\nu)=\alpha(t)=\alpha^{t^{-\nu}}.}{f(t;alpha,nu)=alpha^(t^(-nu)).}
-#' A value of \code{nu=0.8} approximates an O'Brien-Fleming spending function
-#' well.
-#' 
-#' The general class of spending functions this family is derived from requires
-#' a continuously increasing cumulative distribution function defined for
-#' \eqn{x>0} and is defined as \deqn{f(t;\alpha,
-#' \nu)=1-F\left(F^{-1}(1-\alpha)/ t^\nu\right).}{% f(t; alpha,
-#' nu)=1-F(F^(-1)(1-alpha)/ t^nu).} The exponential spending function can be
-#' derived by letting \eqn{F(x)=1-\exp(-x)}, the exponential cumulative
-#' distribution function. This function was derived as a generalization of the
-#' Lan-DeMets (1983) spending function used to approximate an O'Brien-Fleming
-#' spending function (\code{sfLDOF()}), \deqn{f(t; \alpha)=2-2\Phi \left(
-#' \Phi^{-1}(1-\alpha/2)/ t^{1/2} \right).}{% f(t;
-#' alpha)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(1/2)).}
-#' 
-#' @param alpha Real value \eqn{> 0} and no more than 1. Normally,
-#' \code{alpha=0.025} for one-sided Type I error specification or
-#' \code{alpha=0.1} for Type II error specification. However, this could be set
-#' to 1 if for descriptive purposes you wish to see the proportion of spending
-#' as a function of the proportion of sample size/information.
-#' @param t A vector of points with increasing values from 0 to 1, inclusive.
-#' Values of the proportion of sample size/information for which the spending
-#' function will be computed.
-#' @param param A single positive value specifying the nu parameter for which
-#' the exponential spending is to be computed; allowable range is (0, 1.5].
-#' @return An object of type \code{spendfn}.
-#' @note The manual shows how to use \code{sfExponential()} to closely
-#' approximate an O'Brien-Fleming design. An example is given below. The manual
-#' is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
-#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
-#' \link{gsDesign package overview}
-#' @references Anderson KM and Clark JB (2009), Fitting spending functions.
-#' \emph{Statistics in Medicine}; 29:321-327.
-#' 
-#' Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with
-#' Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' 
-#' Lan, KKG and DeMets, DL (1983), Discrete sequential boundaries for clinical
-#' trials. \emph{Biometrika}; 70:659-663.
-#' @keywords design
-#' @examples
-#' 
-#' # use 'best' exponential approximation for k=6 to O'Brien-Fleming design
-#' # (see manual for details)
-#' gsDesign(k=6, sfu=sfExponential, sfupar=0.7849295,
-#'          test.type=2)$upper$bound
-#' 
-#' # show actual O'Brien-Fleming bound
-#' gsDesign(k=6, sfu="OF", test.type=2)$upper$bound
-#' 
-#' # show Lan-DeMets approximation
-#' # (not as close as sfExponential approximation)
-#' gsDesign(k=6, sfu=sfLDOF, test.type=2)$upper$bound
-#' 
-#' # plot exponential spending function across a range of values of interest
-#' t <- 0:100/100
-#' plot(t, sfExponential(0.025, t, 0.8)$spend,
-#'    xlab="Proportion of final sample size", 
-#'    ylab="Cumulative Type I error spending", 
-#'    main="Exponential Spending Function Example", type="l")
-#' lines(t, sfExponential(0.025, t, 0.5)$spend, lty=2)
-#' lines(t, sfExponential(0.025, t, 0.3)$spend, lty=3)
-#' lines(t, sfExponential(0.025, t, 0.2)$spend, lty=4)
-#' lines(t, sfExponential(0.025, t, 0.15)$spend, lty=5)
-#' legend(x=c(.0, .3), y=.025*c(.7, 1), lty=1:5, 
-#'     legend=c("nu = 0.8", "nu = 0.5", "nu = 0.3", "nu = 0.2",
-#'              "nu = 0.15"))
-#' text(x=.59, y=.95*.025, labels="<--approximates O'Brien-Fleming")
-#' 
-sfExponential <- function(alpha, t, param){  
-    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
-    # K. Wills 12/11/08: restrict param range
-    # checkScalar(param, "numeric", c(0, 10), c(FALSE, TRUE))
-    checkScalar(param, "numeric", c(0, 1.5), c(FALSE, TRUE))
-    
-    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
-    t[t>1] <- 1
-    
-    x <- list(name="Exponential", param=param, parname="nu", sf=sfExponential, 
-            spend=alpha ^ (t ^ (-param)), bound=NULL, prob=NULL)  
-    
-    class(x) <- "spendfn"
-    
-    x
-}
-
-sfExtremeValue <- function(alpha, t, param){  
-    x <- list(name="Extreme value", param=param, parname=c("a", "b"), sf=sfExtremeValue, spend=NULL, 
-            bound=NULL, prob=NULL)
-    
-    class(x) <- "spendfn"
-    
-    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
-    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
-    t[t>1] <- 1
-
-    checkVector(param, "numeric")
-    len <- length(param)
-    
-    if (len == 2)
-    {    
-        if (param[2] <= 0.) 
-        {
-            stop("Second extreme value spending parameter param[2] must be real value > 0")
-        }
-        
-        a <- param[1]
-        b <- param[2]
-    }
-    else if (len == 4)
-    {   
-        t0 <- param[1:2]
-        p0 <- param[3:4]
-        
-        if (t0[2] <= t0[1] || p0[2] <= p0[1]) 
-        {
-            stop("4-parameter specification of extreme value function incorrect")
-        }
-        
-        xv <-  -log(-log(t0))
-        y <-  -log(-log(p0))
-        b <- (y[2] - y[1]) / (xv[2] - xv[1])
-        a <- y[2] - b * xv[2]
-        x$param <- c(a, b)
-    }
-    else
-    {
-        stop("Extreme value spending function parameter must be of length 2 or 4")
-    }
-    
-    t[t > 1] <- 1
-    xv <-  -log(-log((!is.element(t, 1)) * t))
-    y <- exp(-exp(-a-b * xv))
-    x$spend <- alpha * (1 * (!is.element(t, 1)) * y + 1 * is.element(t, 1))
-    
-    x
-}
-
-sfExtremeValue2 <- function(alpha, t, param){  
-    x <- list(name="Extreme value 2", param=param, parname=c("a", "b"), sf=sfExtremeValue2, spend=NULL, 
-            bound=NULL, prob=NULL)
-    
-    class(x) <- "spendfn"
-    
-    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
-    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
-    t[t>1] <- 1
-
-    checkVector(param, "numeric")
-    len <- length(param)
-    
-    if (len == 2)
-    {    
-        if (param[2] <= 0.)
-        {
-            stop("Second extreme value (2) spending parameter param[2] must be real value > 0")
-        }
-        
-        a <- param[1]
-        b <- param[2]
-    }
-    else if (len == 4)
-    {   
-        t0 <- param[1:2]
-        p0 <- param[3:4]
-        
-        if (t0[2] <= t0[1] || p0[2] <= p0[1]) 
-        {
-            stop("4-parameter specification of extreme value (2) function incorrect")
-        }
-        
-        xv <- log(-log(1 - t0))
-        y <- log(-log(1 - p0))
-        b <- (y[2] - y[1]) / (xv[2] - xv[1])
-        a <- y[2] - b * xv[2]
-        x$param <- c(a, b)
-    }
-    else
-    {
-        stop("Extreme value (2) spending function parameter must be of length 2 or 4")
-    }
-    
-    t[t > 1] <- 1
-    xv <- log(-log(1 - 1 * (!is.element(t, 1)) * t))
-    y <- 1 - exp(-exp(a + b * xv))
-    x$spend <- alpha * (1 * (!is.element(t, 1)) * y + 1 * is.element(t, 1))
-    
-    x
-}
-
-
-
-#' 4.1: Hwang-Shih-DeCani Spending Function
-#' 
-#' The function \code{sfHSD} implements a Hwang-Shih-DeCani spending function.
-#' This is the default spending function for \code{gsDesign()}. Normally it
-#' will be passed to \code{gsDesign} in the parameter \code{sfu} for the upper
-#' bound or \code{sfl} for the lower bound to specify a spending function
-#' family for a design. In this case, the user does not need to know the
-#' calling sequence. The calling sequence is useful, however, when the user
-#' wishes to plot a spending function as demonstrated below in examples.
-#' 
-#' A Hwang-Shih-DeCani spending function takes the form \deqn{f(t;\alpha,
-#' \gamma)=\alpha(1-e^{-\gamma t})/(1-e^{-\gamma})}{f(t; alpha, gamma) = alpha
-#' * (1-exp(-gamma * t))/(1 - exp(-gamma))} where \eqn{\gamma}{gamma} is the
-#' value passed in \code{param}. A value of \eqn{\gamma=-4}{gamma=-4} is used
-#' to approximate an O'Brien-Fleming design (see \code{\link{sfExponential}}
-#' for a better fit), while a value of \eqn{\gamma=1}{gamma=1} approximates a
-#' Pocock design well.
-#' 
-#' @param alpha Real value \eqn{> 0} and no more than 1. Normally,
-#' \code{alpha=0.025} for one-sided Type I error specification or
-#' \code{alpha=0.1} for Type II error specification. However, this could be set
-#' to 1 if for descriptive purposes you wish to see the proportion of spending
-#' as a function of the proportion of sample size/information.
-#' @param t A vector of points with increasing values from 0 to 1, inclusive.
-#' Values of the proportion of sample size/information for which the spending
-#' function will be computed.
-#' @param param A single real value specifying the gamma parameter for which
-#' Hwang-Shih-DeCani spending is to be computed; allowable range is [-40, 40]
-#' @return An object of type \code{spendfn}. See \link{Spending function
-#' overview} for further details.
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
-#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
-#' \link{gsDesign package overview}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' @keywords design
-#' @examples
-#' 
-#' # design a 4-analysis trial using a Hwang-Shih-DeCani spending function 
-#' # for both lower and upper bounds 
-#' x <- gsDesign(k=4, sfu=sfHSD, sfupar=-2, sfl=sfHSD, sflpar=1)
-#' 
-#' # print the design
-#' x
-#' 
-#' # since sfHSD is the default for both sfu and sfl,
-#' # this could have been written as
-#' x <- gsDesign(k=4, sfupar=-2, sflpar=1)
-#' 
-#' # print again
-#' x
-#' 
-#' # plot the spending function using many points to obtain a smooth curve
-#' # show default values of gamma to see how the spending function changes
-#' # also show gamma=1 which is supposed to approximate a Pocock design
-#' t <- 0:100/100
-#' plot(t,  sfHSD(0.025, t, -4)$spend,
-#'    xlab="Proportion of final sample size", 
-#'    ylab="Cumulative Type I error spending", 
-#'    main="Hwang-Shih-DeCani Spending Function Example", type="l")
-#' lines(t, sfHSD(0.025, t, -2)$spend, lty=2)
-#' lines(t, sfHSD(0.025, t, 1)$spend, lty=3)
-#' legend(x=c(.0, .375), y=.025*c(.8, 1), lty=1:3, 
-#'     legend=c("gamma= -4", "gamma= -2", "gamma= 1"))
-#' 
-#' @export
-sfHSD <- function(alpha, t, param){
-    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
-    checkScalar(param, "numeric", c(-40, 40))
-    
-    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
-    t[t>1] <- 1
-    
-    x <- list(name="Hwang-Shih-DeCani", param=param, parname="gamma", sf=sfHSD, 
-            spend=if (param == 0) t * alpha else alpha * (1. - exp(-t * param)) / (1 - exp(-param)),
-            bound=NULL, prob=NULL)  
-    
-    class(x) <- "spendfn"
-    
-    x
-}
-
-
-
-#' 4.4: Lan-DeMets Spending function overview
-#' 
-#' Lan and DeMets (1983) first published the method of using spending functions
-#' to set boundaries for group sequential trials. In this publication they
-#' proposed two specific spending functions: one to approximate an
-#' O'Brien-Fleming design and the other to approximate a Pocock design. Both of
-#' these spending functions are available here, mainly for historical purposes.
-#' Neither requires a parameter.
-#' 
-#' The Lan-DeMets (1983) spending function to approximate an O'Brien-Fleming
-#' bound is implemented in the function (\code{sfLDOF()}): \deqn{f(t;
-#' \alpha)=2-2\Phi\left(\Phi^{-1}(1-\alpha/2)/ t^{1/2}\right).}{% f(t;
-#' alpha)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(1/2)\right).} The Lan-DeMets (1983)
-#' spending function to approximate a Pocock design is implemented in the
-#' function \code{sfLDPocock()}:
-#' \deqn{f(t;\alpha)=ln(1+(e-1)t).}{f(t;alpha)=ln(1+(e-1)t).} As shown in
-#' examples below, other spending functions can be used to get as good or
-#' better approximations to Pocock and O'Brien-Fleming bounds. In particular,
-#' O'Brien-Fleming bounds can be closely approximated using
-#' \code{\link{sfExponential}}.
-#' 
-#' @aliases sfLDOF sfLDPocock
-#' @param alpha Real value \eqn{> 0} and no more than 1. Normally,
-#' \code{alpha=0.025} for one-sided Type I error specification or
-#' \code{alpha=0.1} for Type II error specification. However, this could be set
-#' to 1 if for descriptive purposes you wish to see the proportion of spending
-#' as a function of the proportion of sample size/information.
-#' @param t A vector of points with increasing values from 0 to 1, inclusive.
-#' Values of the proportion of sample size/information for which the spending
-#' function will be computed.
-#' @param param This parameter is not used and need not be specified. It is
-#' here so that the calling sequence conforms the to the standard for spending
-#' functions used with \code{gsDesign()}.
-#' @return An object of type \code{spendfn}. See spending functions for further
-#' details.
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
-#' \link{gsDesign package overview}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' 
-#' Lan, KKG and DeMets, DL (1983), Discrete sequential boundaries for clinical
-#' trials. \emph{Biometrika};70: 659-663.
-#' @keywords design
-#' @examples
-#' 
-#' # 2-sided,  symmetric 6-analysis trial Pocock
-#' # spending function approximation 
-#' gsDesign(k=6, sfu=sfLDPocock, test.type=2)$upper$bound
-#' 
-#' # show actual Pocock design
-#' gsDesign(k=6, sfu="Pocock", test.type=2)$upper$bound
-#' 
-#' # approximate Pocock again using a standard
-#' # Hwang-Shih-DeCani approximation
-#' gsDesign(k=6, sfu=sfHSD, sfupar=1, test.type=2)$upper$bound
-#' 
-#' # use 'best' Hwang-Shih-DeCani approximation for Pocock,  k=6;
-#' # see manual for details
-#' gsDesign(k=6, sfu=sfHSD, sfupar=1.3354376, test.type=2)$upper$bound
-#' 
-#' # 2-sided, symmetric 6-analysis trial
-#' # O'Brien-Fleming spending function approximation 
-#' gsDesign(k=6, sfu=sfLDOF, test.type=2)$upper$bound
-#' 
-#' # show actual O'Brien-Fleming bound
-#' gsDesign(k=6, sfu="OF", test.type=2)$upper$bound
-#' 
-#' # approximate again using a standard Hwang-Shih-DeCani 
-#' # approximation to O'Brien-Fleming
-#' x<-gsDesign(k=6, test.type=2)
-#' x$upper$bound
-#' x$upper$param
-#' 
-#' # use 'best' exponential approximation for k=6; see manual for details
-#' gsDesign(k=6, sfu=sfExponential, sfupar=0.7849295,
-#'          test.type=2)$upper$bound
-#' 
-sfLDOF <- function(alpha, t, param){    
-    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
-    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
-    t[t>1] <- 1
-
-    z <- - stats::qnorm(alpha / 2)
-    
-    x <- list(name="Lan-DeMets O'brien-Fleming approximation", param=NULL, parname="none", sf=sfLDOF, 
-            spend=2 * (1 - stats::pnorm(z / sqrt(t))), bound=NULL, prob=NULL)  
-    
-    class(x) <- "spendfn"
-    
-    x
-}
-
-sfLDPocock <- function(alpha, t, param){  
-    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
-    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
-    t[t>1] <- 1
-
-    
-    x <- list(name="Lan-DeMets Pocock approximation", param=NULL, parname="none", sf=sfLDPocock, 
-            spend=alpha * log(1 + (exp(1) - 1) * t), bound=NULL, prob=NULL)  
-    
-    class(x) <- "spendfn"
-    
-    x
-}
-
-
-
-#' 4.7: Two-parameter Spending Function Families
-#' 
-#' The functions \code{sfLogistic()}, \code{sfNormal()},
+# sfLogistic roxy [sinew] ---- 
+#' @title Two-parameter Spending Function Families
+#' @description The functions \code{sfLogistic()}, \code{sfNormal()},
 #' \code{sfExtremeValue()}, \code{sfExtremeValue2()}, \code{sfCauchy()}, and
 #' \code{sfBetaDist()} are all 2-parameter spending function families. These
 #' provide increased flexibility in some situations where the flexibility of a
@@ -542,8 +36,6 @@ sfLDPocock <- function(alpha, t, param){
 #' the standard distribution is flipped about 0. This is reflected in
 #' \code{sfExtremeValue2()} where \deqn{F(x)=1-\exp(-\exp(x)).}
 #' 
-#' @aliases sfLogistic sfNormal sfExtremeValue sfExtremeValue2 sfCauchy
-#' sfBetaDist
 #' @param alpha Real value \eqn{> 0} and no more than 1. Normally,
 #' \code{alpha=0.025} for one-sided Type I error specification or
 #' \code{alpha=0.1} for Type II error specification. However, this could be set
@@ -564,15 +56,6 @@ sfLDPocock <- function(alpha, t, param){
 #' t2}, \code{u1 < u2}.
 #' @return An object of type \code{spendfn}. See \code{\link{Spending function
 #' overview}} for further details.
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
-#' \link{gsDesign package overview}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' @keywords design
 #' @examples
 #' 
 #' # design a 4-analysis trial using a Kim-DeMets spending function 
@@ -632,8 +115,289 @@ sfLDPocock <- function(alpha, t, param){
 #' # from the others
 #' param <- c(.25, .5, .05, .1)
 #' plotsf(.025, t, param)
-#' 
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \code{\link{gsDesign}}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @export
+#' @rdname sfDistribution
+# sfLogistic function [sinew] ----
 sfLogistic <- function(alpha, t, param){  
+  checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+  checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+  t[t>1] <- 1
+  checkVector(param, "numeric")
+  len <- length(param)
+  
+  if (len == 2)
+  {
+    if (!is.numeric(param[1])) 
+    {
+      stop("Numeric first logistic spending parameter not given")
+    }
+    if (param[2] <= 0.) 
+    {
+      stop("Second logistic spending parameter param[2] must be real value > 0")
+    }
+    
+    a <- param[1]
+    b <- param[2]
+  }
+  else if (len == 4)
+  {   
+    checkRange(param, inclusion=c(FALSE, FALSE))
+    t0 <- param[1:2]
+    p0 <- param[3:4]
+    
+    if (t0[2] <= t0[1] || p0[2] <= p0[1]) 
+    {
+      stop("4-parameter specification of logistic function incorrect")
+    }
+    
+    xv <- log(t0 / (1 - t0))
+    y <- log(p0 / (1 - p0))
+    b <- (y[2] - y[1]) / (xv[2] - xv[1])
+    a <- y[2] - b * xv[2]
+    param <- c(a, b)
+  }
+  else
+  {
+    stop("Logistic spending function parameter must be of length 2 or 4")
+  }
+  
+  xv <- log(t / (1 - 1 * (!is.element(t, 1)) * t))
+  y <- exp(a + b * xv)
+  y <- y / (1 + y)
+  t[t > 1] <- 1
+  
+  x <- list(name="Logistic", param=param, parname=c("a", "b"), sf=sfLogistic, 
+            spend=alpha * (1 * (!is.element(t, 1)) * y + 1 * is.element(t, 1)), 
+            bound=NULL, prob=NULL)
+  
+  class(x) <- "spendfn"
+  
+  x
+}
+
+# sfExponential roxy [sinew] ---- 
+#' @title Exponential Spending Function
+#' @description The function \code{sfExponential} implements the exponential spending
+#' function (Anderson and Clark, 2009). Normally \code{sfExponential} will be
+#' passed to \code{gsDesign} in the parameter \code{sfu} for the upper bound or
+#' \code{sfl} for the lower bound to specify a spending function family for a
+#' design. In this case, the user does not need to know the calling sequence.
+#' The calling sequence is useful, however, when the user wishes to plot a
+#' spending function as demonstrated below in examples.
+#' 
+#' An exponential spending function is defined for any positive \code{nu} and
+#' \eqn{0\le t\le 1} as
+#' \deqn{f(t;\alpha,\nu)=\alpha(t)=\alpha^{t^{-\nu}}.}{f(t;alpha,nu)=alpha^(t^(-nu)).}
+#' A value of \code{nu=0.8} approximates an O'Brien-Fleming spending function
+#' well.
+#' 
+#' The general class of spending functions this family is derived from requires
+#' a continuously increasing cumulative distribution function defined for
+#' \eqn{x>0} and is defined as \deqn{f(t;\alpha,
+#' \nu)=1-F\left(F^{-1}(1-\alpha)/ t^\nu\right).}{% f(t; alpha,
+#' nu)=1-F(F^(-1)(1-alpha)/ t^nu).} The exponential spending function can be
+#' derived by letting \eqn{F(x)=1-\exp(-x)}, the exponential cumulative
+#' distribution function. This function was derived as a generalization of the
+#' Lan-DeMets (1983) spending function used to approximate an O'Brien-Fleming
+#' spending function (\code{sfLDOF()}), \deqn{f(t; \alpha)=2-2\Phi \left(
+#' \Phi^{-1}(1-\alpha/2)/ t^{1/2} \right).}{% f(t;
+#' alpha)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(1/2)).}
+#' 
+#' @param alpha Real value \eqn{> 0} and no more than 1. Normally,
+#' \code{alpha=0.025} for one-sided Type I error specification or
+#' \code{alpha=0.1} for Type II error specification. However, this could be set
+#' to 1 if for descriptive purposes you wish to see the proportion of spending
+#' as a function of the proportion of sample size/information.
+#' @param t A vector of points with increasing values from 0 to 1, inclusive.
+#' Values of the proportion of sample size/information for which the spending
+#' function will be computed.
+#' @param param A single positive value specifying the nu parameter for which
+#' the exponential spending is to be computed; allowable range is (0, 1.5].
+#' @return An object of type \code{spendfn}.
+#' @examples
+#' 
+#' # use 'best' exponential approximation for k=6 to O'Brien-Fleming design
+#' # (see manual for details)
+#' gsDesign(k=6, sfu=sfExponential, sfupar=0.7849295,
+#'          test.type=2)$upper$bound
+#' 
+#' # show actual O'Brien-Fleming bound
+#' gsDesign(k=6, sfu="OF", test.type=2)$upper$bound
+#' 
+#' # show Lan-DeMets approximation
+#' # (not as close as sfExponential approximation)
+#' gsDesign(k=6, sfu=sfLDOF, test.type=2)$upper$bound
+#' 
+#' # plot exponential spending function across a range of values of interest
+#' t <- 0:100/100
+#' plot(t, sfExponential(0.025, t, 0.8)$spend,
+#'    xlab="Proportion of final sample size", 
+#'    ylab="Cumulative Type I error spending", 
+#'    main="Exponential Spending Function Example", type="l")
+#' lines(t, sfExponential(0.025, t, 0.5)$spend, lty=2)
+#' lines(t, sfExponential(0.025, t, 0.3)$spend, lty=3)
+#' lines(t, sfExponential(0.025, t, 0.2)$spend, lty=4)
+#' lines(t, sfExponential(0.025, t, 0.15)$spend, lty=5)
+#' legend(x=c(.0, .3), y=.025*c(.7, 1), lty=1:5, 
+#'     legend=c("nu = 0.8", "nu = 0.5", "nu = 0.3", "nu = 0.2",
+#'              "nu = 0.15"))
+#' text(x=.59, y=.95*.025, labels="<--approximates O'Brien-Fleming")
+#' @note The manual shows how to use \code{sfExponential()} to closely
+#' approximate an O'Brien-Fleming design. An example is given below. The manual
+#' is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
+#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
+#' \link{gsDesign package overview}
+#' @references Anderson KM and Clark JB (2009), Fitting spending functions.
+#' \emph{Statistics in Medicine}; 29:321-327.
+#' 
+#' Jennison C and Turnbull BW (2000), \emph{Group Sequential Methods with
+#' Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' 
+#' Lan, KKG and DeMets, DL (1983), Discrete sequential boundaries for clinical
+#' trials. \emph{Biometrika}; 70:659-663.
+#' @keywords design
+#' @export
+#' @rdname sfExponential
+# sfExponential function [sinew] ----
+sfExponential <- function(alpha, t, param){  
+  checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+  # K. Wills 12/11/08: restrict param range
+  # checkScalar(param, "numeric", c(0, 10), c(FALSE, TRUE))
+  checkScalar(param, "numeric", c(0, 1.5), c(FALSE, TRUE))
+  
+  checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+  t[t>1] <- 1
+  
+  x <- list(name="Exponential", param=param, parname="nu", sf=sfExponential, 
+            spend=alpha ^ (t ^ (-param)), bound=NULL, prob=NULL)  
+  
+  class(x) <- "spendfn"
+  
+  x
+}
+
+# sfBetaDist roxy [sinew] ---- 
+#' @rdname sfDistribution
+#' @export 
+#' @importFrom stats nlminb pbeta
+# sfBetaDist function [sinew] ----
+sfBetaDist <- function(alpha, t, param){  
+    x <- list(name="Beta distribution", param=param, parname=c("a","b"), sf=sfBetaDist, spend=NULL,
+            bound=NULL, prob=NULL)
+  
+    class(x) <- "spendfn"
+    
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+    len <- length(param)
+    
+    if (len == 2)
+    {   
+        checkVector(param, "numeric", c(0, Inf), c(FALSE, TRUE))
+    }    
+    else if (len == 4)
+    {   
+        checkVector(param, "numeric", c(0, 1), c(FALSE, FALSE))
+        
+        tem <- stats::nlminb(c(1, 1), diffbetadist, lower=c(0, 0), xval=param[1:2], uval=param[3:4])
+        
+        if (tem$convergence != 0)
+        { 
+            stop("Solution to 4-parameter specification of Beta distribution spending function not found.")
+        }
+        
+        x$param <- tem$par
+    }
+    else
+    {
+        stop("Beta distribution spending function parameter must be of length 2 or 4")        
+    }
+    
+    t[t > 1] <- 1
+    
+    x$spend <- alpha * stats::pbeta(t, x$param[1], x$param[2])
+    
+    x
+}
+
+# sfCauchy roxy [sinew] ---- 
+#' @rdname sfDistribution
+#' @export 
+#' @importFrom stats qcauchy pcauchy
+# sfCauchy function [sinew] ----
+sfCauchy <- function(alpha, t, param){  
+    x <- list(name="Cauchy", param=param, parname=c("a", "b"), sf=sfCauchy, spend=NULL, 
+            bound=NULL, prob=NULL)
+    
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    class(x) <- "spendfn"
+    
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+    checkVector(param, "numeric")
+    len <- length(param)
+    
+    if (len == 2)    
+    {        
+        if (param[2] <= 0.) 
+        {
+            stop("Second Cauchy spending parameter param[2] must be real value > 0")
+        }
+        
+        a <- param[1]
+        b <- param[2]
+    }
+    else if (len == 4) 
+    {   
+        t0 <- param[1:2]
+        p0 <- param[3:4]
+        
+        if (t0[2] <= t0[1] || p0[2] <= p0[1]) 
+        {
+            stop("4-parameter specification of Cauchy function incorrect")
+        }
+        
+        xv <- stats::qcauchy(t0)
+        y <- stats::qcauchy(p0)
+        b <- (y[2] - y[1]) / (xv[2] - xv[1])
+        a <- y[2] - b * xv[2]
+        x$param <- c(a, b)
+    }
+    else
+    {
+        stop("Cauchy spending function parameter must be of length 2 or 4")
+    }
+    
+    t[t > 1] <- 1
+    xv <- stats::qcauchy(1 * (!is.element(t, 1)) * t)
+    y <- stats::pcauchy(a + b * xv)
+    x$spend <- alpha * (1 * (!is.element(t, 1)) * y + 1 * is.element(t, 1))
+    
+    x
+}
+
+# sfExtremeValue roxy [sinew] ---- 
+#' @rdname sfDistribution
+#' @export
+# sfExtremeValue function [sinew] ----
+sfExtremeValue <- function(alpha, t, param){  
+    x <- list(name="Extreme value", param=param, parname=c("a", "b"), sf=sfExtremeValue, spend=NULL, 
+            bound=NULL, prob=NULL)
+    
+    class(x) <- "spendfn"
+    
     checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
     checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
     t[t>1] <- 1
@@ -641,14 +405,10 @@ sfLogistic <- function(alpha, t, param){
     len <- length(param)
     
     if (len == 2)
-    {
-        if (!is.numeric(param[1])) 
-        {
-            stop("Numeric first logistic spending parameter not given")
-        }
+    {    
         if (param[2] <= 0.) 
         {
-            stop("Second logistic spending parameter param[2] must be real value > 0")
+            stop("Second extreme value spending parameter param[2] must be real value > 0")
         }
         
         a <- param[1]
@@ -656,40 +416,307 @@ sfLogistic <- function(alpha, t, param){
     }
     else if (len == 4)
     {   
-        checkRange(param, inclusion=c(FALSE, FALSE))
         t0 <- param[1:2]
         p0 <- param[3:4]
         
         if (t0[2] <= t0[1] || p0[2] <= p0[1]) 
         {
-            stop("4-parameter specification of logistic function incorrect")
+            stop("4-parameter specification of extreme value function incorrect")
         }
         
-        xv <- log(t0 / (1 - t0))
-        y <- log(p0 / (1 - p0))
+        xv <-  -log(-log(t0))
+        y <-  -log(-log(p0))
         b <- (y[2] - y[1]) / (xv[2] - xv[1])
         a <- y[2] - b * xv[2]
-        param <- c(a, b)
+        x$param <- c(a, b)
     }
     else
     {
-        stop("Logistic spending function parameter must be of length 2 or 4")
+        stop("Extreme value spending function parameter must be of length 2 or 4")
     }
     
-    xv <- log(t / (1 - 1 * (!is.element(t, 1)) * t))
-    y <- exp(a + b * xv)
-    y <- y / (1 + y)
     t[t > 1] <- 1
+    xv <-  -log(-log((!is.element(t, 1)) * t))
+    y <- exp(-exp(-a-b * xv))
+    x$spend <- alpha * (1 * (!is.element(t, 1)) * y + 1 * is.element(t, 1))
     
-    x <- list(name="Logistic", param=param, parname=c("a", "b"), sf=sfLogistic, 
-            spend=alpha * (1 * (!is.element(t, 1)) * y + 1 * is.element(t, 1)), 
+    x
+}
+
+# sfExtremeValue2 roxy [sinew] ---- 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param alpha PARAM_DESCRIPTION
+#' @param t PARAM_DESCRIPTION
+#' @param param PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname sfExtremeValue2
+#' @export 
+#' @author Keaven Anderson, PhD
+# sfExtremeValue2 function [sinew] ----
+sfExtremeValue2 <- function(alpha, t, param){  
+    x <- list(name="Extreme value 2", param=param, parname=c("a", "b"), sf=sfExtremeValue2, spend=NULL, 
             bound=NULL, prob=NULL)
+    
+    class(x) <- "spendfn"
+    
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+    checkVector(param, "numeric")
+    len <- length(param)
+    
+    if (len == 2)
+    {    
+        if (param[2] <= 0.)
+        {
+            stop("Second extreme value (2) spending parameter param[2] must be real value > 0")
+        }
+        
+        a <- param[1]
+        b <- param[2]
+    }
+    else if (len == 4)
+    {   
+        t0 <- param[1:2]
+        p0 <- param[3:4]
+        
+        if (t0[2] <= t0[1] || p0[2] <= p0[1]) 
+        {
+            stop("4-parameter specification of extreme value (2) function incorrect")
+        }
+        
+        xv <- log(-log(1 - t0))
+        y <- log(-log(1 - p0))
+        b <- (y[2] - y[1]) / (xv[2] - xv[1])
+        a <- y[2] - b * xv[2]
+        x$param <- c(a, b)
+    }
+    else
+    {
+        stop("Extreme value (2) spending function parameter must be of length 2 or 4")
+    }
+    
+    t[t > 1] <- 1
+    xv <- log(-log(1 - 1 * (!is.element(t, 1)) * t))
+    y <- 1 - exp(-exp(a + b * xv))
+    x$spend <- alpha * (1 * (!is.element(t, 1)) * y + 1 * is.element(t, 1))
+    
+    x
+}
+
+# sfHSD roxy [sinew] ---- 
+#' @title Hwang-Shih-DeCani Spending Function
+#' @description The function \code{sfHSD} implements a Hwang-Shih-DeCani spending function.
+#' This is the default spending function for \code{gsDesign()}. Normally it
+#' will be passed to \code{gsDesign} in the parameter \code{sfu} for the upper
+#' bound or \code{sfl} for the lower bound to specify a spending function
+#' family for a design. In this case, the user does not need to know the
+#' calling sequence. The calling sequence is useful, however, when the user
+#' wishes to plot a spending function as demonstrated below in examples.
+#' 
+#' A Hwang-Shih-DeCani spending function takes the form \deqn{f(t;\alpha,
+#' \gamma)=\alpha(1-e^{-\gamma t})/(1-e^{-\gamma})}{f(t; alpha, gamma) = alpha
+#' * (1-exp(-gamma * t))/(1 - exp(-gamma))} where \eqn{\gamma}{gamma} is the
+#' value passed in \code{param}. A value of \eqn{\gamma=-4}{gamma=-4} is used
+#' to approximate an O'Brien-Fleming design (see \code{\link{sfExponential}}
+#' for a better fit), while a value of \eqn{\gamma=1}{gamma=1} approximates a
+#' Pocock design well.
+#' 
+#' @param alpha Real value \eqn{> 0} and no more than 1. Normally,
+#' \code{alpha=0.025} for one-sided Type I error specification or
+#' \code{alpha=0.1} for Type II error specification. However, this could be set
+#' to 1 if for descriptive purposes you wish to see the proportion of spending
+#' as a function of the proportion of sample size/information.
+#' @param t A vector of points with increasing values from 0 to 1, inclusive.
+#' Values of the proportion of sample size/information for which the spending
+#' function will be computed.
+#' @param param A single real value specifying the gamma parameter for which
+#' Hwang-Shih-DeCani spending is to be computed; allowable range is [-40, 40]
+#' @return An object of type \code{spendfn}. See \link{Spending function
+#' overview} for further details.
+#' @examples
+#' 
+#' # design a 4-analysis trial using a Hwang-Shih-DeCani spending function 
+#' # for both lower and upper bounds 
+#' x <- gsDesign(k=4, sfu=sfHSD, sfupar=-2, sfl=sfHSD, sflpar=1)
+#' 
+#' # print the design
+#' x
+#' 
+#' # since sfHSD is the default for both sfu and sfl,
+#' # this could have been written as
+#' x <- gsDesign(k=4, sfupar=-2, sflpar=1)
+#' 
+#' # print again
+#' x
+#' 
+#' # plot the spending function using many points to obtain a smooth curve
+#' # show default values of gamma to see how the spending function changes
+#' # also show gamma=1 which is supposed to approximate a Pocock design
+#' t <- 0:100/100
+#' plot(t,  sfHSD(0.025, t, -4)$spend,
+#'    xlab="Proportion of final sample size", 
+#'    ylab="Cumulative Type I error spending", 
+#'    main="Hwang-Shih-DeCani Spending Function Example", type="l")
+#' lines(t, sfHSD(0.025, t, -2)$spend, lty=2)
+#' lines(t, sfHSD(0.025, t, 1)$spend, lty=3)
+#' legend(x=c(.0, .375), y=.025*c(.8, 1), lty=1:3, 
+#'     legend=c("gamma= -4", "gamma= -2", "gamma= 1"))
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
+#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
+#' \link{gsDesign package overview}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @export
+#' @rdname sfHSD
+#' 
+# sfHSD function [sinew] ----
+sfHSD <- function(alpha, t, param){
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkScalar(param, "numeric", c(-40, 40))
+    
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+    
+    x <- list(name="Hwang-Shih-DeCani", param=param, parname="gamma", sf=sfHSD, 
+            spend=if (param == 0) t * alpha else alpha * (1. - exp(-t * param)) / (1 - exp(-param)),
+            bound=NULL, prob=NULL)  
     
     class(x) <- "spendfn"
     
     x
 }
 
+# sfLDOF roxy [sinew] ---- 
+#' @title Lan-DeMets Spending function overview
+#' @description  Lan and DeMets (1983) first published the method of using spending functions
+#' to set boundaries for group sequential trials. In this publication they
+#' proposed two specific spending functions: one to approximate an
+#' O'Brien-Fleming design and the other to approximate a Pocock design. Both of
+#' these spending functions are available here, mainly for historical purposes.
+#' Neither requires a parameter.
+#' 
+#' The Lan-DeMets (1983) spending function to approximate an O'Brien-Fleming
+#' bound is implemented in the function (\code{sfLDOF()}): \deqn{f(t;
+#' \alpha)=2-2\Phi\left(\Phi^{-1}(1-\alpha/2)/ t^{1/2}\right).}{% f(t;
+#' alpha)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(1/2)\right).} The Lan-DeMets (1983)
+#' spending function to approximate a Pocock design is implemented in the
+#' function \code{sfLDPocock()}:
+#' \deqn{f(t;\alpha)=ln(1+(e-1)t).}{f(t;alpha)=ln(1+(e-1)t).} As shown in
+#' examples below, other spending functions can be used to get as good or
+#' better approximations to Pocock and O'Brien-Fleming bounds. In particular,
+#' O'Brien-Fleming bounds can be closely approximated using
+#' \code{\link{sfExponential}}.
+#' 
+#' @param alpha Real value \eqn{> 0} and no more than 1. Normally,
+#' \code{alpha=0.025} for one-sided Type I error specification or
+#' \code{alpha=0.1} for Type II error specification. However, this could be set
+#' to 1 if for descriptive purposes you wish to see the proportion of spending
+#' as a function of the proportion of sample size/information.
+#' @param t A vector of points with increasing values from 0 to 1, inclusive.
+#' Values of the proportion of sample size/information for which the spending
+#' function will be computed.
+#' @param param This parameter is not used and need not be specified. It is
+#' here so that the calling sequence conforms the to the standard for spending
+#' functions used with \code{gsDesign()}.
+#' @return An object of type \code{spendfn}. See spending functions for further
+#' details.
+#' @examples
+#' 
+#' # 2-sided,  symmetric 6-analysis trial Pocock
+#' # spending function approximation 
+#' gsDesign(k=6, sfu=sfLDPocock, test.type=2)$upper$bound
+#' 
+#' # show actual Pocock design
+#' gsDesign(k=6, sfu="Pocock", test.type=2)$upper$bound
+#' 
+#' # approximate Pocock again using a standard
+#' # Hwang-Shih-DeCani approximation
+#' gsDesign(k=6, sfu=sfHSD, sfupar=1, test.type=2)$upper$bound
+#' 
+#' # use 'best' Hwang-Shih-DeCani approximation for Pocock,  k=6;
+#' # see manual for details
+#' gsDesign(k=6, sfu=sfHSD, sfupar=1.3354376, test.type=2)$upper$bound
+#' 
+#' # 2-sided, symmetric 6-analysis trial
+#' # O'Brien-Fleming spending function approximation 
+#' gsDesign(k=6, sfu=sfLDOF, test.type=2)$upper$bound
+#' 
+#' # show actual O'Brien-Fleming bound
+#' gsDesign(k=6, sfu="OF", test.type=2)$upper$bound
+#' 
+#' # approximate again using a standard Hwang-Shih-DeCani 
+#' # approximation to O'Brien-Fleming
+#' x<-gsDesign(k=6, test.type=2)
+#' x$upper$bound
+#' x$upper$param
+#' 
+#' # use 'best' exponential approximation for k=6; see manual for details
+#' gsDesign(k=6, sfu=sfExponential, sfupar=0.7849295,
+#'          test.type=2)$upper$bound
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
+#' \link{gsDesign package overview}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' 
+#' Lan, KKG and DeMets, DL (1983), Discrete sequential boundaries for clinical
+#' trials. \emph{Biometrika};70: 659-663.
+#' @keywords design
+#' @rdname sfLDOF
+#' @export
+# sfLDOF function [sinew] ----
+sfLDOF <- function(alpha, t, param){    
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+    z <- - stats::qnorm(alpha / 2)
+    
+    x <- list(name="Lan-DeMets O'brien-Fleming approximation", param=NULL, parname="none", sf=sfLDOF, 
+            spend=2 * (1 - stats::pnorm(z / sqrt(t))), bound=NULL, prob=NULL)  
+    
+    class(x) <- "spendfn"
+    
+    x
+}
+
+# sfLDPocock roxy [sinew] ---- 
+#' @rdname sfLDOF
+#' @export
+# sfLDPocock function [sinew] ----
+sfLDPocock <- function(alpha, t, param){  
+    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
+    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
+    t[t>1] <- 1
+    
+    x <- list(name="Lan-DeMets Pocock approximation", param=NULL, parname="none", sf=sfLDPocock, 
+            spend=alpha * log(1 + (exp(1) - 1) * t), bound=NULL, prob=NULL)  
+    
+    class(x) <- "spendfn"
+    
+    x
+}
+
+# sfNormal roxy [sinew] ---- 
+#' @export
+#' @rdname sfDistribution
+#' @importFrom stats qnorm pnorm
+# sfNormal function [sinew] ----
 sfNormal <- function(alpha, t, param){  
     x <- list(name="Normal", param=param, parname=c("a", "b"), sf=sfNormal, spend=NULL, 
             bound=NULL, prob=NULL)
@@ -741,8 +768,7 @@ sfNormal <- function(alpha, t, param){
     x
 }
 
-
-
+# sfLinear roxy [sinew] ---- 
 #' 4.6: Piecewise Linear and Step Function Spending Functions
 #' 
 #' The function \code{sfLinear()} allows specification of a piecewise linear
@@ -867,7 +893,8 @@ sfNormal <- function(alpha, t, param){
 #' z1alt <- s1alt / sqrt(178)
 #' z2alt <- (s1alt+s2)/sqrt(178+n2)
 #' sum(z1alt >= x$upper$bound[1] | z2alt >= x$upper$bound[2])/1000000
-#' 
+#'
+# sfLinear function [sinew] ----
 sfLinear <- function(alpha, t, param){  
     x <- list(name="Piecewise linear", param=param, parname="line points", sf=sfLinear, spend=NULL, 
             bound=NULL, prob=NULL)
@@ -881,14 +908,12 @@ sfLinear <- function(alpha, t, param){
     { 
         stop("sfLinear parameter param must be numeric")
     }    
-
     j <- length(param)
     if (floor(j / 2) * 2 != j)
     {
        stop("sfLinear parameter param must have even length")
     }
     k <- j/2
-
     if (max(param) > 1 || min(param) < 0)
     {
        stop("Timepoints and cumulative proportion of spending must be >= 0 and <= 1 in sfLinear")
@@ -904,7 +929,6 @@ sfLinear <- function(alpha, t, param){
         {
            stop("Spending must be non-decreasing in sfLinear")
         }
-
     }
     s <- t
     s[t<=0]<-0
@@ -925,6 +949,7 @@ sfLinear <- function(alpha, t, param){
     x
 }
 
+# sfStep function [sinew] ---- 
 sfStep <- function(alpha, t, param){  
   x <- list(name="Step ", param=param, parname="line points", sf=sfStep, spend=NULL, 
             bound=NULL, prob=NULL)
@@ -980,8 +1005,7 @@ sfStep <- function(alpha, t, param){
   x
 }
 
-
-
+# sfPoints roxy [sinew] ---- 
 #' 4.5: Pointwise Spending Function
 #' 
 #' The function \code{sfPoints} implements a spending function with values
@@ -1055,7 +1079,7 @@ sfStep <- function(alpha, t, param){
 #'               sfl=sfPoints, sflpar=c(0,.25))
 #' x
 #' 
-#' 
+# sfPoints function [sinew] ----
 sfPoints <- function(alpha, t, param){  
     x <- list(name="User-specified", param=param, parname="Points", sf=sfPoints, spend=NULL, 
             bound=NULL, prob=NULL)
@@ -1065,7 +1089,6 @@ sfPoints <- function(alpha, t, param){
     checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
     checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
     t[t>1] <- 1
-
     k <- length(t)
     j <- length(param)
     
@@ -1102,8 +1125,7 @@ sfPoints <- function(alpha, t, param){
     x
 }
 
-
-
+# sfPower roxy [sinew] ---- 
 #' 4.2: Kim-DeMets (power) Spending Function
 #' 
 #' The function \code{sfPower()} implements a Kim-DeMets (power) spending
@@ -1171,7 +1193,7 @@ sfPoints <- function(alpha, t, param){
 #'        legend=c("rho= 3", "rho= 2", "rho= 0.75"))
 #' legend(x=c(.0, .357), y=.025*c(.65, .85), lty=1:3, bty="n", col=2, 
 #'        legend=c("gamma= -4", "gamma= -2", "gamma=1"))
-#' 
+# sfPower function [sinew] ----
 sfPower <- function(alpha, t, param){
     # K. Wills 12/11/08: restrict param range
     # checkScalar(param, "numeric", c(0, Inf), c(FALSE, TRUE))
@@ -1189,8 +1211,7 @@ sfPower <- function(alpha, t, param){
     x
 }
 
-
-
+# sfTDist roxy [sinew] ---- 
 #' 4.8: t-distribution Spending Function
 #' 
 #' The function \code{sfTDist()} provides perhaps the maximum flexibility among
@@ -1286,7 +1307,7 @@ sfPower <- function(alpha, t, param){
 #' lines(t, sfTDist(0.025, t, c(.25, .5, .1, .2, 100))$spend, lty=5)
 #' legend(x=c(.0, .3), y=.025*c(.7, 1), lty=1:5, 
 #'     legend=c("df = 1", "df = 1.5", "df = 3", "df = 10", "df = 100"))
-#' 
+# sfTDist function [sinew] ----
 sfTDist <- function(alpha, t, param){  
     x <- list(name="t-distribution", param=param, parname=c("a", "b", "df"), sf=sfTDist, spend=NULL, 
             bound=NULL, prob=NULL)
@@ -1371,11 +1392,9 @@ sfTDist <- function(alpha, t, param){
     x
 }
 
-
-
-#' 4.7a: Truncated, trimmed and gapped spending functions
-#' 
-#' The functions \code{sfTruncated()} and \code{sfTrimmed} apply any other
+# sfTruncated roxy [sinew] ---- 
+#' @title Truncated, trimmed and gapped spending functions
+#' @description The functions \code{sfTruncated()} and \code{sfTrimmed} apply any other
 #' spending function over a restricted range. This allows eliminating spending
 #' for early interim analyses when you desire not to stop for the bound being
 #' specified; this is usually applied to eliminate early tests for a positive
@@ -1411,7 +1430,6 @@ sfTDist <- function(alpha, t, param){
 #' function parameter(s) in \code{param$param}. See example using
 #' \code{sfLinear} that spends uniformly over specified range.
 #' 
-#' @aliases sfTruncated sfTrimmed sfGapped
 #' @param alpha Real value \eqn{> 0} and no more than 1. Normally,
 #' \code{alpha=0.025} for one-sided Type I error specification or
 #' \code{alpha=0.1} for Type II error specification. However, this could be set
@@ -1427,15 +1445,6 @@ sfTDist <- function(alpha, t, param){
 #' vector of parameters needed to fully specify the spending function in sf).
 #' @return An object of type \code{spendfn}. See \code{\link{Spending function
 #' overview}} for further details.
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
-#' \link{gsDesign package overview}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' @keywords design
 #' @examples
 #' 
 #' 
@@ -1501,7 +1510,18 @@ sfTDist <- function(alpha, t, param){
 #' # interim at or after 20 percent of information
 #' x <- gsDesign(n.fix=100,sfl=sfGapped,sflpar=list(trange=c(.2,.9),sf=sfHSD,param=1))
 #' 
-#' 
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
+#' \link{gsDesign package overview}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @export
+#' @rdname sfSpecial
+# sfTruncated function [sinew] ----
 sfTruncated <- function(alpha, t, param){
    checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
    checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
@@ -1532,6 +1552,10 @@ sfTruncated <- function(alpha, t, param){
    x
 }
 
+# sfTrimmed roxy [sinew] ---- 
+#' @export
+#' @rdname sfSpecial
+# sfTrimmed function [sinew] ----
 sfTrimmed <- function(alpha, t, param){
   checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
   checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
@@ -1562,6 +1586,10 @@ sfTrimmed <- function(alpha, t, param){
   x
 }
 
+# sfGapped roxy [sinew] ---- 
+#' @export
+#' @rdname sfSpecial
+# sfGapped function [sinew] ----
 sfGapped <- function(alpha, t, param){
   checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
   checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
@@ -1596,6 +1624,24 @@ sfGapped <- function(alpha, t, param){
   x
 }
 
+# spendingFunction roxy [sinew] ---- 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param alpha PARAM_DESCRIPTION
+#' @param t PARAM_DESCRIPTION
+#' @param param PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname spendingFunction
+#' @export 
+#' @author Keaven Anderson, PhD
+# spendingFunction function [sinew] ----
 spendingFunction <- function(alpha, t, param){      
     checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
     checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
@@ -1609,10 +1655,9 @@ spendingFunction <- function(alpha, t, param){
     x
 }
 
-###
-# Hidden Functions
-###
-
+# diffbetadist roxy [sinew] ---- 
+#' @importFrom stats pbeta
+# diffbetadist function [sinew] ----
 diffbetadist <- function(aval, xval, uval){   
     if (min(aval) <= 0.)
     {
@@ -1624,6 +1669,9 @@ diffbetadist <- function(aval, xval, uval){
     sum(diff ^ 2)
 }
 
+# Tdistdiff roxy [sinew] ---- 
+#' @importFrom stats qt
+# Tdistdiff function [sinew] ----
 Tdistdiff <- function(x, t0, p0){  
     xv <- stats::qt(t0, x)
     y <- stats::qt(p0, x)

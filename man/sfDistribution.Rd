@@ -2,14 +2,21 @@
 % Please edit documentation in R/gsSpending.R
 \name{sfLogistic}
 \alias{sfLogistic}
-\alias{sfNormal}
-\alias{sfExtremeValue}
-\alias{sfExtremeValue2}
-\alias{sfCauchy}
 \alias{sfBetaDist}
-\title{4.7: Two-parameter Spending Function Families}
+\alias{sfCauchy}
+\alias{sfExtremeValue}
+\alias{sfNormal}
+\title{Two-parameter Spending Function Families}
 \usage{
 sfLogistic(alpha, t, param)
+
+sfBetaDist(alpha, t, param)
+
+sfCauchy(alpha, t, param)
+
+sfExtremeValue(alpha, t, param)
+
+sfNormal(alpha, t, param)
 }
 \arguments{
 \item{alpha}{Real value \eqn{> 0} and no more than 1. Normally,
@@ -53,8 +60,7 @@ The calling sequence is useful, however, when the user wishes to plot a
 spending function as demonstrated in the examples; note, however, that an
 automatic \eqn{\alpha}{alpha}- and \eqn{\beta}{beta}-spending function plot
 is also available.
-}
-\details{
+
 \code{sfBetaDist(alpha,t,param)} is simply \code{alpha} times the incomplete
 beta cumulative distribution function with parameters \eqn{a} and \eqn{b}
 passed in \code{param} evaluated at values passed in \code{t}.
@@ -139,15 +145,13 @@ plotsf <- function(alpha, t, param)
 # from the others
 param <- c(.25, .5, .05, .1)
 plotsf(.025, t, param)
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
-\link{Spending function overview}, \code{\link{gsDesign}},
-\link{gsDesign package overview}
+\code{\link{gsDesign}}
 }
 \author{
 Keaven Anderson \email{keaven\_anderson@merck.}

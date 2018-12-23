@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsSpending.R
 \name{sfHSD}
 \alias{sfHSD}
-\title{4.1: Hwang-Shih-DeCani Spending Function}
+\title{Hwang-Shih-DeCani Spending Function}
 \usage{
 sfHSD(alpha, t, param)
 }
@@ -32,8 +32,7 @@ bound or \code{sfl} for the lower bound to specify a spending function
 family for a design. In this case, the user does not need to know the
 calling sequence. The calling sequence is useful, however, when the user
 wishes to plot a spending function as demonstrated below in examples.
-}
-\details{
+
 A Hwang-Shih-DeCani spending function takes the form \deqn{f(t;\alpha,
 \gamma)=\alpha(1-e^{-\gamma t})/(1-e^{-\gamma})}{f(t; alpha, gamma) = alpha
 * (1-exp(-gamma * t))/(1 - exp(-gamma))} where \eqn{\gamma}{gamma} is the
@@ -75,7 +74,6 @@ lines(t, sfHSD(0.025, t, -2)$spend, lty=2)
 lines(t, sfHSD(0.025, t, 1)$spend, lty=3)
 legend(x=c(.0, .375), y=.025*c(.8, 1), lty=1:3, 
     legend=c("gamma= -4", "gamma= -2", "gamma= 1"))
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

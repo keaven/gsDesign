@@ -1,3 +1,4 @@
+# eEvents1 function [sinew] ---- 
 eEvents1 <- function(lambda=1, eta=0, gamma=1, R=1, S=NULL, 
                    T=2, Tfinal=NULL, minfup=0, simple=TRUE){  
   if (is.null(Tfinal))
@@ -55,6 +56,7 @@ eEvents1 <- function(lambda=1, eta=0, gamma=1, R=1, S=NULL,
 
 
 
+# eEvents roxy [sinew] ---- 
 #' Expected number of events for a time-to-event study
 #' 
 #' \code{eEvents()} is used to calculate the expected number of events for a
@@ -140,6 +142,7 @@ eEvents1 <- function(lambda=1, eta=0, gamma=1, R=1, S=NULL,
 #' n<-eEvents(lambda=matrix(c(lamC,lamC*2/3),ncol=6), eta=0, 
 #'            gamma=matrix(.5,ncol=6), R=2, T=4)
 #' 
+# eEvents function [sinew] ----
 eEvents <- function(lambda=1, eta=0, gamma=1, R=1, S=NULL, T=2,
                   Tfinal=NULL, minfup=0, digits=4){  if (is.null(Tfinal))
 	{	if (minfup >= T)
@@ -196,6 +199,7 @@ eEvents <- function(lambda=1, eta=0, gamma=1, R=1, S=NULL, T=2,
 	return(x)
 }
 
+# periods function [sinew] ---- 
 periods <- function(S, T, minfup, digits){  periods <- cumsum(S)
 	if (length(periods)==0) periods <- max(0, T - minfup)
 	else
@@ -211,6 +215,7 @@ periods <- function(S, T, minfup, digits){  periods <- cumsum(S)
 	return(list(periods,names))
 }
 
+# print.eEvents function [sinew] ---- 
 print.eEvents <- function(x,digits=4,...){
   if (class(x) != "eEvents") 
     stop("print.eEvents: primary argument must have class eEvents")
@@ -253,12 +258,14 @@ print.eEvents <- function(x,digits=4,...){
   return(x)
 }
 
+# nameperiod function [sinew] ---- 
 nameperiod <- function(R, digits=2){
   if (length(R)==1) return(paste("0-",round(R,digits),sep=""))
     R0 <- c(0,R[1:(length(R)-1)])
     return(paste(round(R0,digits),"-",round(R,digits),sep=""))
 }
 
+# LFPWE function [sinew] ---- 
 LFPWE <- function(alpha=.025, sided=1, beta=.1,
   lambdaC=log(2) / 6, hr=.5, hr0=1, etaC=0, etaE=0,
   gamma=1, ratio=1, R=18, S=NULL, T=24, minfup=NULL){
@@ -323,6 +330,7 @@ LFPWE <- function(alpha=.025, sided=1, beta=.1,
   return(rval)
 }
 
+# print.nSurv function [sinew] ---- 
 print.nSurv <- function(x,digits=4,...){
   if (class(x) != "nSurv") 
 		stop("Primary argument must have class nSurv")
@@ -370,6 +378,7 @@ print.nSurv <- function(x,digits=4,...){
            x$ratio, "\n")
 }
 
+# KTZ function [sinew] ---- 
 KTZ <- function(x=NULL, minfup=NULL, n1Target=NULL, 
                 lambdaC=log(2) / 6, etaC=0, etaE=0,
                 gamma=1, ratio=1, R=18, S=NULL, beta=.1, 
@@ -462,6 +471,7 @@ KTZ <- function(x=NULL, minfup=NULL, n1Target=NULL,
 }
 
 
+# KT function [sinew] ---- 
 KT <- function(alpha=.025, sided=1, beta=.1, 
   lambdaC=log(2) / 6, hr=.5, hr0=1, etaC=0, etaE=0,
   gamma=1, ratio=1, R=18, S=NULL, minfup=NULL,
@@ -525,6 +535,7 @@ KT <- function(alpha=.025, sided=1, beta=.1,
 
 
 
+# nSurv roxy [sinew] ---- 
 #' Advanced time-to-event sample size calculation
 #' 
 #' \code{nSurv()} is used to calculate the sample size for a clinical trial
@@ -859,6 +870,7 @@ KT <- function(alpha=.025, sided=1, beta=.1,
 #' tEventsIA(x=x,timing=.25)
 #' 
 #' @export
+# nSurv function [sinew] ----
 nSurv <- function(lambdaC=log(2)/6, hr=.6, hr0=1, eta = 0, etaE=NULL, 
   gamma=1, R=12, S=NULL, T=NULL,  minfup = NULL, ratio = 1,
   alpha = 0.025, beta = 0.10,  sided = 1, tol = .Machine$double.eps^0.25){ 
@@ -906,6 +918,7 @@ nSurv <- function(lambdaC=log(2)/6, hr=.6, hr0=1, eta = 0, etaE=NULL,
   return(xx)
 }
 
+# gsnSurv function [sinew] ---- 
 gsnSurv <- function(x,nEvents){  
   if (x$variable=="Accrual rate")
    {  Ifct <- nEvents/x$d
@@ -942,6 +955,7 @@ gsnSurv <- function(x,nEvents){
    return(rval)
 }
 
+# tEventsIA function [sinew] ---- 
 tEventsIA<-function(x, timing=.25, tol = .Machine$double.eps^0.25){   
   T <- x$T[length(x$T)]
     z <- stats::uniroot(f=nEventsIA, interval=c(0.0001,T-.0001), x=x,
@@ -949,6 +963,7 @@ tEventsIA<-function(x, timing=.25, tol = .Machine$double.eps^0.25){
     return(nEventsIA(tIA=z$root,x=x,simple=FALSE))
 }
 
+# nEventsIA function [sinew] ---- 
 nEventsIA <- function(tIA=5, x=NULL, target=0, simple=TRUE){  
   Qe <- x$ratio/(1+x$ratio)
   eDC <- eEvents(lambda=x$lambdaC, eta=x$etaC,
@@ -967,7 +982,9 @@ nEventsIA <- function(tIA=5, x=NULL, target=0, simple=TRUE){
   else return(list(T=tIA,eDC=eDC$d,eDE=eDE$d,eNC=eDC$n,eNE=eDE$n))
 }
 
+# gsSurv roxy [sinew] ---- 
 #' @export
+# gsSurv function [sinew] ----
 gsSurv <- function(k=3, test.type=4, alpha=0.025, sided=1,  
   beta=0.1, astar=0, timing=1, sfu=sfHSD, sfupar=-4,
   sfl=sfHSD, sflpar=-2, r=18,
@@ -1021,6 +1038,7 @@ gsSurv <- function(k=3, test.type=4, alpha=0.025, sided=1,
   return(y)
 }
 
+# print.gsSurv function [sinew] ---- 
 print.gsSurv <- function(x,digits=2,...){
   cat("Time to event group sequential design with HR=",x$hr,"\n")
   if (x$hr0 != 1) cat("Non-inferiority design with null HR=",x$hr0,"\n")
@@ -1063,6 +1081,7 @@ print.gsSurv <- function(x,digits=2,...){
   }
 }
 
+# xtable.gsSurv function [sinew] ---- 
 xtable.gsSurv <- function(x, caption=NULL, label=NULL, align=NULL, digits=NULL,
                           display=NULL, auto=FALSE, footnote=NULL, fnwid="9cm", timename="months",...){
   k <- x$k

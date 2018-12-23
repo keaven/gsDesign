@@ -79,7 +79,6 @@ x <- gsDesign(k=3, sfu=sfPoints, sfupar=c(.25, .25),
               sfl=sfPoints, sflpar=c(0,.25))
 x
 
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

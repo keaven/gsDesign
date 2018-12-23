@@ -2,6 +2,7 @@
 # Exported Functions
 ###
 
+# print.gsProbability function [sinew] ---- 
 print.gsProbability  <- function(x,...){    
     ntxt <- "N "
     nval <- ceiling(x$n.I)
@@ -60,6 +61,7 @@ print.gsProbability  <- function(x,...){
   invisible(x)
 }
 
+# summary.gsDesign function [sinew] ---- 
 summary.gsDesign     <- function(object, information=FALSE, timeunit="months",...){
   out <- NULL
   if (object$test.type == 1){
@@ -96,6 +98,7 @@ summary.gsDesign     <- function(object, information=FALSE, timeunit="months",..
   return(out)
 }
 
+# print.gsDesign function [sinew] ---- 
 print.gsDesign       <- function(x, ...){    
     if (x$nFixSurv > 0)
     {    cat("Group sequential design sample size for time-to-event outcome\n", 
@@ -249,6 +252,7 @@ print.gsDesign       <- function(x, ...){
   invisible(x)
 }
 
+# print.nSurvival function [sinew] ---- 
 print.nSurvival      <- function(x,...){
 	if (class(x) != "nSurvival") stop("print.nSurvival: primary argument must have class nSurvival")
    cat("Fixed design, two-arm trial with time-to-event\n")
@@ -288,9 +292,9 @@ print.nSurvival      <- function(x,...){
 
 
 
-#' 2.8: Bound Summary and Z-transformations
-#' 
-#' A tabular summary of a group sequential design's bounds and their properties
+# gsBoundSummary roxy [sinew] ---- 
+#' @title Bound Summary and Z-transformations
+#' @description  A tabular summary of a group sequential design's bounds and their properties
 #' are often useful. The 'vintage' \code{print.gsDesign()} function provides a
 #' complete but minimally formatted summary of a group sequential design
 #' derived by \code{gsDesign()}. A brief description of the overall design can
@@ -369,9 +373,6 @@ print.nSurvival      <- function(x,...){
 #' the probability of crossing the efficacy bound at or before the analysis of
 #' interest.
 #' 
-#' @aliases gsBoundSummary print.gsDesign summary.gsDesign print.gsBoundSummary
-#' xprint gsBValue gsDelta gsHR gsRR gsCPz gsDesign print, summary and table
-#' summary functions
 #' @param x An item of class \code{gsDesign} or \code{gsSurv}, except for
 #' \code{print.gsBoundSummary()} where \code{x} is an object created by
 #' \code{gsBoundSummary()} and \code{xprint()} which is used with \code{xtable}
@@ -471,15 +472,6 @@ print.nSurvival      <- function(x,...){
 #' intended for objects created with \code{gsBoundSummary}. The only extension
 #' is to make the default to not print row names. This is probably `not good R
 #' style' but may be helpful for many lazy R programmers like the author.
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{gsDesign}, \link{Plots for group sequential designs},
-#' \code{\link{gsProbability}}, \code{\link{xtable.gsSurv}}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' @keywords design
 #' @examples
 #' 
 #' # survival endpoint using gsSurv
@@ -544,9 +536,21 @@ print.nSurvival      <- function(x,...){
 #' 
 #' # for nice LaTeX table output, use xprint
 #' xprint(xtable(gsBoundSummary(xOR, deltaname="OR", logdelta=TRUE), caption="Table caption."))
-#'
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \link{gsDesign}, \link{Plots for group sequential designs},
+#' \code{\link{gsProbability}}, \code{\link{xtable.gsSurv}}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @aliases print.gsDesign summary.gsDesign gsBValue gsDelta gsHR gsRR gsCPz gsDesign
+#' @rdname gsBoundSummary
 #' @export 
-gsBoundSummary       <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits=4, ddigits=2, tdigits=0, timename="Month", 
+#' @importFrom stats pnorm
+# gsBoundSummary function [sinew] ----
+gsBoundSummary <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits=4, ddigits=2, tdigits=0, timename="Month", 
                            prior=normalGrid(mu=x$delta/2, sigma=10/sqrt(x$n.fix)), 
                            POS=FALSE, ratio=NULL,exclude=c("B-value","Spending","CP","CP H1","PP"), r=18,...){
   k <- x$k
@@ -683,25 +687,33 @@ gsBoundSummary       <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, 
   return(rval)
 }
 
-xprint               <- function(x, include.rownames=FALSE, hline.after=c(-1,which(x$Value==x[1,]$Value)-1,nrow(x)),...){
+# xprint roxy [sinew] ---- 
+#' @export
+#' @rdname gsBoundSummary
+#' @importFrom xtable print.xtable
+# xprint function [sinew] ----
+xprint <- function(x, include.rownames=FALSE, hline.after=c(-1,which(x$Value==x[1,]$Value)-1,nrow(x)),...){
   xtable::print.xtable(x, hline.after=hline.after, include.rownames=include.rownames,...)
 }
 
+# print.gsBoundSummary roxy [sinew] ---- 
+#' @export
+#' @rdname gsBoundSummary
+# print.gsBoundSummary function [sinew] ----
 print.gsBoundSummary <- function(x,row.names=FALSE,digits=4,...){
   print.data.frame(x,row.names=row.names,digits=digits,...)
 }
 
-###
-# Hidden Functions
-###
-
-gsLegendText    <- function(test.type){
+# gsLegendText function [sinew] ---- 
+gsLegendText <- function(test.type){
     switch(as.character(test.type), 
             "1" = c(expression(paste("Reject ", H[0])), "Continue"),
             "2" = c(expression(paste("Reject ", H[0])), "Continue", expression(paste("Reject ", H[0]))),
             c(expression(paste("Reject ", H[0])), "Continue", expression(paste("Reject ", H[1]))))            
 }
-sfprint         <- function(x){   
+
+# sfprint function [sinew] ---- 
+sfprint <- function(x){   
     # print spending function information    
     if (x$name == "OF")
     {
@@ -739,6 +751,8 @@ sfprint         <- function(x){
     }
     cat("\n")
 }
+
+# summary.spendfn function [sinew] ---- 
 summary.spendfn <- function(object,...){   
   # print spending function information    
   if (object$name == "OF")

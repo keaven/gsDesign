@@ -1,4 +1,5 @@
 # conditional power function
+# condPower function [sinew] ---- 
 condPower <- function(z1, n2, z2=z2NC, theta=NULL, 
                 x=gsDesign(k=2, timing=.5, beta=beta),
                 ...){
@@ -9,6 +10,7 @@ condPower <- function(z1, n2, z2=z2NC, theta=NULL,
 
 
 
+# condPowerDiff function [sinew] ---- 
 condPowerDiff <- function(z1, target, n2, z2=z2NC,
                             theta=NULL,
                             x=gsDesign(k=2,timing=.5)){
@@ -19,6 +21,7 @@ condPowerDiff <- function(z1, target, n2, z2=z2NC,
 
 
 
+# n2sizediff function [sinew] ---- 
 n2sizediff <- function(z1, target, beta=.1, z2=z2NC, 
                          theta=NULL, 
                          x=gsDesign(k=2, timing=.5, beta=beta)){
@@ -30,6 +33,7 @@ n2sizediff <- function(z1, target, beta=.1, z2=z2NC,
 
 
 
+# ssrCP roxy [sinew] ---- 
 #' Sample size re-estimation based on conditional power
 #' 
 #' \code{ssrCP()} adapts 2-stage group sequential designs to 2-stage sample
@@ -272,6 +276,7 @@ n2sizediff <- function(z1, target, beta=.1, z2=z2NC,
 #' # plot power by design and effect size
 #' ggplot(data=y3,aes(x=delta,y=Power,col=CP.effect.size))+geom_line() + xlab(expression(delta))
 #' 
+# ssrCP function [sinew] ----
 ssrCP <- function(z1, theta=NULL, maxinc=2, overrun=0, 
                   beta = x$beta, cpadj=c(.5,1-beta), 
                   x=gsDesign(k=2, timing=.5),
@@ -345,6 +350,7 @@ ssrCP <- function(z1, theta=NULL, maxinc=2, overrun=0,
   return(rval)
 }
 
+# plot.ssrCP function [sinew] ---- 
 plot.ssrCP <- function(x, z1ticks=NULL, mar=c(7, 4, 4, 4)+.1, ylab="Adapted sample size", xlaboffset=-.2, lty=1, col=1,...){
   graphics::par(mar=mar)
   plot(x$dat$z1, x$dat$n2,type="l", axes=FALSE, xlab="", ylab="", lty=lty, col=col,...)
@@ -365,6 +371,7 @@ plot.ssrCP <- function(x, z1ticks=NULL, mar=c(7, 4, 4, 4)+.1, ylab="Adapted samp
 }
 
 # normal combination test cutoff for z2
+# z2NC function [sinew] ---- 
 z2NC <- function(z1,x,...){
   z2 <- (x$upper$bound[2] - z1*sqrt(x$timing[1])) / 
     sqrt(1-x$timing[1])
@@ -373,6 +380,7 @@ z2NC <- function(z1,x,...){
 }
 
 # sufficient statistic cutoff for z2
+# z2Z function [sinew] ---- 
 z2Z <- function(z1,x,n2=x$n.I[2]-x$n.I[1],...){
   N2 <- x$n.I[1] + n2
   z2 <- (x$upper$bound[2]-z1*sqrt(x$n.I[1]/N2)) / 
@@ -382,6 +390,7 @@ z2Z <- function(z1,x,n2=x$n.I[2]-x$n.I[1],...){
 }
 
 # Fisher's combination text
+# z2Fisher function [sinew] ---- 
 z2Fisher <- function(z1,x,...){
   z2 <- z1
   indx <- stats::pchisq(-2*log(stats::pnorm(-z1)), 4, lower.tail=F) <= 
@@ -395,6 +404,7 @@ z2Fisher <- function(z1,x,...){
   return(z2)
 }
 
+# Power.ssrCP function [sinew] ---- 
 Power.ssrCP <- function(x, theta=NULL, delta=NULL, r=18){
   if (class(x) != "ssrCP") 
     stop("Power.ssrCP must be called with x of class ssrCP")

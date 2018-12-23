@@ -4,6 +4,7 @@
 # minima. My example here does with a finite range and makes the 
 # plot easier to visualize.
 # NOTE: this is more conservative than using a 2-sided exact test in binom.test
+# nBinomial1Sample function [sinew] ---- 
 nBinomial1Sample <- function(p0 = 0.90, p1=0.95, 
                              alpha = 0.025, beta=NULL, 
                              n = 200:250, outtype=1, conservative=FALSE){

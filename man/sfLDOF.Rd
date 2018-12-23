@@ -3,9 +3,11 @@
 \name{sfLDOF}
 \alias{sfLDOF}
 \alias{sfLDPocock}
-\title{4.4: Lan-DeMets Spending function overview}
+\title{Lan-DeMets Spending function overview}
 \usage{
 sfLDOF(alpha, t, param)
+
+sfLDPocock(alpha, t, param)
 }
 \arguments{
 \item{alpha}{Real value \eqn{> 0} and no more than 1. Normally,
@@ -33,8 +35,7 @@ proposed two specific spending functions: one to approximate an
 O'Brien-Fleming design and the other to approximate a Pocock design. Both of
 these spending functions are available here, mainly for historical purposes.
 Neither requires a parameter.
-}
-\details{
+
 The Lan-DeMets (1983) spending function to approximate an O'Brien-Fleming
 bound is implemented in the function (\code{sfLDOF()}): \deqn{f(t;
 \alpha)=2-2\Phi\left(\Phi^{-1}(1-\alpha/2)/ t^{1/2}\right).}{% f(t;
@@ -85,7 +86,6 @@ x$upper$param
 # use 'best' exponential approximation for k=6; see manual for details
 gsDesign(k=6, sfu=sfExponential, sfupar=0.7849295,
          test.type=2)$upper$bound
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

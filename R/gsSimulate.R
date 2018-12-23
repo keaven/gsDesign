@@ -1,7 +1,6 @@
-###
-# Hidden Functions
-###
-
+# gsAdaptSim roxy [sinew] ---- 
+#' @importFrom stats qnorm rbinom
+# gsAdaptSim function [sinew] ----
 gsAdaptSim <- function(SimStage, IniSim, TrialPar, SimPar, cp=0, thetacp=-100, maxn=100000, pdeltamin=0, ...){
     # simulate 1st k-1 stages of trial
     x <- gsSimulate(nstage=TrialPar$gsx$k-1, SimStage, IniSim, TrialPar, SimPar)
@@ -114,6 +113,7 @@ gsAdaptSim <- function(SimStage, IniSim, TrialPar, SimPar, cp=0, thetacp=-100, m
     x
 }
 
+# gsSimulate function [sinew] ---- 
 gsSimulate <- function(nstage=0, SimStage, IniSim, TrialPar, SimPar){    
     if (nstage == 0) 
     {

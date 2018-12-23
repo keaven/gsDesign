@@ -1,7 +1,6 @@
-#' 2.4: Conditional and Predictive Power, Overall and Conditional Probability
-#' of Success
-#' 
-#' \code{gsCP()} computes conditional boundary crossing probabilities at future
+# gsCP roxy [sinew] ---- 
+#' @title Conditional and Predictive Power, Overall and Conditional Probability of Success
+#' @description  \code{gsCP()} computes conditional boundary crossing probabilities at future
 #' planned analyses for a given group sequential design assuming an interim
 #' z-statistic at a specified interim analysis. While \code{gsCP()} is designed
 #' toward computing conditional power for a variety of underlying parameter
@@ -44,8 +43,6 @@
 #' defaulted to 1 (equal weighting). To ensure a proper prior distribution, you
 #' must have \code{sum(gridwgts * density)} equal to 1; this is NOT checked,
 #' however.
-#' 
-#' @aliases gsCP gsPP gsPI gsPOS gsCPOS gsPosterior
 #' @param x An object of type \code{gsDesign} or \code{gsProbability}
 #' @param theta a vector with \eqn{\theta}{theta} value(s) at which conditional
 #' power is to be computed; for \code{gsCP()} if \code{NULL}, an estimated
@@ -106,23 +103,6 @@
 #' positive study weighted by the posterior distribution derived from the
 #' interim test statistic and the prior distribution input for \code{theta}
 #' conditional on an interim test statistic.
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \code{\link{normalGrid}}, \code{\link{gsDesign}},
-#' \code{\link{gsProbability}}, \code{\link{gsBoundCP}}, \code{\link{ssrCP}},
-#' \code{\link{condPower}}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' 
-#' Proschan, Michael A., Lan, KK Gordon and Wittes, Janet Turk (2006),
-#' \emph{Statiscal Monitoring of Clinical Trials}. NY: Springer.
-#' 
-#' Muller, Hans-Helge and Schaffer, Helmut (2001), Adaptive group sequential
-#' designs for clinical trials: combining the advantages of adaptive and
-#' classical group sequential approaches. \emph{Biometrics};57:886-891.
-#' @keywords design
 #' @examples
 #' 
 #' # set up a group sequential design
@@ -202,7 +182,26 @@
 #' # start with point estimate, followed by 90% prediction interval
 #' gsPI(x=x, i=1, zi=z1, j=2, theta=prior$z, wgts=prior$wgts, level=0)
 #' gsPI(x=x, i=1, zi=z1, j=2, theta=prior$z, wgts=prior$wgts, level=.9)
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \code{\link{normalGrid}}, \code{\link{gsDesign}},
+#' \code{\link{gsProbability}}, \code{\link{gsBoundCP}}, \code{\link{ssrCP}},
+#' \code{\link{condPower}}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 #' 
+#' Proschan, Michael A., Lan, KK Gordon and Wittes, Janet Turk (2006),
+#' \emph{Statiscal Monitoring of Clinical Trials}. NY: Springer.
+#' 
+#' Muller, Hans-Helge and Schaffer, Helmut (2001), Adaptive group sequential
+#' designs for clinical trials: combining the advantages of adaptive and
+#' classical group sequential approaches. \emph{Biometrics};57:886-891.
+#' @keywords design
+#' @export
+#' @rdname gsCP
+# gsCP function [sinew] ----
 gsCP <- function(x, theta=NULL, i=1, zi=0, r=18){    
     # conditional power for remaining trial is returned (including each interim)
     # as a gsProbability object
@@ -250,6 +249,10 @@ gsCP <- function(x, theta=NULL, i=1, zi=0, r=18){
     gsProbability(k=knew, theta=theta, n.I=Inew, a=anew, b=bnew, r=r, overrun=0)
 }
 
+# gsPP roxy [sinew] ---- 
+#' @export
+#' @rdname gsCP
+# gsPP function [sinew] ----
 gsPP <- function(x, i=1, zi=0, theta=c(0,3), wgts=c(.5,.5), r=18, total=TRUE){   if (!(methods::is(x, "gsProbability") || methods::is(x, "gsDesign")))
     {   stop("gsPP: class(x) must be gsProbability or gsDesign")
     }
@@ -267,6 +270,10 @@ gsPP <- function(x, i=1, zi=0, theta=c(0,3), wgts=c(.5,.5), r=18, total=TRUE){  
     else return(pp)
 }
 
+# gsPI roxy [sinew] ---- 
+#' @export
+#' @rdname gsCP
+# gsPI function [sinew] ----
 gsPI<-function(x, i=1, zi=0, j=2, level=.95, theta=c(0,3), wgts=c(.5,.5)){
    if (!(methods::is(x, "gsProbability") || methods::is(x, "gsDesign")))
    {  stop("gsPI: class(x) must be gsProbability or gsDesign")
@@ -289,9 +296,9 @@ gsPI<-function(x, i=1, zi=0, j=2, level=.95, theta=c(0,3), wgts=c(.5,.5)){
 
 
 
-#' 2.5: Conditional Power at Interim Boundaries
-#' 
-#' \code{gsBoundCP()} computes the total probability of crossing future upper
+# gsBoundCP roxy [sinew] ---- 
+#' @title Conditional Power at Interim Boundaries
+#' @description  \code{gsBoundCP()} computes the total probability of crossing future upper
 #' bounds given an interim test statistic at an interim bound. For each interim
 #' boundary, assumes an interim test statistic at the boundary and computes the
 #' probability of crossing any of the later upper boundaries.
@@ -316,6 +323,17 @@ gsPI<-function(x, i=1, zi=0, j=2, level=.95, theta=c(0,3), wgts=c(.5,.5)){
 #' crossing upper bounds given interim test statistics at each lower bound}
 #' \item{CPhi}{A vector of length \code{x$k-1} with conditional powers of
 #' crossing upper bounds given interim test statistics at each upper bound.}
+#' @examples
+#' 
+#' # set up a group sequential design
+#' x <- gsDesign(k=5)
+#' x
+#' 
+#' # compute conditional power based on interim treatment effects
+#' gsBoundCP(x)
+#' 
+#' # compute conditional power based on original x$delta
+#' gsBoundCP(x, theta=x$delta)
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
@@ -329,18 +347,9 @@ gsPI<-function(x, i=1, zi=0, j=2, level=.95, theta=c(0,3), wgts=c(.5,.5)){
 #' designs for clinical trials: combining the advantages of adaptive and
 #' classical group sequential approaches. \emph{Biometrics};57:886-891.
 #' @keywords design
-#' @examples
-#' 
-#' # set up a group sequential design
-#' x <- gsDesign(k=5)
-#' x
-#' 
-#' # compute conditional power based on interim treatment effects
-#' gsBoundCP(x)
-#' 
-#' # compute conditional power based on original x$delta
-#' gsBoundCP(x, theta=x$delta)
-#' 
+#' @export
+#' @rdname gsBoundCP
+# gsBoundCP function [sinew] ----
 gsBoundCP <- function(x, theta="thetahat", r=18){   if (!(methods::is(x, "gsProbability") || methods::is(x, "gsDesign")))
     {  stop("gsPI: class(x) must be gsProbability or gsDesign")
     }
@@ -378,6 +387,11 @@ gsBoundCP <- function(x, theta="thetahat", r=18){   if (!(methods::is(x, "gsProb
     if (test.type > 1) cbind(CPlo, CPhi) else CPhi
 }
 
+# gsPosterior roxy [sinew] ---- 
+#' @rdname gsCP
+#' @export 
+#' @importFrom methods is
+# gsPosterior function [sinew] ----
 gsPosterior <- function(x=gsDesign(), i=1, zi=NULL, prior=normalGrid(),r=18){   if (is.null(prior$gridwgts)) prior$gridwgts <- array(1,length(prior$z))
     checkLengths(prior$z, prior$density, prior$gridwgts)
     checkVector(prior$gridwgts, "numeric", c(0, Inf), c(TRUE, FALSE))
@@ -414,9 +428,10 @@ gsPosterior <- function(x=gsDesign(), i=1, zi=NULL, prior=normalGrid(),r=18){   
                 gridwgts=prior$gridwgts, wgts=prior$gridwgts*posterior))
 }
 
-###
-# Hidden Functions
-###
+
+# gsZ roxy [sinew] ---- 
+#' @importFrom stats dnorm
+# gsZ function [sinew] ----
 gsZ <- function(x, theta, i, zi){
     mu <- sqrt(x$n.I[i]) * theta
     xx <- matrix(0,nrow=length(zi),ncol=length(theta))
@@ -424,9 +439,46 @@ gsZ <- function(x, theta, i, zi){
     list(zi=zi, theta=theta, density=xx)
 }
 
+# postfn roxy [sinew] ---- 
+#' @importFrom stats pnorm
+# postfn function [sinew] ----
 postfn <- function(x, PP, d, i, zi, j, theta, wgts){   newmean <- (d$timing[j]-d$timing[i]) * theta * sqrt(d$n.I[d$k])
     newsd <- sqrt(d$timing[j]-d$timing[i])
     pprob <- stats::pnorm(x*sqrt(d$timing[j])-zi*sqrt(d$timing[i]), mean=newmean, 
                    sd=newsd, lower.tail=FALSE)
     sum(pprob * wgts) - PP
+}
+
+# gsPOS roxy [sinew] ---- 
+#' @export
+#' @rdname gsCP
+# gsPOS function [sinew] ----
+gsPOS <- function(x, theta, wgts){
+  if (!methods::is(x,c("gsProbability","gsDesign")))
+    stop("x must have class gsProbability or gsDesign")
+  checkVector(theta, "numeric")
+  checkVector(wgts, "numeric")
+  checkLengths(theta, wgts)    
+  x <- gsProbability(theta = theta, d=x)
+  one <- array(1, x$k)
+  as.double(one %*% x$upper$prob %*% wgts)
+}
+
+# gsCPOS roxy [sinew] ---- 
+#' @export
+#' @rdname gsCP
+# gsCPOS function [sinew] ----
+gsCPOS <- function(i, x, theta, wgts){
+  if (!methods::is(x,c("gsProbability","gsDesign")))
+    stop("x must have class gsProbability or gsDesign")
+  checkScalar(i, "integer", c(1, x$k), c(TRUE, FALSE))
+  checkVector(theta, "numeric")
+  checkVector(wgts, "numeric")
+  checkLengths(theta, wgts)    
+  x <- gsProbability(theta = theta, d=x)
+  v <- c(array(1, i), array(0, (x$k - i)))
+  pAi <- 1 - as.double(v %*% (x$upper$prob + x$lower$prob) %*% wgts)
+  v <- 1 - v
+  pAiB <- as.double(v %*% x$upper$prob %*% wgts)
+  pAiB / pAi
 }

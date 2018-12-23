@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsDesign.R
 \name{gsDesign}
 \alias{gsDesign}
-\title{2.1: Design Derivation}
+\title{Design Derivation}
 \usage{
 gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1,
   astar = 0, delta = 0, n.fix = 1, timing = 1, sfu = sfHSD,
@@ -168,8 +168,7 @@ includes the overrun at each interim.}
 \description{
 \code{gsDesign()} is used to find boundaries and trial size required for a
 group sequential design.
-}
-\details{
+
 Many parameters normally take on default values and thus do not require
 explicit specification. One- and two-sided designs are supported. Two-sided
 designs may be symmetric or asymmetric. Wang-Tsiatis designs, including
@@ -252,7 +251,6 @@ plot(x, plottype=2)
 # same design, but with relative sample sizes
 gsDesign(k=4, timing=timing, sfu=sfPoints, sfupar=sfup, sfl=sfPoints,
 sflpar=sflp)
-
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential
