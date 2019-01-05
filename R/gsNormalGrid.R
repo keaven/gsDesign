@@ -90,6 +90,7 @@
 #' @export
 #' @rdname normalGrid
 #' @importFrom stats dnorm
+#' @useDynLib gsDesign stdnorpts
 # normalGrid function [sinew] ----
 normalGrid <- function(r=18, bounds=c(0, 0), mu=0, sigma=1){    
     checkScalar(r,"integer", c(1, 80))
