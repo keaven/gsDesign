@@ -8,7 +8,7 @@ Authors@R:
            email = "keaven_anderson@merck.com",
            role = c('aut','cre'))
 Depends: R (>= 3.0.0)
-Imports: plyr, methods, stats, utils, ggplot2, xtable,tools,graphics
+Imports: stats,utils,ggplot2,methods,xtable,plyr,tools,graphics
 Suggests: knitr, scales, rmarkdown, testthat
 VignetteBuilder: knitr 
 License: GPL (>= 2)

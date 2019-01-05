@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsSpending.R
 \name{sfPower}
 \alias{sfPower}
-\title{4.2: Kim-DeMets (power) Spending Function}
+\title{Kim-DeMets (power) Spending Function}
 \usage{
 sfPower(alpha, t, param)
 }
@@ -34,8 +34,7 @@ Jennison and Turnbull (2000). Normally it will be passed to
 design. In this case, the user does not need to know the calling sequence.
 The calling sequence is useful, however, when the user wishes to plot a
 spending function as demonstrated below in examples.
-}
-\details{
+
 A Kim-DeMets spending function takes the form \deqn{f(t;\alpha,\rho)=\alpha
 t^\rho}{f(t; alpha, rho) = alpha t^rho} where \eqn{\rho}{rho} is the value
 passed in \code{param}. See examples below for a range of values of
@@ -81,7 +80,6 @@ legend(
   x = c(.0, .357), y = .025 * c(.65, .85), lty = 1:3, bty = "n", col = 2,
   legend = c("gamma= -4", "gamma= -2", "gamma=1")
 )
-# sfPower function [sinew] ----
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

@@ -1,5 +1,27 @@
 # conditional power function
 # condPower function [sinew] ----
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param z1 PARAM_DESCRIPTION
+#' @param n2 PARAM_DESCRIPTION
+#' @param z2 PARAM_DESCRIPTION, Default: z2NC
+#' @param theta PARAM_DESCRIPTION, Default: NULL
+#' @param x PARAM_DESCRIPTION, Default: gsDesign(k = 2, timing = 0.5, beta = beta)
+#' @param ... PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @author Keaven Anderson, PhD
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @export 
+#' @rdname condPower
+#' @seealso 
+#'  
+#' @importFrom stats pnorm
 condPower <- function(z1, n2, z2 = z2NC, theta = NULL,
                       x = gsDesign(k = 2, timing = .5, beta = beta),
                       ...) {
@@ -34,9 +56,9 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 
 
 # ssrCP roxy [sinew] ----
-#' Sample size re-estimation based on conditional power
+#' @title Sample size re-estimation based on conditional power
 #'
-#' \code{ssrCP()} adapts 2-stage group sequential designs to 2-stage sample
+#' @description \code{ssrCP()} adapts 2-stage group sequential designs to 2-stage sample
 #' size re-estimation designs based on interim analysis conditional power. This
 #' is a simple case of designs developed by Lehmacher and Wassmer, Biometrics
 #' (1999).  The conditional power designs of Bauer and Kohne (1994), Proschan
@@ -93,7 +115,6 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #' suggest that using the parameter value for which the trial was originally
 #' powered is a good choice.
 #'
-#' @aliases ssrCP plot.ssrCP Power.ssrCP condPower z2NC z2Z z2Fisher
 #' @param z1 Scalar or vector with interim standardized Z-value(s). Input of
 #' multiple values makes it easy to plot the revised sample size as a function
 #' of the interim test statistic.
@@ -151,33 +172,6 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #' \code{theta} and \code{delta} is determined by the \code{delta0} and
 #' \code{delta1} values from \code{x}: \code{delta = delta0 +
 #' theta(delta1-delta0)}.}
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \code{\link{gsDesign}}
-#' @references Bauer, Peter and Kohne, F., Evaluation of experiments with
-#' adaptive interim analyses, Biometrics, 50:1029-1041, 1994.
-#'
-#' Chen, YHJ, DeMets, DL and Lan, KKG. Increasing the sample size when the
-#' unblinded interim result is promising, Statistics in Medicine, 23:1023-1038,
-#' 2004.
-#'
-#' Gao, P, Ware, JH and Mehta, C, Sample size re-estimation for adaptive
-#' sequential design in clinical trials, Journal of Biopharmaceutical
-#' Statistics", 18:1184-1196, 2008.
-#'
-#' Jennison, C and Turnbull, BW.  Mid-course sample size modification in
-#' clinical trials based on the observed treatment effect. Statistics in
-#' Medicine, 22:971-993", 2003.
-#'
-#' Lehmacher, W and Wassmer, G. Adaptive sample size calculations in group
-#' sequential trials, Biometrics, 55:1286-1290, 1999.
-#'
-#' Liu, Q and Chi, GY., On sample size and inference for two-stage adaptive
-#' designs, Biometrics, 57:172-177, 2001.
-#'
-#' Mehta, C and Pocock, S. Adaptive increase in sample size when interim
-#' results are promising: A practical guide with examples, Statistics in
-#' Medicine, 30:3267-3284, 2011.
-#' @keywords design
 #' @examples
 #' 
 #' # Following is a template for entering parameters for ssrCP
@@ -288,8 +282,39 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #'   xlab(expression(delta)) + ylab("Expected sample size")
 #' # plot power by design and effect size
 #' ggplot(data = y3, aes(x = delta, y = Power, col = CP.effect.size)) + geom_line() + xlab(expression(delta))
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \code{\link{gsDesign}}
+#' @references Bauer, Peter and Kohne, F., Evaluation of experiments with
+#' adaptive interim analyses, Biometrics, 50:1029-1041, 1994.
+#'
+#' Chen, YHJ, DeMets, DL and Lan, KKG. Increasing the sample size when the
+#' unblinded interim result is promising, Statistics in Medicine, 23:1023-1038,
+#' 2004.
+#'
+#' Gao, P, Ware, JH and Mehta, C, Sample size re-estimation for adaptive
+#' sequential design in clinical trials, Journal of Biopharmaceutical
+#' Statistics", 18:1184-1196, 2008.
+#'
+#' Jennison, C and Turnbull, BW.  Mid-course sample size modification in
+#' clinical trials based on the observed treatment effect. Statistics in
+#' Medicine, 22:971-993", 2003.
+#'
+#' Lehmacher, W and Wassmer, G. Adaptive sample size calculations in group
+#' sequential trials, Biometrics, 55:1286-1290, 1999.
+#'
+#' Liu, Q and Chi, GY., On sample size and inference for two-stage adaptive
+#' designs, Biometrics, 57:172-177, 2001.
+#'
+#' Mehta, C and Pocock, S. Adaptive increase in sample size when interim
+#' results are promising: A practical guide with examples, Statistics in
+#' Medicine, 30:3267-3284, 2011.
+#' @keywords design
+#' @aliases ssrCP plot.ssrCP Power.ssrCP condPower z2NC z2Z z2Fisher
+#' @rdname ssrCP
+#' @importFrom stats qnorm
+#' @export
 #' 
-#' # ssrCP function [sinew] ----
+# ssrCP function [sinew] ----
 ssrCP <- function(z1, theta = NULL, maxinc = 2, overrun = 0,
                   beta = x$beta, cpadj = c(.5, 1 - beta),
                   x = gsDesign(k = 2, timing = .5),
@@ -383,6 +408,8 @@ ssrCP <- function(z1, theta = NULL, maxinc = 2, overrun = 0,
   return(rval)
 }
 
+#' @export
+#' @rdname ssrCP
 # plot.ssrCP function [sinew] ----
 plot.ssrCP <- function(x, z1ticks = NULL, mar = c(7, 4, 4, 4) + .1, ylab = "Adapted sample size", xlaboffset = -.2, lty = 1, col = 1, ...) {
   graphics::par(mar = mar)
@@ -404,6 +431,22 @@ plot.ssrCP <- function(x, z1ticks = NULL, mar = c(7, 4, 4, 4) + .1, ylab = "Adap
 }
 
 # normal combination test cutoff for z2
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param z1 PARAM_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param ... PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname z2NC
+#' @export 
+#' @author Keaven Anderson, PhD
 # z2NC function [sinew] ----
 z2NC <- function(z1, x, ...) {
   z2 <- (x$upper$bound[2] - z1 * sqrt(x$timing[1])) /
@@ -412,8 +455,24 @@ z2NC <- function(z1, x, ...) {
   return(z2)
 }
 
-# sufficient statistic cutoff for z2
-# z2Z function [sinew] ----
+#' @title FUNCTION_TITLE
+#' @description Sufficient statistic cutoff for z2
+#' @param z1 PARAM_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param n2 PARAM_DESCRIPTION, Default: x$n.I[2] - x$n.I[1]
+#' @param ... PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname z2Z
+#' @export 
+#' @author Keaven Anderson, PhD
+
 z2Z <- function(z1, x, n2 = x$n.I[2] - x$n.I[1], ...) {
   N2 <- x$n.I[1] + n2
   z2 <- (x$upper$bound[2] - z1 * sqrt(x$n.I[1] / N2)) /
@@ -422,8 +481,25 @@ z2Z <- function(z1, x, n2 = x$n.I[2] - x$n.I[1], ...) {
   return(z2)
 }
 
-# Fisher's combination text
-# z2Fisher function [sinew] ----
+#' @title Fisher's combination test
+#' @description FUNCTION_DESCRIPTION
+#' @param z1 PARAM_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param ... PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @seealso 
+#'  \code{\link[stats]{Chisquare}},\code{\link[stats]{Normal}}
+#' @rdname z2Fisher
+#' @export 
+#' @author Keaven Anderson, PhD
+#' @importFrom stats pchisq pnorm qnorm qchisq
 z2Fisher <- function(z1, x, ...) {
   z2 <- z1
   indx <- stats::pchisq(-2 * log(stats::pnorm(-z1)), 4, lower.tail = F) <=
@@ -439,7 +515,27 @@ z2Fisher <- function(z1, x, ...) {
   return(z2)
 }
 
-# Power.ssrCP function [sinew] ----
+
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param theta PARAM_DESCRIPTION, Default: NULL
+#' @param delta PARAM_DESCRIPTION, Default: NULL
+#' @param r PARAM_DESCRIPTION, Default: 18
+#' @return OUTPUT_DESCRIPTION
+#' @author Keaven Anderson, PhD
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @export 
+#' @rdname Power.ssrCP
+#' @seealso 
+#'  
+#' @importFrom stats pnorm dnorm uniroot
 Power.ssrCP <- function(x, theta = NULL, delta = NULL, r = 18) {
   if (class(x) != "ssrCP") {
     stop("Power.ssrCP must be called with x of class ssrCP")

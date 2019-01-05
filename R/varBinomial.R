@@ -1,8 +1,8 @@
 # varBinomial roxy [sinew] ----
-#' 3.2: Testing, Confidence Intervals, Sample Size and Power for Comparing Two
+#' @title Testing, Confidence Intervals, Sample Size and Power for Comparing Two
 #' Binomial Rates
 #'
-#' Support is provided for sample size estimation, power, testing, confidence
+#' @description Support is provided for sample size estimation, power, testing, confidence
 #' intervals and simulation for fixed sample size trials (that is, not group
 #' sequential or adaptive) with two arms and binary outcomes.  Both superiority
 #' and non-inferiority trials are considered. While all routines default to
@@ -69,7 +69,6 @@
 #' consideration would be \code{p1-p2-delta0}$>0$. However, the alternative can
 #' have \code{p1-p2-delta0}$<0$.
 #'
-#' @aliases testBinomial ciBinomial nBinomial simBinomial varBinomial
 #' @param p1 event rate in group 1 under the alternative hypothesis
 #' @param p2 event rate in group 2 under the alternative hypothesis
 #' @param alpha type I error; see \code{sided} below to distinguish between 1-
@@ -157,22 +156,6 @@
 #' the alternative hypothesis.} \item{p1}{As input} \item{p2}{As input}
 #' \item{p10}{group 1 event rate used for null hypothesis} \item{p20}{group 2
 #' event rate used for null hypothesis}
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
-#' @references Farrington, CP and Manning, G (1990), Test statistics and sample
-#' size formulae for comparative binomial trials with null hypothesis of
-#' non-zero risk difference or non-unity relative risk. \emph{Statistics in
-#' Medicine}; 9: 1447-1454.
-#'
-#' Fleiss, JL, Tytun, A and Ury (1980), A simple approximation for calculating
-#' sample sizes for comparing independent proportions.
-#' \emph{Biometrics};36:343-346.
-#'
-#' Gordon, I and Watson R (1985), The myth of continuity-corrected sample size
-#' formulae. \emph{Biometrics}; 52: 71-76.
-#'
-#' Miettinen, O and Nurminen, M (1985), Comparative analysis of two rates.
-#' \emph{Statistics in Medicine}; 4 : 213-226.
-#' @keywords design
 #' @examples
 #' 
 #' # Compute z-test test statistic comparing 39/500 to 13/500
@@ -271,7 +254,26 @@
 #' varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0, scale = "RR")
 #' # blinded estimate of log-odds-ratio
 #' varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0, scale = "OR")
-#' # varBinomial function [sinew] ----
+#' @aliases testBinomial ciBinomial nBinomial simBinomial
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
+#' @references Farrington, CP and Manning, G (1990), Test statistics and sample
+#' size formulae for comparative binomial trials with null hypothesis of
+#' non-zero risk difference or non-unity relative risk. \emph{Statistics in
+#' Medicine}; 9: 1447-1454.
+#'
+#' Fleiss, JL, Tytun, A and Ury (1980), A simple approximation for calculating
+#' sample sizes for comparing independent proportions.
+#' \emph{Biometrics};36:343-346.
+#'
+#' Gordon, I and Watson R (1985), The myth of continuity-corrected sample size
+#' formulae. \emph{Biometrics}; 52: 71-76.
+#'
+#' Miettinen, O and Nurminen, M (1985), Comparative analysis of two rates.
+#' \emph{Statistics in Medicine}; 4 : 213-226.
+#' @keywords design
+#' @rdname varBinomial
+#' @export
+# varBinomial function [sinew] ----
 varBinomial <- function(x, n, delta0 = 0, ratio = 1, scale = "Difference") { # check input arguments
   checkVector(x, "integer", c(1, Inf))
   checkScalar(n, "integer", c(1, Inf))

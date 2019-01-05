@@ -6,7 +6,6 @@
 \alias{nBinomial1Sample}
 \alias{binomialSPRT}
 \alias{plot.gsBinomialExact}
-\alias{plot.binomialSPRT}
 \title{One-Sample Binomial Routines}
 \usage{
 gsBinomialExact(k = 2, theta = c(0.1, 0.2), n.I = c(50, 100),
@@ -16,8 +15,6 @@ binomialSPRT(p0 = 0.05, p1 = 0.25, alpha = 0.1, beta = 0.15,
   minn = 10, maxn = 35)
 
 \method{plot}{gsBinomialExact}(x, plottype = 1, ...)
-
-\method{plot}{binomialSPRT}(x, plottype = 1, ...)
 }
 \arguments{
 \item{k}{Number of analyses planned, including interim and final.}

@@ -3,7 +3,7 @@
 \name{sfLinear}
 \alias{sfLinear}
 \alias{sfStep}
-\title{4.6: Piecewise Linear and Step Function Spending Functions}
+\title{Piecewise Linear and Step Function Spending Functions}
 \usage{
 sfLinear(alpha, t, param)
 }
@@ -56,8 +56,7 @@ function family for a design. When passed to \code{gsDesign()}, the value of
 \code{param} would be passed to \code{sfLinear()} or \code{sfStep()} through
 the \code{gsDesign()} arguments \code{sfupar} for the upper bound and
 \code{sflpar} for the lower bound.
-}
-\details{
+
 Note that \code{sfStep()} allows setting a particular level of spending when
 the timing is not strictly known; an example shows how this can inflate Type
 I error when timing of analyses are changed based on knowing the treatment
@@ -134,7 +133,6 @@ z1alt <- s1alt / sqrt(178)
 z2alt <- (s1alt + s2) / sqrt(178 + n2)
 sum(z1alt >= x$upper$bound[1] | z2alt >= x$upper$bound[2]) / 1000000
 
-# sfLinear function [sinew] ----
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

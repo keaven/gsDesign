@@ -1,7 +1,6 @@
-###
-# Exported Functions
-###
-
+# print.gsProbability roxy [sinew] ----
+#' @export
+#' @importFrom stats pnorm
 # print.gsProbability function [sinew] ----
 print.gsProbability <- function(x, ...) {
   ntxt <- "N "
@@ -62,6 +61,9 @@ print.gsProbability <- function(x, ...) {
   invisible(x)
 }
 
+
+# summary.gsDesign roxy [sinew] ----
+#' @export
 # summary.gsDesign function [sinew] ----
 summary.gsDesign <- function(object, information = FALSE, timeunit = "months", ...) {
   out <- NULL
@@ -115,6 +117,8 @@ summary.gsDesign <- function(object, information = FALSE, timeunit = "months", .
   return(out)
 }
 
+# print.gsDesign roxy [sinew] ----
+#' @export
 # print.gsDesign function [sinew] ----
 print.gsDesign <- function(x, ...) {
   if (x$nFixSurv > 0) {
@@ -255,6 +259,8 @@ print.gsDesign <- function(x, ...) {
   invisible(x)
 }
 
+# print.nSurvival roxy [sinew] ----
+#' @export
 # print.nSurvival function [sinew] ----
 print.nSurvival <- function(x, ...) {
   if (class(x) != "nSurvival") stop("print.nSurvival: primary argument must have class nSurvival")
@@ -770,6 +776,8 @@ sfprint <- function(x) {
   cat("\n")
 }
 
+# summary.spendfn roxy [sinew] ----
+#' @export
 # summary.spendfn function [sinew] ----
 summary.spendfn <- function(object, ...) {
   # print spending function information

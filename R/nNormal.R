@@ -1,7 +1,7 @@
 # nNormal roxy [sinew] ----
-#' Normal distribution sample size (2-sample)
+#' @title Normal distribution sample size (2-sample)
 #'
-#' \code{nNormal()} computes a fixed design sample size for comparing 2 means
+#' @description \code{nNormal()} computes a fixed design sample size for comparing 2 means
 #' where variance is known. T The function allows computation of sample size
 #' for a non-inferiority hypothesis. Note that you may wish to investigate
 #' other R packages such as the \code{pwr} package which uses the t-distr
@@ -42,15 +42,6 @@
 #' input} \item{sd2}{As input} \item{delta1}{As input} \item{delta0}{As input}
 #' \item{se}{standard error for estimate of difference in treatment group
 #' means}
-#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
-#' @seealso \link{gsDesign package overview}
-#' @references Lachin JM (1981), Introduction to sample size determination and
-#' power analysis for clinical trials. \emph{Controlled Clinical Trials}
-#' 2:93-113.
-#'
-#' Snedecor GW and Cochran WG (1989), Statistical Methods. 8th ed. Ames, IA:
-#' Iowa State University Press.
-#' @keywords design
 #' @examples
 #' 
 #' # EXAMPLES
@@ -62,8 +53,19 @@
 #' nNormal(delta1 = .5, sd = 1.1, alpha = .025, beta = .2, ratio = 2)
 #' # non-inferiority assuming a better effect than null
 #' nNormal(delta1 = .5, delta0 = -.1, sd = 1.2)
-#' 
-#' # nNormal function [sinew] ----
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
+#' @seealso \link{gsDesign package overview}
+#' @references Lachin JM (1981), Introduction to sample size determination and
+#' power analysis for clinical trials. \emph{Controlled Clinical Trials}
+#' 2:93-113.
+#'
+#' Snedecor GW and Cochran WG (1989), Statistical Methods. 8th ed. Ames, IA:
+#' Iowa State University Press.
+#' @keywords design
+#' @rdname nNormal
+#' @importFrom stats qnorm pnorm
+#' @export
+# nNormal function [sinew] ----
 nNormal <- function(delta1 = 1, sd = 1.7, sd2 = NULL, alpha = .025,
                     beta = .1, ratio = 1, sided = 1, n = NULL, delta0 = 0, outtype = 1) { # check input arguments
   checkVector(delta1, "numeric", c(-Inf, Inf), c(FALSE, FALSE))

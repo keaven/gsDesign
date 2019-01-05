@@ -366,11 +366,26 @@ plot.gsBinomialExact <- function(x, plottype = 1, ...) {
   return(p)
 }
 
-# plot.binomialSPRT roxy [sinew] ----
-#' @rdname gsBinomialExact
-#' @export
+
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param plottype PARAM_DESCRIPTION, Default: 1
+#' @param ... PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @author Keaven Anderson, PhD
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @export 
+#' @rdname plot.binomialSPRT
+#' @seealso 
+#'  \code{\link[ggplot2]{geom_abline}}
 #' @importFrom ggplot2 geom_abline
-# plot.binomialSPRT function [sinew] ----
 plot.binomialSPRT <- function(x, plottype = 1, ...) {
   p <- plot.gsBinomialExact(x, plottype = plottype, ...)
   if (plottype == 1) {

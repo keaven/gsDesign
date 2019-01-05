@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsSpending.R
 \name{sfPoints}
 \alias{sfPoints}
-\title{4.5: Pointwise Spending Function}
+\title{Pointwise Spending Function}
 \usage{
 sfPoints(alpha, t, param)
 }
@@ -85,7 +85,6 @@ x <- gsDesign(
 )
 x
 
-# sfPoints function [sinew] ----
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

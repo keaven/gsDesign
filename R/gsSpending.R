@@ -780,9 +780,9 @@ sfNormal <- function(alpha, t, param) {
 }
 
 # sfLinear roxy [sinew] ----
-#' 4.6: Piecewise Linear and Step Function Spending Functions
+#' @title  Piecewise Linear and Step Function Spending Functions
 #'
-#' The function \code{sfLinear()} allows specification of a piecewise linear
+#' @description The function \code{sfLinear()} allows specification of a piecewise linear
 #' spending function. The function \code{sfStep()} specifies a step function
 #' spending function. Both functions provide complete flexibility in setting
 #' spending at desired timepoints in a group sequential design. Normally these
@@ -799,7 +799,6 @@ sfNormal <- function(alpha, t, param) {
 #' effect at an interim.
 #'
 #'
-#' @aliases sfLinear sfStep
 #' @param alpha Real value \eqn{> 0} and no more than 1. Normally,
 #' \code{alpha=0.025} for one-sided Type I error specification or
 #' \code{alpha=0.1} for Type II error specification. However, this could be set
@@ -832,15 +831,6 @@ sfNormal <- function(alpha, t, param) {
 #' was not previously spent.
 #'
 #' See \code{\link{Spending function overview}} for further details.
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
-#' \link{gsDesign package overview}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' @keywords design
 #' @examples
 #' 
 #' # set up alpha spending and beta spending to be piecewise linear
@@ -907,7 +897,20 @@ sfNormal <- function(alpha, t, param) {
 #' z2alt <- (s1alt + s2) / sqrt(178 + n2)
 #' sum(z1alt >= x$upper$bound[1] | z2alt >= x$upper$bound[2]) / 1000000
 #' 
-#' # sfLinear function [sinew] ----
+#' @aliases sfLinear sfStep
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
+#' \link{gsDesign package overview}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @rdname sfLinear
+#' @export
+#' 
+# sfLinear function [sinew] ----
 sfLinear <- function(alpha, t, param) {
   x <- list(
     name = "Piecewise linear", param = param, parname = "line points", sf = sfLinear, spend = NULL,
@@ -960,6 +963,22 @@ sfLinear <- function(alpha, t, param) {
   x
 }
 
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param alpha PARAM_DESCRIPTION
+#' @param t PARAM_DESCRIPTION
+#' @param param PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @author Keaven Anderson, PhD
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @export 
+#' @rdname sfStep
 # sfStep function [sinew] ----
 sfStep <- function(alpha, t, param) {
   x <- list(
@@ -1014,9 +1033,9 @@ sfStep <- function(alpha, t, param) {
 }
 
 # sfPoints roxy [sinew] ----
-#' 4.5: Pointwise Spending Function
+#' @title  Pointwise Spending Function
 #'
-#' The function \code{sfPoints} implements a spending function with values
+#' @description The function \code{sfPoints} implements a spending function with values
 #' specified for an arbitrary set of specified points. It is now recommended to
 #' use sfLinear rather than sfPoints. Normally \code{sfPoints} will be passed
 #' to \code{gsDesign} in the parameter \code{sfu} for the upper bound or
@@ -1041,15 +1060,6 @@ sfStep <- function(alpha, t, param) {
 #' \code{t}; must be >=0 and <=1.
 #' @return An object of type \code{spendfn}. See spending functions for further
 #' details.
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
-#' \link{gsDesign package overview}, \link{sfLogistic}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' @keywords design
 #' @examples
 #' 
 #' # example to specify spending on a pointwise basis
@@ -1093,7 +1103,18 @@ sfStep <- function(alpha, t, param) {
 #' )
 #' x
 #' 
-#' # sfPoints function [sinew] ----
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
+#' \link{gsDesign package overview}, \link{sfLogistic}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @rdname sfPoints
+#' @export
+# sfPoints function [sinew] ----
 sfPoints <- function(alpha, t, param) {
   x <- list(
     name = "User-specified", param = param, parname = "Points", sf = sfPoints, spend = NULL,
@@ -1137,9 +1158,9 @@ sfPoints <- function(alpha, t, param) {
 }
 
 # sfPower roxy [sinew] ----
-#' 4.2: Kim-DeMets (power) Spending Function
+#' @title Kim-DeMets (power) Spending Function
 #'
-#' The function \code{sfPower()} implements a Kim-DeMets (power) spending
+#' @description The function \code{sfPower()} implements a Kim-DeMets (power) spending
 #' function. This is a flexible, one-parameter spending function recommended by
 #' Jennison and Turnbull (2000). Normally it will be passed to
 #' \code{gsDesign()} in the parameter \code{sfu} for the upper bound or
@@ -1167,15 +1188,6 @@ sfPoints <- function(alpha, t, param) {
 #' is (0,15]
 #' @return An object of type \code{spendfn}. See \link{Spending function
 #' overview} for further details.
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
-#' \link{gsDesign package overview}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' @keywords design
 #' @examples
 #' 
 #' # design a 4-analysis trial using a Kim-DeMets spending function
@@ -1210,7 +1222,18 @@ sfPoints <- function(alpha, t, param) {
 #'   x = c(.0, .357), y = .025 * c(.65, .85), lty = 1:3, bty = "n", col = 2,
 #'   legend = c("gamma= -4", "gamma= -2", "gamma=1")
 #' )
-#' # sfPower function [sinew] ----
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
+#' \link{gsDesign package overview}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @rdname sfPower
+#' @export
+# sfPower function [sinew] ----
 sfPower <- function(alpha, t, param) {
   # K. Wills 12/11/08: restrict param range
   # checkScalar(param, "numeric", c(0, Inf), c(FALSE, TRUE))
@@ -1231,9 +1254,9 @@ sfPower <- function(alpha, t, param) {
 }
 
 # sfTDist roxy [sinew] ----
-#' 4.8: t-distribution Spending Function
+#' @title t-distribution Spending Function
 #'
-#' The function \code{sfTDist()} provides perhaps the maximum flexibility among
+#' @description The function \code{sfTDist()} provides perhaps the maximum flexibility among
 #' spending functions provided in the \code{gsDesign} package. This function
 #' allows fitting of three points on a cumulative spending function curve; in
 #' this case, six parameters are specified indicating an x and a y coordinate
@@ -1276,15 +1299,6 @@ sfPower <- function(alpha, t, param) {
 #' fit.
 #' @return An object of type \code{spendfn}. See spending functions for further
 #' details.
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
-#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
-#' \link{gsDesign package overview}
-#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
-#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
-#' @keywords design
 #' @examples
 #' 
 #' # 3-parameter specification: a,  b,  df
@@ -1329,7 +1343,19 @@ sfPower <- function(alpha, t, param) {
 #'   x = c(.0, .3), y = .025 * c(.7, 1), lty = 1:5,
 #'   legend = c("df = 1", "df = 1.5", "df = 3", "df = 10", "df = 100")
 #' )
-#' # sfTDist function [sinew] ----
+#' @note The manual is not linked to this help file, but is available in
+#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
+#' installed.
+#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
+#' @seealso \link{Spending function overview}, \code{\link{gsDesign}},
+#' \link{gsDesign package overview}
+#' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
+#' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' @keywords design
+#' @rdname sfTDist
+#' @export
+#' @importFrom stats qt uniroot pt
+# sfTDist function [sinew] ----
 sfTDist <- function(alpha, t, param) {
   x <- list(
     name = "t-distribution", param = param, parname = c("a", "b", "df"), sf = sfTDist, spend = NULL,

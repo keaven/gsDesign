@@ -72,6 +72,7 @@ Accrual of events of events over time is approximated assuming failure rates are
 ```{r enrollment, message=FALSE, echo=FALSE, results="hide"}
 # code here applies to both fixed and group sequential design sections below.
 library(gsDesign)
+library(xtable)
 # enrollment period durations; the last of these will be extended if T=NULL below
 R <- c(1,2,3,4)
 # relative enrollment rates during above periods

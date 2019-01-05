@@ -6,7 +6,7 @@
 \alias{ciBinomial}
 \alias{nBinomial}
 \alias{simBinomial}
-\title{3.2: Testing, Confidence Intervals, Sample Size and Power for Comparing Two
+\title{Testing, Confidence Intervals, Sample Size and Power for Comparing Two
 Binomial Rates}
 \usage{
 varBinomial(x, n, delta0 = 0, ratio = 1, scale = "Difference")
@@ -127,8 +127,7 @@ sequential or adaptive) with two arms and binary outcomes.  Both superiority
 and non-inferiority trials are considered. While all routines default to
 comparisons of risk-difference, options to base computations on risk-ratio
 and odds-ratio are also included.
-}
-\details{
+
 \code{nBinomial()} computes sample size or power using the method of
 Farrington and Manning (1990) for a trial to test the difference between two
 binomial event rates.  The routine can be used for a test of superiority or
@@ -287,7 +286,6 @@ varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0)
 varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0, scale = "RR")
 # blinded estimate of log-odds-ratio
 varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0, scale = "OR")
-# varBinomial function [sinew] ----
 }
 \references{
 Farrington, CP and Manning, G (1990), Test statistics and sample

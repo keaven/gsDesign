@@ -72,8 +72,7 @@ for the sample size method they propose. Piecewise exponential survival and
 dropout rates are supported as well as piecewise uniform enrollment. A
 stratified population is allowed. Output is the expected number of events
 observed given a trial duration and the above rate parameters.
-}
-\details{
+
 \code{eEvents()} produces an object of class \code{eEvents} with the number
 of subjects and events for a set of pre-specified trial parameters, such as
 accrual duration and follow-up period. The underlying power calculation is
@@ -103,7 +102,6 @@ n <- eEvents(
   gamma = matrix(.5, ncol = 6), R = 2, T = 4
 )
 
-# eEvents function [sinew] ----
 }
 \references{
 Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and

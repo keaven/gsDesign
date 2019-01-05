@@ -1,6 +1,11 @@
-# #'@export function [sinew] ----
+# xtable.gsDesign roxy [sinew] ----
+#' @seealso 
+#'  \code{\link[stats]{Normal}}
+#'  \code{\link[xtable]{xtable}}
+#' @importFrom stats pnorm
 #' @importFrom xtable xtable
 #' @export
+# xtable.gsDesign function [sinew] ----
 xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digits = NULL, display = NULL,
                             footnote = NULL, fnwid = "9cm", deltaname = "delta",
                             Nname = "N", logdelta = FALSE, ...) {

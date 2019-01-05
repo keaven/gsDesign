@@ -13,6 +13,10 @@
 ssrCP(z1, theta = NULL, maxinc = 2, overrun = 0, beta = x$beta,
   cpadj = c(0.5, 1 - beta), x = gsDesign(k = 2, timing = 0.5),
   z2 = z2NC, ...)
+
+\method{plot}{ssrCP}(x, z1ticks = NULL, mar = c(7, 4, 4, 4) + 0.1,
+  ylab = "Adapted sample size", xlaboffset = -0.2, lty = 1,
+  col = 1, ...)
 }
 \arguments{
 \item{z1}{Scalar or vector with interim standardized Z-value(s). Input of
@@ -51,18 +55,6 @@ the design \code{x} and the stage 2 sample size.}
 user-supplied function, codez2. In the case of \code{plot.ssrCP()}, allows
 passing more graphical parameters.}
 
-\item{delta}{Natural parameter values for power calculation; see
-\code{\link{gsDesign}} for a description of how this is related to
-\code{theta}.}
-
-\item{r}{Integer value controlling grid for numerical integration as in
-Jennison and Turnbull (2000); default is 18, range is 1 to 80.  Larger
-values provide larger number of grid points and greater accuracy.  Normally
-\code{r} will not be changed by the user.}
-
-\item{n2}{stage 2 sample size to be used in computing sufficient statistic
-when combining stage 1 and 2 test statistics.}
-
 \item{z1ticks}{Test statistic values at which tick marks are to be made on
 x-axis; automatically calculated under default of \code{NULL}}
 
@@ -75,6 +67,18 @@ x-axis; automatically calculated under default of \code{NULL}}
 \item{lty}{line type for stage 2 sample size}
 
 \item{col}{line color for stage 2 sample size}
+
+\item{delta}{Natural parameter values for power calculation; see
+\code{\link{gsDesign}} for a description of how this is related to
+\code{theta}.}
+
+\item{r}{Integer value controlling grid for numerical integration as in
+Jennison and Turnbull (2000); default is 18, range is 1 to 80.  Larger
+values provide larger number of grid points and greater accuracy.  Normally
+\code{r} will not be changed by the user.}
+
+\item{n2}{stage 2 sample size to be used in computing sufficient statistic
+when combining stage 1 and 2 test statistics.}
 }
 \value{
 \code{ssrCP} returns a list with the following items: \item{x}{As
@@ -111,8 +115,7 @@ inverse normal combination test (Lehmacher and Wassmer, 1999), the
 sufficient statistic for the complete data, and Fisher's combination test.
 \code{Power.ssrCP} computes unconditional power for a conditional power
 design derived by \code{ssrCP}.
-}
-\details{
+
 \code{condPower} is a supportive routine that also is interesting in its own
 right; it computes conditional power of a combination test given an interim
 test statistic, stage 2 sample size and combindation test statistic. While
@@ -261,8 +264,6 @@ ggplot(data = y3, aes(x = delta, y = en, col = CP.effect.size)) + geom_line() +
   xlab(expression(delta)) + ylab("Expected sample size")
 # plot power by design and effect size
 ggplot(data = y3, aes(x = delta, y = Power, col = CP.effect.size)) + geom_line() + xlab(expression(delta))
-
-# ssrCP function [sinew] ----
 }
 \references{
 Bauer, Peter and Kohne, F., Evaluation of experiments with

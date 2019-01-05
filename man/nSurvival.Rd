@@ -10,7 +10,7 @@
 \alias{Survival}
 \alias{sample}
 \alias{size}
-\title{3.4: Time-to-event sample size calculation (Lachin-Foulkes)}
+\title{Time-to-event sample size calculation (Lachin-Foulkes)}
 \usage{
 nSurvival(lambda1 = 1/12, lambda2 = 1/24, Ts = 24, Tr = 12,
   eta = 0, ratio = 1, alpha = 0.025, beta = 0.1, sided = 1,
@@ -114,8 +114,7 @@ events observed in a survival analysis. The functions \code{hrz2n()},
 \code{hrn2z()} and \code{zn2hr()} also use the Schoenfeld approximation to
 provide simple translations between hazard ratios, z-values and the number
 of events in an analysis; input variables can be given as vectors.
-}
-\details{
+
 \code{nSurvival()} produces an object of class "nSurvival" with the number
 of subjects and events for a set of pre-specified trial parameters, such as
 accrual duration and follow-up period. The calculation is based on Lachin
@@ -237,8 +236,6 @@ hrz2n(hr = 2, z = 2)
 # assuming 2-to-1 randomization of experimental to control
 hrn2z(hr = .6, n = 75, ratio = 2)
 hrn2z(hr = 1 / .6, n = 75, ratio = 2)
-
-# nSurvival function [sinew] ----
 }
 \references{
 Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and

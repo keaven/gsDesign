@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsSpending.R
 \name{sfTDist}
 \alias{sfTDist}
-\title{4.8: t-distribution Spending Function}
+\title{t-distribution Spending Function}
 \usage{
 sfTDist(alpha, t, param)
 }
@@ -51,8 +51,7 @@ for each of 3 points. Normally this function will be passed to
 design. In this case, the user does not need to know the calling sequence.
 The calling sequence is useful, however, when the user wishes to plot a
 spending function as demonstrated below in examples.
-}
-\details{
+
 The t-distribution spending function takes the form \deqn{f(t;\alpha)=\alpha
 F(a+bF^{-1}(t))} where \eqn{F()} is a cumulative t-distribution function
 with \code{df} degrees of freedom and \eqn{F^{-1}()} is its inverse.
@@ -106,7 +105,6 @@ legend(
   x = c(.0, .3), y = .025 * c(.7, 1), lty = 1:5,
   legend = c("df = 1", "df = 1.5", "df = 3", "df = 10", "df = 100")
 )
-# sfTDist function [sinew] ----
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential
