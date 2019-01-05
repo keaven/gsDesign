@@ -1,4 +1,56 @@
-testthat::context('gs stress')
+testthat::context("gs stress")
+### Utility functions for gsDesign stress tests
+
+"alpha.beta.range.util" <- function(alpha, beta, type, sf) {
+  no.err <- TRUE
+  
+  for (a in alpha)
+  {
+    for (b in beta)
+    {
+      # sfLDPocock, test.type=3: errors with alpha >= .5 and beta close to 1 - alpha
+      if (b < 1 - a - 0.1) {
+        # cat("a = ", a, "b = ", b, "\n")
+        res <- try(gsDesign(test.type = type, alpha = a, beta = b, sfu = sf))
+        
+        if (is(res, "try-error")) {
+          no.err <- FALSE
+        }
+      }
+    }
+  }
+  
+  no.err
+}
+
+"param.range.util" <- function(param, type, sf) {
+  no.err <- TRUE
+  
+  for (p in param)
+  {
+    res <- try(gsDesign(test.type = type, sfu = sf, sfupar = p))
+    
+    if (is(res, "try-error")) {
+      no.err <- FALSE
+    }
+  }
+  
+  no.err
+}
+
+a1 <- round(seq(from = 0.05, to = 0.95, by = 0.05), 2)
+a2 <- round(seq(from = 0.05, to = 0.45, by = 0.05), 2)
+b <- round(seq(from = 0.05, to = 0.95, by = 0.05), 2)
+
+# nu: sfExponential parameter
+nu <- round(seq(from = 0.1, to = 1.5, by = 0.1), 1)
+
+# rho: sfPower parameter
+rho <- round(seq(from = 1, to = 15, by = 1), 0)
+
+# gamma: sfHSD parameter
+gamma <- round(seq(from = -5, to = 5, by = 1), 0)
+
 
 testthat::test_that("test.stress.sfExp.type1", {
   no.errors <- param.range.util(param = nu, type = 1, sf = sfExponential)
@@ -61,74 +113,98 @@ testthat::test_that("test.stress.sfHSD.type6", {
 })
 
 testthat::test_that("test.stress.sfLDOF.type1", {
-  no.errors <- alpha.beta.range.util(alpha = a1, beta = b, 
-                                     type = 1, sf = sfLDOF)
+  no.errors <- alpha.beta.range.util(
+    alpha = a1, beta = b,
+    type = 1, sf = sfLDOF
+  )
   testthat::expect_true(no.errors, info = "Type 1 LDOF stress test")
 })
 
 testthat::test_that("test.stress.sfLDOF.type2", {
-  no.errors <- alpha.beta.range.util(alpha = a2, beta = b, 
-                                     type = 2, sf = sfLDOF)
+  no.errors <- alpha.beta.range.util(
+    alpha = a2, beta = b,
+    type = 2, sf = sfLDOF
+  )
   testthat::expect_true(no.errors, info = "Type 2 LDOF stress test")
 })
 
 testthat::test_that("test.stress.sfLDOF.type3", {
-  no.errors <- alpha.beta.range.util(alpha = a1, beta = b, 
-                                     type = 3, sf = sfLDOF)
+  no.errors <- alpha.beta.range.util(
+    alpha = a1, beta = b,
+    type = 3, sf = sfLDOF
+  )
   testthat::expect_true(no.errors, info = "Type 3 LDOF stress test")
 })
 
 testthat::test_that("test.stress.sfLDOF.type4", {
-  no.errors <- alpha.beta.range.util(alpha = a1, beta = b, 
-                                     type = 4, sf = sfLDOF)
+  no.errors <- alpha.beta.range.util(
+    alpha = a1, beta = b,
+    type = 4, sf = sfLDOF
+  )
   testthat::expect_true(no.errors, info = "Type 4 LDOF stress test")
 })
 
 testthat::test_that("test.stress.sfLDOF.type5", {
-  no.errors <- alpha.beta.range.util(alpha = a1, beta = b, 
-                                     type = 5, sf = sfLDOF)
+  no.errors <- alpha.beta.range.util(
+    alpha = a1, beta = b,
+    type = 5, sf = sfLDOF
+  )
   testthat::expect_true(no.errors, info = "Type 5 LDOF stress test")
 })
 
 testthat::test_that("test.stress.sfLDOF.type6", {
-  no.errors <- alpha.beta.range.util(alpha = a1, beta = b, 
-                                     type = 6, sf = sfLDOF)
+  no.errors <- alpha.beta.range.util(
+    alpha = a1, beta = b,
+    type = 6, sf = sfLDOF
+  )
   testthat::expect_true(no.errors, info = "Type 6 LDOF stress test")
 })
 
 testthat::test_that("test.stress.sfLDPocock.type1", {
-  no.errors <- alpha.beta.range.util(alpha = a1, beta = b, 
-                                     type = 1, sf = sfLDPocock)
+  no.errors <- alpha.beta.range.util(
+    alpha = a1, beta = b,
+    type = 1, sf = sfLDPocock
+  )
   testthat::expect_true(no.errors, info = "Type 1 LDPocock stress test")
 })
 
 testthat::test_that("test.stress.sfLDPocock.type2", {
-  no.errors <- alpha.beta.range.util(alpha = a2, beta = b, 
-                                     type = 2, sf = sfLDPocock)
+  no.errors <- alpha.beta.range.util(
+    alpha = a2, beta = b,
+    type = 2, sf = sfLDPocock
+  )
   testthat::expect_true(no.errors, info = "Type 2 LDPocock stress test")
 })
 
 testthat::test_that("test.stress.sfLDPocock.type3", {
-  no.errors <- alpha.beta.range.util(alpha = a1, beta = b, 
-                                     type = 3, sf = sfLDPocock)
+  no.errors <- alpha.beta.range.util(
+    alpha = a1, beta = b,
+    type = 3, sf = sfLDPocock
+  )
   testthat::expect_true(no.errors, info = "Type 3 LDPocock stress test")
 })
 
 testthat::test_that("test.stress.sfLDPocock.type4", {
-  no.errors <- alpha.beta.range.util(alpha = a1, beta = b, 
-                                     type = 4, sf = sfLDPocock)
+  no.errors <- alpha.beta.range.util(
+    alpha = a1, beta = b,
+    type = 4, sf = sfLDPocock
+  )
   testthat::expect_true(no.errors, info = "Type 4 LDPocock stress test")
 })
 
 testthat::test_that("test.stress.sfLDPocock.type5", {
-  no.errors <- alpha.beta.range.util(alpha = a1, beta = b, 
-                                     type = 5, sf = sfLDPocock)
+  no.errors <- alpha.beta.range.util(
+    alpha = a1, beta = b,
+    type = 5, sf = sfLDPocock
+  )
   testthat::expect_true(no.errors, info = "Type 5 LDPocock stress test")
 })
 
 testthat::test_that("test.stress.sfLDPocock.type6", {
-  no.errors <- alpha.beta.range.util(alpha = a1, beta = b, 
-                                     type = 6, sf = sfLDPocock)
+  no.errors <- alpha.beta.range.util(
+    alpha = a1, beta = b,
+    type = 6, sf = sfLDPocock
+  )
   testthat::expect_true(no.errors, info = "Type 6 LDPocock stress test")
 })
 

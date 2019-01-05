@@ -1,4 +1,4 @@
-testthat::context('gs probability')
+testthat::context("gs probability")
 
 testthat::test_that("test.gsProbability.a", {
   testthat::expect_error(gsDesign::gsProbability(a = "abc"), info = "Checking for incorrect variable type")

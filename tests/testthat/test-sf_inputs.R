@@ -1,16 +1,18 @@
-testthat::context('sf inputs')
+testthat::context("sf inputs")
 
 testthat::test_that("test.sfTDist.param", {
   testthat::expect_error(gsDesign::sfTDist(param = rep(1, 4)), info = "Checking for incorrect variable length")
   testthat::expect_error(gsDesign::sfTDist(param = c(1, 0, 1)), info = "Checking for out-of-range variable value")
   testthat::expect_error(gsDesign::sfTDist(param = c(1, 1, 0.5)), info = "Checking for out-of-range variable value")
-  testthat::expect_error(gsDesign::sfTDist(param = 1, 1:3/4, c(0.25, 0.5, 0.75, 0.1, 0.2, 0.3)),
-               info = "Checking for out-of-range variable value")
+  testthat::expect_error(gsDesign::sfTDist(param = 1, 1:3 / 4, c(0.25, 0.5, 0.75, 0.1, 0.2, 0.3)),
+    info = "Checking for out-of-range variable value"
+  )
 })
 
 testthat::test_that("test.sfTDist.param ", {
   testthat::expect_error(gsDesign::sfTDist(param = "abc"),
-               info = "Checking for incorrect variable type")
+    info = "Checking for incorrect variable type"
+  )
 })
 
 testthat::test_that("test.sfpower.param", {
@@ -21,8 +23,10 @@ testthat::test_that("test.sfpower.param", {
 
 testthat::test_that("test.sfnorm.param", {
   testthat::expect_error(sfnorm(param = rep(1, 3)), info = "Checking for incorrect variable length")
-  testthat::expect_error(sfnorm(param = c(0.1, 0.6, 0.2, 0.05), k = 5, 
-                      timing = c(0.1, 0.25, 0.4, 0.6)), info = "Checking for out-of-order input sequence")
+  testthat::expect_error(sfnorm(
+    param = c(0.1, 0.6, 0.2, 0.05), k = 5,
+    timing = c(0.1, 0.25, 0.4, 0.6)
+  ), info = "Checking for out-of-order input sequence")
 })
 
 testthat::test_that("test.sfnorm.param ", {
@@ -32,8 +36,10 @@ testthat::test_that("test.sfnorm.param ", {
 
 testthat::test_that("test.sflogistic.param", {
   testthat::expect_error(sflogistic(param = rep(1, 3)), info = "Checking for incorrect variable length")
-  testthat::expect_error(sflogistic(param = c(0.1, 0.6, 0.2, 0.05), k = 5, 
-                          timing = c(0.1, 0.25, 0.4, 0.6)), info = "Checking for out-of-order input sequence")
+  testthat::expect_error(sflogistic(
+    param = c(0.1, 0.6, 0.2, 0.05), k = 5,
+    timing = c(0.1, 0.25, 0.4, 0.6)
+  ), info = "Checking for out-of-order input sequence")
 })
 
 testthat::test_that("test.sflogistic.param ", {
@@ -57,8 +63,10 @@ testthat::test_that("test.sfexp.param", {
 
 testthat::test_that("test.sfcauchy.param", {
   testthat::expect_error(sfcauchy(param = rep(1, 3)), info = "Checking for incorrect variable length")
-  testthat::expect_error(sfcauchy(param = c(0.1, 0.6, 0.2, 0.05), k = 5, 
-                        timing = c(0.1, 0.25, 0.4, 0.6)), info = "Checking for out-of-order input sequence")
+  testthat::expect_error(sfcauchy(
+    param = c(0.1, 0.6, 0.2, 0.05), k = 5,
+    timing = c(0.1, 0.25, 0.4, 0.6)
+  ), info = "Checking for out-of-order input sequence")
 })
 
 testthat::test_that("test.sfcauchy.param ", {

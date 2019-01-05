@@ -1,14 +1,14 @@
-# varBinomial roxy [sinew] ---- 
+# varBinomial roxy [sinew] ----
 #' 3.2: Testing, Confidence Intervals, Sample Size and Power for Comparing Two
 #' Binomial Rates
-#' 
+#'
 #' Support is provided for sample size estimation, power, testing, confidence
 #' intervals and simulation for fixed sample size trials (that is, not group
 #' sequential or adaptive) with two arms and binary outcomes.  Both superiority
 #' and non-inferiority trials are considered. While all routines default to
 #' comparisons of risk-difference, options to base computations on risk-ratio
 #' and odds-ratio are also included.
-#' 
+#'
 #' \code{nBinomial()} computes sample size or power using the method of
 #' Farrington and Manning (1990) for a trial to test the difference between two
 #' binomial event rates.  The routine can be used for a test of superiority or
@@ -18,20 +18,20 @@
 #' routine is consistent with the Hmisc package routines \code{bsamsize} and
 #' \code{bpower} for superiority designs. Vector arguments allow computing
 #' sample sizes for multiple scenarios for comparative purposes.
-#' 
+#'
 #' \code{testBinomial()} computes a Z- or Chi-square-statistic that compares
 #' two binomial event rates using the method of Miettinen and Nurminen (1980).
 #' This can be used for superiority or non-inferiority testing. Vector
 #' arguments allow easy incorporation into simulation routines for fixed, group
 #' sequential and adaptive designs.
-#' 
+#'
 #' \code{ciBinomial()} computes confidence intervals for 1) the difference
 #' between two rates, 2) the risk-ratio for two rates or 3) the odds-ratio for
 #' two rates. This procedure provides inference that is consistent with
 #' \code{testBinomial()} in that the confidence intervals are produced by
 #' inverting the testing procedures in \code{testBinomial()}. The Type I error
 #' \code{alpha} input to \code{ciBinomial} is always interpreted as 2-sided.
-#' 
+#'
 #' \code{simBinomial()} performs simulations to estimate the power for a
 #' Miettinen and Nurminen (1985) test comparing two binomial rates for
 #' superiority or non-inferiority.  As noted in documentation for
@@ -40,19 +40,19 @@
 #' accurate.  In fact, Type I error for a continuity-corrected test is
 #' significantly lower (Gordon and Watson, 1996) than the nominal rate.  Thus,
 #' as a default no continuity corrections are performed.
-#' 
+#'
 #' \code{varBinomial} computes blinded estimates of the variance of the
 #' estimate of 1) event rate differences, 2) logarithm of the risk ratio, or 3)
 #' logarithm of the odds ratio. This is intended for blinded sample size
 #' re-estimation for comparative trials with a binary outcome.
-#' 
+#'
 #' Testing is 2-sided when a Chi-square statistic is used and 1-sided when a
 #' Z-statistic is used. Thus, these 2 options will produce substantially
 #' different results, in general. For non-inferiority, 1-sided testing is
 #' appropriate.
-#' 
+#'
 #' You may wish to round sample sizes up using \code{ceiling()}.
-#' 
+#'
 #' Farrington and Manning (1990) begin with event rates \code{p1} and \code{p2}
 #' under the alternative hypothesis and a difference between these rates under
 #' the null hypothesis, \code{delta0}. From these values, actual rates under
@@ -63,12 +63,12 @@
 #' hypothesis. This computational method is also used to estimate variances in
 #' \code{varBinomial()} based on the overall event rate observed and the input
 #' treatment difference specified in \code{delta0}.
-#' 
+#'
 #' Sample size with \code{scale="Difference"} produces an error if
 #' \code{p1-p2=delta0}.  Normally, the alternative hypothesis under
 #' consideration would be \code{p1-p2-delta0}$>0$. However, the alternative can
 #' have \code{p1-p2-delta0}$<0$.
-#' 
+#'
 #' @aliases testBinomial ciBinomial nBinomial simBinomial varBinomial
 #' @param p1 event rate in group 1 under the alternative hypothesis
 #' @param p2 event rate in group 2 under the alternative hypothesis
@@ -126,15 +126,15 @@
 #' of either Chi-square or Z test statistics.  These may be compared to an
 #' appropriate cutoff point (e.g., \code{qnorm(.975)} for normal or
 #' \code{qchisq(.95,1)} for chi-square).
-#' 
+#'
 #' \code{ciBinomial()} returns a data frame with 1 row with a confidence
 #' interval; variable names are \code{lower} and \code{upper}.
-#' 
+#'
 #' \code{varBinomial()} returns a vector of (blinded) variance estimates of the
 #' difference of event rates (\code{scale="Difference"}), logarithm of the
 #' odds-ratio (\code{scale="OR"}) or logarithm of the risk-ratio
 #' (\code{scale="RR"}).
-#' 
+#'
 #' With the default \code{outtype=1}, \code{nBinomial()} returns a vector of
 #' total sample sizes is returned.  With \code{outtype=2}, \code{nBinomial()}
 #' returns a data frame containing two vectors \code{n1} and \code{n2}
@@ -162,14 +162,14 @@
 #' size formulae for comparative binomial trials with null hypothesis of
 #' non-zero risk difference or non-unity relative risk. \emph{Statistics in
 #' Medicine}; 9: 1447-1454.
-#' 
+#'
 #' Fleiss, JL, Tytun, A and Ury (1980), A simple approximation for calculating
 #' sample sizes for comparing independent proportions.
 #' \emph{Biometrics};36:343-346.
-#' 
+#'
 #' Gordon, I and Watson R (1985), The myth of continuity-corrected sample size
 #' formulae. \emph{Biometrics}; 52: 71-76.
-#' 
+#'
 #' Miettinen, O and Nurminen, M (1985), Comparative analysis of two rates.
 #' \emph{Statistics in Medicine}; 4 : 213-226.
 #' @keywords design
@@ -177,144 +177,154 @@
 #' 
 #' # Compute z-test test statistic comparing 39/500 to 13/500
 #' # use continuity correction in variance
-#' x <- testBinomial(x1=39, x2=13, n1=500, n2=500, adj=1)
+#' x <- testBinomial(x1 = 39, x2 = 13, n1 = 500, n2 = 500, adj = 1)
 #' x
-#' pnorm(x, lower.tail=FALSE)
+#' pnorm(x, lower.tail = FALSE)
 #' 
 #' # Compute with unadjusted variance
-#' x0 <- testBinomial(x1=39, x2=23, n1=500, n2=500)
+#' x0 <- testBinomial(x1 = 39, x2 = 23, n1 = 500, n2 = 500)
 #' x0
-#' pnorm(x0, lower.tail=FALSE)
+#' pnorm(x0, lower.tail = FALSE)
 #' 
 #' # Perform 50k simulations to test validity of the above
-#' # asymptotic p-values 
+#' # asymptotic p-values
 #' # (you may want to perform more to reduce standard error of estimate)
-#' sum(as.double(x0) <= 
-#'     simBinomial(p1=.078, p2=.078, n1=500, n2=500, nsim=10000)) / 10000
-#' sum(as.double(x0) <= 
-#'     simBinomial(p1=.052, p2=.052, n1=500, n2=500, nsim=10000)) / 10000
+#' sum(as.double(x0) <=
+#'   simBinomial(p1 = .078, p2 = .078, n1 = 500, n2 = 500, nsim = 10000)) / 10000
+#' sum(as.double(x0) <=
+#'   simBinomial(p1 = .052, p2 = .052, n1 = 500, n2 = 500, nsim = 10000)) / 10000
 #' 
-#' # Perform a non-inferiority test to see if p2=400 / 500 is within 5% of 
+#' # Perform a non-inferiority test to see if p2=400 / 500 is within 5% of
 #' # p1=410 / 500 use a z-statistic with unadjusted variance
-#' x <- testBinomial(x1=410, x2=400, n1=500, n2=500, delta0= -.05)
+#' x <- testBinomial(x1 = 410, x2 = 400, n1 = 500, n2 = 500, delta0 = -.05)
 #' x
-#' pnorm(x, lower.tail=FALSE)
+#' pnorm(x, lower.tail = FALSE)
 #' 
 #' # since chi-square tests equivalence (a 2-sided test) rather than
-#' # non-inferiority (a 1-sided test), 
+#' # non-inferiority (a 1-sided test),
 #' # the result is quite different
-#' pchisq(testBinomial(x1=410, x2=400, n1=500, n2=500, delta0= -.05, 
-#'                     chisq=1, adj=1), 1, lower.tail=FALSE)
+#' pchisq(testBinomial(
+#'   x1 = 410, x2 = 400, n1 = 500, n2 = 500, delta0 = -.05,
+#'   chisq = 1, adj = 1
+#' ), 1, lower.tail = FALSE)
 #' 
 #' # now simulate the z-statistic witthout continuity corrected variance
-#' sum(qnorm(.975) <= 
-#'     simBinomial(p1=.8, p2=.8, n1=500, n2=500, nsim=100000)) / 100000
+#' sum(qnorm(.975) <=
+#'   simBinomial(p1 = .8, p2 = .8, n1 = 500, n2 = 500, nsim = 100000)) / 100000
 #' 
 #' # compute a sample size to show non-inferiority
 #' # with 5% margin, 90% power
-#' nBinomial(p1=.2, p2=.2, delta0=.05, alpha=.025, sided=1, beta=.1)
+#' nBinomial(p1 = .2, p2 = .2, delta0 = .05, alpha = .025, sided = 1, beta = .1)
 #' 
 #' # assuming a slight advantage in the experimental group lowers
 #' # sample size requirement
-#' nBinomial(p1=.2, p2=.19, delta0=.05, alpha=.025, sided=1, beta=.1)
+#' nBinomial(p1 = .2, p2 = .19, delta0 = .05, alpha = .025, sided = 1, beta = .1)
 #' 
 #' # compute a sample size for comparing 15% vs 10% event rates
 #' # with 1 to 2 randomization
-#' nBinomial(p1=.15, p2=.1, beta=.2, ratio=2, alpha=.05)
+#' nBinomial(p1 = .15, p2 = .1, beta = .2, ratio = 2, alpha = .05)
 #' 
 #' # now look at total sample size using 1-1 randomization
-#' n <- nBinomial(p1=.15, p2=.1, beta=.2, alpha=.05)
+#' n <- nBinomial(p1 = .15, p2 = .1, beta = .2, alpha = .05)
 #' n
 #' # check if inputing sample size returns the desired power
-#' nBinomial(p1=.15, p2=.1, beta=.2, alpha=.05,n=n)
+#' nBinomial(p1 = .15, p2 = .1, beta = .2, alpha = .05, n = n)
 #' 
 #' # re-do with alternate output types
-#' nBinomial(p1=.15, p2=.1, beta=.2, alpha=.05, outtype=2)
-#' nBinomial(p1=.15, p2=.1, beta=.2, alpha=.05, outtype=3)
+#' nBinomial(p1 = .15, p2 = .1, beta = .2, alpha = .05, outtype = 2)
+#' nBinomial(p1 = .15, p2 = .1, beta = .2, alpha = .05, outtype = 3)
 #' 
 #' 
 #' # look at power plot under different control event rate and
 #' # relative risk reductions
 #' p1 <- seq(.075, .2, .000625)
 #' p2 <- p1 * 2 / 3
-#' y1 <- nBinomial(p1, p2, beta=.2, outtype=1, alpha=.025, sided=1)
+#' y1 <- nBinomial(p1, p2, beta = .2, outtype = 1, alpha = .025, sided = 1)
 #' p2 <- p1 * .75
-#' y2 <- nBinomial(p1, p2, beta=.2, outtype=1, alpha=.025, sided=1)
+#' y2 <- nBinomial(p1, p2, beta = .2, outtype = 1, alpha = .025, sided = 1)
 #' p2 <- p1 * .6
-#' y3 <- nBinomial(p1, p2, beta=.2, outtype=1, alpha=.025, sided=1)
+#' y3 <- nBinomial(p1, p2, beta = .2, outtype = 1, alpha = .025, sided = 1)
 #' p2 <- p1 * .5
-#' y4 <- nBinomial(p1, p2, beta=.2, outtype=1, alpha=.025, sided=1)
-#' plot(p1, y1, type="l", ylab="Sample size",
-#'      xlab="Control group event rate", ylim=c(0, 6000), lwd=2)
-#' title(main="Binomial sample size computation for 80 pct power")
-#' lines(p1, y2, lty=2, lwd=2)
-#' lines(p1, y3, lty=3, lwd=2)
-#' lines(p1, y4, lty=4, lwd=2)
-#' legend(x=c(.15, .2),y=c(4500, 6000),lty=c(2, 1, 3, 4), lwd=2,
-#'        legend=c("25 pct reduction", "33 pct reduction",
-#'                 "40 pct reduction", "50 pct reduction"))
+#' y4 <- nBinomial(p1, p2, beta = .2, outtype = 1, alpha = .025, sided = 1)
+#' plot(p1, y1,
+#'   type = "l", ylab = "Sample size",
+#'   xlab = "Control group event rate", ylim = c(0, 6000), lwd = 2
+#' )
+#' title(main = "Binomial sample size computation for 80 pct power")
+#' lines(p1, y2, lty = 2, lwd = 2)
+#' lines(p1, y3, lty = 3, lwd = 2)
+#' lines(p1, y4, lty = 4, lwd = 2)
+#' legend(
+#'   x = c(.15, .2), y = c(4500, 6000), lty = c(2, 1, 3, 4), lwd = 2,
+#'   legend = c(
+#'     "25 pct reduction", "33 pct reduction",
+#'     "40 pct reduction", "50 pct reduction"
+#'   )
+#' )
 #' 
 #' # compute blinded estimate of treatment effect difference
-#' x1 <- rbinom(n=1,size=100,p=.2)
-#' x2 <- rbinom(n=1,size=200,p=.1)
+#' x1 <- rbinom(n = 1, size = 100, p = .2)
+#' x2 <- rbinom(n = 1, size = 200, p = .1)
 #' # blinded estimate of risk difference variance
-#' varBinomial(x=x1+x2,n=300,ratio=2,delta0=0)
+#' varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0)
 #' # blnded estimate of log-risk-ratio
-#' varBinomial(x=x1+x2,n=300,ratio=2,delta0=0,scale="RR")
+#' varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0, scale = "RR")
 #' # blinded estimate of log-odds-ratio
-#' varBinomial(x=x1+x2,n=300,ratio=2,delta0=0,scale="OR")
-# varBinomial function [sinew] ----
-varBinomial <- function(x,n,delta0=0,ratio=1,scale="Difference")
-{	# check input arguments 
+#' varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0, scale = "OR")
+#' # varBinomial function [sinew] ----
+varBinomial <- function(x, n, delta0 = 0, ratio = 1, scale = "Difference") { # check input arguments
   checkVector(x, "integer", c(1, Inf))
   checkScalar(n, "integer", c(1, Inf))
-  checkScalar(ratio, "numeric", c(0, Inf), c(FALSE,FALSE))
+  checkScalar(ratio, "numeric", c(0, Inf), c(FALSE, FALSE))
   scale <- match.arg(tolower(scale), c("difference", "rr", "or"))
   # risk difference test - from Miettinen and Nurminen eqn (9)
-	p<-x/n
-	phi<-array(0,max(length(delta0),length(x),length(ratio),length(n)))
-	if (scale=="difference")
-	{	checkScalar(delta0, "numeric", c(-1, 1),c(FALSE,FALSE))
-    p1<-p+ratio*delta0/(ratio+1)
-		p2<-p1-delta0
-		a<-1+ratio
-		b<- -(a+p1+ratio*p2-delta0*(ratio+2))
-		c<- delta0^2-delta0*(2*p1+a)+p1+ratio*p2
-		d<- p1*delta0*(1-delta0)
-		v<-(b/(3*a))^3-b*c/6/a^2+d/2/a
-		u<-sign(v)*sqrt((b/3/a)^2-c/3/a)
-		w<-(pi+acos(v/u^3))/3
-		p10<-2*u*cos(w)-b/3/a
-		p20<-p10+delta0
-		phi <- (p10*(1-p10)+p20*(1-p20)/ratio)*(ratio+1)
-		phi[delta0==0]<-p*(1-p)/ratio*(1+ratio)^2
-	}
-	else if (scale=="rr") # log(p2/p1)
-	{	checkScalar(delta0, "numeric", c(-Inf, Inf),c(FALSE,FALSE))
-	  RR<-exp(delta0)
-		if (delta0==0) phi<-(1-p)/p/ratio*(1+ratio)^2
-		else
-		{	p1<-p*(ratio+1)/(ratio*RR+1)
-			p2<-RR*p1
-			a<-(1+ratio)*RR
-			b<- -(RR*ratio+p2*ratio+1+p1*RR)
-			c<- ratio*p2+p1
-			p10<-(-b-sqrt(b^2-4*a*c))/2/a
-			p20<-RR*p10
-			phi<-(ratio+1)*((1-p10)/p10+(1-p20)/ratio/p20)
-	}	}	
-	# log-odds ratio - based on asymptotic distribution of log-odds
-	# see vignette
-	else
-	{	checkScalar(delta0, "numeric", c(-Inf, Inf),c(FALSE,FALSE))
-	  OR<-exp(delta0)
-		a<-OR-1
-		c<- -p*(ratio+1)
-		b<- 1+ratio*OR+(OR-1)*c
-		p10<-(-b+sqrt(b^2-4*a*c))/2/a
-		p20<-OR*p10/(1+p10*(OR-1))
-		phi<-(ratio+1)*(1/p10/(1-p10)+1/p20/(1-p20)/ratio)
-		phi[delta0==0]<-1/p/(1-p)*(1+1/ratio)*(1+ratio)
-	}
-	return(phi/n)
+  p <- x / n
+  phi <- array(0, max(length(delta0), length(x), length(ratio), length(n)))
+  if (scale == "difference") {
+    checkScalar(delta0, "numeric", c(-1, 1), c(FALSE, FALSE))
+    p1 <- p + ratio * delta0 / (ratio + 1)
+    p2 <- p1 - delta0
+    a <- 1 + ratio
+    b <- -(a + p1 + ratio * p2 - delta0 * (ratio + 2))
+    c <- delta0^2 - delta0 * (2 * p1 + a) + p1 + ratio * p2
+    d <- p1 * delta0 * (1 - delta0)
+    v <- (b / (3 * a))^3 - b * c / 6 / a^2 + d / 2 / a
+    u <- sign(v) * sqrt((b / 3 / a)^2 - c / 3 / a)
+    w <- (pi + acos(v / u^3)) / 3
+    p10 <- 2 * u * cos(w) - b / 3 / a
+    p20 <- p10 + delta0
+    phi <- (p10 * (1 - p10) + p20 * (1 - p20) / ratio) * (ratio + 1)
+    phi[delta0 == 0] <- p * (1 - p) / ratio * (1 + ratio)^2
+  }
+  else if (scale == "rr") # log(p2/p1)
+  {
+    checkScalar(delta0, "numeric", c(-Inf, Inf), c(FALSE, FALSE))
+    RR <- exp(delta0)
+    if (delta0 == 0) {
+      phi <- (1 - p) / p / ratio * (1 + ratio)^2
+    } else {
+      p1 <- p * (ratio + 1) / (ratio * RR + 1)
+      p2 <- RR * p1
+      a <- (1 + ratio) * RR
+      b <- -(RR * ratio + p2 * ratio + 1 + p1 * RR)
+      c <- ratio * p2 + p1
+      p10 <- (-b - sqrt(b^2 - 4 * a * c)) / 2 / a
+      p20 <- RR * p10
+      phi <- (ratio + 1) * ((1 - p10) / p10 + (1 - p20) / ratio / p20)
+    }
+  }
+  # log-odds ratio - based on asymptotic distribution of log-odds
+  # see vignette
+  else {
+    checkScalar(delta0, "numeric", c(-Inf, Inf), c(FALSE, FALSE))
+    OR <- exp(delta0)
+    a <- OR - 1
+    c <- -p * (ratio + 1)
+    b <- 1 + ratio * OR + (OR - 1) * c
+    p10 <- (-b + sqrt(b^2 - 4 * a * c)) / 2 / a
+    p20 <- OR * p10 / (1 + p10 * (OR - 1))
+    phi <- (ratio + 1) * (1 / p10 / (1 - p10) + 1 / p20 / (1 - p20) / ratio)
+    phi[delta0 == 0] <- 1 / p / (1 - p) * (1 + 1 / ratio) * (1 + ratio)
+  }
+  return(phi / n)
 }
