@@ -1,4 +1,56 @@
 testthat::context("gs stress")
+### Utility functions for gsDesign stress tests
+
+"alpha.beta.range.util" <- function(alpha, beta, type, sf) {
+  no.err <- TRUE
+  
+  for (a in alpha)
+  {
+    for (b in beta)
+    {
+      # sfLDPocock, test.type=3: errors with alpha >= .5 and beta close to 1 - alpha
+      if (b < 1 - a - 0.1) {
+        # cat("a = ", a, "b = ", b, "\n")
+        res <- try(gsDesign(test.type = type, alpha = a, beta = b, sfu = sf))
+        
+        if (is(res, "try-error")) {
+          no.err <- FALSE
+        }
+      }
+    }
+  }
+  
+  no.err
+}
+
+"param.range.util" <- function(param, type, sf) {
+  no.err <- TRUE
+  
+  for (p in param)
+  {
+    res <- try(gsDesign(test.type = type, sfu = sf, sfupar = p))
+    
+    if (is(res, "try-error")) {
+      no.err <- FALSE
+    }
+  }
+  
+  no.err
+}
+
+a1 <- round(seq(from = 0.05, to = 0.95, by = 0.05), 2)
+a2 <- round(seq(from = 0.05, to = 0.45, by = 0.05), 2)
+b <- round(seq(from = 0.05, to = 0.95, by = 0.05), 2)
+
+# nu: sfExponential parameter
+nu <- round(seq(from = 0.1, to = 1.5, by = 0.1), 1)
+
+# rho: sfPower parameter
+rho <- round(seq(from = 1, to = 15, by = 1), 0)
+
+# gamma: sfHSD parameter
+gamma <- round(seq(from = -5, to = 5, by = 1), 0)
+
 
 testthat::test_that("test.stress.sfExp.type1", {
   no.errors <- param.range.util(param = nu, type = 1, sf = sfExponential)

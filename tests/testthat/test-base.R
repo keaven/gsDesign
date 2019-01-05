@@ -1419,7 +1419,7 @@ testthat::test_that("test.nBinomial.misc", {
     alpha = 0.05, ratio = 3 / 2, scale = "rr", outtype = 2
   )),
   c(133.9289, 200.8933),
-  info = "nBinomial check #4 failed (F&M, Table 1)"
+  info = "nBinomial check #4 failed (F&M, Table 1)", tolerance = 0.0001
   )
   testthat::expect_equal(gsDesign::nBinomial(p1 = 0.15, p2 = 0.1, beta = 0.2, scale = "or"),
     1355.84,
@@ -1466,7 +1466,7 @@ testthat::test_that("test.simBinomial.misc", {
     p1 = 0.15, p2 = 0.1,
     delta0 = log(1.1), n1 = 901, n2 = 1351, scale = "or",
     nsim = 1e+05
-  )) / 1e+05, 0.8056, info = "simBinomial check #5 failed")
+  )) / 1e+05, 0.8056, info = "simBinomial check #5 failed", tolerance = 0.01)
   testthat::expect_equal(sum(-stats::qnorm(0.05) < gsDesign::simBinomial(
     p1 = 0.25, p2 = 0.05,
     delta0 = log(2), n1 = 134, n2 = 201, scale = "rr", nsim = 1e+05
