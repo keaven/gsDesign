@@ -24,9 +24,9 @@ DETAILS
 }
 \examples{
 \dontrun{
-if(interactive()){
- #EXAMPLE1
- }
+if (interactive()) {
+  # EXAMPLE1
+}
 }
 }
 \author{

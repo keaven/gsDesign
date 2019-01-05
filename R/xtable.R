@@ -1,4 +1,5 @@
 # #'@export function [sinew] ----
+#' @importFrom xtable xtable
 #' @export
 xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digits = NULL, display = NULL,
                             footnote = NULL, fnwid = "9cm", deltaname = "delta",
