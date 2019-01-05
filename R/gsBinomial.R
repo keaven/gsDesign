@@ -1,4 +1,4 @@
-# ciBinomial roxy [sinew] ---- 
+# ciBinomial roxy [sinew] ----
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 #' @param x1 PARAM_DESCRIPTION
@@ -10,16 +10,16 @@
 #' @param scale PARAM_DESCRIPTION, Default: 'Difference'
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
+#' if (interactive()) {
+#'   # EXAMPLE1
 #' }
-#' @seealso 
+#' }
+#' @seealso
 #'  \code{\link[stats]{Normal}},\code{\link[stats]{uniroot}}
 #' @rdname ciBinomial
-#' @export 
+#' @export
 #' @author Keaven Anderson, PhD
 #' @importFrom stats qnorm uniroot
 # ciBinomial function [sinew] ----
@@ -112,7 +112,7 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
   data.frame(lower = lower, upper = upper)
 }
 
-# nBinomial roxy [sinew] ---- 
+# nBinomial roxy [sinew] ----
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 #' @param p1 PARAM_DESCRIPTION
@@ -127,16 +127,16 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
 #' @param n PARAM_DESCRIPTION, Default: NULL
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
+#' if (interactive()) {
+#'   # EXAMPLE1
 #' }
-#' @seealso 
+#' }
+#' @seealso
 #'  \code{\link[stats]{Normal}}
 #' @rdname nBinomial
-#' @export 
+#' @export
 #' @author Keaven Anderson, PhD
 #' @importFrom stats qnorm pnorm
 # nBinomial function [sinew] ----
@@ -369,7 +369,7 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
   }
 }
 
-# simBinomial roxy [sinew] ---- 
+# simBinomial roxy [sinew] ----
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 #' @param p1 PARAM_DESCRIPTION
@@ -383,16 +383,16 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
 #' @param scale PARAM_DESCRIPTION, Default: 'Difference'
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
+#' if (interactive()) {
+#'   # EXAMPLE1
 #' }
-#' @seealso 
+#' }
+#' @seealso
 #'  \code{\link[stats]{Binomial}}
 #' @rdname simBinomial
-#' @export 
+#' @export
 #' @author Keaven Anderson, PhD
 #' @importFrom stats rbinom
 # simBinomial function [sinew] ----
@@ -416,7 +416,7 @@ simBinomial <- function(p1, p2, n1, n2, delta0 = 0, nsim = 10000, chisq = 0, adj
   )
 }
 
-# testBinomial roxy [sinew] ---- 
+# testBinomial roxy [sinew] ----
 #' @title FUNCTION_TITLE
 #' @description FUNCTION_DESCRIPTION
 #' @param x1 PARAM_DESCRIPTION
@@ -430,14 +430,14 @@ simBinomial <- function(p1, p2, n1, n2, delta0 = 0, nsim = 10000, chisq = 0, adj
 #' @param tol PARAM_DESCRIPTION, Default: 1e-11
 #' @return OUTPUT_DESCRIPTION
 #' @details DETAILS
-#' @examples 
+#' @examples
 #' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
+#' if (interactive()) {
+#'   # EXAMPLE1
+#' }
 #' }
 #' @rdname testBinomial
-#' @export 
+#' @export
 #' @author Keaven Anderson, PhD
 # testBinomial function [sinew] ----
 testBinomial <- function(x1, x2, n1, n2, delta0 = 0, chisq = 0, adj = 0, scale = "Difference", tol = .1e-10) {
@@ -552,7 +552,7 @@ testBinomial <- function(x1, x2, n1, n2, delta0 = 0, chisq = 0, adj = 0, scale =
 }
 
 
-# bpdiff function [sinew] ---- 
+# bpdiff function [sinew] ----
 bpdiff <- function(delta, x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference", lower.tail = FALSE) {
   stats::pnorm(testBinomial(x1, x2, n1, n2, delta0 = delta, adj = adj, scale = scale),
     lower.tail = lower.tail

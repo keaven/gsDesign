@@ -1,4 +1,4 @@
-testthat::context('normal grid inputs')
+testthat::context("normal grid inputs")
 
 testthat::test_that("test.normalGrid.bounds", {
   testthat::expect_error(gsDesign::normalGrid(bounds = "abc"), info = "Checking for incorrect variable type")

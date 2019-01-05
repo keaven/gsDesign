@@ -1,6 +1,6 @@
-# nSurvival roxy [sinew] ---- 
+# nSurvival roxy [sinew] ----
 #' 3.4: Time-to-event sample size calculation (Lachin-Foulkes)
-#' 
+#'
 #' \code{nSurvival()} is used to calculate the sample size for a clinical trial
 #' with a time-to-event endpoint. The Lachin and Foulkes (1986) method is used.
 #' \code{nEvents} uses the Schoenfeld (1981) approximation to provide sample
@@ -9,26 +9,26 @@
 #' \code{hrn2z()} and \code{zn2hr()} also use the Schoenfeld approximation to
 #' provide simple translations between hazard ratios, z-values and the number
 #' of events in an analysis; input variables can be given as vectors.
-#' 
+#'
 #' \code{nSurvival()} produces an object of class "nSurvival" with the number
 #' of subjects and events for a set of pre-specified trial parameters, such as
 #' accrual duration and follow-up period. The calculation is based on Lachin
 #' and Foulkes (1986) method and can be used for risk ratio or risk difference.
 #' The function also consider non-uniform (exponential) entry as well as
 #' uniform entry.
-#' 
+#'
 #' If the logical \code{approx} is \code{TRUE}, the variance under alternative
 #' hypothesis is used to replace the variance under null hypothesis.  For
 #' non-uniform entry, a non-zero value of \code{gamma} for exponential entry
 #' must be supplied. For positive \code{gamma}, the entry distribution is
 #' convex, whereas for negative \code{gamma}, the entry distribution is
 #' concave.
-#' 
+#'
 #' \code{nEvents()} uses the Schoenfeld (1981) method to approximate the number
 #' of events \code{n} (given \code{beta}) or the power (given \code{n}).
 #' Arguments may be vectors or scalars, but any vectors must have the same
 #' length.
-#' 
+#'
 #' The functions \code{hrz2n}, \code{hrn2z} and \code{zn2hr} also all apply the
 #' Schoenfeld approximation for proportional hazards modelling.  This
 #' approximation is based on the asymptotic normal distribtuion of the logrank
@@ -50,7 +50,7 @@
 #' events and the z-statistic. That is, \deqn{\hat{\lambda}=
 #' \exp(z(1+r)/\sqrt{rn})} \deqn{z=log(\hat{\lambda})\sqrt{nr}/(1+r)} \deqn{n=
 #' (z(1+r)/log(\hat{\lambda}))^2/r.}
-#' 
+#'
 #' \code{hrz2n()} translates an observed interim hazard ratio and interim
 #' z-value into the number of events required for the Z-value and hazard ratio
 #' to correspond to each other. \code{hrn2z()} translates a hazard ratio and
@@ -62,7 +62,7 @@
 #' \code{hr1} which is only used to compute the sign of the computed Z-value in
 #' the case of \code{hrn2z()} and whether or not a z-value > 0 corresponds to a
 #' hazard ratio > or < the null hazard ratio \code{hr0}.
-#' 
+#'
 #' @aliases nSurvival nEvents zn2hr hrn2z hrz2n print.nSurvival Survival sample
 #' size
 #' @param lambda1,lambda2 event hazard rate for placebo and treatment group
@@ -108,7 +108,7 @@
 #' \item{eta}{As input.} \item{ratio}{As input.} \item{gamma}{As input.}
 #' \item{alpha}{As input.} \item{beta}{As input.} \item{sided}{As input.}
 #' \item{Ts}{As input.} \item{Tr}{As input.}
-#' 
+#'
 #' \code{nEvents} produces a scalar or vector of sample sizes (or powers) when
 #' \code{tbl=FALSE} or, when \code{tbl=TRUE} a data frame of values with the
 #' following columns: \item{hr}{As input.} \item{n}{If \code{n[1]=0} on input
@@ -124,7 +124,7 @@
 #' where 'experimental' is the same as the group with hazard represented in the
 #' numerator of the hazard ratio.} \item{se}{Estimated standard error for the
 #' observed log(hazard ratio) with the given sample size.}
-#' 
+#'
 #' \code{hrz2n} outputs a number of events required to approximately have the
 #' input hazard ratio, z-statistic and sample size correspond. \code{hrn2z}
 #' outputs an approximate z-statistic corresponding to an input hazard ratio
@@ -138,14 +138,14 @@
 #' Power for Analyses of Survival with Allowance for Nonuniform Patient Entry,
 #' Losses to Follow-Up, Noncompliance, and Stratification. \emph{Biometrics},
 #' 42, 507-519.
-#' 
+#'
 #' Schoenfeld D (1981), The Asymptotic Properties of Nonparametric Tests for
 #' Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
 #' @keywords design
 #' @examples
 #' 
 #' 
-#' # consider a trial with 
+#' # consider a trial with
 #' # 2 year maximum follow-up
 #' # 6 month uniform enrollment
 #' # Treatment/placebo hazards = 0.1/0.2 per 1 person-year
@@ -153,159 +153,157 @@
 #' # alpha = 0.025 (1-sided)
 #' # power = 0.9 (default beta=.1)
 #' 
-#' ss <- nSurvival(lambda1=.2 , lambda2=.1, eta = .1, Ts = 2, Tr = .5,
-#'                 sided=1, alpha=.025)
+#' ss <- nSurvival(
+#'   lambda1 = .2, lambda2 = .1, eta = .1, Ts = 2, Tr = .5,
+#'   sided = 1, alpha = .025
+#' )
 #' 
 #' #  group sequential translation with default bounds
 #' #  note that delta1 is log hazard ratio; used later in gsBoundSummary summary
-#' 	x<-gsDesign(k = 5, test.type = 2, n.fix=ss$nEvents, nFixSurv=ss$n, 
-#'       delta1=log(ss$lambda2/ss$lambda1))
+#' x <- gsDesign(
+#'   k = 5, test.type = 2, n.fix = ss$nEvents, nFixSurv = ss$n,
+#'   delta1 = log(ss$lambda2 / ss$lambda1)
+#' )
 #' # boundary plot
-#' 	plot(x)
+#' plot(x)
 #' # effect size plot
-#' 	plot(x, plottype = "hr")
+#' plot(x, plottype = "hr")
 #' # total sample size
-#'    x$nSurv
+#' x$nSurv
 #' # number of events at analyses
-#'    x$n.I
+#' x$n.I
 #' # print the design
 #' x
 #' # overall design summary
 #' cat(summary(x))
 #' # tabular summary of bounds
-#' gsBoundSummary(x,deltaname="HR",Nname="Events",logdelta=TRUE)
+#' gsBoundSummary(x, deltaname = "HR", Nname = "Events", logdelta = TRUE)
 #' 
 #' 
 #' 
 #' # approximate number of events required using Schoenfeld's method
 #' # for 2 different hazard ratios
-#' nEvents(hr=c(.5, .6), tbl=TRUE)
+#' nEvents(hr = c(.5, .6), tbl = TRUE)
 #' # vector output
-#' nEvents(hr=c(.5, .6))
+#' nEvents(hr = c(.5, .6))
 #' 
 #' # approximate power using Schoenfeld's method
 #' # given 2 sample sizes and hr=.6
-#' nEvents(hr=.6, n=c(50, 100), tbl=TRUE)
+#' nEvents(hr = .6, n = c(50, 100), tbl = TRUE)
 #' # vector output
-#' nEvents(hr=.6, n=c(50, 100))
+#' nEvents(hr = .6, n = c(50, 100))
 #' 
 #' # approximate hazard ratio corresponding to 100 events and z-statistic of 2
-#' zn2hr(n=100,z=2)
+#' zn2hr(n = 100, z = 2)
 #' # same when hr0 is 1.1
-#' zn2hr(n=100,z=2,hr0=1.1)
+#' zn2hr(n = 100, z = 2, hr0 = 1.1)
 #' # same when hr0 is .9 and hr1 is greater than hr0
-#' zn2hr(n=100,z=2,hr0=.9,hr1=1)
+#' zn2hr(n = 100, z = 2, hr0 = .9, hr1 = 1)
 #' 
-#' # approximate number of events corresponding to z-statistic of 2 and 
+#' # approximate number of events corresponding to z-statistic of 2 and
 #' # estimated hazard ratio of .5 (or 2)
-#' hrz2n(hr=.5,z=2)
-#' hrz2n(hr=2,z=2)
+#' hrz2n(hr = .5, z = 2)
+#' hrz2n(hr = 2, z = 2)
 #' 
 #' # approximate z statistic corresponding to 75 events
 #' # and estimated hazard ratio of .6 (or 1/.6)
 #' # assuming 2-to-1 randomization of experimental to control
-#' hrn2z(hr=.6,n=75,ratio=2)
-#' hrn2z(hr=1/.6,n=75,ratio=2)
+#' hrn2z(hr = .6, n = 75, ratio = 2)
+#' hrn2z(hr = 1 / .6, n = 75, ratio = 2)
 #' 
-# nSurvival function [sinew] ----
-nSurvival <- function(lambda1=1/12, lambda2=1/24, Ts=24, Tr=12,
-        eta = 0, ratio = 1,
-        alpha = 0.025, beta = 0.10, sided = 1,
-        approx = FALSE, type = c("rr", "rd"),
-        entry = c("unif", "expo"), gamma = NA)
-{
+#' # nSurvival function [sinew] ----
+nSurvival <- function(lambda1 = 1 / 12, lambda2 = 1 / 24, Ts = 24, Tr = 12,
+                      eta = 0, ratio = 1,
+                      alpha = 0.025, beta = 0.10, sided = 1,
+                      approx = FALSE, type = c("rr", "rd"),
+                      entry = c("unif", "expo"), gamma = NA) {
+  type <- match.arg(type)
+  entry <- match.arg(entry)
 
-    type <- match.arg(type)
-    entry <- match.arg(entry)
-    
-    method <- match(type, c("rr", "rd"))
-    accrual <- match(entry, c("unif", "expo")) == 1
-    
-    xi0 <- 1 / (1 + ratio)
-    xi1 <- 1 - xi0 
-    
-    if (is.na(method))
-    {
-        stop("Only rr (risk ratio) or rd (risk difference) is valid!")
+  method <- match(type, c("rr", "rd"))
+  accrual <- match(entry, c("unif", "expo")) == 1
+
+  xi0 <- 1 / (1 + ratio)
+  xi1 <- 1 - xi0
+
+  if (is.na(method)) {
+    stop("Only rr (risk ratio) or rd (risk difference) is valid!")
+  }
+
+  # average hazard rate under H_1
+  ave.haz <- lambda1 * xi0 + lambda2 * xi1
+
+  # vector of hazards: placebo, test, and average
+  haz <- c(lambda1, lambda2, ave.haz)
+
+  prob.e <- sapply(haz, pe,
+    eta = eta, Ts = Ts, Tr = Tr,
+    gamma = gamma, unif = accrual
+  )
+
+  zalpha <- stats::qnorm(1 - alpha / sided)
+  zbeta <- stats::qnorm(1 - beta)
+
+  haz.ratio <- log(lambda1 / lambda2)
+  haz.diff <- lambda1 - lambda2
+
+  if (method == 1) { # risk ratio
+    power <- zalpha / sqrt(prob.e[3] * xi0 * xi1) +
+      zbeta * sqrt((xi0 * prob.e[1])^(-1) +
+        (xi1 * prob.e[2])^(-1))
+    N <- (power / haz.ratio)^2
+    E <- N * (xi0 * prob.e[1] + xi1 * prob.e[2])
+  }
+  else { # risk difference
+    if (approx) { # use approximation
+      power <- (zalpha + zbeta) * sqrt((lambda1^2 * (xi0 * prob.e[1])^(-1) +
+        lambda2^2 * (xi1 * prob.e[2])^(-1)))
     }
-    
-    # average hazard rate under H_1
-    ave.haz <- lambda1 * xi0 + lambda2 * xi1
-    
-    # vector of hazards: placebo, test, and average 
-    haz <- c(lambda1, lambda2, ave.haz)
-    
-    prob.e <- sapply(haz, pe, eta = eta, Ts = Ts, Tr = Tr,
-            gamma = gamma, unif = accrual)
-    
-    zalpha <- stats::qnorm(1 - alpha / sided)
-    zbeta <- stats::qnorm(1 - beta)
-    
-    haz.ratio <- log(lambda1 / lambda2)
-    haz.diff <- lambda1 - lambda2
-    
-    if (method == 1){  # risk ratio
-        power <- zalpha/sqrt(prob.e[3]*xi0*xi1) +
-                zbeta*sqrt((xi0*prob.e[1])^(-1) + 
-                                (xi1*prob.e[2])^(-1))
-        N <- (power / haz.ratio)^2
-        E <- N * (xi0 * prob.e[1] + xi1 * prob.e[2])
+    else { # use variance under H_0 and H_a
+      power <- zalpha * (xi0 * xi1 * prob.e[3] / ave.haz^2)^(-1 / 2) +
+        zbeta * sqrt((lambda1^2 * (xi0 * prob.e[1])^(-1) +
+          lambda2^2 * (xi1 * prob.e[2])^(-1)))
     }
-    else
-    { # risk difference
-        if (approx)
-        { # use approximation
-            power <- (zalpha + zbeta) * sqrt((lambda1^2 * (xi0 * prob.e[1])^(-1) +
-                                lambda2^2 * (xi1 * prob.e[2])^(-1)))
-        }
-        else
-        { # use variance under H_0 and H_a
-            power <- zalpha * (xi0 * xi1 * prob.e[3] / ave.haz^2)^(-1/2) +
-                    zbeta * sqrt((lambda1^2 * (xi0 * prob.e[1])^(-1) +
-                                        lambda2^2 * (xi1 * prob.e[2])^(-1)))
-        }
-        N <- (power / haz.diff)^2
-        E <- N * (xi0 * prob.e[1] + xi1 * prob.e[2])
-    }
-    
-    # output all the input parameters, including entry type and
-    # method, and sample size
-    outd <- list(type = type, entry = entry, n = N,
-            nEvents = E, 
-            lambda1 = lambda1, lambda2 = lambda2,
-            eta = eta, ratio=ratio, 
-            gamma = gamma, alpha = alpha, beta = beta, sided = sided,
-            Ts = Ts, Tr = Tr, approx=approx)
-    class(outd) <- "nSurvival"
-    outd
+    N <- (power / haz.diff)^2
+    E <- N * (xi0 * prob.e[1] + xi1 * prob.e[2])
+  }
+
+  # output all the input parameters, including entry type and
+  # method, and sample size
+  outd <- list(
+    type = type, entry = entry, n = N,
+    nEvents = E,
+    lambda1 = lambda1, lambda2 = lambda2,
+    eta = eta, ratio = ratio,
+    gamma = gamma, alpha = alpha, beta = beta, sided = sided,
+    Ts = Ts, Tr = Tr, approx = approx
+  )
+  class(outd) <- "nSurvival"
+  outd
 }
 
 ###
 # Hidden Functions
 ###
 
-# pe function [sinew] ---- 
-pe <- function(lam, eta = 0, Ts, Tr, unif = TRUE, gamma){
+# pe function [sinew] ----
+pe <- function(lam, eta = 0, Ts, Tr, unif = TRUE, gamma) {
+  q1 <- lam / (lam + eta)
 
-    q1 <- lam / (lam + eta)
-    
-    if (unif)
-    {    
-        q2 <- exp(-(lam + eta) * (Ts - Tr)) - exp(-(lam+eta) * Ts)
-        q3 <- (lam + eta) * Tr    
-        resu <- q1 * (1 - q2 / q3)
+  if (unif) {
+    q2 <- exp(-(lam + eta) * (Ts - Tr)) - exp(-(lam + eta) * Ts)
+    q3 <- (lam + eta) * Tr
+    resu <- q1 * (1 - q2 / q3)
+  }
+  else {
+    if (is.na(gamma)) {
+      stop("Exponential entry! gamma cannot be misssing")
     }
-    else
-    {
-        if (is.na(gamma))
-        {
-            stop("Exponential entry! gamma cannot be misssing")            
-        }
-        
-        t2 <- lam * gamma * exp(-(lam + eta) * Ts) * (1 - exp((lam + eta - gamma) * Tr))
-        t3 <- (1 - exp(-gamma * Tr)) * (lam + eta) * (lam + eta - gamma)
-        resu <- q1 + t2 / t3
-    }
-    
-    resu                        
+
+    t2 <- lam * gamma * exp(-(lam + eta) * Ts) * (1 - exp((lam + eta - gamma) * Tr))
+    t3 <- (1 - exp(-gamma * Tr)) * (lam + eta) * (lam + eta - gamma)
+    resu <- q1 + t2 / t3
+  }
+
+  resu
 }

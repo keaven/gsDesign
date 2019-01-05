@@ -1,6 +1,6 @@
 globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "Analysis"))
 
-# plot.gsDesign roxy [sinew] ---- 
+# plot.gsDesign roxy [sinew] ----
 #' @title Plots for group sequential designs
 #' @description The \code{plot()} function has been extended to work with objects returned
 #' by \code{gsDesign()} and \code{gsProbability()}.  For objects of type
@@ -105,28 +105,30 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' of \code{x}, while in others \code{x$theta} is replaced and corresponding
 #' characteristics computed; see details.
 #' @examples
-#'
+#' 
 #' #  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
 #' #  lower bound is non-binding (ignored in Type I error computation)
 #' #  sample size is computed based on a fixed design requiring n=100
-#' x <- gsDesign(k=5, test.type=2, n.fix=100)
+#' x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
 #' x
-#'
+#' 
 #' # the following translate to calls to plot.gsDesign since x was
 #' # returned by gsDesign; run these commands one at a time
 #' plot(x)
-#' plot(x, plottype=2)
-#' plot(x, plottype=3)
-#' plot(x, plottype=4)
-#' plot(x, plottype=5)
-#' plot(x, plottype=6)
-#' plot(x, plottype=7)
-#'
+#' plot(x, plottype = 2)
+#' plot(x, plottype = 3)
+#' plot(x, plottype = 4)
+#' plot(x, plottype = 5)
+#' plot(x, plottype = 6)
+#' plot(x, plottype = 7)
+#' 
 #' #  choose different parameter values for power plot
 #' #  start with design in x from above
-#' y <- gsProbability(k=5, theta=seq(0, .5, .025), x$n.I,
-#'                    x$lower$bound, x$upper$bound)
-#'
+#' y <- gsProbability(
+#'   k = 5, theta = seq(0, .5, .025), x$n.I,
+#'   x$lower$bound, x$upper$bound
+#' )
+#' 
 #' # the following translates to a call to plot.gsProbability since
 #' # y has that type
 #' plot(y)
@@ -150,7 +152,7 @@ plot.gsDesign <- function(x, plottype = 1, base = FALSE, ...) {
   do.call(gsPlotName(plottype), list(x, base = base, ...))
 }
 
-# plot.gsProbability roxy [sinew] ---- 
+# plot.gsProbability roxy [sinew] ----
 #' @rdname plot.gsDesign
 #' @export
 # plot.gsProbability function [sinew] ----
@@ -172,7 +174,7 @@ plot.gsProbability <- function(x, plottype = 2, base = FALSE, ...) {
 # Hidden Functions
 ###
 
-# gsPlotName function [sinew] ---- 
+# gsPlotName function [sinew] ----
 gsPlotName <- function(plottype) {
   # define plots and associated valid plot types
   plots <- list(
@@ -192,7 +194,7 @@ gsPlotName <- function(plottype) {
   names(plots)[which(unlist(lapply(plots, function(x, type) is.element(type, x), type = plottype)))]
 }
 
-# gsPlotName2 function [sinew] ---- 
+# gsPlotName2 function [sinew] ----
 gsPlotName2 <- function(plottype) {
   # define plots and associated valid plot types
   plots <- list(
@@ -210,19 +212,19 @@ gsPlotName2 <- function(plottype) {
   names(plots)[which(unlist(lapply(plots, function(x, type) is.element(type, x), type = plottype)))]
 }
 
-# plotgsZ function [sinew] ---- 
+# plotgsZ function [sinew] ----
 plotgsZ <- function(x, ylab = "Normal critical value", main = "Normal test statistics at bounds", ...) {
   qplotit(x = x, ylab = ylab, main = main, fn = function(z, ...) {
     z
   }, ...)
 }
 
-# plotBval function [sinew] ---- 
+# plotBval function [sinew] ----
 plotBval <- function(x, ylab = "B-value", main = "B-values at bounds", ...) {
   qplotit(x = x, fn = gsBValue, ylab = ylab, main = main, ...)
 }
 
-# plotreleffect function [sinew] ---- 
+# plotreleffect function [sinew] ----
 plotreleffect <- function(x = x, ylab = NULL, main = "Treatment effect at bounds", ...) {
   qplotit(x, fn = gsDelta, main = main, ylab = ifelse(!is.null(ylab), ylab,
     ifelse(tolower(x$endpoint) == "binomial",
@@ -232,35 +234,35 @@ plotreleffect <- function(x = x, ylab = NULL, main = "Treatment effect at bounds
   ), ...)
 }
 
-# plotHR function [sinew] ---- 
+# plotHR function [sinew] ----
 plotHR <- function(x = x, ylab = "Estimated hazard ratio", main = "Hazard ratio at bounds", ...) {
   qplotit(x, fn = gsHR, ylab = ylab, main = main, ratio = 1, ...)
 }
 
-# plotRR function [sinew] ---- 
+# plotRR function [sinew] ----
 plotRR <- function(x = x, ylab = "Estimated risk ratio", main = "Risk ratio at bounds", ...) {
   qplotit(x, fn = gsRR, ylab = ylab, main = main, ratio = 1, ...)
 }
 
-# gsBValue function [sinew] ---- 
+# gsBValue function [sinew] ----
 gsBValue <- function(z, i, x, ylab = "B-value", ...) {
   Bval <- z * sqrt(x$timing[i])
   Bval
 }
 
-# gsDelta function [sinew] ---- 
+# gsDelta function [sinew] ----
 gsDelta <- function(z, i, x, ylab = NULL, ...) {
   deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1 - x$delta0) / x$delta + x$delta0
   deltaHat
 }
 
-# gsRR function [sinew] ---- 
+# gsRR function [sinew] ----
 gsRR <- function(z, i, x, ratio = 1, ylab = "Estimated risk ratio", ...) {
   deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1 - x$delta0) / x$delta + x$delta0
   exp(deltaHat)
 }
 
-# gsHR function [sinew] ---- 
+# gsHR function [sinew] ----
 gsHR <- function(z, i, x, ratio = 1, ylab = "Estimated hazard ratio", ...) {
   c <- 1 / (1 + ratio)
   psi <- c * (1 - c)
@@ -273,7 +275,7 @@ gsHR <- function(z, i, x, ratio = 1, ylab = "Estimated hazard ratio", ...) {
   hrHat
 }
 
-# gsCPz function [sinew] ---- 
+# gsCPz function [sinew] ----
 gsCPz <- function(z, i, x, theta = NULL, ylab = NULL, ...) {
   cp <- array(0, length(z))
 
@@ -292,7 +294,7 @@ gsCPz <- function(z, i, x, theta = NULL, ylab = NULL, ...) {
   cp
 }
 
-# qplotit roxy [sinew] ---- 
+# qplotit roxy [sinew] ----
 #' @import ggplot2
 # qplotit function [sinew] ----
 qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "text"),
@@ -424,7 +426,7 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
   }
 }
 
-# plotgsCP function [sinew] ---- 
+# plotgsCP function [sinew] ----
 plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim stopping boundaries",
                      ylab = NULL, geom = c("line", "text"),
                      xlab = ifelse(x$n.fix == 1, "Sample size relative to fixed design", "N"), xlim = NULL,
@@ -582,7 +584,7 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
   }
 }
 
-# plotsf roxy [sinew] ---- 
+# plotsf roxy [sinew] ----
 #' @import ggplot2
 # plotsf function [sinew] ----
 plotsf <- function(x,
@@ -684,7 +686,7 @@ plotsf <- function(x,
   }
 }
 
-# plotASN roxy [sinew] ---- 
+# plotASN roxy [sinew] ----
 #' @import ggplot2
 # plotASN function [sinew] ----
 plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval = NULL, type = "l",
@@ -747,7 +749,7 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
   }
 }
 
-# plotgsPower roxy [sinew] ---- 
+# plotgsPower roxy [sinew] ----
 #' @import ggplot2
 # plotgsPower function [sinew] ----
 plotgsPower <- function(x, main = "Boundary crossing probabilities by effect size",

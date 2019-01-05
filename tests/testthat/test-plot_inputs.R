@@ -1,4 +1,4 @@
-testthat::context('plot inputs')
+testthat::context("plot inputs")
 
 testthat::test_that("test.plot.gsDesign.plottype", {
   testthat::expect_error(gsDesign::plot.gsDesign(plottype = "abc"), info = "Checking for incorrect variable type")
