@@ -103,6 +103,8 @@
 #' gsProbability(k=length(x$b), theta=c(0, 2.2), n.I=x$I, b=x$b, a= -y$b)
 #' 
 #' @export
+#' @useDynLib gsDesign gsbound
+#' @useDynLib gsDesign gsbound1
 #' @rdname gsBound
 # gsBound function [sinew] ----
 gsBound <- function(I, trueneg, falsepos, tol=0.000001, r=18){    
@@ -606,6 +608,7 @@ gsDesign <- function(k=3, test.type=4, alpha=0.025, beta=0.1, astar=0,
 #' @aliases print.gsProbability
 #' @rdname gsProbability
 #' @importFrom methods is
+#' @useDynLib gsDesign probrej
 # gsProbability function [sinew] ----
 gsProbability <- function(k=0, theta, n.I, a, b, r=18, d=NULL, overrun=0){
     # compute boundary crossing probabilities and return in a gsProbability structure
@@ -751,6 +754,7 @@ gsProbability <- function(k=0, theta, n.I, a, b, r=18, d=NULL, overrun=0){
 #' @keywords design
 #' @export
 #' @rdname gsDensity
+#' @useDynLib gsDesign gsdensity
 # gsDensity function [sinew] ----
 gsDensity <- function(x, theta=0, i=1, zi=0, r=18){
   if (class(x) != "gsDesign" && class(x) != "gsProbability")
