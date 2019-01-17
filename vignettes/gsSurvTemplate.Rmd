@@ -37,7 +37,6 @@ references:
     issued:
       year: 1986
       month: 9
-
 vignette: >
   %\VignetteIndexEntry{Template for time-to-event group sequential design}
   %\VignetteEngine{knitr::rmarkdown}
@@ -54,25 +53,24 @@ knitr::opts_chunk$set(
 # Introduction
 
 This vignette provides a template for time-to-event sample size calculations for fixed designs using \texttt{nSurv} and group sequential designs using \texttt{gsSurv}.
-Edit this template (from gsDesign R package source /inst/doc/gsSurvTemplate.rnw) so that you can reuse it on a regular basis for sample size calculations for time-to-event study planning.
+Edit this template so that you can reuse it on a regular basis for sample size calculations for time-to-event study planning.
 The template only uses the simplest options with a single stratum and exponential failure and dropout rates.
 The template can be modified to accomodate multiple strata and/or piecewise exponential failure and dropout rates; this was not chosen here since the simplest options are a) often used and b) simplest to learn and apply for beginners. 
 Note that we produce tabular, textual and graphical output; examining the source file to see how this is done will enable you to easily customize to fit your purposes.
 You will need the knitr R package, which I find simpler to use than Sweave (although you could make minor edits and use Sweave).
 I have found using knitr and the RStudio development environment to be a good combination.
 Within this template, we suppress printing of all of the code used to generate results. 
-The file /inst/doc/gsSurvTemplateInstructions.pdf is an alternate version of this document that shows code associated with this template.
+The file [gsSurvTemplateInstructions](gsSurvTemplateInstructions.html) is an alternate version of this document that shows code associated with this template.
 
 We apply the @LachinFoulkes sample size method and extend it to group sequential design.
 This method fixes the duration of a study and varies enrollment rates to power a trial.
-{Alternate text when enrollment rate is fixed and enrollment duration is allowed to vary: \em We use the @LachinFoulkes basic power equation to compute sample size along the lines of @KimTsiatis where enrollment rates are fixed and enrollment duration is allowed to vary to enroll a sufficient sample size to power a study.}
+Alternate text when enrollment rate is fixed and enrollment duration is allowed to vary: We use the @LachinFoulkes basic power equation to compute sample size along the lines of @KimTsiatis where enrollment rates are fixed and enrollment duration is allowed to vary to enroll a sufficient sample size to power a study.
 The sample size method assumes proportional hazards between treatment groups.
 Accrual of events of events over time is approximated assuming failure rates are exponential.
 
 ```{r enrollment, message=FALSE, echo=FALSE, results="hide"}
 # code here applies to both fixed and group sequential design sections below.
 library(gsDesign)
-library(xtable)
 # enrollment period durations; the last of these will be extended if T=NULL below
 R <- c(1,2,3,4)
 # relative enrollment rates during above periods
@@ -119,15 +117,15 @@ enrolrates <- paste(c("piecewise constant at rates of ",
 
 __This section can be deleted if you are only interested in group sequential design.__
 
-The median time-to-event is assumed to be \Sexpr{median} \Sexpr{timename} in the control group.
+The median time-to-event is assumed to be `r median` `r timename` in the control group.
 
-\Sexpr{if (hr0==1) paste("The trial is designed to demonstrate superiority of experimental treatment over control with an assumed hazard ratio of ",hr)} \Sexpr{if (hr0 != 1) paste("The trial is designed to reject a null hypothesis hazard ratio of ",hr0," in favor of a hazard ratio of",hr)} with \Sexpr{100*(1-beta)}\% power and a one-sided Type I error rate of \Sexpr{100*alpha}.
-The total sample size is \Sexpr{2*ceiling(x$n/2)} and a
-total of \Sexpr{ceiling(x$d)} endpoints is required for analysis.
-Planned recruitment duration is \Sexpr{sum(x$R)} \Sexpr{timename} and the minimum follow-up planned is \Sexpr{round(x$minfup,1)} \Sexpr{timename}.
-Thus, the total expected study duration is \Sexpr{round(max(x$T),1)} \Sexpr{timename}.
-Enrollment is assumed to be \Sexpr{enrolrates}.
-The assumed dropout rate is \Sexpr{100*eta}\% per \Sexpr{timename1}.
+`r if (hr0==1) paste("The trial is designed to demonstrate superiority of experimental treatment over control with an assumed hazard ratio of ",hr)` `r if (hr0 != 1) paste("The trial is designed to reject a null hypothesis hazard ratio of ",hr0," in favor of a hazard ratio of",hr)` with `r 100*(1-beta)`\% power and a one-sided Type I error rate of `r 100*alpha`.
+The total sample size is `r 2*ceiling(x$n/2)` and a
+total of `r ceiling(x$d)` endpoints is required for analysis.
+Planned recruitment duration is `r sum(x$R)` `r timename` and the minimum follow-up planned is `r round(x$minfup,1)` `r timename`.
+Thus, the total expected study duration is `r round(max(x$T),1)` `r timename`.
+Enrollment is assumed to be `r enrolrates`.
+The assumed dropout rate is `r 100*eta`\% per `r timename1`.
 
 # Group sequential design
 
@@ -163,27 +161,27 @@ enrolrates <- paste(c("piecewise constant at rates of ",
 }
 ```
 
-For a comparative trial we consider a 2-arm group sequential design with \Sexpr{ep} as the primary endpoint as shown in Table \ref{tab1} (a second version of the table is in \ref{tab2}.
+For a comparative trial we consider a 2-arm group sequential design with `r ep` as the primary endpoint as shown in Table \ref{tab1} (a second version of the table is in \ref{tab2}.
 Timing, number of events, sample size, boundaries (Z-values, nominal p-values, approximate hazard ratios) are shown as well as the probability of crossing study boundaries under the null and alternate hypotheses.
-Bounds are determined by Hwang-Shih-DeCani spending functions with $\gamma=\Sexpr{sfupar}$ ($\alpha$-spending) and $\gamma=\Sexpr{sflpar}$ ($\beta$-spending).
-The median time-to-event is assumed to be \Sexpr{median} \Sexpr{timename} in the control group.
-\Sexpr{if (hr0==1) paste("The trial is designed to demonstrate superiority of experimental treatment over control with an assumed hazard ratio of ",hr,".",sep="")}
-The total sample size is \Sexpr{ceiling(sum(x$eNE[k,]+x$eNC[k,]))} and a
-total of \Sexpr{ceiling(sum(x$eDE[k,]+x$eDC[k,]))} endpoints is required for the final analysis.
-Planned recruitment duration is \Sexpr{sum(x$R)} \Sexpr{timename} and the minimum follow-up planned is \Sexpr{round(x$minfup,1)} \Sexpr{timename}.
-Thus, the total expected study duration is \Sexpr{round(max(x$T),1)} \Sexpr{timename}.
-Enrollment is assumed to be \Sexpr{enrolrates}.
-The assumed dropout rate is \Sexpr{100*eta}\% per \Sexpr{timename1}.
-\Sexpr{if (x$k==2) paste("There is a single interim analysis planned after",ceiling(x$eDE[1,]+x$eDC[1,]),"events have accrued which is expected after approximately",round(x$T[1],1),timename,sep=" ")}.
+Bounds are determined by Hwang-Shih-DeCani spending functions with $\gamma=`r sfupar`$ ($\alpha$-spending) and $\gamma=`r sflpar`$ ($\beta$-spending).
+The median time-to-event is assumed to be `r median` `r timename` in the control group.
+`r if (hr0==1) paste("The trial is designed to demonstrate superiority of experimental treatment over control with an assumed hazard ratio of ",hr,".",sep="")`
+The total sample size is `r ceiling(sum(x$eNE[k,]+x$eNC[k,]))` and a
+total of `r ceiling(sum(x$eDE[k,]+x$eDC[k,]))` endpoints is required for the final analysis.
+Planned recruitment duration is `r sum(x$R)` `r timename` and the minimum follow-up planned is `r round(x$minfup,1)` `r timename`.
+Thus, the total expected study duration is `r round(max(x$T),1)` `r timename`.
+Enrollment is assumed to be `r enrolrates`.
+The assumed dropout rate is `r 100*eta`\% per `r timename1`.
+`r if (x$k==2) paste("There is a single interim analysis planned after",ceiling(x$eDE[1,]+x$eDC[1,]),"events have accrued which is expected after approximately",round(x$T[1],1),timename,sep=" ")`.
 
-```{r tab1, results="asis",echo=FALSE,message=FALSE,tidy=FALSE}
+```{r tab1, results="asis",message=FALSE,tidy=FALSE}
 print(xtable(x,footnote=footnote,caption=caption,
              label="tab1"), 
       include.rownames=F, 
       sanitize.text.function=function(x) x)
 ```
 
-```{r tab2, results="asis",echo=FALSE,message=FALSE,tidy=FALSE}
+```{r tab2, results="asis",message=FALSE,tidy=FALSE}
 xprint(xtable(gsBoundSummary(x, logdelta=TRUE), digits=4, label="tab2", caption=summary(x)))
 ```
 

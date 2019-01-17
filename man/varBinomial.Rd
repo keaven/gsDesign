@@ -2,10 +2,6 @@
 % Please edit documentation in R/varBinomial.R
 \name{varBinomial}
 \alias{varBinomial}
-\alias{testBinomial}
-\alias{ciBinomial}
-\alias{nBinomial}
-\alias{simBinomial}
 \title{Testing, Confidence Intervals, Sample Size and Power for Comparing Two
 Binomial Rates}
 \usage{

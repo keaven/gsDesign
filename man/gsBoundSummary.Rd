@@ -4,12 +4,6 @@
 \alias{gsBoundSummary}
 \alias{print.gsDesign}
 \alias{summary.gsDesign}
-\alias{gsBValue}
-\alias{gsDelta}
-\alias{gsHR}
-\alias{gsRR}
-\alias{gsCPz}
-\alias{gsDesign}
 \alias{xprint}
 \alias{print.gsBoundSummary}
 \title{Bound Summary and Z-transformations}

@@ -3,7 +3,6 @@
 \name{gsBinomialExact}
 \alias{gsBinomialExact}
 \alias{print.gsBinomialExact}
-\alias{nBinomial1Sample}
 \alias{binomialSPRT}
 \alias{plot.gsBinomialExact}
 \title{One-Sample Binomial Routines}
@@ -204,7 +203,8 @@ class(zz)
 zz
 # also plot (see also plots below for \\code{binomialSPRT})
 # add lines using geom_line()
-plot(zz) + geom_line()
+plot(zz) + 
+ggplot2::geom_line()
 
 # now for SPRT examples
 x <- binomialSPRT(p0 = .05, p1 = .25, alpha = .1, beta = .2)
@@ -223,7 +223,10 @@ plot(x, plottype = 6)
 nb1 <- nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, outtype = 3)
 nb1
 library(scales)
-ggplot(nb1, aes(x = n, y = Power)) + geom_line() + geom_point() + scale_y_continuous(labels = percent)
+ggplot2::ggplot(nb1, ggplot2::aes(x = n, y = Power)) + 
+ggplot2::geom_line() + 
+ggplot2::geom_point() + 
+ggplot2::scale_y_continuous(labels = percent)
 
 # simple call with same parameters to get minimum sample size yielding desired power
 nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40)
@@ -233,7 +236,8 @@ nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40)
 nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, conservative = TRUE)
 
 # print out more information for the selected derived sample size
-nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, conservative = TRUE, outtype = 2)
+nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, conservative = TRUE,
+ outtype = 2)
 
 # what happens if input sample sizes not sufficient?
 nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)

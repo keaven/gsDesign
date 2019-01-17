@@ -90,7 +90,8 @@ s <- sfTrimmed(alpha = .05, t = tx, param = param)$spend
 x <- rbind(x, data.frame(t = tx, Spending = s, sf = "Trimmed"))
 s <- sfGapped(alpha = .05, t = tx, param = param)$spend
 x <- rbind(x, data.frame(t = tx, Spending = s, sf = "Gapped"))
-ggplot(x, aes(x = t, y = Spending, col = sf)) + geom_line()
+ggplot2::ggplot(x, ggplot2::aes(x = t, y = Spending, col = sf)) + 
+ggplot2::geom_line()
 
 
 # now apply the sfTrimmed version in gsDesign

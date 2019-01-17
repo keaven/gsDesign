@@ -897,7 +897,7 @@ sfNormal <- function(alpha, t, param) {
 #' z2alt <- (s1alt + s2) / sqrt(178 + n2)
 #' sum(z1alt >= x$upper$bound[1] | z2alt >= x$upper$bound[2]) / 1000000
 #' 
-#' @aliases sfLinear sfStep
+#' @aliases sfLinear
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
@@ -1501,7 +1501,8 @@ sfTDist <- function(alpha, t, param) {
 #' x <- rbind(x, data.frame(t = tx, Spending = s, sf = "Trimmed"))
 #' s <- sfGapped(alpha = .05, t = tx, param = param)$spend
 #' x <- rbind(x, data.frame(t = tx, Spending = s, sf = "Gapped"))
-#' ggplot(x, aes(x = t, y = Spending, col = sf)) + geom_line()
+#' ggplot2::ggplot(x, ggplot2::aes(x = t, y = Spending, col = sf)) + 
+#' ggplot2::geom_line()
 #' 
 #' 
 #' # now apply the sfTrimmed version in gsDesign

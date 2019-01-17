@@ -2,7 +2,6 @@
 % Please edit documentation in R/gsSpending.R
 \name{sfLinear}
 \alias{sfLinear}
-\alias{sfStep}
 \title{Piecewise Linear and Step Function Spending Functions}
 \usage{
 sfLinear(alpha, t, param)

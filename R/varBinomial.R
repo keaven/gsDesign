@@ -254,7 +254,6 @@
 #' varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0, scale = "RR")
 #' # blinded estimate of log-odds-ratio
 #' varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0, scale = "OR")
-#' @aliases testBinomial ciBinomial nBinomial simBinomial
 #' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
 #' @references Farrington, CP and Manning, G (1990), Test statistics and sample
 #' size formulae for comparative binomial trials with null hypothesis of

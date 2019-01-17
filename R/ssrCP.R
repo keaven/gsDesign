@@ -226,9 +226,12 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #' axis(side = 4, at = 80 + 240 * seq(0, .4, .1), labels = as.character(seq(0, .4, .1)))
 #' mtext(side = 4, expression(paste("Density for ", z[1])), line = 2)
 #' text(x = 1.5, y = 90, col = 2, labels = expression(paste("Density for ", theta, "=0")))
-#' text(x = 3.00, y = 180, col = 3, labels = expression(paste("Density for ", theta, "=", theta[1])))
-#' text(x = 1.00, y = 180, col = 4, labels = expression(paste("Density for ", theta, "=", theta[1], "/2")))
-#' text(x = 2.5, y = 140, col = 5, labels = expression(paste("Density for ", theta, "=", theta[1], "*.75")))
+#' text(x = 3.00, y = 180, col = 3, labels = expression(paste("Density for ", theta, "=",
+#'  theta[1])))
+#' text(x = 1.00, y = 180, col = 4, labels = expression(paste("Density for ", theta, "=",
+#'  theta[1], "/2")))
+#' text(x = 2.5, y = 140, col = 5, labels = expression(paste("Density for ", theta, "=",
+#'  theta[1], "*.75")))
 #' # overall line for max sample size
 #' nalt <- xx$maxinc * x$n.I[2]
 #' lines(x = par("usr")[1:2], y = c(nalt, nalt), lty = 2)
@@ -251,9 +254,11 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #'   data.frame(cbind(xxFisher$dat, Test = "Fisher combination"))
 #' )
 #' # plot stage 2 statistic required for positive combination test
-#' ggplot(data = y, aes(x = z1, y = z2, col = Test)) + geom_line()
+#' ggplot2::ggplot(data = y, ggplot2::aes(x = z1, y = z2, col = Test)) + 
+#' ggplot2::geom_line()
 #' # plot total sample size versus stage 1 test statistic
-#' ggplot(data = y, aes(x = z1, y = n2, col = Test)) + geom_line()
+#' ggplot2::ggplot(data = y, ggplot2::aes(x = z1, y = n2, col = Test)) + 
+#' ggplot2::geom_line()
 #' # check achieved Type I error for sufficient statistic design
 #' Power.ssrCP(x = xxZ, theta = 0)
 #' 
@@ -268,7 +273,8 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #'   data.frame(cbind(xxtheta1$dat, "CP effect size" = "Alt. hypothesis"))
 #' )
 #' # plot stage 2 sample size by design
-#' ggplot(data = y, aes(x = z1, y = n2, col = CP.effect.size)) + geom_line()
+#' ggplot2::ggplot(data = y, ggplot2::aes(x = z1, y = n2, col = CP.effect.size)) + 
+#' ggplot2::geom_line()
 #' # compare power and expected sample size
 #' y1 <- Power.ssrCP(x = xx)
 #' y2 <- Power.ssrCP(x = xxtheta1)
@@ -278,10 +284,14 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #'   data.frame(cbind(y2, "CP effect size" = "Alt. hypothesis"))
 #' )
 #' # plot expected sample size by design and effect size
-#' ggplot(data = y3, aes(x = delta, y = en, col = CP.effect.size)) + geom_line() +
-#'   xlab(expression(delta)) + ylab("Expected sample size")
+#' ggplot2::ggplot(data = y3, ggplot2::aes(x = delta, y = en, col = CP.effect.size)) + 
+#' ggplot2::geom_line() +
+#' ggplot2::xlab(expression(delta)) + 
+#' ggplot2::ylab("Expected sample size")
 #' # plot power by design and effect size
-#' ggplot(data = y3, aes(x = delta, y = Power, col = CP.effect.size)) + geom_line() + xlab(expression(delta))
+#' ggplot2::ggplot(data = y3, ggplot2::aes(x = delta, y = Power, col = CP.effect.size)) + 
+#' ggplot2::geom_line() + 
+#' ggplot2::xlab(expression(delta))
 #' @author Keaven Anderson \email{keaven\_anderson@@merck.}
 #' @seealso \code{\link{gsDesign}}
 #' @references Bauer, Peter and Kohne, F., Evaluation of experiments with
@@ -309,7 +319,7 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #' results are promising: A practical guide with examples, Statistics in
 #' Medicine, 30:3267-3284, 2011.
 #' @keywords design
-#' @aliases ssrCP plot.ssrCP Power.ssrCP condPower z2NC z2Z z2Fisher
+#' @aliases ssrCP plot.ssrCP
 #' @rdname ssrCP
 #' @importFrom stats qnorm
 #' @export

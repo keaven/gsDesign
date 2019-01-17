@@ -3,13 +3,6 @@
 \name{eEvents}
 \alias{eEvents}
 \alias{print.eEvents}
-\alias{Expected}
-\alias{number}
-\alias{of}
-\alias{events}
-\alias{for}
-\alias{survival}
-\alias{studies}
 \title{Expected number of events for a time-to-event study}
 \usage{
 eEvents(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL, T = 2,

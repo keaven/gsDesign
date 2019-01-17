@@ -2,16 +2,9 @@
 % Please edit documentation in R/gsSurv.R
 \name{nSurv}
 \alias{nSurv}
-\alias{gsSurv}
 \alias{print.nSurv}
 \alias{print.gsSurv}
 \alias{xtable.gsSurv}
-\alias{tEventsIA}
-\alias{nEventsIA}
-\alias{Advanced}
-\alias{survival}
-\alias{sample}
-\alias{size}
 \title{Advanced time-to-event sample size calculation}
 \usage{
 nSurv(lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0,

@@ -208,7 +208,7 @@
 #' Schoenfeld D (1981), The Asymptotic Properties of Nonparametric Tests for
 #' Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
 #' @keywords design
-#' @aliases nEvents zn2hr hrn2z hrz2n print.nSurvival Survival sample size 
+#' @aliases print.nSurvival
 #' @rdname nSurvival
 #' @export
 # nSurvival function [sinew] ----

@@ -563,7 +563,7 @@ print.nSurvival <- function(x, ...) {
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 #' @keywords design
-#' @aliases print.gsDesign summary.gsDesign gsBValue gsDelta gsHR gsRR gsCPz gsDesign
+#' @aliases print.gsDesign summary.gsDesign
 #' @rdname gsBoundSummary
 #' @export
 #' @importFrom stats pnorm

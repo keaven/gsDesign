@@ -37,16 +37,16 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
   }
   for (i in min(length(gamma) + 1, length(T2)):2)
     gam[T3 > T2[i]] <- gamma[i - 1]
-  q <- exp(-(lam + et) * s)
+  q <- exp(-(c(lam) + c(et)) * s)
   Q <- cumprod(q)
   indx <- 1:(nperiod - 1)
   Qm1 <- c(1, Q[indx])
-  p <- lam / (lam + et) * Qm1 * (1 - q)
+  p <- c(lam) / (c(lam) + c(et)) * c(Qm1) * (1 - c(q))
   p[is.nan(p)] <- 0
   P <- cumsum(p)
-  B <- gam / (lam + et) * lam * (s - (1 - q) / (lam + et))
+  B <- c(gam) / (c(lam) + c(et)) * c(lam) * (c(s) - (1 - c(q)) / (c(lam) + c(et)))
   B[is.nan(B)] <- 0
-  A <- c(0, P[indx]) * gam * s + Qm1 * B
+  A <- c(0, P[indx]) * c(gam) * c(s) + c(Qm1) * c(B)
   if (!simple) {
     return(list(
       lambda = lambda, eta = eta, gamma = gamma, R = R, S = S,
@@ -58,7 +58,7 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
     return(list(
       lambda = lambda, eta = eta, gamma = gamma, R = R, S = S,
       T = T, Tfinal = Tfinal, minfup = minfup, d = sum(A),
-      n = sum(gam * s)
+      n = sum(c(gam) * c(s))
     ))
   }
 }
@@ -140,7 +140,7 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 #'   gamma = matrix(.5, ncol = 6), R = 2, T = 4
 #' )
 #' 
-#' @aliases print.eEvents Expected number of events for survival studies
+#' @aliases print.eEvents
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{gsDesign package overview}, \link{Plots for group sequential
 #' designs}, \code{\link{gsDesign}}, \code{\link{gsHR}},
@@ -746,8 +746,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' fixed design to obtain a sufficient number of events to power a group
 #' sequential design.
 #'
-#' @aliases nSurv gsSurv print.nSurv print.gsSurv xtable.gsSurv tEventsIA
-#' nEventsIA Advanced survival sample size
+#' @aliases nSurv print.nSurv print.gsSurv xtable.gsSurv
 #' @param x An object of class \code{nSurv} or \code{gsSurv}.
 #' \code{print.nSurv()} is used for an object of class \code{nSurv} which will
 #' generally be output from \code{nSurv()}. For \code{print.gsSurv()} is used

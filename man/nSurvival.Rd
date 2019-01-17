@@ -2,14 +2,7 @@
 % Please edit documentation in R/gsSurvival.R
 \name{nSurvival}
 \alias{nSurvival}
-\alias{nEvents}
-\alias{zn2hr}
-\alias{hrn2z}
-\alias{hrz2n}
 \alias{print.nSurvival}
-\alias{Survival}
-\alias{sample}
-\alias{size}
 \title{Time-to-event sample size calculation (Lachin-Foulkes)}
 \usage{
 nSurvival(lambda1 = 1/12, lambda2 = 1/24, Ts = 24, Tr = 12,
