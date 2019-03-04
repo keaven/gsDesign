@@ -224,20 +224,31 @@ gsCP <- function(x, theta = NULL, i = 1, zi = 0, r = 18) {
     stop("gsCP must have x$lower$bound[i]<=zi<=x$upper$bound[i]")
   }
 
-  if (is.null(theta)) {
-    theta <- c(zi / sqrt(x$n.I[i]), 0, x$delta)
-  }
+  if (is.null(theta)) theta <- c(zi/sqrt(x$n.I[i]), 0, x$delta)
 
   knew <- x$k - i
   Inew <- x$n.I[(i + 1):x$k] - x$n.I[i]
-  bnew <- (x$upper$bound[(i + 1):x$k] - zi * sqrt(x$n.I[i] / x$n.I[(i + 1):x$k])) /
-    sqrt(Inew / x$n.I[(i + 1):x$k])
+
+  # update KA, 20160213
+  if (is.null(x$timing)) x$timing <- x$n.I/x$n.I[x$k]
+  bnew <- (x$upper$bound[(i+1):x$k]*sqrt(x$timing[(i+1):x$k]) - zi*sqrt(x$timing[i]))/
+    sqrt(x$timing[(i+1):x$k]-x$timing[i])
+  # while equivalent, above code is simpler expression of what is in write-up    
+  #    bnew <- (x$upper$bound[(i+1):x$k] - zi * sqrt(x$n.I[i] / x$n.I[(i+1):x$k]))/ 
+  #            sqrt(Inew/x$n.I[(i+1):x$k])
+  # end update
+  
   if (test.type > 1) {
-    anew <- (x$lower$bound[(i + 1):x$k] - zi * sqrt(x$n.I[i] / x$n.I[(i + 1):x$k])) /
-      sqrt(Inew / x$n.I[(i + 1):x$k])
+    # update KA, 20160213
+    anew <- (x$lower$bound[(i+1):x$k]*sqrt(x$timing[(i+1):x$k]) - zi*sqrt(x$timing[i]))/
+      sqrt(x$timing[(i+1):x$k]-x$timing[i])
+    # while equivalent, above code is simpler expression of what is in write-up    
+    #      anew <- (x$lower$bound[(i+1):x$k]-zi*sqrt(x$n.I[i]/x$n.I[(i+1):x$k]))/
+    #            sqrt(Inew/x$n.I[(i+1):x$k])        
+    # end update
   }
   else {
-    anew <- array(-20, knew)
+    anew <- rep(-20, knew)
   }
 
   gsProbability(k = knew, theta = theta, n.I = Inew, a = anew, b = bnew, r = r, overrun = 0)
@@ -365,13 +376,13 @@ gsBoundCP <- function(x, theta = "thetahat", r = 18) {
   test.type <- ifelse(methods::is(x, "gsProbability"), 3, x$test.type)
 
   if (theta != "thetahat") {
-    thetahi <- array(theta, len)
+    thetahi <- rep(theta, len)
     if (test.type > 1) thetalow <- thetahi
   } else {
     if (test.type > 1) thetalow <- x$lower$bound[1:len] / sqrt(x$n.I[1:len])
     thetahi <- x$upper$bound[1:len] / sqrt(x$n.I[1:len])
   }
-  CPhi <- array(0, len)
+  CPhi <- rep(0, len)
 
   if (test.type > 1) CPlo <- CPhi
 
@@ -394,7 +405,7 @@ gsBoundCP <- function(x, theta = "thetahat", r = 18) {
 #' @importFrom methods is
 # gsPosterior function [sinew] ----
 gsPosterior <- function(x = gsDesign(), i = 1, zi = NULL, prior = normalGrid(), r = 18) {
-  if (is.null(prior$gridwgts)) prior$gridwgts <- array(1, length(prior$z))
+  if (is.null(prior$gridwgts)) prior$gridwgts <- rep(1, length(prior$z))
   checkLengths(prior$z, prior$density, prior$gridwgts)
   checkVector(prior$gridwgts, "numeric", c(0, Inf), c(TRUE, FALSE))
   checkVector(prior$density, "numeric", c(0, Inf), c(TRUE, FALSE))
@@ -473,7 +484,7 @@ gsPOS <- function(x, theta, wgts) {
   checkVector(wgts, "numeric")
   checkLengths(theta, wgts)
   x <- gsProbability(theta = theta, d = x)
-  one <- array(1, x$k)
+  one <- rep(1, x$k)
   as.double(one %*% x$upper$prob %*% wgts)
 }
 
@@ -490,7 +501,7 @@ gsCPOS <- function(i, x, theta, wgts) {
   checkVector(wgts, "numeric")
   checkLengths(theta, wgts)
   x <- gsProbability(theta = theta, d = x)
-  v <- c(array(1, i), array(0, (x$k - i)))
+  v <- c(rep(1, i), rep(0, (x$k - i)))
   pAi <- 1 - as.double(v %*% (x$upper$prob + x$lower$prob) %*% wgts)
   v <- 1 - v
   pAiB <- as.double(v %*% x$upper$prob %*% wgts)

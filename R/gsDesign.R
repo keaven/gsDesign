@@ -112,7 +112,7 @@
 #' @useDynLib gsDesign gsbound1
 #' @rdname gsBound
 # gsBound function [sinew] ----
-gsBound <- function(I, trueneg, falsepos, tol = 0.000001, r = 18) {
+gsBound <- function(I, trueneg, falsepos, tol = 0.000001, r = 18, printerr = 0) {
   # gsBound: assuming theta=0, derive lower and upper crossing boundaries given
   #          timing of interims, false positive rates and true negative rates
 
@@ -122,12 +122,14 @@ gsBound <- function(I, trueneg, falsepos, tol = 0.000001, r = 18) {
   checkVector(falsepos, "numeric", c(0, 1), c(TRUE, FALSE))
   checkScalar(tol, "numeric", c(0, Inf), c(FALSE, TRUE))
   checkScalar(r, "integer", c(1, 80))
+  checkScalar(printerr, "integer")
   checkLengths(trueneg, falsepos, I)
 
   k <- as.integer(length(I))
   if (trueneg[k] <= 0.) stop("Final futility spend must be > 0")
   if (falsepos[k] <= 0.) stop("Final efficacy spend must be > 0")
   r <- as.integer(r)
+  printerr <- as.integer(printerr)
   storage.mode(I) <- "double"
   storage.mode(trueneg) <- "double"
   storage.mode(falsepos) <- "double"
@@ -135,9 +137,11 @@ gsBound <- function(I, trueneg, falsepos, tol = 0.000001, r = 18) {
   a <- falsepos
   b <- falsepos
   retval <- as.integer(0)
-  xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval)
+  xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval, printerr)
   rates <- list(falsepos = xx[[6]], trueneg = xx[[5]])
 
+  ## DSB question: do we need to do something here in case of an error? (similarly as in gsBound1)
+  
   list(
     k = xx[[1]], theta = 0., I = xx[[2]], a = xx[[3]], b = xx[[4]], rates = rates, tol = xx[[7]],
     r = xx[[8]], error = xx[[9]]
@@ -431,20 +435,26 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
                      delta = 0, n.fix = 1, timing = 1, sfu = sfHSD, sfupar = -4,
                      sfl = sfHSD, sflpar = -2, tol = 0.000001, r = 18, n.I = 0, maxn.IPlan = 0,
-                     nFixSurv = 0, endpoint = NULL, delta1 = 1, delta0 = 0, overrun = 0) {
+                     nFixSurv = 0, endpoint = NULL, delta1 = 1, delta0 = 0, overrun = 0, usTime = NULL, lsTime = NULL) {
   # Derive a group sequential design and return in a gsDesign structure
 
   # set up class variable x for gsDesign being requested
   x <- list(
     k = k, test.type = test.type, alpha = alpha, beta = beta, astar = astar,
     delta = delta, n.fix = n.fix, timing = timing, tol = tol, r = r, n.I = n.I, maxn.IPlan = maxn.IPlan,
-    nFixSurv = nFixSurv, nSurv = 0, endpoint = endpoint, delta1 = delta1, delta0 = delta0, overrun = overrun
+    nFixSurv = nFixSurv, nSurv = 0, endpoint = endpoint, delta1 = delta1, delta0 = delta0, overrun = overrun, usTime = usTime, lsTime = lsTime
   )
 
   class(x) <- "gsDesign"
 
   # check parameters other than spending functions
   x <- gsDErrorCheck(x)
+  # get upper spending time (usually will be x$timing)
+  if (is.null(x$usTime)){
+    x$usTime <- x$timing
+    usTime <- x$timing
+  }else usTime <- x$usTime
+  if (usTime[length(usTime)-1] > 1) stop("All interim analyses must have spending time < 1 (usTime)")
 
   # set up spending for upper bound
   if (is.character(sfu)) {
@@ -464,7 +474,7 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
     stop("Upper spending function mis-specified")
   }
   else {
-    upper <- sfu(x$alpha, x$timing, sfupar)
+    upper <- sfu(x$alpha, usTime, sfupar)
     upper$sf <- sfu
   }
 
@@ -476,19 +486,24 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
   }
   else if (x$test.type == 2) {
     x$lower <- x$upper
+    x$lsTime <- x$usTime
   }
   else {
+    # get lower spending time (usually will be x$timing)
+    if (is.null(x$lsTime)) lsTime <- x$timing
+    else lsTime <- x$lsTime
+    if (lsTime[length(lsTime)-1] > 1) stop("All interim analyses must have spending time < 1 (lsTime)")
     if (!is.function(sfl)) {
       stop("Lower spending function must return object with class spendfn")
     }
     else if (is.element(test.type, 3:4)) {
-      x$lower <- sfl(x$beta, x$timing, sflpar)
+      x$lower <- sfl(x$beta, lsTime, sflpar)
     }
     else if (is.element(test.type, 5:6)) {
       if (x$astar == 0) {
         x$astar <- 1 - x$alpha
       }
-      x$lower <- sfl(x$astar, x$timing, sflpar)
+      x$lower <- sfl(x$astar, lsTime, sflpar)
     }
 
     x$lower$sf <- sfl
@@ -653,15 +668,15 @@ gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0
   )
   plo <- matrix(xx[[7]], k, ntheta)
   phi <- matrix(xx[[8]], k, ntheta)
-  powr <- as.vector(array(1, k) %*% phi)
-  futile <- array(1, k) %*% plo
+  powr <- as.vector(rep(1, k) %*% phi)
+  futile <- rep(1, k) %*% plo
   if (k == 1) {
     nOver <- n.I[k]
   } else {
     nOver <- c(n.I[1:(k - 1)] + overrun, n.I[k])
   }
   nOver[nOver > n.I[k]] <- n.I[k]
-  en <- as.vector(nOver %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
+  en <- as.vector(nOver %*% (plo + phi) + n.I[k] * (t(rep(1, ntheta)) - powr - futile))
   x <- list(
     k = xx[[1]], theta = xx[[3]], n.I = xx[[4]], lower = list(bound = xx[[5]], prob = plo),
     upper = list(bound = xx[[6]], prob = phi), en = en, r = r, overrun = overrun
@@ -779,7 +794,7 @@ gsDensity <- function(x, theta = 0, i = 1, zi = 0, r = 18) {
   checkScalar(i, "integer", c(0, x$k), c(FALSE, TRUE))
   checkVector(zi, "numeric")
   checkScalar(r, "integer", c(1, 80))
-  den <- array(0, length(theta) * length(zi))
+  den <- rep(0, length(theta) * length(zi))
   xx <- .C(
     "gsdensity", den, as.integer(i), length(theta),
     as.double(theta), as.double(x$n.I),
@@ -801,7 +816,7 @@ gsDType1 <- function(x, ss = 1) {
   # gsDType1: calculate bound assuming one-sided rule (only upper bound)
 
   # set lower bound
-  a <- array(-20, x$k)
+  a <- rep(-20, x$k)
 
   # get Wang-Tsiatis bound, if desired
   if (is.element(x$upper$name, c("WT", "Pocock", "OF"))) {
@@ -951,7 +966,7 @@ gsDType3ss <- function(x) {
   falsepos <- x$upper$spend
   falsepos <- falsepos - c(0, falsepos[1:x$k - 1])
   x$upper$spend <- falsepos
-  trueneg <- array((1 - x$alpha) / x$k, x$k)
+  trueneg <- rep((1 - x$alpha) / x$k, x$k)
   x1 <- gsBound(x$timing, trueneg, falsepos, x$tol, x$r)
 
   # get I(max) and lower bound
@@ -1082,7 +1097,7 @@ gsDType3b <- function(x) {
   x$upper$spend <- falsepos
 
   # compute initial upper bound under H0
-  trueneg <- array((1 - x$alpha) / x$k, x$k)
+  trueneg <- rep((1 - x$alpha) / x$k, x$k)
   x1 <- gsBound(x$timing, trueneg, falsepos, x$tol, x$r)
 
   # x$k==1 is a special case
@@ -1155,7 +1170,7 @@ gsDType4a <- function(x) {
   x$upper$spend <- falsepos
 
   # compute upper bound under H0
-  x1 <- gsBound1(theta = 0, I = x$n.I, a = array(-20, x$k), probhi = falsepos, tol = x$tol, r = x$r)
+  x1 <- gsBound1(theta = 0, I = x$n.I, a = rep(-20, x$k), probhi = falsepos, tol = x$tol, r = x$r)
 
   # get lower bound
   x2 <- gsBound1(theta = -x$delta, I = x$n.I, a = -x1$b, probhi = falseneg, tol = x$tol, r = x$r)
@@ -1183,7 +1198,7 @@ gsDType4ss <- function(x) {
   falsepos <- x$upper$spend
   falsepos <- falsepos - c(0, falsepos[1:x$k - 1])
   x$upper$spend <- falsepos
-  x0 <- gsBound1(0., x$timing, array(-20, x$k), falsepos, x$tol, x$r)
+  x0 <- gsBound1(0., x$timing, rep(-20, x$k), falsepos, x$tol, x$r)
 
   # get beta spending (falseneg)
   falseneg <- x$lower$spend
@@ -1211,7 +1226,7 @@ gsDType4ss <- function(x) {
 
   # compute additional error rates needed and add to x
   x$theta <- c(0, x$delta)
-  x$falseposnb <- as.vector(gsprob(0, xx$I, array(-20, x$k), x0$b, r = x$r)$probhi)
+  x$falseposnb <- as.vector(gsprob(0, xx$I, rep(-20, x$k), x0$b, r = x$r)$probhi)
   x3 <- gsprob(x$theta, xx$I, xx$a, x0$b, r = x$r, overrun = x$overrun)
   x$upper$prob <- x3$probhi
   x$lower$prob <- x3$problo
@@ -1244,7 +1259,7 @@ gsDType6 <- function(x) {
   falsepos <- x$upper$spend
   falsepos <- falsepos - c(0, falsepos[1:x$k - 1])
   x$upper$spend <- falsepos
-  x0 <- gsBound1(0., x$timing, array(-20, x$k), falsepos, x$tol, x$r)
+  x0 <- gsBound1(0., x$timing, rep(-20, x$k), falsepos, x$tol, x$r)
   x$upper$bound <- x0$b
 
   if (x$astar == 1 - x$alpha) {
@@ -1285,7 +1300,7 @@ gsDType6 <- function(x) {
 
   # compute error rates needed and add to x
   x$theta <- c(0, x$delta)
-  x$falseposnb <- as.vector(gsprob(0, x$n.I, array(-20, x$k), x$upper$bound, r = x$r)$probhi)
+  x$falseposnb <- as.vector(gsprob(0, x$n.I, rep(-20, x$k), x$upper$bound, r = x$r)$probhi)
   x3 <- gsprob(x$theta, x$n.I, x$lower$bound, x$upper$bound, r = x$r, overrun = x$overrun)
   x$upper$prob <- x3$probhi
   x$lower$prob <- x3$problo
@@ -1390,11 +1405,11 @@ gsprob <- function(theta, I, a, b, r = 18, overrun = 0) {
 
   plo <- matrix(xx[[7]], nanal, ntheta)
   phi <- matrix(xx[[8]], nanal, ntheta)
-  powr <- array(1, nanal) %*% phi
-  futile <- array(1, nanal) %*% plo
+  powr <- rep(1, nanal) %*% phi
+  futile <- rep(1, nanal) %*% plo
   IOver <- c(I[1:(nanal - 1)] + overrun, I[nanal])
   IOver[IOver > I[nanal]] <- I[nanal]
-  en <- as.vector(IOver %*% (plo + phi) + I[nanal] * (t(array(1, ntheta)) - powr - futile))
+  en <- as.vector(IOver %*% (plo + phi) + I[nanal] * (t(rep(1, ntheta)) - powr - futile))
   list(
     k = xx[[1]], theta = xx[[3]], I = xx[[4]], a = xx[[5]], b = xx[[6]], problo = plo,
     probhi = phi, powr = powr, en = en, r = r
@@ -1406,7 +1421,7 @@ gsDProb <- function(theta, d) {
   k <- d$k
   n.I <- d$n.I
 
-  a <- if (d$test.type != 1) d$lower$bound else array(-20, k)
+  a <- if (d$test.type != 1) d$lower$bound else rep(-20, k)
   b <- d$upper$bound
   r <- d$r
   ntheta <- as.integer(length(theta))
@@ -1420,15 +1435,15 @@ gsDProb <- function(theta, d) {
   )
   plo <- matrix(xx[[7]], k, ntheta)
   phi <- matrix(xx[[8]], k, ntheta)
-  powr <- as.vector(array(1, k) %*% phi)
-  futile <- array(1, k) %*% plo
+  powr <- as.vector(rep(1, k) %*% phi)
+  futile <- rep(1, k) %*% plo
   if (k == 1) {
     IOver <- n.I
   } else {
     IOver <- c(n.I[1:(k - 1)] + d$overrun, n.I[k])
   }
   IOver[IOver > n.I[k]] <- n.I[k]
-  en <- as.vector(IOver %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
+  en <- as.vector(IOver %*% (plo + phi) + n.I[k] * (t(rep(1, ntheta)) - powr - futile))
 
   d$en <- en
   d$theta <- theta
@@ -1490,9 +1505,12 @@ gsDErrorCheck <- function(x) {
 
     x$timing <- x$n.I / x$maxn.IPlan
 
-    if (x$n.I[x$k - 1] >= x$maxn.IPlan) {
-      stop("Only 1 n >= Planned Final n")
-    }
+    # Following check removed when spending time added (lsTime, usTime); KA 9/30/17
+    # Appropriate checking is done in gsDesign after return from this function
+    #if (x$n.I[x$k-1] >= x$maxn.IPlan)
+    #{
+    #    stop("Only 1 n >= Planned Final n")        
+    #}
   }
   else if (x$maxn.IPlan > 0) {
     if (length(x$n.I) == 1) {
@@ -1525,6 +1543,29 @@ gsDErrorCheck <- function(x) {
       stop("value input for timing must be length 1, k-1 or k")
     }
   }
+  # if usTime (upper spending time) is specified, check it
+  if (!is.null(x$usTime)){
+    checkVector(x$usTime,"numeric",c(0,1),c(FALSE,TRUE))
+    if (length(x$usTime) < x$k - 1 || length(x$usTime)>x$k) stop("usTime, if specified, must have length k or k-1")
+    if (length(x$usTime)<x$k) x$usTime <- c(x$usTime,1)
+    if (min(x$usTime - c(0,x$usTime[1:(x$k-1)])) <= 0)
+    {
+      stop("input upper spending time at analyses must be increasing >0 and <=1 (<1 at any interim)")
+    }
+    if (x$usTime[x$k]<1) stop("upper spending time at final analysis, if specified, must be =1")
+  }
+  # if lsTime (lower spending time) is specified, check it; if not, set it to timing
+  if (!is.null(x$lsTime)){
+    checkVector(x$lsTime,"numeric",c(0,1),c(FALSE,TRUE))
+    if (length(x$lsTime) < x$k - 1 || length(x$lsTime)>x$k) stop("lsTime, if specified, must have length k or k-1")
+    if (length(x$lsTime)<x$k) x$lsTime <- c(x$lsTime,1)
+    if (min(x$lsTime - c(0,x$lsTime[1:(x$k-1)])) <= 0)
+    {
+      stop("input lower spending time at analyses must be increasing >0 and <=1 (<1 at any interim)")
+    }
+    if (x$lsTime[x$k]<1) stop("lower spending time at final analysis, if specified, must be =1")
+  }
+  
   # check input values for tol, r
   checkScalar(x$tol, "numeric", c(0, 0.1), c(FALSE, TRUE))
   checkScalar(x$r, "integer", c(1, 80))
