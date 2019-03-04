@@ -321,6 +321,9 @@ gsBoundSummary <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits
       Nname <- "N/Fixed design N"
     }else Nname="N"
   }
+  if(is.null(deltaname)){
+    if ("gsSurv" %in% class(x) || x$nFixSurv>0){deltaname="HR"}else{deltaname="delta"}
+  }
   # delta values corresponding to x$theta
   delta <- x$delta0 + (x$delta1-x$delta0)*x$theta/x$delta
   if (logdelta || "gsSurv" %in% class(x)) delta <- exp(delta)
@@ -331,27 +334,24 @@ gsBoundSummary <- function(x, deltaname=NULL, logdelta=FALSE, Nname=NULL, digits
   # delta values at bounds
   # note that RR and HR are treated specially
   if (x$test.type > 1){
-    if (x$nFixSurv > 0 || "gsSurv" %in% class(x) ||Nname=="HR"){
+    if (x$nFixSurv > 0 || "gsSurv" %in% class(x) || toupper(deltaname)=="HR"){
       deltafutility <- gsHR(x=x,i=1:x$k,z=x$lower$bound[1:x$k],ratio=ratio)
-    }else if (tolower(Nname) =="rr"){
+    }else if (tolower(deltaname) =="rr"){
       deltafutility <- gsRR(x=x,i=1:x$k,z=x$lower$bound[1:x$k],ratio=ratio)
     }else{
       deltafutility <- gsDelta(x=x,i=1:x$k,z=x$lower$bound[1:x$k])
-      if (logdelta==TRUE || "gsSurv" %in% class(x)) deltafutility <- exp(deltafutility)
+      if (logdelta==TRUE) deltafutility <- exp(deltafutility)
     }
   }
-  if (x$nFixSurv > 0 || "gsSurv" %in% class(x) ||Nname=="HR"){
+  if (x$nFixSurv > 0 || "gsSurv" %in% class(x) ||toupper(deltaname)=="HR"){
     deltaefficacy <- gsHR(x=x,i=1:x$k,z=x$upper$bound[1:x$k],ratio=ratio)
-  }else if (tolower(Nname) =="rr"){
+  }else if (tolower(deltaname) =="rr"){
     deltaefficacy <- gsRR(x=x,i=1:x$k,z=x$upper$bound[1:x$k],ratio=ratio)
   }else{
     deltaefficacy <- gsDelta(x=x,i=1:x$k,z=x$upper$bound[1:x$k])
-    if (logdelta==TRUE || "gsSurv" %in% class(x)) deltaefficacy <- exp(deltaefficacy)
+    if (logdelta==TRUE) deltaefficacy <- exp(deltaefficacy)
   }
-  if(is.null(deltaname)){
-    if ("gsSurv" %in% class(x) || x$nFixSurv>0){deltaname="HR"}else{deltaname="delta"}
-  }
-  # create delta names for boundary corssing probabilities
+  # create delta names for boundary crossing probabilities
   deltanames <- paste("P(Cross) if ",deltaname,"=",round(delta,ddigits),sep="")
   pframe <- NULL
   for(i in 1:length(x$theta)) pframe <- rbind(pframe, data.frame("Value"=deltanames[i],"Efficacy"=cumsum(x$upper$prob[,i]),i=1:x$k))
