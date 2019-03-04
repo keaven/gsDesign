@@ -168,22 +168,22 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
   len <- max(sapply(list(p1, p2, beta, delta0, ratio), length))
   if (len > 1) {
     if (length(p1) == 1) {
-      p1 <- array(p1, len)
+      p1 <- rep(p1, len)
     }
     if (length(p2) == 1) {
-      p2 <- array(p2, len)
+      p2 <- rep(p2, len)
     }
     if (length(alpha) == 1) {
-      alpha <- array(alpha, len)
+      alpha <- rep(alpha, len)
     }
     if (length(beta) == 1) {
-      beta <- array(beta, len)
+      beta <- rep(beta, len)
     }
     if (length(delta0) == 1) {
-      delta0 <- array(delta0, len)
+      delta0 <- rep(delta0, len)
     }
     if (length(ratio) == 1) {
-      ratio <- array(ratio, len)
+      ratio <- rep(ratio, len)
     }
   }
   if (max(delta0 == 0) > 0 && max(p1[delta0 == 0] == p2[delta0 ==
@@ -459,11 +459,11 @@ testBinomial <- function(x1, x2, n1, n2, delta0 = 0, chisq = 0, adj = 0, scale =
   len <- max(sapply(list(n1, n2, x1, x2, chisq, adj, delta0), length))
 
   if (len > 1) {
-    if (length(x1) == 1) p1 <- array(x1, len)
-    if (length(x2) == 1) p2 <- array(x2, len)
-    if (length(chisq) == 1) alpha <- array(chisq, len)
-    if (length(adj) == 1) beta <- array(adj, len)
-    if (length(delta0) == 1) delta0 <- array(delta0, len)
+    if (length(x1) == 1) p1 <- rep(x1, len)
+    if (length(x2) == 1) p2 <- rep(x2, len)
+    if (length(chisq) == 1) alpha <- rep(chisq, len)
+    if (length(adj) == 1) beta <- rep(adj, len)
+    if (length(delta0) == 1) delta0 <- rep(delta0, len)
   }
 
   ntot <- n1 + n2
@@ -537,12 +537,12 @@ testBinomial <- function(x1, x2, n1, n2, delta0 = 0, chisq = 0, adj = 0, scale =
   }
 
   # do continuity correction, where required
-  one <- array(TRUE, max(length(V), length(adj)))
+  one <- rep(TRUE, max(length(V), length(adj)))
   adj <- (adj == 1) & one
   V[adj] <- V[adj] * ntot / (ntot - 1)
 
   # square z where required to get chi-square
-  one <- array(TRUE, max(length(z), length(chisq)))
+  one <- rep(TRUE, max(length(z), length(chisq)))
   chisq <- chisq & one
   if (length(z) == 1) z <- z * one
   z[chisq] <- z[chisq]^2 / V[chisq]

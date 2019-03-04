@@ -238,7 +238,7 @@ gsBinomialExact <- function(k = 2, theta = c(.1, .2), n.I = c(50, 100), a = c(3,
   if (min(diff(n.I - b)) < 0) stop("n.I - b must be non-decreasing")
 
   plo <- matrix(nrow = k, ncol = ntheta)
-  rownames(plo) <- paste(array("Analysis ", k), 1:k)
+  rownames(plo) <- paste(rep("Analysis ", k), 1:k)
   colnames(plo) <- theta
   phi <- plo
   en <- numeric(ntheta)
@@ -267,9 +267,9 @@ gsBinomialExact <- function(k = 2, theta = c(.1, .2), n.I = c(50, 100), a = c(3,
     }
   }
 
-  powr <- array(1, k) %*% phi
-  futile <- array(1, k) %*% plo
-  en <- as.vector(n.I %*% (plo + phi) + n.I[k] * (t(array(1, ntheta)) - powr - futile))
+  powr <- rep(1, k) %*% phi
+  futile <- rep(1, k) %*% plo
+  en <- as.vector(n.I %*% (plo + phi) + n.I[k] * (t(rep(1, ntheta)) - powr - futile))
 
   x <- list(
     k = k, theta = theta, n.I = n.I,
@@ -414,7 +414,7 @@ plot.binomialSPRT <- function(x, plottype = 1, ...) {
 binomialPP <- function(a = .2, b = .8, theta = c(.2, .4), p1 = .4, PP = c(.025, .95), nIA) {
   # initiate bounds outside of range of possibility
   upper <- nIA + 1
-  lower <- array(-1, length(nIA))
+  lower <- rep(-1, length(nIA))
   j <- 1
   # set bounds for each analysis sample size specified
   for (i in nIA) {

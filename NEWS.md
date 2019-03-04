@@ -1,6 +1,26 @@
+for 3.0-5, January, 2018
+- registered C routines
+- fix "gsbound"
+- replace "array" by "rep" calls to avoid R CMD check warnings
+
+3.0-4, September, 2017
+- First Github-based release
+- Cleaned up documentation for nBinomial1Sample
+- Updated documentation and code (including one default value for an argument) for nBinomial1Sample to improve error handling and clarity 
+- Updated sfLDOF to generalize with rho parameter; still backwards compatible for Lan-DeMets O'Brien-Fleming
+
+3.0-3 (not released)
+- Introduced spending time as a separate concept from information time to enable concepts such as calendar-based spending functions. The only user function changed is the gsDesign function and the change is the addition of the parameters usTime and lsTime; default behavior is backwards compatible.
+
+3.0-2, February, 2016 (not released)
+- Simplified conditional power section of gsDesignManual.pdf in doc directory
+- Corrected basic calculation in gsCP()
+- Eliminated deprecated ggplot2 function opts
+
 3.0-1, January, 2016
 - More changes to comply with R standards (in NAMESPACE - importFrom statements - and DESCRIPTION - adding plyr to imports) ensuring appropriate references.
 - Deleted link in documentation that no longer exists (gsBinomialExact.Rd).
+- Last planned RForge-based release; moving to Github.
 
 
 3.0-0, December, 2015
