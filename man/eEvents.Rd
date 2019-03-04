@@ -3,13 +3,6 @@
 \name{eEvents}
 \alias{eEvents}
 \alias{print.eEvents}
-\alias{Expected}
-\alias{number}
-\alias{of}
-\alias{events}
-\alias{for}
-\alias{survival}
-\alias{studies}
 \title{Expected number of events for a time-to-event study}
 \usage{
 eEvents(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL, T = 2,
@@ -72,8 +65,7 @@ for the sample size method they propose. Piecewise exponential survival and
 dropout rates are supported as well as piecewise uniform enrollment. A
 stratified population is allowed. Output is the expected number of events
 observed given a trial duration and the above rate parameters.
-}
-\details{
+
 \code{eEvents()} produces an object of class \code{eEvents} with the number
 of subjects and events for a set of pre-specified trial parameters, such as
 accrual duration and follow-up period. The underlying power calculation is
@@ -91,13 +83,17 @@ enrollment rate.
 \examples{
 
 # 3 enrollment periods, 3 piecewise exponential failure rates
-eEvents(lambda=c(.05,.02,.01), eta=.01, gamma=c(5,10,20), 
-             R=c(2,1,2), S=c(1,1), T=20)
-             
-# control group for example from Berstein and Lagakos (1978) 
-lamC<-c(1,.8,.5)
-n<-eEvents(lambda=matrix(c(lamC,lamC*2/3),ncol=6), eta=0, 
-           gamma=matrix(.5,ncol=6), R=2, T=4)
+eEvents(
+  lambda = c(.05, .02, .01), eta = .01, gamma = c(5, 10, 20),
+  R = c(2, 1, 2), S = c(1, 1), T = 20
+)
+
+# control group for example from Berstein and Lagakos (1978)
+lamC <- c(1, .8, .5)
+n <- eEvents(
+  lambda = matrix(c(lamC, lamC * 2 / 3), ncol = 6), eta = 0,
+  gamma = matrix(.5, ncol = 6), R = 2, T = 4
+)
 
 }
 \references{

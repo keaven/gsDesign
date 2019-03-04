@@ -1,8 +1,31 @@
-# #'@export function [sinew] ----
+# xtable.gsDesign roxy [sinew] ----
+#' @seealso 
+#'  \code{\link[stats]{Normal}}
+#'  \code{\link[xtable]{xtable}}
+#' @importFrom stats pnorm
+#' @importFrom xtable xtable
 #' @export
-xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digits = NULL, display = NULL,
-                            footnote = NULL, fnwid = "9cm", deltaname = "delta",
-                            Nname = "N", logdelta = FALSE, ...) {
+# xtable.gsDesign function [sinew] ----
+xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digits = NULL, 
+                            display = NULL, ...) {
+  
+  dots <- list(...)
+  
+  if(!'footnote'%in%dots)
+    footnote <- NULL
+  
+  if(!'fnwid'%in%dots)
+    fnwid <- "9cm"
+  
+  if(!'deltaname'%in%dots)
+    deltaname <- "delta"
+  
+  if(!'Nname'%in%dots)
+    Nname <- "N"
+  
+  if(!'logdelta'%in%dots)
+    logdelta <- FALSE
+  
   k <- x$k
   deltafutility <- gsDelta(x = x, i = 1:x$k, z = x$lower$bound[1:x$k])
   deltaefficacy <- gsDelta(x = x, i = 1:x$k, z = x$upper$bound[1:x$k])
@@ -73,3 +96,11 @@ xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digit
   colnames(x) <- c("Analysis", "Value", "Futility", "Efficacy")
   xtable::xtable(x, caption = caption, label = label, align = align, digits = digits, display = display, ...)
 }
+
+#' @title xtable
+#' @inheritParams xtable::xtable
+#' @importFrom xtable xtable
+#' @rdname xtable
+#' @name xtable
+#' @export
+NULL

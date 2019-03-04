@@ -1,7 +1,7 @@
 # nSurvival roxy [sinew] ----
-#' 3.4: Time-to-event sample size calculation (Lachin-Foulkes)
+#' @title Time-to-event sample size calculation (Lachin-Foulkes)
 #'
-#' \code{nSurvival()} is used to calculate the sample size for a clinical trial
+#' @description \code{nSurvival()} is used to calculate the sample size for a clinical trial
 #' with a time-to-event endpoint. The Lachin and Foulkes (1986) method is used.
 #' \code{nEvents} uses the Schoenfeld (1981) approximation to provide sample
 #' size and power in terms of the underlying hazard ratio and the number of
@@ -63,8 +63,6 @@
 #' the case of \code{hrn2z()} and whether or not a z-value > 0 corresponds to a
 #' hazard ratio > or < the null hazard ratio \code{hr0}.
 #'
-#' @aliases nSurvival nEvents zn2hr hrn2z hrz2n print.nSurvival Survival sample
-#' size
 #' @param lambda1,lambda2 event hazard rate for placebo and treatment group
 #' respectively.
 #' @param eta equal dropout hazard rate for both groups.
@@ -130,18 +128,6 @@
 #' outputs an approximate z-statistic corresponding to an input hazard ratio
 #' and number of events. \code{zn2hr} outputs an approximate hazard ratio
 #' corresponding to an input z-statistic and number of events.
-#' @author Shanhong Guan \email{shanhong.guan@@gmail.com}, Keaven Anderson
-#' \email{keaven_anderson@@merck.com}
-#' @seealso \link{gsDesign package overview}, \link{Plots for group sequential
-#' designs}, \link{gsDesign}, \link{gsHR}
-#' @references Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and
-#' Power for Analyses of Survival with Allowance for Nonuniform Patient Entry,
-#' Losses to Follow-Up, Noncompliance, and Stratification. \emph{Biometrics},
-#' 42, 507-519.
-#'
-#' Schoenfeld D (1981), The Asymptotic Properties of Nonparametric Tests for
-#' Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
-#' @keywords design
 #' @examples
 #' 
 #' 
@@ -210,8 +196,22 @@
 #' # assuming 2-to-1 randomization of experimental to control
 #' hrn2z(hr = .6, n = 75, ratio = 2)
 #' hrn2z(hr = 1 / .6, n = 75, ratio = 2)
-#' 
-#' # nSurvival function [sinew] ----
+#' @author Shanhong Guan \email{shanhong.guan@@gmail.com}, Keaven Anderson
+#' \email{keaven_anderson@@merck.com}
+#' @seealso \link{gsDesign package overview}, \link{Plots for group sequential
+#' designs}, \link{gsDesign}, \link{gsHR}
+#' @references Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and
+#' Power for Analyses of Survival with Allowance for Nonuniform Patient Entry,
+#' Losses to Follow-Up, Noncompliance, and Stratification. \emph{Biometrics},
+#' 42, 507-519.
+#'
+#' Schoenfeld D (1981), The Asymptotic Properties of Nonparametric Tests for
+#' Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
+#' @keywords design
+#' @aliases print.nSurvival
+#' @rdname nSurvival
+#' @export
+# nSurvival function [sinew] ----
 nSurvival <- function(lambda1 = 1 / 12, lambda2 = 1 / 24, Ts = 24, Tr = 12,
                       eta = 0, ratio = 1,
                       alpha = 0.025, beta = 0.10, sided = 1,

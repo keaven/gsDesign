@@ -37,16 +37,16 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
   }
   for (i in min(length(gamma) + 1, length(T2)):2)
     gam[T3 > T2[i]] <- gamma[i - 1]
-  q <- exp(-(lam + et) * s)
+  q <- exp(-(c(lam) + c(et)) * s)
   Q <- cumprod(q)
   indx <- 1:(nperiod - 1)
   Qm1 <- c(1, Q[indx])
-  p <- lam / (lam + et) * Qm1 * (1 - q)
+  p <- c(lam) / (c(lam) + c(et)) * c(Qm1) * (1 - c(q))
   p[is.nan(p)] <- 0
   P <- cumsum(p)
-  B <- gam / (lam + et) * lam * (s - (1 - q) / (lam + et))
+  B <- c(gam) / (c(lam) + c(et)) * c(lam) * (c(s) - (1 - c(q)) / (c(lam) + c(et)))
   B[is.nan(B)] <- 0
-  A <- c(0, P[indx]) * gam * s + Qm1 * B
+  A <- c(0, P[indx]) * c(gam) * c(s) + c(Qm1) * c(B)
   if (!simple) {
     return(list(
       lambda = lambda, eta = eta, gamma = gamma, R = R, S = S,
@@ -58,7 +58,7 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
     return(list(
       lambda = lambda, eta = eta, gamma = gamma, R = R, S = S,
       T = T, Tfinal = Tfinal, minfup = minfup, d = sum(A),
-      n = sum(gam * s)
+      n = sum(c(gam) * c(s))
     ))
   }
 }
@@ -66,9 +66,9 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 
 
 # eEvents roxy [sinew] ----
-#' Expected number of events for a time-to-event study
+#' @title Expected number of events for a time-to-event study
 #'
-#' \code{eEvents()} is used to calculate the expected number of events for a
+#' @description \code{eEvents()} is used to calculate the expected number of events for a
 #' population with a time-to-event endpoint.  It is based on calculations
 #' demonstrated in Lachin and Foulkes (1986) and is fundamental in computations
 #' for the sample size method they propose. Piecewise exponential survival and
@@ -90,8 +90,6 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 #' \code{print.eEvents()} formats the output for an object of class
 #' \code{eEvents} and returns the input value.
 #'
-#' @aliases eEvents print.eEvents Expected number of events for survival
-#' studies
 #' @param lambda scalar, vector or matrix of event hazard rates; rows represent
 #' time periods while columns represent strata; a vector implies a single
 #' stratum.
@@ -127,19 +125,6 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 #' input.} \item{T}{as input.} \item{Tfinal}{lanned duration of study.}
 #' \item{minfup}{as input.} \item{d}{expected number of events.}
 #' \item{n}{expected sample size.} \item{digits}{as input.}
-#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
-#' @seealso \link{gsDesign package overview}, \link{Plots for group sequential
-#' designs}, \code{\link{gsDesign}}, \code{\link{gsHR}},
-#' \code{\link{nSurvival}}
-#' @references Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and
-#' Power for Analyses of Survival with Allowance for Nonuniform Patient Entry,
-#' Losses to Follow-Up, Noncompliance, and Stratification. \emph{Biometrics},
-#' 42, 507-519.
-#'
-#' Bernstein D and Lagakos S (1978), Sample size and power determination for
-#' stratified clinical trials. \emph{Journal of Statistical Computation and
-#' Simulation}, 8:65-73.
-#' @keywords design
 #' @examples
 #' 
 #' # 3 enrollment periods, 3 piecewise exponential failure rates
@@ -155,7 +140,23 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 #'   gamma = matrix(.5, ncol = 6), R = 2, T = 4
 #' )
 #' 
-#' # eEvents function [sinew] ----
+#' @aliases print.eEvents
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
+#' @seealso \link{gsDesign package overview}, \link{Plots for group sequential
+#' designs}, \code{\link{gsDesign}}, \code{\link{gsHR}},
+#' \code{\link{nSurvival}}
+#' @references Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and
+#' Power for Analyses of Survival with Allowance for Nonuniform Patient Entry,
+#' Losses to Follow-Up, Noncompliance, and Stratification. \emph{Biometrics},
+#' 42, 507-519.
+#'
+#' Bernstein D and Lagakos S (1978), Sample size and power determination for
+#' stratified clinical trials. \emph{Journal of Statistical Computation and
+#' Simulation}, 8:65-73.
+#' @keywords design
+#' @rdname eEvents
+#' @export
+# eEvents function [sinew] ----
 eEvents <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL, T = 2,
                     Tfinal = NULL, minfup = 0, digits = 4) {
   if (is.null(Tfinal)) {
@@ -246,6 +247,8 @@ periods <- function(S, T, minfup, digits) {
   return(list(periods, names))
 }
 
+# print.eEvents roxy [sinew] ----
+#' @export
 # print.eEvents function [sinew] ----
 print.eEvents <- function(x, digits = 4, ...) {
   if (class(x) != "eEvents") {
@@ -403,6 +406,8 @@ LFPWE <- function(alpha = .025, sided = 1, beta = .1,
   return(rval)
 }
 
+# print.nSurv roxy [sinew] ----
+#' @export
 # print.nSurv function [sinew] ----
 print.nSurv <- function(x, digits = 4, ...) {
   if (class(x) != "nSurv") {
@@ -741,8 +746,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' fixed design to obtain a sufficient number of events to power a group
 #' sequential design.
 #'
-#' @aliases nSurv gsSurv print.nSurv print.gsSurv xtable.gsSurv tEventsIA
-#' nEventsIA Advanced survival sample size
+#' @aliases nSurv print.nSurv print.gsSurv xtable.gsSurv
 #' @param x An object of class \code{nSurv} or \code{gsSurv}.
 #' \code{print.nSurv()} is used for an object of class \code{nSurv} which will
 #' generally be output from \code{nSurv()}. For \code{print.gsSurv()} is used
@@ -1111,6 +1115,26 @@ gsnSurv <- function(x, nEvents) {
   return(rval)
 }
 
+# tEventsIA roxy [sinew] ----
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param timing PARAM_DESCRIPTION, Default: 0.25
+#' @param tol PARAM_DESCRIPTION, Default: .Machine$double.eps^0.25
+#' @return OUTPUT_DESCRIPTION
+#' @author Keaven Anderson, PhD
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @export 
+#' @rdname tEventsIA
+#' @seealso 
+#'  \code{\link[stats]{uniroot}}
+#' @importFrom stats uniroot
 # tEventsIA function [sinew] ----
 tEventsIA <- function(x, timing = .25, tol = .Machine$double.eps^0.25) {
   T <- x$T[length(x$T)]
@@ -1121,6 +1145,24 @@ tEventsIA <- function(x, timing = .25, tol = .Machine$double.eps^0.25) {
   return(nEventsIA(tIA = z$root, x = x, simple = FALSE))
 }
 
+# nEventsIA roxy [sinew] ----
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param tIA PARAM_DESCRIPTION, Default: 5
+#' @param x PARAM_DESCRIPTION, Default: NULL
+#' @param target PARAM_DESCRIPTION, Default: 0
+#' @param simple PARAM_DESCRIPTION, Default: TRUE
+#' @return OUTPUT_DESCRIPTION
+#' @author Keaven Anderson, PhD
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @export 
+#' @rdname nEventsIA
 # nEventsIA function [sinew] ----
 nEventsIA <- function(tIA = 5, x = NULL, target = 0, simple = TRUE) {
   Qe <- x$ratio / (1 + x$ratio)
@@ -1221,6 +1263,8 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
   return(y)
 }
 
+# print.gsSurv roxy [sinew] ----
+#' @export
 # print.gsSurv function [sinew] ----
 print.gsSurv <- function(x, digits = 2, ...) {
   cat("Time to event group sequential design with HR=", x$hr, "\n")
@@ -1271,6 +1315,13 @@ print.gsSurv <- function(x, digits = 2, ...) {
   }
 }
 
+# xtable.gsSurv roxy [sinew] ----
+#' @seealso 
+#'  \code{\link[stats]{Normal}}
+#'  \code{\link[xtable]{xtable}}
+#' @importFrom stats pnorm
+#' @importFrom xtable xtable
+#' @export
 # xtable.gsSurv function [sinew] ----
 xtable.gsSurv <- function(x, caption = NULL, label = NULL, align = NULL, digits = NULL,
                           display = NULL, auto = FALSE, footnote = NULL, fnwid = "9cm", timename = "months", ...) {

@@ -245,24 +245,102 @@ plotRR <- function(x = x, ylab = "Estimated risk ratio", main = "Risk ratio at b
 }
 
 # gsBValue function [sinew] ----
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param z PARAM_DESCRIPTION
+#' @param i PARAM_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param ylab PARAM_DESCRIPTION, Default: 'B-value'
+#' @param ... PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @author Keaven Anderson, PhD
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @export 
+#' @rdname gsBValue
+
 gsBValue <- function(z, i, x, ylab = "B-value", ...) {
   Bval <- z * sqrt(x$timing[i])
   Bval
 }
 
 # gsDelta function [sinew] ----
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param z PARAM_DESCRIPTION
+#' @param i PARAM_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param ylab PARAM_DESCRIPTION, Default: NULL
+#' @param ... PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @author Keaven Anderson, PhD
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @export 
+#' @rdname gsDelta
+
 gsDelta <- function(z, i, x, ylab = NULL, ...) {
   deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1 - x$delta0) / x$delta + x$delta0
   deltaHat
 }
 
 # gsRR function [sinew] ----
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param z PARAM_DESCRIPTION
+#' @param i PARAM_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param ratio PARAM_DESCRIPTION, Default: 1
+#' @param ylab PARAM_DESCRIPTION, Default: 'Estimated risk ratio'
+#' @param ... PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @author Keaven Anderson, PhD
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @export 
+#' @rdname gsRR
+
 gsRR <- function(z, i, x, ratio = 1, ylab = "Estimated risk ratio", ...) {
   deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1 - x$delta0) / x$delta + x$delta0
   exp(deltaHat)
 }
 
 # gsHR function [sinew] ----
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param z PARAM_DESCRIPTION
+#' @param i PARAM_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param ratio PARAM_DESCRIPTION, Default: 1
+#' @param ylab PARAM_DESCRIPTION, Default: 'Estimated hazard ratio'
+#' @param ... PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @author Keaven Anderson, PhD
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @export 
+#' @rdname gsHR
+
 gsHR <- function(z, i, x, ratio = 1, ylab = "Estimated hazard ratio", ...) {
   c <- 1 / (1 + ratio)
   psi <- c * (1 - c)
@@ -276,6 +354,25 @@ gsHR <- function(z, i, x, ratio = 1, ylab = "Estimated hazard ratio", ...) {
 }
 
 # gsCPz function [sinew] ----
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param z PARAM_DESCRIPTION
+#' @param i PARAM_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param theta PARAM_DESCRIPTION, Default: NULL
+#' @param ylab PARAM_DESCRIPTION, Default: NULL
+#' @param ... PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @rdname gsCPz
+#' @export 
+#' @author Keaven Anderson, PhD
 gsCPz <- function(z, i, x, theta = NULL, ylab = NULL, ...) {
   cp <- array(0, length(z))
 
@@ -295,7 +392,9 @@ gsCPz <- function(z, i, x, theta = NULL, ylab = NULL, ...) {
 }
 
 # qplotit roxy [sinew] ----
-#' @import ggplot2
+#' @importFrom graphics lines text
+#' @importFrom ggplot2 ggplot aes geom_text geom_line scale_x_continuous scale_y_continuous scale_colour_manual scale_linetype_manual ggtitle xlab ylab
+#' @importFrom rlang !! sym
 # qplotit function [sinew] ----
 qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "text"),
                     dgt = c(2, 2), lty = c(2, 1), col = c(1, 1),
@@ -303,7 +402,7 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
                       z
                     },
                     ratio = 1, delta0 = 0, delta = 1, cex = 1, base = FALSE, ...) {
-  ggver <- as.numeric_version(packageVersion("ggplot2"))
+#   ggver <- as.numeric_version(packageVersion("ggplot2"))
   if (length(lty) == 1) lty <- array(lty, 2)
   if (length(col) == 1) col <- array(col, 2)
   if (length(lwd) == 1) lwd <- array(lwd, 2)
@@ -365,32 +464,42 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
       x = y$N[y$Bound == "Upper"], y = y$Z[y$Bound == "Upper"], type = "l", xlim = xlim, ylim = ylim,
       main = main, lty = lty[1], col = col[1], lwd = lwd[1], xlab = xlab, ylab = ylab, ...
     )
-    lines(x = y$N[y$Bound == "Lower"], y = y$Z[y$Bound == "Lower"], lty = lty[2], col = col[2], lwd = lwd[2])
+    graphics::lines(x = y$N[y$Bound == "Lower"], y = y$Z[y$Bound == "Lower"], lty = lty[2], col = col[2], lwd = lwd[2])
   } else {
     lbls <- c("Lower", "Upper")
     if (x$test.type > 1) {
-      p <- ggplot(data = y, aes(
-        x = as.numeric(N), y = as.numeric(Z), group = factor(Bound),
-        col = factor(Bound), label = Ztxt, lty = factor(Bound)
-      )) +
-        geom_text(show.legend = F, size = cex * 5) + geom_line() +
-        scale_x_continuous(xlab) + scale_y_continuous(ylab) +
-        scale_colour_manual(name = "Bound", values = col, labels = lbls, breaks = lbls) +
-        scale_linetype_manual(name = "Bound", values = lty, labels = lbls, breaks = lbls)
-      if (ggver >= as.numeric_version("0.9.2")) {
-        p <- p + ggtitle(label = main)
-      } else {
-        p <- p + opts(title = main)
-      }
+      p <- ggplot2::ggplot(data = y, ggplot2::aes(
+        x = as.numeric(!!rlang::sym('N')), y = as.numeric(!!rlang::sym('Z')), group = factor(!!rlang::sym('Bound')),
+        col = factor(!!rlang::sym('Bound')), label = Ztxt, lty = factor(!!rlang::sym('Bound'))
+      )) + 
+        ggplot2::geom_text(show.legend = F, size = cex * 5) + 
+        ggplot2::geom_line() +
+        ggplot2::scale_x_continuous(xlab) + 
+        ggplot2::scale_y_continuous(ylab) +
+        ggplot2::scale_colour_manual(name = "Bound", values = col, labels = lbls, breaks = lbls) +
+        ggplot2::scale_linetype_manual(name = "Bound", values = lty, labels = lbls, breaks = lbls)
+      # if (ggver >= as.numeric_version("0.9.2")) {
+        p <- p + ggplot2::ggtitle(label = main)
+      # } else {
+      #   p <- p + opts(title = main)
+      # }
     } else {
-      p <- ggplot(aes(x = as.numeric(N), y = as.numeric(Z), label = Ztxt, group = factor(Bound)), data = y) +
-        geom_line(colour = col[1], lty = lty[1], lwd = lwd[1]) +
-        geom_text(size = cex * 5) + xlab(xlab) + ylab(ylab)
-      if (ggver >= as.numeric_version("0.9.2")) {
-        p <- p + ggtitle(label = main)
-      } else {
-        p <- p + opts(title = main)
-      }
+      p <- ggplot2::ggplot(ggplot2::aes(
+        x = as.numeric(!!rlang::sym('N')),
+        y = as.numeric(!!rlang::sym('Z')),
+        label = Ztxt, 
+        group = factor(!!rlang::sym('Bound'))),
+        data = y
+        ) +
+        ggplot2::geom_line(colour = col[1], lty = lty[1], lwd = lwd[1]) +
+        ggplot2::geom_text(size = cex * 5) + 
+        ggplot2::xlab(xlab) + 
+        ggplot2::ylab(ylab)
+      # if (ggver >= as.numeric_version("0.9.2")) {
+        p <- p + ggplot2::ggtitle(label = main)
+      # } else {
+      #   p <- p + opts(title = main)
+      # }
     }
   }
   if (nlabel == TRUE) {
@@ -401,21 +510,21 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
       Ztxt = ifelse(array(nround, x$k) > 0, as.character(round(x$n.I, nround)), ceiling(x$n.I))
     )
     if (base) {
-      text(x = y2$N, y = y$Z, y$Ztxt, cex = cex)
+      graphics::text(x = y2$N, y = y$Z, y$Ztxt, cex = cex)
     }
     if (x$n.fix == 1) {
       if (base) {
-        text(x = y2$N, y = y2$Z, paste(array("r=", x$k), y2$Ztxt, sep = ""), cex = cex)
+        graphics::text(x = y2$N, y = y2$Z, paste(array("r=", x$k), y2$Ztxt, sep = ""), cex = cex)
       } else {
         y2$Ztxt <- paste(array("r=", x$k), y2$Ztxt, sep = "")
-        p <- p + geom_text(data = y2, aes(group = factor(Bound), label = Ztxt), size = cex * 5, show.legend = F, colour = 1)
+        p <- p + geom_text(data = y2, aes(group = factor(!!rlang::sym('Bound')), label = Ztxt), size = cex * 5, show.legend = F, colour = 1)
       }
     } else {
       if (base) {
-        text(x = y2$N, y = y2$Z, paste(array("N=", x$k), y2$Ztxt, sep = ""), cex = cex)
+        graphics::text(x = y2$N, y = y2$Z, paste(array("N=", x$k), y2$Ztxt, sep = ""), cex = cex)
       } else {
         y2$Ztxt <- paste(array("N=", x$k), y2$Ztxt, sep = "")
-        p <- p + geom_text(data = y2, aes(group = factor(Bound), label = Ztxt), size = cex * 5, show.legend = F, colour = 1)
+        p <- p + ggplot2::geom_text(data = y2, ggplot2::aes(group = factor(!!rlang::sym('Bound')), label = Ztxt), size = cex * 5, show.legend = F, colour = 1)
       }
     }
   }
@@ -426,13 +535,17 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
   }
 }
 
+
+# plotgsCP roxy [sinew] ----
+#' @importFrom graphics plot text matplot matpoints points
+#' @importFrom ggplot2 ggplot aes geom_text scale_x_continuous scale_y_continuous scale_colour_manual scale_linetype_manual ggtitle geom_line xlab ylab
 # plotgsCP function [sinew] ----
 plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim stopping boundaries",
                      ylab = NULL, geom = c("line", "text"),
                      xlab = ifelse(x$n.fix == 1, "Sample size relative to fixed design", "N"), xlim = NULL,
                      lty = c(1, 2), col = c(1, 1), lwd = c(1, 1), pch = " ", cex = 1, legtext = NULL, dgt = c(3, 2), nlabel = TRUE,
                      base = FALSE, ...) {
-  ggver <- as.numeric_version(packageVersion("ggplot2"))
+#   ggver <- as.numeric_version(packageVersion("ggplot2"))
   if (length(lty) == 1) lty <- array(lty, 2)
   if (length(col) == 1) col <- array(col, 2)
   if (length(lwd) == 1) lwd <- array(lwd, 2)
@@ -490,26 +603,26 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
 
   if (base) {
     if (test.type == 1) {
-      plot(x$n.I[1:(x$k - 1)], y,
+      graphics::plot(x$n.I[1:(x$k - 1)], y,
         xlab = xlab, ylab = ylab, main = main,
         ylim = c(ymin, ymax), xlim = xlim, col = col[1], lwd = lwd[1], lty = lty[1], type = "l", ...
       )
-      points(x$n.I[1:(x$k - 1)], y, ...)
-      text(x$n.I[1:(x$k - 1)], y, as.character(round(y, dgt[2])), cex = cex)
+      graphics::points(x$n.I[1:(x$k - 1)], y, ...)
+      graphics::text(x$n.I[1:(x$k - 1)], y, as.character(round(y, dgt[2])), cex = cex)
       ymid <- ymin
     }
     else {
-      matplot(x$n.I[1:(x$k - 1)], y,
+      graphics::matplot(x$n.I[1:(x$k - 1)], y,
         xlab = xlab, ylab = ylab, main = main,
         lty = lty, col = col, lwd = lwd, ylim = c(ymin, ymax), xlim = xlim, type = "l", ...
       )
-      matpoints(x$n.I[1:(x$k - 1)], y, pch = pch, col = col, ...)
-      text(xtext, ymin, legtext[3], cex = cex)
-      text(x$n.I[1:(x$k - 1)], y[, 1], as.character(round(y[, 1], dgt[1])), col = col[1], cex = cex)
-      text(x$n.I[1:(x$k - 1)], y[, 2], as.character(round(y[, 2], dgt[2])), col = col[2], cex = cex)
+      graphics::matpoints(x$n.I[1:(x$k - 1)], y, pch = pch, col = col, ...)
+      graphics::text(xtext, ymin, legtext[3], cex = cex)
+      graphics::text(x$n.I[1:(x$k - 1)], y[, 1], as.character(round(y[, 1], dgt[1])), col = col[1], cex = cex)
+      graphics::text(x$n.I[1:(x$k - 1)], y[, 2], as.character(round(y[, 2], dgt[2])), col = col[2], cex = cex)
     }
-    text(xtext, ymid, legtext[2], cex = cex)
-    text(xtext, 1.03, legtext[1], cex = cex)
+    graphics::text(xtext, ymid, legtext[2], cex = cex)
+    graphics::text(xtext, 1.03, legtext[1], cex = cex)
   } else {
     N <- as.numeric(x$n.I[1:(x$k - 1)])
     if (test.type > 1) {
@@ -528,30 +641,46 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
     y <- data.frame(N = N, CP = CP, Bound = Bound, Ztxt = Ztxt)
     if (test.type > 1) {
       lbls <- c("Lower", "Upper")
-      p <- ggplot(data = y, aes(
-        x = as.numeric(N), y = as.numeric(CP), group = factor(Bound),
-        col = factor(Bound), label = Ztxt, lty = factor(Bound)
+      p <- ggplot2::ggplot(
+        data = y, 
+        ggplot2::aes(
+          x = as.numeric(N), 
+          y = as.numeric(CP), 
+          group = factor(Bound),
+          col = factor(Bound), 
+          label = Ztxt, 
+          lty = factor(Bound)
       )) +
-        geom_text(show.legend = F, size = cex * 5) + geom_line() +
-        scale_x_continuous(xlab) + scale_y_continuous(ylab) +
-        scale_colour_manual(name = "Bound", values = col, labels = lbls, breaks = lbls) +
-        scale_linetype_manual(name = "Bound", values = lty, labels = lbls, breaks = lbls)
-      if (ggver >= as.numeric_version("0.9.2")) {
-        p <- p + ggtitle(label = main)
-      } else {
-        p <- p + opts(title = main)
-      }
+        ggplot2::geom_text(show.legend = F, size = cex * 5) + geom_line() +
+        ggplot2::scale_x_continuous(xlab) + 
+        ggplot2::scale_y_continuous(ylab) +
+        ggplot2::scale_colour_manual(name = "Bound", values = col, labels = lbls, breaks = lbls) +
+        ggplot2::scale_linetype_manual(name = "Bound", values = lty, labels = lbls, breaks = lbls)
+      # if (ggver >= as.numeric_version("0.9.2")) {
+        p <- p + ggplot2::ggtitle(label = main)
+      # } else {
+      #   p <- p + opts(title = main)
+      # }
     } else { # p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
       # 	label=Ztxt, geom="text",
       # 	xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + geom_line(colour=col[1],lty=lty[1],lwd=lwd[1])
-      p <- ggplot(aes(x = as.numeric(N), y = as.numeric(CP), label = Ztxt, group = factor(Bound)), data = y) +
-        geom_line(colour = col[1], lty = lty[1], lwd = lwd[1]) +
-        geom_text(size = cex * 5) + xlab(xlab) + ylab(ylab)
-      if (ggver >= as.numeric_version("0.9.2")) {
-        p <- p + ggtitle(label = main)
-      } else {
-        p <- p + opts(title = main)
-      }
+      p <- ggplot2::ggplot(
+        ggplot2::aes(
+          x = as.numeric(N), 
+          y = as.numeric(CP), 
+          label = Ztxt, 
+          group = factor(Bound)), 
+        data = y
+        ) +
+        ggplot2::geom_line(colour = col[1], lty = lty[1], lwd = lwd[1]) +
+        ggplot2::geom_text(size = cex * 5) + 
+        ggplot2::xlab(xlab) + 
+        ggplot2::ylab(ylab)
+      # if (ggver >= as.numeric_version("0.9.2")) {
+        p <- p + ggplot2::ggtitle(label = main)
+      # } else {
+      #   p <- p + opts(title = main)
+      # }
     }
   }
   if (nlabel == TRUE) {
@@ -563,14 +692,14 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
     )
     if (x$n.fix == 1) {
       if (base) {
-        text(x = y2$N, y = y2$CP, paste(array("r=", x$k), y2$Ztxt, sep = ""), cex = cex)
+        graphics::text(x = y2$N, y = y2$CP, paste(array("r=", x$k), y2$Ztxt, sep = ""), cex = cex)
       } else {
         y2$Ztxt <- paste(array("r=", x$k - 1), y2$Ztxt, sep = "")
         p <- p + geom_text(data = y2, aes(N, CP, group = factor(Bound), label = Ztxt), size = cex * 5, colour = 1)
       }
     } else {
       if (base) {
-        text(x = y2$N, y = y2$CP, paste(array("N=", x$k), y2$Ztxt, sep = ""), cex = cex)
+        graphics::text(x = y2$N, y = y2$CP, paste(array("N=", x$k), y2$Ztxt, sep = ""), cex = cex)
       } else {
         y2$Ztxt <- paste(array("N=", x$k - 1), y2$Ztxt, sep = "")
         p <- p + geom_text(data = y2, aes(N, CP, group = factor(Bound), label = Ztxt), size = cex * 5, colour = 1)
@@ -585,7 +714,8 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
 }
 
 # plotsf roxy [sinew] ----
-#' @import ggplot2
+#' @importFrom graphics par plot legend axis mtext
+#' @importFrom ggplot2 qplot scale_colour_manual scale_linetype_manual
 # plotsf function [sinew] ----
 plotsf <- function(x,
                    xlab = "Proportion of total sample size",
@@ -594,7 +724,7 @@ plotsf <- function(x,
                    legtext = NULL,
                    col = c(1, 1), lwd = c(.5, .5), lty = c(1, 2),
                    mai = c(.85, .75, .5, .5), xmax = 1, base = FALSE, ...) {
-  ggver <- as.numeric_version(packageVersion("ggplot2"))
+#   ggver <- as.numeric_version(packageVersion("ggplot2"))
   if (is.null(legtext)) {
     if (x$test.type > 4) {
       legtext <- c("Upper bound", "Lower bound")
@@ -634,10 +764,10 @@ plotsf <- function(x,
   t <- 0:40 / 40 * xmax
 
   if (x$test.type > 2 && base) {
-    par(mai = mai, oma = oma)
+    graphics::par(mai = mai, oma = oma)
   }
   if (base) {
-    plot(t, x$upper$sf(x$alpha, t, x$upper$param)$spend,
+    graphics::plot(t, x$upper$sf(x$alpha, t, x$upper$param)$spend,
       type = "l", ylab = ylab, xlab = xlab, lty = lty[1],
       lwd = lwd[1], col = col[1], main = main, ...
     )
@@ -645,20 +775,20 @@ plotsf <- function(x,
   else if (x$test.type < 3) {
     spend <- x$upper$sf(x$alpha, t, x$upper$param)$spend
     q <- data.frame(t = t, spend = spend)
-    p <- qplot(x = t, y = spend, data = q, geom = "line", ylab = ylab, xlab = xlab, main = main, ...)
+    p <- ggplot2::qplot(x = t, y = spend, data = q, geom = "line", ylab = ylab, xlab = xlab, main = main, ...)
     return(p)
   }
 
   if (x$test.type > 2) {
     if (base) {
-      legend(x = c(.0, .43), y = x$alpha * c(.85, 1), lty = lty, col = col, lwd = lwd, legend = legtext)
-      par(new = TRUE)
-      plot(t, x$lower$sf(x$beta, t, x$lower$param)$spend,
+      graphics::legend(x = c(.0, .43), y = x$alpha * c(.85, 1), lty = lty, col = col, lwd = lwd, legend = legtext)
+      graphics::par(new = TRUE)
+      graphics::plot(t, x$lower$sf(x$beta, t, x$lower$param)$spend,
         ylim = c(0, x$beta), type = "l", ylab = ylab,
         yaxt = "n", xlab = xlab, lty = lty[2], lwd = lwd[2], col = col[2], main = main, ...
       )
-      axis(4)
-      mtext(text = ylab2, side = 4, outer = TRUE)
+      graphics::axis(4)
+      graphics::mtext(text = ylab2, side = 4, outer = TRUE)
     } else {
       spenda <- x$upper$sf(x$alpha, t, x$upper$param)$spend / x$alpha
       if (x$test.type < 5) {
@@ -668,16 +798,16 @@ plotsf <- function(x,
       }
       group <- array(1, length(t))
       q <- data.frame(t = c(t, t), spend = c(spenda, spendb), group = c(group, 2 * group))
-      p <- qplot(
+      p <- ggplot2::qplot(
         x = t, y = spend, data = q, geom = "line", ylab = ylab, xlab = xlab, main = main,
         group = factor(group), linetype = factor(group), colour = factor(group)
       )
       p <- p +
-        scale_colour_manual(
+        ggplot2::scale_colour_manual(
           name = "Spending", values = col,
           labels = c(expression(alpha), ifelse(x$test.type < 5, expression(beta), expression(1 - alpha))), breaks = 1:2
         ) +
-        scale_linetype_manual(
+        ggplot2::scale_linetype_manual(
           name = "Spending", values = lty,
           labels = c(expression(alpha), ifelse(x$test.type < 5, expression(beta), expression(1 - alpha))), breaks = 1:2
         )
@@ -687,7 +817,9 @@ plotsf <- function(x,
 }
 
 # plotASN roxy [sinew] ----
-#' @import ggplot2
+#' @importFrom graphics plot
+#' @importFrom ggplot2 qplot
+#' @importFrom rlang !! sym
 # plotASN function [sinew] ----
 plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval = NULL, type = "l",
                     base = FALSE, ...) {
@@ -739,25 +871,29 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
     }
   }
   if (base) {
-    plot(xval, x$en, type = type, ylab = ylab, xlab = xlab, main = main, ...)
+    graphics::plot(xval, x$en, type = type, ylab = ylab, xlab = xlab, main = main, ...)
     return(invisible(x))
   }
   else {
     q <- data.frame(x = xval, y = x$en)
-    p <- qplot(x = x, y = y, data = q, geom = "line", ylab = ylab, xlab = xlab, main = main)
+    p <- ggplot2::qplot(x = x, y = !!rlang::sym('y'), data = q, geom = "line", ylab = ylab, xlab = xlab, main = main)
     return(p)
   }
 }
 
 # plotgsPower roxy [sinew] ----
-#' @import ggplot2
+#' @importFrom stats reshape
+#' @importFrom plyr ddply summarize
+#' @importFrom ggplot2 ggplot aes geom_line ylab guides guide_legend xlab scale_linetype_manual scale_color_manual scale_y_continuous ggtitle scale_x_continuous scale_colour_manual geom_text
+#' @importFrom rlang !! sym
+#' @importFrom graphics plot axis lines strwidth text
 # plotgsPower function [sinew] ----
 plotgsPower <- function(x, main = "Boundary crossing probabilities by effect size",
                         ylab = "Cumulative Boundary Crossing Probability",
                         xlab = NULL, lty = NULL, col = NULL, lwd = 1, cex = 1,
                         theta = if (is(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta,
                         xval = NULL, base = FALSE, outtype = 1, ...) {
-  ggver <- as.numeric_version(packageVersion("ggplot2"))
+#   ggver <- as.numeric_version(packageVersion("ggplot2"))
   if (is.null(xval)) {
     if (is(x, "gsDesign")) {
       xval <- x$delta0 + (x$delta1 - x$delta0) * theta / x$delta
@@ -781,29 +917,49 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
   if (!base && outtype == 1) {
     if (is.null(lty)) lty <- x$k:1
     xu <- data.frame(x$upper$prob)
-    y <- cbind(reshape(xu, varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = "Upper bound")
+    y <- cbind(stats::reshape(xu, varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = "Upper bound")
     if (is.null(col)) col <- 1
     if (is.null(x$test.type) || x$test.type > 1) {
       y <- rbind(
-        cbind(reshape(data.frame(x$lower$prob), varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = "1-Lower bound"),
+        cbind(stats::reshape(data.frame(x$lower$prob), varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = "1-Lower bound"),
         y
       )
       if (length(col) == 1) col <- c(2, 1)
     }
-    y2 <- ddply(y, .(Bound, thetaidx), summarize, Probability = cumsum(Probability))
+    
+    Probability <- NULL
+    
+    y2 <- plyr::ddply(y,
+                      .variables = c('Bound', 'thetaidx'), 
+                      plyr::summarize, 
+                      Probability = cumsum(Probability)
+                    )
+    
     y2$Probability[y2$Bound == "1-Lower bound"] <- 1 - y2$Probability[y2$Bound == "1-Lower bound"]
+    
     y2$Analysis <- factor(y$id)
+    
     y2$delta <- xval[y$thetaidx]
-    p <- ggplot(y2, aes(x = delta, y = Probability, col = Bound, lty = Analysis)) + geom_line(size = lwd) + ylab(ylab) +
-      guides(color = guide_legend(title = "Probability")) + xlab(xlab) +
-      scale_linetype_manual(values = lty) +
-      scale_color_manual(values = col) +
-      scale_y_continuous(breaks = seq(0, 1, .2))
-    if (ggver >= as.numeric_version("0.9.2")) {
-      return(p + ggtitle(label = main))
-    } else {
-      return(p + opts(title = main))
-    }
+    
+    p <- ggplot2::ggplot(y2, 
+                         ggplot2::aes(
+                           x = !!rlang::sym('delta'), 
+                           y = !!rlang::sym('Probability'), 
+                           col = !!rlang::sym('Bound'), 
+                           lty = !!rlang::sym('Analysis'))
+                         ) + 
+      ggplot2::geom_line(size = lwd) + 
+      ggplot2::ylab(ylab) +
+      ggplot2::guides(color = ggplot2::guide_legend(title = "Probability")) + 
+      ggplot2::xlab(xlab) +
+      ggplot2::scale_linetype_manual(values = lty) +
+      ggplot2::scale_color_manual(values = col) +
+      ggplot2::scale_y_continuous(breaks = seq(0, 1, .2))
+    # if (ggver >= as.numeric_version("0.9.2")) {
+      return(p + ggplot2::ggtitle(label = main))
+    # } else {
+    #   return(p + opts(title = main))
+    # }
   }
   if (is.null(col)) {
     if (base || outtype == 2) {
@@ -886,18 +1042,18 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
 
     ylim <- if (is(x, "gsDesign") && test.type <= 2) c(0, 1) else c(0, 1.25)
 
-    plot(xval, x$upper$prob[1, ],
+    graphics::plot(xval, x$upper$prob[1, ],
       xlab = xlab, main = main, ylab = ylab,
       ylim = ylim, type = "l", col = col[1], lty = lty[1], lwd = lwd[1], yaxt = "n"
     )
 
     if (is(x, "gsDesign") && test.type <= 2) {
-      axis(2, seq(0, 1, 0.1))
-      axis(4, seq(0, 1, 0.1))
+      graphics::axis(2, seq(0, 1, 0.1))
+      graphics::axis(4, seq(0, 1, 0.1))
     }
     else {
-      axis(4, seq(0, 1, by = 0.1), col.axis = col[1], col = col[1])
-      axis(2, seq(0, 1, .1), labels = 1 - seq(0, 1, .1), col.axis = col2, col = col2)
+      graphics::axis(4, seq(0, 1, by = 0.1), col.axis = col[1], col = col[1])
+      graphics::axis(2, seq(0, 1, .1), labels = 1 - seq(0, 1, .1), col.axis = col2, col = col2)
     }
 
     if (x$k == 1) {
@@ -905,23 +1061,23 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     }
 
     if ((is(x, "gsDesign") && test.type > 2) || !is(x, "gsDesign")) {
-      lines(xval, 1 - x$lower$prob[1, ], lty = lty2, col = col2, lwd = lwd2)
+      graphics::lines(xval, 1 - x$lower$prob[1, ], lty = lty2, col = col2, lwd = lwd2)
       plo <- x$lower$prob[1, ]
 
       for (i in 2:x$k)
       {
         plo <- plo + x$lower$prob[i, ]
-        lines(xval, 1 - plo, lty = lty2, col = col2, lwd = lwd2)
+        graphics::lines(xval, 1 - plo, lty = lty2, col = col2, lwd = lwd2)
       }
 
       temp <- legend("topleft",
         legend = c(" ", " "), col = col,
-        text.width = max(strwidth(c("Upper", "Lower"))), lwd = lwd,
+        text.width = max(graphics::strwidth(c("Upper", "Lower"))), lwd = lwd,
         lty = lty, xjust = 1, yjust = 1,
         title = "Boundary"
       )
 
-      text(temp$rect$left + temp$rect$w, temp$text$y,
+      graphics::text(temp$rect$left + temp$rect$w, temp$text$y,
         c("Upper", "Lower"),
         col = col, pos = 2
       )
@@ -932,62 +1088,66 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     for (i in 2:x$k)
     {
       phi <- phi + x$upper$prob[i, ]
-      lines(xval, phi, col = col[1], lwd = lwd[1], lty = lty[1])
+      graphics::lines(xval, phi, col = col[1], lwd = lwd[1], lty = lty[1])
     }
     colr <- array(col[1], x$k)
     if (length(yt$theta) > x$k) colr <- c(colr, array(col[2], x$k - 1))
-    text(x = yt$theta, y = yt$prob, col = colr, yt$itxt, cex = cex)
+    graphics::text(x = yt$theta, y = yt$prob, col = colr, yt$itxt, cex = cex)
     invisible(x)
   }
   else {
-    p <- ggplot(
+    p <- ggplot2::ggplot(
       data = subset(y, interim == 1),
-      aes(
+      ggplot2::aes(
         x = theta, y = prob, group = factor(bound),
         col = factor(bound), lty = factor(bound)
       )
     ) +
-      geom_line() +
-      scale_x_continuous(xlab) + scale_y_continuous(ylab) +
-      scale_colour_manual(name = "Bound", values = col) +
-      scale_linetype_manual(name = "Bound", values = lty)
-    if (ggver >= as.numeric_version("0.9.2")) {
-      p <- p + ggtitle(label = main)
-    } else {
-      p <- p + opts(title = main)
-    }
+      ggplot2::geom_line() +
+      ggplot2::scale_x_continuous(xlab) + 
+      ggplot2::scale_y_continuous(ylab) +
+      ggplot2::scale_colour_manual(name = "Bound", values = col) +
+      ggplot2::scale_linetype_manual(name = "Bound", values = lty)
+    # if (ggver >= as.numeric_version("0.9.2")) {
+      p <- p + ggplot2::ggtitle(label = main)
+    # } else {
+    #   p <- p + opts(title = main)
+    # }
     if (test.type == 1) {
-      p <- p + scale_colour_manual(
+      p <- p + 
+        ggplot2::scale_colour_manual(
         name = "Probability", values = col, breaks = 1,
         labels = "Upper bound"
       ) +
-        scale_linetype_manual(
+        ggplot2::scale_linetype_manual(
           name = "Probability", values = lty[1], breaks = 1,
           labels = "Upper bound"
         )
-      if (ggver >= as.numeric_version("0.9.2")) {
-        p <- p + ggtitle(label = main)
-      } else {
-        p <- p + opts(title = main)
-      }
+      # if (ggver >= as.numeric_version("0.9.2")) {
+        p <- p + ggplot2::ggtitle(label = main)
+      # } else {
+      #   p <- p + opts(title = main)
+      # }
     } else {
-      p <- p + scale_colour_manual(
+      p <- p + 
+        ggplot2::scale_colour_manual(
         name = "Probability", values = col, breaks = 1:2,
         labels = c("Upper bound", "1-Lower bound")
       ) +
-        scale_linetype_manual(
+        ggplot2::scale_linetype_manual(
           name = "Probability", values = lty, breaks = 1:2,
           labels = c("Upper bound", "1-Lower bound")
         )
     }
-    p <- p + geom_text(data = yt, aes(theta, prob, colour = factor(bound), group = 1, label = itxt), size = cex * 5, show.legend = F)
-    for (i in 1:x$k) p <- p + geom_line(
+    p <- p + 
+      ggplot2::geom_text(data = yt, ggplot2::aes(theta, prob, colour = factor(bound), group = 1, label = itxt), size = cex * 5, show.legend = F)
+    for (i in 1:x$k) p <- p + ggplot2::geom_line(
         data = subset(y, interim == i & bound == 1),
         colour = col[1], lty = lty[1], lwd = lwd[1]
       )
     if (test.type > 2) {
       for (i in 1:(x$k - 1)) {
-        p <- p + geom_line(data = subset(y, interim == i & bound == 2), colour = col[2], lty = lty[2], lwd = lwd[2])
+        p <- p + ggplot2::geom_line(data = subset(y, interim == i & bound == 2), colour = col[2], lty = lty[2], lwd = lwd[2])
       }
     }
     return(p)

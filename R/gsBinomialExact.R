@@ -165,7 +165,8 @@ utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 #' zz
 #' # also plot (see also plots below for \code{binomialSPRT})
 #' # add lines using geom_line()
-#' plot(zz) + geom_line()
+#' plot(zz) + 
+#' ggplot2::geom_line()
 #' 
 #' # now for SPRT examples
 #' x <- binomialSPRT(p0 = .05, p1 = .25, alpha = .1, beta = .2)
@@ -184,7 +185,10 @@ utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 #' nb1 <- nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, outtype = 3)
 #' nb1
 #' library(scales)
-#' ggplot(nb1, aes(x = n, y = Power)) + geom_line() + geom_point() + scale_y_continuous(labels = percent)
+#' ggplot2::ggplot(nb1, ggplot2::aes(x = n, y = Power)) + 
+#' ggplot2::geom_line() + 
+#' ggplot2::geom_point() + 
+#' ggplot2::scale_y_continuous(labels = percent)
 #' 
 #' # simple call with same parameters to get minimum sample size yielding desired power
 #' nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40)
@@ -194,7 +198,8 @@ utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 #' nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, conservative = TRUE)
 #' 
 #' # print out more information for the selected derived sample size
-#' nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, conservative = TRUE, outtype = 2)
+#' nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, conservative = TRUE,
+#'  outtype = 2)
 #' 
 #' # what happens if input sample sizes not sufficient?
 #' nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)
@@ -210,7 +215,7 @@ utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 #' marc_schwartz@me.com.
 #' @keywords design
 #' @export
-#' @aliases print.gsBinomialExact nBinomial1Sample
+#' @aliases print.gsBinomialExact
 #' @rdname gsBinomialExact
 # gsBinomialExact function [sinew] ----
 gsBinomialExact <- function(k = 2, theta = c(.1, .2), n.I = c(50, 100), a = c(3, 7), b = c(20, 30)) {
@@ -312,17 +317,18 @@ binomialSPRT <- function(p0 = .05, p1 = .25, alpha = .1, beta = .15, minn = 10, 
 #' @rdname gsBinomialExact
 #' @export
 #' @importFrom ggplot2 ggplot aes geom_line ylab geom_point xlab
+#' @importFrom rlang !! sym
 # plot.gsBinomialExact function [sinew] ----
 plot.gsBinomialExact <- function(x, plottype = 1, ...) {
   if (plottype == 6) {
     theta <- (max(x$theta) - min(x$theta)) * (0:50) / 50 + min(x$theta)
     y <- gsBinomialExact(k = x$k, theta = theta, n.I = x$n.I, a = x$lower$bound, b = x$upper$bound)
     xx <- data.frame(p = theta, EN = y$en)
-    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = p, y = EN)) + ggplot2::geom_line() + ggplot2::ylab("Expected sample size")
+    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = p, y = !!rlang::sym('EN'))) + ggplot2::geom_line() + ggplot2::ylab("Expected sample size")
   } else if (plottype == 3) {
     xx <- data.frame(N = x$n.I, p = x$upper$bound / x$n.I, Bound = "Upper")
     xx <- rbind(xx, data.frame(N = x$n.I, p = x$lower$bound / x$n.I, Bound = "Lower"))
-    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = N, y = p, group = Bound)) +
+    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = !!rlang::sym('N'), y = p, group = !!rlang::sym('Bound'))) +
       ggplot2::geom_point() +
       ggplot2::ylab("Rate at bound")
   } else if (plottype == 2) {
@@ -353,24 +359,39 @@ plot.gsBinomialExact <- function(x, plottype = 1, ...) {
     )
     # combine and plot
     outcome <- rbind(Power, futility, indeterminate)
-    p <- ggplot2::ggplot(data = outcome, ggplot2::aes(x = rr, y = Percent, lty = Outcome)) +
+    p <- ggplot2::ggplot(data = outcome, ggplot2::aes(x = !!rlang::sym('rr'), y = !!rlang::sym('Percent'), lty = !!rlang::sym('Outcome'))) +
       ggplot2::geom_line() +
       ggplot2::xlab("Underlying response rate")
   } else {
     xx <- data.frame(N = x$n.I, x = x$upper$bound, Bound = "Upper")
     xx <- rbind(xx, data.frame(N = x$n.I, x = x$lower$bound, Bound = "Lower"))
-    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = N, y = x, group = Bound)) +
+    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = !!rlang::sym('N'), y = x, group = !!rlang::sym('Bound'))) +
       ggplot2::geom_point() +
       ggplot2::ylab("Number of responses")
   }
   return(p)
 }
 
-# plot.binomialSPRT roxy [sinew] ----
-#' @rdname gsBinomialExact
-#' @export
+
+#' @title FUNCTION_TITLE
+#' @description FUNCTION_DESCRIPTION
+#' @param x PARAM_DESCRIPTION
+#' @param plottype PARAM_DESCRIPTION, Default: 1
+#' @param ... PARAM_DESCRIPTION
+#' @return OUTPUT_DESCRIPTION
+#' @author Keaven Anderson, PhD
+#' @details DETAILS
+#' @examples 
+#' \dontrun{
+#' if(interactive()){
+#'  #EXAMPLE1
+#'  }
+#' }
+#' @export 
+#' @rdname plot.binomialSPRT
+#' @seealso 
+#'  \code{\link[ggplot2]{geom_abline}}
 #' @importFrom ggplot2 geom_abline
-# plot.binomialSPRT function [sinew] ----
 plot.binomialSPRT <- function(x, plottype = 1, ...) {
   p <- plot.gsBinomialExact(x, plottype = plottype, ...)
   if (plottype == 1) {

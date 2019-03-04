@@ -59,8 +59,7 @@ means}
 where variance is known. T The function allows computation of sample size
 for a non-inferiority hypothesis. Note that you may wish to investigate
 other R packages such as the \code{pwr} package which uses the t-distr
-}
-\details{
+
 \code{nNormal()} computes sample size for comparing two normal means when
 the variance for observations in
 }
@@ -68,14 +67,13 @@ the variance for observations in
 
 # EXAMPLES
 # equal variances
-nNormal(delta1=.5,sd=1.1,alpha=.025,beta=.2)
+nNormal(delta1 = .5, sd = 1.1, alpha = .025, beta = .2)
 # unequal variances
-nNormal(delta1=.5,sd=1.1,sd2=2,alpha=.025,beta=.2)
+nNormal(delta1 = .5, sd = 1.1, sd2 = 2, alpha = .025, beta = .2)
 # unequal sample sizes
-nNormal(delta1=.5,sd=1.1,alpha=.025,beta=.2, ratio=2)
+nNormal(delta1 = .5, sd = 1.1, alpha = .025, beta = .2, ratio = 2)
 # non-inferiority assuming a better effect than null
-nNormal(delta1=.5,delta0=-.1,sd=1.2)
-
+nNormal(delta1 = .5, delta0 = -.1, sd = 1.2)
 }
 \references{
 Lachin JM (1981), Introduction to sample size determination and

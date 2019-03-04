@@ -1,7 +1,6 @@
-###
-# Exported Functions
-###
-
+# checkLengths roxy [sinew] ----
+#' @rdname checkScalar
+#' @export
 # checkLengths function [sinew] ----
 checkLengths <- function(..., allowSingle = FALSE) {
   lens <- unlist(lapply(list(...), length))
@@ -21,6 +20,9 @@ checkLengths <- function(..., allowSingle = FALSE) {
   invisible(NULL)
 }
 
+# checkRange roxy [sinew] ----
+#' @rdname checkScalar
+#' @export
 # checkRange function [sinew] ----
 checkRange <- function(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = deparse(substitute(x)), tol = 0) {
   # check inputs
@@ -50,9 +52,9 @@ checkRange <- function(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = d
 
 
 # checkScalar roxy [sinew] ----
-#' 6.0 Utility functions to verify variable properties
+#' @title Utility functions to verify variable properties
 #'
-#' Utility functions to verify an objects's properties including whether it is
+#' @description Utility functions to verify an objects's properties including whether it is
 #' a scalar or vector, the class, the length, and (if numeric) whether the
 #' range of values is on a specified interval. Additionally, the
 #' \code{checkLengths} function can be used to ensure that all the supplied
@@ -75,7 +77,6 @@ checkRange <- function(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = d
 #' \code{checkLength} is used to check whether all of the supplied inputs have
 #' equal lengths.
 #'
-#' @aliases checkScalar checkVector checkRange checkLengths isInteger
 #' @param x any object.
 #' @param isType character string defining the class that the input object is
 #' expected to be.
@@ -109,7 +110,6 @@ checkRange <- function(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = d
 #' test in the \code{\link{checkLengths}} function. Partial matching on the
 #' name of this argument is not performed so you must specify 'allowSingle' in
 #' its entirety in the call.
-#' @keywords programming
 #' @examples
 #' 
 #' # check whether input is an integer
@@ -146,7 +146,12 @@ checkRange <- function(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = d
 #' checkLengths(1, 2, 3, 4:5, 7:8, allowSingle = TRUE)
 #' 
 #' 
-#' # checkScalar function [sinew] ----
+#' @aliases checkLengths isInteger
+#' @keywords programming
+#' @rdname checkScalar
+#' @export
+#' @importFrom methods is
+# checkScalar function [sinew] ----
 checkScalar <- function(x, isType = "numeric", ...) {
   # check inputs
   if (!is.character(isType)) {
@@ -175,6 +180,10 @@ checkScalar <- function(x, isType = "numeric", ...) {
   invisible(NULL)
 }
 
+# checkVector roxy [sinew] ----
+#' @rdname checkScalar
+#' @export
+#' @importFrom methods is
 # checkVector function [sinew] ----
 checkVector <- function(x, isType = "numeric", ..., length = NULL) {
   # check inputs
@@ -213,12 +222,11 @@ checkVector <- function(x, isType = "numeric", ..., length = NULL) {
   invisible(NULL)
 }
 
+# isInteger roxy [sinew] ----
+#' @rdname checkScalar
+#' @export
 # isInteger function [sinew] ----
 isInteger <- function(x) all(is.numeric(x)) && all(round(x, 0) == x)
-
-###
-# Hidden Functions
-###
 
 checkMD5 <- function(package = "gsDesign", dir) {
   if (missing(dir)) {
