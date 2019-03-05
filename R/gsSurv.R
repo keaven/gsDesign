@@ -122,7 +122,7 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 #' class \code{eEvents} which contains the following items: \item{lambda}{as
 #' input; converted to a matrix on output.} \item{eta}{as input; converted to a
 #' matrix on output.} \item{gamma}{as input.} \item{R}{as input.} \item{S}{as
-#' input.} \item{T}{as input.} \item{Tfinal}{lanned duration of study.}
+#' input.} \item{T}{as input.} \item{Tfinal}{planned duration of study.}
 #' \item{minfup}{as input.} \item{d}{expected number of events.}
 #' \item{n}{expected sample size.} \item{digits}{as input.}
 #' @examples
