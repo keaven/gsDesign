@@ -458,17 +458,25 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
   class(x) <- "gsDesign"
 
   # check parameters other than spending functions
-  x <- gsDErrorCheck(x)
+  x <- gsDErrorCheck
+  # if usTime (upper spending time) is specified, check it
+  if (!is.null(usTime)){
+    checkVector(usTime[1:(x$k-1)],"numeric",c(0,1),c(FALSE,FALSE)) # interim fractions in (0,1)
+    if (length(usTime) < x$k - 1 || length(usTime)>x$k) stop("usTime, if specified, must have length k or k-1")
+    if (length(usTime)<x$k) usTime <- c(usTime,1)
+    if (min(usTime - c(0,usTime[1:(x$k-1)])) <= 0)
+    {
+      stop("input upper spending time at analyses must be increasing >0 and, at any interim <1)")
+    }
+  }
   # get upper spending time (usually will be x$timing)
-  if (is.null(x$usTime)){
-    x$usTime <- x$timing
+  if (is.null(usTime)){
     usTime <- x$timing
-  }else usTime <- x$usTime
-  if (usTime[length(usTime)-1] > 1) stop("All interim analyses must have spending time < 1 (usTime)")
+  }
 
   # set up spending for upper bound
   if (is.character(sfu)) {
-    upper <- list(sf = sfu, name = sfu, parname = "Delta", param = sfupar)
+    upper <- list(sf = sfu, name = sfu, parname = "Delta", param = sfupar, sTime = usTime)
 
     class(upper) <- "spendfn"
 
@@ -485,7 +493,7 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
   }
   else {
     upper <- sfu(x$alpha, usTime, sfupar)
-    upper$sf <- sfu
+    upper$sTime <- usTime
   }
 
   x$upper <- upper
@@ -494,15 +502,20 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
   if (x$test.type == 1) {
     x$lower <- NULL
   }
-  else if (x$test.type == 2) {
-    x$lower <- x$upper
-    x$lsTime <- x$usTime
-  }
+  else if (x$test.type == 2) x$lower <- x$upper
   else {
+    # if lsTime (lower spending time) is specified, check it; if not, set it to timing
+    if (!is.null(lsTime)){
+      checkVector(lsTime[1:(x$k-1)],"numeric",c(0,1),c(FALSE,FALSE))
+      if (length(lsTime) < x$k - 1 || length(lsTime)>x$k) stop("lsTime, if specified, must have length k or k-1")
+      if (length(lsTime)<x$k) lsTime <- c(lsTime,1)
+      if (min(lsTime - c(0,lsTime[1:(x$k-1)])) <= 0)
+      {
+        stop("input lower spending time at analyses must be increasing >0 and, at any interim, <1)")
+      }
+    }
     # get lower spending time (usually will be x$timing)
-    if (is.null(x$lsTime)) lsTime <- x$timing
-    else lsTime <- x$lsTime
-    if (lsTime[length(lsTime)-1] > 1) stop("All interim analyses must have spending time < 1 (lsTime)")
+    if (is.null(lsTime)) lsTime <- x$timing
     if (!is.function(sfl)) {
       stop("Lower spending function must return object with class spendfn")
     }
@@ -514,9 +527,8 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
         x$astar <- 1 - x$alpha
       }
       x$lower <- sfl(x$astar, lsTime, sflpar)
+      x$lower$sTime <- lsTime
     }
-
-    x$lower$sf <- sfl
   }
 
   # call appropriate calculation routine according to test.type
@@ -1553,29 +1565,6 @@ gsDErrorCheck <- function(x) {
       stop("value input for timing must be length 1, k-1 or k")
     }
   }
-  # if usTime (upper spending time) is specified, check it
-  if (!is.null(x$usTime)){
-    checkVector(x$usTime,"numeric",c(0,1),c(FALSE,TRUE))
-    if (length(x$usTime) < x$k - 1 || length(x$usTime)>x$k) stop("usTime, if specified, must have length k or k-1")
-    if (length(x$usTime)<x$k) x$usTime <- c(x$usTime,1)
-    if (min(x$usTime - c(0,x$usTime[1:(x$k-1)])) <= 0)
-    {
-      stop("input upper spending time at analyses must be increasing >0 and <=1 (<1 at any interim)")
-    }
-    if (x$usTime[x$k]<1) stop("upper spending time at final analysis, if specified, must be =1")
-  }
-  # if lsTime (lower spending time) is specified, check it; if not, set it to timing
-  if (!is.null(x$lsTime)){
-    checkVector(x$lsTime,"numeric",c(0,1),c(FALSE,TRUE))
-    if (length(x$lsTime) < x$k - 1 || length(x$lsTime)>x$k) stop("lsTime, if specified, must have length k or k-1")
-    if (length(x$lsTime)<x$k) x$lsTime <- c(x$lsTime,1)
-    if (min(x$lsTime - c(0,x$lsTime[1:(x$k-1)])) <= 0)
-    {
-      stop("input lower spending time at analyses must be increasing >0 and <=1 (<1 at any interim)")
-    }
-    if (x$lsTime[x$k]<1) stop("lower spending time at final analysis, if specified, must be =1")
-  }
-  
   # check input values for tol, r
   checkScalar(x$tol, "numeric", c(0, 0.1), c(FALSE, TRUE))
   checkScalar(x$r, "integer", c(1, 80))
