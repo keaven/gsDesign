@@ -73,14 +73,14 @@
 #' # each upper boundary and .02 of crossing each lower boundary
 #' # under the null hypothesis
 #' x <- gsBound(
-#'   I = c(1, 2, 3) / 3, trueneg = array(.02, 3),
-#'   falsepos = array(.01, 3)
+#'   I = c(1, 2, 3) / 3, trueneg = rep(.02, 3),
+#'   falsepos = rep(.01, 3)
 #' )
 #' x
 #' 
 #' #  use gsBound1 to set up boundary for a 1-sided test
 #' x <- gsBound1(
-#'   theta = 0, I = c(1, 2, 3) / 3, a = array(-20, 3),
+#'   theta = 0, I = c(1, 2, 3) / 3, a = rep(-20, 3),
 #'   probhi = c(.001, .009, .015)
 #' )
 #' x$b
@@ -97,7 +97,7 @@
 #' #  assuming theta=2.2
 #' y <- gsBound1(
 #'   theta = -2.2, I = c(1, 2, 3) / 3, a = -x$b,
-#'   probhi = array(.05, 3)
+#'   probhi = rep(.05, 3)
 #' )
 #' y$b
 #' 
@@ -757,8 +757,8 @@ gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0
 #' # add vertical lines with lower and upper bounds at analysis 2
 #' # to demonstrate how likely it is to continue, stop for futility
 #' # or stop for efficacy at analysis 2 by treatment effect
-#' lines(array(x$upper$bound[2], 2), c(0, .4), col = 2)
-#' lines(array(x$lower$bound[2], 2), c(0, .4), lty = 2, col = 2)
+#' lines(rep(x$upper$bound[2], 2), c(0, .4), col = 2)
+#' lines(rep(x$lower$bound[2], 2), c(0, .4), lty = 2, col = 2)
 #' 
 #' # Replicate part of figures 8.1 and 8.2 of Jennison and Turnbull text book
 #' # O'Brien-Fleming design with four analyses
