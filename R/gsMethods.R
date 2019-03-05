@@ -28,7 +28,7 @@ print.gsProbability <- function(x, ...) {
     )
     colnames(y) <- c("Analysis", ntxt, "Z  ", "Nominal p", "Z  ", "Nominal p")
   }
-  rownames(y) <- array(" ", x$k)
+  rownames(y) <- rep(" ", x$k)
   cat("\n")
   print(y)
   cat("\nBoundary crossing probabilities and expected sample size assume\n")
@@ -41,7 +41,7 @@ print.gsProbability <- function(x, ...) {
   }
   y <- round(cbind(x$theta, t(x$upper$prob), sump, x$en), 4)
   y[, x$k + 3] <- round(y[, x$k + 3], 1)
-  rownames(y) <- array(" ", j)
+  rownames(y) <- rep(" ", j)
   colnames(y) <- c("Theta", 1:x$k, "Total", "E{N}")
   cat("Upper boundary (power or Type I Error)\n")
   cat("          Analysis\n")
@@ -53,7 +53,7 @@ print.gsProbability <- function(x, ...) {
   }
 
   y <- round(cbind(x$theta, t(x$lower$prob), sump), 4)
-  rownames(y) <- array(" ", j)
+  rownames(y) <- rep(" ", j)
   colnames(y) <- c("Theta", 1:x$k, "Total")
   cat("\nLower boundary (futility or Type II Error)\n")
   cat("          Analysis\n")
@@ -184,7 +184,7 @@ print.gsDesign <- function(x, ...) {
     )
     colnames(y) <- c("Analysis", ntxt, "Z  ", "Nominal p", "Spend")
   }
-  rownames(y) <- array(" ", x$k)
+  rownames(y) <- rep(" ", x$k)
   cat("\n")
   print(y)
   cat("     Total")
@@ -239,7 +239,7 @@ print.gsDesign <- function(x, ...) {
   if (x$n.fix != 1) {
     y[, x$k + 3] <- round(y[, x$k + 3], 1)
   }
-  rownames(y) <- array(" ", j)
+  rownames(y) <- rep(" ", j)
   colnames(y) <- c("Theta", 1:x$k, "Total", "E{N}")
   cat("Upper boundary (power or Type I Error)\n")
   cat("          Analysis\n")
@@ -250,7 +250,7 @@ print.gsDesign <- function(x, ...) {
       sump[m] <- sum(x$lower$prob[, m])
     }
     y <- round(cbind(x$theta, t(x$lower$prob), sump), 4)
-    rownames(y) <- array(" ", j)
+    rownames(y) <- rep(" ", j)
     colnames(y) <- c("Theta", 1:x$k, "Total")
     cat("\nLower boundary (futility or Type II Error)\n")
     cat("          Analysis\n")
@@ -660,7 +660,7 @@ gsBoundSummary <- function(x, deltaname = NULL, logdelta = FALSE, Nname = NULL, 
   if (x$test.type > 2) tem <- data.frame(cbind(tem, "Futility" = stats::pnorm(x$lower$bound, lower.tail = FALSE)))
   statframe <- rbind(statframe, tem)
   # delta values at bounds
-  tem <- data.frame("Value" = paste(deltaname, "at bound"), "Efficacy" = deltaefficacy, i = 1:x$k)
+  tem <- data.frame("Value" = paste("~",deltaname, " at bound", sep = ""), "Efficacy" = deltaefficacy, i = 1:x$k)
   if (x$test.type > 1) tem$Futility <- deltafutility
   statframe <- rbind(statframe, tem)
 
@@ -698,7 +698,7 @@ gsBoundSummary <- function(x, deltaname = NULL, logdelta = FALSE, Nname = NULL, 
   statframe[statframe$Value == statframe$Value[2], ]$Analysis <- paste(Nname, ": ", N, sep = "")
   # add POS and predicitive POS, if requested
   if (POS) {
-    ppos <- array("", x$k)
+    ppos <- rep("", x$k)
     for (i in 1:(x$k - 1)) ppos[i] <- paste("Post IA POS: ", as.character(round(100 * gsCPOS(i = i, x = x, theta = prior$z, wgts = prior$wgts), 1)), "%", sep = "")
     statframe[statframe$Value == statframe$Value[nstat + 1], ]$Analysis <- ppos
     statframe[nstat + 2, ]$Analysis <- ppos[1]
