@@ -4,11 +4,13 @@ Title: Group Sequential Design
 Description: Derives group sequential designs and describes their properties.
 Authors@R: person(given = "Keaven", family = "Anderson", email =
           "keaven_anderson@merck.com", role = c('aut','cre'))
-Depends: R (>= 3.0.0)
+Depends: R (>= 3.0.0), xtable, ggplot2 (>= 0.9.2)
 Imports: stats,utils,ggplot2,rlang,methods,xtable,graphics,plyr,tools
 Suggests: knitr, scales, rmarkdown, testthat
 VignetteBuilder: knitr
 License: GPL (>= 2)
 Copyright: Copyright 2010, Merck Research Laboratories
+Packaged: 2011-12-30 13:26:23 UTC; Anderkea
+Date: 2012-11-12
 RoxygenNote: 6.1.1
 Encoding: UTF-8

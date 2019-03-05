@@ -609,7 +609,7 @@ sfHSD <- function(alpha, t, param) {
 
 # sfLDOF roxy [sinew] ----
 #' @title Lan-DeMets Spending function overview
-#' @description  Lan and DeMets (1983) first published the method of using spending functions
+#' @description Lan and DeMets (1983) first published the method of using spending functions 
 #' to set boundaries for group sequential trials. In this publication they
 #' proposed two specific spending functions: one to approximate an
 #' O'Brien-Fleming design and the other to approximate a Pocock design.
