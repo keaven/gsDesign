@@ -694,16 +694,27 @@ sfHSD <- function(alpha, t, param) {
 sfLDOF <- function(alpha, t, param) {
   checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
   checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
-  t[t > 1] <- 1
-  z <- -stats::qnorm(alpha / 2)
-
-  x <- list(
-    name = "Lan-DeMets O'brien-Fleming approximation", param = NULL, parname = "none", sf = sfLDOF,
-    spend = 2 * (1 - stats::pnorm(z / sqrt(t))), bound = NULL, prob = NULL
-  )
-
+  # Following 2 lines udated 10/11/17 
+  # fix needed since default for gsDesign is param=-4 is out of range for LDOF
+  if (is.null(param) || param < .005 || param > 20) param <- 1
+  checkScalar(param, "numeric", c(.005,20),c(TRUE,TRUE))
+  t[t>1] <- 1
+  if (param == 1){
+    rho <- 1
+    txt <- "Lan-DeMets O'Brien-Fleming approximation"
+    parname <- "none"
+  }else{
+    rho<-param
+    txt <- "Generalized Lan-DeMets O'Brien-Fleming"
+    parname <- "rho"
+  }
+  z <- - qnorm(alpha / 2)
+  
+  x <- list(name=txt, param=param, parname=parname, sf=sfLDOF, 
+            spend=2 * (1 - pnorm(z / t^(rho/2))), bound=NULL, prob=NULL)  
+  
   class(x) <- "spendfn"
-
+  
   x
 }
 
@@ -1585,7 +1596,7 @@ sfTruncated <- function(alpha, t, param) {
   }
   if (class(param$sf) != "function") stop("param$sf must be a spending function")
   if (!is.numeric(param$param)) stop("param$param must be numeric")
-  spend <- as.vector(array(0, length(t)))
+  spend <- as.vector(rep(0, length(t)))
   spend[t >= param$trange[2]] <- alpha
   indx <- param$trange[1] < t & t < param$trange[2]
   if (max(indx)) {
@@ -1622,7 +1633,7 @@ sfTrimmed <- function(alpha, t, param) {
   }
   if (class(param$sf) != "function") stop("param$sf must be a spending function")
   if (!is.numeric(param$param)) stop("param$param must be numeric")
-  spend <- as.vector(array(0, length(t)))
+  spend <- as.vector(rep(0, length(t)))
   spend[t >= param$trange[2]] <- alpha
   indx <- param$trange[1] < t & t < param$trange[2]
   if (max(indx)) {
@@ -1659,7 +1670,7 @@ sfGapped <- function(alpha, t, param) {
   }
   if (class(param$sf) != "function") stop("param$sf must be a spending function")
   if (!is.numeric(param$param)) stop("param$param must be numeric")
-  spend <- as.vector(array(0, length(t)))
+  spend <- as.vector(rep(0, length(t)))
   spend[t >= param$trange[2]] <- alpha
   indx <- param$trange[1] > t
   if (max(indx)) {
