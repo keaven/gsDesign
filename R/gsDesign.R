@@ -332,6 +332,12 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' natural parameter scale.
 #' @param overrun Scalar or vector of length \code{k-1} with patients enrolled
 #' that are not included in each interim analysis.
+#' @param usTime Default is NULL in which case upper bound spending time is 
+#' determined by \code{timing}. Otherwise, this should be a vector of length 
+#' \code{k} with the spending time at each analysis (see Details).
+#' @param lsTime Default is NULL in which case lower bound spending time is 
+#' determined by \code{timing}. Otherwise, this should be a vector of length 
+#' \code{k} with the spending time at each analysis (see Details).
 #' @return An object of the class \code{gsDesign}. This class has the following
 #' elements and upon return from \code{gsDesign()} contains: \item{k}{As
 #' input.} \item{test.type}{As input.} \item{alpha}{As input.} \item{beta}{As
@@ -359,7 +365,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' \code{nSurv}. Note that if you use \code{gsSurv} for time-to-event sample
 #' size, this is not needed and a more complete output summary is given.}
 #' \item{endpoint}{As input.} \item{delta1}{As input.} \item{delta0}{As input.}
-#' \item{overrun}{As input.} \item{upper}{Upper bound spending function,
+#' \item{overrun}{As input.} \item{usTime}{As input.} \item{lsTime}{As input.} \item{upper}{Upper bound spending function,
 #' boundary and boundary crossing probabilities under the NULL and alternate
 #' hypotheses. See \link{Spending function overview} and manual for further
 #' details.} \item{lower}{Lower bound spending function, boundary and boundary
@@ -428,6 +434,10 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' \link{Wang-Tsiatis Bounds}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+#' Lan KK, DeMets DL (1989). Group sequential procedures: calendar versus information 
+#' time. \emph{Statistics in medicine} 8(10):1191-8.
+#' Liu, Q, Lim, P, Nuamah, I, and Li, Y (2012), On adaptive error spending approach for 
+#' group sequential trials with random information levels. \emph{Journal of biopharmaceutical statistics}; 22(4), 687-699.
 #' @keywords design
 #' @export
 #' @rdname gsDesign
