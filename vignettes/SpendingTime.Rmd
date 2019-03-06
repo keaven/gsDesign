@@ -18,6 +18,9 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r}
+library(gsDesign)
+```
 
 # Introduction
 
@@ -39,7 +42,6 @@ The situations we will consider are:
 
 ```{r}
 # code here applies to both fixed and group sequential design sections below.
-require(gsDesign)
 # name of primary endpoint and time units
 ep <- "overall survival"
 timename <- "months"
