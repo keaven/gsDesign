@@ -620,7 +620,7 @@ sfHSD <- function(alpha, t, param) {
 #' \alpha)=2-2\Phi\left(\Phi^{-1}(1-\alpha/2)/ t^{\rho/2}\right).}{%
 #' f(t; alpha)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(rho/2)\right)}
 #' For \code{rho} otherwise in \code{[.005,2]}, this is the generalized version of Liu et al (2012).
-#' For \code{param} outside of \code{[.005,2]}, \code{rho} is set to 1. } The Lan-DeMets (1983)
+#' For \code{param} outside of \code{[.005,2]}, \code{rho} is set to 1. The Lan-DeMets (1983)
 #' spending function to approximate a Pocock design is implemented in the
 #' function \code{sfLDPocock()}:
 #' \deqn{f(t;\alpha)=ln(1+(e-1)t).}{f(t;alpha)=ln(1+(e-1)t).} As shown in

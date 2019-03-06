@@ -32,7 +32,25 @@ An object of type \code{spendfn}. See spending functions for further
 details.
 }
 \description{
-Lan-DeMets Spending function overview
+Lan and DeMets (1983) first published the method of using spending functions 
+to set boundaries for group sequential trials. In this publication they
+proposed two specific spending functions: one to approximate an
+O'Brien-Fleming design and the other to approximate a Pocock design.
+The spending function to approximate O'Brien-Fleming has been generalized as proposed by Liu, et al (2012)
+
+With \code{param=1=rho}, the Lan-DeMets (1983) spending function to approximate an O'Brien-Fleming
+bound is implemented in the function (\code{sfLDOF()}): \deqn{f(t; 
+\alpha)=2-2\Phi\left(\Phi^{-1}(1-\alpha/2)/ t^{\rho/2}\right).}{%
+f(t; alpha)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(rho/2)\right)}
+For \code{rho} otherwise in \code{[.005,2]}, this is the generalized version of Liu et al (2012).
+For \code{param} outside of \code{[.005,2]}, \code{rho} is set to 1. The Lan-DeMets (1983)
+spending function to approximate a Pocock design is implemented in the
+function \code{sfLDPocock()}:
+\deqn{f(t;\alpha)=ln(1+(e-1)t).}{f(t;alpha)=ln(1+(e-1)t).} As shown in
+examples below, other spending functions can be used to get as good or
+better approximations to Pocock and O'Brien-Fleming bounds. In particular,
+O'Brien-Fleming bounds can be closely approximated using
+\code{\link{sfExponential}}.
 }
 \note{
 The manual is not linked to this help file, but is available in
