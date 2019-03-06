@@ -447,7 +447,6 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
                      sfl = sfHSD, sflpar = -2, tol = 0.000001, r = 18, n.I = 0, maxn.IPlan = 0,
                      nFixSurv = 0, endpoint = NULL, delta1 = 1, delta0 = 0, overrun = 0, usTime = NULL, lsTime = NULL) {
   # Derive a group sequential design and return in a gsDesign structure
-
   # set up class variable x for gsDesign being requested
   x <- list(
     k = k, test.type = test.type, alpha = alpha, beta = beta, astar = astar,
@@ -458,7 +457,7 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
   class(x) <- "gsDesign"
 
   # check parameters other than spending functions
-  x <- gsDErrorCheck
+  x <- gsDErrorCheck(x)
   # if usTime (upper spending time) is specified, check it
   if (!is.null(usTime)){
     checkVector(usTime[1:(x$k-1)],"numeric",c(0,1),c(FALSE,FALSE)) # interim fractions in (0,1)
