@@ -17,13 +17,13 @@ gsAdaptSim <- function(SimStage, IniSim, TrialPar, SimPar, cp = 0, thetacp = -10
   nnewe <- ceiling(x$gsx$n.I[x$gsx$k] * x$ratio / (1 + x$ratio) - x$ne)
 
   if (length(nnewe) == 1) {
-    nnewe <- array(nnewe, TrialPar$nsim)
+    nnewe <- rep(nnewe, TrialPar$nsim)
   }
 
   nnewc <- ceiling(x$gsx$n.I[x$gsx$k] / (1 + x$ratio) - x$nc)
 
   if (length(nnewc) == 1) {
-    nnewc <- array(nnewc, TrialPar$nsim)
+    nnewc <- rep(nnewc, TrialPar$nsim)
   }
 
   # compute bounds for each simulation for z based on data between final interim and final analysis
@@ -40,13 +40,13 @@ gsAdaptSim <- function(SimStage, IniSim, TrialPar, SimPar, cp = 0, thetacp = -10
   }
 
   # compute sample size to achieve desired conditional power
-  ncp <- array(maxn, TrialPar$nsim) - x$nc - x$ne
+  ncp <- rep(maxn, TrialPar$nsim) - x$nc - x$ne
   ncp[thetacp > 0] <- as.integer(ceiling(((bnew[thetacp > 0] + stats::qnorm(cp)) / thetacp[thetacp > 0])^2))
 
   if (maxn > 0) {
     maxn <- maxn - x$nc - x$ne
     if (length(maxn) == 1) {
-      maxn <- array(maxn, x$nsim)
+      maxn <- rep(maxn, x$nsim)
     }
     ncp[ncp > maxn] <- maxn[ncp > maxn]
   }
@@ -64,7 +64,7 @@ gsAdaptSim <- function(SimStage, IniSim, TrialPar, SimPar, cp = 0, thetacp = -10
   nnewe[flag == 1] <- ncpe[flag == 1]
 
   # set up analysis object for final stage
-  zero <- array(0, x$nsim)
+  zero <- rep(0, x$nsim)
   y <- list(xc = zero, xe = zero, nc = nnewc, ne = nnewe, xadd = x$xadd, nadd = x$nadd)
 
   # simulate data for final stage
@@ -84,12 +84,12 @@ gsAdaptSim <- function(SimStage, IniSim, TrialPar, SimPar, cp = 0, thetacp = -10
   }
 
   if (length(x$nc) == 1) {
-    x$nc <- array(x$nc, TrialPar$nsim)
+    x$nc <- rep(x$nc, TrialPar$nsim)
   }
   x$nc[x$outcome == 0] <- x$nc[x$outcome == 0] + nnewc[x$outcome == 0]
 
   if (length(x$ne) == 1) {
-    x$ne <- array(x$ne, TrialPar$nsim)
+    x$ne <- rep(x$ne, TrialPar$nsim)
   }
   x$ne[x$outcome == 0] <- x$ne[x$outcome == 0] + nnewe[x$outcome == 0]
 

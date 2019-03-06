@@ -95,9 +95,9 @@ theta(delta1-delta0)}.}
 \code{ssrCP()} adapts 2-stage group sequential designs to 2-stage sample
 size re-estimation designs based on interim analysis conditional power. This
 is a simple case of designs developed by Lehmacher and Wassmer, Biometrics
-(1999).  The conditional power designs of Bauer and Kohne (1994), Proschan
-and Hunsberger (199x), Cui, Hung and Wang (199x) and Liu and Chi (), Gao,
-Ware and Mehta (), and Mehta and Pocock (2011).  Either the estimated
+(1999). The conditional power designs of Bauer and Kohne (1994), 
+Proschan and Hunsberger (1995), Cui, Hung and Wang (1999) and Liu and Chi (2001), 
+Gao, Ware and Mehta (2008), and Mehta and Pocock (2011). Either the estimated
 treatment effect at the interim analysis or any chosen effect size can be
 used for sample size re-estimation. If not done carefully, these designs can
 be very inefficient. It is probably a good idea to compare any design to a
@@ -150,6 +150,22 @@ suggest that using the parameter value for which the trial was originally
 powered is a good choice.
 }
 \examples{
+# quick trick for simple conditional power based on interim z-value, stage 1 and 2 sample size
+# assumed treatment effect and final alpha level
+# and observed treatment effect
+alpha <- .01 # set final nominal significance level
+timing <- .6 # set proportion of sample size, events or statistical information at IA
+n2 <- 40 # set stage 2 sample size events or statistical information
+hr <- .6 # for this example we will derive conditional power based on hazard ratios
+n.fix <- nEvents(hr=hr,alpha=alpha) # you could otherwise make n.fix an arbitrary positive value
+# this just derives a group sequential design that should not change sample size from n.fix
+# due to stringent IA bound
+x <- gsDesign(k=2,n.fix=n.fix,alpha=alpha,test.type=1,sfu=sfHSD,sfupar=-20,timing=timing,delta1=log(hr))
+# derive effect sizes for which you wish to compute conditional power
+hrpostIA = seq(.4,1,.05)
+# in the following, we convert HR into standardized effect size based on the design in x
+powr <- condPower(x=x,z1=1,n2=x$n.I[2]-x$n.I[1],theta=log(hrpostIA)/x$delta1*x$theta[2])
+qplot(hrpostIA,condPower(x=x,z1=1,n2=x$n.I[2]-x$n.I[1],theta=log(hrpostIA)/x$delta1*x$theta[2]),geom="line",xlab="HR post IA",ylab="Conditional power",main ="Conditional power as a function of assumed HR")
 
 # Following is a template for entering parameters for ssrCP
 # Natural parameter value null and alternate hypothesis values
@@ -300,6 +316,6 @@ Medicine, 30:3267-3284, 2011.
 \code{\link{gsDesign}}
 }
 \author{
-Keaven Anderson \email{keaven\_anderson@merck.}
+Keaven Anderson \email{keaven_anderson@merck.}
 }
 \keyword{design}

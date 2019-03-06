@@ -280,7 +280,7 @@ varBinomial <- function(x, n, delta0 = 0, ratio = 1, scale = "Difference") { # c
   scale <- match.arg(tolower(scale), c("difference", "rr", "or"))
   # risk difference test - from Miettinen and Nurminen eqn (9)
   p <- x / n
-  phi <- array(0, max(length(delta0), length(x), length(ratio), length(n)))
+  phi <- rep(0, max(length(delta0), length(x), length(ratio), length(n)))
   if (scale == "difference") {
     checkScalar(delta0, "numeric", c(-1, 1), c(FALSE, FALSE))
     p1 <- p + ratio * delta0 / (ratio + 1)

@@ -5,7 +5,7 @@
 \alias{gsBound1}
 \title{Boundary derivation - low level}
 \usage{
-gsBound(I, trueneg, falsepos, tol = 1e-06, r = 18)
+gsBound(I, trueneg, falsepos, tol = 1e-06, r = 18, printerr = 0)
 
 gsBound1(theta, I, a, probhi, tol = 1e-06, r = 18, printerr = 0)
 }
@@ -27,6 +27,12 @@ in Jennison and Turnbull (2000); default is 18, range is 1 to 80.  Larger
 values provide larger number of grid points and greater accuracy.  Normally
 \code{r} will not be changed by the user.}
 
+\item{printerr}{If this scalar argument set to 1, this will print messages
+from underlying C program.  Mainly intended to notify user when an output
+solution does not match input specifications.  This is not intended to stop
+execution as this often occurs when deriving a design in \code{gsDesign}
+that uses beta-spending.}
+
 \item{theta}{Scalar containing mean (drift) per unit of statistical
 information.}
 
@@ -35,12 +41,6 @@ information.}
 
 \item{probhi}{Vector of desired probabilities for crossing upper bound
 assuming mean of theta.}
-
-\item{printerr}{If this scalar argument set to 1, this will print messages
-from underlying C program.  Mainly intended to notify user when an output
-solution does not match input specifications.  This is not intended to stop
-execution as this often occurs when deriving a design in \code{gsDesign}
-that uses beta-spending.}
 }
 \value{
 Both routines return a list. Common items returned by the two
@@ -91,14 +91,14 @@ installed.
 # each upper boundary and .02 of crossing each lower boundary
 # under the null hypothesis
 x <- gsBound(
-  I = c(1, 2, 3) / 3, trueneg = array(.02, 3),
-  falsepos = array(.01, 3)
+  I = c(1, 2, 3) / 3, trueneg = rep(.02, 3),
+  falsepos = rep(.01, 3)
 )
 x
 
 #  use gsBound1 to set up boundary for a 1-sided test
 x <- gsBound1(
-  theta = 0, I = c(1, 2, 3) / 3, a = array(-20, 3),
+  theta = 0, I = c(1, 2, 3) / 3, a = rep(-20, 3),
   probhi = c(.001, .009, .015)
 )
 x$b
@@ -115,7 +115,7 @@ y <- gsProbability(k = 3, theta = 0, n.I = x$I, a = x$a, b = x$b)$upper$prob
 #  assuming theta=2.2
 y <- gsBound1(
   theta = -2.2, I = c(1, 2, 3) / 3, a = -x$b,
-  probhi = array(.05, 3)
+  probhi = rep(.05, 3)
 )
 y$b
 

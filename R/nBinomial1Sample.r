@@ -30,7 +30,7 @@
 nBinomial1Sample <- function(p0 = 0.90, p1 = 0.95,
                              alpha = 0.025, beta = NULL,
                              n = 200:250, outtype = 1, conservative = FALSE) {
-  Pow <- 1 - beta
+
   # Required number of events, given a vector of sample sizes (n)
   # to be considered at the null proportion, for the given alpha
   CritVal <- stats::qbinom(p = 1 - alpha, size = n, prob = p0) + 1
@@ -39,24 +39,16 @@ nBinomial1Sample <- function(p0 = 0.90, p1 = 0.95,
   # proportion
   Power <- stats::pbinom(CritVal - 1, n, p1, lower.tail = FALSE)
   bta <- 1 - Power
-  if (is.null(beta)) beta <- bta
-  if (outtype == 3 || is.null(beta)) {
-    return(data.frame(
-      p0 = p0, p1 = p1, alpha = alpha, beta = beta,
-      n = n, b = CritVal,
-      alphaR = Alpha, Power = Power
-    ))
+  if (is.null(beta)){
+    beta <- bta
+    return(data.frame(p0=p0, p1=p1, alpha=alpha, beta=beta, 
+                      n=n, b=CritVal, alphaR=Alpha, Power=Power))
   }
-  if (max(Power) < Pow) return(NULL)
-  if (is.null(beta)) beta <- 1 - Power
+  if (max(Power)< 1-beta) stop("Input sample size insufficient to power trial")
+  if (min(Power)>= 1-beta) stop("All input sample sizes produce at least desired power, so minimum required sample size could not be determined")
   # Find the smallest sample size yielding at least the required power
-  if (!conservative) {
-    SampSize <- min(which(Power >= Pow))
-  } else if (min(Power >= Pow) == 1) {
-    SampSize <- 1
-  } else {
-    SampSize <- max(which(Power < Pow)) + 1
-  }
+  if (!conservative){SampSize <- min(which(Power >= 1-beta))
+  }else SampSize <- max(which(Power < 1-beta)) + 1
 
   if (outtype == 2) {
     return(data.frame(

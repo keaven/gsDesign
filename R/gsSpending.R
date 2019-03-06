@@ -609,17 +609,18 @@ sfHSD <- function(alpha, t, param) {
 
 # sfLDOF roxy [sinew] ----
 #' @title Lan-DeMets Spending function overview
-#' @description  Lan and DeMets (1983) first published the method of using spending functions
+#' @description Lan and DeMets (1983) first published the method of using spending functions 
 #' to set boundaries for group sequential trials. In this publication they
 #' proposed two specific spending functions: one to approximate an
-#' O'Brien-Fleming design and the other to approximate a Pocock design. Both of
-#' these spending functions are available here, mainly for historical purposes.
-#' Neither requires a parameter.
+#' O'Brien-Fleming design and the other to approximate a Pocock design.
+#' The spending function to approximate O'Brien-Fleming has been generalized as proposed by Liu, et al (2012)
 #'
-#' The Lan-DeMets (1983) spending function to approximate an O'Brien-Fleming
-#' bound is implemented in the function (\code{sfLDOF()}): \deqn{f(t;
-#' \alpha)=2-2\Phi\left(\Phi^{-1}(1-\alpha/2)/ t^{1/2}\right).}{% f(t;
-#' alpha)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(1/2)\right).} The Lan-DeMets (1983)
+#' With \code{param=1=rho}, the Lan-DeMets (1983) spending function to approximate an O'Brien-Fleming
+#' bound is implemented in the function (\code{sfLDOF()}): \deqn{f(t; 
+#' \alpha)=2-2\Phi\left(\Phi^{-1}(1-\alpha/2)/ t^{\rho/2}\right).}{%
+#' f(t; alpha)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(rho/2)\right)}
+#' For \code{rho} otherwise in \code{[.005,2]}, this is the generalized version of Liu et al (2012).
+#' For \code{param} outside of \code{[.005,2]}, \code{rho} is set to 1. The Lan-DeMets (1983)
 #' spending function to approximate a Pocock design is implemented in the
 #' function \code{sfLDPocock()}:
 #' \deqn{f(t;\alpha)=ln(1+(e-1)t).}{f(t;alpha)=ln(1+(e-1)t).} As shown in
@@ -636,9 +637,12 @@ sfHSD <- function(alpha, t, param) {
 #' @param t A vector of points with increasing values from 0 to 1, inclusive.
 #' Values of the proportion of sample size/information for which the spending
 #' function will be computed.
-#' @param param This parameter is not used and need not be specified. It is
-#' here so that the calling sequence conforms the to the standard for spending
-#' functions used with \code{gsDesign()}.
+#' @param param This parameter is not used for \code{sfLDPocock}, not required 
+#' for \code{sfLDOF} and need not be specified. For \code{sfLDPocock} it is here 
+#' so that the calling sequence conforms to the standard for spending functions used 
+#' with \code{gsDesign()}. For \code{sfLDOF} it will default to 1 (Lan-DeMets function 
+#' to approximate O'Brien-Fleming) if \code{NULL} or if outside of the range \code{[.005,2]}.
+#' otherwise, it will be use to set rho from Liu et al (2012).
 #' @return An object of type \code{spendfn}. See spending functions for further
 #' details.
 #' @examples
@@ -676,6 +680,19 @@ sfHSD <- function(alpha, t, param) {
 #'   k = 6, sfu = sfExponential, sfupar = 0.7849295,
 #'   test.type = 2
 #' )$upper$bound
+#' 
+#' # plot spending functions for generalized Lan-DeMets approximation of
+# O'Brien-Fleming (from Liu et al, 2012)
+#' ti <-(0:100)/100
+#' rho <- c(.05,.5,1,1.5,2,2.5,3:6,8,10,12.5,15,20,30,200)/10
+#' df <- NULL
+#' for(r in rho){
+#'   df <- rbind(df,data.frame(t=ti,rho=r,alpha=.025,spend=sfLDOF(alpha=.025,t=ti,param=r)$spend))
+#' }
+#' ggplot(df,aes(x=t,y=spend,col=as.factor(rho)))+
+#'   geom_line()+
+#'   guides(col=guide_legend(expression(rho)))+
+#'   ggtitle("Generalized Lan-DeMets O'Brien-Fleming Spending Function")
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
@@ -687,6 +704,10 @@ sfHSD <- function(alpha, t, param) {
 #'
 #' Lan, KKG and DeMets, DL (1983), Discrete sequential boundaries for clinical
 #' trials. \emph{Biometrika};70: 659-663.
+#' 
+#' Liu, Q, Lim, P, Nuamah, I, and Li, Y (2012), On adaptive error spending approach 
+#' for group sequential trials with random information levels. 
+#' \emph{Journal of biopharmaceutical statistics}; 22(4), 687-699.
 #' @keywords design
 #' @rdname sfLDOF
 #' @export
@@ -694,16 +715,27 @@ sfHSD <- function(alpha, t, param) {
 sfLDOF <- function(alpha, t, param) {
   checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
   checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
-  t[t > 1] <- 1
-  z <- -stats::qnorm(alpha / 2)
-
-  x <- list(
-    name = "Lan-DeMets O'brien-Fleming approximation", param = NULL, parname = "none", sf = sfLDOF,
-    spend = 2 * (1 - stats::pnorm(z / sqrt(t))), bound = NULL, prob = NULL
-  )
-
+  # Following 2 lines udated 10/11/17 
+  # fix needed since default for gsDesign is param=-4 is out of range for LDOF
+  if (is.null(param) || param < .005 || param > 20) param <- 1
+  checkScalar(param, "numeric", c(.005,20),c(TRUE,TRUE))
+  t[t>1] <- 1
+  if (param == 1){
+    rho <- 1
+    txt <- "Lan-DeMets O'Brien-Fleming approximation"
+    parname <- "none"
+  }else{
+    rho<-param
+    txt <- "Generalized Lan-DeMets O'Brien-Fleming"
+    parname <- "rho"
+  }
+  z <- - qnorm(alpha / 2)
+  
+  x <- list(name=txt, param=param, parname=parname, sf=sfLDOF, 
+            spend=2 * (1 - pnorm(z / t^(rho/2))), bound=NULL, prob=NULL)  
+  
   class(x) <- "spendfn"
-
+  
   x
 }
 
@@ -880,7 +912,7 @@ sfNormal <- function(alpha, t, param) {
 #' # compute corresponding z-values
 #' z1 <- s1 / sqrt(178)
 #' # set stage 2 sample size to 1 if z1 is over final bound, otherwise full sample size
-#' n2 <- array(1, 1000000)
+#' n2 <- rep(1, 1000000)
 #' n2[z1 < 1.96] <- ceiling(x$n.I[2]) - ceiling(178)
 #' # now sample n2 observations for second stage
 #' s2 <- rnorm(1000000, 0, sqrt(n2))
@@ -1585,7 +1617,7 @@ sfTruncated <- function(alpha, t, param) {
   }
   if (class(param$sf) != "function") stop("param$sf must be a spending function")
   if (!is.numeric(param$param)) stop("param$param must be numeric")
-  spend <- as.vector(array(0, length(t)))
+  spend <- as.vector(rep(0, length(t)))
   spend[t >= param$trange[2]] <- alpha
   indx <- param$trange[1] < t & t < param$trange[2]
   if (max(indx)) {
@@ -1622,7 +1654,7 @@ sfTrimmed <- function(alpha, t, param) {
   }
   if (class(param$sf) != "function") stop("param$sf must be a spending function")
   if (!is.numeric(param$param)) stop("param$param must be numeric")
-  spend <- as.vector(array(0, length(t)))
+  spend <- as.vector(rep(0, length(t)))
   spend[t >= param$trange[2]] <- alpha
   indx <- param$trange[1] < t & t < param$trange[2]
   if (max(indx)) {
@@ -1659,7 +1691,7 @@ sfGapped <- function(alpha, t, param) {
   }
   if (class(param$sf) != "function") stop("param$sf must be a spending function")
   if (!is.numeric(param$param)) stop("param$param must be numeric")
-  spend <- as.vector(array(0, length(t)))
+  spend <- as.vector(rep(0, length(t)))
   spend[t >= param$trange[2]] <- alpha
   indx <- param$trange[1] > t
   if (max(indx)) {

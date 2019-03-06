@@ -57,8 +57,9 @@ means}
 \description{
 \code{nNormal()} computes a fixed design sample size for comparing 2 means
 where variance is known. T The function allows computation of sample size
-for a non-inferiority hypothesis. Note that you may wish to investigate
-other R packages such as the \code{pwr} package which uses the t-distr
+for a non-inferiority hypothesis. Note that you may wish to investigate 
+other R packages such as the \code{pwr} package which uses the t-distribution.
+In the examples below we show how to set up a 2-arm group sequential design with a normal outcome. 
 
 \code{nNormal()} computes sample size for comparing two normal means when
 the variance for observations in
@@ -67,8 +68,13 @@ the variance for observations in
 
 # EXAMPLES
 # equal variances
-nNormal(delta1 = .5, sd = 1.1, alpha = .025, beta = .2)
-# unequal variances
+n=nNormal(delta1=.5,sd=1.1,alpha=.025,beta=.2)
+n
+x <- gsDesign(k = 3, n.fix = n, test.type = 4, alpha = 0.025, beta = 0.1, timing = c(.5,.75),
+sfu = sfLDOF, sfl = sfHSD, sflpar = -1, delta1 = 0.5, endpoint = 'normal') 
+gsBoundSummary(x)
+summary(x)
+# unequal variances, fixed design
 nNormal(delta1 = .5, sd = 1.1, sd2 = 2, alpha = .025, beta = .2)
 # unequal sample sizes
 nNormal(delta1 = .5, sd = 1.1, alpha = .025, beta = .2, ratio = 2)

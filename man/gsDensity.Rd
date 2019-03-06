@@ -88,8 +88,8 @@ legend(
 # add vertical lines with lower and upper bounds at analysis 2
 # to demonstrate how likely it is to continue, stop for futility
 # or stop for efficacy at analysis 2 by treatment effect
-lines(array(x$upper$bound[2], 2), c(0, .4), col = 2)
-lines(array(x$lower$bound[2], 2), c(0, .4), lty = 2, col = 2)
+lines(rep(x$upper$bound[2], 2), c(0, .4), col = 2)
+lines(rep(x$lower$bound[2], 2), c(0, .4), lty = 2, col = 2)
 
 # Replicate part of figures 8.1 and 8.2 of Jennison and Turnbull text book
 # O'Brien-Fleming design with four analyses

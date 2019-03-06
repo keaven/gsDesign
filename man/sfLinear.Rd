@@ -115,7 +115,7 @@ s1 <- rnorm(1000000, 0, sqrt(178))
 # compute corresponding z-values
 z1 <- s1 / sqrt(178)
 # set stage 2 sample size to 1 if z1 is over final bound, otherwise full sample size
-n2 <- array(1, 1000000)
+n2 <- rep(1, 1000000)
 n2[z1 < 1.96] <- ceiling(x$n.I[2]) - ceiling(178)
 # now sample n2 observations for second stage
 s2 <- rnorm(1000000, 0, sqrt(n2))
