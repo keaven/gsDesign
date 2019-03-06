@@ -558,7 +558,7 @@ print.nSurvival <- function(x, ...) {
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
 #' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{gsDesign}, \link{Plots for group sequential designs},
+#' @seealso \link{gsDesign}, \link{plot.gsDesign},
 #' \code{\link{gsProbability}}, \code{\link{xtable.gsSurv}}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.

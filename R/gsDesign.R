@@ -429,7 +429,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' installed.
 #' @author Keaven Anderson \email{keaven\_anderson@@merck.}
 #' @seealso \link{gsDesign package overview}, \link{gsDesign print, summary and
-#' table summary functions}, \link{Plots for group sequential designs},
+#' table summary functions}, \link{plot.gsDesign},
 #' \code{\link{gsProbability}}, \link{Spending function overview},
 #' \link{Wang-Tsiatis Bounds}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -440,7 +440,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' group sequential trials with random information levels. \emph{Journal of biopharmaceutical statistics}; 22(4), 687-699.
 #' @keywords design
 #' @export
-#' @rdname gsDesign
+#' @name gsDesign
 # gsDesign function [sinew] ----
 gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
                      delta = 0, n.fix = 1, timing = 1, sfu = sfHSD, sfupar = -4,
@@ -642,7 +642,7 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
 #' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{Plots for group sequential designs}, \code{\link{gsDesign}},
+#' @seealso \link{plot.gsDesign}, \code{\link{gsDesign}},
 #' \link{gsDesign package overview}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.

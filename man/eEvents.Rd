@@ -107,8 +107,8 @@ stratified clinical trials. \emph{Journal of Statistical Computation and
 Simulation}, 8:65-73.
 }
 \seealso{
-\link{gsDesign package overview}, \link{Plots for group sequential
-designs}, \code{\link{gsDesign}}, \code{\link{gsHR}},
+\link{gsDesign package overview}, \link{plot.gsDesign}, 
+\code{\link{gsDesign}}, \code{\link{gsHR}},
 \code{\link{nSurvival}}
 }
 \author{

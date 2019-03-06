@@ -21,8 +21,7 @@ function will be computed.}
 Hwang-Shih-DeCani spending is to be computed; allowable range is [-40, 40]}
 }
 \value{
-An object of type \code{spendfn}. See \link{Spending function
-overview} for further details.
+An object of type \code{spendfn}. See \link{Spending function overview} for further details.
 }
 \description{
 The function \code{sfHSD} implements a Hwang-Shih-DeCani spending function.

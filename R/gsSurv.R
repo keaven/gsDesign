@@ -142,8 +142,8 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 #' 
 #' @aliases print.eEvents
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
-#' @seealso \link{gsDesign package overview}, \link{Plots for group sequential
-#' designs}, \code{\link{gsDesign}}, \code{\link{gsHR}},
+#' @seealso \link{gsDesign package overview}, \link{plot.gsDesign}, 
+#' \code{\link{gsDesign}}, \code{\link{gsHR}},
 #' \code{\link{nSurvival}}
 #' @references Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and
 #' Power for Analyses of Survival with Allowance for Nonuniform Patient Entry,
@@ -949,8 +949,8 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #'
 #' \code{tEventsIA()} returns
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
-#' @seealso \code{\link{gsBoundSummary}}, \code{\link{xprint}},\link{gsDesign
-#' package overview}, \link{Plots for group sequential designs},
+#' @seealso \code{\link{gsBoundSummary}}, \code{\link{xprint}},
+#' \link{gsDesign package overview}, \link{plot.gsDesign},
 #' \code{\link{gsDesign}}, \code{\link{gsHR}}, \code{\link{nSurvival}}
 #' @references Kim KM and Tsiatis AA (1990), Study duration for clinical trials
 #' with survival response and early stopping rule. \emph{Biometrics}, 46, 81-92

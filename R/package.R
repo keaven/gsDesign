@@ -94,7 +94,7 @@ NULL
 #' demonstrated below in examples. In addition to using supplied spending
 #' functions, a user can write code for a spending function. See examples.
 #' 
-#' @aliases Spending function overview spendingFunction summary.spendfn
+#' @aliases Spending function overview summary.spendfn
 #' @param alpha Real value \eqn{> 0} and no more than 1. Defaults in calls to
 #' \code{gsDesign()} are \code{alpha=0.025} for one-sided Type I error
 #' specification and \code{alpha=0.1} for Type II error specification.
@@ -129,8 +129,8 @@ NULL
 #' @author Keaven Anderson \email{keaven\_anderson@@merck.}
 #' @seealso \code{\link{gsDesign}}, \code{\link{sfHSD}}, \code{\link{sfPower}},
 #' \code{\link{sfLogistic}}, \code{\link{sfExponential}},
-#' \code{\link{sfTruncated}}, \link{Wang-Tsiatis Bounds}, \link{gsDesign
-#' package overview}
+#' \code{\link{sfTruncated}}, \link{Wang-Tsiatis Bounds}, \link{gsDesign package overview}
+#' 
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 #' @keywords design
@@ -194,4 +194,5 @@ NULL
 #' legend(x=c(.65, 1), y=1 * c(0, .25), lty=1:4, 
 #'     legend=c("a=2, b=1","a=6, b=4","a=0.5, b=0.5","a=0.6, b=2"))
 #' 
+#' @name Spending function overview
 NULL

@@ -240,8 +240,8 @@ Schoenfeld D (1981), The Asymptotic Properties of Nonparametric Tests for
 Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
 }
 \seealso{
-\link{gsDesign package overview}, \link{Plots for group sequential
-designs}, \link{gsDesign}, \link{gsHR}
+\link{gsDesign package overview}, \link{plot.gsDesign}, 
+\link{gsDesign}, \link{gsHR}
 }
 \author{
 Shanhong Guan \email{shanhong.guan@gmail.com}, Keaven Anderson

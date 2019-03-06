@@ -54,8 +54,8 @@
 #' \code{sf(t1)=alpha*u1} and \code{sf(t2)=alpha*u2}.  In this
 #' parameterization, all four values must be between 0 and 1 and \code{t1 <
 #' t2}, \code{u1 < u2}.
-#' @return An object of type \code{spendfn}. See \code{\link{Spending function
-#' overview}} for further details.
+#' @return An object of type \code{spendfn}. 
+#' See \code{\link{Spending function overview}} for further details.
 #' @examples
 #' 
 #' # design a 4-analysis trial using a Kim-DeMets spending function
@@ -543,8 +543,7 @@ sfExtremeValue2 <- function(alpha, t, param) {
 #' function will be computed.
 #' @param param A single real value specifying the gamma parameter for which
 #' Hwang-Shih-DeCani spending is to be computed; allowable range is [-40, 40]
-#' @return An object of type \code{spendfn}. See \link{Spending function
-#' overview} for further details.
+#' @return An object of type \code{spendfn}. See \link{Spending function overview} for further details.
 #' @examples
 #' 
 #' # design a 4-analysis trial using a Hwang-Shih-DeCani spending function
@@ -1218,8 +1217,7 @@ sfPoints <- function(alpha, t, param) {
 #' @param param A single, positive value specifying the \eqn{\rho}{rho}
 #' parameter for which Kim-DeMets spending is to be computed; allowable range
 #' is (0,15]
-#' @return An object of type \code{spendfn}. See \link{Spending function
-#' overview} for further details.
+#' @return An object of type \code{spendfn}. See \link{Spending function overview} for further details.
 #' @examples
 #' 
 #' # design a 4-analysis trial using a Kim-DeMets spending function
@@ -1516,8 +1514,8 @@ sfTDist <- function(alpha, t, param) {
 #' to 1; 0 <= trange[1]<trange[2] <=1; for sfGapped, trange[1] must be > 0),
 #' and param (null for a spending function with no parameters or a scalar or
 #' vector of parameters needed to fully specify the spending function in sf).
-#' @return An object of type \code{spendfn}. See \code{\link{Spending function
-#' overview}} for further details.
+#' @return An object of type \code{spendfn}. See \code{\link{Spending function overview}} 
+#' for further details.
 #' @examples
 #' 
 #' 

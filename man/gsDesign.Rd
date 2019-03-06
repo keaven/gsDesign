@@ -277,7 +277,7 @@ group sequential trials with random information levels. \emph{Journal of biophar
 }
 \seealso{
 \link{gsDesign package overview}, \link{gsDesign print, summary and
-table summary functions}, \link{Plots for group sequential designs},
+table summary functions}, \link{plot.gsDesign},
 \code{\link{gsProbability}}, \link{Spending function overview},
 \link{Wang-Tsiatis Bounds}
 }

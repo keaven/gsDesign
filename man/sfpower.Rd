@@ -22,8 +22,7 @@ parameter for which Kim-DeMets spending is to be computed; allowable range
 is (0,15]}
 }
 \value{
-An object of type \code{spendfn}. See \link{Spending function
-overview} for further details.
+An object of type \code{spendfn}. See \link{Spending function overview} for further details.
 }
 \description{
 The function \code{sfPower()} implements a Kim-DeMets (power) spending

@@ -160,12 +160,15 @@ hr <- .6 # for this example we will derive conditional power based on hazard rat
 n.fix <- nEvents(hr=hr,alpha=alpha) # you could otherwise make n.fix an arbitrary positive value
 # this just derives a group sequential design that should not change sample size from n.fix
 # due to stringent IA bound
-x <- gsDesign(k=2,n.fix=n.fix,alpha=alpha,test.type=1,sfu=sfHSD,sfupar=-20,timing=timing,delta1=log(hr))
+x <- gsDesign(k=2,n.fix=n.fix,alpha=alpha,test.type=1,sfu=sfHSD,
+sfupar=-20,timing=timing,delta1=log(hr))
 # derive effect sizes for which you wish to compute conditional power
 hrpostIA = seq(.4,1,.05)
 # in the following, we convert HR into standardized effect size based on the design in x
 powr <- condPower(x=x,z1=1,n2=x$n.I[2]-x$n.I[1],theta=log(hrpostIA)/x$delta1*x$theta[2])
-qplot(hrpostIA,condPower(x=x,z1=1,n2=x$n.I[2]-x$n.I[1],theta=log(hrpostIA)/x$delta1*x$theta[2]),geom="line",xlab="HR post IA",ylab="Conditional power",main ="Conditional power as a function of assumed HR")
+qplot(hrpostIA,condPower(x=x,z1=1,n2=x$n.I[2]-x$n.I[1],theta=log(hrpostIA)/x$delta1*x$theta[2]),
+geom="line",xlab="HR post IA",ylab="Conditional power",
+main ="Conditional power as a function of assumed HR")
 
 # Following is a template for entering parameters for ssrCP
 # Natural parameter value null and alternate hypothesis values

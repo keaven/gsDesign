@@ -302,7 +302,7 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
-\link{gsDesign}, \link{Plots for group sequential designs},
+\link{gsDesign}, \link{plot.gsDesign},
 \code{\link{gsProbability}}, \code{\link{xtable.gsSurv}}
 }
 \author{
