@@ -276,8 +276,8 @@ Liu, Q, Lim, P, Nuamah, I, and Li, Y (2012), On adaptive error spending approach
 group sequential trials with random information levels. \emph{Journal of biopharmaceutical statistics}; 22(4), 687-699.
 }
 \seealso{
-\link{gsDesign package overview}, \link{gsDesign print, summary and
-table summary functions}, \link{plot.gsDesign},
+\link{gsDesign package overview}, \link{gsBoundSummary}, 
+\link{plot.gsDesign},
 \code{\link{gsProbability}}, \link{Spending function overview},
 \link{Wang-Tsiatis Bounds}
 }

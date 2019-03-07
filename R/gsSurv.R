@@ -694,7 +694,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' \code{\link{xprint}} (application of \code{xtable} for tabular output) and
 #' \code{summary.gsSurv} (textual summary of \code{gsDesign} or \code{gsSurv}
 #' object) may be preferred summary functions; see example in vignettes. See
-#' also \link{gsDesign print, summary and table summary functions} for output
+#' also \link{gsBoundSummary} for output
 #' of tabular summaries of bounds for designs produced by \code{gsSurv()}.
 #'
 #' Both \code{nEventsIA} and \code{tEventsIA} require a group sequential design

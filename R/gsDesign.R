@@ -428,8 +428,8 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
 #' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{gsDesign package overview}, \link{gsDesign print, summary and
-#' table summary functions}, \link{plot.gsDesign},
+#' @seealso \link{gsDesign package overview}, \link{gsBoundSummary}, 
+#' \link{plot.gsDesign},
 #' \code{\link{gsProbability}}, \link{Spending function overview},
 #' \link{Wang-Tsiatis Bounds}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
