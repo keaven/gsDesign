@@ -24,7 +24,7 @@
 #'  }
 #' }
 #' @export 
-#' @rdname nBinomial1Sample
+#' @rdname gsBinomialExact
 #' @importFrom stats qbinom pbinom
 # nBinomial1Sample function [sinew] ----
 nBinomial1Sample <- function(p0 = 0.90, p1 = 0.95,
