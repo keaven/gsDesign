@@ -113,31 +113,8 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
 }
 
 # nBinomial roxy [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param p1 PARAM_DESCRIPTION
-#' @param p2 PARAM_DESCRIPTION
-#' @param alpha PARAM_DESCRIPTION, Default: 0.025
-#' @param beta PARAM_DESCRIPTION, Default: 0.1
-#' @param delta0 PARAM_DESCRIPTION, Default: 0
-#' @param ratio PARAM_DESCRIPTION, Default: 1
-#' @param sided PARAM_DESCRIPTION, Default: 1
-#' @param outtype PARAM_DESCRIPTION, Default: 1
-#' @param scale PARAM_DESCRIPTION, Default: 'Difference'
-#' @param n PARAM_DESCRIPTION, Default: NULL
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   # EXAMPLE1
-#' }
-#' }
-#' @seealso
-#'  \code{\link[stats]{Normal}}
-#' @rdname nBinomial
+#' @rdname varBinomial
 #' @export
-#' @author Keaven Anderson, PhD
 #' @importFrom stats qnorm pnorm
 # nBinomial function [sinew] ----
 nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, sided = 1, outtype = 1, scale = "Difference", n = NULL) {
@@ -370,30 +347,8 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
 }
 
 # simBinomial roxy [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param p1 PARAM_DESCRIPTION
-#' @param p2 PARAM_DESCRIPTION
-#' @param n1 PARAM_DESCRIPTION
-#' @param n2 PARAM_DESCRIPTION
-#' @param delta0 PARAM_DESCRIPTION, Default: 0
-#' @param nsim PARAM_DESCRIPTION, Default: 10000
-#' @param chisq PARAM_DESCRIPTION, Default: 0
-#' @param adj PARAM_DESCRIPTION, Default: 0
-#' @param scale PARAM_DESCRIPTION, Default: 'Difference'
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   # EXAMPLE1
-#' }
-#' }
-#' @seealso
-#'  \code{\link[stats]{Binomial}}
-#' @rdname simBinomial
+#' @rdname varBinomial
 #' @export
-#' @author Keaven Anderson, PhD
 #' @importFrom stats rbinom
 # simBinomial function [sinew] ----
 simBinomial <- function(p1, p2, n1, n2, delta0 = 0, nsim = 10000, chisq = 0, adj = 0, scale = "Difference") {
@@ -417,28 +372,9 @@ simBinomial <- function(p1, p2, n1, n2, delta0 = 0, nsim = 10000, chisq = 0, adj
 }
 
 # testBinomial roxy [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x1 PARAM_DESCRIPTION
-#' @param x2 PARAM_DESCRIPTION
-#' @param n1 PARAM_DESCRIPTION
-#' @param n2 PARAM_DESCRIPTION
-#' @param delta0 PARAM_DESCRIPTION, Default: 0
-#' @param chisq PARAM_DESCRIPTION, Default: 0
-#' @param adj PARAM_DESCRIPTION, Default: 0
-#' @param scale PARAM_DESCRIPTION, Default: 'Difference'
-#' @param tol PARAM_DESCRIPTION, Default: 1e-11
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   # EXAMPLE1
-#' }
-#' }
-#' @rdname testBinomial
+#' @rdname varBinomial
 #' @export
-#' @author Keaven Anderson, PhD
+#' @importFrom stats rbinom
 # testBinomial function [sinew] ----
 testBinomial <- function(x1, x2, n1, n2, delta0 = 0, chisq = 0, adj = 0, scale = "Difference", tol = .1e-10) {
   # check input arguments
