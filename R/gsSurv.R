@@ -249,6 +249,7 @@ periods <- function(S, T, minfup, digits) {
 }
 
 # print.eEvents roxy [sinew] ----
+#' @rdname eEvents
 #' @export
 # print.eEvents function [sinew] ----
 print.eEvents <- function(x, digits = 4, ...) {
