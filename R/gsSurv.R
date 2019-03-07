@@ -409,6 +409,7 @@ LFPWE <- function(alpha = .025, sided = 1, beta = .1,
 }
 
 # print.nSurv roxy [sinew] ----
+#' @rdname nSurv
 #' @export
 # print.nSurv function [sinew] ----
 print.nSurv <- function(x, digits = 4, ...) {
@@ -1123,22 +1124,8 @@ gsnSurv <- function(x, nEvents) {
 }
 
 # tEventsIA roxy [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param timing PARAM_DESCRIPTION, Default: 0.25
-#' @param tol PARAM_DESCRIPTION, Default: .Machine$double.eps^0.25
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @export 
-#' @rdname tEventsIA
+#' @rdname nSurv
 #' @seealso 
 #'  \code{\link[stats]{uniroot}}
 #' @importFrom stats uniroot
@@ -1153,23 +1140,8 @@ tEventsIA <- function(x, timing = .25, tol = .Machine$double.eps^0.25) {
 }
 
 # nEventsIA roxy [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param tIA PARAM_DESCRIPTION, Default: 5
-#' @param x PARAM_DESCRIPTION, Default: NULL
-#' @param target PARAM_DESCRIPTION, Default: 0
-#' @param simple PARAM_DESCRIPTION, Default: TRUE
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @export 
-#' @rdname nEventsIA
+#' @rdname nSurv
 # nEventsIA function [sinew] ----
 nEventsIA <- function(tIA = 5, x = NULL, target = 0, simple = TRUE) {
   Qe <- x$ratio / (1 + x$ratio)
@@ -1200,6 +1172,7 @@ nEventsIA <- function(tIA = 5, x = NULL, target = 0, simple = TRUE) {
 }
 
 # gsSurv roxy [sinew] ----
+#' @rdname nSurv
 #' @export
 # gsSurv function [sinew] ----
 gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
@@ -1274,6 +1247,7 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
 }
 
 # print.gsSurv roxy [sinew] ----
+#' @rdname nSurv
 #' @export
 # print.gsSurv function [sinew] ----
 print.gsSurv <- function(x, digits = 2, ...) {
@@ -1331,6 +1305,7 @@ print.gsSurv <- function(x, digits = 2, ...) {
 #'  \code{\link[xtable]{xtable}}
 #' @importFrom stats pnorm
 #' @importFrom xtable xtable
+#' @rdname nSurv
 #' @export
 # xtable.gsSurv function [sinew] ----
 xtable.gsSurv <- function(x, caption = NULL, label = NULL, align = NULL, digits = NULL,

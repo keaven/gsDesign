@@ -1,5 +1,6 @@
 # print.gsProbability roxy [sinew] ----
 #' @export
+#' @rdname gsProbability
 #' @importFrom stats pnorm
 # print.gsProbability function [sinew] ----
 print.gsProbability <- function(x, ...) {
