@@ -64,6 +64,7 @@ print.gsProbability <- function(x, ...) {
 
 # summary.gsDesign roxy [sinew] ----
 #' @export
+#' @rdname gsBoundSummary
 # summary.gsDesign function [sinew] ----
 summary.gsDesign <- function(object, information = FALSE, timeunit = "months", ...) {
   out <- NULL
@@ -119,6 +120,7 @@ summary.gsDesign <- function(object, information = FALSE, timeunit = "months", .
 
 # print.gsDesign roxy [sinew] ----
 #' @export
+#' @rdname gsBoundSummary
 # print.gsDesign function [sinew] ----
 print.gsDesign <- function(x, ...) {
   if (x$nFixSurv > 0) {
