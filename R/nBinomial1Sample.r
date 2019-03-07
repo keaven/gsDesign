@@ -4,25 +4,9 @@
 # minima. My example here does with a finite range and makes the
 # plot easier to visualize.
 # NOTE: this is more conservative than using a 2-sided exact test in binom.test
-# nBinomial1Sample roxy [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param p0 PARAM_DESCRIPTION, Default: 0.9
-#' @param p1 PARAM_DESCRIPTION, Default: 0.95
-#' @param alpha PARAM_DESCRIPTION, Default: 0.025
-#' @param beta PARAM_DESCRIPTION, Default: NULL
-#' @param n PARAM_DESCRIPTION, Default: 200:250
-#' @param outtype PARAM_DESCRIPTION, Default: 1
-#' @param conservative PARAM_DESCRIPTION, Default: FALSE
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
+
+
+# nBinomial1Sample roxy [sinew] ---
 #' @export 
 #' @rdname gsBinomialExact
 #' @importFrom stats qbinom pbinom

@@ -1,24 +1,7 @@
 # conditional power function
 # condPower function [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param z1 PARAM_DESCRIPTION
-#' @param n2 PARAM_DESCRIPTION
-#' @param z2 PARAM_DESCRIPTION, Default: z2NC
-#' @param theta PARAM_DESCRIPTION, Default: NULL
-#' @param x PARAM_DESCRIPTION, Default: gsDesign(k = 2, timing = 0.5, beta = beta)
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @export 
-#' @rdname condPower
+#' @rdname ssrCP
 #' @importFrom stats pnorm
 condPower <- function(z1, n2, z2 = z2NC, theta = NULL,
                       x = gsDesign(k = 2, timing = .5, beta = beta),
@@ -458,22 +441,8 @@ plot.ssrCP <- function(x, z1ticks = NULL, mar = c(7, 4, 4, 4) + .1, ylab = "Adap
 }
 
 # normal combination test cutoff for z2
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param z1 PARAM_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname z2NC
-#' @export 
-#' @author Keaven Anderson, PhD
+#' @rdname ssrCP
+#' @export
 # z2NC function [sinew] ----
 z2NC <- function(z1, x, ...) {
   z2 <- (x$upper$bound[2] - z1 * sqrt(x$timing[1])) /
@@ -482,24 +451,9 @@ z2NC <- function(z1, x, ...) {
   return(z2)
 }
 
-#' @title FUNCTION_TITLE
-#' @description Sufficient statistic cutoff for z2
-#' @param z1 PARAM_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param n2 PARAM_DESCRIPTION, Default: x$n.I[2] - x$n.I[1]
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname z2Z
-#' @export 
-#' @author Keaven Anderson, PhD
 
+#' @rdname ssrCP
+#' @export
 z2Z <- function(z1, x, n2 = x$n.I[2] - x$n.I[1], ...) {
   N2 <- x$n.I[1] + n2
   z2 <- (x$upper$bound[2] - z1 * sqrt(x$n.I[1] / N2)) /
@@ -508,24 +462,8 @@ z2Z <- function(z1, x, n2 = x$n.I[2] - x$n.I[1], ...) {
   return(z2)
 }
 
-#' @title Fisher's combination test
-#' @description FUNCTION_DESCRIPTION
-#' @param z1 PARAM_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @seealso 
-#'  \code{\link[stats]{Chisquare}},\code{\link[stats]{Normal}}
-#' @rdname z2Fisher
 #' @export 
-#' @author Keaven Anderson, PhD
+#' @rdname ssrCP
 #' @importFrom stats pchisq pnorm qnorm qchisq
 z2Fisher <- function(z1, x, ...) {
   z2 <- z1
@@ -543,23 +481,8 @@ z2Fisher <- function(z1, x, ...) {
 }
 
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param theta PARAM_DESCRIPTION, Default: NULL
-#' @param delta PARAM_DESCRIPTION, Default: NULL
-#' @param r PARAM_DESCRIPTION, Default: 18
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @export 
-#' @rdname Power.ssrCP
+#' @rdname ssrCP
 #' @importFrom stats pnorm dnorm uniroot
 Power.ssrCP <- function(x, theta = NULL, delta = NULL, r = 18) {
   if (class(x) != "ssrCP") {

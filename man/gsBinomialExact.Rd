@@ -82,20 +82,6 @@ which power is at least \code{1-beta}. When \code{conservative=TRUE}, the
 minimum sample sample size for which power is at least \code{1-beta} and
 there is no larger sample size in the input \code{n} where power is less
 than \code{1-beta}.}
-
-\item{p0}{PARAM_DESCRIPTION, Default: 0.9}
-
-\item{p1}{PARAM_DESCRIPTION, Default: 0.95}
-
-\item{alpha}{PARAM_DESCRIPTION, Default: 0.025}
-
-\item{beta}{PARAM_DESCRIPTION, Default: NULL}
-
-\item{n}{PARAM_DESCRIPTION, Default: 200:250}
-
-\item{outtype}{PARAM_DESCRIPTION, Default: 1}
-
-\item{conservative}{PARAM_DESCRIPTION, Default: FALSE}
 }
 \value{
 \code{gsBinomialExact()} returns a list of class
@@ -140,8 +126,6 @@ case realized Type II error is computed.} \item{n}{sample size.} \item{b}{cutoff
 Type I error; value is \code{NULL} if no such value exists.} \item{alphaR}{Type I error achieved for each 
 output value of \code{n}; less than or equal to the input value \code{alpha}.} \item{Power}{Power achieved 
 for each output value of \code{n}.}
-
-OUTPUT_DESCRIPTION
 }
 \description{
 \code{gsBinomialExact} computes power/Type I error and expected sample size
@@ -214,11 +198,6 @@ aware of possible consequences.
 The possible sample size vector \code{n} needs to be selected in such a fashion
 that it covers the possible range of values that include the true minima. 
 NOTE: the one-sided evaluation of significance is more conservative than using the 2-sided exact test in \code{binom.test}.
-
-FUNCTION_DESCRIPTION
-}
-\details{
-DETAILS
 }
 \note{
 The manual is not linked to this help file, but is available in
@@ -280,11 +259,6 @@ nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, conse
 
 # what happens if input sample sizes not sufficient?
 # nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)
-\dontrun{
-if(interactive()){
- #EXAMPLE1
- }
-}
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -298,7 +272,5 @@ marc_schwartz@me.com.
 }
 \author{
 Jon Hartzel, Yevgen Tymofyeyev and Keaven Anderson \email{keaven\_anderson@merck.}
-
-Keaven Anderson, PhD
 }
 \keyword{design}

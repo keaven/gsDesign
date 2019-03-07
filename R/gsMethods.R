@@ -260,6 +260,7 @@ print.gsDesign <- function(x, ...) {
 }
 
 # print.nSurvival roxy [sinew] ----
+#' @rdname nSurvival
 #' @export
 # print.nSurvival function [sinew] ----
 print.nSurvival <- function(x, ...) {
