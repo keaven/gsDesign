@@ -13,6 +13,19 @@
 \usage{
 WT(d, alpha, a, timing, tol = 1e-06, r = 18)
 }
+\arguments{
+\item{d}{FUNCTION_PARAMETER}
+
+\item{alpha}{FUNCTION_PARAMETER}
+
+\item{a}{FUNCTION_PARAMETER}
+
+\item{timing}{FUNCTION_PARAMETER}
+
+\item{tol}{FUNCTION_PARAMETER}
+
+\item{r}{FUNCTION_PARAMETER}
+}
 \description{
 \code{gsDesign} offers the option of using Wang-Tsiatis bounds as an
 alternative to the spending function approach to group sequential design.

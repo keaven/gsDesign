@@ -23,6 +23,13 @@
 #' \code{sfupar}. For O'Brien-Fleming and Pocock designs there is also a
 #' calling sequence that does not require a parameter. See examples.
 #'
+#' @param d FUNCTION_PARAMETER
+#' @param alpha FUNCTION_PARAMETER
+#' @param a FUNCTION_PARAMETER
+#' @param timing FUNCTION_PARAMETER
+#' @param tol FUNCTION_PARAMETER
+#' @param r FUNCTION_PARAMETER
+#' 
 #' @name Wang-Tsiatis Bounds
 #' @aliases O'Brien-Fleming Bounds Wang-Tsiatis Bounds Pocock Bounds
 #' @docType package
