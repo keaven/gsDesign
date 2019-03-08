@@ -21,7 +21,7 @@ function will be computed.}
 Hwang-Shih-DeCani spending is to be computed; allowable range is [-40, 40]}
 }
 \value{
-An object of type \code{spendfn}. See \link{Spending function overview} for further details.
+An object of type \code{spendfn}. See \link{Spending_Function_Overview} for further details.
 }
 \description{
 The function \code{sfHSD} implements a Hwang-Shih-DeCani spending function.
@@ -82,7 +82,7 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
-\link{Spending function overview}, \code{\link{gsDesign}},
+\link{Spending_Function_Overview}, \code{\link{gsDesign}},
 \link{gsDesign package overview}
 }
 \author{

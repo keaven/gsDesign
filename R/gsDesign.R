@@ -282,7 +282,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' one-sided and symmetric two-sided testing is used to completely specify
 #' spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
 #' \code{sfHSD} which is a Hwang-Shih-DeCani spending function.  See details,
-#' \link{Spending function overview}, manual and examples.
+#' \link{Spending_Function_Overview}, manual and examples.
 #' @param sfupar Real value, default is \eqn{-4} which is an
 #' O'Brien-Fleming-like conservative bound when used with the default
 #' Hwang-Shih-DeCani spending function. This is a real-vector for many spending
@@ -367,13 +367,13 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' \item{endpoint}{As input.} \item{delta1}{As input.} \item{delta0}{As input.}
 #' \item{overrun}{As input.} \item{usTime}{As input.} \item{lsTime}{As input.} \item{upper}{Upper bound spending function,
 #' boundary and boundary crossing probabilities under the NULL and alternate
-#' hypotheses. See \link{Spending function overview} and manual for further
+#' hypotheses. See \link{Spending_Function_Overview} and manual for further
 #' details.} \item{lower}{Lower bound spending function, boundary and boundary
 #' crossing probabilities at each analysis. Lower spending is under alternative
 #' hypothesis (beta spending) for \code{test.type=3} or \code{4}.  For
 #' \code{test.type=2}, \code{5} or \code{6}, lower spending is under the null
 #' hypothesis. For \code{test.type=1}, output value is \code{NULL}. See
-#' \link{Spending function overview} and manual.} \item{theta}{Standarized
+#' \link{Spending_Function_Overview} and manual.} \item{theta}{Standarized
 #' effect size under null (0) and alternate hypothesis. If \code{delta} is
 #' input, \code{theta[1]=delta}. If \code{n.fix} is input, \code{theta[1]} is
 #' computed using a standard sample size formula (pseudocode):
@@ -430,7 +430,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' @author Keaven Anderson \email{keaven\_anderson@@merck.}
 #' @seealso \link{gsDesign package overview}, \link{gsBoundSummary}, 
 #' \link{plot.gsDesign},
-#' \code{\link{gsProbability}}, \link{Spending function overview},
+#' \code{\link{gsProbability}}, \link{Spending_Function_Overview},
 #' \link{Wang-Tsiatis Bounds}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.

@@ -2,9 +2,12 @@
 % Please edit documentation in R/gsSpending.R
 \name{sfLinear}
 \alias{sfLinear}
+\alias{sfStep}
 \title{Piecewise Linear and Step Function Spending Functions}
 \usage{
 sfLinear(alpha, t, param)
+
+sfStep(alpha, t, param)
 }
 \arguments{
 \item{alpha}{Real value \eqn{> 0} and no more than 1. Normally,
@@ -42,7 +45,7 @@ performed after the last proportion of final planned information
 (\code{param[m]}) will be the final analysis, using any remaining error that
 was not previously spent.
 
-See \code{\link{Spending function overview}} for further details.
+See \code{\link{Spending_Function_Overview}} for further details.
 }
 \description{
 The function \code{sfLinear()} allows specification of a piecewise linear
@@ -138,7 +141,7 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
-\link{Spending function overview}, \code{\link{gsDesign}},
+\link{Spending_Function_Overview}, \code{\link{gsDesign}},
 \link{gsDesign package overview}
 }
 \author{

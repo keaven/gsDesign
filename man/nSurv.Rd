@@ -144,7 +144,7 @@ O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds).  For
 one-sided and symmetric two-sided testing is used to completely specify
 spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
 \code{sfHSD} which is a Hwang-Shih-DeCani spending function.  See details,
-\link{Spending function overview}, manual and examples.}
+\link{Spending_Function_Overview}, manual and examples.}
 
 \item{sfupar}{Real value, default is \eqn{-4} which is an
 O'Brien-Fleming-like conservative bound when used with the default

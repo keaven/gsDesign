@@ -45,7 +45,7 @@ t2}, \code{u1 < u2}.}
 }
 \value{
 An object of type \code{spendfn}. 
-See \code{\link{Spending function overview}} for further details.
+See \code{\link{Spending_Function_Overview}} for further details.
 }
 \description{
 The functions \code{sfLogistic()}, \code{sfNormal()},

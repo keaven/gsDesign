@@ -30,7 +30,7 @@
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
 #' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \code{\link{Spending function overview}, \link{gsDesign}},
+#' @seealso \code{\link{Spending_Function_Overview}, \link{gsDesign}},
 #' \code{\link{gsProbability}}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.

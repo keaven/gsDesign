@@ -35,7 +35,7 @@ design. In this case, the user does not need to know the calling sequence,
 just the points they wish to specify. If using \code{sfPoints()} in a
 design, it is recommended to specify how to interpolate between the
 specified points (e.g,, linear interpolation); also consider fitting smooth
-spending functions; see \link{Spending function overview}.
+spending functions; see \link{Spending_Function_Overview}.
 }
 \note{
 The manual is not linked to this help file, but is available in
@@ -91,7 +91,7 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
-\link{Spending function overview}, \code{\link{gsDesign}},
+\link{Spending_Function_Overview}, \code{\link{gsDesign}},
 \link{gsDesign package overview}, \link{sfLogistic}
 }
 \author{

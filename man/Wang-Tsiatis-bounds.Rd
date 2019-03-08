@@ -74,7 +74,7 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
-\code{\link{Spending function overview}, \link{gsDesign}},
+\code{\link{Spending_Function_Overview}, \link{gsDesign}},
 \code{\link{gsProbability}}
 }
 \author{
