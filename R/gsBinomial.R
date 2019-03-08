@@ -1,26 +1,8 @@
 # ciBinomial roxy [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x1 PARAM_DESCRIPTION
-#' @param x2 PARAM_DESCRIPTION
-#' @param n1 PARAM_DESCRIPTION
-#' @param n2 PARAM_DESCRIPTION
-#' @param alpha PARAM_DESCRIPTION, Default: 0.05
-#' @param adj PARAM_DESCRIPTION, Default: 0
-#' @param scale PARAM_DESCRIPTION, Default: 'Difference'
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   # EXAMPLE1
-#' }
-#' }
 #' @seealso
 #'  \code{\link[stats]{Normal}},\code{\link[stats]{uniroot}}
-#' @rdname ciBinomial
+#' @rdname varBinomial
 #' @export
-#' @author Keaven Anderson, PhD
 #' @importFrom stats qnorm uniroot
 # ciBinomial function [sinew] ----
 ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference") {

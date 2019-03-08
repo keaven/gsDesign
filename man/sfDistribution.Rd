@@ -5,6 +5,7 @@
 \alias{sfBetaDist}
 \alias{sfCauchy}
 \alias{sfExtremeValue}
+\alias{sfExtremeValue2}
 \alias{sfNormal}
 \title{Two-parameter Spending Function Families}
 \usage{
@@ -15,6 +16,8 @@ sfBetaDist(alpha, t, param)
 sfCauchy(alpha, t, param)
 
 sfExtremeValue(alpha, t, param)
+
+sfExtremeValue2(alpha, t, param)
 
 sfNormal(alpha, t, param)
 }

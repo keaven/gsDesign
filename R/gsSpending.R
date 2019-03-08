@@ -450,22 +450,8 @@ sfExtremeValue <- function(alpha, t, param) {
 }
 
 # sfExtremeValue2 roxy [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param alpha PARAM_DESCRIPTION
-#' @param t PARAM_DESCRIPTION
-#' @param param PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples
-#' \dontrun{
-#' if (interactive()) {
-#'   # EXAMPLE1
-#' }
-#' }
-#' @rdname sfExtremeValue2
+#' @rdname sfDistribution
 #' @export
-#' @author Keaven Anderson, PhD
 # sfExtremeValue2 function [sinew] ----
 sfExtremeValue2 <- function(alpha, t, param) {
   x <- list(
