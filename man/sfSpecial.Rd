@@ -30,8 +30,8 @@ and param (null for a spending function with no parameters or a scalar or
 vector of parameters needed to fully specify the spending function in sf).}
 }
 \value{
-An object of type \code{spendfn}. See \code{\link{Spending function
-overview}} for further details.
+An object of type \code{spendfn}. See \code{\link{Spending_Function_Overview}} 
+for further details.
 }
 \description{
 The functions \code{sfTruncated()} and \code{sfTrimmed} apply any other
@@ -154,7 +154,7 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
-\link{Spending function overview}, \code{\link{gsDesign}},
+\link{Spending_Function_Overview}, \code{\link{gsDesign}},
 \link{gsDesign package overview}
 }
 \author{

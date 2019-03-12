@@ -7,6 +7,8 @@
 \usage{
 eEvents(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL, T = 2,
   Tfinal = NULL, minfup = 0, digits = 4)
+
+\method{print}{eEvents}(x, digits = 4, ...)
 }
 \arguments{
 \item{lambda}{scalar, vector or matrix of event hazard rates; rows represent
@@ -107,8 +109,8 @@ stratified clinical trials. \emph{Journal of Statistical Computation and
 Simulation}, 8:65-73.
 }
 \seealso{
-\link{gsDesign package overview}, \link{Plots for group sequential
-designs}, \code{\link{gsDesign}}, \code{\link{gsHR}},
+\link{gsDesign package overview}, \link{plot.gsDesign}, 
+\code{\link{gsDesign}}, \code{\link{gsHR}},
 \code{\link{nSurvival}}
 }
 \author{

@@ -1,26 +1,7 @@
 # conditional power function
 # condPower function [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param z1 PARAM_DESCRIPTION
-#' @param n2 PARAM_DESCRIPTION
-#' @param z2 PARAM_DESCRIPTION, Default: z2NC
-#' @param theta PARAM_DESCRIPTION, Default: NULL
-#' @param x PARAM_DESCRIPTION, Default: gsDesign(k = 2, timing = 0.5, beta = beta)
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @export 
-#' @rdname condPower
-#' @seealso 
-#'  
+#' @rdname ssrCP
 #' @importFrom stats pnorm
 condPower <- function(z1, n2, z2 = z2NC, theta = NULL,
                       x = gsDesign(k = 2, timing = .5, beta = beta),
@@ -183,12 +164,15 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #' n.fix <- nEvents(hr=hr,alpha=alpha) # you could otherwise make n.fix an arbitrary positive value
 #' # this just derives a group sequential design that should not change sample size from n.fix
 #' # due to stringent IA bound
-#' x <- gsDesign(k=2,n.fix=n.fix,alpha=alpha,test.type=1,sfu=sfHSD,sfupar=-20,timing=timing,delta1=log(hr))
+#' x <- gsDesign(k=2,n.fix=n.fix,alpha=alpha,test.type=1,sfu=sfHSD,
+#' sfupar=-20,timing=timing,delta1=log(hr))
 #' # derive effect sizes for which you wish to compute conditional power
 #' hrpostIA = seq(.4,1,.05)
 #' # in the following, we convert HR into standardized effect size based on the design in x
 #' powr <- condPower(x=x,z1=1,n2=x$n.I[2]-x$n.I[1],theta=log(hrpostIA)/x$delta1*x$theta[2])
-#' qplot(hrpostIA,condPower(x=x,z1=1,n2=x$n.I[2]-x$n.I[1],theta=log(hrpostIA)/x$delta1*x$theta[2]),geom="line",xlab="HR post IA",ylab="Conditional power",main ="Conditional power as a function of assumed HR")
+#' qplot(hrpostIA,condPower(x=x,z1=1,n2=x$n.I[2]-x$n.I[1],theta=log(hrpostIA)/x$delta1*x$theta[2]),
+#' geom="line",xlab="HR post IA",ylab="Conditional power",
+#' main ="Conditional power as a function of assumed HR")
 #' 
 #' # Following is a template for entering parameters for ssrCP
 #' # Natural parameter value null and alternate hypothesis values
@@ -457,22 +441,8 @@ plot.ssrCP <- function(x, z1ticks = NULL, mar = c(7, 4, 4, 4) + .1, ylab = "Adap
 }
 
 # normal combination test cutoff for z2
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param z1 PARAM_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname z2NC
-#' @export 
-#' @author Keaven Anderson, PhD
+#' @rdname ssrCP
+#' @export
 # z2NC function [sinew] ----
 z2NC <- function(z1, x, ...) {
   z2 <- (x$upper$bound[2] - z1 * sqrt(x$timing[1])) /
@@ -481,24 +451,9 @@ z2NC <- function(z1, x, ...) {
   return(z2)
 }
 
-#' @title FUNCTION_TITLE
-#' @description Sufficient statistic cutoff for z2
-#' @param z1 PARAM_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param n2 PARAM_DESCRIPTION, Default: x$n.I[2] - x$n.I[1]
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname z2Z
-#' @export 
-#' @author Keaven Anderson, PhD
 
+#' @rdname ssrCP
+#' @export
 z2Z <- function(z1, x, n2 = x$n.I[2] - x$n.I[1], ...) {
   N2 <- x$n.I[1] + n2
   z2 <- (x$upper$bound[2] - z1 * sqrt(x$n.I[1] / N2)) /
@@ -507,24 +462,8 @@ z2Z <- function(z1, x, n2 = x$n.I[2] - x$n.I[1], ...) {
   return(z2)
 }
 
-#' @title Fisher's combination test
-#' @description FUNCTION_DESCRIPTION
-#' @param z1 PARAM_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @seealso 
-#'  \code{\link[stats]{Chisquare}},\code{\link[stats]{Normal}}
-#' @rdname z2Fisher
 #' @export 
-#' @author Keaven Anderson, PhD
+#' @rdname ssrCP
 #' @importFrom stats pchisq pnorm qnorm qchisq
 z2Fisher <- function(z1, x, ...) {
   z2 <- z1
@@ -542,25 +481,8 @@ z2Fisher <- function(z1, x, ...) {
 }
 
 
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param theta PARAM_DESCRIPTION, Default: NULL
-#' @param delta PARAM_DESCRIPTION, Default: NULL
-#' @param r PARAM_DESCRIPTION, Default: 18
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @export 
-#' @rdname Power.ssrCP
-#' @seealso 
-#'  
+#' @rdname ssrCP
 #' @importFrom stats pnorm dnorm uniroot
 Power.ssrCP <- function(x, theta = NULL, delta = NULL, r = 18) {
   if (class(x) != "ssrCP") {

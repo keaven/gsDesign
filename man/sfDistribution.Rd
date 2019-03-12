@@ -5,6 +5,7 @@
 \alias{sfBetaDist}
 \alias{sfCauchy}
 \alias{sfExtremeValue}
+\alias{sfExtremeValue2}
 \alias{sfNormal}
 \title{Two-parameter Spending Function Families}
 \usage{
@@ -15,6 +16,8 @@ sfBetaDist(alpha, t, param)
 sfCauchy(alpha, t, param)
 
 sfExtremeValue(alpha, t, param)
+
+sfExtremeValue2(alpha, t, param)
 
 sfNormal(alpha, t, param)
 }
@@ -41,8 +44,8 @@ parameterization, all four values must be between 0 and 1 and \code{t1 <
 t2}, \code{u1 < u2}.}
 }
 \value{
-An object of type \code{spendfn}. See \code{\link{Spending function
-overview}} for further details.
+An object of type \code{spendfn}. 
+See \code{\link{Spending_Function_Overview}} for further details.
 }
 \description{
 The functions \code{sfLogistic()}, \code{sfNormal()},

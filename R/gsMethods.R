@@ -1,5 +1,6 @@
 # print.gsProbability roxy [sinew] ----
 #' @export
+#' @rdname gsProbability
 #' @importFrom stats pnorm
 # print.gsProbability function [sinew] ----
 print.gsProbability <- function(x, ...) {
@@ -64,6 +65,7 @@ print.gsProbability <- function(x, ...) {
 
 # summary.gsDesign roxy [sinew] ----
 #' @export
+#' @rdname gsBoundSummary
 # summary.gsDesign function [sinew] ----
 summary.gsDesign <- function(object, information = FALSE, timeunit = "months", ...) {
   out <- NULL
@@ -119,6 +121,7 @@ summary.gsDesign <- function(object, information = FALSE, timeunit = "months", .
 
 # print.gsDesign roxy [sinew] ----
 #' @export
+#' @rdname gsBoundSummary
 # print.gsDesign function [sinew] ----
 print.gsDesign <- function(x, ...) {
   if (x$nFixSurv > 0) {
@@ -260,6 +263,7 @@ print.gsDesign <- function(x, ...) {
 }
 
 # print.nSurvival roxy [sinew] ----
+#' @rdname nSurvival
 #' @export
 # print.nSurvival function [sinew] ----
 print.nSurvival <- function(x, ...) {
@@ -558,7 +562,7 @@ print.nSurvival <- function(x, ...) {
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
 #' @author Keaven Anderson \email{keaven\_anderson@@merck.}
-#' @seealso \link{gsDesign}, \link{Plots for group sequential designs},
+#' @seealso \link{gsDesign}, \link{plot.gsDesign},
 #' \code{\link{gsProbability}}, \code{\link{xtable.gsSurv}}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
@@ -774,6 +778,7 @@ sfprint <- function(x) {
 
 # summary.spendfn roxy [sinew] ----
 #' @export
+#' @aliases summary.spendfn
 # summary.spendfn function [sinew] ----
 summary.spendfn <- function(object, ...) {
   # print spending function information

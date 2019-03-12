@@ -142,8 +142,8 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 #' 
 #' @aliases print.eEvents
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
-#' @seealso \link{gsDesign package overview}, \link{Plots for group sequential
-#' designs}, \code{\link{gsDesign}}, \code{\link{gsHR}},
+#' @seealso \link{gsDesign package overview}, \link{plot.gsDesign}, 
+#' \code{\link{gsDesign}}, \code{\link{gsHR}},
 #' \code{\link{nSurvival}}
 #' @references Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and
 #' Power for Analyses of Survival with Allowance for Nonuniform Patient Entry,
@@ -249,6 +249,7 @@ periods <- function(S, T, minfup, digits) {
 }
 
 # print.eEvents roxy [sinew] ----
+#' @rdname eEvents
 #' @export
 # print.eEvents function [sinew] ----
 print.eEvents <- function(x, digits = 4, ...) {
@@ -408,6 +409,7 @@ LFPWE <- function(alpha = .025, sided = 1, beta = .1,
 }
 
 # print.nSurv roxy [sinew] ----
+#' @rdname nSurv
 #' @export
 # print.nSurv function [sinew] ----
 print.nSurv <- function(x, digits = 4, ...) {
@@ -694,7 +696,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' \code{\link{xprint}} (application of \code{xtable} for tabular output) and
 #' \code{summary.gsSurv} (textual summary of \code{gsDesign} or \code{gsSurv}
 #' object) may be preferred summary functions; see example in vignettes. See
-#' also \link{gsDesign print, summary and table summary functions} for output
+#' also \link{gsBoundSummary} for output
 #' of tabular summaries of bounds for designs produced by \code{gsSurv()}.
 #'
 #' Both \code{nEventsIA} and \code{tEventsIA} require a group sequential design
@@ -824,7 +826,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' one-sided and symmetric two-sided testing is used to completely specify
 #' spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
 #' \code{sfHSD} which is a Hwang-Shih-DeCani spending function.  See details,
-#' \link{Spending function overview}, manual and examples.
+#' \link{Spending_Function_Overview}, manual and examples.
 #' @param sfupar Real value, default is \eqn{-4} which is an
 #' O'Brien-Fleming-like conservative bound when used with the default
 #' Hwang-Shih-DeCani spending function. This is a real-vector for many spending
@@ -949,8 +951,8 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #'
 #' \code{tEventsIA()} returns
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
-#' @seealso \code{\link{gsBoundSummary}}, \code{\link{xprint}},\link{gsDesign
-#' package overview}, \link{Plots for group sequential designs},
+#' @seealso \code{\link{gsBoundSummary}}, \code{\link{xprint}},
+#' \link{gsDesign package overview}, \link{plot.gsDesign},
 #' \code{\link{gsDesign}}, \code{\link{gsHR}}, \code{\link{nSurvival}}
 #' @references Kim KM and Tsiatis AA (1990), Study duration for clinical trials
 #' with survival response and early stopping rule. \emph{Biometrics}, 46, 81-92
@@ -1122,22 +1124,8 @@ gsnSurv <- function(x, nEvents) {
 }
 
 # tEventsIA roxy [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param timing PARAM_DESCRIPTION, Default: 0.25
-#' @param tol PARAM_DESCRIPTION, Default: .Machine$double.eps^0.25
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @export 
-#' @rdname tEventsIA
+#' @rdname nSurv
 #' @seealso 
 #'  \code{\link[stats]{uniroot}}
 #' @importFrom stats uniroot
@@ -1152,23 +1140,8 @@ tEventsIA <- function(x, timing = .25, tol = .Machine$double.eps^0.25) {
 }
 
 # nEventsIA roxy [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param tIA PARAM_DESCRIPTION, Default: 5
-#' @param x PARAM_DESCRIPTION, Default: NULL
-#' @param target PARAM_DESCRIPTION, Default: 0
-#' @param simple PARAM_DESCRIPTION, Default: TRUE
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @export 
-#' @rdname nEventsIA
+#' @rdname nSurv
 # nEventsIA function [sinew] ----
 nEventsIA <- function(tIA = 5, x = NULL, target = 0, simple = TRUE) {
   Qe <- x$ratio / (1 + x$ratio)
@@ -1199,6 +1172,7 @@ nEventsIA <- function(tIA = 5, x = NULL, target = 0, simple = TRUE) {
 }
 
 # gsSurv roxy [sinew] ----
+#' @rdname nSurv
 #' @export
 # gsSurv function [sinew] ----
 gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
@@ -1273,6 +1247,7 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
 }
 
 # print.gsSurv roxy [sinew] ----
+#' @rdname nSurv
 #' @export
 # print.gsSurv function [sinew] ----
 print.gsSurv <- function(x, digits = 2, ...) {
@@ -1330,6 +1305,7 @@ print.gsSurv <- function(x, digits = 2, ...) {
 #'  \code{\link[xtable]{xtable}}
 #' @importFrom stats pnorm
 #' @importFrom xtable xtable
+#' @rdname nSurv
 #' @export
 # xtable.gsSurv function [sinew] ----
 xtable.gsSurv <- function(x, caption = NULL, label = NULL, align = NULL, digits = NULL,

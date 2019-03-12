@@ -245,102 +245,32 @@ plotRR <- function(x = x, ylab = "Estimated risk ratio", main = "Risk ratio at b
 }
 
 # gsBValue function [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param z PARAM_DESCRIPTION
-#' @param i PARAM_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param ylab PARAM_DESCRIPTION, Default: 'B-value'
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @export 
-#' @rdname gsBValue
-
+#' @rdname gsBoundSummary
 gsBValue <- function(z, i, x, ylab = "B-value", ...) {
   Bval <- z * sqrt(x$timing[i])
   Bval
 }
 
 # gsDelta function [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param z PARAM_DESCRIPTION
-#' @param i PARAM_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param ylab PARAM_DESCRIPTION, Default: NULL
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @export 
-#' @rdname gsDelta
-
+#' @rdname gsBoundSummary
 gsDelta <- function(z, i, x, ylab = NULL, ...) {
   deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1 - x$delta0) / x$delta + x$delta0
   deltaHat
 }
 
 # gsRR function [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param z PARAM_DESCRIPTION
-#' @param i PARAM_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param ratio PARAM_DESCRIPTION, Default: 1
-#' @param ylab PARAM_DESCRIPTION, Default: 'Estimated risk ratio'
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @export 
-#' @rdname gsRR
-
+#' @rdname gsBoundSummary
 gsRR <- function(z, i, x, ratio = 1, ylab = "Estimated risk ratio", ...) {
   deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1 - x$delta0) / x$delta + x$delta0
   exp(deltaHat)
 }
 
 # gsHR function [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param z PARAM_DESCRIPTION
-#' @param i PARAM_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param ratio PARAM_DESCRIPTION, Default: 1
-#' @param ylab PARAM_DESCRIPTION, Default: 'Estimated hazard ratio'
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @author Keaven Anderson, PhD
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
 #' @export 
-#' @rdname gsHR
-
+#' @rdname gsBoundSummary
 gsHR <- function(z, i, x, ratio = 1, ylab = "Estimated hazard ratio", ...) {
   c <- 1 / (1 + ratio)
   psi <- c * (1 - c)
@@ -354,25 +284,8 @@ gsHR <- function(z, i, x, ratio = 1, ylab = "Estimated hazard ratio", ...) {
 }
 
 # gsCPz function [sinew] ----
-#' @title FUNCTION_TITLE
-#' @description FUNCTION_DESCRIPTION
-#' @param z PARAM_DESCRIPTION
-#' @param i PARAM_DESCRIPTION
-#' @param x PARAM_DESCRIPTION
-#' @param theta PARAM_DESCRIPTION, Default: NULL
-#' @param ylab PARAM_DESCRIPTION, Default: NULL
-#' @param ... PARAM_DESCRIPTION
-#' @return OUTPUT_DESCRIPTION
-#' @details DETAILS
-#' @examples 
-#' \dontrun{
-#' if(interactive()){
-#'  #EXAMPLE1
-#'  }
-#' }
-#' @rdname gsCPz
-#' @export 
-#' @author Keaven Anderson, PhD
+#' @rdname gsBoundSummary
+#' @export
 gsCPz <- function(z, i, x, theta = NULL, ylab = NULL, ...) {
   cp <- rep(0, length(z))
 

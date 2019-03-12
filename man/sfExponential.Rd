@@ -104,7 +104,7 @@ Lan, KKG and DeMets, DL (1983), Discrete sequential boundaries for clinical
 trials. \emph{Biometrika}; 70:659-663.
 }
 \seealso{
-\link{Spending function overview}, \code{\link{gsDesign}},
+\link{Spending_Function_Overview}, \code{\link{gsDesign}},
 \link{gsDesign package overview}
 }
 \author{
