@@ -128,10 +128,10 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 #' @examples
 #' 
 #' # 3 enrollment periods, 3 piecewise exponential failure rates
-#' eEvents(
+#' str(eEvents(
 #'   lambda = c(.05, .02, .01), eta = .01, gamma = c(5, 10, 20),
 #'   R = c(2, 1, 2), S = c(1, 1), T = 20
-#' )
+#' ))
 #' 
 #' # control group for example from Berstein and Lagakos (1978)
 #' lamC <- c(1, .8, .5)

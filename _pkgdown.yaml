@@ -1,0 +1,93 @@
+reference:
+- title: Group Sequential Computation
+  contents:
+  - gsDesign
+  - gsProbability
+  - gsBound1
+  - gsBound
+- title: Design Characterization
+  contents:
+  - gsBoundSummary
+  - print.gsBoundSummary
+  - gsDelta
+  - xtable
+  - xprint
+- title: Normal Endpoint Design
+  contents:
+  - nNormal
+- title: Binomial Endpoint Design
+  contents:
+  - nBinomial
+  - gsRR
+  - simBinomial
+  - testBinomial
+  - varBinomial
+  - ciBinomial
+- title: Time-to-Event Endpoint Design
+  contents:
+  - nEvents
+  - nSurv
+  - gsSurv
+  - nSurvival
+  - gsHR
+  - zn2hr
+  - hrn2z
+  - hrz2n
+  - eEvents
+  - nEventsIA
+  - tEventsIA
+- title: Spending Functions
+  contents:
+  - Spending_Function_Overview
+  - sfLDPocock
+  - sfLDOF
+  - sfHSD
+  - sfPower
+  - sfExponential
+  - sfNormal
+  - sfCauchy
+  - sfTDist
+  - sfLogistic
+  - sfBetaDist
+  - sfExtremeValue
+  - sfExtremeValue2
+  - sfLinear
+  - sfStep
+  - sfPoints
+  - sfTrimmed
+  - sfTruncated
+  - sfGapped
+- title: Conditional and Predictive Power
+  contents:
+  - gsCP
+  - gsCPz
+  - gsBoundCP
+  - gsBValue
+  - normalGrid
+  - gsDensity
+  - gsPosterior
+  - gsPOS
+  - gsPP
+  - gsCPOS
+  - gsPI
+- title: Sample Size Adaption
+  contents:
+  - ssrCP
+  - condPower
+  - Power.ssrCP
+  - z2Fisher
+  - z2Z
+  - z2NC
+- title: Single Arm Binomial Design
+  contents:
+  - gsBinomialExact
+  - plot.gsBinomialExact
+  - binomialSPRT
+  - nBinomial1Sample
+- title: Input Checking
+  contents:
+  - isInteger
+  - checkLengths
+  - checkRange
+  - checkScalar
+  - checkVector
