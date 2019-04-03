@@ -36,9 +36,6 @@ reference:
   - eEvents
   - nEventsIA
   - tEventsIA
-- title: Boundary Family Designs
-  contents:
-  - WT
 - title: Spending Functions
   contents:
   - Spending_Function_Overview
