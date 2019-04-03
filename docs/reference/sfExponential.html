@@ -83,7 +83,7 @@ spending function (sfLDOF()), $$f(t; \alpha)=2-2\Phi \left(
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
       </span>
     </div>
 
@@ -164,7 +164,7 @@ a continuously increasing cumulative distribution function defined for
 derived by letting \(F(x)=1-\exp(-x)\), the exponential cumulative
 distribution function. This function was derived as a generalization of the
 Lan-DeMets (1983) spending function used to approximate an O'Brien-Fleming
-spending function (<code>sfLDOF()</code>), $$f(t; \alpha)=2-2\Phi \left(
+spending function (<code><a href='sfLDOF.html'>sfLDOF()</a></code>), $$f(t; \alpha)=2-2\Phi \left(
 \Phi^{-1}(1-\alpha/2)/ t^{1/2} \right).$$</p>
     
     </div>
@@ -218,23 +218,23 @@ trials. <em>Biometrika</em>; 70:659-663.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Spending_Function_Overview, <code>gsDesign</code>,
-gsDesign package overview</p></div>
+    <div class='dont-index'><p><a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>, <code><a href='gsDesign.html'>gsDesign</a></code>,
+<a href='gsDesign-package-overview.html'>gsDesign package overview</a></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># use 'best' exponential approximation for k=6 to O'Brien-Fleming design</span>
 <span class='co'># (see manual for details)</span>
-<span class='fu'>gsDesign</span>(
+<span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfExponential</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='fl'>0.7849295</span>,
   <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>
 )$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 4.998123 3.598098 2.933292 2.530838 2.253723 2.047082</div><div class='input'>
 <span class='co'># show actual O'Brien-Fleming bound</span>
-<span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='st'>"OF"</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 5.028296 3.555542 2.903088 2.514148 2.248722 2.052793</div><div class='input'>
+<span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='st'>"OF"</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 5.028296 3.555542 2.903088 2.514148 2.248722 2.052793</div><div class='input'>
 <span class='co'># show Lan-DeMets approximation</span>
 <span class='co'># (not as close as sfExponential approximation)</span>
-<span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLDOF</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 5.366558 3.710340 2.969736 2.538677 2.252190 2.044790</div><div class='input'>
+<span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLDOF</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 5.366558 3.710340 2.969736 2.538677 2.252190 2.044790</div><div class='input'>
 <span class='co'># plot exponential spending function across a range of values of interest</span>
 <span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fl'>0</span>:<span class='fl'>100</span> / <span class='fl'>100</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfExponential</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>0.8</span>)$<span class='no'>spend</span>,

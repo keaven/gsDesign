@@ -118,7 +118,7 @@ hazard ratio &amp;gt; or &amp;lt; the null hazard ratio hr0." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
       </span>
     </div>
 
@@ -402,8 +402,8 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>gsDesign package overview, plot.gsDesign, 
-gsDesign, gsHR</p></div>
+    <div class='dont-index'><p><a href='gsDesign-package-overview.html'>gsDesign package overview</a>, <a href='plot.gsDesign.html'>plot.gsDesign</a>, 
+<a href='gsDesign.html'>gsDesign</a>, <a href='gsBoundSummary.html'>gsHR</a></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -424,7 +424,7 @@ gsDesign, gsHR</p></div>
 
 <span class='co'>#  group sequential translation with default bounds</span>
 <span class='co'>#  note that delta1 is log hazard ratio; used later in gsBoundSummary summary</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>ss</span>$<span class='no'>nEvents</span>, <span class='kw'>nFixSurv</span> <span class='kw'>=</span> <span class='no'>ss</span>$<span class='no'>n</span>,
   <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>ss</span>$<span class='no'>lambda2</span> / <span class='no'>ss</span>$<span class='no'>lambda1</span>)
 )
@@ -468,7 +468,7 @@ gsDesign, gsHR</p></div>
 #&gt;   0.0000 6e-04 0.0013 0.0028 0.0063 0.014 0.025
 #&gt;   0.3415 0e+00 0.0000 0.0000 0.0000 0.000 0.000</div><div class='input'><span class='co'># overall design summary</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cat'>cat</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>x</span>))</div><div class='output co'>#&gt; Symmetric two-sided group sequential design with 5 analyses, time-to-event outcome with sample size 440 and 93 events required, 90 percent power, 2.5 percent (1-sided) Type I error. Bounds derived using a  Hwang-Shih-DeCani spending function with gamma = -4.</div><div class='input'><span class='co'># tabular summary of bounds</span>
-<span class='fu'>gsBoundSummary</span>(<span class='no'>x</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"HR"</span>, <span class='kw'>Nname</span> <span class='kw'>=</span> <span class='st'>"Events"</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    Analysis              Value Efficacy Futility
+<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span>(<span class='no'>x</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"HR"</span>, <span class='kw'>Nname</span> <span class='kw'>=</span> <span class='st'>"Events"</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    Analysis              Value Efficacy Futility
 #&gt;   IA 1: 20%                  Z   3.2527  -3.2527
 #&gt;  Events: 19        p (1-sided)   0.0006   0.0006
 #&gt;                   ~HR at bound   0.2198   4.5487

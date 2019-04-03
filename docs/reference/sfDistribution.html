@@ -93,7 +93,7 @@ sfExtremeValue2() where $$F(x)=1-\exp(-\exp(x)).$$" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
       </span>
     </div>
 
@@ -163,7 +163,7 @@ one-parameter spending function family is not sufficient. These functions
 all allow fitting of two points on a cumulative spending function curve; in
 this case, four parameters are specified indicating an x and a y coordinate
 for each of 2 points. Normally each of these functions will be passed to
-<code>gsDesign()</code> in the parameter <code>sfu</code> for the upper bound or
+<code><a href='gsDesign.html'>gsDesign()</a></code> in the parameter <code>sfu</code> for the upper bound or
 <code>sfl</code> for the lower bound to specify a spending function family for a
 design. In this case, the user does not need to know the calling sequence.
 The calling sequence is useful, however, when the user wishes to plot a
@@ -235,7 +235,7 @@ t2</code>, <code>u1 &lt; u2</code>.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of type <code>spendfn</code>. 
-See <code>Spending_Function_Overview</code> for further details.</p>
+See <code><a href='Spending_Function_Overview.html'>Spending_Function_Overview</a></code> for further details.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -250,14 +250,14 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>gsDesign</code></p></div>
+    <div class='dont-index'><p><code><a href='gsDesign.html'>gsDesign</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># design a 4-analysis trial using a Kim-DeMets spending function</span>
 <span class='co'># for both lower and upper bounds</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfPower</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfPower</span>, <span class='kw'>sflpar</span> <span class='kw'>=</span> <span class='fl'>1.5</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfPower</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfPower</span>, <span class='kw'>sflpar</span> <span class='kw'>=</span> <span class='fl'>1.5</span>)
 
 <span class='co'># print the design</span>
 <span class='no'>x</span></div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with

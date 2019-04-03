@@ -1,5 +1,5 @@
 Package: gsDesign
-Version: 4.0.0.9000
+Version: 3.1.0
 Title: Group Sequential Design
 Description: Derives group sequential designs and describes their properties.
 Authors@R: person(given = "Keaven", family = "Anderson", email =

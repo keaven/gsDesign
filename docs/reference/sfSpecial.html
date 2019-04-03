@@ -93,7 +93,7 @@ sfLinear that spends uniformly over specified range." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
       </span>
     </div>
 
@@ -224,7 +224,7 @@ vector of parameters needed to fully specify the spending function in sf).</p></
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of type <code>spendfn</code>. See <code>Spending_Function_Overview</code> 
+    <p>An object of type <code>spendfn</code>. See <code><a href='Spending_Function_Overview.html'>Spending_Function_Overview</a></code> 
 for further details.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
@@ -240,8 +240,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Spending_Function_Overview, <code>gsDesign</code>,
-gsDesign package overview</p></div>
+    <div class='dont-index'><p><a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>, <code><a href='gsDesign.html'>gsDesign</a></code>,
+<a href='gsDesign-package-overview.html'>gsDesign package overview</a></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -250,7 +250,7 @@ gsDesign package overview</p></div>
 <span class='co'># Eliminate efficacy spending forany interim at or before 20 percent of information.</span>
 <span class='co'># Complete spending at first interim at or after 80 percent of information.</span>
 <span class='no'>tx</span> <span class='kw'>&lt;-</span> (<span class='fl'>0</span>:<span class='fl'>100</span>) / <span class='fl'>100</span>
-<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>sfHSD</span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.05</span>, <span class='kw'>t</span> <span class='kw'>=</span> <span class='no'>tx</span>, <span class='kw'>param</span> <span class='kw'>=</span> <span class='fl'>1</span>)$<span class='no'>spend</span>
+<span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sfHSD.html'>sfHSD</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.05</span>, <span class='kw'>t</span> <span class='kw'>=</span> <span class='no'>tx</span>, <span class='kw'>param</span> <span class='kw'>=</span> <span class='fl'>1</span>)$<span class='no'>spend</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>t</span> <span class='kw'>=</span> <span class='no'>tx</span>, <span class='kw'>Spending</span> <span class='kw'>=</span> <span class='no'>s</span>, <span class='kw'>sf</span> <span class='kw'>=</span> <span class='st'>"Original spending"</span>)
 <span class='no'>param</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>trange</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.2</span>, <span class='fl'>.8</span>), <span class='kw'>sf</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>, <span class='kw'>param</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='no'>s</span> <span class='kw'>&lt;-</span> <span class='fu'>sfTruncated</span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.05</span>, <span class='kw'>t</span> <span class='kw'>=</span> <span class='no'>tx</span>, <span class='kw'>param</span> <span class='kw'>=</span> <span class='no'>param</span>)$<span class='no'>spend</span>
@@ -265,13 +265,13 @@ gsDesign package overview</p></div>
 <span class='co'># now apply the sfTrimmed version in gsDesign</span>
 <span class='co'># initially, eliminate the early efficacy analysis</span>
 <span class='co'># note: final spend must occur at &gt; next to last interim</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfTrimmed</span>,
   <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>sf</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>, <span class='kw'>param</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>trange</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.3</span>, <span class='fl'>.9</span>))
 )
 
 <span class='co'># first upper bound=20 means no testing there</span>
-<span class='fu'>gsBoundSummary</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;   Analysis               Value Efficacy Futility
+<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;   Analysis               Value Efficacy Futility
 #&gt;  IA 1: 25%                   Z  20.0000  -0.5316
 #&gt;      N: 31         p (1-sided)   0.0000   0.7025
 #&gt;                ~delta at bound  11.1795  -0.2972
@@ -294,19 +294,19 @@ gsDesign package overview</p></div>
 #&gt;            P(Cross) if delta=1   0.9000   0.1000</div><div class='input'>
 <span class='co'># now, do not eliminate early efficacy analysis</span>
 <span class='no'>param</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>sf</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>, <span class='kw'>param</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>trange</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>.9</span>))
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfTrimmed</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>param</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfTrimmed</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>param</span>)
 
 <span class='co'># The above means if final analysis is done a little early, all spending can occur</span>
 <span class='co'># Suppose we set calendar date for final analysis based on</span>
 <span class='co'># estimated full information, but come up with only 97 pct of plan</span>
-<span class='no'>xA</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(
+<span class='no'>xA</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>k</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>:<span class='fl'>3</span>], <span class='fl'>.97</span> * <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>4</span>]),
   <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>test.type</span>,
   <span class='kw'>maxn.IPlan</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='no'>x</span>$<span class='no'>k</span>],
   <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfTrimmed</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>param</span>
 )
 <span class='co'># now accelerate without the trimmed spending function</span>
-<span class='no'>xNT</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(
+<span class='no'>xNT</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>k</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>:<span class='fl'>3</span>], <span class='fl'>.97</span> * <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>4</span>]),
   <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>test.type</span>,
   <span class='kw'>maxn.IPlan</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='no'>x</span>$<span class='no'>k</span>],
@@ -320,7 +320,7 @@ gsDesign package overview</p></div>
 <span class='no'>xNT</span>$<span class='no'>upper</span>$<span class='no'>bound</span>[<span class='fl'>4</span>]</div><div class='output co'>#&gt; [1] 2.37218</div><div class='input'>
 <span class='co'># note that if the last analysis is LATE, all 3 approaches should give the same</span>
 <span class='co'># final bound that has a little larger z-value</span>
-<span class='no'>xlate</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(
+<span class='no'>xlate</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>k</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>:<span class='fl'>3</span>], <span class='fl'>1.25</span> * <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>4</span>]),
   <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>test.type</span>,
   <span class='kw'>maxn.IPlan</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='no'>x</span>$<span class='no'>k</span>],
@@ -330,7 +330,7 @@ gsDesign package overview</p></div>
 <span class='co'># eliminate futility after the first interim analysis</span>
 <span class='co'># note that by setting trange[1] to .2, the spend at t=.2 is used for the first</span>
 <span class='co'># interim at or after 20 percent of information</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfGapped</span>, <span class='kw'>sflpar</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>trange</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.2</span>, <span class='fl'>.9</span>), <span class='kw'>sf</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>, <span class='kw'>param</span> <span class='kw'>=</span> <span class='fl'>1</span>))</div></pre>
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfGapped</span>, <span class='kw'>sflpar</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>trange</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.2</span>, <span class='fl'>.9</span>), <span class='kw'>sf</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>, <span class='kw'>param</span> <span class='kw'>=</span> <span class='fl'>1</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -79,7 +79,7 @@ sfExponential." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
       </span>
     </div>
 
@@ -157,7 +157,7 @@ $$f(t;\alpha)=ln(1+(e-1)t).$$ As shown in
 examples below, other spending functions can be used to get as good or
 better approximations to Pocock and O'Brien-Fleming bounds. In particular,
 O'Brien-Fleming bounds can be closely approximated using
-<code>sfExponential</code>.</p>
+<code><a href='sfExponential.html'>sfExponential</a></code>.</p>
     
     </div>
 
@@ -187,7 +187,7 @@ function will be computed.</p></td>
       <td><p>This parameter is not used for <code>sfLDPocock</code>, not required 
 for <code>sfLDOF</code> and need not be specified. For <code>sfLDPocock</code> it is here 
 so that the calling sequence conforms to the standard for spending functions used 
-with <code>gsDesign()</code>. For <code>sfLDOF</code> it will default to 1 (Lan-DeMets function 
+with <code><a href='gsDesign.html'>gsDesign()</a></code>. For <code>sfLDOF</code> it will default to 1 (Lan-DeMets function 
 to approximate O'Brien-Fleming) if <code>NULL</code> or if outside of the range <code>[.005,2]</code>.
 otherwise, it will be use to set rho from Liu et al (2012).</p></td>
     </tr>
@@ -216,34 +216,34 @@ for group sequential trials with random information levels.
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Spending_Function_Overview, <code>gsDesign</code>,
-gsDesign package overview</p></div>
+    <div class='dont-index'><p><a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>, <code><a href='gsDesign.html'>gsDesign</a></code>,
+<a href='gsDesign-package-overview.html'>gsDesign package overview</a></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># 2-sided,  symmetric 6-analysis trial Pocock</span>
 <span class='co'># spending function approximation</span>
-<span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLDPocock</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 2.495115 2.476907 2.454964 2.437262 2.423276 2.412059</div><div class='input'>
+<span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLDPocock</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 2.495115 2.476907 2.454964 2.437262 2.423276 2.412059</div><div class='input'>
 <span class='co'># show actual Pocock design</span>
-<span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='st'>"Pocock"</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 2.453211 2.453211 2.453211 2.453211 2.453211 2.453211</div><div class='input'>
+<span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='st'>"Pocock"</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 2.453211 2.453211 2.453211 2.453211 2.453211 2.453211</div><div class='input'>
 <span class='co'># approximate Pocock again using a standard</span>
 <span class='co'># Hwang-Shih-DeCani approximation</span>
-<span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 2.507958 2.471981 2.443139 2.426686 2.420302 2.421749</div><div class='input'>
+<span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 2.507958 2.471981 2.443139 2.426686 2.420302 2.421749</div><div class='input'>
 <span class='co'># use 'best' Hwang-Shih-DeCani approximation for Pocock,  k=6;</span>
 <span class='co'># see manual for details</span>
-<span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='fl'>1.3354376</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 2.469285 2.448341 2.436191 2.437278 2.448837 2.468360</div><div class='input'>
+<span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='fl'>1.3354376</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 2.469285 2.448341 2.436191 2.437278 2.448837 2.468360</div><div class='input'>
 <span class='co'># 2-sided, symmetric 6-analysis trial</span>
 <span class='co'># O'Brien-Fleming spending function approximation</span>
-<span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLDOF</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 5.366558 3.710340 2.969736 2.538677 2.252190 2.044790</div><div class='input'>
+<span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLDOF</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 5.366558 3.710340 2.969736 2.538677 2.252190 2.044790</div><div class='input'>
 <span class='co'># show actual O'Brien-Fleming bound</span>
-<span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='st'>"OF"</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 5.028296 3.555542 2.903088 2.514148 2.248722 2.052793</div><div class='input'>
+<span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='st'>"OF"</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 5.028296 3.555542 2.903088 2.514148 2.248722 2.052793</div><div class='input'>
 <span class='co'># approximate again using a standard Hwang-Shih-DeCani</span>
 <span class='co'># approximation to O'Brien-Fleming</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 <span class='no'>x</span>$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 3.325024 3.103223 2.860383 2.603454 2.330046 2.034988</div><div class='input'><span class='no'>x</span>$<span class='no'>upper</span>$<span class='no'>param</span></div><div class='output co'>#&gt; [1] -4</div><div class='input'>
 <span class='co'># use 'best' exponential approximation for k=6; see manual for details</span>
-<span class='fu'>gsDesign</span>(
+<span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfExponential</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='fl'>0.7849295</span>,
   <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>
 )$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 4.998123 3.598098 2.933292 2.530838 2.253723 2.047082</div><div class='input'>
