@@ -195,10 +195,10 @@ interest." />
     <p>A tabular summary of a group sequential design's bounds and their properties
 are often useful. The 'vintage' <code>print.gsDesign()</code> function provides a
 complete but minimally formatted summary of a group sequential design
-derived by <code><a href='gsDesign.html'>gsDesign()</a></code>. A brief description of the overall design can
+derived by <code>gsDesign()</code>. A brief description of the overall design can
 also be useful (<code>summary.gsDesign()</code>.  A tabular summary of boundary
 characteristics oriented only towards LaTeX output is produced by
-<code><a href='nSurv.html'>xtable.gsSurv</a></code>. More flexibility is provided by
+<code>xtable.gsSurv</code>. More flexibility is provided by
 <code>gsBoundSummary()</code> which produces a tabular summary of a
 user-specifiable set of package-provided boundary properties in a data
 frame.  This can also be used to along with functions such as
@@ -238,7 +238,7 @@ hypothesis value of the standardized parameter. Note that this value will be
 exponentiated in the case of relative risks, hazard ratios or when the user
 specifies <code>logdelta=TRUE</code>. In the case of hazard ratios, the value is
 computed instead by <code>gsHR()</code> to be consistent with
-<code><a href='plot.gsDesign.html'>plot.gsDesign()</a></code>. Similarly, the value is computed by <code>gsRR()</code>
+<code>plot.gsDesign()</code>. Similarly, the value is computed by <code>gsRR()</code>
 when the relative risk is the natural parameter.</p>
 <p><code>Spending: </code>Incremental error spending at each given analysis. For
 asymmetric designs, futility bound will have beta-spending summarized.
@@ -272,7 +272,7 @@ interest.</p>
 
 <span class='fu'>gsBoundSummary</span>(<span class='no'>x</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>Nname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>ddigits</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>tdigits</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>timename</span> <span class='kw'>=</span> <span class='st'>"Month"</span>,
-  <span class='kw'>prior</span> <span class='kw'>=</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>delta</span>/<span class='fl'>2</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>10</span>/<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/MathFun'>sqrt</a></span>(<span class='no'>x</span>$<span class='no'>n.fix</span>)),
+  <span class='kw'>prior</span> <span class='kw'>=</span> <span class='fu'>normalGrid</span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>delta</span>/<span class='fl'>2</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>10</span>/<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/MathFun'>sqrt</a></span>(<span class='no'>x</span>$<span class='no'>n.fix</span>)),
   <span class='kw'>POS</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"B-value"</span>, <span class='st'>"Spending"</span>, <span class='st'>"CP"</span>,
   <span class='st'>"CP H1"</span>, <span class='st'>"PP"</span>), <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>, <span class='no'>...</span>)
 
@@ -307,7 +307,7 @@ represents statistical information rather than sample size or event counts.</p><
     <tr>
       <th>timeunit</th>
       <td><p>Text string with time units used for time-to-event designs
-created with <code><a href='nSurv.html'>gsSurv()</a></code></p></td>
+created with <code>gsSurv()</code></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -326,7 +326,7 @@ calling <code>plot</code> for <code>gsBValue</code>, <code>gsDelta</code>, <code
       <th>deltaname</th>
       <td><p>Natural parameter name. If default <code>NULL</code> is used,
 routine will default to <code>"HR"</code> when class is <code>gsSurv</code> or if
-<code>nFixSurv</code> was input when creating <code>x</code> with <code><a href='gsDesign.html'>gsDesign()</a></code>.</p></td>
+<code>nFixSurv</code> was input when creating <code>x</code> with <code>gsDesign()</code>.</p></td>
     </tr>
     <tr>
       <th>logdelta</th>
@@ -335,7 +335,7 @@ of the actual parameter. For example, the relative risk or odds-ratio would
 be put on the logarithmic scale since the asymptotic behavior is 'more
 normal' than a non-transformed value. As with <code>deltaname</code>, the default
 will be changed to true if <code>x</code> has class <code>gsDesign</code> or if
-<code>nFixSurv&gt;0</code> was input when <code>x</code> was created by <code><a href='gsDesign.html'>gsDesign()</a></code>;
+<code>nFixSurv&gt;0</code> was input when <code>x</code> was created by <code>gsDesign()</code>;
 that is, the natural parameter for a time-to-event endpoint will be on the
 logarithmic scale.</p></td>
     </tr>
@@ -367,7 +367,7 @@ estimated timing of each analysis.</p></td>
     <tr>
       <th>prior</th>
       <td><p>A prior distribution for the standardized effect size. Must be
-of the format produced by <code><a href='normalGrid.html'>normalGrid()</a></code>, but can reflect an arbitrary
+of the format produced by <code>normalGrid()</code>, but can reflect an arbitrary
 prior distribution. The default reflects a normal prior centered half-way
 between the null and alternate hypothesis with the variance being equivalent
 to the treatment effect estimate if 1 percent of the sample size for a fixed
@@ -402,7 +402,7 @@ values. A value of <code>NULL</code> produces all available summaries.</p></td>
     </tr>
     <tr>
       <th>r</th>
-      <td><p>See <code><a href='gsDesign.html'>gsDesign</a></code>. This is an integer used to control the
+      <td><p>See <code>gsDesign</code>. This is an integer used to control the
 degree of accuracy of group sequential calculations which will normally not
 be changed.</p></td>
     </tr>
@@ -480,15 +480,15 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='gsDesign.html'>gsDesign</a>, <a href='plot.gsDesign.html'>plot.gsDesign</a>,
-<code><a href='gsProbability.html'>gsProbability</a></code>, <code><a href='nSurv.html'>xtable.gsSurv</a></code></p></div>
+    <div class='dont-index'><p>gsDesign, plot.gsDesign,
+<code>gsProbability</code>, <code>xtable.gsSurv</code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># survival endpoint using gsSurv</span>
 <span class='co'># generally preferred over nSurv since time computations are shown</span>
-<span class='no'>xgs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='nSurv.html'>gsSurv</a></span>(<span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>T</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='fl'>1.5</span>)
+<span class='no'>xgs</span> <span class='kw'>&lt;-</span> <span class='fu'>gsSurv</span>(<span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>T</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='fl'>1.5</span>)
 <span class='fu'>gsBoundSummary</span>(<span class='no'>xgs</span>, <span class='kw'>timename</span> <span class='kw'>=</span> <span class='st'>"Year"</span>, <span class='kw'>tdigits</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt;    Analysis              Value Efficacy Futility
 #&gt;   IA 1: 33%                  Z   3.0107  -0.2388
 #&gt;      N: 460        p (1-sided)   0.0013   0.5944
@@ -507,11 +507,11 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;             P(Cross) if HR=0.5   0.9000   0.1000</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xgs</span>)</div><div class='output co'>#&gt; [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 460 and 97 events required, 90 percent power, 2.5 percent (1-sided) Type I error to detect a hazard ratio of 0.5. Enrollment and total study durations are assumed to be 0.5 and 2 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</div><div class='input'>
 <span class='co'># survival endpoint using nSurvival</span>
 <span class='co'># NOTE: generally recommend gsSurv above for this!</span>
-<span class='no'>ss</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='nSurvival.html'>nSurvival</a></span>(
+<span class='no'>ss</span> <span class='kw'>&lt;-</span> <span class='fu'>nSurvival</span>(
   <span class='kw'>lambda1</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>lambda2</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>Ts</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>Tr</span> <span class='kw'>=</span> <span class='fl'>.5</span>,
   <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.025</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>
 )
-<span class='no'>xs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>nFixSurv</span> <span class='kw'>=</span> <span class='no'>ss</span>$<span class='no'>n</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>ss</span>$<span class='no'>nEvents</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>ss</span>$<span class='no'>lambda2</span> / <span class='no'>ss</span>$<span class='no'>lambda1</span>))
+<span class='no'>xs</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>nFixSurv</span> <span class='kw'>=</span> <span class='no'>ss</span>$<span class='no'>n</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>ss</span>$<span class='no'>nEvents</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='no'>ss</span>$<span class='no'>lambda2</span> / <span class='no'>ss</span>$<span class='no'>lambda1</span>))
 <span class='fu'>gsBoundSummary</span>(<span class='no'>xs</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='no'>ss</span>$<span class='no'>ratio</span>)</div><div class='output co'>#&gt;   Analysis              Value Efficacy Futility
 #&gt;  IA 1: 33%                  Z   3.0107  -0.2387
 #&gt;      N: 34        p (1-sided)   0.0013   0.5943
@@ -535,7 +535,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='fu'>gsCPz</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>z</span>[<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xs</span>)</div><div class='output co'>#&gt; [1] 0.9999676 0.9737643</div><div class='input'><span class='co'># conditional power at H1 treatment effect</span>
 <span class='fu'>gsCPz</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>z</span>[<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xs</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>xs</span>$<span class='no'>delta</span>)</div><div class='output co'>#&gt; [1] 0.9937804 0.9809768</div><div class='input'>
 <span class='co'># information-based design</span>
-<span class='no'>xinfo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>.3</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>.3</span>)
+<span class='no'>xinfo</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>.3</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>.3</span>)
 <span class='fu'>gsBoundSummary</span>(<span class='no'>xinfo</span>, <span class='kw'>Nname</span> <span class='kw'>=</span> <span class='st'>"Information"</span>)</div><div class='output co'>#&gt;             Analysis                 Value Efficacy Futility
 #&gt;            IA 1: 33%                     Z   3.0107  -0.2387
 #&gt;   Information: 41.64           p (1-sided)   0.0013   0.5943
@@ -582,7 +582,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;                        P(Cross) if delta=0   0.0233   0.9767
 #&gt;                      P(Cross) if delta=0.3   0.9000   0.1000</div><div class='input'>
 <span class='co'># add intermediate parameter value</span>
-<span class='no'>xinfo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsProbability.html'>gsProbability</a></span>(<span class='kw'>d</span> <span class='kw'>=</span> <span class='no'>xinfo</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>.15</span>, <span class='fl'>.3</span>))
+<span class='no'>xinfo</span> <span class='kw'>&lt;-</span> <span class='fu'>gsProbability</span>(<span class='kw'>d</span> <span class='kw'>=</span> <span class='no'>xinfo</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>.15</span>, <span class='fl'>.3</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>xinfo</span>) <span class='co'># note this is still as gsDesign class object</span></div><div class='output co'>#&gt; [1] "gsDesign"</div><div class='input'><span class='fu'>gsBoundSummary</span>(<span class='no'>xinfo</span>, <span class='kw'>Nname</span> <span class='kw'>=</span> <span class='st'>"Information"</span>)</div><div class='output co'>#&gt;             Analysis                  Value Efficacy Futility
 #&gt;            IA 1: 33%                      Z   3.0107  -0.2387
 #&gt;   Information: 41.64            p (1-sided)   0.0013   0.5943
@@ -605,8 +605,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># now look at a binomial endpoint; specify H0 treatment difference as p1-p2=.05</span>
 <span class='co'># now treatment effect at bound (say, thetahat) is transformed to</span>
 <span class='co'># xp$delta0 + xp$delta1*(thetahat-xp$delta0)/xp$delta</span>
-<span class='no'>np</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>.15</span>, <span class='kw'>p2</span> <span class='kw'>=</span> <span class='fl'>.10</span>)
-<span class='no'>xp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>np</span>, <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"Binomial"</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>.05</span>)
+<span class='no'>np</span> <span class='kw'>&lt;-</span> <span class='fu'>nBinomial</span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>.15</span>, <span class='kw'>p2</span> <span class='kw'>=</span> <span class='fl'>.10</span>)
+<span class='no'>xp</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>np</span>, <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"Binomial"</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>.05</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>xp</span>)</div><div class='output co'>#&gt; [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, sample size 1963, 90 percent power, 2.5 percent (1-sided) Type I error. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</div><div class='input'><span class='fu'>gsBoundSummary</span>(<span class='no'>xp</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"p[C]-p[E]"</span>)</div><div class='output co'>#&gt;   Analysis                      Value Efficacy Futility
 #&gt;  IA 1: 33%                          Z   3.0107  -0.2387
 #&gt;     N: 655                p (1-sided)   0.0013   0.5943
@@ -628,8 +628,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># in this case, this is the difference in event rates</span>
 <span class='fu'>gsDelta</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>xp</span>$<span class='no'>lower</span>$<span class='no'>bound</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='no'>xp</span>)</div><div class='output co'>#&gt; [1] -0.006166098  0.017187789  0.029813687</div><div class='input'>
 <span class='co'># binomial endpoint with risk ratio estimates</span>
-<span class='no'>n.fix</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>.3</span>, <span class='kw'>p2</span> <span class='kw'>=</span> <span class='fl'>.15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"RR"</span>)
-<span class='no'>xrr</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>n.fix</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='fl'>.15</span> / <span class='fl'>.3</span>), <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"Binomial"</span>)
+<span class='no'>n.fix</span> <span class='kw'>&lt;-</span> <span class='fu'>nBinomial</span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>.3</span>, <span class='kw'>p2</span> <span class='kw'>=</span> <span class='fl'>.15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"RR"</span>)
+<span class='no'>xrr</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>n.fix</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='fl'>.15</span> / <span class='fl'>.3</span>), <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"Binomial"</span>)
 <span class='fu'>gsBoundSummary</span>(<span class='no'>xrr</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"RR"</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   Analysis              Value Efficacy Futility
 #&gt;  IA 1: 50%                  Z   2.7500   0.4122
 #&gt;     N: 168        p (1-sided)   0.0030   0.3401
@@ -642,8 +642,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;              P(Cross) if RR=1   0.0239   0.9761
 #&gt;            P(Cross) if RR=0.5   0.9000   0.1000</div><div class='input'><span class='fu'>gsRR</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>xp</span>$<span class='no'>lower</span>$<span class='no'>bound</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='no'>xrr</span>)</div><div class='output co'>#&gt; [1] 1.0732500 0.8211496        NA</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>xrr</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='st'>"RR"</span>)</div><div class='img'><img src='gsBoundSummary-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># delta is odds-ratio: sample size slightly smaller than for relative risk or risk difference</span>
-<span class='no'>n.fix</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>.3</span>, <span class='kw'>p2</span> <span class='kw'>=</span> <span class='fl'>.15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"OR"</span>)
-<span class='no'>xOR</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>n.fix</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='fl'>.15</span> / <span class='fl'>.3</span> / <span class='fl'>.85</span> * <span class='fl'>.7</span>), <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"Binomial"</span>)
+<span class='no'>n.fix</span> <span class='kw'>&lt;-</span> <span class='fu'>nBinomial</span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>.3</span>, <span class='kw'>p2</span> <span class='kw'>=</span> <span class='fl'>.15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"OR"</span>)
+<span class='no'>xOR</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>n.fix</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='fl'>.15</span> / <span class='fl'>.3</span> / <span class='fl'>.85</span> * <span class='fl'>.7</span>), <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"Binomial"</span>)
 <span class='fu'>gsBoundSummary</span>(<span class='no'>xOR</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"OR"</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   Analysis               Value Efficacy Futility
 #&gt;  IA 1: 50%                   Z   2.7500   0.4122
 #&gt;     N: 166         p (1-sided)   0.0030   0.3401
@@ -656,8 +656,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;               P(Cross) if OR=1   0.0239   0.9761
 #&gt;            P(Cross) if OR=0.41   0.9000   0.1000</div><div class='input'>
 <span class='co'># for nice LaTeX table output, use xprint</span>
-<span class='fu'>xprint</span>(<span class='fu'><a href='xtable.html'>xtable</a></span>(<span class='fu'>gsBoundSummary</span>(<span class='no'>xOR</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"OR"</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"Table caption."</span>))</div><div class='output co'>#&gt; % latex table generated in R 3.5.2 by xtable 1.8-3 package
-#&gt; % Wed Apr  3 12:18:51 2019
+<span class='fu'>xprint</span>(<span class='fu'>xtable</span>(<span class='fu'>gsBoundSummary</span>(<span class='no'>xOR</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"OR"</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"Table caption."</span>))</div><div class='output co'>#&gt; % latex table generated in R 3.5.3 by xtable 1.8-3 package
+#&gt; % Wed Apr  3 12:25:12 2019
 #&gt; \begin{table}[ht]
 #&gt; \centering
 #&gt; \begin{tabular}{llrr}

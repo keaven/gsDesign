@@ -139,7 +139,7 @@ does not exist." />
     <p><code>gsBound()</code> and <code>gsBound1()</code> are lower-level functions used to
 find boundaries for a group sequential design. They are not recommended
 (especially <code>gsBound1()</code>) for casual users. These functions do not
-adjust sample size as <code><a href='gsDesign.html'>gsDesign()</a></code> does to ensure appropriate power for
+adjust sample size as <code>gsDesign()</code> does to ensure appropriate power for
 a design.</p>
 <p><code>gsBound()</code> computes upper and lower bounds given boundary crossing
 probabilities assuming a mean of 0, the usual null hypothesis.
@@ -248,8 +248,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='gsDesign-package-overview.html'>gsDesign package overview</a>, <code><a href='gsDesign.html'>gsDesign</a></code>,
-<code><a href='gsProbability.html'>gsProbability</a></code></p></div>
+    <div class='dont-index'><p>gsDesign package overview, <code>gsDesign</code>,
+<code>gsProbability</code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -300,7 +300,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 )
 <span class='no'>x</span>$<span class='no'>b</span></div><div class='output co'>#&gt; [1] 3.090232 2.344824 2.039501</div><div class='input'>
 <span class='co'># check boundary crossing probabilities with gsProbability</span>
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsProbability.html'>gsProbability</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>I</span>, <span class='kw'>a</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>a</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>b</span>)$<span class='no'>upper</span>$<span class='no'>prob</span>
+<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'>gsProbability</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>I</span>, <span class='kw'>a</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>a</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>b</span>)$<span class='no'>upper</span>$<span class='no'>prob</span>
 
 <span class='co'>#  Note that gsBound1 only computes upper bound</span>
 <span class='co'>#  To get a lower bound under a parameter value theta:</span>
@@ -319,7 +319,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'>#  specified for theta=2.2, but for theta=0 the upper boundary</span>
 <span class='co'>#  crossing probabilities are smaller than originally specified</span>
 <span class='co'>#  above after first interim analysis</span>
-<span class='fu'><a href='gsProbability.html'>gsProbability</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>x</span>$<span class='no'>b</span>), <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2.2</span>), <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>I</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>b</span>, <span class='kw'>a</span> <span class='kw'>=</span> -<span class='no'>y</span>$<span class='no'>b</span>)</div><div class='output co'>#&gt;                Lower bounds   Upper bounds
+<span class='fu'>gsProbability</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>x</span>$<span class='no'>b</span>), <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2.2</span>), <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>I</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>b</span>, <span class='kw'>a</span> <span class='kw'>=</span> -<span class='no'>y</span>$<span class='no'>b</span>)</div><div class='output co'>#&gt;                Lower bounds   Upper bounds
 #&gt;   Analysis N    Z   Nominal p  Z   Nominal p
 #&gt;          1  1 -0.37    0.3539 3.09    0.0010
 #&gt;          2  1  0.36    0.6404 2.34    0.0095

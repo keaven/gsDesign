@@ -148,7 +148,7 @@ for a design.</p>
     <tr>
       <th>alpha</th>
       <td><p>Real value \(&gt; 0\) and no more than 1. Defaults in calls to
-<code><a href='gsDesign.html'>gsDesign()</a></code> are <code>alpha=0.025</code> for one-sided Type I error
+<code>gsDesign()</code> are <code>alpha=0.025</code> for one-sided Type I error
 specification and <code>alpha=0.1</code> for Type II error specification.
 However, this could be set to 1 if, for descriptive purposes, you wish to
 see the proportion of spending as a function of the proportion of sample
@@ -186,12 +186,12 @@ function.</p></dd> <dt>parname</dt><dd><p>a character string or strings with the
 the parameter(s) in <code>param</code>.</p></dd> <dt>sf</dt><dd><p>the spending function
 specified.</p></dd> <dt>spend</dt><dd><p>a vector of cumulative spending values
 corresponding to the input values in <code>t</code>.</p></dd> <dt>bound</dt><dd><p>this is null
-when returned from the spending function, but is set in <code><a href='gsDesign.html'>gsDesign()</a></code> if
+when returned from the spending function, but is set in <code>gsDesign()</code> if
 the spending function is called from there.  Contains z-values for bounds of
 a design.</p></dd> <dt>prob</dt><dd><p>this is null when returned from the spending
-function, but is set in <code><a href='gsDesign.html'>gsDesign()</a></code> if the spending function is called
+function, but is set in <code>gsDesign()</code> if the spending function is called
 from there.  Contains probabilities of boundary crossing at <code>i</code>-th
-analysis for <code>j</code>-th theta value input to <code><a href='gsDesign.html'>gsDesign()</a></code> in
+analysis for <code>j</code>-th theta value input to <code>gsDesign()</code> in
 <code>prob[i,j]</code>.</p></dd>
 
     
@@ -201,7 +201,7 @@ analysis for <code>j</code>-th theta value input to <code><a href='gsDesign.html
 textual summary of a spending function or boundary used for a design.</p>
 <p>Spending functions have three arguments as noted above and return an object
 of type <code>spendfn</code>. Normally a spending function will be passed to
-<code><a href='gsDesign.html'>gsDesign()</a></code> in the parameter <code>sfu</code> for the upper bound and
+<code>gsDesign()</code> in the parameter <code>sfu</code> for the upper bound and
 <code>sfl</code> for the lower bound to specify a spending function family for a
 design. In this case, the user does not need to know the calling sequence -
 only how to specify the parameter(s) for the spending function. The calling
@@ -222,9 +222,9 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='gsDesign.html'>gsDesign</a></code>, <code><a href='sfHSD.html'>sfHSD</a></code>, <code><a href='sfPower.html'>sfPower</a></code>,
-<code><a href='sfDistribution.html'>sfLogistic</a></code>, <code><a href='sfExponential.html'>sfExponential</a></code>,
-<code><a href='sfSpecial.html'>sfTruncated</a></code>, Wang-Tsiatis Bounds, <a href='gsDesign-package-overview.html'>gsDesign package overview</a></p></div>
+    <div class='dont-index'><p><code>gsDesign</code>, <code>sfHSD</code>, <code>sfPower</code>,
+<code>sfLogistic</code>, <code>sfExponential</code>,
+<code>sfTruncated</code>, Wang-Tsiatis Bounds, gsDesign package overview</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -233,7 +233,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 
 <span class='co'># design a 4-analysis trial using a Hwang-Shih-DeCani spending function </span>
 <span class='co'># for both lower and upper bounds </span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span><span class='kw'>=</span><span class='fl'>4</span>, <span class='kw'>sfu</span><span class='kw'>=</span><span class='no'>sfHSD</span>, <span class='kw'>sfupar</span><span class='kw'>=</span>-<span class='fl'>2</span>, <span class='kw'>sfl</span><span class='kw'>=</span><span class='no'>sfHSD</span>, <span class='kw'>sflpar</span><span class='kw'>=</span><span class='fl'>1</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>k</span><span class='kw'>=</span><span class='fl'>4</span>, <span class='kw'>sfu</span><span class='kw'>=</span><span class='no'>sfHSD</span>, <span class='kw'>sfupar</span><span class='kw'>=</span>-<span class='fl'>2</span>, <span class='kw'>sfl</span><span class='kw'>=</span><span class='no'>sfHSD</span>, <span class='kw'>sflpar</span><span class='kw'>=</span><span class='fl'>1</span>)
 
 <span class='co'># print the design</span>
 <span class='no'>x</span></div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
@@ -273,8 +273,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># plot the alpha- and beta-spending functions</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span><span class='kw'>=</span><span class='fl'>5</span>)</div><div class='img'><img src='Spending_Function_Overview-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># what happens to summary if we used a boundary function design</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>test.type</span><span class='kw'>=</span><span class='fl'>2</span>,<span class='kw'>sfu</span><span class='kw'>=</span><span class='st'>"OF"</span>)
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>test.type</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>sfu</span><span class='kw'>=</span><span class='st'>"WT"</span>,<span class='kw'>sfupar</span><span class='kw'>=</span><span class='fl'>.25</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>test.type</span><span class='kw'>=</span><span class='fl'>2</span>,<span class='kw'>sfu</span><span class='kw'>=</span><span class='st'>"OF"</span>)
+<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>test.type</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>sfu</span><span class='kw'>=</span><span class='st'>"WT"</span>,<span class='kw'>sfupar</span><span class='kw'>=</span><span class='fl'>.25</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>x</span>$<span class='no'>upper</span>)</div><div class='output co'>#&gt; [1] "O'Brien-Fleming boundary"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>y</span>$<span class='no'>upper</span>)</div><div class='output co'>#&gt; [1] "Wang-Tsiatis boundary with Delta = 0.25"</div><div class='input'>
 <span class='co'># Example 2: advanced example: writing a new spending function  </span>
 <span class='co'># Most users may ignore this!</span>
@@ -285,7 +285,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='no'>sfbdist</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>alpha</span>,  <span class='no'>t</span>,  <span class='no'>param</span>)
 {
    <span class='co'># check inputs</span>
-   <span class='fu'><a href='checkScalar.html'>checkVector</a></span>(<span class='no'>param</span>, <span class='st'>"numeric"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>Inf</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>FALSE</span>, <span class='fl'>TRUE</span>))
+   <span class='fu'>checkVector</span>(<span class='no'>param</span>, <span class='st'>"numeric"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>Inf</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>FALSE</span>, <span class='fl'>TRUE</span>))
    <span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>param</span>) <span class='kw'>!=</span><span class='fl'>2</span>) <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stop'>stop</a></span>(
    <span class='st'>"b-dist example spending function parameter must be of length 2"</span>)
 

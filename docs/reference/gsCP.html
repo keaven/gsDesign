@@ -168,9 +168,9 @@ however." />
 planned analyses for a given group sequential design assuming an interim
 z-statistic at a specified interim analysis. While <code>gsCP()</code> is designed
 toward computing conditional power for a variety of underlying parameter
-values, <code><a href='ssrCP.html'>condPower</a></code> is built to compute conditional power for a
+values, <code>condPower</code> is built to compute conditional power for a
 variety of interim test statistic values which is useful for sample size
-adaptation (see <code><a href='ssrCP.html'>ssrCP</a></code>). <code>gsPP()</code> averages conditional
+adaptation (see <code>ssrCP</code>). <code>gsPP()</code> averages conditional
 power across a posterior distribution to compute predictive power.
 <code>gsPI()</code> computes Bayesian prediction intervals for future analyses
 corresponding to results produced by <code>gsPP()</code>.  <code>gsPosterior()</code>
@@ -193,13 +193,13 @@ through the arguments <code>theta</code> and <code>wgts</code>. This can be a di
 or a continuous probability density function. For a discrete function,
 generally all weights would be 1. For a continuous density, the <code>wgts</code>
 would contain integration grid weights, such as those provided by
-<a href='normalGrid.html'>normalGrid</a>.</p>
+normalGrid.</p>
 <p>For <code>gsPosterior</code>, a prior distribution in <code>prior</code> must be
 composed of the vectors <code>z</code> <code>density</code>.  The vector <code>z</code>
 contains points where the prior is evaluated and <code>density</code> the
 corresponding density or, for a discrete distribution, the probabilities of
 each point in <code>z</code>. Densities may be supplied as from
-<code><a href='normalGrid.html'>normalGrid()</a></code> where grid weights for numerical integration are
+<code>normalGrid()</code> where grid weights for numerical integration are
 supplied in <code>gridwgts</code>. If <code>gridwgts</code> are not supplied, they are
 defaulted to 1 (equal weighting). To ensure a proper prior distribution, you
 must have <code><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum(gridwgts * density)</a></code> equal to 1; this is NOT checked,
@@ -215,7 +215,7 @@ however.</p>
 <span class='fu'>gsPI</span>(<span class='no'>x</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>j</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>),
   <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>0.5</span>))
 
-<span class='fu'>gsPosterior</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(), <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span>(),
+<span class='fu'>gsPosterior</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'>gsDesign</span>(), <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='fu'>normalGrid</span>(),
   <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>)
 
 <span class='fu'>gsPOS</span>(<span class='no'>x</span>, <span class='no'>theta</span>, <span class='no'>wgts</span>)
@@ -281,7 +281,7 @@ provides a point estimate rather than an interval.</p></td>
     <tr>
       <th>prior</th>
       <td><p>provides a prior distribution in the form produced by
-<code><a href='normalGrid.html'>normalGrid</a></code></p></td>
+<code>normalGrid</code></p></td>
     </tr>
     </table>
     
@@ -333,15 +333,15 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='normalGrid.html'>normalGrid</a></code>, <code><a href='gsDesign.html'>gsDesign</a></code>,
-<code><a href='gsProbability.html'>gsProbability</a></code>, <code><a href='gsBoundCP.html'>gsBoundCP</a></code>, <code><a href='ssrCP.html'>ssrCP</a></code>,
-<code><a href='ssrCP.html'>condPower</a></code></p></div>
+    <div class='dont-index'><p><code>normalGrid</code>, <code>gsDesign</code>,
+<code>gsProbability</code>, <code>gsBoundCP</code>, <code>ssrCP</code>,
+<code>condPower</code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># set up a group sequential design</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>5</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>5</span>)
 <span class='no'>x</span></div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Upper bound spending computations assume
@@ -380,7 +380,7 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 <span class='co'># that is normal with mean .75*x$delta and standard deviation x$delta/2</span>
 <span class='no'>mu0</span> <span class='kw'>&lt;-</span> <span class='fl'>.75</span> * <span class='no'>x</span>$<span class='no'>delta</span>
 <span class='no'>sigma0</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>delta</span> / <span class='fl'>2</span>
-<span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>mu0</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>sigma0</span>)
+<span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'>normalGrid</span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>mu0</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>sigma0</span>)
 
 <span class='co'># compute POS for the design given the above prior distribution for theta</span>
 <span class='fu'>gsPOS</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>z</span>, <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>wgts</span>)</div><div class='output co'>#&gt; [1] 0.5954771</div><div class='input'>
@@ -425,7 +425,7 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 <span class='co'># gsCPOS to compute conditional POS based on this</span>
 <span class='fu'>gsCPOS</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>z</span>, <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>wgts</span>)</div><div class='output co'>#&gt; [1] 0.6114033</div><div class='input'>
 <span class='co'># 2-stage example to compare results to direct computation</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 <span class='no'>z1</span> <span class='kw'>&lt;-</span> <span class='fl'>0.5</span>
 <span class='no'>n1</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>]
 <span class='no'>n2</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>2</span>] - <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>]
@@ -440,7 +440,7 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 <span class='co'># use same prior as above</span>
 <span class='no'>mu0</span> <span class='kw'>&lt;-</span> <span class='fl'>.75</span> * <span class='no'>x</span>$<span class='no'>delta</span> * <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/MathFun'>sqrt</a></span>(<span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>2</span>])
 <span class='no'>sigma2</span> <span class='kw'>&lt;-</span> (<span class='fl'>.5</span> * <span class='no'>x</span>$<span class='no'>delta</span>)^<span class='fl'>2</span> * <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>2</span>]
-<span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='fl'>.75</span> * <span class='no'>x</span>$<span class='no'>delta</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>delta</span> / <span class='fl'>2</span>)
+<span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'>normalGrid</span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='fl'>.75</span> * <span class='no'>x</span>$<span class='no'>delta</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>delta</span> / <span class='fl'>2</span>)
 <span class='fu'>gsPP</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='no'>z1</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>z</span>, <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>wgts</span>)</div><div class='output co'>#&gt; [1] 0.1556447</div><div class='input'><span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fl'>.5</span>
 <span class='no'>z1</span> <span class='kw'>&lt;-</span> <span class='fl'>.5</span>
 <span class='no'>b</span> <span class='kw'>&lt;-</span> <span class='no'>z1</span> * <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/MathFun'>sqrt</a></span>(<span class='no'>t</span>)

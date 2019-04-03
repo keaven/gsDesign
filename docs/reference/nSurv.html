@@ -152,7 +152,7 @@ with treatment groups referred to as experimental and control. A stratified
 population is allowed as in Lachin and Foulkes (1986); this method has been
 extended to derive non-inferiority as well as superiority trials.
 Stratification also allows power calculation for meta-analyses.
-<code>gsSurv()</code> combines <code>nSurv()</code> with <code><a href='gsDesign.html'>gsDesign()</a></code> to derive a
+<code>gsSurv()</code> combines <code>nSurv()</code> with <code>gsDesign()</code> to derive a
 group sequential design for a study with a time-to-event endpoint.</p>
     
     </div>
@@ -180,7 +180,7 @@ group sequential design for a study with a time-to-event endpoint.</p>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for gsSurv</span>
-<span class='fu'><a href='xtable.html'>xtable</a></span>(<span class='no'>x</span>, <span class='kw'>caption</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+<span class='fu'>xtable</span>(<span class='no'>x</span>, <span class='kw'>caption</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>align</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>display</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>auto</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>footnote</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fnwid</span> <span class='kw'>=</span> <span class='st'>"9cm"</span>, <span class='kw'>timename</span> <span class='kw'>=</span> <span class='st'>"months"</span>, <span class='no'>...</span>)</pre>
     
@@ -199,7 +199,7 @@ for an object of class <code>gsSurv</code> which will generally be output from
     <tr>
       <th>digits</th>
       <td><p>Number of digits past the decimal place to print
-(<code>print.gsSurv.</code>); also a pass through to generic <code><a href='xtable.html'>xtable()</a></code> from
+(<code>print.gsSurv.</code>); also a pass through to generic <code>xtable()</code> from
 <code>xtable.gsSurv()</code>.</p></td>
     </tr>
     <tr>
@@ -348,7 +348,7 @@ O'Brien-Fleming bounds and &#8220;Pocock&#8221; for Pocock bounds).  For
 one-sided and symmetric two-sided testing is used to completely specify
 spending (<code>test.type=1, 2</code>), <code>sfu</code>.  The default value is
 <code>sfHSD</code> which is a Hwang-Shih-DeCani spending function.  See details,
-<a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>, manual and examples.</p></td>
+Spending_Function_Overview, manual and examples.</p></td>
     </tr>
     <tr>
       <th>sfupar</th>
@@ -398,23 +398,23 @@ determined by <code>timing</code>. Otherwise, this should be a vector of length
     </tr>
     <tr>
       <th>caption</th>
-      <td><p>passed through to generic <code><a href='xtable.html'>xtable()</a></code>.</p></td>
+      <td><p>passed through to generic <code>xtable()</code>.</p></td>
     </tr>
     <tr>
       <th>label</th>
-      <td><p>passed through to generic <code><a href='xtable.html'>xtable()</a></code>.</p></td>
+      <td><p>passed through to generic <code>xtable()</code>.</p></td>
     </tr>
     <tr>
       <th>align</th>
-      <td><p>passed through to generic <code><a href='xtable.html'>xtable()</a></code>.</p></td>
+      <td><p>passed through to generic <code>xtable()</code>.</p></td>
     </tr>
     <tr>
       <th>display</th>
-      <td><p>passed through to generic <code><a href='xtable.html'>xtable()</a></code>.</p></td>
+      <td><p>passed through to generic <code>xtable()</code>.</p></td>
     </tr>
     <tr>
       <th>auto</th>
-      <td><p>passed through to generic <code><a href='xtable.html'>xtable()</a></code>.</p></td>
+      <td><p>passed through to generic <code>xtable()</code>.</p></td>
     </tr>
     <tr>
       <th>footnote</th>
@@ -467,7 +467,7 @@ follow-up duration, or "Power" if accrual rates and duration as well as
 follow-up duration was specified and <code>beta=NULL</code> was input.</p></dd>
 
 gsSurv() returns much of the above plus an object of class
-gsDesign in a variable named gs; see <a href='gsDesign.html'>gsDesign</a>
+gsDesign in a variable named gs; see gsDesign
 for general documentation on what is returned in gs.  The value of
 gs$n.I represents the number of endpoints required at each analysis
 to adequately power the trial. Other items returned by gsSurv() are:
@@ -517,14 +517,14 @@ tEventsIA() returns
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print()</a></code>, <code><a href='xtable.html'>xtable()</a></code> and <code><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary()</a></code> methods are provided to
+    <p><code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print()</a></code>, <code>xtable()</code> and <code><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary()</a></code> methods are provided to
 operate on the returned value from <code>gsSurv()</code>, an object of class
 <code>gsSurv</code>. <code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print()</a></code> is also extended to <code>nSurv</code> objects. The
-functions <code><a href='gsBoundSummary.html'>gsBoundSummary</a></code> (data frame for tabular output),
-<code><a href='gsBoundSummary.html'>xprint</a></code> (application of <code>xtable</code> for tabular output) and
+functions <code>gsBoundSummary</code> (data frame for tabular output),
+<code>xprint</code> (application of <code>xtable</code> for tabular output) and
 <code>summary.gsSurv</code> (textual summary of <code>gsDesign</code> or <code>gsSurv</code>
 object) may be preferred summary functions; see example in vignettes. See
-also <a href='gsBoundSummary.html'>gsBoundSummary</a> for output
+also gsBoundSummary for output
 of tabular summaries of bounds for designs produced by <code>gsSurv()</code>.</p>
 <p>Both <code>nEventsIA</code> and <code>tEventsIA</code> require a group sequential design
 for a time-to-event endpoing of class <code>gsSurv</code> as input.
@@ -539,7 +539,7 @@ based on Lachin and Foulkes (1986) method for proportional hazards assuming
 a fixed underlying hazard ratio between 2 treatment groups. The method has
 been extended here to enable designs to test non-inferiority. Piecewise
 constant enrollment and failure rates are assumed and a stratified
-population is allowed. See also <code><a href='nSurvival.html'>nSurvival</a></code> for other Lachin and
+population is allowed. See also <code>nSurvival</code> for other Lachin and
 Foulkes (1986) methods assuming a constant hazard difference or exponential
 enrollment rate.</p>
 <p>When study duration (<code>T</code>) and follow-up duration (<code>minfup</code>) are
@@ -561,7 +561,7 @@ over-powers the trial with no additional follow-up or underpowers the trial
 with infinite follow-up. This method produces a corresponding error message
 in such cases.</p>
 <p>The input to <code>gsSurv</code> is a combination of the input to <code>nSurv()</code>
-and <code><a href='gsDesign.html'>gsDesign()</a></code>.</p>
+and <code>gsDesign()</code>.</p>
 <p><code>nEventsIA()</code> is provided to compute the expected number of events at a
 given point in time given enrollment, event and censoring rates. The routine
 is used with a root finding routine to approximate the approximate timing of
@@ -582,9 +582,9 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='gsBoundSummary.html'>gsBoundSummary</a></code>, <code><a href='gsBoundSummary.html'>xprint</a></code>,
-<a href='gsDesign-package-overview.html'>gsDesign package overview</a>, <a href='plot.gsDesign.html'>plot.gsDesign</a>,
-<code><a href='gsDesign.html'>gsDesign</a></code>, <code><a href='gsBoundSummary.html'>gsHR</a></code>, <code><a href='nSurvival.html'>nSurvival</a></code></p>
+    <div class='dont-index'><p><code>gsBoundSummary</code>, <code>xprint</code>,
+gsDesign package overview, plot.gsDesign,
+<code>gsDesign</code>, <code>gsHR</code>, <code>nSurvival</code></p>
 <p><code><a href='https://www.rdocumentation.org/packages/stats/topics/uniroot'>uniroot</a></code></p>
 <p><code><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>Normal</a></code>
  <code><a href='https://www.rdocumentation.org/packages/xtable/topics/xtable'>xtable</a></code></p></div>
@@ -839,11 +839,11 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt; 0-Inf      0.12
 #&gt; Censoring rates:
 #&gt;       Stratum 1
-#&gt; 0-Inf      0.02</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='fu'><a href='xtable.html'>xtable</a></span>(<span class='no'>x</span>,
+#&gt; 0-Inf      0.02</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='fu'>xtable</span>(<span class='no'>x</span>,
   <span class='kw'>footnote</span> <span class='kw'>=</span> <span class='st'>"This is a footnote; note that it can be wide."</span>,
   <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"Caption example."</span>
-))</div><div class='output co'>#&gt; % latex table generated in R 3.5.2 by xtable 1.8-3 package
-#&gt; % Wed Apr  3 12:18:57 2019
+))</div><div class='output co'>#&gt; % latex table generated in R 3.5.3 by xtable 1.8-3 package
+#&gt; % Wed Apr  3 12:25:18 2019
 #&gt; \begin{table}[ht]
 #&gt; \centering
 #&gt; \begin{tabular}{rllll}

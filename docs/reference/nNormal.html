@@ -227,7 +227,7 @@ Iowa State University Press.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='gsDesign-package-overview.html'>gsDesign package overview</a></p></div>
+    <div class='dont-index'><p>gsDesign package overview</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -235,9 +235,9 @@ Iowa State University Press.</p>
 <span class='co'># EXAMPLES</span>
 <span class='co'># equal variances</span>
 <span class='no'>n</span><span class='kw'>=</span><span class='fu'>nNormal</span>(<span class='kw'>delta1</span><span class='kw'>=</span><span class='fl'>.5</span>,<span class='kw'>sd</span><span class='kw'>=</span><span class='fl'>1.1</span>,<span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>.025</span>,<span class='kw'>beta</span><span class='kw'>=</span><span class='fl'>.2</span>)
-<span class='no'>n</span></div><div class='output co'>#&gt; [1] 151.9543</div><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.75</span>),
+<span class='no'>n</span></div><div class='output co'>#&gt; [1] 151.9543</div><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.75</span>),
 <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLDOF</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>, <span class='kw'>sflpar</span> <span class='kw'>=</span> -<span class='fl'>1</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>'normal'</span>)
-<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;   Analysis                 Value Efficacy Futility
+<span class='fu'>gsBoundSummary</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;   Analysis                 Value Efficacy Futility
 #&gt;  IA 1: 50%                     Z   2.9626   0.6475
 #&gt;      N: 86           p (1-sided)   0.0015   0.2587
 #&gt;                  ~delta at bound   0.6109   0.1335

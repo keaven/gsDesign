@@ -142,11 +142,11 @@ effect at an interim." />
 spending function. The function <code>sfStep()</code> specifies a step function
 spending function. Both functions provide complete flexibility in setting
 spending at desired timepoints in a group sequential design. Normally these
-function will be passed to <code><a href='gsDesign.html'>gsDesign()</a></code> in the parameter <code>sfu</code> for
+function will be passed to <code>gsDesign()</code> in the parameter <code>sfu</code> for
 the upper bound or <code>sfl</code> for the lower bound to specify a spending
-function family for a design. When passed to <code><a href='gsDesign.html'>gsDesign()</a></code>, the value of
+function family for a design. When passed to <code>gsDesign()</code>, the value of
 <code>param</code> would be passed to <code>sfLinear()</code> or <code>sfStep()</code> through
-the <code><a href='gsDesign.html'>gsDesign()</a></code> arguments <code>sfupar</code> for the upper bound and
+the <code>gsDesign()</code> arguments <code>sfupar</code> for the upper bound and
 <code>sflpar</code> for the lower bound.</p>
 <p>Note that <code>sfStep()</code> allows setting a particular level of spending when
 the timing is not strictly known; an example shows how this can inflate Type
@@ -203,7 +203,7 @@ param[i+1]</code>, the cumulative spending is set at <code>alpha * param[i+m]</c
 performed after the last proportion of final planned information
 (<code>param[m]</code>) will be the final analysis, using any remaining error that
 was not previously spent.</p>
-<p>See <code><a href='Spending_Function_Overview.html'>Spending_Function_Overview</a></code> for further details.</p>
+<p>See <code>Spending_Function_Overview</code> for further details.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -218,8 +218,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>, <code><a href='gsDesign.html'>gsDesign</a></code>,
-<a href='gsDesign-package-overview.html'>gsDesign package overview</a></p></div>
+    <div class='dont-index'><p>Spending_Function_Overview, <code>gsDesign</code>,
+gsDesign package overview</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -227,7 +227,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># set up alpha spending and beta spending to be piecewise linear</span>
 <span class='no'>sfupar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.2</span>, <span class='fl'>.4</span>, <span class='fl'>.05</span>, <span class='fl'>.2</span>)
 <span class='no'>sflpar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.65</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>, <span class='fl'>.9</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLinear</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfLinear</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>sfupar</span>, <span class='kw'>sflpar</span> <span class='kw'>=</span> <span class='no'>sflpar</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLinear</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfLinear</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>sfupar</span>, <span class='kw'>sflpar</span> <span class='kw'>=</span> <span class='no'>sflpar</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='st'>"sf"</span>)</div><div class='img'><img src='sfLinear-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>x</span></div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Upper bound spending computations assume
@@ -264,7 +264,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># and no upper spending at interim 2</span>
 <span class='no'>sflpar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span> / <span class='fl'>3</span>, <span class='fl'>2</span> / <span class='fl'>3</span>, <span class='fl'>0</span>, <span class='fl'>.25</span>)
 <span class='no'>sfupar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span> / <span class='fl'>3</span>, <span class='fl'>2</span> / <span class='fl'>3</span>, <span class='fl'>.1</span>, <span class='fl'>.1</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLinear</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfLinear</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>sfupar</span>, <span class='kw'>sflpar</span> <span class='kw'>=</span> <span class='no'>sflpar</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLinear</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfLinear</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>sfupar</span>, <span class='kw'>sflpar</span> <span class='kw'>=</span> <span class='no'>sflpar</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='st'>"sf"</span>)</div><div class='img'><img src='sfLinear-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>x</span></div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Upper bound spending computations assume
@@ -300,19 +300,19 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># now do an example where timing of interims changes slightly, but error spending does not</span>
 <span class='co'># also, spend all alpha when at least &gt;=90 percent of final information is in the analysis</span>
 <span class='no'>sfupar</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.2</span>, <span class='fl'>.4</span>, <span class='fl'>.9</span>, ((<span class='fl'>1</span>:<span class='fl'>3</span>) / <span class='fl'>3</span>)^<span class='fl'>3</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfStep</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>sfupar</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfStep</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>sfupar</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>pl</span> <span class='kw'>=</span> <span class='st'>"sf"</span>)</div><div class='img'><img src='sfLinear-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># original planned sample sizes</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Round'>ceiling</a></span>(<span class='no'>x</span>$<span class='no'>n.I</span>)</div><div class='output co'>#&gt; [1]  34  68 102</div><div class='input'><span class='co'># cumulative spending planned at original interims</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cumsum'>cumsum</a></span>(<span class='no'>x</span>$<span class='no'>upper</span>$<span class='no'>spend</span>)</div><div class='output co'>#&gt; [1] 0.0009259259 0.0074074074 0.0250000000</div><div class='input'><span class='co'># change timing of analyses;</span>
 <span class='co'># note that cumulative spending "P(Cross) if delta=0" does not change from cumsum(x$upper$spend)</span>
 <span class='co'># while full alpha is spent, power is reduced by reduced sample size</span>
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(
+<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfStep</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>sfupar</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>maxn.IPlan</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='no'>x</span>$<span class='no'>k</span>], <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>30</span>, <span class='fl'>70</span>, <span class='fl'>95</span>),
   <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>n.fix</span>
 )
 <span class='co'># note that full alpha is used, but power is reduced due to lowered sample size</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span>(<span class='no'>y</span>)</div><div class='output co'>#&gt;   Analysis               Value Efficacy
+<span class='fu'>gsBoundSummary</span>(<span class='no'>y</span>)</div><div class='output co'>#&gt;   Analysis               Value Efficacy
 #&gt;  IA 1: 29%                   Z   3.1130
 #&gt;      N: 30         p (1-sided)   0.0009
 #&gt;                ~delta at bound   1.7534
@@ -329,7 +329,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;            P(Cross) if delta=0   0.0250
 #&gt;            P(Cross) if delta=1   0.8807</div><div class='input'>
 <span class='co'># now show how step function can be abused by 'adapting' stage 2 sample size based on interim result</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>.05</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfStep</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.02</span>, <span class='fl'>.001</span>), <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fl'>.02</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>.05</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfStep</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.02</span>, <span class='fl'>.001</span>), <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fl'>.02</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='co'># spending jumps from miniscule to full alpha at first analysis after interim 1</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>pl</span> <span class='kw'>=</span> <span class='st'>"sf"</span>)</div><div class='img'><img src='sfLinear-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># sample sizes at analyses:</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Round'>ceiling</a></span>(<span class='no'>x</span>$<span class='no'>n.I</span>)</div><div class='output co'>#&gt; [1]   85 4204</div><div class='input'><span class='co'># simulate 1 million stage 1 sum of 178 Normal(0,1) random variables</span>
