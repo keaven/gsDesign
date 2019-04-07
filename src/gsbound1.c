@@ -3,6 +3,7 @@
 #define MAXR 83
 #include "R.h"
 #include "Rmath.h"
+#include "gsDesign.h"
 /* Group sequential probability computation per Jennison & Turnbull
    Computes upper bound to have input crossing probabilities given fixed input lower bound.
    xnanal- # of possible analyses in the group-sequential designs

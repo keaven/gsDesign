@@ -2,3 +2,9 @@
 .Rhistory
 .RData
 .Ruserdata
+inst/doc
+*.o
+*.so
+*.dll
+TODO
+.DS_Store
