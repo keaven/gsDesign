@@ -128,7 +128,7 @@ NULL
 #' @author Keaven Anderson \email{keaven\_anderson@@merck.}
 #' @seealso \code{\link{gsDesign}}, \code{\link{sfHSD}}, \code{\link{sfPower}},
 #' \code{\link{sfLogistic}}, \code{\link{sfExponential}},
-#' \code{\link{sfTruncated}}, \link{Wang-Tsiatis Bounds}, \link{gsDesign package overview}
+#' \code{\link{sfTruncated}}, \link{gsDesign package overview}
 #' 
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
