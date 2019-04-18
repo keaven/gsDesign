@@ -1,4 +1,13 @@
-for 3.0-5, January, 2018
+3.1.0, April, 2019
+- Addition of pkgdown web site
+- Updated unit testing to from RUnit to testthat
+- Converted to ROxygen2 generation of help files
+- Converted vignettes to RMarkdown
+- Added Travis-CI support
+- Added sequentialPValue function 
+- Backwards compatible addition of spending time capabilities to gsDesign and gsSurv
+
+3.0-5, January, 2018
 - registered C routines
 - fix "gsbound"
 - replace "array" by "rep" calls to avoid R CMD check warnings
