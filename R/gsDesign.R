@@ -431,7 +431,6 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' @seealso \link{gsDesign package overview}, \link{gsBoundSummary}, 
 #' \link{plot.gsDesign},
 #' \code{\link{gsProbability}}, \link{Spending_Function_Overview},
-#' \link{Wang-Tsiatis Bounds}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 #' Lan KK, DeMets DL (1989). Group sequential procedures: calendar versus information 

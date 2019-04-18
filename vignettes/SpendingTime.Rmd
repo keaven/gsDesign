@@ -113,13 +113,13 @@ knitr::kable(gsBoundSummary(x),digits=4,row.names=FALSE,
 Following are plots of the Z-values and approximate hazard ratios at the design bounds.
 
 
-```{r p1 ,fig.width=6,fig.height=4}
+```{r,fig.width=6,fig.height=4}
 plot(x,cex=.8,xlab="Number of events")+
   theme(legend.position = "bottom")
 ```
 
 
-```{r p2 ,fig.width=6,fig.height=4}
+```{r,fig.width=6,fig.height=4}
 plot(x,plottype="hr",cex=.8,xlab="Number of events")+
   theme(legend.position = "bottom")
 ```
