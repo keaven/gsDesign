@@ -1,3 +1,4 @@
+[![Travis build status](https://travis-ci.org/keaven/gsDesign.svg?branch=master)](https://travis-ci.org/keaven/gsDesign)
 [![Covrpage Summary](https://img.shields.io/badge/covrpage-Last_Build_2019_01_17-brightgreen.svg)](http://tinyurl.com/y6uylrcw)
 
 # gsDesign 
