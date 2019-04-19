@@ -5,6 +5,7 @@ reference:
   - gsProbability
   - gsBound1
   - gsBound
+  - sequentialPValue
 - title: Design Characterization
   contents:
   - gsBoundSummary
