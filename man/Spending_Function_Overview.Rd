@@ -137,7 +137,7 @@ Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 \seealso{
 \code{\link{gsDesign}}, \code{\link{sfHSD}}, \code{\link{sfPower}},
 \code{\link{sfLogistic}}, \code{\link{sfExponential}},
-\code{\link{sfTruncated}}, \link{Wang-Tsiatis Bounds}, \link{gsDesign package overview}
+\code{\link{sfTruncated}}, \link{gsDesign package overview}
 }
 \author{
 Keaven Anderson \email{keaven\_anderson@merck.}

@@ -279,7 +279,6 @@ group sequential trials with random information levels. \emph{Journal of biophar
 \link{gsDesign package overview}, \link{gsBoundSummary}, 
 \link{plot.gsDesign},
 \code{\link{gsProbability}}, \link{Spending_Function_Overview},
-\link{Wang-Tsiatis Bounds}
 }
 \author{
 Keaven Anderson \email{keaven\_anderson@merck.}
