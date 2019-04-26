@@ -5,5 +5,5 @@ articles:
   SpendingTime: SpendingTime.html
   gsSurvTemplate: gsSurvTemplate.html
   gsSurvTemplateInstructions: gsSurvTemplateInstructions.html
-  test: test.html
+  tests_and_coverage: tests_and_coverage.html
 
