@@ -4,7 +4,7 @@
 #' It is the minimum of repeated p-values computed at each analysis (Jennison and Turnbull, 2000).
 #' This is particularly useful for multiplicity methods such as the graphical method for group sequential designs 
 #' where sequential p-values for multiple hypotheses can be used as nominal p-values to plug into a multiplicity graph. 
-#' A sequential p-value is described as the maximum alpha level at which a one-sided group sequential bound would 
+#' A sequential p-value is described as the minimum alpha level at which a one-sided group sequential bound would 
 #' be rejected given interim and final observed results.
 #' It is meaningful for both one-sided designs and designs with non-binding futility bounds (\code{test.type} 1, 4, 6), 
 #' but not for 2-sided designs with binding futility bounds (\code{test.type} 2, 3 or 5).
