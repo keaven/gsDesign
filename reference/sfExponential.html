@@ -8,21 +8,25 @@
 
 <title>Exponential Spending Function — sfExponential • gsDesign</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,8 +34,8 @@
 
 
 
-<meta property="og:title" content="Exponential Spending Function — sfExponential" />
 
+<meta property="og:title" content="Exponential Spending Function — sfExponential" />
 <meta property="og:description" content="The function sfExponential implements the exponential spending
 function (Anderson and Clark, 2009). Normally sfExponential will be
 passed to gsDesign in the parameter sfu for the upper bound or
@@ -57,6 +61,7 @@ spending function (sfLDOF()), $$f(t; \alpha)=2-2\Phi \left(
 
 
 
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -65,6 +70,7 @@ spending function (sfLDOF()), $$f(t; \alpha)=2-2\Phi \left(
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -91,7 +97,7 @@ spending function (sfLDOF()), $$f(t; \alpha)=2-2\Phi \left(
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -123,7 +129,6 @@ spending function (sfLDOF()), $$f(t; \alpha)=2-2\Phi \left(
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -133,6 +138,7 @@ spending function (sfLDOF()), $$f(t; \alpha)=2-2\Phi \left(
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -144,7 +150,6 @@ spending function (sfLDOF()), $$f(t; \alpha)=2-2\Phi \left(
     </div>
 
     <div class="ref-description">
-    
     <p>The function <code>sfExponential</code> implements the exponential spending
 function (Anderson and Clark, 2009). Normally <code>sfExponential</code> will be
 passed to <code>gsDesign</code> in the parameter <code>sfu</code> for the upper bound or
@@ -166,11 +171,10 @@ distribution function. This function was derived as a generalization of the
 Lan-DeMets (1983) spending function used to approximate an O'Brien-Fleming
 spending function (<code><a href='sfLDOF.html'>sfLDOF()</a></code>), $$f(t; \alpha)=2-2\Phi \left(
 \Phi^{-1}(1-\alpha/2)/ t^{1/2} \right).$$</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>sfExponential</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -194,11 +198,10 @@ function will be computed.</p></td>
 the exponential spending is to be computed; allowable range is (0, 1.5].</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of type <code>spendfn</code>.</p>
-    
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The manual shows how to use <code>sfExponential()</code> to closely
@@ -206,7 +209,6 @@ approximate an O'Brien-Fleming design. An example is given below. The manual
 is not linked to this help file, but is available in
 library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Anderson KM and Clark JB (2009), Fitting spending functions.
@@ -215,12 +217,10 @@ installed.</p>
 Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.</p>
 <p>Lan, KKG and DeMets, DL (1983), Discrete sequential boundaries for clinical
 trials. <em>Biometrika</em>; 70:659-663.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>, <code><a href='gsDesign.html'>gsDesign</a></code>,
 <a href='gsDesign-package-overview.html'>gsDesign package overview</a></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -237,31 +237,26 @@ trials. <em>Biometrika</em>; 70:659-663.</p>
 <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLDOF</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>)$<span class='no'>upper</span>$<span class='no'>bound</span></div><div class='output co'>#&gt; [1] 5.366558 3.710340 2.969736 2.538677 2.252190 2.044790</div><div class='input'>
 <span class='co'># plot exponential spending function across a range of values of interest</span>
 <span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fl'>0</span>:<span class='fl'>100</span> / <span class='fl'>100</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfExponential</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>0.8</span>)$<span class='no'>spend</span>,
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfExponential</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>0.8</span>)$<span class='no'>spend</span>,
   <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Proportion of final sample size"</span>,
   <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Cumulative Type I error spending"</span>,
   <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"Exponential Spending Function Example"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"l"</span>
-)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfExponential</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>0.5</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfExponential</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>0.3</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfExponential</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>0.2</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfExponential</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>0.15</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/legend'>legend</a></span>(
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.0</span>, <span class='fl'>.3</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>.025</span> * <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.7</span>, <span class='fl'>1</span>), <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>,
-  <span class='kw'>legend</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(
+)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfExponential</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>0.5</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfExponential</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>0.3</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfExponential</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>0.2</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfExponential</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>0.15</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(
+  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.0</span>, <span class='fl'>.3</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>.025</span> * <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.7</span>, <span class='fl'>1</span>), <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>,
+  <span class='kw'>legend</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
     <span class='st'>"nu = 0.8"</span>, <span class='st'>"nu = 0.5"</span>, <span class='st'>"nu = 0.3"</span>, <span class='st'>"nu = 0.2"</span>,
     <span class='st'>"nu = 0.15"</span>
   )
-)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/text'>text</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>.59</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>.95</span> * <span class='fl'>.025</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='st'>"&lt;--approximates O'Brien-Fleming"</span>)</div><div class='img'><img src='sfExponential-1.png' alt='' width='700' height='433' /></div></pre>
+)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>.59</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>.95</span> * <span class='fl'>.025</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='st'>"&lt;--approximates O'Brien-Fleming"</span>)</div><div class='img'><img src='sfExponential-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#note">Note</a></li>
-
       <li><a href="#references">References</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -270,19 +265,23 @@ trials. <em>Biometrika</em>; 70:659-663.</p>
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Keaven Anderson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

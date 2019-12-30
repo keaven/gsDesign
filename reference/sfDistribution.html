@@ -8,21 +8,25 @@
 
 <title>Two-parameter Spending Function Families — sfLogistic • gsDesign</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,8 +34,8 @@
 
 
 
-<meta property="og:title" content="Two-parameter Spending Function Families — sfLogistic" />
 
+<meta property="og:title" content="Two-parameter Spending Function Families — sfLogistic" />
 <meta property="og:description" content="The functions sfLogistic(), sfNormal(),
 sfExtremeValue(), sfExtremeValue2(), sfCauchy(), and
 sfBetaDist() are all 2-parameter spending function families. These
@@ -67,6 +71,7 @@ sfExtremeValue2() where $$F(x)=1-\exp(-\exp(x)).$$" />
 
 
 
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -75,6 +80,7 @@ sfExtremeValue2() where $$F(x)=1-\exp(-\exp(x)).$$" />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -101,7 +107,7 @@ sfExtremeValue2() where $$F(x)=1-\exp(-\exp(x)).$$" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +139,6 @@ sfExtremeValue2() where $$F(x)=1-\exp(-\exp(x)).$$" />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -143,6 +148,7 @@ sfExtremeValue2() where $$F(x)=1-\exp(-\exp(x)).$$" />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -154,7 +160,6 @@ sfExtremeValue2() where $$F(x)=1-\exp(-\exp(x)).$$" />
     </div>
 
     <div class="ref-description">
-    
     <p>The functions <code>sfLogistic()</code>, <code>sfNormal()</code>,
 <code>sfExtremeValue()</code>, <code>sfExtremeValue2()</code>, <code>sfCauchy()</code>, and
 <code>sfBetaDist()</code> are all 2-parameter spending function families. These
@@ -186,7 +191,6 @@ simplifies to $$f(t;\alpha,a,b)=\alpha \exp(-e^a (-\ln t)^b).$$ Since the
 extreme value distribution is not symmetric, there is also a version where
 the standard distribution is flipped about 0. This is reflected in
 <code>sfExtremeValue2()</code> where $$F(x)=1-\exp(-\exp(x)).$$</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>sfLogistic</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)
@@ -200,7 +204,7 @@ the standard distribution is flipped about 0. This is reflected in
 <span class='fu'>sfExtremeValue2</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)
 
 <span class='fu'>sfNormal</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -225,33 +229,29 @@ requires 2 positive values, while <code>sfLogistic()</code>, <code>sfNormal()</c
 <code>sfExtremeValue()</code>,</p>
 <p><code>sfExtremeValue2()</code> and <code>sfCauchy()</code> require the first parameter
 to be any real value and the second to be a positive value.  The four
-parameter specification is <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c(t1,t2,u1,u2)</a></code> where the objective is that
+parameter specification is <code><a href='https://rdrr.io/r/base/c.html'>c(t1,t2,u1,u2)</a></code> where the objective is that
 <code>sf(t1)=alpha*u1</code> and <code>sf(t2)=alpha*u2</code>.  In this
 parameterization, all four values must be between 0 and 1 and <code>t1 &lt;
 t2</code>, <code>u1 &lt; u2</code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of type <code>spendfn</code>. 
 See <code><a href='Spending_Function_Overview.html'>Spending_Function_Overview</a></code> for further details.</p>
-    
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The manual is not linked to this help file, but is available in
 library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Jennison C and Turnbull BW (2000), <em>Group Sequential
 Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='gsDesign.html'>gsDesign</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -294,25 +294,25 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;   0.0000 0.3015 0.4138 0.2008 0.0619 0.9779
 #&gt;   3.2415 0.0125 0.0229 0.0296 0.0350 0.1000</div><div class='input'>
 <span class='co'># plot the alpha- and beta-spending functions</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='img'><img src='sfDistribution-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='img'><img src='sfDistribution-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># start by showing how to fit two points with sfLogistic</span>
 <span class='co'># plot the spending function using many points to obtain a smooth curve</span>
 <span class='co'># note that curve fits the points x=.1,  y=.01 and x=.4,  y=.1</span>
 <span class='co'># specified in the 3rd parameter of sfLogistic</span>
 <span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fl'>0</span>:<span class='fl'>100</span> / <span class='fl'>100</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='fl'>1</span>, <span class='no'>t</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.1</span>, <span class='fl'>.4</span>, <span class='fl'>.01</span>, <span class='fl'>.1</span>))$<span class='no'>spend</span>,
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='fl'>1</span>, <span class='no'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.1</span>, <span class='fl'>.4</span>, <span class='fl'>.01</span>, <span class='fl'>.1</span>))$<span class='no'>spend</span>,
   <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Proportion of final sample size"</span>,
   <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Cumulative Type I error spending"</span>,
   <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"Logistic Spending Function Examples"</span>,
   <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"l"</span>, <span class='kw'>cex.main</span> <span class='kw'>=</span> <span class='fl'>.9</span>
-)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='fl'>1</span>, <span class='no'>t</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.01</span>, <span class='fl'>.1</span>, <span class='fl'>.1</span>, <span class='fl'>.4</span>))$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='input'>
+)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='fl'>1</span>, <span class='no'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.01</span>, <span class='fl'>.1</span>, <span class='fl'>.1</span>, <span class='fl'>.4</span>))$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='input'>
 <span class='co'># now just give a=0 and b=1 as 3rd parameters for sfLogistic</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='fl'>1</span>, <span class='no'>t</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>))$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='fl'>1</span>, <span class='no'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>))$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='input'>
 <span class='co'># try a couple with unconventional shapes again using</span>
 <span class='co'># the xy form in the 3rd parameter</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='fl'>1</span>, <span class='no'>t</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.4</span>, <span class='fl'>.6</span>, <span class='fl'>.1</span>, <span class='fl'>.7</span>))$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='fl'>1</span>, <span class='no'>t</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.1</span>, <span class='fl'>.7</span>, <span class='fl'>.4</span>, <span class='fl'>.6</span>))$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/legend'>legend</a></span>(
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.0</span>, <span class='fl'>.475</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.76</span>, <span class='fl'>1.03</span>), <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>,
-  <span class='kw'>legend</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(
+<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='fl'>1</span>, <span class='no'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.4</span>, <span class='fl'>.6</span>, <span class='fl'>.1</span>, <span class='fl'>.7</span>))$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='fl'>1</span>, <span class='no'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.1</span>, <span class='fl'>.7</span>, <span class='fl'>.4</span>, <span class='fl'>.6</span>))$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(
+  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.0</span>, <span class='fl'>.475</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.76</span>, <span class='fl'>1.03</span>), <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>5</span>,
+  <span class='kw'>legend</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
     <span class='st'>"Fit (.1, 01) and (.4, .1)"</span>, <span class='st'>"Fit (.01, .1) and (.1, .4)"</span>,
     <span class='st'>"a=0,  b=1"</span>, <span class='st'>"Fit (.4, .1) and (.6, .7)"</span>,
     <span class='st'>"Fit (.1, .4) and (.7, .6)"</span>
@@ -321,20 +321,20 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># set up a function to plot comparsons of all</span>
 <span class='co'># 2-parameter spending functions</span>
 <span class='no'>plotsf</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>) {
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfCauchy</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>,
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfCauchy</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>,
     <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Proportion of enrollment"</span>,
     <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Cumulative spending"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"l"</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>2</span>
   )
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfExtremeValue</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>5</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfNormal</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>3</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfExtremeValue2</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/lines'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfBetaDist</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>7</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>3</span>)
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/legend'>legend</a></span>(
-    <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.05</span>, <span class='fl'>.475</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>.025</span> * <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.55</span>, <span class='fl'>.9</span>),
-    <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>7</span>),
-    <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>),
-    <span class='kw'>legend</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(
+  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfExtremeValue</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>5</span>)
+  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfNormal</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>3</span>)
+  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfExtremeValue2</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>t</span>, <span class='fu'>sfBetaDist</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>7</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>3</span>)
+  <span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(
+    <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.05</span>, <span class='fl'>.475</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>.025</span> * <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.55</span>, <span class='fl'>.9</span>),
+    <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>7</span>),
+    <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>),
+    <span class='kw'>legend</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
       <span class='st'>"Logistic"</span>, <span class='st'>"Cauchy"</span>, <span class='st'>"Normal"</span>, <span class='st'>"Extreme value"</span>,
       <span class='st'>"Extreme value 2"</span>, <span class='st'>"Beta distribution"</span>
     )
@@ -343,22 +343,17 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># do comparison for a design with conservative early spending</span>
 <span class='co'># note that Cauchy spending function is quite different</span>
 <span class='co'># from the others</span>
-<span class='no'>param</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.05</span>, <span class='fl'>.1</span>)
+<span class='no'>param</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.05</span>, <span class='fl'>.1</span>)
 <span class='fu'>plotsf</span>(<span class='fl'>.025</span>, <span class='no'>t</span>, <span class='no'>param</span>)</div><div class='img'><img src='sfDistribution-3.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#note">Note</a></li>
-
       <li><a href="#references">References</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -367,19 +362,23 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Keaven Anderson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

@@ -8,21 +8,25 @@
 
 <title>Normal distribution sample size (2-sample) — nNormal • gsDesign</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,8 +34,8 @@
 
 
 
-<meta property="og:title" content="Normal distribution sample size (2-sample) — nNormal" />
 
+<meta property="og:title" content="Normal distribution sample size (2-sample) — nNormal" />
 <meta property="og:description" content="nNormal() computes a fixed design sample size for comparing 2 means
 where variance is known. T The function allows computation of sample size
 for a non-inferiority hypothesis. Note that you may wish to investigate 
@@ -43,6 +47,7 @@ the variance for observations in" />
 
 
 
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -51,6 +56,7 @@ the variance for observations in" />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -77,7 +83,7 @@ the variance for observations in" />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -109,7 +115,6 @@ the variance for observations in" />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -119,6 +124,7 @@ the variance for observations in" />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -130,7 +136,6 @@ the variance for observations in" />
     </div>
 
     <div class="ref-description">
-    
     <p><code>nNormal()</code> computes a fixed design sample size for comparing 2 means
 where variance is known. T The function allows computation of sample size
 for a non-inferiority hypothesis. Note that you may wish to investigate 
@@ -138,13 +143,12 @@ other R packages such as the <code>pwr</code> package which uses the t-distribut
 In the examples below we show how to set up a 2-arm group sequential design with a normal outcome.</p>
 <p><code>nNormal()</code> computes sample size for comparing two normal means when
 the variance for observations in</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>nNormal</span>(<span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1.7</span>, <span class='kw'>sd2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>,
   <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>outtype</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -195,7 +199,7 @@ normally this will be left as the default of 0.</p></td>
       <td><p>controls output; see value section below.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>If <code>n</code> is <code>NULL</code> (default), total sample size (2 arms
@@ -216,7 +220,6 @@ input</p></dd> <dt>sd2</dt><dd><p>As input</p></dd> <dt>delta1</dt><dd><p>As inp
 <dt>se</dt><dd><p>standard error for estimate of difference in treatment group
 means</p></dd>
 
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Lachin JM (1981), Introduction to sample size determination and
@@ -224,18 +227,16 @@ power analysis for clinical trials. <em>Controlled Clinical Trials</em>
 2:93-113.</p>
 <p>Snedecor GW and Cochran WG (1989), Statistical Methods. 8th ed. Ames, IA:
 Iowa State University Press.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='gsDesign-package-overview.html'>gsDesign package overview</a></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># EXAMPLES</span>
 <span class='co'># equal variances</span>
 <span class='no'>n</span><span class='kw'>=</span><span class='fu'>nNormal</span>(<span class='kw'>delta1</span><span class='kw'>=</span><span class='fl'>.5</span>,<span class='kw'>sd</span><span class='kw'>=</span><span class='fl'>1.1</span>,<span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>.025</span>,<span class='kw'>beta</span><span class='kw'>=</span><span class='fl'>.2</span>)
-<span class='no'>n</span></div><div class='output co'>#&gt; [1] 151.9543</div><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.75</span>),
+<span class='no'>n</span></div><div class='output co'>#&gt; [1] 151.9543</div><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.75</span>),
 <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfLDOF</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>, <span class='kw'>sflpar</span> <span class='kw'>=</span> -<span class='fl'>1</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>'normal'</span>)
 <span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;   Analysis                 Value Efficacy Futility
 #&gt;  IA 1: 50%                     Z   2.9626   0.6475
@@ -252,7 +253,7 @@ Iowa State University Press.</p>
 #&gt;     N: 171           p (1-sided)   0.0220   0.0220
 #&gt;                  ~delta at bound   0.2937   0.2937
 #&gt;              P(Cross) if delta=0   0.0219   0.9781
-#&gt;            P(Cross) if delta=0.5   0.9000   0.1000</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, sample size 171, 90 percent power, 2.5 percent (1-sided) Type I error. Efficacy bounds derived using a Lan-DeMets O'Brien-Fleming approximation spending function with none = 1. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -1."</div><div class='input'><span class='co'># unequal variances, fixed design</span>
+#&gt;            P(Cross) if delta=0.5   0.9000   0.1000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, sample size 171, 90 percent power, 2.5 percent (1-sided) Type I error. Efficacy bounds derived using a Lan-DeMets O'Brien-Fleming approximation spending function with none = 1. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -1."</div><div class='input'><span class='co'># unequal variances, fixed design</span>
 <span class='fu'>nNormal</span>(<span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1.1</span>, <span class='kw'>sd2</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.025</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>.2</span>)</div><div class='output co'>#&gt; [1] 327.1413</div><div class='input'><span class='co'># unequal sample sizes</span>
 <span class='fu'>nNormal</span>(<span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1.1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.025</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 170.9486</div><div class='input'><span class='co'># non-inferiority assuming a better effect than null</span>
 <span class='fu'>nNormal</span>(<span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> -<span class='fl'>.1</span>, <span class='kw'>sd</span> <span class='kw'>=</span> <span class='fl'>1.2</span>)</div><div class='output co'>#&gt; [1] 168.1188</div></pre>
@@ -261,13 +262,9 @@ Iowa State University Press.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#references">References</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -276,19 +273,23 @@ Iowa State University Press.</p>
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Keaven Anderson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

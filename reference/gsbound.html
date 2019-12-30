@@ -8,21 +8,25 @@
 
 <title>Boundary derivation - low level — gsBound • gsDesign</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,8 +34,8 @@
 
 
 
-<meta property="og:title" content="Boundary derivation - low level — gsBound" />
 
+<meta property="og:title" content="Boundary derivation - low level — gsBound" />
 <meta property="og:description" content="gsBound() and gsBound1() are lower-level functions used to
 find boundaries for a group sequential design. They are not recommended
 (especially gsBound1()) for casual users. These functions do not
@@ -48,6 +52,7 @@ does not exist." />
 
 
 
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -56,6 +61,7 @@ does not exist." />
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -82,7 +88,7 @@ does not exist." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -114,7 +120,6 @@ does not exist." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -124,6 +129,7 @@ does not exist." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -135,7 +141,6 @@ does not exist." />
     </div>
 
     <div class="ref-description">
-    
     <p><code>gsBound()</code> and <code>gsBound1()</code> are lower-level functions used to
 find boundaries for a group sequential design. They are not recommended
 (especially <code>gsBound1()</code>) for casual users. These functions do not
@@ -148,13 +153,12 @@ boundary crossing probabilities and an arbitrary mean (<code>theta</code>).</p>
 <p>The function <code>gsBound1()</code> requires special attention to detail and
 knowledge of behavior when a design corresponding to the input parameters
 does not exist.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>gsBound</span>(<span class='no'>I</span>, <span class='no'>trueneg</span>, <span class='no'>falsepos</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>, <span class='kw'>printerr</span> <span class='kw'>=</span> <span class='fl'>0</span>)
 
 <span class='fu'>gsBound1</span>(<span class='no'>theta</span>, <span class='no'>I</span>, <span class='no'>a</span>, <span class='no'>probhi</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>, <span class='kw'>printerr</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -209,7 +213,7 @@ information.</p></td>
 assuming mean of theta.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Both routines return a list. Common items returned by the two
@@ -234,23 +238,19 @@ lower boundary crossing probabilities; computed using input lower bound and
 derived upper bound.</p></dd> <dt>probhi</dt><dd><p>vector of upper boundary crossing
 probabilities as input.</p></dd>
 
-    
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The manual is not linked to this help file, but is available in
 library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Jennison C and Turnbull BW (2000), <em>Group Sequential
 Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='gsDesign-package-overview.html'>gsDesign package overview</a>, <code><a href='gsDesign.html'>gsDesign</a></code>,
 <code><a href='gsProbability.html'>gsProbability</a></code></p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -258,8 +258,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># each upper boundary and .02 of crossing each lower boundary</span>
 <span class='co'># under the null hypothesis</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsBound</span>(
-  <span class='kw'>I</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>) / <span class='fl'>3</span>, <span class='kw'>trueneg</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>.02</span>, <span class='fl'>3</span>),
-  <span class='kw'>falsepos</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>.01</span>, <span class='fl'>3</span>)
+  <span class='kw'>I</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>) / <span class='fl'>3</span>, <span class='kw'>trueneg</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>.02</span>, <span class='fl'>3</span>),
+  <span class='kw'>falsepos</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>.01</span>, <span class='fl'>3</span>)
 )
 <span class='no'>x</span></div><div class='output co'>#&gt; $k
 #&gt; [1] 3
@@ -295,8 +295,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt; </div><div class='input'>
 <span class='co'>#  use gsBound1 to set up boundary for a 1-sided test</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsBound1</span>(
-  <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>I</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>) / <span class='fl'>3</span>, <span class='kw'>a</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(-<span class='fl'>20</span>, <span class='fl'>3</span>),
-  <span class='kw'>probhi</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.001</span>, <span class='fl'>.009</span>, <span class='fl'>.015</span>)
+  <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>I</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>) / <span class='fl'>3</span>, <span class='kw'>a</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(-<span class='fl'>20</span>, <span class='fl'>3</span>),
+  <span class='kw'>probhi</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.001</span>, <span class='fl'>.009</span>, <span class='fl'>.015</span>)
 )
 <span class='no'>x</span>$<span class='no'>b</span></div><div class='output co'>#&gt; [1] 3.090232 2.344824 2.039501</div><div class='input'>
 <span class='co'># check boundary crossing probabilities with gsProbability</span>
@@ -310,8 +310,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'>#  Here we let set lower boundary crossing at 0.05 at each analysis</span>
 <span class='co'>#  assuming theta=2.2</span>
 <span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'>gsBound1</span>(
-  <span class='kw'>theta</span> <span class='kw'>=</span> -<span class='fl'>2.2</span>, <span class='kw'>I</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>) / <span class='fl'>3</span>, <span class='kw'>a</span> <span class='kw'>=</span> -<span class='no'>x</span>$<span class='no'>b</span>,
-  <span class='kw'>probhi</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>.05</span>, <span class='fl'>3</span>)
+  <span class='kw'>theta</span> <span class='kw'>=</span> -<span class='fl'>2.2</span>, <span class='kw'>I</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>) / <span class='fl'>3</span>, <span class='kw'>a</span> <span class='kw'>=</span> -<span class='no'>x</span>$<span class='no'>b</span>,
+  <span class='kw'>probhi</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>.05</span>, <span class='fl'>3</span>)
 )
 <span class='no'>y</span>$<span class='no'>b</span></div><div class='output co'>#&gt; [1]  0.3746830 -0.3594403 -0.9470061</div><div class='input'>
 <span class='co'>#  Now use gsProbability to look at design</span>
@@ -319,7 +319,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'>#  specified for theta=2.2, but for theta=0 the upper boundary</span>
 <span class='co'>#  crossing probabilities are smaller than originally specified</span>
 <span class='co'>#  above after first interim analysis</span>
-<span class='fu'><a href='gsProbability.html'>gsProbability</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>x</span>$<span class='no'>b</span>), <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2.2</span>), <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>I</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>b</span>, <span class='kw'>a</span> <span class='kw'>=</span> -<span class='no'>y</span>$<span class='no'>b</span>)</div><div class='output co'>#&gt;                Lower bounds   Upper bounds
+<span class='fu'><a href='gsProbability.html'>gsProbability</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>x</span>$<span class='no'>b</span>), <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2.2</span>), <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>I</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>b</span>, <span class='kw'>a</span> <span class='kw'>=</span> -<span class='no'>y</span>$<span class='no'>b</span>)</div><div class='output co'>#&gt;                Lower bounds   Upper bounds
 #&gt;   Analysis N    Z   Nominal p  Z   Nominal p
 #&gt;          1  1 -0.37    0.3539 3.09    0.0010
 #&gt;          2  1  0.36    0.6404 2.34    0.0095
@@ -344,15 +344,10 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#note">Note</a></li>
-
       <li><a href="#references">References</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -361,19 +356,23 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by Keaven Anderson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
