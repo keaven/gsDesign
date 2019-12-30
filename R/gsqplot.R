@@ -174,6 +174,23 @@ plot.gsProbability <- function(x, plottype = 2, base = FALSE, ...) {
 # Hidden Functions
 ###
 
+# getColor function [sinew] ----
+getColor <- function(.col_vector) {
+  
+  .col_list <- lapply(
+    X = .col_vector, 
+    FUN = function(.col){
+      if(!is.na(suppressWarnings(as.integer(.col)))){
+        rep(palette(), .col)[as.integer(.col)]
+      } else {
+        .col
+      }
+    }
+  )
+  
+  unlist(.col_list)
+}
+
 # gsPlotName function [sinew] ----
 gsPlotName <- function(plottype) {
   # define plots and associated valid plot types
@@ -389,7 +406,7 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
         ggplot2::geom_line() +
         ggplot2::scale_x_continuous(xlab) + 
         ggplot2::scale_y_continuous(ylab) +
-        ggplot2::scale_colour_manual(name = "Bound", values = col, labels = lbls, breaks = lbls) +
+        ggplot2::scale_colour_manual(name = "Bound", values = getColor(col), labels = lbls, breaks = lbls) +
         ggplot2::scale_linetype_manual(name = "Bound", values = lty, labels = lbls, breaks = lbls)
       
         p <- p + ggplot2::ggtitle(label = main)
@@ -402,7 +419,7 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
         group = factor(!!rlang::sym('Bound'))),
         data = y
         ) +
-        ggplot2::geom_line(colour = col[1], lty = lty[1], lwd = lwd[1]) +
+        ggplot2::geom_line(colour = getColor(col[1]), lty = lty[1], lwd = lwd[1]) +
         ggplot2::geom_text(size = cex * 5) + 
         ggplot2::xlab(xlab) + 
         ggplot2::ylab(ylab)
@@ -425,14 +442,14 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
         graphics::text(x = y2$N, y = y2$Z, paste(rep("r=", x$k), y2$Ztxt, sep = ""), cex = cex)
       } else {
         y2$Ztxt <- paste(rep("r=", x$k), y2$Ztxt, sep = "")
-        p <- p + geom_text(data = y2, aes(group = factor(!!rlang::sym('Bound')), label = Ztxt), size = cex * 5, show.legend = F, colour = 1)
+        p <- p + geom_text(data = y2, aes(group = factor(!!rlang::sym('Bound')), label = Ztxt), size = cex * 5, show.legend = F, colour = getColor(1))
       }
     } else {
       if (base) {
         graphics::text(x = y2$N, y = y2$Z, paste(rep("N=", x$k), y2$Ztxt, sep = ""), cex = cex)
       } else {
         y2$Ztxt <- paste(rep("N=", x$k), y2$Ztxt, sep = "")
-        p <- p + ggplot2::geom_text(data = y2, ggplot2::aes(group = factor(!!rlang::sym('Bound')), label = Ztxt), size = cex * 5, show.legend = F, colour = 1)
+        p <- p + ggplot2::geom_text(data = y2, ggplot2::aes(group = factor(!!rlang::sym('Bound')), label = Ztxt), size = cex * 5, show.legend = F, colour = getColor(1))
       }
     }
   }
@@ -562,7 +579,7 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
         ggplot2::geom_text(show.legend = F, size = cex * 5) + geom_line() +
         ggplot2::scale_x_continuous(xlab) + 
         ggplot2::scale_y_continuous(ylab) +
-        ggplot2::scale_colour_manual(name = "Bound", values = col, labels = lbls, breaks = lbls) +
+        ggplot2::scale_colour_manual(name = "Bound", values = getColor(col), labels = lbls, breaks = lbls) +
         ggplot2::scale_linetype_manual(name = "Bound", values = lty, labels = lbls, breaks = lbls)
         p <- p + ggplot2::ggtitle(label = main)
     } else { # p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
@@ -576,7 +593,7 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
           group = factor(Bound)), 
         data = y
         ) +
-        ggplot2::geom_line(colour = col[1], lty = lty[1], lwd = lwd[1]) +
+        ggplot2::geom_line(colour = getColor(col[1]), lty = lty[1], lwd = lwd[1]) +
         ggplot2::geom_text(size = cex * 5) + 
         ggplot2::xlab(xlab) + 
         ggplot2::ylab(ylab)
@@ -595,14 +612,14 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
         graphics::text(x = y2$N, y = y2$CP, paste(rep("r=", x$k), y2$Ztxt, sep = ""), cex = cex)
       } else {
         y2$Ztxt <- paste(rep("r=", x$k - 1), y2$Ztxt, sep = "")
-        p <- p + geom_text(data = y2, aes(N, CP, group = factor(Bound), label = Ztxt), size = cex * 5, colour = 1)
+        p <- p + geom_text(data = y2, aes(N, CP, group = factor(Bound), label = Ztxt), size = cex * 5, colour = getColor(1))
       }
     } else {
       if (base) {
         graphics::text(x = y2$N, y = y2$CP, paste(rep("N=", x$k), y2$Ztxt, sep = ""), cex = cex)
       } else {
         y2$Ztxt <- paste(rep("N=", x$k - 1), y2$Ztxt, sep = "")
-        p <- p + geom_text(data = y2, aes(N, CP, group = factor(Bound), label = Ztxt), size = cex * 5, colour = 1)
+        p <- p + geom_text(data = y2, aes(N, CP, group = factor(Bound), label = Ztxt), size = cex * 5, colour = getColor(1))
       }
     }
   }
@@ -704,7 +721,7 @@ plotsf <- function(x,
       )
       p <- p +
         ggplot2::scale_colour_manual(
-          name = "Spending", values = col,
+          name = "Spending", values = getColor(col),
           labels = c(expression(alpha), ifelse(x$test.type < 5, expression(beta), expression(1 - alpha))), breaks = 1:2
         ) +
         ggplot2::scale_linetype_manual(
@@ -853,7 +870,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       ggplot2::guides(color = ggplot2::guide_legend(title = "Probability")) + 
       ggplot2::xlab(xlab) +
       ggplot2::scale_linetype_manual(values = lty) +
-      ggplot2::scale_color_manual(values = col) +
+      ggplot2::scale_color_manual(values = getColor(col)) +
       ggplot2::scale_y_continuous(breaks = seq(0, 1, .2))
     
       return(p + ggplot2::ggtitle(label = main))
@@ -865,7 +882,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       col <- c(2, 1)
     }
   }
-  if (length(col == 1)) col <- rep(col, 2)
+  if (length(col) == 1) col <- rep(col, 2)
   if (is.null(lty)) {
     if (base || outtype == 2) {
       lty <- c(1, 2)
@@ -873,8 +890,8 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       lty <- c(2, 1)
     }
   }
-  if (length(lty == 1)) lty <- rep(lty, 2)
-  if (length(lwd == 1)) lwd <- rep(lwd, 2)
+  if (length(lty) == 1) lty <- rep(lty, 2)
+  if (length(lwd) == 1) lwd <- rep(lwd, 2)
 
 
   interim <- rep(1, length(xval))
@@ -1003,7 +1020,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       ggplot2::geom_line() +
       ggplot2::scale_x_continuous(xlab) + 
       ggplot2::scale_y_continuous(ylab) +
-      ggplot2::scale_colour_manual(name = "Bound", values = col) +
+      ggplot2::scale_colour_manual(name = "Bound", values = getColor(col)) +
       ggplot2::scale_linetype_manual(name = "Bound", values = lty)
 
       p <- p + ggplot2::ggtitle(label = main)
@@ -1011,7 +1028,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     if (test.type == 1) {
       p <- p + 
         ggplot2::scale_colour_manual(
-        name = "Probability", values = col, breaks = 1,
+        name = "Probability", values = getColor(col), breaks = 1,
         labels = "Upper bound"
       ) +
         ggplot2::scale_linetype_manual(
@@ -1024,7 +1041,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     } else {
       p <- p + 
         ggplot2::scale_colour_manual(
-        name = "Probability", values = col, breaks = 1:2,
+        name = "Probability", values = getColor(col), breaks = 1:2,
         labels = c("Upper bound", "1-Lower bound")
       ) +
         ggplot2::scale_linetype_manual(
@@ -1036,11 +1053,11 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       ggplot2::geom_text(data = yt, ggplot2::aes(theta, prob, colour = factor(bound), group = 1, label = itxt), size = cex * 5, show.legend = F)
     for (i in 1:x$k) p <- p + ggplot2::geom_line(
         data = subset(y, interim == i & bound == 1),
-        colour = col[1], lty = lty[1], lwd = lwd[1]
+        colour = getColor(col[1]), lty = lty[1], lwd = lwd[1]
       )
     if (test.type > 2) {
       for (i in 1:(x$k - 1)) {
-        p <- p + ggplot2::geom_line(data = subset(y, interim == i & bound == 2), colour = col[2], lty = lty[2], lwd = lwd[2])
+        p <- p + ggplot2::geom_line(data = subset(y, interim == i & bound == 2), colour = getColor(col[2]), lty = lty[2], lwd = lwd[2])
       }
     }
     return(p)
