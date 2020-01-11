@@ -1,0 +1,349 @@
+---
+title: "Enrollment and event accumulation"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: gsDesign.bib
+vignette: >
+  %\VignetteIndexEntry{Enrollment and event accumulationl}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE,message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+options( width = 58 )
+
+```
+
+# Introduction
+
+Most often timing for analyses for studies with time-to-event endpoints is planned based on event counts. Enrollment rates and failure rates over time have a substantial impact on the rate of accumulation of endpoints, and thus on the calendar timing of analyses. 
+There is also the option of doing analyses based on calendar timing, but then the event counts at analyses can be substantially impacted by enrollment and failure rates.
+Thus, it is worth thinking carefully at the time of study design about expected failure rates over time for both control and experimental treatment groups as well as expected enrollment rates.
+The **gsDesign** package has tools for computing sample size and expected accumulation of events for a piecewise exponential model that can be used to approximate any set of enrollment rates and failure rates. 
+For sample size calculations, there is a current limitation to proportional hazards model for treatment effect.
+However, expect event accumulation can be computed under arbitrary treatment effects.
+
+In this document, we consider a single example for enrollment rates and consider various models for failure rate distributions to demonstrate
+
+- the impact of different assumptions on event accumulation, and
+- how to implement different assumptions on enrollment, failure and dropout rates in the **gsDesign** package.
+
+At time of study design for a time-to-event study it is worth considering the shape of the distribution for the control group based on historical data. 
+The default distribution for `gsSurv()` and `nSurv()` is an exponential distribution which could be inadequate for cases where, say, there is a high failure rate period followed by a lower failure rate period. 
+The study designer may wish approximate such a situation by using a piecewise exponential failure rate assumption with 2 or more pieces.
+This can be extended in the extreme to frequent changes in the hazard rate to approximate a continuously changing hazard rate such as that in a cure model. 
+We demonstrate both of these extremes here and see the impact on study planning.
+In all cases, we assume a proportional hazards model.
+This is an extension of the vignette on basic time-to-event endpoint design with the assumption of exponential failure times and still applies the @LachinFoulkes sample size method.
+
+# Common assumptions
+
+For the piecewise exponential distribution, there may be an arbitrary number of points with decreasing survival in $(0,1)$ as time $>0$ increases.
+For other models below, we will consider the first 2 values specified here.
+
+
+```{r}
+times <- c(6,12,18)
+survAtTimes <- c(.7,.61,.55)
+```
+
+The cumulative hazard at each time point will be useful for calculations in some cases.
+
+```{r}
+HazardAtTimes <- -log(survAtTimes)
+HazardAtTimes
+```
+
+We will also assume piecewise constant enrollment rates and a constant exponential dropout rate; this could just as easily be specified as piecewise exponential using the same interval durations at the piecewise exponential failure rates.
+
+```{r}
+dropoutRates <- .001
+enrollRates <- c(5,10,20,30)
+enrollRateDurations <- c(2,2,2,10)
+# Specify trial duration if enrollment rates to be changed
+# or leave NULL if enrollment rates fixed and duration set to achieve power
+T <-NULL
+# Specify the number of time points from 0 to T for model approximations
+npts <- 50
+# max range for approximations to survival curves
+maxT <- 60
+# minimum follow-up for last patient enrolled
+minfup <- 24
+```
+
+The following requires no modification, but will be used below for cure models below where we will approximate continuously changing hazard rates with a step function.
+
+```{r}
+# used for models continuously changing hazard rates 
+tx <- seq(maxT/npts,maxT,maxT/npts)
+```
+
+For group sequential designs below, we will use many defaults which the user can change as noted in the vignette on basic design time-to-event endpoints.
+This allows the reader to focus on survival distribution assumptions in this vignette.
+We will make explicit the assumed hazard ratio for experimental vs. control therapy since that does drive the experimental group failure distribution.
+
+```{r}
+hr <- .7 # Alternate hypothesis hazard ratio
+```
+
+
+# Piecewise exponential distribution
+
+We consider first a piecewise exponential distribution with
+constant hazard rates are between points specifed in `times`.
+The rates yielding survival `survAtTimes` at times specified in `times` are computed as:
+
+```{r}
+k <- length(HazardAtTimes)-1
+failRateDurationsPWE <- times-c(0,times[1:k])
+failRatesPWE <- (HazardAtTimes-c(0,HazardAtTimes[1:k]))/failRateDurationsPWE
+failRatesPWE
+```
+
+## Group sequential design
+
+```{r,message=FALSE,warning=FALSE}
+library(gsDesign)
+designPWE <- gsSurv(hr = hr,
+                    # failure rates
+                    lambdaC = failRatesPWE,
+                    # failure rate durations; exclude last
+                    S = failRateDurationsPWE[1:k],
+                    # dropout rates
+                    eta = dropoutRates,
+                    # enrollment rates
+                    gamma = enrollRates,
+                    # enrollment rate durations
+                    R = enrollRateDurations,
+                    # Trial duration
+                    T = T,
+                    # minimum follow-up
+                    minfup = minfup
+                   )
+```
+
+Now we summarize the design. We have placed analyses at equally spaced event counts.
+Note that the calendar timing is not equally spaced.
+
+```{r,message=FALSE,warning=FALSE}
+library(gt)
+gsBoundSummary(designPWE) %>% 
+  gt() %>% 
+  cols_align(align="left") %>%
+  tab_header(title="Group sequential design with piecewise exponential failure",
+             subtitle="Analyses equally spaced by event counts")
+```
+
+## Design duration and enrollment rates
+
+If you left `T=NULL`, then the following enrollment rates should match the input you specified.
+
+```{r}
+designPWE$gamma %>%
+  gt(rownames_to_stub=TRUE) %>%
+  tab_header(title="Design enrollment rates",
+             subtitle=" with periods of enrollment")
+```
+
+Adding minimum follow-up to total duration of enrollment gives estimated trial duration to achieve targeted enrollment and event counts at each analysis:
+
+```{r}
+# total enrollment duration + minimum follow-up
+sum(designPWE$R) + designPWE$minfup
+# timing of interim and final analyses
+designPWE$T
+```
+
+## Computing expected enrollment and event accumulation over time
+
+Now we can compute expected enrollment as a function of time.
+The function used is `gsDesign::nEventsIA()` which is used with `purrr::map_dbl()` to compute expected event accumulation for a vector of times from 0 to the expected trial duration.
+
+```{r,message=FALSE,warning=FALSE}
+library(purrr)
+mx <- max(designPWE$T)
+timesPWE <- c(1:floor(mx),mx)
+qplot(x=c(0,timesPWE),y=c(0,map_dbl(timesPWE,nEventsIA,x=designPWE)),geom="line")+
+  labs(x="Trial month",y="Expected events")
+```
+
+# Event accumulation under alternate scenarios
+
+We can compute expected event accumulation under alternate scenarios using the `eEvents()` function.
+Suppose we assume the experimental group has a hazard ratio of 1.16 for the first 6 months and is 0.6 thereafter.
+Recall that failure rates were defined on the intervals 0-6, 6-12 and thereafter.
+
+
+```{r}
+hrNPH <- c(1.15,.6,.6)
+frExperimental <- failRatesPWE * hrNPH
+```
+
+We will compute expected enrollment and expected event accumulation separately by treatment group.
+We begin with the control group for a fixed time at 12 months assuming half of patients are randomized to control treatment.
+
+```{r}
+eEventsControl <- 
+  eEvents(T=12, # Time in trial to evaluate
+          lambda=failRatesPWE, # failure rates
+          eta=dropoutRates, # dropout rates
+          S=failRateDurationsPWE[1:k], # failure rate durations
+          gamma=designPWE$gamma/2, # enrollment rates per treatment group
+          R=designPWE$R, # enrollment rate durations
+          minfup=minfup, # minimum follow-up at end of trial
+          Tfinal=max(designPWE$T) # planned end of trial from design
+         )
+c(Enrollment=eEventsControl$n,Events=eEventsControl$d)
+```
+
+Now for the experimental group. 
+
+```{r}
+eEventsExperimental <-  
+          eEvents(T=12, # Time in trial to evaluate
+          lambda=frExperimental, # failure rates
+          eta=dropoutRates, # dropout rates
+          S=failRateDurationsPWE[1:k], # failure rate durations
+          gamma=designPWE$gamma/2, # enrollment rates per treatment group
+          R=designPWE$R, # enrollment rate durations
+          minfup=minfup, # minimum follow-up at end of trial
+          Tfinal=max(designPWE$T) # planned end of trial from design
+         )
+c(Enrollment=eEventsExperimental$n,Events=eEventsExperimental$d)
+```
+
+Thus, at 1 year after study start, event accumulation is expected to be nearly equal in each treatment group due to the tradeoff between an early excess failure rate in the experimental group followed by a large reduction thereafter. 
+This is presumably because the majority of events have occurred for patients during the first 6 months of treatment.
+
+Unfortunately, since the function `eEvents()` has a complex return value it is not easily used with `purrr::map_dbl()`. Thus, we write a simple alternative function that only returns expected event count to enable use of `purrr::map_dbl()`.
+
+```{r}
+eEventsX <- function( T = 2, lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
+  Tfinal = NULL, minfup = 0, digits = 4){
+  eEvents(lambda, eta, gamma, R, S, T, Tfinal, minfup, digits)$d
+}
+```
+
+Now we reproduce the expected 12 month accumulation in the experimental group.
+
+```{r}
+eEventsX(T=12, # Time in trial to evaluate
+        lambda=frExperimental, # failure rates
+        eta=dropoutRates, # dropout rates
+        S=failRateDurationsPWE[1:k], # failure rate durations
+        gamma=designPWE$gamma/2, # enrollment rates per treatment group
+        R=designPWE$R, # enrollment rate durations
+        minfup=minfup, # minimum follow-up at end of trial
+        Tfinal=max(designPWE$T) # planned end of trial from design
+       )
+```
+
+Now we compute expected control and experimental event accumulation over time.
+
+```{r}
+eEventsControl <- map_dbl(
+    timesPWE, # Times in trial to evaluate
+    eEventsX, # function to evaluate at timesPWE
+    lambda=failRatesPWE, # failure rates
+    eta=dropoutRates, # dropout rates
+    S=failRateDurationsPWE[1:k], # failure rate durations
+    gamma=designPWE$gamma/2, # enrollment rates per treatment group
+    R=designPWE$R, # enrollment rate durations
+    minfup=minfup, # minimum follow-up at end of trial
+    Tfinal=max(designPWE$T) # planned end of trial from design
+   )
+# Experimental group under proportional hazards
+eEventsExperimentalPH <- map_dbl(  
+    timesPWE, # Times in trial to evaluate
+    eEventsX, # function to evaluate at timesPWE
+    lambda=failRatesPWE*hr, # failure rates
+    eta=dropoutRates, # dropout rates
+    S=failRateDurationsPWE[1:k], # failure rate durations
+    gamma=designPWE$gamma/2, # enrollment rates per treatment group
+    R=designPWE$R, # enrollment rate durations
+    minfup=minfup, # minimum follow-up at end of trial
+    Tfinal=max(designPWE$T) # planned end of trial from design
+   )
+# Experimental group under non-proportional (crossing) hazard
+eEventsExperimentalNPH <- map_dbl(  
+    timesPWE, # Times in trial to evaluate
+    eEventsX, # function to evaluate at timesPWE
+    lambda=frExperimental, # failure rates
+    eta=dropoutRates, # dropout rates
+    S=failRateDurationsPWE[1:k], # failure rate durations
+    gamma=designPWE$gamma/2, # enrollment rates per treatment group
+    R=designPWE$R, # enrollment rate durations
+    minfup=minfup, # minimum follow-up at end of trial
+    Tfinal=max(designPWE$T) # planned end of trial from design
+   )
+```
+
+Now we plot expected event accumulation under the two alternative hypotheses: proportional hazards and delayed treatment effect.
+
+```{r,message=FALSE,warning=FALSE,fig.width=7.5,fig.height=5}
+library(tibble)
+pdat <- 
+rbind(
+  # Enrollment
+  tibble(Measure="Enrollment: Overall",
+         Time=c(0,cumsum(enrollRateDurations)),
+         Value=c(0,cumsum(designPWE$gamma*designPWE$R))),
+  # Control event accumulation
+  tibble(Measure="Events: control",
+         Time=c(0,timesPWE),
+         Value=c(0,eEventsControl)),
+  # Experimental event accumulation, PH
+  tibble(Measure="Events: experimental (PH)",
+         Time=c(0,timesPWE),
+         Value=c(0,eEventsExperimentalPH)),
+  # Experimental event accumulation, NPH (crossing)
+  tibble(Measure="Events: Experimental (crossing)",
+         Time=c(0,timesPWE),
+         Value=c(0,eEventsExperimentalNPH)),
+  # Experimental event accumulation, PH
+  tibble(Measure="Events: overall (PH)",
+         Time=c(0,timesPWE),
+         Value=c(0,eEventsControl+eEventsExperimentalPH)),
+  # Experimental event accumulation, NPH (crossing)
+  tibble(Measure="Events: overall (crossing)",
+         Time=c(0,timesPWE),
+         Value=c(0,eEventsControl+eEventsExperimentalNPH))
+)
+ggplot(pdat,aes(x=Time,y=Value,color=Measure))+ geom_line()+
+  labs(title="Expected enrollment and event accumulation")+
+  scale_y_continuous(breaks=(0:7)*100)
+```
+
+The overall events curves point out that there is potentially a several month difference for the final event accumulation depending on differences in the treatment effect over time.
+We plot survival on the log scale to simplify the plot and emphasize the piecewise constant event rates reflected by a piecewise linear cumulative hazard.
+For a delayed effect or crossing hazards alternative, this can easily result in a final analysis as differences in treatment effect accumulate in the tail of the distribution.
+Of course, any alternative assumptions are speculation at the time of trial design.
+However, given historical data for the control group, it is worth considering minimum follow-up at final analysis well past the presumed control median to characterize survival with minimal censoring into a potentially important part of the tail of the curve.
+
+```{r,fig.width=7.5,message=FALSE,warning=FALSE}
+library(dplyr)
+x <- c(designPWE$S,36) # three interval durations for survival curves
+xx <- rbind(
+  tibble(Group="Control",duration=0,rate=0),
+  tibble(Group="Control",duration=x,rate=designPWE$lambdaC),
+  tibble(Group="Experimental: PH",duration=0,rate=0),
+  tibble(Group="Experimental: PH",duration=x,rate=designPWE$lambdaC*hr),
+  tibble(Group="Experimental: Crossing",duration=0,rate=0),
+  tibble(Group="Experimental: Crossing",duration=x,rate=designPWE$lambdaC*hrNPH)
+)
+xxx <- xx %>% group_by(Group) %>% 
+  mutate(Month=cumsum(duration),H=cumsum(duration*rate),Survival=exp(-H))
+ggplot(xxx,aes(x=Month,y=Survival,col=Group))+
+  geom_line()+
+  scale_y_log10(breaks=c(1,.75,.5,.35))+
+  scale_x_continuous(breaks=(0:4)*12)
+```
+
+
+
+# References
