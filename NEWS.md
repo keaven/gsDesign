@@ -1,3 +1,9 @@
+3.1.1, January, 2020
+- Vignettes updated
+- Added hgraph() to support ggplot2 versions of multiplicity graphs
+- Targeted release to CRAN
+
+
 3.1.0, April, 2019
 - Addition of pkgdown web site
 - Updated unit testing to from RUnit to testthat
