@@ -92,3 +92,13 @@ reference:
   - checkRange
   - checkScalar
   - checkVector
+articles:
+  - title: "Designing for time-to-event endpoints"
+    desc: >
+      These vignettes provide an introduction to designing group sequential trials with 
+      time-to-event endpoints using **gsDesign** package.
+    contents:
+      - OverviewOfSurvivalVignettes
+      - EnrollmentAndEventAccumulation
+      - gsSurvCureModel
+      - gsSurvForMultipleHypotheses
