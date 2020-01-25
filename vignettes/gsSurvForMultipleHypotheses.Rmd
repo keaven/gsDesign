@@ -1,0 +1,36 @@
+---
+title: "Designing for multiple hypotheses"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: gsDesign.bib
+vignette: >
+  %\VignetteIndexEntry{Designing for multiple hypotheses}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+options( width = 58 )
+
+```
+
+# Introduction
+
+We consider designing a trial to examine multiple hypotheses while maintaining strong control of Type I error.
+
+- Stratified populations
+- Sequential p-values
+- Graphical multiplicity implementation using the **gMCP** package
+
+# Designing with a stratified population
+
+# Sequential p-values
+
+# Graphical multiplicity
+
+# References
