@@ -1,6 +1,7 @@
 3.1.1, January, 2020
 - Vignettes updated
 - Added hgraph() to support ggplot2 versions of multiplicity graphs
+- Eliminated unnecessary check from sequentialPValue
 - Targeted release to CRAN
 
 

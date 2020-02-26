@@ -73,10 +73,8 @@ sequentialPValue <- function(gsD = gsDesign(),
   if(is.vector(usTime,mode="numeric")!=TRUE) stop("usTime must be a positive, increasing numeric vector with at most one value >= 1")
   checkLengths(n.I, Z, usTime)
   # check that n.I and usTime are increasing and greater than 0
-  if(length(n.I)!=length(unique(n.I))) stop("n.I values must be an increasing positive")
-  if (!(all(sort(n.I) == n.I) && all(gsD$n.I > 0))) stop("n.I must be an increasing, positive sequence at most one value > max(gsD$n.I)")
-  # check that n.I has at most one value >= gsD$n.I[gsD$k]
-  if(sum(n.I>=max(gsD$n.I))>1) stop("At most one value of n.I >= max(gsD$n.I)")
+  if(length(n.I)!=length(unique(n.I))) stop("n.I values must be an increasing positive sequence")
+  if (!(all(sort(n.I) == n.I) && all(gsD$n.I > 0))) stop("n.I must be an increasing, positive sequence")
   # check that usTime has at most 1 value >= 1
   if(sum(usTime>=1)>1)stop("No more than one value of usTime >= 1")
   # check the interval is 2 values in (0,1), exclusive of endpoints
