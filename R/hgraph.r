@@ -1,4 +1,5 @@
-ellipseCenters <- function(alphaHypotheses, digits=5, txt = letters[1:3], fill=1, fillAlpha=1, xradius = 2, yradius = 2, radianStart = NULL, x=NULL, y=NULL, wchar='x'){
+ellipseCenters <- function(alphaHypotheses, digits=5, txt = letters[1:3], fill=1, xradius = 2, yradius = 2, radianStart = NULL, 
+                           x=NULL, y=NULL, wchar='x'){
   ntxt <- length(txt)
   if (!is.null(x) && !is.null(y)){
     if (length(x)!=ntxt) stop("length of x must match # hypotheses")
@@ -13,11 +14,11 @@ ellipseCenters <- function(alphaHypotheses, digits=5, txt = letters[1:3], fill=1
     x <- xradius * cos(radian)
     y <- yradius * sin(radian)
   }
-  # create data frame with middle (x and y) of ellipses, txt, fill and fillAlpha
+  # create data frame with middle (x and y) of ellipses, txt, fill
   return(data.frame(x,y,
                     txt=paste(txt,'\n',wchar,'=',round(alphaHypotheses,digits),sep=""),
-                    fill=as.factor(fill),
-                    fillAlpha=fillAlpha))
+                    fill=as.factor(fill))
+        )
 }
 
 
@@ -72,7 +73,7 @@ makeTransitionSegments <- function(x, m, xradius, yradius, offset, trdigits, trp
 }
 
 
-checkHGArgs <- function(nHypotheses, nameHypotheses, alphaHypotheses, m, fill, fillAlpha, 
+checkHGArgs <- function(nHypotheses, nameHypotheses, alphaHypotheses, m, fill, 
                         palette, labels, legend, legend.name, legend.Position, halfwid, halfhgt, 
                         trhw, trhh, trprop, digits, trdigits, size, boxtextsize,
                         arrowsize, radianStart, offset, xradius, yradius, x, y, wchar)
@@ -86,14 +87,9 @@ checkHGArgs <- function(nHypotheses, nameHypotheses, alphaHypotheses, m, fill, f
     expect_gt(xradius, 0)
     expect_gt(yradius, 0)
   })
-  # length of fill, fillAlpha should be same as ntxt
+  # length of fill should be same as ntxt
   if(length(fill) != 1 & length(fill) != ntxt) stop("fill must have length 1 or number of hypotheses")
-  if(!is.numeric(fillAlpha)) stop("fillAlpha must be numeric")
-  if(length(fillAlpha) != 1 & length(fillAlpha) != ntxt) stop("fillAlpha must have length 1 or number of hypotheses")
-  if(max(fillAlpha > 1 | fillAlpha < 0)) stop("fillAlpha values must be in [0,1]")
 }
-
-
 
 #' @title Create multiplicity graph using ggplot2
 #' @description \code{hGraph()} plots a multiplicity graph defined by user inputs.
@@ -103,7 +99,6 @@ checkHGArgs <- function(nHypotheses, nameHypotheses, alphaHypotheses, m, fill, f
 #' @param alphaHypotheses alpha-levels or weights for ellipses
 #' @param m square transition matrix of dimension `nHypotheses`
 #' @param fill grouping variable for hypotheses
-#' @param fillAlpha can be used to set alpha for fill in ellipses
 #' @param palette colors for groups
 #' @param labels text labels for groups
 #' @param legend.name text for legend header
@@ -152,11 +147,13 @@ checkHGArgs <- function(nHypotheses, nameHypotheses, alphaHypotheses, m, fill, f
 #'        nameHypotheses=c("H1:\n Long name","H2:\n Longer name","H3:\n Longest name"))
 #' @rdname hGraph
 #' @details
-#' Details to be added here.
+#' See vignette **Multiplicity graphs formatting using ggplot2** for explanation of formatting.
 #' @import dplyr
 #' @importFrom grDevices gray.colors
 #' @import scales
 #' @import ggplot2
+#' @import testthat
+#' @rdname hGraph
 #' @export
 hGraph <- function(
   nHypotheses = 4, 
@@ -165,7 +162,6 @@ hGraph <- function(
   m = matrix(array(1/(nHypotheses - 1), nHypotheses^2), 
              nrow = nHypotheses) - diag(1/(nHypotheses - 1), nHypotheses),
   fill = 1,
-  fillAlpha = 1,
   palette = grDevices::gray.colors(length(unique(fill)), start = .5, end = .8),
   labels = LETTERS[1:length(unique(fill))], 
   legend.name = " ", 
@@ -191,7 +187,7 @@ hGraph <- function(
   wchar = if(as.character(Sys.info()[1])=="Windows"){'\u03b1'}else{'w'}
 ){
   # Check inputs
-  checkHGArgs(nHypotheses, nameHypotheses, alphaHypotheses, m, fill, fillAlpha, 
+  checkHGArgs(nHypotheses, nameHypotheses, alphaHypotheses, m, fill, 
               palette, labels, legend, legend.name, legend.position, halfwid, halfhgt, 
               trhw, trhh, trprop, digits, trdigits, size, boxtextsize,
               arrowsize, radianStart, offset, xradius, yradius, x, y, wchar)
@@ -200,7 +196,6 @@ hGraph <- function(
                           digits,
                           nameHypotheses,
                           fill = fill, 
-                          fillAlpha = fillAlpha,
                           xradius = xradius,
                           yradius = yradius,
                           radianStart = radianStart,
@@ -218,11 +213,11 @@ hGraph <- function(
     # plot ellipses
     stat_ellipse(data=ellipseData,
                  aes(x=x, y=y, group=n, fill=as.factor(fill)), 
-                 alpha=fillAlpha, 
                  geom="polygon") +
     theme_void() +
-    scale_alpha(guide="none") + 
-    scale_fill_manual(values=alpha(palette,fillAlpha),
+#following should be needed
+#   scale_alpha(guide="none") + 
+    scale_fill_manual(values=palette,
                       labels=labels,
                       guide_legend(legend.name)) +
     theme(legend.position = legend.position) +
