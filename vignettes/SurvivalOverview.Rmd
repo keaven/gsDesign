@@ -1,0 +1,149 @@
+---
+title: "Overview of design and evaluation of trials with time-to-event outcomes"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: gsDesign.bib
+vignette: >
+  %\VignetteIndexEntry{Overview of survival endpoint design}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+options( width = 58 )
+
+```
+
+# Introduction
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(gsDesign)
+library(tidyr)
+library(knitr)
+```
+
+This article/vignette provides a summary of functions in the ***gsDesign*** package supporting design and evaluation of trial designs for time-to-event outcomes.
+We do not focus on detailed output options, but rather on different methods.
+If you are not looking for this level of detail and just want to see how to design a fixed or group sequential design for a time-to-event endpoint, see the vignette *Basic time-to-event group sequential design using gsSurv*.
+
+The following functions support use of the very straightforward @Schoenfeld1981 approximation:
+
+- `nEvents()`: number of events to achieve power or power given number of events.
+- `zn2hr()`: approximate observed hazard ratio (HR) required to achieve a targeted Z-value for a given number of events.
+- `hrn2z()`: approximate Z-value corresponding to a specified HR and event count.
+- `hrz2n()`: approxiate event count corresponding to a specified HR and Z-value.
+
+The above functions do not directly support sample size calculations. 
+This is done with the @LachinFoulkes method. Functions include:
+
+- `nSurvival()`: Sample size restricted to single enrollment rate.
+- `nSurv()`: More flexible enrollment scenarios.
+- `gsSurv()`: Group sequential design extension of `nSurv()`.
+
+Output for `gsSurv()` in various formats is supported by the following functions:
+
+- `gsHR()`: Approximate HR required to cross a bound.
+- `gsBoundSummary()`: Tabular summary of design in a data frame.
+- `plot.gsDesign()`: Various plot summaries of design.
+
+# Schoenfeld approximation support
+
+Assuming a proportional hazards model with underlying hazard ratio $e^\delta$. Asymptotically the distribution of the Cox model estimate $\hat{\delta}$ of minus the logarithm of the hazard ratio $\hat\delta$ under the proportional hazards assumption is:
+$$\hat\delta\sim \hbox{Normal}(\delta, (1+r)^2/nr)$$
+where $r$ is the ratio of the sample size  of the experimental group divided by the sample size of the control group and $n$ is the number of events observed.
+Also, we know that a Wald test of $\hat{\delta}$ and Z-test version of the logrank test are both asymptotically efficient and therefore normalized versions have the same asymptotic distribution. We denote the standardized effect as
+
+$$\theta = \sqrt r / (1+r)\delta,$$
+let $\hat\theta =\sqrt r/(1+r)\hat\delta$ and note that
+$$ \theta \sim \hbox{Normal}(\theta, 1/\sqrt n).$$
+Thus, the standardized Z version of the logrank is approximately distributed as 
+
+$$Z\sim\hbox{Normal}(\sqrt n\theta,1).$$
+
+## Power and sample size with nEvents() 
+
+Based on the above, the power for the logrank test is approximated by
+
+$$P[Z\ge z]=1- \Phi(z -\sqrt n\theta)=1- \Phi(z- \sqrt{nr}/(1+r)\delta).$$
+Thus, assuming $n=100$ and $\delta = -\log(.7)$, and $r=1$ (equal randomization) we compute power when $\alpha=0.025$ as
+
+```{r}
+n <- 100
+hr <- .7
+delta <- -log(hr)
+alpha <- .025
+r <- 1
+pnorm(qnorm(1-alpha) - sqrt(n*r)/(1+r)*delta, lower.tail = FALSE)
+```
+
+We can compute this with `gsDesign::nEvents()` as:
+
+```{r}
+nEvents(n=n,alpha=alpha,hr=hr,r=r)
+```
+
+We solve for the number of event $n$ to see how many events are required to obtain a desired power $1-\beta=P(Z\ge \Phi^{1}(1-\alpha))$:
+
+$$n = \left(\frac{\Phi^{-1} (1-\alpha)+\Phi^{-1}(1-\beta)}{\theta}\right)^2
+=r^{-1}\left(\frac{\Phi^{-1} (1-\alpha)+\Phi^{-1}(1-\beta)}{\delta/(1+r)}\right)^2$$
+Thus, the approximate number of events required to power for HR=0.7 with $\alpha=0.025$ one-sided and power $1-\beta=0.9$ is
+
+```{r}
+beta <- 0.1
+1/r * ((qnorm(1 - alpha) + qnorm(1 - beta))*(1+r)/delta)^2
+```
+which, rounding up, matches (with tabular output):
+
+```{r}
+nEvents(hr = hr, alpha = alpha, beta = beta, r = 1, tbl = TRUE) %>%
+  kable()
+```
+
+The notation `delta` in the above table matches the standardized effect size $\theta$ in the above:
+
+```{r}
+theta <- delta * sqrt(r) / (1 + r)
+theta
+```
+
+## Group sequential design
+
+We can create a group sequential design for the above problem either with `theta` or with the fixed design sample size. The parameter `delta` in `gsDesign()` corresponds to standardized effect size $\theta$ in notation used above and by @JTBook, while the natural parameter, $\log(\hbox{HR})$ is in the parameter `delta1` passed to `gsDesign()`.
+The name of the effect size is specified in `deltaname` and the parameter `logdelta = TRUE` indicates that `delta` input needs to be exponentiated to obtain HR in the output below.
+Admittedly, there may have been some questionable choices here, so this example code can be useful in practice.
+We begin by passing the number of events for a fixed design in the parameter `n.fix` (continuous, not rounded) to adapt to a group sequential design.
+
+```{r}
+Schoenfeld <- gsDesign(k=2, 
+                       n.fix = nEvents(hr = hr, alpha = alpha, beta = beta, r = 1),
+                       delta1 = log(hr))
+Schoenfeld %>% 
+  gsBoundSummary(deltaname = "HR", logdelta = TRUE) %>% 
+  kable(row.names = FALSE)
+```
+
+Exactly the same output can be obtained with the following, passing the standardized effect size `theta` from above to the parameter `delta` in `gsDesign()`.
+ 
+
+```{r, eval=FALSE}
+gsDesign(k=2, delta = theta, delta1 = log(hr)) %>% 
+  gsBoundSummary(deltaname = "HR", logdelta = TRUE) %>% 
+  kable(row.names = FALSE)
+```
+
+# Lachin and Foulkes design
+
+## Fixed design
+
+## Group sequential design
+
+# Design summaries
+
+
+
+# References
