@@ -34,7 +34,7 @@ If you are not looking for this level of detail and just want to see how to desi
 The following functions support use of the very straightforward @Schoenfeld1981 approximation:
 
 - `nEvents()`: number of events to achieve power or power given number of events.
-- `zn2hr()`: approximate observed hazard ratio (HR) required to achieve a targeted Z-value for a given number of events.
+- `zn2hr()`, `gsHR()` and `gsBoundSummary()`: approximate the observed hazard ratio (HR) required to achieve a targeted Z-value for a given number of events.
 - `hrn2z()`: approximate Z-value corresponding to a specified HR and event count.
 - `hrz2n()`: approxiate event count corresponding to a specified HR and Z-value.
 
@@ -136,7 +136,45 @@ gsDesign(k=2, delta = theta, delta1 = log(hr)) %>%
   kable(row.names = FALSE)
 ```
 
+## Approximating boundary characteristics
+
+Another application of the @Schoenfeld1981 method is to approximate boundary characteristics of a design. As noted in the introduction above, we will consider `zn2hr()`, `gsHR()` and `gsBoundSummary()` to approximate design bounds with `zn2hr()` having some broader use. The functions `hrn2z()` and `hrz2n()` complement `zn2hr()`.
+We begin with the basic approximation used across all of these functions in this section, follow with a sub-section with example code for the approximations, and then provide a more technical sub-section for those wanting more detail.
+
+We consider further the following approximation from above that was demonstrated using `gsDesign::nEvents()`; recall that $\delta$ is the logarithm of the underlying hazard ratio:
+
+$$P[Z\ge z]=1- \Phi(z- \sqrt{nr}/(1+r)\delta).$$
+The above assumes the randomization ratio experimental/control of $r$, number of events $n$, and $\delta$ are fixed and computes the probability of an observed test statistic greater than $z$. Similarly, we can solve for $\exp(\delta)$ given $n$ and $z$ with:
+
+$$\exp(\delta)=. 1-\Phi^{-1}(z)$$
+
+$$
+\begin{align}
+\hat{\lambda} = &\exp(z(1+r)/\sqrt{rn})\\ 
+z = &\log(\hat{\lambda})\sqrt{nr}/(1+r)\\ 
+n = &(z(1+r)/\log(\hat{\lambda}))^2/r.
+\end{align}
+$$
+
+### Examples
+
+
+
+
+### Technical details
+
+
+
+
 # Lachin and Foulkes design
+
+For the purpose of sample size and power for group sequential design, the @LachinFoulkes is based on substantial evaluation not documented further here.
+We try to make clear here what some of the strengths and weaknesses of both the @LachinFoules method as well as its implementation in the `gsDesign::nSurv()` (fixed design) and `gsDesign::gsSurv()` (group sequential) functions.
+For historical and testing purposes, we also discuss use of the less flexible `gsDesign::nSurvival()` function that was independently programmed and can be used for some limited validations of `gsDesign::nSurv()`.
+
+
+
+
 
 ## Fixed design
 
