@@ -493,7 +493,7 @@ print.nSurvival <- function(x, ...) {
 #' is to make the default to not print row names. This is probably `not good R
 #' style' but may be helpful for many lazy R programmers like the author.
 #' @examples
-#' 
+#' library(ggplot2)
 #' # survival endpoint using gsSurv
 #' # generally preferred over nSurv since time computations are shown
 #' xgs <- gsSurv(lambdaC = .2, hr = .5, eta = .1, T = 2, minfup = 1.5)

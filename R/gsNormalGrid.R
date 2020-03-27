@@ -31,7 +31,7 @@
 #' the grid in \code{z} for integrating the normal density function; see
 #' examples. This is equal to \code{density * gridwgts}.}
 #' @examples
-#' 
+#' library(ggplot2)
 #' #  standard normal distribution
 #' x <- normalGrid(r = 3)
 #' plot(x$z, x$wgts)

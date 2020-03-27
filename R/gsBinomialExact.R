@@ -164,7 +164,7 @@ utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 #' for each output value of \code{n}.}
 #' 
 #' @examples
-#' 
+#' library(ggplot2)
 #' 
 #' zz <- gsBinomialExact(
 #'   k = 3, theta = seq(0, 1, 0.1), n.I = c(12, 24, 36),

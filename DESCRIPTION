@@ -1,18 +1,21 @@
 Package: gsDesign
-Version: 3.1.0.9003
+Version: 3.1.0.9004
 Title: Group Sequential Design
 Description: Derives group sequential designs and describes their properties.
 Authors@R: person(given = "Keaven", family = "Anderson", email =
           "keaven_anderson@merck.com", role = c('aut','cre'))
-Depends: R (>= 3.0.0), xtable, ggplot2 (>= 0.9.2)
-Imports: stats,utils,ggplot2,rlang,methods,xtable,graphics,plyr,tools,mvtnorm
+Depends: R (>= 3.0.0)
+Imports: stats,utils,ggplot2 (>= 0.9.2), rlang,methods,xtable,graphics,plyr,tools,mvtnorm
 Suggests: 
     knitr,
     scales,
     rmarkdown,
     gt,
     testthat,
-    covr
+    covr,
+    dplyr,
+    gridExtra,
+    tidyr
 VignetteBuilder: knitr
 License: GPL (>= 2)
 Copyright: Copyright 2010, Merck Research Laboratories

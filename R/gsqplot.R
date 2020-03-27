@@ -105,7 +105,7 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' of \code{x}, while in others \code{x$theta} is replaced and corresponding
 #' characteristics computed; see details.
 #' @examples
-#' 
+#' library(ggplot2)
 #' #  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
 #' #  lower bound is non-binding (ignored in Type I error computation)
 #' #  sample size is computed based on a fixed design requiring n=100

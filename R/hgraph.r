@@ -27,10 +27,10 @@ makeEllipseData <- function(x,xradius=.5,yradius=.5){
   w <- xradius/3.1
   h <- yradius/3.1
   x$n <- 1:nrow(x)
-  ellipses <- rbind(x %>% mutate(y=y+h),
-                    x %>% mutate(y=y-h),
-                    x %>% mutate(x=x+w),
-                    x %>% mutate(x=x-w)
+  ellipses <- rbind(x %>% dplyr::mutate(y=y+h),
+                    x %>% dplyr::mutate(y=y-h),
+                    x %>% dplyr::mutate(x=x+w),
+                    x %>% dplyr::mutate(x=x-w)
   )
   ellipses$txt=""
   return(ellipses)
@@ -42,19 +42,19 @@ makeTransitionSegments <- function(x, m, xradius, yradius, offset, trdigits, trp
   md <- data.frame(m) 
   names(md) <- 1:nrow(m) 
   md <- md %>% 
-    mutate(from=1:n()) %>% 
+    dplyr::mutate(from=1:dplyr::n()) %>% 
     # put transition weight in w
     tidyr::pivot_longer(-from, names_to="to", values_to="w") %>% 
-    mutate(to=as.integer(to)) %>% 
-    filter(w > 0) 
+    dplyr::mutate(to=as.integer(to)) %>% 
+    dplyr::filter(w > 0) 
   
   # Get ellipse center centers for transitions
-  y <- x %>% select(x, y) %>% mutate(from = 1:n())
+  y <- x %>% dplyr::select(x, y) %>% dplyr::mutate(from = 1:dplyr::n())
   return(
-    md %>% left_join(y, by = "from") %>%
-      left_join(y %>% transmute(to = from, xend = x, yend = y), by = "to") %>%
+    md %>% dplyr::left_join(y, by = "from") %>%
+      dplyr::left_join(y %>% dplyr::transmute(to = from, xend = x, yend = y), by = "to") %>%
       # Use ellipse centers, radii and offset to create points for line segments.
-      mutate(theta=atan2((yend - y) * xradius, (xend - x) * yradius),
+      dplyr::mutate(theta=atan2((yend - y) * xradius, (xend - x) * yradius),
              x1 = x, x1end = xend, y1 = y, y1end = yend,
              x = x1 + xradius * cos(theta + offset),
              y = y1 + yradius * sin(theta + offset),
@@ -68,7 +68,7 @@ makeTransitionSegments <- function(x, m, xradius, yradius, offset, trdigits, trp
              ybmax = yb + trhh,
              txt = as.character(round(w,trdigits))
       ) %>%
-      select(c(from, to, w, x, y, xend, yend, xb, yb, xbmin, xbmax, ybmin, ybmax, txt))
+      dplyr::select(c(from, to, w, x, y, xend, yend, xb, yb, xbmin, xbmax, ybmin, ybmax, txt))
   )
 }
 
@@ -79,13 +79,13 @@ checkHGArgs <- function(nHypotheses, nameHypotheses, alphaHypotheses, m, fill,
                         arrowsize, radianStart, offset, xradius, yradius, x, y, wchar)
 { if (!is.character(nameHypotheses)) stop("Hypotheses should be in a vector of character strings")
   ntxt <- length(nameHypotheses)
-  test_that("Each radius should be a single positive number",{
-    expect_type(xradius, "double")
-    expect_type(yradius, "double")
-    expect_equal(length(xradius),1)
-    expect_equal(length(yradius),1)
-    expect_gt(xradius, 0)
-    expect_gt(yradius, 0)
+  testthat::test_that("Each radius should be a single positive number",{
+    testthat::expect_type(xradius, "double")
+    testthat::expect_type(yradius, "double")
+    testthat::expect_equal(length(xradius),1)
+    testthat:: expect_equal(length(yradius),1)
+    testthat::expect_gt(xradius, 0)
+    testthat::expect_gt(yradius, 0)
   })
   # length of fill should be same as ntxt
   if(length(fill) != 1 & length(fill) != ntxt) stop("fill must have length 1 or number of hypotheses")
@@ -122,6 +122,7 @@ checkHGArgs <- function(nHypotheses, nameHypotheses, alphaHypotheses, m, fill,
 #' @param wchar character for alphaHypotheses in ellipses
 #' @return A `ggplot` object with a multi-layer multiplicity graph
 #' @examples
+#' library(tidyr)
 #' # Defaults: note clockwise ordering
 #' hGraph(5)
 #' # Add colors (default is 3 gray shades)
@@ -148,11 +149,9 @@ checkHGArgs <- function(nHypotheses, nameHypotheses, alphaHypotheses, m, fill,
 #' @rdname hGraph
 #' @details
 #' See vignette **Multiplicity graphs formatting using ggplot2** for explanation of formatting.
-#' @import dplyr
 #' @importFrom grDevices gray.colors
-#' @import scales
-#' @import ggplot2
-#' @import testthat
+#' @importFrom ggplot2 aes ggplot guide_legend stat_ellipse theme theme_void geom_text geom_segment geom_rect scale_fill_manual
+#' @importFrom grid unit
 #' @rdname hGraph
 #' @export
 hGraph <- function(

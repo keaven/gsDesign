@@ -129,7 +129,7 @@
 #' and number of events. \code{zn2hr} outputs an approximate hazard ratio
 #' corresponding to an input z-statistic and number of events.
 #' @examples
-#' 
+#' library(ggplot2)
 #' 
 #' # consider a trial with
 #' # 2 year maximum follow-up

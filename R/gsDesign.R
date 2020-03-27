@@ -387,7 +387,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' trial stops. If \code{overrun} is specified, the expected sample size
 #' includes the overrun at each interim.}
 #' @examples
-#' 
+#' library(ggplot2)
 #' #  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
 #' #  lower bound is non-binding (ignored in Type I error computation)
 #' #  sample size is computed based on a fixed design requiring n=800
@@ -598,7 +598,7 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
 #' value in the vector \code{theta}.} \item{r}{As input.} Note:
 #' \code{print.gsProbability()} returns the input \code{x}.
 #' @examples
-#' 
+#' library(ggplot2)
 #' # making a gsDesign object first may be easiest...
 #' x <- gsDesign()
 #' 
@@ -742,7 +742,7 @@ gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0
 #' \code{length(theta)} columns.  The subdensity function for \code{z[j]},
 #' \code{theta[m]} at analysis \code{i} is returned in \code{density[j,m]}. }
 #' @examples
-#' 
+#' library(ggplot2)
 #' # set up a group sequential design
 #' x <- gsDesign()
 #' 
