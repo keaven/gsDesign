@@ -146,7 +146,6 @@ checkHGArgs <- function(nHypotheses, nameHypotheses, alphaHypotheses, m, fill,
 #'        palette=cbPalette[2:4], fill = c(1, 2, 2),
 #'        legend.position = c(.6,.5), legend.name = "Legend:", labels = c("Group 1", "Group 2"),
 #'        nameHypotheses=c("H1:\n Long name","H2:\n Longer name","H3:\n Longest name"))
-#' @rdname hGraph
 #' @details
 #' See vignette **Multiplicity graphs formatting using ggplot2** for explanation of formatting.
 #' @importFrom grDevices gray.colors

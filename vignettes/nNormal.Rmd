@@ -3,7 +3,7 @@ title: "Two-sample normal sample size computation"
 output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
 vignette: >
-  %\VignetteIndexEntry{Multiplicity graphs}
+  %\VignetteIndexEntry{Two-sample normal sample size}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

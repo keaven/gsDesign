@@ -20,5 +20,5 @@ VignetteBuilder: knitr
 License: GPL (>= 2)
 Copyright: Copyright 2010, Merck Research Laboratories
 Date: 2012-11-12
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Encoding: UTF-8
