@@ -94,7 +94,7 @@ reference:
   - checkVector
 - title: Testing multiple hypotheses
   contents:
-  - hgraph
+  - hGraph
 articles:
   - title: "Designing for time-to-event endpoints"
     desc: >
