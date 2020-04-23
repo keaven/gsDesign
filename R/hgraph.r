@@ -1,3 +1,8 @@
+#' importFrom magrittr "%>%"
+#' importFrom dplyr mutate n filter left_join select
+#' importFrom tidyr pivot_longer
+NULL
+
 ellipseCenters <- function(alphaHypotheses, digits=5, txt = letters[1:3], fill=1, xradius = 2, yradius = 2, radianStart = NULL, 
                            x=NULL, y=NULL, wchar='x'){
   ntxt <- length(txt)
