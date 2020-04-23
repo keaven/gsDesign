@@ -667,7 +667,7 @@ sfHSD <- function(alpha, t, param) {
 #' )$upper$bound
 #' 
 #' # plot spending functions for generalized Lan-DeMets approximation of
-# O'Brien-Fleming (from Liu et al, 2012)
+#' # O'Brien-Fleming (from Liu et al, 2012)
 #' ti <-(0:100)/100
 #' rho <- c(.05,.5,1,1.5,2,2.5,3:6,8,10,12.5,15,20,30,200)/10
 #' df <- NULL
