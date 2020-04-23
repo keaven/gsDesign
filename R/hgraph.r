@@ -146,8 +146,9 @@ checkHGArgs <- function(nHypotheses, nameHypotheses, alphaHypotheses, m, fill,
 #'               1,0,0),nrow=3,byrow=TRUE)
 #' hGraph(3,alphaHypotheses=alphaHypotheses,nameHypotheses=nameHypotheses,m=m)
 #' # Custom position and size of ellipses, change text to multi-line text
+#' # Adjust box width
 #' # add legend in middle of plot
-#' hGraph(3,x=sqrt(0:2),y=c(1,3,1.5),size=6,halfWid=.25,halfHgt=.25, 
+#' hGraph(3,x=sqrt(0:2),y=c(1,3,1.5),size=6,halfWid=.3,halfHgt=.3, trhw=0.6,
 #'        palette=cbPalette[2:4], fill = c(1, 2, 2),
 #'        legend.position = c(.6,.5), legend.name = "Legend:", labels = c("Group 1", "Group 2"),
 #'        nameHypotheses=c("H1:\n Long name","H2:\n Longer name","H3:\n Longest name"))
