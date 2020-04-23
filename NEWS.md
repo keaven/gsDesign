@@ -1,4 +1,4 @@
-3.1.1, March, 2020
+3.1.1, April, 2020
 - Vignettes updated
 - Added hGraph() to support ggplot2 versions of multiplicity graphs
 - Eliminated unnecessary check from sequentialPValue
