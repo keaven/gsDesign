@@ -1490,7 +1490,7 @@ sfTDist <- function(alpha, t, param) {
 #' for further details.
 #' @examples
 #' 
-#' 
+#' library(ggplot2)
 #' # Eliminate efficacy spending forany interim at or before 20 percent of information.
 #' # Complete spending at first interim at or after 80 percent of information.
 #' tx <- (0:100) / 100
