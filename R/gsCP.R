@@ -104,7 +104,7 @@
 #' interim test statistic and the prior distribution input for \code{theta}
 #' conditional on an interim test statistic.
 #' @examples
-#' 
+#' library(ggplot2)
 #' # set up a group sequential design
 #' x <- gsDesign(k = 5)
 #' x

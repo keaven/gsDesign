@@ -57,7 +57,7 @@
 #' @return An object of type \code{spendfn}. 
 #' See \code{\link{Spending_Function_Overview}} for further details.
 #' @examples
-#' 
+#' library(ggplot2)
 #' # design a 4-analysis trial using a Kim-DeMets spending function
 #' # for both lower and upper bounds
 #' x <- gsDesign(k = 4, sfu = sfPower, sfupar = 3, sfl = sfPower, sflpar = 1.5)
@@ -228,7 +228,7 @@ sfLogistic <- function(alpha, t, param) {
 #' the exponential spending is to be computed; allowable range is (0, 1.5].
 #' @return An object of type \code{spendfn}.
 #' @examples
-#' 
+#' library(ggplot2)
 #' # use 'best' exponential approximation for k=6 to O'Brien-Fleming design
 #' # (see manual for details)
 #' gsDesign(
@@ -531,7 +531,7 @@ sfExtremeValue2 <- function(alpha, t, param) {
 #' Hwang-Shih-DeCani spending is to be computed; allowable range is [-40, 40]
 #' @return An object of type \code{spendfn}. See \link{Spending_Function_Overview} for further details.
 #' @examples
-#' 
+#' library(ggplot2)
 #' # design a 4-analysis trial using a Hwang-Shih-DeCani spending function
 #' # for both lower and upper bounds
 #' x <- gsDesign(k = 4, sfu = sfHSD, sfupar = -2, sfl = sfHSD, sflpar = 1)
@@ -631,7 +631,7 @@ sfHSD <- function(alpha, t, param) {
 #' @return An object of type \code{spendfn}. See spending functions for further
 #' details.
 #' @examples
-#' 
+#' library(ggplot2)
 #' # 2-sided,  symmetric 6-analysis trial Pocock
 #' # spending function approximation
 #' gsDesign(k = 6, sfu = sfLDPocock, test.type = 2)$upper$bound
@@ -849,7 +849,7 @@ sfNormal <- function(alpha, t, param) {
 #'
 #' See \code{\link{Spending_Function_Overview}} for further details.
 #' @examples
-#' 
+#' library(ggplot2)
 #' # set up alpha spending and beta spending to be piecewise linear
 #' sfupar <- c(.2, .4, .05, .2)
 #' sflpar <- c(.3, .5, .65, .5, .75, .9)
@@ -1064,7 +1064,7 @@ sfStep <- function(alpha, t, param) {
 #' @return An object of type \code{spendfn}. See spending functions for further
 #' details.
 #' @examples
-#' 
+#' library(ggplot2)
 #' # example to specify spending on a pointwise basis
 #' x <- gsDesign(
 #'   k = 6, sfu = sfPoints, sfupar = c(.01, .05, .1, .25, .5, 1),
@@ -1191,7 +1191,7 @@ sfPoints <- function(alpha, t, param) {
 #' is (0,15]
 #' @return An object of type \code{spendfn}. See \link{Spending_Function_Overview} for further details.
 #' @examples
-#' 
+#' library(ggplot2)
 #' # design a 4-analysis trial using a Kim-DeMets spending function
 #' # for both lower and upper bounds
 #' x <- gsDesign(k = 4, sfu = sfPower, sfupar = 3, sfl = sfPower, sflpar = 1.5)
@@ -1302,7 +1302,7 @@ sfPower <- function(alpha, t, param) {
 #' @return An object of type \code{spendfn}. See spending functions for further
 #' details.
 #' @examples
-#' 
+#' library(ggplot2)
 #' # 3-parameter specification: a,  b,  df
 #' sfTDist(1, 1:5 / 6, c(-1, 1.5, 4))$spend
 #' 

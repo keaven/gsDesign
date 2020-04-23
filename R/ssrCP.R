@@ -154,6 +154,7 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #' \code{delta1} values from \code{x}: \code{delta = delta0 +
 #' theta(delta1-delta0)}.}
 #' @examples
+#' library(ggplot2)
 #' # quick trick for simple conditional power based on interim z-value, stage 1 and 2 sample size
 #' # assumed treatment effect and final alpha level
 #' # and observed treatment effect

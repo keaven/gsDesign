@@ -8,7 +8,9 @@
 # xtable.gsDesign function [sinew] ----
 xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digits = NULL, 
                             display = NULL, ...) {
-  
+
+  .Deprecated("gsBoundSummary")
+
   dots <- list(...)
   
   if(!'footnote'%in%dots)

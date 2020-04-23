@@ -5,10 +5,10 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' @description The \code{plot()} function has been extended to work with objects returned
 #' by \code{gsDesign()} and \code{gsProbability()}.  For objects of type
 #' \code{gsDesign}, seven types of plots are provided: z-values at boundaries
-#' (default), power, estimated treatment effects at boundaries, conditional
+#' (default), power, approximate treatment effects at boundaries, conditional
 #' power at boundaries, spending functions, expected sample size, and B-values
 #' at boundaries. For objects of type \code{gsProbability} plots are available
-#' for z-values at boundaries, power (default), estimated treatment effects at
+#' for z-values at boundaries, power (default), approximate treatment effects at
 #' boundaries, conditional power, expected sample size and B-values at
 #' boundaries.
 #'
@@ -35,7 +35,7 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' \code{gsProbability} object, the values of \code{theta} are plotted and are
 #' labeled as \eqn{theta}. See examples below.
 #'
-#' Estimated treatment effects at boundaries are computed dividing the Z-values
+#' Approximate treatment effects at boundaries are computed dividing the Z-values
 #' at the boundaries by the square root of \code{n.I} at that analysis.
 #'
 #' Spending functions are plotted for a continuous set of values from 0 to 1.
@@ -45,7 +45,7 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #'
 #' Conditional power is computed using the function \code{gsBoundCP()}.  The
 #' default input for this routine is \code{theta="thetahat"} which will compute
-#' the conditional power at each bound using the estimated treatment effect at
+#' the conditional power at each bound using the approximate treatment effect at
 #' that bound.  Otherwise, if the input is \code{gsDesign} object conditional
 #' power is computed assuming \code{theta=x$delta}, the original effect size
 #' for which the trial was planned.
@@ -68,7 +68,7 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #'
 #' 2=power plot (default for \code{gsProbability}),
 #'
-#' 3=estimated treatment effect at boundaries,
+#' 3=approximate treatment effect at boundaries,
 #'
 #' 4=conditional power at boundaries,
 #'
@@ -95,8 +95,8 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #'
 #' \code{ses=TRUE} which applies only when \code{plottype=3} and
 #'
-#' \code{class(x)=="gsDesign"}; indicates that estimated standardized effect
-#' size at the boundary is to be plotted rather than the actual estimate.
+#' \code{class(x)=="gsDesign"}; indicates that approximate standardized effect
+#' size at the boundary is to be plotted rather than the approximate natural parameter.
 #'
 #' \code{xval="Default"} which is only effective when \code{plottype=2} or
 #' \code{6}. Appropriately scaled (reparameterized) values for x-axis for power
@@ -105,7 +105,7 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' of \code{x}, while in others \code{x$theta} is replaced and corresponding
 #' characteristics computed; see details.
 #' @examples
-#' 
+#' library(ggplot2)
 #' #  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
 #' #  lower bound is non-binding (ignored in Type I error computation)
 #' #  sample size is computed based on a fixed design requiring n=100
@@ -252,12 +252,12 @@ plotreleffect <- function(x = x, ylab = NULL, main = "Treatment effect at bounds
 }
 
 # plotHR function [sinew] ----
-plotHR <- function(x = x, ylab = "Estimated hazard ratio", main = "Hazard ratio at bounds", ...) {
+plotHR <- function(x = x, ylab = "Approximate hazard ratio", main = "Approximate hazard ratio at bounds", ...) {
   qplotit(x, fn = gsHR, ylab = ylab, main = main, ratio = 1, ...)
 }
 
 # plotRR function [sinew] ----
-plotRR <- function(x = x, ylab = "Estimated risk ratio", main = "Risk ratio at bounds", ...) {
+plotRR <- function(x = x, ylab = "Approximate risk ratio", main = "Approximate risk ratio at bounds", ...) {
   qplotit(x, fn = gsRR, ylab = ylab, main = main, ratio = 1, ...)
 }
 
@@ -280,7 +280,7 @@ gsDelta <- function(z, i, x, ylab = NULL, ...) {
 # gsRR function [sinew] ----
 #' @export 
 #' @rdname gsBoundSummary
-gsRR <- function(z, i, x, ratio = 1, ylab = "Estimated risk ratio", ...) {
+gsRR <- function(z, i, x, ratio = 1, ylab = "Approximate risk ratio", ...) {
   deltaHat <- z / sqrt(x$n.I[i]) * (x$delta1 - x$delta0) / x$delta + x$delta0
   exp(deltaHat)
 }
@@ -288,7 +288,7 @@ gsRR <- function(z, i, x, ratio = 1, ylab = "Estimated risk ratio", ...) {
 # gsHR function [sinew] ----
 #' @export 
 #' @rdname gsBoundSummary
-gsHR <- function(z, i, x, ratio = 1, ylab = "Estimated hazard ratio", ...) {
+gsHR <- function(z, i, x, ratio = 1, ylab = "Approximate hazard ratio", ...) {
   c <- 1 / (1 + ratio)
   psi <- c * (1 - c)
 

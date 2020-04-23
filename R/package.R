@@ -59,7 +59,7 @@
 #' Clinical Trials. A Unified Approach}.  New York: Springer.
 #' @keywords design
 #' @examples
-#' 
+#' library(ggplot2)
 #' # assume a fixed design (no interim) trial with the same endpoint
 #' # requires 200 subjects for 90% power at alpha=.025, one-sided
 #' x <- gsDesign(n.fix=200)
@@ -134,7 +134,7 @@ NULL
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 #' @keywords design
 #' @examples
-#' 
+#' library(ggplot2)
 #' # Example 1: simple example showing what mose users need to know
 #' 
 #' # design a 4-analysis trial using a Hwang-Shih-DeCani spending function 

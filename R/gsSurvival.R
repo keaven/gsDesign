@@ -48,8 +48,8 @@
 #' hazard ratio into the above equation allows approximating any one of the
 #' following based on the other two: the estimate hazard ratio, the number of
 #' events and the z-statistic. That is, \deqn{\hat{\lambda}=
-#' \exp(z(1+r)/\sqrt{rn})} \deqn{z=log(\hat{\lambda})\sqrt{nr}/(1+r)} \deqn{n=
-#' (z(1+r)/log(\hat{\lambda}))^2/r.}
+#' \exp(z(1+r)/\sqrt{rn})} \deqn{z=\log(\hat{\lambda})\sqrt{nr}/(1+r)} \deqn{n=
+#' (z(1+r)/\log(\hat{\lambda}))^2/r.}
 #'
 #' \code{hrz2n()} translates an observed interim hazard ratio and interim
 #' z-value into the number of events required for the Z-value and hazard ratio
@@ -129,7 +129,7 @@
 #' and number of events. \code{zn2hr} outputs an approximate hazard ratio
 #' corresponding to an input z-statistic and number of events.
 #' @examples
-#' 
+#' library(ggplot2)
 #' 
 #' # consider a trial with
 #' # 2 year maximum follow-up

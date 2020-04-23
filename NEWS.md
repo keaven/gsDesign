@@ -1,9 +1,16 @@
+3.1.1, April, 2020
+- Vignettes updated
+- Added hGraph() to support ggplot2 versions of multiplicity graphs
+- Eliminated unnecessary check from sequentialPValue
+- Targeted release to CRAN
+- Removed dependencies on reshape2, plyr
+
 3.1.0, April, 2019
 - Addition of pkgdown web site
 - Updated unit testing to from RUnit to testthat
 - Converted to ROxygen2 generation of help files
 - Converted vignettes to RMarkdown
-- Added Travis-CI support
+- Added Travis-CI and Appveyor support
 - Added sequentialPValue function 
 - Backwards compatible addition of spending time capabilities to gsDesign and gsSurv
 
