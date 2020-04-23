@@ -674,7 +674,7 @@ sfHSD <- function(alpha, t, param) {
 #' for(r in rho){
 #'   df <- rbind(df,data.frame(t=ti,rho=r,alpha=.025,spend=sfLDOF(alpha=.025,t=ti,param=r)$spend))
 #' }
-#' ggplot(df,aes(x=t,y=spend,col=as.factor(rho)))+
+#' ggplot2::ggplot(df,aes(x=t,y=spend,col=as.factor(rho)))+
 #'   geom_line()+
 #'   guides(col=guide_legend(expression(rho)))+
 #'   ggtitle("Generalized Lan-DeMets O'Brien-Fleming Spending Function")
