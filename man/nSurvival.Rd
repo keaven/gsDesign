@@ -11,13 +11,32 @@
 \usage{
 \method{print}{nSurvival}(x, ...)
 
-nSurvival(lambda1 = 1/12, lambda2 = 1/24, Ts = 24, Tr = 12,
-  eta = 0, ratio = 1, alpha = 0.025, beta = 0.1, sided = 1,
-  approx = FALSE, type = c("rr", "rd"), entry = c("unif", "expo"),
-  gamma = NA)
+nSurvival(
+  lambda1 = 1/12,
+  lambda2 = 1/24,
+  Ts = 24,
+  Tr = 12,
+  eta = 0,
+  ratio = 1,
+  alpha = 0.025,
+  beta = 0.1,
+  sided = 1,
+  approx = FALSE,
+  type = c("rr", "rd"),
+  entry = c("unif", "expo"),
+  gamma = NA
+)
 
-nEvents(hr = 0.6, alpha = 0.025, beta = 0.1, ratio = 1,
-  sided = 1, hr0 = 1, n = 0, tbl = FALSE)
+nEvents(
+  hr = 0.6,
+  alpha = 0.025,
+  beta = 0.1,
+  ratio = 1,
+  sided = 1,
+  hr0 = 1,
+  n = 0,
+  tbl = FALSE
+)
 
 zn2hr(z, n, ratio = 1, hr0 = 1, hr1 = 0.7)
 
@@ -161,8 +180,8 @@ ratio \eqn{\lambda} and thus \eqn{z} is asymptotically normal with variance
 hazard ratio into the above equation allows approximating any one of the
 following based on the other two: the estimate hazard ratio, the number of
 events and the z-statistic. That is, \deqn{\hat{\lambda}=
-\exp(z(1+r)/\sqrt{rn})} \deqn{z=log(\hat{\lambda})\sqrt{nr}/(1+r)} \deqn{n=
-(z(1+r)/log(\hat{\lambda}))^2/r.}
+\exp(z(1+r)/\sqrt{rn})} \deqn{z=\log(\hat{\lambda})\sqrt{nr}/(1+r)} \deqn{n=
+(z(1+r)/\log(\hat{\lambda}))^2/r.}
 
 \code{hrz2n()} translates an observed interim hazard ratio and interim
 z-value into the number of events required for the Z-value and hazard ratio
@@ -177,7 +196,7 @@ the case of \code{hrn2z()} and whether or not a z-value > 0 corresponds to a
 hazard ratio > or < the null hazard ratio \code{hr0}.
 }
 \examples{
-
+library(ggplot2)
 
 # consider a trial with
 # 2 year maximum follow-up

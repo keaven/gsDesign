@@ -12,27 +12,72 @@
 \usage{
 \method{print}{nSurv}(x, digits = 4, ...)
 
-nSurv(lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0,
-  etaE = NULL, gamma = 1, R = 12, S = NULL, T = NULL,
-  minfup = NULL, ratio = 1, alpha = 0.025, beta = 0.1, sided = 1,
-  tol = .Machine$double.eps^0.25)
+nSurv(
+  lambdaC = log(2)/6,
+  hr = 0.6,
+  hr0 = 1,
+  eta = 0,
+  etaE = NULL,
+  gamma = 1,
+  R = 12,
+  S = NULL,
+  T = NULL,
+  minfup = NULL,
+  ratio = 1,
+  alpha = 0.025,
+  beta = 0.1,
+  sided = 1,
+  tol = .Machine$double.eps^0.25
+)
 
 tEventsIA(x, timing = 0.25, tol = .Machine$double.eps^0.25)
 
 nEventsIA(tIA = 5, x = NULL, target = 0, simple = TRUE)
 
-gsSurv(k = 3, test.type = 4, alpha = 0.025, sided = 1,
-  beta = 0.1, astar = 0, timing = 1, sfu = sfHSD, sfupar = -4,
-  sfl = sfHSD, sflpar = -2, r = 18, lambdaC = log(2)/6, hr = 0.6,
-  hr0 = 1, eta = 0, etaE = NULL, gamma = 1, R = 12, S = NULL,
-  T = NULL, minfup = NULL, ratio = 1,
-  tol = .Machine$double.eps^0.25, usTime = NULL, lsTime = NULL)
+gsSurv(
+  k = 3,
+  test.type = 4,
+  alpha = 0.025,
+  sided = 1,
+  beta = 0.1,
+  astar = 0,
+  timing = 1,
+  sfu = sfHSD,
+  sfupar = -4,
+  sfl = sfHSD,
+  sflpar = -2,
+  r = 18,
+  lambdaC = log(2)/6,
+  hr = 0.6,
+  hr0 = 1,
+  eta = 0,
+  etaE = NULL,
+  gamma = 1,
+  R = 12,
+  S = NULL,
+  T = NULL,
+  minfup = NULL,
+  ratio = 1,
+  tol = .Machine$double.eps^0.25,
+  usTime = NULL,
+  lsTime = NULL
+)
 
 \method{print}{gsSurv}(x, digits = 2, ...)
 
-\method{xtable}{gsSurv}(x, caption = NULL, label = NULL,
-  align = NULL, digits = NULL, display = NULL, auto = FALSE,
-  footnote = NULL, fnwid = "9cm", timename = "months", ...)
+\method{xtable}{gsSurv}(
+  x,
+  caption = NULL,
+  label = NULL,
+  align = NULL,
+  digits = NULL,
+  display = NULL,
+  auto = FALSE,
+  footnote = NULL,
+  fnwid = "9cm",
+  timename = "months",
+  ...
+)
 }
 \arguments{
 \item{x}{An object of class \code{nSurv} or \code{gsSurv}.

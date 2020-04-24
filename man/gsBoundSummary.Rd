@@ -13,19 +13,33 @@
 \alias{gsCPz}
 \title{Bound Summary and Z-transformations}
 \usage{
-\method{summary}{gsDesign}(object, information = FALSE,
-  timeunit = "months", ...)
+\method{summary}{gsDesign}(object, information = FALSE, timeunit = "months", ...)
 
 \method{print}{gsDesign}(x, ...)
 
-gsBoundSummary(x, deltaname = NULL, logdelta = FALSE, Nname = NULL,
-  digits = 4, ddigits = 2, tdigits = 0, timename = "Month",
+gsBoundSummary(
+  x,
+  deltaname = NULL,
+  logdelta = FALSE,
+  Nname = NULL,
+  digits = 4,
+  ddigits = 2,
+  tdigits = 0,
+  timename = "Month",
   prior = normalGrid(mu = x$delta/2, sigma = 10/sqrt(x$n.fix)),
-  POS = FALSE, ratio = NULL, exclude = c("B-value", "Spending", "CP",
-  "CP H1", "PP"), r = 18, ...)
+  POS = FALSE,
+  ratio = NULL,
+  exclude = c("B-value", "Spending", "CP", "CP H1", "PP"),
+  r = 18,
+  ...
+)
 
-xprint(x, include.rownames = FALSE, hline.after = c(-1, which(x$Value
-  == x[1, ]$Value) - 1, nrow(x)), ...)
+xprint(
+  x,
+  include.rownames = FALSE,
+  hline.after = c(-1, which(x$Value == x[1, ]$Value) - 1, nrow(x)),
+  ...
+)
 
 \method{print}{gsBoundSummary}(x, row.names = FALSE, digits = 4, ...)
 
@@ -33,9 +47,9 @@ gsBValue(z, i, x, ylab = "B-value", ...)
 
 gsDelta(z, i, x, ylab = NULL, ...)
 
-gsRR(z, i, x, ratio = 1, ylab = "Estimated risk ratio", ...)
+gsRR(z, i, x, ratio = 1, ylab = "Approximate risk ratio", ...)
 
-gsHR(z, i, x, ratio = 1, ylab = "Estimated hazard ratio", ...)
+gsHR(z, i, x, ratio = 1, ylab = "Approximate hazard ratio", ...)
 
 gsCPz(z, i, x, theta = NULL, ylab = NULL, ...)
 }
@@ -251,7 +265,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 # survival endpoint using gsSurv
 # generally preferred over nSurv since time computations are shown
 xgs <- gsSurv(lambdaC = .2, hr = .5, eta = .1, T = 2, minfup = 1.5)

@@ -5,8 +5,17 @@
 \alias{print.eEvents}
 \title{Expected number of events for a time-to-event study}
 \usage{
-eEvents(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL, T = 2,
-  Tfinal = NULL, minfup = 0, digits = 4)
+eEvents(
+  lambda = 1,
+  eta = 0,
+  gamma = 1,
+  R = 1,
+  S = NULL,
+  T = 2,
+  Tfinal = NULL,
+  minfup = 0,
+  digits = 4
+)
 
 \method{print}{eEvents}(x, digits = 4, ...)
 }

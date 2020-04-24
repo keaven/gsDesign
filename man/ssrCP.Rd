@@ -10,16 +10,37 @@
 \alias{Power.ssrCP}
 \title{Sample size re-estimation based on conditional power}
 \usage{
-condPower(z1, n2, z2 = z2NC, theta = NULL, x = gsDesign(k = 2, timing
-  = 0.5, beta = beta), ...)
+condPower(
+  z1,
+  n2,
+  z2 = z2NC,
+  theta = NULL,
+  x = gsDesign(k = 2, timing = 0.5, beta = beta),
+  ...
+)
 
-ssrCP(z1, theta = NULL, maxinc = 2, overrun = 0, beta = x$beta,
-  cpadj = c(0.5, 1 - beta), x = gsDesign(k = 2, timing = 0.5),
-  z2 = z2NC, ...)
+ssrCP(
+  z1,
+  theta = NULL,
+  maxinc = 2,
+  overrun = 0,
+  beta = x$beta,
+  cpadj = c(0.5, 1 - beta),
+  x = gsDesign(k = 2, timing = 0.5),
+  z2 = z2NC,
+  ...
+)
 
-\method{plot}{ssrCP}(x, z1ticks = NULL, mar = c(7, 4, 4, 4) + 0.1,
-  ylab = "Adapted sample size", xlaboffset = -0.2, lty = 1,
-  col = 1, ...)
+\method{plot}{ssrCP}(
+  x,
+  z1ticks = NULL,
+  mar = c(7, 4, 4, 4) + 0.1,
+  ylab = "Adapted sample size",
+  xlaboffset = -0.2,
+  lty = 1,
+  col = 1,
+  ...
+)
 
 z2NC(z1, x, ...)
 
@@ -166,6 +187,7 @@ suggest that using the parameter value for which the trial was originally
 powered is a good choice.
 }
 \examples{
+library(ggplot2)
 # quick trick for simple conditional power based on interim z-value, stage 1 and 2 sample size
 # assumed treatment effect and final alpha level
 # and observed treatment effect

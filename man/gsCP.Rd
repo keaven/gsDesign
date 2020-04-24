@@ -11,14 +11,27 @@
 \usage{
 gsCP(x, theta = NULL, i = 1, zi = 0, r = 18)
 
-gsPP(x, i = 1, zi = 0, theta = c(0, 3), wgts = c(0.5, 0.5),
-  r = 18, total = TRUE)
+gsPP(
+  x,
+  i = 1,
+  zi = 0,
+  theta = c(0, 3),
+  wgts = c(0.5, 0.5),
+  r = 18,
+  total = TRUE
+)
 
-gsPI(x, i = 1, zi = 0, j = 2, level = 0.95, theta = c(0, 3),
-  wgts = c(0.5, 0.5))
+gsPI(
+  x,
+  i = 1,
+  zi = 0,
+  j = 2,
+  level = 0.95,
+  theta = c(0, 3),
+  wgts = c(0.5, 0.5)
+)
 
-gsPosterior(x = gsDesign(), i = 1, zi = NULL, prior = normalGrid(),
-  r = 18)
+gsPosterior(x = gsDesign(), i = 1, zi = NULL, prior = normalGrid(), r = 18)
 
 gsPOS(x, theta, wgts)
 
@@ -148,7 +161,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 # set up a group sequential design
 x <- gsDesign(k = 5)
 x

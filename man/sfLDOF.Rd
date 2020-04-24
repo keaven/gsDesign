@@ -58,7 +58,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 # 2-sided,  symmetric 6-analysis trial Pocock
 # spending function approximation
 gsDesign(k = 6, sfu = sfLDPocock, test.type = 2)$upper$bound

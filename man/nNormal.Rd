@@ -4,9 +4,18 @@
 \alias{nNormal}
 \title{Normal distribution sample size (2-sample)}
 \usage{
-nNormal(delta1 = 1, sd = 1.7, sd2 = NULL, alpha = 0.025,
-  beta = 0.1, ratio = 1, sided = 1, n = NULL, delta0 = 0,
-  outtype = 1)
+nNormal(
+  delta1 = 1,
+  sd = 1.7,
+  sd2 = NULL,
+  alpha = 0.025,
+  beta = 0.1,
+  ratio = 1,
+  sided = 1,
+  n = NULL,
+  delta0 = 0,
+  outtype = 1
+)
 }
 \arguments{
 \item{delta1}{difference between sample means under the alternate
@@ -64,6 +73,13 @@ In the examples below we show how to set up a 2-arm group sequential design with
 \code{nNormal()} computes sample size for comparing two normal means when
 the variance for observations in
 }
+\details{
+This is more of a convenience routine than one recommended for broad use without careful considerations
+such as those outlined in Jennison and Turnbull (2000).
+For larger studies where a conservative estimate of within group standard deviations is available, it
+can be useful.
+A more detailed formulation is available in the vignette on two-sample normal sample size.
+}
 \examples{
 
 # EXAMPLES
@@ -82,6 +98,9 @@ nNormal(delta1 = .5, sd = 1.1, alpha = .025, beta = .2, ratio = 2)
 nNormal(delta1 = .5, delta0 = -.1, sd = 1.2)
 }
 \references{
+Jennison C and Turnbull BW (2000), \emph{Group Sequential
+Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
+
 Lachin JM (1981), Introduction to sample size determination and
 power analysis for clinical trials. \emph{Controlled Clinical Trials}
 2:93-113.

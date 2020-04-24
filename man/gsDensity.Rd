@@ -53,7 +53,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 # set up a group sequential design
 x <- gsDesign()
 

@@ -62,7 +62,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 # 3-parameter specification: a,  b,  df
 sfTDist(1, 1:5 / 6, c(-1, 1.5, 4))$spend
 

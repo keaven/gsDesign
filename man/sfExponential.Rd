@@ -58,7 +58,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 # use 'best' exponential approximation for k=6 to O'Brien-Fleming design
 # (see manual for details)
 gsDesign(

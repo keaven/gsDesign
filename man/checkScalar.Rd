@@ -10,8 +10,13 @@
 \usage{
 checkLengths(..., allowSingle = FALSE)
 
-checkRange(x, interval = 0:1, inclusion = c(TRUE, TRUE),
-  varname = deparse(substitute(x)), tol = 0)
+checkRange(
+  x,
+  interval = 0:1,
+  inclusion = c(TRUE, TRUE),
+  varname = deparse(substitute(x)),
+  tol = 0
+)
 
 checkScalar(x, isType = "numeric", ...)
 

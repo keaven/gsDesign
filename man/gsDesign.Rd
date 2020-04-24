@@ -4,12 +4,31 @@
 \alias{gsDesign}
 \title{Design Derivation}
 \usage{
-gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1,
-  astar = 0, delta = 0, n.fix = 1, timing = 1, sfu = sfHSD,
-  sfupar = -4, sfl = sfHSD, sflpar = -2, tol = 1e-06, r = 18,
-  n.I = 0, maxn.IPlan = 0, nFixSurv = 0, endpoint = NULL,
-  delta1 = 1, delta0 = 0, overrun = 0, usTime = NULL,
-  lsTime = NULL)
+gsDesign(
+  k = 3,
+  test.type = 4,
+  alpha = 0.025,
+  beta = 0.1,
+  astar = 0,
+  delta = 0,
+  n.fix = 1,
+  timing = 1,
+  sfu = sfHSD,
+  sfupar = -4,
+  sfl = sfHSD,
+  sflpar = -2,
+  tol = 1e-06,
+  r = 18,
+  n.I = 0,
+  maxn.IPlan = 0,
+  nFixSurv = 0,
+  endpoint = NULL,
+  delta1 = 1,
+  delta0 = 0,
+  overrun = 0,
+  usTime = NULL,
+  lsTime = NULL
+)
 }
 \arguments{
 \item{k}{Number of analyses planned, including interim and final.}
@@ -229,7 +248,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 #  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
 #  lower bound is non-binding (ignored in Type I error computation)
 #  sample size is computed based on a fixed design requiring n=800

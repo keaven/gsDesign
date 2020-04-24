@@ -3,7 +3,6 @@
 \docType{package}
 \name{gsDesign package overview}
 \alias{gsDesign package overview}
-\alias{gsDesign package overview-package}
 \title{1.0 Group Sequential Design}
 \description{
 gsDesign is a package for deriving and describing group sequential designs.
@@ -54,7 +53,7 @@ characterize and even optimize routine group sequential trial designs as
 well as provide a tool to evaluate innovative designs.
 }
 \examples{
-
+library(ggplot2)
 # assume a fixed design (no interim) trial with the same endpoint
 # requires 200 subjects for 90\% power at alpha=.025, one-sided
 x <- gsDesign(n.fix=200)

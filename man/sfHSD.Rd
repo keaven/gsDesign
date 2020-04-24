@@ -46,7 +46,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 # design a 4-analysis trial using a Hwang-Shih-DeCani spending function
 # for both lower and upper bounds
 x <- gsDesign(k = 4, sfu = sfHSD, sfupar = -2, sfl = sfHSD, sflpar = 1)

@@ -50,7 +50,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 #  standard normal distribution
 x <- normalGrid(r = 3)
 plot(x$z, x$wgts)
@@ -96,9 +96,9 @@ z <- gsProbability(
 )
 z <- gsProbability(d = x, theta = y$z)
 cat(
-  "Expected sample size averaged over normal\\n prior distribution for theta with \\n mu=",
+  "Expected sample size averaged over normal\n prior distribution for theta with \n mu=",
   x$theta[2], "sigma=", x$theta[2] / 1.5, ":",
-  round(sum(z$en * y$wgt), 1), "\\n"
+  round(sum(z$en * y$wgt), 1), "\n"
 )
 plot(y$z, z$en,
   xlab = "theta", ylab = "E{N}",

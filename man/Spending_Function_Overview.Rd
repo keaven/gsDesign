@@ -70,7 +70,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 # Example 1: simple example showing what mose users need to know
 
 # design a 4-analysis trial using a Hwang-Shih-DeCani spending function 

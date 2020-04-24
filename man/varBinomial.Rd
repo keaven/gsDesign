@@ -9,17 +9,44 @@
 \title{Testing, Confidence Intervals, Sample Size and Power for Comparing Two
 Binomial Rates}
 \usage{
-ciBinomial(x1, x2, n1, n2, alpha = 0.05, adj = 0,
-  scale = "Difference")
+ciBinomial(x1, x2, n1, n2, alpha = 0.05, adj = 0, scale = "Difference")
 
-nBinomial(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1,
-  sided = 1, outtype = 1, scale = "Difference", n = NULL)
+nBinomial(
+  p1,
+  p2,
+  alpha = 0.025,
+  beta = 0.1,
+  delta0 = 0,
+  ratio = 1,
+  sided = 1,
+  outtype = 1,
+  scale = "Difference",
+  n = NULL
+)
 
-simBinomial(p1, p2, n1, n2, delta0 = 0, nsim = 10000, chisq = 0,
-  adj = 0, scale = "Difference")
+simBinomial(
+  p1,
+  p2,
+  n1,
+  n2,
+  delta0 = 0,
+  nsim = 10000,
+  chisq = 0,
+  adj = 0,
+  scale = "Difference"
+)
 
-testBinomial(x1, x2, n1, n2, delta0 = 0, chisq = 0, adj = 0,
-  scale = "Difference", tol = 1e-11)
+testBinomial(
+  x1,
+  x2,
+  n1,
+  n2,
+  delta0 = 0,
+  chisq = 0,
+  adj = 0,
+  scale = "Difference",
+  tol = 1e-11
+)
 
 varBinomial(x, n, delta0 = 0, ratio = 1, scale = "Difference")
 }
@@ -261,42 +288,31 @@ nBinomial(p1 = .15, p2 = .1, beta = .2, alpha = .05, n = n)
 nBinomial(p1 = .15, p2 = .1, beta = .2, alpha = .05, outtype = 2)
 nBinomial(p1 = .15, p2 = .1, beta = .2, alpha = .05, outtype = 3)
 
-
 # look at power plot under different control event rate and
 # relative risk reductions
+library(dplyr)
+library(ggplot2)
 p1 <- seq(.075, .2, .000625)
-p2 <- p1 * 2 / 3
-y1 <- nBinomial(p1, p2, beta = .2, outtype = 1, alpha = .025, sided = 1)
-p2 <- p1 * .75
-y2 <- nBinomial(p1, p2, beta = .2, outtype = 1, alpha = .025, sided = 1)
-p2 <- p1 * .6
-y3 <- nBinomial(p1, p2, beta = .2, outtype = 1, alpha = .025, sided = 1)
-p2 <- p1 * .5
-y4 <- nBinomial(p1, p2, beta = .2, outtype = 1, alpha = .025, sided = 1)
-plot(p1, y1,
-  type = "l", ylab = "Sample size",
-  xlab = "Control group event rate", ylim = c(0, 6000), lwd = 2
-)
-title(main = "Binomial sample size computation for 80 pct power")
-lines(p1, y2, lty = 2, lwd = 2)
-lines(p1, y3, lty = 3, lwd = 2)
-lines(p1, y4, lty = 4, lwd = 2)
-legend(
-  x = c(.15, .2), y = c(4500, 6000), lty = c(2, 1, 3, 4), lwd = 2,
-  legend = c(
-    "25 pct reduction", "33 pct reduction",
-    "40 pct reduction", "50 pct reduction"
-  )
-)
+len <- length(p1)
+p2 <- c(p1 * .75, p1 * 2/3, p1 * .6, p1 * .5)
+Reduction <- c(rep("25 percent", len), rep("33 percent", len), 
+               rep("40 percent", len), rep("50 percent", len))
+df <- tibble(p1 = rep(p1, 4), p2, Reduction) \%>\% 
+  mutate(`Sample size` = nBinomial(p1, p2, beta = .2, alpha = .025, sided = 1))
+ggplot(df, aes(x = p1, y = `Sample size`, col = Reduction)) + 
+  geom_line() + 
+  xlab("Control group event rate") +
+  ylim(0,6000) +
+  ggtitle("Binomial sample size computation for 80 pct power")
 
 # compute blinded estimate of treatment effect difference
 x1 <- rbinom(n = 1, size = 100, p = .2)
 x2 <- rbinom(n = 1, size = 200, p = .1)
 # blinded estimate of risk difference variance
 varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0)
-# blnded estimate of log-risk-ratio
+# blinded estimate of log-risk-ratio variance
 varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0, scale = "RR")
-# blinded estimate of log-odds-ratio
+# blinded estimate of log-odds-ratio variance
 varBinomial(x = x1 + x2, n = 300, ratio = 2, delta0 = 0, scale = "OR")
 }
 \references{

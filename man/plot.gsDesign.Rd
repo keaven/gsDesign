@@ -19,7 +19,7 @@
 
 2=power plot (default for \code{gsProbability}),
 
-3=estimated treatment effect at boundaries,
+3=approximate treatment effect at boundaries,
 
 4=conditional power at boundaries,
 
@@ -48,8 +48,8 @@ normally defaults will be adequate; see details.
 
 \code{ses=TRUE} which applies only when \code{plottype=3} and
 
-\code{class(x)=="gsDesign"}; indicates that estimated standardized effect
-size at the boundary is to be plotted rather than the actual estimate.
+\code{class(x)=="gsDesign"}; indicates that approximate standardized effect
+size at the boundary is to be plotted rather than the approximate natural parameter.
 
 \code{xval="Default"} which is only effective when \code{plottype=2} or
 \code{6}. Appropriately scaled (reparameterized) values for x-axis for power
@@ -64,10 +64,10 @@ characteristics computed; see details.
 The \code{plot()} function has been extended to work with objects returned
 by \code{gsDesign()} and \code{gsProbability()}.  For objects of type
 \code{gsDesign}, seven types of plots are provided: z-values at boundaries
-(default), power, estimated treatment effects at boundaries, conditional
+(default), power, approximate treatment effects at boundaries, conditional
 power at boundaries, spending functions, expected sample size, and B-values
 at boundaries. For objects of type \code{gsProbability} plots are available
-for z-values at boundaries, power (default), estimated treatment effects at
+for z-values at boundaries, power (default), approximate treatment effects at
 boundaries, conditional power, expected sample size and B-values at
 boundaries.
 
@@ -94,7 +94,7 @@ a \code{gsDesign} object, the x-axis values are rescaled to
 \code{gsProbability} object, the values of \code{theta} are plotted and are
 labeled as \eqn{theta}. See examples below.
 
-Estimated treatment effects at boundaries are computed dividing the Z-values
+Approximate treatment effects at boundaries are computed dividing the Z-values
 at the boundaries by the square root of \code{n.I} at that analysis.
 
 Spending functions are plotted for a continuous set of values from 0 to 1.
@@ -104,7 +104,7 @@ function is used (\code{sfu} or \code{sfl="WT", "OF", "Pocock"} or
 
 Conditional power is computed using the function \code{gsBoundCP()}.  The
 default input for this routine is \code{theta="thetahat"} which will compute
-the conditional power at each bound using the estimated treatment effect at
+the conditional power at each bound using the approximate treatment effect at
 that bound.  Otherwise, if the input is \code{gsDesign} object conditional
 power is computed assuming \code{theta=x$delta}, the original effect size
 for which the trial was planned.
@@ -125,7 +125,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 #  symmetric, 2-sided design with O'Brien-Fleming-like boundaries
 #  lower bound is non-binding (ignored in Type I error computation)
 #  sample size is computed based on a fixed design requiring n=100

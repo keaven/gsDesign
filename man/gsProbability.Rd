@@ -5,8 +5,7 @@
 \alias{print.gsProbability}
 \title{Boundary Crossing Probabilities}
 \usage{
-gsProbability(k = 0, theta, n.I, a, b, r = 18, d = NULL,
-  overrun = 0)
+gsProbability(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0)
 
 \method{print}{gsProbability}(x, ...)
 }
@@ -81,7 +80,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 # making a gsDesign object first may be easiest...
 x <- gsDesign()
 

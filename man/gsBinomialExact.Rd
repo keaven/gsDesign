@@ -8,16 +8,34 @@
 \alias{nBinomial1Sample}
 \title{One-Sample Binomial Routines}
 \usage{
-gsBinomialExact(k = 2, theta = c(0.1, 0.2), n.I = c(50, 100),
-  a = c(3, 7), b = c(20, 30))
+gsBinomialExact(
+  k = 2,
+  theta = c(0.1, 0.2),
+  n.I = c(50, 100),
+  a = c(3, 7),
+  b = c(20, 30)
+)
 
-binomialSPRT(p0 = 0.05, p1 = 0.25, alpha = 0.1, beta = 0.15,
-  minn = 10, maxn = 35)
+binomialSPRT(
+  p0 = 0.05,
+  p1 = 0.25,
+  alpha = 0.1,
+  beta = 0.15,
+  minn = 10,
+  maxn = 35
+)
 
 \method{plot}{gsBinomialExact}(x, plottype = 1, ...)
 
-nBinomial1Sample(p0 = 0.9, p1 = 0.95, alpha = 0.025, beta = NULL,
-  n = 200:250, outtype = 1, conservative = FALSE)
+nBinomial1Sample(
+  p0 = 0.9,
+  p1 = 0.95,
+  alpha = 0.025,
+  beta = NULL,
+  n = 200:250,
+  outtype = 1,
+  conservative = FALSE
+)
 }
 \arguments{
 \item{k}{Number of analyses planned, including interim and final.}
@@ -205,7 +223,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 
 zz <- gsBinomialExact(
   k = 3, theta = seq(0, 1, 0.1), n.I = c(12, 24, 36),
@@ -218,7 +236,7 @@ class(zz)
 # because of "gsProbability" class above, following is equivalent to
 # print.gsProbability(zz)
 zz
-# also plot (see also plots below for \\code{binomialSPRT})
+# also plot (see also plots below for \code{binomialSPRT})
 # add lines using geom_line()
 plot(zz) + 
 ggplot2::geom_line()

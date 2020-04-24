@@ -70,7 +70,7 @@ library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 installed.
 }
 \examples{
-
+library(ggplot2)
 # set up alpha spending and beta spending to be piecewise linear
 sfupar <- c(.2, .4, .05, .2)
 sflpar <- c(.3, .5, .65, .5, .75, .9)
