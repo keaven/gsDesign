@@ -96,7 +96,8 @@ hGraph <- function(
   yradius = xradius, 
   x = NULL, 
   y = NULL, 
-  wchar = if(as.character(Sys.info()[1])=="Windows"){'\u03b1'}else{'w'}
+  # following is temporary fix from intended {'\u03b1'} for Windows
+  wchar = if(as.character(Sys.info()[1])=="Windows"){'w'}else{'w'}
 ){
   # Check inputs
   checkHGArgs(nHypotheses, nameHypotheses, alphaHypotheses, m, fill, 
