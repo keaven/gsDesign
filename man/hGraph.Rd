@@ -32,7 +32,7 @@ hGraph(
   yradius = xradius,
   x = NULL,
   y = NULL,
-  wchar = if (as.character(Sys.info()[1]) == "Windows") {     "a" } else {     "w" }
+  wchar = if (as.character(Sys.info()[1]) == "Windows") {     "α" } else {     "w" }
 )
 }
 \arguments{

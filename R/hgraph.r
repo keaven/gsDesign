@@ -1,7 +1,154 @@
 #' importFrom magrittr "%>%"
 #' importFrom dplyr mutate n filter left_join select
 #' importFrom tidyr pivot_longer
+#' importFrom "grDevices" "palette"
 NULL
+
+#' @title Create multiplicity graph using ggplot2
+#' @description \code{hGraph()} plots a multiplicity graph defined by user inputs.
+#' The graph can also be used with the ***gMCP*** package to evaluate a set of nominal p-values for the tests of the hypotheses in the graph
+#' @param nHypotheses number of hypotheses in graph
+#' @param nameHypotheses hypothesis names
+#' @param alphaHypotheses alpha-levels or weights for ellipses
+#' @param m square transition matrix of dimension `nHypotheses`
+#' @param fill grouping variable for hypotheses
+#' @param palette colors for groups
+#' @param labels text labels for groups
+#' @param legend.name text for legend header
+#' @param legend.position text string or x,y coordinates for legend
+#' @param halfWid half width of ellipses
+#' @param halfHgt half height of ellipses
+#' @param trhw transition box width
+#' @param trhh transition box height
+#' @param trprop proportion of transition arrow length where transition box is placed
+#' @param digits number of digits to show for alphaHypotheses
+#' @param trdigits digits displayed for transition weights
+#' @param size text size in ellipses
+#' @param boxtextsize transition text size
+#' @param arrowsize size of arrowhead for transition arrows
+#' @param radianStart radians from origin for first ellipse; nodes spaced equally in clockwise order with centers on an ellipse by default
+#' @param offset rotational offset in radians for transition weight arrows
+#' @param xradius horizontal ellipse diameter on which ellipses are drawn
+#' @param yradius vertical ellipse diameter on which ellipses are drawn
+#' @param x x coordinates for hypothesis ellipses if elliptical arrangement is not wanted
+#' @param y y coordinates for hypothesis ellipses if elliptical arrangement is not wanted
+#' @param wchar character for alphaHypotheses in ellipses
+#' @return A `ggplot` object with a multi-layer multiplicity graph
+#' @examples
+#' library(tidyr)
+#' # Defaults: note clockwise ordering
+#' hGraph(5)
+#' # Add colors (default is 3 gray shades)
+#' hGraph(3,fill=1:3)
+#' # Colorblind palette
+#' cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
+#'                "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+#' hGraph(6,fill=as.factor(1:6),palette=cbPalette)
+#' # Use a hue palette
+#' hGraph(4,fill=factor(1:4),palette=scales::hue_pal(l=75)(4))
+#' # different alpha allocation, hypothesis names and transitions
+#' alphaHypotheses <- c(.005,.007,.013)
+#' nameHypotheses <- c("ORR","PFS","OS")
+#' m <- matrix(c(0,1,0,
+#'               0,0,1,
+#'               1,0,0),nrow=3,byrow=TRUE)
+#' hGraph(3,alphaHypotheses=alphaHypotheses,nameHypotheses=nameHypotheses,m=m)
+#' # Custom position and size of ellipses, change text to multi-line text
+#' # Adjust box width
+#' # add legend in middle of plot
+#' hGraph(3,x=sqrt(0:2),y=c(1,3,1.5),size=6,halfWid=.3,halfHgt=.3, trhw=0.6,
+#'        palette=cbPalette[2:4], fill = c(1, 2, 2),
+#'        legend.position = c(.6,.5), legend.name = "Legend:", labels = c("Group 1", "Group 2"),
+#'        nameHypotheses=c("H1:\n Long name","H2:\n Longer name","H3:\n Longest name"))
+#' @details
+#' See vignette **Multiplicity graphs formatting using ggplot2** for explanation of formatting.
+#' @importFrom grDevices gray.colors
+#' @importFrom ggplot2 aes ggplot guide_legend stat_ellipse theme theme_void geom_text geom_segment geom_rect scale_fill_manual
+#' @importFrom grid unit
+#' @rdname hGraph
+#' @export
+hGraph <- function(
+  nHypotheses = 4, 
+  nameHypotheses = paste("H", (1:nHypotheses), sep = ""), 
+  alphaHypotheses = 0.025/nHypotheses,
+  m = matrix(array(1/(nHypotheses - 1), nHypotheses^2), 
+             nrow = nHypotheses) - diag(1/(nHypotheses - 1), nHypotheses),
+  fill = 1,
+  palette = grDevices::gray.colors(length(unique(fill)), start = .5, end = .8),
+  labels = LETTERS[1:length(unique(fill))], 
+  legend.name = " ", 
+  legend.position = "none", 
+  halfWid = 0.5,
+  halfHgt = 0.5, 
+  trhw = 0.1, 
+  trhh = 0.075, 
+  trprop = 1/3,
+  digits = 5, 
+  trdigits = 2, 
+  size = 6, 
+  boxtextsize = 4,
+  arrowsize = 0.02, 
+  radianStart = if((nHypotheses)%%2 != 0) {
+    pi * (1/2 + 1/nHypotheses) } else {    
+      pi * (1 + 2/nHypotheses)/2 }, 
+  offset = pi/4/nHypotheses, 
+  xradius = 2,
+  yradius = xradius, 
+  x = NULL, 
+  y = NULL, 
+  wchar = if(as.character(Sys.info()[1])=="Windows"){'\u03b1'}else{'w'}
+){
+  # Check inputs
+  checkHGArgs(nHypotheses, nameHypotheses, alphaHypotheses, m, fill, 
+              palette, labels, legend, legend.name, legend.position, halfwid, halfhgt, 
+              trhw, trhh, trprop, digits, trdigits, size, boxtextsize,
+              arrowsize, radianStart, offset, xradius, yradius, x, y, wchar)
+  # Set up hypothesis data
+  hData <- ellipseCenters(alphaHypotheses,
+                          digits,
+                          nameHypotheses,
+                          fill = fill, 
+                          xradius = xradius,
+                          yradius = yradius,
+                          radianStart = radianStart,
+                          x = x,
+                          y = y,
+                          wchar = wchar)
+  # Set up ellipse data
+  ellipseData <- hData %>% makeEllipseData(xradius = halfWid, yradius = halfHgt)
+  # Set up transition data
+  transitionSegments <- hData %>% 
+    makeTransitionSegments(m, xradius = halfWid, yradius = halfHgt, offset = offset,
+                           trprop = trprop, trdigits = trdigits, trhw = trhw, trhh = trhh)
+  # Layer the plot
+  ggplot()+
+    # plot ellipses
+    stat_ellipse(data=ellipseData,
+                 aes(x=x, y=y, group=n, fill=as.factor(fill)), 
+                 geom="polygon") +
+    theme_void() +
+    #following should be needed
+    #   scale_alpha(guide="none") + 
+    scale_fill_manual(values=palette,
+                      labels=labels,
+                      guide_legend(legend.name)) +
+    theme(legend.position = legend.position) +
+    # Add text
+    geom_text(data=hData,aes(x=x,y=y,label=txt),size=size) + 
+    # Add transition arrows
+    geom_segment(data = transitionSegments,
+                 aes(x=x, y=y, xend=xend, yend=yend),
+                 arrow = grid::arrow(length = grid::unit(arrowsize, "npc"))) +
+    # Add transition boxes
+    geom_rect(data = transitionSegments, 
+              aes(xmin = xbmin, xmax = xbmax, ymin = ybmin, ymax = ybmax),
+              fill="white",color="black") +
+    # Add transition text
+    geom_text(data = transitionSegments, aes(x = xb, y = yb, label=txt), size = boxtextsize)
+} 
+
+utils::globalVariables(c("%>%","from","halfhgt","halfwid","n","palette","theta","to","txt","w","x1","x1end","xb",
+                         "xbmax","xbmin","xend","y1","y1end","yb","ybmax","ybmin","yend"))
 
 ellipseCenters <- function(alphaHypotheses, digits=5, txt = letters[1:3], fill=1, xradius = 2, yradius = 2, radianStart = NULL, 
                            x=NULL, y=NULL, wchar='x'){
@@ -96,145 +243,3 @@ checkHGArgs <- function(nHypotheses, nameHypotheses, alphaHypotheses, m, fill,
   if(length(fill) != 1 & length(fill) != ntxt) stop("fill must have length 1 or number of hypotheses")
 }
 
-#' @title Create multiplicity graph using ggplot2
-#' @description \code{hGraph()} plots a multiplicity graph defined by user inputs.
-#' The graph can also be used with the ***gMCP*** package to evaluate a set of nominal p-values for the tests of the hypotheses in the graph
-#' @param nHypotheses number of hypotheses in graph
-#' @param nameHypotheses hypothesis names
-#' @param alphaHypotheses alpha-levels or weights for ellipses
-#' @param m square transition matrix of dimension `nHypotheses`
-#' @param fill grouping variable for hypotheses
-#' @param palette colors for groups
-#' @param labels text labels for groups
-#' @param legend.name text for legend header
-#' @param legend.position text string or x,y coordinates for legend
-#' @param halfWid half width of ellipses
-#' @param halfHgt half height of ellipses
-#' @param trhw transition box width
-#' @param trhh transition box height
-#' @param trprop proportion of transition arrow length where transition box is placed
-#' @param digits number of digits to show for alphaHypotheses
-#' @param trdigits digits displayed for transition weights
-#' @param size text size in ellipses
-#' @param boxtextsize transition text size
-#' @param arrowsize size of arrowhead for transition arrows
-#' @param radianStart radians from origin for first ellipse; nodes spaced equally in clockwise order with centers on an ellipse by default
-#' @param offset rotational offset in radians for transition weight arrows
-#' @param xradius horizontal ellipse diameter on which ellipses are drawn
-#' @param yradius vertical ellipse diameter on which ellipses are drawn
-#' @param x x coordinates for hypothesis ellipses if elliptical arrangement is not wanted
-#' @param y y coordinates for hypothesis ellipses if elliptical arrangement is not wanted
-#' @param wchar character for alphaHypotheses in ellipses
-#' @return A `ggplot` object with a multi-layer multiplicity graph
-#' @examples
-#' library(tidyr)
-#' # Defaults: note clockwise ordering
-#' hGraph(5)
-#' # Add colors (default is 3 gray shades)
-#' hGraph(3,fill=1:3)
-#' # Colorblind palette
-#' cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
-#'                "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-#' hGraph(6,fill=as.factor(1:6),palette=cbPalette)
-#' # Use a hue palette
-#' hGraph(4,fill=factor(1:4),palette=scales::hue_pal(l=75)(4))
-#' # different alpha allocation, hypothesis names and transitions
-#' alphaHypotheses <- c(.005,.007,.013)
-#' nameHypotheses <- c("ORR","PFS","OS")
-#' m <- matrix(c(0,1,0,
-#'               0,0,1,
-#'               1,0,0),nrow=3,byrow=TRUE)
-#' hGraph(3,alphaHypotheses=alphaHypotheses,nameHypotheses=nameHypotheses,m=m)
-#' # Custom position and size of ellipses, change text to multi-line text
-#' # Adjust box width
-#' # add legend in middle of plot
-#' hGraph(3,x=sqrt(0:2),y=c(1,3,1.5),size=6,halfWid=.3,halfHgt=.3, trhw=0.6,
-#'        palette=cbPalette[2:4], fill = c(1, 2, 2),
-#'        legend.position = c(.6,.5), legend.name = "Legend:", labels = c("Group 1", "Group 2"),
-#'        nameHypotheses=c("H1:\n Long name","H2:\n Longer name","H3:\n Longest name"))
-#' @details
-#' See vignette **Multiplicity graphs formatting using ggplot2** for explanation of formatting.
-#' @importFrom grDevices gray.colors
-#' @importFrom ggplot2 aes ggplot guide_legend stat_ellipse theme theme_void geom_text geom_segment geom_rect scale_fill_manual
-#' @importFrom grid unit
-#' @rdname hGraph
-#' @export
-hGraph <- function(
-  nHypotheses = 4, 
-  nameHypotheses = paste("H", (1:nHypotheses), sep = ""), 
-  alphaHypotheses = 0.025/nHypotheses,
-  m = matrix(array(1/(nHypotheses - 1), nHypotheses^2), 
-             nrow = nHypotheses) - diag(1/(nHypotheses - 1), nHypotheses),
-  fill = 1,
-  palette = grDevices::gray.colors(length(unique(fill)), start = .5, end = .8),
-  labels = LETTERS[1:length(unique(fill))], 
-  legend.name = " ", 
-  legend.position = "none", 
-  halfWid = 0.5,
-  halfHgt = 0.5, 
-  trhw = 0.1, 
-  trhh = 0.075, 
-  trprop = 1/3,
-  digits = 5, 
-  trdigits = 2, 
-  size = 6, 
-  boxtextsize = 4,
-  arrowsize = 0.02, 
-  radianStart = if((nHypotheses)%%2 != 0) {
-      pi * (1/2 + 1/nHypotheses) } else {    
-      pi * (1 + 2/nHypotheses)/2 }, 
-  offset = pi/4/nHypotheses, 
-  xradius = 2,
-  yradius = xradius, 
-  x = NULL, 
-  y = NULL, 
-  wchar = if(as.character(Sys.info()[1])=="Windows"){'\u03b1'}else{'w'}
-){
-  # Check inputs
-  checkHGArgs(nHypotheses, nameHypotheses, alphaHypotheses, m, fill, 
-              palette, labels, legend, legend.name, legend.position, halfwid, halfhgt, 
-              trhw, trhh, trprop, digits, trdigits, size, boxtextsize,
-              arrowsize, radianStart, offset, xradius, yradius, x, y, wchar)
-  # Set up hypothesis data
-  hData <- ellipseCenters(alphaHypotheses,
-                          digits,
-                          nameHypotheses,
-                          fill = fill, 
-                          xradius = xradius,
-                          yradius = yradius,
-                          radianStart = radianStart,
-                          x = x,
-                          y = y,
-                          wchar = wchar)
-  # Set up ellipse data
-  ellipseData <- hData %>% makeEllipseData(xradius = halfWid, yradius = halfHgt)
-  # Set up transition data
-  transitionSegments <- hData %>% 
-    makeTransitionSegments(m, xradius = halfWid, yradius = halfHgt, offset = offset,
-                           trprop = trprop, trdigits = trdigits, trhw = trhw, trhh = trhh)
-  # Layer the plot
-  ggplot()+
-    # plot ellipses
-    stat_ellipse(data=ellipseData,
-                 aes(x=x, y=y, group=n, fill=as.factor(fill)), 
-                 geom="polygon") +
-    theme_void() +
-#following should be needed
-#   scale_alpha(guide="none") + 
-    scale_fill_manual(values=palette,
-                      labels=labels,
-                      guide_legend(legend.name)) +
-    theme(legend.position = legend.position) +
-    # Add text
-    geom_text(data=hData,aes(x=x,y=y,label=txt),size=size) + 
-    # Add transition arrows
-    geom_segment(data = transitionSegments,
-                 aes(x=x, y=y, xend=xend, yend=yend),
-                 arrow = grid::arrow(length = grid::unit(arrowsize, "npc"))) +
-    # Add transition boxes
-    geom_rect(data = transitionSegments, 
-              aes(xmin = xbmin, xmax = xbmax, ymin = ybmin, ymax = ybmax),
-              fill="white",color="black") +
-    # Add transition text
-    geom_text(data = transitionSegments, aes(x = xb, y = yb, label=txt), size = boxtextsize)
-} 
