@@ -158,7 +158,7 @@
            <span class="no">sd2</span>^<span class="fl">2</span> * <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">rchisq</a></span>(<span class="kw">n</span><span class="kw">=</span><span class="no">nsim</span>, <span class="kw">df</span><span class="kw">=</span><span class="no">n2</span> - <span class="fl">1</span>)/(<span class="no">n2</span>-<span class="fl">1</span>)/<span class="no">n2</span>)
 <span class="no">z</span> <span class="kw">&lt;-</span> <span class="no">deltahat</span> / <span class="no">s</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">z</span> <span class="kw">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span>(<span class="fl">.975</span>))
-<span class="co">#&gt; [1] 0.946721</span></pre></body></html></div>
+<span class="co">#&gt; [1] 0.946222</span></pre></body></html></div>
 <p>The standard error for this simulation power calculation is approximately</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="no">pwr</span>*(<span class="fl">1</span>-<span class="no">pwr</span>)/<span class="no">nsim</span>)
 <span class="co">#&gt; [1] 0.0002246659</span></pre></body></html></div>
