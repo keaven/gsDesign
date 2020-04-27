@@ -5,7 +5,7 @@ Description: Derives group sequential designs and describes their properties.
 Authors@R: person(given = "Keaven", family = "Anderson", email =
           "keaven_anderson@merck.com", role = c('aut','cre'))
 Depends: R (>= 3.0.0), ggplot2 (>= 0.9.2)
-Imports: stats,utils, rlang,methods,xtable,graphics,plyr,tools,mvtnorm
+Imports: stats,utils, rlang,methods,xtable,graphics,plyr,tools,mvtnorm,dplyr
 Suggests: 
     knitr,
     scales,
@@ -13,7 +13,6 @@ Suggests:
     gt,
     testthat,
     covr,
-    dplyr,
     gridExtra,
     tidyr
 VignetteBuilder: knitr

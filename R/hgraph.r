@@ -5,6 +5,7 @@
 NULL
 
 #' @title Create multiplicity graph using ggplot2
+#' 
 #' @description \code{hGraph()} plots a multiplicity graph defined by user inputs.
 #' The graph can also be used with the ***gMCP*** package to evaluate a set of nominal p-values for the tests of the hypotheses in the graph
 #' @param nHypotheses number of hypotheses in graph
@@ -65,6 +66,7 @@ NULL
 #' @importFrom grDevices gray.colors
 #' @importFrom ggplot2 aes ggplot guide_legend stat_ellipse theme theme_void geom_text geom_segment geom_rect scale_fill_manual
 #' @importFrom grid unit
+#' @importFrom dplyr '%>%'
 #' @rdname hGraph
 #' @export
 hGraph <- function(
@@ -99,6 +101,111 @@ hGraph <- function(
   # following is temporary fix from intended {'\u03b1'} for Windows
   wchar = if(as.character(Sys.info()[1])=="Windows"){'w'}else{'w'}
 ){
+  #####################################################################
+  # Begin: Internal functions
+  #####################################################################
+  ellipseCenters <- function(alphaHypotheses=NULL, digits=5, txt = letters[1:3], fill=1, 
+                             xradius = 2, yradius = 2, radianStart = NULL, 
+                             x=NULL, y=NULL, wchar='x'){
+    ntxt <- length(txt)
+    if (!is.null(x) && !is.null(y)){
+      if (length(x)!=ntxt) stop("length of x must match # hypotheses")
+      if (length(y)!=ntxt) stop("length of y must match # hypotheses")
+    }else{
+      if (is.null(radianStart)) radianStart <- if((ntxt)%%2!=0){pi*(1/2+1/ntxt)}else{
+        pi * (1 + 2 / ntxt) / 2}
+      if (!is.numeric(radianStart)) stop("radianStart must be numeric")
+      if (length(radianStart) != 1) stop("radianStart should be a single numeric value")
+      # compute middle of each rectangle
+      radian <- (radianStart - (0:(ntxt-1))/ntxt*2*pi) %% (2*pi)
+      x <- xradius * cos(radian)
+      y <- yradius * sin(radian)
+    }
+    # create data frame with middle (x and y) of ellipses, txt, fill
+    return(data.frame(x,y,
+                      txt=paste(txt,'\n',wchar,'=',round(alphaHypotheses,digits),sep=""),
+                      fill=as.factor(fill))
+    )
+  }
+  
+  
+  makeEllipseData <- function(x=NULL,xradius=.5,yradius=.5){
+    # hack to get ellipses around x,y with radii xradius and yradius
+    w <- xradius/3.1
+    h <- yradius/3.1
+    x$n <- 1:nrow(x)
+    ellipses <- rbind(x %>% dplyr::mutate(y=y+h),
+                      x %>% dplyr::mutate(y=y-h),
+                      x %>% dplyr::mutate(x=x+w),
+                      x %>% dplyr::mutate(x=x-w)
+    )
+    ellipses$txt=""
+    return(ellipses)
+  }
+  
+  makeTransitionSegments <- function(x=NULL, m=NULL, xradius=NULL, yradius=NULL, offset=NULL, 
+                                     trdigits=NULL, trprop=NULL, trhw=NULL, trhh=NULL){
+    from <- to <- w <- y <- xend <- yend <- xb <- yb <- xbmin <- xbmax <- ybmin <- ybmax <- txt <- NULL
+    # Create dataset records from transition matrix
+    md <- data.frame(m) 
+    names(md) <- 1:nrow(m) 
+    md <- md %>% 
+      dplyr::mutate(from=1:dplyr::n()) %>% 
+      # put transition weight in w
+      tidyr::pivot_longer(-from, names_to="to", values_to="w") %>% 
+      dplyr::mutate(to=as.integer(to)) %>% 
+      dplyr::filter(w > 0) 
+    
+    # Get ellipse center centers for transitions
+    y <- x %>% dplyr::select(x, y) %>% dplyr::mutate(from = 1:dplyr::n())
+    return(
+      md %>% dplyr::left_join(y, by = "from") %>%
+        dplyr::left_join(y %>% dplyr::transmute(to = from, xend = x, yend = y), by = "to") %>%
+        # Use ellipse centers, radii and offset to create points for line segments.
+        dplyr::mutate(theta=atan2((yend - y) * xradius, (xend - x) * yradius),
+                      x1 = x, x1end = xend, y1 = y, y1end = yend,
+                      x = x1 + xradius * cos(theta + offset),
+                      y = y1 + yradius * sin(theta + offset),
+                      xend = x1end + xradius * cos(theta + pi - offset),
+                      yend = y1end + yradius * sin(theta + pi - offset),
+                      xb = x + (xend - x) * trprop,
+                      yb = y + (yend - y) * trprop,
+                      xbmin = xb - trhw, 
+                      xbmax = xb + trhw, 
+                      ybmin = yb - trhh, 
+                      ybmax = yb + trhh,
+                      txt = as.character(round(w,trdigits))
+        ) %>%
+        dplyr::select(c(from, to, w, x, y, xend, yend, xb, yb, xbmin, xbmax, ybmin, ybmax, txt))
+    )
+  }
+  
+  
+  checkHGArgs <- function(nHypotheses =NULL, nameHypotheses =NULL, alphaHypotheses = NULL, m = NULL, fill = NULL, 
+                          palette = NULL, labels = NULL, legend = NULL, legend.name = NULL, legend.Position = NULL, 
+                          halfwid = NULL, halfhgt = NULL, trhw = NULL, trhh = NULL, trprop = NULL, digits = NULL, 
+                          trdigits = NULL, size = NULL, boxtextsize = NULL, arrowsize = NULL, radianStart = NULL, 
+                          offset = NULL, xradius = NULL, yradius = NULL, x = NULL, y = NULL, wchar='w')
+  { if (!is.character(nameHypotheses)) stop("Hypotheses should be in a vector of character strings")
+    ntxt <- length(nameHypotheses)
+    testthat::test_that("Each radius should be a single positive number",{
+      testthat::expect_type(xradius, "double")
+      testthat::expect_type(yradius, "double")
+      testthat::expect_equal(length(xradius),1)
+      testthat:: expect_equal(length(yradius),1)
+      testthat::expect_gt(xradius, 0)
+      testthat::expect_gt(yradius, 0)
+    })
+    # length of fill should be same as ntxt
+    if(length(fill) != 1 & length(fill) != ntxt) stop("fill must have length 1 or number of hypotheses")
+  }
+  # Following is to eliminate R CMD check error related to defining variables
+  #from <- halfhgt <- halfwid <- n <- palette <- theta <- to <- txt <- w <- x1 <- x1end <- xb <-
+  #xbmax <- xbmin <- xend <- y1 <- y1end <- yb <- ybmax <- ybmin <- yend <- NULL
+  #####################################################################
+  # End: Internal functions
+  #####################################################################
+  
   # Check inputs
   checkHGArgs(nHypotheses, nameHypotheses, alphaHypotheses, m, fill, 
               palette, labels, legend, legend.name, legend.position, halfwid, halfhgt, 
@@ -148,99 +255,6 @@ hGraph <- function(
     geom_text(data = transitionSegments, aes(x = xb, y = yb, label=txt), size = boxtextsize)
 } 
 
-utils::globalVariables(c("%>%","from","halfhgt","halfwid","n","palette","theta","to","txt","w","x1","x1end","xb",
+utils::globalVariables(c("from","halfhgt","halfwid","n","palette","theta","to","txt","w","x1","x1end","xb",
                          "xbmax","xbmin","xend","y1","y1end","yb","ybmax","ybmin","yend"))
-
-ellipseCenters <- function(alphaHypotheses, digits=5, txt = letters[1:3], fill=1, xradius = 2, yradius = 2, radianStart = NULL, 
-                           x=NULL, y=NULL, wchar='x'){
-  ntxt <- length(txt)
-  if (!is.null(x) && !is.null(y)){
-    if (length(x)!=ntxt) stop("length of x must match # hypotheses")
-    if (length(y)!=ntxt) stop("length of y must match # hypotheses")
-  }else{
-    if (is.null(radianStart)) radianStart <- if((ntxt)%%2!=0){pi*(1/2+1/ntxt)}else{
-      pi * (1 + 2 / ntxt) / 2}
-    if (!is.numeric(radianStart)) stop("radianStart must be numeric")
-    if (length(radianStart) != 1) stop("radianStart should be a single numeric value")
-    # compute middle of each rectangle
-    radian <- (radianStart - (0:(ntxt-1))/ntxt*2*pi) %% (2*pi)
-    x <- xradius * cos(radian)
-    y <- yradius * sin(radian)
-  }
-  # create data frame with middle (x and y) of ellipses, txt, fill
-  return(data.frame(x,y,
-                    txt=paste(txt,'\n',wchar,'=',round(alphaHypotheses,digits),sep=""),
-                    fill=as.factor(fill))
-        )
-}
-
-
-makeEllipseData <- function(x,xradius=.5,yradius=.5){
-  # hack to get ellipses around x,y with radii xradius and yradius
-  w <- xradius/3.1
-  h <- yradius/3.1
-  x$n <- 1:nrow(x)
-  ellipses <- rbind(x %>% dplyr::mutate(y=y+h),
-                    x %>% dplyr::mutate(y=y-h),
-                    x %>% dplyr::mutate(x=x+w),
-                    x %>% dplyr::mutate(x=x-w)
-  )
-  ellipses$txt=""
-  return(ellipses)
-}
-
-
-makeTransitionSegments <- function(x, m, xradius, yradius, offset, trdigits, trprop, trhw, trhh){
-  # Create dataset records from transition matrix
-  md <- data.frame(m) 
-  names(md) <- 1:nrow(m) 
-  md <- md %>% 
-    dplyr::mutate(from=1:dplyr::n()) %>% 
-    # put transition weight in w
-    tidyr::pivot_longer(-from, names_to="to", values_to="w") %>% 
-    dplyr::mutate(to=as.integer(to)) %>% 
-    dplyr::filter(w > 0) 
-  
-  # Get ellipse center centers for transitions
-  y <- x %>% dplyr::select(x, y) %>% dplyr::mutate(from = 1:dplyr::n())
-  return(
-    md %>% dplyr::left_join(y, by = "from") %>%
-      dplyr::left_join(y %>% dplyr::transmute(to = from, xend = x, yend = y), by = "to") %>%
-      # Use ellipse centers, radii and offset to create points for line segments.
-      dplyr::mutate(theta=atan2((yend - y) * xradius, (xend - x) * yradius),
-             x1 = x, x1end = xend, y1 = y, y1end = yend,
-             x = x1 + xradius * cos(theta + offset),
-             y = y1 + yradius * sin(theta + offset),
-             xend = x1end + xradius * cos(theta + pi - offset),
-             yend = y1end + yradius * sin(theta + pi - offset),
-             xb = x + (xend - x) * trprop,
-             yb = y + (yend - y) * trprop,
-             xbmin = xb - trhw, 
-             xbmax = xb + trhw, 
-             ybmin = yb - trhh, 
-             ybmax = yb + trhh,
-             txt = as.character(round(w,trdigits))
-      ) %>%
-      dplyr::select(c(from, to, w, x, y, xend, yend, xb, yb, xbmin, xbmax, ybmin, ybmax, txt))
-  )
-}
-
-
-checkHGArgs <- function(nHypotheses, nameHypotheses, alphaHypotheses, m, fill, 
-                        palette, labels, legend, legend.name, legend.Position, halfwid, halfhgt, 
-                        trhw, trhh, trprop, digits, trdigits, size, boxtextsize,
-                        arrowsize, radianStart, offset, xradius, yradius, x, y, wchar)
-{ if (!is.character(nameHypotheses)) stop("Hypotheses should be in a vector of character strings")
-  ntxt <- length(nameHypotheses)
-  testthat::test_that("Each radius should be a single positive number",{
-    testthat::expect_type(xradius, "double")
-    testthat::expect_type(yradius, "double")
-    testthat::expect_equal(length(xradius),1)
-    testthat:: expect_equal(length(yradius),1)
-    testthat::expect_gt(xradius, 0)
-    testthat::expect_gt(yradius, 0)
-  })
-  # length of fill should be same as ntxt
-  if(length(fill) != 1 & length(fill) != ntxt) stop("fill must have length 1 or number of hypotheses")
-}
 
