@@ -2,6 +2,12 @@
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/keaven/gsDesign?branch=master&svg=true)](https://ci.appveyor.com/project/keaven/gsDesign)
 [![Covrpage Summary](https://img.shields.io/badge/covrpage-Last_Build_2019_04_26-brightgreen.svg)](http://tinyurl.com/y6uylrcw)
 
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/gsDesign)](https://CRAN.R-project.org/package=gsDesign)
+[![Codecov test coverage](https://codecov.io/gh/keaven/gsDesign/branch/master/graph/badge.svg)](https://codecov.io/gh/keaven/gsDesign?branch=master)
+[![R build status](https://github.com/keaven/gsDesign/workflows/R-CMD-check/badge.svg)](https://github.com/keaven/gsDesign/actions)
+<!-- badges: end -->
+
 # gsDesign 
 
 The gsDesign package supports group sequential clinical trial design.
