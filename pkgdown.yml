@@ -1,9 +1,11 @@
 pandoc: '2.2'
-pkgdown: 1.4.1
+pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
-  SpendingTime: SpendingTime.html
-  gsSurvTemplate: gsSurvTemplate.html
-  gsSurvTemplateInstructions: gsSurvTemplateInstructions.html
+  SurvivalOverview: SurvivalOverview.html
+  gsSurvBasicExamples: gsSurvBasicExamples.html
+  hGraph: hGraph.html
+  nNormal: nNormal.html
   tests_and_coverage: tests_and_coverage.html
+last_built: 2020-04-27T16:04Z
 

@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -104,7 +108,6 @@ x, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
 interest." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -122,7 +125,7 @@ interest." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -136,7 +139,7 @@ interest." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0.9006</span>
       </span>
     </div>
 
@@ -151,26 +154,8 @@ interest." />
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/SpendingTime.html">Spending Time</a>
-    </li>
-    <li>
-      <a href="../articles/gsSurvTemplate.html">Template for time-to-event group sequential design</a>
-    </li>
-    <li>
-      <a href="../articles/gsSurvTemplateInstructions.html">Template instructions for time-to-event group sequential design</a>
-    </li>
-    <li>
-      <a href="../articles/tests_and_coverage.html">Tests and Coverage</a>
-    </li>
-  </ul>
+<li>
+  <a href="../articles/index.html">Articles</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -268,20 +253,34 @@ interest.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for gsDesign</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>object</span>, <span class='kw'>information</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>timeunit</span> <span class='kw'>=</span> <span class='st'>"months"</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>object</span>, <span class='kw'>information</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>timeunit</span> <span class='kw'>=</span> <span class='st'>"months"</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for gsDesign</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>gsBoundSummary</span>(<span class='no'>x</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>Nname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>ddigits</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>tdigits</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>timename</span> <span class='kw'>=</span> <span class='st'>"Month"</span>,
+<span class='fu'>gsBoundSummary</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>Nname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+  <span class='kw'>ddigits</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>tdigits</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>timename</span> <span class='kw'>=</span> <span class='st'>"Month"</span>,
   <span class='kw'>prior</span> <span class='kw'>=</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>delta</span>/<span class='fl'>2</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>10</span>/<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>x</span>$<span class='no'>n.fix</span>)),
-  <span class='kw'>POS</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"B-value"</span>, <span class='st'>"Spending"</span>, <span class='st'>"CP"</span>,
-  <span class='st'>"CP H1"</span>, <span class='st'>"PP"</span>), <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>, <span class='no'>...</span>)
+  <span class='kw'>POS</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"B-value"</span>, <span class='st'>"Spending"</span>, <span class='st'>"CP"</span>, <span class='st'>"CP H1"</span>, <span class='st'>"PP"</span>),
+  <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>,
+  <span class='no'>...</span>
+)
 
-<span class='fu'>xprint</span>(<span class='no'>x</span>, <span class='kw'>include.rownames</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>hline.after</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>x</span>$<span class='no'>Value</span>
-  <span class='kw'>==</span> <span class='no'>x</span>[<span class='fl'>1</span>, ]$<span class='no'>Value</span>) - <span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>x</span>)), <span class='no'>...</span>)
+<span class='fu'>xprint</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>include.rownames</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>hline.after</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>x</span>$<span class='no'>Value</span> <span class='kw'>==</span> <span class='no'>x</span>[<span class='fl'>1</span>, ]$<span class='no'>Value</span>) - <span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>x</span>)),
+  <span class='no'>...</span>
+)
 
 <span class='co'># S3 method for gsBoundSummary</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='no'>...</span>)
@@ -290,9 +289,9 @@ interest.</p>
 
 <span class='fu'>gsDelta</span>(<span class='no'>z</span>, <span class='no'>i</span>, <span class='no'>x</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
-<span class='fu'>gsRR</span>(<span class='no'>z</span>, <span class='no'>i</span>, <span class='no'>x</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Estimated risk ratio"</span>, <span class='no'>...</span>)
+<span class='fu'>gsRR</span>(<span class='no'>z</span>, <span class='no'>i</span>, <span class='no'>x</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Approximate risk ratio"</span>, <span class='no'>...</span>)
 
-<span class='fu'>gsHR</span>(<span class='no'>z</span>, <span class='no'>i</span>, <span class='no'>x</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Estimated hazard ratio"</span>, <span class='no'>...</span>)
+<span class='fu'>gsHR</span>(<span class='no'>z</span>, <span class='no'>i</span>, <span class='no'>x</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Approximate hazard ratio"</span>, <span class='no'>...</span>)
 
 <span class='fu'>gsCPz</span>(<span class='no'>z</span>, <span class='no'>i</span>, <span class='no'>x</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
 
@@ -485,7 +484,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <code><a href='gsProbability.html'>gsProbability</a></code>, <code><a href='nSurv.html'>xtable.gsSurv</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
 <span class='co'># survival endpoint using gsSurv</span>
 <span class='co'># generally preferred over nSurv since time computations are shown</span>
 <span class='no'>xgs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='nSurv.html'>gsSurv</a></span>(<span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>T</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='fl'>1.5</span>)
@@ -640,7 +639,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;     N: 336        p (1-sided)   0.0238   0.0238
 #&gt;                  ~RR at bound   0.6605   0.6605
 #&gt;              P(Cross) if RR=1   0.0239   0.9761
-#&gt;            P(Cross) if RR=0.5   0.9000   0.1000</div><div class='input'><span class='fu'>gsRR</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>xp</span>$<span class='no'>lower</span>$<span class='no'>bound</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='no'>xrr</span>)</div><div class='output co'>#&gt; [1] 1.0732500 0.8211496        NA</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>xrr</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='st'>"RR"</span>)</div><div class='img'><img src='gsBoundSummary-1.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt;            P(Cross) if RR=0.5   0.9000   0.1000</div><div class='input'><span class='fu'>gsRR</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>xp</span>$<span class='no'>lower</span>$<span class='no'>bound</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='no'>xrr</span>)</div><div class='output co'>#&gt; [1] 1.0732500 0.8211496        NA</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>xrr</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='st'>"RR"</span>)</div><div class='img'><img src='gsBoundSummary-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># delta is odds-ratio: sample size slightly smaller than for relative risk or risk difference</span>
 <span class='no'>n.fix</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>.3</span>, <span class='kw'>p2</span> <span class='kw'>=</span> <span class='fl'>.15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"OR"</span>)
 <span class='no'>xOR</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>n.fix</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>.15</span> / <span class='fl'>.3</span> / <span class='fl'>.85</span> * <span class='fl'>.7</span>), <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"Binomial"</span>)
@@ -656,8 +655,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;               P(Cross) if OR=1   0.0239   0.9761
 #&gt;            P(Cross) if OR=0.41   0.9000   0.1000</div><div class='input'>
 <span class='co'># for nice LaTeX table output, use xprint</span>
-<span class='fu'>xprint</span>(<span class='fu'><a href='xtable.html'>xtable</a></span>(<span class='fu'>gsBoundSummary</span>(<span class='no'>xOR</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"OR"</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"Table caption."</span>))</div><div class='output co'>#&gt; % latex table generated in R 3.6.1 by xtable 1.8-4 package
-#&gt; % Mon Dec 30 17:48:35 2019
+<span class='fu'>xprint</span>(<span class='fu'><a href='xtable.html'>xtable</a></span>(<span class='fu'>gsBoundSummary</span>(<span class='no'>xOR</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"OR"</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"Table caption."</span>))</div><div class='output co'>#&gt; % latex table generated in R 4.0.0 by xtable 1.8-4 package
+#&gt; % Mon Apr 27 16:04:48 2020
 #&gt; \begin{table}[ht]
 #&gt; \centering
 #&gt; \begin{tabular}{llrr}
@@ -680,19 +679,10 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt; \caption{Table caption.} 
 #&gt; \end{table}</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -703,7 +693,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

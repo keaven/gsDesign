@@ -11,23 +11,27 @@ Binomial Rates — ciBinomial • gsDesign</title>
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -95,7 +99,6 @@ Sample size with scale=&quot;Difference&quot; produces an error if
 p1-p2=delta0.  Normally, the alternative hypothesis under
 consideration would be p1-p2-delta0$&amp;gt;0$. However, the alternative can
 have p1-p2-delta0$&amp;lt;0$." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -113,7 +116,7 @@ have p1-p2-delta0$&amp;lt;0$." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -127,7 +130,7 @@ have p1-p2-delta0$&amp;lt;0$." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0.9006</span>
       </span>
     </div>
 
@@ -142,26 +145,8 @@ have p1-p2-delta0$&amp;lt;0$." />
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/SpendingTime.html">Spending Time</a>
-    </li>
-    <li>
-      <a href="../articles/gsSurvTemplate.html">Template for time-to-event group sequential design</a>
-    </li>
-    <li>
-      <a href="../articles/gsSurvTemplateInstructions.html">Template instructions for time-to-event group sequential design</a>
-    </li>
-    <li>
-      <a href="../articles/tests_and_coverage.html">Tests and Coverage</a>
-    </li>
-  </ul>
+<li>
+  <a href="../articles/index.html">Articles</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -248,17 +233,44 @@ consideration would be <code>p1-p2-delta0</code>$&gt;0$. However, the alternativ
 have <code>p1-p2-delta0</code>$&lt;0$.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ciBinomial</span>(<span class='no'>x1</span>, <span class='no'>x2</span>, <span class='no'>n1</span>, <span class='no'>n2</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>adj</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Difference"</span>)
+    <pre class="usage"><span class='fu'>ciBinomial</span>(<span class='no'>x1</span>, <span class='no'>x2</span>, <span class='no'>n1</span>, <span class='no'>n2</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>adj</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Difference"</span>)
 
-<span class='fu'>nBinomial</span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>outtype</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Difference"</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>nBinomial</span>(
+  <span class='no'>p1</span>,
+  <span class='no'>p2</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>,
+  <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>outtype</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Difference"</span>,
+  <span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)
 
-<span class='fu'>simBinomial</span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='no'>n1</span>, <span class='no'>n2</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>nsim</span> <span class='kw'>=</span> <span class='fl'>10000</span>, <span class='kw'>chisq</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>adj</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Difference"</span>)
+<span class='fu'>simBinomial</span>(
+  <span class='no'>p1</span>,
+  <span class='no'>p2</span>,
+  <span class='no'>n1</span>,
+  <span class='no'>n2</span>,
+  <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>nsim</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
+  <span class='kw'>chisq</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>adj</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Difference"</span>
+)
 
-<span class='fu'>testBinomial</span>(<span class='no'>x1</span>, <span class='no'>x2</span>, <span class='no'>n1</span>, <span class='no'>n2</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>chisq</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>adj</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Difference"</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-11</span>)
+<span class='fu'>testBinomial</span>(
+  <span class='no'>x1</span>,
+  <span class='no'>x2</span>,
+  <span class='no'>n1</span>,
+  <span class='no'>n2</span>,
+  <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>chisq</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>adj</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Difference"</span>,
+  <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-11</span>
+)
 
 <span class='fu'>varBinomial</span>(<span class='no'>x</span>, <span class='no'>n</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"Difference"</span>)</pre>
 
@@ -477,48 +489,38 @@ formulae. <em>Biometrics</em>; 52: 71-76.</p>
 #&gt; 1 1079.853 539.9264 539.9264  0.05     1  0.2   0.8 0.6614378 0.6595453 0.15
 #&gt;    p2 delta0   p10   p20
 #&gt; 1 0.1      0 0.125 0.125</div><div class='input'>
-
 <span class='co'># look at power plot under different control event rate and</span>
 <span class='co'># relative risk reductions</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
 <span class='no'>p1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>.075</span>, <span class='fl'>.2</span>, <span class='fl'>.000625</span>)
-<span class='no'>p2</span> <span class='kw'>&lt;-</span> <span class='no'>p1</span> * <span class='fl'>2</span> / <span class='fl'>3</span>
-<span class='no'>y1</span> <span class='kw'>&lt;-</span> <span class='fu'>nBinomial</span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>outtype</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.025</span>, <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>p2</span> <span class='kw'>&lt;-</span> <span class='no'>p1</span> * <span class='fl'>.75</span>
-<span class='no'>y2</span> <span class='kw'>&lt;-</span> <span class='fu'>nBinomial</span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>outtype</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.025</span>, <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>p2</span> <span class='kw'>&lt;-</span> <span class='no'>p1</span> * <span class='fl'>.6</span>
-<span class='no'>y3</span> <span class='kw'>&lt;-</span> <span class='fu'>nBinomial</span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>outtype</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.025</span>, <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='no'>p2</span> <span class='kw'>&lt;-</span> <span class='no'>p1</span> * <span class='fl'>.5</span>
-<span class='no'>y4</span> <span class='kw'>&lt;-</span> <span class='fu'>nBinomial</span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>outtype</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.025</span>, <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>p1</span>, <span class='no'>y1</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"l"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Sample size"</span>,
-  <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Control group event rate"</span>, <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>6000</span>), <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>
-)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/title.html'>title</a></span>(<span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"Binomial sample size computation for 80 pct power"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>p1</span>, <span class='no'>y2</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>p1</span>, <span class='no'>y3</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>p1</span>, <span class='no'>y4</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span>(
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.15</span>, <span class='fl'>.2</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4500</span>, <span class='fl'>6000</span>), <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>4</span>), <span class='kw'>lwd</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>legend</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
-    <span class='st'>"25 pct reduction"</span>, <span class='st'>"33 pct reduction"</span>,
-    <span class='st'>"40 pct reduction"</span>, <span class='st'>"50 pct reduction"</span>
-  )
-)</div><div class='img'><img src='varBinomial-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='no'>len</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>p1</span>)
+<span class='no'>p2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>p1</span> * <span class='fl'>.75</span>, <span class='no'>p1</span> * <span class='fl'>2</span>/<span class='fl'>3</span>, <span class='no'>p1</span> * <span class='fl'>.6</span>, <span class='no'>p1</span> * <span class='fl'>.5</span>)
+<span class='no'>Reduction</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"25 percent"</span>, <span class='no'>len</span>), <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"33 percent"</span>, <span class='no'>len</span>),
+               <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"40 percent"</span>, <span class='no'>len</span>), <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"50 percent"</span>, <span class='no'>len</span>))
+<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/reexports.html'>tibble</a></span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='no'>p1</span>, <span class='fl'>4</span>), <span class='no'>p2</span>, <span class='no'>Reduction</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>`Sample size`</span> <span class='kw'>=</span> <span class='fu'>nBinomial</span>(<span class='no'>p1</span>, <span class='no'>p2</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.025</span>, <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>))
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='no'>df</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>p1</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>`Sample size`</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>Reduction</span>)) +
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>() +
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='st'>"Control group event rate"</span>) +
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/lims.html'>ylim</a></span>(<span class='fl'>0</span>,<span class='fl'>6000</span>) +
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ggtitle</a></span>(<span class='st'>"Binomial sample size computation for 80 pct power"</span>)</div><div class='img'><img src='varBinomial-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># compute blinded estimate of treatment effect difference</span>
 <span class='no'>x1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>.2</span>)
 <span class='no'>x2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>.1</span>)
 <span class='co'># blinded estimate of risk difference variance</span>
-<span class='fu'>varBinomial</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x1</span> + <span class='no'>x2</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>300</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='output co'>#&gt; [1] 0.001659333</div><div class='input'><span class='co'># blnded estimate of log-risk-ratio</span>
-<span class='fu'>varBinomial</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x1</span> + <span class='no'>x2</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>300</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"RR"</span>)</div><div class='output co'>#&gt; [1] 0.1034211</div><div class='input'><span class='co'># blinded estimate of log-odds-ratio</span>
+<span class='fu'>varBinomial</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x1</span> + <span class='no'>x2</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>300</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='output co'>#&gt; [1] 0.001659333</div><div class='input'><span class='co'># blinded estimate of log-risk-ratio variance</span>
+<span class='fu'>varBinomial</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x1</span> + <span class='no'>x2</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>300</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"RR"</span>)</div><div class='output co'>#&gt; [1] 0.1034211</div><div class='input'><span class='co'># blinded estimate of log-odds-ratio variance</span>
 <span class='fu'>varBinomial</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x1</span> + <span class='no'>x2</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>300</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"OR"</span>)</div><div class='output co'>#&gt; [1] 0.1355966</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.com'>keaven\_anderson@merck.com</a></p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -529,7 +531,7 @@ formulae. <em>Biometrics</em>; 52: 71-76.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

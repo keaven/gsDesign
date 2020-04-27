@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -79,7 +83,6 @@ options 3 and 4 must compute boundary crossing probabilities under both the
 null and alternative hypotheses, deriving these designs can take longer than
 other options. Options 5 and 6 compute lower bound spending under the null
 hypothesis." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -97,7 +100,7 @@ hypothesis." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -111,7 +114,7 @@ hypothesis." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.0.9006</span>
       </span>
     </div>
 
@@ -126,26 +129,8 @@ hypothesis." />
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/SpendingTime.html">Spending Time</a>
-    </li>
-    <li>
-      <a href="../articles/gsSurvTemplate.html">Template for time-to-event group sequential design</a>
-    </li>
-    <li>
-      <a href="../articles/gsSurvTemplateInstructions.html">Template instructions for time-to-event group sequential design</a>
-    </li>
-    <li>
-      <a href="../articles/tests_and_coverage.html">Tests and Coverage</a>
-    </li>
-  </ul>
+<li>
+  <a href="../articles/index.html">Articles</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -217,12 +202,31 @@ other options. Options 5 and 6 compute lower bound spending under the null
 hypothesis.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>astar</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>,
-  <span class='kw'>sfupar</span> <span class='kw'>=</span> -<span class='fl'>4</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>, <span class='kw'>sflpar</span> <span class='kw'>=</span> -<span class='fl'>2</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>,
-  <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>maxn.IPlan</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>nFixSurv</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>overrun</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>usTime</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>lsTime</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>gsDesign</span>(
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>,
+  <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>astar</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>,
+  <span class='kw'>sfupar</span> <span class='kw'>=</span> -<span class='fl'>4</span>,
+  <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>,
+  <span class='kw'>sflpar</span> <span class='kw'>=</span> -<span class='fl'>2</span>,
+  <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>,
+  <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>,
+  <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>maxn.IPlan</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>nFixSurv</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>overrun</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>usTime</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>lsTime</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -459,7 +463,7 @@ group sequential trials with random information levels. <em>Journal of biopharma
 <code><a href='gsProbability.html'>gsProbability</a></code>, <a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>,</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
 <span class='co'>#  symmetric, 2-sided design with O'Brien-Fleming-like boundaries</span>
 <span class='co'>#  lower bound is non-binding (ignored in Type I error computation)</span>
 <span class='co'>#  sample size is computed based on a fixed design requiring n=800</span>
@@ -496,7 +500,7 @@ group sequential trials with random information levels. <em>Journal of biopharma
 #&gt;           Analysis
 #&gt;    Theta     1      2      3      4     5 Total
 #&gt;   0.0000 6e-04 0.0013 0.0028 0.0063 0.014 0.025
-#&gt;   0.1146 0e+00 0.0000 0.0000 0.0000 0.000 0.000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='gsDesign-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsDesign-2.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt;   0.1146 0e+00 0.0000 0.0000 0.0000 0.000 0.000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='gsDesign-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsDesign-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Assuming after trial was designed actual analyses occurred after</span>
 <span class='co'># 300, 600, and 860 patients, reset bounds</span>
 <span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(
@@ -571,7 +575,7 @@ group sequential trials with random information levels. <em>Journal of biopharma
 #&gt;           Analysis
 #&gt;    Theta      1      2      3      4  Total
 #&gt;   0.0000 0.2041 0.4703 0.2361 0.0693 0.9798
-#&gt;   0.1025 0.0250 0.0250 0.0250 0.0250 0.1000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='gsDesign-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsDesign-4.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt;   0.1025 0.0250 0.0250 0.0250 0.0250 0.1000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='gsDesign-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsDesign-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># same design, but with relative sample sizes</span>
 <span class='fu'>gsDesign</span>(
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='no'>timing</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfPoints</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>sfup</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfPoints</span>,
@@ -610,19 +614,10 @@ group sequential trials with random information levels. <em>Journal of biopharma
 #&gt;   0.0000 0.2041 0.4703 0.2361 0.0693 0.9798
 #&gt;   3.2415 0.0250 0.0250 0.0250 0.0250 0.1000</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -633,7 +628,7 @@ group sequential trials with random information levels. <em>Journal of biopharma
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
