@@ -195,7 +195,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
 <span class='co'>#  standard normal distribution</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>normalGrid</span>(<span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>3</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>$<span class='no'>z</span>, <span class='no'>x</span>$<span class='no'>wgts</span>)</div><div class='img'><img src='normalGrid-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>$<span class='no'>z</span>, <span class='no'>x</span>$<span class='no'>wgts</span>)</div><div class='img'><img src='normalGrid-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#  verify that numerical integration replicates sigma</span>
 <span class='co'>#  get grid points and weights</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>normalGrid</span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>3</span>)
@@ -264,7 +264,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
   <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>z</span>$<span class='no'>en</span> * <span class='no'>y</span>$<span class='no'>wgt</span>), <span class='fl'>1</span>), <span class='st'>"\n"</span>
 )</div><div class='output co'>#&gt; Expected sample size averaged over normal
 #&gt;  prior distribution for theta with 
-#&gt;  mu= 0.1025057 sigma= 0.06833715 : 682.2 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>y</span>$<span class='no'>z</span>, <span class='no'>z</span>$<span class='no'>en</span>,
+#&gt;  mu= 0.1025057 sigma= 0.06833715 : 682.2 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>y</span>$<span class='no'>z</span>, <span class='no'>z</span>$<span class='no'>en</span>,
   <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"theta"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"E{N}"</span>,
   <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"Expected sample size for different theta values"</span>
 )</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>y</span>$<span class='no'>z</span>, <span class='no'>z</span>$<span class='no'>en</span>)</div><div class='img'><img src='normalGrid-2.png' alt='' width='700' height='433' /></div></pre>
@@ -283,7 +283,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

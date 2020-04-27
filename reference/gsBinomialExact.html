@@ -252,7 +252,7 @@ NOTE: the one-sided evaluation of significance is more conservative than using t
 )
 
 <span class='co'># S3 method for gsBinomialExact</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>...</span>)
 
 <span class='fu'>nBinomial1Sample</span>(
   <span class='kw'>p0</span> <span class='kw'>=</span> <span class='fl'>0.9</span>,
@@ -478,15 +478,15 @@ marc_schwartz@me.com.</p>
 #&gt;     0.9 0 0.0000 0.0000 0.0000
 #&gt;     1.0 0 0.0000 0.0000 0.0000</div><div class='input'><span class='co'># also plot (see also plots below for \code{binomialSPRT})</span>
 <span class='co'># add lines using geom_line()</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>zz</span>) +
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>zz</span>) +
 <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>()</div><div class='img'><img src='gsBinomialExact-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># now for SPRT examples</span>
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>binomialSPRT</span>(<span class='kw'>p0</span> <span class='kw'>=</span> <span class='fl'>.05</span>, <span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>.25</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>.2</span>)
 <span class='co'># boundary plot</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='gsBinomialExact-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># power plot</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsBinomialExact-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Response (event) rate at boundary</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='img'><img src='gsBinomialExact-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Expected sample size at boundary crossing or end of trial</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>6</span>)</div><div class='img'><img src='gsBinomialExact-5.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='gsBinomialExact-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># power plot</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsBinomialExact-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Response (event) rate at boundary</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='img'><img src='gsBinomialExact-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Expected sample size at boundary crossing or end of trial</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>6</span>)</div><div class='img'><img src='gsBinomialExact-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># sample size for single arm exact binomial</span>
 
 <span class='co'># plot of table of power by sample size</span>
@@ -540,7 +540,7 @@ marc_schwartz@me.com.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

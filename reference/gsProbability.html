@@ -279,9 +279,9 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;   0.0000 0.4057 0.4290 0.1420 0.9767
 #&gt;   3.2415 0.0148 0.0289 0.0563 0.1000</div><div class='input'>
 <span class='co'># default plot for gsDesign object shows boundaries</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='gsProbability-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='gsProbability-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># plottype=2 shows boundary crossing probabilities</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsProbability-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsProbability-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># now add boundary crossing probabilities and</span>
 <span class='co'># expected sample size for more theta values</span>
 <span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'>gsProbability</span>(<span class='kw'>d</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>delta</span> * <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>.25</span>))
@@ -336,7 +336,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;   6.4830 0.0000 0.0000 0.0000 0.0000</div><div class='input'>
 <span class='co'># the plot does not change from before since this is a</span>
 <span class='co'># gsDesign object; note that theta/delta is on x axis</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>y</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsProbability-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>y</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsProbability-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># now let's see what happens with a gsProbability object</span>
 <span class='no'>z</span> <span class='kw'>&lt;-</span> <span class='fu'>gsProbability</span>(
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>a</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>lower</span>$<span class='no'>bound</span>, <span class='kw'>b</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>upper</span>$<span class='no'>bound</span>,
@@ -380,7 +380,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;   6.4830 0.0000 0.0000 0.0000 0.0000</div><div class='input'>
 <span class='co'># default plottype is now 2</span>
 <span class='co'># this is the same range for theta, but plot now has theta on x axis</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>z</span>)</div><div class='img'><img src='gsProbability-4.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>z</span>)</div><div class='img'><img src='gsProbability-4.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -396,7 +396,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

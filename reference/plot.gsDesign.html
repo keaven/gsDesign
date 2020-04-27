@@ -164,7 +164,7 @@ that time. See Proschan, Lan and Wittes (2006)." />
     </div>
 
     <div class="ref-description">
-    <p>The <code><a href='https://rdrr.io/r/base/plot.html'>plot()</a></code> function has been extended to work with objects returned
+    <p>The <code><a href='https://rdrr.io/r/graphics/plot.html'>plot()</a></code> function has been extended to work with objects returned
 by <code><a href='gsDesign.html'>gsDesign()</a></code> and <code><a href='gsProbability.html'>gsProbability()</a></code>.  For objects of type
 <code>gsDesign</code>, seven types of plots are provided: z-values at boundaries
 (default), power, approximate treatment effects at boundaries, conditional
@@ -173,7 +173,7 @@ at boundaries. For objects of type <code>gsProbability</code> plots are availabl
 for z-values at boundaries, power (default), approximate treatment effects at
 boundaries, conditional power, expected sample size and B-values at
 boundaries.</p>
-<p>The intent is that many standard <code><a href='https://rdrr.io/r/base/plot.html'>plot()</a></code> parameters will function as
+<p>The intent is that many standard <code><a href='https://rdrr.io/r/graphics/plot.html'>plot()</a></code> parameters will function as
 expected; exceptions to this rule exist. In particular, <code>main, xlab,
 ylab, lty, col, lwd, type, pch, cex</code> have been tested and work for most
 values of <code>plottype</code>; one exception is that <code>type="l"</code> cannot be
@@ -182,7 +182,7 @@ overridden when <code>plottype=2</code>. Default values for labels depend on
 <p>Note that there is some special behavior for values plotted and returned for
 power and expected sample size (ASN) plots for a <code>gsDesign</code> object. A
 call to <code>x&lt;-gsDesign()</code> produces power and expected sample size for
-only two <code>theta</code> values: 0 and <code>x$delta</code>.  The call <code><a href='https://rdrr.io/r/base/plot.html'>plot(x,
+only two <code>theta</code> values: 0 and <code>x$delta</code>.  The call <code><a href='https://rdrr.io/r/graphics/plot.html'>plot(x,
 plottype="Power")</a></code> (or <code>plot(x,plottype="ASN"</code>) for a <code>gsDesign</code>
 object produces power (expected sample size) curves and returns a
 <code>gsDesign</code> object with <code>theta</code> values determined as follows.  If
@@ -217,10 +217,10 @@ that time. See Proschan, Lan and Wittes (2006).</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for gsDesign</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for gsProbability</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -326,7 +326,7 @@ Clinical Trials. A Unified Approach</em>.  New York: Springer.</p>
 #&gt;   0.3242 0e+00 0.0000 0.0000 0.0000 0.000 0.000</div><div class='input'>
 <span class='co'># the following translate to calls to plot.gsDesign since x was</span>
 <span class='co'># returned by gsDesign; run these commands one at a time</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='plot.gsDesign-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='plot.gsDesign-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='img'><img src='plot.gsDesign-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='img'><img src='plot.gsDesign-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='img'><img src='plot.gsDesign-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>6</span>)</div><div class='img'><img src='plot.gsDesign-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>7</span>)</div><div class='img'><img src='plot.gsDesign-7.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='plot.gsDesign-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='plot.gsDesign-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='img'><img src='plot.gsDesign-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='img'><img src='plot.gsDesign-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='img'><img src='plot.gsDesign-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>6</span>)</div><div class='img'><img src='plot.gsDesign-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>7</span>)</div><div class='img'><img src='plot.gsDesign-7.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#  choose different parameter values for power plot</span>
 <span class='co'>#  start with design in x from above</span>
 <span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsProbability.html'>gsProbability</a></span>(
@@ -336,7 +336,7 @@ Clinical Trials. A Unified Approach</em>.  New York: Springer.</p>
 
 <span class='co'># the following translates to a call to plot.gsProbability since</span>
 <span class='co'># y has that type</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>y</span>)</div><div class='img'><img src='plot.gsDesign-8.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>y</span>)</div><div class='img'><img src='plot.gsDesign-8.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -352,7 +352,7 @@ Clinical Trials. A Unified Approach</em>.  New York: Springer.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

@@ -279,13 +279,13 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;   0.0000 0.3015 0.4138 0.2008 0.0619 0.9779
 #&gt;   3.2415 0.0125 0.0229 0.0296 0.0350 0.1000</div><div class='input'>
 <span class='co'># plot the alpha- and beta-spending functions</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='img'><img src='sfDistribution-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='img'><img src='sfDistribution-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># start by showing how to fit two points with sfLogistic</span>
 <span class='co'># plot the spending function using many points to obtain a smooth curve</span>
 <span class='co'># note that curve fits the points x=.1,  y=.01 and x=.4,  y=.1</span>
 <span class='co'># specified in the 3rd parameter of sfLogistic</span>
 <span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fl'>0</span>:<span class='fl'>100</span> / <span class='fl'>100</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='fl'>1</span>, <span class='no'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.1</span>, <span class='fl'>.4</span>, <span class='fl'>.01</span>, <span class='fl'>.1</span>))$<span class='no'>spend</span>,
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfLogistic</span>(<span class='fl'>1</span>, <span class='no'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.1</span>, <span class='fl'>.4</span>, <span class='fl'>.01</span>, <span class='fl'>.1</span>))$<span class='no'>spend</span>,
   <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Proportion of final sample size"</span>,
   <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Cumulative Type I error spending"</span>,
   <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"Logistic Spending Function Examples"</span>,
@@ -306,7 +306,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># set up a function to plot comparsons of all</span>
 <span class='co'># 2-parameter spending functions</span>
 <span class='no'>plotsf</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>) {
-  <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfCauchy</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>,
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfCauchy</span>(<span class='no'>alpha</span>, <span class='no'>t</span>, <span class='no'>param</span>)$<span class='no'>spend</span>,
     <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Proportion of enrollment"</span>,
     <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Cumulative spending"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"l"</span>, <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>2</span>
   )
@@ -345,7 +345,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

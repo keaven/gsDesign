@@ -1,11 +1,11 @@
-pandoc: '2.2'
-pkgdown: 1.5.1
-pkgdown_sha: ~
+pandoc: 2.7.3
+pkgdown: 1.5.1.9000
+pkgdown_sha: c181e5c9ac09b28974a97f5e32deddc36690fcf2
 articles:
   SurvivalOverview: SurvivalOverview.html
   gsSurvBasicExamples: gsSurvBasicExamples.html
   hGraph: hGraph.html
   nNormal: nNormal.html
   tests_and_coverage: tests_and_coverage.html
-last_built: 2020-04-27T17:54Z
+last_built: 2020-04-27T20:10Z
 
