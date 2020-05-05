@@ -1,9 +1,10 @@
-3.1.1, April, 2020
+3.1.1, May, 2020
 - Vignettes updated
 - Added hGraph() to support ggplot2 versions of multiplicity graphs
 - Eliminated unnecessary check from sequentialPValue
 - Targeted release to CRAN
 - Removed dependencies on reshape2, plyr
+- Updated continuous integration
 
 3.1.0, April, 2019
 - Addition of pkgdown web site

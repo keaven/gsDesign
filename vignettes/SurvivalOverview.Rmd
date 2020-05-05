@@ -25,6 +25,7 @@ options( width = 58 )
 library(gsDesign)
 library(tidyr)
 library(knitr)
+library(tibble)
 ```
 
 This article/vignette provides a summary of functions in the ***gsDesign*** package supporting design and evaluation of trial designs for time-to-event outcomes.
