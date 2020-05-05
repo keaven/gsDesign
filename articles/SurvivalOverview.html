@@ -68,7 +68,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Overview of design and evaluation of trials with time-to-event outcomes</h1>
             
-            <h4 class="date">2020-04-27</h4>
+            <h4 class="date">2020-05-05</h4>
       
       
       <div class="hidden name"><code>SurvivalOverview.Rmd</code></div>
@@ -503,7 +503,7 @@
 <h3 class="hasAnchor">
 <a href="#plotting" class="anchor"></a>Plotting</h3>
 <p>There are various plots available. The approximate hazard ratios required to cross bounds again use the <span class="citation">Schoenfeld (1981)</span> approximation. For a <strong>ggplot2</strong> version of this plot, use the default <code>base = FALSE</code>.</p>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">lfgs</span>, <span class="kw">pl</span><span class="kw">=</span><span class="st">"hr"</span>, <span class="kw">dgt</span><span class="kw">=</span><span class="fl">4</span>, <span class="kw">base</span><span class="kw">=</span><span class="fl">TRUE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">lfgs</span>, <span class="kw">pl</span><span class="kw">=</span><span class="st">"hr"</span>, <span class="kw">dgt</span><span class="kw">=</span><span class="fl">4</span>, <span class="kw">base</span><span class="kw">=</span><span class="fl">TRUE</span>)</pre></body></html></div>
 <p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-25-1.png" width="624"></p>
 </div>
 <div id="event-accrual" class="section level3">
@@ -536,7 +536,7 @@
 <p>It is worth noting that if events accrue at the same rate in both the null and alternate hypothesis, then the expected duration of time to achieve the targeted events would be shortened. Keep in mind that there can be many reasons events will accrue at a different rate than in the design plan.</p>
 <p>The expected event accrual of events over time for a design can be computed as follows:</p>
 <div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">Month</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0.025</span>, <span class="no">enrollDuration</span> + <span class="no">minfup</span>, <span class="fl">.025</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="no">Month</span>),
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="no">Month</span>),
      <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span>(<span class="no">Month</span>, <span class="kw">function</span>(<span class="no">x</span>){<span class="fu"><a href="../reference/nSurv.html">nEventsIA</a></span>(<span class="kw">tIA</span><span class="kw">=</span><span class="no">x</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">lfgs</span>)})),
      <span class="kw">type</span> <span class="kw">=</span> <span class="st">'l'</span>, <span class="kw">xlab</span><span class="kw">=</span><span class="st">"Month"</span>, <span class="kw">ylab</span><span class="kw">=</span><span class="st">"Expected events"</span>,
      <span class="kw">main</span><span class="kw">=</span><span class="st">"Expected event accrual over time"</span>)</pre></body></html></div>

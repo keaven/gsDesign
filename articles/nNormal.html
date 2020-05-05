@@ -132,12 +132,12 @@
 <p>If we want to plot power for a variety of sample sizes, we can input <code>n</code> as a vector:</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">n</span> <span class="kw">&lt;-</span> <span class="fl">100</span>:<span class="fl">200</span>
 <span class="no">pwrn</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span>(<span class="kw">delta1</span> <span class="kw">=</span> <span class="fl">0.8</span>, <span class="kw">sd</span> <span class="kw">=</span> <span class="fl">1.6</span>, <span class="kw">sd2</span> <span class="kw">=</span> <span class="fl">1.25</span>, <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">0.025</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n</span>, <span class="kw">ratio</span> <span class="kw">=</span> <span class="fl">2</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">n</span>, <span class="no">pwrn</span>, <span class="kw">type</span><span class="kw">=</span><span class="st">"l"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">n</span>, <span class="no">pwrn</span>, <span class="kw">type</span><span class="kw">=</span><span class="st">"l"</span>)</pre></body></html></div>
 <p><img src="nNormal_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>Alternatively, you could fix sample size at 200 and plot power under different treatment effect assumptions:</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">delta1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">.5</span>,<span class="fl">1</span>,<span class="fl">.025</span>)
 <span class="no">pwrdelta1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span>(<span class="kw">delta1</span> <span class="kw">=</span> <span class="no">delta1</span>, <span class="kw">sd</span> <span class="kw">=</span> <span class="fl">1.6</span>, <span class="kw">sd2</span> <span class="kw">=</span> <span class="fl">1.25</span>, <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">0.025</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="fl">200</span>, <span class="kw">ratio</span> <span class="kw">=</span> <span class="fl">2</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">delta1</span>, <span class="no">pwrdelta1</span>, <span class="kw">type</span><span class="kw">=</span><span class="st">"l"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">delta1</span>, <span class="no">pwrdelta1</span>, <span class="kw">type</span><span class="kw">=</span><span class="st">"l"</span>)</pre></body></html></div>
 <p><img src="nNormal_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
 <div id="verification-with-simulation" class="section level2">
@@ -158,7 +158,7 @@
            <span class="no">sd2</span>^<span class="fl">2</span> * <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">rchisq</a></span>(<span class="kw">n</span><span class="kw">=</span><span class="no">nsim</span>, <span class="kw">df</span><span class="kw">=</span><span class="no">n2</span> - <span class="fl">1</span>)/(<span class="no">n2</span>-<span class="fl">1</span>)/<span class="no">n2</span>)
 <span class="no">z</span> <span class="kw">&lt;-</span> <span class="no">deltahat</span> / <span class="no">s</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">z</span> <span class="kw">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span>(<span class="fl">.975</span>))
-<span class="co">#&gt; [1] 0.946058</span></pre></body></html></div>
+<span class="co">#&gt; [1] 0.946176</span></pre></body></html></div>
 <p>The standard error for this simulation power calculation is approximately</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="no">pwr</span>*(<span class="fl">1</span>-<span class="no">pwr</span>)/<span class="no">nsim</span>)
 <span class="co">#&gt; [1] 0.0002246659</span></pre></body></html></div>

@@ -232,7 +232,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># Also show rho=2 for an intermediate spending.</span>
 <span class='co'># Compare these to Hwang-Shih-DeCani spending with gamma=-4,  -2,  1</span>
 <span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fl'>0</span>:<span class='fl'>100</span> / <span class='fl'>100</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfPower</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>3</span>)$<span class='no'>spend</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>t</span>, <span class='fu'>sfPower</span>(<span class='fl'>0.025</span>, <span class='no'>t</span>, <span class='fl'>3</span>)$<span class='no'>spend</span>,
   <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Proportion of sample size"</span>,
   <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Cumulative Type I error spending"</span>,
   <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"Kim-DeMets (rho) versus Hwang-Shih-DeCani (gamma) Spending"</span>,

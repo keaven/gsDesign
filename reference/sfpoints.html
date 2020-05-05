@@ -196,11 +196,11 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;            Sample
 #&gt;             Size 
 #&gt;   Analysis Ratio*  Z   Nominal p  Spend
-#&gt;          1  0.171 3.48    0.0002 0.0002
+#&gt;          1  0.171 3.48    0.0002 0.0003
 #&gt;          2  0.342 3.07    0.0011 0.0010
 #&gt;          3  0.512 2.94    0.0017 0.0013
-#&gt;          4  0.683 2.58    0.0050 0.0038
-#&gt;          5  0.854 2.33    0.0099 0.0062
+#&gt;          4  0.683 2.58    0.0050 0.0037
+#&gt;          5  0.854 2.33    0.0099 0.0063
 #&gt;          6  1.025 2.03    0.0211 0.0125
 #&gt;      Total                       0.0250 
 #&gt; 
@@ -233,7 +233,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># this should correspond to input sfupar</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='no'>y</span>, <span class='fl'>6</span>)</div><div class='output co'>#&gt; [1] 0.01 0.05 0.10 0.25 0.50 1.00</div><div class='input'>
 <span class='co'># plot these cumulative spending points</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fl'>1</span>:<span class='fl'>6</span> / <span class='fl'>6</span>, <span class='no'>y</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='fl'>1</span>:<span class='fl'>6</span> / <span class='fl'>6</span>, <span class='no'>y</span>,
   <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"Pointwise spending function example"</span>,
   <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Proportion of final sample size"</span>,
   <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Cumulative proportion of spending"</span>,
@@ -257,7 +257,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;            Sample
 #&gt;             Size    ----Lower bounds----  ----Upper bounds-----
 #&gt;   Analysis Ratio*    Z   Nominal p Spend+   Z   Nominal p Spend++
-#&gt;          1  0.351 -20.00    0.0000  0.000  2.50    0.0063  0.0062
+#&gt;          1  0.351 -20.00    0.0000  0.000  2.50    0.0063  0.0063
 #&gt;          2  0.703   0.76    0.7758  0.025 20.00    0.0000  0.0000
 #&gt;          3  1.054   2.04    0.9793  0.075  2.04    0.0207  0.0188
 #&gt;      Total                        0.1000                 0.0250 
