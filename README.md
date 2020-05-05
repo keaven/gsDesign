@@ -2,6 +2,7 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/gsDesign)](https://CRAN.R-project.org/package=gsDesign)
 [![Codecov test coverage](https://codecov.io/gh/keaven/gsDesign/branch/master/graph/badge.svg)](https://codecov.io/gh/keaven/gsDesign?branch=master)
 [![R build status](https://github.com/keaven/gsDesign/workflows/R-CMD-check/badge.svg)](https://github.com/keaven/gsDesign/actions)
+![pkgdown](https://github.com/keaven/gsDesign/workflows/pkgdown/badge.svg)
 <!-- badges: end -->
 
 # gsDesign 
