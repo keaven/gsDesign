@@ -1,4 +1,0 @@
-# don't ignore html/png for the doc site
-!*.html
-!*.png
-!*.svg

@@ -5,5 +5,4 @@
 .travis.yml
 ^.*\.yml$
 ^\.github$
-crancomments.md
-
+^cran-comments\.md$

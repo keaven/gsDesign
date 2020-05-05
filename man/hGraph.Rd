@@ -2,7 +2,7 @@
 % Please edit documentation in R/hgraph.r
 \name{hGraph}
 \alias{hGraph}
-\title{Create multiplicity graph using ggplot2}
+\title{Create multiplicity graphs using ggplot2}
 \usage{
 hGraph(
   nHypotheses = 4,
