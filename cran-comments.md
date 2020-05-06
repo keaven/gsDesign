@@ -26,8 +26,4 @@ Warning: Topic 'xtable': no parameters to inherit with @inheritParams
 
 # Reverse dependencies
 
-Not checked, but there are only 6 packages depending on gsDesign.
-Given complete backwards compatibility, no breaks are expected.
-
-Reverse depends:	coprimary, gsbDesign
-Reverse suggests:	ADCT, gscounts, ph2bye, ph2mult
+revdepcheck() has been run with no issues: *Wow, no problems at all. :)*

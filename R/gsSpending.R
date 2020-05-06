@@ -697,7 +697,7 @@ sfHSD <- function(alpha, t, param) {
 #' @rdname sfLDOF
 #' @export
 # sfLDOF function [sinew] ----
-sfLDOF <- function(alpha, t, param) {
+sfLDOF <- function(alpha, t, param = NULL) {
   checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
   checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))
   # Following 2 lines udated 10/11/17 

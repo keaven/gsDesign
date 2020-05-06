@@ -6,3 +6,4 @@
 ^.*\.yml$
 ^\.github$
 ^cran-comments\.md$
+^revdep$

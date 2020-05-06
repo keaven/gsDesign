@@ -5,7 +5,7 @@
 \alias{sfLDPocock}
 \title{Lan-DeMets Spending function overview}
 \usage{
-sfLDOF(alpha, t, param)
+sfLDOF(alpha, t, param = NULL)
 
 sfLDPocock(alpha, t, param)
 }
