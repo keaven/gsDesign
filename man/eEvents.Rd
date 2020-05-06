@@ -26,13 +26,13 @@ stratum.}
 
 \item{eta}{scalar, vector or matrix of dropout hazard rates; rows represent
 time periods while columns represent strata; if entered as a scalar, rate is
-constant accross strata and time periods; if entered as a vector, rates are
-constant accross strata.}
+constant across strata and time periods; if entered as a vector, rates are
+constant across strata.}
 
 \item{gamma}{a scalar, vector or matrix of rates of entry by time period
 (rows) and strata (columns); if entered as a scalar, rate is constant
-accross strata and time periods; if entered as a vector, rates are constant
-accross strata.}
+across strata and time periods; if entered as a vector, rates are constant
+across strata.}
 
 \item{R}{a scalar or vector of durations of time periods for recruitment
 rates specified in rows of \code{gamma}. Length is the same as number of

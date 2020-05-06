@@ -245,7 +245,7 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 
 Proschan, Michael A., Lan, KK Gordon and Wittes, Janet Turk (2006),
-\emph{Statiscal Monitoring of Clinical Trials}. NY: Springer.
+\emph{Statistical Monitoring of Clinical Trials}. NY: Springer.
 
 Muller, Hans-Helge and Schaffer, Helmut (2001), Adaptive group sequential
 designs for clinical trials: combining the advantages of adaptive and

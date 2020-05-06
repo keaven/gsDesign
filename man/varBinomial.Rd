@@ -101,7 +101,7 @@ group (\code{n1, n2}), Type I error (\code{alpha}), 1 or 2 (\code{sided}, as
 input), Type II error (\code{beta}), power (\code{Power}), null and
 alternate hypothesis standard deviations (\code{sigma0, sigma1}), input
 event rates (\code{p1, p2}), null hypothesis difference in treatment group
-meands (\code{delta0}) and null hypothesis event rates (\code{p10, p20}).}
+means (\code{delta0}) and null hypothesis event rates (\code{p10, p20}).}
 
 \item{n}{If power is to be computed in \code{nBinomial()}, input total trial
 sample size in \code{n}; this may be a vector. This is also the sample size
