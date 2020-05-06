@@ -60,7 +60,7 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #'
 #' \code{condPower} is a supportive routine that also is interesting in its own
 #' right; it computes conditional power of a combination test given an interim
-#' test statistic, stage 2 sample size and combindation test statistic. While
+#' test statistic, stage 2 sample size and combination test statistic. While
 #' the returned data frame should make general plotting easy, the function
 #' \code{plot.ssrCP()} prints a plot of study sample size by stage 1 outcome
 #' with multiple x-axis labels for stage 1 z-value, conditional power, and

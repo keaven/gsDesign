@@ -30,7 +30,7 @@
 #' length.
 #'
 #' The functions \code{hrz2n}, \code{hrn2z} and \code{zn2hr} also all apply the
-#' Schoenfeld approximation for proportional hazards modelling.  This
+#' Schoenfeld approximation for proportional hazards modeling.  This
 #' approximation is based on the asymptotic normal distribtuion of the logrank
 #' statistic as well as related statistics are asymptotically normal.  Let
 #' \eqn{\lambda} denote the underlying hazard ratio (\code{lambda1/lambda2} in

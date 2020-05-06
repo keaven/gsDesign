@@ -95,12 +95,12 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 #' stratum.
 #' @param eta scalar, vector or matrix of dropout hazard rates; rows represent
 #' time periods while columns represent strata; if entered as a scalar, rate is
-#' constant accross strata and time periods; if entered as a vector, rates are
-#' constant accross strata.
+#' constant across strata and time periods; if entered as a vector, rates are
+#' constant across strata.
 #' @param gamma a scalar, vector or matrix of rates of entry by time period
 #' (rows) and strata (columns); if entered as a scalar, rate is constant
-#' accross strata and time periods; if entered as a vector, rates are constant
-#' accross strata.
+#' across strata and time periods; if entered as a vector, rates are constant
+#' across strata.
 #' @param R a scalar or vector of durations of time periods for recruitment
 #' rates specified in rows of \code{gamma}. Length is the same as number of
 #' rows in \code{gamma}. Note that the final enrollment period is extended as
@@ -700,7 +700,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' of tabular summaries of bounds for designs produced by \code{gsSurv()}.
 #'
 #' Both \code{nEventsIA} and \code{tEventsIA} require a group sequential design
-#' for a time-to-event endpoing of class \code{gsSurv} as input.
+#' for a time-to-event endpoint of class \code{gsSurv} as input.
 #' \code{nEventsIA} calculates the expected number of events under the
 #' alternate hypothesis at a given interim time. \code{tEventsIA} calculates
 #' the time that the expected number of events under the alternate hypothesis
@@ -767,14 +767,14 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' (scalar).
 #' @param eta scalar, vector or matrix of dropout hazard rates for the control
 #' group; rows represent time periods while columns represent strata; if
-#' entered as a scalar, rate is constant accross strata and time periods; if
-#' entered as a vector, rates are constant accross strata.
+#' entered as a scalar, rate is constant across strata and time periods; if
+#' entered as a vector, rates are constant across strata.
 #' @param etaE matrix dropout hazard rates for the experimental group specified
 #' in like form as \code{eta}; if NULL, this is set equal to \code{eta}.
 #' @param gamma a scalar, vector or matrix of rates of entry by time period
 #' (rows) and strata (columns); if entered as a scalar, rate is constant
-#' accross strata and time periods; if entered as a vector, rates are constant
-#' accross strata.
+#' across strata and time periods; if entered as a vector, rates are constant
+#' across strata.
 #' @param R a scalar or vector of durations of time periods for recruitment
 #' rates specified in rows of \code{gamma}. Length is the same as number of
 #' rows in \code{gamma}. Note that when variable enrollment duration is

@@ -37,7 +37,7 @@ The following functions support use of the very straightforward @Schoenfeld1981 
 - `nEvents()`: number of events to achieve power or power given number of events with no interim analysis.
 - `zn2hr()`, `gsHR()` and `gsBoundSummary()`: approximate the observed hazard ratio (HR) required to achieve a targeted Z-value for a given number of events.
 - `hrn2z()`: approximate Z-value corresponding to a specified HR and event count.
-- `hrz2n()`: approxiate event count corresponding to a specified HR and Z-value.
+- `hrz2n()`: approximate event count corresponding to a specified HR and Z-value.
 
 The above functions do not directly support sample size calculations. 
 This is done with the @LachinFoulkes method. Functions include:
@@ -274,7 +274,7 @@ The model assumes
 - A fixed enrollment period with piecewise constant enrollment rates
 - A fixed minimum follow-up period
 - Piecewise exponential failure rates for the control group
-- A single, constant hazard ratio for the experimenatl group
+- A single, constant hazard ratio for the experimental group
 - Piecewise exponential loss-to-follow-up rates
 - A stratified population
 - A fixed randomization ratio of experimental to control group assignment

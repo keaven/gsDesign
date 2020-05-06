@@ -484,7 +484,7 @@ print.nSurvival <- function(x, ...) {
 #' Word (see the \code{rtf} package) or to a csv format readable by spreadsheet
 #' software using \code{write.csv}.
 #'
-#' \code{print.gsDesign} prints an overall summary a group sequentia design.
+#' \code{print.gsDesign} prints an overall summary a group sequential design.
 #' While the design description is complete, the format is not as `document
 #' friendly' as \code{gsBoundSummary}.
 #'
