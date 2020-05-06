@@ -5,6 +5,7 @@
 - Targeted release to CRAN
 - Removed dependencies on reshape2, plyr
 - Updated continuous integration
+- Updated license
 
 3.1.0, April, 2019
 - Addition of pkgdown web site
