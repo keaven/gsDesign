@@ -23,12 +23,11 @@
 # \code{sfupar}. For O'Brien-Fleming and Pocock designs there is also a
 # calling sequence that does not require a parameter. See examples.
 #
-# @param d FUNCTION_PARAMETER
-# @param alpha FUNCTION_PARAMETER
-# @param a FUNCTION_PARAMETER
-# @param timing FUNCTION_PARAMETER
-# @param tol FUNCTION_PARAMETER
-# @param r FUNCTION_PARAMETER
+# @param d Delta parameter for Wang-Tsiatis boundary family
+# @param a Set elsewhere to control 1- vs 2-sided calculation
+# @param timing Relative information at each analysis
+# @param tol Convergence criteria for solution
+# @param r Grid size parameter as used elsewhere
 # 
 # @name Wang-Tsiatis Bounds
 # @aliases O'Brien-Fleming Bounds Wang-Tsiatis Bounds Pocock Bounds
