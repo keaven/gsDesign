@@ -31,18 +31,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -63,7 +57,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="nNormal_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Two-sample normal sample size computation</h1>
@@ -113,31 +107,36 @@
 <a href="#sample-size-1" class="anchor"></a>Sample size</h2>
 <p>We consider an example with <span class="math inline">\(\sigma_2=1.25\)</span>, <span class="math inline">\(\sigma_1=1.6\)</span>, <span class="math inline">\(\delta=0.8\)</span> and <span class="math inline">\(\delta_0=0\)</span>. We let the sample size ratio be 2 experimental group observations per control observation. We compute sample size with <code><a href="../reference/nNormal.html">nNormal()</a></code> assuming one-sided Type I error <span class="math inline">\(\alpha=0.025\)</span> and 90% power (<span class="math inline">\(1-\beta=0.9\)</span>).</p>
 <p>Checking using the sample size formula above, we have:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">r</span> <span class="kw">&lt;-</span> <span class="fl">2</span>
-<span class="no">sigma</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>((<span class="fl">1</span>+<span class="no">r</span>)*(<span class="fl">1.6</span>^<span class="fl">2</span> + <span class="fl">1.25</span>^<span class="fl">2</span>/<span class="no">r</span>))
-<span class="no">theta</span> <span class="kw">&lt;-</span> <span class="fl">0.8</span>/<span class="no">sigma</span>
-((<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span>(<span class="fl">.9</span>)+<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span>(<span class="fl">.975</span>))/<span class="no">theta</span>)^<span class="fl">2</span>
-<span class="co">#&gt; [1] 164.5684</span></pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">2</span>
+<span class="va">sigma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="va">r</span><span class="op">)</span><span class="op">*</span><span class="op">(</span><span class="fl">1.6</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">1.25</span><span class="op">^</span><span class="fl">2</span><span class="op">/</span><span class="va">r</span><span class="op">)</span><span class="op">)</span> 
+<span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">0.8</span><span class="op">/</span><span class="va">sigma</span>
+<span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">.9</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">.975</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="va">theta</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
+<span class="co">#&gt; [1] 164.5684</span></code></pre></div>
 </div>
 <div id="power" class="section level2">
 <h2 class="hasAnchor">
 <a href="#power" class="anchor"></a>Power</h2>
 <p>Now, assume we let the sample size be 200 and compute power under the same scenario.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/nNormal.html">nNormal</a></span>(<span class="kw">delta1</span><span class="kw">=</span><span class="fl">0.8</span>, <span class="kw">sd</span> <span class="kw">=</span> <span class="fl">1.6</span>, <span class="kw">sd2</span> <span class="kw">=</span> <span class="fl">1.25</span>, <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">0.025</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="fl">200</span>, <span class="kw">ratio</span> <span class="kw">=</span> <span class="fl">2</span>)
-<span class="co">#&gt; [1] 0.9466825</span></pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1<span class="op">=</span><span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">1.6</span>, sd2 <span class="op">=</span> <span class="fl">1.25</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, n <span class="op">=</span> <span class="fl">200</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.9466825</span></code></pre></div>
 <p>From the power formula above, we duplicate this with:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">pwr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span>(<span class="fl">.975</span>) - <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fl">200</span>) * <span class="no">theta</span>, <span class="kw">lower.tail</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="no">pwr</span>
-<span class="co">#&gt; [1] 0.9466825</span></pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pwr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">.975</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span> <span class="op">*</span> <span class="va">theta</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">pwr</span>
+<span class="co">#&gt; [1] 0.9466825</span></code></pre></div>
 <p>If we want to plot power for a variety of sample sizes, we can input <code>n</code> as a vector:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">n</span> <span class="kw">&lt;-</span> <span class="fl">100</span>:<span class="fl">200</span>
-<span class="no">pwrn</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span>(<span class="kw">delta1</span> <span class="kw">=</span> <span class="fl">0.8</span>, <span class="kw">sd</span> <span class="kw">=</span> <span class="fl">1.6</span>, <span class="kw">sd2</span> <span class="kw">=</span> <span class="fl">1.25</span>, <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">0.025</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="no">n</span>, <span class="kw">ratio</span> <span class="kw">=</span> <span class="fl">2</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">n</span>, <span class="no">pwrn</span>, <span class="kw">type</span><span class="kw">=</span><span class="st">"l"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span><span class="op">:</span><span class="fl">200</span>
+<span class="va">pwrn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1 <span class="op">=</span> <span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">1.6</span>, sd2 <span class="op">=</span> <span class="fl">1.25</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, n <span class="op">=</span> <span class="va">n</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">pwrn</span>, type<span class="op">=</span><span class="st">"l"</span><span class="op">)</span></code></pre></div>
 <p><img src="nNormal_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>Alternatively, you could fix sample size at 200 and plot power under different treatment effect assumptions:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">delta1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">.5</span>,<span class="fl">1</span>,<span class="fl">.025</span>)
-<span class="no">pwrdelta1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span>(<span class="kw">delta1</span> <span class="kw">=</span> <span class="no">delta1</span>, <span class="kw">sd</span> <span class="kw">=</span> <span class="fl">1.6</span>, <span class="kw">sd2</span> <span class="kw">=</span> <span class="fl">1.25</span>, <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">0.025</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="fl">200</span>, <span class="kw">ratio</span> <span class="kw">=</span> <span class="fl">2</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">delta1</span>, <span class="no">pwrdelta1</span>, <span class="kw">type</span><span class="kw">=</span><span class="st">"l"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">delta1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">.5</span>,<span class="fl">1</span>,<span class="fl">.025</span><span class="op">)</span>
+<span class="va">pwrdelta1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1 <span class="op">=</span> <span class="va">delta1</span>, sd <span class="op">=</span> <span class="fl">1.6</span>, sd2 <span class="op">=</span> <span class="fl">1.25</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, n <span class="op">=</span> <span class="fl">200</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">delta1</span>, <span class="va">pwrdelta1</span>, type<span class="op">=</span><span class="st">"l"</span><span class="op">)</span></code></pre></div>
 <p><img src="nNormal_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
 <div id="verification-with-simulation" class="section level2">
@@ -147,33 +146,36 @@
 <p><span class="math display">\[\bar X_j\sim \hbox{Normal}(\mu_j,\sigma_j^2/n_j)\]</span> and</p>
 <p><span class="math display">\[(n_j-1)s_j^2/\sigma_j^2=\sum_{i=1}^{n_j} (X_{ij}-\bar X_j)/\sigma^2 \sim \chi ^2_{n_j-1}\]</span></p>
 <p>are independent. Thus, we can simulate trial power with <span class="math inline">\(n=200\)</span> 1 million times with a t-statistic with unequal variances quickly as follows under the alternate hypothesis:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">nsim</span> <span class="kw">&lt;-</span> <span class="fl">1000000</span>
-<span class="no">delta</span> <span class="kw">&lt;-</span> <span class="fl">0.8</span>
-<span class="no">sd1</span> <span class="kw">&lt;-</span> <span class="fl">1.6</span>
-<span class="no">sd2</span> <span class="kw">&lt;-</span> <span class="fl">1.25</span>
-<span class="no">n1</span> <span class="kw">&lt;-</span> <span class="fl">67</span>
-<span class="no">n2</span> <span class="kw">&lt;-</span> <span class="fl">133</span>
-<span class="no">deltahat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="kw">n</span><span class="kw">=</span><span class="no">nsim</span>, <span class="kw">mean</span><span class="kw">=</span><span class="no">delta</span>, <span class="kw">sd</span><span class="kw">=</span><span class="no">sd1</span>/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="no">n1</span>)) - <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="kw">n</span><span class="kw">=</span><span class="no">nsim</span>, <span class="kw">mean</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">sd</span><span class="kw">=</span><span class="no">sd2</span>/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="no">n2</span>))
-<span class="no">s</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="no">sd1</span>^<span class="fl">2</span> * <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">rchisq</a></span>(<span class="kw">n</span><span class="kw">=</span><span class="no">nsim</span>, <span class="kw">df</span><span class="kw">=</span><span class="no">n1</span> - <span class="fl">1</span>)/(<span class="no">n1</span>-<span class="fl">1</span>)/<span class="no">n1</span> +
-           <span class="no">sd2</span>^<span class="fl">2</span> * <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">rchisq</a></span>(<span class="kw">n</span><span class="kw">=</span><span class="no">nsim</span>, <span class="kw">df</span><span class="kw">=</span><span class="no">n2</span> - <span class="fl">1</span>)/(<span class="no">n2</span>-<span class="fl">1</span>)/<span class="no">n2</span>)
-<span class="no">z</span> <span class="kw">&lt;-</span> <span class="no">deltahat</span> / <span class="no">s</span>
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">z</span> <span class="kw">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span>(<span class="fl">.975</span>))
-<span class="co">#&gt; [1] 0.945613</span></pre></body></html></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">1000000</span>
+<span class="va">delta</span> <span class="op">&lt;-</span> <span class="fl">0.8</span>
+<span class="va">sd1</span> <span class="op">&lt;-</span> <span class="fl">1.6</span>
+<span class="va">sd2</span> <span class="op">&lt;-</span> <span class="fl">1.25</span>
+<span class="va">n1</span> <span class="op">&lt;-</span> <span class="fl">67</span>
+<span class="va">n2</span> <span class="op">&lt;-</span> <span class="fl">133</span>
+<span class="va">deltahat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span>n<span class="op">=</span><span class="va">nsim</span>, mean<span class="op">=</span><span class="va">delta</span>, sd<span class="op">=</span><span class="va">sd1</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">n1</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span>n<span class="op">=</span><span class="va">nsim</span>, mean<span class="op">=</span><span class="fl">0</span>, sd<span class="op">=</span><span class="va">sd2</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">n2</span><span class="op">)</span><span class="op">)</span>
+<span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">sd1</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">rchisq</a></span><span class="op">(</span>n<span class="op">=</span><span class="va">nsim</span>, df<span class="op">=</span><span class="va">n1</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="va">n1</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="va">n1</span> <span class="op">+</span>
+           <span class="va">sd2</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">rchisq</a></span><span class="op">(</span>n<span class="op">=</span><span class="va">nsim</span>, df<span class="op">=</span><span class="va">n2</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="va">n2</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="va">n2</span><span class="op">)</span>
+<span class="va">z</span> <span class="op">&lt;-</span> <span class="va">deltahat</span> <span class="op">/</span> <span class="va">s</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">z</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">.975</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.946344</span></code></pre></div>
 <p>The standard error for this simulation power calculation is approximately</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="no">pwr</span>*(<span class="fl">1</span>-<span class="no">pwr</span>)/<span class="no">nsim</span>)
-<span class="co">#&gt; [1] 0.0002246659</span></pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">pwr</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">pwr</span><span class="op">)</span><span class="op">/</span><span class="va">nsim</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.0002246659</span></code></pre></div>
 <p>suggesting we should be within less than about 0.001 if the actual power, which suggests the normal power approximation is reasonable for this scenario.</p>
 </div>
 <div id="group-sequential-design" class="section level2">
 <h2 class="hasAnchor">
 <a href="#group-sequential-design" class="anchor"></a>Group sequential design</h2>
 <p>Now we derive a group sequential design under the above scenario. We will largely use default parameters and show two methods. For the first, we plug in the fixed sample size above as follows:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">d</span> <span class="kw">&lt;-</span>
-<span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span>(<span class="kw">k</span><span class="kw">=</span><span class="fl">2</span>,
-         <span class="kw">n.fix</span> <span class="kw">=</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span>(<span class="kw">delta1</span><span class="kw">=</span><span class="fl">0.8</span>, <span class="kw">sd</span> <span class="kw">=</span> <span class="fl">1.6</span>, <span class="kw">sd2</span> <span class="kw">=</span> <span class="fl">1.25</span>, <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">0.025</span>, <span class="kw">beta</span> <span class="kw">=</span> <span class="fl">.1</span>, <span class="kw">ratio</span> <span class="kw">=</span> <span class="fl">2</span>),
-         <span class="kw">delta1</span> <span class="kw">=</span> <span class="fl">0.8</span>)
-<span class="no">d</span> <span class="kw">%&gt;%</span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span>(<span class="kw">deltaname</span> <span class="kw">=</span> <span class="st">"Mean difference"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>(<span class="kw">row.names</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">d</span> <span class="op">&lt;-</span> 
+<span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k<span class="op">=</span><span class="fl">2</span>,
+         n.fix <span class="op">=</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1<span class="op">=</span><span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">1.6</span>, sd2 <span class="op">=</span> <span class="fl">1.25</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">.1</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
+         delta1 <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>
+<span class="va">d</span> <span class="op">%&gt;%</span>  <span class="fu"><a href="../reference/summary.gsDesign.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Analysis</th>
@@ -245,14 +247,16 @@
 </tbody>
 </table>
 <p>A textual summary of the design is given by:</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">d</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Asymmetric two-sided group sequential design with non-binding futility bound, 2 analyses, sample size 172, 90 percent power, 2.5 percent (1-sided) Type I error. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2.</p>
 <p>We can get the same answer by plugging in the standardized effect size we computed above:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span>(<span class="kw">k</span><span class="kw">=</span><span class="fl">2</span>,
-         <span class="kw">delta</span> <span class="kw">=</span> <span class="no">theta</span>,
-         <span class="kw">delta1</span> <span class="kw">=</span> <span class="fl">0.8</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span>(<span class="kw">deltaname</span> <span class="kw">=</span> <span class="st">"Mean difference"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>(<span class="kw">row.names</span><span class="kw">=</span><span class="fl">FALSE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k<span class="op">=</span><span class="fl">2</span>,
+         delta <span class="op">=</span> <span class="va">theta</span>,
+         delta1 <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/summary.gsDesign.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">kable</span><span class="op">(</span>row.names<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Analysis</th>
@@ -352,7 +356,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

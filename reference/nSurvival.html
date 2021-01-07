@@ -127,19 +127,13 @@ hazard ratio &amp;gt; or &amp;lt; the null hazard ratio hr0." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -229,40 +223,40 @@ hazard ratio &gt; or &lt; the null hazard ratio <code>hr0</code>.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for nSurvival</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>nSurvival</span>(
-  <span class='kw'>lambda1</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>12</span>,
-  <span class='kw'>lambda2</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>24</span>,
-  <span class='kw'>Ts</span> <span class='kw'>=</span> <span class='fl'>24</span>,
-  <span class='kw'>Tr</span> <span class='kw'>=</span> <span class='fl'>12</span>,
-  <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>,
-  <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>approx</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"rr"</span>, <span class='st'>"rd"</span>),
-  <span class='kw'>entry</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"unif"</span>, <span class='st'>"expo"</span>),
-  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>NA</span>
-)
+<span class='fu'>nSurvival</span><span class='op'>(</span>
+  lambda1 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='fl'>12</span>,
+  lambda2 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='fl'>24</span>,
+  Ts <span class='op'>=</span> <span class='fl'>24</span>,
+  Tr <span class='op'>=</span> <span class='fl'>12</span>,
+  eta <span class='op'>=</span> <span class='fl'>0</span>,
+  ratio <span class='op'>=</span> <span class='fl'>1</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.025</span>,
+  beta <span class='op'>=</span> <span class='fl'>0.1</span>,
+  sided <span class='op'>=</span> <span class='fl'>1</span>,
+  approx <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"rr"</span>, <span class='st'>"rd"</span><span class='op'>)</span>,
+  entry <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"unif"</span>, <span class='st'>"expo"</span><span class='op'>)</span>,
+  gamma <span class='op'>=</span> <span class='cn'>NA</span>
+<span class='op'>)</span>
 
-<span class='fu'>nEvents</span>(
-  <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>0.6</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>,
-  <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>hr0</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>tbl</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>nEvents</span><span class='op'>(</span>
+  hr <span class='op'>=</span> <span class='fl'>0.6</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.025</span>,
+  beta <span class='op'>=</span> <span class='fl'>0.1</span>,
+  ratio <span class='op'>=</span> <span class='fl'>1</span>,
+  sided <span class='op'>=</span> <span class='fl'>1</span>,
+  hr0 <span class='op'>=</span> <span class='fl'>1</span>,
+  n <span class='op'>=</span> <span class='fl'>0</span>,
+  tbl <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>zn2hr</span>(<span class='no'>z</span>, <span class='no'>n</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>hr0</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>hr1</span> <span class='kw'>=</span> <span class='fl'>0.7</span>)
+<span class='fu'>zn2hr</span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>n</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, hr0 <span class='op'>=</span> <span class='fl'>1</span>, hr1 <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>)</span>
 
-<span class='fu'>hrn2z</span>(<span class='no'>hr</span>, <span class='no'>n</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>hr0</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>hr1</span> <span class='kw'>=</span> <span class='fl'>0.7</span>)
+<span class='fu'>hrn2z</span><span class='op'>(</span><span class='va'>hr</span>, <span class='va'>n</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, hr0 <span class='op'>=</span> <span class='fl'>1</span>, hr1 <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>)</span>
 
-<span class='fu'>hrz2n</span>(<span class='no'>hr</span>, <span class='no'>z</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>hr0</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+<span class='fu'>hrz2n</span><span class='op'>(</span><span class='va'>hr</span>, <span class='va'>z</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, hr0 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -408,11 +402,15 @@ Losses to Follow-Up, Noncompliance, and Stratification. <em>Biometrics</em>,
 Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='gsDesign-package-overview.html'>gsDesign package overview</a>, <a href='plot.gsDesign.html'>plot.gsDesign</a>, 
-<a href='gsDesign.html'>gsDesign</a>, <a href='gsBoundSummary.html'>gsHR</a></p></div>
+    <div class='dont-index'><p><a href='gsDesign package overview.html'>gsDesign package overview</a>, <a href='plot.gsDesign.html'>plot.gsDesign</a>, 
+<a href='gsDesign.html'>gsDesign</a>, <a href='summary.gsDesign.html'>gsHR</a></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Shanhong Guan <a href='mailto:shanhong.guan@gmail.com'>shanhong.guan@gmail.com</a>, Keaven Anderson
+<a href='mailto:keaven_anderson@merck.com'>keaven_anderson@merck.com</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
 
 <span class='co'># consider a trial with</span>
 <span class='co'># 2 year maximum follow-up</span>
@@ -422,23 +420,28 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class='co'># alpha = 0.025 (1-sided)</span>
 <span class='co'># power = 0.9 (default beta=.1)</span>
 
-<span class='no'>ss</span> <span class='kw'>&lt;-</span> <span class='fu'>nSurvival</span>(
-  <span class='kw'>lambda1</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>lambda2</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>Ts</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>Tr</span> <span class='kw'>=</span> <span class='fl'>.5</span>,
-  <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.025</span>
-)
+<span class='va'>ss</span> <span class='op'>&lt;-</span> <span class='fu'>nSurvival</span><span class='op'>(</span>
+  lambda1 <span class='op'>=</span> <span class='fl'>.2</span>, lambda2 <span class='op'>=</span> <span class='fl'>.1</span>, eta <span class='op'>=</span> <span class='fl'>.1</span>, Ts <span class='op'>=</span> <span class='fl'>2</span>, Tr <span class='op'>=</span> <span class='fl'>.5</span>,
+  sided <span class='op'>=</span> <span class='fl'>1</span>, alpha <span class='op'>=</span> <span class='fl'>.025</span>
+<span class='op'>)</span>
 
 <span class='co'>#  group sequential translation with default bounds</span>
 <span class='co'>#  note that delta1 is log hazard ratio; used later in gsBoundSummary summary</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>ss</span>$<span class='no'>nEvents</span>, <span class='kw'>nFixSurv</span> <span class='kw'>=</span> <span class='no'>ss</span>$<span class='no'>n</span>,
-  <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>ss</span>$<span class='no'>lambda2</span> / <span class='no'>ss</span>$<span class='no'>lambda1</span>)
-)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>
+  k <span class='op'>=</span> <span class='fl'>5</span>, test.type <span class='op'>=</span> <span class='fl'>2</span>, n.fix <span class='op'>=</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>nEvents</span>, nFixSurv <span class='op'>=</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>n</span>,
+  delta1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>ss</span><span class='op'>$</span><span class='va'>lambda2</span> <span class='op'>/</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>lambda1</span><span class='op'>)</span>
+<span class='op'>)</span>
 <span class='co'># boundary plot</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='nSurvival-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># effect size plot</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='st'>"hr"</span>)</div><div class='img'><img src='nSurvival-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># total sample size</span>
-<span class='no'>x</span>$<span class='no'>nSurv</span></div><div class='output co'>#&gt; [1] 440</div><div class='input'><span class='co'># number of events at analyses</span>
-<span class='no'>x</span>$<span class='no'>n.I</span></div><div class='output co'>#&gt; [1] 18.44213 36.88425 55.32638 73.76850 92.21063</div><div class='input'><span class='co'># print the design</span>
-<span class='no'>x</span></div><div class='output co'>#&gt; Group sequential design sample size for time-to-event outcome
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='img'><img src='nSurvival-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># effect size plot</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='st'>"hr"</span><span class='op'>)</span>
+</div><div class='img'><img src='nSurvival-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># total sample size</span>
+<span class='va'>x</span><span class='op'>$</span><span class='va'>nSurv</span>
+</div><div class='output co'>#&gt; [1] 440</div><div class='input'><span class='co'># number of events at analyses</span>
+<span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span>
+</div><div class='output co'>#&gt; [1] 18.44213 36.88425 55.32638 73.76850 92.21063</div><div class='input'><span class='co'># print the design</span>
+<span class='va'>x</span>
+</div><div class='output co'>#&gt; Group sequential design sample size for time-to-event outcome
 #&gt; with sample size 440. The analysis plan below shows events
 #&gt; at each analysis.
 #&gt; Symmetric two-sided group sequential design with
@@ -472,8 +475,10 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt;    Theta     1      2      3      4     5 Total
 #&gt;   0.0000 6e-04 0.0013 0.0028 0.0063 0.014 0.025
 #&gt;   0.3415 0e+00 0.0000 0.0000 0.0000 0.000 0.000</div><div class='input'><span class='co'># overall design summary</span>
-<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>x</span>))</div><div class='output co'>#&gt; Symmetric two-sided group sequential design with 5 analyses, time-to-event outcome with sample size 440 and 93 events required, 90 percent power, 2.5 percent (1-sided) Type I error. Bounds derived using a  Hwang-Shih-DeCani spending function with gamma = -4.</div><div class='input'><span class='co'># tabular summary of bounds</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span>(<span class='no'>x</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"HR"</span>, <span class='kw'>Nname</span> <span class='kw'>=</span> <span class='st'>"Events"</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    Analysis              Value Efficacy Futility
+<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Symmetric two-sided group sequential design with 5 analyses, time-to-event outcome with sample size 440 and 93 events required, 90 percent power, 2.5 percent (1-sided) Type I error. Bounds derived using a  Hwang-Shih-DeCani spending function with gamma = -4.</div><div class='input'><span class='co'># tabular summary of bounds</span>
+<span class='fu'><a href='summary.gsDesign.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>x</span>, deltaname <span class='op'>=</span> <span class='st'>"HR"</span>, Nname <span class='op'>=</span> <span class='st'>"Events"</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    Analysis              Value Efficacy Futility
 #&gt;   IA 1: 20%                  Z   3.2527  -3.2527
 #&gt;  Events: 19        p (1-sided)   0.0006   0.0006
 #&gt;                   ~HR at bound   0.2198   4.5487
@@ -503,27 +508,38 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 
 <span class='co'># approximate number of events required using Schoenfeld's method</span>
 <span class='co'># for 2 different hazard ratios</span>
-<span class='fu'>nEvents</span>(<span class='kw'>hr</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>, <span class='fl'>.6</span>), <span class='kw'>tbl</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    hr   n alpha sided beta Power     delta ratio hr0        se
+<span class='fu'>nEvents</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>.6</span><span class='op'>)</span>, tbl <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    hr   n alpha sided beta Power     delta ratio hr0        se
 #&gt; 1 0.5  88 0.025     1  0.1   0.9 0.3465736     1   1 0.2132007
 #&gt; 2 0.6 162 0.025     1  0.1   0.9 0.2554128     1   1 0.1571348</div><div class='input'><span class='co'># vector output</span>
-<span class='fu'>nEvents</span>(<span class='kw'>hr</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>, <span class='fl'>.6</span>))</div><div class='output co'>#&gt; [1]  87.4793 161.0686</div><div class='input'>
+<span class='fu'>nEvents</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>.6</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1]  87.4793 161.0686</div><div class='input'>
 <span class='co'># approximate power using Schoenfeld's method</span>
 <span class='co'># given 2 sample sizes and hr=.6</span>
-<span class='fu'>nEvents</span>(<span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.6</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>50</span>, <span class='fl'>100</span>), <span class='kw'>tbl</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    hr   n alpha sided      beta     Power     delta ratio hr0        se
+<span class='fu'>nEvents</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>.6</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>100</span><span class='op'>)</span>, tbl <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    hr   n alpha sided      beta     Power     delta ratio hr0        se
 #&gt; 1 0.6  50 0.025     1 0.5611646 0.4388354 0.2554128     1   1 0.2828427
 #&gt; 2 0.6 100 0.025     1 0.2762012 0.7237988 0.2554128     1   1 0.2000000</div><div class='input'><span class='co'># vector output</span>
-<span class='fu'>nEvents</span>(<span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.6</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>50</span>, <span class='fl'>100</span>))</div><div class='output co'>#&gt; [1] 0.4388354 0.7237988</div><div class='input'>
+<span class='fu'>nEvents</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>.6</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.4388354 0.7237988</div><div class='input'>
 <span class='co'># approximate hazard ratio corresponding to 100 events and z-statistic of 2</span>
-<span class='fu'>zn2hr</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 0.67032</div><div class='input'><span class='co'># same when hr0 is 1.1</span>
-<span class='fu'>zn2hr</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>hr0</span> <span class='kw'>=</span> <span class='fl'>1.1</span>)</div><div class='output co'>#&gt; [1] 0.7373521</div><div class='input'><span class='co'># same when hr0 is .9 and hr1 is greater than hr0</span>
-<span class='fu'>zn2hr</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>hr0</span> <span class='kw'>=</span> <span class='fl'>.9</span>, <span class='kw'>hr1</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] 1.342642</div><div class='input'>
+<span class='fu'>zn2hr</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, z <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.67032</div><div class='input'><span class='co'># same when hr0 is 1.1</span>
+<span class='fu'>zn2hr</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, z <span class='op'>=</span> <span class='fl'>2</span>, hr0 <span class='op'>=</span> <span class='fl'>1.1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.7373521</div><div class='input'><span class='co'># same when hr0 is .9 and hr1 is greater than hr0</span>
+<span class='fu'>zn2hr</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, z <span class='op'>=</span> <span class='fl'>2</span>, hr0 <span class='op'>=</span> <span class='fl'>.9</span>, hr1 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1.342642</div><div class='input'>
 <span class='co'># approximate number of events corresponding to z-statistic of 2 and</span>
 <span class='co'># estimated hazard ratio of .5 (or 2)</span>
-<span class='fu'>hrz2n</span>(<span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 33.3019</div><div class='input'><span class='fu'>hrz2n</span>(<span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 33.3019</div><div class='input'>
+<span class='fu'>hrz2n</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>.5</span>, z <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 33.3019</div><div class='input'><span class='fu'>hrz2n</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>2</span>, z <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 33.3019</div><div class='input'>
 <span class='co'># approximate z statistic corresponding to 75 events</span>
 <span class='co'># and estimated hazard ratio of .6 (or 1/.6)</span>
 <span class='co'># assuming 2-to-1 randomization of experimental to control</span>
-<span class='fu'>hrn2z</span>(<span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.6</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>75</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] -2.085437</div><div class='input'><span class='fu'>hrn2z</span>(<span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>1</span> / <span class='fl'>.6</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>75</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 2.085437</div></pre>
+<span class='fu'>hrn2z</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>.6</span>, n <span class='op'>=</span> <span class='fl'>75</span>, ratio <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] -2.085437</div><div class='input'><span class='fu'>hrn2z</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>1</span> <span class='op'>/</span> <span class='fl'>.6</span>, n <span class='op'>=</span> <span class='fl'>75</span>, ratio <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 2.085437</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -539,7 +555,7 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

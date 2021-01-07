@@ -111,19 +111,13 @@ however." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -158,9 +152,9 @@ however." />
 planned analyses for a given group sequential design assuming an interim
 z-statistic at a specified interim analysis. While <code>gsCP()</code> is designed
 toward computing conditional power for a variety of underlying parameter
-values, <code><a href='ssrCP.html'>condPower</a></code> is built to compute conditional power for a
+values, <code><a href='condPower.html'>condPower</a></code> is built to compute conditional power for a
 variety of interim test statistic values which is useful for sample size
-adaptation (see <code><a href='ssrCP.html'>ssrCP</a></code>). <code>gsPP()</code> averages conditional
+adaptation (see <code><a href='condPower.html'>ssrCP</a></code>). <code>gsPP()</code> averages conditional
 power across a posterior distribution to compute predictive power.
 <code>gsPI()</code> computes Bayesian prediction intervals for future analyses
 corresponding to results produced by <code>gsPP()</code>.  <code>gsPosterior()</code>
@@ -196,33 +190,33 @@ must have <code><a href='https://rdrr.io/r/base/sum.html'>sum(gridwgts * density
 however.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gsCP</span>(<span class='no'>x</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>)
+    <pre class="usage"><span class='fu'>gsCP</span><span class='op'>(</span><span class='va'>x</span>, theta <span class='op'>=</span> <span class='cn'>NULL</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='fl'>0</span>, r <span class='op'>=</span> <span class='fl'>18</span><span class='op'>)</span>
 
-<span class='fu'>gsPP</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>zi</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>),
-  <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>0.5</span>),
-  <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>,
-  <span class='kw'>total</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)
+<span class='fu'>gsPP</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  i <span class='op'>=</span> <span class='fl'>1</span>,
+  zi <span class='op'>=</span> <span class='fl'>0</span>,
+  theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>3</span><span class='op'>)</span>,
+  wgts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>0.5</span><span class='op'>)</span>,
+  r <span class='op'>=</span> <span class='fl'>18</span>,
+  total <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
 
-<span class='fu'>gsPI</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>zi</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>j</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>level</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>),
-  <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>0.5</span>)
-)
+<span class='fu'>gsPI</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  i <span class='op'>=</span> <span class='fl'>1</span>,
+  zi <span class='op'>=</span> <span class='fl'>0</span>,
+  j <span class='op'>=</span> <span class='fl'>2</span>,
+  level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>3</span><span class='op'>)</span>,
+  wgts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>0.5</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='fu'>gsPosterior</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(), <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span>(), <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>)
+<span class='fu'>gsPosterior</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span><span class='op'>)</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='cn'>NULL</span>, prior <span class='op'>=</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span><span class='op'>(</span><span class='op'>)</span>, r <span class='op'>=</span> <span class='fl'>18</span><span class='op'>)</span>
 
-<span class='fu'>gsPOS</span>(<span class='no'>x</span>, <span class='no'>theta</span>, <span class='no'>wgts</span>)
+<span class='fu'>gsPOS</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>theta</span>, <span class='va'>wgts</span><span class='op'>)</span>
 
-<span class='fu'>gsCPOS</span>(<span class='no'>i</span>, <span class='no'>x</span>, <span class='no'>theta</span>, <span class='no'>wgts</span>)</pre>
+<span class='fu'>gsCPOS</span><span class='op'>(</span><span class='va'>i</span>, <span class='va'>x</span>, <span class='va'>theta</span>, <span class='va'>wgts</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -333,14 +327,18 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='normalGrid.html'>normalGrid</a></code>, <code><a href='gsDesign.html'>gsDesign</a></code>,
-<code><a href='gsProbability.html'>gsProbability</a></code>, <code><a href='gsBoundCP.html'>gsBoundCP</a></code>, <code><a href='ssrCP.html'>ssrCP</a></code>,
-<code><a href='ssrCP.html'>condPower</a></code></p></div>
+<code><a href='gsProbability.html'>gsProbability</a></code>, <code><a href='gsBoundCP.html'>gsBoundCP</a></code>, <code><a href='condPower.html'>ssrCP</a></code>,
+<code><a href='condPower.html'>condPower</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
 <span class='co'># set up a group sequential design</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>5</span>)
-<span class='no'>x</span></div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+<span class='va'>x</span>
+</div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Upper bound spending computations assume
 #&gt; trial continues if lower bound is crossed.
@@ -376,20 +374,23 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 #&gt;   3.2415 0.0077 0.0115 0.0171 0.0256 0.0381 0.1000</div><div class='input'>
 <span class='co'># set up a prior distribution for the treatment effect</span>
 <span class='co'># that is normal with mean .75*x$delta and standard deviation x$delta/2</span>
-<span class='no'>mu0</span> <span class='kw'>&lt;-</span> <span class='fl'>.75</span> * <span class='no'>x</span>$<span class='no'>delta</span>
-<span class='no'>sigma0</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>delta</span> / <span class='fl'>2</span>
-<span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>mu0</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>sigma0</span>)
+<span class='va'>mu0</span> <span class='op'>&lt;-</span> <span class='fl'>.75</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span>
+<span class='va'>sigma0</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>/</span> <span class='fl'>2</span>
+<span class='va'>prior</span> <span class='op'>&lt;-</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span><span class='op'>(</span>mu <span class='op'>=</span> <span class='va'>mu0</span>, sigma <span class='op'>=</span> <span class='va'>sigma0</span><span class='op'>)</span>
 
 <span class='co'># compute POS for the design given the above prior distribution for theta</span>
-<span class='fu'>gsPOS</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>z</span>, <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>wgts</span>)</div><div class='output co'>#&gt; [1] 0.5954771</div><div class='input'>
+<span class='fu'>gsPOS</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.5954771</div><div class='input'>
 <span class='co'># assume POS should only count cases in prior where theta &gt;= x$delta/2</span>
-<span class='fu'>gsPOS</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>z</span>, <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>wgts</span> * (<span class='no'>prior</span>$<span class='no'>z</span> <span class='kw'>&gt;=</span> <span class='no'>x</span>$<span class='no'>delta</span> / <span class='fl'>2</span>))</div><div class='output co'>#&gt; [1] 0.5554313</div><div class='input'>
+<span class='fu'>gsPOS</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span> <span class='op'>*</span> <span class='op'>(</span><span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>/</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.5554313</div><div class='input'>
 <span class='co'># assuming a z-value at lower bound at analysis 2, what are conditional</span>
 <span class='co'># boundary crossing probabilities for future analyses</span>
 <span class='co'># assuming theta values from x as well as a value based on the interim</span>
 <span class='co'># observed z</span>
-<span class='no'>CP</span> <span class='kw'>&lt;-</span> <span class='fu'>gsCP</span>(<span class='no'>x</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>lower</span>$<span class='no'>bound</span>[<span class='fl'>2</span>])
-<span class='no'>CP</span></div><div class='output co'>#&gt;               Lower bounds   Upper bounds
+<span class='va'>CP</span> <span class='op'>&lt;-</span> <span class='fu'>gsCP</span><span class='op'>(</span><span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>2</span>, zi <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>CP</span>
+</div><div class='output co'>#&gt;               Lower bounds   Upper bounds
 #&gt;   Analysis N   Z   Nominal p  Z   Nominal p
 #&gt;          1  1 1.25    0.8952 4.71    0.0000
 #&gt;          2  1 1.96    0.9750 3.39    0.0003
@@ -413,50 +414,63 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 #&gt;    3.2415 0.3950 0.1368 0.1006 0.6323</div><div class='input'>
 <span class='co'># summing values for crossing future upper bounds gives overall</span>
 <span class='co'># conditional power for each theta value</span>
-<span class='no'>CP</span>$<span class='no'>theta</span></div><div class='output co'>#&gt; [1] -0.05536767  0.00000000  3.24151555</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>CP</span>$<span class='no'>upper</span>$<span class='no'>prob</span>) <span class='kw'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>)</div><div class='output co'>#&gt;             [,1]
+<span class='va'>CP</span><span class='op'>$</span><span class='va'>theta</span>
+</div><div class='output co'>#&gt; [1] -0.05536767  0.00000000  3.24151555</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>CP</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span><span class='op'>)</span> <span class='op'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;             [,1]
 #&gt; [1,] 0.002238566
 #&gt; [2,] 0.002561570
 #&gt; [3,] 0.367657693</div><div class='input'>
 <span class='co'># compute predictive probability based on above assumptions</span>
-<span class='fu'>gsPP</span>(<span class='no'>x</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>lower</span>$<span class='no'>bound</span>[<span class='fl'>2</span>], <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>z</span>, <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>wgts</span>)</div><div class='output co'>#&gt; [1] 0.06730167</div><div class='input'>
+<span class='fu'>gsPP</span><span class='op'>(</span><span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>2</span>, zi <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.06730167</div><div class='input'>
 <span class='co'># if it is known that boundary not crossed at interim 2, use</span>
 <span class='co'># gsCPOS to compute conditional POS based on this</span>
-<span class='fu'>gsCPOS</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>z</span>, <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>wgts</span>)</div><div class='output co'>#&gt; [1] 0.6114033</div><div class='input'>
+<span class='fu'>gsCPOS</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.6114033</div><div class='input'>
 <span class='co'># 2-stage example to compare results to direct computation</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-<span class='no'>z1</span> <span class='kw'>&lt;-</span> <span class='fl'>0.5</span>
-<span class='no'>n1</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>]
-<span class='no'>n2</span> <span class='kw'>&lt;-</span> <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>2</span>] - <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>]
-<span class='no'>thetahat</span> <span class='kw'>&lt;-</span> <span class='no'>z1</span> / <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>n1</span>)
-<span class='no'>theta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>thetahat</span>, <span class='fl'>0</span>, <span class='no'>x</span>$<span class='no'>delta</span>)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='va'>z1</span> <span class='op'>&lt;-</span> <span class='fl'>0.5</span>
+<span class='va'>n1</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
+<span class='va'>n2</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
+<span class='va'>thetahat</span> <span class='op'>&lt;-</span> <span class='va'>z1</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n1</span><span class='op'>)</span>
+<span class='va'>theta</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>thetahat</span>, <span class='fl'>0</span>, <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span><span class='op'>)</span>
 
 <span class='co'># conditional power direct computation - comparison w gsCP</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>pnorm</a></span>((<span class='no'>n2</span> * <span class='no'>theta</span> + <span class='no'>z1</span> * <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>n1</span>) - <span class='no'>x</span>$<span class='no'>upper</span>$<span class='no'>bound</span>[<span class='fl'>2</span>] * <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>n1</span> + <span class='no'>n2</span>)) / <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>n2</span>))</div><div class='output co'>#&gt; [1] 0.03579292 0.01067483 0.51555676</div><div class='input'>
-<span class='fu'>gsCP</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='no'>z1</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>)$<span class='no'>upper</span>$<span class='no'>prob</span></div><div class='output co'>#&gt;            [,1]       [,2]      [,3]
+<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>pnorm</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>n2</span> <span class='op'>*</span> <span class='va'>theta</span> <span class='op'>+</span> <span class='va'>z1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n1</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n1</span> <span class='op'>+</span> <span class='va'>n2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n2</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.03579292 0.01067483 0.51555676</div><div class='input'>
+<span class='fu'>gsCP</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span>
+</div><div class='output co'>#&gt;            [,1]       [,2]      [,3]
 #&gt; [1,] 0.03579292 0.01067483 0.5155568</div><div class='input'>
 <span class='co'># predictive power direct computation - comparison w gsPP</span>
 <span class='co'># use same prior as above</span>
-<span class='no'>mu0</span> <span class='kw'>&lt;-</span> <span class='fl'>.75</span> * <span class='no'>x</span>$<span class='no'>delta</span> * <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>2</span>])
-<span class='no'>sigma2</span> <span class='kw'>&lt;-</span> (<span class='fl'>.5</span> * <span class='no'>x</span>$<span class='no'>delta</span>)^<span class='fl'>2</span> * <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>2</span>]
-<span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='fl'>.75</span> * <span class='no'>x</span>$<span class='no'>delta</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>delta</span> / <span class='fl'>2</span>)
-<span class='fu'>gsPP</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='no'>z1</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>z</span>, <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>wgts</span>)</div><div class='output co'>#&gt; [1] 0.1556447</div><div class='input'><span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fl'>.5</span>
-<span class='no'>z1</span> <span class='kw'>&lt;-</span> <span class='fl'>.5</span>
-<span class='no'>b</span> <span class='kw'>&lt;-</span> <span class='no'>z1</span> * <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>t</span>)
+<span class='va'>mu0</span> <span class='op'>&lt;-</span> <span class='fl'>.75</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>
+<span class='va'>sigma2</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='fl'>.5</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>
+<span class='va'>prior</span> <span class='op'>&lt;-</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span><span class='op'>(</span>mu <span class='op'>=</span> <span class='fl'>.75</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span>, sigma <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>/</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='fu'>gsPP</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, i <span class='op'>=</span> <span class='fl'>1</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.1556447</div><div class='input'><span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fl'>.5</span>
+<span class='va'>z1</span> <span class='op'>&lt;-</span> <span class='fl'>.5</span>
+<span class='va'>b</span> <span class='op'>&lt;-</span> <span class='va'>z1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span>
 <span class='co'># direct from Proschan, Lan and Wittes eqn 3.10</span>
 <span class='co'># adjusted drift at n.I[2]</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>pnorm</a></span>(((<span class='no'>b</span> - <span class='no'>x</span>$<span class='no'>upper</span>$<span class='no'>bound</span>[<span class='fl'>2</span>]) * (<span class='fl'>1</span> + <span class='no'>t</span> * <span class='no'>sigma2</span>) +
-  (<span class='fl'>1</span> - <span class='no'>t</span>) * (<span class='no'>mu0</span> + <span class='no'>b</span> * <span class='no'>sigma2</span>)) /
-  <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>((<span class='fl'>1</span> - <span class='no'>t</span>) * (<span class='fl'>1</span> + <span class='no'>sigma2</span>) * (<span class='fl'>1</span> + <span class='no'>t</span> * <span class='no'>sigma2</span>)))</div><div class='output co'>#&gt; [1] 0.1556447</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>pnorm</a></span><span class='op'>(</span><span class='op'>(</span><span class='op'>(</span><span class='va'>b</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>t</span> <span class='op'>*</span> <span class='va'>sigma2</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>t</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='va'>mu0</span> <span class='op'>+</span> <span class='va'>b</span> <span class='op'>*</span> <span class='va'>sigma2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>/</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>t</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>sigma2</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>t</span> <span class='op'>*</span> <span class='va'>sigma2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.1556447</div><div class='input'>
 <span class='co'># plot prior then posterior distribution for unblinded analysis with i=1, zi=1</span>
-<span class='no'>xp</span> <span class='kw'>&lt;-</span> <span class='fu'>gsPosterior</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='no'>prior</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xp</span>$<span class='no'>z</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>xp</span>$<span class='no'>density</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"l"</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>theta</span>), <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Density"</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>z</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>density</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='input'>
+<span class='va'>xp</span> <span class='op'>&lt;-</span> <span class='fu'>gsPosterior</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='fl'>1</span>, prior <span class='op'>=</span> <span class='va'>prior</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>z</span>, y <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>density</span>, type <span class='op'>=</span> <span class='st'>"l"</span>, col <span class='op'>=</span> <span class='fl'>2</span>, xlab <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='va'>theta</span><span class='op'>)</span>, ylab <span class='op'>=</span> <span class='st'>"Density"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>z</span>, y <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>density</span>, col <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='input'>
 <span class='co'># add posterior plot assuming only knowlede that interim bound has</span>
 <span class='co'># not been crossed at interim 1</span>
-<span class='no'>xpb</span> <span class='kw'>&lt;-</span> <span class='fu'>gsPosterior</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='no'>prior</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xpb</span>$<span class='no'>z</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>xpb</span>$<span class='no'>density</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='img'><img src='gsCP-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='va'>xpb</span> <span class='op'>&lt;-</span> <span class='fu'>gsPosterior</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='fl'>1</span>, prior <span class='op'>=</span> <span class='va'>prior</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>xpb</span><span class='op'>$</span><span class='va'>z</span>, y <span class='op'>=</span> <span class='va'>xpb</span><span class='op'>$</span><span class='va'>density</span>, col <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+</div><div class='img'><img src='gsCP-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># prediction interval based in interim 1 results</span>
 <span class='co'># start with point estimate, followed by 90% prediction interval</span>
-<span class='fu'>gsPI</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='no'>z1</span>, <span class='kw'>j</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>z</span>, <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>wgts</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='output co'>#&gt; [1] 1.081745</div><div class='input'><span class='fu'>gsPI</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>zi</span> <span class='kw'>=</span> <span class='no'>z1</span>, <span class='kw'>j</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>z</span>, <span class='kw'>wgts</span> <span class='kw'>=</span> <span class='no'>prior</span>$<span class='no'>wgts</span>, <span class='kw'>level</span> <span class='kw'>=</span> <span class='fl'>.9</span>)</div><div class='output co'>#&gt; [1] -0.3793133  2.5428090</div></pre>
+<span class='fu'>gsPI</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, j <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span>, level <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1.081745</div><div class='input'><span class='fu'>gsPI</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, j <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span>, level <span class='op'>=</span> <span class='fl'>.9</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] -0.3793133  2.5428090</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -472,7 +486,7 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

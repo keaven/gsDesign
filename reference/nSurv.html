@@ -86,19 +86,13 @@ group sequential design for a study with a time-to-event endpoint." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -147,76 +141,76 @@ group sequential design for a study with a time-to-event endpoint.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for nSurv</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, digits <span class='op'>=</span> <span class='fl'>4</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>nSurv</span>(
-  <span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>)/<span class='fl'>6</span>,
-  <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>0.6</span>,
-  <span class='kw'>hr0</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>etaE</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>R</span> <span class='kw'>=</span> <span class='fl'>12</span>,
-  <span class='kw'>S</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>T</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>,
-  <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>tol</span> <span class='kw'>=</span> <span class='no'>.Machine</span>$<span class='no'>double.eps</span>^<span class='fl'>0.25</span>
-)
+<span class='fu'>nSurv</span><span class='op'>(</span>
+  lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>6</span>,
+  hr <span class='op'>=</span> <span class='fl'>0.6</span>,
+  hr0 <span class='op'>=</span> <span class='fl'>1</span>,
+  eta <span class='op'>=</span> <span class='fl'>0</span>,
+  etaE <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gamma <span class='op'>=</span> <span class='fl'>1</span>,
+  R <span class='op'>=</span> <span class='fl'>12</span>,
+  S <span class='op'>=</span> <span class='cn'>NULL</span>,
+  T <span class='op'>=</span> <span class='cn'>NULL</span>,
+  minfup <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ratio <span class='op'>=</span> <span class='fl'>1</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.025</span>,
+  beta <span class='op'>=</span> <span class='fl'>0.1</span>,
+  sided <span class='op'>=</span> <span class='fl'>1</span>,
+  tol <span class='op'>=</span> <span class='va'>.Machine</span><span class='op'>$</span><span class='va'>double.eps</span><span class='op'>^</span><span class='fl'>0.25</span>
+<span class='op'>)</span>
 
-<span class='fu'>tEventsIA</span>(<span class='no'>x</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='no'>.Machine</span>$<span class='no'>double.eps</span>^<span class='fl'>0.25</span>)
+<span class='fu'>tEventsIA</span><span class='op'>(</span><span class='va'>x</span>, timing <span class='op'>=</span> <span class='fl'>0.25</span>, tol <span class='op'>=</span> <span class='va'>.Machine</span><span class='op'>$</span><span class='va'>double.eps</span><span class='op'>^</span><span class='fl'>0.25</span><span class='op'>)</span>
 
-<span class='fu'>nEventsIA</span>(<span class='kw'>tIA</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>simple</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>nEventsIA</span><span class='op'>(</span>tIA <span class='op'>=</span> <span class='fl'>5</span>, x <span class='op'>=</span> <span class='cn'>NULL</span>, target <span class='op'>=</span> <span class='fl'>0</span>, simple <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'>gsSurv</span>(
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>,
-  <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>astar</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>,
-  <span class='kw'>sfupar</span> <span class='kw'>=</span> -<span class='fl'>4</span>,
-  <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>,
-  <span class='kw'>sflpar</span> <span class='kw'>=</span> -<span class='fl'>2</span>,
-  <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>,
-  <span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>)/<span class='fl'>6</span>,
-  <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>0.6</span>,
-  <span class='kw'>hr0</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>etaE</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>R</span> <span class='kw'>=</span> <span class='fl'>12</span>,
-  <span class='kw'>S</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>T</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>tol</span> <span class='kw'>=</span> <span class='no'>.Machine</span>$<span class='no'>double.eps</span>^<span class='fl'>0.25</span>,
-  <span class='kw'>usTime</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>lsTime</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)
-
-<span class='co'># S3 method for gsSurv</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='no'>...</span>)
+<span class='fu'>gsSurv</span><span class='op'>(</span>
+  k <span class='op'>=</span> <span class='fl'>3</span>,
+  test.type <span class='op'>=</span> <span class='fl'>4</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.025</span>,
+  sided <span class='op'>=</span> <span class='fl'>1</span>,
+  beta <span class='op'>=</span> <span class='fl'>0.1</span>,
+  astar <span class='op'>=</span> <span class='fl'>0</span>,
+  timing <span class='op'>=</span> <span class='fl'>1</span>,
+  sfu <span class='op'>=</span> <span class='va'>sfHSD</span>,
+  sfupar <span class='op'>=</span> <span class='op'>-</span><span class='fl'>4</span>,
+  sfl <span class='op'>=</span> <span class='va'>sfHSD</span>,
+  sflpar <span class='op'>=</span> <span class='op'>-</span><span class='fl'>2</span>,
+  r <span class='op'>=</span> <span class='fl'>18</span>,
+  lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>6</span>,
+  hr <span class='op'>=</span> <span class='fl'>0.6</span>,
+  hr0 <span class='op'>=</span> <span class='fl'>1</span>,
+  eta <span class='op'>=</span> <span class='fl'>0</span>,
+  etaE <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gamma <span class='op'>=</span> <span class='fl'>1</span>,
+  R <span class='op'>=</span> <span class='fl'>12</span>,
+  S <span class='op'>=</span> <span class='cn'>NULL</span>,
+  T <span class='op'>=</span> <span class='cn'>NULL</span>,
+  minfup <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ratio <span class='op'>=</span> <span class='fl'>1</span>,
+  tol <span class='op'>=</span> <span class='va'>.Machine</span><span class='op'>$</span><span class='va'>double.eps</span><span class='op'>^</span><span class='fl'>0.25</span>,
+  usTime <span class='op'>=</span> <span class='cn'>NULL</span>,
+  lsTime <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for gsSurv</span>
-<span class='fu'><a href='xtable.html'>xtable</a></span>(
-  <span class='no'>x</span>,
-  <span class='kw'>caption</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>align</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>display</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>auto</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>footnote</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>fnwid</span> <span class='kw'>=</span> <span class='st'>"9cm"</span>,
-  <span class='kw'>timename</span> <span class='kw'>=</span> <span class='st'>"months"</span>,
-  <span class='no'>...</span>
-)</pre>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, digits <span class='op'>=</span> <span class='fl'>2</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for gsSurv</span>
+<span class='fu'><a href='xtable.html'>xtable</a></span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  caption <span class='op'>=</span> <span class='cn'>NULL</span>,
+  label <span class='op'>=</span> <span class='cn'>NULL</span>,
+  align <span class='op'>=</span> <span class='cn'>NULL</span>,
+  digits <span class='op'>=</span> <span class='cn'>NULL</span>,
+  display <span class='op'>=</span> <span class='cn'>NULL</span>,
+  auto <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  footnote <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fnwid <span class='op'>=</span> <span class='st'>"9cm"</span>,
+  timename <span class='op'>=</span> <span class='st'>"months"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -553,11 +547,11 @@ tEventsIA() returns
     <p><code><a href='https://rdrr.io/r/base/print.html'>print()</a></code>, <code><a href='xtable.html'>xtable()</a></code> and <code><a href='https://rdrr.io/r/base/summary.html'>summary()</a></code> methods are provided to
 operate on the returned value from <code>gsSurv()</code>, an object of class
 <code>gsSurv</code>. <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code> is also extended to <code>nSurv</code> objects. The
-functions <code><a href='gsBoundSummary.html'>gsBoundSummary</a></code> (data frame for tabular output),
-<code><a href='gsBoundSummary.html'>xprint</a></code> (application of <code>xtable</code> for tabular output) and
+functions <code><a href='summary.gsDesign.html'>gsBoundSummary</a></code> (data frame for tabular output),
+<code><a href='summary.gsDesign.html'>xprint</a></code> (application of <code>xtable</code> for tabular output) and
 <code>summary.gsSurv</code> (textual summary of <code>gsDesign</code> or <code>gsSurv</code>
 object) may be preferred summary functions; see example in vignettes. See
-also <a href='gsBoundSummary.html'>gsBoundSummary</a> for output
+also <a href='summary.gsDesign.html'>gsBoundSummary</a> for output
 of tabular summaries of bounds for designs produced by <code>gsSurv()</code>.</p>
 <p>Both <code>nEventsIA</code> and <code>tEventsIA</code> require a group sequential design
 for a time-to-event endpoint of class <code>gsSurv</code> as input.
@@ -572,7 +566,7 @@ based on Lachin and Foulkes (1986) method for proportional hazards assuming
 a fixed underlying hazard ratio between 2 treatment groups. The method has
 been extended here to enable designs to test non-inferiority. Piecewise
 constant enrollment and failure rates are assumed and a stratified
-population is allowed. See also <code><a href='nSurvival.html'>nSurvival</a></code> for other Lachin and
+population is allowed. See also <code><a href='print.nSurvival.html'>nSurvival</a></code> for other Lachin and
 Foulkes (1986) methods assuming a constant hazard difference or exponential
 enrollment rate.</p>
 <p>When study duration (<code>T</code>) and follow-up duration (<code>minfup</code>) are
@@ -613,17 +607,21 @@ Follow-Up, Noncompliance, and Stratification. <em>Biometrics</em>, 42,
 Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='gsBoundSummary.html'>gsBoundSummary</a></code>, <code><a href='gsBoundSummary.html'>xprint</a></code>,
-<a href='gsDesign-package-overview.html'>gsDesign package overview</a>, <a href='plot.gsDesign.html'>plot.gsDesign</a>,
-<code><a href='gsDesign.html'>gsDesign</a></code>, <code><a href='gsBoundSummary.html'>gsHR</a></code>, <code><a href='nSurvival.html'>nSurvival</a></code></p>
+    <div class='dont-index'><p><code><a href='summary.gsDesign.html'>gsBoundSummary</a></code>, <code><a href='summary.gsDesign.html'>xprint</a></code>,
+<a href='gsDesign package overview.html'>gsDesign package overview</a>, <a href='plot.gsDesign.html'>plot.gsDesign</a>,
+<code><a href='gsDesign.html'>gsDesign</a></code>, <code><a href='summary.gsDesign.html'>gsHR</a></code>, <code><a href='print.nSurvival.html'>nSurvival</a></code></p>
 <p><code><a href='https://rdrr.io/r/stats/uniroot.html'>uniroot</a></code></p>
 <p><code><a href='https://rdrr.io/r/stats/Normal.html'>Normal</a></code>
  <code><a href='https://rdrr.io/pkg/xtable/man/xtable.html'>xtable</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Keaven Anderson <a href='mailto:keaven_anderson@merck.com'>keaven_anderson@merck.com</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># vary accrual rate to obtain power</span>
-<span class='fu'>nSurv</span>(<span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fl'>6</span>, <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fl'>40</span>, <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>T</span> <span class='kw'>=</span> <span class='fl'>36</span>, <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='fl'>12</span>)</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
+<span class='fu'>nSurv</span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fl'>1</span>, T <span class='op'>=</span> <span class='fl'>36</span>, minfup <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
 #&gt; outcome (Lachin and Foulkes, 1986).
 #&gt; Solving for:  Accrual rate 
 #&gt; Hazard ratio                  H1/H0=0.5/1
@@ -645,7 +643,8 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt; Type I error (1-sided):   100*alpha=2.5%
 #&gt; Equal randomization:          ratio=1</div><div class='input'>
 <span class='co'># vary accrual duration to obtain power</span>
-<span class='fu'>nSurv</span>(<span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fl'>6</span>, <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fl'>40</span>, <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='fl'>12</span>)</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
+<span class='fu'>nSurv</span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fl'>6</span>, minfup <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
 #&gt; outcome (Lachin and Foulkes, 1986).
 #&gt; Solving for:  Accrual duration 
 #&gt; Hazard ratio                  H1/H0=0.5/1
@@ -667,7 +666,8 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt; Type I error (1-sided):   100*alpha=2.5%
 #&gt; Equal randomization:          ratio=1</div><div class='input'>
 <span class='co'># vary follow-up duration to obtain power</span>
-<span class='fu'>nSurv</span>(<span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fl'>6</span>, <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fl'>40</span>, <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>R</span> <span class='kw'>=</span> <span class='fl'>25</span>)</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
+<span class='fu'>nSurv</span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fl'>6</span>, R <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
 #&gt; outcome (Lachin and Foulkes, 1986).
 #&gt; Solving for:  Follow-up duration 
 #&gt; Hazard ratio                  H1/H0=0.5/1
@@ -689,10 +689,11 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt; Type I error (1-sided):   100*alpha=2.5%
 #&gt; Equal randomization:          ratio=1</div><div class='input'>
 <span class='co'># piecewise constant enrollment rates (vary accrual duration)</span>
-<span class='fu'>nSurv</span>(
-  <span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fl'>6</span>, <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fl'>40</span>, <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>6</span>),
-  <span class='kw'>R</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>9</span>), <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='fl'>12</span>
-)</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
+<span class='fu'>nSurv</span><span class='op'>(</span>
+  lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>6</span><span class='op'>)</span>,
+  R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>9</span><span class='op'>)</span>, minfup <span class='op'>=</span> <span class='fl'>12</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
 #&gt; outcome (Lachin and Foulkes, 1986).
 #&gt; Solving for:  Accrual duration 
 #&gt; Hazard ratio                  H1/H0=0.5/1
@@ -716,10 +717,11 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt; Type I error (1-sided):   100*alpha=2.5%
 #&gt; Equal randomization:          ratio=1</div><div class='input'>
 <span class='co'># stratified population (vary accrual duration)</span>
-<span class='fu'>nSurv</span>(
-  <span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>12</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fl'>40</span>,
-  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>4</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='fl'>12</span>
-)</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
+<span class='fu'>nSurv</span><span class='op'>(</span>
+  lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>12</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>,
+  gamma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>4</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, minfup <span class='op'>=</span> <span class='fl'>12</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
 #&gt; outcome (Lachin and Foulkes, 1986).
 #&gt; Solving for:  Accrual duration 
 #&gt; Hazard ratio                  H1/H0=0.5/1
@@ -741,7 +743,8 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt; Type I error (1-sided):   100*alpha=2.5%
 #&gt; Equal randomization:          ratio=1</div><div class='input'>
 <span class='co'># piecewise exponential failure rates (vary accrual duration)</span>
-<span class='fu'>nSurv</span>(<span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>12</span>), <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fl'>40</span>, <span class='kw'>S</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='fl'>12</span>)</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
+<span class='fu'>nSurv</span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>12</span><span class='op'>)</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, S <span class='op'>=</span> <span class='fl'>3</span>, gamma <span class='op'>=</span> <span class='fl'>6</span>, minfup <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
 #&gt; outcome (Lachin and Foulkes, 1986).
 #&gt; Solving for:  Accrual duration 
 #&gt; Hazard ratio                  H1/H0=0.5/1
@@ -765,11 +768,12 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt; Type I error (1-sided):   100*alpha=2.5%
 #&gt; Equal randomization:          ratio=1</div><div class='input'>
 <span class='co'># combine it all: 2 strata, 2 failure rate periods</span>
-<span class='fu'>nSurv</span>(
-  <span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>6</span>, <span class='fl'>12</span>, <span class='fl'>18</span>, <span class='fl'>24</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>,
-  <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>45</span>, <span class='fl'>55</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='kw'>S</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>5</span>, <span class='fl'>7</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='kw'>R</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>10</span>), <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='fl'>12</span>
-)</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
+<span class='fu'>nSurv</span><span class='op'>(</span>
+  lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>12</span>, <span class='fl'>18</span>, <span class='fl'>24</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>,
+  eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>45</span>, <span class='fl'>55</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, S <span class='op'>=</span> <span class='fl'>3</span>,
+  gamma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>5</span>, <span class='fl'>7</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>10</span><span class='op'>)</span>, minfup <span class='op'>=</span> <span class='fl'>12</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
 #&gt; outcome (Lachin and Foulkes, 1986).
 #&gt; Solving for:  Accrual duration 
 #&gt; Hazard ratio                  H1/H0=0.5/1
@@ -795,7 +799,8 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt; Equal randomization:          ratio=1</div><div class='input'>
 <span class='co'># example where only 1 month of follow-up is desired</span>
 <span class='co'># set failure rate to 0 after 1 month using lambdaC and S</span>
-<span class='fu'>nSurv</span>(<span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.4</span>, <span class='fl'>0</span>), <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>2</span> / <span class='fl'>3</span>, <span class='kw'>S</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
+<span class='fu'>nSurv</span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.4</span>, <span class='fl'>0</span><span class='op'>)</span>, hr <span class='op'>=</span> <span class='fl'>2</span> <span class='op'>/</span> <span class='fl'>3</span>, S <span class='op'>=</span> <span class='fl'>1</span>, minfup <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Fixed design, two-arm trial with time-to-event
 #&gt; outcome (Lachin and Foulkes, 1986).
 #&gt; Solving for:  Accrual duration 
 #&gt; Hazard ratio                  H1/H0=0.6667/1
@@ -819,11 +824,12 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt; Type I error (1-sided):   100*alpha=2.5%
 #&gt; Equal randomization:          ratio=1</div><div class='input'>
 <span class='co'># group sequential design (vary accrual rate to obtain power)</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsSurv</span>(
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfPower</span>, <span class='kw'>sflpar</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fl'>6</span>, <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>,
-  <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>2</span>) / <span class='fl'>40</span>, <span class='kw'>gamma</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>T</span> <span class='kw'>=</span> <span class='fl'>36</span>, <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='fl'>12</span>
-)
-<span class='no'>x</span></div><div class='output co'>#&gt; Time to event group sequential design with HR= 0.5 
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>gsSurv</span><span class='op'>(</span>
+  k <span class='op'>=</span> <span class='fl'>4</span>, sfl <span class='op'>=</span> <span class='va'>sfPower</span>, sflpar <span class='op'>=</span> <span class='fl'>.5</span>, lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>,
+  eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fl'>1</span>, T <span class='op'>=</span> <span class='fl'>36</span>, minfup <span class='op'>=</span> <span class='fl'>12</span>
+<span class='op'>)</span>
+<span class='va'>x</span>
+</div><div class='output co'>#&gt; Time to event group sequential design with HR= 0.5 
 #&gt; Equal randomization:          ratio=1
 #&gt; Asymmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
@@ -869,11 +875,12 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt; 0-Inf      0.12
 #&gt; Censoring rates:
 #&gt;       Stratum 1
-#&gt; 0-Inf      0.02</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='fu'><a href='xtable.html'>xtable</a></span>(<span class='no'>x</span>,
-  <span class='kw'>footnote</span> <span class='kw'>=</span> <span class='st'>"This is a footnote; note that it can be wide."</span>,
-  <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"Caption example."</span>
-))</div><div class='output co'>#&gt; % latex table generated in R 4.0.0 by xtable 1.8-4 package
-#&gt; % Tue May 19 15:44:31 2020
+#&gt; 0-Inf      0.02</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='xtable.html'>xtable</a></span><span class='op'>(</span><span class='va'>x</span>,
+  footnote <span class='op'>=</span> <span class='st'>"This is a footnote; note that it can be wide."</span>,
+  caption <span class='op'>=</span> <span class='st'>"Caption example."</span>
+<span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; % latex table generated in R 4.0.3 by xtable 1.8-4 package
+#&gt; % Thu Jan  7 21:25:37 2021
 #&gt; \begin{table}[ht]
 #&gt; \centering
 #&gt; \begin{tabular}{rllll}
@@ -904,9 +911,11 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt; \end{tabular}
 #&gt; \caption{Caption example.} 
 #&gt; \end{table}</div><div class='input'><span class='co'># find expected number of events at time 12 in the above trial</span>
-<span class='fu'>nEventsIA</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>tIA</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='output co'>#&gt; [1] 20.51876</div><div class='input'>
+<span class='fu'>nEventsIA</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, tIA <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 20.51876</div><div class='input'>
 <span class='co'># find time at which 1/4 of events are expected</span>
-<span class='fu'>tEventsIA</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fl'>.25</span>)</div><div class='output co'>#&gt; $T
+<span class='fu'>tEventsIA</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, timing <span class='op'>=</span> <span class='fl'>.25</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $T
 #&gt; [1] 12.24228
 #&gt; 
 #&gt; $eDC
@@ -936,7 +945,7 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

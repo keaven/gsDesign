@@ -139,19 +139,13 @@ interest." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -188,7 +182,7 @@ complete but minimally formatted summary of a group sequential design
 derived by <code><a href='gsDesign.html'>gsDesign()</a></code>. A brief description of the overall design can
 also be useful (<code>summary.gsDesign()</code>.  A tabular summary of boundary
 characteristics oriented only towards LaTeX output is produced by
-<code><a href='nSurv.html'>xtable.gsSurv</a></code>. More flexibility is provided by
+<code><a href='print.nSurv.html'>xtable.gsSurv</a></code>. More flexibility is provided by
 <code>gsBoundSummary()</code> which produces a tabular summary of a
 user-specifiable set of package-provided boundary properties in a data
 frame.  This can also be used to along with functions such as
@@ -253,47 +247,47 @@ interest.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for gsDesign</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>object</span>, <span class='kw'>information</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>timeunit</span> <span class='kw'>=</span> <span class='st'>"months"</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, information <span class='op'>=</span> <span class='cn'>FALSE</span>, timeunit <span class='op'>=</span> <span class='st'>"months"</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for gsDesign</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>gsBoundSummary</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>Nname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-  <span class='kw'>ddigits</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>tdigits</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>timename</span> <span class='kw'>=</span> <span class='st'>"Month"</span>,
-  <span class='kw'>prior</span> <span class='kw'>=</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span>(<span class='kw'>mu</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>delta</span>/<span class='fl'>2</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>10</span>/<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>x</span>$<span class='no'>n.fix</span>)),
-  <span class='kw'>POS</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"B-value"</span>, <span class='st'>"Spending"</span>, <span class='st'>"CP"</span>, <span class='st'>"CP H1"</span>, <span class='st'>"PP"</span>),
-  <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>,
-  <span class='no'>...</span>
-)
+<span class='fu'>gsBoundSummary</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  deltaname <span class='op'>=</span> <span class='cn'>NULL</span>,
+  logdelta <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  Nname <span class='op'>=</span> <span class='cn'>NULL</span>,
+  digits <span class='op'>=</span> <span class='fl'>4</span>,
+  ddigits <span class='op'>=</span> <span class='fl'>2</span>,
+  tdigits <span class='op'>=</span> <span class='fl'>0</span>,
+  timename <span class='op'>=</span> <span class='st'>"Month"</span>,
+  prior <span class='op'>=</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span><span class='op'>(</span>mu <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span><span class='op'>/</span><span class='fl'>2</span>, sigma <span class='op'>=</span> <span class='fl'>10</span><span class='op'>/</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.fix</span><span class='op'>)</span><span class='op'>)</span>,
+  POS <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  ratio <span class='op'>=</span> <span class='cn'>NULL</span>,
+  exclude <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"B-value"</span>, <span class='st'>"Spending"</span>, <span class='st'>"CP"</span>, <span class='st'>"CP H1"</span>, <span class='st'>"PP"</span><span class='op'>)</span>,
+  r <span class='op'>=</span> <span class='fl'>18</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
-<span class='fu'>xprint</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>include.rownames</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>hline.after</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>x</span>$<span class='no'>Value</span> <span class='kw'>==</span> <span class='no'>x</span>[<span class='fl'>1</span>, ]$<span class='no'>Value</span>) - <span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>x</span>)),
-  <span class='no'>...</span>
-)
+<span class='fu'>xprint</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  include.rownames <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  hline.after <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>Value</span> <span class='op'>==</span> <span class='va'>x</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span><span class='op'>$</span><span class='va'>Value</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for gsBoundSummary</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='kw'>row.names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, row.names <span class='op'>=</span> <span class='cn'>FALSE</span>, digits <span class='op'>=</span> <span class='fl'>4</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>gsBValue</span>(<span class='no'>z</span>, <span class='no'>i</span>, <span class='no'>x</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"B-value"</span>, <span class='no'>...</span>)
+<span class='fu'>gsBValue</span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, ylab <span class='op'>=</span> <span class='st'>"B-value"</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>gsDelta</span>(<span class='no'>z</span>, <span class='no'>i</span>, <span class='no'>x</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'>gsDelta</span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, ylab <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>gsRR</span>(<span class='no'>z</span>, <span class='no'>i</span>, <span class='no'>x</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Approximate risk ratio"</span>, <span class='no'>...</span>)
+<span class='fu'>gsRR</span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, ylab <span class='op'>=</span> <span class='st'>"Approximate risk ratio"</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>gsHR</span>(<span class='no'>z</span>, <span class='no'>i</span>, <span class='no'>x</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Approximate hazard ratio"</span>, <span class='no'>...</span>)
+<span class='fu'>gsHR</span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, ylab <span class='op'>=</span> <span class='st'>"Approximate hazard ratio"</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>gsCPz</span>(<span class='no'>z</span>, <span class='no'>i</span>, <span class='no'>x</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>gsCPz</span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, theta <span class='op'>=</span> <span class='cn'>NULL</span>, ylab <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -310,7 +304,7 @@ represents statistical information rather than sample size or event counts.</p><
     <tr>
       <th>timeunit</th>
       <td><p>Text string with time units used for time-to-event designs
-created with <code><a href='nSurv.html'>gsSurv()</a></code></p></td>
+created with <code><a href='print.nSurv.html'>gsSurv()</a></code></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -481,14 +475,18 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='gsDesign.html'>gsDesign</a>, <a href='plot.gsDesign.html'>plot.gsDesign</a>,
-<code><a href='gsProbability.html'>gsProbability</a></code>, <code><a href='nSurv.html'>xtable.gsSurv</a></code></p></div>
+<code><a href='gsProbability.html'>gsProbability</a></code>, <code><a href='print.nSurv.html'>xtable.gsSurv</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
 <span class='co'># survival endpoint using gsSurv</span>
 <span class='co'># generally preferred over nSurv since time computations are shown</span>
-<span class='no'>xgs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='nSurv.html'>gsSurv</a></span>(<span class='kw'>lambdaC</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>hr</span> <span class='kw'>=</span> <span class='fl'>.5</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>T</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>minfup</span> <span class='kw'>=</span> <span class='fl'>1.5</span>)
-<span class='fu'>gsBoundSummary</span>(<span class='no'>xgs</span>, <span class='kw'>timename</span> <span class='kw'>=</span> <span class='st'>"Year"</span>, <span class='kw'>tdigits</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt;    Analysis              Value Efficacy Futility
+<span class='va'>xgs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='print.nSurv.html'>gsSurv</a></span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fl'>.2</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fl'>.1</span>, T <span class='op'>=</span> <span class='fl'>2</span>, minfup <span class='op'>=</span> <span class='fl'>1.5</span><span class='op'>)</span>
+<span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xgs</span>, timename <span class='op'>=</span> <span class='st'>"Year"</span>, tdigits <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    Analysis              Value Efficacy Futility
 #&gt;   IA 1: 33%                  Z   3.0107  -0.2388
 #&gt;      N: 460        p (1-sided)   0.0013   0.5944
 #&gt;  Events: 33       ~HR at bound   0.3457   1.0879
@@ -503,15 +501,17 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;      N: 460        p (1-sided)   0.0228   0.0228
 #&gt;  Events: 97       ~HR at bound   0.6655   0.6655
 #&gt;     Year: 2   P(Cross) if HR=1   0.0233   0.9767
-#&gt;             P(Cross) if HR=0.5   0.9000   0.1000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>xgs</span>)</div><div class='output co'>#&gt; [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 460 and 97 events required, 90 percent power, 2.5 percent (1-sided) Type I error to detect a hazard ratio of 0.5. Enrollment and total study durations are assumed to be 0.5 and 2 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</div><div class='input'>
+#&gt;             P(Cross) if HR=0.5   0.9000   0.1000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>xgs</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 460 and 97 events required, 90 percent power, 2.5 percent (1-sided) Type I error to detect a hazard ratio of 0.5. Enrollment and total study durations are assumed to be 0.5 and 2 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</div><div class='input'>
 <span class='co'># survival endpoint using nSurvival</span>
 <span class='co'># NOTE: generally recommend gsSurv above for this!</span>
-<span class='no'>ss</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='nSurvival.html'>nSurvival</a></span>(
-  <span class='kw'>lambda1</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>lambda2</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>eta</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>Ts</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>Tr</span> <span class='kw'>=</span> <span class='fl'>.5</span>,
-  <span class='kw'>sided</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.025</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='fl'>2</span>
-)
-<span class='no'>xs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>nFixSurv</span> <span class='kw'>=</span> <span class='no'>ss</span>$<span class='no'>n</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>ss</span>$<span class='no'>nEvents</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>ss</span>$<span class='no'>lambda2</span> / <span class='no'>ss</span>$<span class='no'>lambda1</span>))
-<span class='fu'>gsBoundSummary</span>(<span class='no'>xs</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ratio</span> <span class='kw'>=</span> <span class='no'>ss</span>$<span class='no'>ratio</span>)</div><div class='output co'>#&gt;   Analysis              Value Efficacy Futility
+<span class='va'>ss</span> <span class='op'>&lt;-</span> <span class='fu'><a href='print.nSurvival.html'>nSurvival</a></span><span class='op'>(</span>
+  lambda1 <span class='op'>=</span> <span class='fl'>.2</span>, lambda2 <span class='op'>=</span> <span class='fl'>.1</span>, eta <span class='op'>=</span> <span class='fl'>.1</span>, Ts <span class='op'>=</span> <span class='fl'>2</span>, Tr <span class='op'>=</span> <span class='fl'>.5</span>,
+  sided <span class='op'>=</span> <span class='fl'>1</span>, alpha <span class='op'>=</span> <span class='fl'>.025</span>, ratio <span class='op'>=</span> <span class='fl'>2</span>
+<span class='op'>)</span>
+<span class='va'>xs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>nFixSurv <span class='op'>=</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>n</span>, n.fix <span class='op'>=</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>nEvents</span>, delta1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>ss</span><span class='op'>$</span><span class='va'>lambda2</span> <span class='op'>/</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>lambda1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xs</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span>, ratio <span class='op'>=</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>ratio</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   Analysis              Value Efficacy Futility
 #&gt;  IA 1: 33%                  Z   3.0107  -0.2387
 #&gt;      N: 34        p (1-sided)   0.0013   0.5943
 #&gt;                  ~HR at bound   0.3306   1.0917
@@ -527,15 +527,20 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;                  ~HR at bound   0.6542   0.6542
 #&gt;              P(Cross) if HR=1   0.0233   0.9767
 #&gt;            P(Cross) if HR=0.5   0.9000   0.1000</div><div class='input'><span class='co'># generate some of the above summary statistics for the upper bound</span>
-<span class='no'>z</span> <span class='kw'>&lt;-</span> <span class='no'>xs</span>$<span class='no'>upper</span>$<span class='no'>bound</span>
+<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='va'>xs</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
 <span class='co'># B-values</span>
-<span class='fu'>gsBValue</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>z</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xs</span>)</div><div class='output co'>#&gt; [1] 1.738251 2.079233 1.999226</div><div class='input'><span class='co'># hazard ratio</span>
-<span class='fu'>gsHR</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>z</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xs</span>)</div><div class='output co'>#&gt; [1] 0.3521851 0.5357126 0.6702573</div><div class='input'><span class='co'># conditional power at observed treatment effect</span>
-<span class='fu'>gsCPz</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>z</span>[<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xs</span>)</div><div class='output co'>#&gt; [1] 0.9999676 0.9737643</div><div class='input'><span class='co'># conditional power at H1 treatment effect</span>
-<span class='fu'>gsCPz</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>z</span>[<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xs</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>xs</span>$<span class='no'>delta</span>)</div><div class='output co'>#&gt; [1] 0.9937804 0.9809768</div><div class='input'>
+<span class='fu'>gsBValue</span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>z</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, x <span class='op'>=</span> <span class='va'>xs</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1.738251 2.079233 1.999226</div><div class='input'><span class='co'># hazard ratio</span>
+<span class='fu'>gsHR</span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>z</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, x <span class='op'>=</span> <span class='va'>xs</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.3521851 0.5357126 0.6702573</div><div class='input'><span class='co'># conditional power at observed treatment effect</span>
+<span class='fu'>gsCPz</span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>z</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, x <span class='op'>=</span> <span class='va'>xs</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.9999676 0.9737643</div><div class='input'><span class='co'># conditional power at H1 treatment effect</span>
+<span class='fu'>gsCPz</span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>z</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, x <span class='op'>=</span> <span class='va'>xs</span>, theta <span class='op'>=</span> <span class='va'>xs</span><span class='op'>$</span><span class='va'>delta</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.9937804 0.9809768</div><div class='input'>
 <span class='co'># information-based design</span>
-<span class='no'>xinfo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>.3</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>.3</span>)
-<span class='fu'>gsBoundSummary</span>(<span class='no'>xinfo</span>, <span class='kw'>Nname</span> <span class='kw'>=</span> <span class='st'>"Information"</span>)</div><div class='output co'>#&gt;             Analysis                 Value Efficacy Futility
+<span class='va'>xinfo</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>delta <span class='op'>=</span> <span class='fl'>.3</span>, delta1 <span class='op'>=</span> <span class='fl'>.3</span><span class='op'>)</span>
+<span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xinfo</span>, Nname <span class='op'>=</span> <span class='st'>"Information"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;             Analysis                 Value Efficacy Futility
 #&gt;            IA 1: 33%                     Z   3.0107  -0.2387
 #&gt;   Information: 41.64           p (1-sided)   0.0013   0.5943
 #&gt;                            ~delta at bound   0.4666  -0.0370
@@ -552,7 +557,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;                        P(Cross) if delta=0   0.0233   0.9767
 #&gt;                      P(Cross) if delta=0.3   0.9000   0.1000</div><div class='input'>
 <span class='co'># show all available boundary descriptions</span>
-<span class='fu'>gsBoundSummary</span>(<span class='no'>xinfo</span>, <span class='kw'>Nname</span> <span class='kw'>=</span> <span class='st'>"Information"</span>, <span class='kw'>exclude</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</div><div class='output co'>#&gt;             Analysis                 Value Efficacy Futility
+<span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xinfo</span>, Nname <span class='op'>=</span> <span class='st'>"Information"</span>, exclude <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;             Analysis                 Value Efficacy Futility
 #&gt;            IA 1: 33%                     Z   3.0107  -0.2387
 #&gt;   Information: 41.64           p (1-sided)   0.0013   0.5943
 #&gt;                            ~delta at bound   0.4666  -0.0370
@@ -581,8 +587,10 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;                        P(Cross) if delta=0   0.0233   0.9767
 #&gt;                      P(Cross) if delta=0.3   0.9000   0.1000</div><div class='input'>
 <span class='co'># add intermediate parameter value</span>
-<span class='no'>xinfo</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsProbability.html'>gsProbability</a></span>(<span class='kw'>d</span> <span class='kw'>=</span> <span class='no'>xinfo</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>.15</span>, <span class='fl'>.3</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>xinfo</span>) <span class='co'># note this is still as gsDesign class object</span></div><div class='output co'>#&gt; [1] "gsDesign"</div><div class='input'><span class='fu'>gsBoundSummary</span>(<span class='no'>xinfo</span>, <span class='kw'>Nname</span> <span class='kw'>=</span> <span class='st'>"Information"</span>)</div><div class='output co'>#&gt;             Analysis                  Value Efficacy Futility
+<span class='va'>xinfo</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsProbability.html'>gsProbability</a></span><span class='op'>(</span>d <span class='op'>=</span> <span class='va'>xinfo</span>, theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.15</span>, <span class='fl'>.3</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>xinfo</span><span class='op'>)</span> <span class='co'># note this is still as gsDesign class object</span>
+</div><div class='output co'>#&gt; [1] "gsDesign"</div><div class='input'><span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xinfo</span>, Nname <span class='op'>=</span> <span class='st'>"Information"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;             Analysis                  Value Efficacy Futility
 #&gt;            IA 1: 33%                      Z   3.0107  -0.2387
 #&gt;   Information: 41.64            p (1-sided)   0.0013   0.5943
 #&gt;                             ~delta at bound   0.4666  -0.0370
@@ -604,9 +612,11 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># now look at a binomial endpoint; specify H0 treatment difference as p1-p2=.05</span>
 <span class='co'># now treatment effect at bound (say, thetahat) is transformed to</span>
 <span class='co'># xp$delta0 + xp$delta1*(thetahat-xp$delta0)/xp$delta</span>
-<span class='no'>np</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>.15</span>, <span class='kw'>p2</span> <span class='kw'>=</span> <span class='fl'>.10</span>)
-<span class='no'>xp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>np</span>, <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"Binomial"</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>.05</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>xp</span>)</div><div class='output co'>#&gt; [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, sample size 1963, 90 percent power, 2.5 percent (1-sided) Type I error. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</div><div class='input'><span class='fu'>gsBoundSummary</span>(<span class='no'>xp</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"p[C]-p[E]"</span>)</div><div class='output co'>#&gt;   Analysis                      Value Efficacy Futility
+<span class='va'>np</span> <span class='op'>&lt;-</span> <span class='fu'><a href='ciBinomial.html'>nBinomial</a></span><span class='op'>(</span>p1 <span class='op'>=</span> <span class='fl'>.15</span>, p2 <span class='op'>=</span> <span class='fl'>.10</span><span class='op'>)</span>
+<span class='va'>xp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>n.fix <span class='op'>=</span> <span class='va'>np</span>, endpoint <span class='op'>=</span> <span class='st'>"Binomial"</span>, delta1 <span class='op'>=</span> <span class='fl'>.05</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>xp</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, sample size 1963, 90 percent power, 2.5 percent (1-sided) Type I error. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</div><div class='input'><span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xp</span>, deltaname <span class='op'>=</span> <span class='st'>"p[C]-p[E]"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   Analysis                      Value Efficacy Futility
 #&gt;  IA 1: 33%                          Z   3.0107  -0.2387
 #&gt;     N: 655                p (1-sided)   0.0013   0.5943
 #&gt;                   ~p[C]-p[E] at bound   0.0778  -0.0062
@@ -625,11 +635,13 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># by setting delta0=0 (default) and delta1 above in gsDesign</span>
 <span class='co'># treatment effect at bounds is scaled to these differences</span>
 <span class='co'># in this case, this is the difference in event rates</span>
-<span class='fu'>gsDelta</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>xp</span>$<span class='no'>lower</span>$<span class='no'>bound</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='no'>xp</span>)</div><div class='output co'>#&gt; [1] -0.006166098  0.017187789  0.029813687</div><div class='input'>
+<span class='fu'>gsDelta</span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, <span class='va'>xp</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] -0.006166098  0.017187789  0.029813687</div><div class='input'>
 <span class='co'># binomial endpoint with risk ratio estimates</span>
-<span class='no'>n.fix</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>.3</span>, <span class='kw'>p2</span> <span class='kw'>=</span> <span class='fl'>.15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"RR"</span>)
-<span class='no'>xrr</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>n.fix</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>.15</span> / <span class='fl'>.3</span>), <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"Binomial"</span>)
-<span class='fu'>gsBoundSummary</span>(<span class='no'>xrr</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"RR"</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   Analysis              Value Efficacy Futility
+<span class='va'>n.fix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='ciBinomial.html'>nBinomial</a></span><span class='op'>(</span>p1 <span class='op'>=</span> <span class='fl'>.3</span>, p2 <span class='op'>=</span> <span class='fl'>.15</span>, scale <span class='op'>=</span> <span class='st'>"RR"</span><span class='op'>)</span>
+<span class='va'>xrr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span>, n.fix <span class='op'>=</span> <span class='va'>n.fix</span>, delta1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.15</span> <span class='op'>/</span> <span class='fl'>.3</span><span class='op'>)</span>, endpoint <span class='op'>=</span> <span class='st'>"Binomial"</span><span class='op'>)</span>
+<span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xrr</span>, deltaname <span class='op'>=</span> <span class='st'>"RR"</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   Analysis              Value Efficacy Futility
 #&gt;  IA 1: 50%                  Z   2.7500   0.4122
 #&gt;     N: 168        p (1-sided)   0.0030   0.3401
 #&gt;                  ~RR at bound   0.4429   0.8851
@@ -639,11 +651,14 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;     N: 336        p (1-sided)   0.0238   0.0238
 #&gt;                  ~RR at bound   0.6605   0.6605
 #&gt;              P(Cross) if RR=1   0.0239   0.9761
-#&gt;            P(Cross) if RR=0.5   0.9000   0.1000</div><div class='input'><span class='fu'>gsRR</span>(<span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>xp</span>$<span class='no'>lower</span>$<span class='no'>bound</span>, <span class='kw'>i</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='no'>xrr</span>)</div><div class='output co'>#&gt; [1] 1.0732500 0.8211496        NA</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>xrr</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='st'>"RR"</span>)</div><div class='img'><img src='gsBoundSummary-1.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt;            P(Cross) if RR=0.5   0.9000   0.1000</div><div class='input'><span class='fu'>gsRR</span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, <span class='va'>xrr</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1.0732500 0.8211496        NA</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>xrr</span>, plottype <span class='op'>=</span> <span class='st'>"RR"</span><span class='op'>)</span>
+</div><div class='img'><img src='gsBoundSummary-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># delta is odds-ratio: sample size slightly smaller than for relative risk or risk difference</span>
-<span class='no'>n.fix</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span>(<span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>.3</span>, <span class='kw'>p2</span> <span class='kw'>=</span> <span class='fl'>.15</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='st'>"OR"</span>)
-<span class='no'>xOR</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>n.fix</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fl'>.15</span> / <span class='fl'>.3</span> / <span class='fl'>.85</span> * <span class='fl'>.7</span>), <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='st'>"Binomial"</span>)
-<span class='fu'>gsBoundSummary</span>(<span class='no'>xOR</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"OR"</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   Analysis               Value Efficacy Futility
+<span class='va'>n.fix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='ciBinomial.html'>nBinomial</a></span><span class='op'>(</span>p1 <span class='op'>=</span> <span class='fl'>.3</span>, p2 <span class='op'>=</span> <span class='fl'>.15</span>, scale <span class='op'>=</span> <span class='st'>"OR"</span><span class='op'>)</span>
+<span class='va'>xOR</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span>, n.fix <span class='op'>=</span> <span class='va'>n.fix</span>, delta1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.15</span> <span class='op'>/</span> <span class='fl'>.3</span> <span class='op'>/</span> <span class='fl'>.85</span> <span class='op'>*</span> <span class='fl'>.7</span><span class='op'>)</span>, endpoint <span class='op'>=</span> <span class='st'>"Binomial"</span><span class='op'>)</span>
+<span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xOR</span>, deltaname <span class='op'>=</span> <span class='st'>"OR"</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   Analysis               Value Efficacy Futility
 #&gt;  IA 1: 50%                   Z   2.7500   0.4122
 #&gt;     N: 166         p (1-sided)   0.0030   0.3401
 #&gt;                   ~OR at bound   0.3526   0.8553
@@ -655,8 +670,9 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 #&gt;               P(Cross) if OR=1   0.0239   0.9761
 #&gt;            P(Cross) if OR=0.41   0.9000   0.1000</div><div class='input'>
 <span class='co'># for nice LaTeX table output, use xprint</span>
-<span class='fu'>xprint</span>(<span class='fu'><a href='xtable.html'>xtable</a></span>(<span class='fu'>gsBoundSummary</span>(<span class='no'>xOR</span>, <span class='kw'>deltaname</span> <span class='kw'>=</span> <span class='st'>"OR"</span>, <span class='kw'>logdelta</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='kw'>caption</span> <span class='kw'>=</span> <span class='st'>"Table caption."</span>))</div><div class='output co'>#&gt; % latex table generated in R 4.0.0 by xtable 1.8-4 package
-#&gt; % Tue May 19 15:44:21 2020
+<span class='fu'>xprint</span><span class='op'>(</span><span class='fu'><a href='xtable.html'>xtable</a></span><span class='op'>(</span><span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xOR</span>, deltaname <span class='op'>=</span> <span class='st'>"OR"</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, caption <span class='op'>=</span> <span class='st'>"Table caption."</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; % latex table generated in R 4.0.3 by xtable 1.8-4 package
+#&gt; % Thu Jan  7 21:25:26 2021
 #&gt; \begin{table}[ht]
 #&gt; \centering
 #&gt; \begin{tabular}{llrr}
@@ -693,7 +709,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

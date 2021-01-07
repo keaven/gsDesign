@@ -114,19 +114,13 @@ hypothesis." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -166,7 +160,7 @@ O'Brien-Fleming and Pocock designs can be generated. Designs with common
 spending functions as well as other built-in and user-specified functions
 for Type I error and futility are supported. Type I error computations for
 asymmetric designs may assume binding or non-binding lower bounds. The print
-function has been extended using <code><a href='gsBoundSummary.html'>print.gsDesign</a>()</code> to print
+function has been extended using <code><a href='summary.gsDesign.html'>print.gsDesign</a>()</code> to print
 <code>gsDesign</code> objects; see examples.</p>
 <p>The user may ignore the structure of the value returned by <code>gsDesign()</code>
 if the standard printing and plotting suffice; see examples.</p>
@@ -202,31 +196,31 @@ other options. Options 5 and 6 compute lower bound spending under the null
 hypothesis.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gsDesign</span>(
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>,
-  <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>astar</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>,
-  <span class='kw'>sfupar</span> <span class='kw'>=</span> -<span class='fl'>4</span>,
-  <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfHSD</span>,
-  <span class='kw'>sflpar</span> <span class='kw'>=</span> -<span class='fl'>2</span>,
-  <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-06</span>,
-  <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>,
-  <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>maxn.IPlan</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>nFixSurv</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>endpoint</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>overrun</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>usTime</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>lsTime</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>gsDesign</span><span class='op'>(</span>
+  k <span class='op'>=</span> <span class='fl'>3</span>,
+  test.type <span class='op'>=</span> <span class='fl'>4</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.025</span>,
+  beta <span class='op'>=</span> <span class='fl'>0.1</span>,
+  astar <span class='op'>=</span> <span class='fl'>0</span>,
+  delta <span class='op'>=</span> <span class='fl'>0</span>,
+  n.fix <span class='op'>=</span> <span class='fl'>1</span>,
+  timing <span class='op'>=</span> <span class='fl'>1</span>,
+  sfu <span class='op'>=</span> <span class='va'>sfHSD</span>,
+  sfupar <span class='op'>=</span> <span class='op'>-</span><span class='fl'>4</span>,
+  sfl <span class='op'>=</span> <span class='va'>sfHSD</span>,
+  sflpar <span class='op'>=</span> <span class='op'>-</span><span class='fl'>2</span>,
+  tol <span class='op'>=</span> <span class='fl'>1e-06</span>,
+  r <span class='op'>=</span> <span class='fl'>18</span>,
+  n.I <span class='op'>=</span> <span class='fl'>0</span>,
+  maxn.IPlan <span class='op'>=</span> <span class='fl'>0</span>,
+  nFixSurv <span class='op'>=</span> <span class='fl'>0</span>,
+  endpoint <span class='op'>=</span> <span class='cn'>NULL</span>,
+  delta1 <span class='op'>=</span> <span class='fl'>1</span>,
+  delta0 <span class='op'>=</span> <span class='fl'>0</span>,
+  overrun <span class='op'>=</span> <span class='fl'>0</span>,
+  usTime <span class='op'>=</span> <span class='cn'>NULL</span>,
+  lsTime <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -355,9 +349,9 @@ rounded up to an even number.</p></td>
       <td><p>An optional character string that should represent the type
 of endpoint used for the study. This may be used by output functions. Types
 most likely to be recognized initially are "TTE" for time-to-event outcomes
-with fixed design sample size generated by <code><a href='nSurvival.html'>nSurvival()</a></code> and "Binomial"
+with fixed design sample size generated by <code><a href='print.nSurvival.html'>nSurvival()</a></code> and "Binomial"
 for 2-sample binomial outcomes with fixed design sample size generated by
-<code><a href='varBinomial.html'>nBinomial()</a></code>.</p></td>
+<code><a href='ciBinomial.html'>nBinomial()</a></code>.</p></td>
     </tr>
     <tr>
       <th>delta1</th>
@@ -458,19 +452,23 @@ Liu, Q, Lim, P, Nuamah, I, and Li, Y (2012), On adaptive error spending approach
 group sequential trials with random information levels. <em>Journal of biopharmaceutical statistics</em>; 22(4), 687-699.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='gsDesign-package-overview.html'>gsDesign package overview</a>, <a href='gsBoundSummary.html'>gsBoundSummary</a>, 
+    <div class='dont-index'><p><a href='gsDesign package overview.html'>gsDesign package overview</a>, <a href='summary.gsDesign.html'>gsBoundSummary</a>, 
 <a href='plot.gsDesign.html'>plot.gsDesign</a>,
 <code><a href='gsProbability.html'>gsProbability</a></code>, <a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>,</p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
 <span class='co'>#  symmetric, 2-sided design with O'Brien-Fleming-like boundaries</span>
 <span class='co'>#  lower bound is non-binding (ignored in Type I error computation)</span>
 <span class='co'>#  sample size is computed based on a fixed design requiring n=800</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>800</span>)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>gsDesign</span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>5</span>, test.type <span class='op'>=</span> <span class='fl'>2</span>, n.fix <span class='op'>=</span> <span class='fl'>800</span><span class='op'>)</span>
 
 <span class='co'># note that "x" below is equivalent to print(x) and print.gsDesign(x)</span>
-<span class='no'>x</span></div><div class='output co'>#&gt; Symmetric two-sided group sequential design with
+<span class='va'>x</span>
+</div><div class='output co'>#&gt; Symmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Spending computations assume trial stops
 #&gt; if a bound is crossed.
@@ -500,14 +498,17 @@ group sequential trials with random information levels. <em>Journal of biopharma
 #&gt;           Analysis
 #&gt;    Theta     1      2      3      4     5 Total
 #&gt;   0.0000 6e-04 0.0013 0.0028 0.0063 0.014 0.025
-#&gt;   0.1146 0e+00 0.0000 0.0000 0.0000 0.000 0.000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='gsDesign-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsDesign-2.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt;   0.1146 0e+00 0.0000 0.0000 0.0000 0.000 0.000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='img'><img src='gsDesign-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='img'><img src='gsDesign-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Assuming after trial was designed actual analyses occurred after</span>
 <span class='co'># 300, 600, and 860 patients, reset bounds</span>
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>test.type</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>800</span>, <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>300</span>, <span class='fl'>600</span>, <span class='fl'>860</span>),
-  <span class='kw'>maxn.IPlan</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='no'>x</span>$<span class='no'>k</span>]
-)
-<span class='no'>y</span></div><div class='output co'>#&gt; Symmetric two-sided group sequential design with
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'>gsDesign</span><span class='op'>(</span>
+  k <span class='op'>=</span> <span class='fl'>3</span>, test.type <span class='op'>=</span> <span class='fl'>2</span>, n.fix <span class='op'>=</span> <span class='fl'>800</span>, n.I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>300</span>, <span class='fl'>600</span>, <span class='fl'>860</span><span class='op'>)</span>,
+  maxn.IPlan <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='va'>x</span><span class='op'>$</span><span class='va'>k</span><span class='op'>]</span>
+<span class='op'>)</span>
+<span class='va'>y</span>
+</div><div class='output co'>#&gt; Symmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Spending computations assume trial stops
 #&gt; if a bound is crossed.
@@ -538,14 +539,15 @@ group sequential trials with random information levels. <em>Journal of biopharma
 #&gt;   0.1146 0.0000 0.0000 0.0000 0.000</div><div class='input'>
 <span class='co'>#  asymmetric design with user-specified spending that is non-binding</span>
 <span class='co'>#  sample size is computed relative to a fixed design with n=1000</span>
-<span class='no'>sfup</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.033333</span>, <span class='fl'>.063367</span>, <span class='fl'>.1</span>)
-<span class='no'>sflp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>)
-<span class='no'>timing</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.1</span>, <span class='fl'>.4</span>, <span class='fl'>.7</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>gsDesign</span>(
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='no'>timing</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfPoints</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>sfup</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfPoints</span>,
-  <span class='kw'>sflpar</span> <span class='kw'>=</span> <span class='no'>sflp</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='fl'>1000</span>
-)
-<span class='no'>x</span></div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
+<span class='va'>sfup</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.033333</span>, <span class='fl'>.063367</span>, <span class='fl'>.1</span><span class='op'>)</span>
+<span class='va'>sflp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span><span class='op'>)</span>
+<span class='va'>timing</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.1</span>, <span class='fl'>.4</span>, <span class='fl'>.7</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>gsDesign</span><span class='op'>(</span>
+  k <span class='op'>=</span> <span class='fl'>4</span>, timing <span class='op'>=</span> <span class='va'>timing</span>, sfu <span class='op'>=</span> <span class='va'>sfPoints</span>, sfupar <span class='op'>=</span> <span class='va'>sfup</span>, sfl <span class='op'>=</span> <span class='va'>sfPoints</span>,
+  sflpar <span class='op'>=</span> <span class='va'>sflp</span>, n.fix <span class='op'>=</span> <span class='fl'>1000</span>
+<span class='op'>)</span>
+<span class='va'>x</span>
+</div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Upper bound spending computations assume
 #&gt; trial continues if lower bound is crossed.
@@ -575,12 +577,15 @@ group sequential trials with random information levels. <em>Journal of biopharma
 #&gt;           Analysis
 #&gt;    Theta      1      2      3      4  Total
 #&gt;   0.0000 0.2041 0.4703 0.2361 0.0693 0.9798
-#&gt;   0.1025 0.0250 0.0250 0.0250 0.0250 0.1000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='gsDesign-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsDesign-4.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt;   0.1025 0.0250 0.0250 0.0250 0.0250 0.1000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='img'><img src='gsDesign-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='img'><img src='gsDesign-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># same design, but with relative sample sizes</span>
-<span class='fu'>gsDesign</span>(
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='no'>timing</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfPoints</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>sfup</span>, <span class='kw'>sfl</span> <span class='kw'>=</span> <span class='no'>sfPoints</span>,
-  <span class='kw'>sflpar</span> <span class='kw'>=</span> <span class='no'>sflp</span>
-)</div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
+<span class='fu'>gsDesign</span><span class='op'>(</span>
+  k <span class='op'>=</span> <span class='fl'>4</span>, timing <span class='op'>=</span> <span class='va'>timing</span>, sfu <span class='op'>=</span> <span class='va'>sfPoints</span>, sfupar <span class='op'>=</span> <span class='va'>sfup</span>, sfl <span class='op'>=</span> <span class='va'>sfPoints</span>,
+  sflpar <span class='op'>=</span> <span class='va'>sflp</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Upper bound spending computations assume
 #&gt; trial continues if lower bound is crossed.
@@ -628,7 +633,7 @@ group sequential trials with random information levels. <em>Journal of biopharma
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

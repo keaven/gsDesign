@@ -130,19 +130,13 @@ NOTE: the one-sided evaluation of significance is more conservative than using t
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -234,35 +228,35 @@ that it covers the possible range of values that include the true minima.
 NOTE: the one-sided evaluation of significance is more conservative than using the 2-sided exact test in <code>binom.test</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gsBinomialExact</span>(
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.1</span>, <span class='fl'>0.2</span>),
-  <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>50</span>, <span class='fl'>100</span>),
-  <span class='kw'>a</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>7</span>),
-  <span class='kw'>b</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>20</span>, <span class='fl'>30</span>)
-)
+    <pre class="usage"><span class='fu'>gsBinomialExact</span><span class='op'>(</span>
+  k <span class='op'>=</span> <span class='fl'>2</span>,
+  theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>0.2</span><span class='op'>)</span>,
+  n.I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>100</span><span class='op'>)</span>,
+  a <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>7</span><span class='op'>)</span>,
+  b <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>20</span>, <span class='fl'>30</span><span class='op'>)</span>
+<span class='op'>)</span>
 
-<span class='fu'>binomialSPRT</span>(
-  <span class='kw'>p0</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
-  <span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>0.25</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>0.15</span>,
-  <span class='kw'>minn</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>maxn</span> <span class='kw'>=</span> <span class='fl'>35</span>
-)
+<span class='fu'>binomialSPRT</span><span class='op'>(</span>
+  p0 <span class='op'>=</span> <span class='fl'>0.05</span>,
+  p1 <span class='op'>=</span> <span class='fl'>0.25</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.1</span>,
+  beta <span class='op'>=</span> <span class='fl'>0.15</span>,
+  minn <span class='op'>=</span> <span class='fl'>10</span>,
+  maxn <span class='op'>=</span> <span class='fl'>35</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for gsBinomialExact</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>nBinomial1Sample</span>(
-  <span class='kw'>p0</span> <span class='kw'>=</span> <span class='fl'>0.9</span>,
-  <span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>,
-  <span class='kw'>beta</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>200</span>:<span class='fl'>250</span>,
-  <span class='kw'>outtype</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>conservative</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+<span class='fu'>nBinomial1Sample</span><span class='op'>(</span>
+  p0 <span class='op'>=</span> <span class='fl'>0.9</span>,
+  p1 <span class='op'>=</span> <span class='fl'>0.95</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.025</span>,
+  beta <span class='op'>=</span> <span class='cn'>NULL</span>,
+  n <span class='op'>=</span> <span class='fl'>200</span><span class='op'>:</span><span class='fl'>250</span>,
+  outtype <span class='op'>=</span> <span class='fl'>1</span>,
+  conservative <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -426,20 +420,25 @@ marc_schwartz@me.com.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='gsProbability.html'>gsProbability</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Jon Hartzel, Yevgen Tymofyeyev and Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
 
-<span class='no'>zz</span> <span class='kw'>&lt;-</span> <span class='fu'>gsBinomialExact</span>(
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0.1</span>), <span class='kw'>n.I</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>24</span>, <span class='fl'>36</span>),
-  <span class='kw'>a</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>11</span>), <span class='kw'>b</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>9</span>, <span class='fl'>12</span>)
-)
+<span class='va'>zz</span> <span class='op'>&lt;-</span> <span class='fu'>gsBinomialExact</span><span class='op'>(</span>
+  k <span class='op'>=</span> <span class='fl'>3</span>, theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0.1</span><span class='op'>)</span>, n.I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span>, <span class='fl'>36</span><span class='op'>)</span>,
+  a <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>11</span><span class='op'>)</span>, b <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>9</span>, <span class='fl'>12</span><span class='op'>)</span>
+<span class='op'>)</span>
 
 <span class='co'># let's see what class this is</span>
-<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>zz</span>)</div><div class='output co'>#&gt; [1] "gsBinomialExact" "gsProbability"  </div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>zz</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "gsBinomialExact" "gsProbability"  </div><div class='input'>
 <span class='co'># because of "gsProbability" class above, following is equivalent to</span>
 <span class='co'># print.gsProbability(zz)</span>
-<span class='no'>zz</span></div><div class='output co'>#&gt;               Bounds
+<span class='va'>zz</span>
+</div><div class='output co'>#&gt;               Bounds
 #&gt;   Analysis   N   a   b
 #&gt;          1  12  -1   5
 #&gt;          2  24   0   9
@@ -478,21 +477,27 @@ marc_schwartz@me.com.</p>
 #&gt;     0.9 0 0.0000 0.0000 0.0000
 #&gt;     1.0 0 0.0000 0.0000 0.0000</div><div class='input'><span class='co'># also plot (see also plots below for \code{binomialSPRT})</span>
 <span class='co'># add lines using geom_line()</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>zz</span>) +
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>()</div><div class='img'><img src='gsBinomialExact-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>zz</span><span class='op'>)</span> <span class='op'>+</span> 
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='img'><img src='gsBinomialExact-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># now for SPRT examples</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>binomialSPRT</span>(<span class='kw'>p0</span> <span class='kw'>=</span> <span class='fl'>.05</span>, <span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>.25</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.1</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>.2</span>)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>binomialSPRT</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>.05</span>, p1 <span class='op'>=</span> <span class='fl'>.25</span>, alpha <span class='op'>=</span> <span class='fl'>.1</span>, beta <span class='op'>=</span> <span class='fl'>.2</span><span class='op'>)</span>
 <span class='co'># boundary plot</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='gsBinomialExact-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># power plot</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='gsBinomialExact-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Response (event) rate at boundary</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='img'><img src='gsBinomialExact-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Expected sample size at boundary crossing or end of trial</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>plottype</span> <span class='kw'>=</span> <span class='fl'>6</span>)</div><div class='img'><img src='gsBinomialExact-5.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='img'><img src='gsBinomialExact-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># power plot</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='img'><img src='gsBinomialExact-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Response (event) rate at boundary</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+</div><div class='img'><img src='gsBinomialExact-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Expected sample size at boundary crossing or end of trial</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>6</span><span class='op'>)</span>
+</div><div class='img'><img src='gsBinomialExact-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># sample size for single arm exact binomial</span>
 
 <span class='co'># plot of table of power by sample size</span>
 <span class='co'># note that outtype need no be specified if beta is NULL</span>
-<span class='no'>nb1</span> <span class='kw'>&lt;-</span> <span class='fu'>nBinomial1Sample</span>(<span class='kw'>p0</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>p1</span><span class='kw'>=</span><span class='fl'>0.2</span>,<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>, <span class='kw'>beta</span><span class='kw'>=</span><span class='kw'>NULL</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>25</span>:<span class='fl'>40</span>)
-<span class='no'>nb1</span></div><div class='output co'>#&gt;      p0  p1 alpha      beta  n b      alphaR     Power
+<span class='va'>nb1</span> <span class='op'>&lt;-</span> <span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1<span class='op'>=</span><span class='fl'>0.2</span>,alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta<span class='op'>=</span><span class='cn'>NULL</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span><span class='op'>)</span>
+<span class='va'>nb1</span>
+</div><div class='output co'>#&gt;      p0  p1 alpha      beta  n b      alphaR     Power
 #&gt; 1  0.05 0.2 0.025 0.4206743 25 5 0.007164948 0.5793257
 #&gt; 2  0.05 0.2 0.025 0.3833381 26 5 0.008511231 0.6166619
 #&gt; 3  0.05 0.2 0.025 0.3480384 27 5 0.010022739 0.6519616
@@ -508,22 +513,26 @@ marc_schwartz@me.com.</p>
 #&gt; 13 0.05 0.2 0.025 0.2224770 37 6 0.009541557 0.7775230
 #&gt; 14 0.05 0.2 0.025 0.2003744 38 6 0.010860905 0.7996256
 #&gt; 15 0.05 0.2 0.025 0.1800132 39 6 0.012304191 0.8199868
-#&gt; 16 0.05 0.2 0.025 0.1613288 40 6 0.013876949 0.8386712</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>scales</span>)
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='no'>nb1</span>, <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>n</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Power</span>)) +
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>() +
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span>() +
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_continuous</a></span>(<span class='kw'>labels</span> <span class='kw'>=</span> <span class='no'>percent</span>)</div><div class='img'><img src='gsBinomialExact-6.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; 16 0.05 0.2 0.025 0.1613288 40 6 0.013876949 0.8386712</div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://scales.r-lib.org'>scales</a></span><span class='op'>)</span>
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>nb1</span>, <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>n</span>, y <span class='op'>=</span> <span class='va'>Power</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_continuous</a></span><span class='op'>(</span>labels <span class='op'>=</span> <span class='va'>percent</span><span class='op'>)</span>
+</div><div class='img'><img src='gsBinomialExact-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># simple call with same parameters to get minimum sample size yielding desired power</span>
-<span class='fu'>nBinomial1Sample</span>(<span class='kw'>p0</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>25</span>:<span class='fl'>40</span>)</div><div class='output co'>#&gt; [1] 33</div><div class='input'>
+<span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 33</div><div class='input'>
 <span class='co'># change to 'conservative' if you want all larger sample</span>
 <span class='co'># sizes to also provide adequate power</span>
-<span class='fu'>nBinomial1Sample</span>(<span class='kw'>p0</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>25</span>:<span class='fl'>40</span>, <span class='kw'>conservative</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] 39</div><div class='input'>
+<span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span>, conservative <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 39</div><div class='input'>
 <span class='co'># print out more information for the selected derived sample size</span>
-<span class='fu'>nBinomial1Sample</span>(<span class='kw'>p0</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>p1</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.025</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='fl'>.2</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>25</span>:<span class='fl'>40</span>, <span class='kw'>conservative</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
- <span class='kw'>outtype</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt;     p0  p1 alpha beta  n b     alphaR     Power
+<span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span>, conservative <span class='op'>=</span> <span class='cn'>TRUE</span>,
+ outtype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     p0  p1 alpha beta  n b     alphaR     Power
 #&gt; 1 0.05 0.2 0.025  0.2 39 6 0.01230419 0.8199868</div><div class='input'>
-# what happens if input sample sizes not sufficient?
-# nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)
+<span class='co'># what happens if input sample sizes not sufficient?</span>
+<span class='co'># nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -540,7 +549,7 @@ marc_schwartz@me.com.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

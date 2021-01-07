@@ -88,19 +88,13 @@ equal lengths." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -150,21 +144,21 @@ specified interval, a <code>FALSE</code> is returned.</p>
 equal lengths.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>checkLengths</span>(<span class='no'>...</span>, <span class='kw'>allowSingle</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>checkLengths</span><span class='op'>(</span><span class='va'>...</span>, allowSingle <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>checkRange</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>interval</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>1</span>,
-  <span class='kw'>inclusion</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>TRUE</span>, <span class='fl'>TRUE</span>),
-  <span class='kw'>varname</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/deparse.html'>deparse</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/substitute.html'>substitute</a></span>(<span class='no'>x</span>)),
-  <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>0</span>
-)
+<span class='fu'>checkRange</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  interval <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span>,
+  inclusion <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>TRUE</span><span class='op'>)</span>,
+  varname <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/deparse.html'>deparse</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/substitute.html'>substitute</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>,
+  tol <span class='op'>=</span> <span class='fl'>0</span>
+<span class='op'>)</span>
 
-<span class='fu'>checkScalar</span>(<span class='no'>x</span>, <span class='kw'>isType</span> <span class='kw'>=</span> <span class='st'>"numeric"</span>, <span class='no'>...</span>)
+<span class='fu'>checkScalar</span><span class='op'>(</span><span class='va'>x</span>, isType <span class='op'>=</span> <span class='st'>"numeric"</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>checkVector</span>(<span class='no'>x</span>, <span class='kw'>isType</span> <span class='kw'>=</span> <span class='st'>"numeric"</span>, <span class='no'>...</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>checkVector</span><span class='op'>(</span><span class='va'>x</span>, isType <span class='op'>=</span> <span class='st'>"numeric"</span>, <span class='va'>...</span>, length <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>isInteger</span>(<span class='no'>x</span>)</pre>
+<span class='fu'>isInteger</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -233,34 +227,44 @@ check is performed.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># check whether input is an integer</span>
-<span class='fu'>isInteger</span>(<span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>isInteger</span>(<span class='fl'>1</span>:<span class='fl'>5</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>isInteger</span>(<span class='st'>"abc"</span>)) <span class='co'># expect error</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
+<span class='fu'>isInteger</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>isInteger</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>isInteger</span><span class='op'>(</span><span class='st'>"abc"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># expect error</span>
+</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
 <span class='co'># check whether input is an integer scalar</span>
-<span class='fu'>checkScalar</span>(<span class='fl'>3</span>, <span class='st'>"integer"</span>)
+<span class='fu'>checkScalar</span><span class='op'>(</span><span class='fl'>3</span>, <span class='st'>"integer"</span><span class='op'>)</span>
 
 <span class='co'># check whether input is an integer scalar that resides</span>
 <span class='co'># on the interval on [3, 6]. Then test for interval (3, 6].</span>
-<span class='fu'>checkScalar</span>(<span class='fl'>3</span>, <span class='st'>"integer"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>6</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>checkScalar</span>(<span class='fl'>3</span>, <span class='st'>"integer"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>6</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>FALSE</span>, <span class='fl'>TRUE</span>))) <span class='co'># expect error</span></div><div class='output co'>#&gt; Error in checkRange(x, ..., varname = deparse(substitute(x))) : 
+<span class='fu'>checkScalar</span><span class='op'>(</span><span class='fl'>3</span>, <span class='st'>"integer"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>6</span><span class='op'>)</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>checkScalar</span><span class='op'>(</span><span class='fl'>3</span>, <span class='st'>"integer"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>6</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>FALSE</span>, <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># expect error</span>
+</div><div class='output co'>#&gt; Error in checkRange(x, ..., varname = deparse(substitute(x))) : 
 #&gt;   3 not on interval (3, 6]</div><div class='input'>
 <span class='co'># check whether the input is an atomic vector of class numeric,</span>
 <span class='co'># of length 3, and whose value all reside on the interval [1, 10)</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='no'>pi</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='fl'>1</span>))
-<span class='fu'>checkVector</span>(<span class='no'>x</span>, <span class='st'>"numeric"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>10</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>), <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>3</span>)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='va'>pi</span>, <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>checkVector</span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"numeric"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>10</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>, length <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 
 <span class='co'># do the same but change the expected length; expect error</span>
-<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>checkVector</span>(<span class='no'>x</span>, <span class='st'>"numeric"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>10</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>TRUE</span>, <span class='fl'>FALSE</span>), <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>2</span>))</div><div class='output co'>#&gt; Error in paste(varstr, " is a vector of length ", length(x), " but should be of length",  : 
+<span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>checkVector</span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"numeric"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>10</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>, length <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Error in paste(varstr, " is a vector of length ", length(x), " but should be of length",  : 
 #&gt;   object 'varstr' not found</div><div class='input'>
 <span class='co'># create faux function to check input variable</span>
-<span class='no'>foo</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>moo</span>) <span class='fu'>checkVector</span>(<span class='no'>moo</span>, <span class='st'>"character"</span>)
-<span class='fu'>foo</span>(<span class='no'>letters</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>foo</span>(<span class='fl'>1</span>:<span class='fl'>5</span>)) <span class='co'># expect error with function and argument name in message</span></div><div class='output co'>#&gt; Error in checkVector(moo, "character") : 
+<span class='va'>foo</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>moo</span><span class='op'>)</span> <span class='fu'>checkVector</span><span class='op'>(</span><span class='va'>moo</span>, <span class='st'>"character"</span><span class='op'>)</span>
+<span class='fu'>foo</span><span class='op'>(</span><span class='va'>letters</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>foo</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># expect error with function and argument name in message</span>
+</div><div class='output co'>#&gt; Error in checkVector(moo, "character") : 
 #&gt;   In function foo : variable moo  must be vector of class  character</div><div class='input'>
 <span class='co'># check for equal lengths of various inputs</span>
-<span class='fu'>checkLengths</span>(<span class='fl'>1</span>:<span class='fl'>2</span>, <span class='fl'>2</span>:<span class='fl'>3</span>, <span class='fl'>3</span>:<span class='fl'>4</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/try.html'>try</a></span>(<span class='fu'>checkLengths</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>:<span class='fl'>5</span>)) <span class='co'># expect error</span></div><div class='output co'>#&gt; Error in checkLengths(1, 2, 3, 4:5) : 
+<span class='fu'>checkLengths</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>:</span><span class='fl'>3</span>, <span class='fl'>3</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>checkLengths</span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># expect error</span>
+</div><div class='output co'>#&gt; Error in checkLengths(1, 2, 3, 4:5) : 
 #&gt;   In function doTryCatch :lengths of inputs are not all equal</div><div class='input'>
 <span class='co'># check for equal length inputs but ignore single element vectors</span>
-<span class='fu'>checkLengths</span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>:<span class='fl'>5</span>, <span class='fl'>7</span>:<span class='fl'>8</span>, <span class='kw'>allowSingle</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></pre>
+<span class='fu'>checkLengths</span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>7</span><span class='op'>:</span><span class='fl'>8</span>, allowSingle <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -276,7 +280,7 @@ check is performed.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

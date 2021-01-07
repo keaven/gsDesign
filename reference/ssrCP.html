@@ -123,19 +123,13 @@ powered is a good choice." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -220,46 +214,46 @@ suggest that using the parameter value for which the trial was originally
 powered is a good choice.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>condPower</span>(
-  <span class='no'>z1</span>,
-  <span class='no'>n2</span>,
-  <span class='kw'>z2</span> <span class='kw'>=</span> <span class='no'>z2NC</span>,
-  <span class='kw'>theta</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='no'>beta</span>),
-  <span class='no'>...</span>
-)
+    <pre class="usage"><span class='fu'>condPower</span><span class='op'>(</span>
+  <span class='va'>z1</span>,
+  <span class='va'>n2</span>,
+  z2 <span class='op'>=</span> <span class='va'>z2NC</span>,
+  theta <span class='op'>=</span> <span class='cn'>NULL</span>,
+  x <span class='op'>=</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span>, timing <span class='op'>=</span> <span class='fl'>0.5</span>, beta <span class='op'>=</span> <span class='va'>beta</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
-<span class='fu'>ssrCP</span>(
-  <span class='no'>z1</span>,
-  <span class='kw'>theta</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>maxinc</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>overrun</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>beta</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>beta</span>,
-  <span class='kw'>cpadj</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>1</span> - <span class='no'>beta</span>),
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='fl'>0.5</span>),
-  <span class='kw'>z2</span> <span class='kw'>=</span> <span class='no'>z2NC</span>,
-  <span class='no'>...</span>
-)
+<span class='fu'>ssrCP</span><span class='op'>(</span>
+  <span class='va'>z1</span>,
+  theta <span class='op'>=</span> <span class='cn'>NULL</span>,
+  maxinc <span class='op'>=</span> <span class='fl'>2</span>,
+  overrun <span class='op'>=</span> <span class='fl'>0</span>,
+  beta <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>beta</span>,
+  cpadj <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>1</span> <span class='op'>-</span> <span class='va'>beta</span><span class='op'>)</span>,
+  x <span class='op'>=</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span>, timing <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>,
+  z2 <span class='op'>=</span> <span class='va'>z2NC</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for ssrCP</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(
-  <span class='no'>x</span>,
-  <span class='kw'>z1ticks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>7</span>, <span class='fl'>4</span>, <span class='fl'>4</span>, <span class='fl'>4</span>) + <span class='fl'>0.1</span>,
-  <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Adapted sample size"</span>,
-  <span class='kw'>xlaboffset</span> <span class='kw'>=</span> -<span class='fl'>0.2</span>,
-  <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='no'>...</span>
-)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  z1ticks <span class='op'>=</span> <span class='cn'>NULL</span>,
+  mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>7</span>, <span class='fl'>4</span>, <span class='fl'>4</span>, <span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>0.1</span>,
+  ylab <span class='op'>=</span> <span class='st'>"Adapted sample size"</span>,
+  xlaboffset <span class='op'>=</span> <span class='op'>-</span><span class='fl'>0.2</span>,
+  lty <span class='op'>=</span> <span class='fl'>1</span>,
+  col <span class='op'>=</span> <span class='fl'>1</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
-<span class='fu'>z2NC</span>(<span class='no'>z1</span>, <span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>z2NC</span><span class='op'>(</span><span class='va'>z1</span>, <span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>z2Z</span>(<span class='no'>z1</span>, <span class='no'>x</span>, <span class='kw'>n2</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>2</span>] - <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>], <span class='no'>...</span>)
+<span class='fu'>z2Z</span><span class='op'>(</span><span class='va'>z1</span>, <span class='va'>x</span>, n2 <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>z2Fisher</span>(<span class='no'>z1</span>, <span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>z2Fisher</span><span class='op'>(</span><span class='va'>z1</span>, <span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>Power.ssrCP</span>(<span class='no'>x</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>18</span>)</pre>
+<span class='fu'>Power.ssrCP</span><span class='op'>(</span><span class='va'>x</span>, theta <span class='op'>=</span> <span class='cn'>NULL</span>, delta <span class='op'>=</span> <span class='cn'>NULL</span>, r <span class='op'>=</span> <span class='fl'>18</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -404,130 +398,152 @@ Medicine, 30:3267-3284, 2011.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='gsDesign.html'>gsDesign</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Keaven Anderson <a href='mailto:keaven_anderson@merck.'>keaven_anderson@merck.</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
 <span class='co'># quick trick for simple conditional power based on interim z-value, stage 1 and 2 sample size</span>
 <span class='co'># assumed treatment effect and final alpha level</span>
 <span class='co'># and observed treatment effect</span>
-<span class='no'>alpha</span> <span class='kw'>&lt;-</span> <span class='fl'>.01</span> <span class='co'># set final nominal significance level</span>
-<span class='no'>timing</span> <span class='kw'>&lt;-</span> <span class='fl'>.6</span> <span class='co'># set proportion of sample size, events or statistical information at IA</span>
-<span class='no'>n2</span> <span class='kw'>&lt;-</span> <span class='fl'>40</span> <span class='co'># set stage 2 sample size events or statistical information</span>
-<span class='no'>hr</span> <span class='kw'>&lt;-</span> <span class='fl'>.6</span> <span class='co'># for this example we will derive conditional power based on hazard ratios</span>
-<span class='no'>n.fix</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='nSurvival.html'>nEvents</a></span>(<span class='kw'>hr</span><span class='kw'>=</span><span class='no'>hr</span>,<span class='kw'>alpha</span><span class='kw'>=</span><span class='no'>alpha</span>) <span class='co'># you could otherwise make n.fix an arbitrary positive value</span>
+<span class='va'>alpha</span> <span class='op'>&lt;-</span> <span class='fl'>.01</span> <span class='co'># set final nominal significance level</span>
+<span class='va'>timing</span> <span class='op'>&lt;-</span> <span class='fl'>.6</span> <span class='co'># set proportion of sample size, events or statistical information at IA</span>
+<span class='va'>n2</span> <span class='op'>&lt;-</span> <span class='fl'>40</span> <span class='co'># set stage 2 sample size events or statistical information</span>
+<span class='va'>hr</span> <span class='op'>&lt;-</span> <span class='fl'>.6</span> <span class='co'># for this example we will derive conditional power based on hazard ratios</span>
+<span class='va'>n.fix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='print.nSurvival.html'>nEvents</a></span><span class='op'>(</span>hr<span class='op'>=</span><span class='va'>hr</span>,alpha<span class='op'>=</span><span class='va'>alpha</span><span class='op'>)</span> <span class='co'># you could otherwise make n.fix an arbitrary positive value</span>
 <span class='co'># this just derives a group sequential design that should not change sample size from n.fix</span>
 <span class='co'># due to stringent IA bound</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(<span class='kw'>k</span><span class='kw'>=</span><span class='fl'>2</span>,<span class='kw'>n.fix</span><span class='kw'>=</span><span class='no'>n.fix</span>,<span class='kw'>alpha</span><span class='kw'>=</span><span class='no'>alpha</span>,<span class='kw'>test.type</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>sfu</span><span class='kw'>=</span><span class='no'>sfHSD</span>,
-<span class='kw'>sfupar</span><span class='kw'>=</span>-<span class='fl'>20</span>,<span class='kw'>timing</span><span class='kw'>=</span><span class='no'>timing</span>,<span class='kw'>delta1</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>hr</span>))
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k<span class='op'>=</span><span class='fl'>2</span>,n.fix<span class='op'>=</span><span class='va'>n.fix</span>,alpha<span class='op'>=</span><span class='va'>alpha</span>,test.type<span class='op'>=</span><span class='fl'>1</span>,sfu<span class='op'>=</span><span class='va'>sfHSD</span>,
+sfupar<span class='op'>=</span><span class='op'>-</span><span class='fl'>20</span>,timing<span class='op'>=</span><span class='va'>timing</span>,delta1<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>hr</span><span class='op'>)</span><span class='op'>)</span>
 <span class='co'># derive effect sizes for which you wish to compute conditional power</span>
-<span class='no'>hrpostIA</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>.4</span>,<span class='fl'>1</span>,<span class='fl'>.05</span>)
+<span class='va'>hrpostIA</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>.4</span>,<span class='fl'>1</span>,<span class='fl'>.05</span><span class='op'>)</span>
 <span class='co'># in the following, we convert HR into standardized effect size based on the design in x</span>
-<span class='no'>powr</span> <span class='kw'>&lt;-</span> <span class='fu'>condPower</span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>x</span>,<span class='kw'>z1</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>n2</span><span class='kw'>=</span><span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>2</span>]-<span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>],<span class='kw'>theta</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>hrpostIA</span>)/<span class='no'>x</span>$<span class='no'>delta1</span>*<span class='no'>x</span>$<span class='no'>theta</span>[<span class='fl'>2</span>])
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/qplot.html'>qplot</a></span>(<span class='no'>hrpostIA</span>,<span class='fu'>condPower</span>(<span class='kw'>x</span><span class='kw'>=</span><span class='no'>x</span>,<span class='kw'>z1</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>n2</span><span class='kw'>=</span><span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>2</span>]-<span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>],<span class='kw'>theta</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>hrpostIA</span>)/<span class='no'>x</span>$<span class='no'>delta1</span>*<span class='no'>x</span>$<span class='no'>theta</span>[<span class='fl'>2</span>]),
-<span class='kw'>geom</span><span class='kw'>=</span><span class='st'>"line"</span>,<span class='kw'>xlab</span><span class='kw'>=</span><span class='st'>"HR post IA"</span>,<span class='kw'>ylab</span><span class='kw'>=</span><span class='st'>"Conditional power"</span>,
-<span class='kw'>main</span> <span class='kw'>=</span><span class='st'>"Conditional power as a function of assumed HR"</span>)</div><div class='img'><img src='ssrCP-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='va'>powr</span> <span class='op'>&lt;-</span> <span class='fu'>condPower</span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>x</span>,z1<span class='op'>=</span><span class='fl'>1</span>,n2<span class='op'>=</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>-</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,theta<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>hrpostIA</span><span class='op'>)</span><span class='op'>/</span><span class='va'>x</span><span class='op'>$</span><span class='va'>delta1</span><span class='op'>*</span><span class='va'>x</span><span class='op'>$</span><span class='va'>theta</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/qplot.html'>qplot</a></span><span class='op'>(</span><span class='va'>hrpostIA</span>,<span class='fu'>condPower</span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>x</span>,z1<span class='op'>=</span><span class='fl'>1</span>,n2<span class='op'>=</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>-</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,theta<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>hrpostIA</span><span class='op'>)</span><span class='op'>/</span><span class='va'>x</span><span class='op'>$</span><span class='va'>delta1</span><span class='op'>*</span><span class='va'>x</span><span class='op'>$</span><span class='va'>theta</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>,
+geom<span class='op'>=</span><span class='st'>"line"</span>,xlab<span class='op'>=</span><span class='st'>"HR post IA"</span>,ylab<span class='op'>=</span><span class='st'>"Conditional power"</span>,
+main <span class='op'>=</span><span class='st'>"Conditional power as a function of assumed HR"</span><span class='op'>)</span>
+</div><div class='img'><img src='ssrCP-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Following is a template for entering parameters for ssrCP</span>
 <span class='co'># Natural parameter value null and alternate hypothesis values</span>
-<span class='no'>delta0</span> <span class='kw'>&lt;-</span> <span class='fl'>0</span>
-<span class='no'>delta1</span> <span class='kw'>&lt;-</span> <span class='fl'>1</span>
+<span class='va'>delta0</span> <span class='op'>&lt;-</span> <span class='fl'>0</span>
+<span class='va'>delta1</span> <span class='op'>&lt;-</span> <span class='fl'>1</span>
 <span class='co'># timing of interim analysis for underlying group sequential design</span>
-<span class='no'>timing</span> <span class='kw'>&lt;-</span> <span class='fl'>.5</span>
+<span class='va'>timing</span> <span class='op'>&lt;-</span> <span class='fl'>.5</span>
 <span class='co'># upper spending function</span>
-<span class='no'>sfu</span> <span class='kw'>&lt;-</span> <span class='no'>sfHSD</span>
+<span class='va'>sfu</span> <span class='op'>&lt;-</span> <span class='va'>sfHSD</span>
 <span class='co'># upper spending function paramater</span>
-<span class='no'>sfupar</span> <span class='kw'>&lt;-</span> -<span class='fl'>12</span>
+<span class='va'>sfupar</span> <span class='op'>&lt;-</span> <span class='op'>-</span><span class='fl'>12</span>
 <span class='co'># maximum sample size inflation</span>
-<span class='no'>maxinflation</span> <span class='kw'>&lt;-</span> <span class='fl'>2</span>
+<span class='va'>maxinflation</span> <span class='op'>&lt;-</span> <span class='fl'>2</span>
 <span class='co'># assumed enrollment overrrun at IA</span>
-<span class='no'>overrun</span> <span class='kw'>&lt;-</span> <span class='fl'>25</span>
+<span class='va'>overrun</span> <span class='op'>&lt;-</span> <span class='fl'>25</span>
 <span class='co'># interim z-values for plotting</span>
-<span class='no'>z</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>4</span>, <span class='fl'>.025</span>)
+<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>4</span>, <span class='fl'>.025</span><span class='op'>)</span>
 <span class='co'># Type I error (1-sided)</span>
-<span class='no'>alpha</span> <span class='kw'>&lt;-</span> <span class='fl'>.025</span>
+<span class='va'>alpha</span> <span class='op'>&lt;-</span> <span class='fl'>.025</span>
 <span class='co'># Type II error for design</span>
-<span class='no'>beta</span> <span class='kw'>&lt;-</span> <span class='fl'>.1</span>
+<span class='va'>beta</span> <span class='op'>&lt;-</span> <span class='fl'>.1</span>
 <span class='co'># Fixed design sample size</span>
-<span class='no'>n.fix</span> <span class='kw'>&lt;-</span> <span class='fl'>100</span>
+<span class='va'>n.fix</span> <span class='op'>&lt;-</span> <span class='fl'>100</span>
 <span class='co'># conditional power interval where sample</span>
 <span class='co'># size is to be adjusted</span>
-<span class='no'>cpadj</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.3</span>, <span class='fl'>.9</span>)
+<span class='va'>cpadj</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.9</span><span class='op'>)</span>
 <span class='co'># targeted Type II error when adapting sample size</span>
-<span class='no'>betastar</span> <span class='kw'>&lt;-</span> <span class='no'>beta</span>
+<span class='va'>betastar</span> <span class='op'>&lt;-</span> <span class='va'>beta</span>
 <span class='co'># combination test (built-in options are: z2Z, z2NC, z2Fisher)</span>
-<span class='no'>z2</span> <span class='kw'>&lt;-</span> <span class='no'>z2NC</span>
+<span class='va'>z2</span> <span class='op'>&lt;-</span> <span class='va'>z2NC</span>
 
 <span class='co'># use the above parameters to generate design</span>
 <span class='co'># generate a 2-stage group sequential design with</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span>(
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>n.fix</span> <span class='kw'>=</span> <span class='no'>n.fix</span>, <span class='kw'>timing</span> <span class='kw'>=</span> <span class='no'>timing</span>, <span class='kw'>sfu</span> <span class='kw'>=</span> <span class='no'>sfu</span>, <span class='kw'>sfupar</span> <span class='kw'>=</span> <span class='no'>sfupar</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>alpha</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='no'>beta</span>, <span class='kw'>delta0</span> <span class='kw'>=</span> <span class='no'>delta0</span>, <span class='kw'>delta1</span> <span class='kw'>=</span> <span class='no'>delta1</span>
-)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>
+  k <span class='op'>=</span> <span class='fl'>2</span>, n.fix <span class='op'>=</span> <span class='va'>n.fix</span>, timing <span class='op'>=</span> <span class='va'>timing</span>, sfu <span class='op'>=</span> <span class='va'>sfu</span>, sfupar <span class='op'>=</span> <span class='va'>sfupar</span>,
+  alpha <span class='op'>=</span> <span class='va'>alpha</span>, beta <span class='op'>=</span> <span class='va'>beta</span>, delta0 <span class='op'>=</span> <span class='va'>delta0</span>, delta1 <span class='op'>=</span> <span class='va'>delta1</span>
+<span class='op'>)</span>
 <span class='co'># extend this to a conditional power design</span>
-<span class='no'>xx</span> <span class='kw'>&lt;-</span> <span class='fu'>ssrCP</span>(
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>z1</span> <span class='kw'>=</span> <span class='no'>z</span>, <span class='kw'>overrun</span> <span class='kw'>=</span> <span class='no'>overrun</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='no'>betastar</span>, <span class='kw'>cpadj</span> <span class='kw'>=</span> <span class='no'>cpadj</span>,
-  <span class='kw'>maxinc</span> <span class='kw'>=</span> <span class='no'>maxinflation</span>, <span class='kw'>z2</span> <span class='kw'>=</span> <span class='no'>z2</span>
-)
+<span class='va'>xx</span> <span class='op'>&lt;-</span> <span class='fu'>ssrCP</span><span class='op'>(</span>
+  x <span class='op'>=</span> <span class='va'>x</span>, z1 <span class='op'>=</span> <span class='va'>z</span>, overrun <span class='op'>=</span> <span class='va'>overrun</span>, beta <span class='op'>=</span> <span class='va'>betastar</span>, cpadj <span class='op'>=</span> <span class='va'>cpadj</span>,
+  maxinc <span class='op'>=</span> <span class='va'>maxinflation</span>, z2 <span class='op'>=</span> <span class='va'>z2</span>
+<span class='op'>)</span>
 <span class='co'># plot the stage 2 sample size</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>xx</span>)</div><div class='input'><span class='co'># demonstrate overlays on this plot</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>xx</span><span class='op'>)</span>
+</div><div class='input'><span class='co'># demonstrate overlays on this plot</span>
 <span class='co'># overlay with densities for z1 under different hypotheses</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>z</span>, <span class='fl'>80</span> + <span class='fl'>240</span> * <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>dnorm</a></span>(<span class='no'>z</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fl'>0</span>), <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>z</span>, <span class='fl'>80</span> + <span class='fl'>240</span> * <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>dnorm</a></span>(<span class='no'>z</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>]) * <span class='no'>x</span>$<span class='no'>theta</span>[<span class='fl'>2</span>]), <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>z</span>, <span class='fl'>80</span> + <span class='fl'>240</span> * <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>dnorm</a></span>(<span class='no'>z</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>]) * <span class='no'>x</span>$<span class='no'>theta</span>[<span class='fl'>2</span>] / <span class='fl'>2</span>), <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='no'>z</span>, <span class='fl'>80</span> + <span class='fl'>240</span> * <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>dnorm</a></span>(<span class='no'>z</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span>(<span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>1</span>]) * <span class='no'>x</span>$<span class='no'>theta</span>[<span class='fl'>2</span>] * <span class='fl'>.75</span>), <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>5</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span>(<span class='kw'>side</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='fl'>80</span> + <span class='fl'>240</span> * <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>.4</span>, <span class='fl'>.1</span>), <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>.4</span>, <span class='fl'>.1</span>)))</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/mtext.html'>mtext</a></span>(<span class='kw'>side</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"Density for "</span>, <span class='no'>z</span>[<span class='fl'>1</span>])), <span class='kw'>line</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1.5</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>90</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"Density for "</span>, <span class='no'>theta</span>, <span class='st'>"=0"</span>)))</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>3.00</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>180</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"Density for "</span>, <span class='no'>theta</span>, <span class='st'>"="</span>,
- <span class='no'>theta</span>[<span class='fl'>1</span>])))</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>1.00</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>180</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>4</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"Density for "</span>, <span class='no'>theta</span>, <span class='st'>"="</span>,
- <span class='no'>theta</span>[<span class='fl'>1</span>], <span class='st'>"/2"</span>)))</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>2.5</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>140</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='st'>"Density for "</span>, <span class='no'>theta</span>, <span class='st'>"="</span>,
- <span class='no'>theta</span>[<span class='fl'>1</span>], <span class='st'>"*.75"</span>)))</div><div class='input'><span class='co'># overall line for max sample size</span>
-<span class='no'>nalt</span> <span class='kw'>&lt;-</span> <span class='no'>xx</span>$<span class='no'>maxinc</span> * <span class='no'>x</span>$<span class='no'>n.I</span>[<span class='fl'>2</span>]
-<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span>(<span class='st'>"usr"</span>)[<span class='fl'>1</span>:<span class='fl'>2</span>], <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>nalt</span>, <span class='no'>nalt</span>), <span class='kw'>lty</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='ssrCP-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='fl'>80</span> <span class='op'>+</span> <span class='fl'>240</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>dnorm</a></span><span class='op'>(</span><span class='va'>z</span>, mean <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='fl'>80</span> <span class='op'>+</span> <span class='fl'>240</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>dnorm</a></span><span class='op'>(</span><span class='va'>z</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>theta</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='fl'>80</span> <span class='op'>+</span> <span class='fl'>240</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>dnorm</a></span><span class='op'>(</span><span class='va'>z</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>theta</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='op'>/</span> <span class='fl'>2</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='fl'>80</span> <span class='op'>+</span> <span class='fl'>240</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>dnorm</a></span><span class='op'>(</span><span class='va'>z</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>theta</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='op'>*</span> <span class='fl'>.75</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/axis.html'>axis</a></span><span class='op'>(</span>side <span class='op'>=</span> <span class='fl'>4</span>, at <span class='op'>=</span> <span class='fl'>80</span> <span class='op'>+</span> <span class='fl'>240</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.4</span>, <span class='fl'>.1</span><span class='op'>)</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.4</span>, <span class='fl'>.1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/mtext.html'>mtext</a></span><span class='op'>(</span>side <span class='op'>=</span> <span class='fl'>4</span>, <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Density for "</span>, <span class='va'>z</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>, line <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>1.5</span>, y <span class='op'>=</span> <span class='fl'>90</span>, col <span class='op'>=</span> <span class='fl'>2</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Density for "</span>, <span class='va'>theta</span>, <span class='st'>"=0"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>3.00</span>, y <span class='op'>=</span> <span class='fl'>180</span>, col <span class='op'>=</span> <span class='fl'>3</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Density for "</span>, <span class='va'>theta</span>, <span class='st'>"="</span>,
+ <span class='va'>theta</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>1.00</span>, y <span class='op'>=</span> <span class='fl'>180</span>, col <span class='op'>=</span> <span class='fl'>4</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Density for "</span>, <span class='va'>theta</span>, <span class='st'>"="</span>,
+ <span class='va'>theta</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='st'>"/2"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>2.5</span>, y <span class='op'>=</span> <span class='fl'>140</span>, col <span class='op'>=</span> <span class='fl'>5</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Density for "</span>, <span class='va'>theta</span>, <span class='st'>"="</span>,
+ <span class='va'>theta</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='st'>"*.75"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='input'><span class='co'># overall line for max sample size</span>
+<span class='va'>nalt</span> <span class='op'>&lt;-</span> <span class='va'>xx</span><span class='op'>$</span><span class='va'>maxinc</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span><span class='st'>"usr"</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>nalt</span>, <span class='va'>nalt</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='img'><img src='ssrCP-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># compare above design with different combination tests</span>
 <span class='co'># use sufficient statistic for final testing</span>
-<span class='no'>xxZ</span> <span class='kw'>&lt;-</span> <span class='fu'>ssrCP</span>(
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>z1</span> <span class='kw'>=</span> <span class='no'>z</span>, <span class='kw'>overrun</span> <span class='kw'>=</span> <span class='no'>overrun</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='no'>betastar</span>, <span class='kw'>cpadj</span> <span class='kw'>=</span> <span class='no'>cpadj</span>,
-  <span class='kw'>maxinc</span> <span class='kw'>=</span> <span class='no'>maxinflation</span>, <span class='kw'>z2</span> <span class='kw'>=</span> <span class='no'>z2Z</span>
-)
+<span class='va'>xxZ</span> <span class='op'>&lt;-</span> <span class='fu'>ssrCP</span><span class='op'>(</span>
+  x <span class='op'>=</span> <span class='va'>x</span>, z1 <span class='op'>=</span> <span class='va'>z</span>, overrun <span class='op'>=</span> <span class='va'>overrun</span>, beta <span class='op'>=</span> <span class='va'>betastar</span>, cpadj <span class='op'>=</span> <span class='va'>cpadj</span>,
+  maxinc <span class='op'>=</span> <span class='va'>maxinflation</span>, z2 <span class='op'>=</span> <span class='va'>z2Z</span>
+<span class='op'>)</span>
 <span class='co'># use Fisher combination test for final testing</span>
-<span class='no'>xxFisher</span> <span class='kw'>&lt;-</span> <span class='fu'>ssrCP</span>(
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>z1</span> <span class='kw'>=</span> <span class='no'>z</span>, <span class='kw'>overrun</span> <span class='kw'>=</span> <span class='no'>overrun</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='no'>betastar</span>, <span class='kw'>cpadj</span> <span class='kw'>=</span> <span class='no'>cpadj</span>,
-  <span class='kw'>maxinc</span> <span class='kw'>=</span> <span class='no'>maxinflation</span>, <span class='kw'>z2</span> <span class='kw'>=</span> <span class='no'>z2Fisher</span>
-)
+<span class='va'>xxFisher</span> <span class='op'>&lt;-</span> <span class='fu'>ssrCP</span><span class='op'>(</span>
+  x <span class='op'>=</span> <span class='va'>x</span>, z1 <span class='op'>=</span> <span class='va'>z</span>, overrun <span class='op'>=</span> <span class='va'>overrun</span>, beta <span class='op'>=</span> <span class='va'>betastar</span>, cpadj <span class='op'>=</span> <span class='va'>cpadj</span>,
+  maxinc <span class='op'>=</span> <span class='va'>maxinflation</span>, z2 <span class='op'>=</span> <span class='va'>z2Fisher</span>
+<span class='op'>)</span>
 <span class='co'># combine data frames from these designs</span>
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>xx</span>$<span class='no'>dat</span>, <span class='kw'>Test</span> <span class='kw'>=</span> <span class='st'>"Normal combination"</span>)),
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>xxZ</span>$<span class='no'>dat</span>, <span class='kw'>Test</span> <span class='kw'>=</span> <span class='st'>"Sufficient statistic"</span>)),
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>xxFisher</span>$<span class='no'>dat</span>, <span class='kw'>Test</span> <span class='kw'>=</span> <span class='st'>"Fisher combination"</span>))
-)
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>xx</span><span class='op'>$</span><span class='va'>dat</span>, Test <span class='op'>=</span> <span class='st'>"Normal combination"</span><span class='op'>)</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>xxZ</span><span class='op'>$</span><span class='va'>dat</span>, Test <span class='op'>=</span> <span class='st'>"Sufficient statistic"</span><span class='op'>)</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>xxFisher</span><span class='op'>$</span><span class='va'>dat</span>, Test <span class='op'>=</span> <span class='st'>"Fisher combination"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span>
 <span class='co'># plot stage 2 statistic required for positive combination test</span>
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>z1</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>z2</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>Test</span>)) +
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>()</div><div class='img'><img src='ssrCP-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># plot total sample size versus stage 1 test statistic</span>
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>z1</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>n2</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>Test</span>)) +
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>()</div><div class='img'><img src='ssrCP-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># check achieved Type I error for sufficient statistic design</span>
-<span class='fu'>Power.ssrCP</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xxZ</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='output co'>#&gt;   theta delta     Power       en
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>y</span>, <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>z1</span>, y <span class='op'>=</span> <span class='va'>z2</span>, col <span class='op'>=</span> <span class='va'>Test</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='img'><img src='ssrCP-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># plot total sample size versus stage 1 test statistic</span>
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>y</span>, <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>z1</span>, y <span class='op'>=</span> <span class='va'>n2</span>, col <span class='op'>=</span> <span class='va'>Test</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='img'><img src='ssrCP-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># check achieved Type I error for sufficient statistic design</span>
+<span class='fu'>Power.ssrCP</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>xxZ</span>, theta <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   theta delta     Power       en
 #&gt; 1     0     0 0.0220804 95.11565</div><div class='input'>
 <span class='co'># compare designs using observed vs planned theta for conditional power</span>
-<span class='no'>xxtheta1</span> <span class='kw'>&lt;-</span> <span class='fu'>ssrCP</span>(
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>z1</span> <span class='kw'>=</span> <span class='no'>z</span>, <span class='kw'>overrun</span> <span class='kw'>=</span> <span class='no'>overrun</span>, <span class='kw'>beta</span> <span class='kw'>=</span> <span class='no'>betastar</span>, <span class='kw'>cpadj</span> <span class='kw'>=</span> <span class='no'>cpadj</span>,
-  <span class='kw'>maxinc</span> <span class='kw'>=</span> <span class='no'>maxinflation</span>, <span class='kw'>z2</span> <span class='kw'>=</span> <span class='no'>z2</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='no'>x</span>$<span class='no'>delta</span>
-)
+<span class='va'>xxtheta1</span> <span class='op'>&lt;-</span> <span class='fu'>ssrCP</span><span class='op'>(</span>
+  x <span class='op'>=</span> <span class='va'>x</span>, z1 <span class='op'>=</span> <span class='va'>z</span>, overrun <span class='op'>=</span> <span class='va'>overrun</span>, beta <span class='op'>=</span> <span class='va'>betastar</span>, cpadj <span class='op'>=</span> <span class='va'>cpadj</span>,
+  maxinc <span class='op'>=</span> <span class='va'>maxinflation</span>, z2 <span class='op'>=</span> <span class='va'>z2</span>, theta <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span>
+<span class='op'>)</span>
 <span class='co'># combine data frames for the 2 designs</span>
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>xx</span>$<span class='no'>dat</span>, <span class='st'>"CP effect size"</span> <span class='kw'>=</span> <span class='st'>"Obs. at IA"</span>)),
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>xxtheta1</span>$<span class='no'>dat</span>, <span class='st'>"CP effect size"</span> <span class='kw'>=</span> <span class='st'>"Alt. hypothesis"</span>))
-)
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>xx</span><span class='op'>$</span><span class='va'>dat</span>, <span class='st'>"CP effect size"</span> <span class='op'>=</span> <span class='st'>"Obs. at IA"</span><span class='op'>)</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>xxtheta1</span><span class='op'>$</span><span class='va'>dat</span>, <span class='st'>"CP effect size"</span> <span class='op'>=</span> <span class='st'>"Alt. hypothesis"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span>
 <span class='co'># plot stage 2 sample size by design</span>
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>y</span>, <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>z1</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>n2</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>CP.effect.size</span>)) +
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>()</div><div class='img'><img src='ssrCP-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># compare power and expected sample size</span>
-<span class='no'>y1</span> <span class='kw'>&lt;-</span> <span class='fu'>Power.ssrCP</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xx</span>)
-<span class='no'>y2</span> <span class='kw'>&lt;-</span> <span class='fu'>Power.ssrCP</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>xxtheta1</span>)
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>y</span>, <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>z1</span>, y <span class='op'>=</span> <span class='va'>n2</span>, col <span class='op'>=</span> <span class='va'>CP.effect.size</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='img'><img src='ssrCP-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># compare power and expected sample size</span>
+<span class='va'>y1</span> <span class='op'>&lt;-</span> <span class='fu'>Power.ssrCP</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>xx</span><span class='op'>)</span>
+<span class='va'>y2</span> <span class='op'>&lt;-</span> <span class='fu'>Power.ssrCP</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>xxtheta1</span><span class='op'>)</span>
 <span class='co'># combine data frames for the 2 designs</span>
-<span class='no'>y3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>y1</span>, <span class='st'>"CP effect size"</span> <span class='kw'>=</span> <span class='st'>"Obs. at IA"</span>)),
-  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='no'>y2</span>, <span class='st'>"CP effect size"</span> <span class='kw'>=</span> <span class='st'>"Alt. hypothesis"</span>))
-)
+<span class='va'>y3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>y1</span>, <span class='st'>"CP effect size"</span> <span class='op'>=</span> <span class='st'>"Obs. at IA"</span><span class='op'>)</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>y2</span>, <span class='st'>"CP effect size"</span> <span class='op'>=</span> <span class='st'>"Alt. hypothesis"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span>
 <span class='co'># plot expected sample size by design and effect size</span>
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>y3</span>, <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>delta</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>en</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>CP.effect.size</span>)) +
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>() +
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>delta</span>)) +
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span>(<span class='st'>"Expected sample size"</span>)</div><div class='img'><img src='ssrCP-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># plot power by design and effect size</span>
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>y3</span>, <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>delta</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Power</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>CP.effect.size</span>)) +
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span>() +
-<span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span>(<span class='no'>delta</span>))</div><div class='img'><img src='ssrCP-7.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>y3</span>, <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>delta</span>, y <span class='op'>=</span> <span class='va'>en</span>, col <span class='op'>=</span> <span class='va'>CP.effect.size</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='va'>delta</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span><span class='op'>(</span><span class='st'>"Expected sample size"</span><span class='op'>)</span>
+</div><div class='img'><img src='ssrCP-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># plot power by design and effect size</span>
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>y3</span>, <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>delta</span>, y <span class='op'>=</span> <span class='va'>Power</span>, col <span class='op'>=</span> <span class='va'>CP.effect.size</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
+<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='va'>delta</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='img'><img src='ssrCP-7.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -543,7 +559,7 @@ Medicine, 30:3267-3284, 2011.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

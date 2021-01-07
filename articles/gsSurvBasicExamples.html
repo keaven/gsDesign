@@ -31,18 +31,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -63,12 +57,12 @@
 
       
 
-      </header><div class="row">
+      </header><script src="gsSurvBasicExamples_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Basic time-to-event group sequential design using gsSurv</h1>
             
-            <h4 class="date">2020-05-19</h4>
+            <h4 class="date">2021-01-07</h4>
       
       
       <div class="hidden name"><code>gsSurvBasicExamples.Rmd</code></div>
@@ -80,7 +74,7 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>This article/vignette provides a basic time-to-event endpoint designs for fixed designs using <code><a href="../reference/nSurv.html">nSurv()</a></code> and group sequential designs using <code><a href="../reference/nSurv.html">gsSurv()</a></code>. Some detail in specification comes with the flexibility allowed by the <span class="citation">Lachin and Foulkes (1986)</span> method for sample size under a proportional hazards model with piecewise constant enrollment, piecewise exponential failure and dropout rates. Users may also be interested in the <a href="https://gsdesign.shinyapps.io/prod/">Shiny interface</a> as a learning tool. We only use the simplest options here with a single stratum and exponential failure and dropout rates; see the help file for <code><a href="../reference/nSurv.html">gsSurv()</a></code> for examples with a stratified population or piecewise exponential failure.</p>
+<p>This article/vignette provides a basic time-to-event endpoint designs for fixed designs using <code><a href="../reference/print.nSurv.html">nSurv()</a></code> and group sequential designs using <code><a href="../reference/print.nSurv.html">gsSurv()</a></code>. Some detail in specification comes with the flexibility allowed by the <span class="citation">Lachin and Foulkes (1986)</span> method for sample size under a proportional hazards model with piecewise constant enrollment, piecewise exponential failure and dropout rates. Users may also be interested in the <a href="https://gsdesign.shinyapps.io/prod/">Shiny interface</a> as a learning tool. We only use the simplest options here with a single stratum and exponential failure and dropout rates; see the help file for <code><a href="../reference/print.nSurv.html">gsSurv()</a></code> for examples with a stratified population or piecewise exponential failure.</p>
 <p>We apply the <span class="citation">Lachin and Foulkes (1986)</span> sample size method and extend it to group sequential design. This method fixes the duration of a study and varies enrollment rates to power a trial. We also use the <span class="citation">Lachin and Foulkes (1986)</span> basic power calculation to compute sample size along the lines of <span class="citation">Kim and Tsiatis (1990)</span> where enrollment rates are fixed and enrollment duration is allowed to vary to enroll a sufficient sample size to power a study.</p>
 </div>
 <div id="fixed-design-derivation" class="section level1">
@@ -91,53 +85,57 @@
 <h2 class="hasAnchor">
 <a href="#outcome-and-dropout-distributions" class="anchor"></a>Outcome and dropout distributions</h2>
 <p>We begin with information about the median time-to-event in the control group, dropout rate, hazard ratios under the null and alternate hypotheses for experimental therapy compared to control, and the desired Type I and II error rates.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="co"># median control time-to-event</span>
-<span class="no">median</span> <span class="kw">&lt;-</span> <span class="fl">12</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># median control time-to-event</span>
+<span class="va">median</span> <span class="op">&lt;-</span> <span class="fl">12</span>
 <span class="co"># exponential dropout rate per unit of time</span>
-<span class="no">eta</span> <span class="kw">&lt;-</span> <span class="fl">.001</span>
+<span class="va">eta</span> <span class="op">&lt;-</span> <span class="fl">.001</span>
 <span class="co"># hypothesized experimental/control hazard ratio </span>
 <span class="co"># (alternate hypothesis)</span>
-<span class="no">hr</span> <span class="kw">&lt;-</span> <span class="fl">.75</span>
+<span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">.75</span>
 <span class="co"># null hazard ratio (1 for superiority, &gt;1 for non-inferiority)</span>
-<span class="no">hr0</span> <span class="kw">&lt;-</span> <span class="fl">1</span>
+<span class="va">hr0</span> <span class="op">&lt;-</span> <span class="fl">1</span>
 <span class="co"># Type I error (1-sided)</span>
-<span class="no">alpha</span> <span class="kw">&lt;-</span> <span class="fl">.025</span>
+<span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">.025</span>
 <span class="co"># Type II error (1-power)</span>
-<span class="no">beta</span> <span class="kw">&lt;-</span> <span class="fl">.1</span></pre></body></html></div>
+<span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">.1</span></code></pre></div>
 </div>
 <div id="enrollment-and-trial-duration" class="section level2">
 <h2 class="hasAnchor">
 <a href="#enrollment-and-trial-duration" class="anchor"></a>Enrollment and trial duration</h2>
 <p>Next, we plan the trial duration and the enrollment pattern. There are two basic methods for doing this. The <span class="citation">Lachin and Foulkes (1986)</span> method demonstrated here fixes the enrollment pattern and duration as well as the trial duration and changes the absolute enrollment rates to obtain desired power. The alternate recommended method is along the lines of <span class="citation">Kim and Tsiatis (1990)</span>, fixing the enrollment rates and follow-up duration, varying the total trial duration to power the design; this will also be demonstrated below.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># study duration</span>
-<span class="no">T</span> <span class="kw">&lt;-</span> <span class="fl">36</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># study duration</span>
+<span class="cn">T</span> <span class="op">&lt;-</span> <span class="fl">36</span> 
 <span class="co"># follow-up duration of last patient enrolled</span>
-<span class="no">minfup</span> <span class="kw">&lt;-</span> <span class="fl">12</span>
+<span class="va">minfup</span> <span class="op">&lt;-</span> <span class="fl">12</span>
 <span class="co"># enrollment period durations</span>
-<span class="no">R</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>)
+<span class="va">R</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span>
 <span class="co"># relative enrollment rates during above periods</span>
-<span class="no">gamma</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">1.5</span>,<span class="fl">2.5</span>,<span class="fl">4</span>)
+<span class="va">gamma</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1.5</span>,<span class="fl">2.5</span>,<span class="fl">4</span><span class="op">)</span>
 <span class="co"># randomization ratio, experimental/control</span>
-<span class="no">ratio</span> <span class="kw">&lt;-</span> <span class="fl">1</span></pre></body></html></div>
+<span class="va">ratio</span> <span class="op">&lt;-</span> <span class="fl">1</span></code></pre></div>
 </div>
 <div id="deriving-design-with-no-interim-analyses" class="section level2">
 <h2 class="hasAnchor">
 <a href="#deriving-design-with-no-interim-analyses" class="anchor"></a>Deriving design with no interim analyses</h2>
-<p>The above information is sufficient to design a trial with no interim analyses. Note that when calling <code><a href="../reference/nSurv.html">nSurv()</a></code>, we transform the median time-to-event (<span class="math inline">\(m\)</span>) to an exponential event rate (<span class="math inline">\(\lambda\)</span>) with the formula <span class="math display">\[\lambda=\log(2)/m.\]</span></p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gsDesign</span>)
+<p>The above information is sufficient to design a trial with no interim analyses. Note that when calling <code><a href="../reference/print.nSurv.html">nSurv()</a></code>, we transform the median time-to-event (<span class="math inline">\(m\)</span>) to an exponential event rate (<span class="math inline">\(\lambda\)</span>) with the formula <span class="math display">\[\lambda=\log(2)/m.\]</span></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gsDesign</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: ggplot2</span>
-<span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">nSurv</a></span>(<span class="kw">R</span> <span class="kw">=</span> <span class="no">R</span>,
-           <span class="kw">gamma</span> <span class="kw">=</span> <span class="no">gamma</span>,
-           <span class="kw">eta</span> <span class="kw">=</span> <span class="no">eta</span>,
-           <span class="kw">minfup</span> <span class="kw">=</span> <span class="no">minfup</span>,
-           <span class="kw">T</span> <span class="kw">=</span> <span class="no">T</span>,
-           <span class="kw">lambdaC</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(<span class="fl">2</span>)/<span class="no">median</span>,
-           <span class="kw">hr</span> <span class="kw">=</span> <span class="no">hr</span>,
-           <span class="kw">hr0</span> <span class="kw">=</span> <span class="no">hr0</span>,
-           <span class="kw">beta</span> <span class="kw">=</span> <span class="no">beta</span>,
-           <span class="kw">alpha</span> <span class="kw">=</span> <span class="no">alpha</span>)</pre></body></html></div>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/print.nSurv.html">nSurv</a></span><span class="op">(</span>R <span class="op">=</span> <span class="va">R</span>,
+           gamma <span class="op">=</span> <span class="va">gamma</span>,
+           eta <span class="op">=</span> <span class="va">eta</span>,
+           minfup <span class="op">=</span> <span class="va">minfup</span>,
+           T <span class="op">=</span> <span class="cn">T</span>,
+           lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">/</span><span class="va">median</span>,
+           hr <span class="op">=</span> <span class="va">hr</span>,
+           hr0 <span class="op">=</span> <span class="va">hr0</span>,
+           beta <span class="op">=</span> <span class="va">beta</span>,
+           alpha <span class="op">=</span> <span class="va">alpha</span><span class="op">)</span></code></pre></div>
 <p>A textual summary of this design is given by printing it. For the group sequential design shown later, much more complete formatted output will be shown.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">x</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">x</span>
 <span class="co">#&gt; Fixed design, two-arm trial with time-to-event</span>
 <span class="co">#&gt; outcome (Lachin and Foulkes, 1986).</span>
 <span class="co">#&gt; Solving for:  Accrual rate </span>
@@ -161,23 +159,24 @@
 <span class="co">#&gt; 0-Inf     0.001</span>
 <span class="co">#&gt; Power:                 100*(1-beta)=90%</span>
 <span class="co">#&gt; Type I error (1-sided):   100*alpha=2.5%</span>
-<span class="co">#&gt; Equal randomization:          ratio=1</span></pre></body></html></div>
+<span class="co">#&gt; Equal randomization:          ratio=1</span></code></pre></div>
 </div>
 <div id="varying-enrollment-duration-to-power-trial" class="section level2">
 <h2 class="hasAnchor">
 <a href="#varying-enrollment-duration-to-power-trial" class="anchor"></a>Varying enrollment duration to power trial</h2>
 <p>If we had set <code>T = NULL</code> above, the specified enrollment rates would not be changed but enrollment duration would be adjusted to achieve desired power. For the low enrollment rates specified in <code>gamma</code> above, this would have resulted in a long trial.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co"># THIS CODE IS EXAMPLE ONLY; NOT EXECUTED HERE</span>
-<span class="fu"><a href="../reference/nSurv.html">nSurv</a></span>(<span class="kw">R</span> <span class="kw">=</span> <span class="no">R</span>,
-   <span class="kw">gamma</span> <span class="kw">=</span> <span class="no">gamma</span>,
-   <span class="kw">eta</span> <span class="kw">=</span> <span class="no">eta</span>,
-   <span class="kw">minfup</span> <span class="kw">=</span> <span class="no">minfup</span>,
-   <span class="kw">T</span> <span class="kw">=</span> <span class="kw">NULL</span>, <span class="co"># this was changed</span>
-   <span class="kw">lambdaC</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(<span class="fl">2</span>)/<span class="no">median</span>,
-   <span class="kw">hr</span> <span class="kw">=</span> <span class="no">hr</span>,
-   <span class="kw">hr0</span> <span class="kw">=</span> <span class="no">hr0</span>,
-   <span class="kw">beta</span> <span class="kw">=</span> <span class="no">beta</span>,
-   <span class="kw">alpha</span> <span class="kw">=</span> <span class="no">alpha</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># THIS CODE IS EXAMPLE ONLY; NOT EXECUTED HERE</span>
+<span class="fu"><a href="../reference/print.nSurv.html">nSurv</a></span><span class="op">(</span>R <span class="op">=</span> <span class="va">R</span>,
+   gamma <span class="op">=</span> <span class="va">gamma</span>,
+   eta <span class="op">=</span> <span class="va">eta</span>,
+   minfup <span class="op">=</span> <span class="va">minfup</span>,
+   T <span class="op">=</span> <span class="cn">NULL</span>, <span class="co"># this was changed</span>
+   lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">/</span><span class="va">median</span>,
+   hr <span class="op">=</span> <span class="va">hr</span>,
+   hr0 <span class="op">=</span> <span class="va">hr0</span>,
+   beta <span class="op">=</span> <span class="va">beta</span>,
+   alpha <span class="op">=</span> <span class="va">alpha</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="group-sequential-design" class="section level1">
@@ -204,39 +203,43 @@
 </ul>
 </li>
 </ul>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="co"># number of analyses (interim + final)</span>
-<span class="no">k</span> <span class="kw">&lt;-</span> <span class="fl">3</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># number of analyses (interim + final)</span>
+<span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">3</span>
 <span class="co"># timing of interim analyses (k-1 increasing numbers &gt;0 and &lt;1)</span>
 <span class="co"># proportion of final events at each interim</span>
-<span class="no">timing</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.25</span>,<span class="fl">.75</span>)
+<span class="va">timing</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.25</span>,<span class="fl">.75</span><span class="op">)</span>
 <span class="co"># efficacy bound spending function</span>
 <span class="co"># We use Lan-DeMets spending function approximating O'Brien-Fleming bound</span>
 <span class="co"># no parameter required for this spending function</span>
-<span class="no">sfu</span> <span class="kw">&lt;-</span> <span class="no">sfLDOF</span>
-<span class="no">sfupar</span> <span class="kw">&lt;-</span> <span class="kw">NULL</span>
+<span class="va">sfu</span> <span class="op">&lt;-</span> <span class="va">sfLDOF</span>
+<span class="va">sfupar</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
 <span class="co"># futility bound spending function</span>
-<span class="no">sfl</span> <span class="kw">&lt;-</span> <span class="no">sfHSD</span>
+<span class="va">sfl</span> <span class="op">&lt;-</span> <span class="va">sfHSD</span> 
 <span class="co"># futility bound spending parameter specification</span>
-<span class="no">sflpar</span> <span class="kw">&lt;-</span> -<span class="fl">7</span></pre></body></html></div>
+<span class="va">sflpar</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">7</span></code></pre></div>
 <p>Type II error (1-power) may be set up differently than for a fixed design so that more meaningful futility analyses can be performed during the course of the trial.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co"># Type II error = 1-Power</span>
-<span class="no">beta</span> <span class="kw">&lt;-</span> <span class="fl">.15</span></pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Type II error = 1-Power</span>
+<span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">.15</span></code></pre></div>
 </div>
 <div id="generating-the-design" class="section level2">
 <h2 class="hasAnchor">
 <a href="#generating-the-design" class="anchor"></a>Generating the design</h2>
 <p>Now we are prepared to generate the design.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="co"># generate design</span>
-<span class="no">x</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span>(<span class="kw">k</span> <span class="kw">=</span> <span class="no">k</span>, <span class="kw">timing</span> <span class="kw">=</span> <span class="no">timing</span>, <span class="kw">R</span> <span class="kw">=</span> <span class="no">R</span>, <span class="kw">gamma</span> <span class="kw">=</span> <span class="no">gamma</span>, <span class="kw">eta</span> <span class="kw">=</span> <span class="no">eta</span>,
-            <span class="kw">minfup</span> <span class="kw">=</span> <span class="no">minfup</span>,<span class="kw">T</span> <span class="kw">=</span> <span class="no">T</span>, <span class="kw">lambdaC</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(<span class="fl">2</span>) / <span class="no">median</span>,
-            <span class="kw">hr</span> <span class="kw">=</span> <span class="no">hr</span>, <span class="kw">hr0</span> <span class="kw">=</span> <span class="no">hr0</span> , <span class="kw">beta</span> <span class="kw">=</span> <span class="no">beta</span>, <span class="kw">alpha</span> <span class="kw">=</span> <span class="no">alpha</span>,
-            <span class="kw">sfu</span> <span class="kw">=</span> <span class="no">sfu</span>, <span class="kw">sfupar</span> <span class="kw">=</span> <span class="no">sfupar</span>, <span class="kw">sfl</span> <span class="kw">=</span> <span class="no">sfl</span>, <span class="kw">sflpar</span> <span class="kw">=</span> <span class="no">sflpar</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># generate design</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/print.nSurv.html">gsSurv</a></span><span class="op">(</span>k <span class="op">=</span> <span class="va">k</span>, timing <span class="op">=</span> <span class="va">timing</span>, R <span class="op">=</span> <span class="va">R</span>, gamma <span class="op">=</span> <span class="va">gamma</span>, eta <span class="op">=</span> <span class="va">eta</span>,
+            minfup <span class="op">=</span> <span class="va">minfup</span>,T <span class="op">=</span> <span class="cn">T</span>, lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="va">median</span>,
+            hr <span class="op">=</span> <span class="va">hr</span>, hr0 <span class="op">=</span> <span class="va">hr0</span> , beta <span class="op">=</span> <span class="va">beta</span>, alpha <span class="op">=</span> <span class="va">alpha</span>,
+            sfu <span class="op">=</span> <span class="va">sfu</span>, sfupar <span class="op">=</span> <span class="va">sfupar</span>, sfl <span class="op">=</span> <span class="va">sfl</span>, sflpar <span class="op">=</span> <span class="va">sflpar</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="textual-summary" class="section level2">
 <h2 class="hasAnchor">
 <a href="#textual-summary" class="anchor"></a>Textual summary</h2>
 <p>The design summary is:</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">x</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 676 and 443 events required, 85 percent power, 2.5 percent (1-sided) Type I error to detect a hazard ratio of 0.75. Enrollment and total study durations are assumed to be 24 and 36 months, respectively. Efficacy bounds derived using a Lan-DeMets O’Brien-Fleming approximation spending function with none = 1. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -7.</p>
 <p>An important addition not provided above is that the median time-to-event is assumed to be 12 months in the control group.</p>
 </div>
@@ -244,22 +247,25 @@
 <h2 class="hasAnchor">
 <a href="#tabular-summaries" class="anchor"></a>Tabular summaries</h2>
 <p>Following are the enrollment rates required to power the trial.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gt</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tibble</span>)
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">Period</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Month"</span>,<span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames</a></span>(<span class="no">x</span>$<span class="no">gamma</span>)),
-       <span class="kw">Rate</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="no">x</span>$<span class="no">gamma</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/gt.html">gt</a></span>() <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_header.html">tab_header</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Enrollment rate requirements"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/gt">gt</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span>
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>Period <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Month"</span>,<span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span><span class="op">)</span>,
+       Rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/gt.html">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_header.html">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Enrollment rate requirements"</span><span class="op">)</span></code></pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#qxuaigbosf .gt_table {
+#aixfvqywtw .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
   font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
   background-color: #FFFFFF;
   width: auto;
   border-top-style: solid;
@@ -276,7 +282,7 @@
   border-left-color: #D3D3D3;
 }
 
-#qxuaigbosf .gt_heading {
+#aixfvqywtw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -288,7 +294,7 @@
   border-right-color: #D3D3D3;
 }
 
-#qxuaigbosf .gt_title {
+#aixfvqywtw .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -298,7 +304,7 @@
   border-bottom-width: 0;
 }
 
-#qxuaigbosf .gt_subtitle {
+#aixfvqywtw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -308,13 +314,13 @@
   border-top-width: 0;
 }
 
-#qxuaigbosf .gt_bottom_border {
+#aixfvqywtw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qxuaigbosf .gt_col_headings {
+#aixfvqywtw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -329,7 +335,7 @@
   border-right-color: #D3D3D3;
 }
 
-#qxuaigbosf .gt_col_heading {
+#aixfvqywtw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -349,7 +355,7 @@
   overflow-x: hidden;
 }
 
-#qxuaigbosf .gt_column_spanner_outer {
+#aixfvqywtw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -361,15 +367,15 @@
   padding-right: 4px;
 }
 
-#qxuaigbosf .gt_column_spanner_outer:first-child {
+#aixfvqywtw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qxuaigbosf .gt_column_spanner_outer:last-child {
+#aixfvqywtw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qxuaigbosf .gt_column_spanner {
+#aixfvqywtw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -381,7 +387,7 @@
   width: 100%;
 }
 
-#qxuaigbosf .gt_group_heading {
+#aixfvqywtw .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -403,7 +409,7 @@
   vertical-align: middle;
 }
 
-#qxuaigbosf .gt_empty_group_heading {
+#aixfvqywtw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -418,19 +424,15 @@
   vertical-align: middle;
 }
 
-#qxuaigbosf .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#qxuaigbosf .gt_from_md > :first-child {
+#aixfvqywtw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qxuaigbosf .gt_from_md > :last-child {
+#aixfvqywtw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qxuaigbosf .gt_row {
+#aixfvqywtw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -449,7 +451,7 @@
   overflow-x: hidden;
 }
 
-#qxuaigbosf .gt_stub {
+#aixfvqywtw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -461,7 +463,7 @@
   padding-left: 12px;
 }
 
-#qxuaigbosf .gt_summary_row {
+#aixfvqywtw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -471,7 +473,7 @@
   padding-right: 5px;
 }
 
-#qxuaigbosf .gt_first_summary_row {
+#aixfvqywtw .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -481,7 +483,7 @@
   border-top-color: #D3D3D3;
 }
 
-#qxuaigbosf .gt_grand_summary_row {
+#aixfvqywtw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -491,7 +493,7 @@
   padding-right: 5px;
 }
 
-#qxuaigbosf .gt_first_grand_summary_row {
+#aixfvqywtw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -501,7 +503,11 @@
   border-top-color: #D3D3D3;
 }
 
-#qxuaigbosf .gt_table_body {
+#aixfvqywtw .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#aixfvqywtw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -510,7 +516,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#qxuaigbosf .gt_footnotes {
+#aixfvqywtw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -524,13 +530,13 @@
   border-right-color: #D3D3D3;
 }
 
-#qxuaigbosf .gt_footnote {
+#aixfvqywtw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#qxuaigbosf .gt_sourcenotes {
+#aixfvqywtw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -544,46 +550,46 @@
   border-right-color: #D3D3D3;
 }
 
-#qxuaigbosf .gt_sourcenote {
+#aixfvqywtw .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#qxuaigbosf .gt_left {
+#aixfvqywtw .gt_left {
   text-align: left;
 }
 
-#qxuaigbosf .gt_center {
+#aixfvqywtw .gt_center {
   text-align: center;
 }
 
-#qxuaigbosf .gt_right {
+#aixfvqywtw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qxuaigbosf .gt_font_normal {
+#aixfvqywtw .gt_font_normal {
   font-weight: normal;
 }
 
-#qxuaigbosf .gt_font_bold {
+#aixfvqywtw .gt_font_bold {
   font-weight: bold;
 }
 
-#qxuaigbosf .gt_font_italic {
+#aixfvqywtw .gt_font_italic {
   font-style: italic;
 }
 
-#qxuaigbosf .gt_super {
+#aixfvqywtw .gt_super {
   font-size: 65%;
 }
 
-#qxuaigbosf .gt_footnote_marks {
+#aixfvqywtw .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="qxuaigbosf" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="aixfvqywtw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="2" class="gt_heading gt_title gt_font_normal" style>Enrollment rate requirements</th>
@@ -615,28 +621,30 @@
     </tr>
 </tbody>
 </table></div>
-<p>Next we provide a tabular summary of bounds for the design. We have added extensive footnoting to the table, which may or may not be required for your design. However, as seen here it makes many choices for design parameters and properties transparent. No attempt has been made to automate this, but it may be worth considering for a template if you wish to make the same choice across many trials. Note that the <code>exclude</code> argument for <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> allows additional descriptions for design bounds such as conditional or predictive power; see the help file for details or just provide <code>exclude = NULL</code> to <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> to see all options.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="co"># footnote text for table</span>
-<span class="no">footnote1</span> <span class="kw">&lt;-</span> <span class="st">"P{Cross} is the probability of crossing the given bound (efficacy or futility) at or before the given analysis under the assumed hazard ratio (HR)."</span>
-<span class="no">footnote2</span> <span class="kw">&lt;-</span> <span class="st">" Design assumes futility bound is discretionary (non-binding); upper boundary crossing probabilities shown here assume trial stops at first boundary crossed and thus total less than the design Type I error."</span>
-<span class="no">footnoteHR</span> <span class="kw">&lt;-</span> <span class="st">"HR presented is not a requirement, but an estimate of approximately what HR would be required to cross each bound."</span>
-<span class="no">footnoteM</span> <span class="kw">&lt;-</span> <span class="st">"Month is approximated given enrollment and event rate assumptions under alternate hypothesis."</span>
+<p>Next we provide a tabular summary of bounds for the design. We have added extensive footnoting to the table, which may or may not be required for your design. However, as seen here it makes many choices for design parameters and properties transparent. No attempt has been made to automate this, but it may be worth considering for a template if you wish to make the same choice across many trials. Note that the <code>exclude</code> argument for <code><a href="../reference/summary.gsDesign.html">gsBoundSummary()</a></code> allows additional descriptions for design bounds such as conditional or predictive power; see the help file for details or just provide <code>exclude = NULL</code> to <code><a href="../reference/summary.gsDesign.html">gsBoundSummary()</a></code> to see all options.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># footnote text for table</span>
+<span class="va">footnote1</span> <span class="op">&lt;-</span> <span class="st">"P{Cross} is the probability of crossing the given bound (efficacy or futility) at or before the given analysis under the assumed hazard ratio (HR)."</span>
+<span class="va">footnote2</span> <span class="op">&lt;-</span> <span class="st">" Design assumes futility bound is discretionary (non-binding); upper boundary crossing probabilities shown here assume trial stops at first boundary crossed and thus total less than the design Type I error."</span>
+<span class="va">footnoteHR</span> <span class="op">&lt;-</span> <span class="st">"HR presented is not a requirement, but an estimate of approximately what HR would be required to cross each bound."</span>
+<span class="va">footnoteM</span> <span class="op">&lt;-</span> <span class="st">"Month is approximated given enrollment and event rate assumptions under alternate hypothesis."</span>
 <span class="co"># spending function footnotes</span>
-<span class="no">footnoteUS</span> <span class="kw">&lt;-</span><span class="st">"Efficacy bound set using Lan-DeMets spending function approximating an O'Brien-Fleming bound."</span>
-<span class="no">footnoteLS</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Futility bound set using "</span>,<span class="no">x</span>$<span class="no">lower</span>$<span class="no">name</span>,<span class="st">" beta-spending function with "</span>,
-                    <span class="no">x</span>$<span class="no">lower</span>$<span class="no">parname</span>,<span class="st">"="</span>,<span class="no">x</span>$<span class="no">lower</span>$<span class="no">param</span>,<span class="st">"."</span>,<span class="kw">sep</span> <span class="kw">=</span> <span class="st">""</span>)
+<span class="va">footnoteUS</span> <span class="op">&lt;-</span><span class="st">"Efficacy bound set using Lan-DeMets spending function approximating an O'Brien-Fleming bound."</span>
+<span class="va">footnoteLS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Futility bound set using "</span>,<span class="va">x</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">name</span>,<span class="st">" beta-spending function with "</span>, 
+                    <span class="va">x</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">parname</span>,<span class="st">"="</span>,<span class="va">x</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">param</span>,<span class="st">"."</span>,sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>
 <span class="co"># caption text for table</span>
-<span class="no">caption</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Overall survival trial design with HR="</span>,<span class="no">hr</span>,<span class="st">", "</span>,<span class="fl">100</span>*(<span class="fl">1</span>-<span class="no">beta</span>),<span class="st">"% power and "</span>,<span class="fl">100</span>*<span class="no">alpha</span>,<span class="st">"% Type 1 error"</span>,<span class="kw">sep</span> <span class="kw">=</span> <span class="st">""</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span>(<span class="no">x</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/gt.html">gt</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_header.html">tab_header</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Time-to-event group sequential design"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cols_align.html">cols_align</a></span>(<span class="st">"left"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="no">footnoteUS</span>,<span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_column_labels.html">cells_column_labels</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">3</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="no">footnoteLS</span>,<span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_column_labels.html">cells_column_labels</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">4</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="no">footnoteHR</span>,<span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">rows</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">8</span>,<span class="fl">13</span>))) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="no">footnoteM</span>,<span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">1</span>,<span class="kw">rows</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">9</span>,<span class="fl">14</span>))) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="no">footnote1</span>,<span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">rows</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">9</span>,<span class="fl">10</span>,<span class="fl">14</span>,<span class="fl">15</span>))) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="no">footnote2</span>,<span class="kw">locations</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">2</span>,<span class="kw">rows</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">9</span>,<span class="fl">14</span>)))
+<span class="va">caption</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Overall survival trial design with HR="</span>,<span class="va">hr</span>,<span class="st">", "</span>,<span class="fl">100</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">beta</span><span class="op">)</span>,<span class="st">"% power and "</span>,<span class="fl">100</span><span class="op">*</span><span class="va">alpha</span>,<span class="st">"% Type 1 error"</span>,sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/summary.gsDesign.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/gt.html">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_header.html">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Time-to-event group sequential design"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cols_align.html">cols_align</a></span><span class="op">(</span><span class="st">"left"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span><span class="op">(</span><span class="va">footnoteUS</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_column_labels.html">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span><span class="op">(</span><span class="va">footnoteLS</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_column_labels.html">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span><span class="op">(</span><span class="va">footnoteHR</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>,rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">8</span>,<span class="fl">13</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span><span class="op">(</span><span class="va">footnoteM</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">1</span>,rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">9</span>,<span class="fl">14</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span><span class="op">(</span><span class="va">footnote1</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>,rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">9</span>,<span class="fl">10</span>,<span class="fl">14</span>,<span class="fl">15</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span><span class="op">(</span><span class="va">footnote2</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>,rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">9</span>,<span class="fl">14</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: The `cells_data()` function is deprecated and will soon be removed</span>
 <span class="co">#&gt;  * Use the `cells_body()` function instead</span>
 
@@ -647,18 +655,20 @@
 <span class="co">#&gt;  * Use the `cells_body()` function instead</span>
 
 <span class="co">#&gt; Warning: The `cells_data()` function is deprecated and will soon be removed</span>
-<span class="co">#&gt;  * Use the `cells_body()` function instead</span></pre></body></html></div>
+<span class="co">#&gt;  * Use the `cells_body()` function instead</span></code></pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#mpctjndvxo .gt_table {
+#hbgqukdopf .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
   font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
   background-color: #FFFFFF;
   width: auto;
   border-top-style: solid;
@@ -675,7 +685,7 @@
   border-left-color: #D3D3D3;
 }
 
-#mpctjndvxo .gt_heading {
+#hbgqukdopf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -687,7 +697,7 @@
   border-right-color: #D3D3D3;
 }
 
-#mpctjndvxo .gt_title {
+#hbgqukdopf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -697,7 +707,7 @@
   border-bottom-width: 0;
 }
 
-#mpctjndvxo .gt_subtitle {
+#hbgqukdopf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -707,13 +717,13 @@
   border-top-width: 0;
 }
 
-#mpctjndvxo .gt_bottom_border {
+#hbgqukdopf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mpctjndvxo .gt_col_headings {
+#hbgqukdopf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -728,7 +738,7 @@
   border-right-color: #D3D3D3;
 }
 
-#mpctjndvxo .gt_col_heading {
+#hbgqukdopf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -748,7 +758,7 @@
   overflow-x: hidden;
 }
 
-#mpctjndvxo .gt_column_spanner_outer {
+#hbgqukdopf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -760,15 +770,15 @@
   padding-right: 4px;
 }
 
-#mpctjndvxo .gt_column_spanner_outer:first-child {
+#hbgqukdopf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mpctjndvxo .gt_column_spanner_outer:last-child {
+#hbgqukdopf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mpctjndvxo .gt_column_spanner {
+#hbgqukdopf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -780,7 +790,7 @@
   width: 100%;
 }
 
-#mpctjndvxo .gt_group_heading {
+#hbgqukdopf .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -802,7 +812,7 @@
   vertical-align: middle;
 }
 
-#mpctjndvxo .gt_empty_group_heading {
+#hbgqukdopf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -817,19 +827,15 @@
   vertical-align: middle;
 }
 
-#mpctjndvxo .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#mpctjndvxo .gt_from_md > :first-child {
+#hbgqukdopf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mpctjndvxo .gt_from_md > :last-child {
+#hbgqukdopf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mpctjndvxo .gt_row {
+#hbgqukdopf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -848,7 +854,7 @@
   overflow-x: hidden;
 }
 
-#mpctjndvxo .gt_stub {
+#hbgqukdopf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -860,7 +866,7 @@
   padding-left: 12px;
 }
 
-#mpctjndvxo .gt_summary_row {
+#hbgqukdopf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -870,7 +876,7 @@
   padding-right: 5px;
 }
 
-#mpctjndvxo .gt_first_summary_row {
+#hbgqukdopf .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -880,7 +886,7 @@
   border-top-color: #D3D3D3;
 }
 
-#mpctjndvxo .gt_grand_summary_row {
+#hbgqukdopf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -890,7 +896,7 @@
   padding-right: 5px;
 }
 
-#mpctjndvxo .gt_first_grand_summary_row {
+#hbgqukdopf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -900,7 +906,11 @@
   border-top-color: #D3D3D3;
 }
 
-#mpctjndvxo .gt_table_body {
+#hbgqukdopf .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#hbgqukdopf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -909,7 +919,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#mpctjndvxo .gt_footnotes {
+#hbgqukdopf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -923,13 +933,13 @@
   border-right-color: #D3D3D3;
 }
 
-#mpctjndvxo .gt_footnote {
+#hbgqukdopf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#mpctjndvxo .gt_sourcenotes {
+#hbgqukdopf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -943,46 +953,46 @@
   border-right-color: #D3D3D3;
 }
 
-#mpctjndvxo .gt_sourcenote {
+#hbgqukdopf .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#mpctjndvxo .gt_left {
+#hbgqukdopf .gt_left {
   text-align: left;
 }
 
-#mpctjndvxo .gt_center {
+#hbgqukdopf .gt_center {
   text-align: center;
 }
 
-#mpctjndvxo .gt_right {
+#hbgqukdopf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mpctjndvxo .gt_font_normal {
+#hbgqukdopf .gt_font_normal {
   font-weight: normal;
 }
 
-#mpctjndvxo .gt_font_bold {
+#hbgqukdopf .gt_font_bold {
   font-weight: bold;
 }
 
-#mpctjndvxo .gt_font_italic {
+#hbgqukdopf .gt_font_italic {
   font-style: italic;
 }
 
-#mpctjndvxo .gt_super {
+#hbgqukdopf .gt_super {
   font-size: 65%;
 }
 
-#mpctjndvxo .gt_footnote_marks {
+#hbgqukdopf .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="mpctjndvxo" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="hbgqukdopf" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="4" class="gt_heading gt_title gt_font_normal" style>Time-to-event group sequential design</th>
@@ -1150,10 +1160,11 @@
 <a href="#summary-plots" class="anchor"></a>Summary plots</h2>
 <p>Several plots are available to summarize a design; see help for <code><a href="../reference/plot.gsDesign.html">plot.gsDesign()</a></code>; one easy way to see how to generate each is by checking plots and code generated by the <a href="https://gsdesign.shinyapps.io/prod/">Shiny interface</a>. The power plot is information-rich, but also requires some explanation; thus, we demonstrate here.</p>
 <p>The solid black line represents the trial power by effect size. Power at interim 1 is represented by the black dotted line. Cumulative power at interim 2 is represented by the black dashed line. The red dotted line is 1 minus the probability of crossing the futility bound on the percentage scale. The red dashed line is 1 minus the cumulative probability of crossing the futility bound by interim 2.</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">scales</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">x</span>,<span class="kw">plottype</span> <span class="kw">=</span> <span class="st">"power"</span>,<span class="kw">cex</span> <span class="kw">=</span> <span class="fl">.8</span>,<span class="kw">xlab</span> <span class="kw">=</span> <span class="st">"HR"</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span>(<span class="kw">labels</span> <span class="kw">=</span> <span class="kw pkg">scales</span><span class="kw ns">::</span><span class="no"><a href="https://scales.r-lib.org//reference/label_percent.html">percent</a></span>)</pre></body></html></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org">scales</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">x</span>,plottype <span class="op">=</span> <span class="st">"power"</span>,cex <span class="op">=</span> <span class="fl">.8</span>,xlab <span class="op">=</span> <span class="st">"HR"</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_percent.html">percent</a></span><span class="op">)</span></code></pre></div>
 <p><img src="gsSurvBasicExamples_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
 </div>
 </div>
@@ -1162,30 +1173,33 @@
 <a href="#update-bounds-at-time-of-analysis" class="anchor"></a>Update bounds at time of analysis</h1>
 <p>Analyses rarely occur at exactly the number of events which are planned. The advantage of the spending function approach to design is that bounds can be updated to account for the actual number of events observed at each analysis. In fact, analyses can be added or deleted noting that any changes in timing or analyses should not be made with knowledge of unblinded study results. We suggest tables and a plot that may be of particular use. We also present computation of conditional and predictive power.</p>
 <p>First, we update the actual number of events for interims 1 and 2 and assume the final analysis event count is still as originally planned:</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="co"># number of events (final is still planned number)</span>
-<span class="no">n.I</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">115</span>, <span class="fl">364</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">ceiling</a></span>(<span class="no">x</span>$<span class="no">n.I</span>[<span class="no">x</span>$<span class="no">k</span>]))</pre></body></html></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># number of events (final is still planned number)</span>
+<span class="va">n.I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">115</span>, <span class="fl">364</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">ceiling</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">k</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>The simple updates to Z-values and p-values for the design based on information fraction just requires the fraction of final events planned, but does not include the number of events or treatment effect in the output:</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">xu</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span>(<span class="kw">alpha</span> <span class="kw">=</span> <span class="no">x</span>$<span class="no">alpha</span>, <span class="kw">beta</span> <span class="kw">=</span> <span class="no">x</span>$<span class="no">beta</span>,
-               <span class="kw">maxn.IPlan</span> <span class="kw">=</span> <span class="no">x</span>$<span class="no">n.I</span>[<span class="no">x</span>$<span class="no">k</span>], <span class="kw">n.I</span> <span class="kw">=</span> <span class="no">n.I</span>,
-               <span class="kw">sfu</span> <span class="kw">=</span> <span class="no">sfu</span>, <span class="kw">sfupar</span> <span class="kw">=</span> <span class="no">sfupar</span>, <span class="kw">sfl</span> <span class="kw">=</span> <span class="no">sfl</span>, <span class="kw">sflpar</span> <span class="kw">=</span> <span class="no">sflpar</span>,
-               <span class="kw">delta</span> <span class="kw">=</span> <span class="no">x</span>$<span class="no">delta</span>, <span class="kw">delta1</span> <span class="kw">=</span> <span class="no">x</span>$<span class="no">delta1</span>, <span class="kw">delta0</span> <span class="kw">=</span> <span class="no">x</span>$<span class="no">delta0</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">xu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">alpha</span>, beta <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">beta</span>,
+               maxn.IPlan <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">k</span><span class="op">]</span>, n.I <span class="op">=</span> <span class="va">n.I</span>,
+               sfu <span class="op">=</span> <span class="va">sfu</span>, sfupar <span class="op">=</span> <span class="va">sfupar</span>, sfl <span class="op">=</span> <span class="va">sfl</span>, sflpar <span class="op">=</span> <span class="va">sflpar</span>,
+               delta <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">delta</span>, delta1 <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">delta1</span>, delta0 <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">delta0</span><span class="op">)</span></code></pre></div>
 <p>Now we print the design summary, selecting minimal calculations for a table to provide guidance for review of results. If you wish to see all possible summaries of bounds, change to <code>exclude = NULL</code> below. Here we have assumed futility guidance is based on the hazard ratio at interim analysis; this is not generally the case, but is an option as these bounds are guidance rather than having strict inferential interpretation.</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span>(<span class="no">xu</span>,
-               <span class="kw">deltaname</span><span class="kw">=</span><span class="st">"HR"</span>,
-               <span class="kw">logdelta</span><span class="kw">=</span><span class="fl">TRUE</span>,
-               <span class="kw">Nname</span><span class="kw">=</span><span class="st">"Events"</span>,
-               <span class="kw">exclude</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Spending"</span>, <span class="st">"B-value"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>,
-                           <span class="st">"PP"</span>, <span class="st">"P(Cross) if HR=1"</span>,<span class="st">"P(Cross) if HR=0.75"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/gt.html">gt</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cols_align.html">cols_align</a></span>(<span class="st">"left"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_header.html">tab_header</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Time-to-event group sequential bound guidance"</span>,
-             <span class="kw">subtitle</span> <span class="kw">=</span> <span class="st">"Bounds updated based on event counts through IA2"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="st">"Nominal p-value required to establish statistical significance."</span>,
-               <span class="kw">locations</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">8</span>))) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="st">"Interim futility guidance based on observed HR is non-binding."</span>,
-               <span class="kw">locations</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span>(<span class="kw">columns</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>, <span class="fl">6</span>))) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span>(<span class="st">"HR bounds are approximations; decisions on crossing are based solely on p-values."</span>,
-               <span class="kw">locations</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span>(<span class="kw">column</span><span class="kw">=</span> <span class="fl">2</span>, <span class="kw">rows</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>)))
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/summary.gsDesign.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xu</span>,
+               deltaname<span class="op">=</span><span class="st">"HR"</span>,
+               logdelta<span class="op">=</span><span class="cn">TRUE</span>,
+               Nname<span class="op">=</span><span class="st">"Events"</span>,
+               exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Spending"</span>, <span class="st">"B-value"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, 
+                           <span class="st">"PP"</span>, <span class="st">"P(Cross) if HR=1"</span>,<span class="st">"P(Cross) if HR=0.75"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/gt.html">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cols_align.html">cols_align</a></span><span class="op">(</span><span class="st">"left"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_header.html">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Time-to-event group sequential bound guidance"</span>,
+             subtitle <span class="op">=</span> <span class="st">"Bounds updated based on event counts through IA2"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span><span class="op">(</span><span class="st">"Nominal p-value required to establish statistical significance."</span>,
+               locations<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">3</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span><span class="op">(</span><span class="st">"Interim futility guidance based on observed HR is non-binding."</span>,
+               locations<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">4</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html">tab_footnote</a></span><span class="op">(</span><span class="st">"HR bounds are approximations; decisions on crossing are based solely on p-values."</span>,
+               locations<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html">cells_data</a></span><span class="op">(</span>column<span class="op">=</span> <span class="fl">2</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: The `cells_data()` function is deprecated and will soon be removed</span>
 <span class="co">#&gt;  * Use the `cells_body()` function instead</span>
 
@@ -1193,18 +1207,20 @@
 <span class="co">#&gt;  * Use the `cells_body()` function instead</span>
 
 <span class="co">#&gt; Warning: The `cells_data()` function is deprecated and will soon be removed</span>
-<span class="co">#&gt;  * Use the `cells_body()` function instead</span></pre></body></html></div>
+<span class="co">#&gt;  * Use the `cells_body()` function instead</span></code></pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#vsyxixuwph .gt_table {
+#soooofvxog .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
   font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
   background-color: #FFFFFF;
   width: auto;
   border-top-style: solid;
@@ -1221,7 +1237,7 @@
   border-left-color: #D3D3D3;
 }
 
-#vsyxixuwph .gt_heading {
+#soooofvxog .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1233,7 +1249,7 @@
   border-right-color: #D3D3D3;
 }
 
-#vsyxixuwph .gt_title {
+#soooofvxog .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1243,7 +1259,7 @@
   border-bottom-width: 0;
 }
 
-#vsyxixuwph .gt_subtitle {
+#soooofvxog .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1253,13 +1269,13 @@
   border-top-width: 0;
 }
 
-#vsyxixuwph .gt_bottom_border {
+#soooofvxog .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vsyxixuwph .gt_col_headings {
+#soooofvxog .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1274,7 +1290,7 @@
   border-right-color: #D3D3D3;
 }
 
-#vsyxixuwph .gt_col_heading {
+#soooofvxog .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1294,7 +1310,7 @@
   overflow-x: hidden;
 }
 
-#vsyxixuwph .gt_column_spanner_outer {
+#soooofvxog .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1306,15 +1322,15 @@
   padding-right: 4px;
 }
 
-#vsyxixuwph .gt_column_spanner_outer:first-child {
+#soooofvxog .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vsyxixuwph .gt_column_spanner_outer:last-child {
+#soooofvxog .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vsyxixuwph .gt_column_spanner {
+#soooofvxog .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1326,7 +1342,7 @@
   width: 100%;
 }
 
-#vsyxixuwph .gt_group_heading {
+#soooofvxog .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1348,7 +1364,7 @@
   vertical-align: middle;
 }
 
-#vsyxixuwph .gt_empty_group_heading {
+#soooofvxog .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1363,19 +1379,15 @@
   vertical-align: middle;
 }
 
-#vsyxixuwph .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#vsyxixuwph .gt_from_md > :first-child {
+#soooofvxog .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vsyxixuwph .gt_from_md > :last-child {
+#soooofvxog .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vsyxixuwph .gt_row {
+#soooofvxog .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1394,7 +1406,7 @@
   overflow-x: hidden;
 }
 
-#vsyxixuwph .gt_stub {
+#soooofvxog .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1406,7 +1418,7 @@
   padding-left: 12px;
 }
 
-#vsyxixuwph .gt_summary_row {
+#soooofvxog .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1416,7 +1428,7 @@
   padding-right: 5px;
 }
 
-#vsyxixuwph .gt_first_summary_row {
+#soooofvxog .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1426,7 +1438,7 @@
   border-top-color: #D3D3D3;
 }
 
-#vsyxixuwph .gt_grand_summary_row {
+#soooofvxog .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1436,7 +1448,7 @@
   padding-right: 5px;
 }
 
-#vsyxixuwph .gt_first_grand_summary_row {
+#soooofvxog .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1446,7 +1458,11 @@
   border-top-color: #D3D3D3;
 }
 
-#vsyxixuwph .gt_table_body {
+#soooofvxog .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#soooofvxog .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1455,7 +1471,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#vsyxixuwph .gt_footnotes {
+#soooofvxog .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1469,13 +1485,13 @@
   border-right-color: #D3D3D3;
 }
 
-#vsyxixuwph .gt_footnote {
+#soooofvxog .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#vsyxixuwph .gt_sourcenotes {
+#soooofvxog .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1489,46 +1505,46 @@
   border-right-color: #D3D3D3;
 }
 
-#vsyxixuwph .gt_sourcenote {
+#soooofvxog .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#vsyxixuwph .gt_left {
+#soooofvxog .gt_left {
   text-align: left;
 }
 
-#vsyxixuwph .gt_center {
+#soooofvxog .gt_center {
   text-align: center;
 }
 
-#vsyxixuwph .gt_right {
+#soooofvxog .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vsyxixuwph .gt_font_normal {
+#soooofvxog .gt_font_normal {
   font-weight: normal;
 }
 
-#vsyxixuwph .gt_font_bold {
+#soooofvxog .gt_font_bold {
   font-weight: bold;
 }
 
-#vsyxixuwph .gt_font_italic {
+#soooofvxog .gt_font_italic {
   font-style: italic;
 }
 
-#vsyxixuwph .gt_super {
+#soooofvxog .gt_super {
   font-size: 65%;
 }
 
-#vsyxixuwph .gt_footnote_marks {
+#soooofvxog .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="vsyxixuwph" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="soooofvxog" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="4" class="gt_heading gt_title gt_font_normal" style>Time-to-event group sequential bound guidance</th>
@@ -1640,46 +1656,51 @@
 <li>A B-value plot to evaluate the trend in test statistics towards a positive conclusion.</li>
 </ul>
 <p>For these summaries, we will assume the updated interim event counts used above along with interim Z-values of 0.25 and 2 at interim 1 and interim 2, respectively.</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">Z</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.25</span>, <span class="fl">2</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p>Conditional power at interim analysis 2 is computed for the current trend, under the null hypothesis (HR=1), and under the alternate hypothesis (HR=0.75 in this case) as follows:</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="../reference/gsCP.html">gsCP</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">xu</span>, <span class="co"># updated design</span>
-     <span class="kw">i</span> <span class="kw">=</span> <span class="fl">2</span>,  <span class="co"># interim analysis 2</span>
-     <span class="kw">zi</span> <span class="kw">=</span> <span class="no">Z</span>[<span class="fl">2</span>] <span class="co"># observed Z-value for testing</span>
-)$<span class="no">upper</span>$<span class="no">prob</span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/gsCP.html">gsCP</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">xu</span>, <span class="co"># updated design</span>
+     i <span class="op">=</span> <span class="fl">2</span>,  <span class="co"># interim analysis 2</span>
+     zi <span class="op">=</span> <span class="va">Z</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="co"># observed Z-value for testing</span>
+<span class="op">)</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span>
 <span class="co">#&gt;           [,1]     [,2]      [,3]</span>
-<span class="co">#&gt; [1,] 0.6599398 0.301728 0.7764629</span></pre></body></html></div>
+<span class="co">#&gt; [1,] 0.6599398 0.301728 0.7764629</span></code></pre></div>
 <p>Predictive power incorporates uncertainty into the above conditional power evaluation. The computation assumes a prior distribution for the treatment effect and then updates to a posterior distribution for the treatment effect based on the most recent interim result. The conditional probability of a positive finding is then averaged according to this posterior. We specify a normal prior for the standardized effect size using the <code><a href="../reference/normalGrid.html">gsDesign::normalGrid()</a></code> function. We select a weak prior with mean half-way between the alternative (<code>x$delta</code>) and null (0) hypotheses and a variance equivalent to observing 5% (=1/20) of the targeted events at the final analysis; the following shows that the standard deviation for the prior is well over twice the mean, so the prior is relatively weak.</p>
-<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">prior</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/normalGrid.html">normalGrid</a></span>(<span class="kw">mu</span> <span class="kw">=</span> <span class="no">x</span>$<span class="no">delta</span>/<span class="fl">2</span>,
-                    <span class="kw">sigma</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fl">20</span>/<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">x</span>$<span class="no">n.I</span>)))
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">" Prior mean:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">x</span>$<span class="no">delta</span>/<span class="fl">2</span>, <span class="fl">3</span>),
-          <span class="st">"\n Prior standard deviation"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fl">20</span>/<span class="no">x</span>$<span class="no">n.fix</span>), <span class="fl">3</span>), <span class="st">"\n"</span>))
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/normalGrid.html">normalGrid</a></span><span class="op">(</span>mu <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">delta</span><span class="op">/</span><span class="fl">2</span>,
+                    sigma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">20</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">" Prior mean:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">delta</span><span class="op">/</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, 
+          <span class="st">"\n Prior standard deviation"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">20</span><span class="op">/</span><span class="va">x</span><span class="op">$</span><span class="va">n.fix</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;  Prior mean: 0.072 </span>
-<span class="co">#&gt;  Prior standard deviation 0.215</span></pre></body></html></div>
+<span class="co">#&gt;  Prior standard deviation 0.215</span></code></pre></div>
 <p>Now based on the interim 2 result, we compute the predictive power of a positive final analysis.</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="../reference/gsCP.html">gsPP</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">xu</span>, <span class="co"># updated design</span>
-     <span class="kw">i</span> <span class="kw">=</span> <span class="fl">2</span>,  <span class="co"># interim analysis 2</span>
-     <span class="kw">zi</span> <span class="kw">=</span> <span class="no">Z</span>[<span class="fl">2</span>], <span class="co"># observed Z-value for testing</span>
-     <span class="kw">theta</span> <span class="kw">=</span> <span class="no">prior</span>$<span class="no">z</span>, <span class="co"># grid points for above prior</span>
-     <span class="kw">wgts</span> <span class="kw">=</span> <span class="no">prior</span>$<span class="no">wgts</span> <span class="co"># weights for averaging over grid</span>
-)
-<span class="co">#&gt; [1] 0.6407376</span></pre></body></html></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/gsCP.html">gsPP</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">xu</span>, <span class="co"># updated design</span>
+     i <span class="op">=</span> <span class="fl">2</span>,  <span class="co"># interim analysis 2</span>
+     zi <span class="op">=</span> <span class="va">Z</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="co"># observed Z-value for testing</span>
+     theta <span class="op">=</span> <span class="va">prior</span><span class="op">$</span><span class="va">z</span>, <span class="co"># grid points for above prior</span>
+     wgts <span class="op">=</span> <span class="va">prior</span><span class="op">$</span><span class="va">wgts</span> <span class="co"># weights for averaging over grid</span>
+<span class="op">)</span>
+<span class="co">#&gt; [1] 0.6407376</span></code></pre></div>
 <p>A B-value (<span class="citation">Proschan, Lan, and Wittes (2006)</span>) is a Z-value multiplied by the square root of the information fraction (interim information divided by final planned information. In the plot below on the B-value scale, we present the efficacy bounds at each analysis in black, futility guidance in red, the observed interim tests in blue connected by solid lines, and a dashed blue line to project the final result. Under a constant treatment effect (proportional hazards for a time-to-event outcome tested with a logrank test) the blue line behaves like observations from a Brownian motion with a linear trend (“constant drift”). While a comparable Z-value plot would have the effect increasing with the square root of the number of events, the B-value plot trend is linear in the event count. The trend is proportional to the logarithm of the underlying hazard ratio. The projected final test is based on the dashed line which represents a linear trend based on the most recent B-value computed; this projection is what was used in the conditional power calculation under the current trend that was computed above.</p>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">maxx</span> <span class="kw">&lt;-</span> <span class="fl">450</span> <span class="co"># max for x-axis specified by user  </span>
-<span class="no">ylim</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">1</span>,<span class="fl">3</span>) <span class="co"># user-specified y-axis limits</span>
-<span class="no">analysis</span> <span class="kw">&lt;-</span> <span class="fl">2</span>  <span class="co"># current analysis specified by user</span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">maxx</span> <span class="op">&lt;-</span> <span class="fl">450</span> <span class="co"># max for x-axis specified by user  </span>
+<span class="va">ylim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span> <span class="co"># user-specified y-axis limits</span>
+<span class="va">analysis</span> <span class="op">&lt;-</span> <span class="fl">2</span>  <span class="co"># current analysis specified by user</span>
 <span class="co"># Following code should require no further changes</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">xu</span>, <span class="kw">plottype</span><span class="kw">=</span><span class="st">"B"</span>, <span class="kw">base</span><span class="kw">=</span><span class="fl">TRUE</span>, <span class="kw">xlim</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="no">maxx</span>), <span class="kw">ylim</span><span class="kw">=</span><span class="no">ylim</span>, <span class="kw">main</span><span class="kw">=</span><span class="st">"B-value projection"</span>,
-     <span class="kw">lty</span><span class="kw">=</span><span class="fl">1</span>, <span class="kw">col</span><span class="kw">=</span><span class="fl">1</span>:<span class="fl">2</span>, <span class="kw">xlab</span><span class="kw">=</span><span class="st">"Events"</span>)
-<span class="no">N</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="no">xu</span>$<span class="no">n.I</span>[<span class="fl">1</span>:<span class="no">analysis</span>])
-<span class="no">B</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="no">Z</span> * <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="no">xu</span>$<span class="no">timing</span>[<span class="fl">1</span>:<span class="no">analysis</span>]))
-<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">N</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">B</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="fl">4</span>)
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">N</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">B</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="fl">4</span>)
-<span class="no">slope</span> <span class="kw">&lt;-</span> <span class="no">B</span>[<span class="no">analysis</span>+<span class="fl">1</span>] / <span class="no">N</span>[<span class="no">analysis</span> + <span class="fl">1</span>]
-<span class="no">Nvals</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">N</span>[<span class="no">analysis</span>+<span class="fl">1</span>], <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">xu</span>$<span class="no">n.I</span>))
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">Nvals</span>,
-      <span class="kw">y</span> <span class="kw">=</span> <span class="no">B</span>[<span class="no">analysis</span> + <span class="fl">1</span>] + <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="no">slope</span> * (<span class="no">Nvals</span>[<span class="fl">2</span>] - <span class="no">Nvals</span>[<span class="fl">1</span>])),
-      <span class="kw">col</span> <span class="kw">=</span> <span class="fl">4</span>,
-      <span class="kw">lty</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">xu</span>, plottype<span class="op">=</span><span class="st">"B"</span>, base<span class="op">=</span><span class="cn">TRUE</span>, xlim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">maxx</span><span class="op">)</span>, ylim<span class="op">=</span><span class="va">ylim</span>, main<span class="op">=</span><span class="st">"B-value projection"</span>,
+     lty<span class="op">=</span><span class="fl">1</span>, col<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, xlab<span class="op">=</span><span class="st">"Events"</span><span class="op">)</span>
+<span class="va">N</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">xu</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">analysis</span><span class="op">]</span><span class="op">)</span>
+<span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">Z</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">xu</span><span class="op">$</span><span class="va">timing</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">analysis</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">N</span>, y <span class="op">=</span> <span class="va">B</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">N</span>, y <span class="op">=</span> <span class="va">B</span>, col <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<span class="va">slope</span> <span class="op">&lt;-</span> <span class="va">B</span><span class="op">[</span><span class="va">analysis</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span> <span class="op">/</span> <span class="va">N</span><span class="op">[</span><span class="va">analysis</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>
+<span class="va">Nvals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">N</span><span class="op">[</span><span class="va">analysis</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">xu</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Nvals</span>,
+      y <span class="op">=</span> <span class="va">B</span><span class="op">[</span><span class="va">analysis</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">slope</span> <span class="op">*</span> <span class="op">(</span><span class="va">Nvals</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="va">Nvals</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,
+      col <span class="op">=</span> <span class="fl">4</span>,
+      lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="gsSurvBasicExamples_files/figure-html/unnamed-chunk-21-1.png" width="624"></p>
 </div>
 </div>
@@ -1718,7 +1739,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
