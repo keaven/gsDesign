@@ -307,6 +307,12 @@ sfExponential <- function(alpha, t, param) {
 #' @importFrom stats nlminb pbeta
 # sfBetaDist function [sinew] ----
 sfBetaDist <- function(alpha, t, param) {
+  
+  if(length(param) == 4){
+    if (param[1] >= param[2]) stop("sfBetaDist: param[1] < param[2] required in 4 point parameterization")
+    if (param[3] >= param[4]) stop("sfBetaDist: param[3] < param[4] required in 4 point parameterization")
+  }
+  
   x <- list(
     name = "Beta distribution", param = param, parname = c("a", "b"), sf = sfBetaDist, spend = NULL,
     bound = NULL, prob = NULL
