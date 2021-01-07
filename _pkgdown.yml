@@ -83,6 +83,7 @@ reference:
   contents:
   - gsBinomialExact
   - plot.gsBinomialExact
+  - plot.binomialSPRT
   - binomialSPRT
   - nBinomial1Sample
 - title: Input Checking
