@@ -329,7 +329,8 @@ xOR <- gsDesign(k = 2, n.fix = n.fix, delta1 = log(.15 / .3 / .85 * .7), endpoin
 gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE)
 
 # for nice LaTeX table output, use xprint
-xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE), caption = "Table caption."))
+xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE), 
+                                          caption = "Table caption."))
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential
