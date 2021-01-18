@@ -1,3 +1,8 @@
+3.2.0, January, 2021
+ - Substantially updated unit testing to increase code coverage above 80%
+ - Updated error checking messages to print function where check fails
+ - Removed dependencies on xtable and plyr packages
+ 
 3.1.1, May, 2020
 - Vignettes updated
 - Added hGraph() to support ggplot2 versions of multiplicity graphs

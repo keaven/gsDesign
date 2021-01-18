@@ -2,10 +2,12 @@ reference:
 - title: Group Sequential Computation
   contents:
   - gsDesign
+  - plot.gsDesign
   - gsProbability
   - gsBound1
   - gsBound
   - sequentialPValue
+  - gsDesign package overview
 - title: Design Characterization
   contents:
   - gsBoundSummary
@@ -84,6 +86,7 @@ reference:
   - gsBinomialExact
   - plot.gsBinomialExact
   - binomialSPRT
+  - plot.binomialSPRT
   - nBinomial1Sample
 - title: Input Checking
   contents:
@@ -109,4 +112,3 @@ articles:
     contents:
       - nNormal
       - hGraph
-      - tests_and_coverage
