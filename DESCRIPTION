@@ -15,6 +15,7 @@ Suggests:
     testthat,
     covr,
     gridExtra,
+    xtable, 
     tidyr
 VignetteBuilder: knitr
 Copyright: Copyright 2010, Merck Research Laboratories
