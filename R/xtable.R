@@ -3,7 +3,6 @@
 #'  \code{\link[stats]{Normal}}
 #'  \code{\link[xtable]{xtable}}
 #' @importFrom stats pnorm
-#' @importFrom xtable xtable
 #' @export
 # xtable.gsDesign function [sinew] ----
 xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digits = NULL, 
@@ -96,11 +95,10 @@ xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digit
   }
   x <- data.frame(cbind(an, stat, fut, eff))
   colnames(x) <- c("Analysis", "Value", "Futility", "Efficacy")
-  xtable:::xtable(x, caption = caption, label = label, align = align, digits = digits, display = display, ...)
+  xtable::xtable(x, caption = caption, label = label, align = align, digits = digits, display = display, ...)
 }
 
 #' @title xtable
-#' @inheritParams xtable::xtable
 #' @importFrom xtable xtable
 #' @rdname xtable
 #' @name xtable

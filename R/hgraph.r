@@ -1,9 +1,3 @@
-#' importFrom magrittr "%>%"
-#' importFrom dplyr mutate n filter left_join select
-#' importFrom tidyr pivot_longer
-#' importFrom "grDevices" "palette"
-NULL
-
 #' @title Create multiplicity graphs using ggplot2
 #'
 #' @description \code{hGraph()} plots a multiplicity graph defined by user inputs.
@@ -66,7 +60,10 @@ NULL
 #' @importFrom grDevices gray.colors
 #' @importFrom ggplot2 aes ggplot guide_legend stat_ellipse theme theme_void geom_text geom_segment geom_rect scale_fill_manual
 #' @importFrom grid unit
-#' @importFrom dplyr '%>%'
+#' @importFrom magrittr "%>%"
+#' @importFrom dplyr mutate n filter left_join select
+#' @importFrom tidyr pivot_longer
+#' @importFrom "grDevices" "palette"
 #' @rdname hGraph
 #' @export
 hGraph <- function(
