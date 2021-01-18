@@ -96,7 +96,7 @@ xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digit
   }
   x <- data.frame(cbind(an, stat, fut, eff))
   colnames(x) <- c("Analysis", "Value", "Futility", "Efficacy")
-  xtable::xtable(x, caption = caption, label = label, align = align, digits = digits, display = display, ...)
+  xtable:::xtable(x, caption = caption, label = label, align = align, digits = digits, display = display, ...)
 }
 
 #' @title xtable

@@ -1008,7 +1008,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #'   eta = log(2) / 40, gamma = 1, T = 36, minfup = 12
 #' )
 #' x
-#' print(xtable(x,
+#' print(xtable::xtable(x,
 #'   footnote = "This is a footnote; note that it can be wide.",
 #'   caption = "Caption example."
 #' ))

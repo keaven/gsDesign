@@ -557,7 +557,7 @@ print.nSurvival <- function(x, ...) {
 #' gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE)
 #' 
 #' # for nice LaTeX table output, use xprint
-#' xprint(xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE), caption = "Table caption."))
+#' xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE), caption = "Table caption."))
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
