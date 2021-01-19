@@ -1304,7 +1304,6 @@ print.gsSurv <- function(x, digits = 2, ...) {
 #'  \code{\link[stats]{Normal}}
 #'  \code{\link[xtable]{xtable}}
 #' @importFrom stats pnorm
-#' @importFrom xtable xtable
 #' @rdname nSurv
 #' @export
 # xtable.gsSurv function [sinew] ----
