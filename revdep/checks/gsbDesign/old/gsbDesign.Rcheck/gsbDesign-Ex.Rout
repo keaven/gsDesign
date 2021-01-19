@@ -1,0 +1,847 @@
+
+R version 4.0.1 (2020-06-06) -- "See Things Now"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "gsbDesign"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('gsbDesign')
+Loading required package: gsDesign
+Loading required package: ggplot2
+Loading required package: lattice
+Loading required package: grid
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("gsb")
+> ### * gsb
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: gsb
+> ### Title: Group Sequential Bayesian Design
+> ### Aliases: gsb gsbDesign gsbSimulation
+> ### Keywords: main function operating characteristics
+> 
+> ### ** Examples
+> 
+> ## E X A M P L E 1: Update on treatment effect, flat prior
+> ##
+> ## A. Trial Design:
+> ## ----------------
+> ## A.1 2 stages (interim + final):
+> ##     --> nr.stages = 2
+> ## A.2 10 patients per arms and stages. (total 2*2*10 = 40 patients)
+> ##     --> patients = 10
+> ## A.3 Sigma in both arms = 10
+> ##     --> sigma = 10
+> ## A.3 Criteria:
+> ##     stop for success, if P( delta > 0 | data ) >= 0.8
+> ##                      AND P( delta > 7 | data ) >= 0.5 
+> ##     --> criteria.success = c(0,0.8,7,0.5)
+> ##     stop for futility, if P( delta < 2 | data ) >= 0.8
+> ##     --> criteria.futility = c(2,0.8)
+> ## A.4 Prior:
+> ##     --> prior = "non-informative"
+> 
+> design1 <- gsbDesign(nr.stages = 2,
++                      patients = 10,
++                      sigma = 10,
++                      criteria.success = c(0,0.8, 7, 0.5),
++                      criteria.futility = c(2,0.8),
++                      prior.difference = "non-informative")
+> design1
+
+*** Trial Design ***
+
+number of stages:  2 
+
+prior:  non-informative
+
+patients: 
+        control treatment
+stage 1      10        10
+stage 2      10        10
+
+sigma control: 10 ;	sigma treatment: 10 
+
+criteria: 
+     type stage number value probability
+  success     1      1     0         0.8
+  success     1      2     7         0.5
+  success     2      1     0         0.8
+  success     2      2     7         0.5
+ futility     1      1     2         0.8
+ futility     2      1     2         0.8
+> 
+> ## B. Simulation Settings
+> ## ----------------------
+> ## B.1 True treatment effects to be evaluated = seq(-10,20,60)
+> ##     --> truth = c(-10,20,60)
+> ## B.2 Bayesian update on treatment effect delta (= treatment - control)
+> ##     --> type.update = "treatment effect"
+> 
+> simulation1 <- gsbSimulation(truth=c(-10,20,60),
++                              type.update="treatment effect")
+> simulation1
+
+*** Simulation Settings ***
+
+type.update: 		 treatment effect 
+method: 		 numerical integration 
+
+grid of true differences (= treatment - control):
+60 distinct values from -10 to 20.
+> 
+> ## C.1 Calculate the operating characteristics
+> x1 <- gsb(design=design1, simulation=simulation1)
+> x1
+
+*** Group Sequential Bayesian Design ***
+
+ Analysis N1 N2  S      F std.S  std.F
+    Prior  0  0 NA     NA    NA     NA
+        1 10 10  7 -1.764  1.57 -0.394
+        2 10 10  7 -0.661  2.21 -0.209
+
+sigma treatment: 10 	sigma control: 10 
+
+stopping for success:
+ delta stage 1 stage 2  total E{N}
+     0   0.059  0.0050 0.0641 31.9
+     7   0.500  0.1244 0.6244 29.5
+
+stopping for futility:
+ delta stage 1 stage 2 total
+     2  0.2004  0.0857 0.286
+
+names in output list: 
+[1] "OC"          "boundary"    "design"      "simulation"  "system.time"
+> 
+> ## D.1 Table the probabilities of success
+> t1.1 <- tab(x1, "success", digits=2)
+> t1.1
+          stage 1 stage 2
+1  -10.00    0.00    0.00
+2   -9.49    0.00    0.00
+3   -8.98    0.00    0.00
+4   -8.47    0.00    0.00
+5   -7.97    0.00    0.00
+6   -7.46    0.00    0.00
+7   -6.95    0.00    0.00
+8   -6.44    0.00    0.00
+9   -5.93    0.00    0.00
+10  -5.42    0.00    0.00
+11  -4.92    0.00    0.00
+12  -4.41    0.01    0.00
+13  -3.90    0.01    0.00
+14  -3.39    0.01    0.00
+15  -2.88    0.01    0.00
+16  -2.37    0.02    0.00
+17  -1.86    0.02    0.00
+18  -1.36    0.03    0.00
+19  -0.85    0.04    0.00
+20  -0.34    0.05    0.00
+21   0.17    0.06    0.01
+22   0.68    0.08    0.01
+23   1.19    0.10    0.01
+24   1.69    0.12    0.02
+25   2.20    0.14    0.02
+26   2.71    0.17    0.03
+27   3.22    0.20    0.04
+28   3.73    0.23    0.05
+29   4.24    0.27    0.06
+30   4.75    0.31    0.07
+31   5.25    0.35    0.08
+32   5.76    0.39    0.10
+33   6.27    0.44    0.11
+34   6.78    0.48    0.12
+35   7.29    0.53    0.13
+36   7.80    0.57    0.14
+37   8.31    0.61    0.14
+38   8.81    0.66    0.14
+39   9.32    0.70    0.14
+40   9.83    0.74    0.14
+41  10.34    0.77    0.13
+42  10.85    0.81    0.12
+43  11.36    0.83    0.11
+44  11.86    0.86    0.10
+45  12.37    0.89    0.09
+46  12.88    0.91    0.07
+47  13.39    0.92    0.06
+48  13.90    0.94    0.05
+49  14.41    0.95    0.04
+50  14.92    0.96    0.03
+51  15.42    0.97    0.03
+52  15.93    0.98    0.02
+53  16.44    0.98    0.02
+54  16.95    0.99    0.01
+55  17.46    0.99    0.01
+56  17.97    0.99    0.01
+57  18.47    0.99    0.01
+58  18.98    1.00    0.00
+59  19.49    1.00    0.00
+60  20.00    1.00    0.00
+> 
+> ## D.2 Table the cumulative probabilities of futility at delta = c(-5,0,5.57)
+> ##     (for 5.57 a linear interpolation is used.)
+> t1.2 <- tab(x1, "cumulative futility", atDelta = c(-5,0,5.57), digits=5)
+> t1.2
+        stage 1 stage 2
+1 -5.00 0.76515 0.93344
+2  0.00 0.34684 0.50334
+3  5.57 0.05078 0.06286
+> 
+> ## D.3 Table the expected sample size (digits == 0 --> ceiling)
+> t1.3 <- tab(x1, "sample size", atDelta= c(-5,0,5,16), digits=0)
+> t1.3
+     stage 1 stage 2
+1 -5      20      25
+2  0      20      32
+3  5      20      33
+4 16      20      21
+> 
+> ## E.1 Plot the operating characteristics
+> plot(x1)
+> 
+> ## E.2 Plot the operating characteristics
+> plot(x1,"cumulative all")
+> 
+> ## E.3 Plot the expected sample size
+> plot(x1, what="sample size")
+> 
+> ## F.1 Boundaries / criteria 
+> x1$boundary
+                    type   stage observed_difference std_observed_difference
+1  success / upper bound stage 1            7.000000               1.5652476
+2  success / upper bound stage 2            7.000000               2.2135944
+3 futility / lower bound stage 1           -1.763845              -0.3944076
+4 futility / lower bound stage 2           -0.661440              -0.2091657
+> plot(x1, what="boundary")
+> plot(x1, what="std.boundary")
+> 
+> 
+> ## E X A M P L E 2: Update on treatment effect, informative prior
+> ##
+> ## A. Trial design:
+> ## ----------------
+> ## A.1 3 stages (interims + final):
+> ##     --> nr.stages = 3
+> ## A.2 10 patients per stage in control arm
+> ##     15 patients per stage in treatment arm
+> ##     (i.e. total 3 * ( 10 + 15 ) = 75 patients)
+> ##     --> patients = c(10,15)
+> ## A.3 Sigma in control arm = 9, sigma in treatment arm = 12
+> ##     --> sigma = c(9,12)
+> ## A.3 Criteria:
+> ##     stop for success, if P( delta > 0 | data ) >= 0.8
+> ##                      AND P( delta > 7 | data ) >= 0.5 
+> ##     --> criteria.success = c(0,0.8,7,0.5)
+> ##     not stop for futility, i.e. no futility criteria
+> ##     --> criteria.futility = NA
+> ## A.4 Prior on difference:
+> ##     prior difference = 3
+> ##     informative prior equivalent to:
+> ##     5 patients in control arm; 2 patients in treatment arm
+> ##     --> prior = c(3,5,2)
+> 
+> design2a <- gsbDesign(nr.stages = 3,
++                      patients = c(10,15),
++                      sigma=c(9,12),
++                      criteria.success = c(0,0.8,7,0.5),
++                      criteria.futility = NA,
++                      prior.diff = c(3,5,2))
+> design2a
+
+*** Trial Design ***
+
+number of stages:  3 
+
+prior difference:	  3 
+prior patients control:	  5 
+prior patients treatment: 2 
+
+patients: 
+        control treatment
+stage 1      10        15
+stage 2      10        15
+stage 3      10        15
+
+sigma control: 9 ;	sigma treatment: 12 
+
+criteria: 
+    type stage number value probability
+ success     1      1     0         0.8
+ success     1      2     7         0.5
+ success     2      1     0         0.8
+ success     2      2     7         0.5
+ success     3      1     0         0.8
+ success     3      2     7         0.5
+> 
+> ## A similar design with 3 success criteria can be specified as follows
+> ## A.3 criteria:
+> ##     Stage 1: stop for success, if P( delta > 0  | data ) >= 0.8
+> ##                            AND if P( delta > 10 | data ) >= 0.5
+> ##                            AND if P( delta > 14 | data ) >= 0.4
+> ##     Stage 2: stop for success, if P( delta > 0  | data ) >= 0.8
+> ##                            AND if P( delta > 9  | data ) >= 0.5
+> ##                            AND if P( delta > 13 | data ) >= 0.4
+> ##     Stage 3: stop for success, if P( delta > 0  | data ) >= 0.8
+> ##                            AND if P( delta > 7  | data ) >= 0.5
+> ##                            AND if P( delta > 12 | data ) >= 0.4
+> ##     --> criteria.success = rbind(c(0,0.8, 10,0.5, 14,0.4),
+> ##                                  c(0,0.8,  9,0.5, 13,0.4),
+> ##                                  c(0,0.8,  7,0.5, 12,0.4))
+> 
+> design2b <- gsbDesign(nr.stages = 3,
++                       patients = c(10,15),
++                       sigma = c(9,12),
++                       criteria.success = rbind(c(0,0.8, 10,0.5, 14,0.4),
++                                                c(0,0.8, 9,0.5,  13,0.4),
++                                                c(0,0.8, 7,0.5,  12,0.4)),
++                       criteria.futility = NA,
++                       prior.diff = c(3,5,2))
+> design2b
+
+*** Trial Design ***
+
+number of stages:  3 
+
+prior difference:	  3 
+prior patients control:	  5 
+prior patients treatment: 2 
+
+patients: 
+        control treatment
+stage 1      10        15
+stage 2      10        15
+stage 3      10        15
+
+sigma control: 9 ;	sigma treatment: 12 
+
+criteria: 
+    type stage number value probability
+ success     1      1     0         0.8
+ success     1      2    10         0.5
+ success     1      3    14         0.4
+ success     2      1     0         0.8
+ success     2      2     9         0.5
+ success     2      3    13         0.4
+ success     3      1     0         0.8
+ success     3      2     7         0.5
+ success     3      3    12         0.4
+> 
+> ## B. Simulation Settings
+> ## ----------------------
+> ## B.1 True treatment effects to be evaluated from -5 to 30
+> ##     --> truth = -5:30
+> ## B.2 To enter the values in this format set grid.type = "manually"
+> ##     --> grid.type = "manually"
+> 
+> ## B.2 Bayesian update on treatment effect delta (treatment - control)
+> ##     --> type.update = "treatment effect"
+> 
+> simulation2 <- gsbSimulation(truth = -5:30,
++                              grid.type ="manually",
++                              type.update = "treatment effect")
+> simulation2
+
+*** Simulation Settings ***
+
+type.update: 		 treatment effect 
+method: 		 numerical integration 
+
+grid of true differences (= treatment - control):
+36 distinct values from -5 to 30.
+> 
+> ## C. Calculate the operating characteristics
+> x2a <- gsb(design = design2a, simulation = simulation2)
+> x2b <- gsb(design = design2b, simulation = simulation2)
+> x2a
+
+*** Group Sequential Bayesian Design ***
+
+ Analysis N1 N2    S  F std.S std.F
+    Prior  5  2   NA NA    NA    NA
+        1 10 15 7.80 NA  1.85    NA
+        2 10 15 7.40 NA  2.49    NA
+        3 10 15 7.27 NA  2.99    NA
+
+sigma treatment: 9 	sigma control: 12 
+
+stopping for success:
+ delta stage 1 stage 2 stage 3  total E{N}
+     0  0.0318  0.0028  0.0004 0.0350 73.3
+     7  0.4243  0.1346  0.0704 0.6293 50.4
+
+names in output list: 
+[1] "OC"          "boundary"    "design"      "simulation"  "system.time"
+> x2b
+
+*** Group Sequential Bayesian Design ***
+
+ Analysis N1 N2    S  F std.S std.F
+    Prior  5  2   NA NA    NA    NA
+        1 10 15 15.0 NA  3.57    NA
+        2 10 15 13.2 NA  4.44    NA
+        3 10 15 12.0 NA  4.93    NA
+
+sigma treatment: 9 	sigma control: 12 
+
+stopping for success:
+ delta stage 1 stage 2 stage 3  total E{N}
+     0  0.0002  0.0000  0.0000 0.0002 75.0
+     7  0.0280  0.0110  0.0102 0.0492 73.3
+     9  0.0756  0.0443  0.0500 0.1699 70.1
+    10  0.1155  0.0762  0.0875 0.2792 67.3
+    12  0.2350  0.1672  0.1690 0.5712 59.1
+    13  0.3139  0.2142  0.1878 0.7159 53.9
+    14  0.4024  0.2499  0.1806 0.8330 48.6
+
+names in output list: 
+[1] "OC"          "boundary"    "design"      "simulation"  "system.time"
+> 
+> ## D. Table the cumulative probabilities of success of 'design2b'
+> ##    at delta = c(-5,0,5.57). For 5.57 a linear interpolation is used.
+> t2b <- tab(x2b, "cumulative success", atDelta = c(-5,0,5.57), digits=5)
+> t2b
+        stage 1 stage 2 stage 3
+1 -5.00 0.00000 0.00000 0.00000
+2  0.00 0.00018 0.00018 0.00018
+3  5.57 0.01268 0.01612 0.01867
+> 
+> ## E. Plot the operating characteristics of 'design2a' and 'design2b'
+> plot(x2a)
+> plot(x2b)
+> plot(x2a,"cumulative all")
+> 
+> ## F.1 Boundaries / criteria of 'design2b' 
+> x2b$boundary
+                    type   stage observed_difference std_observed_difference
+1  success / upper bound stage 1            15.03955                3.574772
+2  success / upper bound stage 2            13.21281                4.441438
+3  success / upper bound stage 3            11.96641                4.926495
+4 futility / lower bound stage 1                  NA                      NA
+5 futility / lower bound stage 2                  NA                      NA
+6 futility / lower bound stage 3                  NA                      NA
+> plot(x2b, what="boundary")
+> plot(x2b, what="std.boundary")
+> 
+> 
+> 
+> 
+> ## Not run: 
+> ##D ## E X A M P L E 3: Update on treatment effect, informative prior
+> ##D ##
+> ##D ## A. Trial Design
+> ##D ## ---------------
+> ##D ## A.1 3 stages (interims + final):
+> ##D ##     --> nr.stages = 3
+> ##D ## A.2 Patients:
+> ##D ##         Stage 1: 10 patients in control arm; 15 patients in treatment arm
+> ##D ##         Stage 2: 20 patients in control arm; 30 patients in treatment arm
+> ##D ##         Stage 3: 30 patients in control arm; 45 patients in treatment arm
+> ##D ##     --> patients = rbind(c(10,15),c(20,30),c(30,45))
+> ##D ## A.3 Sigma in control arm = 9 ; in treatment arm = 12
+> ##D ##     --> sigma = c(9,12)
+> ##D ## A.4 Success criteria for all stages:
+> ##D ##     stop for success, if P( delta > 0 | data ) >= 0.8
+> ##D ##                      AND P( delta > 7 | data ) >= 0.5
+> ##D ##      --> criteria.success = c(0,0.8,7,0.5)
+> ##D ## A.5 Futility criteria:
+> ##D ##         Stage 1: no futility criteria
+> ##D ##         Stage 2: stop for futility, if P( delta < 2 | data ) >= 0.8
+> ##D ##         Stage 3: stop for futility, if P( delta < 2 | data ) >= 0.8
+> ##D ##     --> criteria.futility = rbind(c(NA,NA),c(2,0.8),c(2,0.8))
+> ##D ## A.6 Prior on treatment effect:
+> ##D ##         difference  = 3;
+> ##D ##         informative prior equivalent to:
+> ##D ##         2 placebo patient; 1 treatment patient
+> ##D ##     --> prior.difference = c(3,2,1)
+> ##D 
+> ##D design3 <- gsbDesign(nr.stages = 3,
+> ##D                      patients = rbind(c(10,15),c(20,30),c(30,45)),
+> ##D                      sigma=c(9,12),
+> ##D                      criteria.success = c(0,0.8,7,0.5),
+> ##D                      criteria.futility = rbind(c(NA,NA),c(2,0.8),c(2,0.8)),
+> ##D                      prior.difference = c(3,2,1))
+> ##D design3
+> ##D 
+> ##D ## B. Simulation Settings
+> ##D ## ----------------------
+> ##D ## B.1 True treatment effects to be evaluated at seq(-5,20,15)
+> ##D ##     --> truth = c(-5,20,15)
+> ##D ## B.2 Bayesian update on treatment effect delta (= treatment - control)
+> ##D ##     --> type.update = "treatment effect"
+> ##D ## B.3 Operating characteristics are evaluated by simulation and
+> ##D ##     numerical integration to double check the results
+> ##D ##     --> method = "both"
+> ##D ## B.4 Number of simulations = 5000
+> ##D ##     --> nr.sim = 5000
+> ##D ## B.5 If the number of simulated trials is smaller than 300
+> ##D ##     during the simulation print a warning.
+> ##D ##     --> warnings.sensitivity = 300
+> ##D ## B.6 A seed value is set to 13
+> ##D ##     --> seed = 13 
+> ##D 
+> ##D simulation3 <- gsbSimulation(truth = c(-5,20,15),
+> ##D                              type.update = "treatment effect",
+> ##D                              method = "both",
+> ##D                              nr.sim = 5000,
+> ##D                              warnings.sensitivity = 300,
+> ##D                              seed = 13)
+> ##D simulation3
+> ##D 
+> ##D ## C. Calculate the operating characteristics
+> ##D x3 <- gsb(design = design3, simulation = simulation3)
+> ##D x3
+> ##D 
+> ##D ## D. The summary(x3) is almost the same as print(x3) but its entries
+> ##D ##    can be saved as list.
+> ##D s3 <- summary(x3)
+> ##D names(s3)
+> ##D 
+> ##D ## E.1 Plot the operating characteristics
+> ##D plot(x3)
+> ##D 
+> ##D ## E.2 Plot the operating characteristics obtained by simulation and
+> ##D ##     numerical integration in one plot. The lines should be identical (then
+> ##D ##     only one line is visible)
+> ##D plot(x3, "both")
+> ##D plot(x3, "cumulative both")
+> ##D 
+> ##D 
+> ##D 
+> ##D ## E X A M P L E 4 - Boundaries / Criteria
+> ##D ## See how the Bayesian boundaries change within 10 stages.
+> ##D ##
+> ##D ## A. Trial Design:
+> ##D ## ----------------
+> ##D ## A.1 10 stages (interims + final):
+> ##D ##     --> nr.stages = 10
+> ##D ## A.2 10 patients per arm and stage. (total 2*10*10 = 200 patients)
+> ##D ##     --> patients = 10
+> ##D ## A.3 sigma in both arms = 10
+> ##D ##     --> sigma = 10
+> ##D ## A.3 Criteria:
+> ##D ##     stop for success, if P( delta > 0 | data ) >= 0.8
+> ##D ##                      AND P( delta > 7 | data ) >= 0.5 
+> ##D ##     --> criteria.success = c(0,0.8,7,0.5)
+> ##D ##     stop for futility, if P( delta < 2 | data ) >= 0.8
+> ##D ##     --> criteria.futility = c(2,0.8)
+> ##D ## A.4 Prior:
+> ##D ##     --> prior = "non-informative"
+> ##D 
+> ##D design4 <- gsbDesign(nr.stages=10,
+> ##D                      patients=10,
+> ##D                      sigma=10,
+> ##D                      criteria.success=c(0,0.8, 7, 0.5),
+> ##D                      criteria.futility=c(2,0.8),
+> ##D                      prior.difference="non-informative")
+> ##D design4
+> ##D 
+> ##D 
+> ##D ## B. Simulation Settings
+> ##D ## --------------------------------------------
+> ##D ## B.1 True treatment effects to be evaluated = seq(-10,20,60)
+> ##D ##     --> truth = c(-10,20,60)
+> ##D ## B.2 Bayesian update on treatment effect delta (= treatment - control)
+> ##D ##     --> type.update = "treatment effect"
+> ##D 
+> ##D simulation4 <- gsbSimulation(truth=c(-10,20,60),
+> ##D                              type.update="treatment effect")
+> ##D simulation4
+> ##D 
+> ##D ## C. Calculate the operating characteristics
+> ##D x4 <- gsb(design = design4, simulation = simulation4)
+> ##D x4
+> ##D 
+> ##D ## D. Boundaries / criteria 
+> ##D x4$boundary
+> ##D plot(x4, what="boundary")
+> ##D plot(x4, what="std.boundary")
+> ##D 
+> ##D 
+> ##D ## E X A M P L E 5 - Bayesian update "per arm", 
+> ##D ## 
+> ##D ## A. Trial Design:
+> ##D ## ----------------
+> ##D ## A.1 3 stages (interims + final):
+> ##D ##     --> nr.stages = 3
+> ##D ## A.2 12 patients per stage in control arm
+> ##D ##     20 patients per stage in treatment arm
+> ##D ##     (i.e. total 3 * ( 12 + 20 ) = 96 patients)
+> ##D ##     --> patients = c(12,20)
+> ##D ## A.3 sigma in both arms = 10
+> ##D ##     --> sigma = 10
+> ##D ## A.3 Criteria:
+> ##D ##     stop for success, if P( delta > 0 | data ) >= 0.8
+> ##D ##                      AND P( delta > 7 | data ) >= 0.5 
+> ##D ##     --> criteria.success = c(0,0.8,7,0.5)
+> ##D ##     stop for futility, if P( delta < 2 | data ) >= 0.8
+> ##D ##     --> criteria.futility = c(2,0.8)
+> ##D ## A.4 Prior:
+> ##D ##     informative prior equivalent to:
+> ##D ##     2 patients in control arm with mean = 0
+> ##D ##     --> prior.control = c(0,2)
+> ##D ##     1 patient in treatment arm with mean = 7 
+> ##D ##     --> prior.treatment = c(7,1)
+> ##D 
+> ##D design5 <- gsbDesign(nr.stages=3,
+> ##D                      patients=c(12,20),
+> ##D                      sigma=10,
+> ##D                      criteria.success=c(0,0.8,7,0.5),
+> ##D                      criteria.futility=c(2,0.8),
+> ##D                      prior.control=c(0,2),
+> ##D                      prior.treatment=c(7,1)) 
+> ##D design5
+> ##D 
+> ##D ## B.  Simulation Settings: - with table grid
+> ##D ## --------------------------------------------
+> ##D ## B.1 True control/treatment values:
+> ##D ##       control = seq(1,5,0.5)
+> ##D ##       treatment = seq(1,7,1)
+> ##D ##       --> truth = list(seq(1,5,0.5),seq(1,7,1))
+> ##D ## B.2 Output optimized to create table
+> ##D ##       --> grid.type = "table"
+> ##D ## B.3 Bayesian update per arm
+> ##D ##       --> type.update = "per arm"
+> ##D ## B.4 Number of simulations = 5000 (which is low)
+> ##D ##       --> nr.sim = 5000
+> ##D ## B.5 If the number of simulations is smaller than 2000
+> ##D ##       print a warning.
+> ##D ##       --> warnings.sensitivity = 2000
+> ##D ## B.6 A seed value is set to 13
+> ##D ##       --> seed = 13
+> ##D 
+> ##D simulation5.table <- gsbSimulation(truth = list(seq(1,5,0.5), seq(1,7,1)),
+> ##D                                    grid.type = "table",
+> ##D                                    type.update = "per arm",
+> ##D                                    nr.sim = 5000,
+> ##D                                    warnings.sensitivity = 2000,
+> ##D                                    seed = 13)
+> ##D simulation5.table
+> ##D 
+> ##D ## The same grid can be specified manually by
+> ##D simulation5.manually <- gsbSimulation(truth = as.matrix(expand.grid(seq(1,5,0.5),seq(1,7,1))),
+> ##D                                      grid.type = "manually",
+> ##D                                      type.update = "per arm",
+> ##D                                      nr.sim = 5000,
+> ##D                                      warnings.sensitivity = 2000,
+> ##D                                      seed = 13)
+> ##D simulation5.manually
+> ##D 
+> ##D ## To specify a grid optimized for sliced plotting with
+> ##D ## control values from -10 to 0 and treatment values from -10 to 25
+> ##D 
+> ##D simulation5.sliced <- gsbSimulation(truth = list(control=seq(-10,0,2), delta=seq(-10,25,4)),
+> ##D                                     grid.type = "sliced",
+> ##D                                     type.update = "per arm",
+> ##D                                     nr.sim = 5000,
+> ##D                                     warnings.sensitivity = 2000,
+> ##D                                     seed = 13)
+> ##D simulation5.sliced
+> ##D 
+> ##D ## To specify a grid optimized for plotting with
+> ##D ## control values from 1 to 5 and treatment values from 1 to 7
+> ##D ## with approximately 20 values enter: 
+> ##D simulation5.plot <- gsbSimulation(truth = c(1,5,1,7,20),
+> ##D                                   grid.type = "plot",
+> ##D                                   type.update = "per arm",
+> ##D                                   nr.sim = 5000,
+> ##D                                   warnings.sensitivity = 2000,
+> ##D                                   seed = 13)
+> ##D simulation5.plot
+> ##D 
+> ##D ## C. Use function gsb
+> ##D x5.table <- gsb(design5,simulation5.table)
+> ##D x5.sliced <- gsb(design5,simulation5.sliced)
+> ##D x5.plot <- gsb(design5,simulation5.plot)
+> ##D x5.table
+> ##D 
+> ##D ## D. Tables
+> ##D ## D.1 For any grid a table in long format can be obtained  
+> ##D t5.1 <- tab(x5.table,"cumulative futility")
+> ##D head(t5.1)
+> ##D 
+> ##D t5.2 <- tab(x5.sliced,"all")
+> ##D head(t5.2)
+> ##D 
+> ##D ## D.2 For the "table" grid there are additionally tables in wide format available.
+> ##D t5.3 <- tab(x5.table,"success", wide=TRUE)
+> ##D t5.3
+> ##D 
+> ##D ## Fix a stage, e.g. stage 2, to get a matrix
+> ##D t5.3[,,2]
+> ##D 
+> ##D ## D.2 Set delta.control to '3' to get a matrix
+> ##D t5.3["contr 3",,]
+> ##D 
+> ##D # D.3 Plot results
+> ##D plot(x5.table)
+> ##D plot(x5.plot)
+> ##D plot(x5.sliced)
+> ##D plot(x5.sliced, sliced=TRUE)
+> ##D plot(x5.sliced, sliced=TRUE, range.control=c(-4,0))
+> ##D plot(x5.sliced, what="success", sliced=TRUE, range.control=c(-4,0))
+> ##D 
+> ##D ## the plot can differ because the number of simulations "nr.sim"
+> ##D ## is low and because the grids are different
+> ##D plot(x5.plot,"sample size", color=FALSE)
+> ##D head(tab(x5.table,"sample size"))
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("gsbBayesUpdate")
+> ### * gsbBayesUpdate
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: gsbBayesUpdate
+> ### Title: Bayesian Update
+> ### Aliases: gsbBayesUpdate
+> ### Keywords: bayes update
+> 
+> ### ** Examples
+> 
+> ## One dimensional case, with.alpha = FALSE
+> gsbBayesUpdate(beta=10,precisionData=20, with.alpha=FALSE)
+$beta
+[1] 30
+
+$weight
+[1] 0.3333333
+
+> 
+> ## Two dimensional case, with.alpha = TRUE
+> gsbBayesUpdate(alpha=c(5,6),beta=c(10,11),meanData=c(10,11),
++                precisionData=c(20,21),with.alpha=TRUE)
+$alpha
+[1] 8.333333 9.281250
+
+$beta
+[1] 30 32
+
+$weight
+[1] 0.3333333 0.3437500
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("plot.gsbMainOut")
+> ### * plot.gsbMainOut
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: plot.gsbMainOut
+> ### Title: Plot methods
+> ### Aliases: plot.gsbMainOut plot.gsbDesign plot.gsbSimulation
+> ### Keywords: plot
+> 
+> ### ** Examples
+> 
+> 
+> ## please see examples of function 'gsb'. 
+> ## --------------------------------------
+> 
+> 
+> ## --------------------------------------
+> ## alternative plots can be created for example
+> ## with package 'ggplot2'.
+> ## Not run: 
+> ##D des <- gsbDesign(nr.stages=2,
+> ##D                      patients=10,
+> ##D                      sigma=10,
+> ##D                      criteria.success=c(0,0.8, 7, 0.5),
+> ##D                      criteria.futility=c(2,0.8),
+> ##D                      prior.difference="non-informative")
+> ##D 
+> ##D sim <- gsbSimulation(truth=c(-10,20,60),
+> ##D                              type.update="treatment effect")
+> ##D 
+> ##D 
+> ##D x <- gsb(des,sim)
+> ##D 
+> ##D ## get data.frame with operating characteristics
+> ##D datgraph <- x$OC
+> ##D 
+> ##D 
+> ##D ## prepare for plot
+> ##D sub <- levels(datgraph$type)[1:3]
+> ##D datgraph2 <- subset(datgraph,datgraph$type %in% sub)
+> ##D datgraph2$type <- as.factor(paste(datgraph2$type))
+> ##D datgraph2$value[datgraph2$type=="cumulative success or futility"] <-
+> ##D 1-datgraph2$value[datgraph2$type=="cumulative success or futility"]
+> ##D levels(datgraph2$type) <- c("1)cumulative futility" ,"3)cumulative success","2)indeterminate")
+> ##D datgraph2$type=as.factor(paste(datgraph2$type))
+> ##D levels(datgraph2$type) <- c("cumulative futility" ,"indeterminate","cumulative success")
+> ##D datgraph2 <- datgraph2[order(datgraph2$delta),]
+> ##D 
+> ##D 
+> ##D ## plots
+> ##D p1 <- qplot(delta,value,geom="blank",color=type,facets=.~stage,data=datgraph2,
+> ##D xlab=expression(delta))
+> ##D 
+> ##D p1+geom_line(size=1.5)+scale_color_manual(values = c("cumulative futility" = "dark red",
+> ##D "indeterminate" = "orange", "cumulative success" = "dark green"))
+> ##D 
+> ##D p2=p1+geom_area(aes(x = delta,y=value,fill=type))
+> ##D 
+> ##D p2+scale_fill_manual(values = c("cumulative futility" = "dark red",
+> ##D "indeterminate" = "orange", "cumulative success" = "dark green"))
+> ##D 
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("tab")
+> ### * tab
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: tab
+> ### Title: get tables.
+> ### Aliases: tab
+> ### Keywords: table
+> 
+> ### ** Examples
+> 
+> ## please see examples of function 'gsb'.
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  3.406 0.163 11.038 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

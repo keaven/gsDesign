@@ -1,0 +1,42 @@
+Spending_Function_Overview
+                        4.0: Spending function overview
+checkLengths            Utility functions to verify variable properties
+ciBinomial              Testing, Confidence Intervals, Sample Size and
+                        Power for Comparing Two Binomial Rates
+condPower               Sample size re-estimation based on conditional
+                        power
+eEvents                 Expected number of events for a time-to-event
+                        study
+gsBinomialExact         One-Sample Binomial Routines
+gsBound                 Boundary derivation - low level
+gsBoundCP               Conditional Power at Interim Boundaries
+gsCP                    Conditional and Predictive Power, Overall and
+                        Conditional Probability of Success
+gsDensity               Group sequential design interim density
+                        function
+gsDesign                Design Derivation
+gsDesign package overview
+                        1.0 Group Sequential Design
+gsProbability           Boundary Crossing Probabilities
+hGraph                  Create multiplicity graphs using ggplot2
+nNormal                 Normal distribution sample size (2-sample)
+normalGrid              Normal Density Grid
+plot.binomialSPRT       FUNCTION_TITLE
+plot.gsDesign           Plots for group sequential designs
+print.nSurv             Advanced time-to-event sample size calculation
+print.nSurvival         Time-to-event sample size calculation
+                        (Lachin-Foulkes)
+sequentialPValue        Sequential p-value computation
+sfExponential           Exponential Spending Function
+sfHSD                   Hwang-Shih-DeCani Spending Function
+sfLDOF                  Lan-DeMets Spending function overview
+sfLinear                Piecewise Linear and Step Function Spending
+                        Functions
+sfLogistic              Two-parameter Spending Function Families
+sfPoints                Pointwise Spending Function
+sfPower                 Kim-DeMets (power) Spending Function
+sfTDist                 t-distribution Spending Function
+sfTruncated             Truncated, trimmed and gapped spending
+                        functions
+summary.gsDesign        Bound Summary and Z-transformations
+xtable                  xtable
