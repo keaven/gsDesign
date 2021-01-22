@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.1.9002</span>
       </span>
     </div>
 
@@ -158,7 +158,7 @@
            <span class="va">sd2</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">rchisq</a></span><span class="op">(</span>n<span class="op">=</span><span class="va">nsim</span>, df<span class="op">=</span><span class="va">n2</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="va">n2</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="va">n2</span><span class="op">)</span>
 <span class="va">z</span> <span class="op">&lt;-</span> <span class="va">deltahat</span> <span class="op">/</span> <span class="va">s</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">z</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="fl">.975</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.946318</span></code></pre></div>
+<span class="co">#&gt; [1] 0.946268</span></code></pre></div>
 <p>The standard error for this simulation power calculation is approximately</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">pwr</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">pwr</span><span class="op">)</span><span class="op">/</span><span class="va">nsim</span><span class="op">)</span>
