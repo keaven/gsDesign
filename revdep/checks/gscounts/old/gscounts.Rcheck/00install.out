@@ -1,0 +1,22 @@
+* installing *source* package ‘gscounts’ ...
+** package ‘gscounts’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+/opt/rh/devtoolset-7/root/bin/g++ -std=gnu++11 -I"/usr/local/app/R/Rtoolkit-EIM-0.0.1/4.0.1/lib64/R/include" -DNDEBUG  -I'/home/shirazam/gsDesign/revdep/library/gsDesign/old/Rcpp/include' -I/usr/local/app/Rtoolkit-EIM/0.0.1/include -I/usr/local/app/Rtoolkit-EIM/0.0.1/include/cairo -I/opt/rh/v8314/root/usr/include  -fPIC  -I/usr/local/app/Rtoolkit-EIM/0.0.1/include -I/usr/local/app/Rtoolkit-EIM/0.0.1/include/cairo -I/opt/rh/v8314/root/usr/include  -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -lstdc++ -c RcppExports.cpp -o RcppExports.o
+/opt/rh/devtoolset-7/root/bin/g++ -std=gnu++11 -I"/usr/local/app/R/Rtoolkit-EIM-0.0.1/4.0.1/lib64/R/include" -DNDEBUG  -I'/home/shirazam/gsDesign/revdep/library/gsDesign/old/Rcpp/include' -I/usr/local/app/Rtoolkit-EIM/0.0.1/include -I/usr/local/app/Rtoolkit-EIM/0.0.1/include/cairo -I/opt/rh/v8314/root/usr/include  -fPIC  -I/usr/local/app/Rtoolkit-EIM/0.0.1/include -I/usr/local/app/Rtoolkit-EIM/0.0.1/include/cairo -I/opt/rh/v8314/root/usr/include  -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -lstdc++ -c cpp_functions.cpp -o cpp_functions.o
+/opt/rh/devtoolset-7/root/bin/g++ -std=gnu++11 -shared -L/usr/local/app/R/Rtoolkit-EIM-0.0.1/4.0.1/lib64/R/lib -L/usr/local/app/Rtoolkit-EIM/0.0.1/lib -L/usr/local/app/Rtoolkit-EIM/0.0.1/lib64 -L/opt/rh/v8314/root/usr/lib64 -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -lstdc++ -L/usr/local/lib64 -o gscounts.so RcppExports.o cpp_functions.o -L/usr/local/app/R/Rtoolkit-EIM-0.0.1/4.0.1/lib64/R/lib -lR
+installing to /home/shirazam/gsDesign/revdep/checks/gscounts/old/gscounts.Rcheck/00LOCK-gscounts/00new/gscounts/libs
+** R
+** data
+*** moving datasets to lazyload DB
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** checking absolute paths in shared objects and dynamic libraries
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (gscounts)

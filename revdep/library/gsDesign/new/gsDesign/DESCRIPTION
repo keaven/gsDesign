@@ -1,0 +1,22 @@
+Package: gsDesign
+Version: 3.1.9002
+Title: Group Sequential Design
+Description: Derives group sequential designs and describes their properties.
+Authors@R: person(given = "Keaven", family = "Anderson", email =
+          "keaven_anderson@merck.com", role = c('aut','cre'))
+Depends: R (>= 3.5.0), ggplot2 (>= 0.9.2)
+License: GPL (>= 3)
+Imports: stats, magrittr, utils, rlang, methods, graphics, tools,
+        mvtnorm, dplyr, tidyr, tibble, xtable
+Suggests: knitr, scales, rmarkdown, gt, testthat, covr, gridExtra
+VignetteBuilder: knitr
+Copyright: Copyright 2010, Merck Research Laboratories
+RoxygenNote: 7.1.1
+Encoding: UTF-8
+RemoteType: local
+RemoteUrl: /home/shirazam/gsDesign
+NeedsCompilation: yes
+Packaged: 2021-01-28 18:01:39 UTC; shirazam
+Author: Keaven Anderson [aut, cre]
+Maintainer: Keaven Anderson <keaven_anderson@merck.com>
+Built: R 4.0.1; x86_64-pc-linux-gnu; 2021-01-28 18:01:42 UTC; unix

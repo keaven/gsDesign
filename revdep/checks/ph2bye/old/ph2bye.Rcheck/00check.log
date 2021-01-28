@@ -1,0 +1,16 @@
+* using log directory ‘/home/shirazam/gsDesign/revdep/checks/ph2bye/old/ph2bye.Rcheck’
+* using R version 4.0.1 (2020-06-06)
+* using platform: x86_64-pc-linux-gnu (64-bit)
+* using session charset: UTF-8
+* using options ‘--no-manual --no-build-vignettes’
+* checking for file ‘ph2bye/DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘ph2bye’ version ‘0.1.4’
+* checking package namespace information ... OK
+* checking package dependencies ... ERROR
+Package required but not available: ‘animation’
+
+See section ‘The DESCRIPTION file’ in the ‘Writing R Extensions’
+manual.
+* DONE
+Status: 1 ERROR
