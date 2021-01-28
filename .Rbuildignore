@@ -12,7 +12,6 @@
 ^vignettes$
 ^_pkgdown\.yml$
 ^gsDesign\.Rproj$
-^\.gitignore$
 
 
 
