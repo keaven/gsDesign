@@ -9,7 +9,6 @@
 ^revdep$
 ^CRAN-RELEASE$
 ..Rcheck
-^vignettes$
 ^_pkgdown\.yml$
 
 
