@@ -1,4 +1,4 @@
-source("../benchmarks/gsDesign_independent_code.R")
+source('../gsDesign_independent_code.R')
 #---------------
 ### Testing gsZ:
 #---------------
