@@ -9,7 +9,7 @@ test_that(
       eta = log(2) / 40, gamma = 1, T = 36, minfup = 12
     )
     local_edition(3) # use the 3rd edition of the testthat package
-    expect_snapshot_output(x = xprint(xtable(x), comment = FALSE))
+    expect_snapshot_output(x = xprint(xtable::xtable(x), comment = FALSE))
   }
 )
 
@@ -20,7 +20,7 @@ test_that(
       eta = log(2) / 40, gamma = 1, T = 36, minfup = 12
     )
     local_edition(3) # use the 3rd edition of the testthat package
-    expect_snapshot_output(x = xprint(xtable(x,
+    expect_snapshot_output(x = xprint(xtable::xtable(x,
       footnote = "This is a footnote; note that it can be wide.",
       caption = "Caption example."
     ), comment = FALSE))
@@ -34,7 +34,7 @@ test_that(
       eta = log(2) / 40, gamma = 1, T = 36, minfup = 12, test.type = 1
     )
     local_edition(3) # use the 3rd edition of the testthat package
-    expect_snapshot_output(x = xprint(xtable(x,
+    expect_snapshot_output(x = xprint(xtable::xtable(x,
       footnote = "This is a footnote; note that it can be wide.",
       caption = "Caption example."
     ), comment = FALSE))

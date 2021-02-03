@@ -5,7 +5,7 @@
 ## For such test cases,the tolerance is set to 1e-6 (= 0.000001), a sufficiently
 ## low value.
 
-source("../benchmarks/gsDesign_independent_code.R")
+source('../gsDesign_independent_code.R')
 
 validate_vd <- Validate_comp_sprt_bnd(
   alpha = 0.1, beta = 0.15, p0 = 0.05, p1 = 0.25,

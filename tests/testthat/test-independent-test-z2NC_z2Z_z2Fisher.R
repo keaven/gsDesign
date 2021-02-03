@@ -1,5 +1,5 @@
 
-source("../benchmarks/gsDesign_independent_code.R")
+source('../gsDesign_independent_code.R')
 
 
 # combination test (built-in options are: z2Z, z2NC, z2Fisher):

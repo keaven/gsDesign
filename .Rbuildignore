@@ -8,3 +8,9 @@
 ^cran-comments\.md$
 ^revdep$
 ^CRAN-RELEASE$
+..Rcheck
+^_pkgdown\.yml$
+tests/benchmarks
+tests/testthat/_snaps$
+
+

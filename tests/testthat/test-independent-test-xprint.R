@@ -11,7 +11,7 @@ test_that(
     local_edition(3)  #use the 3rd edition of the testthat package
     
     expect_snapshot_output(x = xprint(
-      xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE)),
+      xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE)),
       comment = FALSE
     ))
   }
