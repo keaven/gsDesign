@@ -1,4 +1,4 @@
-source('../benchmarks/gsDesign_independent_code.R')
+source('../gsDesign_independent_code.R')
 # Testing gsNormalGrid() : normalGrid() is intended to be used for computation of
 # the expected value of a function of a normal random variable.
 # The function produces grid points and weights to be used for numerical integration.

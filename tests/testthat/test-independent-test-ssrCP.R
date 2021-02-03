@@ -1,4 +1,4 @@
-source('../benchmarks/gsDesign_independent_code.R')
+source('../gsDesign_independent_code.R')
 #-------------------------------------------------------------------------------
 # ssrCp : ssrCP() adapts 2-stage group sequential designs to 2-stage sample size
 # re-estimation designs based on interim analysis conditional power.

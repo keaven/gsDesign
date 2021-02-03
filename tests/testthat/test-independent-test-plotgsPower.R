@@ -1,4 +1,4 @@
-source('../benchmarks/gsDesign_independent_code.R')
+source('../gsDesign_independent_code.R')
 #-------------------------------------------------------------------------------
 # Probability Calculations done using East 6.5', 
 # source : tests/benchmarks/gsqplot.cywx
