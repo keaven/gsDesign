@@ -114,6 +114,131 @@
       
     </div>
 
+    <div id="gsdesign-320-january-2021" class="section level1">
+<h1 class="page-header" data-toc-text="3.2.0">
+<a href="#gsdesign-320-january-2021" class="anchor"></a>gsDesign 3.2.0 (January, 2021)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Substantially updated unit testing to increase code coverage above 80%</li>
+<li>Updated error checking messages to print function where check fails</li>
+<li>Removed dependencies on plyr packages</li>
+</ul>
+</div>
+    <div id="gsdesign-311-may-2020" class="section level1">
+<h1 class="page-header" data-toc-text="3.1.1">
+<a href="#gsdesign-311-may-2020" class="anchor"></a>gsDesign 3.1.1 (May, 2020)<small> 2020-05-07 </small>
+</h1>
+<ul>
+<li>Vignettes updated</li>
+<li>Added <code><a href="../reference/hGraph.html">hGraph()</a></code> to support ggplot2 versions of multiplicity graphs</li>
+<li>Eliminated unnecessary check from <code>sequentialPValue</code>
+</li>
+<li>Targeted release to CRAN</li>
+<li>Removed dependencies on reshape2, plyr</li>
+<li>Updated continuous integration</li>
+<li>Updated license</li>
+</ul>
+</div>
+    <div id="gsdesign-310-april-2019" class="section level1">
+<h1 class="page-header" data-toc-text="3.1.0">
+<a href="#gsdesign-310-april-2019" class="anchor"></a>gsDesign 3.1.0 (April, 2019)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Addition of pkgdown web site</li>
+<li>Updated unit testing to from RUnit to testthat</li>
+<li>Converted to roxygen2 generation of help files</li>
+<li>Converted vignettes to R Markdown</li>
+<li>Added Travis-CI and Appveyor support</li>
+<li>Added <code>sequentialPValue</code> function</li>
+<li>Backwards compatible addition of spending time capabilities to <code>gsDesign</code> and <code>gsSurv</code>
+</li>
+</ul>
+</div>
+    <div id="gsdesign-30-5-january-2018" class="section level1">
+<h1 class="page-header" data-toc-text="3.0-5">
+<a href="#gsdesign-30-5-january-2018" class="anchor"></a>gsDesign 3.0-5 (January, 2018)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Registered C routines</li>
+<li>Fixed “gsbound”</li>
+<li>Replaced “array” by “rep” calls to avoid <code>R CMD check</code> warnings</li>
+</ul>
+</div>
+    <div id="gsdesign-30-4-september-2017" class="section level1">
+<h1 class="page-header" data-toc-text="3.0-4">
+<a href="#gsdesign-30-4-september-2017" class="anchor"></a>gsDesign 3.0-4 (September, 2017)<small> Unreleased </small>
+</h1>
+<ul>
+<li>First Github-based release</li>
+<li>Cleaned up documentation for <code><a href="../reference/gsBinomialExact.html">nBinomial1Sample()</a></code>
+</li>
+<li>Updated documentation and code (including one default value for an argument) for <code><a href="../reference/gsBinomialExact.html">nBinomial1Sample()</a></code> to improve error handling and clarity</li>
+<li>Updated <code><a href="../reference/sfLDOF.html">sfLDOF()</a></code> to generalize with rho parameter; still backwards compatible for Lan-DeMets O’Brien-Fleming</li>
+</ul>
+</div>
+    <div id="gsdesign-30-3" class="section level1">
+<h1 class="page-header" data-toc-text="3.0-3">
+<a href="#gsdesign-30-3" class="anchor"></a>gsDesign 3.0-3<small> Unreleased </small>
+</h1>
+<ul>
+<li>Introduced spending time as a separate concept from information time to enable concepts such as calendar-based spending functions. The only user function changed is the <code><a href="../reference/gsDesign.html">gsDesign()</a></code> function and the change is the addition of the parameters <code>usTime</code> and <code>lsTime</code>; default behavior is backwards compatible.</li>
+</ul>
+</div>
+    <div id="gsdesign-30-2-february-2016" class="section level1">
+<h1 class="page-header" data-toc-text="3.0-2">
+<a href="#gsdesign-30-2-february-2016" class="anchor"></a>gsDesign 3.0-2 (February, 2016)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Simplified conditional power section of gsDesignManual.pdf in doc directory</li>
+<li>Corrected basic calculation in <code><a href="../reference/gsCP.html">gsCP()</a></code>
+</li>
+<li>Eliminated deprecated ggplot2 function <code>opts()</code>
+</li>
+</ul>
+</div>
+    <div id="gsdesign-30-1-january-2016" class="section level1">
+<h1 class="page-header" data-toc-text="3.0-1">
+<a href="#gsdesign-30-1-january-2016" class="anchor"></a>gsDesign 3.0-1 (January, 2016)<small> 2016-02-01 </small>
+</h1>
+<ul>
+<li>More changes to comply with R standards (in NAMESPACE - <code>importFrom</code> statements - and DESCRIPTION - adding plyr to imports) ensuring appropriate references.</li>
+<li>Deleted link in documentation that no longer exists (gsBinomialExact.Rd).</li>
+<li>Last planned RForge-based release; moving to Github.</li>
+</ul>
+</div>
+    <div id="gsdesign-30-0-december-2015" class="section level1">
+<h1 class="page-header" data-toc-text="3.0-0">
+<a href="#gsdesign-30-0-december-2015" class="anchor"></a>gsDesign 3.0-0 (December, 2015)<small> Unreleased </small>
+</h1>
+<ul>
+<li>Updated xtable extension to meet R standards for extensions.</li>
+<li>Fixed <code>xtable.gsSurv</code> and <code>print.gsSurv</code> to work with 1-sided designs</li>
+<li>Update to calls to ggplot to replace show_guide (deprecated) with <code>show.legend</code> arguments where used in <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">ggplot2::geom_text</a></code> calls; no user impact</li>
+<li>Minor typo fixed in <code>sfLogistic</code> help file</li>
+<li>Cleaned up “imports” and “depends” in an effort to be an R “good citizen”</li>
+<li>Registered S3 methods in NAMESPACE</li>
+</ul>
+</div>
+    <div id="gsdesign-29-4" class="section level1">
+<h1 class="page-header" data-toc-text="2.9-4">
+<a href="#gsdesign-29-4" class="anchor"></a>gsDesign 2.9-4<small> Unreleased </small>
+</h1>
+<ul>
+<li>Minor edit to package description to comply with R standards</li>
+</ul>
+</div>
+    <div id="gsdesign-29-3-november-2014" class="section level1">
+<h1 class="page-header" data-toc-text="2.9-3">
+<a href="#gsdesign-29-3-november-2014" class="anchor"></a>gsDesign 2.9-3 (November, 2014)<small> 2014-11-10 </small>
+</h1>
+<ul>
+<li>Added <code>sfTrimmed</code> as likely preferred spending function approach to skipping early or all interim efficacy analyses; this also can adjust bound when final analysis is performed with less than maximum planned information. Updated <code><a href="../reference/sfTruncated.html">help(sfTrimmed)</a></code> to demonstrate these capabilities.</li>
+<li>Added <code>sfGapped</code>, which is primarily intended to eliminate futility analyses later in a study; see <code><a href="../reference/sfTruncated.html">help(sfGapped)</a></code> for an example</li>
+<li>Added <code><a href="../reference/Spending_Function_Overview.html">summary.spendfn()</a></code> to provide textual summary of spending functions; this simplified the print function for gsDesign objects</li>
+<li>Added <code><a href="../reference/sfLinear.html">sfStep()</a></code> which can be used to set an interim spend when the exact amount of information is unknown; an example of how this can be misused is provided in the help file</li>
+<li>Fixed rounding so that <code>gsBoundSummary</code>, <code>xtable.gsSurv</code> and <code>summary.gsDesign</code> are consistent for <code>gsSurv</code> objects</li>
+</ul>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
