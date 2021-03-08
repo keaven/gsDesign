@@ -61,7 +61,8 @@ void gsbound1(int *xnanal,double *xtheta,double *I,double *a,double *b,double *p
     for(i=1;i<nanal;i++)
     {   rtIkm1=rtIk; rtIk=sqrt(I[i]); mu=rtIk*theta; rtdeltak=sqrt(I[i]-I[i-1]);
         if (probhi[i] <= 0.) btem2=EXTREMEZ;
-        else btem2=qnorm(probhi[i],mu,1.,0,0); bdelta=1.; j=0;
+        else btem2=qnorm(probhi[i],mu,1.,0,0); 
+        bdelta=1.; j=0;
         while((bdelta>tol) && j++ < 20)
 		  {   phi=0.; dphi=0.; plo=0.;
             btem=btem2;
