@@ -8,15 +8,12 @@ Depends: R (>= 3.5.0), ggplot2 (>= 0.9.2)
 License: GPL (>= 3)
 Imports: stats,
          magrittr,
-         utils, 
          rlang,
          methods,
          graphics,
          tools,
-         mvtnorm,
          dplyr,
          tidyr,
-         tibble,
          xtable
 Suggests: 
     knitr,
@@ -25,7 +22,10 @@ Suggests:
     gt,
     testthat,
     covr,
-    gridExtra
+    gridExtra,
+    tibble,
+    utils,
+    mvtnorm
 VignetteBuilder: knitr
 Copyright: Copyright 2010, Merck Research Laboratories
 RoxygenNote: 7.1.1
