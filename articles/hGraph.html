@@ -91,7 +91,7 @@
 <p>We begin with the default plot to demonstrate the basic formatting below. Hypthoses and initial <span class="math inline">\(\alpha\)</span>-allocation or weighting are presented in shaded ellipses with the first hyothesis specified in the upper-left part of the plot. While the user has full control of ellipse placement and color, the default is to present clockwise on a larger ellipse with gray shading. One advantage of default placement is that generally transition lines between hypotheses will not cross hypothesis ellipses, including when the graph is updated when some hypotheses are rejected. Transition weights between hypotheses are specified on directional lines between the hypothesis ellipses. Try this in a plot window. Note the effect if you change the size of the plot window. In a similar fashion, if you are using R Markdown, <code>fig.width</code> and <code>fig.height</code> parameters will affect formatting.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/hGraph.html">hGraph</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Test passed 😀</span></code></pre></div>
+<span class="co">#&gt; Test passed 🌈</span></code></pre></div>
 <p><img src="hGraph_files/figure-html/unnamed-chunk-2-1.png" width="720"></p>
 </div>
 <div id="specifying-hypothesis-names-and-alpha-allocation" class="section level1">
@@ -104,7 +104,7 @@
        alphaHypotheses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.3</span>, <span class="fl">.5</span><span class="op">)</span>,
        wchar <span class="op">=</span> <span class="st">'w'</span> <span class="co"># character before weights</span>
 <span class="op">)</span>
-<span class="co">#&gt; Test passed 🥇</span></code></pre></div>
+<span class="co">#&gt; Test passed 🎊</span></code></pre></div>
 <p><img src="hGraph_files/figure-html/unnamed-chunk-3-1.png" width="720"></p>
 </div>
 <div id="text-formatting-and-location-ellipse-size" class="section level1">
@@ -158,8 +158,8 @@
   nrow <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span></code></pre></div>
 <p><img src="hGraph_files/figure-html/unnamed-chunk-4-1.png" width="768"></p>
-<pre><code>#&gt; Test passed 🥇
-#&gt; Test passed 🌈</code></pre>
+<pre><code>#&gt; Test passed 😸
+#&gt; Test passed 😸</code></pre>
 </div>
 <div id="using-colors-and-legends" class="section level1">
 <h1 class="hasAnchor">
@@ -181,8 +181,8 @@
   nrow <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span></code></pre></div>
 <p><img src="hGraph_files/figure-html/unnamed-chunk-5-1.png" width="720"></p>
-<pre><code>#&gt; Test passed 🥳
-#&gt; Test passed 🎉</code></pre>
+<pre><code>#&gt; Test passed 😸
+#&gt; Test passed 😸</code></pre>
 <p>Next, we add a legend.</p>
 <ul>
 <li>The legend is added when the default of <code>legend.positon = "none"</code> is replaced. Here we use a custom position specifying the relative postioning on the (0,1) scale in the x- and y-range of the graph. Commonly used options are <code>"left"</code>, <code>"right"</code>, <code>"top"</code>, or ’“bottom”`</li>
@@ -199,7 +199,7 @@
        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Primary"</span>, <span class="st">"Secondary"</span><span class="op">)</span>,
        legend.position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.75</span>,<span class="fl">.25</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; Test passed 😸</span></code></pre></div>
+<span class="co">#&gt; Test passed 🥇</span></code></pre></div>
 <p><img src="hGraph_files/figure-html/unnamed-chunk-6-1.png" width="720"></p>
 </div>
 <div id="specifying-the-transition-matrix-between-hypotheses" class="section level1">
@@ -221,7 +221,7 @@
 <a href="#references" class="anchor"></a>References</h1>
 <div id="refs" class="references">
 <div id="ref-Bretz2011">
-<p>Bretz, Frank, Martin Posch, Ekkehard Glimm, Florian Klinglmueller, Willi Maurer, and Kornelius Rohmeyer. 2011. “Graphical Approaches for Multiple Comparison Procedures Using Weighted Bonferroni, Simes or Parametric Tests.” <em>Biometrical Journal</em> 53 (6): 894–913. <a href="http://onlinelibrary.wiley.com/doi/10.1002/bimj.201000239/full" class="external-link">http://onlinelibrary.wiley.com/doi/10.1002/bimj.201000239/full</a>.</p>
+<p>Bretz, Frank, Martin Posch, Ekkehard Glimm, Florian Klinglmueller, Willi Maurer, and Kornelius Rohmeyer. 2011. “Graphical Approaches for Multiple Comparison Procedures Using Weighted Bonferroni, Simes or Parametric Tests.” <em>Biometrical Journal</em> 53 (6): 894–913. <a href="https://onlinelibrary.wiley.com/doi/10.1002/bimj.201000239/full" class="external-link">https://onlinelibrary.wiley.com/doi/10.1002/bimj.201000239/full</a>.</p>
 </div>
 <div id="ref-MaurerBretz2013">
 <p>Maurer, Willi, and Frank Bretz. 2013. “Multiple Testing in Group Sequential Trials Using Graphical Approaches.” <em>Statistics in Biopharmaceutical Research</em> 5: 311–20. <a href="https://doi.org/10.1080/19466315.2013.807748" class="external-link">https://doi.org/10.1080/19466315.2013.807748</a>.</p>
