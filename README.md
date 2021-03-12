@@ -7,7 +7,7 @@
 
 # gsDesign 
 
-The gsDesign package supports group sequential clinical trial design.
+The gsDesign package supports group sequential clinical trial design, largely as presented in the book Group Sequential Methods with Applications to Clinical Trials by Christopher Jennison and Bruce Turnbull (Chapman and Hall/CRC, 2000).
 An easy-to-use [web interface](https://gsdesign.shinyapps.io/prod/) to both enable usage without coding and to generate code to be able to reproduce the design. 
 
 While there is a strong focus on designs using **α** and **β** spending functions, Wang-Tsiatis designs, including O'Brien-Fleming and Pocock designs, are also available. The ability to design with non-binding futility rules allows control of Type I error in a manner acceptable to regulatory authorities when futility bounds are employed. Particular effort has gone into designs with time-to-event endpoints.
