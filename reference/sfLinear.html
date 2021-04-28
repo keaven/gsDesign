@@ -71,6 +71,9 @@ effect at an interim." />
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -207,7 +210,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>, <code><a href='gsDesign.html'>gsDesign</a></code>,
-<a href='gsDesign package overview.html'>gsDesign package overview</a></p></div>
+<a href='gsDesign-package-overview.html'>gsDesign package overview</a></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
@@ -220,7 +223,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>sfu <span class='op'>=</span> <span class='va'>sfLinear</span>, sfl <span class='op'>=</span> <span class='va'>sfLinear</span>, sfupar <span class='op'>=</span> <span class='va'>sfupar</span>, sflpar <span class='op'>=</span> <span class='va'>sflpar</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span>
 </div><div class='img'><img src='sfLinear-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>x</span>
-</div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
+</div><div class='co'>#&gt; Asymmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Upper bound spending computations assume
 #&gt; trial continues if lower bound is crossed.
@@ -259,7 +262,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>sfu <span class='op'>=</span> <span class='va'>sfLinear</span>, sfl <span class='op'>=</span> <span class='va'>sfLinear</span>, sfupar <span class='op'>=</span> <span class='va'>sfupar</span>, sflpar <span class='op'>=</span> <span class='va'>sflpar</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span>
 </div><div class='img'><img src='sfLinear-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>x</span>
-</div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
+</div><div class='co'>#&gt; Asymmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Upper bound spending computations assume
 #&gt; trial continues if lower bound is crossed.
@@ -298,9 +301,9 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, pl <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span>
 </div><div class='img'><img src='sfLinear-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># original planned sample sizes</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1]  34  68 102</div><div class='input'><span class='co'># cumulative spending planned at original interims</span>
+</div><div class='co'>#&gt; [1]  34  68 102</div><div class='input'><span class='co'># cumulative spending planned at original interims</span>
 <span class='fu'><a href='https://rdrr.io/r/base/cumsum.html'>cumsum</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>spend</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.0009259259 0.0074074074 0.0250000000</div><div class='input'><span class='co'># change timing of analyses;</span>
+</div><div class='co'>#&gt; [1] 0.0009259259 0.0074074074 0.0250000000</div><div class='input'><span class='co'># change timing of analyses;</span>
 <span class='co'># note that cumulative spending "P(Cross) if delta=0" does not change from cumsum(x$upper$spend)</span>
 <span class='co'># while full alpha is spent, power is reduced by reduced sample size</span>
 <span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>
@@ -309,8 +312,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
   n.fix <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.fix</span>
 <span class='op'>)</span>
 <span class='co'># note that full alpha is used, but power is reduced due to lowered sample size</span>
-<span class='fu'><a href='summary.gsDesign.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   Analysis               Value Efficacy
+<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
+</div><div class='co'>#&gt;   Analysis               Value Efficacy
 #&gt;  IA 1: 29%                   Z   3.1130
 #&gt;      N: 30         p (1-sided)   0.0009
 #&gt;                ~delta at bound   1.7534
@@ -332,7 +335,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, pl <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span>
 </div><div class='img'><img src='sfLinear-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># sample sizes at analyses:</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1]   85 4204</div><div class='input'><span class='co'># simulate 1 million stage 1 sum of 178 Normal(0,1) random variables</span>
+</div><div class='co'>#&gt; [1]   85 4204</div><div class='input'><span class='co'># simulate 1 million stage 1 sum of 178 Normal(0,1) random variables</span>
 <span class='co'># Normal(0,Variance=178) under null hypothesis</span>
 <span class='va'>s1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1000000</span>, <span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span><span class='op'>)</span>
 <span class='co'># compute corresponding z-values</span>
@@ -348,13 +351,13 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># early or late depending on observed interim z1,</span>
 <span class='co'># Type I error is now almost twice the planned .025</span>
 <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>z1</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>|</span> <span class='va'>z2</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>1000000</span>
-</div><div class='output co'>#&gt; [1] 0.046449</div><div class='input'><span class='co'># if stage 2 sample size is random and independent of z1 with same frequency,</span>
+</div><div class='co'>#&gt; [1] 0.046449</div><div class='input'><span class='co'># if stage 2 sample size is random and independent of z1 with same frequency,</span>
 <span class='co'># this is not a problem</span>
 <span class='va'>s1alt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1000000</span>, <span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>z1alt</span> <span class='op'>&lt;-</span> <span class='va'>s1alt</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span>
 <span class='va'>z2alt</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='va'>s1alt</span> <span class='op'>+</span> <span class='va'>s2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span> <span class='op'>+</span> <span class='va'>n2</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>z1alt</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>|</span> <span class='va'>z2alt</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>1000000</span>
-</div><div class='output co'>#&gt; [1] 0.024672</div><div class='input'>
+</div><div class='co'>#&gt; [1] 0.024672</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -371,7 +374,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>

@@ -59,6 +59,9 @@ The graph can also be used with the ***gMCP*** package to evaluate a set of nomi
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -143,7 +146,7 @@ The graph can also be used with the ***gMCP*** package to evaluate a set of nomi
   size <span class='op'>=</span> <span class='fl'>6</span>,
   boxtextsize <span class='op'>=</span> <span class='fl'>4</span>,
   arrowsize <span class='op'>=</span> <span class='fl'>0.02</span>,
-  radianStart <span class='op'>=</span> <span class='kw'>if</span> <span class='op'>(</span><span class='op'>(</span><span class='va'>nHypotheses</span><span class='op'>)</span><span class='op'>%%</span><span class='fl'>2</span> <span class='op'>!=</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>{</span>     <span class='va'>pi</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>2</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>/</span><span class='va'>nHypotheses</span><span class='op'>)</span> <span class='op'>}</span> <span class='kw'>else</span> <span class='op'>{</span> 
+  radianStart <span class='op'>=</span> <span class='kw'>if</span> <span class='op'>(</span><span class='op'>(</span><span class='va'>nHypotheses</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/r/base/Arithmetic.html'>%%</a></span><span class='fl'>2</span> <span class='op'>!=</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>{</span>     <span class='va'>pi</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>2</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>/</span><span class='va'>nHypotheses</span><span class='op'>)</span> <span class='op'>}</span> <span class='kw'>else</span> <span class='op'>{</span> 
        <span class='va'>pi</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='fl'>2</span><span class='op'>/</span><span class='va'>nHypotheses</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>2</span> <span class='op'>}</span>,
   offset <span class='op'>=</span> <span class='va'>pi</span><span class='op'>/</span><span class='fl'>4</span><span class='op'>/</span><span class='va'>nHypotheses</span>,
   xradius <span class='op'>=</span> <span class='fl'>2</span>,
@@ -273,29 +276,29 @@ The graph can also be used with the ***gMCP*** package to evaluate a set of nomi
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyr.tidyverse.org'>tidyr</a></span><span class='op'>)</span>
 <span class='co'># Defaults: note clockwise ordering</span>
 <span class='fu'>hGraph</span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #00BB00;'>Test passed</span><span> 🥇</div><div class='img'><img src='hGraph-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Add colors (default is 3 gray shades)</span>
+</div><div class='co'>#&gt; <span style='color: #00BB00;'>Test passed</span><span> 🥇</span></div><div class='img'><img src='hGraph-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Add colors (default is 3 gray shades)</span>
 <span class='fu'>hGraph</span><span class='op'>(</span><span class='fl'>3</span>,fill<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #00BB00;'>Test passed</span><span> 🎊</div><div class='img'><img src='hGraph-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Colorblind palette</span>
+</div><div class='co'>#&gt; <span style='color: #00BB00;'>Test passed</span><span> 🎊</span></div><div class='img'><img src='hGraph-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Colorblind palette</span>
 <span class='va'>cbPalette</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"#999999"</span>, <span class='st'>"#E69F00"</span>, <span class='st'>"#56B4E9"</span>, <span class='st'>"#009E73"</span>,
                <span class='st'>"#F0E442"</span>, <span class='st'>"#0072B2"</span>, <span class='st'>"#D55E00"</span>, <span class='st'>"#CC79A7"</span><span class='op'>)</span>
 <span class='fu'>hGraph</span><span class='op'>(</span><span class='fl'>6</span>,fill<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span><span class='op'>)</span>,palette<span class='op'>=</span><span class='va'>cbPalette</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #00BB00;'>Test passed</span><span> 🌈</div><div class='img'><img src='hGraph-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Use a hue palette</span>
-<span class='fu'>hGraph</span><span class='op'>(</span><span class='fl'>4</span>,fill<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span>,palette<span class='op'>=</span><span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/hue_pal.html'>hue_pal</a></span><span class='op'>(</span>l<span class='op'>=</span><span class='fl'>75</span><span class='op'>)</span><span class='op'>(</span><span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #00BB00;'>Test passed</span><span> 🎊</div><div class='img'><img src='hGraph-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># different alpha allocation, hypothesis names and transitions</span>
+</div><div class='co'>#&gt; <span style='color: #00BB00;'>Test passed</span><span> 🌈</span></div><div class='img'><img src='hGraph-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Use a hue palette</span>
+<span class='fu'>hGraph</span><span class='op'>(</span><span class='fl'>4</span>,fill<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span>,palette<span class='op'>=</span><span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/hue_pal.html'>hue_pal</a></span><span class='op'>(</span>l<span class='op'>=</span><span class='fl'>75</span><span class='op'>)</span><span class='op'>(</span><span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='co'>#&gt; <span style='color: #00BB00;'>Test passed</span><span> 🎊</span></div><div class='img'><img src='hGraph-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># different alpha allocation, hypothesis names and transitions</span>
 <span class='va'>alphaHypotheses</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.005</span>,<span class='fl'>.007</span>,<span class='fl'>.013</span><span class='op'>)</span>
 <span class='va'>nameHypotheses</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ORR"</span>,<span class='st'>"PFS"</span>,<span class='st'>"OS"</span><span class='op'>)</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,
               <span class='fl'>0</span>,<span class='fl'>0</span>,<span class='fl'>1</span>,
               <span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span>,nrow<span class='op'>=</span><span class='fl'>3</span>,byrow<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='fu'>hGraph</span><span class='op'>(</span><span class='fl'>3</span>,alphaHypotheses<span class='op'>=</span><span class='va'>alphaHypotheses</span>,nameHypotheses<span class='op'>=</span><span class='va'>nameHypotheses</span>,m<span class='op'>=</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #00BB00;'>Test passed</span><span> 🥇</div><div class='img'><img src='hGraph-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Custom position and size of ellipses, change text to multi-line text</span>
+</div><div class='co'>#&gt; <span style='color: #00BB00;'>Test passed</span><span> 🥇</span></div><div class='img'><img src='hGraph-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Custom position and size of ellipses, change text to multi-line text</span>
 <span class='co'># Adjust box width</span>
 <span class='co'># add legend in middle of plot</span>
 <span class='fu'>hGraph</span><span class='op'>(</span><span class='fl'>3</span>,x<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>,y<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>3</span>,<span class='fl'>1.5</span><span class='op'>)</span>,size<span class='op'>=</span><span class='fl'>6</span>,halfWid<span class='op'>=</span><span class='fl'>.3</span>,halfHgt<span class='op'>=</span><span class='fl'>.3</span>, trhw<span class='op'>=</span><span class='fl'>0.6</span>,
        palette<span class='op'>=</span><span class='va'>cbPalette</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>,
        legend.position <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.6</span>,<span class='fl'>.5</span><span class='op'>)</span>, legend.name <span class='op'>=</span> <span class='st'>"Legend:"</span>, labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Group 1"</span>, <span class='st'>"Group 2"</span><span class='op'>)</span>,
        nameHypotheses<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"H1:\n Long name"</span>,<span class='st'>"H2:\n Longer name"</span>,<span class='st'>"H3:\n Longest name"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #00BB00;'>Test passed</span><span> 🎉</div><div class='img'><img src='hGraph-6.png' alt='' width='700' height='433' /></div></span></pre>
+</div><div class='co'>#&gt; <span style='color: #00BB00;'>Test passed</span><span> 🎉</span></div><div class='img'><img src='hGraph-6.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -311,7 +314,7 @@ The graph can also be used with the ***gMCP*** package to evaluate a set of nomi
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>

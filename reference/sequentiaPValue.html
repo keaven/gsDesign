@@ -68,6 +68,9 @@ such as the Lan-DeMets spending function approximating an O'Brien-Fleming bound 
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -140,7 +143,7 @@ Mild restrictions are required on spending functions used, but these are satisfi
 such as the Lan-DeMets spending function approximating an O'Brien-Fleming bound or a Hwang-Shih-DeCani spending function; see Maurer and Bretz (2013).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sequentialPValue</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'><a href='sequentiaPValue.html'>sequentialPValue</a></span><span class='op'>(</span>
   gsD <span class='op'>=</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span><span class='op'>)</span>,
   n.I <span class='op'>=</span> <span class='cn'>NULL</span>,
   Z <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -171,7 +174,7 @@ if not <code>NULL</code>, must have the same length as <code>n.I</code>; increas
     </tr>
     <tr>
       <th>interval</th>
-      <td><p>Interval for search to derive p-value; Default: <code><a href='https://rdrr.io/r/base/c.html'>c(1e-05, 0.9999)</a></code>. Lower end of interval must be &gt;0 and upper end must be &lt; 1. 
+      <td><p>Interval for search to derive p-value; Default: <code>c(1e-05, 0.9999)</code>. Lower end of interval must be &gt;0 and upper end must be &lt; 1. 
 The primary reason to not use the defaults would likely be if a test were vs a Type I error &lt;0.0001.</p></td>
     </tr>
     </table>
@@ -201,16 +204,16 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># Derive Group Sequential Design </span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='print.nSurv.html'>gsSurv</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>4</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>0.1</span>, timing <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>,<span class='fl'>.65</span>,<span class='fl'>.8</span><span class='op'>)</span>, sfu <span class='op'>=</span> <span class='va'>sfLDOF</span>,
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nSurv.html'>gsSurv</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>4</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>0.1</span>, timing <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>,<span class='fl'>.65</span>,<span class='fl'>.8</span><span class='op'>)</span>, sfu <span class='op'>=</span> <span class='va'>sfLDOF</span>,
             sfl <span class='op'>=</span> <span class='va'>sfHSD</span>, sflpar <span class='op'>=</span> <span class='fl'>2</span>, lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>0.6</span>,
             eta <span class='op'>=</span> <span class='fl'>0.01</span> , gamma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2.5</span>,<span class='fl'>5</span>,<span class='fl'>7.5</span>,<span class='fl'>10</span><span class='op'>)</span>, R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span> <span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>6</span> <span class='op'>)</span>,
             T <span class='op'>=</span> <span class='fl'>30</span> , minfup <span class='op'>=</span> <span class='fl'>18</span><span class='op'>)</span>
 <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span>
-</div><div class='output co'>#&gt; [1] 109.2757 142.0585 174.8412 218.5515</div><div class='input'><span class='co'># Analysis at IA2</span>
-<span class='fu'>sequentialPValue</span><span class='op'>(</span>gsD<span class='op'>=</span><span class='va'>x</span>,n.I<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>,<span class='fl'>160</span><span class='op'>)</span>,Z<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.05363369</div><div class='input'><span class='co'># Use planned spending instead of information fraction; do final analysis</span>
-<span class='fu'>sequentialPValue</span><span class='op'>(</span>gsD<span class='op'>=</span><span class='va'>x</span>,n.I<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>,<span class='fl'>160</span>,<span class='fl'>190</span>,<span class='fl'>230</span><span class='op'>)</span>,Z<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>,<span class='fl'>2</span>,<span class='fl'>2.5</span>,<span class='fl'>3</span><span class='op'>)</span>,usTime<span class='op'>=</span><span class='va'>x</span><span class='op'>$</span><span class='va'>timing</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.001452684</div><div class='input'><span class='co'># Check bounds for updated design to verify at least one was crossed</span>
+</div><div class='co'>#&gt; [1] 109.2757 142.0585 174.8412 218.5515</div><div class='input'><span class='co'># Analysis at IA2</span>
+<span class='fu'><a href='sequentiaPValue.html'>sequentialPValue</a></span><span class='op'>(</span>gsD<span class='op'>=</span><span class='va'>x</span>,n.I<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>,<span class='fl'>160</span><span class='op'>)</span>,Z<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='co'>#&gt; [1] 0.05363369</div><div class='input'><span class='co'># Use planned spending instead of information fraction; do final analysis</span>
+<span class='fu'><a href='sequentiaPValue.html'>sequentialPValue</a></span><span class='op'>(</span>gsD<span class='op'>=</span><span class='va'>x</span>,n.I<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>,<span class='fl'>160</span>,<span class='fl'>190</span>,<span class='fl'>230</span><span class='op'>)</span>,Z<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.5</span>,<span class='fl'>2</span>,<span class='fl'>2.5</span>,<span class='fl'>3</span><span class='op'>)</span>,usTime<span class='op'>=</span><span class='va'>x</span><span class='op'>$</span><span class='va'>timing</span><span class='op'>)</span>
+</div><div class='co'>#&gt; [1] 0.001452684</div><div class='input'><span class='co'># Check bounds for updated design to verify at least one was crossed</span>
 <span class='va'>xupdate</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>maxn.IPlan<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>)</span>,n.I<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>,<span class='fl'>160</span>,<span class='fl'>190</span>,<span class='fl'>230</span><span class='op'>)</span>,usTime<span class='op'>=</span><span class='va'>x</span><span class='op'>$</span><span class='va'>timing</span>,
                     delta<span class='op'>=</span><span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span>,delta1<span class='op'>=</span><span class='va'>x</span><span class='op'>$</span><span class='va'>delta1</span>,k<span class='op'>=</span><span class='fl'>4</span>,alpha<span class='op'>=</span><span class='va'>x</span><span class='op'>$</span><span class='va'>alpha</span>,test.type<span class='op'>=</span><span class='fl'>1</span>,
                     sfu<span class='op'>=</span><span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>sf</span>,sfupar<span class='op'>=</span><span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>param</span><span class='op'>)</span>
@@ -230,7 +233,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>

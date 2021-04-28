@@ -97,6 +97,9 @@ however." />
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -160,9 +163,9 @@ however." />
 planned analyses for a given group sequential design assuming an interim
 z-statistic at a specified interim analysis. While <code>gsCP()</code> is designed
 toward computing conditional power for a variety of underlying parameter
-values, <code><a href='condPower.html'>condPower</a></code> is built to compute conditional power for a
+values, <code><a href='ssrCP.html'>condPower</a></code> is built to compute conditional power for a
 variety of interim test statistic values which is useful for sample size
-adaptation (see <code><a href='condPower.html'>ssrCP</a></code>). <code>gsPP()</code> averages conditional
+adaptation (see <code><a href='ssrCP.html'>ssrCP</a></code>). <code>gsPP()</code> averages conditional
 power across a posterior distribution to compute predictive power.
 <code>gsPI()</code> computes Bayesian prediction intervals for future analyses
 corresponding to results produced by <code>gsPP()</code>.  <code>gsPosterior()</code>
@@ -194,7 +197,7 @@ each point in <code>z</code>. Densities may be supplied as from
 <code><a href='normalGrid.html'>normalGrid()</a></code> where grid weights for numerical integration are
 supplied in <code>gridwgts</code>. If <code>gridwgts</code> are not supplied, they are
 defaulted to 1 (equal weighting). To ensure a proper prior distribution, you
-must have <code><a href='https://rdrr.io/r/base/sum.html'>sum(gridwgts * density)</a></code> equal to 1; this is NOT checked,
+must have <code>sum(gridwgts * density)</code> equal to 1; this is NOT checked,
 however.</p>
     </div>
 
@@ -335,8 +338,8 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='normalGrid.html'>normalGrid</a></code>, <code><a href='gsDesign.html'>gsDesign</a></code>,
-<code><a href='gsProbability.html'>gsProbability</a></code>, <code><a href='gsBoundCP.html'>gsBoundCP</a></code>, <code><a href='condPower.html'>ssrCP</a></code>,
-<code><a href='condPower.html'>condPower</a></code></p></div>
+<code><a href='gsProbability.html'>gsProbability</a></code>, <code><a href='gsBoundCP.html'>gsBoundCP</a></code>, <code><a href='ssrCP.html'>ssrCP</a></code>,
+<code><a href='ssrCP.html'>condPower</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
@@ -346,7 +349,7 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 <span class='co'># set up a group sequential design</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
 <span class='va'>x</span>
-</div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
+</div><div class='co'>#&gt; Asymmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Upper bound spending computations assume
 #&gt; trial continues if lower bound is crossed.
@@ -388,17 +391,17 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 
 <span class='co'># compute POS for the design given the above prior distribution for theta</span>
 <span class='fu'>gsPOS</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.5954771</div><div class='input'>
+</div><div class='co'>#&gt; [1] 0.5954771</div><div class='input'>
 <span class='co'># assume POS should only count cases in prior where theta &gt;= x$delta/2</span>
 <span class='fu'>gsPOS</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span> <span class='op'>*</span> <span class='op'>(</span><span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>/</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.5554313</div><div class='input'>
+</div><div class='co'>#&gt; [1] 0.5554313</div><div class='input'>
 <span class='co'># assuming a z-value at lower bound at analysis 2, what are conditional</span>
 <span class='co'># boundary crossing probabilities for future analyses</span>
 <span class='co'># assuming theta values from x as well as a value based on the interim</span>
 <span class='co'># observed z</span>
 <span class='va'>CP</span> <span class='op'>&lt;-</span> <span class='fu'>gsCP</span><span class='op'>(</span><span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>2</span>, zi <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>
 <span class='va'>CP</span>
-</div><div class='output co'>#&gt;               Lower bounds   Upper bounds
+</div><div class='co'>#&gt;               Lower bounds   Upper bounds
 #&gt;   Analysis N   Z   Nominal p  Z   Nominal p
 #&gt;          1  1 1.25    0.8952 4.71    0.0000
 #&gt;          2  1 1.96    0.9750 3.39    0.0003
@@ -423,18 +426,18 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 <span class='co'># summing values for crossing future upper bounds gives overall</span>
 <span class='co'># conditional power for each theta value</span>
 <span class='va'>CP</span><span class='op'>$</span><span class='va'>theta</span>
-</div><div class='output co'>#&gt; [1] -0.05536767  0.00000000  3.24151555</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>CP</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span><span class='op'>)</span> <span class='op'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;             [,1]
+</div><div class='co'>#&gt; [1] -0.05536767  0.00000000  3.24151555</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>CP</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/r/base/matmult.html'>%*%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='co'>#&gt;             [,1]
 #&gt; [1,] 0.002238566
 #&gt; [2,] 0.002561570
 #&gt; [3,] 0.367657693</div><div class='input'>
 <span class='co'># compute predictive probability based on above assumptions</span>
 <span class='fu'>gsPP</span><span class='op'>(</span><span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>2</span>, zi <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.06730167</div><div class='input'>
+</div><div class='co'>#&gt; [1] 0.06730167</div><div class='input'>
 <span class='co'># if it is known that boundary not crossed at interim 2, use</span>
 <span class='co'># gsCPOS to compute conditional POS based on this</span>
 <span class='fu'>gsCPOS</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.6114033</div><div class='input'>
+</div><div class='co'>#&gt; [1] 0.6114033</div><div class='input'>
 <span class='co'># 2-stage example to compare results to direct computation</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 <span class='va'>z1</span> <span class='op'>&lt;-</span> <span class='fl'>0.5</span>
@@ -445,9 +448,9 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 
 <span class='co'># conditional power direct computation - comparison w gsCP</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>pnorm</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>n2</span> <span class='op'>*</span> <span class='va'>theta</span> <span class='op'>+</span> <span class='va'>z1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n1</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n1</span> <span class='op'>+</span> <span class='va'>n2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.03579292 0.01067483 0.51555676</div><div class='input'>
+</div><div class='co'>#&gt; [1] 0.03579292 0.01067483 0.51555676</div><div class='input'>
 <span class='fu'>gsCP</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span>
-</div><div class='output co'>#&gt;            [,1]       [,2]      [,3]
+</div><div class='co'>#&gt;            [,1]       [,2]      [,3]
 #&gt; [1,] 0.03579292 0.01067483 0.5155568</div><div class='input'>
 <span class='co'># predictive power direct computation - comparison w gsPP</span>
 <span class='co'># use same prior as above</span>
@@ -455,7 +458,7 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 <span class='va'>sigma2</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='fl'>.5</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>
 <span class='va'>prior</span> <span class='op'>&lt;-</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span><span class='op'>(</span>mu <span class='op'>=</span> <span class='fl'>.75</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span>, sigma <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>/</span> <span class='fl'>2</span><span class='op'>)</span>
 <span class='fu'>gsPP</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, i <span class='op'>=</span> <span class='fl'>1</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.1556447</div><div class='input'><span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fl'>.5</span>
+</div><div class='co'>#&gt; [1] 0.1556447</div><div class='input'><span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fl'>.5</span>
 <span class='va'>z1</span> <span class='op'>&lt;-</span> <span class='fl'>.5</span>
 <span class='va'>b</span> <span class='op'>&lt;-</span> <span class='va'>z1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span>
 <span class='co'># direct from Proschan, Lan and Wittes eqn 3.10</span>
@@ -463,7 +466,7 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>pnorm</a></span><span class='op'>(</span><span class='op'>(</span><span class='op'>(</span><span class='va'>b</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>t</span> <span class='op'>*</span> <span class='va'>sigma2</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>t</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='va'>mu0</span> <span class='op'>+</span> <span class='va'>b</span> <span class='op'>*</span> <span class='va'>sigma2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>/</span>
   <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>t</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>sigma2</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>t</span> <span class='op'>*</span> <span class='va'>sigma2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.1556447</div><div class='input'>
+</div><div class='co'>#&gt; [1] 0.1556447</div><div class='input'>
 <span class='co'># plot prior then posterior distribution for unblinded analysis with i=1, zi=1</span>
 <span class='va'>xp</span> <span class='op'>&lt;-</span> <span class='fu'>gsPosterior</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='fl'>1</span>, prior <span class='op'>=</span> <span class='va'>prior</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>z</span>, y <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>density</span>, type <span class='op'>=</span> <span class='st'>"l"</span>, col <span class='op'>=</span> <span class='fl'>2</span>, xlab <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='va'>theta</span><span class='op'>)</span>, ylab <span class='op'>=</span> <span class='st'>"Density"</span><span class='op'>)</span>
@@ -477,8 +480,8 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 <span class='co'># prediction interval based in interim 1 results</span>
 <span class='co'># start with point estimate, followed by 90% prediction interval</span>
 <span class='fu'>gsPI</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, j <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span>, level <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1.081745</div><div class='input'><span class='fu'>gsPI</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, j <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span>, level <span class='op'>=</span> <span class='fl'>.9</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] -0.3793133  2.5428090</div></pre>
+</div><div class='co'>#&gt; [1] 1.081745</div><div class='input'><span class='fu'>gsPI</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, j <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span>, level <span class='op'>=</span> <span class='fl'>.9</span><span class='op'>)</span>
+</div><div class='co'>#&gt; [1] -0.3793133  2.5428090</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -494,7 +497,7 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>

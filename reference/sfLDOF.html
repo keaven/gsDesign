@@ -74,6 +74,9 @@ sfExponential." />
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -205,7 +208,7 @@ for group sequential trials with random information levels.
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>, <code><a href='gsDesign.html'>gsDesign</a></code>,
-<a href='gsDesign package overview.html'>gsDesign package overview</a></p></div>
+<a href='gsDesign-package-overview.html'>gsDesign package overview</a></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
@@ -215,37 +218,37 @@ for group sequential trials with random information levels.
 <span class='co'># 2-sided,  symmetric 6-analysis trial Pocock</span>
 <span class='co'># spending function approximation</span>
 <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>6</span>, sfu <span class='op'>=</span> <span class='va'>sfLDPocock</span>, test.type <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
-</div><div class='output co'>#&gt; [1] 2.495115 2.476907 2.454964 2.437262 2.423276 2.412059</div><div class='input'>
+</div><div class='co'>#&gt; [1] 2.495115 2.476907 2.454964 2.437262 2.423276 2.412059</div><div class='input'>
 <span class='co'># show actual Pocock design</span>
 <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>6</span>, sfu <span class='op'>=</span> <span class='st'>"Pocock"</span>, test.type <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
-</div><div class='output co'>#&gt; [1] 2.453211 2.453211 2.453211 2.453211 2.453211 2.453211</div><div class='input'>
+</div><div class='co'>#&gt; [1] 2.453211 2.453211 2.453211 2.453211 2.453211 2.453211</div><div class='input'>
 <span class='co'># approximate Pocock again using a standard</span>
 <span class='co'># Hwang-Shih-DeCani approximation</span>
 <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>6</span>, sfu <span class='op'>=</span> <span class='va'>sfHSD</span>, sfupar <span class='op'>=</span> <span class='fl'>1</span>, test.type <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
-</div><div class='output co'>#&gt; [1] 2.507958 2.471981 2.443139 2.426686 2.420302 2.421749</div><div class='input'>
+</div><div class='co'>#&gt; [1] 2.507958 2.471981 2.443139 2.426686 2.420302 2.421749</div><div class='input'>
 <span class='co'># use 'best' Hwang-Shih-DeCani approximation for Pocock,  k=6;</span>
 <span class='co'># see manual for details</span>
 <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>6</span>, sfu <span class='op'>=</span> <span class='va'>sfHSD</span>, sfupar <span class='op'>=</span> <span class='fl'>1.3354376</span>, test.type <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
-</div><div class='output co'>#&gt; [1] 2.469285 2.448341 2.436191 2.437278 2.448837 2.468360</div><div class='input'>
+</div><div class='co'>#&gt; [1] 2.469285 2.448341 2.436191 2.437278 2.448837 2.468360</div><div class='input'>
 <span class='co'># 2-sided, symmetric 6-analysis trial</span>
 <span class='co'># O'Brien-Fleming spending function approximation</span>
 <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>6</span>, sfu <span class='op'>=</span> <span class='va'>sfLDOF</span>, test.type <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
-</div><div class='output co'>#&gt; [1] 5.366558 3.710340 2.969736 2.538677 2.252190 2.044790</div><div class='input'>
+</div><div class='co'>#&gt; [1] 5.366558 3.710340 2.969736 2.538677 2.252190 2.044790</div><div class='input'>
 <span class='co'># show actual O'Brien-Fleming bound</span>
 <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>6</span>, sfu <span class='op'>=</span> <span class='st'>"OF"</span>, test.type <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
-</div><div class='output co'>#&gt; [1] 5.028296 3.555542 2.903088 2.514148 2.248722 2.052793</div><div class='input'>
+</div><div class='co'>#&gt; [1] 5.028296 3.555542 2.903088 2.514148 2.248722 2.052793</div><div class='input'>
 <span class='co'># approximate again using a standard Hwang-Shih-DeCani</span>
 <span class='co'># approximation to O'Brien-Fleming</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>6</span>, test.type <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
-</div><div class='output co'>#&gt; [1] 3.325024 3.103223 2.860383 2.603454 2.330046 2.034988</div><div class='input'><span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>param</span>
-</div><div class='output co'>#&gt; [1] -4</div><div class='input'>
+</div><div class='co'>#&gt; [1] 3.325024 3.103223 2.860383 2.603454 2.330046 2.034988</div><div class='input'><span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>param</span>
+</div><div class='co'>#&gt; [1] -4</div><div class='input'>
 <span class='co'># use 'best' exponential approximation for k=6; see manual for details</span>
 <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>
   k <span class='op'>=</span> <span class='fl'>6</span>, sfu <span class='op'>=</span> <span class='va'>sfExponential</span>, sfupar <span class='op'>=</span> <span class='fl'>0.7849295</span>,
   test.type <span class='op'>=</span> <span class='fl'>2</span>
 <span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
-</div><div class='output co'>#&gt; [1] 4.998123 3.598098 2.933292 2.530838 2.253723 2.047082</div><div class='input'>
+</div><div class='co'>#&gt; [1] 4.998123 3.598098 2.933292 2.530838 2.253723 2.047082</div><div class='input'>
 <span class='co'># plot spending functions for generalized Lan-DeMets approximation of</span>
 <span class='va'>ti</span> <span class='op'>&lt;-</span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>100</span>
 <span class='va'>rho</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.05</span>,<span class='fl'>.5</span>,<span class='fl'>1</span>,<span class='fl'>1.5</span>,<span class='fl'>2</span>,<span class='fl'>2.5</span>,<span class='fl'>3</span><span class='op'>:</span><span class='fl'>6</span>,<span class='fl'>8</span>,<span class='fl'>10</span>,<span class='fl'>12.5</span>,<span class='fl'>15</span>,<span class='fl'>20</span>,<span class='fl'>30</span>,<span class='fl'>200</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>10</span>
@@ -273,7 +276,7 @@ for group sequential trials with random information levels.
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>

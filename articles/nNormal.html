@@ -74,12 +74,12 @@
     
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<a href="#introduction" class="anchor" aria-hidden="true"></a>Introduction</h1>
 <p>Limited support is provided for 2-sample design with a normally distributed random variable as the outcome. Users are encouraged to look at guidance such as in <span class="citation">Jennison and Turnbull (2000)</span>. We provide a tool where for a large sample case where a reasonable estimate of standard deviation is available, a reasonable sample size can be computed based straightforward distribution theory outlined below.</p>
 </div>
 <div id="the-problem-considered" class="section level1">
 <h1 class="hasAnchor">
-<a href="#the-problem-considered" class="anchor"></a>The problem considered</h1>
+<a href="#the-problem-considered" class="anchor" aria-hidden="true"></a>The problem considered</h1>
 <p>The overall sample size notation used for <strong>gsDesign</strong> is to consider a standardized effect size parameter which is referred to as <span class="math inline">\(\theta\)</span> in <span class="citation">Jennison and Turnbull (2000)</span>. We begin with the 2-sample normal problem where we assume a possibly different standard deviation in each treatment group. For <span class="math inline">\(j=1,2\)</span>, we let <span class="math inline">\(X_{j,i}\)</span>, <span class="math inline">\(i=1,2,\ldots n_j\)</span> represent independent and identically distributed observations following a normal distribution with mean <span class="math inline">\(\mu_j\)</span> and standard deviation <span class="math inline">\(\sigma_j\)</span>. The natural parameter for comparing the two distributions is</p>
 <p><span class="math display">\[\delta = \mu_2 - \mu_1\]</span></p>
 <p>and we wish to test if <span class="math inline">\(\delta &gt; 0\)</span> in a one-sided testing scenario to test for superiority of treatment 2 over treatment 1. We could also consider testing, say, <span class="math inline">\(\delta &gt; \delta_0\)</span> for a non-inferiority scenario with <span class="math inline">\(\delta_0&lt;0\)</span> or <strong>super superiority</strong> if <span class="math inline">\(\delta_0&gt;0\)</span>. While normally a t-test would be used for this, for large sample sizes this would be nearly equivalent to a Z-test defined by:</p>
@@ -87,7 +87,7 @@
 </div>
 <div id="sample-size" class="section level1">
 <h1 class="hasAnchor">
-<a href="#sample-size" class="anchor"></a>Sample size</h1>
+<a href="#sample-size" class="anchor" aria-hidden="true"></a>Sample size</h1>
 <p>Thus, <span class="math inline">\(n_2=rn/(1+r)\)</span>, <span class="math inline">\(n_1=n/(1+r)\)</span> and when <span class="math inline">\(r=1\)</span> we have <span class="math inline">\(n_1=n_2=n/2\)</span>. Now that we have completed needed notation, those not interested in the theory behind the sample size and power calculation used may skip the rest of this section.</p>
 <p>We let <span class="math display">\[\sigma^2=(1+r)(\sigma_1^2+\sigma_2^2/r)\]</span> and define <span class="math display">\[ \theta= (\delta -\delta_0)/\sigma.\]</span> Under the given assumptions, <span class="math display">\[Z \sim \hbox{Normal}\left(\sqrt n\theta,1\right).\]</span> Under the null hypothesis that <span class="math inline">\(\delta=\delta_0\)</span>, we have <span class="math inline">\(Z\sim \hbox{Normal}(0,1)\)</span>. Thus, regardless of <span class="math inline">\(n\)</span> we have <span class="math display">\[P_0[Z\ge \Phi^{-1}(1-\alpha)]=\alpha.\]</span> Under the alternate hypothesis that <span class="math inline">\(\delta=\delta_1\)</span> and we denote a corresponding <span class="math inline">\(\theta_1\)</span>. We define the type 2 error <span class="math inline">\(\beta\)</span> and power <span class="math inline">\(1-\beta\)</span> by</p>
 <p><span class="math display">\[
@@ -102,11 +102,11 @@
 </div>
 <div id="examples" class="section level1">
 <h1 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h1>
+<a href="#examples" class="anchor" aria-hidden="true"></a>Examples</h1>
 <p>We consider two examples to check the above formulas vs. <code><a href="../reference/nNormal.html">nNormal()</a></code>. We then confirm that the approximation is working well by simulating and confirming that the power and Type I error approximations are useful. Finally, we provide a simple group sequential design example.</p>
 <div id="sample-size-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#sample-size-1" class="anchor"></a>Sample size</h2>
+<a href="#sample-size-1" class="anchor" aria-hidden="true"></a>Sample size</h2>
 <p>We consider an example with <span class="math inline">\(\sigma_2=1.25\)</span>, <span class="math inline">\(\sigma_1=1.6\)</span>, <span class="math inline">\(\delta=0.8\)</span> and <span class="math inline">\(\delta_0=0\)</span>. We let the sample size ratio be 2 experimental group observations per control observation. We compute sample size with <code><a href="../reference/nNormal.html">nNormal()</a></code> assuming one-sided Type I error <span class="math inline">\(\alpha=0.025\)</span> and 90% power (<span class="math inline">\(1-\beta=0.9\)</span>).</p>
 <p>Checking using the sample size formula above, we have:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -118,7 +118,7 @@
 </div>
 <div id="power" class="section level2">
 <h2 class="hasAnchor">
-<a href="#power" class="anchor"></a>Power</h2>
+<a href="#power" class="anchor" aria-hidden="true"></a>Power</h2>
 <p>Now, assume we let the sample size be 200 and compute power under the same scenario.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1<span class="op">=</span><span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">1.6</span>, sd2 <span class="op">=</span> <span class="fl">1.25</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, n <span class="op">=</span> <span class="fl">200</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
@@ -143,7 +143,7 @@
 </div>
 <div id="verification-with-simulation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#verification-with-simulation" class="anchor"></a>Verification with simulation</h2>
+<a href="#verification-with-simulation" class="anchor" aria-hidden="true"></a>Verification with simulation</h2>
 <p>Rather than simulate individual observations, we will take advantage of the fact that for <span class="math inline">\(j=1,2\)</span></p>
 <p><span class="math display">\[\bar X_j\sim \hbox{Normal}(\mu_j,\sigma_j^2/n_j)\]</span> and</p>
 <p><span class="math display">\[(n_j-1)s_j^2/\sigma_j^2=\sum_{i=1}^{n_j} (X_{ij}-\bar X_j)/\sigma^2 \sim \chi ^2_{n_j-1}\]</span></p>
@@ -160,7 +160,7 @@
            <span class="va">sd2</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html" class="external-link">rchisq</a></span><span class="op">(</span>n<span class="op">=</span><span class="va">nsim</span>, df<span class="op">=</span><span class="va">n2</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="va">n2</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="va">n2</span><span class="op">)</span>
 <span class="va">z</span> <span class="op">&lt;-</span> <span class="va">deltahat</span> <span class="op">/</span> <span class="va">s</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">z</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">.975</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.946142</span></code></pre></div>
+<span class="co">#&gt; [1] 0.946314</span></code></pre></div>
 <p>The standard error for this simulation power calculation is approximately</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">pwr</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">pwr</span><span class="op">)</span><span class="op">/</span><span class="va">nsim</span><span class="op">)</span>
@@ -169,14 +169,14 @@
 </div>
 <div id="group-sequential-design" class="section level2">
 <h2 class="hasAnchor">
-<a href="#group-sequential-design" class="anchor"></a>Group sequential design</h2>
+<a href="#group-sequential-design" class="anchor" aria-hidden="true"></a>Group sequential design</h2>
 <p>Now we derive a group sequential design under the above scenario. We will largely use default parameters and show two methods. For the first, we plug in the fixed sample size above as follows:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d</span> <span class="op">&lt;-</span> 
 <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k<span class="op">=</span><span class="fl">2</span>,
          n.fix <span class="op">=</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1<span class="op">=</span><span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">1.6</span>, sd2 <span class="op">=</span> <span class="fl">1.25</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">.1</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
          delta1 <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>
-<span class="va">d</span> <span class="op">%&gt;%</span>  <span class="fu"><a href="../reference/summary.gsDesign.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="va">d</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -256,8 +256,8 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k<span class="op">=</span><span class="fl">2</span>,
          delta <span class="op">=</span> <span class="va">theta</span>,
-         delta1 <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/summary.gsDesign.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+         delta1 <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">kable</span><span class="op">(</span>row.names<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -334,7 +334,7 @@
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<a href="#references" class="anchor" aria-hidden="true"></a>References</h1>
 <div id="refs" class="references">
 <div id="ref-JTBook">
 <p>Jennison, Christopher, and Bruce W. Turnbull. 2000. <em>Group Sequential Methods with Applications to Clinical Trials</em>. Boca Raton, FL: Chapman; Hall/CRC.</p>
@@ -360,7 +360,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>

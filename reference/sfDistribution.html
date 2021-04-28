@@ -88,6 +88,9 @@ sfExtremeValue2() where $$F(x)=1-\exp(-\exp(x)).$$" />
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -147,9 +150,9 @@ sfExtremeValue2() where $$F(x)=1-\exp(-\exp(x)).$$" />
     </div>
 
     <div class="ref-description">
-    <p>The functions <code>sfLogistic()</code>, <code>sfNormal()</code>,
-<code>sfExtremeValue()</code>, <code>sfExtremeValue2()</code>, <code>sfCauchy()</code>, and
-<code>sfBetaDist()</code> are all 2-parameter spending function families. These
+    <p>The functions <code><a href='sfDistribution.html'>sfLogistic()</a></code>, <code><a href='sfDistribution.html'>sfNormal()</a></code>,
+<code><a href='sfDistribution.html'>sfExtremeValue()</a></code>, <code><a href='sfDistribution.html'>sfExtremeValue2()</a></code>, <code><a href='sfDistribution.html'>sfCauchy()</a></code>, and
+<code><a href='sfDistribution.html'>sfBetaDist()</a></code> are all 2-parameter spending function families. These
 provide increased flexibility in some situations where the flexibility of a
 one-parameter spending function family is not sufficient. These functions
 all allow fitting of two points on a cumulative spending function curve; in
@@ -168,8 +171,8 @@ passed in <code>param</code> evaluated at values passed in <code>t</code>.</p>
 <p>The other spending functions take the form $$f(t;\alpha,a,b)=\alpha
 F(a+bF^{-1}(t))$$ where \(F()\) is a
 cumulative distribution function with values \(&gt; 0\) on the real line
-(logistic for <code>sfLogistic()</code>, normal for <code>sfNormal()</code>, extreme
-value for <code>sfExtremeValue()</code> and Cauchy for <code>sfCauchy()</code>) and
+(logistic for <code><a href='sfDistribution.html'>sfLogistic()</a></code>, normal for <code><a href='sfDistribution.html'>sfNormal()</a></code>, extreme
+value for <code><a href='sfDistribution.html'>sfExtremeValue()</a></code> and Cauchy for <code><a href='sfDistribution.html'>sfCauchy()</a></code>) and
 \(F^{-1}()\) is its inverse.</p>
 <p>For the logistic spending function this simplifies to
 $$f(t;\alpha,a,b)=\alpha (1-(1+e^a(t/(1-t))^b)^{-1}).$$</p>
@@ -177,20 +180,20 @@ $$f(t;\alpha,a,b)=\alpha (1-(1+e^a(t/(1-t))^b)^{-1}).$$</p>
 simplifies to $$f(t;\alpha,a,b)=\alpha \exp(-e^a (-\ln t)^b).$$ Since the
 extreme value distribution is not symmetric, there is also a version where
 the standard distribution is flipped about 0. This is reflected in
-<code>sfExtremeValue2()</code> where $$F(x)=1-\exp(-\exp(x)).$$</p>
+<code><a href='sfDistribution.html'>sfExtremeValue2()</a></code> where $$F(x)=1-\exp(-\exp(x)).$$</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sfLogistic</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'><a href='sfDistribution.html'>sfLogistic</a></span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span>
 
-<span class='fu'>sfBetaDist</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span>
+<span class='fu'><a href='sfDistribution.html'>sfBetaDist</a></span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span>
 
-<span class='fu'>sfCauchy</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span>
+<span class='fu'><a href='sfDistribution.html'>sfCauchy</a></span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span>
 
-<span class='fu'>sfExtremeValue</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span>
+<span class='fu'><a href='sfDistribution.html'>sfExtremeValue</a></span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span>
 
-<span class='fu'>sfExtremeValue2</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span>
+<span class='fu'><a href='sfDistribution.html'>sfExtremeValue2</a></span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span>
 
-<span class='fu'>sfNormal</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span></pre>
+<span class='fu'><a href='sfDistribution.html'>sfNormal</a></span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -211,12 +214,12 @@ spending function will be computed.</p></td>
     </tr>
     <tr>
       <th>param</th>
-      <td><p>In the two-parameter specification, <code>sfBetaDist()</code>
-requires 2 positive values, while <code>sfLogistic()</code>, <code>sfNormal()</code>,
-<code>sfExtremeValue()</code>,</p>
-<p><code>sfExtremeValue2()</code> and <code>sfCauchy()</code> require the first parameter
+      <td><p>In the two-parameter specification, <code><a href='sfDistribution.html'>sfBetaDist()</a></code>
+requires 2 positive values, while <code><a href='sfDistribution.html'>sfLogistic()</a></code>, <code><a href='sfDistribution.html'>sfNormal()</a></code>,
+<code><a href='sfDistribution.html'>sfExtremeValue()</a></code>,</p>
+<p><code><a href='sfDistribution.html'>sfExtremeValue2()</a></code> and <code><a href='sfDistribution.html'>sfCauchy()</a></code> require the first parameter
 to be any real value and the second to be a positive value.  The four
-parameter specification is <code><a href='https://rdrr.io/r/base/c.html'>c(t1,t2,u1,u2)</a></code> where the objective is that
+parameter specification is <code>c(t1,t2,u1,u2)</code> where the objective is that
 <code>sf(t1)=alpha*u1</code> and <code>sf(t2)=alpha*u2</code>.  In this
 parameterization, all four values must be between 0 and 1 and <code>t1 &lt;
 t2</code>, <code>u1 &lt; u2</code>.</p></td>
@@ -251,7 +254,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 
 <span class='co'># print the design</span>
 <span class='va'>x</span>
-</div><div class='output co'>#&gt; Asymmetric two-sided group sequential design with
+</div><div class='co'>#&gt; Asymmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Upper bound spending computations assume
 #&gt; trial continues if lower bound is crossed.
@@ -292,21 +295,21 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># note that curve fits the points x=.1,  y=.01 and x=.4,  y=.1</span>
 <span class='co'># specified in the 3rd parameter of sfLogistic</span>
 <span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span> <span class='op'>/</span> <span class='fl'>100</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfLogistic</span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.1</span>, <span class='fl'>.4</span>, <span class='fl'>.01</span>, <span class='fl'>.1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>,
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfDistribution.html'>sfLogistic</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.1</span>, <span class='fl'>.4</span>, <span class='fl'>.01</span>, <span class='fl'>.1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>,
   xlab <span class='op'>=</span> <span class='st'>"Proportion of final sample size"</span>,
   ylab <span class='op'>=</span> <span class='st'>"Cumulative Type I error spending"</span>,
   main <span class='op'>=</span> <span class='st'>"Logistic Spending Function Examples"</span>,
   type <span class='op'>=</span> <span class='st'>"l"</span>, cex.main <span class='op'>=</span> <span class='fl'>.9</span>
 <span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfLogistic</span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.01</span>, <span class='fl'>.1</span>, <span class='fl'>.1</span>, <span class='fl'>.4</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfDistribution.html'>sfLogistic</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.01</span>, <span class='fl'>.1</span>, <span class='fl'>.1</span>, <span class='fl'>.4</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 </div><div class='input'>
 <span class='co'># now just give a=0 and b=1 as 3rd parameters for sfLogistic</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfLogistic</span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfDistribution.html'>sfLogistic</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
 </div><div class='input'>
 <span class='co'># try a couple with unconventional shapes again using</span>
 <span class='co'># the xy form in the 3rd parameter</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfLogistic</span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.4</span>, <span class='fl'>.6</span>, <span class='fl'>.1</span>, <span class='fl'>.7</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfLogistic</span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.1</span>, <span class='fl'>.7</span>, <span class='fl'>.4</span>, <span class='fl'>.6</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfDistribution.html'>sfLogistic</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.4</span>, <span class='fl'>.6</span>, <span class='fl'>.1</span>, <span class='fl'>.7</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfDistribution.html'>sfLogistic</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>t</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.1</span>, <span class='fl'>.7</span>, <span class='fl'>.4</span>, <span class='fl'>.6</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span>
   x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.0</span>, <span class='fl'>.475</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.76</span>, <span class='fl'>1.03</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,
   legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
@@ -319,15 +322,15 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class='co'># set up a function to plot comparsons of all</span>
 <span class='co'># 2-parameter spending functions</span>
 <span class='va'>plotsf</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfCauchy</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>,
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfDistribution.html'>sfCauchy</a></span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>,
     xlab <span class='op'>=</span> <span class='st'>"Proportion of enrollment"</span>,
     ylab <span class='op'>=</span> <span class='st'>"Cumulative spending"</span>, type <span class='op'>=</span> <span class='st'>"l"</span>, lty <span class='op'>=</span> <span class='fl'>2</span>
   <span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfExtremeValue</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfLogistic</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfNormal</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfExtremeValue2</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>6</span>, col <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfBetaDist</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>7</span>, col <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfDistribution.html'>sfExtremeValue</a></span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfDistribution.html'>sfLogistic</a></span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfDistribution.html'>sfNormal</a></span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfDistribution.html'>sfExtremeValue2</a></span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>6</span>, col <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfDistribution.html'>sfBetaDist</a></span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>7</span>, col <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span>
     x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.05</span>, <span class='fl'>.475</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fl'>.025</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.55</span>, <span class='fl'>.9</span><span class='op'>)</span>,
     lty <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>7</span><span class='op'>)</span>,
@@ -359,7 +362,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>

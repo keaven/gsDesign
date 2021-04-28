@@ -76,6 +76,9 @@ eEvents and returns the input value." />
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -149,7 +152,7 @@ based on Lachin and Foulkes (1986) method for proportional hazards assuming
 a fixed underlying hazard ratio between 2 treatment groups. The method has
 been extended here to enable designs to test non-inferiority. Piecewise
 constant enrollment and failure rates are assumed and a stratified
-population is allowed. See also <code><a href='print.nSurvival.html'>nSurvival</a></code> for other Lachin and
+population is allowed. See also <code><a href='nSurvival.html'>nSurvival</a></code> for other Lachin and
 Foulkes (1986) methods assuming a constant hazard difference or exponential
 enrollment rate.</p>
 <p><code>print.eEvents()</code> formats the output for an object of class
@@ -220,7 +223,7 @@ duration.</p></td>
     </tr>
     <tr>
       <th>minfup</th>
-      <td><p>time from end of planned enrollment (<code><a href='https://rdrr.io/r/base/sum.html'>sum(R)</a></code> from output
+      <td><p>time from end of planned enrollment (<code>sum(R)</code> from output
 value of <code>R</code>) until <code>Tfinal</code>.</p></td>
     </tr>
     <tr>
@@ -259,9 +262,9 @@ stratified clinical trials. <em>Journal of Statistical Computation and
 Simulation</em>, 8:65-73.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='gsDesign package overview.html'>gsDesign package overview</a>, <a href='plot.gsDesign.html'>plot.gsDesign</a>, 
-<code><a href='gsDesign.html'>gsDesign</a></code>, <code><a href='summary.gsDesign.html'>gsHR</a></code>,
-<code><a href='print.nSurvival.html'>nSurvival</a></code></p></div>
+    <div class='dont-index'><p><a href='gsDesign-package-overview.html'>gsDesign package overview</a>, <a href='plot.gsDesign.html'>plot.gsDesign</a>, 
+<code><a href='gsDesign.html'>gsDesign</a></code>, <code><a href='gsBoundSummary.html'>gsHR</a></code>,
+<code><a href='nSurvival.html'>nSurvival</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Keaven Anderson <a href='mailto:keaven_anderson@merck.com'>keaven_anderson@merck.com</a></p>
@@ -273,7 +276,7 @@ Simulation</em>, 8:65-73.</p>
   lambda <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.05</span>, <span class='fl'>.02</span>, <span class='fl'>.01</span><span class='op'>)</span>, eta <span class='op'>=</span> <span class='fl'>.01</span>, gamma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>10</span>, <span class='fl'>20</span><span class='op'>)</span>,
   R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>, S <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>, T <span class='op'>=</span> <span class='fl'>20</span>
 <span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; List of 11
+</div><div class='co'>#&gt; List of 11
 #&gt;  $ lambda: num [1:3, 1] 0.05 0.02 0.01
 #&gt;   ..- attr(*, "dimnames")=List of 2
 #&gt;   .. ..$ : chr [1:3] "0-1" "1-2" "2-20"
@@ -318,7 +321,7 @@ Simulation</em>, 8:65-73.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>

@@ -74,7 +74,7 @@
     
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<a href="#introduction" class="anchor" aria-hidden="true"></a>Introduction</h1>
 <p>With version 3.1, we have added a function to support graphical multiplicity methods using <strong><em>ggplot2</em></strong>. The graphical method is introduced nicely in <span class="citation">Bretz et al. (2011)</span> and supported by the <strong><em>gMCP</em></strong> package (<span class="citation">Rohmeyer and Klinglmueller (2018)</span>). It was extended to group sequential design by <span class="citation">Maurer and Bretz (2013)</span>. While the <strong><em>gMCP</em></strong> package supports graphics, here we add the <code><a href="../reference/hGraph.html">hGraph()</a></code> function to create multiplicity graphs using the <strong><em>ggplot2</em></strong> package as a convenience for those desiring this format. We demonstrate basic formatting in this article and demonstrate use with <strong><em>gMCP</em></strong> elsewhere.</p>
 <p>Use of <code><a href="../reference/hGraph.html">hGraph()</a></code> is organized as follows:</p>
 <ul>
@@ -87,16 +87,16 @@
 </div>
 <div id="the-basic-graph-layout" class="section level1">
 <h1 class="hasAnchor">
-<a href="#the-basic-graph-layout" class="anchor"></a>The basic graph layout</h1>
+<a href="#the-basic-graph-layout" class="anchor" aria-hidden="true"></a>The basic graph layout</h1>
 <p>We begin with the default plot to demonstrate the basic formatting below. Hypthoses and initial <span class="math inline">\(\alpha\)</span>-allocation or weighting are presented in shaded ellipses with the first hyothesis specified in the upper-left part of the plot. While the user has full control of ellipse placement and color, the default is to present clockwise on a larger ellipse with gray shading. One advantage of default placement is that generally transition lines between hypotheses will not cross hypothesis ellipses, including when the graph is updated when some hypotheses are rejected. Transition weights between hypotheses are specified on directional lines between the hypothesis ellipses. Try this in a plot window. Note the effect if you change the size of the plot window. In a similar fashion, if you are using R Markdown, <code>fig.width</code> and <code>fig.height</code> parameters will affect formatting.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/hGraph.html">hGraph</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Test passed 🥳</span></code></pre></div>
+<span class="co">#&gt; Test passed 🌈</span></code></pre></div>
 <p><img src="hGraph_files/figure-html/unnamed-chunk-2-1.png" width="720"></p>
 </div>
 <div id="specifying-hypothesis-names-and-alpha-allocation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#specifying-hypothesis-names-and-alpha-allocation" class="anchor"></a>Specifying hypothesis names and <span class="math inline">\(\alpha\)</span>-allocation</h1>
+<a href="#specifying-hypothesis-names-and-alpha-allocation" class="anchor" aria-hidden="true"></a>Specifying hypothesis names and <span class="math inline">\(\alpha\)</span>-allocation</h1>
 <p>Next we specify the number of hypotheses, hypothesis names and <span class="math inline">\(\alpha\)</span>-allocation or weighting. Whereas the default plot above used <span class="math inline">\(\alpha\)</span>-allocation adding to 0.025, here we use weights adding to 1. Note the <code>\n</code> character used to insert a carriage return in hypothesis name text. The character used for weights (specified in <code>wchar</code>) is by default <span class="math inline">\(\alpha\)</span> under Windows and <code>w</code> otherwise. Note the clockwise placement of hypotheses.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/hGraph.html">hGraph</a></span><span class="op">(</span>nHypotheses <span class="op">=</span> <span class="fl">3</span>,
@@ -104,12 +104,12 @@
        alphaHypotheses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.3</span>, <span class="fl">.5</span><span class="op">)</span>,
        wchar <span class="op">=</span> <span class="st">'w'</span> <span class="co"># character before weights</span>
 <span class="op">)</span>
-<span class="co">#&gt; Test passed 🎊</span></code></pre></div>
+<span class="co">#&gt; Test passed 🌈</span></code></pre></div>
 <p><img src="hGraph_files/figure-html/unnamed-chunk-3-1.png" width="720"></p>
 </div>
 <div id="text-formatting-and-location-ellipse-size" class="section level1">
 <h1 class="hasAnchor">
-<a href="#text-formatting-and-location-ellipse-size" class="anchor"></a>Text formatting and location, ellipse size</h1>
+<a href="#text-formatting-and-location-ellipse-size" class="anchor" aria-hidden="true"></a>Text formatting and location, ellipse size</h1>
 <p>You can specify location of hypothesis ellipses in two ways.</p>
 <ul>
 <li>For the first, specify in radians where on the large ellipse where the first hypothesis is placed. Setting <span class="math inline">\(\pi/2\)</span> for <code>radianStart</code> places the first hypothesis at the center and top of the plot (left plot).</li>
@@ -158,12 +158,12 @@
   nrow <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span></code></pre></div>
 <p><img src="hGraph_files/figure-html/unnamed-chunk-4-1.png" width="768"></p>
-<pre><code>#&gt; Test passed 😸
-#&gt; Test passed 🥳</code></pre>
+<pre><code>#&gt; Test passed 🎉
+#&gt; Test passed 🎉</code></pre>
 </div>
 <div id="using-colors-and-legends" class="section level1">
 <h1 class="hasAnchor">
-<a href="#using-colors-and-legends" class="anchor"></a>Using colors and legends</h1>
+<a href="#using-colors-and-legends" class="anchor" aria-hidden="true"></a>Using colors and legends</h1>
 <p>The default color palette for ellipse shading is monochrome (left plot below). To limit the parameters used, we have not adjusted text, ellipse and box size as above. Colors are specified as follows:</p>
 <ul>
 <li>A <code>fill</code> color category; here we group the first 2 hypotheses and last 2 hypotheses (both graphs)</li>
@@ -181,8 +181,8 @@
   nrow <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span></code></pre></div>
 <p><img src="hGraph_files/figure-html/unnamed-chunk-5-1.png" width="720"></p>
-<pre><code>#&gt; Test passed 🌈
-#&gt; Test passed 🥳</code></pre>
+<pre><code>#&gt; Test passed 🎊
+#&gt; Test passed 🎉</code></pre>
 <p>Next, we add a legend.</p>
 <ul>
 <li>The legend is added when the default of <code>legend.positon = "none"</code> is replaced. Here we use a custom position specifying the relative postioning on the (0,1) scale in the x- and y-range of the graph. Commonly used options are <code>"left"</code>, <code>"right"</code>, <code>"top"</code>, or ’“bottom”`</li>
@@ -199,12 +199,12 @@
        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Primary"</span>, <span class="st">"Secondary"</span><span class="op">)</span>,
        legend.position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.75</span>,<span class="fl">.25</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; Test passed 🥇</span></code></pre></div>
+<span class="co">#&gt; Test passed 🌈</span></code></pre></div>
 <p><img src="hGraph_files/figure-html/unnamed-chunk-6-1.png" width="720"></p>
 </div>
 <div id="specifying-the-transition-matrix-between-hypotheses" class="section level1">
 <h1 class="hasAnchor">
-<a href="#specifying-the-transition-matrix-between-hypotheses" class="anchor"></a>Specifying the transition matrix between hypotheses</h1>
+<a href="#specifying-the-transition-matrix-between-hypotheses" class="anchor" aria-hidden="true"></a>Specifying the transition matrix between hypotheses</h1>
 <p>Transition weights are specified in matrix format in the variable <code>m</code>. The matrix must be square of dimension <code>nHypotheses</code> and have 0 on the diagonal. Rows respresent the hypotheses from which transitions start; row values should sum to 1. Columns represent the hypotheses to which transition arrows go. Any transition weight of 0 has no corresponding transition line in the figure.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/hGraph.html">hGraph</a></span><span class="op">(</span>nHypotheses <span class="op">=</span> <span class="fl">3</span>, 
@@ -213,12 +213,12 @@
                     <span class="fl">.3</span>, <span class="fl">.7</span>, <span class="fl">0</span><span class="op">)</span>,
                   nrow<span class="op">=</span><span class="fl">3</span>, byrow<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,
 <span class="op">)</span>
-<span class="co">#&gt; Test passed 😀</span></code></pre></div>
+<span class="co">#&gt; Test passed 🥇</span></code></pre></div>
 <p><img src="hGraph_files/figure-html/unnamed-chunk-7-1.png" width="720"></p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<a href="#references" class="anchor" aria-hidden="true"></a>References</h1>
 <div id="refs" class="references">
 <div id="ref-Bretz2011">
 <p>Bretz, Frank, Martin Posch, Ekkehard Glimm, Florian Klinglmueller, Willi Maurer, and Kornelius Rohmeyer. 2011. “Graphical Approaches for Multiple Comparison Procedures Using Weighted Bonferroni, Simes or Parametric Tests.” <em>Biometrical Journal</em> 53 (6): 894–913. <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/bimj.201000239" class="external-link">https://onlinelibrary.wiley.com/doi/full/10.1002/bimj.201000239</a>.</p>
@@ -250,7 +250,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>

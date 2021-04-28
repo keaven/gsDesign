@@ -113,6 +113,9 @@ hazard ratio &amp;gt; or &amp;lt; the null hazard ratio hr0." />
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -172,15 +175,15 @@ hazard ratio &amp;gt; or &amp;lt; the null hazard ratio hr0." />
     </div>
 
     <div class="ref-description">
-    <p><code>nSurvival()</code> is used to calculate the sample size for a clinical trial
+    <p><code><a href='nSurvival.html'>nSurvival()</a></code> is used to calculate the sample size for a clinical trial
 with a time-to-event endpoint. The Lachin and Foulkes (1986) method is used.
 <code>nEvents</code> uses the Schoenfeld (1981) approximation to provide sample
 size and power in terms of the underlying hazard ratio and the number of
-events observed in a survival analysis. The functions <code>hrz2n()</code>,
-<code>hrn2z()</code> and <code>zn2hr()</code> also use the Schoenfeld approximation to
+events observed in a survival analysis. The functions <code><a href='nSurvival.html'>hrz2n()</a></code>,
+<code><a href='nSurvival.html'>hrn2z()</a></code> and <code><a href='nSurvival.html'>zn2hr()</a></code> also use the Schoenfeld approximation to
 provide simple translations between hazard ratios, z-values and the number
 of events in an analysis; input variables can be given as vectors.</p>
-<p><code>nSurvival()</code> produces an object of class "nSurvival" with the number
+<p><code><a href='nSurvival.html'>nSurvival()</a></code> produces an object of class "nSurvival" with the number
 of subjects and events for a set of pre-specified trial parameters, such as
 accrual duration and follow-up period. The calculation is based on Lachin
 and Foulkes (1986) method and can be used for risk ratio or risk difference.
@@ -192,7 +195,7 @@ non-uniform entry, a non-zero value of <code>gamma</code> for exponential entry
 must be supplied. For positive <code>gamma</code>, the entry distribution is
 convex, whereas for negative <code>gamma</code>, the entry distribution is
 concave.</p>
-<p><code>nEvents()</code> uses the Schoenfeld (1981) method to approximate the number
+<p><code><a href='nSurvival.html'>nEvents()</a></code> uses the Schoenfeld (1981) method to approximate the number
 of events <code>n</code> (given <code>beta</code>) or the power (given <code>n</code>).
 Arguments may be vectors or scalars, but any vectors must have the same
 length.</p>
@@ -217,23 +220,23 @@ following based on the other two: the estimate hazard ratio, the number of
 events and the z-statistic. That is, $$\hat{\lambda}=
 \exp(z(1+r)/\sqrt{rn})$$ $$z=\log(\hat{\lambda})\sqrt{nr}/(1+r)$$ $$n=
 (z(1+r)/\log(\hat{\lambda}))^2/r.$$</p>
-<p><code>hrz2n()</code> translates an observed interim hazard ratio and interim
+<p><code><a href='nSurvival.html'>hrz2n()</a></code> translates an observed interim hazard ratio and interim
 z-value into the number of events required for the Z-value and hazard ratio
-to correspond to each other. <code>hrn2z()</code> translates a hazard ratio and
-number of events into an approximate corresponding Z-value. <code>zn2hr()</code>
+to correspond to each other. <code><a href='nSurvival.html'>hrn2z()</a></code> translates a hazard ratio and
+number of events into an approximate corresponding Z-value. <code><a href='nSurvival.html'>zn2hr()</a></code>
 translates a Z-value and number of events into an approximate corresponding
 hazard ratio. Each of these functions has a default assumption of an
 underlying hazard ratio of 1 which can be changed using the argument
-<code>hr0</code>. <code>hrn2z()</code> and <code>zn2hr()</code> also have an argument
+<code>hr0</code>. <code><a href='nSurvival.html'>hrn2z()</a></code> and <code><a href='nSurvival.html'>zn2hr()</a></code> also have an argument
 <code>hr1</code> which is only used to compute the sign of the computed Z-value in
-the case of <code>hrn2z()</code> and whether or not a z-value &gt; 0 corresponds to a
+the case of <code><a href='nSurvival.html'>hrn2z()</a></code> and whether or not a z-value &gt; 0 corresponds to a
 hazard ratio &gt; or &lt; the null hazard ratio <code>hr0</code>.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for nSurvival</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>nSurvival</span><span class='op'>(</span>
+<span class='fu'><a href='nSurvival.html'>nSurvival</a></span><span class='op'>(</span>
   lambda1 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='fl'>12</span>,
   lambda2 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>/</span><span class='fl'>24</span>,
   Ts <span class='op'>=</span> <span class='fl'>24</span>,
@@ -249,7 +252,7 @@ hazard ratio &gt; or &lt; the null hazard ratio <code>hr0</code>.</p>
   gamma <span class='op'>=</span> <span class='cn'>NA</span>
 <span class='op'>)</span>
 
-<span class='fu'>nEvents</span><span class='op'>(</span>
+<span class='fu'><a href='nSurvival.html'>nEvents</a></span><span class='op'>(</span>
   hr <span class='op'>=</span> <span class='fl'>0.6</span>,
   alpha <span class='op'>=</span> <span class='fl'>0.025</span>,
   beta <span class='op'>=</span> <span class='fl'>0.1</span>,
@@ -260,24 +263,24 @@ hazard ratio &gt; or &lt; the null hazard ratio <code>hr0</code>.</p>
   tbl <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span>
 
-<span class='fu'>zn2hr</span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>n</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, hr0 <span class='op'>=</span> <span class='fl'>1</span>, hr1 <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>)</span>
+<span class='fu'><a href='nSurvival.html'>zn2hr</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>n</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, hr0 <span class='op'>=</span> <span class='fl'>1</span>, hr1 <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>)</span>
 
-<span class='fu'>hrn2z</span><span class='op'>(</span><span class='va'>hr</span>, <span class='va'>n</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, hr0 <span class='op'>=</span> <span class='fl'>1</span>, hr1 <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>)</span>
+<span class='fu'><a href='nSurvival.html'>hrn2z</a></span><span class='op'>(</span><span class='va'>hr</span>, <span class='va'>n</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, hr0 <span class='op'>=</span> <span class='fl'>1</span>, hr1 <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>)</span>
 
-<span class='fu'>hrz2n</span><span class='op'>(</span><span class='va'>hr</span>, <span class='va'>z</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, hr0 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
+<span class='fu'><a href='nSurvival.html'>hrz2n</a></span><span class='op'>(</span><span class='va'>hr</span>, <span class='va'>z</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, hr0 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An object of class "nSurvival" returned by <code>nSurvival()</code>
+      <td><p>An object of class "nSurvival" returned by <code><a href='nSurvival.html'>nSurvival()</a></code>
 (optional: used for output; "months" or "years" would be the 'usual'
 choices).</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Allows additional arguments for <code>print.nSurvival()</code>.</p></td>
+      <td><p>Allows additional arguments for <code><a href='nSurvival.html'>print.nSurvival()</a></code>.</p></td>
     </tr>
     <tr>
       <th>lambda1, lambda2</th>
@@ -309,7 +312,7 @@ default.</p></td>
     <tr>
       <th>beta</th>
       <td><p>type II error rate. Default is 0.10 (90% power). Not needed for
-<code>nEvents()</code> if n is provided.</p></td>
+<code><a href='nSurvival.html'>nEvents()</a></code> if n is provided.</p></td>
     </tr>
     <tr>
       <th>sided</th>
@@ -354,7 +357,7 @@ rather than sample size.</p></td>
     <tr>
       <th>tbl</th>
       <td><p>Indicator of whether or not scalar (vector) or tabular output is
-desired for <code>nEvents()</code>.</p></td>
+desired for <code><a href='nSurvival.html'>nEvents()</a></code>.</p></td>
     </tr>
     <tr>
       <th>z</th>
@@ -410,8 +413,8 @@ Losses to Follow-Up, Noncompliance, and Stratification. <em>Biometrics</em>,
 Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='gsDesign package overview.html'>gsDesign package overview</a>, <a href='plot.gsDesign.html'>plot.gsDesign</a>, 
-<a href='gsDesign.html'>gsDesign</a>, <a href='summary.gsDesign.html'>gsHR</a></p></div>
+    <div class='dont-index'><p><a href='gsDesign-package-overview.html'>gsDesign package overview</a>, <a href='plot.gsDesign.html'>plot.gsDesign</a>, 
+<a href='gsDesign.html'>gsDesign</a>, <a href='gsBoundSummary.html'>gsHR</a></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Shanhong Guan <a href='mailto:shanhong.guan@gmail.com'>shanhong.guan@gmail.com</a>, Keaven Anderson
@@ -428,7 +431,7 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class='co'># alpha = 0.025 (1-sided)</span>
 <span class='co'># power = 0.9 (default beta=.1)</span>
 
-<span class='va'>ss</span> <span class='op'>&lt;-</span> <span class='fu'>nSurvival</span><span class='op'>(</span>
+<span class='va'>ss</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nSurvival.html'>nSurvival</a></span><span class='op'>(</span>
   lambda1 <span class='op'>=</span> <span class='fl'>.2</span>, lambda2 <span class='op'>=</span> <span class='fl'>.1</span>, eta <span class='op'>=</span> <span class='fl'>.1</span>, Ts <span class='op'>=</span> <span class='fl'>2</span>, Tr <span class='op'>=</span> <span class='fl'>.5</span>,
   sided <span class='op'>=</span> <span class='fl'>1</span>, alpha <span class='op'>=</span> <span class='fl'>.025</span>
 <span class='op'>)</span>
@@ -445,11 +448,11 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='st'>"hr"</span><span class='op'>)</span>
 </div><div class='img'><img src='nSurvival-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># total sample size</span>
 <span class='va'>x</span><span class='op'>$</span><span class='va'>nSurv</span>
-</div><div class='output co'>#&gt; [1] 440</div><div class='input'><span class='co'># number of events at analyses</span>
+</div><div class='co'>#&gt; [1] 440</div><div class='input'><span class='co'># number of events at analyses</span>
 <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span>
-</div><div class='output co'>#&gt; [1] 18.44213 36.88425 55.32638 73.76850 92.21063</div><div class='input'><span class='co'># print the design</span>
+</div><div class='co'>#&gt; [1] 18.44213 36.88425 55.32638 73.76850 92.21063</div><div class='input'><span class='co'># print the design</span>
 <span class='va'>x</span>
-</div><div class='output co'>#&gt; Group sequential design sample size for time-to-event outcome
+</div><div class='co'>#&gt; Group sequential design sample size for time-to-event outcome
 #&gt; with sample size 440. The analysis plan below shows events
 #&gt; at each analysis.
 #&gt; Symmetric two-sided group sequential design with
@@ -484,9 +487,9 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 #&gt;   0.0000 6e-04 0.0013 0.0028 0.0063 0.014 0.025
 #&gt;   0.3415 0e+00 0.0000 0.0000 0.0000 0.000 0.000</div><div class='input'><span class='co'># overall design summary</span>
 <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Symmetric two-sided group sequential design with 5 analyses, time-to-event outcome with sample size 440 and 93 events required, 90 percent power, 2.5 percent (1-sided) Type I error. Bounds derived using a  Hwang-Shih-DeCani spending function with gamma = -4.</div><div class='input'><span class='co'># tabular summary of bounds</span>
-<span class='fu'><a href='summary.gsDesign.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>x</span>, deltaname <span class='op'>=</span> <span class='st'>"HR"</span>, Nname <span class='op'>=</span> <span class='st'>"Events"</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    Analysis              Value Efficacy Futility
+</div><div class='co'>#&gt; Symmetric two-sided group sequential design with 5 analyses, time-to-event outcome with sample size 440 and 93 events required, 90 percent power, 2.5 percent (1-sided) Type I error. Bounds derived using a  Hwang-Shih-DeCani spending function with gamma = -4.</div><div class='input'><span class='co'># tabular summary of bounds</span>
+<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>x</span>, deltaname <span class='op'>=</span> <span class='st'>"HR"</span>, Nname <span class='op'>=</span> <span class='st'>"Events"</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='co'>#&gt;    Analysis              Value Efficacy Futility
 #&gt;   IA 1: 20%                  Z   3.2527  -3.2527
 #&gt;  Events: 19        p (1-sided)   0.0006   0.0006
 #&gt;                   ~HR at bound   0.2198   4.5487
@@ -516,38 +519,38 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 
 <span class='co'># approximate number of events required using Schoenfeld's method</span>
 <span class='co'># for 2 different hazard ratios</span>
-<span class='fu'>nEvents</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>.6</span><span class='op'>)</span>, tbl <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    hr   n alpha sided beta Power     delta ratio hr0        se
+<span class='fu'><a href='nSurvival.html'>nEvents</a></span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>.6</span><span class='op'>)</span>, tbl <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='co'>#&gt;    hr   n alpha sided beta Power     delta ratio hr0        se
 #&gt; 1 0.5  88 0.025     1  0.1   0.9 0.3465736     1   1 0.2132007
 #&gt; 2 0.6 162 0.025     1  0.1   0.9 0.2554128     1   1 0.1571348</div><div class='input'><span class='co'># vector output</span>
-<span class='fu'>nEvents</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>.6</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1]  87.4793 161.0686</div><div class='input'>
+<span class='fu'><a href='nSurvival.html'>nEvents</a></span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>.6</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='co'>#&gt; [1]  87.4793 161.0686</div><div class='input'>
 <span class='co'># approximate power using Schoenfeld's method</span>
 <span class='co'># given 2 sample sizes and hr=.6</span>
-<span class='fu'>nEvents</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>.6</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>100</span><span class='op'>)</span>, tbl <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    hr   n alpha sided      beta     Power     delta ratio hr0        se
+<span class='fu'><a href='nSurvival.html'>nEvents</a></span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>.6</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>100</span><span class='op'>)</span>, tbl <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='co'>#&gt;    hr   n alpha sided      beta     Power     delta ratio hr0        se
 #&gt; 1 0.6  50 0.025     1 0.5611646 0.4388354 0.2554128     1   1 0.2828427
 #&gt; 2 0.6 100 0.025     1 0.2762012 0.7237988 0.2554128     1   1 0.2000000</div><div class='input'><span class='co'># vector output</span>
-<span class='fu'>nEvents</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>.6</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.4388354 0.7237988</div><div class='input'>
+<span class='fu'><a href='nSurvival.html'>nEvents</a></span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>.6</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='co'>#&gt; [1] 0.4388354 0.7237988</div><div class='input'>
 <span class='co'># approximate hazard ratio corresponding to 100 events and z-statistic of 2</span>
-<span class='fu'>zn2hr</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, z <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.67032</div><div class='input'><span class='co'># same when hr0 is 1.1</span>
-<span class='fu'>zn2hr</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, z <span class='op'>=</span> <span class='fl'>2</span>, hr0 <span class='op'>=</span> <span class='fl'>1.1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.7373521</div><div class='input'><span class='co'># same when hr0 is .9 and hr1 is greater than hr0</span>
-<span class='fu'>zn2hr</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, z <span class='op'>=</span> <span class='fl'>2</span>, hr0 <span class='op'>=</span> <span class='fl'>.9</span>, hr1 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 1.342642</div><div class='input'>
+<span class='fu'><a href='nSurvival.html'>zn2hr</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, z <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='co'>#&gt; [1] 0.67032</div><div class='input'><span class='co'># same when hr0 is 1.1</span>
+<span class='fu'><a href='nSurvival.html'>zn2hr</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, z <span class='op'>=</span> <span class='fl'>2</span>, hr0 <span class='op'>=</span> <span class='fl'>1.1</span><span class='op'>)</span>
+</div><div class='co'>#&gt; [1] 0.7373521</div><div class='input'><span class='co'># same when hr0 is .9 and hr1 is greater than hr0</span>
+<span class='fu'><a href='nSurvival.html'>zn2hr</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, z <span class='op'>=</span> <span class='fl'>2</span>, hr0 <span class='op'>=</span> <span class='fl'>.9</span>, hr1 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='co'>#&gt; [1] 1.342642</div><div class='input'>
 <span class='co'># approximate number of events corresponding to z-statistic of 2 and</span>
 <span class='co'># estimated hazard ratio of .5 (or 2)</span>
-<span class='fu'>hrz2n</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>.5</span>, z <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 33.3019</div><div class='input'><span class='fu'>hrz2n</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>2</span>, z <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 33.3019</div><div class='input'>
+<span class='fu'><a href='nSurvival.html'>hrz2n</a></span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>.5</span>, z <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='co'>#&gt; [1] 33.3019</div><div class='input'><span class='fu'><a href='nSurvival.html'>hrz2n</a></span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>2</span>, z <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='co'>#&gt; [1] 33.3019</div><div class='input'>
 <span class='co'># approximate z statistic corresponding to 75 events</span>
 <span class='co'># and estimated hazard ratio of .6 (or 1/.6)</span>
 <span class='co'># assuming 2-to-1 randomization of experimental to control</span>
-<span class='fu'>hrn2z</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>.6</span>, n <span class='op'>=</span> <span class='fl'>75</span>, ratio <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] -2.085437</div><div class='input'><span class='fu'>hrn2z</span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>1</span> <span class='op'>/</span> <span class='fl'>.6</span>, n <span class='op'>=</span> <span class='fl'>75</span>, ratio <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2.085437</div></pre>
+<span class='fu'><a href='nSurvival.html'>hrn2z</a></span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>.6</span>, n <span class='op'>=</span> <span class='fl'>75</span>, ratio <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='co'>#&gt; [1] -2.085437</div><div class='input'><span class='fu'><a href='nSurvival.html'>hrn2z</a></span><span class='op'>(</span>hr <span class='op'>=</span> <span class='fl'>1</span> <span class='op'>/</span> <span class='fl'>.6</span>, n <span class='op'>=</span> <span class='fl'>75</span>, ratio <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+</div><div class='co'>#&gt; [1] 2.085437</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -563,7 +566,7 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>

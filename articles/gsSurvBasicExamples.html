@@ -64,7 +64,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Basic time-to-event group sequential design using gsSurv</h1>
             
-            <h4 data-toc-skip class="date">2021-03-12</h4>
+            <h4 data-toc-skip class="date">2021-04-28</h4>
       
       
       <div class="hidden name"><code>gsSurvBasicExamples.Rmd</code></div>
@@ -75,17 +75,17 @@
     
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>This article/vignette provides a basic time-to-event endpoint designs for fixed designs using <code><a href="../reference/print.nSurv.html">nSurv()</a></code> and group sequential designs using <code><a href="../reference/print.nSurv.html">gsSurv()</a></code>. Some detail in specification comes with the flexibility allowed by the <span class="citation">Lachin and Foulkes (1986)</span> method for sample size under a proportional hazards model with piecewise constant enrollment, piecewise exponential failure and dropout rates. Users may also be interested in the <a href="https://gsdesign.shinyapps.io/prod/" class="external-link">Shiny interface</a> as a learning tool. We only use the simplest options here with a single stratum and exponential failure and dropout rates; see the help file for <code><a href="../reference/print.nSurv.html">gsSurv()</a></code> for examples with a stratified population or piecewise exponential failure.</p>
+<a href="#introduction" class="anchor" aria-hidden="true"></a>Introduction</h1>
+<p>This article/vignette provides a basic time-to-event endpoint designs for fixed designs using <code><a href="../reference/nSurv.html">nSurv()</a></code> and group sequential designs using <code><a href="../reference/nSurv.html">gsSurv()</a></code>. Some detail in specification comes with the flexibility allowed by the <span class="citation">Lachin and Foulkes (1986)</span> method for sample size under a proportional hazards model with piecewise constant enrollment, piecewise exponential failure and dropout rates. Users may also be interested in the <a href="https://gsdesign.shinyapps.io/prod/" class="external-link">Shiny interface</a> as a learning tool. We only use the simplest options here with a single stratum and exponential failure and dropout rates; see the help file for <code><a href="../reference/nSurv.html">gsSurv()</a></code> for examples with a stratified population or piecewise exponential failure.</p>
 <p>We apply the <span class="citation">Lachin and Foulkes (1986)</span> sample size method and extend it to group sequential design. This method fixes the duration of a study and varies enrollment rates to power a trial. We also use the <span class="citation">Lachin and Foulkes (1986)</span> basic power calculation to compute sample size along the lines of <span class="citation">Kim and Tsiatis (1990)</span> where enrollment rates are fixed and enrollment duration is allowed to vary to enroll a sufficient sample size to power a study.</p>
 </div>
 <div id="fixed-design-derivation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#fixed-design-derivation" class="anchor"></a>Fixed design derivation</h1>
+<a href="#fixed-design-derivation" class="anchor" aria-hidden="true"></a>Fixed design derivation</h1>
 <p>Since the parameters used for a design with no interim are also used for a group sequential design, we first specify and derive a design with no interim analysis.</p>
 <div id="outcome-and-dropout-distributions" class="section level2">
 <h2 class="hasAnchor">
-<a href="#outcome-and-dropout-distributions" class="anchor"></a>Outcome and dropout distributions</h2>
+<a href="#outcome-and-dropout-distributions" class="anchor" aria-hidden="true"></a>Outcome and dropout distributions</h2>
 <p>We begin with information about the median time-to-event in the control group, dropout rate, hazard ratios under the null and alternate hypotheses for experimental therapy compared to control, and the desired Type I and II error rates.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># median control time-to-event</span>
@@ -104,7 +104,7 @@
 </div>
 <div id="enrollment-and-trial-duration" class="section level2">
 <h2 class="hasAnchor">
-<a href="#enrollment-and-trial-duration" class="anchor"></a>Enrollment and trial duration</h2>
+<a href="#enrollment-and-trial-duration" class="anchor" aria-hidden="true"></a>Enrollment and trial duration</h2>
 <p>Next, we plan the trial duration and the enrollment pattern. There are two basic methods for doing this. The <span class="citation">Lachin and Foulkes (1986)</span> method demonstrated here fixes the enrollment pattern and duration as well as the trial duration and changes the absolute enrollment rates to obtain desired power. The alternate recommended method is along the lines of <span class="citation">Kim and Tsiatis (1990)</span>, fixing the enrollment rates and follow-up duration, varying the total trial duration to power the design; this will also be demonstrated below.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># study duration</span>
@@ -120,12 +120,12 @@
 </div>
 <div id="deriving-design-with-no-interim-analyses" class="section level2">
 <h2 class="hasAnchor">
-<a href="#deriving-design-with-no-interim-analyses" class="anchor"></a>Deriving design with no interim analyses</h2>
-<p>The above information is sufficient to design a trial with no interim analyses. Note that when calling <code><a href="../reference/print.nSurv.html">nSurv()</a></code>, we transform the median time-to-event (<span class="math inline">\(m\)</span>) to an exponential event rate (<span class="math inline">\(\lambda\)</span>) with the formula <span class="math display">\[\lambda=\log(2)/m.\]</span></p>
+<a href="#deriving-design-with-no-interim-analyses" class="anchor" aria-hidden="true"></a>Deriving design with no interim analyses</h2>
+<p>The above information is sufficient to design a trial with no interim analyses. Note that when calling <code><a href="../reference/nSurv.html">nSurv()</a></code>, we transform the median time-to-event (<span class="math inline">\(m\)</span>) to an exponential event rate (<span class="math inline">\(\lambda\)</span>) with the formula <span class="math display">\[\lambda=\log(2)/m.\]</span></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gsDesign</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: ggplot2</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/print.nSurv.html">nSurv</a></span><span class="op">(</span>R <span class="op">=</span> <span class="va">R</span>,
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">nSurv</a></span><span class="op">(</span>R <span class="op">=</span> <span class="va">R</span>,
            gamma <span class="op">=</span> <span class="va">gamma</span>,
            eta <span class="op">=</span> <span class="va">eta</span>,
            minfup <span class="op">=</span> <span class="va">minfup</span>,
@@ -165,11 +165,11 @@
 </div>
 <div id="varying-enrollment-duration-to-power-trial" class="section level2">
 <h2 class="hasAnchor">
-<a href="#varying-enrollment-duration-to-power-trial" class="anchor"></a>Varying enrollment duration to power trial</h2>
+<a href="#varying-enrollment-duration-to-power-trial" class="anchor" aria-hidden="true"></a>Varying enrollment duration to power trial</h2>
 <p>If we had set <code>T = NULL</code> above, the specified enrollment rates would not be changed but enrollment duration would be adjusted to achieve desired power. For the low enrollment rates specified in <code>gamma</code> above, this would have resulted in a long trial.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># THIS CODE IS EXAMPLE ONLY; NOT EXECUTED HERE</span>
-<span class="fu"><a href="../reference/print.nSurv.html">nSurv</a></span><span class="op">(</span>R <span class="op">=</span> <span class="va">R</span>,
+<span class="fu"><a href="../reference/nSurv.html">nSurv</a></span><span class="op">(</span>R <span class="op">=</span> <span class="va">R</span>,
    gamma <span class="op">=</span> <span class="va">gamma</span>,
    eta <span class="op">=</span> <span class="va">eta</span>,
    minfup <span class="op">=</span> <span class="va">minfup</span>,
@@ -183,11 +183,11 @@
 </div>
 <div id="group-sequential-design" class="section level1">
 <h1 class="hasAnchor">
-<a href="#group-sequential-design" class="anchor"></a>Group sequential design</h1>
+<a href="#group-sequential-design" class="anchor" aria-hidden="true"></a>Group sequential design</h1>
 <p>Now we move on to a group sequential design.</p>
 <div id="additional-parameters" class="section level2">
 <h2 class="hasAnchor">
-<a href="#additional-parameters" class="anchor"></a>Additional parameters</h2>
+<a href="#additional-parameters" class="anchor" aria-hidden="true"></a>Additional parameters</h2>
 <p>All the parameters above are used. We set up the number of analyses, timing and spending function parameters. These deserve careful attention for every trial and tend to be somewhat customized to be fit-for-purpose according to all those involved in designing the trial. Here the choices considered the following:</p>
 <ul>
 <li>There is an early look intended primarily for futility
@@ -227,18 +227,18 @@
 </div>
 <div id="generating-the-design" class="section level2">
 <h2 class="hasAnchor">
-<a href="#generating-the-design" class="anchor"></a>Generating the design</h2>
+<a href="#generating-the-design" class="anchor" aria-hidden="true"></a>Generating the design</h2>
 <p>Now we are prepared to generate the design.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># generate design</span>
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/print.nSurv.html">gsSurv</a></span><span class="op">(</span>k <span class="op">=</span> <span class="va">k</span>, timing <span class="op">=</span> <span class="va">timing</span>, R <span class="op">=</span> <span class="va">R</span>, gamma <span class="op">=</span> <span class="va">gamma</span>, eta <span class="op">=</span> <span class="va">eta</span>,
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span>k <span class="op">=</span> <span class="va">k</span>, timing <span class="op">=</span> <span class="va">timing</span>, R <span class="op">=</span> <span class="va">R</span>, gamma <span class="op">=</span> <span class="va">gamma</span>, eta <span class="op">=</span> <span class="va">eta</span>,
             minfup <span class="op">=</span> <span class="va">minfup</span>,T <span class="op">=</span> <span class="cn">T</span>, lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="va">median</span>,
             hr <span class="op">=</span> <span class="va">hr</span>, hr0 <span class="op">=</span> <span class="va">hr0</span> , beta <span class="op">=</span> <span class="va">beta</span>, alpha <span class="op">=</span> <span class="va">alpha</span>,
             sfu <span class="op">=</span> <span class="va">sfu</span>, sfupar <span class="op">=</span> <span class="va">sfupar</span>, sfl <span class="op">=</span> <span class="va">sfl</span>, sflpar <span class="op">=</span> <span class="va">sflpar</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="textual-summary" class="section level2">
 <h2 class="hasAnchor">
-<a href="#textual-summary" class="anchor"></a>Textual summary</h2>
+<a href="#textual-summary" class="anchor" aria-hidden="true"></a>Textual summary</h2>
 <p>The design summary is:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -247,19 +247,19 @@
 </div>
 <div id="tabular-summaries" class="section level2">
 <h2 class="hasAnchor">
-<a href="#tabular-summaries" class="anchor"></a>Tabular summaries</h2>
+<a href="#tabular-summaries" class="anchor" aria-hidden="true"></a>Tabular summaries</h2>
 <p>Following are the enrollment rates required to power the trial.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/gt" class="external-link">gt</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span>
 <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>Period <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Month"</span>,<span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span><span class="op">)</span>,
-       Rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Enrollment rate requirements"</span><span class="op">)</span></code></pre></div>
+       Rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Enrollment rate requirements"</span><span class="op">)</span></code></pre></div>
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#akxkdokrag .gt_table {
+#twvorvshlz .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -284,7 +284,7 @@
   border-left-color: #D3D3D3;
 }
 
-#akxkdokrag .gt_heading {
+#twvorvshlz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -296,7 +296,7 @@
   border-right-color: #D3D3D3;
 }
 
-#akxkdokrag .gt_title {
+#twvorvshlz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -306,7 +306,7 @@
   border-bottom-width: 0;
 }
 
-#akxkdokrag .gt_subtitle {
+#twvorvshlz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -316,13 +316,13 @@
   border-top-width: 0;
 }
 
-#akxkdokrag .gt_bottom_border {
+#twvorvshlz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#akxkdokrag .gt_col_headings {
+#twvorvshlz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -337,7 +337,7 @@
   border-right-color: #D3D3D3;
 }
 
-#akxkdokrag .gt_col_heading {
+#twvorvshlz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -357,7 +357,7 @@
   overflow-x: hidden;
 }
 
-#akxkdokrag .gt_column_spanner_outer {
+#twvorvshlz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -369,15 +369,15 @@
   padding-right: 4px;
 }
 
-#akxkdokrag .gt_column_spanner_outer:first-child {
+#twvorvshlz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#akxkdokrag .gt_column_spanner_outer:last-child {
+#twvorvshlz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#akxkdokrag .gt_column_spanner {
+#twvorvshlz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -389,7 +389,7 @@
   width: 100%;
 }
 
-#akxkdokrag .gt_group_heading {
+#twvorvshlz .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -411,7 +411,7 @@
   vertical-align: middle;
 }
 
-#akxkdokrag .gt_empty_group_heading {
+#twvorvshlz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -426,15 +426,15 @@
   vertical-align: middle;
 }
 
-#akxkdokrag .gt_from_md > :first-child {
+#twvorvshlz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#akxkdokrag .gt_from_md > :last-child {
+#twvorvshlz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#akxkdokrag .gt_row {
+#twvorvshlz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -453,7 +453,7 @@
   overflow-x: hidden;
 }
 
-#akxkdokrag .gt_stub {
+#twvorvshlz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -465,7 +465,7 @@
   padding-left: 12px;
 }
 
-#akxkdokrag .gt_summary_row {
+#twvorvshlz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -475,7 +475,7 @@
   padding-right: 5px;
 }
 
-#akxkdokrag .gt_first_summary_row {
+#twvorvshlz .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -485,7 +485,7 @@
   border-top-color: #D3D3D3;
 }
 
-#akxkdokrag .gt_grand_summary_row {
+#twvorvshlz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -495,7 +495,7 @@
   padding-right: 5px;
 }
 
-#akxkdokrag .gt_first_grand_summary_row {
+#twvorvshlz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -505,11 +505,11 @@
   border-top-color: #D3D3D3;
 }
 
-#akxkdokrag .gt_striped {
+#twvorvshlz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#akxkdokrag .gt_table_body {
+#twvorvshlz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -518,7 +518,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#akxkdokrag .gt_footnotes {
+#twvorvshlz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -532,13 +532,13 @@
   border-right-color: #D3D3D3;
 }
 
-#akxkdokrag .gt_footnote {
+#twvorvshlz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#akxkdokrag .gt_sourcenotes {
+#twvorvshlz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -552,46 +552,46 @@
   border-right-color: #D3D3D3;
 }
 
-#akxkdokrag .gt_sourcenote {
+#twvorvshlz .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#akxkdokrag .gt_left {
+#twvorvshlz .gt_left {
   text-align: left;
 }
 
-#akxkdokrag .gt_center {
+#twvorvshlz .gt_center {
   text-align: center;
 }
 
-#akxkdokrag .gt_right {
+#twvorvshlz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#akxkdokrag .gt_font_normal {
+#twvorvshlz .gt_font_normal {
   font-weight: normal;
 }
 
-#akxkdokrag .gt_font_bold {
+#twvorvshlz .gt_font_bold {
   font-weight: bold;
 }
 
-#akxkdokrag .gt_font_italic {
+#twvorvshlz .gt_font_italic {
   font-style: italic;
 }
 
-#akxkdokrag .gt_super {
+#twvorvshlz .gt_super {
   font-size: 65%;
 }
 
-#akxkdokrag .gt_footnote_marks {
+#twvorvshlz .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="akxkdokrag" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="twvorvshlz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="2" class="gt_heading gt_title gt_font_normal" style>Enrollment rate requirements</th>
@@ -623,7 +623,7 @@
     </tr>
 </tbody>
 </table></div>
-<p>Next we provide a tabular summary of bounds for the design. We have added extensive footnoting to the table, which may or may not be required for your design. However, as seen here it makes many choices for design parameters and properties transparent. No attempt has been made to automate this, but it may be worth considering for a template if you wish to make the same choice across many trials. Note that the <code>exclude</code> argument for <code><a href="../reference/summary.gsDesign.html">gsBoundSummary()</a></code> allows additional descriptions for design bounds such as conditional or predictive power; see the help file for details or just provide <code>exclude = NULL</code> to <code><a href="../reference/summary.gsDesign.html">gsBoundSummary()</a></code> to see all options.</p>
+<p>Next we provide a tabular summary of bounds for the design. We have added extensive footnoting to the table, which may or may not be required for your design. However, as seen here it makes many choices for design parameters and properties transparent. No attempt has been made to automate this, but it may be worth considering for a template if you wish to make the same choice across many trials. Note that the <code>exclude</code> argument for <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> allows additional descriptions for design bounds such as conditional or predictive power; see the help file for details or just provide <code>exclude = NULL</code> to <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> to see all options.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># footnote text for table</span>
 <span class="va">footnote1</span> <span class="op">&lt;-</span> <span class="st">"P{Cross} is the probability of crossing the given bound (efficacy or futility) at or before the given analysis under the assumed hazard ratio (HR)."</span>
@@ -637,15 +637,15 @@
 <span class="co"># caption text for table</span>
 <span class="va">caption</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Overall survival trial design with HR="</span>,<span class="va">hr</span>,<span class="st">", "</span>,<span class="fl">100</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">beta</span><span class="op">)</span>,<span class="st">"% power and "</span>,<span class="fl">100</span><span class="op">*</span><span class="va">alpha</span>,<span class="st">"% Type 1 error"</span>,sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/summary.gsDesign.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Time-to-event group sequential design"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cols_align.html" class="external-link">cols_align</a></span><span class="op">(</span><span class="st">"left"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="va">footnoteUS</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="va">footnoteLS</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="va">footnoteHR</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html" class="external-link">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>,rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">8</span>,<span class="fl">13</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="va">footnoteM</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html" class="external-link">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">1</span>,rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">9</span>,<span class="fl">14</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="va">footnote1</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html" class="external-link">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>,rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">9</span>,<span class="fl">10</span>,<span class="fl">14</span>,<span class="fl">15</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Time-to-event group sequential design"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cols_align.html" class="external-link">cols_align</a></span><span class="op">(</span><span class="st">"left"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="va">footnoteUS</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="va">footnoteLS</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="va">footnoteHR</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html" class="external-link">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>,rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">8</span>,<span class="fl">13</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="va">footnoteM</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html" class="external-link">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">1</span>,rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">9</span>,<span class="fl">14</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="va">footnote1</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html" class="external-link">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>,rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">9</span>,<span class="fl">10</span>,<span class="fl">14</span>,<span class="fl">15</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="va">footnote2</span>,locations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html" class="external-link">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>,rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">9</span>,<span class="fl">14</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: The `cells_data()` function is deprecated and will soon be removed</span>
 <span class="co">#&gt;  * Use the `cells_body()` function instead</span>
@@ -662,7 +662,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ijxrbylhtd .gt_table {
+#cvdughqhts .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -687,7 +687,7 @@
   border-left-color: #D3D3D3;
 }
 
-#ijxrbylhtd .gt_heading {
+#cvdughqhts .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -699,7 +699,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ijxrbylhtd .gt_title {
+#cvdughqhts .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -709,7 +709,7 @@
   border-bottom-width: 0;
 }
 
-#ijxrbylhtd .gt_subtitle {
+#cvdughqhts .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -719,13 +719,13 @@
   border-top-width: 0;
 }
 
-#ijxrbylhtd .gt_bottom_border {
+#cvdughqhts .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ijxrbylhtd .gt_col_headings {
+#cvdughqhts .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -740,7 +740,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ijxrbylhtd .gt_col_heading {
+#cvdughqhts .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -760,7 +760,7 @@
   overflow-x: hidden;
 }
 
-#ijxrbylhtd .gt_column_spanner_outer {
+#cvdughqhts .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -772,15 +772,15 @@
   padding-right: 4px;
 }
 
-#ijxrbylhtd .gt_column_spanner_outer:first-child {
+#cvdughqhts .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ijxrbylhtd .gt_column_spanner_outer:last-child {
+#cvdughqhts .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ijxrbylhtd .gt_column_spanner {
+#cvdughqhts .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -792,7 +792,7 @@
   width: 100%;
 }
 
-#ijxrbylhtd .gt_group_heading {
+#cvdughqhts .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -814,7 +814,7 @@
   vertical-align: middle;
 }
 
-#ijxrbylhtd .gt_empty_group_heading {
+#cvdughqhts .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -829,15 +829,15 @@
   vertical-align: middle;
 }
 
-#ijxrbylhtd .gt_from_md > :first-child {
+#cvdughqhts .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ijxrbylhtd .gt_from_md > :last-child {
+#cvdughqhts .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ijxrbylhtd .gt_row {
+#cvdughqhts .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -856,7 +856,7 @@
   overflow-x: hidden;
 }
 
-#ijxrbylhtd .gt_stub {
+#cvdughqhts .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -868,7 +868,7 @@
   padding-left: 12px;
 }
 
-#ijxrbylhtd .gt_summary_row {
+#cvdughqhts .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -878,7 +878,7 @@
   padding-right: 5px;
 }
 
-#ijxrbylhtd .gt_first_summary_row {
+#cvdughqhts .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -888,7 +888,7 @@
   border-top-color: #D3D3D3;
 }
 
-#ijxrbylhtd .gt_grand_summary_row {
+#cvdughqhts .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -898,7 +898,7 @@
   padding-right: 5px;
 }
 
-#ijxrbylhtd .gt_first_grand_summary_row {
+#cvdughqhts .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -908,11 +908,11 @@
   border-top-color: #D3D3D3;
 }
 
-#ijxrbylhtd .gt_striped {
+#cvdughqhts .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ijxrbylhtd .gt_table_body {
+#cvdughqhts .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -921,7 +921,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#ijxrbylhtd .gt_footnotes {
+#cvdughqhts .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -935,13 +935,13 @@
   border-right-color: #D3D3D3;
 }
 
-#ijxrbylhtd .gt_footnote {
+#cvdughqhts .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#ijxrbylhtd .gt_sourcenotes {
+#cvdughqhts .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -955,46 +955,46 @@
   border-right-color: #D3D3D3;
 }
 
-#ijxrbylhtd .gt_sourcenote {
+#cvdughqhts .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#ijxrbylhtd .gt_left {
+#cvdughqhts .gt_left {
   text-align: left;
 }
 
-#ijxrbylhtd .gt_center {
+#cvdughqhts .gt_center {
   text-align: center;
 }
 
-#ijxrbylhtd .gt_right {
+#cvdughqhts .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ijxrbylhtd .gt_font_normal {
+#cvdughqhts .gt_font_normal {
   font-weight: normal;
 }
 
-#ijxrbylhtd .gt_font_bold {
+#cvdughqhts .gt_font_bold {
   font-weight: bold;
 }
 
-#ijxrbylhtd .gt_font_italic {
+#cvdughqhts .gt_font_italic {
   font-style: italic;
 }
 
-#ijxrbylhtd .gt_super {
+#cvdughqhts .gt_super {
   font-size: 65%;
 }
 
-#ijxrbylhtd .gt_footnote_marks {
+#cvdughqhts .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="ijxrbylhtd" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="cvdughqhts" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="4" class="gt_heading gt_title gt_font_normal" style>Time-to-event group sequential design</th>
@@ -1159,20 +1159,20 @@
 </div>
 <div id="summary-plots" class="section level2">
 <h2 class="hasAnchor">
-<a href="#summary-plots" class="anchor"></a>Summary plots</h2>
+<a href="#summary-plots" class="anchor" aria-hidden="true"></a>Summary plots</h2>
 <p>Several plots are available to summarize a design; see help for <code><a href="../reference/plot.gsDesign.html">plot.gsDesign()</a></code>; one easy way to see how to generate each is by checking plots and code generated by the <a href="https://gsdesign.shinyapps.io/prod/" class="external-link">Shiny interface</a>. The power plot is information-rich, but also requires some explanation; thus, we demonstrate here.</p>
 <p>The solid black line represents the trial power by effect size. Power at interim 1 is represented by the black dotted line. Cumulative power at interim 2 is represented by the black dashed line. The red dotted line is 1 minus the probability of crossing the futility bound on the percentage scale. The red dashed line is 1 minus the cumulative probability of crossing the futility bound by interim 2.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>,plottype <span class="op">=</span> <span class="st">"power"</span>,cex <span class="op">=</span> <span class="fl">.8</span>,xlab <span class="op">=</span> <span class="st">"HR"</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org//reference/label_percent.html" class="external-link">percent</a></span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_percent.html" class="external-link">percent</a></span><span class="op">)</span></code></pre></div>
 <p><img src="gsSurvBasicExamples_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
 </div>
 </div>
 <div id="update-bounds-at-time-of-analysis" class="section level1">
 <h1 class="hasAnchor">
-<a href="#update-bounds-at-time-of-analysis" class="anchor"></a>Update bounds at time of analysis</h1>
+<a href="#update-bounds-at-time-of-analysis" class="anchor" aria-hidden="true"></a>Update bounds at time of analysis</h1>
 <p>Analyses rarely occur at exactly the number of events which are planned. The advantage of the spending function approach to design is that bounds can be updated to account for the actual number of events observed at each analysis. In fact, analyses can be added or deleted noting that any changes in timing or analyses should not be made with knowledge of unblinded study results. We suggest tables and a plot that may be of particular use. We also present computation of conditional and predictive power.</p>
 <p>First, we update the actual number of events for interims 1 and 2 and assume the final analysis event count is still as originally planned:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
@@ -1186,20 +1186,20 @@
                delta <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">delta</span>, delta1 <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">delta1</span>, delta0 <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">delta0</span><span class="op">)</span></code></pre></div>
 <p>Now we print the design summary, selecting minimal calculations for a table to provide guidance for review of results. If you wish to see all possible summaries of bounds, change to <code>exclude = NULL</code> below. Here we have assumed futility guidance is based on the hazard ratio at interim analysis; this is not generally the case, but is an option as these bounds are guidance rather than having strict inferential interpretation.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/summary.gsDesign.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xu</span>,
+<code class="sourceCode R"><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xu</span>,
                deltaname<span class="op">=</span><span class="st">"HR"</span>,
                logdelta<span class="op">=</span><span class="cn">TRUE</span>,
                Nname<span class="op">=</span><span class="st">"Events"</span>,
                exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Spending"</span>, <span class="st">"B-value"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, 
-                           <span class="st">"PP"</span>, <span class="st">"P(Cross) if HR=1"</span>,<span class="st">"P(Cross) if HR=0.75"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cols_align.html" class="external-link">cols_align</a></span><span class="op">(</span><span class="st">"left"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+                           <span class="st">"PP"</span>, <span class="st">"P(Cross) if HR=1"</span>,<span class="st">"P(Cross) if HR=0.75"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/gt/man/cols_align.html" class="external-link">cols_align</a></span><span class="op">(</span><span class="st">"left"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Time-to-event group sequential bound guidance"</span>,
-             subtitle <span class="op">=</span> <span class="st">"Bounds updated based on event counts through IA2"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+             subtitle <span class="op">=</span> <span class="st">"Bounds updated based on event counts through IA2"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="st">"Nominal p-value required to establish statistical significance."</span>,
-               locations<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html" class="external-link">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">3</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+               locations<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html" class="external-link">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">3</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="st">"Interim futility guidance based on observed HR is non-binding."</span>,
-               locations<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html" class="external-link">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">4</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+               locations<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html" class="external-link">cells_data</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">4</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/pkg/gt/man/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span><span class="st">"HR bounds are approximations; decisions on crossing are based solely on p-values."</span>,
                locations<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/gt/man/cells_data.html" class="external-link">cells_data</a></span><span class="op">(</span>column<span class="op">=</span> <span class="fl">2</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: The `cells_data()` function is deprecated and will soon be removed</span>
@@ -1214,7 +1214,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#eqvszhhfau .gt_table {
+#gbslqqfdkp .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1239,7 +1239,7 @@
   border-left-color: #D3D3D3;
 }
 
-#eqvszhhfau .gt_heading {
+#gbslqqfdkp .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1251,7 +1251,7 @@
   border-right-color: #D3D3D3;
 }
 
-#eqvszhhfau .gt_title {
+#gbslqqfdkp .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1261,7 +1261,7 @@
   border-bottom-width: 0;
 }
 
-#eqvszhhfau .gt_subtitle {
+#gbslqqfdkp .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1271,13 +1271,13 @@
   border-top-width: 0;
 }
 
-#eqvszhhfau .gt_bottom_border {
+#gbslqqfdkp .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#eqvszhhfau .gt_col_headings {
+#gbslqqfdkp .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1292,7 +1292,7 @@
   border-right-color: #D3D3D3;
 }
 
-#eqvszhhfau .gt_col_heading {
+#gbslqqfdkp .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1312,7 +1312,7 @@
   overflow-x: hidden;
 }
 
-#eqvszhhfau .gt_column_spanner_outer {
+#gbslqqfdkp .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1324,15 +1324,15 @@
   padding-right: 4px;
 }
 
-#eqvszhhfau .gt_column_spanner_outer:first-child {
+#gbslqqfdkp .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#eqvszhhfau .gt_column_spanner_outer:last-child {
+#gbslqqfdkp .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#eqvszhhfau .gt_column_spanner {
+#gbslqqfdkp .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1344,7 +1344,7 @@
   width: 100%;
 }
 
-#eqvszhhfau .gt_group_heading {
+#gbslqqfdkp .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1366,7 +1366,7 @@
   vertical-align: middle;
 }
 
-#eqvszhhfau .gt_empty_group_heading {
+#gbslqqfdkp .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1381,15 +1381,15 @@
   vertical-align: middle;
 }
 
-#eqvszhhfau .gt_from_md > :first-child {
+#gbslqqfdkp .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#eqvszhhfau .gt_from_md > :last-child {
+#gbslqqfdkp .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#eqvszhhfau .gt_row {
+#gbslqqfdkp .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1408,7 +1408,7 @@
   overflow-x: hidden;
 }
 
-#eqvszhhfau .gt_stub {
+#gbslqqfdkp .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1420,7 +1420,7 @@
   padding-left: 12px;
 }
 
-#eqvszhhfau .gt_summary_row {
+#gbslqqfdkp .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1430,7 +1430,7 @@
   padding-right: 5px;
 }
 
-#eqvszhhfau .gt_first_summary_row {
+#gbslqqfdkp .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1440,7 +1440,7 @@
   border-top-color: #D3D3D3;
 }
 
-#eqvszhhfau .gt_grand_summary_row {
+#gbslqqfdkp .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1450,7 +1450,7 @@
   padding-right: 5px;
 }
 
-#eqvszhhfau .gt_first_grand_summary_row {
+#gbslqqfdkp .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1460,11 +1460,11 @@
   border-top-color: #D3D3D3;
 }
 
-#eqvszhhfau .gt_striped {
+#gbslqqfdkp .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#eqvszhhfau .gt_table_body {
+#gbslqqfdkp .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1473,7 +1473,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#eqvszhhfau .gt_footnotes {
+#gbslqqfdkp .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1487,13 +1487,13 @@
   border-right-color: #D3D3D3;
 }
 
-#eqvszhhfau .gt_footnote {
+#gbslqqfdkp .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#eqvszhhfau .gt_sourcenotes {
+#gbslqqfdkp .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1507,46 +1507,46 @@
   border-right-color: #D3D3D3;
 }
 
-#eqvszhhfau .gt_sourcenote {
+#gbslqqfdkp .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#eqvszhhfau .gt_left {
+#gbslqqfdkp .gt_left {
   text-align: left;
 }
 
-#eqvszhhfau .gt_center {
+#gbslqqfdkp .gt_center {
   text-align: center;
 }
 
-#eqvszhhfau .gt_right {
+#gbslqqfdkp .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#eqvszhhfau .gt_font_normal {
+#gbslqqfdkp .gt_font_normal {
   font-weight: normal;
 }
 
-#eqvszhhfau .gt_font_bold {
+#gbslqqfdkp .gt_font_bold {
   font-weight: bold;
 }
 
-#eqvszhhfau .gt_font_italic {
+#gbslqqfdkp .gt_font_italic {
   font-style: italic;
 }
 
-#eqvszhhfau .gt_super {
+#gbslqqfdkp .gt_super {
   font-size: 65%;
 }
 
-#eqvszhhfau .gt_footnote_marks {
+#gbslqqfdkp .gt_footnote_marks {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="eqvszhhfau" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
+<div id="gbslqqfdkp" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
 <thead class="gt_header">
 <tr>
 <th colspan="4" class="gt_heading gt_title gt_font_normal" style>Time-to-event group sequential bound guidance</th>
@@ -1650,7 +1650,7 @@
 </table></div>
 <div id="evaluating-interim-results" class="section level2">
 <h2 class="hasAnchor">
-<a href="#evaluating-interim-results" class="anchor"></a>Evaluating interim results</h2>
+<a href="#evaluating-interim-results" class="anchor" aria-hidden="true"></a>Evaluating interim results</h2>
 <p>We recommend 3 things to present to summarize results in addition to standard summaries such as the logrank p-value, hazard ratio based on the Cox model, median time-to-event and Kaplan-Meier curves by treatment group.</p>
 <ul>
 <li>Conditional power at the current trend, under the null hypothesis of no treatment difference (conditional error), and under the alternative hypothesis.</li>
@@ -1708,7 +1708,7 @@
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<a href="#references" class="anchor" aria-hidden="true"></a>References</h1>
 <div id="refs" class="references">
 <div id="ref-KimTsiatis">
 <p>Kim, Kyungmann, and Anastasios A. Tsiatis. 1990. “Study Duration for Clinical Trials with Survival Response and Early Stopping Rule.” <em>Biometrics</em> 46: 81–92.</p>
@@ -1743,7 +1743,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>

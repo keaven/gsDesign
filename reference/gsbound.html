@@ -69,6 +69,9 @@ does not exist." />
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -236,7 +239,7 @@ installed.</p>
 Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='gsDesign package overview.html'>gsDesign package overview</a>, <code><a href='gsDesign.html'>gsDesign</a></code>,
+    <div class='dont-index'><p><a href='gsDesign-package-overview.html'>gsDesign package overview</a>, <code><a href='gsDesign.html'>gsDesign</a></code>,
 <code><a href='gsProbability.html'>gsProbability</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
@@ -252,7 +255,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
   falsepos <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>.01</span>, <span class='fl'>3</span><span class='op'>)</span>
 <span class='op'>)</span>
 <span class='va'>x</span>
-</div><div class='output co'>#&gt; $k
+</div><div class='co'>#&gt; $k
 #&gt; [1] 3
 #&gt; 
 #&gt; $theta
@@ -290,7 +293,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
   probhi <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.001</span>, <span class='fl'>.009</span>, <span class='fl'>.015</span><span class='op'>)</span>
 <span class='op'>)</span>
 <span class='va'>x</span><span class='op'>$</span><span class='va'>b</span>
-</div><div class='output co'>#&gt; [1] 3.090232 2.344824 2.039501</div><div class='input'>
+</div><div class='co'>#&gt; [1] 3.090232 2.344824 2.039501</div><div class='input'>
 <span class='co'># check boundary crossing probabilities with gsProbability</span>
 <span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsProbability.html'>gsProbability</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>3</span>, theta <span class='op'>=</span> <span class='fl'>0</span>, n.I <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>I</span>, a <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>a</span>, b <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span>
 
@@ -306,14 +309,14 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
   probhi <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>.05</span>, <span class='fl'>3</span><span class='op'>)</span>
 <span class='op'>)</span>
 <span class='va'>y</span><span class='op'>$</span><span class='va'>b</span>
-</div><div class='output co'>#&gt; [1]  0.3746830 -0.3594403 -0.9470061</div><div class='input'>
+</div><div class='co'>#&gt; [1]  0.3746830 -0.3594403 -0.9470061</div><div class='input'>
 <span class='co'>#  Now use gsProbability to look at design</span>
 <span class='co'>#  Note that lower boundary crossing probabilities are as</span>
 <span class='co'>#  specified for theta=2.2, but for theta=0 the upper boundary</span>
 <span class='co'>#  crossing probabilities are smaller than originally specified</span>
 <span class='co'>#  above after first interim analysis</span>
 <span class='fu'><a href='gsProbability.html'>gsProbability</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span>, theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>2.2</span><span class='op'>)</span>, n.I <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>I</span>, b <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>b</span>, a <span class='op'>=</span> <span class='op'>-</span><span class='va'>y</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                Lower bounds   Upper bounds
+</div><div class='co'>#&gt;                Lower bounds   Upper bounds
 #&gt;   Analysis N    Z   Nominal p  Z   Nominal p
 #&gt;          1  1 -0.37    0.3539 3.09    0.0010
 #&gt;          2  1  0.36    0.6404 2.34    0.0095
@@ -348,7 +351,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>

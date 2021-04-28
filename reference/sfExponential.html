@@ -78,6 +78,9 @@ spending function (sfLDOF()), $$f(t; \alpha)=2-2\Phi \left(
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -207,7 +210,7 @@ trials. <em>Biometrika</em>; 70:659-663.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>, <code><a href='gsDesign.html'>gsDesign</a></code>,
-<a href='gsDesign package overview.html'>gsDesign package overview</a></p></div>
+<a href='gsDesign-package-overview.html'>gsDesign package overview</a></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.com'>keaven\_anderson@merck.com</a></p>
@@ -220,14 +223,14 @@ trials. <em>Biometrika</em>; 70:659-663.</p>
   k <span class='op'>=</span> <span class='fl'>6</span>, sfu <span class='op'>=</span> <span class='va'>sfExponential</span>, sfupar <span class='op'>=</span> <span class='fl'>0.7849295</span>,
   test.type <span class='op'>=</span> <span class='fl'>2</span>
 <span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
-</div><div class='output co'>#&gt; [1] 4.998123 3.598098 2.933292 2.530838 2.253723 2.047082</div><div class='input'>
+</div><div class='co'>#&gt; [1] 4.998123 3.598098 2.933292 2.530838 2.253723 2.047082</div><div class='input'>
 <span class='co'># show actual O'Brien-Fleming bound</span>
 <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>6</span>, sfu <span class='op'>=</span> <span class='st'>"OF"</span>, test.type <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
-</div><div class='output co'>#&gt; [1] 5.028296 3.555542 2.903088 2.514148 2.248722 2.052793</div><div class='input'>
+</div><div class='co'>#&gt; [1] 5.028296 3.555542 2.903088 2.514148 2.248722 2.052793</div><div class='input'>
 <span class='co'># show Lan-DeMets approximation</span>
 <span class='co'># (not as close as sfExponential approximation)</span>
 <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>6</span>, sfu <span class='op'>=</span> <span class='va'>sfLDOF</span>, test.type <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
-</div><div class='output co'>#&gt; [1] 5.366558 3.710340 2.969736 2.538677 2.252190 2.044790</div><div class='input'>
+</div><div class='co'>#&gt; [1] 5.366558 3.710340 2.969736 2.538677 2.252190 2.044790</div><div class='input'>
 <span class='co'># plot exponential spending function across a range of values of interest</span>
 <span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span> <span class='op'>/</span> <span class='fl'>100</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfExponential</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='fl'>0.8</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>,
@@ -263,7 +266,7 @@ trials. <em>Biometrika</em>; 70:659-663.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>

@@ -107,6 +107,9 @@ that time. See Proschan, Lan and Wittes (2006)." />
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -184,8 +187,8 @@ overridden when <code>plottype=2</code>. Default values for labels depend on
 <p>Note that there is some special behavior for values plotted and returned for
 power and expected sample size (ASN) plots for a <code>gsDesign</code> object. A
 call to <code>x&lt;-gsDesign()</code> produces power and expected sample size for
-only two <code>theta</code> values: 0 and <code>x$delta</code>.  The call <code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot(x,
-plottype="Power")</a></code> (or <code>plot(x,plottype="ASN"</code>) for a <code>gsDesign</code>
+only two <code>theta</code> values: 0 and <code>x$delta</code>.  The call <code>plot(x,
+plottype="Power")</code> (or <code>plot(x,plottype="ASN"</code>) for a <code>gsDesign</code>
 object produces power (expected sample size) curves and returns a
 <code>gsDesign</code> object with <code>theta</code> values determined as follows.  If
 <code>theta</code> is non-null on input, the input value(s) are used. Otherwise,
@@ -271,7 +274,7 @@ and expected sample size graphs; see details.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of <code><a href='https://rdrr.io/r/base/class.html'>class(x)</a></code>; in many cases this is the input value
+    <p>An object of <code>class(x)</code>; in many cases this is the input value
 of <code>x</code>, while in others <code>x$theta</code> is replaced and corresponding
 characteristics computed; see details.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
@@ -299,7 +302,7 @@ Clinical Trials. A Unified Approach</em>.  New York: Springer.</p>
 <span class='co'>#  sample size is computed based on a fixed design requiring n=100</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>5</span>, test.type <span class='op'>=</span> <span class='fl'>2</span>, n.fix <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
 <span class='va'>x</span>
-</div><div class='output co'>#&gt; Symmetric two-sided group sequential design with
+</div><div class='co'>#&gt; Symmetric two-sided group sequential design with
 #&gt; 90 % power and 2.5 % Type I Error.
 #&gt; Spending computations assume trial stops
 #&gt; if a bound is crossed.
@@ -366,7 +369,7 @@ Clinical Trials. A Unified Approach</em>.  New York: Springer.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>

@@ -116,6 +116,9 @@ NOTE: the one-sided evaluation of significance is more conservative than using t
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -442,11 +445,11 @@ marc_schwartz@me.com.</p>
 
 <span class='co'># let's see what class this is</span>
 <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>zz</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "gsBinomialExact" "gsProbability"  </div><div class='input'>
+</div><div class='co'>#&gt; [1] "gsBinomialExact" "gsProbability"  </div><div class='input'>
 <span class='co'># because of "gsProbability" class above, following is equivalent to</span>
 <span class='co'># print.gsProbability(zz)</span>
 <span class='va'>zz</span>
-</div><div class='output co'>#&gt;               Bounds
+</div><div class='co'>#&gt;               Bounds
 #&gt;   Analysis   N   a   b
 #&gt;          1  12  -1   5
 #&gt;          2  24   0   9
@@ -505,7 +508,7 @@ marc_schwartz@me.com.</p>
 <span class='co'># note that outtype need no be specified if beta is NULL</span>
 <span class='va'>nb1</span> <span class='op'>&lt;-</span> <span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1<span class='op'>=</span><span class='fl'>0.2</span>,alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta<span class='op'>=</span><span class='cn'>NULL</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span><span class='op'>)</span>
 <span class='va'>nb1</span>
-</div><div class='output co'>#&gt;      p0  p1 alpha      beta  n b      alphaR     Power
+</div><div class='co'>#&gt;      p0  p1 alpha      beta  n b      alphaR     Power
 #&gt; 1  0.05 0.2 0.025 0.4206743 25 5 0.007164948 0.5793257
 #&gt; 2  0.05 0.2 0.025 0.3833381 26 5 0.008511231 0.6166619
 #&gt; 3  0.05 0.2 0.025 0.3480384 27 5 0.010022739 0.6519616
@@ -529,15 +532,15 @@ marc_schwartz@me.com.</p>
 </div><div class='img'><img src='gsBinomialExact-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># simple call with same parameters to get minimum sample size yielding desired power</span>
 <span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 33</div><div class='input'>
+</div><div class='co'>#&gt; [1] 33</div><div class='input'>
 <span class='co'># change to 'conservative' if you want all larger sample</span>
 <span class='co'># sizes to also provide adequate power</span>
 <span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span>, conservative <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 39</div><div class='input'>
+</div><div class='co'>#&gt; [1] 39</div><div class='input'>
 <span class='co'># print out more information for the selected derived sample size</span>
 <span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span>, conservative <span class='op'>=</span> <span class='cn'>TRUE</span>,
  outtype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     p0  p1 alpha beta  n b     alphaR     Power
+</div><div class='co'>#&gt;     p0  p1 alpha beta  n b     alphaR     Power
 #&gt; 1 0.05 0.2 0.025  0.2 39 6 0.01230419 0.8199868</div><div class='input'>
 <span class='co'># what happens if input sample sizes not sufficient?</span>
 <span class='co'># nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)</span>
@@ -557,7 +560,7 @@ marc_schwartz@me.com.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
