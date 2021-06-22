@@ -72,9 +72,6 @@ group sequential design for a study with a time-to-event endpoint." />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -134,7 +131,7 @@ group sequential design for a study with a time-to-event endpoint." />
     </div>
 
     <div class="ref-description">
-    <p><code><a href='nSurv.html'>nSurv()</a></code> is used to calculate the sample size for a clinical trial
+    <p><code>nSurv()</code> is used to calculate the sample size for a clinical trial
 with a time-to-event endpoint and an assumption of proportional hazards.
 This set of routines is new with version 2.7 and will continue to be
 modified and refined to improve input error checking and output format with
@@ -147,14 +144,14 @@ with treatment groups referred to as experimental and control. A stratified
 population is allowed as in Lachin and Foulkes (1986); this method has been
 extended to derive non-inferiority as well as superiority trials.
 Stratification also allows power calculation for meta-analyses.
-<code><a href='nSurv.html'>gsSurv()</a></code> combines <code><a href='nSurv.html'>nSurv()</a></code> with <code><a href='gsDesign.html'>gsDesign()</a></code> to derive a
+<code>gsSurv()</code> combines <code>nSurv()</code> with <code><a href='gsDesign.html'>gsDesign()</a></code> to derive a
 group sequential design for a study with a time-to-event endpoint.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for nSurv</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='co'># S3 method for nSurv</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, digits <span class='op'>=</span> <span class='fl'>4</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'><a href='nSurv.html'>nSurv</a></span><span class='op'>(</span>
+<span class='fu'>nSurv</span><span class='op'>(</span>
   lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>6</span>,
   hr <span class='op'>=</span> <span class='fl'>0.6</span>,
   hr0 <span class='op'>=</span> <span class='fl'>1</span>,
@@ -172,11 +169,11 @@ group sequential design for a study with a time-to-event endpoint.</p>
   tol <span class='op'>=</span> <span class='va'>.Machine</span><span class='op'>$</span><span class='va'>double.eps</span><span class='op'>^</span><span class='fl'>0.25</span>
 <span class='op'>)</span>
 
-<span class='fu'><a href='nSurv.html'>tEventsIA</a></span><span class='op'>(</span><span class='va'>x</span>, timing <span class='op'>=</span> <span class='fl'>0.25</span>, tol <span class='op'>=</span> <span class='va'>.Machine</span><span class='op'>$</span><span class='va'>double.eps</span><span class='op'>^</span><span class='fl'>0.25</span><span class='op'>)</span>
+<span class='fu'>tEventsIA</span><span class='op'>(</span><span class='va'>x</span>, timing <span class='op'>=</span> <span class='fl'>0.25</span>, tol <span class='op'>=</span> <span class='va'>.Machine</span><span class='op'>$</span><span class='va'>double.eps</span><span class='op'>^</span><span class='fl'>0.25</span><span class='op'>)</span>
 
-<span class='fu'><a href='nSurv.html'>nEventsIA</a></span><span class='op'>(</span>tIA <span class='op'>=</span> <span class='fl'>5</span>, x <span class='op'>=</span> <span class='cn'>NULL</span>, target <span class='op'>=</span> <span class='fl'>0</span>, simple <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>nEventsIA</span><span class='op'>(</span>tIA <span class='op'>=</span> <span class='fl'>5</span>, x <span class='op'>=</span> <span class='cn'>NULL</span>, target <span class='op'>=</span> <span class='fl'>0</span>, simple <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='fu'><a href='nSurv.html'>gsSurv</a></span><span class='op'>(</span>
+<span class='fu'>gsSurv</span><span class='op'>(</span>
   k <span class='op'>=</span> <span class='fl'>3</span>,
   test.type <span class='op'>=</span> <span class='fl'>4</span>,
   alpha <span class='op'>=</span> <span class='fl'>0.025</span>,
@@ -221,7 +218,7 @@ group sequential design for a study with a time-to-event endpoint.</p>
   fnwid <span class='op'>=</span> <span class='st'>"9cm"</span>,
   timename <span class='op'>=</span> <span class='st'>"months"</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -229,17 +226,17 @@ group sequential design for a study with a time-to-event endpoint.</p>
     <tr>
       <th>x</th>
       <td><p>An object of class <code>nSurv</code> or <code>gsSurv</code>.
-<code><a href='nSurv.html'>print.nSurv()</a></code> is used for an object of class <code>nSurv</code> which will
-generally be output from <code><a href='nSurv.html'>nSurv()</a></code>. For <code><a href='nSurv.html'>print.gsSurv()</a></code> is used
+<code>print.nSurv()</code> is used for an object of class <code>nSurv</code> which will
+generally be output from <code>nSurv()</code>. For <code>print.gsSurv()</code> is used
 for an object of class <code>gsSurv</code> which will generally be output from
-<code><a href='nSurv.html'>gsSurv()</a></code>. <code>nEventsIA</code> and <code>tEventsIA</code> operate on both the
+<code>gsSurv()</code>. <code>nEventsIA</code> and <code>tEventsIA</code> operate on both the
 <code>nSurv</code> and <code>gsSurv</code> class.</p></td>
     </tr>
     <tr>
       <th>digits</th>
       <td><p>Number of digits past the decimal place to print
 (<code>print.gsSurv.</code>); also a pass through to generic <code><a href='xtable.html'>xtable()</a></code> from
-<code><a href='nSurv.html'>xtable.gsSurv()</a></code>.</p></td>
+<code>xtable.gsSurv()</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -355,7 +352,7 @@ is used for root-finding will be 0 for normal use.</p></td>
     </tr>
     <tr>
       <th>simple</th>
-      <td><p>See output specification for <code><a href='nSurv.html'>nEventsIA()</a></code>.</p></td>
+      <td><p>See output specification for <code>nEventsIA()</code>.</p></td>
     </tr>
     <tr>
       <th>k</th>
@@ -473,7 +470,7 @@ bottom of the xtable output.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code><a href='nSurv.html'>nSurv()</a></code> returns an object of type <code>nSurv</code> with the
+    <p><code>nSurv()</code> returns an object of type <code>nSurv</code> with the
 following components:</p>
 <dt>alpha</dt><dd><p>As input.</p></dd> <dt>sided</dt><dd><p>As input.</p></dd>
 <dt>beta</dt><dd><p>Type II error; if missing, this is computed.</p></dd> <dt>power</dt><dd><p>Power
@@ -556,21 +553,21 @@ tEventsIA() returns
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code><a href='https://rdrr.io/r/base/print.html'>print()</a></code>, <code><a href='xtable.html'>xtable()</a></code> and <code><a href='https://rdrr.io/r/base/summary.html'>summary()</a></code> methods are provided to
-operate on the returned value from <code><a href='nSurv.html'>gsSurv()</a></code>, an object of class
+operate on the returned value from <code>gsSurv()</code>, an object of class
 <code>gsSurv</code>. <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code> is also extended to <code>nSurv</code> objects. The
 functions <code><a href='gsBoundSummary.html'>gsBoundSummary</a></code> (data frame for tabular output),
 <code><a href='gsBoundSummary.html'>xprint</a></code> (application of <code>xtable</code> for tabular output) and
 <code>summary.gsSurv</code> (textual summary of <code>gsDesign</code> or <code>gsSurv</code>
 object) may be preferred summary functions; see example in vignettes. See
 also <a href='gsBoundSummary.html'>gsBoundSummary</a> for output
-of tabular summaries of bounds for designs produced by <code><a href='nSurv.html'>gsSurv()</a></code>.</p>
+of tabular summaries of bounds for designs produced by <code>gsSurv()</code>.</p>
 <p>Both <code>nEventsIA</code> and <code>tEventsIA</code> require a group sequential design
 for a time-to-event endpoint of class <code>gsSurv</code> as input.
 <code>nEventsIA</code> calculates the expected number of events under the
 alternate hypothesis at a given interim time. <code>tEventsIA</code> calculates
 the time that the expected number of events under the alternate hypothesis
 is a given proportion of the total events planned for the final analysis.</p>
-<p><code><a href='nSurv.html'>nSurv()</a></code> produces an object of class <code>nSurv</code> with the number of
+<p><code>nSurv()</code> produces an object of class <code>nSurv</code> with the number of
 subjects and events for a set of pre-specified trial parameters, such as
 accrual duration and follow-up period. The underlying power calculation is
 based on Lachin and Foulkes (1986) method for proportional hazards assuming
@@ -598,9 +595,9 @@ method will fail if the specified enrollment rates and durations either
 over-powers the trial with no additional follow-up or underpowers the trial
 with infinite follow-up. This method produces a corresponding error message
 in such cases.</p>
-<p>The input to <code>gsSurv</code> is a combination of the input to <code><a href='nSurv.html'>nSurv()</a></code>
+<p>The input to <code>gsSurv</code> is a combination of the input to <code>nSurv()</code>
 and <code><a href='gsDesign.html'>gsDesign()</a></code>.</p>
-<p><code><a href='nSurv.html'>nEventsIA()</a></code> is provided to compute the expected number of events at a
+<p><code>nEventsIA()</code> is provided to compute the expected number of events at a
 given point in time given enrollment, event and censoring rates. The routine
 is used with a root finding routine to approximate the approximate timing of
 an interim analysis. It is also used to extend enrollment or follow-up of a
@@ -629,318 +626,330 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
     <p>Keaven Anderson <a href='mailto:keaven_anderson@merck.com'>keaven_anderson@merck.com</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># vary accrual rate to obtain power</span>
-<span class='fu'><a href='nSurv.html'>nSurv</a></span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fl'>1</span>, T <span class='op'>=</span> <span class='fl'>36</span>, minfup <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span>
-</div><div class='co'>#&gt; Fixed design, two-arm trial with time-to-event
-#&gt; outcome (Lachin and Foulkes, 1986).
-#&gt; Solving for:  Accrual rate 
-#&gt; Hazard ratio                  H1/H0=0.5/1
-#&gt; Study duration:                   T=36
-#&gt; Accrual duration:                   24
-#&gt; Min. end-of-study follow-up: minfup=12
-#&gt; Expected events (total, H1):        86.3258
-#&gt; Expected sample size (total):       119.8184
-#&gt; Accrual rates:
-#&gt;      Stratum 1
-#&gt; 0-24    4.9924
-#&gt; Control event rates (H1):
-#&gt;       Stratum 1
-#&gt; 0-Inf    0.1155
-#&gt; Censoring rates:
-#&gt;       Stratum 1
-#&gt; 0-Inf    0.0173
-#&gt; Power:                 100*(1-beta)=90%
-#&gt; Type I error (1-sided):   100*alpha=2.5%
-#&gt; Equal randomization:          ratio=1</div><div class='input'>
-<span class='co'># vary accrual duration to obtain power</span>
-<span class='fu'><a href='nSurv.html'>nSurv</a></span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fl'>6</span>, minfup <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span>
-</div><div class='co'>#&gt; Fixed design, two-arm trial with time-to-event
-#&gt; outcome (Lachin and Foulkes, 1986).
-#&gt; Solving for:  Accrual duration 
-#&gt; Hazard ratio                  H1/H0=0.5/1
-#&gt; Study duration:                   T=32.3089
-#&gt; Accrual duration:                   20.3089
-#&gt; Min. end-of-study follow-up: minfup=12
-#&gt; Expected events (total, H1):        86.3627
-#&gt; Expected sample size (total):       121.8535
-#&gt; Accrual rates:
-#&gt;         Stratum 1
-#&gt; 0-20.31         6
-#&gt; Control event rates (H1):
-#&gt;       Stratum 1
-#&gt; 0-Inf    0.1155
-#&gt; Censoring rates:
-#&gt;       Stratum 1
-#&gt; 0-Inf    0.0173
-#&gt; Power:                 100*(1-beta)=90%
-#&gt; Type I error (1-sided):   100*alpha=2.5%
-#&gt; Equal randomization:          ratio=1</div><div class='input'>
-<span class='co'># vary follow-up duration to obtain power</span>
-<span class='fu'><a href='nSurv.html'>nSurv</a></span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fl'>6</span>, R <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span>
-</div><div class='co'>#&gt; Fixed design, two-arm trial with time-to-event
-#&gt; outcome (Lachin and Foulkes, 1986).
-#&gt; Solving for:  Follow-up duration 
-#&gt; Hazard ratio                  H1/H0=0.5/1
-#&gt; Study duration:                   T=27.2508
-#&gt; Accrual duration:                   25
-#&gt; Min. end-of-study follow-up: minfup=2.2508
-#&gt; Expected events (total, H1):        86.8927
-#&gt; Expected sample size (total):       150
-#&gt; Accrual rates:
-#&gt;      Stratum 1
-#&gt; 0-25         6
-#&gt; Control event rates (H1):
-#&gt;       Stratum 1
-#&gt; 0-Inf    0.1155
-#&gt; Censoring rates:
-#&gt;       Stratum 1
-#&gt; 0-Inf    0.0173
-#&gt; Power:                 100*(1-beta)=90%
-#&gt; Type I error (1-sided):   100*alpha=2.5%
-#&gt; Equal randomization:          ratio=1</div><div class='input'>
-<span class='co'># piecewise constant enrollment rates (vary accrual duration)</span>
-<span class='fu'><a href='nSurv.html'>nSurv</a></span><span class='op'>(</span>
-  lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>6</span><span class='op'>)</span>,
-  R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>9</span><span class='op'>)</span>, minfup <span class='op'>=</span> <span class='fl'>12</span>
-<span class='op'>)</span>
-</div><div class='co'>#&gt; Fixed design, two-arm trial with time-to-event
-#&gt; outcome (Lachin and Foulkes, 1986).
-#&gt; Solving for:  Accrual duration 
-#&gt; Hazard ratio                  H1/H0=0.5/1
-#&gt; Study duration:                   T=37.7809
-#&gt; Accrual duration:                   25.7809
-#&gt; Min. end-of-study follow-up: minfup=12
-#&gt; Expected events (total, H1):        86.3632
-#&gt; Expected sample size (total):       121.6855
-#&gt; Accrual rates:
-#&gt;         Stratum 1
-#&gt; 0-3             1
-#&gt; 3-9             3
-#&gt; 9-25.78         6
-#&gt; Control event rates (H1):
-#&gt;       Stratum 1
-#&gt; 0-Inf    0.1155
-#&gt; Censoring rates:
-#&gt;       Stratum 1
-#&gt; 0-Inf    0.0173
-#&gt; Power:                 100*(1-beta)=90%
-#&gt; Type I error (1-sided):   100*alpha=2.5%
-#&gt; Equal randomization:          ratio=1</div><div class='input'>
-<span class='co'># stratified population (vary accrual duration)</span>
-<span class='fu'><a href='nSurv.html'>nSurv</a></span><span class='op'>(</span>
-  lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>12</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>,
-  gamma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>4</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, minfup <span class='op'>=</span> <span class='fl'>12</span>
-<span class='op'>)</span>
-</div><div class='co'>#&gt; Fixed design, two-arm trial with time-to-event
-#&gt; outcome (Lachin and Foulkes, 1986).
-#&gt; Solving for:  Accrual duration 
-#&gt; Hazard ratio                  H1/H0=0.5/1
-#&gt; Study duration:                   T=36.6817
-#&gt; Accrual duration:                   24.6817
-#&gt; Min. end-of-study follow-up: minfup=12
-#&gt; Expected events (total, H1):        86.8976
-#&gt; Expected sample size (total):       148.09
-#&gt; Accrual rates:
-#&gt;         Stratum 1 Stratum 2
-#&gt; 0-24.68         2         4
-#&gt; Control event rates (H1):
-#&gt;       Stratum 1 Stratum 2
-#&gt; 0-Inf    0.1155    0.0578
-#&gt; Censoring rates:
-#&gt;       Stratum 1 Stratum 2
-#&gt; 0-Inf    0.0173    0.0173
-#&gt; Power:                 100*(1-beta)=90%
-#&gt; Type I error (1-sided):   100*alpha=2.5%
-#&gt; Equal randomization:          ratio=1</div><div class='input'>
-<span class='co'># piecewise exponential failure rates (vary accrual duration)</span>
-<span class='fu'><a href='nSurv.html'>nSurv</a></span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>12</span><span class='op'>)</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, S <span class='op'>=</span> <span class='fl'>3</span>, gamma <span class='op'>=</span> <span class='fl'>6</span>, minfup <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span>
-</div><div class='co'>#&gt; Fixed design, two-arm trial with time-to-event
-#&gt; outcome (Lachin and Foulkes, 1986).
-#&gt; Solving for:  Accrual duration 
-#&gt; Hazard ratio                  H1/H0=0.5/1
-#&gt; Study duration:                   T=37.3655
-#&gt; Accrual duration:                   25.3655
-#&gt; Min. end-of-study follow-up: minfup=12
-#&gt; Expected events (total, H1):        87.1347
-#&gt; Expected sample size (total):       152.1929
-#&gt; Accrual rates:
-#&gt;         Stratum 1
-#&gt; 0-25.37         6
-#&gt; Control event rates (H1):
-#&gt;       Stratum 1
-#&gt; 0-3      0.1155
-#&gt; 3-Inf    0.0578
-#&gt; Censoring rates:
-#&gt;       Stratum 1
-#&gt; 0-3      0.0173
-#&gt; 3-Inf    0.0173
-#&gt; Power:                 100*(1-beta)=90%
-#&gt; Type I error (1-sided):   100*alpha=2.5%
-#&gt; Equal randomization:          ratio=1</div><div class='input'>
-<span class='co'># combine it all: 2 strata, 2 failure rate periods</span>
-<span class='fu'><a href='nSurv.html'>nSurv</a></span><span class='op'>(</span>
-  lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>12</span>, <span class='fl'>18</span>, <span class='fl'>24</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>,
-  eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>45</span>, <span class='fl'>55</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, S <span class='op'>=</span> <span class='fl'>3</span>,
-  gamma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>5</span>, <span class='fl'>7</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>10</span><span class='op'>)</span>, minfup <span class='op'>=</span> <span class='fl'>12</span>
-<span class='op'>)</span>
-</div><div class='co'>#&gt; Fixed design, two-arm trial with time-to-event
-#&gt; outcome (Lachin and Foulkes, 1986).
-#&gt; Solving for:  Accrual duration 
-#&gt; Hazard ratio                  H1/H0=0.5/1
-#&gt; Study duration:                   T=30.097
-#&gt; Accrual duration:                   18.097
-#&gt; Min. end-of-study follow-up: minfup=12
-#&gt; Expected events (total, H1):        88.0958
-#&gt; Expected sample size (total):       210.2612
-#&gt; Accrual rates:
-#&gt;        Stratum 1 Stratum 2
-#&gt; 0-5            3         5
-#&gt; 5-18.1         6         7
-#&gt; Control event rates (H1):
-#&gt;       Stratum 1 Stratum 2
-#&gt; 0-3      0.1155    0.0385
-#&gt; 3-Inf    0.0578    0.0289
-#&gt; Censoring rates:
-#&gt;       Stratum 1 Stratum 2
-#&gt; 0-3      0.0173    0.0154
-#&gt; 3-Inf    0.0139    0.0126
-#&gt; Power:                 100*(1-beta)=90%
-#&gt; Type I error (1-sided):   100*alpha=2.5%
-#&gt; Equal randomization:          ratio=1</div><div class='input'>
-<span class='co'># example where only 1 month of follow-up is desired</span>
-<span class='co'># set failure rate to 0 after 1 month using lambdaC and S</span>
-<span class='fu'><a href='nSurv.html'>nSurv</a></span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.4</span>, <span class='fl'>0</span><span class='op'>)</span>, hr <span class='op'>=</span> <span class='fl'>2</span> <span class='op'>/</span> <span class='fl'>3</span>, S <span class='op'>=</span> <span class='fl'>1</span>, minfup <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='co'>#&gt; Fixed design, two-arm trial with time-to-event
-#&gt; outcome (Lachin and Foulkes, 1986).
-#&gt; Solving for:  Accrual duration 
-#&gt; Hazard ratio                  H1/H0=0.6667/1
-#&gt; Study duration:                   T=915.4375
-#&gt; Accrual duration:                   914.4375
-#&gt; Min. end-of-study follow-up: minfup=1
-#&gt; Expected events (total, H1):        257.7578
-#&gt; Expected sample size (total):       914.4375
-#&gt; Accrual rates:
-#&gt;          Stratum 1
-#&gt; 0-914.44         1
-#&gt; Control event rates (H1):
-#&gt;       Stratum 1
-#&gt; 0-1         0.4
-#&gt; 1-Inf       0.0
-#&gt; Censoring rates:
-#&gt;       Stratum 1
-#&gt; 0-1           0
-#&gt; 1-Inf         0
-#&gt; Power:                 100*(1-beta)=90%
-#&gt; Type I error (1-sided):   100*alpha=2.5%
-#&gt; Equal randomization:          ratio=1</div><div class='input'>
-<span class='co'># group sequential design (vary accrual rate to obtain power)</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nSurv.html'>gsSurv</a></span><span class='op'>(</span>
-  k <span class='op'>=</span> <span class='fl'>4</span>, sfl <span class='op'>=</span> <span class='va'>sfPower</span>, sflpar <span class='op'>=</span> <span class='fl'>.5</span>, lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>,
-  eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fl'>1</span>, T <span class='op'>=</span> <span class='fl'>36</span>, minfup <span class='op'>=</span> <span class='fl'>12</span>
-<span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='co'>#&gt; Time to event group sequential design with HR= 0.5 
-#&gt; Equal randomization:          ratio=1
-#&gt; Asymmetric two-sided group sequential design with
-#&gt; 90 % power and 2.5 % Type I Error.
-#&gt; Upper bound spending computations assume
-#&gt; trial continues if lower bound is crossed.
-#&gt; 
-#&gt;                 ----Lower bounds----  ----Upper bounds-----
-#&gt;   Analysis  N   Z   Nominal p Spend+  Z   Nominal p Spend++
-#&gt;          1  29 0.23    0.5895 0.0500 3.16    0.0008  0.0008
-#&gt;          2  58 0.86    0.8056 0.0207 2.82    0.0024  0.0022
-#&gt;          3  87 1.46    0.9277 0.0159 2.44    0.0074  0.0059
-#&gt;          4 116 2.01    0.9780 0.0134 2.01    0.0220  0.0161
-#&gt;      Total                    0.1000                 0.0250 
-#&gt; + lower bound beta spending (under H1):
-#&gt;  Kim-DeMets (power) spending function with rho = 0.5.
-#&gt; ++ alpha spending:
-#&gt;  Hwang-Shih-DeCani spending function with gamma = -4.
-#&gt; 
-#&gt; Boundary crossing probabilities and expected sample size
-#&gt; assume any cross stops the trial
-#&gt; 
-#&gt; Upper boundary (power or Type I Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3      4  Total E{N}
-#&gt;   0.0000 0.0008 0.0022 0.0055 0.0102 0.0187 46.5
-#&gt;   0.3489 0.0995 0.3393 0.3388 0.1224 0.9000 71.2
-#&gt; 
-#&gt; Lower boundary (futility or Type II Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3      4  Total
-#&gt;   0.0000 0.5895 0.2470 0.1079 0.0369 0.9813
-#&gt;   0.3489 0.0500 0.0207 0.0159 0.0134 0.1000
-#&gt;              T         n    Events HR futility HR efficacy
-#&gt; IA 1  12.24228  81.46723  28.76662       0.919       0.308
-#&gt; IA 2  18.97078 126.24254  57.53321       0.797       0.476
-#&gt; IA 3  25.02728 159.70989  86.29984       0.730       0.591
-#&gt; Final 36.00000 159.70989 115.06648       0.687       0.687
-#&gt; Accrual rates:
-#&gt;      Stratum 1
-#&gt; 0-24      6.65
-#&gt; Control event rates (H1):
-#&gt;       Stratum 1
-#&gt; 0-Inf      0.12
-#&gt; Censoring rates:
-#&gt;       Stratum 1
-#&gt; 0-Inf      0.02</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'>xtable</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/xtable/man/xtable.html'>xtable</a></span><span class='op'>(</span><span class='va'>x</span>,
-  footnote <span class='op'>=</span> <span class='st'>"This is a footnote; note that it can be wide."</span>,
-  caption <span class='op'>=</span> <span class='st'>"Caption example."</span>
-<span class='op'>)</span><span class='op'>)</span>
-</div><div class='co'>#&gt; % latex table generated in R 4.0.5 by xtable 1.8-4 package
-#&gt; % Wed Apr 28 14:59:34 2021
-#&gt; \begin{table}[ht]
-#&gt; \centering
-#&gt; \begin{tabular}{rllll}
-#&gt;   \hline
-#&gt;  &amp; Analysis &amp; Value &amp; Futility &amp; Efficacy \\ 
-#&gt;   \hline
-#&gt; 1 &amp; IA 1: 25$\backslash$\% &amp; Z-value &amp; 0.23 &amp; 3.16 \\ 
-#&gt;   2 &amp; N: 82 &amp; HR &amp; 0.92 &amp; 0.31 \\ 
-#&gt;   3 &amp; Events: 29 &amp; p (1-sided) &amp; 0.4105 &amp; 8e-04 \\ 
-#&gt;   4 &amp; 12.2 months &amp; P$\backslash$\{Cross$\backslash$\} if HR=1 &amp; 0.5895 &amp; 8e-04 \\ 
-#&gt;   5 &amp;   &amp; P$\backslash$\{Cross$\backslash$\} if HR=0.5 &amp; 0.05 &amp; 0.0995 \\ 
-#&gt;   6 &amp; $\backslash$hline IA 2: 50$\backslash$\% &amp; Z-value &amp; 0.86 &amp; 2.82 \\ 
-#&gt;   7 &amp; N: 128 &amp; HR &amp; 0.8 &amp; 0.48 \\ 
-#&gt;   8 &amp; Events: 58 &amp; p (1-sided) &amp; 0.1944 &amp; 0.0024 \\ 
-#&gt;   9 &amp; 19 months &amp; P$\backslash$\{Cross$\backslash$\} if HR=1 &amp; 0.8366 &amp; 0.003 \\ 
-#&gt;   10 &amp;   &amp; P$\backslash$\{Cross$\backslash$\} if HR=0.5 &amp; 0.0707 &amp; 0.4388 \\ 
-#&gt;   11 &amp; $\backslash$hline IA 3: 75$\backslash$\% &amp; Z-value &amp; 1.46 &amp; 2.44 \\ 
-#&gt;   12 &amp; N: 160 &amp; HR &amp; 0.73 &amp; 0.59 \\ 
-#&gt;   13 &amp; Events: 87 &amp; p (1-sided) &amp; 0.0723 &amp; 0.0074 \\ 
-#&gt;   14 &amp; 25 months &amp; P$\backslash$\{Cross$\backslash$\} if HR=1 &amp; 0.9445 &amp; 0.0085 \\ 
-#&gt;   15 &amp;   &amp; P$\backslash$\{Cross$\backslash$\} if HR=0.5 &amp; 0.0866 &amp; 0.7776 \\ 
-#&gt;   16 &amp; $\backslash$hline Final analysis &amp; Z-value &amp; 2.01 &amp; 2.01 \\ 
-#&gt;   17 &amp; N: 160 &amp; HR &amp; 0.69 &amp; 0.69 \\ 
-#&gt;   18 &amp; Events: 116 &amp; p (1-sided) &amp; 0.022 &amp; 0.022 \\ 
-#&gt;   19 &amp; 36 months &amp; P$\backslash$\{Cross$\backslash$\} if HR=1 &amp; 0.9813 &amp; 0.0187 \\ 
-#&gt;   20 &amp;   &amp; P$\backslash$\{Cross$\backslash$\} if HR=0.5 &amp; 0.1 &amp; 0.9 $\backslash$$\backslash$ $\backslash$hline $\backslash$multicolumn\{4\}\{p\{ 9cm \}\}\{$\backslash$footnotesize This is a footnote; note that it can be wide. \} \\ 
-#&gt;    \hline
-#&gt; \end{tabular}
-#&gt; \caption{Caption example.} 
-#&gt; \end{table}</div><div class='input'><span class='co'># find expected number of events at time 12 in the above trial</span>
-<span class='fu'><a href='nSurv.html'>nEventsIA</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, tIA <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 20.51876</div><div class='input'>
-<span class='co'># find time at which 1/4 of events are expected</span>
-<span class='fu'><a href='nSurv.html'>tEventsIA</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, timing <span class='op'>=</span> <span class='fl'>.25</span><span class='op'>)</span>
-</div><div class='co'>#&gt; $T
-#&gt; [1] 12.24228
-#&gt; 
-#&gt; $eDC
-#&gt; [1] 17.92465
-#&gt; 
-#&gt; $eDE
-#&gt; [1] 10.84196
-#&gt; 
-#&gt; $eNC
-#&gt; [1] 40.73361
-#&gt; 
-#&gt; $eNE
-#&gt; [1] 40.73361
-#&gt; </div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'></span>
+<span class='r-in'><span class='co'># vary accrual rate to obtain power</span></span>
+<span class='r-in'><span class='fu'>nSurv</span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fl'>1</span>, T <span class='op'>=</span> <span class='fl'>36</span>, minfup <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Solving for:  Accrual rate </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hazard ratio                  H1/H0=0.5/1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Study duration:                   T=36</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual duration:                   24</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Min. end-of-study follow-up: minfup=12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected events (total, H1):        86.3258</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected sample size (total):       119.8184</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-24    4.9924</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Control event rates (H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-Inf    0.1155</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Censoring rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-Inf    0.0173</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Power:                 100*(1-beta)=90%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Type I error (1-sided):   100*alpha=2.5%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Equal randomization:          ratio=1</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># vary accrual duration to obtain power</span></span>
+<span class='r-in'><span class='fu'>nSurv</span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fl'>6</span>, minfup <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Solving for:  Accrual duration </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hazard ratio                  H1/H0=0.5/1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Study duration:                   T=32.3089</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual duration:                   20.3089</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Min. end-of-study follow-up: minfup=12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected events (total, H1):        86.3627</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected sample size (total):       121.8535</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-20.31         6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Control event rates (H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-Inf    0.1155</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Censoring rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-Inf    0.0173</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Power:                 100*(1-beta)=90%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Type I error (1-sided):   100*alpha=2.5%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Equal randomization:          ratio=1</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># vary follow-up duration to obtain power</span></span>
+<span class='r-in'><span class='fu'>nSurv</span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fl'>6</span>, R <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Solving for:  Follow-up duration </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hazard ratio                  H1/H0=0.5/1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Study duration:                   T=27.2508</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual duration:                   25</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Min. end-of-study follow-up: minfup=2.2508</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected events (total, H1):        86.8927</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected sample size (total):       150</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-25         6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Control event rates (H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-Inf    0.1155</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Censoring rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-Inf    0.0173</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Power:                 100*(1-beta)=90%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Type I error (1-sided):   100*alpha=2.5%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Equal randomization:          ratio=1</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># piecewise constant enrollment rates (vary accrual duration)</span></span>
+<span class='r-in'><span class='fu'>nSurv</span><span class='op'>(</span></span>
+<span class='r-in'>  lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>6</span><span class='op'>)</span>,</span>
+<span class='r-in'>  R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>9</span><span class='op'>)</span>, minfup <span class='op'>=</span> <span class='fl'>12</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Solving for:  Accrual duration </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hazard ratio                  H1/H0=0.5/1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Study duration:                   T=37.7809</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual duration:                   25.7809</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Min. end-of-study follow-up: minfup=12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected events (total, H1):        86.3632</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected sample size (total):       121.6855</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-3             1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3-9             3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9-25.78         6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Control event rates (H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-Inf    0.1155</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Censoring rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-Inf    0.0173</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Power:                 100*(1-beta)=90%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Type I error (1-sided):   100*alpha=2.5%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Equal randomization:          ratio=1</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># stratified population (vary accrual duration)</span></span>
+<span class='r-in'><span class='fu'>nSurv</span><span class='op'>(</span></span>
+<span class='r-in'>  lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>12</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>,</span>
+<span class='r-in'>  gamma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>4</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, minfup <span class='op'>=</span> <span class='fl'>12</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Solving for:  Accrual duration </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hazard ratio                  H1/H0=0.5/1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Study duration:                   T=36.6817</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual duration:                   24.6817</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Min. end-of-study follow-up: minfup=12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected events (total, H1):        86.8976</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected sample size (total):       148.09</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         Stratum 1 Stratum 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-24.68         2         4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Control event rates (H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1 Stratum 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-Inf    0.1155    0.0578</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Censoring rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1 Stratum 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-Inf    0.0173    0.0173</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Power:                 100*(1-beta)=90%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Type I error (1-sided):   100*alpha=2.5%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Equal randomization:          ratio=1</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># piecewise exponential failure rates (vary accrual duration)</span></span>
+<span class='r-in'><span class='fu'>nSurv</span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>12</span><span class='op'>)</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, S <span class='op'>=</span> <span class='fl'>3</span>, gamma <span class='op'>=</span> <span class='fl'>6</span>, minfup <span class='op'>=</span> <span class='fl'>12</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Solving for:  Accrual duration </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hazard ratio                  H1/H0=0.5/1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Study duration:                   T=37.3655</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual duration:                   25.3655</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Min. end-of-study follow-up: minfup=12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected events (total, H1):        87.1347</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected sample size (total):       152.1929</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-25.37         6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Control event rates (H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-3      0.1155</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3-Inf    0.0578</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Censoring rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-3      0.0173</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3-Inf    0.0173</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Power:                 100*(1-beta)=90%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Type I error (1-sided):   100*alpha=2.5%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Equal randomization:          ratio=1</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># combine it all: 2 strata, 2 failure rate periods</span></span>
+<span class='r-in'><span class='fu'>nSurv</span><span class='op'>(</span></span>
+<span class='r-in'>  lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6</span>, <span class='fl'>12</span>, <span class='fl'>18</span>, <span class='fl'>24</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>,</span>
+<span class='r-in'>  eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>40</span>, <span class='fl'>50</span>, <span class='fl'>45</span>, <span class='fl'>55</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, S <span class='op'>=</span> <span class='fl'>3</span>,</span>
+<span class='r-in'>  gamma <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>5</span>, <span class='fl'>7</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>10</span><span class='op'>)</span>, minfup <span class='op'>=</span> <span class='fl'>12</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Solving for:  Accrual duration </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hazard ratio                  H1/H0=0.5/1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Study duration:                   T=30.097</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual duration:                   18.097</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Min. end-of-study follow-up: minfup=12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected events (total, H1):        88.0958</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected sample size (total):       210.2612</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>        Stratum 1 Stratum 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-5            3         5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5-18.1         6         7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Control event rates (H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1 Stratum 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-3      0.1155    0.0385</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3-Inf    0.0578    0.0289</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Censoring rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1 Stratum 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-3      0.0173    0.0154</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3-Inf    0.0139    0.0126</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Power:                 100*(1-beta)=90%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Type I error (1-sided):   100*alpha=2.5%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Equal randomization:          ratio=1</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># example where only 1 month of follow-up is desired</span></span>
+<span class='r-in'><span class='co'># set failure rate to 0 after 1 month using lambdaC and S</span></span>
+<span class='r-in'><span class='fu'>nSurv</span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.4</span>, <span class='fl'>0</span><span class='op'>)</span>, hr <span class='op'>=</span> <span class='fl'>2</span> <span class='op'>/</span> <span class='fl'>3</span>, S <span class='op'>=</span> <span class='fl'>1</span>, minfup <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Solving for:  Accrual duration </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hazard ratio                  H1/H0=0.6667/1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Study duration:                   T=915.4375</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual duration:                   914.4375</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Min. end-of-study follow-up: minfup=1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected events (total, H1):        257.7578</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Expected sample size (total):       914.4375</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-914.44         1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Control event rates (H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-1         0.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1-Inf       0.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Censoring rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-1           0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1-Inf         0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Power:                 100*(1-beta)=90%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Type I error (1-sided):   100*alpha=2.5%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Equal randomization:          ratio=1</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># group sequential design (vary accrual rate to obtain power)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>gsSurv</span><span class='op'>(</span></span>
+<span class='r-in'>  k <span class='op'>=</span> <span class='fl'>4</span>, sfl <span class='op'>=</span> <span class='va'>sfPower</span>, sflpar <span class='op'>=</span> <span class='fl'>.5</span>, lambdaC <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>,</span>
+<span class='r-in'>  eta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>40</span>, gamma <span class='op'>=</span> <span class='fl'>1</span>, T <span class='op'>=</span> <span class='fl'>36</span>, minfup <span class='op'>=</span> <span class='fl'>12</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Time to event group sequential design with HR= 0.5 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Equal randomization:          ratio=1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Asymmetric two-sided group sequential design with</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper bound spending computations assume</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> trial continues if lower bound is crossed.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 ----Lower bounds----  ----Upper bounds-----</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis  N   Z   Nominal p Spend+  Z   Nominal p Spend++</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1  29 0.23    0.5895 0.0500 3.16    0.0008  0.0008</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2  58 0.86    0.8056 0.0207 2.82    0.0024  0.0022</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3  87 1.46    0.9277 0.0159 2.44    0.0074  0.0059</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          4 116 2.01    0.9780 0.0134 2.01    0.0220  0.0161</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Total                    0.1000                 0.0250 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> + lower bound beta spending (under H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Kim-DeMets (power) spending function with rho = 0.5.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ++ alpha spending:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Hwang-Shih-DeCani spending function with gamma = -4.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Boundary crossing probabilities and expected sample size</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assume any cross stops the trial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper boundary (power or Type I Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3      4  Total E{N}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.0008 0.0022 0.0055 0.0102 0.0187 46.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.3489 0.0995 0.3393 0.3388 0.1224 0.9000 71.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lower boundary (futility or Type II Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3      4  Total</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.5895 0.2470 0.1079 0.0369 0.9813</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.3489 0.0500 0.0207 0.0159 0.0134 0.1000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              T         n    Events HR futility HR efficacy</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> IA 1  12.24228  81.46723  28.76662       0.919       0.308</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> IA 2  18.97078 126.24254  57.53321       0.797       0.476</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> IA 3  25.02728 159.70989  86.29984       0.730       0.591</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Final 36.00000 159.70989 115.06648       0.687       0.687</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Accrual rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-24      6.65</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Control event rates (H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-Inf      0.12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Censoring rates:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Stratum 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0-Inf      0.02</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'>xtable</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/xtable/man/xtable.html'>xtable</a></span><span class='op'>(</span><span class='va'>x</span>,</span>
+<span class='r-in'>  footnote <span class='op'>=</span> <span class='st'>"This is a footnote; note that it can be wide."</span>,</span>
+<span class='r-in'>  caption <span class='op'>=</span> <span class='st'>"Caption example."</span></span>
+<span class='r-in'><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> % latex table generated in R 4.1.0 by xtable 1.8-4 package</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> % Tue Jun 22 23:40:11 2021</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> \begin{table}[ht]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> \centering</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> \begin{tabular}{rllll}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   \hline</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  &amp; Analysis &amp; Value &amp; Futility &amp; Efficacy \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   \hline</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 &amp; IA 1: 25$\backslash$\% &amp; Z-value &amp; 0.23 &amp; 3.16 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   2 &amp; N: 82 &amp; HR &amp; 0.92 &amp; 0.31 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3 &amp; Events: 29 &amp; p (1-sided) &amp; 0.4105 &amp; 8e-04 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   4 &amp; 12.2 months &amp; P$\backslash$\{Cross$\backslash$\} if HR=1 &amp; 0.5895 &amp; 8e-04 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   5 &amp;   &amp; P$\backslash$\{Cross$\backslash$\} if HR=0.5 &amp; 0.05 &amp; 0.0995 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   6 &amp; $\backslash$hline IA 2: 50$\backslash$\% &amp; Z-value &amp; 0.86 &amp; 2.82 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   7 &amp; N: 128 &amp; HR &amp; 0.8 &amp; 0.48 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   8 &amp; Events: 58 &amp; p (1-sided) &amp; 0.1944 &amp; 0.0024 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   9 &amp; 19 months &amp; P$\backslash$\{Cross$\backslash$\} if HR=1 &amp; 0.8366 &amp; 0.003 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   10 &amp;   &amp; P$\backslash$\{Cross$\backslash$\} if HR=0.5 &amp; 0.0707 &amp; 0.4388 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   11 &amp; $\backslash$hline IA 3: 75$\backslash$\% &amp; Z-value &amp; 1.46 &amp; 2.44 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   12 &amp; N: 160 &amp; HR &amp; 0.73 &amp; 0.59 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   13 &amp; Events: 87 &amp; p (1-sided) &amp; 0.0723 &amp; 0.0074 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   14 &amp; 25 months &amp; P$\backslash$\{Cross$\backslash$\} if HR=1 &amp; 0.9445 &amp; 0.0085 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   15 &amp;   &amp; P$\backslash$\{Cross$\backslash$\} if HR=0.5 &amp; 0.0866 &amp; 0.7776 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   16 &amp; $\backslash$hline Final analysis &amp; Z-value &amp; 2.01 &amp; 2.01 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   17 &amp; N: 160 &amp; HR &amp; 0.69 &amp; 0.69 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   18 &amp; Events: 116 &amp; p (1-sided) &amp; 0.022 &amp; 0.022 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   19 &amp; 36 months &amp; P$\backslash$\{Cross$\backslash$\} if HR=1 &amp; 0.9813 &amp; 0.0187 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   20 &amp;   &amp; P$\backslash$\{Cross$\backslash$\} if HR=0.5 &amp; 0.1 &amp; 0.9 $\backslash$$\backslash$ $\backslash$hline $\backslash$multicolumn\{4\}\{p\{ 9cm \}\}\{$\backslash$footnotesize This is a footnote; note that it can be wide. \} \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    \hline</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> \end{tabular}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> \caption{Caption example.} </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> \end{table}</span>
+<span class='r-in'><span class='co'># find expected number of events at time 12 in the above trial</span></span>
+<span class='r-in'><span class='fu'>nEventsIA</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, tIA <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 20.51876</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># find time at which 1/4 of events are expected</span></span>
+<span class='r-in'><span class='fu'>tEventsIA</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, timing <span class='op'>=</span> <span class='fl'>.25</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $T</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 12.24228</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $eDC</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 17.92465</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $eDE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 10.84196</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $eNC</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 40.73361</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $eNE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 40.73361</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

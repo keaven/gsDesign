@@ -125,9 +125,6 @@ interest." />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -188,25 +185,25 @@ interest." />
 
     <div class="ref-description">
     <p>A tabular summary of a group sequential design's bounds and their properties
-are often useful. The 'vintage' <code><a href='gsBoundSummary.html'>print.gsDesign()</a></code> function provides a
+are often useful. The 'vintage' <code>print.gsDesign()</code> function provides a
 complete but minimally formatted summary of a group sequential design
 derived by <code><a href='gsDesign.html'>gsDesign()</a></code>. A brief description of the overall design can
-also be useful (<code><a href='gsBoundSummary.html'>summary.gsDesign()</a></code>.  A tabular summary of boundary
+also be useful (<code>summary.gsDesign()</code>.  A tabular summary of boundary
 characteristics oriented only towards LaTeX output is produced by
 <code><a href='nSurv.html'>xtable.gsSurv</a></code>. More flexibility is provided by
-<code><a href='gsBoundSummary.html'>gsBoundSummary()</a></code> which produces a tabular summary of a
+<code>gsBoundSummary()</code> which produces a tabular summary of a
 user-specifiable set of package-provided boundary properties in a data
 frame.  This can also be used to along with functions such as
 <code><a href='https://rdrr.io/r/base/print.dataframe.html'>print.data.frame</a>()</code>, <code><a href='https://rdrr.io/r/utils/write.table.html'>write.table</a>()</code>,
 <code><a href='https://rdrr.io/r/utils/write.table.html'>write.csv</a>()</code>, <code><a href='https://rdrr.io/r/utils/write.table.html'>write.csv2</a>()</code> or, from the RTF
 package, <code>addTable.RTF()</code> (from the rtf package) to produce console or
-R Markdown output or output to a variety of file types. <code><a href='gsBoundSummary.html'>xprint()</a></code> is
+R Markdown output or output to a variety of file types. <code>xprint()</code> is
 provided for LaTeX output by setting default options for
 <code>print.xtable()</code> when producing tables summarizing design
 bounds.</p>
 <p>Individual transformation of z-value test statistics for interim and final
-analyses are obtained from <code><a href='gsBoundSummary.html'>gsBValue()</a></code>, <code><a href='gsBoundSummary.html'>gsDelta()</a></code>,
-<code><a href='gsBoundSummary.html'>gsHR()</a></code> and <code><a href='gsBoundSummary.html'>gsCPz()</a></code> for B-values, approximate treatment effect
+analyses are obtained from <code>gsBValue()</code>, <code>gsDelta()</code>,
+<code>gsHR()</code> and <code>gsCPz()</code> for B-values, approximate treatment effect
 (see details), approximate hazard ratio and conditional power, respectively.</p>
 <p>The <code>print.gsDesign</code> function is intended to provide an easier output
 to review than is available from a simple list of all the output components.
@@ -232,8 +229,8 @@ the input <code>x</code> by the formula <code>delta0 +
 hypothesis value of the standardized parameter. Note that this value will be
 exponentiated in the case of relative risks, hazard ratios or when the user
 specifies <code>logdelta=TRUE</code>. In the case of hazard ratios, the value is
-computed instead by <code><a href='gsBoundSummary.html'>gsHR()</a></code> to be consistent with
-<code><a href='plot.gsDesign.html'>plot.gsDesign()</a></code>. Similarly, the value is computed by <code><a href='gsBoundSummary.html'>gsRR()</a></code>
+computed instead by <code>gsHR()</code> to be consistent with
+<code><a href='plot.gsDesign.html'>plot.gsDesign()</a></code>. Similarly, the value is computed by <code>gsRR()</code>
 when the relative risk is the natural parameter.</p>
 <p><code>Spending: </code>Incremental error spending at each given analysis. For
 asymmetric designs, futility bound will have beta-spending summarized.
@@ -257,13 +254,13 @@ the probability of crossing the efficacy bound at or before the analysis of
 interest.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for gsDesign</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='co'># S3 method for gsDesign</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, information <span class='op'>=</span> <span class='cn'>FALSE</span>, timeunit <span class='op'>=</span> <span class='st'>"months"</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for gsDesign</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span>
+<span class='fu'>gsBoundSummary</span><span class='op'>(</span>
   <span class='va'>x</span>,
   deltaname <span class='op'>=</span> <span class='cn'>NULL</span>,
   logdelta <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -280,7 +277,7 @@ interest.</p>
   <span class='va'>...</span>
 <span class='op'>)</span>
 
-<span class='fu'><a href='gsBoundSummary.html'>xprint</a></span><span class='op'>(</span>
+<span class='fu'>xprint</span><span class='op'>(</span>
   <span class='va'>x</span>,
   include.rownames <span class='op'>=</span> <span class='cn'>FALSE</span>,
   hline.after <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>Value</span> <span class='op'>==</span> <span class='va'>x</span><span class='op'>[</span><span class='fl'>1</span>, <span class='op'>]</span><span class='op'>$</span><span class='va'>Value</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>,
@@ -290,15 +287,15 @@ interest.</p>
 <span class='co'># S3 method for gsBoundSummary</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, row.names <span class='op'>=</span> <span class='cn'>FALSE</span>, digits <span class='op'>=</span> <span class='fl'>4</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'><a href='gsBoundSummary.html'>gsBValue</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, ylab <span class='op'>=</span> <span class='st'>"B-value"</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>gsBValue</span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, ylab <span class='op'>=</span> <span class='st'>"B-value"</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'><a href='gsBoundSummary.html'>gsDelta</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, ylab <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>gsDelta</span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, ylab <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'><a href='gsBoundSummary.html'>gsRR</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, ylab <span class='op'>=</span> <span class='st'>"Approximate risk ratio"</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>gsRR</span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, ylab <span class='op'>=</span> <span class='st'>"Approximate risk ratio"</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'><a href='gsBoundSummary.html'>gsHR</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, ylab <span class='op'>=</span> <span class='st'>"Approximate hazard ratio"</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>gsHR</span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, ratio <span class='op'>=</span> <span class='fl'>1</span>, ylab <span class='op'>=</span> <span class='st'>"Approximate hazard ratio"</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'><a href='gsBoundSummary.html'>gsCPz</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, theta <span class='op'>=</span> <span class='cn'>NULL</span>, ylab <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>gsCPz</span><span class='op'>(</span><span class='va'>z</span>, <span class='va'>i</span>, <span class='va'>x</span>, theta <span class='op'>=</span> <span class='cn'>NULL</span>, ylab <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -326,8 +323,8 @@ calling <code>plot</code> for <code>gsBValue</code>, <code>gsDelta</code>, <code
     <tr>
       <th>x</th>
       <td><p>An item of class <code>gsDesign</code> or <code>gsSurv</code>, except for
-<code><a href='gsBoundSummary.html'>print.gsBoundSummary()</a></code> where <code>x</code> is an object created by
-<code><a href='gsBoundSummary.html'>gsBoundSummary()</a></code> and <code><a href='gsBoundSummary.html'>xprint()</a></code> which is used with <code>xtable</code>
+<code>print.gsBoundSummary()</code> where <code>x</code> is an object created by
+<code>gsBoundSummary()</code> and <code>xprint()</code> which is used with <code>xtable</code>
 (see examples)</p></td>
     </tr>
     <tr>
@@ -454,8 +451,8 @@ based on <code>z</code></p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code><a href='gsBoundSummary.html'>gsBValue()</a></code>, <code><a href='gsBoundSummary.html'>gsDelta()</a></code>, <code><a href='gsBoundSummary.html'>gsHR()</a></code> and
-<code><a href='gsBoundSummary.html'>gsCPz()</a></code> each returns a vector containing the B-values, approximate
+    <p><code>gsBValue()</code>, <code>gsDelta()</code>, <code>gsHR()</code> and
+<code>gsCPz()</code> each returns a vector containing the B-values, approximate
 treatment effect (see details), approximate hazard ratio and conditional
 power, respectively, for each value specified by the interim test statistics
 in <code>z</code> at interim analyses specified in <code>i</code>.</p>
@@ -492,220 +489,239 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
-<span class='co'># survival endpoint using gsSurv</span>
-<span class='co'># generally preferred over nSurv since time computations are shown</span>
-<span class='va'>xgs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nSurv.html'>gsSurv</a></span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fl'>.2</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fl'>.1</span>, T <span class='op'>=</span> <span class='fl'>2</span>, minfup <span class='op'>=</span> <span class='fl'>1.5</span><span class='op'>)</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>xgs</span>, timename <span class='op'>=</span> <span class='st'>"Year"</span>, tdigits <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='co'>#&gt;    Analysis              Value Efficacy Futility
-#&gt;   IA 1: 33%                  Z   3.0107  -0.2388
-#&gt;      N: 460        p (1-sided)   0.0013   0.5944
-#&gt;  Events: 33       ~HR at bound   0.3457   1.0879
-#&gt;   Year: 0.8   P(Cross) if HR=1   0.0013   0.4056
-#&gt;             P(Cross) if HR=0.5   0.1412   0.0148
-#&gt;   IA 2: 67%                  Z   2.5465   0.9410
-#&gt;      N: 460        p (1-sided)   0.0054   0.1733
-#&gt;  Events: 65       ~HR at bound   0.5298   0.7907
-#&gt;   Year: 1.3   P(Cross) if HR=1   0.0062   0.8347
-#&gt;             P(Cross) if HR=0.5   0.5815   0.0437
-#&gt;       Final                  Z   1.9992   1.9992
-#&gt;      N: 460        p (1-sided)   0.0228   0.0228
-#&gt;  Events: 97       ~HR at bound   0.6655   0.6655
-#&gt;     Year: 2   P(Cross) if HR=1   0.0233   0.9767
-#&gt;             P(Cross) if HR=0.5   0.9000   0.1000</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>xgs</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 460 and 97 events required, 90 percent power, 2.5 percent (1-sided) Type I error to detect a hazard ratio of 0.5. Enrollment and total study durations are assumed to be 0.5 and 2 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</div><div class='input'>
-<span class='co'># survival endpoint using nSurvival</span>
-<span class='co'># NOTE: generally recommend gsSurv above for this!</span>
-<span class='va'>ss</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nSurvival.html'>nSurvival</a></span><span class='op'>(</span>
-  lambda1 <span class='op'>=</span> <span class='fl'>.2</span>, lambda2 <span class='op'>=</span> <span class='fl'>.1</span>, eta <span class='op'>=</span> <span class='fl'>.1</span>, Ts <span class='op'>=</span> <span class='fl'>2</span>, Tr <span class='op'>=</span> <span class='fl'>.5</span>,
-  sided <span class='op'>=</span> <span class='fl'>1</span>, alpha <span class='op'>=</span> <span class='fl'>.025</span>, ratio <span class='op'>=</span> <span class='fl'>2</span>
-<span class='op'>)</span>
-<span class='va'>xs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>nFixSurv <span class='op'>=</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>n</span>, n.fix <span class='op'>=</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>nEvents</span>, delta1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>ss</span><span class='op'>$</span><span class='va'>lambda2</span> <span class='op'>/</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>lambda1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>xs</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span>, ratio <span class='op'>=</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>ratio</span><span class='op'>)</span>
-</div><div class='co'>#&gt;   Analysis              Value Efficacy Futility
-#&gt;  IA 1: 33%                  Z   3.0107  -0.2387
-#&gt;      N: 34        p (1-sided)   0.0013   0.5943
-#&gt;                  ~HR at bound   0.3306   1.0917
-#&gt;              P(Cross) if HR=1   0.0013   0.4057
-#&gt;            P(Cross) if HR=0.5   0.1412   0.0148
-#&gt;  IA 2: 67%                  Z   2.5465   0.9411
-#&gt;      N: 67        p (1-sided)   0.0054   0.1733
-#&gt;                  ~HR at bound   0.5158   0.7830
-#&gt;              P(Cross) if HR=1   0.0062   0.8347
-#&gt;            P(Cross) if HR=0.5   0.5815   0.0437
-#&gt;      Final                  Z   1.9992   1.9992
-#&gt;     N: 100        p (1-sided)   0.0228   0.0228
-#&gt;                  ~HR at bound   0.6542   0.6542
-#&gt;              P(Cross) if HR=1   0.0233   0.9767
-#&gt;            P(Cross) if HR=0.5   0.9000   0.1000</div><div class='input'><span class='co'># generate some of the above summary statistics for the upper bound</span>
-<span class='va'>z</span> <span class='op'>&lt;-</span> <span class='va'>xs</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span>
-<span class='co'># B-values</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsBValue</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>z</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, x <span class='op'>=</span> <span class='va'>xs</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 1.738251 2.079233 1.999226</div><div class='input'><span class='co'># hazard ratio</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsHR</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>z</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, x <span class='op'>=</span> <span class='va'>xs</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 0.3521851 0.5357126 0.6702573</div><div class='input'><span class='co'># conditional power at observed treatment effect</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsCPz</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>z</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, x <span class='op'>=</span> <span class='va'>xs</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 0.9999676 0.9737643</div><div class='input'><span class='co'># conditional power at H1 treatment effect</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsCPz</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>z</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, x <span class='op'>=</span> <span class='va'>xs</span>, theta <span class='op'>=</span> <span class='va'>xs</span><span class='op'>$</span><span class='va'>delta</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 0.9937804 0.9809768</div><div class='input'>
-<span class='co'># information-based design</span>
-<span class='va'>xinfo</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>delta <span class='op'>=</span> <span class='fl'>.3</span>, delta1 <span class='op'>=</span> <span class='fl'>.3</span><span class='op'>)</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>xinfo</span>, Nname <span class='op'>=</span> <span class='st'>"Information"</span><span class='op'>)</span>
-</div><div class='co'>#&gt;             Analysis                 Value Efficacy Futility
-#&gt;            IA 1: 33%                     Z   3.0107  -0.2387
-#&gt;   Information: 41.64           p (1-sided)   0.0013   0.5943
-#&gt;                            ~delta at bound   0.4666  -0.0370
-#&gt;                        P(Cross) if delta=0   0.0013   0.4057
-#&gt;                      P(Cross) if delta=0.3   0.1412   0.0148
-#&gt;            IA 2: 67%                     Z   2.5465   0.9411
-#&gt;   Information: 83.27           p (1-sided)   0.0054   0.1733
-#&gt;                            ~delta at bound   0.2791   0.1031
-#&gt;                        P(Cross) if delta=0   0.0062   0.8347
-#&gt;                      P(Cross) if delta=0.3   0.5815   0.0437
-#&gt;                Final                     Z   1.9992   1.9992
-#&gt;  Information: 124.91           p (1-sided)   0.0228   0.0228
-#&gt;                            ~delta at bound   0.1789   0.1789
-#&gt;                        P(Cross) if delta=0   0.0233   0.9767
-#&gt;                      P(Cross) if delta=0.3   0.9000   0.1000</div><div class='input'>
-<span class='co'># show all available boundary descriptions</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>xinfo</span>, Nname <span class='op'>=</span> <span class='st'>"Information"</span>, exclude <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
-</div><div class='co'>#&gt;             Analysis                 Value Efficacy Futility
-#&gt;            IA 1: 33%                     Z   3.0107  -0.2387
-#&gt;   Information: 41.64           p (1-sided)   0.0013   0.5943
-#&gt;                            ~delta at bound   0.4666  -0.0370
-#&gt;                                   Spending   0.0013   0.0148
-#&gt;                                    B-value   1.7383  -0.1378
-#&gt;                                         CP   1.0000   0.0012
-#&gt;                                      CP H1   0.9938   0.4689
-#&gt;                                         PP   0.9897   0.0373
-#&gt;                        P(Cross) if delta=0   0.0013   0.4057
-#&gt;                      P(Cross) if delta=0.3   0.1412   0.0148
-#&gt;            IA 2: 67%                     Z   2.5465   0.9411
-#&gt;   Information: 83.27           p (1-sided)   0.0054   0.1733
-#&gt;                            ~delta at bound   0.2791   0.1031
-#&gt;                                   Spending   0.0049   0.0289
-#&gt;                                    B-value   2.0792   0.7684
-#&gt;                                         CP   0.9738   0.0713
-#&gt;                                      CP H1   0.9810   0.4223
-#&gt;                                         PP   0.9427   0.1157
-#&gt;                        P(Cross) if delta=0   0.0062   0.8347
-#&gt;                      P(Cross) if delta=0.3   0.5815   0.0437
-#&gt;                Final                     Z   1.9992   1.9992
-#&gt;  Information: 124.91           p (1-sided)   0.0228   0.0228
-#&gt;                            ~delta at bound   0.1789   0.1789
-#&gt;                                   Spending   0.0188   0.0563
-#&gt;                                    B-value   1.9992   1.9992
-#&gt;                        P(Cross) if delta=0   0.0233   0.9767
-#&gt;                      P(Cross) if delta=0.3   0.9000   0.1000</div><div class='input'>
-<span class='co'># add intermediate parameter value</span>
-<span class='va'>xinfo</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsProbability.html'>gsProbability</a></span><span class='op'>(</span>d <span class='op'>=</span> <span class='va'>xinfo</span>, theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.15</span>, <span class='fl'>.3</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>xinfo</span><span class='op'>)</span> <span class='co'># note this is still as gsDesign class object</span>
-</div><div class='co'>#&gt; [1] "gsDesign"</div><div class='input'><span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>xinfo</span>, Nname <span class='op'>=</span> <span class='st'>"Information"</span><span class='op'>)</span>
-</div><div class='co'>#&gt;             Analysis                  Value Efficacy Futility
-#&gt;            IA 1: 33%                      Z   3.0107  -0.2387
-#&gt;   Information: 41.64            p (1-sided)   0.0013   0.5943
-#&gt;                             ~delta at bound   0.4666  -0.0370
-#&gt;                         P(Cross) if delta=0   0.0013   0.4057
-#&gt;                      P(Cross) if delta=0.15   0.0205   0.1138
-#&gt;                       P(Cross) if delta=0.3   0.1412   0.0148
-#&gt;            IA 2: 67%                      Z   2.5465   0.9411
-#&gt;   Information: 83.27            p (1-sided)   0.0054   0.1733
-#&gt;                             ~delta at bound   0.2791   0.1031
-#&gt;                         P(Cross) if delta=0   0.0062   0.8347
-#&gt;                      P(Cross) if delta=0.15   0.1243   0.3523
-#&gt;                       P(Cross) if delta=0.3   0.5815   0.0437
-#&gt;                Final                      Z   1.9992   1.9992
-#&gt;  Information: 124.91            p (1-sided)   0.0228   0.0228
-#&gt;                             ~delta at bound   0.1789   0.1789
-#&gt;                         P(Cross) if delta=0   0.0233   0.9767
-#&gt;                      P(Cross) if delta=0.15   0.3636   0.6364
-#&gt;                       P(Cross) if delta=0.3   0.9000   0.1000</div><div class='input'>
-<span class='co'># now look at a binomial endpoint; specify H0 treatment difference as p1-p2=.05</span>
-<span class='co'># now treatment effect at bound (say, thetahat) is transformed to</span>
-<span class='co'># xp$delta0 + xp$delta1*(thetahat-xp$delta0)/xp$delta</span>
-<span class='va'>np</span> <span class='op'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span><span class='op'>(</span>p1 <span class='op'>=</span> <span class='fl'>.15</span>, p2 <span class='op'>=</span> <span class='fl'>.10</span><span class='op'>)</span>
-<span class='va'>xp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>n.fix <span class='op'>=</span> <span class='va'>np</span>, endpoint <span class='op'>=</span> <span class='st'>"Binomial"</span>, delta1 <span class='op'>=</span> <span class='fl'>.05</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>xp</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, sample size 1963, 90 percent power, 2.5 percent (1-sided) Type I error. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</div><div class='input'><span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>xp</span>, deltaname <span class='op'>=</span> <span class='st'>"p[C]-p[E]"</span><span class='op'>)</span>
-</div><div class='co'>#&gt;   Analysis                      Value Efficacy Futility
-#&gt;  IA 1: 33%                          Z   3.0107  -0.2387
-#&gt;     N: 655                p (1-sided)   0.0013   0.5943
-#&gt;                   ~p[C]-p[E] at bound   0.0778  -0.0062
-#&gt;               P(Cross) if p[C]-p[E]=0   0.0013   0.4057
-#&gt;            P(Cross) if p[C]-p[E]=0.05   0.1412   0.0148
-#&gt;  IA 2: 67%                          Z   2.5465   0.9411
-#&gt;    N: 1309                p (1-sided)   0.0054   0.1733
-#&gt;                   ~p[C]-p[E] at bound   0.0465   0.0172
-#&gt;               P(Cross) if p[C]-p[E]=0   0.0062   0.8347
-#&gt;            P(Cross) if p[C]-p[E]=0.05   0.5815   0.0437
-#&gt;      Final                          Z   1.9992   1.9992
-#&gt;    N: 1963                p (1-sided)   0.0228   0.0228
-#&gt;                   ~p[C]-p[E] at bound   0.0298   0.0298
-#&gt;               P(Cross) if p[C]-p[E]=0   0.0233   0.9767
-#&gt;            P(Cross) if p[C]-p[E]=0.05   0.9000   0.1000</div><div class='input'><span class='co'># estimate treatment effect at lower bound</span>
-<span class='co'># by setting delta0=0 (default) and delta1 above in gsDesign</span>
-<span class='co'># treatment effect at bounds is scaled to these differences</span>
-<span class='co'># in this case, this is the difference in event rates</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsDelta</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, <span class='va'>xp</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] -0.006166098  0.017187789  0.029813687</div><div class='input'>
-<span class='co'># binomial endpoint with risk ratio estimates</span>
-<span class='va'>n.fix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span><span class='op'>(</span>p1 <span class='op'>=</span> <span class='fl'>.3</span>, p2 <span class='op'>=</span> <span class='fl'>.15</span>, scale <span class='op'>=</span> <span class='st'>"RR"</span><span class='op'>)</span>
-<span class='va'>xrr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span>, n.fix <span class='op'>=</span> <span class='va'>n.fix</span>, delta1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.15</span> <span class='op'>/</span> <span class='fl'>.3</span><span class='op'>)</span>, endpoint <span class='op'>=</span> <span class='st'>"Binomial"</span><span class='op'>)</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>xrr</span>, deltaname <span class='op'>=</span> <span class='st'>"RR"</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='co'>#&gt;   Analysis              Value Efficacy Futility
-#&gt;  IA 1: 50%                  Z   2.7500   0.4122
-#&gt;     N: 168        p (1-sided)   0.0030   0.3401
-#&gt;                  ~RR at bound   0.4429   0.8851
-#&gt;              P(Cross) if RR=1   0.0030   0.6599
-#&gt;            P(Cross) if RR=0.5   0.3412   0.0269
-#&gt;      Final                  Z   1.9811   1.9811
-#&gt;     N: 336        p (1-sided)   0.0238   0.0238
-#&gt;                  ~RR at bound   0.6605   0.6605
-#&gt;              P(Cross) if RR=1   0.0239   0.9761
-#&gt;            P(Cross) if RR=0.5   0.9000   0.1000</div><div class='input'><span class='fu'><a href='gsBoundSummary.html'>gsRR</a></span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, <span class='va'>xrr</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 1.0732500 0.8211496        NA</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>xrr</span>, plottype <span class='op'>=</span> <span class='st'>"RR"</span><span class='op'>)</span>
-</div><div class='img'><img src='gsBoundSummary-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># delta is odds-ratio: sample size slightly smaller than for relative risk or risk difference</span>
-<span class='va'>n.fix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span><span class='op'>(</span>p1 <span class='op'>=</span> <span class='fl'>.3</span>, p2 <span class='op'>=</span> <span class='fl'>.15</span>, scale <span class='op'>=</span> <span class='st'>"OR"</span><span class='op'>)</span>
-<span class='va'>xOR</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span>, n.fix <span class='op'>=</span> <span class='va'>n.fix</span>, delta1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.15</span> <span class='op'>/</span> <span class='fl'>.3</span> <span class='op'>/</span> <span class='fl'>.85</span> <span class='op'>*</span> <span class='fl'>.7</span><span class='op'>)</span>, endpoint <span class='op'>=</span> <span class='st'>"Binomial"</span><span class='op'>)</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>xOR</span>, deltaname <span class='op'>=</span> <span class='st'>"OR"</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='co'>#&gt;   Analysis               Value Efficacy Futility
-#&gt;  IA 1: 50%                   Z   2.7500   0.4122
-#&gt;     N: 166         p (1-sided)   0.0030   0.3401
-#&gt;                   ~OR at bound   0.3526   0.8553
-#&gt;               P(Cross) if OR=1   0.0030   0.6599
-#&gt;            P(Cross) if OR=0.41   0.3412   0.0269
-#&gt;      Final                   Z   1.9811   1.9811
-#&gt;     N: 332         p (1-sided)   0.0238   0.0238
-#&gt;                   ~OR at bound   0.5880   0.5880
-#&gt;               P(Cross) if OR=1   0.0239   0.9761
-#&gt;            P(Cross) if OR=0.41   0.9000   0.1000</div><div class='input'>
-<span class='co'># for nice LaTeX table output, use xprint</span>
-<span class='fu'><a href='gsBoundSummary.html'>xprint</a></span><span class='op'>(</span><span class='fu'>xtable</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/xtable/man/xtable.html'>xtable</a></span><span class='op'>(</span><span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>xOR</span>, deltaname <span class='op'>=</span> <span class='st'>"OR"</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, 
-                                          caption <span class='op'>=</span> <span class='st'>"Table caption."</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='co'>#&gt; % latex table generated in R 4.0.5 by xtable 1.8-4 package
-#&gt; % Wed Apr 28 14:59:21 2021
-#&gt; \begin{table}[ht]
-#&gt; \centering
-#&gt; \begin{tabular}{llrr}
-#&gt;   \hline
-#&gt; Analysis &amp; Value &amp; Efficacy &amp; Futility \\ 
-#&gt;   \hline
-#&gt; IA 1: 50\% &amp; Z &amp; 2.75 &amp; 0.41 \\ 
-#&gt;   N: 166 &amp; p (1-sided) &amp; 0.00 &amp; 0.34 \\ 
-#&gt;    &amp; \~{}OR at bound &amp; 0.35 &amp; 0.86 \\ 
-#&gt;    &amp; P(Cross) if OR=1 &amp; 0.00 &amp; 0.66 \\ 
-#&gt;    &amp; P(Cross) if OR=0.41 &amp; 0.34 &amp; 0.03 \\ 
-#&gt;    \hline
-#&gt; Final &amp; Z &amp; 1.98 &amp; 1.98 \\ 
-#&gt;   N: 332 &amp; p (1-sided) &amp; 0.02 &amp; 0.02 \\ 
-#&gt;    &amp; \~{}OR at bound &amp; 0.59 &amp; 0.59 \\ 
-#&gt;    &amp; P(Cross) if OR=1 &amp; 0.02 &amp; 0.98 \\ 
-#&gt;    &amp; P(Cross) if OR=0.41 &amp; 0.90 &amp; 0.10 \\ 
-#&gt;    \hline
-#&gt; \end{tabular}
-#&gt; \caption{Table caption.} 
-#&gt; \end{table}</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># survival endpoint using gsSurv</span></span>
+<span class='r-in'><span class='co'># generally preferred over nSurv since time computations are shown</span></span>
+<span class='r-in'><span class='va'>xgs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nSurv.html'>gsSurv</a></span><span class='op'>(</span>lambdaC <span class='op'>=</span> <span class='fl'>.2</span>, hr <span class='op'>=</span> <span class='fl'>.5</span>, eta <span class='op'>=</span> <span class='fl'>.1</span>, T <span class='op'>=</span> <span class='fl'>2</span>, minfup <span class='op'>=</span> <span class='fl'>1.5</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xgs</span>, timename <span class='op'>=</span> <span class='st'>"Year"</span>, tdigits <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Analysis              Value Efficacy Futility</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   IA 1: 33%                  Z   3.0107  -0.2388</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      N: 460        p (1-sided)   0.0013   0.5944</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Events: 33       ~HR at bound   0.3457   1.0879</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Year: 0.8   P(Cross) if HR=1   0.0013   0.4056</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             P(Cross) if HR=0.5   0.1412   0.0148</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   IA 2: 67%                  Z   2.5465   0.9410</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      N: 460        p (1-sided)   0.0054   0.1733</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Events: 65       ~HR at bound   0.5298   0.7907</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Year: 1.3   P(Cross) if HR=1   0.0062   0.8347</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             P(Cross) if HR=0.5   0.5815   0.0437</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       Final                  Z   1.9992   1.9992</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      N: 460        p (1-sided)   0.0228   0.0228</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Events: 97       ~HR at bound   0.6655   0.6655</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Year: 2   P(Cross) if HR=1   0.0233   0.9767</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             P(Cross) if HR=0.5   0.9000   0.1000</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>xgs</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 460 and 97 events required, 90 percent power, 2.5 percent (1-sided) Type I error to detect a hazard ratio of 0.5. Enrollment and total study durations are assumed to be 0.5 and 2 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># survival endpoint using nSurvival</span></span>
+<span class='r-in'><span class='co'># NOTE: generally recommend gsSurv above for this!</span></span>
+<span class='r-in'><span class='va'>ss</span> <span class='op'>&lt;-</span> <span class='fu'><a href='nSurvival.html'>nSurvival</a></span><span class='op'>(</span></span>
+<span class='r-in'>  lambda1 <span class='op'>=</span> <span class='fl'>.2</span>, lambda2 <span class='op'>=</span> <span class='fl'>.1</span>, eta <span class='op'>=</span> <span class='fl'>.1</span>, Ts <span class='op'>=</span> <span class='fl'>2</span>, Tr <span class='op'>=</span> <span class='fl'>.5</span>,</span>
+<span class='r-in'>  sided <span class='op'>=</span> <span class='fl'>1</span>, alpha <span class='op'>=</span> <span class='fl'>.025</span>, ratio <span class='op'>=</span> <span class='fl'>2</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>xs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>nFixSurv <span class='op'>=</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>n</span>, n.fix <span class='op'>=</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>nEvents</span>, delta1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>ss</span><span class='op'>$</span><span class='va'>lambda2</span> <span class='op'>/</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>lambda1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xs</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span>, ratio <span class='op'>=</span> <span class='va'>ss</span><span class='op'>$</span><span class='va'>ratio</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis              Value Efficacy Futility</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  IA 1: 33%                  Z   3.0107  -0.2387</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      N: 34        p (1-sided)   0.0013   0.5943</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                  ~HR at bound   0.3306   1.0917</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              P(Cross) if HR=1   0.0013   0.4057</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if HR=0.5   0.1412   0.0148</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  IA 2: 67%                  Z   2.5465   0.9411</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      N: 67        p (1-sided)   0.0054   0.1733</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                  ~HR at bound   0.5158   0.7830</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              P(Cross) if HR=1   0.0062   0.8347</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if HR=0.5   0.5815   0.0437</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Final                  Z   1.9992   1.9992</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     N: 100        p (1-sided)   0.0228   0.0228</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                  ~HR at bound   0.6542   0.6542</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              P(Cross) if HR=1   0.0233   0.9767</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if HR=0.5   0.9000   0.1000</span>
+<span class='r-in'><span class='co'># generate some of the above summary statistics for the upper bound</span></span>
+<span class='r-in'><span class='va'>z</span> <span class='op'>&lt;-</span> <span class='va'>xs</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span></span>
+<span class='r-in'><span class='co'># B-values</span></span>
+<span class='r-in'><span class='fu'>gsBValue</span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>z</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, x <span class='op'>=</span> <span class='va'>xs</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1.738251 2.079233 1.999226</span>
+<span class='r-in'><span class='co'># hazard ratio</span></span>
+<span class='r-in'><span class='fu'>gsHR</span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>z</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, x <span class='op'>=</span> <span class='va'>xs</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.3521851 0.5357126 0.6702573</span>
+<span class='r-in'><span class='co'># conditional power at observed treatment effect</span></span>
+<span class='r-in'><span class='fu'>gsCPz</span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>z</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, x <span class='op'>=</span> <span class='va'>xs</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.9999676 0.9737643</span>
+<span class='r-in'><span class='co'># conditional power at H1 treatment effect</span></span>
+<span class='r-in'><span class='fu'>gsCPz</span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>z</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, x <span class='op'>=</span> <span class='va'>xs</span>, theta <span class='op'>=</span> <span class='va'>xs</span><span class='op'>$</span><span class='va'>delta</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.9937804 0.9809768</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># information-based design</span></span>
+<span class='r-in'><span class='va'>xinfo</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>delta <span class='op'>=</span> <span class='fl'>.3</span>, delta1 <span class='op'>=</span> <span class='fl'>.3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xinfo</span>, Nname <span class='op'>=</span> <span class='st'>"Information"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Analysis                 Value Efficacy Futility</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            IA 1: 33%                     Z   3.0107  -0.2387</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Information: 41.64           p (1-sided)   0.0013   0.5943</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                            ~delta at bound   0.4666  -0.0370</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                        P(Cross) if delta=0   0.0013   0.4057</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      P(Cross) if delta=0.3   0.1412   0.0148</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            IA 2: 67%                     Z   2.5465   0.9411</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Information: 83.27           p (1-sided)   0.0054   0.1733</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                            ~delta at bound   0.2791   0.1031</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                        P(Cross) if delta=0   0.0062   0.8347</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      P(Cross) if delta=0.3   0.5815   0.0437</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                Final                     Z   1.9992   1.9992</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Information: 124.91           p (1-sided)   0.0228   0.0228</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                            ~delta at bound   0.1789   0.1789</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                        P(Cross) if delta=0   0.0233   0.9767</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      P(Cross) if delta=0.3   0.9000   0.1000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># show all available boundary descriptions</span></span>
+<span class='r-in'><span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xinfo</span>, Nname <span class='op'>=</span> <span class='st'>"Information"</span>, exclude <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Analysis                 Value Efficacy Futility</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            IA 1: 33%                     Z   3.0107  -0.2387</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Information: 41.64           p (1-sided)   0.0013   0.5943</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                            ~delta at bound   0.4666  -0.0370</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                   Spending   0.0013   0.0148</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                    B-value   1.7383  -0.1378</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                         CP   1.0000   0.0012</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                      CP H1   0.9938   0.4689</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                         PP   0.9897   0.0373</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                        P(Cross) if delta=0   0.0013   0.4057</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      P(Cross) if delta=0.3   0.1412   0.0148</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            IA 2: 67%                     Z   2.5465   0.9411</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Information: 83.27           p (1-sided)   0.0054   0.1733</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                            ~delta at bound   0.2791   0.1031</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                   Spending   0.0049   0.0289</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                    B-value   2.0792   0.7684</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                         CP   0.9738   0.0713</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                      CP H1   0.9810   0.4223</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                         PP   0.9427   0.1157</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                        P(Cross) if delta=0   0.0062   0.8347</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      P(Cross) if delta=0.3   0.5815   0.0437</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                Final                     Z   1.9992   1.9992</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Information: 124.91           p (1-sided)   0.0228   0.0228</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                            ~delta at bound   0.1789   0.1789</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                   Spending   0.0188   0.0563</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                    B-value   1.9992   1.9992</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                        P(Cross) if delta=0   0.0233   0.9767</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      P(Cross) if delta=0.3   0.9000   0.1000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># add intermediate parameter value</span></span>
+<span class='r-in'><span class='va'>xinfo</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsProbability.html'>gsProbability</a></span><span class='op'>(</span>d <span class='op'>=</span> <span class='va'>xinfo</span>, theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.15</span>, <span class='fl'>.3</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>xinfo</span><span class='op'>)</span> <span class='co'># note this is still as gsDesign class object</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "gsDesign"</span>
+<span class='r-in'><span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xinfo</span>, Nname <span class='op'>=</span> <span class='st'>"Information"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Analysis                  Value Efficacy Futility</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            IA 1: 33%                      Z   3.0107  -0.2387</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Information: 41.64            p (1-sided)   0.0013   0.5943</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                             ~delta at bound   0.4666  -0.0370</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                         P(Cross) if delta=0   0.0013   0.4057</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      P(Cross) if delta=0.15   0.0205   0.1138</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                       P(Cross) if delta=0.3   0.1412   0.0148</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            IA 2: 67%                      Z   2.5465   0.9411</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Information: 83.27            p (1-sided)   0.0054   0.1733</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                             ~delta at bound   0.2791   0.1031</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                         P(Cross) if delta=0   0.0062   0.8347</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      P(Cross) if delta=0.15   0.1243   0.3523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                       P(Cross) if delta=0.3   0.5815   0.0437</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                Final                      Z   1.9992   1.9992</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Information: 124.91            p (1-sided)   0.0228   0.0228</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                             ~delta at bound   0.1789   0.1789</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                         P(Cross) if delta=0   0.0233   0.9767</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      P(Cross) if delta=0.15   0.3636   0.6364</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                       P(Cross) if delta=0.3   0.9000   0.1000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># now look at a binomial endpoint; specify H0 treatment difference as p1-p2=.05</span></span>
+<span class='r-in'><span class='co'># now treatment effect at bound (say, thetahat) is transformed to</span></span>
+<span class='r-in'><span class='co'># xp$delta0 + xp$delta1*(thetahat-xp$delta0)/xp$delta</span></span>
+<span class='r-in'><span class='va'>np</span> <span class='op'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span><span class='op'>(</span>p1 <span class='op'>=</span> <span class='fl'>.15</span>, p2 <span class='op'>=</span> <span class='fl'>.10</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>xp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>n.fix <span class='op'>=</span> <span class='va'>np</span>, endpoint <span class='op'>=</span> <span class='st'>"Binomial"</span>, delta1 <span class='op'>=</span> <span class='fl'>.05</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>xp</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, sample size 1963, 90 percent power, 2.5 percent (1-sided) Type I error. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</span>
+<span class='r-in'><span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xp</span>, deltaname <span class='op'>=</span> <span class='st'>"p[C]-p[E]"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis                      Value Efficacy Futility</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  IA 1: 33%                          Z   3.0107  -0.2387</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     N: 655                p (1-sided)   0.0013   0.5943</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   ~p[C]-p[E] at bound   0.0778  -0.0062</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               P(Cross) if p[C]-p[E]=0   0.0013   0.4057</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if p[C]-p[E]=0.05   0.1412   0.0148</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  IA 2: 67%                          Z   2.5465   0.9411</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    N: 1309                p (1-sided)   0.0054   0.1733</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   ~p[C]-p[E] at bound   0.0465   0.0172</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               P(Cross) if p[C]-p[E]=0   0.0062   0.8347</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if p[C]-p[E]=0.05   0.5815   0.0437</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Final                          Z   1.9992   1.9992</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    N: 1963                p (1-sided)   0.0228   0.0228</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   ~p[C]-p[E] at bound   0.0298   0.0298</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               P(Cross) if p[C]-p[E]=0   0.0233   0.9767</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if p[C]-p[E]=0.05   0.9000   0.1000</span>
+<span class='r-in'><span class='co'># estimate treatment effect at lower bound</span></span>
+<span class='r-in'><span class='co'># by setting delta0=0 (default) and delta1 above in gsDesign</span></span>
+<span class='r-in'><span class='co'># treatment effect at bounds is scaled to these differences</span></span>
+<span class='r-in'><span class='co'># in this case, this is the difference in event rates</span></span>
+<span class='r-in'><span class='fu'>gsDelta</span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, <span class='va'>xp</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] -0.006166098  0.017187789  0.029813687</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># binomial endpoint with risk ratio estimates</span></span>
+<span class='r-in'><span class='va'>n.fix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span><span class='op'>(</span>p1 <span class='op'>=</span> <span class='fl'>.3</span>, p2 <span class='op'>=</span> <span class='fl'>.15</span>, scale <span class='op'>=</span> <span class='st'>"RR"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>xrr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span>, n.fix <span class='op'>=</span> <span class='va'>n.fix</span>, delta1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.15</span> <span class='op'>/</span> <span class='fl'>.3</span><span class='op'>)</span>, endpoint <span class='op'>=</span> <span class='st'>"Binomial"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xrr</span>, deltaname <span class='op'>=</span> <span class='st'>"RR"</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis              Value Efficacy Futility</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  IA 1: 50%                  Z   2.7500   0.4122</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     N: 168        p (1-sided)   0.0030   0.3401</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                  ~RR at bound   0.4429   0.8851</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              P(Cross) if RR=1   0.0030   0.6599</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if RR=0.5   0.3412   0.0269</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Final                  Z   1.9811   1.9811</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     N: 336        p (1-sided)   0.0238   0.0238</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                  ~RR at bound   0.6605   0.6605</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              P(Cross) if RR=1   0.0239   0.9761</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if RR=0.5   0.9000   0.1000</span>
+<span class='r-in'><span class='fu'>gsRR</span><span class='op'>(</span>z <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, <span class='va'>xrr</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1.0732500 0.8211496        NA</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>xrr</span>, plottype <span class='op'>=</span> <span class='st'>"RR"</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='gsBoundSummary-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># delta is odds-ratio: sample size slightly smaller than for relative risk or risk difference</span></span>
+<span class='r-in'><span class='va'>n.fix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='varBinomial.html'>nBinomial</a></span><span class='op'>(</span>p1 <span class='op'>=</span> <span class='fl'>.3</span>, p2 <span class='op'>=</span> <span class='fl'>.15</span>, scale <span class='op'>=</span> <span class='st'>"OR"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>xOR</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span>, n.fix <span class='op'>=</span> <span class='va'>n.fix</span>, delta1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='fl'>.15</span> <span class='op'>/</span> <span class='fl'>.3</span> <span class='op'>/</span> <span class='fl'>.85</span> <span class='op'>*</span> <span class='fl'>.7</span><span class='op'>)</span>, endpoint <span class='op'>=</span> <span class='st'>"Binomial"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xOR</span>, deltaname <span class='op'>=</span> <span class='st'>"OR"</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis               Value Efficacy Futility</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  IA 1: 50%                   Z   2.7500   0.4122</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     N: 166         p (1-sided)   0.0030   0.3401</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   ~OR at bound   0.3526   0.8553</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               P(Cross) if OR=1   0.0030   0.6599</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if OR=0.41   0.3412   0.0269</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Final                   Z   1.9811   1.9811</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     N: 332         p (1-sided)   0.0238   0.0238</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                   ~OR at bound   0.5880   0.5880</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               P(Cross) if OR=1   0.0239   0.9761</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if OR=0.41   0.9000   0.1000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># for nice LaTeX table output, use xprint</span></span>
+<span class='r-in'><span class='fu'>xprint</span><span class='op'>(</span><span class='fu'>xtable</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/xtable/man/xtable.html'>xtable</a></span><span class='op'>(</span><span class='fu'>gsBoundSummary</span><span class='op'>(</span><span class='va'>xOR</span>, deltaname <span class='op'>=</span> <span class='st'>"OR"</span>, logdelta <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, </span>
+<span class='r-in'>                                          caption <span class='op'>=</span> <span class='st'>"Table caption."</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> % latex table generated in R 4.1.0 by xtable 1.8-4 package</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> % Tue Jun 22 23:39:57 2021</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> \begin{table}[ht]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> \centering</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> \begin{tabular}{llrr}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   \hline</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Analysis &amp; Value &amp; Efficacy &amp; Futility \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   \hline</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> IA 1: 50\% &amp; Z &amp; 2.75 &amp; 0.41 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   N: 166 &amp; p (1-sided) &amp; 0.00 &amp; 0.34 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    &amp; \~{}OR at bound &amp; 0.35 &amp; 0.86 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    &amp; P(Cross) if OR=1 &amp; 0.00 &amp; 0.66 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    &amp; P(Cross) if OR=0.41 &amp; 0.34 &amp; 0.03 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    \hline</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Final &amp; Z &amp; 1.98 &amp; 1.98 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   N: 332 &amp; p (1-sided) &amp; 0.02 &amp; 0.02 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    &amp; \~{}OR at bound &amp; 0.59 &amp; 0.59 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    &amp; P(Cross) if OR=1 &amp; 0.02 &amp; 0.98 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    &amp; P(Cross) if OR=0.41 &amp; 0.90 &amp; 0.10 \\ </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    \hline</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> \end{tabular}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> \caption{Table caption.} </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> \end{table}</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

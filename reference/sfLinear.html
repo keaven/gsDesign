@@ -71,9 +71,6 @@ effect at an interim." />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -149,9 +146,9 @@ I error when timing of analyses are changed based on knowing the treatment
 effect at an interim.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sfLinear</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>sfLinear</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span>
 
-<span class='fu'>sfStep</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span></pre>
+<span class='fu'>sfStep</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -216,149 +213,161 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
-<span class='co'># set up alpha spending and beta spending to be piecewise linear</span>
-<span class='va'>sfupar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.2</span>, <span class='fl'>.4</span>, <span class='fl'>.05</span>, <span class='fl'>.2</span><span class='op'>)</span>
-<span class='va'>sflpar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.65</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>, <span class='fl'>.9</span><span class='op'>)</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>sfu <span class='op'>=</span> <span class='va'>sfLinear</span>, sfl <span class='op'>=</span> <span class='va'>sfLinear</span>, sfupar <span class='op'>=</span> <span class='va'>sfupar</span>, sflpar <span class='op'>=</span> <span class='va'>sflpar</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span>
-</div><div class='img'><img src='sfLinear-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>x</span>
-</div><div class='co'>#&gt; Asymmetric two-sided group sequential design with
-#&gt; 90 % power and 2.5 % Type I Error.
-#&gt; Upper bound spending computations assume
-#&gt; trial continues if lower bound is crossed.
-#&gt; 
-#&gt;            Sample
-#&gt;             Size   ----Lower bounds----  ----Upper bounds-----
-#&gt;   Analysis Ratio*  Z   Nominal p Spend+  Z   Nominal p Spend++
-#&gt;          1  0.474 0.63    0.7342 0.0542 2.67    0.0038  0.0037
-#&gt;          2  0.948 1.60    0.9455 0.0363 2.27    0.0117  0.0101
-#&gt;          3  1.422 2.11    0.9827 0.0095 2.11    0.0173  0.0111
-#&gt;      Total                       0.1000                 0.0250 
-#&gt; + lower bound beta spending (under H1):
-#&gt;  Piecewise linear spending function with line points = 0.3 0.5 0.65 0.5 0.75 0.9.
-#&gt; ++ alpha spending:
-#&gt;  Piecewise linear spending function with line points = 0.2 0.4 0.05 0.2.
-#&gt; * Sample size ratio compared to fixed design with no interim
-#&gt; 
-#&gt; Boundary crossing probabilities and expected sample size
-#&gt; assume any cross stops the trial
-#&gt; 
-#&gt; Upper boundary (power or Type I Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3 Total   E{N}
-#&gt;   0.0000 0.0038 0.0096 0.0056 0.019 0.6143
-#&gt;   3.2415 0.3291 0.4762 0.0947 0.900 0.8155
-#&gt; 
-#&gt; Lower boundary (futility or Type II Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3 Total
-#&gt;   0.0000 0.7342 0.2181 0.0288 0.981
-#&gt;   3.2415 0.0542 0.0363 0.0095 0.100</div><div class='input'>
-<span class='co'># now do an example where there is no lower-spending at interim 1</span>
-<span class='co'># and no upper spending at interim 2</span>
-<span class='va'>sflpar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>/</span> <span class='fl'>3</span>, <span class='fl'>2</span> <span class='op'>/</span> <span class='fl'>3</span>, <span class='fl'>0</span>, <span class='fl'>.25</span><span class='op'>)</span>
-<span class='va'>sfupar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>/</span> <span class='fl'>3</span>, <span class='fl'>2</span> <span class='op'>/</span> <span class='fl'>3</span>, <span class='fl'>.1</span>, <span class='fl'>.1</span><span class='op'>)</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>sfu <span class='op'>=</span> <span class='va'>sfLinear</span>, sfl <span class='op'>=</span> <span class='va'>sfLinear</span>, sfupar <span class='op'>=</span> <span class='va'>sfupar</span>, sflpar <span class='op'>=</span> <span class='va'>sflpar</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span>
-</div><div class='img'><img src='sfLinear-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>x</span>
-</div><div class='co'>#&gt; Asymmetric two-sided group sequential design with
-#&gt; 90 % power and 2.5 % Type I Error.
-#&gt; Upper bound spending computations assume
-#&gt; trial continues if lower bound is crossed.
-#&gt; 
-#&gt;            Sample
-#&gt;             Size    ----Lower bounds----  ----Upper bounds-----
-#&gt;   Analysis Ratio*    Z   Nominal p Spend+   Z   Nominal p Spend++
-#&gt;          1  0.343 -20.00    0.0000  0.000  2.81    0.0025  0.0025
-#&gt;          2  0.685   0.72    0.7652  0.025 20.00    0.0000  0.0000
-#&gt;          3  1.028   1.99    0.9765  0.075  1.99    0.0235  0.0225
-#&gt;      Total                        0.1000                 0.0250 
-#&gt; + lower bound beta spending (under H1):
-#&gt;  Piecewise linear spending function with line points = 0.333333333333333 0.666666666666667 0 0.25.
-#&gt; ++ alpha spending:
-#&gt;  Piecewise linear spending function with line points = 0.333333333333333 0.666666666666667 0.1 0.1.
-#&gt; * Sample size ratio compared to fixed design with no interim
-#&gt; 
-#&gt; Boundary crossing probabilities and expected sample size
-#&gt; assume any cross stops the trial
-#&gt; 
-#&gt; Upper boundary (power or Type I Error)
-#&gt;           Analysis
-#&gt;    Theta      1 2      3  Total   E{N}
-#&gt;   0.0000 0.0025 0 0.0219 0.0244 0.7638
-#&gt;   3.2415 0.1814 0 0.7186 0.9000 0.8947
-#&gt; 
-#&gt; Lower boundary (futility or Type II Error)
-#&gt;           Analysis
-#&gt;    Theta 1      2      3  Total
-#&gt;   0.0000 0 0.7651 0.2105 0.9756
-#&gt;   3.2415 0 0.0250 0.0750 0.1000</div><div class='input'>
-<span class='co'># now do an example where timing of interims changes slightly, but error spending does not</span>
-<span class='co'># also, spend all alpha when at least &gt;=90 percent of final information is in the analysis</span>
-<span class='va'>sfupar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.2</span>, <span class='fl'>.4</span>, <span class='fl'>.9</span>, <span class='op'>(</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>3</span><span class='op'>)</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>3</span>, n.fix <span class='op'>=</span> <span class='fl'>100</span>, sfu <span class='op'>=</span> <span class='va'>sfStep</span>, sfupar <span class='op'>=</span> <span class='va'>sfupar</span>, test.type <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, pl <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span>
-</div><div class='img'><img src='sfLinear-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># original planned sample sizes</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1]  34  68 102</div><div class='input'><span class='co'># cumulative spending planned at original interims</span>
-<span class='fu'><a href='https://rdrr.io/r/base/cumsum.html'>cumsum</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>spend</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 0.0009259259 0.0074074074 0.0250000000</div><div class='input'><span class='co'># change timing of analyses;</span>
-<span class='co'># note that cumulative spending "P(Cross) if delta=0" does not change from cumsum(x$upper$spend)</span>
-<span class='co'># while full alpha is spent, power is reduced by reduced sample size</span>
-<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>
-  k <span class='op'>=</span> <span class='fl'>3</span>, sfu <span class='op'>=</span> <span class='va'>sfStep</span>, sfupar <span class='op'>=</span> <span class='va'>sfupar</span>, test.type <span class='op'>=</span> <span class='fl'>1</span>,
-  maxn.IPlan <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='va'>x</span><span class='op'>$</span><span class='va'>k</span><span class='op'>]</span>, n.I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>30</span>, <span class='fl'>70</span>, <span class='fl'>95</span><span class='op'>)</span>,
-  n.fix <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.fix</span>
-<span class='op'>)</span>
-<span class='co'># note that full alpha is used, but power is reduced due to lowered sample size</span>
-<span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
-</div><div class='co'>#&gt;   Analysis               Value Efficacy
-#&gt;  IA 1: 29%                   Z   3.1130
-#&gt;      N: 30         p (1-sided)   0.0009
-#&gt;                ~delta at bound   1.7534
-#&gt;            P(Cross) if delta=0   0.0009
-#&gt;            P(Cross) if delta=1   0.0905
-#&gt;  IA 2: 69%                   Z   2.4662
-#&gt;      N: 70         p (1-sided)   0.0068
-#&gt;                ~delta at bound   0.9094
-#&gt;            P(Cross) if delta=0   0.0074
-#&gt;            P(Cross) if delta=1   0.6004
-#&gt;      Final                   Z   1.9975
-#&gt;      N: 95         p (1-sided)   0.0229
-#&gt;                ~delta at bound   0.6322
-#&gt;            P(Cross) if delta=0   0.0250
-#&gt;            P(Cross) if delta=1   0.8807</div><div class='input'>
-<span class='co'># now show how step function can be abused by 'adapting' stage 2 sample size based on interim result</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span>, delta <span class='op'>=</span> <span class='fl'>.05</span>, sfu <span class='op'>=</span> <span class='va'>sfStep</span>, sfupar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.02</span>, <span class='fl'>.001</span><span class='op'>)</span>, timing <span class='op'>=</span> <span class='fl'>.02</span>, test.type <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-<span class='co'># spending jumps from miniscule to full alpha at first analysis after interim 1</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, pl <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span>
-</div><div class='img'><img src='sfLinear-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># sample sizes at analyses:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1]   85 4204</div><div class='input'><span class='co'># simulate 1 million stage 1 sum of 178 Normal(0,1) random variables</span>
-<span class='co'># Normal(0,Variance=178) under null hypothesis</span>
-<span class='va'>s1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1000000</span>, <span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># compute corresponding z-values</span>
-<span class='va'>z1</span> <span class='op'>&lt;-</span> <span class='va'>s1</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span>
-<span class='co'># set stage 2 sample size to 1 if z1 is over final bound, otherwise full sample size</span>
-<span class='va'>n2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1000000</span><span class='op'>)</span>
-<span class='va'>n2</span><span class='op'>[</span><span class='va'>z1</span> <span class='op'>&lt;</span> <span class='fl'>1.96</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span>
-<span class='co'># now sample n2 observations for second stage</span>
-<span class='va'>s2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1000000</span>, <span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># add sum and divide by standard deviation</span>
-<span class='va'>z2</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='va'>s1</span> <span class='op'>+</span> <span class='va'>s2</span><span class='op'>)</span> <span class='op'>/</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span> <span class='op'>+</span> <span class='va'>n2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># By allowing full spending when final analysis is either</span>
-<span class='co'># early or late depending on observed interim z1,</span>
-<span class='co'># Type I error is now almost twice the planned .025</span>
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>z1</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>|</span> <span class='va'>z2</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>1000000</span>
-</div><div class='co'>#&gt; [1] 0.046449</div><div class='input'><span class='co'># if stage 2 sample size is random and independent of z1 with same frequency,</span>
-<span class='co'># this is not a problem</span>
-<span class='va'>s1alt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1000000</span>, <span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>z1alt</span> <span class='op'>&lt;-</span> <span class='va'>s1alt</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span>
-<span class='va'>z2alt</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='va'>s1alt</span> <span class='op'>+</span> <span class='va'>s2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span> <span class='op'>+</span> <span class='va'>n2</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>z1alt</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>|</span> <span class='va'>z2alt</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>1000000</span>
-</div><div class='co'>#&gt; [1] 0.024672</div><div class='input'>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># set up alpha spending and beta spending to be piecewise linear</span></span>
+<span class='r-in'><span class='va'>sfupar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.2</span>, <span class='fl'>.4</span>, <span class='fl'>.05</span>, <span class='fl'>.2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sflpar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.3</span>, <span class='fl'>.5</span>, <span class='fl'>.65</span>, <span class='fl'>.5</span>, <span class='fl'>.75</span>, <span class='fl'>.9</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>sfu <span class='op'>=</span> <span class='va'>sfLinear</span>, sfl <span class='op'>=</span> <span class='va'>sfLinear</span>, sfupar <span class='op'>=</span> <span class='va'>sfupar</span>, sflpar <span class='op'>=</span> <span class='va'>sflpar</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='sfLinear-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Asymmetric two-sided group sequential design with</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper bound spending computations assume</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> trial continues if lower bound is crossed.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            Sample</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Size   ----Lower bounds----  ----Upper bounds-----</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis Ratio*  Z   Nominal p Spend+  Z   Nominal p Spend++</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1  0.474 0.63    0.7342 0.0542 2.67    0.0038  0.0037</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2  0.948 1.60    0.9455 0.0363 2.27    0.0117  0.0101</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3  1.422 2.11    0.9827 0.0095 2.11    0.0173  0.0111</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Total                       0.1000                 0.0250 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> + lower bound beta spending (under H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Piecewise linear spending function with line points = 0.3 0.5 0.65 0.5 0.75 0.9.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ++ alpha spending:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Piecewise linear spending function with line points = 0.2 0.4 0.05 0.2.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Sample size ratio compared to fixed design with no interim</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Boundary crossing probabilities and expected sample size</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assume any cross stops the trial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper boundary (power or Type I Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3 Total   E{N}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.0038 0.0096 0.0056 0.019 0.6143</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.3291 0.4762 0.0947 0.900 0.8155</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lower boundary (futility or Type II Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3 Total</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.7342 0.2181 0.0288 0.981</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.0542 0.0363 0.0095 0.100</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># now do an example where there is no lower-spending at interim 1</span></span>
+<span class='r-in'><span class='co'># and no upper spending at interim 2</span></span>
+<span class='r-in'><span class='va'>sflpar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>/</span> <span class='fl'>3</span>, <span class='fl'>2</span> <span class='op'>/</span> <span class='fl'>3</span>, <span class='fl'>0</span>, <span class='fl'>.25</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sfupar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>/</span> <span class='fl'>3</span>, <span class='fl'>2</span> <span class='op'>/</span> <span class='fl'>3</span>, <span class='fl'>.1</span>, <span class='fl'>.1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>sfu <span class='op'>=</span> <span class='va'>sfLinear</span>, sfl <span class='op'>=</span> <span class='va'>sfLinear</span>, sfupar <span class='op'>=</span> <span class='va'>sfupar</span>, sflpar <span class='op'>=</span> <span class='va'>sflpar</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='sfLinear-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Asymmetric two-sided group sequential design with</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper bound spending computations assume</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> trial continues if lower bound is crossed.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            Sample</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Size    ----Lower bounds----  ----Upper bounds-----</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis Ratio*    Z   Nominal p Spend+   Z   Nominal p Spend++</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1  0.343 -20.00    0.0000  0.000  2.81    0.0025  0.0025</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2  0.685   0.72    0.7652  0.025 20.00    0.0000  0.0000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3  1.028   1.99    0.9765  0.075  1.99    0.0235  0.0225</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Total                        0.1000                 0.0250 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> + lower bound beta spending (under H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Piecewise linear spending function with line points = 0.333333333333333 0.666666666666667 0 0.25.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ++ alpha spending:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Piecewise linear spending function with line points = 0.333333333333333 0.666666666666667 0.1 0.1.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Sample size ratio compared to fixed design with no interim</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Boundary crossing probabilities and expected sample size</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assume any cross stops the trial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper boundary (power or Type I Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1 2      3  Total   E{N}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.0025 0 0.0219 0.0244 0.7638</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.1814 0 0.7186 0.9000 0.8947</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lower boundary (futility or Type II Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta 1      2      3  Total</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0 0.7651 0.2105 0.9756</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0 0.0250 0.0750 0.1000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># now do an example where timing of interims changes slightly, but error spending does not</span></span>
+<span class='r-in'><span class='co'># also, spend all alpha when at least &gt;=90 percent of final information is in the analysis</span></span>
+<span class='r-in'><span class='va'>sfupar</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.2</span>, <span class='fl'>.4</span>, <span class='fl'>.9</span>, <span class='op'>(</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>3</span>, n.fix <span class='op'>=</span> <span class='fl'>100</span>, sfu <span class='op'>=</span> <span class='va'>sfStep</span>, sfupar <span class='op'>=</span> <span class='va'>sfupar</span>, test.type <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, pl <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='sfLinear-3.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># original planned sample sizes</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1]  34  68 102</span>
+<span class='r-in'><span class='co'># cumulative spending planned at original interims</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/cumsum.html'>cumsum</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>spend</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.0009259259 0.0074074074 0.0250000000</span>
+<span class='r-in'><span class='co'># change timing of analyses;</span></span>
+<span class='r-in'><span class='co'># note that cumulative spending "P(Cross) if delta=0" does not change from cumsum(x$upper$spend)</span></span>
+<span class='r-in'><span class='co'># while full alpha is spent, power is reduced by reduced sample size</span></span>
+<span class='r-in'><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span></span>
+<span class='r-in'>  k <span class='op'>=</span> <span class='fl'>3</span>, sfu <span class='op'>=</span> <span class='va'>sfStep</span>, sfupar <span class='op'>=</span> <span class='va'>sfupar</span>, test.type <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>  maxn.IPlan <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='va'>x</span><span class='op'>$</span><span class='va'>k</span><span class='op'>]</span>, n.I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>30</span>, <span class='fl'>70</span>, <span class='fl'>95</span><span class='op'>)</span>,</span>
+<span class='r-in'>  n.fix <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.fix</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># note that full alpha is used, but power is reduced due to lowered sample size</span></span>
+<span class='r-in'><span class='fu'><a href='gsBoundSummary.html'>gsBoundSummary</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis               Value Efficacy</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  IA 1: 29%                   Z   3.1130</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      N: 30         p (1-sided)   0.0009</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                ~delta at bound   1.7534</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if delta=0   0.0009</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if delta=1   0.0905</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  IA 2: 69%                   Z   2.4662</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      N: 70         p (1-sided)   0.0068</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                ~delta at bound   0.9094</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if delta=0   0.0074</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if delta=1   0.6004</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Final                   Z   1.9975</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      N: 95         p (1-sided)   0.0229</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                ~delta at bound   0.6322</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if delta=0   0.0250</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            P(Cross) if delta=1   0.8807</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># now show how step function can be abused by 'adapting' stage 2 sample size based on interim result</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span>, delta <span class='op'>=</span> <span class='fl'>.05</span>, sfu <span class='op'>=</span> <span class='va'>sfStep</span>, sfupar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.02</span>, <span class='fl'>.001</span><span class='op'>)</span>, timing <span class='op'>=</span> <span class='fl'>.02</span>, test.type <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># spending jumps from miniscule to full alpha at first analysis after interim 1</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, pl <span class='op'>=</span> <span class='st'>"sf"</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='sfLinear-4.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># sample sizes at analyses:</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1]   85 4204</span>
+<span class='r-in'><span class='co'># simulate 1 million stage 1 sum of 178 Normal(0,1) random variables</span></span>
+<span class='r-in'><span class='co'># Normal(0,Variance=178) under null hypothesis</span></span>
+<span class='r-in'><span class='va'>s1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1000000</span>, <span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># compute corresponding z-values</span></span>
+<span class='r-in'><span class='va'>z1</span> <span class='op'>&lt;-</span> <span class='va'>s1</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># set stage 2 sample size to 1 if z1 is over final bound, otherwise full sample size</span></span>
+<span class='r-in'><span class='va'>n2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1000000</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>n2</span><span class='op'>[</span><span class='va'>z1</span> <span class='op'>&lt;</span> <span class='fl'>1.96</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>ceiling</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># now sample n2 observations for second stage</span></span>
+<span class='r-in'><span class='va'>s2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1000000</span>, <span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># add sum and divide by standard deviation</span></span>
+<span class='r-in'><span class='va'>z2</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='va'>s1</span> <span class='op'>+</span> <span class='va'>s2</span><span class='op'>)</span> <span class='op'>/</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span> <span class='op'>+</span> <span class='va'>n2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># By allowing full spending when final analysis is either</span></span>
+<span class='r-in'><span class='co'># early or late depending on observed interim z1,</span></span>
+<span class='r-in'><span class='co'># Type I error is now almost twice the planned .025</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>z1</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>|</span> <span class='va'>z2</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>1000000</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.046449</span>
+<span class='r-in'><span class='co'># if stage 2 sample size is random and independent of z1 with same frequency,</span></span>
+<span class='r-in'><span class='co'># this is not a problem</span></span>
+<span class='r-in'><span class='va'>s1alt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>1000000</span>, <span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>z1alt</span> <span class='op'>&lt;-</span> <span class='va'>s1alt</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>z2alt</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='va'>s1alt</span> <span class='op'>+</span> <span class='va'>s2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='fl'>178</span> <span class='op'>+</span> <span class='va'>n2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>z1alt</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>|</span> <span class='va'>z2alt</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>1000000</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.024672</span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

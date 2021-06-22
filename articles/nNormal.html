@@ -160,7 +160,7 @@
            <span class="va">sd2</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html" class="external-link">rchisq</a></span><span class="op">(</span>n<span class="op">=</span><span class="va">nsim</span>, df<span class="op">=</span><span class="va">n2</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="va">n2</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">/</span><span class="va">n2</span><span class="op">)</span>
 <span class="va">z</span> <span class="op">&lt;-</span> <span class="va">deltahat</span> <span class="op">/</span> <span class="va">s</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">z</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">.975</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.946314</span></code></pre></div>
+<span class="co">#&gt; [1] 0.946157</span></code></pre></div>
 <p>The standard error for this simulation power calculation is approximately</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">pwr</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">pwr</span><span class="op">)</span><span class="op">/</span><span class="va">nsim</span><span class="op">)</span>
@@ -176,7 +176,7 @@
 <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k<span class="op">=</span><span class="fl">2</span>,
          n.fix <span class="op">=</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1<span class="op">=</span><span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">1.6</span>, sd2 <span class="op">=</span> <span class="fl">1.25</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">.1</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
          delta1 <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>
-<span class="va">d</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
+<span class="va">d</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html" class="external-link">%&gt;%</a></span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -256,8 +256,8 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k<span class="op">=</span><span class="fl">2</span>,
          delta <span class="op">=</span> <span class="va">theta</span>,
-         delta1 <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/gt/man/pipe.html" class="external-link">%&gt;%</a></span> 
+         delta1 <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">kable</span><span class="op">(</span>row.names<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">

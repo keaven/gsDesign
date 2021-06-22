@@ -70,9 +70,6 @@ Pocock design well." />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -147,7 +144,7 @@ for a better fit), while a value of \(\gamma=1\) approximates a
 Pocock design well.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sfHSD</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>sfHSD</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -194,101 +191,104 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.com'>keaven\_anderson@merck.com</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
-<span class='co'># design a 4-analysis trial using a Hwang-Shih-DeCani spending function</span>
-<span class='co'># for both lower and upper bounds</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>4</span>, sfu <span class='op'>=</span> <span class='va'>sfHSD</span>, sfupar <span class='op'>=</span> <span class='op'>-</span><span class='fl'>2</span>, sfl <span class='op'>=</span> <span class='va'>sfHSD</span>, sflpar <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-
-<span class='co'># print the design</span>
-<span class='va'>x</span>
-</div><div class='co'>#&gt; Asymmetric two-sided group sequential design with
-#&gt; 90 % power and 2.5 % Type I Error.
-#&gt; Upper bound spending computations assume
-#&gt; trial continues if lower bound is crossed.
-#&gt; 
-#&gt;            Sample
-#&gt;             Size   ----Lower bounds----  ----Upper bounds-----
-#&gt;   Analysis Ratio*  Z   Nominal p Spend+  Z   Nominal p Spend++
-#&gt;          1  0.324 0.03    0.5136 0.0350 2.80    0.0025  0.0025
-#&gt;          2  0.649 0.88    0.8096 0.0273 2.58    0.0049  0.0042
-#&gt;          3  0.973 1.51    0.9349 0.0212 2.34    0.0096  0.0069
-#&gt;          4  1.297 2.09    0.9817 0.0165 2.09    0.0183  0.0114
-#&gt;      Total                       0.1000                 0.0250 
-#&gt; + lower bound beta spending (under H1):
-#&gt;  Hwang-Shih-DeCani spending function with gamma = 1.
-#&gt; ++ alpha spending:
-#&gt;  Hwang-Shih-DeCani spending function with gamma = -2.
-#&gt; * Sample size ratio compared to fixed design with no interim
-#&gt; 
-#&gt; Boundary crossing probabilities and expected sample size
-#&gt; assume any cross stops the trial
-#&gt; 
-#&gt; Upper boundary (power or Type I Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3      4  Total   E{N}
-#&gt;   0.0000 0.0025 0.0042 0.0065 0.0072 0.0203 0.5477
-#&gt;   3.2415 0.1695 0.3553 0.2774 0.0978 0.9000 0.7533
-#&gt; 
-#&gt; Lower boundary (futility or Type II Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3      4  Total
-#&gt;   0.0000 0.5136 0.3156 0.1169 0.0336 0.9797
-#&gt;   3.2415 0.0350 0.0273 0.0212 0.0165 0.1000</div><div class='input'>
-<span class='co'># since sfHSD is the default for both sfu and sfl,</span>
-<span class='co'># this could have been written as</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>4</span>, sfupar <span class='op'>=</span> <span class='op'>-</span><span class='fl'>2</span>, sflpar <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-
-<span class='co'># print again</span>
-<span class='va'>x</span>
-</div><div class='co'>#&gt; Asymmetric two-sided group sequential design with
-#&gt; 90 % power and 2.5 % Type I Error.
-#&gt; Upper bound spending computations assume
-#&gt; trial continues if lower bound is crossed.
-#&gt; 
-#&gt;            Sample
-#&gt;             Size   ----Lower bounds----  ----Upper bounds-----
-#&gt;   Analysis Ratio*  Z   Nominal p Spend+  Z   Nominal p Spend++
-#&gt;          1  0.324 0.03    0.5136 0.0350 2.80    0.0025  0.0025
-#&gt;          2  0.649 0.88    0.8096 0.0273 2.58    0.0049  0.0042
-#&gt;          3  0.973 1.51    0.9349 0.0212 2.34    0.0096  0.0069
-#&gt;          4  1.297 2.09    0.9817 0.0165 2.09    0.0183  0.0114
-#&gt;      Total                       0.1000                 0.0250 
-#&gt; + lower bound beta spending (under H1):
-#&gt;  Hwang-Shih-DeCani spending function with gamma = 1.
-#&gt; ++ alpha spending:
-#&gt;  Hwang-Shih-DeCani spending function with gamma = -2.
-#&gt; * Sample size ratio compared to fixed design with no interim
-#&gt; 
-#&gt; Boundary crossing probabilities and expected sample size
-#&gt; assume any cross stops the trial
-#&gt; 
-#&gt; Upper boundary (power or Type I Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3      4  Total   E{N}
-#&gt;   0.0000 0.0025 0.0042 0.0065 0.0072 0.0203 0.5477
-#&gt;   3.2415 0.1695 0.3553 0.2774 0.0978 0.9000 0.7533
-#&gt; 
-#&gt; Lower boundary (futility or Type II Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3      4  Total
-#&gt;   0.0000 0.5136 0.3156 0.1169 0.0336 0.9797
-#&gt;   3.2415 0.0350 0.0273 0.0212 0.0165 0.1000</div><div class='input'>
-<span class='co'># plot the spending function using many points to obtain a smooth curve</span>
-<span class='co'># show default values of gamma to see how the spending function changes</span>
-<span class='co'># also show gamma=1 which is supposed to approximate a Pocock design</span>
-<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span> <span class='op'>/</span> <span class='fl'>100</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfHSD</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='op'>-</span><span class='fl'>4</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>,
-  xlab <span class='op'>=</span> <span class='st'>"Proportion of final sample size"</span>,
-  ylab <span class='op'>=</span> <span class='st'>"Cumulative Type I error spending"</span>,
-  main <span class='op'>=</span> <span class='st'>"Hwang-Shih-DeCani Spending Function Example"</span>, type <span class='op'>=</span> <span class='st'>"l"</span>
-<span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfHSD</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='op'>-</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfHSD</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span>
-  x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.0</span>, <span class='fl'>.375</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fl'>.025</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.8</span>, <span class='fl'>1</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,
-  legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gamma= -4"</span>, <span class='st'>"gamma= -2"</span>, <span class='st'>"gamma= 1"</span><span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='img'><img src='sfHSD-1.png' alt='' width='700' height='433' /></div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># design a 4-analysis trial using a Hwang-Shih-DeCani spending function</span></span>
+<span class='r-in'><span class='co'># for both lower and upper bounds</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>4</span>, sfu <span class='op'>=</span> <span class='va'>sfHSD</span>, sfupar <span class='op'>=</span> <span class='op'>-</span><span class='fl'>2</span>, sfl <span class='op'>=</span> <span class='va'>sfHSD</span>, sflpar <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># print the design</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Asymmetric two-sided group sequential design with</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper bound spending computations assume</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> trial continues if lower bound is crossed.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            Sample</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Size   ----Lower bounds----  ----Upper bounds-----</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis Ratio*  Z   Nominal p Spend+  Z   Nominal p Spend++</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1  0.324 0.03    0.5136 0.0350 2.80    0.0025  0.0025</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2  0.649 0.88    0.8096 0.0273 2.58    0.0049  0.0042</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3  0.973 1.51    0.9349 0.0212 2.34    0.0096  0.0069</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          4  1.297 2.09    0.9817 0.0165 2.09    0.0183  0.0114</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Total                       0.1000                 0.0250 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> + lower bound beta spending (under H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Hwang-Shih-DeCani spending function with gamma = 1.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ++ alpha spending:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Hwang-Shih-DeCani spending function with gamma = -2.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Sample size ratio compared to fixed design with no interim</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Boundary crossing probabilities and expected sample size</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assume any cross stops the trial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper boundary (power or Type I Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3      4  Total   E{N}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.0025 0.0042 0.0065 0.0072 0.0203 0.5477</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.1695 0.3553 0.2774 0.0978 0.9000 0.7533</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lower boundary (futility or Type II Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3      4  Total</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.5136 0.3156 0.1169 0.0336 0.9797</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.0350 0.0273 0.0212 0.0165 0.1000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># since sfHSD is the default for both sfu and sfl,</span></span>
+<span class='r-in'><span class='co'># this could have been written as</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>4</span>, sfupar <span class='op'>=</span> <span class='op'>-</span><span class='fl'>2</span>, sflpar <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># print again</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Asymmetric two-sided group sequential design with</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper bound spending computations assume</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> trial continues if lower bound is crossed.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            Sample</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Size   ----Lower bounds----  ----Upper bounds-----</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis Ratio*  Z   Nominal p Spend+  Z   Nominal p Spend++</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1  0.324 0.03    0.5136 0.0350 2.80    0.0025  0.0025</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2  0.649 0.88    0.8096 0.0273 2.58    0.0049  0.0042</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3  0.973 1.51    0.9349 0.0212 2.34    0.0096  0.0069</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          4  1.297 2.09    0.9817 0.0165 2.09    0.0183  0.0114</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Total                       0.1000                 0.0250 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> + lower bound beta spending (under H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Hwang-Shih-DeCani spending function with gamma = 1.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ++ alpha spending:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Hwang-Shih-DeCani spending function with gamma = -2.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Sample size ratio compared to fixed design with no interim</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Boundary crossing probabilities and expected sample size</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assume any cross stops the trial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper boundary (power or Type I Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3      4  Total   E{N}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.0025 0.0042 0.0065 0.0072 0.0203 0.5477</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.1695 0.3553 0.2774 0.0978 0.9000 0.7533</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lower boundary (futility or Type II Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3      4  Total</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.5136 0.3156 0.1169 0.0336 0.9797</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.0350 0.0273 0.0212 0.0165 0.1000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot the spending function using many points to obtain a smooth curve</span></span>
+<span class='r-in'><span class='co'># show default values of gamma to see how the spending function changes</span></span>
+<span class='r-in'><span class='co'># also show gamma=1 which is supposed to approximate a Pocock design</span></span>
+<span class='r-in'><span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span> <span class='op'>/</span> <span class='fl'>100</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfHSD</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='op'>-</span><span class='fl'>4</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>,</span>
+<span class='r-in'>  xlab <span class='op'>=</span> <span class='st'>"Proportion of final sample size"</span>,</span>
+<span class='r-in'>  ylab <span class='op'>=</span> <span class='st'>"Cumulative Type I error spending"</span>,</span>
+<span class='r-in'>  main <span class='op'>=</span> <span class='st'>"Hwang-Shih-DeCani Spending Function Example"</span>, type <span class='op'>=</span> <span class='st'>"l"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfHSD</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='op'>-</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfHSD</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span></span>
+<span class='r-in'>  x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.0</span>, <span class='fl'>.375</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fl'>.025</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.8</span>, <span class='fl'>1</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,</span>
+<span class='r-in'>  legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gamma= -4"</span>, <span class='st'>"gamma= -2"</span>, <span class='st'>"gamma= 1"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-plt'><img src='sfHSD-1.png' alt='' width='700' height='433' /></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

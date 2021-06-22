@@ -69,9 +69,6 @@ does not exist." />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -145,9 +142,9 @@ knowledge of behavior when a design corresponding to the input parameters
 does not exist.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gsBound</span><span class='op'>(</span><span class='va'>I</span>, <span class='va'>trueneg</span>, <span class='va'>falsepos</span>, tol <span class='op'>=</span> <span class='fl'>1e-06</span>, r <span class='op'>=</span> <span class='fl'>18</span>, printerr <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>gsBound</span><span class='op'>(</span><span class='va'>I</span>, <span class='va'>trueneg</span>, <span class='va'>falsepos</span>, tol <span class='op'>=</span> <span class='fl'>1e-06</span>, r <span class='op'>=</span> <span class='fl'>18</span>, printerr <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
 
-<span class='fu'>gsBound1</span><span class='op'>(</span><span class='va'>theta</span>, <span class='va'>I</span>, <span class='va'>a</span>, <span class='va'>probhi</span>, tol <span class='op'>=</span> <span class='fl'>1e-06</span>, r <span class='op'>=</span> <span class='fl'>18</span>, printerr <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></pre>
+<span class='fu'>gsBound1</span><span class='op'>(</span><span class='va'>theta</span>, <span class='va'>I</span>, <span class='va'>a</span>, <span class='va'>probhi</span>, tol <span class='op'>=</span> <span class='fl'>1e-06</span>, r <span class='op'>=</span> <span class='fl'>18</span>, printerr <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -246,96 +243,100 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># set boundaries so that probability is .01 of first crossing</span>
-<span class='co'># each upper boundary and .02 of crossing each lower boundary</span>
-<span class='co'># under the null hypothesis</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>gsBound</span><span class='op'>(</span>
-  I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>3</span>, trueneg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>.02</span>, <span class='fl'>3</span><span class='op'>)</span>,
-  falsepos <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>.01</span>, <span class='fl'>3</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='co'>#&gt; $k
-#&gt; [1] 3
-#&gt; 
-#&gt; $theta
-#&gt; [1] 0
-#&gt; 
-#&gt; $I
-#&gt; [1] 0.3333333 0.6666667 1.0000000
-#&gt; 
-#&gt; $a
-#&gt; [1] -2.053749 -1.914183 -1.789206
-#&gt; 
-#&gt; $b
-#&gt; [1] 2.326348 2.219299 2.120127
-#&gt; 
-#&gt; $rates
-#&gt; $rates$falsepos
-#&gt; [1] 0.01 0.01 0.01
-#&gt; 
-#&gt; $rates$trueneg
-#&gt; [1] 0.02 0.02 0.02
-#&gt; 
-#&gt; 
-#&gt; $tol
-#&gt; [1] 1e-06
-#&gt; 
-#&gt; $r
-#&gt; [1] 18
-#&gt; 
-#&gt; $error
-#&gt; [1] 0
-#&gt; </div><div class='input'>
-<span class='co'>#  use gsBound1 to set up boundary for a 1-sided test</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>gsBound1</span><span class='op'>(</span>
-  theta <span class='op'>=</span> <span class='fl'>0</span>, I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>3</span>, a <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>20</span>, <span class='fl'>3</span><span class='op'>)</span>,
-  probhi <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.001</span>, <span class='fl'>.009</span>, <span class='fl'>.015</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>x</span><span class='op'>$</span><span class='va'>b</span>
-</div><div class='co'>#&gt; [1] 3.090232 2.344824 2.039501</div><div class='input'>
-<span class='co'># check boundary crossing probabilities with gsProbability</span>
-<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsProbability.html'>gsProbability</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>3</span>, theta <span class='op'>=</span> <span class='fl'>0</span>, n.I <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>I</span>, a <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>a</span>, b <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span>
-
-<span class='co'>#  Note that gsBound1 only computes upper bound</span>
-<span class='co'>#  To get a lower bound under a parameter value theta:</span>
-<span class='co'>#      use minus the upper bound as a lower bound</span>
-<span class='co'>#      replace theta with -theta</span>
-<span class='co'>#      set probhi as desired lower boundary crossing probabilities</span>
-<span class='co'>#  Here we let set lower boundary crossing at 0.05 at each analysis</span>
-<span class='co'>#  assuming theta=2.2</span>
-<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'>gsBound1</span><span class='op'>(</span>
-  theta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>2.2</span>, I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>3</span>, a <span class='op'>=</span> <span class='op'>-</span><span class='va'>x</span><span class='op'>$</span><span class='va'>b</span>,
-  probhi <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>.05</span>, <span class='fl'>3</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>y</span><span class='op'>$</span><span class='va'>b</span>
-</div><div class='co'>#&gt; [1]  0.3746830 -0.3594403 -0.9470061</div><div class='input'>
-<span class='co'>#  Now use gsProbability to look at design</span>
-<span class='co'>#  Note that lower boundary crossing probabilities are as</span>
-<span class='co'>#  specified for theta=2.2, but for theta=0 the upper boundary</span>
-<span class='co'>#  crossing probabilities are smaller than originally specified</span>
-<span class='co'>#  above after first interim analysis</span>
-<span class='fu'><a href='gsProbability.html'>gsProbability</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span>, theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>2.2</span><span class='op'>)</span>, n.I <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>I</span>, b <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>b</span>, a <span class='op'>=</span> <span class='op'>-</span><span class='va'>y</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span>
-</div><div class='co'>#&gt;                Lower bounds   Upper bounds
-#&gt;   Analysis N    Z   Nominal p  Z   Nominal p
-#&gt;          1  1 -0.37    0.3539 3.09    0.0010
-#&gt;          2  1  0.36    0.6404 2.34    0.0095
-#&gt;          3  1  0.95    0.8282 2.04    0.0207
-#&gt; 
-#&gt; Boundary crossing probabilities and expected sample size assume
-#&gt; any cross stops the trial
-#&gt; 
-#&gt; Upper boundary (power or Type I Error)
-#&gt;           Analysis
-#&gt;   Theta      1      2      3  Total E{N}
-#&gt;     0.0 0.0010 0.0090 0.0146 0.0246  0.7
-#&gt;     2.2 0.0344 0.2601 0.2783 0.5728  0.8
-#&gt; 
-#&gt; Lower boundary (futility or Type II Error)
-#&gt;           Analysis
-#&gt;   Theta      1      2     3  Total
-#&gt;     0.0 0.3539 0.3153 0.184 0.8532
-#&gt;     2.2 0.0500 0.0500 0.050 0.1500</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'></span>
+<span class='r-in'><span class='co'># set boundaries so that probability is .01 of first crossing</span></span>
+<span class='r-in'><span class='co'># each upper boundary and .02 of crossing each lower boundary</span></span>
+<span class='r-in'><span class='co'># under the null hypothesis</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>gsBound</span><span class='op'>(</span></span>
+<span class='r-in'>  I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>3</span>, trueneg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>.02</span>, <span class='fl'>3</span><span class='op'>)</span>,</span>
+<span class='r-in'>  falsepos <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>.01</span>, <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $k</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $theta</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $I</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.3333333 0.6666667 1.0000000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $a</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] -2.053749 -1.914183 -1.789206</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $b</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 2.326348 2.219299 2.120127</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $rates</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $rates$falsepos</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.01 0.01 0.01</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $rates$trueneg</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.02 0.02 0.02</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $tol</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1e-06</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $r</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 18</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $error</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#  use gsBound1 to set up boundary for a 1-sided test</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>gsBound1</span><span class='op'>(</span></span>
+<span class='r-in'>  theta <span class='op'>=</span> <span class='fl'>0</span>, I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>3</span>, a <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>20</span>, <span class='fl'>3</span><span class='op'>)</span>,</span>
+<span class='r-in'>  probhi <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.001</span>, <span class='fl'>.009</span>, <span class='fl'>.015</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span><span class='op'>$</span><span class='va'>b</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 3.090232 2.344824 2.039501</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># check boundary crossing probabilities with gsProbability</span></span>
+<span class='r-in'><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsProbability.html'>gsProbability</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>3</span>, theta <span class='op'>=</span> <span class='fl'>0</span>, n.I <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>I</span>, a <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>a</span>, b <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#  Note that gsBound1 only computes upper bound</span></span>
+<span class='r-in'><span class='co'>#  To get a lower bound under a parameter value theta:</span></span>
+<span class='r-in'><span class='co'>#      use minus the upper bound as a lower bound</span></span>
+<span class='r-in'><span class='co'>#      replace theta with -theta</span></span>
+<span class='r-in'><span class='co'>#      set probhi as desired lower boundary crossing probabilities</span></span>
+<span class='r-in'><span class='co'>#  Here we let set lower boundary crossing at 0.05 at each analysis</span></span>
+<span class='r-in'><span class='co'>#  assuming theta=2.2</span></span>
+<span class='r-in'><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'>gsBound1</span><span class='op'>(</span></span>
+<span class='r-in'>  theta <span class='op'>=</span> <span class='op'>-</span><span class='fl'>2.2</span>, I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>3</span>, a <span class='op'>=</span> <span class='op'>-</span><span class='va'>x</span><span class='op'>$</span><span class='va'>b</span>,</span>
+<span class='r-in'>  probhi <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>.05</span>, <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>y</span><span class='op'>$</span><span class='va'>b</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1]  0.3746830 -0.3594403 -0.9470061</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>#  Now use gsProbability to look at design</span></span>
+<span class='r-in'><span class='co'>#  Note that lower boundary crossing probabilities are as</span></span>
+<span class='r-in'><span class='co'>#  specified for theta=2.2, but for theta=0 the upper boundary</span></span>
+<span class='r-in'><span class='co'>#  crossing probabilities are smaller than originally specified</span></span>
+<span class='r-in'><span class='co'>#  above after first interim analysis</span></span>
+<span class='r-in'><span class='fu'><a href='gsProbability.html'>gsProbability</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span>, theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>2.2</span><span class='op'>)</span>, n.I <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>I</span>, b <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>b</span>, a <span class='op'>=</span> <span class='op'>-</span><span class='va'>y</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                Lower bounds   Upper bounds</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis N    Z   Nominal p  Z   Nominal p</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1  1 -0.37    0.3539 3.09    0.0010</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2  1  0.36    0.6404 2.34    0.0095</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3  1  0.95    0.8282 2.04    0.0207</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Boundary crossing probabilities and expected sample size assume</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> any cross stops the trial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper boundary (power or Type I Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Theta      1      2      3  Total E{N}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.0 0.0010 0.0090 0.0146 0.0246  0.7</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     2.2 0.0344 0.2601 0.2783 0.5728  0.8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lower boundary (futility or Type II Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Theta      1      2     3  Total</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.0 0.3539 0.3153 0.184 0.8532</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     2.2 0.0500 0.0500 0.050 0.1500</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

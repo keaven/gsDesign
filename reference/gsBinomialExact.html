@@ -116,9 +116,6 @@ NOTE: the one-sided evaluation of significance is more conservative than using t
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -239,7 +236,7 @@ that it covers the possible range of values that include the true minima.
 NOTE: the one-sided evaluation of significance is more conservative than using the 2-sided exact test in <code>binom.test</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gsBinomialExact</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>gsBinomialExact</span><span class='op'>(</span>
   k <span class='op'>=</span> <span class='fl'>2</span>,
   theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.1</span>, <span class='fl'>0.2</span><span class='op'>)</span>,
   n.I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>100</span><span class='op'>)</span>,
@@ -267,7 +264,7 @@ NOTE: the one-sided evaluation of significance is more conservative than using t
   n <span class='op'>=</span> <span class='fl'>200</span><span class='op'>:</span><span class='fl'>250</span>,
   outtype <span class='op'>=</span> <span class='fl'>1</span>,
   conservative <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -436,115 +433,127 @@ marc_schwartz@me.com.</p>
     <p>Jon Hartzel, Yevgen Tymofyeyev and Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
-
-<span class='va'>zz</span> <span class='op'>&lt;-</span> <span class='fu'>gsBinomialExact</span><span class='op'>(</span>
-  k <span class='op'>=</span> <span class='fl'>3</span>, theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0.1</span><span class='op'>)</span>, n.I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span>, <span class='fl'>36</span><span class='op'>)</span>,
-  a <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>11</span><span class='op'>)</span>, b <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>9</span>, <span class='fl'>12</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='co'># let's see what class this is</span>
-<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>zz</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] "gsBinomialExact" "gsProbability"  </div><div class='input'>
-<span class='co'># because of "gsProbability" class above, following is equivalent to</span>
-<span class='co'># print.gsProbability(zz)</span>
-<span class='va'>zz</span>
-</div><div class='co'>#&gt;               Bounds
-#&gt;   Analysis   N   a   b
-#&gt;          1  12  -1   5
-#&gt;          2  24   0   9
-#&gt;          3  36  11  12
-#&gt; 
-#&gt; Boundary crossing probabilities and expected sample size assume
-#&gt; any cross stops the trial
-#&gt; 
-#&gt; Upper boundary (power or Type I Error)
-#&gt;           Analysis
-#&gt;   Theta      1      2      3  Total E{N}
-#&gt;     0.0 0.0000 0.0000 0.0000 0.0000 24.0
-#&gt;     0.1 0.0043 0.0002 0.0001 0.0045 34.9
-#&gt;     0.2 0.0726 0.0155 0.0168 0.1048 34.0
-#&gt;     0.3 0.2763 0.0993 0.1164 0.4921 28.2
-#&gt;     0.4 0.5618 0.1782 0.1362 0.8762 20.4
-#&gt;     0.5 0.8062 0.1372 0.0463 0.9896 15.0
-#&gt;     0.6 0.9427 0.0519 0.0052 0.9998 12.8
-#&gt;     0.7 0.9905 0.0093 0.0002 1.0000 12.1
-#&gt;     0.8 0.9994 0.0006 0.0000 1.0000 12.0
-#&gt;     0.9 1.0000 0.0000 0.0000 1.0000 12.0
-#&gt;     1.0 1.0000 0.0000 0.0000 1.0000 12.0
-#&gt; 
-#&gt; Lower boundary (futility or Type II Error)
-#&gt;           Analysis
-#&gt;   Theta 1      2      3  Total
-#&gt;     0.0 0 1.0000 0.0000 1.0000
-#&gt;     0.1 0 0.0798 0.9157 0.9955
-#&gt;     0.2 0 0.0047 0.8905 0.8952
-#&gt;     0.3 0 0.0002 0.5077 0.5079
-#&gt;     0.4 0 0.0000 0.1238 0.1238
-#&gt;     0.5 0 0.0000 0.0104 0.0104
-#&gt;     0.6 0 0.0000 0.0002 0.0002
-#&gt;     0.7 0 0.0000 0.0000 0.0000
-#&gt;     0.8 0 0.0000 0.0000 0.0000
-#&gt;     0.9 0 0.0000 0.0000 0.0000
-#&gt;     1.0 0 0.0000 0.0000 0.0000</div><div class='input'><span class='co'># also plot (see also plots below for \code{binomialSPRT})</span>
-<span class='co'># add lines using geom_line()</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>zz</span><span class='op'>)</span> <span class='op'>+</span> 
-<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='img'><img src='gsBinomialExact-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># now for SPRT examples</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>binomialSPRT</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>.05</span>, p1 <span class='op'>=</span> <span class='fl'>.25</span>, alpha <span class='op'>=</span> <span class='fl'>.1</span>, beta <span class='op'>=</span> <span class='fl'>.2</span><span class='op'>)</span>
-<span class='co'># boundary plot</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='img'><img src='gsBinomialExact-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># power plot</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='img'><img src='gsBinomialExact-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Response (event) rate at boundary</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-</div><div class='img'><img src='gsBinomialExact-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># Expected sample size at boundary crossing or end of trial</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>6</span><span class='op'>)</span>
-</div><div class='img'><img src='gsBinomialExact-5.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># sample size for single arm exact binomial</span>
-
-<span class='co'># plot of table of power by sample size</span>
-<span class='co'># note that outtype need no be specified if beta is NULL</span>
-<span class='va'>nb1</span> <span class='op'>&lt;-</span> <span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1<span class='op'>=</span><span class='fl'>0.2</span>,alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta<span class='op'>=</span><span class='cn'>NULL</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span><span class='op'>)</span>
-<span class='va'>nb1</span>
-</div><div class='co'>#&gt;      p0  p1 alpha      beta  n b      alphaR     Power
-#&gt; 1  0.05 0.2 0.025 0.4206743 25 5 0.007164948 0.5793257
-#&gt; 2  0.05 0.2 0.025 0.3833381 26 5 0.008511231 0.6166619
-#&gt; 3  0.05 0.2 0.025 0.3480384 27 5 0.010022739 0.6519616
-#&gt; 4  0.05 0.2 0.025 0.3148874 28 5 0.011708399 0.6851126
-#&gt; 5  0.05 0.2 0.025 0.2839465 29 5 0.013576673 0.7160535
-#&gt; 6  0.05 0.2 0.025 0.2552333 30 5 0.015635510 0.7447667
-#&gt; 7  0.05 0.2 0.025 0.2287288 31 5 0.017892313 0.7712712
-#&gt; 8  0.05 0.2 0.025 0.2043839 32 5 0.020353899 0.7956161
-#&gt; 9  0.05 0.2 0.025 0.1821257 33 5 0.023026479 0.8178743
-#&gt; 10 0.05 0.2 0.025 0.2996488 34 6 0.006269405 0.7003512
-#&gt; 11 0.05 0.2 0.025 0.2720917 35 6 0.007251716 0.7279083
-#&gt; 12 0.05 0.2 0.025 0.2463717 36 6 0.008340444 0.7536283
-#&gt; 13 0.05 0.2 0.025 0.2224770 37 6 0.009541557 0.7775230
-#&gt; 14 0.05 0.2 0.025 0.2003744 38 6 0.010860905 0.7996256
-#&gt; 15 0.05 0.2 0.025 0.1800132 39 6 0.012304191 0.8199868
-#&gt; 16 0.05 0.2 0.025 0.1613288 40 6 0.013876949 0.8386712</div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://scales.r-lib.org'>scales</a></span><span class='op'>)</span>
-<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>nb1</span>, <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>n</span>, y <span class='op'>=</span> <span class='va'>Power</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
-<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
-<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> 
-<span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_continuous</a></span><span class='op'>(</span>labels <span class='op'>=</span> <span class='va'>percent</span><span class='op'>)</span>
-</div><div class='img'><img src='gsBinomialExact-6.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># simple call with same parameters to get minimum sample size yielding desired power</span>
-<span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 33</div><div class='input'>
-<span class='co'># change to 'conservative' if you want all larger sample</span>
-<span class='co'># sizes to also provide adequate power</span>
-<span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span>, conservative <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 39</div><div class='input'>
-<span class='co'># print out more information for the selected derived sample size</span>
-<span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span>, conservative <span class='op'>=</span> <span class='cn'>TRUE</span>,
- outtype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='co'>#&gt;     p0  p1 alpha beta  n b     alphaR     Power
-#&gt; 1 0.05 0.2 0.025  0.2 39 6 0.01230419 0.8199868</div><div class='input'>
-<span class='co'># what happens if input sample sizes not sufficient?</span>
-<span class='co'># nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)</span>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>zz</span> <span class='op'>&lt;-</span> <span class='fu'>gsBinomialExact</span><span class='op'>(</span></span>
+<span class='r-in'>  k <span class='op'>=</span> <span class='fl'>3</span>, theta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0.1</span><span class='op'>)</span>, n.I <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span>, <span class='fl'>36</span><span class='op'>)</span>,</span>
+<span class='r-in'>  a <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>11</span><span class='op'>)</span>, b <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>9</span>, <span class='fl'>12</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># let's see what class this is</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>zz</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "gsBinomialExact" "gsProbability"  </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># because of "gsProbability" class above, following is equivalent to</span></span>
+<span class='r-in'><span class='co'># print.gsProbability(zz)</span></span>
+<span class='r-in'><span class='va'>zz</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               Bounds</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis   N   a   b</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1  12  -1   5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2  24   0   9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3  36  11  12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Boundary crossing probabilities and expected sample size assume</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> any cross stops the trial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper boundary (power or Type I Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Theta      1      2      3  Total E{N}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.0 0.0000 0.0000 0.0000 0.0000 24.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.1 0.0043 0.0002 0.0001 0.0045 34.9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.2 0.0726 0.0155 0.0168 0.1048 34.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.3 0.2763 0.0993 0.1164 0.4921 28.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.4 0.5618 0.1782 0.1362 0.8762 20.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.5 0.8062 0.1372 0.0463 0.9896 15.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.6 0.9427 0.0519 0.0052 0.9998 12.8</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.7 0.9905 0.0093 0.0002 1.0000 12.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.8 0.9994 0.0006 0.0000 1.0000 12.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.9 1.0000 0.0000 0.0000 1.0000 12.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     1.0 1.0000 0.0000 0.0000 1.0000 12.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lower boundary (futility or Type II Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Theta 1      2      3  Total</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.0 0 1.0000 0.0000 1.0000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.1 0 0.0798 0.9157 0.9955</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.2 0 0.0047 0.8905 0.8952</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.3 0 0.0002 0.5077 0.5079</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.4 0 0.0000 0.1238 0.1238</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.5 0 0.0000 0.0104 0.0104</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.6 0 0.0000 0.0002 0.0002</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.7 0 0.0000 0.0000 0.0000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.8 0 0.0000 0.0000 0.0000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     0.9 0 0.0000 0.0000 0.0000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     1.0 0 0.0000 0.0000 0.0000</span>
+<span class='r-in'><span class='co'># also plot (see also plots below for \code{binomialSPRT})</span></span>
+<span class='r-in'><span class='co'># add lines using geom_line()</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>zz</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span class='r-in'><span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='gsBinomialExact-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># now for SPRT examples</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>binomialSPRT</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>.05</span>, p1 <span class='op'>=</span> <span class='fl'>.25</span>, alpha <span class='op'>=</span> <span class='fl'>.1</span>, beta <span class='op'>=</span> <span class='fl'>.2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># boundary plot</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='gsBinomialExact-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># power plot</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='gsBinomialExact-3.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># Response (event) rate at boundary</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='gsBinomialExact-4.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># Expected sample size at boundary crossing or end of trial</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>6</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='gsBinomialExact-5.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># sample size for single arm exact binomial</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot of table of power by sample size</span></span>
+<span class='r-in'><span class='co'># note that outtype need no be specified if beta is NULL</span></span>
+<span class='r-in'><span class='va'>nb1</span> <span class='op'>&lt;-</span> <span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1<span class='op'>=</span><span class='fl'>0.2</span>,alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta<span class='op'>=</span><span class='cn'>NULL</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>nb1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      p0  p1 alpha      beta  n b      alphaR     Power</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  0.05 0.2 0.025 0.4206743 25 5 0.007164948 0.5793257</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  0.05 0.2 0.025 0.3833381 26 5 0.008511231 0.6166619</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  0.05 0.2 0.025 0.3480384 27 5 0.010022739 0.6519616</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  0.05 0.2 0.025 0.3148874 28 5 0.011708399 0.6851126</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  0.05 0.2 0.025 0.2839465 29 5 0.013576673 0.7160535</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  0.05 0.2 0.025 0.2552333 30 5 0.015635510 0.7447667</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  0.05 0.2 0.025 0.2287288 31 5 0.017892313 0.7712712</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  0.05 0.2 0.025 0.2043839 32 5 0.020353899 0.7956161</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  0.05 0.2 0.025 0.1821257 33 5 0.023026479 0.8178743</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 0.05 0.2 0.025 0.2996488 34 6 0.006269405 0.7003512</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11 0.05 0.2 0.025 0.2720917 35 6 0.007251716 0.7279083</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12 0.05 0.2 0.025 0.2463717 36 6 0.008340444 0.7536283</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13 0.05 0.2 0.025 0.2224770 37 6 0.009541557 0.7775230</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 14 0.05 0.2 0.025 0.2003744 38 6 0.010860905 0.7996256</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 15 0.05 0.2 0.025 0.1800132 39 6 0.012304191 0.8199868</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16 0.05 0.2 0.025 0.1613288 40 6 0.013876949 0.8386712</span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://scales.r-lib.org'>scales</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>nb1</span>, <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>n</span>, y <span class='op'>=</span> <span class='va'>Power</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span class='r-in'><span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span class='r-in'><span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span class='r-in'><span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_continuous</a></span><span class='op'>(</span>labels <span class='op'>=</span> <span class='va'>percent</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='gsBinomialExact-6.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># simple call with same parameters to get minimum sample size yielding desired power</span></span>
+<span class='r-in'><span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 33</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># change to 'conservative' if you want all larger sample</span></span>
+<span class='r-in'><span class='co'># sizes to also provide adequate power</span></span>
+<span class='r-in'><span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span>, conservative <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 39</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># print out more information for the selected derived sample size</span></span>
+<span class='r-in'><span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>40</span>, conservative <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'> outtype <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     p0  p1 alpha beta  n b     alphaR     Power</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 0.05 0.2 0.025  0.2 39 6 0.01230419 0.8199868</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># what happens if input sample sizes not sufficient?</span></span>
+<span class='r-in'><span class='co'># nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)</span></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -67,9 +67,6 @@ spending functions; see Spending_Function_Overview." />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -141,7 +138,7 @@ specified points (e.g,, linear interpolation); also consider fitting smooth
 spending functions; see <a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sfPoints</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>sfPoints</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,113 +187,117 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
-<span class='co'># example to specify spending on a pointwise basis</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>
-  k <span class='op'>=</span> <span class='fl'>6</span>, sfu <span class='op'>=</span> <span class='va'>sfPoints</span>, sfupar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.01</span>, <span class='fl'>.05</span>, <span class='fl'>.1</span>, <span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>1</span><span class='op'>)</span>,
-  test.type <span class='op'>=</span> <span class='fl'>2</span>
-<span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='co'>#&gt; Symmetric two-sided group sequential design with
-#&gt; 90 % power and 2.5 % Type I Error.
-#&gt; Spending computations assume trial stops
-#&gt; if a bound is crossed.
-#&gt; 
-#&gt;            Sample
-#&gt;             Size 
-#&gt;   Analysis Ratio*  Z   Nominal p  Spend
-#&gt;          1  0.171 3.48    0.0002 0.0003
-#&gt;          2  0.342 3.07    0.0011 0.0010
-#&gt;          3  0.512 2.94    0.0017 0.0013
-#&gt;          4  0.683 2.58    0.0050 0.0037
-#&gt;          5  0.854 2.33    0.0099 0.0063
-#&gt;          6  1.025 2.03    0.0211 0.0125
-#&gt;      Total                       0.0250 
-#&gt; 
-#&gt; ++ alpha spending:
-#&gt;  User-specified spending function with Points = 0.01 0.05 0.1 0.25 0.5 1.
-#&gt; * Sample size ratio compared to fixed design with no interim
-#&gt; 
-#&gt; Boundary crossing probabilities and expected sample size
-#&gt; assume any cross stops the trial
-#&gt; 
-#&gt; Upper boundary (power or Type I Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3      4      5      6 Total   E{N}
-#&gt;   0.0000 0.0002 0.0010 0.0013 0.0038 0.0063 0.0125 0.025 1.0171
-#&gt;   3.2415 0.0161 0.1072 0.1626 0.2666 0.2066 0.1409 0.900 0.7282
-#&gt; 
-#&gt; Lower boundary (futility or Type II Error)
-#&gt;           Analysis
-#&gt;    Theta     1     2      3      4      5      6 Total
-#&gt;   0.0000 2e-04 0.001 0.0013 0.0038 0.0063 0.0125 0.025
-#&gt;   3.2415 0e+00 0.000 0.0000 0.0000 0.0000 0.0000 0.000</div><div class='input'>
-<span class='co'># get proportion of upper spending under null hypothesis</span>
-<span class='co'># at each analysis</span>
-<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>]</span> <span class='op'>/</span> <span class='fl'>.025</span>
-
-<span class='co'># change to cumulative proportion of spending</span>
-<span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>2</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='va'>y</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>y</span><span class='op'>[</span><span class='va'>i</span> <span class='op'>-</span> <span class='fl'>1</span><span class='op'>]</span> <span class='op'>+</span> <span class='va'>y</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span>
-
-<span class='co'># this should correspond to input sfupar</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>y</span>, <span class='fl'>6</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 0.01 0.05 0.10 0.25 0.50 1.00</div><div class='input'>
-<span class='co'># plot these cumulative spending points</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span> <span class='op'>/</span> <span class='fl'>6</span>, <span class='va'>y</span>,
-  main <span class='op'>=</span> <span class='st'>"Pointwise spending function example"</span>,
-  xlab <span class='op'>=</span> <span class='st'>"Proportion of final sample size"</span>,
-  ylab <span class='op'>=</span> <span class='st'>"Cumulative proportion of spending"</span>,
-  type <span class='op'>=</span> <span class='st'>"p"</span>
-<span class='op'>)</span>
-</div><div class='input'>
-<span class='co'># approximate this with a t-distribution spending function</span>
-<span class='co'># by fitting 3 points</span>
-<span class='va'>tx</span> <span class='op'>&lt;-</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span> <span class='op'>/</span> <span class='fl'>100</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>tx</span>, <span class='fu'><a href='sfTDist.html'>sfTDist</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>tx</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>5</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, <span class='fl'>.01</span>, <span class='fl'>.1</span>, <span class='fl'>.5</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>.6</span>, y <span class='op'>=</span> <span class='fl'>.9</span>, labels <span class='op'>=</span> <span class='st'>"Pointwise Spending Approximated by"</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>.6</span>, y <span class='op'>=</span> <span class='fl'>.83</span>, <span class='st'>"t-Distribution Spending with 3-point interpolation"</span><span class='op'>)</span>
-</div><div class='img'><img src='sfPoints-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># example without lower spending at initial interim or</span>
-<span class='co'># upper spending at last interim</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>
-  k <span class='op'>=</span> <span class='fl'>3</span>, sfu <span class='op'>=</span> <span class='va'>sfPoints</span>, sfupar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.25</span>, <span class='fl'>.25</span><span class='op'>)</span>,
-  sfl <span class='op'>=</span> <span class='va'>sfPoints</span>, sflpar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.25</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='co'>#&gt; Asymmetric two-sided group sequential design with
-#&gt; 90 % power and 2.5 % Type I Error.
-#&gt; Upper bound spending computations assume
-#&gt; trial continues if lower bound is crossed.
-#&gt; 
-#&gt;            Sample
-#&gt;             Size    ----Lower bounds----  ----Upper bounds-----
-#&gt;   Analysis Ratio*    Z   Nominal p Spend+   Z   Nominal p Spend++
-#&gt;          1  0.351 -20.00    0.0000  0.000  2.50    0.0063  0.0063
-#&gt;          2  0.703   0.76    0.7758  0.025 20.00    0.0000  0.0000
-#&gt;          3  1.054   2.04    0.9793  0.075  2.04    0.0207  0.0188
-#&gt;      Total                        0.1000                 0.0250 
-#&gt; + lower bound beta spending (under H1):
-#&gt;  User-specified spending function with Points = 0 0.25 1.
-#&gt; ++ alpha spending:
-#&gt;  User-specified spending function with Points = 0.25 0.25 1.
-#&gt; * Sample size ratio compared to fixed design with no interim
-#&gt; 
-#&gt; Boundary crossing probabilities and expected sample size
-#&gt; assume any cross stops the trial
-#&gt; 
-#&gt; Upper boundary (power or Type I Error)
-#&gt;           Analysis
-#&gt;    Theta      1 2      3  Total   E{N}
-#&gt;   0.0000 0.0063 0 0.0182 0.0245 0.7773
-#&gt;   3.2415 0.2822 0 0.6178 0.9000 0.8470
-#&gt; 
-#&gt; Lower boundary (futility or Type II Error)
-#&gt;           Analysis
-#&gt;    Theta 1      2      3  Total
-#&gt;   0.0000 0 0.7755 0.2001 0.9755
-#&gt;   3.2415 0 0.0250 0.0750 0.1000</div><div class='input'>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># example to specify spending on a pointwise basis</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span></span>
+<span class='r-in'>  k <span class='op'>=</span> <span class='fl'>6</span>, sfu <span class='op'>=</span> <span class='va'>sfPoints</span>, sfupar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.01</span>, <span class='fl'>.05</span>, <span class='fl'>.1</span>, <span class='fl'>.25</span>, <span class='fl'>.5</span>, <span class='fl'>1</span><span class='op'>)</span>,</span>
+<span class='r-in'>  test.type <span class='op'>=</span> <span class='fl'>2</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Symmetric two-sided group sequential design with</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Spending computations assume trial stops</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> if a bound is crossed.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            Sample</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Size </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis Ratio*  Z   Nominal p  Spend</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1  0.171 3.48    0.0002 0.0003</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2  0.342 3.07    0.0011 0.0010</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3  0.512 2.94    0.0017 0.0013</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          4  0.683 2.58    0.0050 0.0037</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          5  0.854 2.33    0.0099 0.0063</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          6  1.025 2.03    0.0211 0.0125</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Total                       0.0250 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ++ alpha spending:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  User-specified spending function with Points = 0.01 0.05 0.1 0.25 0.5 1.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Sample size ratio compared to fixed design with no interim</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Boundary crossing probabilities and expected sample size</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assume any cross stops the trial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper boundary (power or Type I Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3      4      5      6 Total   E{N}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.0002 0.0010 0.0013 0.0038 0.0063 0.0125 0.025 1.0171</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.0161 0.1072 0.1626 0.2666 0.2066 0.1409 0.900 0.7282</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lower boundary (futility or Type II Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta     1     2      3      4      5      6 Total</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 2e-04 0.001 0.0013 0.0038 0.0063 0.0125 0.025</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0e+00 0.000 0.0000 0.0000 0.0000 0.0000 0.000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># get proportion of upper spending under null hypothesis</span></span>
+<span class='r-in'><span class='co'># at each analysis</span></span>
+<span class='r-in'><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span><span class='op'>[</span>, <span class='fl'>1</span><span class='op'>]</span> <span class='op'>/</span> <span class='fl'>.025</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># change to cumulative proportion of spending</span></span>
+<span class='r-in'><span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>2</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>y</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>y</span><span class='op'>[</span><span class='va'>i</span> <span class='op'>-</span> <span class='fl'>1</span><span class='op'>]</span> <span class='op'>+</span> <span class='va'>y</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># this should correspond to input sfupar</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>y</span>, <span class='fl'>6</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.01 0.05 0.10 0.25 0.50 1.00</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot these cumulative spending points</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span> <span class='op'>/</span> <span class='fl'>6</span>, <span class='va'>y</span>,</span>
+<span class='r-in'>  main <span class='op'>=</span> <span class='st'>"Pointwise spending function example"</span>,</span>
+<span class='r-in'>  xlab <span class='op'>=</span> <span class='st'>"Proportion of final sample size"</span>,</span>
+<span class='r-in'>  ylab <span class='op'>=</span> <span class='st'>"Cumulative proportion of spending"</span>,</span>
+<span class='r-in'>  type <span class='op'>=</span> <span class='st'>"p"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># approximate this with a t-distribution spending function</span></span>
+<span class='r-in'><span class='co'># by fitting 3 points</span></span>
+<span class='r-in'><span class='va'>tx</span> <span class='op'>&lt;-</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span> <span class='op'>/</span> <span class='fl'>100</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>tx</span>, <span class='fu'><a href='sfTDist.html'>sfTDist</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='va'>tx</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>5</span><span class='op'>)</span> <span class='op'>/</span> <span class='fl'>6</span>, <span class='fl'>.01</span>, <span class='fl'>.1</span>, <span class='fl'>.5</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>.6</span>, y <span class='op'>=</span> <span class='fl'>.9</span>, labels <span class='op'>=</span> <span class='st'>"Pointwise Spending Approximated by"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>.6</span>, y <span class='op'>=</span> <span class='fl'>.83</span>, <span class='st'>"t-Distribution Spending with 3-point interpolation"</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='sfPoints-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># example without lower spending at initial interim or</span></span>
+<span class='r-in'><span class='co'># upper spending at last interim</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span></span>
+<span class='r-in'>  k <span class='op'>=</span> <span class='fl'>3</span>, sfu <span class='op'>=</span> <span class='va'>sfPoints</span>, sfupar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.25</span>, <span class='fl'>.25</span><span class='op'>)</span>,</span>
+<span class='r-in'>  sfl <span class='op'>=</span> <span class='va'>sfPoints</span>, sflpar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>.25</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Asymmetric two-sided group sequential design with</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper bound spending computations assume</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> trial continues if lower bound is crossed.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            Sample</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Size    ----Lower bounds----  ----Upper bounds-----</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis Ratio*    Z   Nominal p Spend+   Z   Nominal p Spend++</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1  0.351 -20.00    0.0000  0.000  2.50    0.0063  0.0063</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2  0.703   0.76    0.7758  0.025 20.00    0.0000  0.0000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3  1.054   2.04    0.9793  0.075  2.04    0.0207  0.0188</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Total                        0.1000                 0.0250 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> + lower bound beta spending (under H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  User-specified spending function with Points = 0 0.25 1.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ++ alpha spending:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  User-specified spending function with Points = 0.25 0.25 1.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Sample size ratio compared to fixed design with no interim</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Boundary crossing probabilities and expected sample size</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assume any cross stops the trial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper boundary (power or Type I Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1 2      3  Total   E{N}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.0063 0 0.0182 0.0245 0.7773</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.2822 0 0.6178 0.9000 0.8470</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lower boundary (futility or Type II Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta 1      2      3  Total</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0 0.7755 0.2001 0.9755</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0 0.0250 0.0750 0.1000</span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

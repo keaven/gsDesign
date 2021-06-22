@@ -70,9 +70,6 @@ documented there)." />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -147,7 +144,7 @@ passed in <code>param</code>. See examples below for a range of values of
 documented there).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sfPower</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span></pre>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>sfPower</span><span class='op'>(</span><span class='va'>alpha</span>, <span class='va'>t</span>, <span class='va'>param</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -195,72 +192,74 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
-<span class='co'># design a 4-analysis trial using a Kim-DeMets spending function</span>
-<span class='co'># for both lower and upper bounds</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>4</span>, sfu <span class='op'>=</span> <span class='va'>sfPower</span>, sfupar <span class='op'>=</span> <span class='fl'>3</span>, sfl <span class='op'>=</span> <span class='va'>sfPower</span>, sflpar <span class='op'>=</span> <span class='fl'>1.5</span><span class='op'>)</span>
-
-<span class='co'># print the design</span>
-<span class='va'>x</span>
-</div><div class='co'>#&gt; Asymmetric two-sided group sequential design with
-#&gt; 90 % power and 2.5 % Type I Error.
-#&gt; Upper bound spending computations assume
-#&gt; trial continues if lower bound is crossed.
-#&gt; 
-#&gt;            Sample
-#&gt;             Size    ----Lower bounds----  ----Upper bounds-----
-#&gt;   Analysis Ratio*   Z   Nominal p Spend+  Z   Nominal p Spend++
-#&gt;          1  0.282 -0.52    0.3015 0.0125 3.36    0.0004  0.0004
-#&gt;          2  0.564  0.53    0.7028 0.0229 2.76    0.0029  0.0027
-#&gt;          3  0.846  1.32    0.9072 0.0296 2.36    0.0092  0.0074
-#&gt;          4  1.128  2.03    0.9788 0.0350 2.03    0.0212  0.0145
-#&gt;      Total                        0.1000                 0.0250 
-#&gt; + lower bound beta spending (under H1):
-#&gt;  Kim-DeMets (power) spending function with rho = 1.5.
-#&gt; ++ alpha spending:
-#&gt;  Kim-DeMets (power) spending function with rho = 3.
-#&gt; * Sample size ratio compared to fixed design with no interim
-#&gt; 
-#&gt; Boundary crossing probabilities and expected sample size
-#&gt; assume any cross stops the trial
-#&gt; 
-#&gt; Upper boundary (power or Type I Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3      4  Total  E{N}
-#&gt;   0.0000 0.0004 0.0027 0.0073 0.0116 0.0221 0.579
-#&gt;   3.2415 0.0507 0.3248 0.3619 0.1626 0.9000 0.768
-#&gt; 
-#&gt; Lower boundary (futility or Type II Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3      4  Total
-#&gt;   0.0000 0.3015 0.4138 0.2008 0.0619 0.9779
-#&gt;   3.2415 0.0125 0.0229 0.0296 0.0350 0.1000</div><div class='input'>
-<span class='co'># plot the spending function using many points to obtain a smooth curve</span>
-<span class='co'># show rho=3 for approximation to O'Brien-Fleming and rho=.75 for</span>
-<span class='co'># approximation to Pocock design.</span>
-<span class='co'># Also show rho=2 for an intermediate spending.</span>
-<span class='co'># Compare these to Hwang-Shih-DeCani spending with gamma=-4,  -2,  1</span>
-<span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span> <span class='op'>/</span> <span class='fl'>100</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfPower</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>,
-  xlab <span class='op'>=</span> <span class='st'>"Proportion of sample size"</span>,
-  ylab <span class='op'>=</span> <span class='st'>"Cumulative Type I error spending"</span>,
-  main <span class='op'>=</span> <span class='st'>"Kim-DeMets (rho) versus Hwang-Shih-DeCani (gamma) Spending"</span>,
-  type <span class='op'>=</span> <span class='st'>"l"</span>, cex.main <span class='op'>=</span> <span class='fl'>.9</span>
-<span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfPower</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfPower</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='fl'>0.75</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfHSD.html'>sfHSD</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>3</span>, col <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfHSD.html'>sfHSD</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='op'>-</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>2</span>, col <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfHSD.html'>sfHSD</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='op'>-</span><span class='fl'>4</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>1</span>, col <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span>
-  x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.0</span>, <span class='fl'>.375</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fl'>.025</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.65</span>, <span class='fl'>1</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,
-  legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"rho= 3"</span>, <span class='st'>"rho= 2"</span>, <span class='st'>"rho= 0.75"</span><span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span>
-  x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.0</span>, <span class='fl'>.357</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fl'>.025</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.65</span>, <span class='fl'>.85</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, bty <span class='op'>=</span> <span class='st'>"n"</span>, col <span class='op'>=</span> <span class='fl'>2</span>,
-  legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gamma= -4"</span>, <span class='st'>"gamma= -2"</span>, <span class='st'>"gamma=1"</span><span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='img'><img src='sfPower-1.png' alt='' width='700' height='433' /></div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># design a 4-analysis trial using a Kim-DeMets spending function</span></span>
+<span class='r-in'><span class='co'># for both lower and upper bounds</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>4</span>, sfu <span class='op'>=</span> <span class='va'>sfPower</span>, sfupar <span class='op'>=</span> <span class='fl'>3</span>, sfl <span class='op'>=</span> <span class='va'>sfPower</span>, sflpar <span class='op'>=</span> <span class='fl'>1.5</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># print the design</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Asymmetric two-sided group sequential design with</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper bound spending computations assume</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> trial continues if lower bound is crossed.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            Sample</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Size    ----Lower bounds----  ----Upper bounds-----</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis Ratio*   Z   Nominal p Spend+  Z   Nominal p Spend++</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1  0.282 -0.52    0.3015 0.0125 3.36    0.0004  0.0004</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2  0.564  0.53    0.7028 0.0229 2.76    0.0029  0.0027</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3  0.846  1.32    0.9072 0.0296 2.36    0.0092  0.0074</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          4  1.128  2.03    0.9788 0.0350 2.03    0.0212  0.0145</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Total                        0.1000                 0.0250 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> + lower bound beta spending (under H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Kim-DeMets (power) spending function with rho = 1.5.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ++ alpha spending:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Kim-DeMets (power) spending function with rho = 3.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Sample size ratio compared to fixed design with no interim</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Boundary crossing probabilities and expected sample size</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assume any cross stops the trial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper boundary (power or Type I Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3      4  Total  E{N}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.0004 0.0027 0.0073 0.0116 0.0221 0.579</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.0507 0.3248 0.3619 0.1626 0.9000 0.768</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lower boundary (futility or Type II Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3      4  Total</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.3015 0.4138 0.2008 0.0619 0.9779</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.0125 0.0229 0.0296 0.0350 0.1000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot the spending function using many points to obtain a smooth curve</span></span>
+<span class='r-in'><span class='co'># show rho=3 for approximation to O'Brien-Fleming and rho=.75 for</span></span>
+<span class='r-in'><span class='co'># approximation to Pocock design.</span></span>
+<span class='r-in'><span class='co'># Also show rho=2 for an intermediate spending.</span></span>
+<span class='r-in'><span class='co'># Compare these to Hwang-Shih-DeCani spending with gamma=-4,  -2,  1</span></span>
+<span class='r-in'><span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>100</span> <span class='op'>/</span> <span class='fl'>100</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfPower</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>,</span>
+<span class='r-in'>  xlab <span class='op'>=</span> <span class='st'>"Proportion of sample size"</span>,</span>
+<span class='r-in'>  ylab <span class='op'>=</span> <span class='st'>"Cumulative Type I error spending"</span>,</span>
+<span class='r-in'>  main <span class='op'>=</span> <span class='st'>"Kim-DeMets (rho) versus Hwang-Shih-DeCani (gamma) Spending"</span>,</span>
+<span class='r-in'>  type <span class='op'>=</span> <span class='st'>"l"</span>, cex.main <span class='op'>=</span> <span class='fl'>.9</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfPower</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'>sfPower</span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='fl'>0.75</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfHSD.html'>sfHSD</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>3</span>, col <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfHSD.html'>sfHSD</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='op'>-</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>2</span>, col <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='va'>t</span>, <span class='fu'><a href='sfHSD.html'>sfHSD</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='va'>t</span>, <span class='op'>-</span><span class='fl'>4</span><span class='op'>)</span><span class='op'>$</span><span class='va'>spend</span>, lty <span class='op'>=</span> <span class='fl'>1</span>, col <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span></span>
+<span class='r-in'>  x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.0</span>, <span class='fl'>.375</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fl'>.025</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.65</span>, <span class='fl'>1</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,</span>
+<span class='r-in'>  legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"rho= 3"</span>, <span class='st'>"rho= 2"</span>, <span class='st'>"rho= 0.75"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span></span>
+<span class='r-in'>  x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.0</span>, <span class='fl'>.357</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fl'>.025</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.65</span>, <span class='fl'>.85</span><span class='op'>)</span>, lty <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, bty <span class='op'>=</span> <span class='st'>"n"</span>, col <span class='op'>=</span> <span class='fl'>2</span>,</span>
+<span class='r-in'>  legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gamma= -4"</span>, <span class='st'>"gamma= -2"</span>, <span class='st'>"gamma=1"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-plt'><img src='sfPower-1.png' alt='' width='700' height='433' /></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

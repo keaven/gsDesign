@@ -97,9 +97,6 @@ however." />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -201,7 +198,7 @@ must have <code>sum(gridwgts * density)</code> equal to 1; this is NOT checked,
 however.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gsCP</span><span class='op'>(</span><span class='va'>x</span>, theta <span class='op'>=</span> <span class='cn'>NULL</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='fl'>0</span>, r <span class='op'>=</span> <span class='fl'>18</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>gsCP</span><span class='op'>(</span><span class='va'>x</span>, theta <span class='op'>=</span> <span class='cn'>NULL</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='fl'>0</span>, r <span class='op'>=</span> <span class='fl'>18</span><span class='op'>)</span>
 
 <span class='fu'>gsPP</span><span class='op'>(</span>
   <span class='va'>x</span>,
@@ -227,7 +224,7 @@ however.</p>
 
 <span class='fu'>gsPOS</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>theta</span>, <span class='va'>wgts</span><span class='op'>)</span>
 
-<span class='fu'>gsCPOS</span><span class='op'>(</span><span class='va'>i</span>, <span class='va'>x</span>, <span class='va'>theta</span>, <span class='va'>wgts</span><span class='op'>)</span></pre>
+<span class='fu'>gsCPOS</span><span class='op'>(</span><span class='va'>i</span>, <span class='va'>x</span>, <span class='va'>theta</span>, <span class='va'>wgts</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -345,143 +342,158 @@ classical group sequential approaches. <em>Biometrics</em>;57:886-891.</p>
     <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
-<span class='co'># set up a group sequential design</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='co'>#&gt; Asymmetric two-sided group sequential design with
-#&gt; 90 % power and 2.5 % Type I Error.
-#&gt; Upper bound spending computations assume
-#&gt; trial continues if lower bound is crossed.
-#&gt; 
-#&gt;            Sample
-#&gt;             Size    ----Lower bounds----  ----Upper bounds-----
-#&gt;   Analysis Ratio*   Z   Nominal p Spend+  Z   Nominal p Spend++
-#&gt;          1  0.220 -0.90    0.1836 0.0077 3.25    0.0006  0.0006
-#&gt;          2  0.441 -0.04    0.4853 0.0115 2.99    0.0014  0.0013
-#&gt;          3  0.661  0.69    0.7563 0.0171 2.69    0.0036  0.0028
-#&gt;          4  0.881  1.36    0.9131 0.0256 2.37    0.0088  0.0063
-#&gt;          5  1.101  2.03    0.9786 0.0381 2.03    0.0214  0.0140
-#&gt;      Total                        0.1000                 0.0250 
-#&gt; + lower bound beta spending (under H1):
-#&gt;  Hwang-Shih-DeCani spending function with gamma = -2.
-#&gt; ++ alpha spending:
-#&gt;  Hwang-Shih-DeCani spending function with gamma = -4.
-#&gt; * Sample size ratio compared to fixed design with no interim
-#&gt; 
-#&gt; Boundary crossing probabilities and expected sample size
-#&gt; assume any cross stops the trial
-#&gt; 
-#&gt; Upper boundary (power or Type I Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3      4      5  Total   E{N}
-#&gt;   0.0000 0.0006 0.0013 0.0028 0.0062 0.0117 0.0226 0.5726
-#&gt;   3.2415 0.0417 0.1679 0.2806 0.2654 0.1444 0.9000 0.7440
-#&gt; 
-#&gt; Lower boundary (futility or Type II Error)
-#&gt;           Analysis
-#&gt;    Theta      1      2      3      4      5  Total
-#&gt;   0.0000 0.1836 0.3201 0.2700 0.1477 0.0559 0.9774
-#&gt;   3.2415 0.0077 0.0115 0.0171 0.0256 0.0381 0.1000</div><div class='input'>
-<span class='co'># set up a prior distribution for the treatment effect</span>
-<span class='co'># that is normal with mean .75*x$delta and standard deviation x$delta/2</span>
-<span class='va'>mu0</span> <span class='op'>&lt;-</span> <span class='fl'>.75</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span>
-<span class='va'>sigma0</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>/</span> <span class='fl'>2</span>
-<span class='va'>prior</span> <span class='op'>&lt;-</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span><span class='op'>(</span>mu <span class='op'>=</span> <span class='va'>mu0</span>, sigma <span class='op'>=</span> <span class='va'>sigma0</span><span class='op'>)</span>
-
-<span class='co'># compute POS for the design given the above prior distribution for theta</span>
-<span class='fu'>gsPOS</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 0.5954771</div><div class='input'>
-<span class='co'># assume POS should only count cases in prior where theta &gt;= x$delta/2</span>
-<span class='fu'>gsPOS</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span> <span class='op'>*</span> <span class='op'>(</span><span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>/</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 0.5554313</div><div class='input'>
-<span class='co'># assuming a z-value at lower bound at analysis 2, what are conditional</span>
-<span class='co'># boundary crossing probabilities for future analyses</span>
-<span class='co'># assuming theta values from x as well as a value based on the interim</span>
-<span class='co'># observed z</span>
-<span class='va'>CP</span> <span class='op'>&lt;-</span> <span class='fu'>gsCP</span><span class='op'>(</span><span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>2</span>, zi <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>
-<span class='va'>CP</span>
-</div><div class='co'>#&gt;               Lower bounds   Upper bounds
-#&gt;   Analysis N   Z   Nominal p  Z   Nominal p
-#&gt;          1  1 1.25    0.8952 4.71    0.0000
-#&gt;          2  1 1.96    0.9750 3.39    0.0003
-#&gt;          3  1 2.64    0.9959 2.64    0.0041
-#&gt; 
-#&gt; Boundary crossing probabilities and expected sample size assume
-#&gt; any cross stops the trial
-#&gt; 
-#&gt; Upper boundary (power or Type I Error)
-#&gt;           Analysis
-#&gt;     Theta     1      2      3  Total E{N}
-#&gt;   -0.0554 0e+00 0.0003 0.0019 0.0022  0.2
-#&gt;    0.0000 0e+00 0.0003 0.0022 0.0026  0.2
-#&gt;    3.2415 7e-04 0.1038 0.2631 0.3677  0.4
-#&gt; 
-#&gt; Lower boundary (futility or Type II Error)
-#&gt;           Analysis
-#&gt;     Theta      1      2      3  Total
-#&gt;   -0.0554 0.8999 0.0841 0.0138 0.9978
-#&gt;    0.0000 0.8952 0.0872 0.0150 0.9974
-#&gt;    3.2415 0.3950 0.1368 0.1006 0.6323</div><div class='input'>
-<span class='co'># summing values for crossing future upper bounds gives overall</span>
-<span class='co'># conditional power for each theta value</span>
-<span class='va'>CP</span><span class='op'>$</span><span class='va'>theta</span>
-</div><div class='co'>#&gt; [1] -0.05536767  0.00000000  3.24151555</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>CP</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/r/base/matmult.html'>%*%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='co'>#&gt;             [,1]
-#&gt; [1,] 0.002238566
-#&gt; [2,] 0.002561570
-#&gt; [3,] 0.367657693</div><div class='input'>
-<span class='co'># compute predictive probability based on above assumptions</span>
-<span class='fu'>gsPP</span><span class='op'>(</span><span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>2</span>, zi <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 0.06730167</div><div class='input'>
-<span class='co'># if it is known that boundary not crossed at interim 2, use</span>
-<span class='co'># gsCPOS to compute conditional POS based on this</span>
-<span class='fu'>gsCPOS</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 0.6114033</div><div class='input'>
-<span class='co'># 2-stage example to compare results to direct computation</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-<span class='va'>z1</span> <span class='op'>&lt;-</span> <span class='fl'>0.5</span>
-<span class='va'>n1</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
-<span class='va'>n2</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>
-<span class='va'>thetahat</span> <span class='op'>&lt;-</span> <span class='va'>z1</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n1</span><span class='op'>)</span>
-<span class='va'>theta</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>thetahat</span>, <span class='fl'>0</span>, <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span><span class='op'>)</span>
-
-<span class='co'># conditional power direct computation - comparison w gsCP</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>pnorm</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>n2</span> <span class='op'>*</span> <span class='va'>theta</span> <span class='op'>+</span> <span class='va'>z1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n1</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n1</span> <span class='op'>+</span> <span class='va'>n2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 0.03579292 0.01067483 0.51555676</div><div class='input'>
-<span class='fu'>gsCP</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span>
-</div><div class='co'>#&gt;            [,1]       [,2]      [,3]
-#&gt; [1,] 0.03579292 0.01067483 0.5155568</div><div class='input'>
-<span class='co'># predictive power direct computation - comparison w gsPP</span>
-<span class='co'># use same prior as above</span>
-<span class='va'>mu0</span> <span class='op'>&lt;-</span> <span class='fl'>.75</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>
-<span class='va'>sigma2</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='fl'>.5</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>
-<span class='va'>prior</span> <span class='op'>&lt;-</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span><span class='op'>(</span>mu <span class='op'>=</span> <span class='fl'>.75</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span>, sigma <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>/</span> <span class='fl'>2</span><span class='op'>)</span>
-<span class='fu'>gsPP</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, i <span class='op'>=</span> <span class='fl'>1</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 0.1556447</div><div class='input'><span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fl'>.5</span>
-<span class='va'>z1</span> <span class='op'>&lt;-</span> <span class='fl'>.5</span>
-<span class='va'>b</span> <span class='op'>&lt;-</span> <span class='va'>z1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span>
-<span class='co'># direct from Proschan, Lan and Wittes eqn 3.10</span>
-<span class='co'># adjusted drift at n.I[2]</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>pnorm</a></span><span class='op'>(</span><span class='op'>(</span><span class='op'>(</span><span class='va'>b</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>t</span> <span class='op'>*</span> <span class='va'>sigma2</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>t</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='va'>mu0</span> <span class='op'>+</span> <span class='va'>b</span> <span class='op'>*</span> <span class='va'>sigma2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>/</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>t</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>sigma2</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>t</span> <span class='op'>*</span> <span class='va'>sigma2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 0.1556447</div><div class='input'>
-<span class='co'># plot prior then posterior distribution for unblinded analysis with i=1, zi=1</span>
-<span class='va'>xp</span> <span class='op'>&lt;-</span> <span class='fu'>gsPosterior</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='fl'>1</span>, prior <span class='op'>=</span> <span class='va'>prior</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>z</span>, y <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>density</span>, type <span class='op'>=</span> <span class='st'>"l"</span>, col <span class='op'>=</span> <span class='fl'>2</span>, xlab <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='va'>theta</span><span class='op'>)</span>, ylab <span class='op'>=</span> <span class='st'>"Density"</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>z</span>, y <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>density</span>, col <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='input'>
-<span class='co'># add posterior plot assuming only knowlede that interim bound has</span>
-<span class='co'># not been crossed at interim 1</span>
-<span class='va'>xpb</span> <span class='op'>&lt;-</span> <span class='fu'>gsPosterior</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='fl'>1</span>, prior <span class='op'>=</span> <span class='va'>prior</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>xpb</span><span class='op'>$</span><span class='va'>z</span>, y <span class='op'>=</span> <span class='va'>xpb</span><span class='op'>$</span><span class='va'>density</span>, col <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
-</div><div class='img'><img src='gsCP-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># prediction interval based in interim 1 results</span>
-<span class='co'># start with point estimate, followed by 90% prediction interval</span>
-<span class='fu'>gsPI</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, j <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span>, level <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] 1.081745</div><div class='input'><span class='fu'>gsPI</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, j <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span>, level <span class='op'>=</span> <span class='fl'>.9</span><span class='op'>)</span>
-</div><div class='co'>#&gt; [1] -0.3793133  2.5428090</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># set up a group sequential design</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Asymmetric two-sided group sequential design with</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper bound spending computations assume</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> trial continues if lower bound is crossed.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            Sample</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Size    ----Lower bounds----  ----Upper bounds-----</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis Ratio*   Z   Nominal p Spend+  Z   Nominal p Spend++</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1  0.220 -0.90    0.1836 0.0077 3.25    0.0006  0.0006</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2  0.441 -0.04    0.4853 0.0115 2.99    0.0014  0.0013</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3  0.661  0.69    0.7563 0.0171 2.69    0.0036  0.0028</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          4  0.881  1.36    0.9131 0.0256 2.37    0.0088  0.0063</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          5  1.101  2.03    0.9786 0.0381 2.03    0.0214  0.0140</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Total                        0.1000                 0.0250 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> + lower bound beta spending (under H1):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Hwang-Shih-DeCani spending function with gamma = -2.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ++ alpha spending:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Hwang-Shih-DeCani spending function with gamma = -4.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * Sample size ratio compared to fixed design with no interim</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Boundary crossing probabilities and expected sample size</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> assume any cross stops the trial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper boundary (power or Type I Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3      4      5  Total   E{N}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.0006 0.0013 0.0028 0.0062 0.0117 0.0226 0.5726</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.0417 0.1679 0.2806 0.2654 0.1444 0.9000 0.7440</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lower boundary (futility or Type II Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    Theta      1      2      3      4      5  Total</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   0.0000 0.1836 0.3201 0.2700 0.1477 0.0559 0.9774</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   3.2415 0.0077 0.0115 0.0171 0.0256 0.0381 0.1000</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># set up a prior distribution for the treatment effect</span></span>
+<span class='r-in'><span class='co'># that is normal with mean .75*x$delta and standard deviation x$delta/2</span></span>
+<span class='r-in'><span class='va'>mu0</span> <span class='op'>&lt;-</span> <span class='fl'>.75</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span></span>
+<span class='r-in'><span class='va'>sigma0</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>/</span> <span class='fl'>2</span></span>
+<span class='r-in'><span class='va'>prior</span> <span class='op'>&lt;-</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span><span class='op'>(</span>mu <span class='op'>=</span> <span class='va'>mu0</span>, sigma <span class='op'>=</span> <span class='va'>sigma0</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># compute POS for the design given the above prior distribution for theta</span></span>
+<span class='r-in'><span class='fu'>gsPOS</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.5954771</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># assume POS should only count cases in prior where theta &gt;= x$delta/2</span></span>
+<span class='r-in'><span class='fu'>gsPOS</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span> <span class='op'>*</span> <span class='op'>(</span><span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span> <span class='op'>&gt;=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>/</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.5554313</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># assuming a z-value at lower bound at analysis 2, what are conditional</span></span>
+<span class='r-in'><span class='co'># boundary crossing probabilities for future analyses</span></span>
+<span class='r-in'><span class='co'># assuming theta values from x as well as a value based on the interim</span></span>
+<span class='r-in'><span class='co'># observed z</span></span>
+<span class='r-in'><span class='va'>CP</span> <span class='op'>&lt;-</span> <span class='fu'>gsCP</span><span class='op'>(</span><span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>2</span>, zi <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>CP</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               Lower bounds   Upper bounds</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis N   Z   Nominal p  Z   Nominal p</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1  1 1.25    0.8952 4.71    0.0000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2  1 1.96    0.9750 3.39    0.0003</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3  1 2.64    0.9959 2.64    0.0041</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Boundary crossing probabilities and expected sample size assume</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> any cross stops the trial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Upper boundary (power or Type I Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Theta     1      2      3  Total E{N}</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   -0.0554 0e+00 0.0003 0.0019 0.0022  0.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    0.0000 0e+00 0.0003 0.0022 0.0026  0.2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3.2415 7e-04 0.1038 0.2631 0.3677  0.4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lower boundary (futility or Type II Error)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           Analysis</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Theta      1      2      3  Total</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   -0.0554 0.8999 0.0841 0.0138 0.9978</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    0.0000 0.8952 0.0872 0.0150 0.9974</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    3.2415 0.3950 0.1368 0.1006 0.6323</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># summing values for crossing future upper bounds gives overall</span></span>
+<span class='r-in'><span class='co'># conditional power for each theta value</span></span>
+<span class='r-in'><span class='va'>CP</span><span class='op'>$</span><span class='va'>theta</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] -0.05536767  0.00000000  3.24151555</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>CP</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/r/base/matmult.html'>%*%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             [,1]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,] 0.002238566</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] 0.002561570</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [3,] 0.367657693</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># compute predictive probability based on above assumptions</span></span>
+<span class='r-in'><span class='fu'>gsPP</span><span class='op'>(</span><span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>2</span>, zi <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>lower</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.06730167</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># if it is known that boundary not crossed at interim 2, use</span></span>
+<span class='r-in'><span class='co'># gsCPOS to compute conditional POS based on this</span></span>
+<span class='r-in'><span class='fu'>gsCPOS</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.6114033</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># 2-stage example to compare results to direct computation</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gsDesign.html'>gsDesign</a></span><span class='op'>(</span>k <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>z1</span> <span class='op'>&lt;-</span> <span class='fl'>0.5</span></span>
+<span class='r-in'><span class='va'>n1</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>n2</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>thetahat</span> <span class='op'>&lt;-</span> <span class='va'>z1</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>theta</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>thetahat</span>, <span class='fl'>0</span>, <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># conditional power direct computation - comparison w gsCP</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>pnorm</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>n2</span> <span class='op'>*</span> <span class='va'>theta</span> <span class='op'>+</span> <span class='va'>z1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n1</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n1</span> <span class='op'>+</span> <span class='va'>n2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>n2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.03579292 0.01067483 0.51555676</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>gsCP</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, i <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>prob</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            [,1]       [,2]      [,3]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,] 0.03579292 0.01067483 0.5155568</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># predictive power direct computation - comparison w gsPP</span></span>
+<span class='r-in'><span class='co'># use same prior as above</span></span>
+<span class='r-in'><span class='va'>mu0</span> <span class='op'>&lt;-</span> <span class='fl'>.75</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sigma2</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='fl'>.5</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>n.I</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>prior</span> <span class='op'>&lt;-</span> <span class='fu'><a href='normalGrid.html'>normalGrid</a></span><span class='op'>(</span>mu <span class='op'>=</span> <span class='fl'>.75</span> <span class='op'>*</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span>, sigma <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>delta</span> <span class='op'>/</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>gsPP</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, i <span class='op'>=</span> <span class='fl'>1</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.1556447</span>
+<span class='r-in'><span class='va'>t</span> <span class='op'>&lt;-</span> <span class='fl'>.5</span></span>
+<span class='r-in'><span class='va'>z1</span> <span class='op'>&lt;-</span> <span class='fl'>.5</span></span>
+<span class='r-in'><span class='va'>b</span> <span class='op'>&lt;-</span> <span class='va'>z1</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='va'>t</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># direct from Proschan, Lan and Wittes eqn 3.10</span></span>
+<span class='r-in'><span class='co'># adjusted drift at n.I[2]</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>pnorm</a></span><span class='op'>(</span><span class='op'>(</span><span class='op'>(</span><span class='va'>b</span> <span class='op'>-</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>upper</span><span class='op'>$</span><span class='va'>bound</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>t</span> <span class='op'>*</span> <span class='va'>sigma2</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>t</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='va'>mu0</span> <span class='op'>+</span> <span class='va'>b</span> <span class='op'>*</span> <span class='va'>sigma2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>/</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>sqrt</a></span><span class='op'>(</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>t</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>sigma2</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>t</span> <span class='op'>*</span> <span class='va'>sigma2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.1556447</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># plot prior then posterior distribution for unblinded analysis with i=1, zi=1</span></span>
+<span class='r-in'><span class='va'>xp</span> <span class='op'>&lt;-</span> <span class='fu'>gsPosterior</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='fl'>1</span>, prior <span class='op'>=</span> <span class='va'>prior</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>z</span>, y <span class='op'>=</span> <span class='va'>xp</span><span class='op'>$</span><span class='va'>density</span>, type <span class='op'>=</span> <span class='st'>"l"</span>, col <span class='op'>=</span> <span class='fl'>2</span>, xlab <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='va'>theta</span><span class='op'>)</span>, ylab <span class='op'>=</span> <span class='st'>"Density"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/points.html'>points</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>z</span>, y <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>density</span>, col <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># add posterior plot assuming only knowlede that interim bound has</span></span>
+<span class='r-in'><span class='co'># not been crossed at interim 1</span></span>
+<span class='r-in'><span class='va'>xpb</span> <span class='op'>&lt;-</span> <span class='fu'>gsPosterior</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='fl'>1</span>, prior <span class='op'>=</span> <span class='va'>prior</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>xpb</span><span class='op'>$</span><span class='va'>z</span>, y <span class='op'>=</span> <span class='va'>xpb</span><span class='op'>$</span><span class='va'>density</span>, col <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span></span>
+<span class='r-plt'><img src='gsCP-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># prediction interval based in interim 1 results</span></span>
+<span class='r-in'><span class='co'># start with point estimate, followed by 90% prediction interval</span></span>
+<span class='r-in'><span class='fu'>gsPI</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, j <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span>, level <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1.081745</span>
+<span class='r-in'><span class='fu'>gsPI</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>x</span>, i <span class='op'>=</span> <span class='fl'>1</span>, zi <span class='op'>=</span> <span class='va'>z1</span>, j <span class='op'>=</span> <span class='fl'>2</span>, theta <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>z</span>, wgts <span class='op'>=</span> <span class='va'>prior</span><span class='op'>$</span><span class='va'>wgts</span>, level <span class='op'>=</span> <span class='fl'>.9</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] -0.3793133  2.5428090</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
