@@ -1,3 +1,7 @@
+# gsDesign 3.2.1 (June, 2021)
+
+- Only update is to change gt package usage in a vignette
+
 # gsDesign 3.2.0 (January, 2021)
 
 - Substantially updated unit testing to increase code coverage above 80%
