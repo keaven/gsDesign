@@ -21,5 +21,5 @@ Thus, the intent of the gsDesign package is to easily create, fully characterize
 Updates in late 2018 and early 2019 largely enabled by Metrum Research Group (Devin Pastoor, Harsh Baid, Jonathan Sidi).
 These include, but are not limited to, converting unit testing to use testthat package as well as developing the github web pages and implementing covrpage to document unit testing. 
 Yilong Zhang implemented 3.1.1 continuous integration at github.
-2020 collaborations with Cytel, Inc. increased unit testing coverage to > 80% from essential unit testing done long ago.
+2020 collaborations with Cytel, Inc. increased unit testing coverage to > 80% in version 3.2.0 from essential unit testing done long ago.
 Much earlier development, testing and documentation help were lead largely by Bill Constantine and Rich Calaway while they were with Revolution Computing. Thanks to John Lueders for his excellent and extensive collaboration building the Shiny app.
