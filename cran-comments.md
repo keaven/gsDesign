@@ -1,6 +1,10 @@
 # Version 3.2.1 June, 2021
 
-- Only change was a fix a warning due to deprecated gt package function
+- Initiating change was a fix a warning due to deprecated gt package function; this has been fixed.
+- Also following up on additional comments from CRAN reviewer
+    - Updated DESCRIPTION file as requested.
+    - 
+
 
 # Test environments
 
