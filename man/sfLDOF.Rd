@@ -46,8 +46,8 @@ For \code{rho} otherwise in \code{[.005,2]}, this is the generalized version of 
 For \code{param} outside of \code{[.005,2]}, \code{rho} is set to 1. The Lan-DeMets (1983)
 spending function to approximate a Pocock design is implemented in the
 function \code{sfLDPocock()}:
-\deqn{f(t;\alpha)=ln(1+(e-1)t).}{f(t;alpha)=ln(1+(e-1)t).} As shown in
-examples below, other spending functions can be used to get as good or
+\deqn{f(t;\alpha)=\alpha ln(1+(e-1)t).}{f(t;alpha)= alpha ln(1+(e-1)t).} As shown in
+examples below, other spending functions can be used to ge t as good or
 better approximations to Pocock and O'Brien-Fleming bounds. In particular,
 O'Brien-Fleming bounds can be closely approximated using
 \code{\link{sfExponential}}.

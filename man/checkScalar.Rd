@@ -67,6 +67,17 @@ expected to be.}
 case it is a vector. If \code{length=NULL}, the default, then no length
 check is performed.}
 }
+\value{
+No return value, called for side effects
+
+No return value, called for side effects
+
+No return value, called for side effects
+
+No return value, called for side effects
+
+Boolean value as checking result
+}
 \description{
 Utility functions to verify an objects's properties including whether it is
 a scalar or vector, the class, the length, and (if numeric) whether the

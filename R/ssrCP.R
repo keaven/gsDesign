@@ -424,8 +424,10 @@ ssrCP <- function(z1, theta = NULL, maxinc = 2, overrun = 0,
 # plot.ssrCP function [sinew] ----
 plot.ssrCP <- function(x, z1ticks = NULL, mar = c(7, 4, 4, 4) + .1, ylab = "Adapted sample size", xlaboffset = -.2, lty = 1, col = 1, ...) {
   graphics::par(mar = mar)
+  on.exit(par(graphics::par(mar = mar)))
   plot(x$dat$z1, x$dat$n2, type = "l", axes = FALSE, xlab = "", ylab = "", lty = lty, col = col, ...)
   xlim <- graphics::par("usr")[1:2] # get x-axis range
+  on.exit(par(xlim)) 
   graphics::axis(side = 2, ...)
   graphics::mtext(side = 2, ylab, line = 2, ...)
   w <- x$x$timing[1]

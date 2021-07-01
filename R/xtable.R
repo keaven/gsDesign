@@ -1,7 +1,9 @@
 # xtable.gsDesign roxy [sinew] ----
+#' @title Tables for ...
 #' @seealso 
 #'  \code{\link[stats]{Normal}}
 #'  \code{\link[xtable]{xtable}}
+#' @return An object of class "xtable" with attributes specifying formatting options for a table
 #' @importFrom stats pnorm
 #' @export
 # xtable.gsDesign function [sinew] ----

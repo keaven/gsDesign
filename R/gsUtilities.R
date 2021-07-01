@@ -1,4 +1,5 @@
 # checkLengths roxy [sinew] ----
+#' @return No return value, called for side effects
 #' @rdname checkScalar
 #' @export
 # checkLengths function [sinew] ----
@@ -21,6 +22,7 @@ checkLengths <- function(..., allowSingle = FALSE) {
 }
 
 # checkRange roxy [sinew] ----
+#' @return No return value, called for side effects
 #' @rdname checkScalar
 #' @export
 # checkRange function [sinew] ----
@@ -110,6 +112,7 @@ checkRange <- function(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = d
 #' test in the \code{\link{checkLengths}} function. Partial matching on the
 #' name of this argument is not performed so you must specify 'allowSingle' in
 #' its entirety in the call.
+#' @return No return value, called for side effects
 #' @examples
 #' 
 #' # check whether input is an integer
@@ -181,6 +184,7 @@ checkScalar <- function(x, isType = "numeric", ...) {
 }
 
 # checkVector roxy [sinew] ----
+#' @return No return value, called for side effects
 #' @rdname checkScalar
 #' @export
 #' @importFrom methods is
@@ -223,6 +227,7 @@ checkVector <- function(x, isType = "numeric", ..., length = NULL) {
 }
 
 # isInteger roxy [sinew] ----
+#' @return Boolean value as checking result
 #' @rdname checkScalar
 #' @export
 # isInteger function [sinew] ----
@@ -252,6 +257,7 @@ checkMD5 <- function(package = "gsDesign", dir) {
   nmxx <- nmxx[!(nmxx %in% ignore)]
 
   dot <- getwd()
+  on.exit(setwd(dot))  
   setwd(dir)
   x <- tools::md5sum(dir(dir, recursive = TRUE))
   setwd(dot)
