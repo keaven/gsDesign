@@ -228,6 +228,17 @@ hypothesis.</p>
   overrun <span class='op'>=</span> <span class='fl'>0</span>,
   usTime <span class='op'>=</span> <span class='cn'>NULL</span>,
   lsTime <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
+
+<span class='co'># S3 method for gsDesign</span>
+<span class='fu'><a href='xtable.html'>xtable</a></span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  caption <span class='op'>=</span> <span class='cn'>NULL</span>,
+  label <span class='op'>=</span> <span class='cn'>NULL</span>,
+  align <span class='op'>=</span> <span class='cn'>NULL</span>,
+  digits <span class='op'>=</span> <span class='cn'>NULL</span>,
+  display <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
 <span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -391,6 +402,78 @@ determined by <code>timing</code>. Otherwise, this should be a vector of length
 determined by <code>timing</code>. Otherwise, this should be a vector of length 
 <code>k</code> with the spending time at each analysis (see Details).</p></td>
     </tr>
+    <tr>
+      <th>x</th>
+      <td><p>An <span style="R">R</span> object of class found among <code>methods(xtable)</code>.  See
+    below on how to write additional method functions for <code>xtable</code>.</p></td>
+    </tr>
+    <tr>
+      <th>caption</th>
+      <td><p>Character vector of length 1 or 2 containing the
+    table's caption or title.  If length is 2, the second item is the
+    "short caption" used when LaTeX generates a "List of Tables". Set to
+    <code>NULL</code> to suppress the caption.  Default value is <code>NULL</code>.</p></td>
+    </tr>
+    <tr>
+      <th>label</th>
+      <td><p>Character vector of length 1 containing the LaTeX label
+    or HTML anchor. Set to <code>NULL</code> to suppress the label.  Default
+    value is <code>NULL</code>.</p></td>
+    </tr>
+    <tr>
+      <th>align</th>
+      <td><p>Character vector of length equal to the number of columns
+    of the resulting table, indicating the alignment of the corresponding
+    columns.  Also, <code>"|"</code> may be used to produce vertical lines
+    between columns in LaTeX tables, but these are effectively ignored
+    when considering the required length of the supplied vector.  If a
+    character vector of length one is supplied, it is split as
+    <code>strsplit(align, "")[[1]]</code> before processing. Since the row
+    names are printed in the first column, the length of <code>align</code> is
+    one greater than <code>ncol(x)</code> if <code>x</code> is a
+    <code>data.frame</code>. Use <code>"l"</code>, <code>"r"</code>, and <code>"c"</code> to
+    denote left, right, and center alignment, respectively.  Use
+    <code>"p{3cm}"</code> etc. for a LaTeX column of the specified width. For
+    HTML output the <code>"p"</code> alignment is interpreted as <code>"l"</code>,
+    ignoring the width request. Default depends on the class of
+    <code>x</code>.</p></td>
+    </tr>
+    <tr>
+      <th>digits</th>
+      <td><p>Numeric vector of length equal to one (in which case it will be
+    replicated as necessary) or to the number of columns of the
+    resulting table <b>or</b> matrix of the same size as the resulting
+    table, indicating the number of digits to display in the
+    corresponding columns. Since the row names are printed in the first
+    column, the length of the vector <code>digits</code> or the number of
+    columns of the matrix <code>digits</code> is one greater than
+    <code>ncol(x)</code> if <code>x</code> is a <code>data.frame</code>. Default depends
+    on the class of <code>x</code>. If values of <code>digits</code> are negative, the
+    corresponding values of <code>x</code> are displayed in scientific format
+    with <code>abs(digits)</code> digits.</p></td>
+    </tr>
+    <tr>
+      <th>display</th>
+      <td><p>Character vector of length equal to the number of columns of the
+    resulting table, indicating the format for the corresponding columns.
+    Since the row names are printed in the first column, the length of
+    <code>display</code> is one greater than <code>ncol(x)</code> if <code>x</code> is a
+    <code>data.frame</code>.  These values are passed to the <code>formatC</code>
+    function.  Use <code>"d"</code> (for integers), <code>"f"</code>, <code>"e"</code>,
+    <code>"E"</code>, <code>"g"</code>, <code>"G"</code>, <code>"fg"</code> (for reals), or
+    <code>"s"</code> (for strings).  <code>"f"</code> gives numbers in the usual
+    <code>xxx.xxx</code> format; <code>"e"</code> and <code>"E"</code> give
+    <code>n.ddde+nn</code> or <code>n.dddE+nn</code> (scientific format); <code>"g"</code>
+    and <code>"G"</code> put <code>x[i]</code> into scientific format only if it
+    saves space to do so.  <code>"fg"</code> uses fixed format as <code>"f"</code>,
+    but <code>digits</code> as number of <em>significant</em> digits.  Note that
+    this can lead to quite long result strings.  Default depends on the
+    class of <code>x</code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Additional arguments.  (Currently ignored.)</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -445,6 +528,8 @@ information-based-design, this would give the expected information when the
 trial stops. If <code>overrun</code> is specified, the expected sample size
 includes the overrun at each interim.</p></dd>
 
+An object of class "xtable" with attributes specifying formatting options for a table
+
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The manual is not linked to this help file, but is available in
@@ -462,7 +547,9 @@ group sequential trials with random information levels. <em>Journal of biopharma
 
     <div class='dont-index'><p><a href='gsDesign-package-overview.html'>gsDesign package overview</a>, <a href='gsBoundSummary.html'>gsBoundSummary</a>, 
 <a href='plot.gsDesign.html'>plot.gsDesign</a>,
-<code><a href='gsProbability.html'>gsProbability</a></code>, <a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>,</p></div>
+<code><a href='gsProbability.html'>gsProbability</a></code>, <a href='Spending_Function_Overview.html'>Spending_Function_Overview</a>,</p>
+<p><code><a href='https://rdrr.io/r/stats/Normal.html'>Normal</a></code>
+ <code><a href='https://rdrr.io/pkg/xtable/man/xtable.html'>xtable</a></code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Keaven Anderson <a href='mailto:keaven\_anderson@merck.'>keaven\_anderson@merck.</a></p>

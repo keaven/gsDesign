@@ -97,7 +97,7 @@ If n is not ordered (a bad idea) or not sequential (maybe OK), be
 aware of possible consequences.
 nBinomial1Sample is based on code from Marc Schwartz marc_schwartz@me.com. 
 The possible sample size vector n needs to be selected in such a fashion
-that it covers the possible range of values that include the true minima. 
+that it covers the possible range of values that include the true minimum. 
 NOTE: the one-sided evaluation of significance is more conservative than using the 2-sided exact test in binom.test." />
 
 
@@ -232,7 +232,7 @@ If <code>n</code> is not ordered (a bad idea) or not sequential (maybe OK), be
 aware of possible consequences.</p>
 <p><code>nBinomial1Sample</code> is based on code from Marc Schwartz marc_schwartz@me.com. 
 The possible sample size vector <code>n</code> needs to be selected in such a fashion
-that it covers the possible range of values that include the true minima. 
+that it covers the possible range of values that include the true minimum. 
 NOTE: the one-sided evaluation of significance is more conservative than using the 2-sided exact test in <code>binom.test</code>.</p>
     </div>
 
@@ -254,6 +254,9 @@ NOTE: the one-sided evaluation of significance is more conservative than using t
 <span class='op'>)</span>
 
 <span class='co'># S3 method for gsBinomialExact</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for binomialSPRT</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, plottype <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>nBinomial1Sample</span><span class='op'>(</span>
@@ -327,7 +330,7 @@ of <code>n</code> and output will be in a data frame.</p></td>
       <td><p>Item of class <code>gsBinomialExact</code> or <code>binomialSPRT</code> for
 <code>print.gsBinomialExact</code>. Item of class <code>gsBinomialExact</code> for
 <code>plot.gsBinomialExact</code>. Item of class <code>binomialSPRT</code> for item of
-class <code>binomialSPRT</code>.</p></td>
+class <code>plot.binomialSPRT</code>.</p></td>
     </tr>
     <tr>
       <th>plottype</th>
@@ -445,7 +448,7 @@ marc_schwartz@me.com.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "gsBinomialExact" "gsProbability"  </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># because of "gsProbability" class above, following is equivalent to</span></span>
-<span class='r-in'><span class='co'># print.gsProbability(zz)</span></span>
+<span class='r-in'><span class='co'># \code{print.gsProbability(zz)}</span></span>
 <span class='r-in'><span class='va'>zz</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>               Bounds</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   Analysis   N   a   b</span>
@@ -485,6 +488,7 @@ marc_schwartz@me.com.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>     0.8 0 0.0000 0.0000 0.0000</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>     0.9 0 0.0000 0.0000 0.0000</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>     1.0 0 0.0000 0.0000 0.0000</span>
+<span class='r-in'></span>
 <span class='r-in'><span class='co'># also plot (see also plots below for \code{binomialSPRT})</span></span>
 <span class='r-in'><span class='co'># add lines using geom_line()</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>zz</span><span class='op'>)</span> <span class='op'>+</span> </span>
@@ -552,7 +556,9 @@ marc_schwartz@me.com.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1 0.05 0.2 0.025  0.2 39 6 0.01230419 0.8199868</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># what happens if input sample sizes not sufficient?</span></span>
-<span class='r-in'><span class='co'># nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span> </span>
+<span class='r-in'>  <span class='fu'>nBinomial1Sample</span><span class='op'>(</span>p0 <span class='op'>=</span> <span class='fl'>0.05</span>, p1 <span class='op'>=</span> <span class='fl'>0.2</span>, alpha <span class='op'>=</span> <span class='fl'>0.025</span>, beta <span class='op'>=</span> <span class='fl'>.2</span>, n <span class='op'>=</span> <span class='fl'>25</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
