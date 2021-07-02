@@ -8,6 +8,7 @@
 #' @inheritParams xtable::xtable      
 #' @return An object of class "xtable" with attributes specifying formatting options for a table
 #' @importFrom stats pnorm
+#' @rdname gsDesign
 #' @export
 # xtable.gsDesign function [sinew] ----
 xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digits = NULL, 
