@@ -107,5 +107,5 @@ xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digit
 #' @importFrom xtable xtable
 #' @rdname xtable
 #' @name xtable
-#' @export
+#' @return an object of class "xtable"
 NULL

@@ -68,15 +68,8 @@ case it is a vector. If \code{length=NULL}, the default, then no length
 check is performed.}
 }
 \value{
-No return value, called for side effects
-
-No return value, called for side effects
-
-No return value, called for side effects
-
-No return value, called for side effects
-
-Boolean value as checking result
+\code{isInteger}: Boolean value as checking result
+Other functions have no return value, called for side effects
 }
 \description{
 Utility functions to verify an objects's properties including whether it is
