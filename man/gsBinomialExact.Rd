@@ -237,8 +237,9 @@ zz <- gsBinomialExact(
 class(zz)
 
 # because of "gsProbability" class above, following is equivalent to
-# print.gsProbability(zz)
+# \code{print.gsProbability(zz)}
 zz
+
 # also plot (see also plots below for \code{binomialSPRT})
 # add lines using geom_line()
 plot(zz) + 
@@ -279,7 +280,9 @@ nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, conse
  outtype = 2)
 
 # what happens if input sample sizes not sufficient?
-# nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)
+\dontrun{ 
+  nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)
+}
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential
