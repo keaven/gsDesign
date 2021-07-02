@@ -5,17 +5,7 @@
 #'  \code{\link[stats]{Normal}}
 #'  \code{\link[xtable]{xtable}}
 #'  
-#' @param x An R object of class found among methods...
-#' @param caption Character vector as table's caption or title. Default value is NULL and will suppress the caption. 
-#' @param label Character vector as table's LaTeX label or HTML anchor. Default value is NULL and will suppress the label.
-#' @param align Character vector of length equal to the number of columns of the resulting table, 
-#'              indicating the alignment of the corresponding columns.
-#' @param digits Numeric vector of length equal to one (in which case it will be replicated as necessary) 
-#'               or to the number of columns of the resulting table or matrix of the same size as the resulting table, 
-#'               indicating the number of digits to display in the corresponding columns.
-#' @param display	Character vector of length equal to the number of columns of the resulting table, 
-#'                indicating the format for the corresponding columns.
-#' @param ... Additional arguments       
+#' @inheritParams xtable::xtable      
 #' @return An object of class "xtable" with attributes specifying formatting options for a table
 #' @importFrom stats pnorm
 #' @export
