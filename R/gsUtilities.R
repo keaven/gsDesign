@@ -110,6 +110,9 @@ checkRange <- function(x, interval = 0:1, inclusion = c(TRUE, TRUE), varname = d
 #' test in the \code{\link{checkLengths}} function. Partial matching on the
 #' name of this argument is not performed so you must specify 'allowSingle' in
 #' its entirety in the call.
+#' @return 
+#' \code{isInteger}: Boolean value as checking result
+#' Other functions have no return value, called for side effects
 #' @examples
 #' 
 #' # check whether input is an integer
@@ -252,6 +255,7 @@ checkMD5 <- function(package = "gsDesign", dir) {
   nmxx <- nmxx[!(nmxx %in% ignore)]
 
   dot <- getwd()
+  on.exit(setwd(dot))  
   setwd(dir)
   x <- tools::md5sum(dir(dir, recursive = TRUE))
   setwd(dot)

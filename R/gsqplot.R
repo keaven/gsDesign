@@ -681,6 +681,8 @@ plotsf <- function(x,
   t <- 0:40 / 40 * xmax
 
   if (x$test.type > 2 && base) {
+    oldpar <- par(no.readonly = TRUE)    
+    on.exit(par(oldpar))
     graphics::par(mai = mai, oma = oma)
   }
   if (base) {
@@ -699,6 +701,8 @@ plotsf <- function(x,
   if (x$test.type > 2) {
     if (base) {
       graphics::legend(x = c(.0, .43), y = x$alpha * c(.85, 1), lty = lty, col = col, lwd = lwd, legend = legtext)
+      oldpar <- par(no.readonly = TRUE)    
+      on.exit(par(oldpar))
       graphics::par(new = TRUE)
       graphics::plot(t, x$lower$sf(x$beta, t, x$lower$param)$spend,
         ylim = c(0, x$beta), type = "l", ylab = ylab,

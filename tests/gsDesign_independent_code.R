@@ -1029,7 +1029,8 @@ save_gg_plot <- function(code, width = 4, height = 4) {
 save_gr_plot <- function(code, width = 400, height = 400) {
   path <- tempfile(fileext = ".png")
   png(path, width = width, height = height)
-  on.exit(dev.off())
+  oldpar <- par(no.readonly = TRUE)    
+  on.exit(par(oldpar))
   code
   path
 }

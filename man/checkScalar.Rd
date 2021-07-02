@@ -67,6 +67,10 @@ expected to be.}
 case it is a vector. If \code{length=NULL}, the default, then no length
 check is performed.}
 }
+\value{
+\code{isInteger}: Boolean value as checking result
+Other functions have no return value, called for side effects
+}
 \description{
 Utility functions to verify an objects's properties including whether it is
 a scalar or vector, the class, the length, and (if numeric) whether the

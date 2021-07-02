@@ -1,7 +1,12 @@
 # xtable.gsDesign roxy [sinew] ----
+#' @title Summary table of gsDesign using xtable
+#' 
 #' @seealso 
 #'  \code{\link[stats]{Normal}}
 #'  \code{\link[xtable]{xtable}}
+#'  
+#' @inheritParams xtable::xtable      
+#' @return An object of class "xtable" with attributes specifying formatting options for a table
 #' @importFrom stats pnorm
 #' @export
 # xtable.gsDesign function [sinew] ----
@@ -102,5 +107,5 @@ xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digit
 #' @importFrom xtable xtable
 #' @rdname xtable
 #' @name xtable
-#' @export
+#' @return an object of class "xtable"
 NULL

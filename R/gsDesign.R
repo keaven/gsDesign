@@ -608,7 +608,7 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
 #' # default plot for gsDesign object shows boundaries
 #' plot(x)
 #' 
-#' # plottype=2 shows boundary crossing probabilities
+#' # \code{plottype=2} shows boundary crossing probabilities
 #' plot(x, plottype = 2)
 #' 
 #' # now add boundary crossing probabilities and
@@ -616,8 +616,8 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
 #' y <- gsProbability(d = x, theta = x$delta * seq(0, 2, .25))
 #' class(y)
 #' 
-#' # note that "y" below is equivalent to print(y) and
-#' # print.gsProbability(y)
+#' # note that "y" below is equivalent to \code{print(y)} and
+#' # \code{print.gsProbability(y)}
 #' y
 #' 
 #' # the plot does not change from before since this is a

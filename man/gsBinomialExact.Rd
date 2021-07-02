@@ -5,6 +5,7 @@
 \alias{print.gsBinomialExact}
 \alias{binomialSPRT}
 \alias{plot.gsBinomialExact}
+\alias{plot.binomialSPRT}
 \alias{nBinomial1Sample}
 \title{One-Sample Binomial Routines}
 \usage{
@@ -26,6 +27,8 @@ binomialSPRT(
 )
 
 \method{plot}{gsBinomialExact}(x, plottype = 1, ...)
+
+\method{plot}{binomialSPRT}(x, plottype = 1, ...)
 
 nBinomial1Sample(
   p0 = 0.9,
@@ -72,7 +75,7 @@ of \code{n} and output will be in a data frame.}
 \item{x}{Item of class \code{gsBinomialExact} or \code{binomialSPRT} for
 \code{print.gsBinomialExact}. Item of class \code{gsBinomialExact} for
 \code{plot.gsBinomialExact}. Item of class \code{binomialSPRT} for item of
-class \code{binomialSPRT}.}
+class \code{plot.binomialSPRT}.}
 
 \item{plottype}{1 produces a plot with counts of response at bounds (for
 \code{binomialSPRT}, also produces linear SPRT bounds); 2 produces a plot
@@ -214,7 +217,7 @@ aware of possible consequences.
 
 \code{nBinomial1Sample} is based on code from Marc Schwartz marc_schwartz@me.com. 
 The possible sample size vector \code{n} needs to be selected in such a fashion
-that it covers the possible range of values that include the true minima. 
+that it covers the possible range of values that include the true minimum. 
 NOTE: the one-sided evaluation of significance is more conservative than using the 2-sided exact test in \code{binom.test}.
 }
 \note{
@@ -234,8 +237,9 @@ zz <- gsBinomialExact(
 class(zz)
 
 # because of "gsProbability" class above, following is equivalent to
-# print.gsProbability(zz)
+# \code{print.gsProbability(zz)}
 zz
+
 # also plot (see also plots below for \code{binomialSPRT})
 # add lines using geom_line()
 plot(zz) + 
@@ -276,7 +280,9 @@ nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, conse
  outtype = 2)
 
 # what happens if input sample sizes not sufficient?
-# nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)
+\dontrun{ 
+  nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)
+}
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential

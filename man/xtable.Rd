@@ -3,6 +3,9 @@
 \name{xtable}
 \alias{xtable}
 \title{xtable}
+\value{
+an object of class "xtable"
+}
 \description{
 xtable
 }
