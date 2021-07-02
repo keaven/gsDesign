@@ -1,8 +1,10 @@
 # xtable.gsDesign roxy [sinew] ----
-#' @title Tables for ...
+#' @title Summary table of gsDesign using xtable
+#' 
 #' @seealso 
 #'  \code{\link[stats]{Normal}}
 #'  \code{\link[xtable]{xtable}}
+#'  
 #' @param x An R object of class found among methods...
 #' @param caption Character vector as table's caption or title. Default value is NULL and will suppress the caption. 
 #' @param label Character vector as table's LaTeX label or HTML anchor. Default value is NULL and will suppress the label.
