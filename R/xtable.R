@@ -3,6 +3,8 @@
 #' @seealso 
 #'  \code{\link[stats]{Normal}}
 #'  \code{\link[xtable]{xtable}}
+#' @param x An R object of class found among methods...
+#' @inheritParams xtable::xtable
 #' @return An object of class "xtable" with attributes specifying formatting options for a table
 #' @importFrom stats pnorm
 #' @export
