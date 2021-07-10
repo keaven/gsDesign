@@ -1,6 +1,8 @@
-# gsDesign 3.2.1 (June, 2021)
+# gsDesign 3.2.1 (July, 2021)
 
-- Only update is to change gt package usage in a vignette
+- Changed gt package usage in a vignette due to deprecated gt function
+- Replied to minor comments from CRAN reviewer (no functionality impact)
+- Minor update to DESCRIPTION citing Jennison and Turnbull reference
 
 # gsDesign 3.2.0 (January, 2021)
 
