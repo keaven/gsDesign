@@ -1,5 +1,5 @@
 ---
-title: "Two-sample normal sample size computation"
+title: "Two-sample normal sample size"
 output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
 vignette: >

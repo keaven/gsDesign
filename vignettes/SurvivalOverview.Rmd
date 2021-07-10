@@ -1,5 +1,5 @@
 ---
-title: "Overview of design and evaluation of trials with time-to-event outcomes"
+title: "Overview of survival endpoint design"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
