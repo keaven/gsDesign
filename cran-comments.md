@@ -2,6 +2,9 @@
 
 - Have the issues why your package was archived been fixed?
   + Yes, the issue was due to deprecated `gt` package function; this has been fixed.
+  + Removed docs folder per automated review
+  + The other NOTE seems to be about the archived status and/or spell check of reference requested by CRAN reviewer in DESCRIPTION file; note that Jennison and Turnbull where checked as possibly incorrect, but they are correct.
+
   
 - Also following up on additional comments from CRAN reviewer
     - Updated DESCRIPTION file to add references describing the methods.
