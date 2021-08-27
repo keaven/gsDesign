@@ -1,0 +1,329 @@
+---
+title: "A cure model calendar-based design"
+author: "Keaven Anderson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: gsDesign.bib
+vignette: >
+  %\VignetteIndexEntry{A cure model calendar-based design}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+
+---
+
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
+# Libraries required
+library(gsDesign)
+library(dplyr)
+library(tibble)
+library(ggplot2)
+library(gt)
+```
+
+# Introduction
+
+We present a study design for a time-to-event outcome based on an underlying Poisson mixture model @PoissonMixture2009.
+The Poisson mixture model is a cure model that can be useful when the failure rate in a population is expected to decline substantially over time based on historical data.
+It also has the property that if control group time-to-event follows a Poisson mixture distribution, then a proportional hazards assumption for treatment effect will yield another Poisson mixture distribution for the experimental group.
+The model is flexible and easy to use in that the control distribution is specified with two parameters in a transparent fashion: the cure rate and one other survival rate at an arbitrarily specified time point.
+
+We illustrate the model distribution and the resulting expected accumulation of events which will slow over time.
+Finally, we design a trial and illustrate some pragmatic issues.
+In particular, we design with calendar-based timing and spending @LanDeMets1989 and discuss some of the potential advantages of this approach in this application where hazard rates for events decrease substantially over time.
+
+# Design Assumptions
+
+Following are assumptions used below.
+
+```{r}
+# Control group assumptions for Poisson mixture cure model
+cure_rate <- .4
+# Second time point
+t1 <- 12
+# Survival rate at 2nd time point
+s1 <- .65
+time_unit = "month"
+# Hazard ratio for experimental versus control
+hr <- .75
+# Total study duration
+study_duration <- 60
+# Number of bins for piecewise approximation
+bins <- 10
+# Enrollment duration
+enroll_duration <- 12
+# 1-sided Type I error
+alpha <- 0.025
+# Type II error (1 - power)
+beta <- .1
+# Test type 6: asymmetric 2-sided design, non-binding futility bound
+test.type <- 6
+# 1-sided Type I error used for safety (for 2-sided asymmetric design)
+astar <- .1
+# Spending functions
+sfu <- sfLDOF
+sfupar <- NULL
+sfl <- sfLDPocock
+sflpar <- NULL
+# Interim analysis timing (information fraction)
+timing <- c(.1,.3,.6,.8,.9, .95)
+# Dropout rate (exponential parameter per unit of time)
+dropout_rate <- 0.002
+# Experimental / control randomization ratio
+ratio <- 1
+```
+
+# The Poisson Mixture Model
+
+The Poisson mixture model @PoissonMixture2009 is applied to account for a failure rate that is assumed to be decreasing over time.
+It is a mixture of patients suffering disease recurrence and others who have excellent long-term results. 
+The model assumes a cure rate $p$ to represent the patients who benefit long-term.
+The survival function as a function of time $t$ for a control group ($c$) is:
+
+$$S_c(t)=\exp(-\theta(1-\exp(-\lambda t))),$$
+where $\theta = -\log(p)$, $\lambda> 0$ is a constant hazard rate and $t\ge 0$.
+The component $\exp(-\lambda t)$ is an exponential survival distribution; while it could be replace with an arbitrary survival distribution for the mixture model, the exponential model is simple, adequately flexible and easy to explain.
+This two-parameter model can be specified by the cure rate and the assumed survival rate $S_c(t_1)$ at some time $0 <t_1<\infty.$
+For this study, the control group cure rate is assumed to be `r cure_rate` and the survival at `r time_unit` is assumed to be `r s1`.
+We can solve for $\theta$ and $\lambda$ as follows:
+
+```{r}
+theta <- -log(cure_rate)
+lambda <- -log(1 + log(s1) / theta) / t1
+```
+
+
+We note that under a proportional hazards assumption with hazard ratio $\gamma > 0$ the survival funtion for the experimental group (e) is:
+
+library$$S_e(t)=\exp(-\theta\gamma(1-\exp(-\lambda t))).$$
+For the setting, it is good to cite published literature and other rationale for study assumptions.
+
+
+The points in the following graph indicate where underlying cumulative hazard matches the piecewise exponential of the specified cure rate model.
+The piecewise failure model is used to derive the sample size and targeted events over time in the trial.
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, out.width="100%"}
+t <- seq(0, study_duration, study_duration / bins)
+control <- tibble(Treatment="Control", Time = t, Survival = exp(-theta * (1 - exp(-lambda * t))))
+experimental <- tibble(Treatment="Experimental", Time = t, Survival = exp(-theta * hr * (1 - exp(-lambda * t))))
+survival <- rbind(control, experimental)
+ggplot(survival, aes(x=Time,y=Survival, col=Treatment))+ geom_point() + scale_x_continuous(breaks = seq(0,study_duration, study_duration / bins)) + 
+  geom_line()  +
+  ggtitle("Poisson Mixture Model with Proportional Hazards") +
+  theme(legend.position="bottom",
+        legend.title=element_text(size=10), 
+        legend.text=element_text(size=9),
+        title =element_text(size=8))
+```
+
+We also evaluate the control failure rate over time. This is later used in the design derivation.
+
+```{r, out.width="100%", echo = FALSE}
+control <- control %>%
+           mutate(cumulative_hazard = -log(Survival),
+                  time_lagged = lag(Time, default = 0), 
+                  hazard_rate = (cumulative_hazard - lag(cumulative_hazard, default = 0))/
+                                 (Time - time_lagged)   
+           )
+control <- control %>% filter(!is.na(hazard_rate))
+ggplot(control,
+       aes(x = time_lagged, xend = Time, y = hazard_rate, yend = hazard_rate)) + 
+  geom_step() +
+  ylim(0, max(control$hazard_rate)) +
+  ylab("Hazard rate") +
+  xlab("Time") +
+  ggtitle("Step Function Approximated Hazard Rate for Cure Model", 
+          subtitle = "Control Group") +
+  theme(legend.position="bottom",
+        legend.title=element_text(size=10), 
+        legend.text=element_text(size=9),
+        title =element_text(size=8))
+```
+
+
+# Study Design and Event Accumulation
+
+We now assume a trial is enrolled with a constant enrollment rate over `r enroll_duration` months trial duration of `r study_duration`.
+
+```{r}
+design <- 
+  gsSurv(k = length(timing) + 1,
+         alpha = alpha,
+         beta = beta,
+         timing = timing,
+         hr = hr,
+         lambdaC = control$hazard_rate,
+         S = (control$Time - control$time_lagged)[-nrow(control)],
+         R = enroll_duration,
+         T = study_duration,
+         minfup = study_duration - enroll_duration,
+         ratio = ratio,
+         test.type = test.type,
+         sfu = sfu,
+         sfupar = sfupar,
+         sfl = sfl,
+         sflpar = sflpar)
+```
+
+Summarize design
+
+```{r, echo = FALSE}
+cat(summary(design))
+```
+
+```{r}
+design %>% gsBoundSummary() %>% gt()
+```
+
+
+# Expected Event Accumulation Over Time
+
+Event accumulation over time can be very sensitive to many trial design assumptions.
+For this case, we are mainly trying to mimic a slowing of event accumulation over time.
+In the table above, it is easy to see that expected accumulation of events slows drastically as time goes by.
+It will be key to consider how the trial will adapt if assumptions are violated to the extent that event accumulation is meaningfully different than anticipated.
+One possibility would be to design with analyses at planned calendar times.
+To facilitate this, we consider the expected event accumulation over time as a proportion of the final planned event count.
+The key to this is the `nEventsIA()` function to get the expected event count at a given calendar time.
+This event count as a fraction of the final event count will then be used as the targeted information when designing the trial. 
+
+We first plot the event accumulation in the above design by calendar time post study initiation.
+We then overlay the percent of final events at 6 months, and annually for years 1 through 5.
+
+```{r}
+# Calendar times
+ti <- seq(0, study_duration, 1)
+# Placeholder for expected event counts
+n <- ti
+# Compute expected events by month (note we keep 0 at month 0)
+for(i in seq_along(ti[-1])){
+  n[i+1] <- nEventsIA(tIA = ti[i + 1], x = design)
+}
+# Now do a line plot of % of final events by month
+ev <- tibble(Month=ti, ev = n/max(n)*100)
+p <- ggplot(ev, aes(x=Month, y= ev)) + geom_line() + 
+      ylab("% of Final Events") + xlab("Study Time") + 
+      scale_x_continuous(breaks = seq(0, 60, 6)) +
+      scale_y_continuous(breaks = seq(0, 100, 10))
+# Add text overlay at targeted analysis times 
+subti <- c(6, 12, 24, 36, 48, 60)
+subpct <- n[subti + 1] / n[61] * 100
+txt <- tibble(Month = subti, ev = subpct, txt = paste(as.character(round(subpct, 1)), '%', sep=''))
+p + geom_label(data = txt, aes(x = Month, y= ev, label=txt))
+```
+
+# Calendar Spending Design
+
+The event accumulation pattern is highly sensitive to the assumptions of the design.
+Changes in the hazard ratio overall or over time as well as relatively minor deviations from the cure model assumption could substantially change the calendar time of event-based analysis timing.
+Thus, calendar-based timing and spending @LanDeMets1989 may have some appeal to make the design more predictable.
+The main risk to this would likely be under-accumulation of the final targeted events for the trial.
+The targeted 5-year window may be considered clinically important as well as an important limitation for trial duration.
+Using the above predicted information fractions at 6, 12, 24, 36, 48, and 60 months to plan a calendar-based design.
+We use the arguments `usTime` and `lsTime` to change to calendar-based spending for the upper and lower bounds, respectively.
+However, the pattern of slowing event accumulation over time after year 1 seems reasonably likely to persist.
+This means that calendar-based spending is likely to give more conservative bounds since the calendar fractions are lower than the information fractions in the text overlay of the plot after the first interim: 10%, 20%, 40%, 60%, 80% and 100%, respectively.
+
+We now use the information fractions from the text overlay to set up a calendar-based design.
+
+```{r}
+# Event fraction from targeted times above
+timing_calendar <- txt$ev / 100
+# Only change to gsSurv call is timing
+design_calendar <- 
+  gsSurv(k = length(timing_calendar),
+         alpha = alpha,
+         beta = beta,
+         hr =  hr,
+         timing = timing_calendar,
+         lambdaC = control$hazard_rate,
+         S = (control$Time - control$time_lagged)[-nrow(control)],
+         R = enroll_duration,
+         T = study_duration,
+         minfup = study_duration - enroll_duration,
+         ratio = ratio,
+         test.type = test.type,
+         sfu = sfu,
+         sfupar = sfupar,
+         usTime = timing_calendar,
+         sfl = sfl,
+         sflpar = sflpar,
+         lsTime = timing_calendar)
+design_calendar %>%
+  gsBoundSummary() %>%
+  gt() %>% 
+   tab_header(title = "Calendar-Based Design",
+                 subtitle = "Calendar Spending")
+  
+```
+
+
+There are a few things to note for the above design:
+
+- The futility bounds are advisory only. In particular, the late futility bounds may be ignored since the follow-up for the full time period may merit continuing the trial.
+- Substantial deviations in event accumulation would not change timing of analyses from their calendar times. This should be considered for acceptability at the time of design.
+- The first efficacy bound is so extreme that it essentially makes the first analysis futility only. This is likely reasonable based on the minimal follow-up at that time.
+- The Z-values and hazard ratios required for a positive efficacy finding are not terribly extreme starting from the two-year follow-up analysis. This is also probably reasonable as long as the hazard ratio differences at the bounds are clinically meaningful. A more extreme finding at year 1 may likely be required for a positive finding.
+- The trial may be continued after crossing an efficacy bound for further follow-up as it is unlikely that control patients doing well would cross over to experimental therapy in absence of adverse clinical outcomes. Inference at subsequent analyses using repeated p-values @JTBook or sequential p-values @LiuAnderson2008 are well-specified and interpretable as adjusted p-values.
+
+# Updating bounds at time of analysis
+
+We update bounds based on observed calendar timing and event counts at the first 3 interim analyses.
+We assume these occur at times 8 months, 13 months and 22 months with 44, 170, and 300 events, respecitively.
+At the future analyses, we assume some method has been used to project 390, 420, and 450 at the last 3 analyses.
+
+```{r}
+# input actual analysis times for IA 1, 2, 3
+# assume planned times for later analyses
+analysis_times <- c(8, 13, 22, 36, 48, 60)
+
+# input actual events for IA 1, 2, 3
+# assume newly projected event counts for analyses 4, 5, 6
+actual_events <- c(44, 170, 300, 390, 420, 450)
+```
+
+
+Based on the above, we update calendar fraction at analyses relative to planned study duration.
+
+```{r}
+calendar_fraction <- analysis_times / max(design_calendar$T)
+```
+
+```{r}
+x <- design_calendar # just to shorten code below
+updated_design <- gsDesign(
+  k = length(analysis_times),
+  alpha = x$alpha,
+  beta = x$beta,
+  maxn.IPlan = x$n.I[x$k],
+  n.I = actual_events,
+  sfu = x$upper$sf,
+  sfupar = x$upper$param,
+  sfl = x$lower$sf,
+  sflpar = x$lower$param,
+  delta = x$delta,
+  delta1 = x$delta1,
+  delta0 = x$delta0,
+  usTime = calendar_fraction, 
+  lsTime = calendar_fraction
+)
+```
+
+There is a problem in the following that will need to be fixed.
+
+```{r}
+gsBoundSummary(
+  updated_design,
+  deltaname = "HR",
+  logdelta = TRUE,
+  Nname = "Events",
+  exclude = c(
+    "B-value", "CP", "CP H1", "PP", # "Spending",
+    paste0("P(Cross) if HR=", round(c(x$hr0, x$hr), digits = 2))
+  )
+) %>% gt()
+```
+
+
+
+# References
+
