@@ -264,6 +264,7 @@ gsPP <- function(x, i = 1, zi = 0, theta = c(0, 3), wgts = c(.5, .5), r = 18, to
   checkVector(theta, "numeric", c(-Inf, Inf), c(FALSE, FALSE))
   checkLengths(theta, wgts)
   checkScalar(r, "integer", c(1, 80))
+  if (!(is.numeric(zi) &  length(zi) == 1)) stop("zi must be single, real value")
   cp <- gsCP(x = x, i = i, theta = theta, zi = zi, r = r)
   gsDen <- stats::dnorm(zi, mean = sqrt(x$n.I[i]) * theta) * wgts
   pp <- cp$upper$prob %*% gsDen / sum(gsDen)
