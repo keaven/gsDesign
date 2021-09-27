@@ -185,14 +185,8 @@ hGraph <- function(
                           offset = NULL, xradius = NULL, yradius = NULL, x = NULL, y = NULL, wchar='w')
   { if (!is.character(nameHypotheses)) stop("Hypotheses should be in a vector of character strings")
     ntxt <- length(nameHypotheses)
-    testthat::test_that("Each radius should be a single positive number",{
-      testthat::expect_type(xradius, "double")
-      testthat::expect_type(yradius, "double")
-      testthat::expect_equal(length(xradius),1)
-      testthat:: expect_equal(length(yradius),1)
-      testthat::expect_gt(xradius, 0)
-      testthat::expect_gt(yradius, 0)
-    })
+    if(!(is.numeric(xradius) & length(xradius) != 1 & xradius > 0)) stop("xradius must be positive, > 0 and length 1")
+    if(!(is.numeric(yradius) & length(yradius) != 1 & yradius > 0)) stop("yradius must be positive, > 0 and length 1")
     # length of fill should be same as ntxt
     if(length(fill) != 1 & length(fill) != ntxt) stop("fill must have length 1 or number of hypotheses")
   }
