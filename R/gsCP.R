@@ -216,14 +216,9 @@ gsCP <- function(x, theta = NULL, i = 1, zi = 0, r = 18) {
   }
 
   test.type <- ifelse(methods::is(x, "gsProbability"), 3, x$test.type)
-
-  if (zi > x$upper$bound[i]) {
-    stop("gsCP must have x$lower$bound[i] <= zi <= x$upper$bound[i]")
-  }
-  else if (test.type > 1 && zi < x$lower$bound[i]) {
-    stop("gsCP must have x$lower$bound[i]<=zi<=x$upper$bound[i]")
-  }
-
+  
+  stopifnot(is.numeric(zi) & length(zi) == 1) 
+  
   if (is.null(theta)) theta <- c(zi/sqrt(x$n.I[i]), 0, x$delta)
 
   knew <- x$k - i
@@ -262,6 +257,9 @@ gsPP <- function(x, i = 1, zi = 0, theta = c(0, 3), wgts = c(.5, .5), r = 18, to
   if (!(methods::is(x, "gsProbability") || methods::is(x, "gsDesign"))) {
     stop("gsPP: class(x) must be gsProbability or gsDesign")
   }
+  
+  stopifnot(is.numeric(zi) & length(zi) == 1) 
+  
   test.type <- ifelse(methods::is(x, "gsProbability"), 3, x$test.type)
   checkScalar(i, "integer", c(1, x$k - 1))
   checkScalar(zi, "numeric", c(-Inf, Inf), c(FALSE, FALSE))
