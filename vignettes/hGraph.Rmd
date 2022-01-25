@@ -17,19 +17,16 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(gsDesign)
 library(dplyr)
 library(gridExtra)
 ```
 
-
-
-
 With version 3.1, we have added a function to support graphical multiplicity methods using ***ggplot2***.
 The graphical method is introduced nicely in @Bretz2011 and supported by the ***gMCP*** package (@gMCP).
 It was extended to group sequential design by @MaurerBretz2013.
-While the ***gMCP*** 
+While the ***gMCP***
 package supports graphics, here we add the `hGraph()` function to create multiplicity graphs using the ***ggplot2*** package as a convenience for those desiring this format.
 We demonstrate basic formatting in this article and demonstrate use with ***gMCP*** elsewhere.
 
@@ -41,21 +38,19 @@ Use of `hGraph()` is organized as follows:
 - Specifying the transition matrix between hypotheses
 - Using colors and legends
 
-
 # The basic graph layout
 
 We begin with the default plot to demonstrate the basic formatting below.
 Hypthoses and initial $\alpha$-allocation or weighting are presented in shaded ellipses with the first hyothesis specified in the upper-left part of the  plot.
 While the user has full control of ellipse placement and color, the default is to present clockwise on a larger ellipse with gray shading.
 One advantage of default placement is that generally transition lines between hypotheses will not cross hypothesis ellipses, including when the graph is updated when some hypotheses are rejected.
-Transition weights between hypotheses are specified on directional lines between the hypothesis ellipses. 
+Transition weights between hypotheses are specified on directional lines between the hypothesis ellipses.
 Try this in a plot window. Note the effect if you change the size of the plot window.
 In a similar fashion, if you are using R Markdown, `fig.width` and `fig.height` parameters will affect formatting.
 
 ```{r, message=FALSE, fig.width=7.5, fig.height=4}
 hGraph()
 ```
-
 
 # Specifying hypothesis names and $\alpha$-allocation
 
@@ -66,21 +61,21 @@ The character used for weights (specified in `wchar`) is by default $\alpha$ und
 Note the clockwise placement of hypotheses.
 
 ```{r, fig.width=7.5, fig.height=4.5}
-hGraph(nHypotheses = 3,
-       nameHypotheses = c("HA\n First", "HC\n Second", "HB\n Third"),
-       alphaHypotheses = c(.2, .3, .5),
-       wchar = 'w' # character before weights
+hGraph(
+  nHypotheses = 3,
+  nameHypotheses = c("HA\n First", "HC\n Second", "HB\n Third"),
+  alphaHypotheses = c(.2, .3, .5),
+  wchar = "w" # Character before weights
 )
 ```
-
 
 # Text formatting and location, ellipse size
 
 You can specify location of hypothesis ellipses in two ways.
 
-- For the first, specify in radians where on the large ellipse  where the first hypothesis is placed.
+- For the first, specify in radians where on the large ellipse where the first hypothesis is placed.
 Setting $\pi/2$ for `radianStart` places the first hypothesis at the center and top of the plot (left plot).
-- Specifying `x` and `y` coordinates, right graph, allows custom placement; note that the differences in minimum and maximum x- and y-values you use as well as window size will impact formatting. 
+- Specifying `x` and `y` coordinates, right graph, allows custom placement; note that the differences in minimum and maximum x- and y-values you use as well as window size will impact formatting.
 
 Ellipse and the text size as well as maximum significant digits for hypotheses are controlled as follows:
 
@@ -98,25 +93,26 @@ Box and text size as well as maximum significant digit display for transition we
 
 The other parameter shown here is `offset` (left graph). This is in radians; it increases and decreases offset of transition lines between hypothesis ellipses. If there are not any transition arrows in both directions between any pair of hypotheses, `offset = 0` is a reasonable option.
 
-
 ```{r, message=FALSE, fig.width=8, fig.height=4}
 grid.arrange(
-  # left graph in figure
-  hGraph(nHypotheses = 3,
-         size = 5, # decrease hypothesis text size from default 6
-         halfWid = 1.25, # increase ellipse width from default 0.5
-         trhw = 0.25, # increase transition box sizes from default 0.075
-         radianStart = pi/2, # first hypothesis top middle
-         offset = pi/20, # decrease offset between transition lines
-         arrowsize = .03 # increase from default 0.02
+  # Left graph in figure
+  hGraph(
+    nHypotheses = 3,
+    size = 5, # Decrease hypothesis text size from default 6
+    halfWid = 1.25, # Increase ellipse width from default 0.5
+    trhw = 0.25, # Increase transition box sizes from default 0.075
+    radianStart = pi / 2, # First hypothesis top middle
+    offset = pi / 20, # Decrease offset between transition lines
+    arrowsize = .03 # Increase from default 0.02
   ),
-  # right graph in figure
-  hGraph(nHypotheses = 3,
-       x = c(-1, 1, -1), # custom placement using x and y
-       y = c(1, 1, -1),
-       halfWid = 0.7, # increase ellipse width from default 0.5
-       boxtextsize = 3, # decrease box text size from default 4
-       trprop = .15 # slide transition boxes closer to initiating hypothesis
+  # Right graph in figure
+  hGraph(
+    nHypotheses = 3,
+    x = c(-1, 1, -1), # Custom placement using x and y
+    y = c(1, 1, -1),
+    halfWid = 0.7, # Increase ellipse width from default 0.5
+    boxtextsize = 3, # Decrease box text size from default 4
+    trprop = .15 # Slide transition boxes closer to initiating hypothesis
   ),
   nrow = 1
 )
@@ -131,21 +127,22 @@ Colors are specified as follows:
 - A `fill` color category; here we group the first 2 hypotheses and last 2 hypotheses (both graphs)
 - The `palette` specifies a palette for the colors (right graph)
 
-
-
 ```{r,fig.width=7.5,fig.height=4}
 grid.arrange(
-  # left graph in figure
-  hGraph(fill=c(1,1,2,2),
-         alphaHypotheses = c(.2,.2,.2,.4) * .025),
-  # right graph in figure
-  hGraph(fill=c(1,1,2,2),
-         palette = c("pink", "lightblue"),
-         alphaHypotheses = c(.2,.2,.2,.4) * .025),
+  # Left graph in figure
+  hGraph(
+    fill = c(1, 1, 2, 2),
+    alphaHypotheses = c(.2, .2, .2, .4) * .025
+  ),
+  # Right graph in figure
+  hGraph(
+    fill = c(1, 1, 2, 2),
+    palette = c("pink", "lightblue"),
+    alphaHypotheses = c(.2, .2, .2, .4) * .025
+  ),
   nrow = 1
 )
 ```
-
 
 Next, we add a legend.
 
@@ -154,12 +151,13 @@ Next, we add a legend.
 - `labels` specifies labels corresponding to the `fill` parameter
 
 ```{r,fig.width=7.5,fig.height=4}
-hGraph(nHypotheses = 3,
-       fill = c(1,1,2),
-       palette = c("yellow", "lightblue"),
-       legend.name = "Color scheme",
-       labels = c("Primary", "Secondary"),
-       legend.position = c(.75,.25)
+hGraph(
+  nHypotheses = 3,
+  fill = c(1, 1, 2),
+  palette = c("yellow", "lightblue"),
+  legend.name = "Color scheme",
+  labels = c("Primary", "Secondary"),
+  legend.position = c(.75, .25)
 )
 ```
 
@@ -167,21 +165,21 @@ hGraph(nHypotheses = 3,
 
 Transition weights are specified in matrix format in the variable `m`.
 The matrix must be square of dimension `nHypotheses` and have 0 on the diagonal.
-Rows respresent the hypotheses from which transitions start; row values should sum to 1.
+Rows represent the hypotheses from which transitions start; row values should sum to 1.
 Columns represent the hypotheses to which transition arrows go.
 Any transition weight of 0 has no corresponding transition line in the figure.
 
 ```{r,fig.width=7.5,fig.height=4}
-hGraph(nHypotheses = 3, 
-       m = matrix(c(0, 1, 0, 
-                    .2, 0, .8,
-                    .3, .7, 0),
-                  nrow=3, byrow=TRUE),
+hGraph(
+  nHypotheses = 3,
+  m = matrix(c(
+    0, 1, 0,
+    .2, 0, .8,
+    .3, .7, 0
+  ),
+  nrow = 3, byrow = TRUE
+  ),
 )
 ```
-
-
-
-
 
 # References

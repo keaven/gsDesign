@@ -1016,7 +1016,6 @@ Validate_comp_sprt_bnd <- function(alpha, beta, p0, p1, nmin, nmax) {
 save_gg_plot <- function(code, width = 4, height = 4) {
   path <- tempfile(fileext = ".png")
   ggsave(path, plot = code, width = width, height = height, dpi = 72, units = "in")
-  code
   path
 }
 
@@ -1029,9 +1028,10 @@ save_gg_plot <- function(code, width = 4, height = 4) {
 save_gr_plot <- function(code, width = 400, height = 400) {
   path <- tempfile(fileext = ".png")
   png(path, width = width, height = height)
-  oldpar <- par(no.readonly = TRUE)    
+  oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
   code
+  invisible(dev.off())
   path
 }
 #-------------------------------------------------------------------------------

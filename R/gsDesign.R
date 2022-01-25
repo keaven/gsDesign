@@ -649,7 +649,6 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
 #' @export
 #' @aliases print.gsProbability
 #' @rdname gsProbability
-#' @importFrom methods is
 #' @useDynLib gsDesign probrej
 # gsProbability function [sinew] ----
 gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0) {
@@ -660,7 +659,7 @@ gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0
   checkVector(theta, "numeric")
 
   if (k == 0) {
-    if (!methods::is(d, "gsDesign")) {
+    if (!inherits(d, "gsDesign")) {
       stop("d should be an object of class gsDesign")
     }
     return(gsDProb(theta = theta, d = d))
