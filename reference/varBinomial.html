@@ -444,10 +444,10 @@ formulae. <em>Biometrics</em>; 52: 71-76.</p>
 <span class="r-in"><span class="co"># (you may want to perform more to reduce standard error of estimate)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">x0</span><span class="op">)</span> <span class="op">&lt;=</span></span>
 <span class="r-in">  <span class="fu">simBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.078</span>, p2 <span class="op">=</span> <span class="fl">.078</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, nsim <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">10000</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0171</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">x0</span><span class="op">)</span> <span class="op">&lt;=</span></span>
 <span class="r-in">  <span class="fu">simBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.052</span>, p2 <span class="op">=</span> <span class="fl">.052</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, nsim <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">10000</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0178</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Perform a non-inferiority test to see if p2=400 / 500 is within 5% of</span></span>
 <span class="r-in"><span class="co"># p1=410 / 500 use a z-statistic with unadjusted variance</span></span>
@@ -469,7 +469,7 @@ formulae. <em>Biometrics</em>; 52: 71-76.</p>
 <span class="r-in"><span class="co"># now simulate the z-statistic witthout continuity corrected variance</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">.975</span><span class="op">)</span> <span class="op">&lt;=</span></span>
 <span class="r-in">  <span class="fu">simBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.8</span>, p2 <span class="op">=</span> <span class="fl">.8</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, nsim <span class="op">=</span> <span class="fl">100000</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">100000</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.02442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.02531</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># compute a sample size to show non-inferiority</span></span>
 <span class="r-in"><span class="co"># with 5% margin, 90% power</span></span>
@@ -535,13 +535,13 @@ formulae. <em>Biometrics</em>; 52: 71-76.</p>
 <span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, size <span class="op">=</span> <span class="fl">200</span>, p <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># blinded estimate of risk difference variance</span></span>
 <span class="r-in"><span class="fu">varBinomial</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, n <span class="op">=</span> <span class="fl">300</span>, ratio <span class="op">=</span> <span class="fl">2</span>, delta0 <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.001981833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.001769833</span>
 <span class="r-in"><span class="co"># blinded estimate of log-risk-ratio variance</span></span>
 <span class="r-in"><span class="fu">varBinomial</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, n <span class="op">=</span> <span class="fl">300</span>, ratio <span class="op">=</span> <span class="fl">2</span>, delta0 <span class="op">=</span> <span class="fl">0</span>, scale <span class="op">=</span> <span class="st">"RR"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.08074468</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0947561</span>
 <span class="r-in"><span class="co"># blinded estimate of log-odds-ratio variance</span></span>
 <span class="r-in"><span class="fu">varBinomial</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, n <span class="op">=</span> <span class="fl">300</span>, ratio <span class="op">=</span> <span class="fl">2</span>, delta0 <span class="op">=</span> <span class="fl">0</span>, scale <span class="op">=</span> <span class="st">"OR"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1135312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1271306</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
