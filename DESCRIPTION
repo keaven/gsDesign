@@ -1,21 +1,30 @@
 Package: gsDesign
 Version: 3.2.1.9000
 Title: Group Sequential Design
-Description: Derives group sequential clinical trial designs and describes their properties. Particular focus on time-to-event, binary and continuous outcomes. Largely based on methods described in Jennison, Christopher and Turnbull, Bruce W., 2000, "Group Sequential Methods with Applications to Clinical Trials" ISBN: 0-8493-0316-8. 
+Description: Derives group sequential clinical trial designs and describes
+    their properties. Particular focus on time-to-event, binary, and
+    continuous outcomes. Largely based on methods described in
+    Jennison, Christopher and Turnbull, Bruce W., 2000,
+    "Group Sequential Methods with Applications to Clinical Trials"
+    ISBN: 0-8493-0316-8.
 Authors@R: person(given = "Keaven", family = "Anderson", email =
           "keaven_anderson@merck.com", role = c('aut','cre'))
 Depends: R (>= 3.5.0), ggplot2 (>= 0.9.2)
 License: GPL (>= 3)
-Imports: stats,
-         magrittr,
-         rlang,
-         methods,
-         graphics,
-         tools,
-         dplyr,
-         tidyr,
-         xtable
-Suggests: 
+URL: https://keaven.github.io/gsDesign/, https://github.com/keaven/gsDesign
+BugReports: https://github.com/keaven/gsDesign/issues
+Encoding: UTF-8
+Imports:
+    stats,
+    magrittr,
+    rlang,
+    methods,
+    graphics,
+    tools,
+    dplyr,
+    tidyr,
+    xtable
+Suggests:
     knitr,
     scales,
     rmarkdown,
@@ -28,5 +37,4 @@ Suggests:
     mvtnorm
 VignetteBuilder: knitr
 Copyright: Copyright 2010, Merck Research Laboratories
-RoxygenNote: 7.1.1
-Encoding: UTF-8
+RoxygenNote: 7.1.2
