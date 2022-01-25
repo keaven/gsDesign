@@ -61,7 +61,7 @@ sequentialPValue <- function(gsD = gsDesign(),
                              usTime = NULL,
                              interval=c(.00001,.9999)){
   # check that gsD has class "gsDesign" (note: this includes "gsSurv" type)
-  if (!methods::is(gsD, "gsDesign")) stop("d should be an object of class gsDesign or gsSurv")
+  if (!inherits(gsD, "gsDesign")) stop("d should be an object of class gsDesign or gsSurv")
   # check that gsD$test.type is 1,4 or 6
   if(max(gsD$test.type == c(1,4,6)) != 1) stop("gsD$test.type must be 1, 4, or 6 (no binding lower bound allowed)")
   # if n.I not specified, assume planned values used

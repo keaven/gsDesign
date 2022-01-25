@@ -504,7 +504,7 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
     ntx <- "n="
     if (is.null(xlab)) xlab <- "N"
   }
-  test.type <- ifelse(is(x, "gsProbability"), 3, x$test.type)
+  test.type <- ifelse(inherits(x, "gsProbability"), 3, x$test.type)
   if (is.null(legtext)) legtext <- gsLegendText(test.type)
   y <- gsBoundCP(x, theta = theta)
   ymax <- 1.05
@@ -668,7 +668,7 @@ plotsf <- function(x,
   if (length(lwd) == 1) lwd <- rep(lwd, 2)
 
   # K. Wills (GSD-31)
-  if (is(x, "gsProbability")) {
+  if (inherits(x, "gsProbability")) {
     stop("Spending function plot not available for gsProbability object")
   }
 
@@ -744,11 +744,11 @@ plotsf <- function(x,
 # plotASN function [sinew] ----
 plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval = NULL, type = "l",
                     base = FALSE, ...) {
-  if (is(x, "gsDesign") && x$n.fix == 1) {
+  if (inherits(x, "gsDesign") && x$n.fix == 1) {
     if (is.null(ylab)) ylab <- "E{N} relative to fixed design"
     if (is.null(main)) main <- "Expected sample size relative to fixed design"
   }
-  else if (is(x, "gsSurv")) {
+  else if (inherits(x, "gsSurv")) {
     if (is.null(ylab)) ylab <- "Expected number of events"
     if (is.null(main)) main <- "Expected number of events by underlying hazard ratio"
   }
@@ -758,7 +758,7 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
   }
 
   if (is.null(theta)) {
-    if (is(x, "gsDesign")) {
+    if (inherits(x, "gsDesign")) {
       theta <- seq(0, 2, .05) * x$delta
     } else {
       theta <- x$theta
@@ -766,9 +766,9 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
   }
 
   if (is.null(xval)) {
-    if (is(x, "gsDesign")) {
+    if (inherits(x, "gsDesign")) {
       xval <- x$delta0 + (x$delta1 - x$delta0) * theta / x$delta
-      if (is(x, "gsSurv")) {
+      if (inherits(x, "gsSurv")) {
         xval <- exp(xval)
         if (is.null(xlab)) xlab <- "Hazard ratio"
       } else if (is.null(xlab)) xlab <- expression(delta)
@@ -778,7 +778,7 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
     }
   }
 
-  x <- if (is(x, "gsDesign")) {
+  x <- if (inherits(x, "gsDesign")) {
     gsProbability(d = x, theta = theta)
   } else {
     gsProbability(k = x$k, a = x$lower$bound, b = x$upper$bound, n.I = x$n.I, theta = theta)
@@ -812,13 +812,13 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
 plotgsPower <- function(x, main = "Boundary crossing probabilities by effect size",
                         ylab = "Cumulative Boundary Crossing Probability",
                         xlab = NULL, lty = NULL, col = NULL, lwd = 1, cex = 1,
-                        theta = if (is(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta,
+                        theta = if (inherits(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta,
                         xval = NULL, base = FALSE, outtype = 1, ...) {
 
   if (is.null(xval)) {
-    if (is(x, "gsDesign")) {
+    if (inherits(x, "gsDesign")) {
       xval <- x$delta0 + (x$delta1 - x$delta0) * theta / x$delta
-      if (is(x, "gsSurv")) {
+      if (inherits(x, "gsSurv")) {
         xval <- exp(xval)
         if (is.null(xlab)) xlab <- "Hazard ratio"
       } else if (is.null(xlab)) xlab <- expression(delta)
@@ -828,12 +828,12 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     }
   }
   if (is.null(xlab)) xlab <- ""
-  x <- if (is(x, "gsDesign")) {
+  x <- if (inherits(x, "gsDesign")) {
     gsProbability(d = x, theta = theta)
   } else {
     gsProbability(k = x$k, a = x$lower$bound, b = x$upper$bound, n.I = x$n.I, theta = theta)
   }
-  test.type <- ifelse(is(x, "gsProbability"), 3, x$test.type)
+  test.type <- ifelse(inherits(x, "gsProbability"), 3, x$test.type)
   theta <- xval
   if (!base && outtype == 1) {
     if (is.null(lty)) lty <- x$k:1
@@ -915,7 +915,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
   itxt <- rep("Interim", x$k - 1)
   itxt <- paste(itxt, 1:(x$k - 1), sep = " ")
 
-  if (is(x, "gsProbability") || (is(x, "gsDesign") && test.type > 1)) {
+  if (inherits(x, "gsProbability") || (inherits(x, "gsDesign") && test.type > 1)) {
     itxt <- c(itxt, "Final", itxt)
     boundprob <- rep(1, length(xval))
     bound <- c(bound, rep(2, length(xval) * (x$k - 1)))
@@ -956,14 +956,14 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     lwd2 <- ifelse(length(lwd) > 1, lwd[2], lwd)
     lty2 <- ifelse(length(lty) > 1, lty[2], lty)
 
-    ylim <- if (is(x, "gsDesign") && test.type <= 2) c(0, 1) else c(0, 1.25)
+    ylim <- if (inherits(x, "gsDesign") && test.type <= 2) c(0, 1) else c(0, 1.25)
 
     graphics::plot(xval, x$upper$prob[1, ],
       xlab = xlab, main = main, ylab = ylab,
       ylim = ylim, type = "l", col = col[1], lty = lty[1], lwd = lwd[1], yaxt = "n"
     )
 
-    if (is(x, "gsDesign") && test.type <= 2) {
+    if (inherits(x, "gsDesign") && test.type <= 2) {
       graphics::axis(2, seq(0, 1, 0.1))
       graphics::axis(4, seq(0, 1, 0.1))
     }
@@ -976,7 +976,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       return(invisible(x))
     }
 
-    if ((is(x, "gsDesign") && test.type > 2) || !is(x, "gsDesign")) {
+    if ((inherits(x, "gsDesign") && test.type > 2) || !inherits(x, "gsDesign")) {
       graphics::lines(xval, 1 - x$lower$prob[1, ], lty = lty2, col = col2, lwd = lwd2)
       plo <- x$lower$prob[1, ]
 
