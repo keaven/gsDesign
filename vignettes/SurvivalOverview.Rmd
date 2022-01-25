@@ -263,7 +263,7 @@ hrz2n(hr = hr, z = z, ratio = r)
 ## Lachin and Foulkes design
 
 For the purpose of sample size and power for group sequential design, the @LachinFoulkes is based on substantial evaluation not documented further here.
-We try to make clear here what some of the strengths and weaknesses of both the @LachinFoules method as well as its implementation in the `gsDesign::nSurv()` (fixed design) and `gsDesign::gsSurv()` (group sequential) functions.
+We try to make clear here what some of the strengths and weaknesses of both the @LachinFoulkes method as well as its implementation in the `gsDesign::nSurv()` (fixed design) and `gsDesign::gsSurv()` (group sequential) functions.
 For historical and testing purposes, we also discuss use of the less flexible `gsDesign::nSurvival()` function that was independently programmed and can be used for some limited validations of `gsDesign::nSurv()`.
 
 ### Model assumptions
