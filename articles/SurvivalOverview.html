@@ -4,78 +4,81 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="gsDesign">
 <title>Overview of survival endpoint design • gsDesign</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Overview of survival endpoint design">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Overview of survival endpoint design">
 <meta property="og:description" content="gsDesign">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">gsDesign</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.2.1.9000</span>
-      </span>
-    </div>
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../reference/index.html">Reference</a>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.2.1.9000</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/index.html">Articles</a>
+<li class="active nav-item">
+  <a class="nav-link" href="../articles/index.html">Articles</a>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/keaven/gsDesign/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
-      
 
-      </header><script src="SurvivalOverview_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Overview of survival endpoint design</h1>
+
+<script src="SurvivalOverview_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+  <main id="main"><div class="page-header">
+      <img src="" class="logo" alt=""><h1>Overview of survival endpoint design</h1>
             
-            <h4 data-toc-skip class="date">2021-08-04</h4>
       
-      
-      <div class="hidden name"><code>SurvivalOverview.Rmd</code></div>
-
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/HEAD/vignettes/SurvivalOverview.Rmd" class="external-link"><code>vignettes/SurvivalOverview.Rmd</code></a></small>
+      <div class="d-none name"><code>SurvivalOverview.Rmd</code></div>
     </div>
 
     
     
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor" aria-hidden="true"></a>Introduction</h2>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>This article/vignette provides a summary of functions in the <strong><em>gsDesign</em></strong> package supporting design and evaluation of trial designs for time-to-event outcomes. We do not focus on detailed output options, but what numbers summarizing the design are based on. If you are not looking for this level of detail and just want to see how to design a fixed or group sequential design for a time-to-event endpoint, see the vignette <em>Basic time-to-event group sequential design using gsSurv</em>.</p>
 <p>The following functions support use of the very straightforward <span class="citation">Schoenfeld (1981)</span> approximation for 2-arm trials:</p>
 <ul>
@@ -107,17 +110,17 @@
 <code><a href="../reference/gsBoundSummary.html">gsHR()</a></code>: Approximate HR required to cross a bound.</li>
 </ul>
 </div>
-<div id="schoenfeld-approximation-support" class="section level2">
-<h2 class="hasAnchor">
-<a href="#schoenfeld-approximation-support" class="anchor" aria-hidden="true"></a>Schoenfeld approximation support</h2>
+<div class="section level2">
+<h2 id="schoenfeld-approximation-support">Schoenfeld approximation support<a class="anchor" aria-label="anchor" href="#schoenfeld-approximation-support"></a>
+</h2>
 <p>We will assume a hazard ratio <span class="math inline">\(\nu &lt; 1\)</span> represents a benefit of experimental treatment over control. We let <span class="math inline">\(\delta = \log\nu\)</span> denote the so-called <em>natural parameter</em> for this case. Asymptotically the distribution of the Cox model estimate <span class="math inline">\(\hat{\delta}\)</span> under the proportional hazards assumption is <span class="math display">\[\hat\delta\sim \hbox{Normal}(\delta=\log\nu, (1+r)^2/nr).\]</span> Using a Cox model to estimate <span class="math inline">\(\delta\)</span>, the Wald test for <span class="math inline">\(\hbox{H_0}: \delta=0\)</span> can be approximated with the asymptotic variance from above as:</p>
 <p><span class="math display">\[Z_W\approx \frac{\sqrt {nr}}{1+r}\hat\delta=\frac{\ln(\hat\nu)\sqrt{nr}}{1+r}.\]</span></p>
 <p>Also, we know that the Wald test <span class="math inline">\(Z_W\)</span> and a standard normal version of the logrank <span class="math inline">\(Z\)</span> are both asymptotically efficient and therefore asymptotically equivalent. We denote the <em>standardized effect size</em> as</p>
 <p><span class="math display">\[\theta = \delta\sqrt r / (1+r)= \log(\nu)\sqrt r / (1+r).\]</span> Letting <span class="math inline">\(\hat\theta = -\sqrt r/(1+r)\hat\delta\)</span> we have <span class="math display">\[ \hat \theta \sim \hbox{Normal}(\theta, 1/ n).\]</span> Thus, the standardized Z version of the logrank is approximately distributed as</p>
 <p><span class="math display">\[Z\sim\hbox{Normal}(\sqrt n\theta,1).\]</span> Treatment effect favoring experimental treatment compared to control in this notation corresponds to a hazard ratio <span class="math inline">\(\nu &lt; 1\)</span>, as well as negative values of the standardized effect <span class="math inline">\(\theta\)</span>, natural parameter <span class="math inline">\(\delta\)</span> and standardized Z-test.</p>
-<div id="power-and-sample-size-with-nevents" class="section level3">
-<h3 class="hasAnchor">
-<a href="#power-and-sample-size-with-nevents" class="anchor" aria-hidden="true"></a>Power and sample size with nEvents()</h3>
+<div class="section level3">
+<h3 id="power-and-sample-size-with-nevents">Power and sample size with nEvents()<a class="anchor" aria-label="anchor" href="#power-and-sample-size-with-nevents"></a>
+</h3>
 <p>Based on the above, the power for the logrank test is approximated by</p>
 <p><span class="math display">\[P[Z\le z]=\Phi(z -\sqrt n\theta)=\Phi(z- \sqrt{nr}/(1+r)\log\nu).\]</span> Thus, assuming <span class="math inline">\(n=100\)</span> events and <span class="math inline">\(\delta = \log\nu=-\log(.7)\)</span>, and <span class="math inline">\(r=1\)</span> (equal randomization) we approximate power for the logrank test when <span class="math inline">\(\alpha=0.025\)</span> as</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -126,11 +129,11 @@
 <span class="va">delta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span>
 <span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">.025</span>
 <span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">1</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="va">alpha</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">n</span><span class="op">*</span><span class="va">r</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="va">r</span><span class="op">)</span><span class="op">*</span><span class="va">delta</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="va">alpha</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">n</span> <span class="op">*</span> <span class="va">r</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">r</span><span class="op">)</span> <span class="op">*</span> <span class="va">delta</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.4299155</span></code></pre></div>
 <p>We can compute this with <code><a href="../reference/nSurvival.html">gsDesign::nEvents()</a></code> as:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/nSurvival.html">nEvents</a></span><span class="op">(</span>n<span class="op">=</span><span class="va">n</span>,alpha<span class="op">=</span><span class="va">alpha</span>,hr<span class="op">=</span><span class="va">hr</span>,r<span class="op">=</span><span class="va">r</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/nSurvival.html">nEvents</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">n</span>, alpha <span class="op">=</span> <span class="va">alpha</span>, hr <span class="op">=</span> <span class="va">hr</span>, r <span class="op">=</span> <span class="va">r</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.4299155</span></code></pre></div>
 <p>We solve for the number of events <span class="math inline">\(n\)</span> to see how many events are required to obtain a desired power</p>
 <p><span class="math display">\[1-\beta=P(Z\ge \Phi^{-1}(1-\alpha))\]</span> with</p>
@@ -138,7 +141,7 @@
 =\frac{(1+r)^2}{r(\log\nu)^2}\left({\Phi^{-1} (1-\alpha)+\Phi^{-1}(1-\beta)}\right)^2.\]</span> Thus, the approximate number of events required to power for HR=0.7 with <span class="math inline">\(\alpha=0.025\)</span> one-sided and power <span class="math inline">\(1-\beta=0.9\)</span> is</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">0.1</span>
-<span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="va">r</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">/</span><span class="va">r</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">alpha</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">beta</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
+<span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">r</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="va">r</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">alpha</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">beta</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span>
 <span class="co">#&gt; [1] 330.3779</span></code></pre></div>
 <p>which, rounding up, matches (with tabular output):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -180,16 +183,18 @@
 <code class="sourceCode R"><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">r</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">331</span> <span class="op">*</span> <span class="va">r</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.1099299</span></code></pre></div>
 </div>
-<div id="group-sequential-design" class="section level3">
-<h3 class="hasAnchor">
-<a href="#group-sequential-design" class="anchor" aria-hidden="true"></a>Group sequential design</h3>
+<div class="section level3">
+<h3 id="group-sequential-design">Group sequential design<a class="anchor" aria-label="anchor" href="#group-sequential-design"></a>
+</h3>
 <p>We can create a group sequential design for the above problem either with <span class="math inline">\(\theta\)</span> or with the fixed design sample size. The parameter <code>delta</code> in <code><a href="../reference/gsDesign.html">gsDesign()</a></code> corresponds to standardized effect size with sign changed <span class="math inline">\(-\theta\)</span> in notation used above and by <span class="citation">Jennison and Turnbull (2000)</span>, while the natural parameter, <span class="math inline">\(\log(\hbox{HR})\)</span> is in the parameter <code>delta1</code> passed to <code><a href="../reference/gsDesign.html">gsDesign()</a></code>. The name of the effect size is specified in <code>deltaname</code> and the parameter <code>logdelta = TRUE</code> indicates that <code>delta</code> input needs to be exponentiated to obtain HR in the output below. This example code can be useful in practice. We begin by passing the number of events for a fixed design in the parameter <code>n.fix</code> (continuous, not rounded) to adapt to a group sequential design.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Schoenfeld</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k<span class="op">=</span><span class="fl">2</span>, 
-                       n.fix <span class="op">=</span> <span class="fu"><a href="../reference/nSurvival.html">nEvents</a></span><span class="op">(</span>hr <span class="op">=</span> <span class="va">hr</span>, alpha <span class="op">=</span> <span class="va">alpha</span>, beta <span class="op">=</span> <span class="va">beta</span>, r <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
-                       delta1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span><span class="op">)</span>
-<span class="va">Schoenfeld</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"HR"</span>, logdelta <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="va">Schoenfeld</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>
+  k <span class="op">=</span> <span class="fl">2</span>,
+  n.fix <span class="op">=</span> <span class="fu"><a href="../reference/nSurvival.html">nEvents</a></span><span class="op">(</span>hr <span class="op">=</span> <span class="va">hr</span>, alpha <span class="op">=</span> <span class="va">alpha</span>, beta <span class="op">=</span> <span class="va">beta</span>, r <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
+  delta1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="va">Schoenfeld</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"HR"</span>, logdelta <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -262,43 +267,45 @@
 </tbody>
 </table>
 </div>
-<div id="information-based-design" class="section level3">
-<h3 class="hasAnchor">
-<a href="#information-based-design" class="anchor" aria-hidden="true"></a>Information based design</h3>
+<div class="section level3">
+<h3 id="information-based-design">Information based design<a class="anchor" aria-label="anchor" href="#information-based-design"></a>
+</h3>
 <p>Exactly the same result can be obtained with the following, passing the standardized effect size <code>theta</code> from above to the parameter <code>delta</code> in <code><a href="../reference/gsDesign.html">gsDesign()</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Schoenfeld</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k<span class="op">=</span><span class="fl">2</span>, delta <span class="op">=</span> <span class="op">-</span><span class="va">theta</span>, delta1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">Schoenfeld</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">2</span>, delta <span class="op">=</span> <span class="op">-</span><span class="va">theta</span>, delta1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>We noted above that the asymptotic variance for <span class="math inline">\(\hat\theta\)</span> is <span class="math inline">\(1/n\)</span> which corresponds to statistical information <span class="math inline">\(\mathcal I=n\)</span> for the parameter <span class="math inline">\(\theta\)</span>. Thus, the value</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Schoenfeld</span><span class="op">$</span><span class="va">n.I</span>
 <span class="co">#&gt; [1] 172.2757 344.5514</span></code></pre></div>
 <p>corresponds both to the number of events and the statistical information for the standardized effect size <span class="math inline">\(\theta\)</span> required to power the trial at the desired level. Note that if you plug in the natural parameter <span class="math inline">\(\delta= -\log\nu &gt; 0\)</span>, then <span class="math inline">\(n.I\)</span> returns the statistical information for the log hazard ratio.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k<span class="op">=</span><span class="fl">2</span>, delta <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">n.I</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">2</span>, delta <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">n.I</span>
 <span class="co">#&gt; [1] 43.06893 86.13786</span></code></pre></div>
 <p>The reader may wish to look above to derive the exact relationship between events and statistical information for <span class="math inline">\(\delta\)</span>.</p>
 </div>
-<div id="approximating-boundary-characteristics" class="section level3">
-<h3 class="hasAnchor">
-<a href="#approximating-boundary-characteristics" class="anchor" aria-hidden="true"></a>Approximating boundary characteristics</h3>
+<div class="section level3">
+<h3 id="approximating-boundary-characteristics">Approximating boundary characteristics<a class="anchor" aria-label="anchor" href="#approximating-boundary-characteristics"></a>
+</h3>
 <p>Another application of the <span class="citation">Schoenfeld (1981)</span> method is to approximate boundary characteristics of a design. As noted in the introduction above, we will consider <code><a href="../reference/nSurvival.html">zn2hr()</a></code>, <code><a href="../reference/gsBoundSummary.html">gsHR()</a></code> and <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> to approximate the treatment effect required to cross design bounds. <code><a href="../reference/nSurvival.html">zn2hr()</a></code> is complemented by the functions <code><a href="../reference/nSurvival.html">hrn2z()</a></code> and <code><a href="../reference/nSurvival.html">hrz2n()</a></code>. We begin with the basic approximation used across all of these functions in this section and follow with a sub-section with example code to reproduce some of what is in the table above.</p>
 <p>We return to the following equation from above:</p>
 <p><span class="math display">\[Z\approx Z_W\approx \frac{\sqrt {nr}}{1+r}\hat\delta=\frac{\ln(\hat\nu)\sqrt{nr}}{1+r}.\]</span> By fixing <span class="math inline">\(Z=z, n\)</span> we can solve for <span class="math inline">\(\hat\nu\)</span> from the above:</p>
 <p><span class="math display">\[\hat{\nu} = \exp(z(1+r)/\sqrt{rn}).\]</span> By fixing <span class="math inline">\(\hat\nu\)</span> and <span class="math inline">\(z\)</span>, we can solve for the corresponding number of events required: <span class="math display">\[ n = (z(1+r)/\log(\hat{\nu}))^2/r.\]</span></p>
 </div>
-<div id="examples" class="section level3">
-<h3 class="hasAnchor">
-<a href="#examples" class="anchor" aria-hidden="true"></a>Examples</h3>
+<div class="section level3">
+<h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h3>
 <p>For our first example, we note that the event counts in <code>Schoenfeld</code> are actually continuous numbers that are rounded up in the table:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Schoenfeld</span><span class="op">$</span><span class="va">n.I</span>
 <span class="co">#&gt; [1] 172.2757 344.5514</span></code></pre></div>
 <p>We reproduce the approximate hazard ratios required to cross efficacy bounds using the Schoenfeld approximations above:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/gsBoundSummary.html">gsHR</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">Schoenfeld</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="co"># Z-values at bound</span>
-     i <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,                    <span class="co"># Analysis number</span>
-     x <span class="op">=</span> <span class="va">Schoenfeld</span>,             <span class="co"># Group sequential design from above</span>
-     ratio <span class="op">=</span> <span class="va">r</span><span class="op">)</span>                  <span class="co"># Experimental/control randomization ratio</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/gsBoundSummary.html">gsHR</a></span><span class="op">(</span>
+  z <span class="op">=</span> <span class="va">Schoenfeld</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="co"># Z-values at bound</span>
+  i <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="co"># Analysis number</span>
+  x <span class="op">=</span> <span class="va">Schoenfeld</span>, <span class="co"># Group sequential design from above</span>
+  ratio <span class="op">=</span> <span class="va">r</span> <span class="co"># Experimental/control randomization ratio</span>
+<span class="op">)</span>
 <span class="co">#&gt; [1] 0.6576844 0.8077846</span></code></pre></div>
 <p>For the following examples, we assume <span class="math inline">\(r=1\)</span>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -307,15 +314,15 @@
 <li>Assuming a Cox model estimate <span class="math inline">\(\hat\nu\)</span> and a corresponding event count, approximately what Z-value (p-value) does this correspond to? We use the first equation above:</li>
 </ol>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">.73</span> <span class="co"># observed hr</span>
+<code class="sourceCode R"><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">.73</span> <span class="co"># Observed hr</span>
 <span class="va">events</span> <span class="op">&lt;-</span> <span class="fl">125</span> <span class="co"># Events in analysis</span>
 
-<span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">events</span><span class="op">*</span><span class="va">r</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span><span class="op">+</span><span class="va">r</span><span class="op">)</span>
+<span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">events</span> <span class="op">*</span> <span class="va">r</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">r</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">z</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">)</span> <span class="co"># Z- and p-value</span>
 <span class="co">#&gt; [1] -1.75928655  0.03926443</span></code></pre></div>
 <p>We replicate the Z-value with</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/nSurvival.html">hrn2z</a></span><span class="op">(</span>hr<span class="op">=</span><span class="va">hr</span>, n <span class="op">=</span> <span class="va">events</span>, ratio <span class="op">=</span> <span class="va">r</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/nSurvival.html">hrn2z</a></span><span class="op">(</span>hr <span class="op">=</span> <span class="va">hr</span>, n <span class="op">=</span> <span class="va">events</span>, ratio <span class="op">=</span> <span class="va">r</span><span class="op">)</span>
 <span class="co">#&gt; [1] -1.759287</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Assuming an efficacy bound Z-value and event count, approximately what hazard ratio must be observed to cross the bound? We use the second equation above:</li>
@@ -327,7 +334,7 @@
 <span class="co">#&gt; [1] 0.6991858</span></code></pre></div>
 <p>We can reproduce this with <code><a href="../reference/nSurvival.html">zn2hr()</a></code> by switching the sign of <code>z</code> above; note that the default is <code>ratio = 1</code> for all of these functions and often is not specified:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/nSurvival.html">zn2hr</a></span><span class="op">(</span>z <span class="op">=</span> <span class="op">-</span><span class="va">z</span>, n <span class="op">=</span> <span class="va">events</span>,  ratio <span class="op">=</span> <span class="va">r</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/nSurvival.html">zn2hr</a></span><span class="op">(</span>z <span class="op">=</span> <span class="op">-</span><span class="va">z</span>, n <span class="op">=</span> <span class="va">events</span>, ratio <span class="op">=</span> <span class="va">r</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.6991858</span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>Finally, if we want an observed hazard ratio <span class="math inline">\(\hat\nu = .8\)</span> to represent a positive result, how many events would be need to observe to achieve a 1-sided p-value of 0.025? assuming 2:1 randomization? We use the third equation above:</li>
@@ -345,13 +352,13 @@
 <span class="co">#&gt; [1] 347.1683</span></code></pre></div>
 </div>
 </div>
-<div id="lachin-and-foulkes-design" class="section level2">
-<h2 class="hasAnchor">
-<a href="#lachin-and-foulkes-design" class="anchor" aria-hidden="true"></a>Lachin and Foulkes design</h2>
-<p>For the purpose of sample size and power for group sequential design, the <span class="citation">Lachin and Foulkes (1986)</span> is based on substantial evaluation not documented further here. We try to make clear here what some of the strengths and weaknesses of both the <span class="citation">(<span class="citeproc-not-found" data-reference-id="LachinFoules"><strong>???</strong></span>)</span> method as well as its implementation in the <code><a href="../reference/nSurv.html">gsDesign::nSurv()</a></code> (fixed design) and <code><a href="../reference/nSurv.html">gsDesign::gsSurv()</a></code> (group sequential) functions. For historical and testing purposes, we also discuss use of the less flexible <code><a href="../reference/nSurvival.html">gsDesign::nSurvival()</a></code> function that was independently programmed and can be used for some limited validations of <code><a href="../reference/nSurv.html">gsDesign::nSurv()</a></code>.</p>
-<div id="model-assumptions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#model-assumptions" class="anchor" aria-hidden="true"></a>Model assumptions</h3>
+<div class="section level2">
+<h2 id="lachin-and-foulkes-design">Lachin and Foulkes design<a class="anchor" aria-label="anchor" href="#lachin-and-foulkes-design"></a>
+</h2>
+<p>For the purpose of sample size and power for group sequential design, the <span class="citation">Lachin and Foulkes (1986)</span> is based on substantial evaluation not documented further here. We try to make clear here what some of the strengths and weaknesses of both the <span class="citation">Lachin and Foulkes (1986)</span> method as well as its implementation in the <code><a href="../reference/nSurv.html">gsDesign::nSurv()</a></code> (fixed design) and <code><a href="../reference/nSurv.html">gsDesign::gsSurv()</a></code> (group sequential) functions. For historical and testing purposes, we also discuss use of the less flexible <code><a href="../reference/nSurvival.html">gsDesign::nSurvival()</a></code> function that was independently programmed and can be used for some limited validations of <code><a href="../reference/nSurv.html">gsDesign::nSurv()</a></code>.</p>
+<div class="section level3">
+<h3 id="model-assumptions">Model assumptions<a class="anchor" aria-label="anchor" href="#model-assumptions"></a>
+</h3>
 <p>Some detail in specification comes With the flexibility allowed by the <span class="citation">Lachin and Foulkes (1986)</span> method. The model assumes</p>
 <ul>
 <li>A fixed enrollment period with piecewise constant enrollment rates</li>
@@ -366,31 +373,32 @@
 <p>The two practical differences the <span class="citation">Lachin and Foulkes (1986)</span> method has from the <span class="citation">Schoenfeld (1981)</span> method are:</p>
 <ol style="list-style-type: decimal">
 <li>By assuming enrollment, failure and dropout rates the method delivers sample size <span class="math inline">\(N\)</span> as well as events required.</li>
-<li>The variance for the log hazard ratio <span class="math inline">\(\hat\delta\)</span> is computed differently and both a null (<span class="math inline">\(\sigma^2_0) and alternate hypothesis (\)</span>^2_1$) variance are incorporated through the formula <span class="math display">\[ N  = \left(\frac{\Phi^{-1}(1-\alpha)\sigma_0 + \Phi^{-1}(1-\beta)\sigma_1}{\delta}\right).\]</span> The null hypothesis is derived by averaging the alternate hypothesis rates, weighting according to the proportion randomized in each group.</li>
+<li>The variance for the log hazard ratio <span class="math inline">\(\hat\delta\)</span> is computed differently and both a null (<span class="math inline">\(\sigma^2_0\)</span>) and alternate hypothesis (<span class="math inline">\(\sigma^2_1\)</span>) variance are incorporated through the formula <span class="math display">\[N = \left(\frac{\Phi^{-1}(1-\alpha)\sigma_0 + \Phi^{-1}(1-\beta)\sigma_1}{\delta}\right).\]</span> The null hypothesis is derived by averaging the alternate hypothesis rates, weighting according to the proportion randomized in each group.</li>
 </ol>
 </div>
-<div id="fixed-design" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fixed-design" class="anchor" aria-hidden="true"></a>Fixed design</h3>
+<div class="section level3">
+<h3 id="fixed-design">Fixed design<a class="anchor" aria-label="anchor" href="#fixed-design"></a>
+</h3>
 <p>We will use the same hazard ratio 0.7 as for the <span class="citation">Schoenfeld (1981)</span> sample size calculations above. We assume further that the trial will enroll for a constant rate for 12 months, have a control group median of 8 months (exponential failure rate <span class="math inline">\(\lambda = \log(2)/8\)</span>), a dropout rate of 0.001 per month, and 16 months of minimum follow-up. As before, we assume a randomization ratio <span class="math inline">\(r=1\)</span>, one-sided Type I error <span class="math inline">\(\alpha=0.025\)</span>, 90% power which is equivalent to Type II error <span class="math inline">\(\beta=0.1\)</span>.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">1</span>               <span class="co"># Experimental/control randomization ratio</span>
-<span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.025</span>       <span class="co"># 1-sided Type I error</span>
-<span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">0.1</span>          <span class="co"># Type II error (1 - power)</span>
-<span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">0.7</span>            <span class="co"># Hazard ratio (experimental / control)</span>
+<code class="sourceCode R"><span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="co"># Experimental/control randomization ratio</span>
+<span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.025</span> <span class="co"># 1-sided Type I error</span>
+<span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">0.1</span> <span class="co"># Type II error (1 - power)</span>
+<span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">0.7</span> <span class="co"># Hazard ratio (experimental / control)</span>
 <span class="va">controlMedian</span> <span class="op">&lt;-</span> <span class="fl">8</span>
 <span class="va">dropoutRate</span> <span class="op">&lt;-</span> <span class="fl">0.001</span> <span class="co"># Exponential dropout rate per time unit</span>
 <span class="va">enrollDuration</span> <span class="op">&lt;-</span> <span class="fl">12</span>
-<span class="va">minfup</span> <span class="op">&lt;-</span> <span class="fl">16</span>         <span class="co"># minimum follow-up</span>
-<span class="va">Nlf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">nSurv</a></span><span class="op">(</span>lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="va">controlMedian</span>,
-             hr <span class="op">=</span> <span class="va">hr</span>,
-             eta <span class="op">=</span> <span class="va">dropoutRate</span>,
-             T <span class="op">=</span> <span class="va">enrollDuration</span> <span class="op">+</span> <span class="va">minfup</span>, <span class="co"># Trial duration</span>
-             minfup <span class="op">=</span> <span class="va">minfup</span>,
-             ratio <span class="op">=</span> <span class="va">r</span>,
-             alpha <span class="op">=</span> <span class="va">alpha</span>, 
-             beta <span class="op">=</span> <span class="va">beta</span>
-      <span class="op">)</span>
+<span class="va">minfup</span> <span class="op">&lt;-</span> <span class="fl">16</span> <span class="co"># Minimum follow-up</span>
+<span class="va">Nlf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">nSurv</a></span><span class="op">(</span>
+  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="va">controlMedian</span>,
+  hr <span class="op">=</span> <span class="va">hr</span>,
+  eta <span class="op">=</span> <span class="va">dropoutRate</span>,
+  T <span class="op">=</span> <span class="va">enrollDuration</span> <span class="op">+</span> <span class="va">minfup</span>, <span class="co"># Trial duration</span>
+  minfup <span class="op">=</span> <span class="va">minfup</span>,
+  ratio <span class="op">=</span> <span class="va">r</span>,
+  alpha <span class="op">=</span> <span class="va">alpha</span>,
+  beta <span class="op">=</span> <span class="va">beta</span>
+<span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Sample size: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">Nlf</span><span class="op">$</span><span class="va">n</span><span class="op">)</span>, <span class="st">"Events: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">Nlf</span><span class="op">$</span><span class="va">d</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Sample size:  422 Events:  330</span></code></pre></div>
 <p>Recall that the <span class="citation">Schoenfeld (1981)</span> method recommended 331 events. The two methods tend to yield very similar event count recommendations, but not the same. Other methods will also differ slightly; see <span class="citation">Lachin and Foulkes (1986)</span>. Sample size recommendations can vary more between methods.</p>
@@ -425,22 +433,25 @@
 <span class="co">#&gt; Sample size (computed):           n=422</span>
 <span class="co">#&gt; Events required (computed): nEvents=330</span></code></pre></div>
 </div>
-<div id="group-sequential-design-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#group-sequential-design-1" class="anchor" aria-hidden="true"></a>Group sequential design</h3>
+<div class="section level3">
+<h3 id="group-sequential-design-1">Group sequential design<a class="anchor" aria-label="anchor" href="#group-sequential-design-1"></a>
+</h3>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">2</span>  <span class="co"># Total number of analyses</span>
-<span class="va">lfgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span>k<span class="op">=</span><span class="fl">2</span>,
-             lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="va">controlMedian</span>,
-             hr <span class="op">=</span> <span class="va">hr</span>,
-             eta <span class="op">=</span> <span class="va">dropoutRate</span>,
-             T <span class="op">=</span> <span class="va">enrollDuration</span> <span class="op">+</span> <span class="va">minfup</span>, <span class="co"># Trial duration</span>
-             minfup <span class="op">=</span> <span class="va">minfup</span>,
-             ratio <span class="op">=</span> <span class="va">r</span>,
-             alpha <span class="op">=</span> <span class="va">alpha</span>, 
-             beta <span class="op">=</span> <span class="va">beta</span>
-      <span class="op">)</span>
-<span class="va">lfgs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># Total number of analyses</span>
+<span class="va">lfgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span>
+  k <span class="op">=</span> <span class="fl">2</span>,
+  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="va">controlMedian</span>,
+  hr <span class="op">=</span> <span class="va">hr</span>,
+  eta <span class="op">=</span> <span class="va">dropoutRate</span>,
+  T <span class="op">=</span> <span class="va">enrollDuration</span> <span class="op">+</span> <span class="va">minfup</span>, <span class="co"># Trial duration</span>
+  minfup <span class="op">=</span> <span class="va">minfup</span>,
+  ratio <span class="op">=</span> <span class="va">r</span>,
+  alpha <span class="op">=</span> <span class="va">alpha</span>,
+  beta <span class="op">=</span> <span class="va">beta</span>
+<span class="op">)</span>
+<span class="va">lfgs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Analysis</th>
@@ -518,22 +529,24 @@
 <span class="fu"><a href="../reference/nSurvival.html">zn2hr</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>, n <span class="op">=</span> <span class="va">events</span><span class="op">)</span> <span class="co"># Schoenfeld approximation to HR</span>
 <span class="co">#&gt; [1] 0.6571386 0.8074431</span></code></pre></div>
 </div>
-<div id="plotting" class="section level3">
-<h3 class="hasAnchor">
-<a href="#plotting" class="anchor" aria-hidden="true"></a>Plotting</h3>
+<div class="section level3">
+<h3 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
+</h3>
 <p>There are various plots available. The approximate hazard ratios required to cross bounds again use the <span class="citation">Schoenfeld (1981)</span> approximation. For a <strong>ggplot2</strong> version of this plot, use the default <code>base = FALSE</code>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lfgs</span>, pl<span class="op">=</span><span class="st">"hr"</span>, dgt<span class="op">=</span><span class="fl">4</span>, base<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-25-1.png" width="624"></p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lfgs</span>, pl <span class="op">=</span> <span class="st">"hr"</span>, dgt <span class="op">=</span> <span class="fl">4</span>, base <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-26-1.png" width="624"></p>
 </div>
-<div id="event-accrual" class="section level3">
-<h3 class="hasAnchor">
-<a href="#event-accrual" class="anchor" aria-hidden="true"></a>Event accrual</h3>
+<div class="section level3">
+<h3 id="event-accrual">Event accrual<a class="anchor" aria-label="anchor" href="#event-accrual"></a>
+</h3>
 <p>The variance calculations for the Lachin and Foulkes method are mostly determined by expected event accrual under the null and alternate hypotheses. The null hypothesis characterized above is seemingly designed so that event accrual will be similar under each hypothesis. You can see the expected events accrued at each analysis under the alternate hypothesis with:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, 
-               `Control events` <span class="op">=</span> <span class="va">lfgs</span><span class="op">$</span><span class="va">eDC</span>, 
-               `Experimental events` <span class="op">=</span>  <span class="va">lfgs</span><span class="op">$</span><span class="va">eDE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<code class="sourceCode R"><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>
+  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,
+  `Control events` <span class="op">=</span> <span class="va">lfgs</span><span class="op">$</span><span class="va">eDC</span>,
+  `Experimental events` <span class="op">=</span> <span class="va">lfgs</span><span class="op">$</span><span class="va">eDE</span>
+<span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -558,18 +571,24 @@
 <p>The expected event accrual of events over time for a design can be computed as follows:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Month</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="va">enrollDuration</span> <span class="op">+</span> <span class="va">minfup</span>, <span class="fl">.025</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="va">Month</span><span class="op">)</span>, 
-     <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">Month</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="../reference/nSurv.html">nEventsIA</a></span><span class="op">(</span>tIA<span class="op">=</span><span class="va">x</span>, x <span class="op">=</span> <span class="va">lfgs</span><span class="op">)</span><span class="op">}</span><span class="op">)</span><span class="op">)</span>, 
-     type <span class="op">=</span> <span class="st">'l'</span>, xlab<span class="op">=</span><span class="st">"Month"</span>, ylab<span class="op">=</span><span class="st">"Expected events"</span>,
-     main<span class="op">=</span><span class="st">"Expected event accrual over time"</span><span class="op">)</span></code></pre></div>
-<p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-27-1.png" width="624"></p>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">Month</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">Month</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+    <span class="fu"><a href="../reference/nSurv.html">nEventsIA</a></span><span class="op">(</span>tIA <span class="op">=</span> <span class="va">x</span>, x <span class="op">=</span> <span class="va">lfgs</span><span class="op">)</span>
+  <span class="op">}</span><span class="op">)</span><span class="op">)</span>,
+  type <span class="op">=</span> <span class="st">"l"</span>, xlab <span class="op">=</span> <span class="st">"Month"</span>, ylab <span class="op">=</span> <span class="st">"Expected events"</span>,
+  main <span class="op">=</span> <span class="st">"Expected event accrual over time"</span>
+<span class="op">)</span></code></pre></div>
+<p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-28-1.png" width="624"></p>
 <p>On the other hand, if you want to know the expected time to accrue 25% of the final events and what the expected enrollment accrual is at that time, you compute using:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">tEventsIA</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lfgs</span>, timing <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">" Time: "</span>, <span class="va">b</span><span class="op">$</span><span class="cn">T</span>, 
-          <span class="st">"\n Expected enrollment:"</span>, <span class="va">b</span><span class="op">$</span><span class="va">eNC</span> <span class="op">+</span> <span class="va">b</span><span class="op">$</span><span class="va">eNE</span>,
-          <span class="st">"\n Expected control events:"</span>, <span class="va">b</span><span class="op">$</span><span class="va">eDC</span>,
-          <span class="st">"\n Expected experimental events:"</span>, <span class="va">b</span><span class="op">$</span><span class="va">eDE</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span>
+  <span class="st">" Time: "</span>, <span class="va">b</span><span class="op">$</span><span class="cn">T</span>,
+  <span class="st">"\n Expected enrollment:"</span>, <span class="va">b</span><span class="op">$</span><span class="va">eNC</span> <span class="op">+</span> <span class="va">b</span><span class="op">$</span><span class="va">eNE</span>,
+  <span class="st">"\n Expected control events:"</span>, <span class="va">b</span><span class="op">$</span><span class="va">eDC</span>,
+  <span class="st">"\n Expected experimental events:"</span>, <span class="va">b</span><span class="op">$</span><span class="va">eDE</span>, <span class="st">"\n"</span>
+<span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;  Time:  8.88072854965729 </span>
 <span class="co">#&gt;  Expected enrollment: 325.066468979827 </span>
 <span class="co">#&gt;  Expected control events: 49.0303966242417 </span>
@@ -577,9 +596,9 @@
 <p>For expected accrual of events without a design returned by <code><a href="../reference/nSurv.html">gsDesign::gsSurv()</a></code>, see the help file for <code><a href="../reference/eEvents.html">gsDesign::eEvents()</a></code>.</p>
 </div>
 </div>
-<div id="references" class="section level2 unnumbered">
-<h2 class="hasAnchor">
-<a href="#references" class="anchor" aria-hidden="true"></a>References</h2>
+<div class="section level2 unnumbered">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references">
 <div id="ref-JTBook">
 <p>Jennison, Christopher, and Bruce W. Turnbull. 2000. <em>Group Sequential Methods with Applications to Clinical Trials</em>. Boca Raton, FL: Chapman; Hall/CRC.</p>
@@ -595,33 +614,26 @@
 </div>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
+    <footer><div class="pkgdown-footer-left">
   <p></p>
 <p>Developed by Keaven Anderson.</p>
 </div>
 
-<div class="pkgdown">
+<div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-
 
   
 
