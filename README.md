@@ -1,6 +1,6 @@
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/gsDesign)](https://CRAN.R-project.org/package=gsDesign)
-[![Codecov test coverage](https://codecov.io/gh/keaven/gsDesign/branch/master/graph/badge.svg)](https://codecov.io/gh/keaven/gsDesign?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/keaven/gsDesign/branch/master/graph/badge.svg)](https://app.codecov.io/gh/keaven/gsDesign?branch=master)
 ![pkgdown](https://github.com/keaven/gsDesign/workflows/pkgdown/badge.svg)
 [![R-CMD-check](https://github.com/keaven/gsDesign/workflows/R-CMD-check/badge.svg)](https://github.com/keaven/gsDesign/actions)
 <!-- badges: end -->
@@ -12,12 +12,13 @@ An easy-to-use [web interface](https://rinpharma.shinyapps.io/gsdesign/) to both
 
 ## Installation
 
-```{r, eval = FALSE}
-# The easiest way to get ggplot2 is to install:
+```r
+# The easiest way to get gsDesign is to install:
 install.packages("gsDesign")
+
 # Alternatively, install development version from GitHub:
-# install.packages("devtools")
-devtools::install_github("keaven/gsDesign")
+# install.packages("remotes")
+remotes::install_github("keaven/gsDesign")
 ```
 
 ## Description
