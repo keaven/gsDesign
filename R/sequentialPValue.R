@@ -93,7 +93,7 @@ sequentialPValue <- function(gsD = gsDesign(),
   # if answer is between interval bounds, find it with root-finding
   x <- try(uniroot(sequentialZdiff, interval = -qnorm(interval), gsD = gsD, n.I = n.I, Z = Z,
                usTime=usTime))
-  if(class(x)=="try-error") stop("Failed to find root for sequential p-value")
+  if(inherits(x, "try-error")) stop("Failed to find root for sequential p-value")
   pnorm(-x$root)
 }
 sequentialZdiff <- function(x,
