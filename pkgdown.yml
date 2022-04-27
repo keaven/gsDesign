@@ -1,12 +1,12 @@
 pandoc: 2.7.3
-pkgdown: 2.0.2
+pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   SurvivalOverview: SurvivalOverview.html
   gsSurvBasicExamples: gsSurvBasicExamples.html
   hGraph: hGraph.html
   nNormal: nNormal.html
-last_built: 2022-02-03T01:12Z
+last_built: 2022-04-27T22:51Z
 urls:
   reference: https://keaven.github.io/gsDesign/reference
   article: https://keaven.github.io/gsDesign/articles
