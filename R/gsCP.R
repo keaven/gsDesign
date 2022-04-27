@@ -185,7 +185,7 @@
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{normalGrid}}, \code{\link{gsDesign}},
 #' \code{\link{gsProbability}}, \code{\link{gsBoundCP}}, \code{\link{ssrCP}},
 #' \code{\link{condPower}}
@@ -350,7 +350,7 @@ gsPI <- function(x, i = 1, zi = 0, j = 2, level = .95, theta = c(0, 3), wgts = c
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsDesign}}, \code{\link{gsProbability}},
 #' \code{\link{gsCP}}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential

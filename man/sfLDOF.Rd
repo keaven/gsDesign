@@ -121,6 +121,6 @@ for group sequential trials with random information levels.
 \link{gsDesign package overview}
 }
 \author{
-Keaven Anderson \email{keaven\_anderson@merck.}
+Keaven Anderson \email{keaven_anderson@merck.com}
 }
 \keyword{design}

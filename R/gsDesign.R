@@ -61,7 +61,7 @@
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{gsDesign package overview}, \code{\link{gsDesign}},
 #' \code{\link{gsProbability}}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -427,7 +427,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{gsDesign package overview}, \link{gsBoundSummary}, 
 #' \link{plot.gsDesign},
 #' \code{\link{gsProbability}}, \link{Spending_Function_Overview},
@@ -640,7 +640,7 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{plot.gsDesign}, \code{\link{gsDesign}},
 #' \link{gsDesign package overview}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -795,7 +795,7 @@ gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsDesign}}, \code{\link{gsProbability}},
 #' \code{\link{gsBoundCP}}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
