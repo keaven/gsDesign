@@ -1,6 +1,6 @@
 # See gsBinomialExact for help file text which is together with functions documented there
 #
-# based on code from Marc Schwartz marc_schwartz@me.com
+# based on code from Marc Schwartz \email{marc_schwartz@@me.com}
 # The possible sample size vector n needs to be selected in such a fashion
 # that it covers the possible range of values that include the true
 # minima. My example here does with a finite range and makes the

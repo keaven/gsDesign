@@ -293,7 +293,7 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #' ggplot2::ggplot(data = y3, ggplot2::aes(x = delta, y = Power, col = CP.effect.size)) + 
 #' ggplot2::geom_line() + 
 #' ggplot2::xlab(expression(delta))
-#' @author Keaven Anderson \email{keaven_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsDesign}}
 #' @references Bauer, Peter and Kohne, F., Evaluation of experiments with
 #' adaptive interim analyses, Biometrics, 50:1029-1041, 1994.

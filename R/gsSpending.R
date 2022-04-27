@@ -127,7 +127,7 @@
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsDesign}}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
@@ -267,7 +267,7 @@ sfLogistic <- function(alpha, t, param) {
 #' is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{Spending_Function_Overview}, \code{\link{gsDesign}},
 #' \link{gsDesign package overview}
 #' @references Anderson KM and Clark JB (2009), Fitting spending functions.
@@ -570,7 +570,7 @@ sfExtremeValue2 <- function(alpha, t, param) {
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{Spending_Function_Overview}, \code{\link{gsDesign}},
 #' \link{gsDesign package overview}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -687,7 +687,7 @@ sfHSD <- function(alpha, t, param) {
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{Spending_Function_Overview}, \code{\link{gsDesign}},
 #' \link{gsDesign package overview}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -924,7 +924,7 @@ sfNormal <- function(alpha, t, param) {
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{Spending_Function_Overview}, \code{\link{gsDesign}},
 #' \link{gsDesign package overview}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -1115,7 +1115,7 @@ sfStep <- function(alpha, t, param) {
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{Spending_Function_Overview}, \code{\link{gsDesign}},
 #' \link{gsDesign package overview}, \link{sfLogistic}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -1233,7 +1233,7 @@ sfPoints <- function(alpha, t, param) {
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{Spending_Function_Overview}, \code{\link{gsDesign}},
 #' \link{gsDesign package overview}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -1354,7 +1354,7 @@ sfPower <- function(alpha, t, param) {
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.com}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{Spending_Function_Overview}, \code{\link{gsDesign}},
 #' \link{gsDesign package overview}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -1570,7 +1570,7 @@ sfTDist <- function(alpha, t, param) {
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{Spending_Function_Overview}, \code{\link{gsDesign}},
 #' \link{gsDesign package overview}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential

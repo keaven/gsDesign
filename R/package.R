@@ -125,7 +125,7 @@ NULL
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsDesign}}, \code{\link{sfHSD}}, \code{\link{sfPower}},
 #' \code{\link{sfLogistic}}, \code{\link{sfExponential}},
 #' \code{\link{sfTruncated}}, \link{gsDesign package overview}

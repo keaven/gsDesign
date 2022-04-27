@@ -115,6 +115,6 @@ Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 \link{gsDesign package overview}
 }
 \author{
-Keaven Anderson \email{keaven\_anderson@merck.com}
+Keaven Anderson \email{keaven_anderson@merck.com}
 }
 \keyword{design}

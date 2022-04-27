@@ -108,6 +108,6 @@ trials. \emph{Biometrika}; 70:659-663.
 \link{gsDesign package overview}
 }
 \author{
-Keaven Anderson \email{keaven\_anderson@merck.com}
+Keaven Anderson \email{keaven_anderson@merck.com}
 }
 \keyword{design}
