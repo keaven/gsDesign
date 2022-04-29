@@ -118,3 +118,6 @@ articles:
     contents:
       - nNormal
       - hGraph
+      - GraphicalMultiplicity
+      - PoissonMixtureModel
+      - VaccineEfficacy

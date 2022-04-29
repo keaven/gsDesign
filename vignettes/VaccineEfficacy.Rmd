@@ -1,11 +1,11 @@
 ---
-title: "Vaccine Efficacy Trial Design"
+title: "Vaccine efficacy trial design"
 output:
   html_document:
     code_folding: show
 bibliography: gsDesign.bib
 vignette: >
-  %\VignetteIndexEntry{Vaccine Efficacy Trial Design}
+  %\VignetteIndexEntry{Vaccine efficacy trial design}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -28,7 +28,7 @@ This article/vignette provides an overview of functions considering designs for 
 It specifies spending function boundaries which are approximated for the exact binomial design by first computing a related time-to-event design.
 The time-to-event design can not only be used to set boundaries for the @ChanBohidar method, but to allow specification of enrollment and study durations to determine enrollment rates and sample size required.
 
-# Vaccine Efficacy
+# Vaccine efficacy
 
 We begin by specifying parameters.
 The `alpha` and `beta` parameters will not be met exactly due to the exact nature of the group sequential calculations performed.
