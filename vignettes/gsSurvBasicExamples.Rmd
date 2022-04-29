@@ -287,7 +287,7 @@ The simple updates to Z-values and p-values for the design based on information 
 
 ```{r}
 xu <- gsDesign(
-  alpha = x$alpha, beta = x$beta,
+  alpha = x$alpha, beta = x$beta, test.type = x$test.type,
   maxn.IPlan = x$n.I[x$k], n.I = n.I,
   sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar,
   delta = x$delta, delta1 = x$delta1, delta0 = x$delta0

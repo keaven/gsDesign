@@ -99,7 +99,7 @@ str(eEvents(
   R = c(2, 1, 2), S = c(1, 1), T = 20
 ))
 
-# control group for example from Berstein and Lagakos (1978)
+# control group for example from Bernstein and Lagakos (1978)
 lamC <- c(1, .8, .5)
 n <- eEvents(
   lambda = matrix(c(lamC, lamC * 2 / 3), ncol = 6), eta = 0,
