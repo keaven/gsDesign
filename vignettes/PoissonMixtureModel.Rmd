@@ -1,18 +1,16 @@
 ---
 title: "A cure model calendar-based design"
 author: "Keaven Anderson"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
 vignette: >
   %\VignetteIndexEntry{A cure model calendar-based design}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-
 ---
 
 ```{r, message=FALSE, echo=FALSE, warning=FALSE}
-# Libraries required
+# Packages required
 library(gsDesign)
 library(dplyr)
 library(tibble)
@@ -48,7 +46,7 @@ cure_rate <- c(.5, .35, .55)
 t1 <- c(24, 24, 24)
 # Survival rate at 2nd time point for respective models
 s1 <- c(.65, .5, .68)
-time_unit = "month"
+time_unit <- "month"
 # Hazard ratio for experimental versus control for respective models
 hr <- c(.7, .75, .7)
 # Total study duration
@@ -71,7 +69,7 @@ dropout_rate <- c(.002, .001, .001)
 # The Poisson Mixture Model
 
 The Poisson mixture model (@PoissonMixture2009) is applied to account for a failure rate that is assumed to be decreasing over time.
-It is a mixture of patients suffering disease recurrence and others who have excellent long-term results. 
+It is a mixture of patients suffering disease recurrence and others who have excellent long-term results.
 The model assumes a cure rate $p$ to represent the patients who benefit long-term.
 The survival function as a function of time $t$ for a control group ($c$) is:
 
@@ -95,19 +93,18 @@ We create the following functions to support examples below. Their use is demons
 
 Most readers should skip reviewing this code.
 
-
 ```{r}
 # Poisson mixture survival
-pPM <- function(x = 0:20, cure_rate = .5, t1 = 10, s1 = .6){
-   theta <- -log(cure_rate)
-   lambda <- -log(1 + log(s1) / theta) / t1
-   return(exp(-theta * (1 - exp(-lambda * x))))
+pPM <- function(x = 0:20, cure_rate = .5, t1 = 10, s1 = .6) {
+  theta <- -log(cure_rate)
+  lambda <- -log(1 + log(s1) / theta) / t1
+  return(exp(-theta * (1 - exp(-lambda * x))))
 }
 # Poisson mixture hazard rate
-hPM <- function(x = 0:20, cure_rate = .5, t1 = 10, s1 = .6){
-   theta <- -log(cure_rate)
-   lambda <- -log(1 + log(s1) / theta) / t1
-   return(theta * lambda * exp(-lambda * x))
+hPM <- function(x = 0:20, cure_rate = .5, t1 = 10, s1 = .6) {
+  theta <- -log(cure_rate)
+  lambda <- -log(1 + log(s1) / theta) / t1
+  return(theta * lambda * exp(-lambda * x))
 }
 ```
 
@@ -119,71 +116,81 @@ $$S_e(t)=\exp(-\theta\gamma(1-\exp(-\lambda t))).$$
 As noted before, $(1 - \exp(-\lambda t)$ can be replaced with the cumulative distribution for any positive random variable.
 For any setting chosen, it is ideal to be able to cite published literature and other rationale for study assumptions.
 
-
 The points in the following graph indicate where underlying cumulative hazard matches the piecewise exponential of the specified cure rate models by scenario.
 The piecewise failure model is used to derive the sample size and targeted events over time in the trial.
 
 ```{r, warning=FALSE, message=FALSE, echo=FALSE, out.width="100%"}
 t <- seq(0, study_duration[1] + 12, (study_duration[1] + 12) / bins)
 survival <- NULL
-for(scenario in 1:length(cure_rate)){
-survival <- rbind(survival,
-     tibble(Scenario = scenario, Treatment = "Control",      Time = t, 
-            Survival = pPM(x = t, cure_rate = cure_rate[scenario],      
-                           t1 = t1[scenario], s1 = s1[scenario])),
-     tibble(Scenario = scenario, Treatment = "Experimental", Time = t, 
-            Survival = pPM(x = t, cure_rate = cure_rate[scenario] ^ hr[scenario], 
-                           t1 = t1[scenario], s1 = s1[scenario] ^ hr[scenario]))
-     )
+for (scenario in 1:length(cure_rate)) {
+  survival <- rbind(
+    survival,
+    tibble(
+      Scenario = scenario, Treatment = "Control", Time = t,
+      Survival = pPM(
+        x = t, cure_rate = cure_rate[scenario],
+        t1 = t1[scenario], s1 = s1[scenario]
+      )
+    ),
+    tibble(
+      Scenario = scenario, Treatment = "Experimental", Time = t,
+      Survival = pPM(
+        x = t, cure_rate = cure_rate[scenario]^hr[scenario],
+        t1 = t1[scenario], s1 = s1[scenario]^hr[scenario]
+      )
+    )
+  )
 }
 survival <- survival %>% mutate(Scenario = as.factor(Scenario))
-ggplot(survival, aes(x=Time, y=Survival, lty=Treatment, col=Scenario))+ geom_point() + 
-       scale_x_continuous(breaks = seq(0,study_duration[1] + 12, (study_duration[1] + 12) / bins)) + 
-  geom_line()  +
+ggplot(survival, aes(x = Time, y = Survival, lty = Treatment, col = Scenario)) +
+  geom_point() +
+  scale_x_continuous(breaks = seq(0, study_duration[1] + 12, (study_duration[1] + 12) / bins)) +
+  geom_line() +
   ggtitle("Poisson Mixture Model with Proportional Hazards") +
-  theme(legend.position="bottom",
-        legend.title=element_text(size=10), 
-        legend.text=element_text(size=9),
-        title =element_text(size=8))
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 10),
+    legend.text = element_text(size = 9),
+    title = element_text(size = 8)
+  )
 ```
 
-We also evaluate the failure rate over time, which is higher in scenario 2. 
+We also evaluate the failure rate over time, which is higher in scenario 2.
 This is later used in the design derivation.
 Note that the piecewise intervals used to approximate changing hazard rates can be made arbitrarily small to get more precise approximations of the above.
 However, given the uncertainty of the underlying assumptions, it is not clear that this provides any advantage.
 
 ```{r, out.width="100%", echo = FALSE}
-hazard <- survival %>% 
-          filter(Time > 0) %>%
-          group_by(Scenario, Treatment) %>%
-          mutate(cumulative_hazard = -log(Survival),
-                 time_lagged = lag(Time, default = 0), 
-                 hazard_rate = (cumulative_hazard - lag(cumulative_hazard, default = 0))/
-                               (Time - time_lagged),
-           ) %>%
-           ungroup()
+hazard <- survival %>%
+  filter(Time > 0) %>%
+  group_by(Scenario, Treatment) %>%
+  mutate(
+    cumulative_hazard = -log(Survival),
+    time_lagged = lag(Time, default = 0),
+    hazard_rate = (cumulative_hazard - lag(cumulative_hazard, default = 0)) /
+      (Time - time_lagged),
+  ) %>%
+  ungroup()
 hazardC1 <- tibble(time_lagged = seq(0, study_duration[1] + 12, .5)) %>%
-                   mutate(hazard_rate = hPM(time_lagged, cure_rate = cure_rate[1], t1 = t1[1], s1 = s1[1]))
+  mutate(hazard_rate = hPM(time_lagged, cure_rate = cure_rate[1], t1 = t1[1], s1 = s1[1]))
 ggplot() +
-  geom_step(data = hazard %>% filter(Treatment == "Control", Scenario == 1), 
-            aes(x = time_lagged, y = hazard_rate)) +
+  geom_step(
+    data = hazard %>% filter(Treatment == "Control", Scenario == 1),
+    aes(x = time_lagged, y = hazard_rate)
+  ) +
   ylab("Hazard rate") +
   xlab("Time") +
   ggtitle("Step Function Approximated Hazard Rate for Design Cure Model (Control Group)",
-          subtitle = "Dashed line shows actual hazard rate") +
-  geom_line(data = hazardC1, aes(x=time_lagged, y= hazard_rate), lty=2)
+    subtitle = "Dashed line shows actual hazard rate"
+  ) +
+  geom_line(data = hazardC1, aes(x = time_lagged, y = hazard_rate), lty = 2)
 ```
-
-
-
-
 
 # Event Accumulation
 
 Based on the above model, we predict how events will accumulate for the control group, experimental group under the alternate hypothesis and overall based on either the null hypothesis of no failure rate difference or the alternate hypothesis where events accrue more slowly in the experimental group.
 We do this by scenario.
 We use as a denominator the final planned events under the alternate hypothesis for scenario 1.
-
 
 Now we compare event accrual under the null and alternate hypothesis for each scenario, with 100% representing the targeted final events under scenario 1.
 The user should not have to update the code here.
@@ -192,61 +199,65 @@ For the 3 scenarios studied, event accrual is quite different, creating differen
 ```{r, echo=FALSE}
 # DO NOT ALTER CODE
 event_accrual <- NULL
-for(scenario in 1:length(cure_rate)){
-   control_accrual <- tibble(Time = 0, Events = 0, Treatment = "Control")
-   experimental_accrual <- control_accrual %>% mutate(Treatment = "Experimental")
-   control <- hazard %>% filter(Scenario == scenario, Treatment == "Control")
-   for(T in 1:(study_duration[1]+12)){
-      xc <- eEvents(lambda = control$hazard_rate, S = (control$Time - control$time_lagged)[1:(bins-1)], 
-                    gamma = 100 / enroll_duration[scenario], R = enroll_duration[scenario], eta = dropout_rate[scenario], 
-                    T =  T, Tfinal = study_duration[1])
-      control_accrual <- rbind(control_accrual, tibble(Time = xc$T, Events = xc$d, Treatment = "Control"))
-      xe <- eEvents(lambda = control$hazard_rate * hr[scenario], S = (control$Time - control$time_lagged)[1:(bins-1)], 
-                    gamma = 100 / enroll_duration[scenario], R = enroll_duration[scenario], eta = dropout_rate[scenario], 
-                    T =  T, Tfinal = study_duration[1])
-      experimental_accrual <- rbind(experimental_accrual, tibble(Time = xe$T, Events = xe$d, Treatment = "Experimental"))
-   }
-   overall_accrual <- rbind(control_accrual, experimental_accrual) %>%
-     group_by(Time) %>%
-     summarize(Events = sum(Events), Scenario = scenario, Hypothesis = "H1")
-   # Get max planned events for enrollment rates for scenario 1 under H1
-   # This will be modified for the design, but relative accrual will remain the same
-   if(scenario == 1) max_events_planned <- overall_accrual$Events[study_duration[1] + 1]
-   overallH0_accrual <- rbind(control_accrual, control_accrual) %>%
-     group_by(Time) %>%
-     summarize(Events = sum(Events), Scenario = scenario, Hypothesis = "H0") %>% 
-     ungroup()
-   # Combine for all scenarios
-   event_accrual <- rbind(event_accrual,
-                          overall_accrual,
-                          overallH0_accrual)
+for (scenario in 1:length(cure_rate)) {
+  control_accrual <- tibble(Time = 0, Events = 0, Treatment = "Control")
+  experimental_accrual <- control_accrual %>% mutate(Treatment = "Experimental")
+  control <- hazard %>% filter(Scenario == scenario, Treatment == "Control")
+  for (T in 1:(study_duration[1] + 12)) {
+    xc <- eEvents(
+      lambda = control$hazard_rate, S = (control$Time - control$time_lagged)[1:(bins - 1)],
+      gamma = 100 / enroll_duration[scenario], R = enroll_duration[scenario], eta = dropout_rate[scenario],
+      T = T, Tfinal = study_duration[1]
+    )
+    control_accrual <- rbind(control_accrual, tibble(Time = xc$T, Events = xc$d, Treatment = "Control"))
+    xe <- eEvents(
+      lambda = control$hazard_rate * hr[scenario], S = (control$Time - control$time_lagged)[1:(bins - 1)],
+      gamma = 100 / enroll_duration[scenario], R = enroll_duration[scenario], eta = dropout_rate[scenario],
+      T = T, Tfinal = study_duration[1]
+    )
+    experimental_accrual <- rbind(experimental_accrual, tibble(Time = xe$T, Events = xe$d, Treatment = "Experimental"))
+  }
+  overall_accrual <- rbind(control_accrual, experimental_accrual) %>%
+    group_by(Time) %>%
+    summarize(Events = sum(Events), Scenario = scenario, Hypothesis = "H1")
+  # Get max planned events for enrollment rates for scenario 1 under H1
+  # This will be modified for the design, but relative accrual will remain the same
+  if (scenario == 1) max_events_planned <- overall_accrual$Events[study_duration[1] + 1]
+  overallH0_accrual <- rbind(control_accrual, control_accrual) %>%
+    group_by(Time) %>%
+    summarize(Events = sum(Events), Scenario = scenario, Hypothesis = "H0") %>%
+    ungroup()
+  # Combine for all scenarios
+  event_accrual <- rbind(
+    event_accrual,
+    overall_accrual,
+    overallH0_accrual
+  )
 }
 event_accrual <- event_accrual %>% mutate(EF = Events / max_events_planned, Scenario = as.factor(Scenario))
 ggplot(event_accrual, aes(x = Time, y = EF, color = Scenario, lty = Hypothesis)) +
   geom_line() +
-  scale_y_continuous(breaks = seq(0,2,.2)) +
+  scale_y_continuous(breaks = seq(0, 2, .2)) +
   scale_x_continuous(breaks = seq(0, study_duration[1] + 12, 12)) +
   ylab("Fraction of planned events") +
   ggtitle("Fraction of planned events expected over time by scenario",
-          subtitle = "Fraction based on planned final events for scenario 1")
+    subtitle = "Fraction based on planned final events for scenario 1"
+  )
 ```
 
 # Design assumptions
 
-
 We choose calendar timing deliberately. For the example, we choose
 
 ```{r}
-h1s1_EF <- event_accrual %>% 
-                 filter(Scenario == 1 & Hypothesis == "H1" & Time %in% c(12, 24, 36)) %>%
-                 select(Time, EF)
+h1s1_EF <- event_accrual %>%
+  filter(Scenario == 1 & Hypothesis == "H1" & Time %in% c(12, 24, 36)) %>%
+  select(Time, EF)
 h1s1_EF
 # Interim analysis timing (information fraction)
 timing <- h1s1_EF$EF
 timing_calendar <- h1s1_EF$Time / study_duration
 ```
-
-
 
 Now we move on to other design assumptions.
 
@@ -256,7 +267,7 @@ control <- hazard %>% filter(Scenario == 1, Treatment == "Control")
 # Failure rates
 lambdaC <- control$hazard_rate
 # Interval durations
-S <- (control$Time - control$time_lagged)[1:(bins-1)]
+S <- (control$Time - control$time_lagged)[1:(bins - 1)]
 # 1-sided Type I error
 alpha <- 0.025
 # Type II error (1 - power)
@@ -266,10 +277,10 @@ test.type <- 6
 # 1-sided Type I error used for safety (for asymmetric 2-sided design)
 astar <- .2
 # Spending functions (sfu, sfl) and parameters (sfupar, sflpar)
-sfu <- sfHSD     # O'Brien-Fleming approximation by Lan and DeMets
-sfupar <- -4    # Not needed for sfLDPocock 
-sfl <- sfLDPocock # Near-equal Z-values for each analysis 
-sflpar <-  NULL   # Not needed for Pocock spending
+sfu <- sfHSD # O'Brien-Fleming approximation by Lan and DeMets
+sfupar <- -4 # Not needed for sfLDPocock
+sfl <- sfLDPocock # Near-equal Z-values for each analysis
+sflpar <- NULL # Not needed for Pocock spending
 # Dropout rate (exponential parameter per unit of time)
 dropout_rate <- 0.002
 # Experimental / control randomization ratio
@@ -279,28 +290,29 @@ ratio <- 1
 # Study Design and Event Accumulation
 
 We now assume a trial is enrolled with a constant enrollment rate over `r enroll_duration` months trial duration of `r study_duration`.
-We begin with a design using event-based spending, the default for gsSurv().
+We begin with a design using event-based spending, the default for `gsSurv()`.
 
 ```{r}
-design <- 
-  gsSurv(k = length(timing) + 1,
-         alpha = alpha,
-         beta = beta,
-         astar = astar,
-         test.type = test.type,
-         timing = timing,
-         hr = hr[1],
-         R = enroll_duration[1],
-         gamma = 1,
-         T = study_duration[1],
-         minfup = study_duration[1] - enroll_duration[1],
-         ratio = ratio,
-         sfu = sfu,
-         sfupar = sfupar,
-         sfl = sfl,
-         sflpar = sflpar,
-         lambdaC = lambdaC,
-         S = S)
+design <- gsSurv(
+  k = length(timing) + 1,
+  alpha = alpha,
+  beta = beta,
+  astar = astar,
+  test.type = test.type,
+  timing = timing,
+  hr = hr[1],
+  R = enroll_duration[1],
+  gamma = 1,
+  T = study_duration[1],
+  minfup = study_duration[1] - enroll_duration[1],
+  ratio = ratio,
+  sfu = sfu,
+  sfupar = sfupar,
+  sfl = sfl,
+  sflpar = sflpar,
+  lambdaC = lambdaC,
+  S = S
+)
 ```
 
 Summarize design
@@ -310,7 +322,9 @@ cat(summary(design))
 ```
 
 ```{r}
-design %>% gsBoundSummary(exclude = c("B-value", "CP", "CP H1", "PP")) %>% gt()
+design %>%
+  gsBoundSummary(exclude = c("B-value", "CP", "CP H1", "PP")) %>%
+  gt()
 ```
 
 # Calendar Spending Design
@@ -329,35 +343,36 @@ We now use the information fractions from the text overlay to set up a calendar-
 
 ```{r}
 # Only change to gsSurv call is timing
-design_calendar <- 
-  gsSurv(k = length(timing) + 1,
-         alpha = alpha,
-         beta = beta,
-         astar = astar,
-         test.type = test.type,
-         timing = timing,
-         hr = hr[1],
-         R = enroll_duration[1],
-         gamma = 1,
-         T = study_duration[1],
-         minfup = study_duration[1] - enroll_duration[1],
-         ratio = ratio,
-         sfu = sfu,
-         sfupar = sfupar,
-         usTime = timing_calendar,
-         sfl = sfl,
-         sflpar = sflpar,
-         lambdaC = lambdaC,
-         S = S)  
+design_calendar <-
+  gsSurv(
+    k = length(timing) + 1,
+    alpha = alpha,
+    beta = beta,
+    astar = astar,
+    test.type = test.type,
+    timing = timing,
+    hr = hr[1],
+    R = enroll_duration[1],
+    gamma = 1,
+    T = study_duration[1],
+    minfup = study_duration[1] - enroll_duration[1],
+    ratio = ratio,
+    sfu = sfu,
+    sfupar = sfupar,
+    usTime = timing_calendar,
+    sfl = sfl,
+    sflpar = sflpar,
+    lambdaC = lambdaC,
+    S = S
+  )
 design_calendar %>%
   gsBoundSummary(exclude = c("B-value", "CP", "CP H1", "PP")) %>%
-  gt() %>% 
-   tab_header(title = "Calendar-Based Design",
-                 subtitle = "Calendar Spending")
-  
+  gt() %>%
+  tab_header(
+    title = "Calendar-Based Design",
+    subtitle = "Calendar Spending"
+  )
 ```
-
-
 
 There are a few things to note for the above design:
 
@@ -371,7 +386,4 @@ There are a few things to note for the above design:
 
 # Expected behavior for scenario 3
 
-
-
 # References
-
