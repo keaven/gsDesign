@@ -12,7 +12,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Overview
+## Overview
 
 This document is intended to evaluate statistical significance for graphical multiplicity control when used with group sequential design [@MaurerBretz2013]. In particular, we demonstrate design and analysis of a complex oncology trial.
 There are many details building on the necessarily simple example provided by @MaurerBretz2013.
@@ -29,7 +29,7 @@ Given the complexity involved, substantial effort has been taken to provide meth
 The table of contents above lays out the organization of the document.
 In short, we begin with 1) design specification followed by 2) results entry which includes event counts and nominal p-values for testing, 3) carrying out hypothesis testing, and 4) verification of the hypothesis testing results.
 
-# Design
+## Design
 
 For the template example, there are 3 endpoints and 2 populations resulting in 6 hypotheses to be tested in the trial.
 The endpoints are:
@@ -80,7 +80,7 @@ library(gsDesign) # Group sequential design capabilities
 library(gMCP) # Multiplicity evaluation
 ```
 
-## Multiplicity diagram for hypothesis testing
+### Multiplicity diagram for hypothesis testing
 
 Following is the multiplicity graph for the trial design.
 We have arbitrarily split Type I error equally between the subgroup and overall populations.
@@ -131,7 +131,7 @@ That is, if PFS hypotheses are not rejected at a given analysis (say final PFS a
 While this practice was not encouraged by @MaurerBretz2013, it was acknowledged to control Type I error as previous discussed in [@LiuAnderson2008].
 Given the stringent Type I error control for multiple hypotheses, the ability to acknowledge clinically significant differences as statistically significant can be important in describing treatment benefits in regulatory labeling for a treatment.
 
-## Group sequential designs for each hypothesis  {.tabset}
+### Group sequential designs for each hypothesis {.tabset}
 
 For the example, we assume 1-sided testing or a non-binding futility bound as required for a @MaurerBretz2013 design using group sequential design with graphical multiplicity control.
 Each is demonstrated in the example code for respective hypotheses.
@@ -141,7 +141,7 @@ This section needs to be modified by the user to match the study design under co
 Those uncomfortable with coding may wish to design using the
 [gsDesign Shiny app](https://gsdesign.shinyapps.io/prod/) which provides not only a point and click interface, but also a code tab that generates R code that can be copied and plugged in for designs below.
 
-### H1: OS, Subgroup
+#### H1: OS, Subgroup
 
 We assume 50% of the population is in the subgroup of interest.
 A sample size of 378 is driven by overall survival (OS) in the subgroup where we assume a hazard ratio of 0.65.
@@ -189,7 +189,7 @@ tab %>%
   )
 ```
 
-### H2: OS, All
+#### H2: OS, All
 
 The total sample size is assumed to be twice the above, N=756.
 The power and hazard ratio can be adjusted to appropriately size the trial rather than starting with adjusting sample size to reach a targeted power.
@@ -227,7 +227,7 @@ We can also plot different design characteristics. Here, we plot the approximate
 plot(os, plottype = "HR", xlab = "Events")
 ```
 
-### H3: PFS, Subgroup
+#### H3: PFS, Subgroup
 
 For progression free survival (PFS) we assume a shorter median time to event of 5 months.
 With an assumed hazard ratio of 0.65, we adjust `beta` and `timing` to match the targeted sample size and interim analysis timing.
@@ -259,7 +259,7 @@ tab %>%
   kable_styling()
 ```
 
-### H4: PFS, All
+#### H4: PFS, All
 
 Finally, we design for PFS in all subjects.
 In this case, we simplify to a one-sided design.
@@ -282,7 +282,7 @@ tab %>%
   kable_styling()
 ```
 
-### H5 and H6: ORR
+#### H5 and H6: ORR
 
 For objective response rate (ORR), we assume an underlying control rate of 15%.
 In the subgroup population, we have almost 90% power to detect a 20% improvement.
@@ -297,7 +297,7 @@ In the all subjects population, we have approximately 95% power to detect an imp
 nBinomial(p1 = .3, p2 = .15, alpha = .0005, n = 756)
 ```
 
-## Design list
+### Design list
 
 Now we associate designs with hypotheses in an ordered list corresponding to the order in the multiplicity graph setup.
 Since ORR designs are not group sequential, we enter `NULL` values for those in the last 2 entries of the design list; hit code button to reveal code for this.
@@ -307,7 +307,7 @@ Since ORR designs are not group sequential, we enter `NULL` values for those in 
 gsDlist <- list(ossub, os, pfssub, pfs, NULL, NULL)
 ```
 
-## Spending plan and spending time
+### Spending plan and spending time
 
 While it was relatively straightforward above to set up timing of analyses to match for the different hypotheses, accumulation of endpoints can vary from plan in a variety of ways.
 Planning on how to deal with this is critical at the time of protocol development to avoid later amendments or inappropriate $\alpha$-allocation to early analyses.
@@ -332,13 +332,13 @@ Our general objectives here will be to:
 
 Here we assume that the subgroup prevalence was over-estimated in the study design and indicating how spending time can be used to deal with this deviation from plan.
 
-# Results entry at time of analysis
+## Results entry at time of analysis
 
 Results for each analysis performed should be entered here.
 We begin by documenting timing and event counts of each analysis.
 Then we proceed to enter nominal 1-sided testing p-values for each analysis of each hypothesis.
 
-## Timing of analyses and resulting event counts and spending times
+### Timing of analyses and resulting event counts and spending times
 
 Recall that the design assumed 50% prevalence of the subgroup.
 Here we assume that the observed prevalence is 40% and that, by specification stated above, we enroll until the targeted subpopulation of 378 is achieved.
@@ -364,7 +364,7 @@ os$n.I <- c(529, 700, 800)
 ossub$n.I <- c(185, 245, 295)
 ```
 
-## Nominal p-values for each analysis
+### Nominal p-values for each analysis
 
 For analyses not yet performed enter dummy values, including a p-value near 1 (e.g., .99).
 No other entry is required by the user in any other section of the document.
@@ -407,9 +407,9 @@ kable(inputResults, caption = "DUMMY RESULTS FOR IA2.") %>%
   add_footnote("Dummy results", notation = "none")
 ```
 
-# Testing hypotheses
+## Testing hypotheses
 
-## Compute sequential p-values for each hypothesis
+### Compute sequential p-values for each hypothesis
 
 Sequential p-value computation is done in one loop in an attempt to minimize chances for coding errors.
 We delay showing these until after display of the sequence of multiplicity graphs generated by hypothesis rejection is shown.
@@ -439,7 +439,7 @@ EOCtab <- EOCtab %>% select(-"nominalP")
 # kable(EOCtab,caption="Sequential p-values as initially placed in EOCtab") %>% kable_styling()
 ```
 
-## Evaluate hypothesis rejection using gMCP
+### Evaluate hypothesis rejection using gMCP
 
 We need to set up a `graph` object as implemented in the gMCP package.
 
@@ -466,7 +466,7 @@ EOCtab$Rejected <- result@rejected
 EOCtab$adjPValues <- result@adjPValues
 ```
 
-# Verification of hypotheses rejected
+## Verification of hypotheses rejected
 
 ```{r}
 # Number of graphs is used repeatedly
@@ -513,7 +513,7 @@ names(EOCtabx) <- c(
 # EOCtabx %>% select(c(1:4,7,5:6,8)) %>% kable() %>% kable_styling()
 ```
 
-## Multiplicity graph sequence from gMCP  {.tabset}
+### Multiplicity graph sequence from gMCP {.tabset}
 
 ```{r,message=FALSE,warning=FALSE,results='asis'}
 ### THERE SHOULD BE NO NEED TO MODIFY THIS CODE SECTION
@@ -532,13 +532,13 @@ for (i in 1:ngraphs) {
   ) +
     scale_fill_manual(values = cbPalette)
   cat(" \n")
-  cat("###", paste(" Graph", as.character(i), " \n\n"))
+  cat("####", paste(" Graph", as.character(i), " \n\n"))
   print(g)
   cat(" \n\n\n")
 }
 ```
 
-## Comparison of sequential p-values to multiplicity graphs
+### Comparison of sequential p-values to multiplicity graphs
 
 We can compare sequential p-values to available $\alpha$ in each graph.
 In the column 'Last Graph' we can see one of 2 things:
@@ -553,7 +553,7 @@ EOCtabx %>%
   kable_styling()
 ```
 
-## Bounds at final $\alpha$ allocated for group sequential tests {.tabset}
+### Bounds at final $\alpha$ allocated for group sequential tests {.tabset}
 
 As a separate validation, we examine group sequential bounds for each hypothesis updated with 1) the maximum $\alpha$ allocated above, 2) the number of events at each analysis, and 3) the cumulative spending at each analysis above. The nominal p-value for at least one of the analyses performed for each rejected hypotheses should be less than or equal to the nominal p-value in the group sequential design.
 For each hypothesis not rejected, all nominal p-values are greater than the its corresponding bound.
@@ -562,7 +562,7 @@ For hypotheses tested without a group sequential design, the nominal p-value for
 ```{r,results='asis'}
 for (i in 1:nHypotheses) {
   # Set up tab for hypothesis in output
-  cat("###", paste(" Hypothesis", as.character(i), " \n"))
+  cat("####", paste(" Hypothesis", as.character(i), " \n"))
   # Get results for hypothesis
   hresults <- inputResults %>% filter(H == i)
   # Print out max alpha allocated
@@ -629,7 +629,7 @@ for (i in 1:nHypotheses) {
 }
 ```
 
-# Session information
+## Session information
 
 The following documents the versions of R and packages used to develop this document.
 Note, in particular, that version 3.1 or later of the **gsDesign** package is needed.
@@ -638,4 +638,4 @@ Note, in particular, that version 3.1 or later of the **gsDesign** package is ne
 sessionInfo()
 ```
 
-# References
+## References
