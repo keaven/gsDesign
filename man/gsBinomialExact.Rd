@@ -215,7 +215,7 @@ run with \code{outtype=3} to check that you have done things appropriately.
 If \code{n} is not ordered (a bad idea) or not sequential (maybe OK), be
 aware of possible consequences.
 
-\code{nBinomial1Sample} is based on code from Marc Schwartz marc_schwartz@me.com. 
+\code{nBinomial1Sample} is based on code from Marc Schwartz \email{marc_schwartz@me.com}. 
 The possible sample size vector \code{n} needs to be selected in such a fashion
 that it covers the possible range of values that include the true minimum. 
 NOTE: the one-sided evaluation of significance is more conservative than using the 2-sided exact test in \code{binom.test}.
@@ -289,12 +289,12 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 
 Code for nBinomial1Sample was based on code developed by
-marc_schwartz@me.com.
+\email{marc_schwartz@me.com}.
 }
 \seealso{
 \code{\link{gsProbability}}
 }
 \author{
-Jon Hartzel, Yevgen Tymofyeyev and Keaven Anderson \email{keaven\_anderson@merck.}
+Jon Hartzel, Yevgen Tymofyeyev and Keaven Anderson \email{keaven_anderson@merck.com}
 }
 \keyword{design}

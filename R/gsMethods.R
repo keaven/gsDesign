@@ -562,7 +562,7 @@ print.nSurvival <- function(x, ...) {
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{gsDesign}, \link{plot.gsDesign},
 #' \code{\link{gsProbability}}, \code{\link{xtable.gsSurv}}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential

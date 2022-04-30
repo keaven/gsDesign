@@ -35,7 +35,7 @@
 # @note The manual is not linked to this help file, but is available in
 # library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 # installed.
-# @author Keaven Anderson \email{keaven\_anderson@@merck.}
+# @author Keaven Anderson \email{keaven_anderson@@merck.com}
 # @seealso \code{\link{Spending_Function_Overview}, \link{gsDesign}},
 # \code{\link{gsProbability}}
 # @references Jennison C and Turnbull BW (2000), \emph{Group Sequential

@@ -1,3 +1,11 @@
+# gsDesign 3.2.2 (January, 2022)
+
+- Use `inherits()` instead of `is()` to determine if an object is an instance of a class, when appropriate
+- Correctly close graphics device in unit tests to avoid plot output file not found issues
+- Minor fixes to hGraph() for multiplicity graphs
+- Minor fix to nBinomial() when odds-ratio scale specified to resolve user issue
+- Minor changes to vignettes
+
 # gsDesign 3.2.1 (July, 2021)
 
 - Changed gt package usage in a vignette due to deprecated gt function

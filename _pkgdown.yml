@@ -1,3 +1,8 @@
+url: https://keaven.github.io/gsDesign/
+
+template:
+  bootstrap: 5
+
 reference:
 - title: Group Sequential Computation
   contents:
@@ -98,6 +103,7 @@ reference:
 - title: Testing multiple hypotheses
   contents:
   - hGraph
+
 articles:
   - title: "Designing for time-to-event endpoints"
     desc: >

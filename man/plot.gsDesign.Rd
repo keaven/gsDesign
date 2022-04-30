@@ -164,6 +164,6 @@ Clinical Trials. A Unified Approach}.  New York: Springer.
 \code{\link{gsDesign}}, \code{\link{gsProbability}}
 }
 \author{
-Keaven Anderson \email{keaven\_anderson@merck.com}
+Keaven Anderson \email{keaven_anderson@merck.com}
 }
 \keyword{design}

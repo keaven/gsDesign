@@ -357,6 +357,6 @@ Medicine, 30:3267-3284, 2011.
 \code{\link{gsDesign}}
 }
 \author{
-Keaven Anderson \email{keaven_anderson@merck.}
+Keaven Anderson \email{keaven_anderson@merck.com}
 }
 \keyword{design}

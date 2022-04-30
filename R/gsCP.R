@@ -185,7 +185,7 @@
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{normalGrid}}, \code{\link{gsDesign}},
 #' \code{\link{gsProbability}}, \code{\link{gsBoundCP}}, \code{\link{ssrCP}},
 #' \code{\link{condPower}}
@@ -207,7 +207,7 @@ gsCP <- function(x, theta = NULL, i = 1, zi = 0, r = 18) {
   # as a gsProbability object
   # Inputs: interim theta value and which interim is considered
 
-  if (!(methods::is(x, "gsProbability") || methods::is(x, "gsDesign"))) {
+  if (!(inherits(x, "gsProbability") || inherits(x, "gsDesign"))) {
     stop("gsCP must be called with class of x either gsProbability or gsDesign")
   }
 
@@ -215,7 +215,7 @@ gsCP <- function(x, theta = NULL, i = 1, zi = 0, r = 18) {
     stop("gsCP must be called with i from 1 to x$k-1")
   }
 
-  test.type <- ifelse(methods::is(x, "gsProbability"), 3, x$test.type)
+  test.type <- ifelse(inherits(x, "gsProbability"), 3, x$test.type)
 
   if (!(is.numeric(zi) &  length(zi) == 1)) stop("zi must be single, real value")
 
@@ -254,10 +254,10 @@ gsCP <- function(x, theta = NULL, i = 1, zi = 0, r = 18) {
 #' @rdname gsCP
 # gsPP function [sinew] ----
 gsPP <- function(x, i = 1, zi = 0, theta = c(0, 3), wgts = c(.5, .5), r = 18, total = TRUE) {
-  if (!(methods::is(x, "gsProbability") || methods::is(x, "gsDesign"))) {
+  if (!(inherits(x, "gsProbability") || inherits(x, "gsDesign"))) {
     stop("gsPP: class(x) must be gsProbability or gsDesign")
   }
-  test.type <- ifelse(methods::is(x, "gsProbability"), 3, x$test.type)
+  test.type <- ifelse(inherits(x, "gsProbability"), 3, x$test.type)
   checkScalar(i, "integer", c(1, x$k - 1))
   checkScalar(zi, "numeric", c(-Inf, Inf), c(FALSE, FALSE))
   checkVector(wgts, "numeric", c(0, Inf), c(TRUE, FALSE))
@@ -280,7 +280,7 @@ gsPP <- function(x, i = 1, zi = 0, theta = c(0, 3), wgts = c(.5, .5), r = 18, to
 #' @rdname gsCP
 # gsPI function [sinew] ----
 gsPI <- function(x, i = 1, zi = 0, j = 2, level = .95, theta = c(0, 3), wgts = c(.5, .5)) {
-  if (!(methods::is(x, "gsProbability") || methods::is(x, "gsDesign"))) {
+  if (!(inherits(x, "gsProbability") || inherits(x, "gsDesign"))) {
     stop("gsPI: class(x) must be gsProbability or gsDesign")
   }
   checkScalar(i, "integer", c(1, x$k - 1))
@@ -346,7 +346,7 @@ gsPI <- function(x, i = 1, zi = 0, j = 2, level = .95, theta = c(0, 3), wgts = c
 #' @note The manual is not linked to this help file, but is available in
 #' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
 #' installed.
-#' @author Keaven Anderson \email{keaven\_anderson@@merck.}
+#' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsDesign}}, \code{\link{gsProbability}},
 #' \code{\link{gsCP}}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
@@ -360,7 +360,7 @@ gsPI <- function(x, i = 1, zi = 0, j = 2, level = .95, theta = c(0, 3), wgts = c
 #' @rdname gsBoundCP
 # gsBoundCP function [sinew] ----
 gsBoundCP <- function(x, theta = "thetahat", r = 18) {
-  if (!(methods::is(x, "gsProbability") || methods::is(x, "gsDesign"))) {
+  if (!(inherits(x, "gsProbability") || inherits(x, "gsDesign"))) {
     stop("gsPI: class(x) must be gsProbability or gsDesign")
   }
   checkScalar(r, "integer", c(1, 70))
@@ -369,7 +369,7 @@ gsBoundCP <- function(x, theta = "thetahat", r = 18) {
   }
 
   len <- x$k - 1
-  test.type <- ifelse(methods::is(x, "gsProbability"), 3, x$test.type)
+  test.type <- ifelse(inherits(x, "gsProbability"), 3, x$test.type)
 
   if (theta != "thetahat") {
     thetahi <- rep(theta, len)
@@ -398,7 +398,6 @@ gsBoundCP <- function(x, theta = "thetahat", r = 18) {
 # gsPosterior roxy [sinew] ----
 #' @rdname gsCP
 #' @export
-#' @importFrom methods is
 # gsPosterior function [sinew] ----
 gsPosterior <- function(x = gsDesign(), i = 1, zi = NULL, prior = normalGrid(), r = 18) {
   if (is.null(prior$gridwgts)) prior$gridwgts <- rep(1, length(prior$z))
@@ -406,10 +405,10 @@ gsPosterior <- function(x = gsDesign(), i = 1, zi = NULL, prior = normalGrid(), 
   checkVector(prior$gridwgts, "numeric", c(0, Inf), c(TRUE, FALSE))
   checkVector(prior$density, "numeric", c(0, Inf), c(TRUE, FALSE))
   checkVector(prior$z, "numeric", c(-Inf, Inf), c(FALSE, FALSE))
-  if (!(methods::is(x, "gsProbability") || methods::is(x, "gsDesign"))) {
+  if (!(inherits(x, "gsProbability") || inherits(x, "gsDesign"))) {
     stop("gsPosterior: x must have class gsDesign or gsProbability")
   }
-  test.type <- ifelse(methods::is(x, "gsProbability"), 3, x$test.type)
+  test.type <- ifelse(inherits(x, "gsProbability"), 3, x$test.type)
   checkScalar(i, "integer", c(1, x$k - 1))
   if (is.null(zi)) {
     zi <- c(x$lower$bound[i], x$upper$bound[i])
@@ -473,7 +472,7 @@ postfn <- function(x, PP, d, i, zi, j, theta, wgts) {
 #' @rdname gsCP
 # gsPOS function [sinew] ----
 gsPOS <- function(x, theta, wgts) {
-  if (!methods::is(x, c("gsProbability", "gsDesign"))) {
+  if (!inherits(x, c("gsProbability", "gsDesign"))) {
     stop("x must have class gsProbability or gsDesign")
   }
   checkVector(theta, "numeric")
@@ -489,7 +488,7 @@ gsPOS <- function(x, theta, wgts) {
 #' @rdname gsCP
 # gsCPOS function [sinew] ----
 gsCPOS <- function(i, x, theta, wgts) {
-  if (!methods::is(x, c("gsProbability", "gsDesign"))) {
+  if (!inherits(x, c("gsProbability", "gsDesign"))) {
     stop("x must have class gsProbability or gsDesign")
   }
   checkScalar(i, "integer", c(1, x$k), c(TRUE, FALSE))

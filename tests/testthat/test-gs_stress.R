@@ -13,7 +13,7 @@ testthat::context("gs stress")
         # cat("a = ", a, "b = ", b, "\n")
         res <- try(gsDesign(test.type = type, alpha = a, beta = b, sfu = sf))
         
-        if (is(res, "try-error")) {
+        if (inherits(res, "try-error")) {
           no.err <- FALSE
         }
       }
@@ -30,7 +30,7 @@ testthat::context("gs stress")
   {
     res <- try(gsDesign(test.type = type, sfu = sf, sfupar = p))
     
-    if (is(res, "try-error")) {
+    if (inherits(res, "try-error")) {
       no.err <- FALSE
     }
   }

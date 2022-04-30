@@ -376,6 +376,6 @@ group sequential trials with random information levels. \emph{Journal of biophar
  \code{\link[xtable]{xtable}}
 }
 \author{
-Keaven Anderson \email{keaven\_anderson@merck.}
+Keaven Anderson \email{keaven_anderson@merck.com}
 }
 \keyword{design}

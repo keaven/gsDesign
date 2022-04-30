@@ -68,6 +68,6 @@ classical group sequential approaches. \emph{Biometrics};57:886-891.
 \code{\link{gsCP}}
 }
 \author{
-Keaven Anderson \email{keaven\_anderson@merck.}
+Keaven Anderson \email{keaven_anderson@merck.com}
 }
 \keyword{design}

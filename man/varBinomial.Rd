@@ -335,6 +335,6 @@ Miettinen, O and Nurminen, M (1985), Comparative analysis of two rates.
 \code{\link[stats]{Normal}},\code{\link[stats]{uniroot}}
 }
 \author{
-Keaven Anderson \email{keaven\_anderson@merck.com}
+Keaven Anderson \email{keaven_anderson@merck.com}
 }
 \keyword{design}
