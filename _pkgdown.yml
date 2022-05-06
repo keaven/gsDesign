@@ -112,6 +112,7 @@ articles:
     contents:
       - SurvivalOverview
       - gsSurvBasicExamples
+      - PoissonMixtureModel
   - title: "Other"
     desc: >
         Other vignettes.
@@ -119,5 +120,4 @@ articles:
       - nNormal
       - hGraph
       - GraphicalMultiplicity
-      - PoissonMixtureModel
       - VaccineEfficacy
