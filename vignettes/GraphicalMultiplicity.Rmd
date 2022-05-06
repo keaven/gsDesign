@@ -639,3 +639,18 @@ sessionInfo()
 ```
 
 ## References
+
+```{js,echo=FALSE}
+// Temporary fix for dynamic tabsets code block rendering issue under pkgdown
+(function () {
+    unstyled_code = document.querySelectorAll('button code');
+
+    block0_old = unstyled_code[0].outerHTML;
+    block0_new = "<pre class='downlit sourceCode r' style='text-align:left;white-space:pre-wrap;'>" + block0_old + "</pre>";
+    unstyled_code[0].outerHTML = block0_new;
+
+    block1_old = unstyled_code[1].outerHTML;
+    block1_new = "<pre class='downlit sourceCode r' style='text-align:left;white-space:pre-wrap;'>" + block1_old + "</pre>";
+    unstyled_code[1].outerHTML = block1_new;
+})();
+```
