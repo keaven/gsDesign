@@ -63,7 +63,7 @@ For group sequential designs, we assume 1-sided testing.
 To reveal code blocks for the remainder of the document, press the code buttons indicated throughout.
 The initial code block sets options and loads needed packages; no modification should be required by the user.
 
-```{r,message=FALSE,warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 ### THERE SHOULD BE NO NEED TO MODIFY THIS CODE SECTION
 options(scipen = 999)
 # Colorblind palette
