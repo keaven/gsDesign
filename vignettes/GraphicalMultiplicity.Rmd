@@ -631,12 +631,8 @@ for (i in 1:nHypotheses) {
 
 ## Session information
 
-The following documents the versions of R and packages used to develop this document.
+You can use `sessionInfo()` to document the versions of R and R packages used to render this document.
 Note, in particular, that version 3.1 or later of the **gsDesign** package is needed.
-
-```{r}
-sessionInfo()
-```
 
 ## References
 
