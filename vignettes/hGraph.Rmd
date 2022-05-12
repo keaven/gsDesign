@@ -8,10 +8,17 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  dev = "ragg_png",
+  dpi = 96,
+  fig.retina = 1,
+  fig.width = 7.2916667,
+  fig.asp = 0.618,
+  fig.align = "center",
+  out.width = "80%"
 )
 ```
 
@@ -46,9 +53,9 @@ While the user has full control of ellipse placement and color, the default is t
 One advantage of default placement is that generally transition lines between hypotheses will not cross hypothesis ellipses, including when the graph is updated when some hypotheses are rejected.
 Transition weights between hypotheses are specified on directional lines between the hypothesis ellipses.
 Try this in a plot window. Note the effect if you change the size of the plot window.
-In a similar fashion, if you are using R Markdown, `fig.width` and `fig.height` parameters will affect formatting.
+In a similar fashion, if you are using R Markdown, parameters like `fig.width`, `fig.height`, and `fig.asp` will affect formatting.
 
-```{r, message=FALSE, fig.width=7.5, fig.height=4}
+```{r, message=FALSE}
 hGraph()
 ```
 
@@ -60,7 +67,7 @@ Note the `\n` character used to insert a carriage return in hypothesis name text
 The character used for weights (specified in `wchar`) is by default $\alpha$ under Windows and `w` otherwise.
 Note the clockwise placement of hypotheses.
 
-```{r, fig.width=7.5, fig.height=4.5}
+```{r}
 hGraph(
   nHypotheses = 3,
   nameHypotheses = c("HA\n First", "HC\n Second", "HB\n Third"),
@@ -93,7 +100,7 @@ Box and text size as well as maximum significant digit display for transition we
 
 The other parameter shown here is `offset` (left graph). This is in radians; it increases and decreases offset of transition lines between hypothesis ellipses. If there are not any transition arrows in both directions between any pair of hypotheses, `offset = 0` is a reasonable option.
 
-```{r, message=FALSE, fig.width=8, fig.height=4}
+```{r, message=FALSE, fig.asp=0.5}
 grid.arrange(
   # Left graph in figure
   hGraph(
@@ -127,7 +134,7 @@ Colors are specified as follows:
 - A `fill` color category; here we group the first 2 hypotheses and last 2 hypotheses (both graphs)
 - The `palette` specifies a palette for the colors (right graph)
 
-```{r,fig.width=7.5,fig.height=4}
+```{r, fig.width=9, fig.asp=0.5}
 grid.arrange(
   # Left graph in figure
   hGraph(
@@ -150,7 +157,7 @@ Next, we add a legend.
 - `legend.name` (default is none) specifies a name for the legend
 - `labels` specifies labels corresponding to the `fill` parameter
 
-```{r,fig.width=7.5,fig.height=4}
+```{r}
 hGraph(
   nHypotheses = 3,
   fill = c(1, 1, 2),
@@ -169,7 +176,7 @@ Rows represent the hypotheses from which transitions start; row values should su
 Columns represent the hypotheses to which transition arrows go.
 Any transition weight of 0 has no corresponding transition line in the figure.
 
-```{r,fig.width=7.5,fig.height=4}
+```{r}
 hGraph(
   nHypotheses = 3,
   m = matrix(c(

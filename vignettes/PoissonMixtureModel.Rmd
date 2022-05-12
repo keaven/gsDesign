@@ -8,6 +8,20 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "ragg_png",
+  dpi = 96,
+  fig.retina = 1,
+  fig.width = 7.2916667,
+  fig.asp = 0.618,
+  fig.align = "center",
+  out.width = "80%"
+)
+```
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(gsDesign)
 library(dplyr)
@@ -114,7 +128,7 @@ For any setting chosen, it is ideal to be able to cite published literature and 
 The points in the following graph indicate where underlying cumulative hazard matches the piecewise exponential of the specified cure rate models by scenario.
 The piecewise failure model is used to derive the sample size and targeted events over time in the trial.
 
-```{r, warning=FALSE, message=FALSE, echo=FALSE, out.width="100%"}
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
 t <- seq(0, study_duration[1] + 12, (study_duration[1] + 12) / bins)
 survival <- NULL
 for (scenario in 1:length(cure_rate)) {
@@ -142,12 +156,7 @@ ggplot(survival, aes(x = Time, y = Survival, lty = Treatment, col = Scenario)) +
   scale_x_continuous(breaks = seq(0, study_duration[1] + 12, (study_duration[1] + 12) / bins)) +
   geom_line() +
   ggtitle("Poisson Mixture Model with Proportional Hazards") +
-  theme(
-    # legend.position = "bottom",
-    # legend.title = element_text(size = 10),
-    # legend.text = element_text(size = 9),
-    plot.title = element_text(size = 8)
-  )
+  theme(legend.position = "bottom")
 ```
 
 We also evaluate the failure rate over time, which is higher in scenario 2.
@@ -155,7 +164,7 @@ This is later used in the design derivation.
 Note that the piecewise intervals used to approximate changing hazard rates can be made arbitrarily small to get more precise approximations of the above.
 However, given the uncertainty of the underlying assumptions, it is not clear that this provides any advantage.
 
-```{r, out.width="100%", echo = FALSE}
+```{r, echo = FALSE}
 hazard <- survival %>%
   filter(Time > 0) %>%
   group_by(Scenario, Treatment) %>%
@@ -179,11 +188,7 @@ ggplot() +
     subtitle = "Control Group"
   ) +
   geom_line(data = hazardC1, aes(x = time_lagged, y = hazard_rate), lty = 2) +
-  annotate(geom = "text", x = 35, y = .02, label = "Dashed line shows actual hazard rate", size = 2) +
-  theme(
-    plot.title = element_text(size = 6),
-    plot.subtitle = element_text(size = 6)
-  )
+  annotate(geom = "text", x = 35, y = .02, label = "Dashed line shows actual hazard rate")
 ```
 
 ## Event Accumulation
@@ -196,7 +201,7 @@ Now we compare event accrual under the null and alternate hypothesis for each sc
 The user should not have to update the code here.
 For the 3 scenarios studied, event accrual is quite different, creating difference spending issues.
 
-```{r, echo=FALSE, out.width="100%", echo=FALSE}
+```{r, echo=FALSE, echo=FALSE}
 # DO NOT ALTER CODE
 event_accrual <- NULL
 for (scenario in 1:length(cure_rate)) {
@@ -240,16 +245,11 @@ ggplot(event_accrual, aes(x = Time, y = EF, color = Scenario, lty = Hypothesis))
   scale_y_continuous(breaks = seq(0, 2, .2)) +
   scale_x_continuous(breaks = seq(0, study_duration[1] + 12, 12)) +
   ylab("Fraction of planned events") +
-  ggtitle("Fraction of planned events expected over time by scenario",
+  ggtitle(
+    "Fraction of planned events expected over time by scenario",
     subtitle = "Fraction based on planned final events for scenario 1"
   ) +
-  theme(
-    plot.title = element_text(size = 6),
-    plot.subtitle = element_text(size = 6),
-    legend.position = "bottom",
-    legend.title = element_text(size = 4),
-    legend.text = element_text(size = 4)
-  )
+  theme(legend.position = "bottom")
 ```
 
 # Study design

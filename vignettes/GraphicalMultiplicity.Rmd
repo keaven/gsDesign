@@ -12,6 +12,20 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = FALSE,
+  comment = "#>",
+  dev = "ragg_png",
+  dpi = 96,
+  fig.retina = 1,
+  fig.width = 7.2916667,
+  fig.asp = 0.618,
+  fig.align = "center",
+  out.width = "80%"
+)
+```
+
 ## Overview
 
 This document is intended to evaluate statistical significance for graphical multiplicity control when used with group sequential design [@MaurerBretz2013]. In particular, we demonstrate design and analysis of a complex oncology trial.
@@ -90,7 +104,7 @@ Reallocation for each endpoint proceeds from the subgroup to the overall populat
 If the overall population hypothesis is rejected for a given endpoint, the reallocation is split between the two populations for another endpoint.
 The choice for allocation and reallocation illustrated here is to demonstrate a complex multiplicity scenario; when actually applying this method the allocation and realloation choices should be carefully considered.
 
-```{r,fig.width=7.5, warning=FALSE, message = FALSE}
+```{r, warning=FALSE, message=FALSE}
 ### THIS CODE NEEDS TO BE MODIFIED FOR YOUR STUDY
 # If needed, see help file for gsDesign::hGraph() for explanation of parameters below
 # Hypothesis names
