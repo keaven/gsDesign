@@ -1591,7 +1591,7 @@ sfTruncated <- function(alpha, t, param) {
   if (param$trange[1] >= 1. | param$trange[2] <= param$trange[1] | param$trange[2] <= 0) {
     stop("param$trange must be a vector of length 2 with 0 <= param$trange[1] < param$trange[2]<=1. See help(sfTruncated)")
   }
-  if (class(param$sf) != "function") stop("param$sf must be a spending function")
+  if (!inherits(param$sf, "function")) stop("param$sf must be a spending function")
   if (!is.numeric(param$param)) stop("param$param must be numeric")
   spend <- as.vector(rep(0, length(t)))
   spend[t >= param$trange[2]] <- alpha
@@ -1628,7 +1628,7 @@ sfTrimmed <- function(alpha, t, param) {
   if (param$trange[1] >= 1. | param$trange[2] <= param$trange[1] | param$trange[2] <= 0) {
     stop("param$trange must be a vector of length 2 with 0 <= param$trange[1] < param$trange[2]<=1. See help(sfTrimmed)")
   }
-  if (class(param$sf) != "function") stop("param$sf must be a spending function")
+  if (!inherits(param$sf, "function")) stop("param$sf must be a spending function")
   if (!is.numeric(param$param)) stop("param$param must be numeric")
   spend <- as.vector(rep(0, length(t)))
   spend[t >= param$trange[2]] <- alpha
@@ -1665,7 +1665,7 @@ sfGapped <- function(alpha, t, param) {
   if (param$trange[1] >= 1. | param$trange[2] <= param$trange[1] | param$trange[2] <= 0 | param$trange[1] <= 0) {
     stop("param$trange must be a vector of length 2 with 0 < param$trange[1] < param$trange[2]<=1. See help(sfTrimmed)")
   }
-  if (class(param$sf) != "function") stop("param$sf must be a spending function")
+  if (!inherits(param$sf, "function")) stop("param$sf must be a spending function")
   if (!is.numeric(param$param)) stop("param$param must be numeric")
   spend <- as.vector(rep(0, length(t)))
   spend[t >= param$trange[2]] <- alpha

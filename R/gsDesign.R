@@ -806,7 +806,7 @@ gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0
 #' @useDynLib gsDesign gsdensity
 # gsDensity function [sinew] ----
 gsDensity <- function(x, theta = 0, i = 1, zi = 0, r = 18) {
-  if (class(x) != "gsDesign" && class(x) != "gsProbability") {
+  if (!inherits(x, "gsDesign") && !inherits(x, "gsProbability")) {
     stop("x must have class gsDesign or gsProbability.")
   }
   checkVector(theta, "numeric")

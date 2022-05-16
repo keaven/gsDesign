@@ -253,7 +253,7 @@ periods <- function(S, T, minfup, digits) {
 #' @export
 # print.eEvents function [sinew] ----
 print.eEvents <- function(x, digits = 4, ...) {
-  if (class(x) != "eEvents") {
+  if (!inherits(x, "eEvents")) {
     stop("print.eEvents: primary argument must have class eEvents")
   }
   cat("Study duration:              Tfinal=",
@@ -413,7 +413,7 @@ LFPWE <- function(alpha = .025, sided = 1, beta = .1,
 #' @export
 # print.nSurv function [sinew] ----
 print.nSurv <- function(x, digits = 4, ...) {
-  if (class(x) != "nSurv") {
+  if (!inherits(x, "nSurv")) {
     stop("Primary argument must have class nSurv")
   }
   x$digits <- digits

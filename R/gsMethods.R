@@ -267,7 +267,7 @@ print.gsDesign <- function(x, ...) {
 #' @export
 # print.nSurvival function [sinew] ----
 print.nSurvival <- function(x, ...) {
-  if (class(x) != "nSurvival") stop("print.nSurvival: primary argument must have class nSurvival")
+  if (!inherits(x, "nSurvival")) stop("print.nSurvival: primary argument must have class nSurvival")
   cat("Fixed design, two-arm trial with time-to-event\n")
   cat("outcome (Lachin and Foulkes, 1986).\n")
   cat("Study duration (fixed):          Ts=", x$Ts, "\n", sep = "")
