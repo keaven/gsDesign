@@ -9,7 +9,7 @@
     Boundary crossing probabilities and expected sample size assume
     any cross stops the trial
     
-    Upper boundary (power or Type I Error)
+    Upper boundary
               Analysis
        Theta      1      2      3  Total E{N}
       0.0000 0.0013 0.0049 0.0171 0.0233  0.6
@@ -22,7 +22,7 @@
       5.6727 0.6469 0.3410 0.0119 0.9998  0.5
       6.4830 0.8053 0.1930 0.0016 1.0000  0.4
     
-    Lower boundary (futility or Type II Error)
+    Lower boundary
               Analysis
        Theta      1      2      3  Total
       0.0000 0.4057 0.4290 0.1420 0.9767
@@ -46,7 +46,7 @@
     Boundary crossing probabilities and expected sample size assume
     any cross stops the trial
     
-    Upper boundary (power or Type I Error)
+    Upper boundary
               Analysis
        Theta      1      2      3  Total E{N}
       0.0000 0.0013 0.0049 0.0171 0.0233  0.6
@@ -59,7 +59,7 @@
       5.6727 0.6469 0.3410 0.0119 0.9998  0.5
       6.4830 0.8053 0.1930 0.0016 1.0000  0.4
     
-    Lower boundary (futility or Type II Error)
+    Lower boundary
               Analysis
        Theta      1      2      3  Total
       0.0000 0.4057 0.4290 0.1420 0.9767
@@ -82,13 +82,13 @@
     Boundary crossing probabilities and expected sample size assume
     any cross stops the trial
     
-    Upper boundary (power or Type I Error)
+    Upper boundary
               Analysis
       Theta     1      2  Total E{N}
         0.1 0e+00 0.0000 0.0000 87.5
         0.2 9e-04 0.0107 0.0116 99.7
     
-    Lower boundary (futility or Type II Error)
+    Lower boundary
               Analysis
       Theta      1      2  Total
         0.1 0.2503 0.0717 0.3220

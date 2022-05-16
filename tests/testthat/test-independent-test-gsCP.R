@@ -41,6 +41,13 @@ testthat::test_that(desc = "Test: out of range i ",
 })
 
 
+testthat::test_that(desc = "Test: zi is not a scalar", 
+                    code = {
+  x <- gsDesign(k = 3, test.type = 1, n.fix = 800)
+  local_edition(3)
+  expect_error(gsCP(x, theta = NULL, i = 2, zi = c(1, 2), r = 18))
+})
+
 
 testthat::test_that(desc = "Test: out of range zi - test.type = 2 ", 
                     code = {

@@ -44,7 +44,7 @@ print.gsProbability <- function(x, ...) {
   y[, x$k + 3] <- round(y[, x$k + 3], 1)
   rownames(y) <- rep(" ", j)
   colnames(y) <- c("Theta", 1:x$k, "Total", "E{N}")
-  cat("Upper boundary (power or Type I Error)\n")
+  cat("Upper boundary\n")
   cat("          Analysis\n")
   print(y)
 
@@ -56,7 +56,7 @@ print.gsProbability <- function(x, ...) {
   y <- round(cbind(x$theta, t(x$lower$prob), sump), 4)
   rownames(y) <- rep(" ", j)
   colnames(y) <- c("Theta", 1:x$k, "Total")
-  cat("\nLower boundary (futility or Type II Error)\n")
+  cat("\nLower boundary\n")
   cat("          Analysis\n")
   print(y)
   invisible(x)
@@ -267,7 +267,7 @@ print.gsDesign <- function(x, ...) {
 #' @export
 # print.nSurvival function [sinew] ----
 print.nSurvival <- function(x, ...) {
-  if (class(x) != "nSurvival") stop("print.nSurvival: primary argument must have class nSurvival")
+  if (!inherits(x, "nSurvival")) stop("print.nSurvival: primary argument must have class nSurvival")
   cat("Fixed design, two-arm trial with time-to-event\n")
   cat("outcome (Lachin and Foulkes, 1986).\n")
   cat("Study duration (fixed):          Ts=", x$Ts, "\n", sep = "")

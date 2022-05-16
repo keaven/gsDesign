@@ -13,3 +13,5 @@ TODO
 *.png
 *.rnw
 docs/
+vignettes/*.html
+vignettes/*.R

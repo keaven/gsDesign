@@ -133,7 +133,7 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 #'   R = c(2, 1, 2), S = c(1, 1), T = 20
 #' ))
 #' 
-#' # control group for example from Berstein and Lagakos (1978)
+#' # control group for example from Bernstein and Lagakos (1978)
 #' lamC <- c(1, .8, .5)
 #' n <- eEvents(
 #'   lambda = matrix(c(lamC, lamC * 2 / 3), ncol = 6), eta = 0,
@@ -253,7 +253,7 @@ periods <- function(S, T, minfup, digits) {
 #' @export
 # print.eEvents function [sinew] ----
 print.eEvents <- function(x, digits = 4, ...) {
-  if (class(x) != "eEvents") {
+  if (!inherits(x, "eEvents")) {
     stop("print.eEvents: primary argument must have class eEvents")
   }
   cat("Study duration:              Tfinal=",
@@ -413,7 +413,7 @@ LFPWE <- function(alpha = .025, sided = 1, beta = .1,
 #' @export
 # print.nSurv function [sinew] ----
 print.nSurv <- function(x, digits = 4, ...) {
-  if (class(x) != "nSurv") {
+  if (!inherits(x, "nSurv")) {
     stop("Primary argument must have class nSurv")
   }
   x$digits <- digits

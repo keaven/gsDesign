@@ -8,10 +8,17 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  dev = "ragg_png",
+  dpi = 96,
+  fig.retina = 1,
+  fig.width = 7.2916667,
+  fig.asp = 0.618,
+  fig.align = "center",
+  out.width = "80%"
 )
 
 options(width = 58)
@@ -365,7 +372,7 @@ zn2hr(z = z, n = events) # Schoenfeld approximation to HR
 
 There are various plots available. The approximate hazard ratios required to cross bounds again use the @Schoenfeld1981 approximation. For a **ggplot2** version of this plot, use the default `base = FALSE`.
 
-```{r,fig.width=6.5, fig.height=4}
+```{r, fig.asp=1}
 plot(lfgs, pl = "hr", dgt = 4, base = TRUE)
 ```
 
@@ -389,7 +396,7 @@ Keep in mind that there can be many reasons events will accrue at a different ra
 
 The expected event accrual of events over time for a design can be computed as follows:
 
-```{r, fig.width=6.5, fig.height=4}
+```{r, fig.asp=1}
 Month <- seq(0.025, enrollDuration + minfup, .025)
 plot(
   c(0, Month),
