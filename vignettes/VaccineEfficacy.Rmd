@@ -151,7 +151,9 @@ x <- gsSurv(
   minfup = trialDuration - enrollDuration, ratio = ratio
 )
 
-gsBoundSummary(x, tdigits = 1) # %>% gt() %>% ggtitle("Initial group sequential approximation")
+gsBoundSummary(x, tdigits = 1) %>%
+  gt() %>%
+  tab_header(title = "Initial group sequential approximation")
 ```
 
 Now we change the event counts at each analysis by rounding down to move away from the continuous, unrounded event counts above.
@@ -180,8 +182,9 @@ xx$hr0 <- x$hr0
 
 ```{r}
 xxsum <- gsBoundSummary(xx, deltaname = "HR", logdelta = TRUE, Nname = "Events")
-xxsum # %>% gt() %>%
-# ggtitle("Updated design with spending based on integer event counts")
+xxsum %>%
+  gt() %>%
+  tab_header(title = "Updated design with spending based on integer event counts")
 ```
 
 # Converting to an exact binomial design
@@ -269,6 +272,6 @@ This is approximated reasonably by the approximations using the time-to-event de
 # Summary
 
 We have provided an extended example to show that a @ChanBohidar exact binomial using spending function bounds can be derived in a two-step process that delivers sample size and bounds by 1) deriving a related time-to-event design using asymptotic methods and then 2) converting to an exact binomial design.
-Small adjustments were made to targeter Type I and Type II error probabilities in the asymptotic approximation to ensure the exact binomial Type I and Type II error rates were achieve. The method seems a reasonable and straightforward approach to develop a complete design.
+Small adjustments were made to target Type I and Type II error probabilities in the asymptotic approximation to ensure the exact binomial Type I and Type II error rates were achieve. The method seems a reasonable and straightforward approach to develop a complete design.
 
 # References
