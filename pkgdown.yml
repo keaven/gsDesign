@@ -2,11 +2,14 @@ pandoc: 2.7.3
 pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
+  GraphicalMultiplicity: GraphicalMultiplicity.html
+  PoissonMixtureModel: PoissonMixtureModel.html
   SurvivalOverview: SurvivalOverview.html
+  VaccineEfficacy: VaccineEfficacy.html
   gsSurvBasicExamples: gsSurvBasicExamples.html
   hGraph: hGraph.html
   nNormal: nNormal.html
-last_built: 2022-05-11T11:56Z
+last_built: 2022-05-16T17:40Z
 urls:
   reference: https://keaven.github.io/gsDesign/reference
   article: https://keaven.github.io/gsDesign/articles

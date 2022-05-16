@@ -137,13 +137,13 @@
 <code class="sourceCode R"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span><span class="op">:</span><span class="fl">200</span>
 <span class="va">pwrn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1 <span class="op">=</span> <span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">1.6</span>, sd2 <span class="op">=</span> <span class="fl">1.25</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, n <span class="op">=</span> <span class="va">n</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">pwrn</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></code></pre></div>
-<p><img src="nNormal_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="nNormal_files/figure-html/unnamed-chunk-6-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>Alternatively, you could fix sample size at 200 and plot power under different treatment effect assumptions:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">delta1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">1</span>, <span class="fl">.025</span><span class="op">)</span>
 <span class="va">pwrdelta1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1 <span class="op">=</span> <span class="va">delta1</span>, sd <span class="op">=</span> <span class="fl">1.6</span>, sd2 <span class="op">=</span> <span class="fl">1.25</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, n <span class="op">=</span> <span class="fl">200</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">delta1</span>, <span class="va">pwrdelta1</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></code></pre></div>
-<p><img src="nNormal_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="nNormal_files/figure-html/unnamed-chunk-7-1.png" width="80%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="verification-with-simulation">Verification with simulation<a class="anchor" aria-label="anchor" href="#verification-with-simulation"></a>
@@ -168,7 +168,7 @@
 <span class="op">)</span>
 <span class="va">z</span> <span class="op">&lt;-</span> <span class="va">deltahat</span> <span class="op">/</span> <span class="va">s</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">z</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">.975</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.946044</span></code></pre></div>
+<span class="co">#&gt; [1] 0.94652</span></code></pre></div>
 <p>The standard error for this simulation power calculation is approximately</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">pwr</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">pwr</span><span class="op">)</span> <span class="op">/</span> <span class="va">nsim</span><span class="op">)</span>
@@ -187,7 +187,7 @@
 <span class="op">)</span>
 <span class="va">d</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Analysis</th>
@@ -270,7 +270,7 @@
   delta1 <span class="op">=</span> <span class="fl">0.8</span>
 <span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op"><a href="https://gt.rstudio.com/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Analysis</th>

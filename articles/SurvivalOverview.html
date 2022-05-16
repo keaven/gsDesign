@@ -146,7 +146,7 @@
 <p>which, rounding up, matches (with tabular output):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/nSurvival.html">nEvents</a></span><span class="op">(</span>hr <span class="op">=</span> <span class="va">hr</span>, alpha <span class="op">=</span> <span class="va">alpha</span>, beta <span class="op">=</span> <span class="va">beta</span>, r <span class="op">=</span> <span class="fl">1</span>, tbl <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">hr</th>
@@ -195,7 +195,7 @@
 <span class="op">)</span>
 <span class="va">Schoenfeld</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"HR"</span>, logdelta <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Analysis</th>
@@ -451,7 +451,7 @@
 <span class="op">)</span>
 <span class="va">lfgs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Analysis</th>
@@ -535,7 +535,7 @@
 <p>There are various plots available. The approximate hazard ratios required to cross bounds again use the <span class="citation">Schoenfeld (1981)</span> approximation. For a <strong>ggplot2</strong> version of this plot, use the default <code>base = FALSE</code>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lfgs</span>, pl <span class="op">=</span> <span class="st">"hr"</span>, dgt <span class="op">=</span> <span class="fl">4</span>, base <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-26-1.png" width="624"></p>
+<p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-26-1.png" width="80%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="event-accrual">Event accrual<a class="anchor" aria-label="anchor" href="#event-accrual"></a>
@@ -547,7 +547,7 @@
   `Control events` <span class="op">=</span> <span class="va">lfgs</span><span class="op">$</span><span class="va">eDC</span>,
   `Experimental events` <span class="op">=</span> <span class="va">lfgs</span><span class="op">$</span><span class="va">eDE</span>
 <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">Analysis</th>
@@ -579,7 +579,7 @@
   type <span class="op">=</span> <span class="st">"l"</span>, xlab <span class="op">=</span> <span class="st">"Month"</span>, ylab <span class="op">=</span> <span class="st">"Expected events"</span>,
   main <span class="op">=</span> <span class="st">"Expected event accrual over time"</span>
 <span class="op">)</span></code></pre></div>
-<p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-28-1.png" width="624"></p>
+<p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-28-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>On the other hand, if you want to know the expected time to accrue 25% of the final events and what the expected enrollment accrual is at that time, you compute using:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">tEventsIA</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lfgs</span>, timing <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span>
