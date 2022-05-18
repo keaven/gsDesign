@@ -1014,26 +1014,22 @@ sfStep <- function(alpha, t, param) {
     stop("Timepoints and cumulative proportion of spending must be >= 0 and <= 1 in sfStep")
   }
   if (k > 1) {
-    inctime <- x$param[1:k] - c(0, x$param[1:(k - 1)])
-    incspend <- x$param[(k + 1):j] - c(0, x$param[(k + 1):(j - 1)])
-    if ((j > 2) && (min(inctime) <= 0)) {
+    inctime <- x$param[2:k] - x$param[1:(k-1)]
+    if (min(inctime <= 0)){
       stop("Timepoints must be strictly increasing in sfStep")
     }
-    if ((j > 2) && (min(incspend) < 0)) {
+    incspend <- x$param[(k + 1):j] - c(0, x$param[(k + 1):(j - 1)])
+    if (min(incspend) < 0) {
       stop("Spending must be non-decreasing in sfStep")
     }
   }
   s <- t
-  s[t <= param[1] | t < 0] <- 0
+  s[t < param[1]] <- 0
+  s[t >= param[k]] <- param[k]
   s[t >= 1] <- 1
-  ind <- (0 < t) & (t <= param[1])
-  s[ind] <- param[k + 1]
-  ind <- (1 > t) & (t >= param[k])
-  s[ind] <- param[j]
   if (k > 1) {
-    for (i in 2:k)
-    {
-      ind <- (param[i - 1] < t) & (t <= param[i])
+    for (i in 2:k){
+      ind <- (param[i - 1] <= t) & (t < param[i])
       s[ind] <- param[k + i - 1]
     }
   }
