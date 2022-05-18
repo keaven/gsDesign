@@ -273,11 +273,11 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-out co"><span class="r-pr">#&gt;</span>                ~delta at bound   0.9094</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            P(Cross) if delta=0   0.0074</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            P(Cross) if delta=1   0.6004</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Final                   Z   1.9975</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      N: 95         p (1-sided)   0.0229</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                ~delta at bound   0.6322</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            P(Cross) if delta=0   0.0250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            P(Cross) if delta=1   0.8807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Final                   Z   2.0505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      N: 95         p (1-sided)   0.0202</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                ~delta at bound   0.6490</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            P(Cross) if delta=0   0.0225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            P(Cross) if delta=1   0.8705</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># now show how step function can be abused by 'adapting' stage 2 sample size based on interim result</span></span>
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">2</span>, delta <span class="op">=</span> <span class="fl">.05</span>, sfu <span class="op">=</span> <span class="va">sfStep</span>, sfupar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.02</span>, <span class="fl">.001</span><span class="op">)</span>, timing <span class="op">=</span> <span class="fl">.02</span>, test.type <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -286,7 +286,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-plt img"><img src="sfLinear-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span class="co"># sample sizes at analyses:</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]   85 4204</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]   85 4223</span>
 <span class="r-in"><span class="co"># simulate 1 million stage 1 sum of 178 Normal(0,1) random variables</span></span>
 <span class="r-in"><span class="co"># Normal(0,Variance=178) under null hypothesis</span></span>
 <span class="r-in"><span class="va">s1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000000</span>, <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">178</span><span class="op">)</span><span class="op">)</span></span>
@@ -303,14 +303,14 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span class="co"># early or late depending on observed interim z1,</span></span>
 <span class="r-in"><span class="co"># Type I error is now almost twice the planned .025</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">z1</span> <span class="op">&gt;=</span> <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">|</span> <span class="va">z2</span> <span class="op">&gt;=</span> <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1000000</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.046795</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.045915</span>
 <span class="r-in"><span class="co"># if stage 2 sample size is random and independent of z1 with same frequency,</span></span>
 <span class="r-in"><span class="co"># this is not a problem</span></span>
 <span class="r-in"><span class="va">s1alt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000000</span>, <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">178</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">z1alt</span> <span class="op">&lt;-</span> <span class="va">s1alt</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">178</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">z2alt</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">s1alt</span> <span class="op">+</span> <span class="va">s2</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">178</span> <span class="op">+</span> <span class="va">n2</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">z1alt</span> <span class="op">&gt;=</span> <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">|</span> <span class="va">z2alt</span> <span class="op">&gt;=</span> <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1000000</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.024985</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.024811</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
