@@ -274,7 +274,7 @@ validate_sfLinear <- function(alpha, t, param) {
 #-------------------------------------------------------------------------------
 #### sfStep : The function sfStep() specifies a step function spending function
 #-------------------------------------------------------------------------------
-# Independent code Author : Apurva Bhingare
+# Independent code Author : Apurva Bhingare (modified by K Anderson, 5/26/2022)
 # alpha: Type I error (or Type II error) specification takes values between 0 and 1.
 # t :    A vector of time points (information fraction) with increasing
 #        values from >0 and <=1.
@@ -287,24 +287,14 @@ validate_sfStep <- function(alpha, t, param) {
 
   s <- t
 
-  ind1 <- (t <= param[1] | t < 0)
-  ind2 <- t >= 1
-  ind3 <- (0 < t) & (t <= param[1])
-  ind4 <- (1 > t) & (t >= param[k])
-
-  s[ind1] <- 0
-  s[ind2] <- 1
-  s[ind3] <- param[k + 1]
-  s[ind4] <- param[j]
-
-  if (k > 1) {
-    for (i in 2:k)
-    {
-      ind <- (param[i - 1] < t) & (t <= param[i])
-      s[ind] <- param[k + i - 1]
-    }
+  s[t < param[1]] <- 0
+  s[t >= param[k]] <- param[j]
+  
+  if (k > 1){
+    for (i in 1:(k-1)) s[(param[i] <= t) & (t < param[i + 1])] <- param[k + i]
   }
-
+  s[t >= 1] <- 1
+  
   spend <- alpha * s
   return(spend)
 }

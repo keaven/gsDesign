@@ -55,10 +55,10 @@ testthat::test_that("Test: Output validation,
                     Source: gsDesign_independent_code.R", {
                       
   alpha <- 0.025
-  t = c(0.25,0.5,1)
+  t = c(0, 0.25, .3, .35, 0.5, .65, .9, 1)
   param <- c(	0.3,	0.5,	0.65,	0.5,0.75,	0.9)
                       
-  spend <- gsDesign::sfStep(alpha = alpha,t = t,param = param)$spend
+  spend <- gsDesign::sfStep(alpha = alpha,t = t, param = param)$spend
   expected_spend <- validate_sfStep(alpha,t,param)
   expect_equal(spend,expected_spend)
 })
