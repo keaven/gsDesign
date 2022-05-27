@@ -1,3 +1,12 @@
+# gsDesign 3.3.0 (May, 2022)
+
+- Addition of vignettes
+    - Demonstrate cure model and calendar-based analysis timing for time-to-event endpoint design
+    - Vaccine efficacy design using spending bounds and exact binomial boundary crossing probabilities
+- Minor fix to labeling in print.gsProbability
+- Fixed error in sfStep
+- Updates to reduce R CMD check and other minor issues 
+
 # gsDesign 3.2.2 (January, 2022)
 
 - Use `inherits()` instead of `is()` to determine if an object is an instance of a class, when appropriate
