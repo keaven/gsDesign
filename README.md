@@ -1,11 +1,11 @@
+# gsDesign
+
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/gsDesign)](https://CRAN.R-project.org/package=gsDesign)
 [![Codecov test coverage](https://codecov.io/gh/keaven/gsDesign/branch/master/graph/badge.svg)](https://app.codecov.io/gh/keaven/gsDesign?branch=master)
-![pkgdown](https://github.com/keaven/gsDesign/workflows/pkgdown/badge.svg)
-[![R-CMD-check](https://github.com/keaven/gsDesign/workflows/R-CMD-check/badge.svg)](https://github.com/keaven/gsDesign/actions)
+[![pkgdown](https://github.com/keaven/gsDesign/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/keaven/gsDesign/actions/workflows/pkgdown.yaml)
+[![R-CMD-check](https://github.com/keaven/gsDesign/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/keaven/gsDesign/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
-
-# gsDesign 
 
 The gsDesign package supports group sequential clinical trial design, largely as presented in the book Group Sequential Methods with Applications to Clinical Trials by Christopher Jennison and Bruce Turnbull (Chapman and Hall/CRC, 2000).
 An easy-to-use [web interface](https://rinpharma.shinyapps.io/gsdesign/) to both enable usage without coding and to generate code to be able to reproduce the design; this is being enhanced to support more features on an ongoing basis. 
