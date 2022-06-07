@@ -8,7 +8,7 @@
 <!-- badges: end -->
 
 The gsDesign package supports group sequential clinical trial design, largely as presented in the book Group Sequential Methods with Applications to Clinical Trials by Christopher Jennison and Bruce Turnbull (Chapman and Hall/CRC, 2000).
-An easy-to-use [web interface](https://rinpharma.shinyapps.io/gsdesign/) to both enable usage without coding and to generate code to be able to reproduce the design; this is being enhanced to support more features on an ongoing basis. 
+An easy-to-use [web interface](https://rinpharma.shinyapps.io/gsdesign/) to both enable usage without coding and to generate code to be able to reproduce the design; this is being enhanced to support more features on an ongoing basis. See the [talk](https://www.youtube.com/watch?v=8uZRuvzma9M) presented at the R/Pharma Conference to get started with the web interface.
 
 ## Installation
 
