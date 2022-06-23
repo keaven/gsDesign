@@ -37,6 +37,12 @@ jobs:
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
+      - name: Install doxygen
+        run: sudo apt-get install -y doxygen graphviz
+
+      - name: Build doxygen site
+        run: doxygen Doxyfile
+
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@4.1.4
