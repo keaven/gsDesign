@@ -1,6 +1,28 @@
+/**
+ * @file probpos.c
+ * @brief A short description of the file.
+ * @author Keaven Anderson <keaven_anderson@merck.com>
+ */
+
 #include "R.h"
 #include "Rmath.h"
 
+/**
+ * @brief A short description of the function.
+ *
+ * Optional full description of the function,
+ * where blank lines start new paragraphs.
+ *
+ * @param theta TBA
+ * @param m TBA
+ * @param ak TBA
+ * @param z TBA
+ * @param h TBA
+ * @param Ikm1 TBA
+ * @param Ik TBA
+ *
+ * @return TBA
+ */
 double probneg(double theta, int m, double ak, double *z, double *h, double Ikm1, double Ik)
 {
     int i;
@@ -18,6 +40,22 @@ double probneg(double theta, int m, double ak, double *z, double *h, double Ikm1
     return (prob);
 }
 
+/**
+ * @brief A short description of the function.
+ *
+ * Optional full description of the function,
+ * where blank lines start new paragraphs.
+ *
+ * @param theta TBA
+ * @param m TBA
+ * @param bk TBA
+ * @param z TBA
+ * @param h TBA
+ * @param Ikm1 TBA
+ * @param Ik TBA
+ *
+ * @return TBA
+ */
 double probpos(double theta, int m, double bk, double *z, double *h, double Ikm1, double Ik)
 {
     int i;

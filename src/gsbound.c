@@ -1,5 +1,11 @@
+/**
+ * @file gsbound.c
+ * @brief A short description of the file.
+ * @author Keaven Anderson <keaven_anderson@merck.com>
+ */
+
 #define DEBUG 0
-/* note: EXTREMEZ > 3 + log(r) +  Z(1-alpha) + Z(1-beta)
+/* Note: EXTREMEZ > 3 + log(r) +  Z(1-alpha) + Z(1-beta)
    per bottom of p 349 in Jennison and Turnbull */
 #define EXTREMEZ 20
 #define MAXR 83
@@ -8,22 +14,31 @@
 #include "Rmath.h"
 #include "gsDesign.h"
 
-/* Group sequential probability computation per Jennison & Turnbull
-   xnanal- # of possible analyses in the group-sequential designs
-            (interims + final)
-   I     - statistical information available at each analysis
-   a     - lower cutoff points for z statistic at each analysis (output)
-   b     - upper cutoff points for z statistic at each analysis (output)
-   probhi- input vector with probability of rejecting (Z>bj) at
-           jth interim analysis, j=1...nanal
-   problo- input vector with probability of rejecting (Z<aj) at
-           jth interim analysis, j=1...nanal
-    xtol  - relative change between iterations required to stop for 'convergence'
-   xr    - determinant of # of grid points for numerical integration
-           r=17 will give a max of 201 points which is what they recommend
-    retval- error flag returned; 0 if convergence; 1 indicates error
-    printerr- 1 if error messages to be printed - other values suppress printing
-*/
+/**
+ * @brief Group sequential probability computation per Jennison & Turnbull.
+ *
+ * Optional full description of the function,
+ * where blank lines start new paragraphs.
+ *
+ * @param xnanal # of possible analyses in the group-sequential designs
+ * (interims + final).
+ * @param I Statistical information available at each analysis.
+ * @param a Lower cutoff points for z statistic at each analysis (output).
+ * @param b Upper cutoff points for z statistic at each analysis (output).
+ * @param probhi Input vector with probability of rejecting (Z > bj) at
+ * j-th interim analysis, j = 1, ..., nanal.
+ * @param problo Input vector with probability of rejecting (Z < aj) at
+ * j-th interim analysis, j = 1, ..., nanal.
+ * @param xtol Relative change between iterations required to
+ * stop for 'convergence'.
+ * @param xr Determinant of # of grid points for numerical integration.
+ * r=17 will give a max of 201 points which is what they recommend.
+ * @param retval Error flag returned; 0 if convergence; 1 indicates error.
+ * @param printerr 1 if error messages to be printed - other values
+ * suppress printing.
+ *
+ * @return Void.
+ */
 void gsbound(int *xnanal, double *I, double *a, double *b, double *problo, double *probhi,
              double *xtol, int *xr, int *retval, int *printerr)
 {

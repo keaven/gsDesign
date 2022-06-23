@@ -1,5 +1,23 @@
+/**
+ * @file gridpts.c
+ * @brief A short description of the file.
+ * @author Keaven Anderson <keaven_anderson@merck.com>
+ */
+
 #include <math.h>
 
+/**
+ * @brief A short description of the function.
+ *
+ * Optional full description of the function,
+ * where blank lines start new paragraphs.
+ *
+ * @param r TBA
+ * @param mu TBA
+ * @param z TBA
+ *
+ * @return Void.
+ */
 void gridpts1(int r, double mu, double *z)
 {
    int i, r5, r6;
@@ -16,9 +34,26 @@ void gridpts1(int r, double mu, double *z)
       z[i - 1] = mu + 3. + 4. * log(rdbl / (r6 - i));
 }
 
-/* returns gridpoints per Jennison & Turnbull, p. 349
-   returned value is # of grid pts
-*/
+/**
+ * @brief A short description of the function.
+ *
+ * Optional full description of the function,
+ * where blank lines start new paragraphs.
+ *
+ * @param r TBA
+ * @param mu TBA
+ * @param a TBA
+ * @param b TBA
+ * @param z TBA
+ * @param w TBA
+ *
+ * @return Grid points per Jennison & Turnbull, p. 349.
+ * Returned value is # of grid points.
+ *
+ * @see Jennison C and Turnbull BW (2000),
+ * _Group Sequential Methods with Applications to Clinical Trials_.
+ * Boca Raton: Chapman and Hall.
+ */
 int gridpts(int r, double mu, double a, double b, double *z, double *w)
 {
    int i, r5, r6, j = 0, done = 0;

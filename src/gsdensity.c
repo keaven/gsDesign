@@ -1,9 +1,33 @@
+/**
+ * @file gsdensity.c
+ * @brief A short description of the file.
+ * @author Keaven Anderson <keaven_anderson@merck.com>
+ */
+
 #include "R.h"
 #include "Rmath.h"
 #include "gsDesign.h"
 
-/* sub-density function (integrates to < 1) between bounds at interim
-   analysis for group sequential design */
+/**
+ * @brief Sub-density function (integrates to < 1) between bounds at
+ * interim analysis for group sequential design.
+ *
+ * Optional full description of the function,
+ * where blank lines start new paragraphs.
+ *
+ * @param den TBA
+ * @param xnanal TBA
+ * @param ntheta TBA
+ * @param xtheta TBA
+ * @param I TBA
+ * @param a TBA
+ * @param b TBA
+ * @param xz TBA
+ * @param zlen TBA
+ * @param xr TBA
+ *
+ * @return Void.
+ */
 void gsdensity(double *den, int *xnanal, int *ntheta, double *xtheta,
                double *I, double *a, double *b, double *xz,
                int *zlen, int *xr)

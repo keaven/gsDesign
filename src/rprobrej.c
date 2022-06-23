@@ -1,23 +1,37 @@
+/**
+ * @file rprobrej.c
+ * @brief A short description of the file.
+ * @author Keaven Anderson <keaven_anderson@merck.com>
+ */
+
 #include "R.h"
 #include "Rmath.h"
 #include "gsDesign.h"
 
-/* Group sequential boundary crossing probability computation per Jennison & Turnbull
-   This version uses all pointer arguments so that it can be called from R or Splus
-   xnanal - # of possible analyses in the group-sequential designs
-            (interims + final)
-       ntheta - # of theta values for which boundary crossing probabilities are to be computed
-   theta  - vector of drift parameters
-   I      - statistical information available at each analysis
-   a      - lower cutoff points for z statistic at each analysis
-   b      - upper cutoff points for z statistic at each analysis
-   xprobhi- vector to return probability of rejecting (Z>bj) at
-            jth interim analysis, j=1...nanal
-   xproblo- vector to return probability of rejecting (Z<aj) at
-            jth interim analysis, j=1...nanal
-   xr     - determinant of # of grid points for numerical integration
-            r=17 will give a max of 201 points which is what they recommend
-*/
+/**
+ * @brief Group sequential boundary crossing probability computation
+ * per Jennison & Turnbull.
+ *
+ * This version uses all pointer arguments so that it can be called
+ * from R or S-PLUS.
+ *
+ * @param xnanal # of possible analyses in the group sequential designs
+ * (interims + final).
+ * @param ntheta # of theta values for which boundary crossing probabilities
+ * are to be computed.
+ * @param xtheta Vector of drift parameters.
+ * @param I Statistical information available at each analysis.
+ * @param a Lower cutoff points for z statistic at each analysis.
+ * @param b Upper cutoff points for z statistic at each analysis.
+ * @param xproblo Vector to return probability of rejecting (Z < aj) at
+ * j-th interim analysis, j = 1, ..., nanal.
+ * @param xprobhi Vector to return probability of rejecting (Z > bj) at
+ * j-th interim analysis, j = 1, ..., nanal.
+ * @param xr Determinant of # of grid points for numerical integration.
+ * r=17 will give a max of 201 points which is what they recommend.
+ *
+ * @return Void.
+ */
 void probrej(int *xnanal, int *ntheta, double *xtheta, double *I, double *a, double *b,
              double *xproblo, double *xprobhi, int *xr)
 {

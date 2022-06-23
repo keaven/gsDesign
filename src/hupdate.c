@@ -1,6 +1,31 @@
+/**
+ * @file hupdate.c
+ * @brief A short description of the file.
+ * @author Keaven Anderson <keaven_anderson@merck.com>
+ */
+
 #include <stdio.h>
 #include <math.h>
 
+/**
+ * @brief A short description of the function.
+ *
+ * Optional full description of the function,
+ * where blank lines start new paragraphs.
+ *
+ * @param theta TBA
+ * @param wgt TBA
+ * @param m1 TBA
+ * @param Ikm1 TBA
+ * @param zkm1 TBA
+ * @param hkm1 TBA
+ * @param m2 TBA
+ * @param Ik TBA
+ * @param zk TBA
+ * @param hk TBA
+ *
+ * @return Void.
+ */
 void hupdate(double theta, double *wgt,
              int m1, double Ikm1, double *zkm1, double *hkm1,
              int m2, double Ik, double *zk, double *hk)
