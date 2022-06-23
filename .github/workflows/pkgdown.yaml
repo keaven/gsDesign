@@ -38,10 +38,17 @@ jobs:
         shell: Rscript {0}
 
       - name: Install doxygen
-        run: sudo apt-get install -y doxygen graphviz
+        run: |
+          sudo apt-get install -y graphviz
+          sudo apt-get install -y wget
+          export DOXYGEN_VERSION=1.9.4
+          wget https://www.doxygen.nl/files/doxygen-$DOXYGEN_VERSION.linux.bin.tar.gz
+          tar -xvzf doxygen-$DOXYGEN_VERSION.linux.bin.tar.gz
+          rm -rf doxygen-$DOXYGEN_VERSION.linux.bin.tar.gz
+          chmod +x doxygen-$DOXYGEN_VERSION/bin/doxygen
 
       - name: Build doxygen site
-        run: doxygen Doxyfile
+        run: ./doxygen-$DOXYGEN_VERSION/bin/doxygen Doxyfile
 
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'
