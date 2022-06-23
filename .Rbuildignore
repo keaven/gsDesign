@@ -13,3 +13,4 @@
 tests/benchmarks
 tests/testthat/_snaps$
 ^Doxyfile$
+^doxygen$
