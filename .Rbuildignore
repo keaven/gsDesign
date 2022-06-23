@@ -12,5 +12,4 @@
 ^_pkgdown\.yml$
 tests/benchmarks
 tests/testthat/_snaps$
-
-
+^Doxyfile$
