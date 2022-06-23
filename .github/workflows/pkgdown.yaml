@@ -37,7 +37,7 @@ jobs:
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
-      - name: Install doxygen
+      - name: Install doxygen and build doxygen site
         run: |
           sudo apt-get install -y graphviz
           sudo apt-get install -y wget
@@ -46,9 +46,7 @@ jobs:
           tar -xvzf doxygen-$DOXYGEN_VERSION.linux.bin.tar.gz
           rm -rf doxygen-$DOXYGEN_VERSION.linux.bin.tar.gz
           chmod +x doxygen-$DOXYGEN_VERSION/bin/doxygen
-
-      - name: Build doxygen site
-        run: ./doxygen-$DOXYGEN_VERSION/bin/doxygen Doxyfile
+          ./doxygen-$DOXYGEN_VERSION/bin/doxygen Doxyfile
 
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'
