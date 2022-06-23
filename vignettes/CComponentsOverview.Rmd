@@ -28,6 +28,8 @@ options(width = 58)
 
 Pages under the Doxygen site keaven.github.io/gsDesign/src/ can be linked.
 
+Before the gsDesign package was developed in about 2007, I wrote C programs to implement the algorithms for group sequential probability and spending bound calculations in C for a research projects, one of which is reflected in 
+
 @JTBook
 
 # References

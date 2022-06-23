@@ -1,20 +1,44 @@
+/*
+*  Copyright (c) 2021 Merck Sharp & Dohme Corp. a subsidiary of Merck & Co., Inc., Kenilworth, NJ, USA.
+*
+*  This file is part of the gsDesign package.
+*
+*  gsDesign is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 /**
  * @file gridpts.c
- * @brief A short description of the file.
+ * @brief Grid points for group sequential design numerical integration
  * @author Keaven Anderson <keaven_anderson@merck.com>
  */
 
 #include <math.h>
 
 /**
- * @brief A short description of the function.
+ * @brief Grid points for group sequential design numerical integration
  *
- * Optional full description of the function,
- * where blank lines start new paragraphs.
+ * Points and weights for Simpson's rule numerical integration from
+ * p 349 - 350 of Jennison and Turnbull book.
+ * This is not used for arbitrary integration, but for the canonical form of Jennison and Turnbull.
+ * mu is computed elsewhere as drift parameter times sqrt of information.
+ * Since this is a lower-level routine, no checking of input is done; calling routines should
+ * ensure that input is correct.
  *
- * @param r TBA
- * @param mu TBA
- * @param z TBA
+ *
+ * @param r Integer, at least 2; default of 18 recommended by Jennison and Turnbull
+ * @param mu Mean of normal distribution (scalar) under consideration
+ * @param z Pointer to vector of points (x-axis) for numerical integration
  *
  * @return Void.
  */
