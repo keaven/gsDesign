@@ -1,0 +1,33 @@
+---
+title: "Overview of C components of gsDesign"
+output: rmarkdown::html_vignette
+bibliography: gsDesign.bib
+vignette: >
+  %\VignetteIndexEntry{Overview of C components of gsDesign}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "ragg_png",
+  dpi = 96,
+  fig.retina = 1,
+  fig.width = 7.2916667,
+  fig.asp = 0.618,
+  fig.align = "center",
+  out.width = "80%"
+)
+
+options(width = 58)
+```
+
+# Introduction
+
+Pages under the Doxygen site keaven.github.io/gsDesign/src/ can be linked.
+
+@JTBook
+
+# References
