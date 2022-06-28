@@ -34,7 +34,7 @@ Pocock design well."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/a
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,7 @@ Pocock design well.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">sfHSD</span><span class="op">(</span><span class="va">alpha</span>, <span class="va">t</span>, <span class="va">param</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sfHSD</span><span class="op">(</span><span class="va">alpha</span>, <span class="va">t</span>, <span class="va">param</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -101,17 +101,24 @@ Pocock design well.</p>
 <code>alpha=0.1</code> for Type II error specification. However, this could be set
 to 1 if for descriptive purposes you wish to see the proportion of spending
 as a function of the proportion of sample size/information.</p></dd>
+
+
 <dt>t</dt>
 <dd><p>A vector of points with increasing values from 0 to 1, inclusive.
 Values of the proportion of sample size/information for which the spending
 function will be computed.</p></dd>
+
+
 <dt>param</dt>
 <dd><p>A single real value specifying the gamma parameter for which
 Hwang-Shih-DeCani spending is to be computed; allowable range is [-40, 40]</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of type <code>spendfn</code>. See <a href="Spending_Function_Overview.html">Spending_Function_Overview</a> for further details.</p>
+    
+
+<p>An object of type <code>spendfn</code>. See <a href="Spending_Function_Overview.html">Spending_Function_Overview</a> for further details.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -136,13 +143,13 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># design a 4-analysis trial using a Hwang-Shih-DeCani spending function</span></span>
-<span class="r-in"><span class="co"># for both lower and upper bounds</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, sfu <span class="op">=</span> <span class="va">sfHSD</span>, sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, sfl <span class="op">=</span> <span class="va">sfHSD</span>, sflpar <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># print the design</span></span>
-<span class="r-in"><span class="va">x</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># design a 4-analysis trial using a Hwang-Shih-DeCani spending function</span></span></span>
+<span class="r-in"><span><span class="co"># for both lower and upper bounds</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, sfu <span class="op">=</span> <span class="va">sfHSD</span>, sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, sfl <span class="op">=</span> <span class="va">sfHSD</span>, sflpar <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># print the design</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Asymmetric two-sided group sequential design with</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Upper bound spending computations assume</span>
@@ -176,13 +183,13 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Theta      1      2      3      4  Total</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.0000 0.5136 0.3156 0.1169 0.0336 0.9797</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3.2415 0.0350 0.0273 0.0212 0.0165 0.1000</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># since sfHSD is the default for both sfu and sfl,</span></span>
-<span class="r-in"><span class="co"># this could have been written as</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, sflpar <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># print again</span></span>
-<span class="r-in"><span class="va">x</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># since sfHSD is the default for both sfu and sfl,</span></span></span>
+<span class="r-in"><span><span class="co"># this could have been written as</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, sflpar <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># print again</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Asymmetric two-sided group sequential design with</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Upper bound spending computations assume</span>
@@ -216,22 +223,22 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Theta      1      2      3      4  Total</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.0000 0.5136 0.3156 0.1169 0.0336 0.9797</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3.2415 0.0350 0.0273 0.0212 0.0165 0.1000</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot the spending function using many points to obtain a smooth curve</span></span>
-<span class="r-in"><span class="co"># show default values of gamma to see how the spending function changes</span></span>
-<span class="r-in"><span class="co"># also show gamma=1 which is supposed to approximate a Pocock design</span></span>
-<span class="r-in"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fl">0</span><span class="op">:</span><span class="fl">100</span> <span class="op">/</span> <span class="fl">100</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">t</span>, <span class="fu">sfHSD</span><span class="op">(</span><span class="fl">0.025</span>, <span class="va">t</span>, <span class="op">-</span><span class="fl">4</span><span class="op">)</span><span class="op">$</span><span class="va">spend</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">"Proportion of final sample size"</span>,</span>
-<span class="r-in">  ylab <span class="op">=</span> <span class="st">"Cumulative Type I error spending"</span>,</span>
-<span class="r-in">  main <span class="op">=</span> <span class="st">"Hwang-Shih-DeCani Spending Function Example"</span>, type <span class="op">=</span> <span class="st">"l"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">t</span>, <span class="fu">sfHSD</span><span class="op">(</span><span class="fl">0.025</span>, <span class="va">t</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">$</span><span class="va">spend</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">t</span>, <span class="fu">sfHSD</span><span class="op">(</span><span class="fl">0.025</span>, <span class="va">t</span>, <span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="va">spend</span>, lty <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.0</span>, <span class="fl">.375</span><span class="op">)</span>, y <span class="op">=</span> <span class="fl">.025</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">1</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
-<span class="r-in">  legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gamma= -4"</span>, <span class="st">"gamma= -2"</span>, <span class="st">"gamma= 1"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot the spending function using many points to obtain a smooth curve</span></span></span>
+<span class="r-in"><span><span class="co"># show default values of gamma to see how the spending function changes</span></span></span>
+<span class="r-in"><span><span class="co"># also show gamma=1 which is supposed to approximate a Pocock design</span></span></span>
+<span class="r-in"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fl">0</span><span class="op">:</span><span class="fl">100</span> <span class="op">/</span> <span class="fl">100</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">t</span>, <span class="fu">sfHSD</span><span class="op">(</span><span class="fl">0.025</span>, <span class="va">t</span>, <span class="op">-</span><span class="fl">4</span><span class="op">)</span><span class="op">$</span><span class="va">spend</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">"Proportion of final sample size"</span>,</span></span>
+<span class="r-in"><span>  ylab <span class="op">=</span> <span class="st">"Cumulative Type I error spending"</span>,</span></span>
+<span class="r-in"><span>  main <span class="op">=</span> <span class="st">"Hwang-Shih-DeCani Spending Function Example"</span>, type <span class="op">=</span> <span class="st">"l"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">t</span>, <span class="fu">sfHSD</span><span class="op">(</span><span class="fl">0.025</span>, <span class="va">t</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span><span class="op">$</span><span class="va">spend</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">t</span>, <span class="fu">sfHSD</span><span class="op">(</span><span class="fl">0.025</span>, <span class="va">t</span>, <span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="va">spend</span>, lty <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.0</span>, <span class="fl">.375</span><span class="op">)</span>, y <span class="op">=</span> <span class="fl">.025</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>, <span class="fl">1</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span></span>
+<span class="r-in"><span>  legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gamma= -4"</span>, <span class="st">"gamma= -2"</span>, <span class="st">"gamma= 1"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sfHSD-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -244,7 +251,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

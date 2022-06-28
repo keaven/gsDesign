@@ -1,5 +1,5 @@
 pandoc: 2.14.2
-pkgdown: 2.0.3
+pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
   GraphicalMultiplicity: GraphicalMultiplicity.html
@@ -9,7 +9,7 @@ articles:
   gsSurvBasicExamples: gsSurvBasicExamples.html
   hGraph: hGraph.html
   nNormal: nNormal.html
-last_built: 2022-06-07T18:47Z
+last_built: 2022-06-28T19:40Z
 urls:
   reference: https://keaven.github.io/gsDesign/reference
   article: https://keaven.github.io/gsDesign/articles

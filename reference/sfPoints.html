@@ -28,7 +28,7 @@ spending functions; see Spending_Function_Overview."><!-- mathjax --><script src
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@ spending functions; see <a href="Spending_Function_Overview.html">Spending_Funct
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">sfPoints</span><span class="op">(</span><span class="va">alpha</span>, <span class="va">t</span>, <span class="va">param</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sfPoints</span><span class="op">(</span><span class="va">alpha</span>, <span class="va">t</span>, <span class="va">param</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -92,18 +92,25 @@ spending functions; see <a href="Spending_Function_Overview.html">Spending_Funct
 <code>alpha=0.1</code> for Type II error specification. However, this could be set
 to 1 if for descriptive purposes you wish to see the proportion of spending
 as a function of the proportion of sample size/information.</p></dd>
+
+
 <dt>t</dt>
 <dd><p>A vector of points with increasing values from &gt;0 and &lt;=1.  Values
 of the proportion of sample size/information for which the spending function
 will be computed.</p></dd>
+
+
 <dt>param</dt>
 <dd><p>A vector of the same length as <code>t</code> specifying the
 cumulative proportion of spending to corresponding to each point in
 <code>t</code>; must be &gt;=0 and &lt;=1.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of type <code>spendfn</code>. See spending functions for further
+    
+
+<p>An object of type <code>spendfn</code>. See spending functions for further
 details.</p>
     </div>
     <div class="section level2">
@@ -129,13 +136,13 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># example to specify spending on a pointwise basis</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
-<span class="r-in">  k <span class="op">=</span> <span class="fl">6</span>, sfu <span class="op">=</span> <span class="va">sfPoints</span>, sfupar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.01</span>, <span class="fl">.05</span>, <span class="fl">.1</span>, <span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span class="r-in">  test.type <span class="op">=</span> <span class="fl">2</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># example to specify spending on a pointwise basis</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  k <span class="op">=</span> <span class="fl">6</span>, sfu <span class="op">=</span> <span class="va">sfPoints</span>, sfupar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.01</span>, <span class="fl">.05</span>, <span class="fl">.1</span>, <span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  test.type <span class="op">=</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Symmetric two-sided group sequential design with</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Spending computations assume trial stops</span>
@@ -170,42 +177,42 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Theta     1     2      3      4      5      6 Total</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.0000 2e-04 0.001 0.0013 0.0038 0.0063 0.0125 0.025</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3.2415 0e+00 0.000 0.0000 0.0000 0.0000 0.0000 0.000</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get proportion of upper spending under null hypothesis</span></span>
-<span class="r-in"><span class="co"># at each analysis</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">/</span> <span class="fl">.025</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># change to cumulative proportion of spending</span></span>
-<span class="r-in"><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">y</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="va">i</span> <span class="op">-</span> <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">y</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># this should correspond to input sfupar</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">y</span>, <span class="fl">6</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get proportion of upper spending under null hypothesis</span></span></span>
+<span class="r-in"><span><span class="co"># at each analysis</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">/</span> <span class="fl">.025</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># change to cumulative proportion of spending</span></span></span>
+<span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">y</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="va">i</span> <span class="op">-</span> <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">y</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># this should correspond to input sfupar</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">y</span>, <span class="fl">6</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.01 0.05 0.10 0.25 0.50 1.00</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot these cumulative spending points</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span> <span class="op">/</span> <span class="fl">6</span>, <span class="va">y</span>,</span>
-<span class="r-in">  main <span class="op">=</span> <span class="st">"Pointwise spending function example"</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">"Proportion of final sample size"</span>,</span>
-<span class="r-in">  ylab <span class="op">=</span> <span class="st">"Cumulative proportion of spending"</span>,</span>
-<span class="r-in">  type <span class="op">=</span> <span class="st">"p"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># approximate this with a t-distribution spending function</span></span>
-<span class="r-in"><span class="co"># by fitting 3 points</span></span>
-<span class="r-in"><span class="va">tx</span> <span class="op">&lt;-</span> <span class="fl">0</span><span class="op">:</span><span class="fl">100</span> <span class="op">/</span> <span class="fl">100</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">tx</span>, <span class="fu"><a href="sfTDist.html">sfTDist</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">tx</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span> <span class="op">/</span> <span class="fl">6</span>, <span class="fl">.01</span>, <span class="fl">.1</span>, <span class="fl">.5</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">spend</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">.6</span>, y <span class="op">=</span> <span class="fl">.9</span>, labels <span class="op">=</span> <span class="st">"Pointwise Spending Approximated by"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">.6</span>, y <span class="op">=</span> <span class="fl">.83</span>, <span class="st">"t-Distribution Spending with 3-point interpolation"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot these cumulative spending points</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span> <span class="op">/</span> <span class="fl">6</span>, <span class="va">y</span>,</span></span>
+<span class="r-in"><span>  main <span class="op">=</span> <span class="st">"Pointwise spending function example"</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">"Proportion of final sample size"</span>,</span></span>
+<span class="r-in"><span>  ylab <span class="op">=</span> <span class="st">"Cumulative proportion of spending"</span>,</span></span>
+<span class="r-in"><span>  type <span class="op">=</span> <span class="st">"p"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># approximate this with a t-distribution spending function</span></span></span>
+<span class="r-in"><span><span class="co"># by fitting 3 points</span></span></span>
+<span class="r-in"><span><span class="va">tx</span> <span class="op">&lt;-</span> <span class="fl">0</span><span class="op">:</span><span class="fl">100</span> <span class="op">/</span> <span class="fl">100</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">tx</span>, <span class="fu"><a href="sfTDist.html">sfTDist</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">tx</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span> <span class="op">/</span> <span class="fl">6</span>, <span class="fl">.01</span>, <span class="fl">.1</span>, <span class="fl">.5</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">spend</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">.6</span>, y <span class="op">=</span> <span class="fl">.9</span>, labels <span class="op">=</span> <span class="st">"Pointwise Spending Approximated by"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">.6</span>, y <span class="op">=</span> <span class="fl">.83</span>, <span class="st">"t-Distribution Spending with 3-point interpolation"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="sfPoints-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># example without lower spending at initial interim or</span></span>
-<span class="r-in"><span class="co"># upper spending at last interim</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
-<span class="r-in">  k <span class="op">=</span> <span class="fl">3</span>, sfu <span class="op">=</span> <span class="va">sfPoints</span>, sfupar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.25</span>, <span class="fl">.25</span><span class="op">)</span>,</span>
-<span class="r-in">  sfl <span class="op">=</span> <span class="va">sfPoints</span>, sflpar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.25</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># example without lower spending at initial interim or</span></span></span>
+<span class="r-in"><span><span class="co"># upper spending at last interim</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  k <span class="op">=</span> <span class="fl">3</span>, sfu <span class="op">=</span> <span class="va">sfPoints</span>, sfupar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.25</span>, <span class="fl">.25</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  sfl <span class="op">=</span> <span class="va">sfPoints</span>, sflpar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.25</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Asymmetric two-sided group sequential design with</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Upper bound spending computations assume</span>
@@ -238,7 +245,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Theta 1      2      3  Total</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.0000 0 0.7755 0.2001 0.9755</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3.2415 0 0.0250 0.0750 0.1000</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -250,7 +257,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

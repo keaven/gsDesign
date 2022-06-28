@@ -124,7 +124,7 @@ have p1-p2-delta0$&amp;lt;0$.'><!-- mathjax --><script src="https://cdnjs.cloudf
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -225,61 +225,71 @@ have <code>p1-p2-delta0</code>$&lt;0$.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ciBinomial</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">n1</span>, <span class="va">n2</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, adj <span class="op">=</span> <span class="fl">0</span>, scale <span class="op">=</span> <span class="st">"Difference"</span><span class="op">)</span>
-
-<span class="fu">nBinomial</span><span class="op">(</span>
-  <span class="va">p1</span>,
-  <span class="va">p2</span>,
-  alpha <span class="op">=</span> <span class="fl">0.025</span>,
-  beta <span class="op">=</span> <span class="fl">0.1</span>,
-  delta0 <span class="op">=</span> <span class="fl">0</span>,
-  ratio <span class="op">=</span> <span class="fl">1</span>,
-  sided <span class="op">=</span> <span class="fl">1</span>,
-  outtype <span class="op">=</span> <span class="fl">1</span>,
-  scale <span class="op">=</span> <span class="st">"Difference"</span>,
-  n <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">simBinomial</span><span class="op">(</span>
-  <span class="va">p1</span>,
-  <span class="va">p2</span>,
-  <span class="va">n1</span>,
-  <span class="va">n2</span>,
-  delta0 <span class="op">=</span> <span class="fl">0</span>,
-  nsim <span class="op">=</span> <span class="fl">10000</span>,
-  chisq <span class="op">=</span> <span class="fl">0</span>,
-  adj <span class="op">=</span> <span class="fl">0</span>,
-  scale <span class="op">=</span> <span class="st">"Difference"</span>
-<span class="op">)</span>
-
-<span class="fu">testBinomial</span><span class="op">(</span>
-  <span class="va">x1</span>,
-  <span class="va">x2</span>,
-  <span class="va">n1</span>,
-  <span class="va">n2</span>,
-  delta0 <span class="op">=</span> <span class="fl">0</span>,
-  chisq <span class="op">=</span> <span class="fl">0</span>,
-  adj <span class="op">=</span> <span class="fl">0</span>,
-  scale <span class="op">=</span> <span class="st">"Difference"</span>,
-  tol <span class="op">=</span> <span class="fl">1e-11</span>
-<span class="op">)</span>
-
-<span class="fu">varBinomial</span><span class="op">(</span><span class="va">x</span>, <span class="va">n</span>, delta0 <span class="op">=</span> <span class="fl">0</span>, ratio <span class="op">=</span> <span class="fl">1</span>, scale <span class="op">=</span> <span class="st">"Difference"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ciBinomial</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, <span class="va">n1</span>, <span class="va">n2</span>, alpha <span class="op">=</span> <span class="fl">0.05</span>, adj <span class="op">=</span> <span class="fl">0</span>, scale <span class="op">=</span> <span class="st">"Difference"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">nBinomial</span><span class="op">(</span></span>
+<span>  <span class="va">p1</span>,</span>
+<span>  <span class="va">p2</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
+<span>  beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  delta0 <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  ratio <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  sided <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  outtype <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  scale <span class="op">=</span> <span class="st">"Difference"</span>,</span>
+<span>  n <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">simBinomial</span><span class="op">(</span></span>
+<span>  <span class="va">p1</span>,</span>
+<span>  <span class="va">p2</span>,</span>
+<span>  <span class="va">n1</span>,</span>
+<span>  <span class="va">n2</span>,</span>
+<span>  delta0 <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  nsim <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>  chisq <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  adj <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  scale <span class="op">=</span> <span class="st">"Difference"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">testBinomial</span><span class="op">(</span></span>
+<span>  <span class="va">x1</span>,</span>
+<span>  <span class="va">x2</span>,</span>
+<span>  <span class="va">n1</span>,</span>
+<span>  <span class="va">n2</span>,</span>
+<span>  delta0 <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  chisq <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  adj <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  scale <span class="op">=</span> <span class="st">"Difference"</span>,</span>
+<span>  tol <span class="op">=</span> <span class="fl">1e-11</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">varBinomial</span><span class="op">(</span><span class="va">x</span>, <span class="va">n</span>, delta0 <span class="op">=</span> <span class="fl">0</span>, ratio <span class="op">=</span> <span class="fl">1</span>, scale <span class="op">=</span> <span class="st">"Difference"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x1</dt>
 <dd><p>Number of “successes” in the control group</p></dd>
+
+
 <dt>x2</dt>
 <dd><p>Number of “successes” in the experimental group</p></dd>
+
+
 <dt>n1</dt>
 <dd><p>Number of observations in the control group</p></dd>
+
+
 <dt>n2</dt>
 <dd><p>Number of observations in the experimental group</p></dd>
+
+
 <dt>alpha</dt>
 <dd><p>type I error; see <code>sided</code> below to distinguish between 1-
 and 2-sided tests</p></dd>
+
+
 <dt>adj</dt>
 <dd><p>With <code>adj=1</code>, the standard variance with a continuity
 correction is used for a Miettinen and Nurminen test statistic This includes
@@ -287,16 +297,26 @@ a factor of \(n / (n - 1)\) where \(n\) is the total sample size. If
 <code>adj</code> is not 1, this factor is not applied. The default is <code>adj=0</code>
 since nominal Type I error is generally conservative with <code>adj=1</code>
 (Gordon and Watson, 1996).</p></dd>
+
+
 <dt>scale</dt>
 <dd><p>“Difference”, “RR”, “OR”; see the
 <code>scale</code> parameter documentation above and Details.  This is a scalar
 argument.</p></dd>
+
+
 <dt>p1</dt>
 <dd><p>event rate in group 1 under the alternative hypothesis</p></dd>
+
+
 <dt>p2</dt>
 <dd><p>event rate in group 2 under the alternative hypothesis</p></dd>
+
+
 <dt>beta</dt>
 <dd><p>type II error</p></dd>
+
+
 <dt>delta0</dt>
 <dd><p>A value of 0 (the default) always represents no difference
 between treatment groups under the null hypothesis. <code>delta0</code> is
@@ -307,10 +327,16 @@ the difference in event rates under the null hypothesis (p10 - p20). If
 event rates (p10 / p20) under the null hypothesis. If <code>scale="LNOR"</code>,
 <code>delta0</code> is the difference in natural logarithm of the odds-ratio under
 the null hypothesis <code>log(p10 / (1 - p10)) - log(p20 / (1 - p20))</code>.</p></dd>
+
+
 <dt>ratio</dt>
 <dd><p>sample size ratio for group 2 divided by group 1</p></dd>
+
+
 <dt>sided</dt>
 <dd><p>2 for 2-sided test, 1 for 1-sided test</p></dd>
+
+
 <dt>outtype</dt>
 <dd><p><code>nBinomial</code> only; 1 (default) returns total sample size;
 2 returns a data frame with sample size for each group (<code>n1, n2</code>; if
@@ -321,82 +347,110 @@ input), Type II error (<code>beta</code>), power (<code>Power</code>), null and
 alternate hypothesis standard deviations (<code>sigma0, sigma1</code>), input
 event rates (<code>p1, p2</code>), null hypothesis difference in treatment group
 means (<code>delta0</code>) and null hypothesis event rates (<code>p10, p20</code>).</p></dd>
+
+
 <dt>n</dt>
 <dd><p>If power is to be computed in <code>nBinomial()</code>, input total trial
 sample size in <code>n</code>; this may be a vector. This is also the sample size
 in <code>varBinomial</code>, in which case the argument must be a scalar.</p></dd>
+
+
 <dt>nsim</dt>
 <dd><p>The number of simulations to be performed in
 <code>simBinomial()</code></p></dd>
+
+
 <dt>chisq</dt>
 <dd><p>An indicator of whether or not a chi-square (as opposed to Z)
 statistic is to be computed. If <code>delta0=0</code> (default), the difference in
 event rates divided by its standard error under the null hypothesis is used.
 Otherwise, a Miettinen and Nurminen chi-square statistic for a 2 x 2 table
 is used.</p></dd>
+
+
 <dt>tol</dt>
 <dd><p>Default should probably be used; this is used to deal with a
 rounding issue in interim calculations</p></dd>
+
+
 <dt>x</dt>
 <dd><p>Number of “successes” in the combined control and
 experimental groups.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>testBinomial()</code> and <code>simBinomial()</code> each return a vector
+    
+
+<p><code>testBinomial()</code> and <code>simBinomial()</code> each return a vector
 of either Chi-square or Z test statistics.  These may be compared to an
 appropriate cutoff point (e.g., <code>qnorm(.975)</code> for normal or
-<code>qchisq(.95,1)</code> for chi-square).
-<code>ciBinomial()</code> returns a data frame with 1 row with a confidence
-interval; variable names are <code>lower</code> and <code>upper</code>.
-<code>varBinomial()</code> returns a vector of (blinded) variance estimates of the
+<code>qchisq(.95,1)</code> for chi-square).</p>
+
+
+<p><code>ciBinomial()</code> returns a data frame with 1 row with a confidence
+interval; variable names are <code>lower</code> and <code>upper</code>.</p>
+
+
+<p><code>varBinomial()</code> returns a vector of (blinded) variance estimates of the
 difference of event rates (<code>scale="Difference"</code>), logarithm of the
 odds-ratio (<code>scale="OR"</code>) or logarithm of the risk-ratio
-(<code>scale="RR"</code>).
-With the default <code>outtype=1</code>, <code>nBinomial()</code> returns a vector of
-total sample sizes is returned.  With <code>outtype=2</code>, <code>nBinomial()</code>returns a data frame containing two vectors <code>n1</code> and <code>n2</code>containing sample sizes for groups 1 and 2, respectively; if <code>n</code> is
+(<code>scale="RR"</code>).</p>
+
+
+<p>With the default <code>outtype=1</code>, <code>nBinomial()</code> returns a vector of
+total sample sizes is returned.  With <code>outtype=2</code>, <code>nBinomial()</code></p>
+
+
+<p>returns a data frame containing two vectors <code>n1</code> and <code>n2</code></p>
+
+
+<p>containing sample sizes for groups 1 and 2, respectively; if <code>n</code> is
 input, this option also returns the power in a third vector, <code>Power</code>.
 With <code>outtype=3</code>, <code>nBinomial()</code> returns a data frame with the
 following columns:</p>
 <dl><dt>n</dt>
 <dd><p>A vector with total samples size required for
 each event rate comparison specified</p></dd>
-<dt>n1</dt>
+ <dt>n1</dt>
 <dd><p>A vector of sample sizes for
 group 1 for each event rate comparison specified</p></dd>
-<dt>n2</dt>
+ <dt>n2</dt>
 <dd><p>A vector of
 sample sizes for group 2 for each event rate comparison specified</p></dd>
+
 <dt>alpha</dt>
 <dd><p>As input</p></dd>
-<dt>sided</dt>
+ <dt>sided</dt>
 <dd><p>As input</p></dd>
-<dt>beta</dt>
+ <dt>beta</dt>
 <dd><p>As input; if
 <code>n</code> is input, this is computed</p></dd>
-<dt>Power</dt>
+ <dt>Power</dt>
 <dd><p>If <code>n=NULL</code> on input,
 this is <code>1-beta</code>; otherwise, the power is computed for each sample size
 input</p></dd>
-<dt>sigma0</dt>
+ <dt>sigma0</dt>
 <dd><p>A vector containing the standard deviation of the
 treatment effect difference under the null hypothesis times <code>sqrt(n)</code>
 when <code>scale="Difference"</code> or <code>scale="OR"</code>; when <code>scale="RR"</code>,
 this is the standard deviation time <code>sqrt(n)</code> for the numerator of the
 Farrington-Manning test statistic <code>x1-exp(delta0)*x2</code>.</p></dd>
-<dt>sigma1</dt>
+ <dt>sigma1</dt>
 <dd><p>A
 vector containing the values as <code>sigma0</code>, in this case estimated under
 the alternative hypothesis.</p></dd>
-<dt>p1</dt>
+ <dt>p1</dt>
 <dd><p>As input</p></dd>
-<dt>p2</dt>
+ <dt>p2</dt>
 <dd><p>As input</p></dd>
+
 <dt>p10</dt>
 <dd><p>group 1 event rate used for null hypothesis</p></dd>
-<dt>p20</dt>
+ <dt>p20</dt>
 <dd><p>group 2
 event rate used for null hypothesis</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -423,90 +477,90 @@ formulae. <em>Biometrics</em>; 52: 71-76.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># Compute z-test test statistic comparing 39/500 to 13/500</span></span>
-<span class="r-in"><span class="co"># use continuity correction in variance</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">testBinomial</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fl">39</span>, x2 <span class="op">=</span> <span class="fl">13</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, adj <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Compute z-test test statistic comparing 39/500 to 13/500</span></span></span>
+<span class="r-in"><span><span class="co"># use continuity correction in variance</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">testBinomial</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fl">39</span>, x2 <span class="op">=</span> <span class="fl">13</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, adj <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.701266</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">x</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">x</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0001072634</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Compute with unadjusted variance</span></span>
-<span class="r-in"><span class="va">x0</span> <span class="op">&lt;-</span> <span class="fu">testBinomial</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fl">39</span>, x2 <span class="op">=</span> <span class="fl">23</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x0</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Compute with unadjusted variance</span></span></span>
+<span class="r-in"><span><span class="va">x0</span> <span class="op">&lt;-</span> <span class="fu">testBinomial</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fl">39</span>, x2 <span class="op">=</span> <span class="fl">23</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x0</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.098083</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">x0</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">x0</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0179489</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Perform 50k simulations to test validity of the above</span></span>
-<span class="r-in"><span class="co"># asymptotic p-values</span></span>
-<span class="r-in"><span class="co"># (you may want to perform more to reduce standard error of estimate)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">x0</span><span class="op">)</span> <span class="op">&lt;=</span></span>
-<span class="r-in">  <span class="fu">simBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.078</span>, p2 <span class="op">=</span> <span class="fl">.078</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, nsim <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">10000</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0198</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">x0</span><span class="op">)</span> <span class="op">&lt;=</span></span>
-<span class="r-in">  <span class="fu">simBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.052</span>, p2 <span class="op">=</span> <span class="fl">.052</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, nsim <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">10000</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0167</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Perform a non-inferiority test to see if p2=400 / 500 is within 5% of</span></span>
-<span class="r-in"><span class="co"># p1=410 / 500 use a z-statistic with unadjusted variance</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">testBinomial</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fl">410</span>, x2 <span class="op">=</span> <span class="fl">400</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, delta0 <span class="op">=</span> <span class="op">-</span><span class="fl">.05</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Perform 50k simulations to test validity of the above</span></span></span>
+<span class="r-in"><span><span class="co"># asymptotic p-values</span></span></span>
+<span class="r-in"><span><span class="co"># (you may want to perform more to reduce standard error of estimate)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">x0</span><span class="op">)</span> <span class="op">&lt;=</span></span></span>
+<span class="r-in"><span>  <span class="fu">simBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.078</span>, p2 <span class="op">=</span> <span class="fl">.078</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, nsim <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">10000</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0207</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">x0</span><span class="op">)</span> <span class="op">&lt;=</span></span></span>
+<span class="r-in"><span>  <span class="fu">simBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.052</span>, p2 <span class="op">=</span> <span class="fl">.052</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, nsim <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">10000</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0182</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Perform a non-inferiority test to see if p2=400 / 500 is within 5% of</span></span></span>
+<span class="r-in"><span><span class="co"># p1=410 / 500 use a z-statistic with unadjusted variance</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">testBinomial</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fl">410</span>, x2 <span class="op">=</span> <span class="fl">400</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, delta0 <span class="op">=</span> <span class="op">-</span><span class="fl">.05</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.807617</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">x</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">x</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.002495478</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># since chi-square tests equivalence (a 2-sided test) rather than</span></span>
-<span class="r-in"><span class="co"># non-inferiority (a 1-sided test),</span></span>
-<span class="r-in"><span class="co"># the result is quite different</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html" class="external-link">pchisq</a></span><span class="op">(</span><span class="fu">testBinomial</span><span class="op">(</span></span>
-<span class="r-in">  x1 <span class="op">=</span> <span class="fl">410</span>, x2 <span class="op">=</span> <span class="fl">400</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, delta0 <span class="op">=</span> <span class="op">-</span><span class="fl">.05</span>,</span>
-<span class="r-in">  chisq <span class="op">=</span> <span class="fl">1</span>, adj <span class="op">=</span> <span class="fl">1</span></span>
-<span class="r-in"><span class="op">)</span>, <span class="fl">1</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># since chi-square tests equivalence (a 2-sided test) rather than</span></span></span>
+<span class="r-in"><span><span class="co"># non-inferiority (a 1-sided test),</span></span></span>
+<span class="r-in"><span><span class="co"># the result is quite different</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html" class="external-link">pchisq</a></span><span class="op">(</span><span class="fu">testBinomial</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x1 <span class="op">=</span> <span class="fl">410</span>, x2 <span class="op">=</span> <span class="fl">400</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, delta0 <span class="op">=</span> <span class="op">-</span><span class="fl">.05</span>,</span></span>
+<span class="r-in"><span>  chisq <span class="op">=</span> <span class="fl">1</span>, adj <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span>, <span class="fl">1</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.005012758</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># now simulate the z-statistic witthout continuity corrected variance</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">.975</span><span class="op">)</span> <span class="op">&lt;=</span></span>
-<span class="r-in">  <span class="fu">simBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.8</span>, p2 <span class="op">=</span> <span class="fl">.8</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, nsim <span class="op">=</span> <span class="fl">100000</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">100000</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.02516</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># compute a sample size to show non-inferiority</span></span>
-<span class="r-in"><span class="co"># with 5% margin, 90% power</span></span>
-<span class="r-in"><span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.2</span>, p2 <span class="op">=</span> <span class="fl">.2</span>, delta0 <span class="op">=</span> <span class="fl">.05</span>, alpha <span class="op">=</span> <span class="fl">.025</span>, sided <span class="op">=</span> <span class="fl">1</span>, beta <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># now simulate the z-statistic witthout continuity corrected variance</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">.975</span><span class="op">)</span> <span class="op">&lt;=</span></span></span>
+<span class="r-in"><span>  <span class="fu">simBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.8</span>, p2 <span class="op">=</span> <span class="fl">.8</span>, n1 <span class="op">=</span> <span class="fl">500</span>, n2 <span class="op">=</span> <span class="fl">500</span>, nsim <span class="op">=</span> <span class="fl">100000</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">100000</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.02367</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compute a sample size to show non-inferiority</span></span></span>
+<span class="r-in"><span><span class="co"># with 5% margin, 90% power</span></span></span>
+<span class="r-in"><span><span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.2</span>, p2 <span class="op">=</span> <span class="fl">.2</span>, delta0 <span class="op">=</span> <span class="fl">.05</span>, alpha <span class="op">=</span> <span class="fl">.025</span>, sided <span class="op">=</span> <span class="fl">1</span>, beta <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2697.607</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># assuming a slight advantage in the experimental group lowers</span></span>
-<span class="r-in"><span class="co"># sample size requirement</span></span>
-<span class="r-in"><span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.2</span>, p2 <span class="op">=</span> <span class="fl">.19</span>, delta0 <span class="op">=</span> <span class="fl">.05</span>, alpha <span class="op">=</span> <span class="fl">.025</span>, sided <span class="op">=</span> <span class="fl">1</span>, beta <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># assuming a slight advantage in the experimental group lowers</span></span></span>
+<span class="r-in"><span><span class="co"># sample size requirement</span></span></span>
+<span class="r-in"><span><span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.2</span>, p2 <span class="op">=</span> <span class="fl">.19</span>, delta0 <span class="op">=</span> <span class="fl">.05</span>, alpha <span class="op">=</span> <span class="fl">.025</span>, sided <span class="op">=</span> <span class="fl">1</span>, beta <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4131.9</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># compute a sample size for comparing 15% vs 10% event rates</span></span>
-<span class="r-in"><span class="co"># with 1 to 2 randomization</span></span>
-<span class="r-in"><span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.15</span>, p2 <span class="op">=</span> <span class="fl">.1</span>, beta <span class="op">=</span> <span class="fl">.2</span>, ratio <span class="op">=</span> <span class="fl">2</span>, alpha <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compute a sample size for comparing 15% vs 10% event rates</span></span></span>
+<span class="r-in"><span><span class="co"># with 1 to 2 randomization</span></span></span>
+<span class="r-in"><span><span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.15</span>, p2 <span class="op">=</span> <span class="fl">.1</span>, beta <span class="op">=</span> <span class="fl">.2</span>, ratio <span class="op">=</span> <span class="fl">2</span>, alpha <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1191.041</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># now look at total sample size using 1-1 randomization</span></span>
-<span class="r-in"><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.15</span>, p2 <span class="op">=</span> <span class="fl">.1</span>, beta <span class="op">=</span> <span class="fl">.2</span>, alpha <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">n</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># now look at total sample size using 1-1 randomization</span></span></span>
+<span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.15</span>, p2 <span class="op">=</span> <span class="fl">.1</span>, beta <span class="op">=</span> <span class="fl">.2</span>, alpha <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">n</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1079.853</span>
-<span class="r-in"><span class="co"># check if inputing sample size returns the desired power</span></span>
-<span class="r-in"><span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.15</span>, p2 <span class="op">=</span> <span class="fl">.1</span>, beta <span class="op">=</span> <span class="fl">.2</span>, alpha <span class="op">=</span> <span class="fl">.05</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># check if inputing sample size returns the desired power</span></span></span>
+<span class="r-in"><span><span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.15</span>, p2 <span class="op">=</span> <span class="fl">.1</span>, beta <span class="op">=</span> <span class="fl">.2</span>, alpha <span class="op">=</span> <span class="fl">.05</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># re-do with alternate output types</span></span>
-<span class="r-in"><span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.15</span>, p2 <span class="op">=</span> <span class="fl">.1</span>, beta <span class="op">=</span> <span class="fl">.2</span>, alpha <span class="op">=</span> <span class="fl">.05</span>, outtype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># re-do with alternate output types</span></span></span>
+<span class="r-in"><span><span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.15</span>, p2 <span class="op">=</span> <span class="fl">.1</span>, beta <span class="op">=</span> <span class="fl">.2</span>, alpha <span class="op">=</span> <span class="fl">.05</span>, outtype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         n1       n2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 539.9264 539.9264</span>
-<span class="r-in"><span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.15</span>, p2 <span class="op">=</span> <span class="fl">.1</span>, beta <span class="op">=</span> <span class="fl">.2</span>, alpha <span class="op">=</span> <span class="fl">.05</span>, outtype <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">nBinomial</span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.15</span>, p2 <span class="op">=</span> <span class="fl">.1</span>, beta <span class="op">=</span> <span class="fl">.2</span>, alpha <span class="op">=</span> <span class="fl">.05</span>, outtype <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          n       n1       n2 alpha sided beta Power    sigma0    sigma1   p1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1079.853 539.9264 539.9264  0.05     1  0.2   0.8 0.6614378 0.6595453 0.15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    p2 delta0   p10   p20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.1      0 0.125 0.125</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># look at power plot under different control event rate and</span></span>
-<span class="r-in"><span class="co"># relative risk reductions</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># look at power plot under different control event rate and</span></span></span>
+<span class="r-in"><span><span class="co"># relative risk reductions</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘dplyr’</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
@@ -515,33 +569,33 @@ formulae. <em>Biometrics</em>; 52: 71-76.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     intersect, setdiff, setequal, union</span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">.075</span>, <span class="fl">.2</span>, <span class="fl">.000625</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">len</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">p1</span> <span class="op">*</span> <span class="fl">.75</span>, <span class="va">p1</span> <span class="op">*</span> <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>, <span class="va">p1</span> <span class="op">*</span> <span class="fl">.6</span>, <span class="va">p1</span> <span class="op">*</span> <span class="fl">.5</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">Reduction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"25 percent"</span>, <span class="va">len</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"33 percent"</span>, <span class="va">len</span><span class="op">)</span>, </span>
-<span class="r-in">               <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"40 percent"</span>, <span class="va">len</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"50 percent"</span>, <span class="va">len</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">p1</span>, <span class="fl">4</span><span class="op">)</span>, <span class="va">p2</span>, <span class="va">Reduction</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>`Sample size` <span class="op">=</span> <span class="fu">nBinomial</span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, beta <span class="op">=</span> <span class="fl">.2</span>, alpha <span class="op">=</span> <span class="fl">.025</span>, sided <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">p1</span>, y <span class="op">=</span> <span class="va">`Sample size`</span>, col <span class="op">=</span> <span class="va">Reduction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Control group event rate"</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">6000</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Binomial sample size computation for 80 pct power"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">.075</span>, <span class="fl">.2</span>, <span class="fl">.000625</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">len</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">p1</span> <span class="op">*</span> <span class="fl">.75</span>, <span class="va">p1</span> <span class="op">*</span> <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>, <span class="va">p1</span> <span class="op">*</span> <span class="fl">.6</span>, <span class="va">p1</span> <span class="op">*</span> <span class="fl">.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Reduction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"25 percent"</span>, <span class="va">len</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"33 percent"</span>, <span class="va">len</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>               <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"40 percent"</span>, <span class="va">len</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"50 percent"</span>, <span class="va">len</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">p1</span>, <span class="fl">4</span><span class="op">)</span>, <span class="va">p2</span>, <span class="va">Reduction</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>`Sample size` <span class="op">=</span> <span class="fu">nBinomial</span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, beta <span class="op">=</span> <span class="fl">.2</span>, alpha <span class="op">=</span> <span class="fl">.025</span>, sided <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">p1</span>, y <span class="op">=</span> <span class="va">`Sample size`</span>, col <span class="op">=</span> <span class="va">Reduction</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Control group event rate"</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">6000</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Binomial sample size computation for 80 pct power"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="varBinomial-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># compute blinded estimate of treatment effect difference</span></span>
-<span class="r-in"><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, size <span class="op">=</span> <span class="fl">100</span>, p <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, size <span class="op">=</span> <span class="fl">200</span>, p <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># blinded estimate of risk difference variance</span></span>
-<span class="r-in"><span class="fu">varBinomial</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, n <span class="op">=</span> <span class="fl">300</span>, ratio <span class="op">=</span> <span class="fl">2</span>, delta0 <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.001769833</span>
-<span class="r-in"><span class="co"># blinded estimate of log-risk-ratio variance</span></span>
-<span class="r-in"><span class="fu">varBinomial</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, n <span class="op">=</span> <span class="fl">300</span>, ratio <span class="op">=</span> <span class="fl">2</span>, delta0 <span class="op">=</span> <span class="fl">0</span>, scale <span class="op">=</span> <span class="st">"RR"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0947561</span>
-<span class="r-in"><span class="co"># blinded estimate of log-odds-ratio variance</span></span>
-<span class="r-in"><span class="fu">varBinomial</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, n <span class="op">=</span> <span class="fl">300</span>, ratio <span class="op">=</span> <span class="fl">2</span>, delta0 <span class="op">=</span> <span class="fl">0</span>, scale <span class="op">=</span> <span class="st">"OR"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1271306</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compute blinded estimate of treatment effect difference</span></span></span>
+<span class="r-in"><span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, size <span class="op">=</span> <span class="fl">100</span>, p <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, size <span class="op">=</span> <span class="fl">200</span>, p <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># blinded estimate of risk difference variance</span></span></span>
+<span class="r-in"><span><span class="fu">varBinomial</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, n <span class="op">=</span> <span class="fl">300</span>, ratio <span class="op">=</span> <span class="fl">2</span>, delta0 <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0016965</span>
+<span class="r-in"><span><span class="co"># blinded estimate of log-risk-ratio variance</span></span></span>
+<span class="r-in"><span><span class="fu">varBinomial</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, n <span class="op">=</span> <span class="fl">300</span>, ratio <span class="op">=</span> <span class="fl">2</span>, delta0 <span class="op">=</span> <span class="fl">0</span>, scale <span class="op">=</span> <span class="st">"RR"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1003846</span>
+<span class="r-in"><span><span class="co"># blinded estimate of log-odds-ratio variance</span></span></span>
+<span class="r-in"><span><span class="fu">varBinomial</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span>, n <span class="op">=</span> <span class="fl">300</span>, ratio <span class="op">=</span> <span class="fl">2</span>, delta0 <span class="op">=</span> <span class="fl">0</span>, scale <span class="op">=</span> <span class="st">"OR"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.132626</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -553,7 +607,7 @@ formulae. <em>Biometrics</em>; 52: 71-76.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
 
 <script src="GraphicalMultiplicity_files/kePrint-0.0.1/kePrint.js"></script><link href="GraphicalMultiplicity_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Graphical testing for group sequential design</h1>
             
       
@@ -115,58 +115,58 @@
 <p>The sample size for the trial will be driven by an adequate sample size and targeted events in the subgroup to ensure 90% power for the OS endpoint assuming a hazard ratio of 0.65. For group sequential designs, we assume 1-sided testing.</p>
 <p>To reveal code blocks for the remainder of the document, press the code buttons indicated throughout. The initial code block sets options and loads needed packages; no modification should be required by the user.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">### THERE SHOULD BE NO NEED TO MODIFY THIS CODE SECTION</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">999</span><span class="op">)</span>
-<span class="co"># Colorblind palette</span>
-<span class="va">cbPalette</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#999999"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#56B4E9"</span>, <span class="st">"#009E73"</span>, <span class="st">"#F0E442"</span>, <span class="st">"#0072B2"</span>, <span class="st">"#D55E00"</span>, <span class="st">"#CC79A7"</span><span class="op">)</span>
-<span class="co"># 3 packages used for data storage and manipulation: dplyr, tibble</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span>
-<span class="co"># 2 packages used for R Markdown capabilities: knitr, kableExtra</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/" class="external-link">kableExtra</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com/" class="external-link">gt</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span> <span class="co"># For plotting</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://keaven.github.io/gsDesign/">gsDesign</a></span><span class="op">)</span> <span class="co"># Group sequential design capabilities</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://gsrmtp.r-forge.r-project.org/" class="external-link">gMCP</a></span><span class="op">)</span> <span class="co"># Multiplicity evaluation</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">### THERE SHOULD BE NO NEED TO MODIFY THIS CODE SECTION</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">999</span><span class="op">)</span></span>
+<span><span class="co"># Colorblind palette</span></span>
+<span><span class="va">cbPalette</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#999999"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#56B4E9"</span>, <span class="st">"#009E73"</span>, <span class="st">"#F0E442"</span>, <span class="st">"#0072B2"</span>, <span class="st">"#D55E00"</span>, <span class="st">"#CC79A7"</span><span class="op">)</span></span>
+<span><span class="co"># 3 packages used for data storage and manipulation: dplyr, tibble</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span><span class="co"># 2 packages used for R Markdown capabilities: knitr, kableExtra</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/" class="external-link">kableExtra</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com/" class="external-link">gt</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span> <span class="co"># For plotting</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://keaven.github.io/gsDesign/">gsDesign</a></span><span class="op">)</span> <span class="co"># Group sequential design capabilities</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://gsrmtp.r-forge.r-project.org/" class="external-link">gMCP</a></span><span class="op">)</span> <span class="co"># Multiplicity evaluation</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="multiplicity-diagram-for-hypothesis-testing">Multiplicity diagram for hypothesis testing<a class="anchor" aria-label="anchor" href="#multiplicity-diagram-for-hypothesis-testing"></a>
 </h3>
 <p>Following is the multiplicity graph for the trial design. We have arbitrarily split Type I error equally between the subgroup and overall populations. Most <span class="math inline">\(\alpha\)</span> is allocated to OS and the least to ORR, with PFS receiving an intermediate amount. This reflects the priority of the endpoints as well as the practicality to detect clinically significant differences in each population. Reallocation for each endpoint proceeds from the subgroup to the overall population. If the overall population hypothesis is rejected for a given endpoint, the reallocation is split between the two populations for another endpoint. The choice for allocation and reallocation illustrated here is to demonstrate a complex multiplicity scenario; when actually applying this method the allocation and realloation choices should be carefully considered.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">### THIS CODE NEEDS TO BE MODIFIED FOR YOUR STUDY</span>
-<span class="co"># If needed, see help file for gsDesign::hGraph() for explanation of parameters below</span>
-<span class="co"># Hypothesis names</span>
-<span class="va">nameHypotheses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-  <span class="st">"H1: OS\n Subgroup"</span>,
-  <span class="st">"H2: OS\n All subjects"</span>,
-  <span class="st">"H3: PFS\n Subgroup"</span>,
-  <span class="st">"H4: PFS\n All subjects"</span>,
-  <span class="st">"H5: ORR\n Subgroup"</span>,
-  <span class="st">"H6: ORR\n All subjects"</span>
-<span class="op">)</span>
-<span class="co"># Number of hypotheses to be tested</span>
-<span class="va">nHypotheses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">nameHypotheses</span><span class="op">)</span>
-<span class="co"># Transition weights for alpha reallocation (square matrix)</span>
-<span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-  <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,
-  <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">.5</span>, <span class="fl">.5</span>, <span class="fl">0</span>, <span class="fl">0</span>,
-  <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>,
-  <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">.5</span>, <span class="fl">.5</span>,
-  <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>,
-  <span class="fl">.5</span>, <span class="fl">.5</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>
-<span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">6</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co"># Initial Type I error assigned to each hypothesis (one-sided)</span>
-<span class="va">alphaHypotheses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.01</span>, <span class="fl">.01</span>, <span class="fl">.004</span>, <span class="fl">0.000</span>, <span class="fl">0.0005</span>, <span class="fl">.0005</span><span class="op">)</span>
-<span class="va">fwer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">alphaHypotheses</span><span class="op">)</span>
-<span class="co"># Make a ggplot representation of the above specification and display it</span>
-<span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/hGraph.html">hGraph</a></span><span class="op">(</span><span class="fl">6</span>,
-  alphaHypotheses <span class="op">=</span> <span class="va">alphaHypotheses</span>, m <span class="op">=</span> <span class="va">m</span>, nameHypotheses <span class="op">=</span> <span class="va">nameHypotheses</span>,
-  halfWid <span class="op">=</span> <span class="fl">1</span>, halfHgt <span class="op">=</span> <span class="fl">.35</span>, xradius <span class="op">=</span> <span class="fl">2.5</span>, yradius <span class="op">=</span> <span class="fl">1</span>, offset <span class="op">=</span> <span class="fl">0</span>, trhw <span class="op">=</span> <span class="fl">.15</span>,
-  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1.25</span>, <span class="fl">1.25</span>, <span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>, <span class="op">-</span><span class="fl">1.25</span>, <span class="fl">1.25</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,
-  trprop <span class="op">=</span> <span class="fl">0.4</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
-<span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">cbPalette</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">### THIS CODE NEEDS TO BE MODIFIED FOR YOUR STUDY</span></span>
+<span><span class="co"># If needed, see help file for gsDesign::hGraph() for explanation of parameters below</span></span>
+<span><span class="co"># Hypothesis names</span></span>
+<span><span class="va">nameHypotheses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"H1: OS\n Subgroup"</span>,</span>
+<span>  <span class="st">"H2: OS\n All subjects"</span>,</span>
+<span>  <span class="st">"H3: PFS\n Subgroup"</span>,</span>
+<span>  <span class="st">"H4: PFS\n All subjects"</span>,</span>
+<span>  <span class="st">"H5: ORR\n Subgroup"</span>,</span>
+<span>  <span class="st">"H6: ORR\n All subjects"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># Number of hypotheses to be tested</span></span>
+<span><span class="va">nHypotheses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">nameHypotheses</span><span class="op">)</span></span>
+<span><span class="co"># Transition weights for alpha reallocation (square matrix)</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>,</span>
+<span>  <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">.5</span>, <span class="fl">.5</span>, <span class="fl">0</span>, <span class="fl">0</span>,</span>
+<span>  <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>,</span>
+<span>  <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">.5</span>, <span class="fl">.5</span>,</span>
+<span>  <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>,</span>
+<span>  <span class="fl">.5</span>, <span class="fl">.5</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span></span>
+<span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">6</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># Initial Type I error assigned to each hypothesis (one-sided)</span></span>
+<span><span class="va">alphaHypotheses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.01</span>, <span class="fl">.01</span>, <span class="fl">.004</span>, <span class="fl">0.000</span>, <span class="fl">0.0005</span>, <span class="fl">.0005</span><span class="op">)</span></span>
+<span><span class="va">fwer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">alphaHypotheses</span><span class="op">)</span></span>
+<span><span class="co"># Make a ggplot representation of the above specification and display it</span></span>
+<span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/hGraph.html">hGraph</a></span><span class="op">(</span><span class="fl">6</span>,</span>
+<span>  alphaHypotheses <span class="op">=</span> <span class="va">alphaHypotheses</span>, m <span class="op">=</span> <span class="va">m</span>, nameHypotheses <span class="op">=</span> <span class="va">nameHypotheses</span>,</span>
+<span>  halfWid <span class="op">=</span> <span class="fl">1</span>, halfHgt <span class="op">=</span> <span class="fl">.35</span>, xradius <span class="op">=</span> <span class="fl">2.5</span>, yradius <span class="op">=</span> <span class="fl">1</span>, offset <span class="op">=</span> <span class="fl">0</span>, trhw <span class="op">=</span> <span class="fl">.15</span>,</span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1.25</span>, <span class="fl">1.25</span>, <span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>, <span class="op">-</span><span class="fl">1.25</span>, <span class="fl">1.25</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  trprop <span class="op">=</span> <span class="fl">0.4</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">cbPalette</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span></code></pre></div>
 <p><img src="GraphicalMultiplicity_files/figure-html/unnamed-chunk-3-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>This testing scheme can result in what might be referred to as time travel for passing of <span class="math inline">\(\alpha\)</span>. That is, if PFS hypotheses are not rejected at a given analysis (say final PFS analysis) and OS hypotheses are rejected at the final analysis, then the previously evaluated PFS tests at the interim and final PFS analysis can be compared to updated bounds based on reallocated Type I error. While this practice was not encouraged by <span class="citation">Maurer and Bretz (2013)</span>, it was acknowledged to control Type I error as previous discussed in <span class="citation">(Liu and Anderson 2008)</span>. Given the stringent Type I error control for multiple hypotheses, the ability to acknowledge clinically significant differences as statistically significant can be important in describing treatment benefits in regulatory labeling for a treatment.</p>
 </div>
@@ -192,48 +192,48 @@
 
 <p>We assume 50% of the population is in the subgroup of interest. A sample size of 378 is driven by overall survival (OS) in the subgroup where we assume a hazard ratio of 0.65. Here we assume a one-sided group sequential design with no futility bound.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">osmedian</span> <span class="op">&lt;-</span> <span class="fl">12</span> <span class="co"># Median control survival</span>
-<span class="co"># Derive group sequential design for OS in the targeted subgroup</span>
-<span class="va">ossub</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span>
-  k <span class="op">=</span> <span class="fl">3</span>, <span class="co"># 3 analyses for OS</span>
-  test.type <span class="op">=</span> <span class="fl">1</span>, <span class="co"># Efficacy bound only (no futility)</span>
-  alpha <span class="op">=</span> <span class="va">alphaHypotheses</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="co"># Allocated alpha from design hypothesis group</span>
-  beta <span class="op">=</span> <span class="fl">0.1</span>, <span class="co"># Type 2 error (1 - power)</span>
-  hr <span class="op">=</span> <span class="fl">0.65</span>, <span class="co"># Assumed hazard ratio for power calculation</span>
-  timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.61</span>, <span class="fl">0.82</span><span class="op">)</span>, <span class="co"># Choose these to match targeted calendar timing of analyses</span>
-  sfu <span class="op">=</span> <span class="va">sfLDOF</span>, <span class="co"># Spending function to approximate O'Brien-Fleming bound</span>
-  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="va">osmedian</span>, <span class="co"># Exponential control failure rate</span>
-  eta <span class="op">=</span> <span class="fl">0.001</span>, <span class="co"># Exponential dropout rate</span>
-  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">7.5</span>, <span class="fl">10</span><span class="op">)</span>, <span class="co"># Relative enrollment rates by time period</span>
-  R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">12</span><span class="op">)</span>, <span class="co"># Duration of time periods for rates in gamma</span>
-  T <span class="op">=</span> <span class="fl">42</span>, <span class="co"># Planned study duration for OS</span>
-  minfup <span class="op">=</span> <span class="fl">24</span> <span class="co"># Planned minimum follow-up after end of enrollment</span>
-<span class="op">)</span>
-<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">ossub</span><span class="op">)</span>
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ossub</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">osmedian</span> <span class="op">&lt;-</span> <span class="fl">12</span> <span class="co"># Median control survival</span></span>
+<span><span class="co"># Derive group sequential design for OS in the targeted subgroup</span></span>
+<span><span class="va">ossub</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="fl">3</span>, <span class="co"># 3 analyses for OS</span></span>
+<span>  test.type <span class="op">=</span> <span class="fl">1</span>, <span class="co"># Efficacy bound only (no futility)</span></span>
+<span>  alpha <span class="op">=</span> <span class="va">alphaHypotheses</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="co"># Allocated alpha from design hypothesis group</span></span>
+<span>  beta <span class="op">=</span> <span class="fl">0.1</span>, <span class="co"># Type 2 error (1 - power)</span></span>
+<span>  hr <span class="op">=</span> <span class="fl">0.65</span>, <span class="co"># Assumed hazard ratio for power calculation</span></span>
+<span>  timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.61</span>, <span class="fl">0.82</span><span class="op">)</span>, <span class="co"># Choose these to match targeted calendar timing of analyses</span></span>
+<span>  sfu <span class="op">=</span> <span class="va">sfLDOF</span>, <span class="co"># Spending function to approximate O'Brien-Fleming bound</span></span>
+<span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="va">osmedian</span>, <span class="co"># Exponential control failure rate</span></span>
+<span>  eta <span class="op">=</span> <span class="fl">0.001</span>, <span class="co"># Exponential dropout rate</span></span>
+<span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">7.5</span>, <span class="fl">10</span><span class="op">)</span>, <span class="co"># Relative enrollment rates by time period</span></span>
+<span>  R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">12</span><span class="op">)</span>, <span class="co"># Duration of time periods for rates in gamma</span></span>
+<span>  T <span class="op">=</span> <span class="fl">42</span>, <span class="co"># Planned study duration for OS</span></span>
+<span>  minfup <span class="op">=</span> <span class="fl">24</span> <span class="co"># Planned minimum follow-up after end of enrollment</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">ossub</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ossub</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>One-sided group sequential design with 3 analyses, time-to-event outcome with sample size 378 and 284 events required, 90 percent power, 1 percent (1-sided) Type I error to detect a hazard ratio of 0.65. Enrollment and total study durations are assumed to be 18 and 42 months, respectively. Efficacy bounds derived using a Lan-DeMets O’Brien-Fleming approximation spending function with none = 1.</p>
 <p>The above text was automatically generated and could be edited appropriately for description of the design. Following is a summary table describing study bounds.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># tab %&gt;% kable(caption = "Design for OS in the subgroup.") %&gt;% kable_styling()</span>
-<span class="va">tab</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Design for OS in the Subgroup"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://gt.rstudio.com/reference/cols_align.html" class="external-link">cols_align</a></span><span class="op">(</span>align <span class="op">=</span> <span class="st">"left"</span>, columns <span class="op">=</span> <span class="va">Value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span>
-    footnote <span class="op">=</span> <span class="st">"Cumulative boundary crossing probability includes crossing probability at earlier analysis."</span>,
-    locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"Value"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">9</span>, <span class="fl">10</span>, <span class="fl">14</span>, <span class="fl">15</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span>
-    footnote <span class="op">=</span> <span class="st">"Approximate hazard ratio at bound."</span>,
-    locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"Value"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">8</span>, <span class="fl">13</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
-<div id="ongxpcywbm" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<code class="sourceCode R"><span><span class="co"># tab %&gt;% kable(caption = "Design for OS in the subgroup.") %&gt;% kable_styling()</span></span>
+<span><span class="va">tab</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Design for OS in the Subgroup"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/cols_align.html" class="external-link">cols_align</a></span><span class="op">(</span>align <span class="op">=</span> <span class="st">"left"</span>, columns <span class="op">=</span> <span class="va">Value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span></span>
+<span>    footnote <span class="op">=</span> <span class="st">"Cumulative boundary crossing probability includes crossing probability at earlier analysis."</span>,</span>
+<span>    locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"Value"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">9</span>, <span class="fl">10</span>, <span class="fl">14</span>, <span class="fl">15</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span></span>
+<span>    footnote <span class="op">=</span> <span class="st">"Approximate hazard ratio at bound."</span>,</span>
+<span>    locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"Value"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">8</span>, <span class="fl">13</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div id="stnnhtrvlq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ongxpcywbm .gt_table {
+#stnnhtrvlq .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -258,7 +258,7 @@
   border-left-color: #D3D3D3;
 }
 
-#ongxpcywbm .gt_heading {
+#stnnhtrvlq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -270,7 +270,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ongxpcywbm .gt_title {
+#stnnhtrvlq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -282,7 +282,7 @@
   border-bottom-width: 0;
 }
 
-#ongxpcywbm .gt_subtitle {
+#stnnhtrvlq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -294,13 +294,13 @@
   border-top-width: 0;
 }
 
-#ongxpcywbm .gt_bottom_border {
+#stnnhtrvlq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ongxpcywbm .gt_col_headings {
+#stnnhtrvlq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -315,7 +315,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ongxpcywbm .gt_col_heading {
+#stnnhtrvlq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -335,7 +335,7 @@
   overflow-x: hidden;
 }
 
-#ongxpcywbm .gt_column_spanner_outer {
+#stnnhtrvlq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -347,15 +347,15 @@
   padding-right: 4px;
 }
 
-#ongxpcywbm .gt_column_spanner_outer:first-child {
+#stnnhtrvlq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ongxpcywbm .gt_column_spanner_outer:last-child {
+#stnnhtrvlq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ongxpcywbm .gt_column_spanner {
+#stnnhtrvlq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -367,7 +367,7 @@
   width: 100%;
 }
 
-#ongxpcywbm .gt_group_heading {
+#stnnhtrvlq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -392,7 +392,7 @@
   vertical-align: middle;
 }
 
-#ongxpcywbm .gt_empty_group_heading {
+#stnnhtrvlq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -407,15 +407,15 @@
   vertical-align: middle;
 }
 
-#ongxpcywbm .gt_from_md > :first-child {
+#stnnhtrvlq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ongxpcywbm .gt_from_md > :last-child {
+#stnnhtrvlq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ongxpcywbm .gt_row {
+#stnnhtrvlq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -434,7 +434,7 @@
   overflow-x: hidden;
 }
 
-#ongxpcywbm .gt_stub {
+#stnnhtrvlq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -447,7 +447,7 @@
   padding-right: 5px;
 }
 
-#ongxpcywbm .gt_stub_row_group {
+#stnnhtrvlq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -461,11 +461,11 @@
   vertical-align: top;
 }
 
-#ongxpcywbm .gt_row_group_first td {
+#stnnhtrvlq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ongxpcywbm .gt_summary_row {
+#stnnhtrvlq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -475,16 +475,16 @@
   padding-right: 5px;
 }
 
-#ongxpcywbm .gt_first_summary_row {
+#stnnhtrvlq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ongxpcywbm .gt_first_summary_row.thick {
+#stnnhtrvlq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ongxpcywbm .gt_last_summary_row {
+#stnnhtrvlq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -494,7 +494,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#ongxpcywbm .gt_grand_summary_row {
+#stnnhtrvlq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -504,7 +504,7 @@
   padding-right: 5px;
 }
 
-#ongxpcywbm .gt_first_grand_summary_row {
+#stnnhtrvlq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -514,11 +514,11 @@
   border-top-color: #D3D3D3;
 }
 
-#ongxpcywbm .gt_striped {
+#stnnhtrvlq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ongxpcywbm .gt_table_body {
+#stnnhtrvlq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -527,7 +527,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#ongxpcywbm .gt_footnotes {
+#stnnhtrvlq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -541,7 +541,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ongxpcywbm .gt_footnote {
+#stnnhtrvlq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -550,7 +550,7 @@
   padding-right: 5px;
 }
 
-#ongxpcywbm .gt_sourcenotes {
+#stnnhtrvlq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -564,7 +564,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ongxpcywbm .gt_sourcenote {
+#stnnhtrvlq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -572,36 +572,36 @@
   padding-right: 5px;
 }
 
-#ongxpcywbm .gt_left {
+#stnnhtrvlq .gt_left {
   text-align: left;
 }
 
-#ongxpcywbm .gt_center {
+#stnnhtrvlq .gt_center {
   text-align: center;
 }
 
-#ongxpcywbm .gt_right {
+#stnnhtrvlq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ongxpcywbm .gt_font_normal {
+#stnnhtrvlq .gt_font_normal {
   font-weight: normal;
 }
 
-#ongxpcywbm .gt_font_bold {
+#stnnhtrvlq .gt_font_bold {
   font-weight: bold;
 }
 
-#ongxpcywbm .gt_font_italic {
+#stnnhtrvlq .gt_font_italic {
   font-style: italic;
 }
 
-#ongxpcywbm .gt_super {
+#stnnhtrvlq .gt_super {
   font-size: 65%;
 }
 
-#ongxpcywbm .gt_two_val_uncert {
+#stnnhtrvlq .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -610,31 +610,31 @@
   margin-left: 0.1em;
 }
 
-#ongxpcywbm .gt_footnote_marks {
+#stnnhtrvlq .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#ongxpcywbm .gt_asterisk {
+#stnnhtrvlq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ongxpcywbm .gt_slash_mark {
+#stnnhtrvlq .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#ongxpcywbm .gt_fraction_numerator {
+#stnnhtrvlq .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#ongxpcywbm .gt_fraction_denominator {
+#stnnhtrvlq .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -750,24 +750,24 @@
 
 <p>The total sample size is assumed to be twice the above, N=756. The power and hazard ratio can be adjusted to appropriately size the trial rather than starting with adjusting sample size to reach a targeted power. For this example, we consider altering power (<code>beta</code>) while fixing the hazard ratio at 0.75, representing an increase in median OS from 12 months in the control group to 16 months in the experimental group. For this design, we consider a non-binding futility bound where the trial may be stopped early in the overall population if the bound is crossed. We use a <span class="citation">Hwang, Shih, and De Cani (1990)</span> bound with <span class="math inline">\(\gamma = -3.25\)</span>. Study designers should carefully consider implication for parameter choices, particularly if the futility bounds provide sensible guidance for stopping the trial. Since the futility bounds are non-binding, the efficacy bound is computed assuming the futility bound is ignored which will control Type I error at the targeted level even if a futility bound is crossed and the trial is continued.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">.75</span>
-<span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">.14</span>
-<span class="va">os</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span>
-  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>, alpha <span class="op">=</span> <span class="fl">0.01</span>, beta <span class="op">=</span> <span class="va">beta</span>, hr <span class="op">=</span> <span class="va">hr</span>,
-  timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.62</span>, <span class="fl">0.83</span><span class="op">)</span>, sfu <span class="op">=</span> <span class="va">sfLDOF</span>,
-  sfl <span class="op">=</span> <span class="va">sfHSD</span>, sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">3.25</span>,
-  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">12</span>, eta <span class="op">=</span> <span class="fl">0.001</span>, S <span class="op">=</span> <span class="cn">NULL</span>,
-  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">7.5</span>, <span class="fl">10</span><span class="op">)</span>, R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">12</span><span class="op">)</span>,
-  T <span class="op">=</span> <span class="fl">42</span>, minfup <span class="op">=</span> <span class="fl">24</span>
-<span class="op">)</span>
-<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">os</span><span class="op">)</span>
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">os</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">.75</span></span>
+<span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">.14</span></span>
+<span><span class="va">os</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>, alpha <span class="op">=</span> <span class="fl">0.01</span>, beta <span class="op">=</span> <span class="va">beta</span>, hr <span class="op">=</span> <span class="va">hr</span>,</span>
+<span>  timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.62</span>, <span class="fl">0.83</span><span class="op">)</span>, sfu <span class="op">=</span> <span class="va">sfLDOF</span>,</span>
+<span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>, sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">3.25</span>,</span>
+<span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">12</span>, eta <span class="op">=</span> <span class="fl">0.001</span>, S <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">7.5</span>, <span class="fl">10</span><span class="op">)</span>, R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">12</span><span class="op">)</span>,</span>
+<span>  T <span class="op">=</span> <span class="fl">42</span>, minfup <span class="op">=</span> <span class="fl">24</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">os</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">os</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 756 and 589 events required, 86 percent power, 1 percent (1-sided) Type I error to detect a hazard ratio of 0.75. Enrollment and total study durations are assumed to be 18 and 42 months, respectively. Efficacy bounds derived using a Lan-DeMets O’Brien-Fleming approximation spending function with none = 1. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -3.25.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tab</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Design for OS in all subjects"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tab</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Design for OS in all subjects"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <caption>
 Design for OS in all subjects
@@ -998,31 +998,31 @@ P(Cross) if HR=0.75
 </table>
 <p>We can also plot different design characteristics. Here, we plot the approximate hazard ratio to cross each bound which may be helpful for design team discussions.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">os</span>, plottype <span class="op">=</span> <span class="st">"HR"</span>, xlab <span class="op">=</span> <span class="st">"Events"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">os</span>, plottype <span class="op">=</span> <span class="st">"HR"</span>, xlab <span class="op">=</span> <span class="st">"Events"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="GraphicalMultiplicity_files/figure-html/unnamed-chunk-8-1.png" width="80%" style="display: block; margin: auto;"></p>
 </div>
 <div class="tab-pane" id="h3-pfs-subgroup" role="tabpanel" aria-labelledby="h3-pfs-subgroup-tab">
 
 <p>For progression free survival (PFS) we assume a shorter median time to event of 5 months. With an assumed hazard ratio of 0.65, we adjust <code>beta</code> and <code>timing</code> to match the targeted sample size and interim analysis timing. We assume a larger dropout rate for PFS than we did for OS. Here we set up a futility bound for safety. This is an asymmetric 2-sided design with both futility and efficacy boundary crossing probabilities under the null hypothesis. The parameter <code>astar = 0.1</code> specifies total lower bound spending of 10%. The lower <span class="citation">Hwang, Shih, and De Cani (1990)</span> spending bound with <span class="math inline">\(\gamma = -8\)</span> is intended to be conservative in terms of futility at the interim, but still provide a safety bound for the PFS result in this targeted population. This would have to be carefully evaluated by the study design team at the time of design.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">.65</span>
-<span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">.149</span>
-<span class="va">pfssub</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span>
-  k <span class="op">=</span> <span class="fl">2</span>, test.type <span class="op">=</span> <span class="fl">6</span>, astar <span class="op">=</span> <span class="fl">0.1</span>, alpha <span class="op">=</span> <span class="fl">0.004</span>, beta <span class="op">=</span> <span class="va">beta</span>, hr <span class="op">=</span> <span class="va">hr</span>,
-  timing <span class="op">=</span> <span class="fl">.87</span>, sfu <span class="op">=</span> <span class="va">sfLDOF</span>,
-  sfl <span class="op">=</span> <span class="va">sfHSD</span>, sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">8</span>,
-  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span>, eta <span class="op">=</span> <span class="fl">0.02</span>, S <span class="op">=</span> <span class="cn">NULL</span>,
-  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">7.5</span>, <span class="fl">10</span><span class="op">)</span>, R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">12</span><span class="op">)</span>,
-  T <span class="op">=</span> <span class="fl">32</span>, minfup <span class="op">=</span> <span class="fl">14</span>
-<span class="op">)</span>
-<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">pfssub</span><span class="op">)</span>
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pfssub</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">.65</span></span>
+<span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">.149</span></span>
+<span><span class="va">pfssub</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="fl">2</span>, test.type <span class="op">=</span> <span class="fl">6</span>, astar <span class="op">=</span> <span class="fl">0.1</span>, alpha <span class="op">=</span> <span class="fl">0.004</span>, beta <span class="op">=</span> <span class="va">beta</span>, hr <span class="op">=</span> <span class="va">hr</span>,</span>
+<span>  timing <span class="op">=</span> <span class="fl">.87</span>, sfu <span class="op">=</span> <span class="va">sfLDOF</span>,</span>
+<span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>, sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">8</span>,</span>
+<span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span>, eta <span class="op">=</span> <span class="fl">0.02</span>, S <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">7.5</span>, <span class="fl">10</span><span class="op">)</span>, R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">12</span><span class="op">)</span>,</span>
+<span>  T <span class="op">=</span> <span class="fl">32</span>, minfup <span class="op">=</span> <span class="fl">14</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">pfssub</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pfssub</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Asymmetric two-sided group sequential design with non-binding futility bound, 2 analyses, time-to-event outcome with sample size 378 and 296 events required, 85.1 percent power, 0.4 percent (1-sided) Type I error to detect a hazard ratio of 0.65. Enrollment and total study durations are assumed to be 18 and 32 months, respectively. Efficacy bounds derived using a Lan-DeMets O’Brien-Fleming approximation spending function with none = 1. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -8.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tab</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Design for PFS in the subgroup"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">tab</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Design for PFS in the subgroup"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <caption>
 Design for PFS in the subgroup
@@ -1187,20 +1187,20 @@ P(Cross) if HR=0.65
 
 <p>Finally, we design for PFS in all subjects. In this case, we simplify to a one-sided design. A futility bound could be considered, if appropriate.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">.74</span>
-<span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">.15</span>
-<span class="va">pfs</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span>
-  k <span class="op">=</span> <span class="fl">2</span>, test.type <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.004</span>, beta <span class="op">=</span> <span class="va">beta</span>, hr <span class="op">=</span> <span class="va">hr</span>,
-  timing <span class="op">=</span> <span class="fl">.86</span>, sfu <span class="op">=</span> <span class="va">sfLDOF</span>,
-  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span>, eta <span class="op">=</span> <span class="fl">0.02</span>, S <span class="op">=</span> <span class="cn">NULL</span>,
-  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">7.5</span>, <span class="fl">10</span><span class="op">)</span>, R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">12</span><span class="op">)</span>,
-  T <span class="op">=</span> <span class="fl">32</span>, minfup <span class="op">=</span> <span class="fl">14</span>
-<span class="op">)</span>
-<span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">pfs</span><span class="op">)</span>
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span>
-<span class="va">tab</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Design for PFS in the overall population"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">.74</span></span>
+<span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">.15</span></span>
+<span><span class="va">pfs</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="fl">2</span>, test.type <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.004</span>, beta <span class="op">=</span> <span class="va">beta</span>, hr <span class="op">=</span> <span class="va">hr</span>,</span>
+<span>  timing <span class="op">=</span> <span class="fl">.86</span>, sfu <span class="op">=</span> <span class="va">sfLDOF</span>,</span>
+<span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span>, eta <span class="op">=</span> <span class="fl">0.02</span>, S <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">5</span>, <span class="fl">7.5</span>, <span class="fl">10</span><span class="op">)</span>, R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">12</span><span class="op">)</span>,</span>
+<span>  T <span class="op">=</span> <span class="fl">32</span>, minfup <span class="op">=</span> <span class="fl">14</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">pfs</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span></span>
+<span><span class="va">tab</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"Design for PFS in the overall population"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <caption>
 Design for PFS in the overall population
@@ -1332,12 +1332,12 @@ P(Cross) if HR=0.74
 
 <p>For objective response rate (ORR), we assume an underlying control rate of 15%. In the subgroup population, we have almost 90% power to detect a 20% improvement.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/varBinomial.html">nBinomial</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.35</span>, p2 <span class="op">=</span> <span class="fl">.15</span>, alpha <span class="op">=</span> <span class="fl">.0005</span>, n <span class="op">=</span> <span class="fl">378</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">#&gt; [1] 0.8911724</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/varBinomial.html">nBinomial</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.35</span>, p2 <span class="op">=</span> <span class="fl">.15</span>, alpha <span class="op">=</span> <span class="fl">.0005</span>, n <span class="op">=</span> <span class="fl">378</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; [1] 0.8911724</span></span></code></pre>
 <p>In the all subjects population, we have approximately 95% power to detect an improvement in ORR from 15% to 30%.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/varBinomial.html">nBinomial</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.3</span>, p2 <span class="op">=</span> <span class="fl">.15</span>, alpha <span class="op">=</span> <span class="fl">.0005</span>, n <span class="op">=</span> <span class="fl">756</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">#&gt; [1] 0.9530369</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/varBinomial.html">nBinomial</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.3</span>, p2 <span class="op">=</span> <span class="fl">.15</span>, alpha <span class="op">=</span> <span class="fl">.0005</span>, n <span class="op">=</span> <span class="fl">756</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; [1] 0.9530369</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1346,8 +1346,8 @@ P(Cross) if HR=0.74
 </h3>
 <p>Now we associate designs with hypotheses in an ordered list corresponding to the order in the multiplicity graph setup. Since ORR designs are not group sequential, we enter <code>NULL</code> values for those in the last 2 entries of the design list; hit code button to reveal code for this.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">### THIS NEEDS TO BE MODIFIED TO MATCH STUDY</span>
-<span class="va">gsDlist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ossub</span>, <span class="va">os</span>, <span class="va">pfssub</span>, <span class="va">pfs</span>, <span class="cn">NULL</span>, <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">### THIS NEEDS TO BE MODIFIED TO MATCH STUDY</span></span>
+<span><span class="va">gsDlist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ossub</span>, <span class="va">os</span>, <span class="va">pfssub</span>, <span class="va">pfs</span>, <span class="cn">NULL</span>, <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="spending-plan-and-spending-time">Spending plan and spending time<a class="anchor" aria-label="anchor" href="#spending-plan-and-spending-time"></a>
@@ -1377,54 +1377,54 @@ P(Cross) if HR=0.74
 </ul>
 <p>All of the above leads to event counts and spending for PFS and OS as follows:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">### THIS NEEDS TO BE MODIFIED TO MATCH YOUR STUDY</span>
-<span class="co"># PFS, overall population</span>
-<span class="va">pfs</span><span class="op">$</span><span class="va">n.I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">675</span>, <span class="fl">750</span><span class="op">)</span>
-<span class="co"># PFS, subgroup</span>
-<span class="va">pfssub</span><span class="op">$</span><span class="va">n.I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">265</span>, <span class="fl">310</span><span class="op">)</span>
-<span class="co"># OS, overall population</span>
-<span class="va">os</span><span class="op">$</span><span class="va">n.I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">529</span>, <span class="fl">700</span>, <span class="fl">800</span><span class="op">)</span>
-<span class="co"># OS, subgroup</span>
-<span class="va">ossub</span><span class="op">$</span><span class="va">n.I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">185</span>, <span class="fl">245</span>, <span class="fl">295</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">### THIS NEEDS TO BE MODIFIED TO MATCH YOUR STUDY</span></span>
+<span><span class="co"># PFS, overall population</span></span>
+<span><span class="va">pfs</span><span class="op">$</span><span class="va">n.I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">675</span>, <span class="fl">750</span><span class="op">)</span></span>
+<span><span class="co"># PFS, subgroup</span></span>
+<span><span class="va">pfssub</span><span class="op">$</span><span class="va">n.I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">265</span>, <span class="fl">310</span><span class="op">)</span></span>
+<span><span class="co"># OS, overall population</span></span>
+<span><span class="va">os</span><span class="op">$</span><span class="va">n.I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">529</span>, <span class="fl">700</span>, <span class="fl">800</span><span class="op">)</span></span>
+<span><span class="co"># OS, subgroup</span></span>
+<span><span class="va">ossub</span><span class="op">$</span><span class="va">n.I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">185</span>, <span class="fl">245</span>, <span class="fl">295</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="nominal-p-values-for-each-analysis">Nominal p-values for each analysis<a class="anchor" aria-label="anchor" href="#nominal-p-values-for-each-analysis"></a>
 </h3>
 <p>For analyses not yet performed enter dummy values, including a p-value near 1 (e.g., .99). No other entry is required by the user in any other section of the document. Calendar timing is also associated with PFS hypotheses for use in spending functions. Spending time for OS spending will be input as NULL so that spending will be based on event counts for OS hypotheses.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">### THIS NEEDS TO BE MODIFIED TO MATCH YOUR STUDY</span>
-<span class="va">inputResults</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>
-  H <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span>, <span class="fl">5</span>, <span class="fl">6</span><span class="op">)</span>,
-  Pop <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Subgroup"</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"All"</span>, <span class="fl">3</span><span class="op">)</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Subgroup"</span>, <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"All"</span>, <span class="fl">2</span><span class="op">)</span>,
-    <span class="st">"Subgroup"</span>, <span class="st">"All"</span>
-  <span class="op">)</span>,
-  Endpoint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"OS"</span>, <span class="fl">6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"PFS"</span>, <span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"ORR"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,
-  <span class="co"># Example with some rejections</span>
-  nominalP <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-    <span class="fl">.03</span>, <span class="fl">.0001</span>, <span class="fl">.000001</span>,
-    <span class="fl">.2</span>, <span class="fl">.15</span>, <span class="fl">.1</span>,
-    <span class="fl">.2</span>, <span class="fl">.001</span>,
-    <span class="fl">.3</span>, <span class="fl">.2</span>,
-    <span class="fl">.00001</span>,
-    <span class="fl">.1</span>
-  <span class="op">)</span>,
-  <span class="co"># Example with no rejections</span>
-  <span class="co"># nominalP = rep(.03, 12),</span>
-  Analysis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
-  events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ossub</span><span class="op">$</span><span class="va">n.I</span>, <span class="va">os</span><span class="op">$</span><span class="va">n.I</span>, <span class="va">pfssub</span><span class="op">$</span><span class="va">n.I</span>, <span class="va">pfs</span><span class="op">$</span><span class="va">n.I</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,
-  spendingTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-    <span class="va">ossub</span><span class="op">$</span><span class="va">n.I</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ossub</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,
-    <span class="va">ossub</span><span class="op">$</span><span class="va">n.I</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ossub</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,
-    <span class="va">pfssub</span><span class="op">$</span><span class="va">n.I</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">pfssub</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,
-    <span class="va">pfssub</span><span class="op">$</span><span class="va">n.I</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">pfssub</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,
-    <span class="cn">NA</span>, <span class="cn">NA</span>
-  <span class="op">)</span>
-<span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">inputResults</span>, caption <span class="op">=</span> <span class="st">"DUMMY RESULTS FOR IA2."</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/add_footnote.html" class="external-link">add_footnote</a></span><span class="op">(</span><span class="st">"Dummy results"</span>, notation <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">### THIS NEEDS TO BE MODIFIED TO MATCH YOUR STUDY</span></span>
+<span><span class="va">inputResults</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  H <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span>, <span class="fl">5</span>, <span class="fl">6</span><span class="op">)</span>,</span>
+<span>  Pop <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Subgroup"</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"All"</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Subgroup"</span>, <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"All"</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Subgroup"</span>, <span class="st">"All"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  Endpoint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"OS"</span>, <span class="fl">6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"PFS"</span>, <span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"ORR"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="co"># Example with some rejections</span></span>
+<span>  nominalP <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fl">.03</span>, <span class="fl">.0001</span>, <span class="fl">.000001</span>,</span>
+<span>    <span class="fl">.2</span>, <span class="fl">.15</span>, <span class="fl">.1</span>,</span>
+<span>    <span class="fl">.2</span>, <span class="fl">.001</span>,</span>
+<span>    <span class="fl">.3</span>, <span class="fl">.2</span>,</span>
+<span>    <span class="fl">.00001</span>,</span>
+<span>    <span class="fl">.1</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="co"># Example with no rejections</span></span>
+<span>  <span class="co"># nominalP = rep(.03, 12),</span></span>
+<span>  Analysis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ossub</span><span class="op">$</span><span class="va">n.I</span>, <span class="va">os</span><span class="op">$</span><span class="va">n.I</span>, <span class="va">pfssub</span><span class="op">$</span><span class="va">n.I</span>, <span class="va">pfs</span><span class="op">$</span><span class="va">n.I</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>  spendingTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="va">ossub</span><span class="op">$</span><span class="va">n.I</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ossub</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,</span>
+<span>    <span class="va">ossub</span><span class="op">$</span><span class="va">n.I</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ossub</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,</span>
+<span>    <span class="va">pfssub</span><span class="op">$</span><span class="va">n.I</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">pfssub</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,</span>
+<span>    <span class="va">pfssub</span><span class="op">$</span><span class="va">n.I</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">pfssub</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,</span>
+<span>    <span class="cn">NA</span>, <span class="cn">NA</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">inputResults</span>, caption <span class="op">=</span> <span class="st">"DUMMY RESULTS FOR IA2."</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/add_footnote.html" class="external-link">add_footnote</a></span><span class="op">(</span><span class="st">"Dummy results"</span>, notation <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <caption>
 DUMMY RESULTS FOR IA2.
@@ -1746,104 +1746,104 @@ NA
 </h3>
 <p>Sequential p-value computation is done in one loop in an attempt to minimize chances for coding errors. We delay showing these until after display of the sequence of multiplicity graphs generated by hypothesis rejection is shown.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">### USER SHOULD NOT NEED TO MODIFY THIS CODE</span>
-<span class="va">EOCtab</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
-<span class="va">EOCtab</span> <span class="op">&lt;-</span> <span class="va">inputResults</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"H"</span>, <span class="st">"Pop"</span>, <span class="st">"Endpoint"</span>, <span class="st">"nominalP"</span><span class="op">)</span>
-<span class="va">EOCtab</span><span class="op">$</span><span class="va">seqp</span> <span class="op">&lt;-</span> <span class="fl">.9999</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">EOCtabline</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nHypotheses</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">EOCtab</span><span class="op">$</span><span class="va">seqp</span><span class="op">[</span><span class="va">EOCtabline</span><span class="op">]</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">gsDlist</span><span class="op">[[</span><span class="va">EOCtabline</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, <span class="va">EOCtab</span><span class="op">$</span><span class="va">nominalP</span><span class="op">[</span><span class="va">EOCtabline</span><span class="op">]</span>, <span class="op">{</span>
-      <span class="va">tem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">inputResults</span>, <span class="va">H</span> <span class="op">==</span> <span class="va">EOCtabline</span><span class="op">)</span>
-      <span class="fu"><a href="../reference/sequentiaPValue.html">sequentialPValue</a></span><span class="op">(</span>
-        gsD <span class="op">=</span> <span class="va">gsDlist</span><span class="op">[[</span><span class="va">EOCtabline</span><span class="op">]</span><span class="op">]</span>, interval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.0001</span>, <span class="fl">.9999</span><span class="op">)</span>,
-        n.I <span class="op">=</span> <span class="va">tem</span><span class="op">$</span><span class="va">events</span>,
-        Z <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="va">tem</span><span class="op">$</span><span class="va">nominalP</span><span class="op">)</span>,
-        usTime <span class="op">=</span> <span class="va">tem</span><span class="op">$</span><span class="va">spendingTime</span>
-      <span class="op">)</span>
-    <span class="op">}</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="va">EOCtab</span> <span class="op">&lt;-</span> <span class="va">EOCtab</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="st">"nominalP"</span><span class="op">)</span>
-<span class="co"># kable(EOCtab,caption="Sequential p-values as initially placed in EOCtab") %&gt;% kable_styling()</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co">### USER SHOULD NOT NEED TO MODIFY THIS CODE</span></span>
+<span><span class="va">EOCtab</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
+<span><span class="va">EOCtab</span> <span class="op">&lt;-</span> <span class="va">inputResults</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"H"</span>, <span class="st">"Pop"</span>, <span class="st">"Endpoint"</span>, <span class="st">"nominalP"</span><span class="op">)</span></span>
+<span><span class="va">EOCtab</span><span class="op">$</span><span class="va">seqp</span> <span class="op">&lt;-</span> <span class="fl">.9999</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">EOCtabline</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nHypotheses</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">EOCtab</span><span class="op">$</span><span class="va">seqp</span><span class="op">[</span><span class="va">EOCtabline</span><span class="op">]</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">gsDlist</span><span class="op">[[</span><span class="va">EOCtabline</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, <span class="va">EOCtab</span><span class="op">$</span><span class="va">nominalP</span><span class="op">[</span><span class="va">EOCtabline</span><span class="op">]</span>, <span class="op">{</span></span>
+<span>      <span class="va">tem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">inputResults</span>, <span class="va">H</span> <span class="op">==</span> <span class="va">EOCtabline</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="../reference/sequentiaPValue.html">sequentialPValue</a></span><span class="op">(</span></span>
+<span>        gsD <span class="op">=</span> <span class="va">gsDlist</span><span class="op">[[</span><span class="va">EOCtabline</span><span class="op">]</span><span class="op">]</span>, interval <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.0001</span>, <span class="fl">.9999</span><span class="op">)</span>,</span>
+<span>        n.I <span class="op">=</span> <span class="va">tem</span><span class="op">$</span><span class="va">events</span>,</span>
+<span>        Z <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="va">tem</span><span class="op">$</span><span class="va">nominalP</span><span class="op">)</span>,</span>
+<span>        usTime <span class="op">=</span> <span class="va">tem</span><span class="op">$</span><span class="va">spendingTime</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">EOCtab</span> <span class="op">&lt;-</span> <span class="va">EOCtab</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="st">"nominalP"</span><span class="op">)</span></span>
+<span><span class="co"># kable(EOCtab,caption="Sequential p-values as initially placed in EOCtab") %&gt;% kable_styling()</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="evaluate-hypothesis-rejection-using-gmcp">Evaluate hypothesis rejection using gMCP<a class="anchor" aria-label="anchor" href="#evaluate-hypothesis-rejection-using-gmcp"></a>
 </h3>
 <p>We need to set up a <code>graph</code> object as implemented in the gMCP package.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Make a graph object</span>
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">nameHypotheses</span>
-<span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gMCP/man/matrix2graph.html" class="external-link">matrix2graph</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
-<span class="co"># Add weights to the object based on alpha allocation</span>
-<span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gMCP/man/graphMCP.html" class="external-link">setWeights</a></span><span class="op">(</span><span class="va">graph</span>, <span class="va">alphaHypotheses</span> <span class="op">/</span> <span class="va">fwer</span><span class="op">)</span>
-<span class="va">rescale</span> <span class="op">&lt;-</span> <span class="fl">45</span>
-<span class="va">d</span> <span class="op">&lt;-</span> <span class="va">g</span><span class="op">$</span><span class="va">layers</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">data</span>
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
-<span class="co"># graph@nodeAttr$X &lt;- rescale * d$x * 1.75</span>
-<span class="co"># graph@nodeAttr$Y &lt;- -rescale * d$y * 2</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Make a graph object</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">nameHypotheses</span></span>
+<span><span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gMCP/man/matrix2graph.html" class="external-link">matrix2graph</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co"># Add weights to the object based on alpha allocation</span></span>
+<span><span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gMCP/man/graphMCP.html" class="external-link">setWeights</a></span><span class="op">(</span><span class="va">graph</span>, <span class="va">alphaHypotheses</span> <span class="op">/</span> <span class="va">fwer</span><span class="op">)</span></span>
+<span><span class="va">rescale</span> <span class="op">&lt;-</span> <span class="fl">45</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">g</span><span class="op">$</span><span class="va">layers</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co"># graph@nodeAttr$X &lt;- rescale * d$x * 1.75</span></span>
+<span><span class="co"># graph@nodeAttr$Y &lt;- -rescale * d$y * 2</span></span></code></pre></div>
 <p>Now we add the sequential p-values and evaluate which hypotheses have been rejected.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gMCP/man/gMCP.html" class="external-link">gMCP</a></span><span class="op">(</span>graph <span class="op">=</span> <span class="va">graph</span>, pvalues <span class="op">=</span> <span class="va">EOCtab</span><span class="op">$</span><span class="va">seqp</span>, alpha <span class="op">=</span> <span class="va">fwer</span><span class="op">)</span>
-<span class="va">result</span><span class="op">@</span><span class="va">rejected</span></code></pre></div>
-<pre><code><span class="co">#&gt;      H1: OS\n Subgroup  H2: OS\n All subjects     H3: PFS\n Subgroup </span>
-<span class="co">#&gt;                   TRUE                  FALSE                   TRUE </span>
-<span class="co">#&gt; H4: PFS\n All subjects     H5: ORR\n Subgroup H6: ORR\n All subjects </span>
-<span class="co">#&gt;                  FALSE                   TRUE                  FALSE</span></code></pre>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/gMCP/man/gMCP.html" class="external-link">gMCP</a></span><span class="op">(</span>graph <span class="op">=</span> <span class="va">graph</span>, pvalues <span class="op">=</span> <span class="va">EOCtab</span><span class="op">$</span><span class="va">seqp</span>, alpha <span class="op">=</span> <span class="va">fwer</span><span class="op">)</span></span>
+<span><span class="va">result</span><span class="op">@</span><span class="va">rejected</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt;      H1: OS\n Subgroup  H2: OS\n All subjects     H3: PFS\n Subgroup </span></span>
+<span><span class="co">#&gt;                   TRUE                  FALSE                   TRUE </span></span>
+<span><span class="co">#&gt; H4: PFS\n All subjects     H5: ORR\n Subgroup H6: ORR\n All subjects </span></span>
+<span><span class="co">#&gt;                  FALSE                   TRUE                  FALSE</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># now map back into EOCtable (CHECK AGAIN!!!)</span>
-<span class="va">EOCtab</span><span class="op">$</span><span class="va">Rejected</span> <span class="op">&lt;-</span> <span class="va">result</span><span class="op">@</span><span class="va">rejected</span>
-<span class="va">EOCtab</span><span class="op">$</span><span class="va">adjPValues</span> <span class="op">&lt;-</span> <span class="va">result</span><span class="op">@</span><span class="va">adjPValues</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># now map back into EOCtable (CHECK AGAIN!!!)</span></span>
+<span><span class="va">EOCtab</span><span class="op">$</span><span class="va">Rejected</span> <span class="op">&lt;-</span> <span class="va">result</span><span class="op">@</span><span class="va">rejected</span></span>
+<span><span class="va">EOCtab</span><span class="op">$</span><span class="va">adjPValues</span> <span class="op">&lt;-</span> <span class="va">result</span><span class="op">@</span><span class="va">adjPValues</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="verification-of-hypotheses-rejected">Verification of hypotheses rejected<a class="anchor" aria-label="anchor" href="#verification-of-hypotheses-rejected"></a>
 </h2>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Number of graphs is used repeatedly</span>
-<span class="va">ngraphs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">)</span>
-<span class="co"># Set up tibble with hypotheses rejected at each stage</span>
-<span class="va">rejected</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">rejected</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span>
-    <span class="va">rejected</span>,
-    <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>
-      H <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">nHypotheses</span>, Stage <span class="op">=</span> <span class="va">i</span>,
-      Rejected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">nodeAttr</span><span class="op">$</span><span class="va">rejected</span><span class="op">)</span>
-    <span class="op">)</span>
-  <span class="op">)</span>
-<span class="op">}</span>
-<span class="va">rejected</span> <span class="op">&lt;-</span> <span class="va">rejected</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Rejected</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>graphRejecting <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">Stage</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Last graph with weight&gt;0 where H rejected</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">graphRejecting</span><span class="op">)</span>
-
-<span class="co"># Get final weights</span>
-<span class="co"># for hypotheses not rejected, this will be final weight where</span>
-<span class="co"># no hypothesis could be rejected</span>
-<span class="va">lastWeights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">[[</span><span class="va">ngraphs</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">weights</span><span class="op">)</span>
-<span class="va">lastGraph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">ngraphs</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">EOCtab</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># We will update for rejected hypotheses with last positive weight for each</span>
-<span class="kw">if</span> <span class="op">(</span><span class="va">ngraphs</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">ngraphs</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">lastWeights</span><span class="op">[</span><span class="va">rejected</span><span class="op">$</span><span class="va">H</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">weights</span><span class="op">[</span><span class="va">rejected</span><span class="op">$</span><span class="va">H</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
-    <span class="va">lastGraph</span><span class="op">[</span><span class="va">rejected</span><span class="op">$</span><span class="va">H</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">i</span>
-  <span class="op">}</span>
-<span class="op">}</span>
-<span class="va">EOCtab</span><span class="op">$</span><span class="va">lastAlpha</span> <span class="op">&lt;-</span> <span class="va">fwer</span> <span class="op">*</span> <span class="va">lastWeights</span>
-<span class="va">EOCtab</span><span class="op">$</span><span class="va">lastGraph</span> <span class="op">&lt;-</span> <span class="va">lastGraph</span>
-<span class="va">EOCtabx</span> <span class="op">&lt;-</span> <span class="va">EOCtab</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">EOCtabx</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-  <span class="st">"Hypothesis"</span>, <span class="st">"Population"</span>, <span class="st">"Endpoint"</span>, <span class="st">"Sequential p"</span>,
-  <span class="st">"Rejected"</span>, <span class="st">"Adjusted p"</span>, <span class="st">"Max alpha allocated"</span>, <span class="st">"Last Graph"</span>
-<span class="op">)</span>
-<span class="co"># Display table with desired column order</span>
-<span class="co"># Delayed following until after multiplicity graph sequence</span>
-<span class="co"># EOCtabx %&gt;% select(c(1:4,7,5:6,8)) %&gt;% kable() %&gt;% kable_styling()</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Number of graphs is used repeatedly</span></span>
+<span><span class="va">ngraphs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">)</span></span>
+<span><span class="co"># Set up tibble with hypotheses rejected at each stage</span></span>
+<span><span class="va">rejected</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">rejected</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<span>    <span class="va">rejected</span>,</span>
+<span>    <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>      H <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">nHypotheses</span>, Stage <span class="op">=</span> <span class="va">i</span>,</span>
+<span>      Rejected <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">nodeAttr</span><span class="op">$</span><span class="va">rejected</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">rejected</span> <span class="op">&lt;-</span> <span class="va">rejected</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Rejected</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">H</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>graphRejecting <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">Stage</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Last graph with weight&gt;0 where H rejected</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">graphRejecting</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get final weights</span></span>
+<span><span class="co"># for hypotheses not rejected, this will be final weight where</span></span>
+<span><span class="co"># no hypothesis could be rejected</span></span>
+<span><span class="va">lastWeights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">[[</span><span class="va">ngraphs</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">weights</span><span class="op">)</span></span>
+<span><span class="va">lastGraph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">ngraphs</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">EOCtab</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># We will update for rejected hypotheses with last positive weight for each</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="va">ngraphs</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">ngraphs</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">lastWeights</span><span class="op">[</span><span class="va">rejected</span><span class="op">$</span><span class="va">H</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">weights</span><span class="op">[</span><span class="va">rejected</span><span class="op">$</span><span class="va">H</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="va">lastGraph</span><span class="op">[</span><span class="va">rejected</span><span class="op">$</span><span class="va">H</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">i</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">EOCtab</span><span class="op">$</span><span class="va">lastAlpha</span> <span class="op">&lt;-</span> <span class="va">fwer</span> <span class="op">*</span> <span class="va">lastWeights</span></span>
+<span><span class="va">EOCtab</span><span class="op">$</span><span class="va">lastGraph</span> <span class="op">&lt;-</span> <span class="va">lastGraph</span></span>
+<span><span class="va">EOCtabx</span> <span class="op">&lt;-</span> <span class="va">EOCtab</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">EOCtabx</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Hypothesis"</span>, <span class="st">"Population"</span>, <span class="st">"Endpoint"</span>, <span class="st">"Sequential p"</span>,</span>
+<span>  <span class="st">"Rejected"</span>, <span class="st">"Adjusted p"</span>, <span class="st">"Max alpha allocated"</span>, <span class="st">"Last Graph"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># Display table with desired column order</span></span>
+<span><span class="co"># Delayed following until after multiplicity graph sequence</span></span>
+<span><span class="co"># EOCtabx %&gt;% select(c(1:4,7,5:6,8)) %&gt;% kable() %&gt;% kable_styling()</span></span></code></pre></div>
 <div class="section level3 tabset">
 <h3 class="tabset" id="multiplicity-graph-sequence-from-gmcp">Multiplicity graph sequence from gMCP<a class="anchor" aria-label="anchor" href="#multiplicity-graph-sequence-from-gmcp"></a>
 </h3>
@@ -1854,26 +1854,26 @@ NA
 
 <ul class="nav nav-tabs" id="multiplicity-graph-sequence-from-gmcp" role="tablist">
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#NA" id="NA-tab" type="button" role="tab" aria-controls="NA" aria-selected="true" class="active nav-link">
-<code class="sourceCode R"><span class="co">### THERE SHOULD BE NO NEED TO MODIFY THIS CODE SECTION</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">ngraphs</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">mx</span> <span class="op">&lt;-</span> <span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">m</span>
-  <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mx</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mx</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
-  <span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hGraph.html">hGraph</a></span><span class="op">(</span>
-    nHypotheses <span class="op">=</span> <span class="va">nHypotheses</span>,
-    alphaHypotheses <span class="op">=</span> <span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">weights</span> <span class="op">*</span> <span class="va">fwer</span>,
-    m <span class="op">=</span> <span class="va">mx</span>,
-    nameHypotheses <span class="op">=</span> <span class="va">nameHypotheses</span>,
-    halfWid <span class="op">=</span> <span class="fl">1</span>, halfHgt <span class="op">=</span> <span class="fl">.35</span>, xradius <span class="op">=</span> <span class="fl">2.5</span>, yradius <span class="op">=</span> <span class="fl">1</span>, offset <span class="op">=</span> <span class="fl">0</span>, trhw <span class="op">=</span> <span class="fl">.15</span>,
-    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1.25</span>, <span class="fl">1.25</span>, <span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>, <span class="op">-</span><span class="fl">1.25</span>, <span class="fl">1.25</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,
-    trprop <span class="op">=</span> <span class="fl">.4</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">cbPalette</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">" \n"</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"####"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">" Graph"</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span>, <span class="st">" \n\n"</span><span class="op">)</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">" \n\n\n"</span><span class="op">)</span>
-<span class="op">}</span></code></button></li>
+<code class="sourceCode R"><span><span class="co">### THERE SHOULD BE NO NEED TO MODIFY THIS CODE SECTION</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">ngraphs</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">mx</span> <span class="op">&lt;-</span> <span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">m</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mx</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mx</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
+<span>  <span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hGraph.html">hGraph</a></span><span class="op">(</span></span>
+<span>    nHypotheses <span class="op">=</span> <span class="va">nHypotheses</span>,</span>
+<span>    alphaHypotheses <span class="op">=</span> <span class="va">result</span><span class="op">@</span><span class="va">graphs</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">weights</span> <span class="op">*</span> <span class="va">fwer</span>,</span>
+<span>    m <span class="op">=</span> <span class="va">mx</span>,</span>
+<span>    nameHypotheses <span class="op">=</span> <span class="va">nameHypotheses</span>,</span>
+<span>    halfWid <span class="op">=</span> <span class="fl">1</span>, halfHgt <span class="op">=</span> <span class="fl">.35</span>, xradius <span class="op">=</span> <span class="fl">2.5</span>, yradius <span class="op">=</span> <span class="fl">1</span>, offset <span class="op">=</span> <span class="fl">0</span>, trhw <span class="op">=</span> <span class="fl">.15</span>,</span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1.25</span>, <span class="fl">1.25</span>, <span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>, <span class="op">-</span><span class="fl">1.25</span>, <span class="fl">1.25</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>    trprop <span class="op">=</span> <span class="fl">.4</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">cbPalette</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">" \n"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"####"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">" Graph"</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span>, <span class="st">" \n\n"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">" \n\n\n"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#graph-1" id="graph-1-tab" type="button" role="tab" aria-controls="graph-1" aria-selected="false" class="nav-link">Graph 1</button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#graph-2" id="graph-2-tab" type="button" role="tab" aria-controls="graph-2" aria-selected="false" class="nav-link">Graph 2</button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#graph-3" id="graph-3-tab" type="button" role="tab" aria-controls="graph-3" aria-selected="false" class="nav-link">Graph 3</button></li>
@@ -1908,10 +1908,10 @@ NA
 <li>For the remaining hypotheses (H2, H4, H6) the maximum <span class="math inline">\(\alpha\)</span> allocated is in the fourth graph; since each sequential p-value is greater than the allocated <span class="math inline">\(\alpha\)</span> for the corresponding hypothesis, none of these hypotheses were rejected.</li>
 </ol>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">EOCtabx</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">7</span>, <span class="fl">5</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">EOCtabx</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">7</span>, <span class="fl">5</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table table" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:right;">
@@ -2112,73 +2112,73 @@ FALSE
 
 <ul class="nav nav-tabs" id="bounds-at-final-alpha-allocated-for-group-sequential-tests" role="tablist">
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#NA" id="NA-tab" type="button" role="tab" aria-controls="NA" aria-selected="true" class="active nav-link">
-<code class="sourceCode R"><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nHypotheses</span><span class="op">)</span> <span class="op">{</span>
-  <span class="co"># Set up tab for hypothesis in output</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"####"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">" Hypothesis"</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span>, <span class="st">" \n"</span><span class="op">)</span><span class="op">)</span>
-  <span class="co"># Get results for hypothesis</span>
-  <span class="va">hresults</span> <span class="op">&lt;-</span> <span class="va">inputResults</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">H</span> <span class="op">==</span> <span class="va">i</span><span class="op">)</span>
-  <span class="co"># Print out max alpha allocated</span>
-  <span class="va">xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Max alpha allocated from above table: "</span>,
-    <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">EOCtab</span><span class="op">$</span><span class="va">lastAlpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>,
-    sep <span class="op">=</span> <span class="st">""</span>
-  <span class="op">)</span>
-  <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">gsDlist</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>
-  <span class="co"># If not group sequential for this hypothesis, print the max alpha allocated</span>
-  <span class="co"># and the nominal p-value</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Maximum alpha allocated: "</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">EOCtab</span><span class="op">$</span><span class="va">lastAlpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n\n"</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Nominal p-value for hypothesis test: "</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">hresults</span><span class="op">$</span><span class="va">nominalP</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n\n"</span><span class="op">)</span>
-  <span class="op">}</span>
-  <span class="co"># For group sequential tests, print max alpha allocated and</span>
-  <span class="co"># corresponding group sequential bounds</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">gsDlist</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Nominal p-values at each analysis for comparison to bounds in table below:\n\n"</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">hresults</span><span class="op">$</span><span class="va">nominalP</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n\n"</span><span class="op">)</span>
-    <span class="co"># Get other info for current hypothesis</span>
-    <span class="va">n.I</span> <span class="op">&lt;-</span> <span class="va">hresults</span><span class="op">$</span><span class="va">events</span>
-    <span class="va">usTime</span> <span class="op">&lt;-</span> <span class="va">hresults</span><span class="op">$</span><span class="va">spendingTime</span>
-    <span class="va">n.Iplan</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>
-    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">n.I</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span>
-      <span class="va">n.I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n.I</span>, <span class="va">n.Iplan</span><span class="op">)</span>
-      <span class="va">usTime</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">usTime</span>, <span class="fl">1</span><span class="op">)</span>
-    <span class="op">}</span>
-    <span class="co"># If no alpha allocated, just print text line to note this along with the 0 alpha allocated</span>
-    <span class="kw">if</span> <span class="op">(</span><span class="va">EOCtab</span><span class="op">$</span><span class="va">lastAlpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Maximum alpha allocated: 0\n\n"</span><span class="op">)</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"No testing required\n\n"</span><span class="op">)</span>
-    <span class="op">}</span>
-    <span class="kw">if</span> <span class="op">(</span><span class="va">EOCtab</span><span class="op">$</span><span class="va">lastAlpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span>
-      <span class="va">dupdate</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>
-        alpha <span class="op">=</span> <span class="va">EOCtab</span><span class="op">$</span><span class="va">lastAlpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
-        k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">n.I</span><span class="op">)</span>,
-        n.I <span class="op">=</span> <span class="va">n.I</span>,
-        usTime <span class="op">=</span> <span class="va">usTime</span>,
-        maxn.IPlan <span class="op">=</span> <span class="va">n.Iplan</span>,
-        n.fix <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">n.fix</span>,
-        test.type <span class="op">=</span> <span class="fl">1</span>,
-        sfu <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">sf</span>,
-        sfupar <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">param</span>
-      <span class="op">)</span>
-      <span class="va">tabl</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">dupdate</span>,
-        Nname <span class="op">=</span> <span class="st">"Events"</span>,
-        exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
-          <span class="st">"B-value"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, <span class="st">"Spending"</span>,
-          <span class="st">"~delta at bound"</span>, <span class="st">"P(Cross) if delta=0"</span>,
-          <span class="st">"PP"</span>, <span class="st">"P(Cross) if delta=1"</span>
-        <span class="op">)</span>
-      <span class="op">)</span>
-      <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">tabl</span>, caption <span class="op">=</span> <span class="va">xx</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-        <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-        <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="op">)</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n\n"</span><span class="op">)</span>
-    <span class="op">}</span>
-  <span class="op">}</span>
-<span class="op">}</span></code></button></li>
+<code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nHypotheses</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Set up tab for hypothesis in output</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"####"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">" Hypothesis"</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span>, <span class="st">" \n"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="co"># Get results for hypothesis</span></span>
+<span>  <span class="va">hresults</span> <span class="op">&lt;-</span> <span class="va">inputResults</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">H</span> <span class="op">==</span> <span class="va">i</span><span class="op">)</span></span>
+<span>  <span class="co"># Print out max alpha allocated</span></span>
+<span>  <span class="va">xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Max alpha allocated from above table: "</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">EOCtab</span><span class="op">$</span><span class="va">lastAlpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>    sep <span class="op">=</span> <span class="st">""</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">gsDlist</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="co"># If not group sequential for this hypothesis, print the max alpha allocated</span></span>
+<span>  <span class="co"># and the nominal p-value</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Maximum alpha allocated: "</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">EOCtab</span><span class="op">$</span><span class="va">lastAlpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n\n"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Nominal p-value for hypothesis test: "</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">hresults</span><span class="op">$</span><span class="va">nominalP</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n\n"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="co"># For group sequential tests, print max alpha allocated and</span></span>
+<span>  <span class="co"># corresponding group sequential bounds</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">gsDlist</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Nominal p-values at each analysis for comparison to bounds in table below:\n\n"</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">hresults</span><span class="op">$</span><span class="va">nominalP</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n\n"</span><span class="op">)</span></span>
+<span>    <span class="co"># Get other info for current hypothesis</span></span>
+<span>    <span class="va">n.I</span> <span class="op">&lt;-</span> <span class="va">hresults</span><span class="op">$</span><span class="va">events</span></span>
+<span>    <span class="va">usTime</span> <span class="op">&lt;-</span> <span class="va">hresults</span><span class="op">$</span><span class="va">spendingTime</span></span>
+<span>    <span class="va">n.Iplan</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">n.I</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">n.I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n.I</span>, <span class="va">n.Iplan</span><span class="op">)</span></span>
+<span>      <span class="va">usTime</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">usTime</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="co"># If no alpha allocated, just print text line to note this along with the 0 alpha allocated</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">EOCtab</span><span class="op">$</span><span class="va">lastAlpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Maximum alpha allocated: 0\n\n"</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"No testing required\n\n"</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">EOCtab</span><span class="op">$</span><span class="va">lastAlpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">dupdate</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
+<span>        alpha <span class="op">=</span> <span class="va">EOCtab</span><span class="op">$</span><span class="va">lastAlpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>        k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">n.I</span><span class="op">)</span>,</span>
+<span>        n.I <span class="op">=</span> <span class="va">n.I</span>,</span>
+<span>        usTime <span class="op">=</span> <span class="va">usTime</span>,</span>
+<span>        maxn.IPlan <span class="op">=</span> <span class="va">n.Iplan</span>,</span>
+<span>        n.fix <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">n.fix</span>,</span>
+<span>        test.type <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>        sfu <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">sf</span>,</span>
+<span>        sfupar <span class="op">=</span> <span class="va">d</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">param</span></span>
+<span>      <span class="op">)</span></span>
+<span>      <span class="va">tabl</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">dupdate</span>,</span>
+<span>        Nname <span class="op">=</span> <span class="st">"Events"</span>,</span>
+<span>        exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>          <span class="st">"B-value"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, <span class="st">"Spending"</span>,</span>
+<span>          <span class="st">"~delta at bound"</span>, <span class="st">"P(Cross) if delta=0"</span>,</span>
+<span>          <span class="st">"PP"</span>, <span class="st">"P(Cross) if delta=1"</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">tabl</span>, caption <span class="op">=</span> <span class="va">xx</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n\n"</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#hypothesis-1" id="hypothesis-1-tab" type="button" role="tab" aria-controls="hypothesis-1" aria-selected="false" class="nav-link">Hypothesis 1</button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#hypothesis-2" id="hypothesis-2-tab" type="button" role="tab" aria-controls="hypothesis-2" aria-selected="false" class="nav-link">Hypothesis 2</button></li>
 <li role="presentation" class="nav-item"><button data-bs-toggle="tab" data-bs-target="#hypothesis-3" id="hypothesis-3-tab" type="button" role="tab" aria-controls="hypothesis-3" aria-selected="false" class="nav-link">Hypothesis 3</button></li>
@@ -2574,7 +2574,7 @@ Proschan, Michael A., K. K. Gordon Lan, and Janet Turk Wittes. 2006. <em>Statist
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer>

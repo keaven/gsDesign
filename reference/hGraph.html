@@ -12,7 +12,7 @@ The graph can also be used with the ***gMCP*** package to evaluate a set of nomi
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,96 +57,149 @@ The graph can also be used with the ***gMCP*** package to evaluate a set of nomi
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">hGraph</span><span class="op">(</span>
-  nHypotheses <span class="op">=</span> <span class="fl">4</span>,
-  nameHypotheses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"H"</span>, <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nHypotheses</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>,
-  alphaHypotheses <span class="op">=</span> <span class="fl">0.025</span><span class="op">/</span><span class="va">nHypotheses</span>,
-  m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">nHypotheses</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>, <span class="va">nHypotheses</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="va">nHypotheses</span><span class="op">)</span> <span class="op">-</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">nHypotheses</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>, <span class="va">nHypotheses</span><span class="op">)</span>,
-  fill <span class="op">=</span> <span class="fl">1</span>,
-  palette <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html" class="external-link">gray.colors</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">fill</span><span class="op">)</span><span class="op">)</span>, start <span class="op">=</span> <span class="fl">0.5</span>, end <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>,
-  labels <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">fill</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,
-  legend.name <span class="op">=</span> <span class="st">" "</span>,
-  legend.position <span class="op">=</span> <span class="st">"none"</span>,
-  halfWid <span class="op">=</span> <span class="fl">0.5</span>,
-  halfHgt <span class="op">=</span> <span class="fl">0.5</span>,
-  trhw <span class="op">=</span> <span class="fl">0.1</span>,
-  trhh <span class="op">=</span> <span class="fl">0.075</span>,
-  trprop <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>,
-  digits <span class="op">=</span> <span class="fl">5</span>,
-  trdigits <span class="op">=</span> <span class="fl">2</span>,
-  size <span class="op">=</span> <span class="fl">6</span>,
-  boxtextsize <span class="op">=</span> <span class="fl">4</span>,
-  arrowsize <span class="op">=</span> <span class="fl">0.02</span>,
-  radianStart <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="op">(</span><span class="va">nHypotheses</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span><span class="fl">2</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span>     <span class="va">pi</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">1</span><span class="op">/</span><span class="va">nHypotheses</span><span class="op">)</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> 
-       <span class="va">pi</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fl">2</span><span class="op">/</span><span class="va">nHypotheses</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span> <span class="op">}</span>,
-  offset <span class="op">=</span> <span class="va">pi</span><span class="op">/</span><span class="fl">4</span><span class="op">/</span><span class="va">nHypotheses</span>,
-  xradius <span class="op">=</span> <span class="fl">2</span>,
-  yradius <span class="op">=</span> <span class="va">xradius</span>,
-  x <span class="op">=</span> <span class="cn">NULL</span>,
-  y <span class="op">=</span> <span class="cn">NULL</span>,
-  wchar <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html" class="external-link">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="st">"Windows"</span><span class="op">)</span> <span class="op">{</span>     <span class="st">"w"</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>     <span class="st">"w"</span> <span class="op">}</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hGraph</span><span class="op">(</span></span>
+<span>  nHypotheses <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  nameHypotheses <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"H"</span>, <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nHypotheses</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>,</span>
+<span>  alphaHypotheses <span class="op">=</span> <span class="fl">0.025</span><span class="op">/</span><span class="va">nHypotheses</span>,</span>
+<span>  m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">nHypotheses</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>, <span class="va">nHypotheses</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="va">nHypotheses</span><span class="op">)</span> <span class="op">-</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">nHypotheses</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>, <span class="va">nHypotheses</span><span class="op">)</span>,</span>
+<span>  fill <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  palette <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/gray.colors.html" class="external-link">gray.colors</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">fill</span><span class="op">)</span><span class="op">)</span>, start <span class="op">=</span> <span class="fl">0.5</span>, end <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">fill</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>  legend.name <span class="op">=</span> <span class="st">" "</span>,</span>
+<span>  legend.position <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  halfWid <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  halfHgt <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  trhw <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  trhh <span class="op">=</span> <span class="fl">0.075</span>,</span>
+<span>  trprop <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  trdigits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  size <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  boxtextsize <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  arrowsize <span class="op">=</span> <span class="fl">0.02</span>,</span>
+<span>  radianStart <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="op">(</span><span class="va">nHypotheses</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span><span class="fl">2</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span>     <span class="va">pi</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span> <span class="op">+</span> <span class="fl">1</span><span class="op">/</span><span class="va">nHypotheses</span><span class="op">)</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> </span>
+<span>       <span class="va">pi</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fl">2</span><span class="op">/</span><span class="va">nHypotheses</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span> <span class="op">}</span>,</span>
+<span>  offset <span class="op">=</span> <span class="va">pi</span><span class="op">/</span><span class="fl">4</span><span class="op">/</span><span class="va">nHypotheses</span>,</span>
+<span>  xradius <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  yradius <span class="op">=</span> <span class="va">xradius</span>,</span>
+<span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  wchar <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html" class="external-link">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="st">"Windows"</span><span class="op">)</span> <span class="op">{</span>     <span class="st">"w"</span> <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>     <span class="st">"w"</span> <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>nHypotheses</dt>
 <dd><p>number of hypotheses in graph</p></dd>
+
+
 <dt>nameHypotheses</dt>
 <dd><p>hypothesis names</p></dd>
+
+
 <dt>alphaHypotheses</dt>
 <dd><p>alpha-levels or weights for ellipses</p></dd>
+
+
 <dt>m</dt>
 <dd><p>square transition matrix of dimension `nHypotheses`</p></dd>
+
+
 <dt>fill</dt>
 <dd><p>grouping variable for hypotheses</p></dd>
+
+
 <dt>palette</dt>
 <dd><p>colors for groups</p></dd>
+
+
 <dt>labels</dt>
 <dd><p>text labels for groups</p></dd>
+
+
 <dt>legend.name</dt>
 <dd><p>text for legend header</p></dd>
+
+
 <dt>legend.position</dt>
 <dd><p>text string or x,y coordinates for legend</p></dd>
+
+
 <dt>halfWid</dt>
 <dd><p>half width of ellipses</p></dd>
+
+
 <dt>halfHgt</dt>
 <dd><p>half height of ellipses</p></dd>
+
+
 <dt>trhw</dt>
 <dd><p>transition box width</p></dd>
+
+
 <dt>trhh</dt>
 <dd><p>transition box height</p></dd>
+
+
 <dt>trprop</dt>
 <dd><p>proportion of transition arrow length where transition box is placed</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>number of digits to show for alphaHypotheses</p></dd>
+
+
 <dt>trdigits</dt>
 <dd><p>digits displayed for transition weights</p></dd>
+
+
 <dt>size</dt>
 <dd><p>text size in ellipses</p></dd>
+
+
 <dt>boxtextsize</dt>
 <dd><p>transition text size</p></dd>
+
+
 <dt>arrowsize</dt>
 <dd><p>size of arrowhead for transition arrows</p></dd>
+
+
 <dt>radianStart</dt>
 <dd><p>radians from origin for first ellipse; nodes spaced equally in clockwise order with centers on an ellipse by default</p></dd>
+
+
 <dt>offset</dt>
 <dd><p>rotational offset in radians for transition weight arrows</p></dd>
+
+
 <dt>xradius</dt>
 <dd><p>horizontal ellipse diameter on which ellipses are drawn</p></dd>
+
+
 <dt>yradius</dt>
 <dd><p>vertical ellipse diameter on which ellipses are drawn</p></dd>
+
+
 <dt>x</dt>
 <dd><p>x coordinates for hypothesis ellipses if elliptical arrangement is not wanted</p></dd>
+
+
 <dt>y</dt>
 <dd><p>y coordinates for hypothesis ellipses if elliptical arrangement is not wanted</p></dd>
+
+
 <dt>wchar</dt>
 <dd><p>character for alphaHypotheses in ellipses</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A `ggplot` object with a multi-layer multiplicity graph</p>
+    
+
+<p>A `ggplot` object with a multi-layer multiplicity graph</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -155,36 +208,36 @@ The graph can also be used with the ***gMCP*** package to evaluate a set of nomi
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Defaults: note clockwise ordering</span></span>
-<span class="r-in"><span class="fu">hGraph</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Defaults: note clockwise ordering</span></span></span>
+<span class="r-in"><span><span class="fu">hGraph</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="hGraph-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># Add colors (default is 3 gray shades)</span></span>
-<span class="r-in"><span class="fu">hGraph</span><span class="op">(</span><span class="fl">3</span>,fill<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Add colors (default is 3 gray shades)</span></span></span>
+<span class="r-in"><span><span class="fu">hGraph</span><span class="op">(</span><span class="fl">3</span>,fill<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="hGraph-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># Colorblind palette</span></span>
-<span class="r-in"><span class="va">cbPalette</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#999999"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#56B4E9"</span>, <span class="st">"#009E73"</span>,</span>
-<span class="r-in">               <span class="st">"#F0E442"</span>, <span class="st">"#0072B2"</span>, <span class="st">"#D55E00"</span>, <span class="st">"#CC79A7"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">hGraph</span><span class="op">(</span><span class="fl">6</span>,fill<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span>,palette<span class="op">=</span><span class="va">cbPalette</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Colorblind palette</span></span></span>
+<span class="r-in"><span><span class="va">cbPalette</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#999999"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#56B4E9"</span>, <span class="st">"#009E73"</span>,</span></span>
+<span class="r-in"><span>               <span class="st">"#F0E442"</span>, <span class="st">"#0072B2"</span>, <span class="st">"#D55E00"</span>, <span class="st">"#CC79A7"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">hGraph</span><span class="op">(</span><span class="fl">6</span>,fill<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span>,palette<span class="op">=</span><span class="va">cbPalette</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="hGraph-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># Use a hue palette</span></span>
-<span class="r-in"><span class="fu">hGraph</span><span class="op">(</span><span class="fl">4</span>,fill<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>,palette<span class="op">=</span><span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/hue_pal.html" class="external-link">hue_pal</a></span><span class="op">(</span>l<span class="op">=</span><span class="fl">75</span><span class="op">)</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Use a hue palette</span></span></span>
+<span class="r-in"><span><span class="fu">hGraph</span><span class="op">(</span><span class="fl">4</span>,fill<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>,palette<span class="op">=</span><span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/hue_pal.html" class="external-link">hue_pal</a></span><span class="op">(</span>l<span class="op">=</span><span class="fl">75</span><span class="op">)</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="hGraph-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># different alpha allocation, hypothesis names and transitions</span></span>
-<span class="r-in"><span class="va">alphaHypotheses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.005</span>,<span class="fl">.007</span>,<span class="fl">.013</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">nameHypotheses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ORR"</span>,<span class="st">"PFS"</span>,<span class="st">"OS"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,</span>
-<span class="r-in">              <span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,</span>
-<span class="r-in">              <span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>,nrow<span class="op">=</span><span class="fl">3</span>,byrow<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">hGraph</span><span class="op">(</span><span class="fl">3</span>,alphaHypotheses<span class="op">=</span><span class="va">alphaHypotheses</span>,nameHypotheses<span class="op">=</span><span class="va">nameHypotheses</span>,m<span class="op">=</span><span class="va">m</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># different alpha allocation, hypothesis names and transitions</span></span></span>
+<span class="r-in"><span><span class="va">alphaHypotheses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.005</span>,<span class="fl">.007</span>,<span class="fl">.013</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">nameHypotheses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ORR"</span>,<span class="st">"PFS"</span>,<span class="st">"OS"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,</span></span>
+<span class="r-in"><span>              <span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,</span></span>
+<span class="r-in"><span>              <span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>,nrow<span class="op">=</span><span class="fl">3</span>,byrow<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">hGraph</span><span class="op">(</span><span class="fl">3</span>,alphaHypotheses<span class="op">=</span><span class="va">alphaHypotheses</span>,nameHypotheses<span class="op">=</span><span class="va">nameHypotheses</span>,m<span class="op">=</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="hGraph-5.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># Custom position and size of ellipses, change text to multi-line text</span></span>
-<span class="r-in"><span class="co"># Adjust box width</span></span>
-<span class="r-in"><span class="co"># add legend in middle of plot</span></span>
-<span class="r-in"><span class="fu">hGraph</span><span class="op">(</span><span class="fl">3</span>,x<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>,y<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">1.5</span><span class="op">)</span>,size<span class="op">=</span><span class="fl">6</span>,halfWid<span class="op">=</span><span class="fl">.3</span>,halfHgt<span class="op">=</span><span class="fl">.3</span>, trhw<span class="op">=</span><span class="fl">0.6</span>,</span>
-<span class="r-in">       palette<span class="op">=</span><span class="va">cbPalette</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span class="r-in">       legend.position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.6</span>,<span class="fl">.5</span><span class="op">)</span>, legend.name <span class="op">=</span> <span class="st">"Legend:"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Group 1"</span>, <span class="st">"Group 2"</span><span class="op">)</span>,</span>
-<span class="r-in">       nameHypotheses<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H1:\n Long name"</span>,<span class="st">"H2:\n Longer name"</span>,<span class="st">"H3:\n Longest name"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Custom position and size of ellipses, change text to multi-line text</span></span></span>
+<span class="r-in"><span><span class="co"># Adjust box width</span></span></span>
+<span class="r-in"><span><span class="co"># add legend in middle of plot</span></span></span>
+<span class="r-in"><span><span class="fu">hGraph</span><span class="op">(</span><span class="fl">3</span>,x<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>,y<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">1.5</span><span class="op">)</span>,size<span class="op">=</span><span class="fl">6</span>,halfWid<span class="op">=</span><span class="fl">.3</span>,halfHgt<span class="op">=</span><span class="fl">.3</span>, trhw<span class="op">=</span><span class="fl">0.6</span>,</span></span>
+<span class="r-in"><span>       palette<span class="op">=</span><span class="va">cbPalette</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>       legend.position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.6</span>,<span class="fl">.5</span><span class="op">)</span>, legend.name <span class="op">=</span> <span class="st">"Legend:"</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Group 1"</span>, <span class="st">"Group 2"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>       nameHypotheses<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"H1:\n Long name"</span>,<span class="st">"H2:\n Longer name"</span>,<span class="st">"H3:\n Longest name"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="hGraph-6.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -197,7 +250,7 @@ The graph can also be used with the ***gMCP*** package to evaluate a set of nomi
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

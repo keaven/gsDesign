@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>A cure model calendar-based design</h1>
             
       
@@ -92,26 +92,26 @@
 </h3>
 <p>We consider three scenarios to demonstrate how spending can impact potential for trial success and fully understanding treatment group differences. The following can be adjusted by the reader and the vignette re-run.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Control group assumptions for three Poisson mixture cure models</span>
-<span class="va">cure_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.35</span>, <span class="fl">.55</span><span class="op">)</span>
-<span class="co"># Second time point for respective models</span>
-<span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">24</span>, <span class="fl">24</span>, <span class="fl">24</span><span class="op">)</span>
-<span class="co"># Survival rate at 2nd time point for respective models</span>
-<span class="va">s1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.65</span>, <span class="fl">.5</span>, <span class="fl">.68</span><span class="op">)</span>
-<span class="va">time_unit</span> <span class="op">&lt;-</span> <span class="st">"month"</span>
-<span class="co"># Hazard ratio for experimental versus control for respective models</span>
-<span class="va">hr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.7</span>, <span class="fl">.75</span>, <span class="fl">.7</span><span class="op">)</span>
-<span class="co"># Total study duration</span>
-<span class="va">study_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">48</span>, <span class="fl">48</span>, <span class="fl">56</span><span class="op">)</span>
-<span class="co"># Number of bins for piecewise approximation</span>
-<span class="va">bins</span> <span class="op">&lt;-</span> <span class="fl">5</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Control group assumptions for three Poisson mixture cure models</span></span>
+<span><span class="va">cure_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.35</span>, <span class="fl">.55</span><span class="op">)</span></span>
+<span><span class="co"># Second time point for respective models</span></span>
+<span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">24</span>, <span class="fl">24</span>, <span class="fl">24</span><span class="op">)</span></span>
+<span><span class="co"># Survival rate at 2nd time point for respective models</span></span>
+<span><span class="va">s1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.65</span>, <span class="fl">.5</span>, <span class="fl">.68</span><span class="op">)</span></span>
+<span><span class="va">time_unit</span> <span class="op">&lt;-</span> <span class="st">"month"</span></span>
+<span><span class="co"># Hazard ratio for experimental versus control for respective models</span></span>
+<span><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.7</span>, <span class="fl">.75</span>, <span class="fl">.7</span><span class="op">)</span></span>
+<span><span class="co"># Total study duration</span></span>
+<span><span class="va">study_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">48</span>, <span class="fl">48</span>, <span class="fl">56</span><span class="op">)</span></span>
+<span><span class="co"># Number of bins for piecewise approximation</span></span>
+<span><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fl">5</span></span></code></pre></div>
 <p>We will assume a constant enrollment rate for the duration of enrollment, allowing different assumed enrollment durations by scenario. The following code can be easily changed to study alternate scenarios.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># This code should be updated by user for their scenario</span>
-<span class="co"># Enrollment duration by scenario</span>
-<span class="va">enroll_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">12</span>, <span class="fl">20</span><span class="op">)</span>
-<span class="co"># Dropout rate (exponential failure rate per time unit) by scenario</span>
-<span class="va">dropout_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.002</span>, <span class="fl">.001</span>, <span class="fl">.001</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># This code should be updated by user for their scenario</span></span>
+<span><span class="co"># Enrollment duration by scenario</span></span>
+<span><span class="va">enroll_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">12</span>, <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="co"># Dropout rate (exponential failure rate per time unit) by scenario</span></span>
+<span><span class="va">dropout_rate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.002</span>, <span class="fl">.001</span>, <span class="fl">.001</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-poisson-mixture-model-1">The Poisson Mixture Model<a class="anchor" aria-label="anchor" href="#the-poisson-mixture-model-1"></a>
@@ -132,18 +132,18 @@
 </ul>
 <p>Most readers should skip reviewing this code.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Poisson mixture survival</span>
-<span class="va">pPM</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span> <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">20</span>, <span class="va">cure_rate</span> <span class="op">=</span> <span class="fl">.5</span>, <span class="va">t1</span> <span class="op">=</span> <span class="fl">10</span>, <span class="va">s1</span> <span class="op">=</span> <span class="fl">.6</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">theta</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">cure_rate</span><span class="op">)</span>
-  <span class="va">lambda</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">s1</span><span class="op">)</span> <span class="op">/</span> <span class="va">theta</span><span class="op">)</span> <span class="op">/</span> <span class="va">t1</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">theta</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">lambda</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="co"># Poisson mixture hazard rate</span>
-<span class="va">hPM</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span> <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">20</span>, <span class="va">cure_rate</span> <span class="op">=</span> <span class="fl">.5</span>, <span class="va">t1</span> <span class="op">=</span> <span class="fl">10</span>, <span class="va">s1</span> <span class="op">=</span> <span class="fl">.6</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">theta</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">cure_rate</span><span class="op">)</span>
-  <span class="va">lambda</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">s1</span><span class="op">)</span> <span class="op">/</span> <span class="va">theta</span><span class="op">)</span> <span class="op">/</span> <span class="va">t1</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">theta</span> <span class="op">*</span> <span class="va">lambda</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">lambda</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Poisson mixture survival</span></span>
+<span><span class="va">pPM</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span> <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">20</span>, <span class="va">cure_rate</span> <span class="op">=</span> <span class="fl">.5</span>, <span class="va">t1</span> <span class="op">=</span> <span class="fl">10</span>, <span class="va">s1</span> <span class="op">=</span> <span class="fl">.6</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">theta</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">cure_rate</span><span class="op">)</span></span>
+<span>  <span class="va">lambda</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">s1</span><span class="op">)</span> <span class="op">/</span> <span class="va">theta</span><span class="op">)</span> <span class="op">/</span> <span class="va">t1</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">theta</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">lambda</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co"># Poisson mixture hazard rate</span></span>
+<span><span class="va">hPM</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span> <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">20</span>, <span class="va">cure_rate</span> <span class="op">=</span> <span class="fl">.5</span>, <span class="va">t1</span> <span class="op">=</span> <span class="fl">10</span>, <span class="va">s1</span> <span class="op">=</span> <span class="fl">.6</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">theta</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">cure_rate</span><span class="op">)</span></span>
+<span>  <span class="va">lambda</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">s1</span><span class="op">)</span> <span class="op">/</span> <span class="va">theta</span><span class="op">)</span> <span class="op">/</span> <span class="va">t1</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">theta</span> <span class="op">*</span> <span class="va">lambda</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">lambda</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -176,44 +176,44 @@
 </ul>
 <p>We begin by specifying calendar times of analysis and find corresponding fractions of final planned events and calendar time under design assumptions.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">h1s1_EF</span> <span class="op">&lt;-</span> <span class="va">event_accrual</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Scenario</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">Hypothesis</span> <span class="op">==</span> <span class="st">"H1"</span> <span class="op">&amp;</span> <span class="va">Time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">24</span>, <span class="fl">36</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Time</span>, <span class="va">EF</span><span class="op">)</span>
-<span class="va">h1s1_EF</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span>
-<span class="co">#&gt;    Time    EF</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    12 0.284</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>    24 0.683</span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>    36 0.888</span>
-<span class="co"># Interim analysis timing (information fraction)</span>
-<span class="va">timing</span> <span class="op">&lt;-</span> <span class="va">h1s1_EF</span><span class="op">$</span><span class="va">EF</span>
-<span class="va">timing_calendar</span> <span class="op">&lt;-</span> <span class="va">h1s1_EF</span><span class="op">$</span><span class="va">Time</span> <span class="op">/</span> <span class="va">study_duration</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">h1s1_EF</span> <span class="op">&lt;-</span> <span class="va">event_accrual</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Scenario</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">Hypothesis</span> <span class="op">==</span> <span class="st">"H1"</span> <span class="op">&amp;</span> <span class="va">Time</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">24</span>, <span class="fl">36</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Time</span>, <span class="va">EF</span><span class="op">)</span></span>
+<span><span class="va">h1s1_EF</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
+<span><span class="co">#&gt;    Time    EF</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    12 0.284</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>    24 0.683</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>    36 0.888</span></span>
+<span><span class="co"># Interim analysis timing (information fraction)</span></span>
+<span><span class="va">timing</span> <span class="op">&lt;-</span> <span class="va">h1s1_EF</span><span class="op">$</span><span class="va">EF</span></span>
+<span><span class="va">timing_calendar</span> <span class="op">&lt;-</span> <span class="va">h1s1_EF</span><span class="op">$</span><span class="va">Time</span> <span class="op">/</span> <span class="va">study_duration</span></span></code></pre></div>
 <p>Now we move on to other design assumptions.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Get hazard rate info for Scenario 1 control group</span>
-<span class="va">control</span> <span class="op">&lt;-</span> <span class="va">hazard</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Scenario</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">Treatment</span> <span class="op">==</span> <span class="st">"Control"</span><span class="op">)</span>
-<span class="co"># Failure rates</span>
-<span class="va">lambdaC</span> <span class="op">&lt;-</span> <span class="va">control</span><span class="op">$</span><span class="va">hazard_rate</span>
-<span class="co"># Interval durations</span>
-<span class="va">S</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">control</span><span class="op">$</span><span class="va">Time</span> <span class="op">-</span> <span class="va">control</span><span class="op">$</span><span class="va">time_lagged</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">bins</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">]</span>
-<span class="co"># 1-sided Type I error</span>
-<span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.025</span>
-<span class="co"># Type II error (1 - power)</span>
-<span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">.1</span>
-<span class="co"># Test type 6: asymmetric 2-sided design, non-binding futility bound</span>
-<span class="va">test.type</span> <span class="op">&lt;-</span> <span class="fl">6</span>
-<span class="co"># 1-sided Type I error used for safety (for asymmetric 2-sided design)</span>
-<span class="va">astar</span> <span class="op">&lt;-</span> <span class="fl">.2</span>
-<span class="co"># Spending functions (sfu, sfl) and parameters (sfupar, sflpar)</span>
-<span class="va">sfu</span> <span class="op">&lt;-</span> <span class="va">sfHSD</span> <span class="co"># O'Brien-Fleming approximation by Lan and DeMets</span>
-<span class="va">sfupar</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">4</span> <span class="co"># Not needed for sfLDPocock</span>
-<span class="va">sfl</span> <span class="op">&lt;-</span> <span class="va">sfLDPocock</span> <span class="co"># Near-equal Z-values for each analysis</span>
-<span class="va">sflpar</span> <span class="op">&lt;-</span> <span class="cn">NULL</span> <span class="co"># Not needed for Pocock spending</span>
-<span class="co"># Dropout rate (exponential parameter per unit of time)</span>
-<span class="va">dropout_rate</span> <span class="op">&lt;-</span> <span class="fl">0.002</span>
-<span class="co"># Experimental / control randomization ratio</span>
-<span class="va">ratio</span> <span class="op">&lt;-</span> <span class="fl">1</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Get hazard rate info for Scenario 1 control group</span></span>
+<span><span class="va">control</span> <span class="op">&lt;-</span> <span class="va">hazard</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Scenario</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">Treatment</span> <span class="op">==</span> <span class="st">"Control"</span><span class="op">)</span></span>
+<span><span class="co"># Failure rates</span></span>
+<span><span class="va">lambdaC</span> <span class="op">&lt;-</span> <span class="va">control</span><span class="op">$</span><span class="va">hazard_rate</span></span>
+<span><span class="co"># Interval durations</span></span>
+<span><span class="va">S</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">control</span><span class="op">$</span><span class="va">Time</span> <span class="op">-</span> <span class="va">control</span><span class="op">$</span><span class="va">time_lagged</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">bins</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co"># 1-sided Type I error</span></span>
+<span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.025</span></span>
+<span><span class="co"># Type II error (1 - power)</span></span>
+<span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">.1</span></span>
+<span><span class="co"># Test type 6: asymmetric 2-sided design, non-binding futility bound</span></span>
+<span><span class="va">test.type</span> <span class="op">&lt;-</span> <span class="fl">6</span></span>
+<span><span class="co"># 1-sided Type I error used for safety (for asymmetric 2-sided design)</span></span>
+<span><span class="va">astar</span> <span class="op">&lt;-</span> <span class="fl">.2</span></span>
+<span><span class="co"># Spending functions (sfu, sfl) and parameters (sfupar, sflpar)</span></span>
+<span><span class="va">sfu</span> <span class="op">&lt;-</span> <span class="va">sfHSD</span> <span class="co"># O'Brien-Fleming approximation by Lan and DeMets</span></span>
+<span><span class="va">sfupar</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">4</span> <span class="co"># Not needed for sfLDPocock</span></span>
+<span><span class="va">sfl</span> <span class="op">&lt;-</span> <span class="va">sfLDPocock</span> <span class="co"># Near-equal Z-values for each analysis</span></span>
+<span><span class="va">sflpar</span> <span class="op">&lt;-</span> <span class="cn">NULL</span> <span class="co"># Not needed for Pocock spending</span></span>
+<span><span class="co"># Dropout rate (exponential parameter per unit of time)</span></span>
+<span><span class="va">dropout_rate</span> <span class="op">&lt;-</span> <span class="fl">0.002</span></span>
+<span><span class="co"># Experimental / control randomization ratio</span></span>
+<span><span class="va">ratio</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="study-design-and-event-accumulation">Study Design and Event Accumulation<a class="anchor" aria-label="anchor" href="#study-design-and-event-accumulation"></a>
@@ -221,42 +221,42 @@
 <p>We now assume a trial is enrolled with a constant enrollment rate over 12, 12, 20 months trial duration of 48, 48, 56. As noted above, the event accumulation pattern is highly sensitive to the assumptions of the design. Deviations from plan in accrual, the hazard ratio overall or over time as well as relatively minor deviations from the cure model assumption could substantially change the calendar time of event-based analysis timing. Thus, calendar-based timing and spending (<span class="citation">Lan and DeMets (1989)</span>) may have some appeal to make the timing of analyses more predictable. The main risk to this would likely be under-accumulation of the final targeted events for the trial. The targeted 4-year window may be considered clinically important as well as an important limitation for trial duration. Using the above predicted information fractions at 6, 12, 24, 36, 48, and 60 months to plan a calendar-based design. We use the arguments <code>usTime</code> and <code>lsTime</code> to change to calendar-based spending for the upper and lower bounds, respectively. However, the pattern of slowing event accumulation over time after year 1 seems reasonably likely to persist. This means that calendar-based spending is likely to give more conservative bounds since the calendar fractions are lower than the information fractions in the text overlay of the plot after the first interim: 10%, 20%, 40%, 60%, 80% and 100%, respectively.</p>
 <p>We now use the information fractions from the text overlay to set up a calendar-based design.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">design_calendar</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span>
-    k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">timing</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>,
-    alpha <span class="op">=</span> <span class="va">alpha</span>,
-    beta <span class="op">=</span> <span class="va">beta</span>,
-    astar <span class="op">=</span> <span class="va">astar</span>,
-    test.type <span class="op">=</span> <span class="va">test.type</span>,
-    timing <span class="op">=</span> <span class="va">timing</span>, <span class="co"># Planned event fractions here</span>
-    hr <span class="op">=</span> <span class="va">hr</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
-    R <span class="op">=</span> <span class="va">enroll_duration</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
-    gamma <span class="op">=</span> <span class="fl">1</span>,
-    T <span class="op">=</span> <span class="va">study_duration</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
-    minfup <span class="op">=</span> <span class="va">study_duration</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="va">enroll_duration</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
-    ratio <span class="op">=</span> <span class="va">ratio</span>,
-    sfu <span class="op">=</span> <span class="va">sfu</span>,
-    sfupar <span class="op">=</span> <span class="va">sfupar</span>,
-    usTime <span class="op">=</span> <span class="va">timing_calendar</span>, <span class="co"># Use calendar-based spending</span>
-    sfl <span class="op">=</span> <span class="va">sfl</span>,
-    sflpar <span class="op">=</span> <span class="va">sflpar</span>,
-    lambdaC <span class="op">=</span> <span class="va">lambdaC</span>,
-    lsTime <span class="op">=</span> <span class="va">timing_calendar</span>, <span class="co"># Use calendar-based spending</span>
-    S <span class="op">=</span> <span class="va">S</span>
-  <span class="op">)</span>
-<span class="va">design_calendar</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B-value"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, <span class="st">"PP"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>
-    title <span class="op">=</span> <span class="st">"Calendar-Based Design"</span>,
-    subtitle <span class="op">=</span> <span class="st">"Calendar Spending"</span>
-  <span class="op">)</span></code></pre></div>
-<div id="zawsgujgzt" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<code class="sourceCode R"><span><span class="va">design_calendar</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
+<span>    k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">timing</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>,</span>
+<span>    alpha <span class="op">=</span> <span class="va">alpha</span>,</span>
+<span>    beta <span class="op">=</span> <span class="va">beta</span>,</span>
+<span>    astar <span class="op">=</span> <span class="va">astar</span>,</span>
+<span>    test.type <span class="op">=</span> <span class="va">test.type</span>,</span>
+<span>    timing <span class="op">=</span> <span class="va">timing</span>, <span class="co"># Planned event fractions here</span></span>
+<span>    hr <span class="op">=</span> <span class="va">hr</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>    R <span class="op">=</span> <span class="va">enroll_duration</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>    gamma <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    T <span class="op">=</span> <span class="va">study_duration</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>    minfup <span class="op">=</span> <span class="va">study_duration</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="va">enroll_duration</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>    ratio <span class="op">=</span> <span class="va">ratio</span>,</span>
+<span>    sfu <span class="op">=</span> <span class="va">sfu</span>,</span>
+<span>    sfupar <span class="op">=</span> <span class="va">sfupar</span>,</span>
+<span>    usTime <span class="op">=</span> <span class="va">timing_calendar</span>, <span class="co"># Use calendar-based spending</span></span>
+<span>    sfl <span class="op">=</span> <span class="va">sfl</span>,</span>
+<span>    sflpar <span class="op">=</span> <span class="va">sflpar</span>,</span>
+<span>    lambdaC <span class="op">=</span> <span class="va">lambdaC</span>,</span>
+<span>    lsTime <span class="op">=</span> <span class="va">timing_calendar</span>, <span class="co"># Use calendar-based spending</span></span>
+<span>    S <span class="op">=</span> <span class="va">S</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">design_calendar</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B-value"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, <span class="st">"PP"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Calendar-Based Design"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Calendar Spending"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div id="xygxwywwgi" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#zawsgujgzt .gt_table {
+#xygxwywwgi .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -281,7 +281,7 @@
   border-left-color: #D3D3D3;
 }
 
-#zawsgujgzt .gt_heading {
+#xygxwywwgi .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -293,7 +293,7 @@
   border-right-color: #D3D3D3;
 }
 
-#zawsgujgzt .gt_title {
+#xygxwywwgi .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -305,7 +305,7 @@
   border-bottom-width: 0;
 }
 
-#zawsgujgzt .gt_subtitle {
+#xygxwywwgi .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -317,13 +317,13 @@
   border-top-width: 0;
 }
 
-#zawsgujgzt .gt_bottom_border {
+#xygxwywwgi .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zawsgujgzt .gt_col_headings {
+#xygxwywwgi .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -338,7 +338,7 @@
   border-right-color: #D3D3D3;
 }
 
-#zawsgujgzt .gt_col_heading {
+#xygxwywwgi .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -358,7 +358,7 @@
   overflow-x: hidden;
 }
 
-#zawsgujgzt .gt_column_spanner_outer {
+#xygxwywwgi .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -370,15 +370,15 @@
   padding-right: 4px;
 }
 
-#zawsgujgzt .gt_column_spanner_outer:first-child {
+#xygxwywwgi .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zawsgujgzt .gt_column_spanner_outer:last-child {
+#xygxwywwgi .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zawsgujgzt .gt_column_spanner {
+#xygxwywwgi .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -390,7 +390,7 @@
   width: 100%;
 }
 
-#zawsgujgzt .gt_group_heading {
+#xygxwywwgi .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -415,7 +415,7 @@
   vertical-align: middle;
 }
 
-#zawsgujgzt .gt_empty_group_heading {
+#xygxwywwgi .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -430,15 +430,15 @@
   vertical-align: middle;
 }
 
-#zawsgujgzt .gt_from_md > :first-child {
+#xygxwywwgi .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zawsgujgzt .gt_from_md > :last-child {
+#xygxwywwgi .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zawsgujgzt .gt_row {
+#xygxwywwgi .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -457,7 +457,7 @@
   overflow-x: hidden;
 }
 
-#zawsgujgzt .gt_stub {
+#xygxwywwgi .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -470,7 +470,7 @@
   padding-right: 5px;
 }
 
-#zawsgujgzt .gt_stub_row_group {
+#xygxwywwgi .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -484,11 +484,11 @@
   vertical-align: top;
 }
 
-#zawsgujgzt .gt_row_group_first td {
+#xygxwywwgi .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zawsgujgzt .gt_summary_row {
+#xygxwywwgi .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -498,16 +498,16 @@
   padding-right: 5px;
 }
 
-#zawsgujgzt .gt_first_summary_row {
+#xygxwywwgi .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zawsgujgzt .gt_first_summary_row.thick {
+#xygxwywwgi .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zawsgujgzt .gt_last_summary_row {
+#xygxwywwgi .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -517,7 +517,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#zawsgujgzt .gt_grand_summary_row {
+#xygxwywwgi .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -527,7 +527,7 @@
   padding-right: 5px;
 }
 
-#zawsgujgzt .gt_first_grand_summary_row {
+#xygxwywwgi .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -537,11 +537,11 @@
   border-top-color: #D3D3D3;
 }
 
-#zawsgujgzt .gt_striped {
+#xygxwywwgi .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zawsgujgzt .gt_table_body {
+#xygxwywwgi .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -550,7 +550,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#zawsgujgzt .gt_footnotes {
+#xygxwywwgi .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -564,7 +564,7 @@
   border-right-color: #D3D3D3;
 }
 
-#zawsgujgzt .gt_footnote {
+#xygxwywwgi .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -573,7 +573,7 @@
   padding-right: 5px;
 }
 
-#zawsgujgzt .gt_sourcenotes {
+#xygxwywwgi .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -587,7 +587,7 @@
   border-right-color: #D3D3D3;
 }
 
-#zawsgujgzt .gt_sourcenote {
+#xygxwywwgi .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -595,36 +595,36 @@
   padding-right: 5px;
 }
 
-#zawsgujgzt .gt_left {
+#xygxwywwgi .gt_left {
   text-align: left;
 }
 
-#zawsgujgzt .gt_center {
+#xygxwywwgi .gt_center {
   text-align: center;
 }
 
-#zawsgujgzt .gt_right {
+#xygxwywwgi .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zawsgujgzt .gt_font_normal {
+#xygxwywwgi .gt_font_normal {
   font-weight: normal;
 }
 
-#zawsgujgzt .gt_font_bold {
+#xygxwywwgi .gt_font_bold {
   font-weight: bold;
 }
 
-#zawsgujgzt .gt_font_italic {
+#xygxwywwgi .gt_font_italic {
   font-style: italic;
 }
 
-#zawsgujgzt .gt_super {
+#xygxwywwgi .gt_super {
   font-size: 65%;
 }
 
-#zawsgujgzt .gt_two_val_uncert {
+#xygxwywwgi .gt_two_val_uncert {
   display: inline-block;
   line-height: 1em;
   text-align: right;
@@ -633,31 +633,31 @@
   margin-left: 0.1em;
 }
 
-#zawsgujgzt .gt_footnote_marks {
+#xygxwywwgi .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#zawsgujgzt .gt_asterisk {
+#xygxwywwgi .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zawsgujgzt .gt_slash_mark {
+#xygxwywwgi .gt_slash_mark {
   font-size: 0.7em;
   line-height: 0.7em;
   vertical-align: 0.15em;
 }
 
-#zawsgujgzt .gt_fraction_numerator {
+#xygxwywwgi .gt_fraction_numerator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: 0.45em;
 }
 
-#zawsgujgzt .gt_fraction_denominator {
+#xygxwywwgi .gt_fraction_denominator {
   font-size: 0.6em;
   line-height: 0.6em;
   vertical-align: -0.05em;
@@ -871,7 +871,7 @@ Rodrigues, Josemar, Vicente G Cancho, Mário de Castro, and Francisco Louzada-Ne
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer>

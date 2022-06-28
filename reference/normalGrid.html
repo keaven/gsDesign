@@ -34,7 +34,7 @@ are spread further apart."><!-- mathjax --><script src="https://cdnjs.cloudflare
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,7 @@ are spread further apart.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">normalGrid</span><span class="op">(</span>r <span class="op">=</span> <span class="fl">18</span>, bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, mu <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">normalGrid</span><span class="op">(</span>r <span class="op">=</span> <span class="fl">18</span>, bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, mu <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -100,30 +100,38 @@ are spread further apart.</p>
 19; default is 18. Range: 1 to 80.  This might be changed by the user (e.g.,
 <code>r=6</code> which produces 65 gridpoints compare to 185 points when
 <code>r=18</code>) when speed is more important than precision.</p></dd>
+
+
 <dt>bounds</dt>
 <dd><p>Range of integration. Real-valued vector of length 2. Default
 value of 0, 0 produces a range of + or - 6 standard deviations (6*sigma)
 from the mean (=mu).</p></dd>
+
+
 <dt>mu</dt>
 <dd><p>Mean of the desired normal distribution.</p></dd>
+
+
 <dt>sigma</dt>
 <dd><p>Standard deviation of the desired normal distribution.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <dl><dt>z</dt>
 <dd><p>Grid points for numerical integration.</p></dd>
-<dt>density</dt>
+ <dt>density</dt>
 <dd><p>The
 standard normal density function evaluated at the values in <code>z</code>; see
 examples.</p></dd>
-<dt>gridwgts</dt>
+ <dt>gridwgts</dt>
 <dd><p>Simpson's rule weights for numerical integration
 on the grid in <code>z</code>; see examples.</p></dd>
-<dt>wgts</dt>
+ <dt>wgts</dt>
 <dd><p>Weights to be used with
 the grid in <code>z</code> for integrating the normal density function; see
 examples. This is equal to <code>density * gridwgts</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -143,50 +151,50 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="co">#  standard normal distribution</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalGrid</span><span class="op">(</span>r <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">z</span>, <span class="va">x</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">#  standard normal distribution</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalGrid</span><span class="op">(</span>r <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">z</span>, <span class="va">x</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="normalGrid-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">#  verify that numerical integration replicates sigma</span></span>
-<span class="r-in"><span class="co">#  get grid points and weights</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalGrid</span><span class="op">(</span>mu <span class="op">=</span> <span class="fl">2</span>, sigma <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># compute squared deviation from mean for grid points</span></span>
-<span class="r-in"><span class="va">dev</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">z</span> <span class="op">-</span> <span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># multiply squared deviations by integration weights and sum</span></span>
-<span class="r-in"><span class="va">sigma2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">dev</span> <span class="op">*</span> <span class="va">x</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># square root of sigma2 should be sigma (3)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">sigma2</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#  verify that numerical integration replicates sigma</span></span></span>
+<span class="r-in"><span><span class="co">#  get grid points and weights</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalGrid</span><span class="op">(</span>mu <span class="op">=</span> <span class="fl">2</span>, sigma <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compute squared deviation from mean for grid points</span></span></span>
+<span class="r-in"><span><span class="va">dev</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">z</span> <span class="op">-</span> <span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># multiply squared deviations by integration weights and sum</span></span></span>
+<span class="r-in"><span><span class="va">sigma2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">dev</span> <span class="op">*</span> <span class="va">x</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># square root of sigma2 should be sigma (3)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">sigma2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.000001</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># do it again with larger r to increase accuracy</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalGrid</span><span class="op">(</span>r <span class="op">=</span> <span class="fl">22</span>, mu <span class="op">=</span> <span class="fl">2</span>, sigma <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">z</span> <span class="op">-</span> <span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># do it again with larger r to increase accuracy</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalGrid</span><span class="op">(</span>r <span class="op">=</span> <span class="fl">22</span>, mu <span class="op">=</span> <span class="fl">2</span>, sigma <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">z</span> <span class="op">-</span> <span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># this can also be done by combining gridwgts and density</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">z</span> <span class="op">-</span> <span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">$</span><span class="va">gridwgts</span> <span class="op">*</span> <span class="va">x</span><span class="op">$</span><span class="va">density</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># this can also be done by combining gridwgts and density</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">z</span> <span class="op">-</span> <span class="fl">2</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="va">x</span><span class="op">$</span><span class="va">gridwgts</span> <span class="op">*</span> <span class="va">x</span><span class="op">$</span><span class="va">density</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># integrate normal density and compare to built-in function</span></span>
-<span class="r-in"><span class="co"># to compute probability of being within 1 standard deviation</span></span>
-<span class="r-in"><span class="co"># of the mean</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># integrate normal density and compare to built-in function</span></span></span>
+<span class="r-in"><span><span class="co"># to compute probability of being within 1 standard deviation</span></span></span>
+<span class="r-in"><span><span class="co"># of the mean</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6826895</span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalGrid</span><span class="op">(</span>bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">normalGrid</span><span class="op">(</span>bounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6826895</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">gridwgts</span> <span class="op">*</span> <span class="va">x</span><span class="op">$</span><span class="va">density</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">gridwgts</span> <span class="op">*</span> <span class="va">x</span><span class="op">$</span><span class="va">density</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6826895</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># find expected sample size for default design with</span></span>
-<span class="r-in"><span class="co"># n.fix=1000</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span>n.fix <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># find expected sample size for default design with</span></span></span>
+<span class="r-in"><span><span class="co"># n.fix=1000</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span>n.fix <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Asymmetric two-sided group sequential design with</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Upper bound spending computations assume</span>
@@ -217,27 +225,27 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Theta      1      2      3  Total</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.0000 0.4057 0.4290 0.1420 0.9767</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.1025 0.0148 0.0289 0.0563 0.1000</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># set a prior distribution for theta</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">normalGrid</span><span class="op">(</span>r <span class="op">=</span> <span class="fl">3</span>, mu <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, sigma <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1.5</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsProbability.html">gsProbability</a></span><span class="op">(</span></span>
-<span class="r-in">  k <span class="op">=</span> <span class="fl">3</span>, theta <span class="op">=</span> <span class="va">y</span><span class="op">$</span><span class="va">z</span>, n.I <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">n.I</span>, a <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>,</span>
-<span class="r-in">  b <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsProbability.html">gsProbability</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">x</span>, theta <span class="op">=</span> <span class="va">y</span><span class="op">$</span><span class="va">z</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">"Expected sample size averaged over normal\n prior distribution for theta with \n mu="</span>,</span>
-<span class="r-in">  <span class="va">x</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="st">"sigma="</span>, <span class="va">x</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1.5</span>, <span class="st">":"</span>,</span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">en</span> <span class="op">*</span> <span class="va">y</span><span class="op">$</span><span class="va">wgt</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"\n"</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># set a prior distribution for theta</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">normalGrid</span><span class="op">(</span>r <span class="op">=</span> <span class="fl">3</span>, mu <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, sigma <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsProbability.html">gsProbability</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  k <span class="op">=</span> <span class="fl">3</span>, theta <span class="op">=</span> <span class="va">y</span><span class="op">$</span><span class="va">z</span>, n.I <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">n.I</span>, a <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>,</span></span>
+<span class="r-in"><span>  b <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsProbability.html">gsProbability</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">x</span>, theta <span class="op">=</span> <span class="va">y</span><span class="op">$</span><span class="va">z</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"Expected sample size averaged over normal\n prior distribution for theta with \n mu="</span>,</span></span>
+<span class="r-in"><span>  <span class="va">x</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="st">"sigma="</span>, <span class="va">x</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">/</span> <span class="fl">1.5</span>, <span class="st">":"</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">en</span> <span class="op">*</span> <span class="va">y</span><span class="op">$</span><span class="va">wgt</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"\n"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Expected sample size averaged over normal</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  prior distribution for theta with </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  mu= 0.1025057 sigma= 0.06833715 : 682.2 </span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">y</span><span class="op">$</span><span class="va">z</span>, <span class="va">z</span><span class="op">$</span><span class="va">en</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">"theta"</span>, ylab <span class="op">=</span> <span class="st">"E{N}"</span>,</span>
-<span class="r-in">  main <span class="op">=</span> <span class="st">"Expected sample size for different theta values"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">y</span><span class="op">$</span><span class="va">z</span>, <span class="va">z</span><span class="op">$</span><span class="va">en</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">y</span><span class="op">$</span><span class="va">z</span>, <span class="va">z</span><span class="op">$</span><span class="va">en</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">"theta"</span>, ylab <span class="op">=</span> <span class="st">"E{N}"</span>,</span></span>
+<span class="r-in"><span>  main <span class="op">=</span> <span class="st">"Expected sample size for different theta values"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">y</span><span class="op">$</span><span class="va">z</span>, <span class="va">z</span><span class="op">$</span><span class="va">en</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="normalGrid-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -250,7 +258,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>
