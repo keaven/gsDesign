@@ -217,13 +217,15 @@ gsCP <- function(x, theta = NULL, i = 1, zi = 0, r = 18) {
 
   test.type <- ifelse(inherits(x, "gsProbability"), 3, x$test.type)
 
-  if (!(is.numeric(zi) & (length(zi) == 1))) stop("gsCP: zi must be positive and of length 1")
+# 2022June28 corrected error message
+  if (!(is.numeric(zi) & (length(zi) == 1))) stop("gsCP: zi must be numeric of length 1")
 
-  if (zi > x$upper$bound[i]) {
-    stop("gsCP must have x$lower$bound[i] <= zi <= x$upper$bound[i]")
-  } else if (test.type > 1 && zi < x$lower$bound[i]) {
-    stop("gsCP must have x$lower$bound[i]<=zi<=x$upper$bound[i]")
-  }
+# 2022Jun28: KA removed range checks for zi
+#  if (zi > x$upper$bound[i]) {
+#    stop("gsCP must have x$lower$bound[i] <= zi <= x$upper$bound[i]")
+#  } else if (test.type > 1 && zi < x$lower$bound[i]) {
+#    stop("gsCP must have x$lower$bound[i]<=zi<=x$upper$bound[i]")
+#  }
 
   if (is.null(theta)) theta <- c(zi/sqrt(x$n.I[i]), 0, x$delta)
 
