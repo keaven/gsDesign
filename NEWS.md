@@ -1,3 +1,8 @@
+# gsDesign 3.3.0.9000
+
+- Removed restriction on gsCP() interim test statistic zi
+
+
 # gsDesign 3.3.0 (May, 2022)
 
 - Addition of vignettes
