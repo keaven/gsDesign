@@ -1,5 +1,5 @@
 Package: gsDesign
-Version: 3.3.0
+Version: 3.3.0.9000
 Title: Group Sequential Design
 Description: Derives group sequential clinical trial designs and describes
     their properties. Particular focus on time-to-event, binary, and
