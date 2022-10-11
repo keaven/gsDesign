@@ -30,31 +30,8 @@
 #' @param wchar character for alphaHypotheses in ellipses
 #' @return A `ggplot` object with a multi-layer multiplicity graph
 #' @examples
-#' library(tidyr)
-#' # Defaults: note clockwise ordering
-#' hGraph(5)
-#' # Add colors (default is 3 gray shades)
-#' hGraph(3,fill=1:3)
-#' # Colorblind palette
-#' cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
-#'                "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-#' hGraph(6,fill=as.factor(1:6),palette=cbPalette)
-#' # Use a hue palette
-#' hGraph(4,fill=factor(1:4),palette=scales::hue_pal(l=75)(4))
-#' # different alpha allocation, hypothesis names and transitions
-#' alphaHypotheses <- c(.005,.007,.013)
-#' nameHypotheses <- c("ORR","PFS","OS")
-#' m <- matrix(c(0,1,0,
-#'               0,0,1,
-#'               1,0,0),nrow=3,byrow=TRUE)
-#' hGraph(3,alphaHypotheses=alphaHypotheses,nameHypotheses=nameHypotheses,m=m)
-#' # Custom position and size of ellipses, change text to multi-line text
-#' # Adjust box width
-#' # add legend in middle of plot
-#' hGraph(3,x=sqrt(0:2),y=c(1,3,1.5),size=6,halfWid=.3,halfHgt=.3, trhw=0.6,
-#'        palette=cbPalette[2:4], fill = c(1, 2, 2),
-#'        legend.position = c(.6,.5), legend.name = "Legend:", labels = c("Group 1", "Group 2"),
-#'        nameHypotheses=c("H1:\n Long name","H2:\n Longer name","H3:\n Longest name"))
+#' # 'gsDesign::hGraph' is deprecated.
+#' # See the examples in 'gMCPLite::hGraph' instead.
 #' @details
 #' See vignette **Multiplicity graphs formatting using ggplot2** for explanation of formatting.
 #' @importFrom grDevices gray.colors
