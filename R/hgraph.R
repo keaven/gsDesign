@@ -1,7 +1,7 @@
 #' @title Create multiplicity graphs using ggplot2
 #'
 #' @description \code{hGraph()} plots a multiplicity graph defined by user inputs.
-#' The graph can also be used with the ***gMCP*** package to evaluate a set of nominal p-values for the tests of the hypotheses in the graph
+#' The graph can also be used with the **gMCPLite** package to evaluate a set of nominal p-values for the tests of the hypotheses in the graph
 #' @param nHypotheses number of hypotheses in graph
 #' @param nameHypotheses hypothesis names
 #' @param alphaHypotheses alpha-levels or weights for ellipses

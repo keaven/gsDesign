@@ -25,14 +25,22 @@ hGraph(
   size = 6,
   boxtextsize = 4,
   arrowsize = 0.02,
-  radianStart = if ((nHypotheses)\%\%2 != 0) {     pi * (1/2 + 1/nHypotheses) } else { 
-       pi * (1 + 2/nHypotheses)/2 },
+  radianStart = if ((nHypotheses)\%\%2 != 0) {
+     pi * (1/2 + 1/nHypotheses)
+ } else {
+
+        pi * (1 + 2/nHypotheses)/2
+ },
   offset = pi/4/nHypotheses,
   xradius = 2,
   yradius = xradius,
   x = NULL,
   y = NULL,
-  wchar = if (as.character(Sys.info()[1]) == "Windows") {     "w" } else {     "w" }
+  wchar = if (as.character(Sys.info()[1]) == "Windows") {
+     "w"
+ } else {
+     "w"
+ }
 )
 }
 \arguments{
@@ -93,7 +101,7 @@ A `ggplot` object with a multi-layer multiplicity graph
 }
 \description{
 \code{hGraph()} plots a multiplicity graph defined by user inputs.
-The graph can also be used with the ***gMCP*** package to evaluate a set of nominal p-values for the tests of the hypotheses in the graph
+The graph can also be used with the **gMCPLite** package to evaluate a set of nominal p-values for the tests of the hypotheses in the graph
 }
 \details{
 See vignette **Multiplicity graphs formatting using ggplot2** for explanation of formatting.

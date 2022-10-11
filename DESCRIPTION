@@ -35,9 +35,8 @@ Suggests:
     tibble,
     utils,
     mvtnorm,
-    gMCP,
     kableExtra,
     ragg
 VignetteBuilder: knitr
 Copyright: Copyright 2010, Merck Research Laboratories
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
