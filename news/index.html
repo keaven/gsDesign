@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.3.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,8 +48,12 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="3.3.0.9000" id="gsdesign-3309000">gsDesign 3.3.0.9000<a class="anchor" aria-label="anchor" href="#gsdesign-3309000"></a></h2>
-<ul><li>Removed restriction on gsCP() interim test statistic zi</li></ul></div>
+<h2 class="pkg-version" data-toc-text="3.4.0" id="gsdesign-340-october-2022">gsDesign 3.4.0 (October, 2022)<a class="anchor" aria-label="anchor" href="#gsdesign-340-october-2022"></a></h2>
+<ul><li>Removed restriction on <code><a href="../reference/gsCP.html">gsCP()</a></code> interim test statistic zi (<a href="https://github.com/keaven/gsDesign/issues/63" class="external-link">#63</a>).</li>
+<li>Removed gMCP dependency. Updated vignettes and linked to vignettes in gMCPLite (<a href="https://github.com/keaven/gsDesign/issues/69" class="external-link">#69</a>).</li>
+<li>Added deprecation warning to <code><a href="../reference/hGraph.html">hGraph()</a></code> and suggested using <code>gMCPLite::hGraph()</code> instead (<a href="https://github.com/keaven/gsDesign/issues/70" class="external-link">#70</a>).</li>
+<li>Moved ggplot2 from <code>Depends</code> to <code>Imports</code> (<a href="https://github.com/keaven/gsDesign/issues/56" class="external-link">#56</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.3.0" id="gsdesign-330-may-2022">gsDesign 3.3.0 (May, 2022)<a class="anchor" aria-label="anchor" href="#gsdesign-330-may-2022"></a></h2><p class="text-muted">CRAN release: 2022-05-27</p>
 <ul><li>Addition of vignettes<ul><li>Demonstrate cure model and calendar-based analysis timing for time-to-event endpoint design</li>
@@ -61,7 +65,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.2.2" id="gsdesign-322-january-2022">gsDesign 3.2.2 (January, 2022)<a class="anchor" aria-label="anchor" href="#gsdesign-322-january-2022"></a></h2><p class="text-muted">CRAN release: 2022-02-02</p>
-<ul><li>Use <code><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits()</a></code> instead of <code><a href="https://rdrr.io/r/methods/is.html" class="external-link">is()</a></code> to determine if an object is an instance of a class, when appropriate</li>
+<ul><li>Use <code><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits()</a></code> instead of <code>is()</code> to determine if an object is an instance of a class, when appropriate</li>
 <li>Correctly close graphics device in unit tests to avoid plot output file not found issues</li>
 <li>Minor fixes to hGraph() for multiplicity graphs</li>
 <li>Minor fix to nBinomial() when odds-ratio scale specified to resolve user issue</li>
