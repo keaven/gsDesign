@@ -1,7 +1,7 @@
 source('../gsDesign_independent_code.R')
 #-------------------------------------------------------------------------------
 # hGraph : hGraph() plots a multiplicity graph defined by user inputs. The graph
-#          can also be used with the ***gMCP*** package to evaluate a set of 
+#          can also be used with the **gMCPLite** package to evaluate a set of 
 #          nominal p-values for the tests of the hypotheses in the graph
 #-------------------------------------------------------------------------------
 
