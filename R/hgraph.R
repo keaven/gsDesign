@@ -98,6 +98,7 @@ hGraph <- function(
   # following is temporary fix from intended {'\u03b1'} for Windows
   wchar = if(as.character(Sys.info()[1])=="Windows"){'w'}else{'w'}
 ){
+  .Deprecated("gMCPLite::hGraph", old = "gsDesign::hGraph")
   #####################################################################
   # Begin: Internal functions
   #####################################################################
