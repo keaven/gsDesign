@@ -10,7 +10,6 @@ TODO
 .DS_Store
 *.pdf
 *.html
-*.png
 *.rnw
 docs/
 vignettes/*.html
