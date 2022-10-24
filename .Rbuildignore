@@ -10,7 +10,6 @@
 ^CRAN-RELEASE$
 ..Rcheck
 ^_pkgdown\.yml$
+^pkgdown$
 tests/benchmarks
 tests/testthat/_snaps$
-
-
