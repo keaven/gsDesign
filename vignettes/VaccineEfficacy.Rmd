@@ -38,6 +38,7 @@ This article explores a method of approximating a design using the exact binomia
 This allows use of spending functions to derive boundaries for the exact method.
 The time-to-event design can not only be used to set approximate boundaries for the @ChanBohidar method, but to allow specification of enrollment duration and study duration to determine enrollment rates and sample size required.
 This also allows us to illustrate the concept of super-superiority often used in prevention studies.
+Finally, we also demonstrate how to set timing to get an integer event count at each analysis.
 
 # Parameterization
 
@@ -156,33 +157,55 @@ gsBoundSummary(x, tdigits = 1) %>%
   tab_header(title = "Initial group sequential approximation")
 ```
 
-Now we change the event counts at each analysis by rounding down to move away from the continuous, unrounded event counts above.
+Now we change the event counts at each analysis by rounding at interim analyses and rounding up at final analysis to move away from the continuous, unrounded event counts above.
+This strategy is not restricted to studies using exact binomial methods, but can be used with any time-to-event endpoint.
 There are small changes from the above design.
 
 ```{r, class.source = 'fold-hide'}
-# Round up event counts and update spending based on slightly updated timing and then re-derive bounds.
-# This will then be used to set event counts and bounds for the exact binomial bounds
+# Round up event counts and update spending based on slightly updated timing and then re-derive bounds
+# This will then be used  both to 
+#   - reset time-to-event design for exact event counts
+#   - set event counts and bounds for the exact binomial bounds
 
 counts <- round(x$n.I) # Round for interim counts
 counts[k] <- ceiling(x$n.I[k]) # Round up for final count
 timing <- counts / max(counts)
 xx <- gsDesign(
-  k = k, test.type = 4, n.I = counts, maxn.IPlan = x$n.I[k],
+  k = k, test.type = 4, n.I = counts, maxn.IPlan = counts[k], # x$n.I[k],
   alpha = alpha, beta = beta,
   delta = x$delta, delta1 = x$delta1, delta0 = x$delta0,
-  sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar,
-  usTime = timing,
-  lsTime = timing
+  sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar
 )
-zupper <- xx$upper$bound # Updated upper bounds
-zlower <- xx$lower$bound # Updated lower bounds
 # For non-inferiority and super-superiority trials
 xx$hr0 <- x$hr0
 ```
 
+Now we re-derive using `gsSurv()` so we can check calendar timing of the design.
+We note that this does not give an exact integer number of events.
+However, it should be very close.
+
 ```{r}
-xxsum <- gsBoundSummary(xx, deltaname = "HR", logdelta = TRUE, Nname = "Events")
-xxsum %>%
+# Derive Group Sequential Design
+# This determines final sample size
+xxx <- gsSurv(
+  k = k, test.type = 4, alpha = alpha, beta = sum(xx$lower$prob[,2]), timing = timing,
+  sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar,
+  lambdaC = failRate, eta = dropoutRate,
+  # Translate vaccine efficacy to HR
+  hr = 1 - VE1, hr0 = 1 - VE0,
+  R = enrollDuration, T = trialDuration,
+  minfup = trialDuration - enrollDuration, ratio = ratio
+)
+zupper <- xx$upper$bound # Updated upper bounds
+zlower <- xx$lower$bound # Updated lower bounds
+cat("Number of events at analyses", xxx$n.I)
+```
+
+
+
+```{r}
+xxxsum <- gsBoundSummary(xxx, deltaname = "HR", logdelta = TRUE, Nname = "Events")
+xxxsum %>%
   gt() %>%
   tab_header(title = "Updated design with spending based on integer event counts")
 ```
@@ -204,22 +227,22 @@ a[k] <- a[k] - 1
 b <- qbinom(p = pnorm(zlower), size = counts, prob = p0, lower.tail = FALSE)
 # a < b required for each analysis; subtracting 1 makes one bound or the other
 # cross at the end
-xxx <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = counts, a = a, b = b)
-xxx
+xxxx <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = counts, a = a, b = b)
+xxxx
 ```
 
-Now we make comparisons between the asymptotic, time-to-event design in `xx` to the exact binomial design in `xxx`.
+Now we make comparisons between the asymptotic, time-to-event design in `xxx` to the exact binomial design in `xxxx`.
 We begin with comparison of nominal one-sided p-values for each of the bounds.
 
 ```{r}
 # Nominal p-values at efficacy bounds
 
-pnorm(-xx$upper$bound) # Asymptotic
-pbinom(xxx$lower$bound, prob = p0, size = xxx$n.I) # Exact binomial
+pnorm(-xxx$upper$bound) # Asymptotic
+pbinom(xxxx$lower$bound, prob = p0, size = xxxx$n.I) # Exact binomial
 
 # Nominal p-values for futility bounds
-pnorm(-xx$lower$bound) # Asymptotic
-pbinom(xxx$upper$bound, prob = p0, size = xxx$n.I) # Exact binomial
+pnorm(-xxx$lower$bound) # Asymptotic
+pbinom(xxxx$upper$bound, prob = p0, size = xxxx$n.I) # Exact binomial
 ```
 
 Next we examine cumulative non-binding $\alpha$-spending for efficacy bounds.
@@ -227,12 +250,12 @@ While the cumulative interim spending is slightly higher than planned, the cumul
 
 ```{r}
 # Cumulative non-binding alpha-spending at lower bounds
-cumsum(xx$upper$spend) # Asymptotic design
+cumsum(xxx$upper$spend) # Asymptotic design
 # Exact binomial design
 # Compute by removing futility bounds
-balt <- xxx$n.I + 1
-xxxalt <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = counts, a = a, b = balt)
-cumsum(xxxalt$lower$prob[, 1])
+balt <- xxxx$n.I + 1
+xxxxalt <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = counts, a = a, b = balt)
+cumsum(xxxxalt$lower$prob[, 1])
 ```
 
 Next we look at $\beta$-spending for the two bounds.
@@ -240,16 +263,16 @@ The exact bounds control $\beta$-spending close to the asymptotic target at inte
 
 ```{r}
 # Cumulative non-binding beta-spending at lower bounds
-cumsum(xx$lower$spend) # Asymptotic design
-cumsum(xxx$upper$prob[, 2]) # Exact binomial design
+cumsum(xxx$lower$spend) # Asymptotic design
+cumsum(xxxx$upper$prob[, 2]) # Exact binomial design
 ```
 
 Now we examine the approximate vaccine efficacy at efficacy and futility bounds for the asymptotic design vs. the exact vaccine efficacy for the exact binomial design.
 We begin using the inversion formula from above to convert the proportion of events in the experimental group at the bounds to vaccine efficacy at the bounds.
 
 ```{r}
-p_lower <- xxx$lower$bound / xxx$n.I
-p_upper <- xxx$upper$bound / xxx$n.I
+p_lower <- xxxx$lower$bound / xxx$n.I
+p_upper <- xxxx$upper$bound / xxx$n.I
 p_lower
 p_upper
 ```
@@ -265,8 +288,8 @@ This is approximated reasonably by the approximations using the time-to-event de
 
 ```{r}
 # Translate ~HR at efficacy bound to VE for asymptotic design
-1 - xxsum[c(3, 8, 13), 3] # Efficacy bound
-1 - xxsum[c(3, 8, 13), 4] # Futility bound
+1 - xxxsum[c(3, 8, 13), 3] # Efficacy bound
+1 - xxxsum[c(3, 8, 13), 4] # Futility bound
 ```
 
 # Summary
