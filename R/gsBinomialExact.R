@@ -15,7 +15,7 @@ utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 #' ratio test (SPRT) which is a specific instance of an exact binomial group
 #' sequential design for a single arm trial with a binary outcome.
 #'
-#' %\code{gsBinomialPP} computes a truncated binomial (group) sequential design
+#' \code{gsBinomialPP} computes a truncated binomial (group) sequential design
 #' based on predictive probability.
 #'
 #' \code{nBinomial1Sample} uses exact binomial calculations to compute power
