@@ -84,12 +84,26 @@ sequentialPValue <- function(gsD = gsDesign(),
   if (min(gsBound1(I=n.I, theta=0, a=rep(-20,length(Z)),
                    probhi=probhi)$b-Z) > 0) return(max(interval))
   # check lower end of p-value interval input
+  # if at least one Z is > than corresponding bound, then set sequential p-value to low end of interval
+  # and make a message
   if(is.vector(interval,mode="numeric")!=TRUE||length(interval) != 2 || min(interval)<=0||max(interval)>=1){ 
     stop("interval must be 2 distinct values strictly between 0 and 1")}
-  probhi <- gsD$upper$sf(alpha=min(interval), t=usTime, param=gsD$upper$param)$spend
-  if (length(Z)>1) probhi <- probhi - c(0,probhi[1:(length(Z)-1)])
-  if (min(gsBound1(I=n.I, theta=0, a=rep(-20,length(Z)),
-                   probhi=probhi)$b-Z) < 0) return(min(interval))
+  probhimin <- gsD$upper$sf(alpha=min(interval), t=usTime, param=gsD$upper$param)$spend
+  if (length(Z)>1) probhimin <- probhimin - c(0,probhimin[1:(length(Z)-1)])
+  if (min(gsBound1(I=n.I, theta=0, a=rep(-20,length(Z)), probhi=probhimin)$b-Z) < 0) {
+            message("Sequential p-value set to lowest value specified in interval argument in sequentialPValue")
+            return(min(interval))
+  }
+  # check upper end of p-value interval input
+  # if all Z's less than corresponding bound, then set sequential p-value to high end of interval
+  # and make a message
+  probhimax <- gsD$upper$sf(alpha=max(interval), t=usTime, param=gsD$upper$param)$spend
+  if (length(Z)>1) probhimax <- probhimax - c(0,probhimax[1:(length(Z)-1)])
+  if (min(gsBound1(I=n.I, theta=0, a=rep(-20,length(Z)), probhi=probhimax)$b-Z) > 0) {
+    message("Sequential p-value set to highest value specified in interval argument in sequentialPValue")
+    return(max(interval))
+  }
+  
   # if answer is between interval bounds, find it with root-finding
   x <- try(uniroot(sequentialZdiff, interval = -qnorm(interval), gsD = gsD, n.I = n.I, Z = Z,
                usTime=usTime))
