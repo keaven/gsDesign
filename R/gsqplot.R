@@ -297,6 +297,7 @@ gsHR <- function(z, i, x, ratio = 1, ylab = "Approximate hazard ratio", ...) {
   }
 
   hrHat <- exp(-z / sqrt(x$n.I[i] * psi)) * x$hr0
+  if (x$delta1 > 0) hrHat <- 1 / hrHat
   hrHat
 }
 
