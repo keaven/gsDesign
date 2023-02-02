@@ -295,8 +295,11 @@ gsHR <- function(z, i, x, ratio = 1, ylab = "Approximate hazard ratio", ...) {
   if (is.null(x$hr0)) {
     x$hr0 <- 1
   }
-
+  # Note that designs are set up so that positive z is a positive result
+  # Normally, a positive result has HR < 1
   hrHat <- exp(-z / sqrt(x$n.I[i] * psi)) * x$hr0
+  # When a positive result is HR > 1 (e.g., shorter time to recovery),
+  # need to flip hrHat appropriately
   if (x$delta1 > 0) hrHat <- 1 / hrHat
   hrHat
 }
