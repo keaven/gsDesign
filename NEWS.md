@@ -1,3 +1,7 @@
+# gsDesign 3.4.1 (March, 2023)
+
+- Fixed hazard ratio output with hazard ratio > 1 is alternate hypothesis
+
 # gsDesign 3.4.0 (October, 2022)
 
 - Removed restriction on `gsCP()` interim test statistic zi (#63).
