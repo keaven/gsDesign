@@ -1,6 +1,6 @@
 # gsDesign 3.4.1 (March, 2023)
 
-- Fixed hazard ratio output with hazard ratio > 1 is alternate hypothesis
+- Fixed hazard ratio output when hazard ratio > 1 is alternate hypothesis
 
 # gsDesign 3.4.0 (October, 2022)
 
