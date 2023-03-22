@@ -585,13 +585,12 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
     } else { # p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
       # 	label=Ztxt, geom="text",
       # 	xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + geom_line(colour=col[1],lty=lty[1],lwd=lwd[1])
-      p <- ggplot2::ggplot(
+      p <- ggplot2::ggplot(data = y,
         ggplot2::aes(
           x = as.numeric(N), 
           y = as.numeric(CP), 
           label = Ztxt, 
-          group = factor(Bound)), 
-        data = y
+          group = factor(Bound))
         ) +
         ggplot2::geom_line(colour = getColor(col[1]), lty = lty[1], lwd = lwd[1]) +
         ggplot2::geom_text(size = cex * 5) + 
@@ -695,12 +694,11 @@ plotsf <- function(x,
     spend <- x$upper$sf(x$alpha, t, x$upper$param)$spend
     q <- data.frame(t = t, spend = spend)
     # p <- ggplot2::qplot(x = t, y = spend, data = q, geom = "line", ylab = ylab, xlab = xlab, main = main, ...)
-    p <- ggplot2::ggplot(
+    p <- ggplot2::ggplot(data = q,
       ggplot2::aes(
         x = t, 
         y = spend
-        ), 
-      data = q
+        )
     ) +
       ggplot2::geom_line() + 
       ggplot2::xlab(xlab) + 
@@ -734,13 +732,11 @@ plotsf <- function(x,
       #   x = t, y = spend, data = q, geom = "line", ylab = ylab, xlab = xlab, main = main,
       #   group = factor(group), linetype = factor(group), colour = factor(group)
       # )
-      p <- ggplot2::ggplot(
+      p <- ggplot2::ggplot(data = q,
         ggplot2::aes(
           x = t, 
-          y = spend, 
-          label = Ztxt, 
-          group = factor(group)), 
-        data = q
+          y = spend,  
+          group = factor(group))
       ) +
         ggplot2::geom_line(aes(colour = factor(group), linetype = factor(group))) +
         ggplot2::xlab(xlab) + 
