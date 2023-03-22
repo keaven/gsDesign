@@ -694,7 +694,18 @@ plotsf <- function(x,
   else if (x$test.type < 3) {
     spend <- x$upper$sf(x$alpha, t, x$upper$param)$spend
     q <- data.frame(t = t, spend = spend)
-    p <- ggplot2::qplot(x = t, y = spend, data = q, geom = "line", ylab = ylab, xlab = xlab, main = main, ...)
+    # p <- ggplot2::qplot(x = t, y = spend, data = q, geom = "line", ylab = ylab, xlab = xlab, main = main, ...)
+    p <- ggplot2::ggplot(
+      ggplot2::aes(
+        x = t, 
+        y = spend
+        ), 
+      data = q
+    ) +
+      ggplot2::geom_line() + 
+      ggplot2::xlab(xlab) + 
+      ggplot2::ylab(ylab)
+    p <- p + ggplot2::ggtitle(label = main)
     return(p)
   }
 
@@ -719,10 +730,22 @@ plotsf <- function(x,
       }
       group <- rep(1, length(t))
       q <- data.frame(t = c(t, t), spend = c(spenda, spendb), group = c(group, 2 * group))
-      p <- ggplot2::qplot(
-        x = t, y = spend, data = q, geom = "line", ylab = ylab, xlab = xlab, main = main,
-        group = factor(group), linetype = factor(group), colour = factor(group)
-      )
+      # p <- ggplot2::qplot(
+      #   x = t, y = spend, data = q, geom = "line", ylab = ylab, xlab = xlab, main = main,
+      #   group = factor(group), linetype = factor(group), colour = factor(group)
+      # )
+      p <- ggplot2::ggplot(
+        ggplot2::aes(
+          x = t, 
+          y = spend, 
+          label = Ztxt, 
+          group = factor(group)), 
+        data = q
+      ) +
+        ggplot2::geom_line(aes(colour = factor(group), linetype = factor(group))) +
+        ggplot2::xlab(xlab) + 
+        ggplot2::ylab(ylab)
+      p <- p + ggplot2::ggtitle(label = main)
       p <- p +
         ggplot2::scale_colour_manual(
           name = "Spending", values = getColor(col),
@@ -797,7 +820,13 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
   }
   else {
     q <- data.frame(x = xval, y = x$en)
-    p <- ggplot2::qplot(x = x, y = !!rlang::sym('y'), data = q, geom = "line", ylab = ylab, xlab = xlab, main = main)
+    # p <- ggplot2::qplot(x = x, y = !!rlang::sym('y'), data = q, geom = "line", ylab = ylab, xlab = xlab, main = main)
+    p <- ggplot2::ggplot(data = q, aes(x = x, y = !!rlang::sym('y'))) +
+      ggplot2::geom_line() +
+      ggplot2::xlab(xlab) + 
+      ggplot2::ylab(ylab)
+    p <- p + ggplot2::ggtitle(label = main)
+      
     return(p)
   }
 }
