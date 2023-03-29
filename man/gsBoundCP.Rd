@@ -39,9 +39,8 @@ See Conditional power section of manual for further clarification. See also
 Muller and Schaffer (2001) for background theory.
 }
 \note{
-The manual is not linked to this help file, but is available in
-library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-installed.
+The gsDesign technical manual is available at
+  <https://keaven.github.io/gsd-tech-manual/>.
 }
 \examples{
 

@@ -65,9 +65,8 @@ demonstrated below in examples. In addition to using supplied spending
 functions, a user can write code for a spending function. See examples.
 }
 \note{
-The manual is not linked to this help file, but is available in
-library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-installed.
+The gsDesign technical manual is available at
+  <https://keaven.github.io/gsd-tech-manual/>.
 }
 \examples{
 library(ggplot2)

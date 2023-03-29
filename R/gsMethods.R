@@ -559,9 +559,8 @@ print.nSurvival <- function(x, ...) {
 #' # for nice LaTeX table output, use xprint
 #' xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE), 
 #'                                           caption = "Table caption."))
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
+#' @note The gsDesign technical manual is available at
+#'   <https://keaven.github.io/gsd-tech-manual/>.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{gsDesign}, \link{plot.gsDesign},
 #' \code{\link{gsProbability}}, \code{\link{xtable.gsSurv}}
