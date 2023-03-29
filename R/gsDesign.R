@@ -58,9 +58,8 @@
 #' lower boundary crossing probabilities; computed using input lower bound and
 #' derived upper bound.} \item{probhi}{vector of upper boundary crossing
 #' probabilities as input.}
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
+#' @note The gsDesign technical manual is available at
+#'   <https://keaven.github.io/gsd-tech-manual/>.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{gsDesign package overview}, \code{\link{gsDesign}},
 #' \code{\link{gsProbability}}
@@ -424,9 +423,8 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #'   k = 4, timing = timing, sfu = sfPoints, sfupar = sfup, sfl = sfPoints,
 #'   sflpar = sflp
 #' )
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
+#' @note The gsDesign technical manual is available at
+#'   <https://keaven.github.io/gsd-tech-manual/>.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{gsDesign package overview}, \link{gsBoundSummary}, 
 #' \link{plot.gsDesign},
@@ -637,9 +635,8 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
 #' # default plottype is now 2
 #' # this is the same range for theta, but plot now has theta on x axis
 #' plot(z)
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
+#' @note The gsDesign technical manual is available at
+#'   <https://keaven.github.io/gsd-tech-manual/>.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{plot.gsDesign}, \code{\link{gsDesign}},
 #' \link{gsDesign package overview}
@@ -792,9 +789,8 @@ gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0
 #' u <- x$upper$bound[4]
 #' text(expression(paste(theta, "=", delta)), x = 2.2, y = .2, cex = 1.5)
 #' text(expression(paste(theta, "=0")), x = .55, y = .4, cex = 1.5)
-#' @note The manual is not linked to this help file, but is available in
-#' library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-#' installed.
+#' @note The gsDesign technical manual is available at
+#'   <https://keaven.github.io/gsd-tech-manual/>.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsDesign}}, \code{\link{gsProbability}},
 #' \code{\link{gsBoundCP}}

@@ -120,9 +120,8 @@ Thus, the expected value of a B-value at an analysis is the true value of
 that time. See Proschan, Lan and Wittes (2006).
 }
 \note{
-The manual is not linked to this help file, but is available in
-library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-installed.
+The gsDesign technical manual is available at
+  <https://keaven.github.io/gsd-tech-manual/>.
 }
 \examples{
 library(ggplot2)

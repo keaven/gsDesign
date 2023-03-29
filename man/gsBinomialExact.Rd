@@ -161,7 +161,7 @@ been extended using \code{plot.gsBinomialExact} to plot
 ratio test (SPRT) which is a specific instance of an exact binomial group
 sequential design for a single arm trial with a binary outcome.
 
-%\code{gsBinomialPP} computes a truncated binomial (group) sequential design
+\code{gsBinomialPP} computes a truncated binomial (group) sequential design
 based on predictive probability.
 
 \code{nBinomial1Sample} uses exact binomial calculations to compute power
@@ -221,9 +221,8 @@ that it covers the possible range of values that include the true minimum.
 NOTE: the one-sided evaluation of significance is more conservative than using the 2-sided exact test in \code{binom.test}.
 }
 \note{
-The manual is not linked to this help file, but is available in
-library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-installed.
+The gsDesign technical manual is available at
+  <https://keaven.github.io/gsd-tech-manual/>.
 }
 \examples{
 library(ggplot2)
