@@ -183,7 +183,7 @@
 #' gsPI(x = x, i = 1, zi = z1, j = 2, theta = prior$z, wgts = prior$wgts, level = 0)
 #' gsPI(x = x, i = 1, zi = z1, j = 2, theta = prior$z, wgts = prior$wgts, level = .9)
 #' @note The gsDesign technical manual is available at
-#'   <https://keaven.github.io/gsd-tech-manual/>.
+#'   \url{https://keaven.github.io/gsd-tech-manual/}.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{normalGrid}}, \code{\link{gsDesign}},
 #' \code{\link{gsProbability}}, \code{\link{gsBoundCP}}, \code{\link{ssrCP}},
@@ -352,7 +352,7 @@ gsPI <- function(x, i = 1, zi = 0, j = 2, level = .95, theta = c(0, 3), wgts = c
 #' # compute conditional power based on original x$delta
 #' gsBoundCP(x, theta = x$delta)
 #' @note The gsDesign technical manual is available at
-#'   <https://keaven.github.io/gsd-tech-manual/>.
+#'   \url{https://keaven.github.io/gsd-tech-manual/}.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsDesign}}, \code{\link{gsProbability}},
 #' \code{\link{gsCP}}

@@ -560,7 +560,7 @@ print.nSurvival <- function(x, ...) {
 #' xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE), 
 #'                                           caption = "Table caption."))
 #' @note The gsDesign technical manual is available at
-#'   <https://keaven.github.io/gsd-tech-manual/>.
+#'   \url{https://keaven.github.io/gsd-tech-manual/}.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{gsDesign}, \link{plot.gsDesign},
 #' \code{\link{gsProbability}}, \code{\link{xtable.gsSurv}}

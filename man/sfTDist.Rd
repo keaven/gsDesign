@@ -58,7 +58,7 @@ with \code{df} degrees of freedom and \eqn{F^{-1}()} is its inverse.
 }
 \note{
 The gsDesign technical manual is available at
-  <https://keaven.github.io/gsd-tech-manual/>.
+  \url{https://keaven.github.io/gsd-tech-manual/}.
 }
 \examples{
 library(ggplot2)
