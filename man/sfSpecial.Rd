@@ -71,9 +71,8 @@ function parameter(s) in \code{param$param}. See example using
 \code{sfLinear} that spends uniformly over specified range.
 }
 \note{
-The manual is not linked to this help file, but is available in
-library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-installed.
+The gsDesign technical manual is available at
+  <https://keaven.github.io/gsd-tech-manual/>.
 }
 \examples{
 

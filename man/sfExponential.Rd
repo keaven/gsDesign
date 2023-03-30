@@ -51,11 +51,9 @@ spending function (\code{sfLDOF()}), \deqn{f(t; \alpha)=2-2\Phi \left(
 alpha)=2-2*Phi(Phi^(-1)(1-alpha/2)/t^(1/2)).}
 }
 \note{
-The manual shows how to use \code{sfExponential()} to closely
-approximate an O'Brien-Fleming design. An example is given below. The manual
-is not linked to this help file, but is available in
-library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-installed.
+The gsDesign technical manual shows how to use \code{sfExponential()}
+  to closely approximate an O'Brien-Fleming design. An example is given below.
+  The manual is available at <https://keaven.github.io/gsd-tech-manual/>.
 }
 \examples{
 library(ggplot2)

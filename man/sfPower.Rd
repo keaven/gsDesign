@@ -41,9 +41,8 @@ passed in \code{param}. See examples below for a range of values of
 documented there).
 }
 \note{
-The manual is not linked to this help file, but is available in
-library/gsdesign/doc/gsDesignManual.pdf in the directory where R is
-installed.
+The gsDesign technical manual is available at
+  <https://keaven.github.io/gsd-tech-manual/>.
 }
 \examples{
 library(ggplot2)
