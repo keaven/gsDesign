@@ -1,0 +1,140 @@
+---
+title: "Binomial SPRT"
+output:
+  rmarkdown::html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    number_sections: true
+    highlight: "textmate"
+    css: "custom.css"
+# bibliography: "example.bib"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Binomial SPRT}
+---
+
+
+# Overview
+
+The sequential probability ratio test (SPRT) was proposed by @wald1947sequential
+as a way to do continuous sampling to establish or raise concerns about product quality.
+There is a wide literature on this topic which we do not attempt to summarize here.
+In clinical trials, the SPRT for a binary endpoint can be useful to raise or alleviate concerns about a short-term endpoint such as occurrence of an important safety endpoint or, for efficacy, a response rate.
+The function `binomialSPRT()` implement a single arm version of the SPRT for a binary outcome. 
+
+# Initial code
+
+```{r}
+library(gsDesign)
+b <- binomialSPRT(p0 = .1, p1 = .35, alpha = .08, beta = .2, minn = 10, maxn = 25)
+plot(b)
+```
+
+
+
+# Summarizing design properties
+
+# Summary
+
+# References
+
+
+
+
+
+# Heading 1
+
+## Heading 2
+
+### Heading 3
+
+# Markdown syntax
+
+This is an **R Markdown** HTML vignette. Markdown is a simple _formatting syntax_
+for authoring HTML, PDF, and Word documents.
+
+$$x^n + y^n = z^n$$
+
+When you click the _Knit_ button a document will be generated that includes both
+content as well as the output of any embedded R code chunks within the document.
+
+Here is an inline equation $A = \pi r^2$.
+
+# Syntax highlighting
+
+This is inline `code`.
+
+This is a code block:
+
+```{r}
+seq_len(10)
+```
+
+This is another code block, without evaluation:
+
+```{r, eval=FALSE}
+library("dplyr")
+
+starwars %>% 
+  filter(species == "Droid")
+
+starwars %>% 
+  select(name, ends_with("color"))
+
+starwars %>% 
+  mutate(name, bmi = mass / ((height / 100) ^ 2)) %>%
+  select(name:mass, bmi)
+```
+
+# Figures
+
+```{r, echo=FALSE, fig.cap="Figure: Insert caption here.", fig.asp=1, out.width="50%", fig.align="center"}
+pal <- c(
+  "#00857c", "#0c2340", "#6eceb2", "#bfed33", "#fff063",
+  "#69b8f7", "#688ce8", "#5450e4"
+)
+
+x <- log(1:length(pal) + 1)
+barplot(x, col = pal, border = FALSE)
+```
+
+# Tables
+
+```{r, echo=FALSE}
+knitr::kable(head(mtcars))
+```
+
+# Citations
+
+See [Bibliographies and Citations in R Markdown](https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
+for details.
+
+# Markdown tables
+
+We support Markdown tables via
+[pandoc table syntax](https://pandoc.org/MANUAL.html#tables).
+
+You can use any online Markdown table generator to create these tables.
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+
+# Markdown figures
+
+Without caption:
+
+```markdown
+#![](example.png){width=50% class="center-block"}
+```
+
+With caption:
+
+```markdown
+#![Insert caption here.](example.png){width=50%}
+```
+
+# References
