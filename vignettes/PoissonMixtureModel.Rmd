@@ -28,7 +28,7 @@ We present a study design for a time-to-event outcome based on a cure model (@Po
 The cure model can provide a good approximation of event accumulation when risk lowers substantially over time.
 In this case, it is assumed that long-term survival is of substantial interest and there is no desire to stop and do a final analysis before substantial follow-up through 3-4 years has been allowed to accrue unless there is a substantial treatment effect with an important statistically significant finding.
 It is assumed further that if substantial events have not accrued in this time period, then some sacrifice in power is acceptable.
-Due to this as well as substantial variability in event accrual caused by feasible differences in event rates and treatment effect, we use a calendar-based timing of analyses and calendar-based spending (@LanDeMets1989).
+Due to this as well as substantial variability in event accrual caused by feasible differences in event rates and treatment effect, we use calendar-based timing of analyses and calendar-based spending (@LanDeMets1989).
 Logistical benefits of predictable analysis timing can be substantial.
 
 We discuss some of the potential advantages and disadvantages of the cure model and calendar-based design cases where hazard rates for events decrease substantially over time and the true underlying distributions may meaningfully deviate from what is anticipated at the time of design.
