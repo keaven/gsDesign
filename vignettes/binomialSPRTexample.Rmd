@@ -75,55 +75,6 @@ library(tidyr)
 # Compute boundary crossing probabilities for selected response rates
 b_power <- gsBinomialExact(k = length(b$n.I), theta = seq(.1, .45, .05), n.I = b$n.I, 
                            a = b$lower$bound, b = b$upper$bound)
-# Make a summary table function
-as_table <- function(x, ...) UseMethod("as_table")
-as_table.gsBinomialExact <- 
-  function(x){
-   sum_lower <- t(x$lower$prob)
-   theta <- as.double(names(t(x$lower$prob)[,1]))
-   sum_lower <- sum_lower %>% 
-     as_tibble() %>% 
-     mutate(theta = theta) %>%
-     pivot_longer(cols = !theta, names_to = "Analysis", values_to = "Probability") %>%
-     group_by(theta) %>%
-     summarize(Lower = sum(Probability))
-   
-   sum_upper <- t(x$upper$prob)
-   sum_upper <- sum_upper %>% 
-     as_tibble() %>% 
-     mutate(theta = theta) %>%
-     pivot_longer(cols = !theta, names_to = "Analysis", values_to = "Probability") %>%
-     group_by(theta) %>%
-     summarize(Upper = sum(Probability))
-   
-   tab <- left_join(sum_lower, sum_upper, by = "theta")
-   tab$en <- x$en
-   class(tab) <- c(class(tab), "gsBinomialExactTable")
-   return(tab)
-}
-library(gt)
-as_gt <- function(x, ...) UseMethod("as_gt")
-as_gt.gsBinomialExactTable <- 
-  function(x,
-           title = "Operating Characteristics for the Truncated SPRT Design",
-           subtitle = "Assumes trial evaluated sequentially after each response",
-           theta_label = html("Underlying<br>response rate"),
-           prob_decimals = 2,
-           en_decimals = 1,
-           rr_decimals = 0){
-  out_gt <- x %>% gt() %>%
-     tab_spanner(label = "Probability of crossing", columns = c(Lower, Upper)) %>%
-     cols_label(theta = theta_label,
-                Lower = "Futility bound",
-                Upper = "Efficacy bound",
-                en = html("Average<br>sample size")
-     ) %>%
-     fmt_number(columns = c(Lower, Upper), decimals = prob_decimals) %>%
-     fmt_number(columns = en, decimals = en_decimals) %>%
-     fmt_percent(columns = theta, decimals = rr_decimals) %>%
-     tab_header(title=title, subtitle = subtitle)
-  return(out_gt)
-  }
 ```
 
 ```{r}
@@ -132,6 +83,45 @@ b_power %>% as_table() %>% as_gt()
 
 # Safety monitoring example
 
+Next we consider a safety monitoring example.
+Suppose a new treatment has a mechanism of action that has potential for an elevated rate of a specific adverse experience (AE);  e.g., serious rash.
+Suppose that this already occurs with some low frequency in the population proposed for a study at a rate of about 4% and that a 10% rate would be considered unacceptable.
+While a comparison of the two arms could be considered with an SPRT, we demonstrate here a monitoring bound for the experimental arm only.
+We assume the proposed sample size for the study is 75 per arm and that we will not stop the trial for serious rash before 4 patients have been studied in the experimental group.
+
+```{r}
+safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75)
+plot(safety_design)
+```
+We see above that if we have no serious rashes in the first 25 experimental group patients or 1 in the first 40 that we reject the 10% rate of concern.
+On the other hand, if the first 4 of the first 4 to 14 patients have serious rashes or 5 of the first 15 to 29 patients have serious rashes we can reject the hypothesis that there is no elevation over the presumed 4% population rate.
+
+The design operating characteristics are now summarized both in a plot and a table.
+
+```{r}
+plot(safety_design, plottype = 2)
+```
+
+We see that there can be a fairly high possibility of an indeterminate outcome at the end of the trial.
+If we include more extreme values in the summary table, we can see that the indeterminate probability lowers outside the range of 0.04 to 0.10.
+The average sample size also goes down; however, this does not account for enrollment that may occur but not be included in the analysis due to inadequate follow-up to assess the endpoint.
+Note that sequential patients should be analyzed, but if you cross a high rate bound with some incomplete data included as *safe* that you can still declare that you crossed the high rate bound as the number of adverse experience cases cannot go down when the missing cases filled in.
+
+```{r}
+
+safety_power <- gsBinomialExact(k = length(safety_design$n.I), 
+                           theta = seq(.02, .16, .02), 
+                           n.I = safety_design$n.I, 
+                           a = safety_design$lower$bound, 
+                           b = safety_design$upper$bound)
+safety_power %>% 
+  as_table() %>% 
+  as_gt(
+    theta_label = html("Underlying<br>AE rate"),
+    prob_decimals = 3,
+    bound_label = c("low rate", "high rate")
+)
+```
 
 
 # Summary
@@ -148,6 +138,9 @@ This means the user needs to consider inputs on an iterative basis to control op
 
 This design can be use for both responses and failures.
 For instance, it can provide a method of early monitoring for excessive risk of key adverse events in a study.
+
+
+
 
 
 # References
