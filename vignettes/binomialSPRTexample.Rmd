@@ -7,8 +7,7 @@ output:
     toc_depth: 2
     number_sections: true
     highlight: "textmate"
-    css: "custom.css"
-# bibliography: "example.bib"
+bibliography: "gsDesign.bib"
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Binomial SPRT}
@@ -17,13 +16,26 @@ vignette: >
 
 # Overview
 
-The sequential probability ratio test (SPRT) was proposed by @wald1947sequential
+The sequential probability ratio test (SPRT) was proposed by @wald1947sequential, @wald1948optimum.
 as a way to do continuous sampling to establish or raise concerns about product quality.
 There is a wide literature on this topic which we do not attempt to summarize here.
-In clinical trials, the SPRT for a binary endpoint can be useful to raise or alleviate concerns about a short-term endpoint such as occurrence of an important safety endpoint or, for efficacy, a response rate.
-The function `binomialSPRT()` implement a single arm version of the SPRT for a binary outcome. 
+In clinical trials, the SPRT for a single arm binary endpoint can be useful to raise or alleviate concerns about a short-term endpoint such as occurrence of an important safety endpoint or, for efficacy, a response rate.
+The function `binomialSPRT()` implements a single arm version of the SPRT for a binary outcome. 
+While comparative SPRT tests are also available for comparing multiple arms, we do not cover those here.
 
-# Initial code
+You may think that having an sequential design for a trial obligates you to do an evaluation after every observation.
+An alternative view is that you can analyze whenever you want and not worry about whether Type I error is controlled.
+
+
+# Response rate example
+
+Consider a single arm where there is historical data suggesting the a positive response to treatment occurs in no more than 10% of patients with currently available treatments.
+Assume that there is interest in having the trial be well-powered to detect a response rate of 35% in a new treatment.
+The SPRT is defined as a continuous testing procedure without a maximum sample size.
+Practically speaking, this is implemented with a minimum and maximum sample size.
+For our example we assume a minimum sample size of 10 and a maximum sample size of 25.
+We will initially set a one-sided Type I error of $\alpha=0.08$ and power of 80% ($1-\beta = 0.2$):
+
 
 ```{r}
 library(gsDesign)
@@ -31,110 +43,114 @@ b <- binomialSPRT(p0 = .1, p1 = .35, alpha = .08, beta = .2, minn = 10, maxn = 2
 plot(b)
 ```
 
+The above plot tests first after 10 patients. If 4/10 have responded, you can reject the null hypothesis of a 10% response rate. If 0 or 1 of 10 have responded, you can conclude that the targeted 35% response rate is not realistic. 
+Note that the number of responses required to cross a bound is a step function due to the discrete nature of the problem.
+We see at the maximum sample size of 25: 
 
+- If 4 or fewer patients have responded we will accept the null hypothesis of a 10% event rate.
+- If 7 or more patients have responded we will reject the null hypothesis in favor of a larger response rate.
+- If 5 or 6 patients respond we have an indeterminate result where we can reject neither the null hypothesis of a 10% response rate nor the alternate hypothesis of a 35% response rate.
 
 # Summarizing design properties
 
-# Summary
-
-# References
-
-
-
-
-
-# Heading 1
-
-## Heading 2
-
-### Heading 3
-
-# Markdown syntax
-
-This is an **R Markdown** HTML vignette. Markdown is a simple _formatting syntax_
-for authoring HTML, PDF, and Word documents.
-
-$$x^n + y^n = z^n$$
-
-When you click the _Knit_ button a document will be generated that includes both
-content as well as the output of any embedded R code chunks within the document.
-
-Here is an inline equation $A = \pi r^2$.
-
-# Syntax highlighting
-
-This is inline `code`.
-
-This is a code block:
+Functions are available to summarize design properties. For example, we can make a power plot:
 
 ```{r}
-seq_len(10)
+library(ggplot2)
+p <- plot(b, plottype = 2) 
+p + scale_y_continuous(breaks=seq(0, 90, 10))
 ```
 
-This is another code block, without evaluation:
+Probability of three possible outcomes are summarized by the underlying response rate:
 
-```{r, eval=FALSE}
-library("dplyr")
+- Solid line: indeterminate outcome (no bound crossed from 10 to 25 patients). Note that probabilities are small, even for response rates half-way between the null and alternative hypotheses.
+- Short-dashed line: reject H0. While we targeted a 10% Type I error rate, we can see here that since we have truncated the design to analyze only after 10 to 25 patient that the Type I error is less 5%; this is below the targeted 1-sided $\alpha=0.08.$
+- Long-dashed line: Reject H1. We can see that we have > 90% chance of rejecting a 35% response rate if the true response rate is 10%.
 
-starwars %>% 
-  filter(species == "Droid")
+We now provide a summary table for operating characterics. The user can ignore reviewing the code, but may copy if wishing to produce a similar table.
 
-starwars %>% 
-  select(name, ends_with("color"))
-
-starwars %>% 
-  mutate(name, bmi = mass / ((height / 100) ^ 2)) %>%
-  select(name:mass, bmi)
+```{r, message = FALSE}
+library(dplyr)
+library(tidyr)
+# Compute boundary crossing probabilities for selected response rates
+b_power <- gsBinomialExact(k = length(b$n.I), theta = seq(.1, .45, .05), n.I = b$n.I, 
+                           a = b$lower$bound, b = b$upper$bound)
+# Make a summary table function
+as_table <- function(x, ...) UseMethod("as_table")
+as_table.gsBinomialExact <- 
+  function(x){
+   sum_lower <- t(x$lower$prob)
+   theta <- as.double(names(t(x$lower$prob)[,1]))
+   sum_lower <- sum_lower %>% 
+     as_tibble() %>% 
+     mutate(theta = theta) %>%
+     pivot_longer(cols = !theta, names_to = "Analysis", values_to = "Probability") %>%
+     group_by(theta) %>%
+     summarize(Lower = sum(Probability))
+   
+   sum_upper <- t(x$upper$prob)
+   sum_upper <- sum_upper %>% 
+     as_tibble() %>% 
+     mutate(theta = theta) %>%
+     pivot_longer(cols = !theta, names_to = "Analysis", values_to = "Probability") %>%
+     group_by(theta) %>%
+     summarize(Upper = sum(Probability))
+   
+   tab <- left_join(sum_lower, sum_upper, by = "theta")
+   tab$en <- x$en
+   class(tab) <- c(class(tab), "gsBinomialExactTable")
+   return(tab)
+}
+library(gt)
+as_gt <- function(x, ...) UseMethod("as_gt")
+as_gt.gsBinomialExactTable <- 
+  function(x,
+           title = "Operating Characteristics for the Truncated SPRT Design",
+           subtitle = "Assumes trial evaluated sequentially after each response",
+           theta_label = html("Underlying<br>response rate"),
+           prob_decimals = 2,
+           en_decimals = 1,
+           rr_decimals = 0){
+  out_gt <- x %>% gt() %>%
+     tab_spanner(label = "Probability of crossing", columns = c(Lower, Upper)) %>%
+     cols_label(theta = theta_label,
+                Lower = "Futility bound",
+                Upper = "Efficacy bound",
+                en = html("Average<br>sample size")
+     ) %>%
+     fmt_number(columns = c(Lower, Upper), decimals = prob_decimals) %>%
+     fmt_number(columns = en, decimals = en_decimals) %>%
+     fmt_percent(columns = theta, decimals = rr_decimals) %>%
+     tab_header(title=title, subtitle = subtitle)
+  return(out_gt)
+  }
 ```
 
-# Figures
-
-```{r, echo=FALSE, fig.cap="Figure: Insert caption here.", fig.asp=1, out.width="50%", fig.align="center"}
-pal <- c(
-  "#00857c", "#0c2340", "#6eceb2", "#bfed33", "#fff063",
-  "#69b8f7", "#688ce8", "#5450e4"
-)
-
-x <- log(1:length(pal) + 1)
-barplot(x, col = pal, border = FALSE)
+```{r}
+b_power %>% as_table() %>% as_gt()
 ```
 
-# Tables
+# Safety monitoring example
 
-```{r, echo=FALSE}
-knitr::kable(head(mtcars))
-```
 
-# Citations
 
-See [Bibliographies and Citations in R Markdown](https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-for details.
+# Summary
 
-# Markdown tables
+We have shown how to:
 
-We support Markdown tables via
-[pandoc table syntax](https://pandoc.org/MANUAL.html#tables).
+- derive bounds for a truncated sequential probability ratio test (SPRT),
+- plot the bounds for the design,
+- plot the operating characteristics for the design, and
+- print a table summarizing the design.
 
-You can use any online Markdown table generator to create these tables.
+We noted that the observed power and Type I error is lower than the specified Type I error and power can be higher.
+This means the user needs to consider inputs on an iterative basis to control operating characteristics of the truncated SPRT.
 
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+This design can be use for both responses and failures.
+For instance, it can provide a method of early monitoring for excessive risk of key adverse events in a study.
 
-# Markdown figures
-
-Without caption:
-
-```markdown
-#![](example.png){width=50% class="center-block"}
-```
-
-With caption:
-
-```markdown
-#![Insert caption here.](example.png){width=50%}
-```
 
 # References
+
+
+
