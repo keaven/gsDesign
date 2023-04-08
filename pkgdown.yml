@@ -6,10 +6,11 @@ articles:
   PoissonMixtureModel: PoissonMixtureModel.html
   SurvivalOverview: SurvivalOverview.html
   VaccineEfficacy: VaccineEfficacy.html
+  binomialSPRTExample: binomialSPRTExample.html
   gsSurvBasicExamples: gsSurvBasicExamples.html
   hGraph: hGraph.html
   nNormal: nNormal.html
-last_built: 2023-03-29T20:55Z
+last_built: 2023-04-08T00:45Z
 urls:
   reference: https://keaven.github.io/gsDesign/reference
   article: https://keaven.github.io/gsDesign/articles
