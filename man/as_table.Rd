@@ -2,9 +2,12 @@
 % Please edit documentation in R/as_table.R
 \name{as_table}
 \alias{as_table}
+\alias{as_table.gsBinomialExact}
 \title{Create a summary table}
 \usage{
 as_table(x, ...)
+
+\method{as_table}{gsBinomialExact}(x, ...)
 }
 \arguments{
 \item{x}{Object to be summarized.}
@@ -15,18 +18,25 @@ as_table(x, ...)
 A tibble which may have an extended class to enable further output processing.
 }
 \description{
-Create a tibble to summarize an object; currently only implemented for gsBinomialExact.
+Create a tibble to summarize an object; currently only implemented for
+\code{\link{gsBinomialExact}}.
 }
 \details{
-Currently only implemented for gsBinomialExact objects. Creates a table to summarize an object.
-For gsBinomialExact, this summarized operating characteristics across a range of effect sizes.
+Currently only implemented for \code{\link{gsBinomialExact}} objects.
+Creates a table to summarize an object.
+For \code{\link{gsBinomialExact}}, this summarized operating characteristics
+across a range of effect sizes.
 }
 \examples{
 b <- binomialSPRT(p0 = .1, p1 = .35, alpha = .08, beta = .2, minn = 10, maxn = 25)
-b_power <- gsBinomialExact(k = length(b$n.I), theta = seq(.1, .45, .05), n.I = b$n.I, 
-                           a = b$lower$bound, b = b$upper$bound)
-b_power \%>\% as_table() \%>\% as_gt()
+b_power <- gsBinomialExact(
+  k = length(b$n.I), theta = seq(.1, .45, .05), n.I = b$n.I,
+  a = b$lower$bound, b = b$upper$bound
+)
+b_power \%>\%
+  as_table() \%>\%
+  as_gt()
 }
 \seealso{
-vignette("binomialSPRTexample")
+\code{vignette("binomialSPRTExample")}
 }

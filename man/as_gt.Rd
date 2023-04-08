@@ -2,40 +2,75 @@
 % Please edit documentation in R/as_gt.R
 \name{as_gt}
 \alias{as_gt}
+\alias{as_gt.gsBinomialExactTable}
 \title{Print a summary table using gt}
 \usage{
 as_gt(x, ...)
+
+\method{as_gt}{gsBinomialExactTable}(
+  x,
+  title = "Operating Characteristics for the Truncated SPRT Design",
+  subtitle = "Assumes trial evaluated sequentially after each response",
+  theta_label = html("Underlying<br>response rate"),
+  bound_label = c("Futility bound", "Efficacy bound"),
+  prob_decimals = 2,
+  en_decimals = 1,
+  rr_decimals = 0,
+  ...
+)
 }
 \arguments{
-\item{x}{Object to be printed using gt().}
+\item{x}{Object to be printed using \code{\link[gt]{gt}}.}
 
 \item{...}{Other parameters that may be specific the object.}
+
+\item{title}{Table title.}
+
+\item{subtitle}{Table subtitle.}
+
+\item{theta_label}{Label for theta.}
+
+\item{bound_label}{Label for bounds.}
+
+\item{prob_decimals}{Number of decimal places for probability of crossing.}
+
+\item{en_decimals}{Number of decimal places for expected number of
+observations when bound is crossed or when trial ends without crossing.}
+
+\item{rr_decimals}{Number of decimal places for response rates.}
 }
 \value{
-A gt() object that may be extended by overloaded versions of \code{as_gt()}.
+A `gt` object that may be extended by overloaded versions of
+  \code{\link{as_gt}}.
 }
 \description{
-Create print a table created with as_table() to summarize an object and print it using gt(); currently only implemented for gsBinomialExact.
+Create print a table created with \code{\link{as_table}} to summarize
+an object and print it using \code{\link[gt]{gt}}; currently only
+implemented for \code{\link{gsBinomialExact}}.
 }
 \details{
-Currently only implemented for gsBinomialExact objects. Creates a table to summarize an object.
-For gsBinomialExact, this summarized operating characteristics across a range of effect sizes.
+Currently only implemented for \code{\link{gsBinomialExact}} objects.
+Creates a table to summarize an object.
+For \code{\link{gsBinomialExact}}, this summarized operating characteristics
+across a range of effect sizes.
 }
 \examples{
 safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75)
-safety_power <- gsBinomialExact(k = length(safety_design$n.I), 
-                                theta = seq(.02, .16, .02), 
-                                n.I = safety_design$n.I, 
-                                a = safety_design$lower$bound, 
-                                b = safety_design$upper$bound)
-safety_power \%>\% 
-  as_table() \%>\% 
+safety_power <- gsBinomialExact(
+  k = length(safety_design$n.I),
+  theta = seq(.02, .16, .02),
+  n.I = safety_design$n.I,
+  a = safety_design$lower$bound,
+  b = safety_design$upper$bound
+)
+safety_power \%>\%
+  as_table() \%>\%
   as_gt(
-    theta_label = html("Underlying<br>AE rate"),
+    theta_label = gt::html("Underlying<br>AE rate"),
     prob_decimals = 3,
     bound_label = c("low rate", "high rate")
   )
 }
 \seealso{
-vignette("binomialSPRTexample")
+\code{vignette("binomialSPRTExample")}
 }
