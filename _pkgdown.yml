@@ -103,6 +103,12 @@ reference:
 - title: Testing multiple hypotheses
   contents:
   - hGraph
+- title: Summary tables
+  contents:
+  - as_table
+  - as_table.gsBinomialExact
+  - as_gt
+  - as_gt.gsBinomialExactTable
 
 articles:
   - title: "Designing for time-to-event endpoints"
@@ -121,3 +127,4 @@ articles:
       - hGraph
       - GraphicalMultiplicity
       - VaccineEfficacy
+      - binomialSPRTExample

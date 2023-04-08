@@ -445,3 +445,6 @@ binomialPP <- function(a = .2, b = .8, theta = c(.2, .4), p1 = .4, PP = c(.025, 
   class(y) <- c("binomialPP", "gsBinomialExact", "gsProbability")
   return(y)
 }
+
+
+
