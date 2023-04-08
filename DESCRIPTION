@@ -1,5 +1,5 @@
 Package: gsDesign
-Version: 3.4.0
+Version: 3.4.0.9000
 Title: Group Sequential Design
 Authors@R: person(given = "Keaven", family = "Anderson", email =
           "keaven_anderson@merck.com", role = c('aut','cre'))
@@ -20,17 +20,18 @@ Imports:
     dplyr,
     ggplot2 (>= 0.9.2),
     graphics,
+    gt,
     magrittr,
     methods,
     rlang,
     stats,
+    tibble,
     tidyr,
     tools,
     xtable
 Suggests:
     covr,
     gridExtra,
-    gt,
     kableExtra,
     knitr,
     mvtnorm,
@@ -38,7 +39,6 @@ Suggests:
     rmarkdown,
     scales,
     testthat,
-    tibble,
     utils
 VignetteBuilder:
     knitr
