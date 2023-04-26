@@ -440,7 +440,7 @@ plot.ssrCP <- function(x, z1ticks = NULL, mar = c(7, 4, 4, 4) + .1, ylab = "Adap
   graphics::axis(side = 1, line = 1, at = z1ticks, labels = as.character(z1ticks), ...)
   graphics::mtext(side = 1, expression(z[1]), line = .75, at = xlim[1] + xlaboffset, ...)
   graphics::axis(side = 1, line = 5, at = z1ticks, labels = as.character(round(theta / x$x$delta, 2)), ...)
-  graphics::mtext(side = 1, expression(stats::hat(theta) / theta[1]), line = 5.5, at = xlim[1] + xlaboffset, ...)
+  graphics::mtext(side = 1, expression(hat(theta) / theta[1]), line = 5.5, at = xlim[1] + xlaboffset, ...)
 }
 
 # normal combination test cutoff for z2
