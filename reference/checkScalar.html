@@ -215,7 +215,7 @@ Other functions have no return value, called for side effects</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># do the same but change the expected length; expect error</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">checkVector</span><span class="op">(</span><span class="va">x</span>, <span class="st">"numeric"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in paste(varstr, " is a vector of length ", length(x), " but should be of length",  : </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in checkVector(x, "numeric", c(1, 10), c(TRUE, FALSE), length = 2) : </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   object 'varstr' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create faux function to check input variable</span></span></span>
