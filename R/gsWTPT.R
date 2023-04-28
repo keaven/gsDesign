@@ -33,7 +33,7 @@
 # @aliases O'Brien-Fleming Bounds Wang-Tsiatis Bounds Pocock Bounds
 # @docType package
 # @note The gsDesign technical manual is available at
-#   <https://keaven.github.io/gsd-tech-manual/>.
+#   \url{https://keaven.github.io/gsd-tech-manual/}.
 # @author Keaven Anderson \email{keaven_anderson@@merck.com}
 # @seealso \code{\link{Spending_Function_Overview}, \link{gsDesign}},
 # \code{\link{gsProbability}}

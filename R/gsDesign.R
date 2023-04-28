@@ -59,7 +59,7 @@
 #' derived upper bound.} \item{probhi}{vector of upper boundary crossing
 #' probabilities as input.}
 #' @note The gsDesign technical manual is available at
-#'   <https://keaven.github.io/gsd-tech-manual/>.
+#'   \url{https://keaven.github.io/gsd-tech-manual/}.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{gsDesign package overview}, \code{\link{gsDesign}},
 #' \code{\link{gsProbability}}
@@ -424,7 +424,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #'   sflpar = sflp
 #' )
 #' @note The gsDesign technical manual is available at
-#'   <https://keaven.github.io/gsd-tech-manual/>.
+#'   \url{https://keaven.github.io/gsd-tech-manual/}.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{gsDesign package overview}, \link{gsBoundSummary}, 
 #' \link{plot.gsDesign},
@@ -636,7 +636,7 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
 #' # this is the same range for theta, but plot now has theta on x axis
 #' plot(z)
 #' @note The gsDesign technical manual is available at
-#'   <https://keaven.github.io/gsd-tech-manual/>.
+#'   \url{https://keaven.github.io/gsd-tech-manual/}.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \link{plot.gsDesign}, \code{\link{gsDesign}},
 #' \link{gsDesign package overview}
@@ -790,7 +790,7 @@ gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0
 #' text(expression(paste(theta, "=", delta)), x = 2.2, y = .2, cex = 1.5)
 #' text(expression(paste(theta, "=0")), x = .55, y = .4, cex = 1.5)
 #' @note The gsDesign technical manual is available at
-#'   <https://keaven.github.io/gsd-tech-manual/>.
+#'   \url{https://keaven.github.io/gsd-tech-manual/}.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsDesign}}, \code{\link{gsProbability}},
 #' \code{\link{gsBoundCP}}

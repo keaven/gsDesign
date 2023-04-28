@@ -40,7 +40,7 @@ Muller and Schaffer (2001) for background theory.
 }
 \note{
 The gsDesign technical manual is available at
-  <https://keaven.github.io/gsd-tech-manual/>.
+  \url{https://keaven.github.io/gsd-tech-manual/}.
 }
 \examples{
 

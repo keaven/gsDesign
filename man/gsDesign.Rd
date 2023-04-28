@@ -317,7 +317,7 @@ hypothesis.
 }
 \note{
 The gsDesign technical manual is available at
-  <https://keaven.github.io/gsd-tech-manual/>.
+  \url{https://keaven.github.io/gsd-tech-manual/}.
 }
 \examples{
 library(ggplot2)

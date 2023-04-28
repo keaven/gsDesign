@@ -222,7 +222,7 @@ NOTE: the one-sided evaluation of significance is more conservative than using t
 }
 \note{
 The gsDesign technical manual is available at
-  <https://keaven.github.io/gsd-tech-manual/>.
+  \url{https://keaven.github.io/gsd-tech-manual/}.
 }
 \examples{
 library(ggplot2)

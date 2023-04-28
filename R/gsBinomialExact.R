@@ -222,7 +222,7 @@ utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 #'   nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)
 #' }
 #' @note The gsDesign technical manual is available at
-#'   <https://keaven.github.io/gsd-tech-manual/>.
+#'   \url{https://keaven.github.io/gsd-tech-manual/}.
 #' @author Jon Hartzel, Yevgen Tymofyeyev and Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsProbability}}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential

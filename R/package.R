@@ -123,7 +123,7 @@ NULL
 #' analysis for \code{j}-th theta value input to \code{gsDesign()} in
 #' \code{prob[i,j]}.}
 #' @note The gsDesign technical manual is available at
-#'   <https://keaven.github.io/gsd-tech-manual/>.
+#'   \url{https://keaven.github.io/gsd-tech-manual/}.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsDesign}}, \code{\link{sfHSD}}, \code{\link{sfPower}},
 #' \code{\link{sfLogistic}}, \code{\link{sfExponential}},

@@ -66,7 +66,7 @@ functions, a user can write code for a spending function. See examples.
 }
 \note{
 The gsDesign technical manual is available at
-  <https://keaven.github.io/gsd-tech-manual/>.
+  \url{https://keaven.github.io/gsd-tech-manual/}.
 }
 \examples{
 library(ggplot2)
