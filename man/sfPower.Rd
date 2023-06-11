@@ -19,7 +19,7 @@ function will be computed.}
 
 \item{param}{A single, positive value specifying the \eqn{\rho}{rho}
 parameter for which Kim-DeMets spending is to be computed; allowable range
-is (0,15]}
+is (0,50]}
 }
 \value{
 An object of type \code{spendfn}. See \link{Spending_Function_Overview} for further details.

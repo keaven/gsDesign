@@ -1179,7 +1179,7 @@ sfPoints <- function(alpha, t, param) {
 #' function will be computed.
 #' @param param A single, positive value specifying the \eqn{\rho}{rho}
 #' parameter for which Kim-DeMets spending is to be computed; allowable range
-#' is (0,15]
+#' is (0,50]
 #' @return An object of type \code{spendfn}. See \link{Spending_Function_Overview} for further details.
 #' @examples
 #' library(ggplot2)
@@ -1227,9 +1227,9 @@ sfPoints <- function(alpha, t, param) {
 #' @export
 # sfPower function [sinew] ----
 sfPower <- function(alpha, t, param) {
-  # K. Wills 12/11/08: restrict param range
-  # checkScalar(param, "numeric", c(0, Inf), c(FALSE, TRUE))
-  checkScalar(param, "numeric", c(0, 15), c(FALSE, TRUE))
+  # K. Wills 12/11/08: restrict param range to (0, 15]
+  # K. Anderson 6/11/23: restrict param range to (0, 50]
+  checkScalar(param, "numeric", c(0, 50), c(FALSE, TRUE))
 
   checkScalar(alpha, "numeric", c(0, Inf), c(FALSE, FALSE))
   checkVector(t, "numeric", c(0, Inf), c(TRUE, FALSE))

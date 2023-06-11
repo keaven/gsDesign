@@ -1,3 +1,7 @@
+# gsDesign 3.4.1 (July, 2023?)
+
+- Allowed wider parameter range (0,15] for sfPower 
+
 # gsDesign 3.4.0 (October, 2022)
 
 - Removed restriction on `gsCP()` interim test statistic zi (#63).
