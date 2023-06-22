@@ -1198,6 +1198,8 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
   z <- gsnSurv(x, y$n.I[k])
   eDC <- NULL
   eDE <- NULL
+  eDC0 <- NULL
+  eDE0 <- NULL
   eNC <- NULL
   eNE <- NULL
   T <- NULL
@@ -1206,12 +1208,16 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
     T <- c(T, xx$T)
     eDC <- rbind(eDC, xx$eDC)
     eDE <- rbind(eDE, xx$eDE)
+    eDC0 <- rbind(eDC0, xx$eDC0) # Added 6/15/2023
+    eDE0 <- rbind(eDE0, xx$eDE0) # Added 6/15/2023
     eNC <- rbind(eNC, xx$eNC)
     eNE <- rbind(eNE, xx$eNE)
   }
   y$T <- c(T, z$T)
   y$eDC <- rbind(eDC, z$eDC)
   y$eDE <- rbind(eDE, z$eDE)
+  y$eDC0 <- rbind(eDC0, z$eDC0) # Added 6/15/2023
+  y$eDE0 <- rbind(eDE0, z$eDE0) # Added 6/15/2023
   y$eNC <- rbind(eNC, z$eNC)
   y$eNE <- rbind(eNE, z$eNE)
   y$hr <- hr
