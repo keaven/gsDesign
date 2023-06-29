@@ -949,7 +949,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' enrollment in the control group at the output time \code{T}.} \item{eNE}{The
 #' expected enrollment in the experimental group at the output time \code{T}.}
 #'
-#' \code{tEventsIA()} returns
+#' \code{tEventsIA()} returns the same structure as \code{nEventsIA(..., simple=TRUE)} when
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsBoundSummary}}, \code{\link{xprint}},
 #' \link{gsDesign package overview}, \link{plot.gsDesign},
@@ -1158,7 +1158,7 @@ nEventsIA <- function(tIA = 5, x = NULL, target = 0, simple = TRUE) {
   if (simple) {
     if (class(x)[1] == "gsSize") {
       d <- x$d
-    } # OLD      else d <- sum(x$eDC[length(x$eDC)]+x$eDE[length(x$eDE)])
+    }
     else if (!is.matrix(x$eDC)) {
       d <- sum(x$eDC[length(x$eDC)] + x$eDE[length(x$eDE)])
     } else {

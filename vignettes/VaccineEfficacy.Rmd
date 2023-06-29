@@ -152,28 +152,33 @@ x <- gsSurv(
   R = enrollDuration, T = trialDuration,
   minfup = trialDuration - enrollDuration, ratio = ratio
 )
+```
 
-gsBoundSummary(x, tdigits = 1) %>%
+Now we convert this to a design with integer event counts at analyses.
+This is achieved by rounding interim analysis event counts from the above design and rounding up the final analysis event count. This will result in a slight change in event fractions at interim analyses as well as a slight change from the targeted 90% power.
+
+
+```{r}
+xx <- toInteger(x)
+gsBoundSummary(xx, tdigits = 1, logdelta = TRUE, deltaname = "HR", Nname = "Events") %>%
   gt() %>%
-  tab_header(title = "Initial group sequential approximation")
+  tab_header(title = "Initial group sequential approximation",
+             subtitle = "Integer event counts at analyses")
 ```
 
 A textual summary for the design is:
 
 ```{r}
-cat(summary(x, timeunit = 'months'))
+cat(summary(xx, timeunit = 'months'))
 ```
 
 # Converting to an exact binomial design
 
-Now we change the event counts at each analysis by rounding at interim analyses and rounding up at final analysis to move away from the continuous, unrounded event counts above.
-This strategy is not restricted to studies using exact binomial methods, but can be used with any time-to-event endpoint.
-There are small changes from the above design.
-
-```{r, class.source = 'fold-hide'}
-xx <- to_binomialExact(x)
-xx
+```{r}
+xb <- toBinomialExact(x)
+xb
 ```
+
 
 Now we make comparisons between the asymptotic, time-to-event design in `x` to the exact binomial design in `xx`.
 We begin with comparison of nominal one-sided p-values for each of the bounds.
@@ -198,7 +203,7 @@ x$upper$sf(alpha = x$alpha, t = x$timing, param=x$upper$param)$spend # Asymptoti
 # Exact binomial design
 # Compute by removing futility bounds
 balt <- xx$n.I + 1
-xxalt <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = xx$n.I, a = xx$lower$bound, b = balt)
+xxalt <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = xb$n.I, a = xb$lower$bound, b = balt)
 cumsum(xxalt$lower$prob[, 1])
 ```
 
@@ -215,8 +220,8 @@ Now we examine the approximate vaccine efficacy at efficacy and futility bounds 
 We begin using the inversion formula from above to convert the proportion of events in the experimental group at the bounds to vaccine efficacy at the bounds.
 
 ```{r}
-p_lower <- xxxx$lower$bound / xxx$n.I
-p_upper <- xxxx$upper$bound / xxx$n.I
+p_lower <- xb$lower$bound / xb$n.I
+p_upper <- xb$upper$bound / xb$n.I
 p_lower
 p_upper
 ```
