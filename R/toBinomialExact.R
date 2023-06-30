@@ -16,7 +16,7 @@
 #'   alpha = .025,          # 1-sided Type I error
 #'   beta = .1,             # Type II error (1 - power)
 #'   timing = c(0.45, 0.7), # Proportion of final planned events at interims
-#'   sfu = sfuHSD,          # Efficacy spending function
+#'   sfu = sfHSD,          # Efficacy spending function
 #'   sfupar = -4,           # Parameter for efficacy spending function
 #'   sfl = sfLDOF,          # Futility spending function; not needed for test.type = 1
 #'   sflpar = 0,            # Parameter for futility spending function
@@ -31,13 +31,14 @@
 #'   ratio = 3              # Randomization ratio (experimental:contro)
 #' )
 #' # Convert bounds to exact binomial bounds
-#' to_binomialExact(x)
+#' toBinomialExact(x)
 toBinomialExact <- function(x){
-  if (class(x)[1] != "gsSurv") stop("to_binomialExact must have class gsSurv as input")
-  if (x$test.type != 1 && x$test.type != 4) stop("to_binomialExact input test.type must be 1 or 4")
+  if (class(x)[1] != "gsSurv") stop("toBinomialExact must have class gsSurv as input")
+  if (x$test.type != 1 && x$test.type != 4) stop("toBinomialExact input test.type must be 1 or 4")
 # Round interim sample size (or events for gsSurv object)
-  xx <- to_Integer(x)
+  xx <- toInteger(x)
   k <- xx$k
+  counts <- xx$n.I
   
 # Translate vaccine efficacy to exact binomial probabilities
   
@@ -59,7 +60,7 @@ toBinomialExact <- function(x){
     b <- counts + 1 # test.type = 1 means no futility bound
     nbupperprob <- 0
   }
-  for(j in 1:k){
+  for(j in 1:x$k){
     # non-binding bound assumed
     # compute spending through analysis j
     # NOTE: cannnot call gsBinomialExact with k == 1, so make it at least 2

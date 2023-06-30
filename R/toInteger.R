@@ -50,7 +50,7 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
   # update bounds and counts from original design
   xi <- gsDesign(
     k = x$k, test.type = x$test.type, n.I = counts, maxn.IPlan = counts[x$k],
-    alpha = x$alpha, beta = x$beta, 
+    alpha = x$alpha, beta = x$beta, astar = x$astar,
     delta = x$delta, delta1 = x$delta1, delta0 = x$delta0,
     sfu = x$upper$sf, sfupar = x$upper$param, sfl = x$lower$sf, sflpar = x$lower$param
   )
@@ -77,8 +77,8 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
     eNC <- NULL
     eNE <- NULL
     T <- NULL
-    for (i in 1:(k - 1)) {
-      xx <- tEventsIA(z, xi$timing[i], tol)
+    for (i in 1:(x$k - 1)) {
+      xx <- tEventsIA(z, xi$timing[i], tol = x$tol)
       T <- c(T, xx$T)
       eDC <- rbind(eDC, xx$eDC)
       eDE <- rbind(eDE, xx$eDE)
@@ -94,8 +94,8 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
     xi$eDE0 <- rbind(eDE0, z$eDE0) # Added 6/15/2023
     xi$eNC <- rbind(eNC, z$eNC)
     xi$eNE <- rbind(eNE, z$eNE)
-    xi$hr <- hr
-    xi$hr0 <- hr0
+    xi$hr <- x$hr
+    xi$hr0 <- x$hr0
     xi$R <- z$R
     xi$S <- z$S
     xi$minfup <- z$minfup
@@ -105,7 +105,7 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
     xi$etaC <- z$etaC
     xi$etaE <- z$etaE
     xi$variable <- x$variable
-    xi$tol <- tol
+    xi$tol <- x$tol
     class(xi) <- c("gsSurv", "gsDesign")
     
     nameR <- gsDesign:::nameperiod(cumsum(xi$R))
@@ -123,7 +123,7 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
     colnames(xi$etaE) <- stratnames
     rownames(xi$gamma) <- nameR
     colnames(xi$gamma) <- stratnames
-    return(xi)
   }
+  return(xi)
 }
   
