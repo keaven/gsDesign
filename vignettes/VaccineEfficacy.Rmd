@@ -233,17 +233,10 @@ Now we convert to observed vaccine efficacy at each bound
 1 - 1 / (ratio * (1 / p_upper - 1)) # Futility bound
 ```
 
-This is approximated reasonably by the approximations using the time-to-event design:
-
-```{r}
-# Translate ~HR at efficacy bound to VE for asymptotic design
-1 - xxxsum[c(3, 8, 13), 3] # Efficacy bound
-1 - xxxsum[c(3, 8, 13), 4] # Futility bound
-```
 
 # Summary
 
 We have provided an extended example to show that a @ChanBohidar exact binomial using spending function bounds can be derived in a two-step process that delivers sample size and bounds by 1) deriving a related time-to-event design using asymptotic methods and then 2) converting to an exact binomial design.
-Small adjustments were made to target Type I and Type II error probabilities in the asymptotic approximation to ensure the exact binomial Type I and Type II error rates were achieve. The method seems a reasonable and straightforward approach to develop a complete design.
+Adjustments were made to target Type I and Type II error probabilities in the asymptotic approximation to ensure the exact binomial Type I and Type II error rates were achieved. The method seems a reasonable and straightforward approach to develop a complete design.
 
 # References
