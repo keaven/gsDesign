@@ -51,7 +51,7 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
   xi <- gsDesign(
     k = x$k, test.type = x$test.type, n.I = counts, maxn.IPlan = counts[x$k],
     alpha = x$alpha, beta = x$beta, astar = x$astar,
-    delta = x$delta, delta1 = x$delta1, delta0 = x$delta0,
+    delta = x$delta, delta1 = x$delta1, delta0 = x$delta0, endpoint = x$endpoint,
     sfu = x$upper$sf, sfupar = x$upper$param, sfl = x$lower$sf, sflpar = x$lower$param
   )
   if ("gsSurv" %in% class(x) || x$nFixSurv > 0) {
@@ -126,4 +126,3 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
   }
   return(xi)
 }
-  
