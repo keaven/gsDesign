@@ -238,7 +238,10 @@ and $\beta$-spending of
 `r round(sfLDOF(alpha = beta, t = 90 / x$n.I[2])$spend, 4)` (`P(Cross) if delta=3` row in Futility column).
 We note that the Z-value and 1-sided p-values in the table below correspond exactly and either can be used for evaluation of statistical significance for a trial result.
 The rows labeled `~delta at bound` are approximations that describe approximately what treatment difference is required to cross a bound; these should not be used for a formal evaluation of whether a bound has been crossed.
-We note further that at the final analysis, the cumulative probability for `P(Cross) if delta=0` is less than the planned $\alpha=0.10$. This probability represents $\alpha(0)$ which excludes the probability of crossing the lower bound at the interim analysis and the final analysis. 
+The O'Brien-Fleming spending function is generally felt to provide conservative bounds for stopping at interim analysis.
+Most of the error spending is reserved for the final analysis in this example.
+The futility bound only required a small trend in the wrong direction to stop the trial; a nominal p-value of 0.77 was observed which crossed the futility bound, stopping the trial.
+Finally, we note that at the final analysis, the cumulative probability for `P(Cross) if delta=0` is less than the planned $\alpha=0.10$. This probability represents $\alpha(0)$ which excludes the probability of crossing the lower bound at the interim analysis and the final analysis. 
 The value of the non-binding Type I error is still $\alpha^+(0)=0.10$.
 ```{r}
 # Updated alpha is unchanged
