@@ -44,6 +44,8 @@ reference:
   - eEvents
   - nEventsIA
   - tEventsIA
+title: Vaccine/Prevention Efficacy
+  - toBinomialExact
 - title: Spending Functions
   contents:
   - Spending_Function_Overview
@@ -117,12 +119,14 @@ articles:
       time-to-event endpoints using **gsDesign** package.
     contents:
       - SurvivalOverview
+      - toInteger
       - gsSurvBasicExamples
       - PoissonMixtureModel
   - title: "Other"
     desc: >
         Other vignettes.
     contents:
+      - GentleIntroductionToGSD
       - nNormal
       - hGraph
       - GraphicalMultiplicity
