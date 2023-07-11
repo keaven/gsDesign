@@ -1,7 +1,7 @@
 #' Translate group sequential design to integer events (survival designs) or sample size (other designs)
 #' 
 #' @param x an object of class \code{gsDesign}
-#' @param ratio integer indicating randomization ratio; see details
+#' @param ratio integer indicating randomization ratio; not used for time-to-event outcome;  see details
 #' @param roundUpFinal final value in returned \code{n.I} rounded up if TRUE; otherwise, just rounded
 #' 
 #' 
@@ -34,7 +34,10 @@
 #' # Convert bounds to exact binomial bounds
 #' toInteger(x, ratio = 3)
 
-#' @details Note that if ratio is 0, rounding is done to the
+#' @details Note that if ratio is 0, rounding for n.I is done to the nearest integer.
+#' For input x of class gsSurv (time-to-event outcome), ratio is taken from the input x rather than
+#' the value provided in the ratio argument. 
+#' For cases other than gsSurv class, rounding of final 
 
 toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
   if (max(class(x) == "gsDesign") != 1) stop("toInteger must have class gsDesign as input")
@@ -54,6 +57,9 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
     delta = x$delta, delta1 = x$delta1, delta0 = x$delta0, endpoint = x$endpoint,
     sfu = x$upper$sf, sfupar = x$upper$param, sfl = x$lower$sf, sflpar = x$lower$param
   )
+  if (x$test.type %in% c(4, 6)){
+    xi$falseposnb <- as.vector(gsprob(0, xi$n.I, rep(-20, xi$k), xi$upper$bound, r = xi$r)$probhi)
+  }
   if ("gsSurv" %in% class(x) || x$nFixSurv > 0) {
     xi$hr0 <- x$hr0 # H0 hazard ratio
     xi$hr <- x$hr # H1 hazard ratio
@@ -100,7 +106,7 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
     xi$S <- z$S
     xi$minfup <- z$minfup
     xi$gamma <- z$gamma
-    xi$ratio <- ratio
+    xi$ratio <- x$ratio
     xi$lambdaC <- z$lambdaC
     xi$etaC <- z$etaC
     xi$etaE <- z$etaE
