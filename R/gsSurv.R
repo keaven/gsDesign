@@ -1,6 +1,10 @@
 # eEvents1 function [sinew] ----
+# calculate expected events in a single treatment group and stratum
 eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
                      T = 2, Tfinal = NULL, minfup = 0, simple = TRUE) {
+  
+  # compute the followup time to T, i.e., minfupia
+  # note that users must input either Tfinal or minfup
   if (is.null(Tfinal)) {
     Tfinal <- T
     minfupia <- minfup
@@ -8,27 +12,37 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
   else {
     minfupia <- max(0, minfup - (Tfinal - T))
   }
-
+  
+  # if the dropout rate is a constant over time,
+  # expand this constant to the same length of the failure rate
   nlambda <- length(lambda)
   if (length(eta) == 1 & nlambda > 1) {
     eta <- rep(eta, nlambda)
   }
+  
+  # change-points from failure & dropout piecewise model 
   T1 <- cumsum(S)
   T1 <- c(T1[T1 < T], T)
+  
+  # change-points from the enrollment piecewise model
   T2 <- T - cumsum(R)
   T2[T2 < minfupia] <- minfupia
   i <- 1:length(gamma)
   gamma[i > length(unique(T2))] <- 0
   T2 <- unique(c(T, T2[T2 > 0]))
+  
+  # all possible change-points
   T3 <- sort(unique(c(T1, T2)))
   if (sum(R) >= T) T2 <- c(T2, 0)
   nperiod <- length(T3)
   s <- T3 - c(0, T3[1:(nperiod - 1)])
-
+  
+  # get the failure rate (lam), dropout rate (et), and enroll rate (gam)
   lam <- rep(lambda[nlambda], nperiod)
   et <- rep(eta[nlambda], nperiod)
   gam <- rep(0, nperiod)
-
+  
+  # compute the expected events by formula in gsSurv.pdf
   for (i in length(T1):1)
   {
     indx <- T3 <= T1[i]
