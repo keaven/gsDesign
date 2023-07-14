@@ -1,6 +1,10 @@
 # eEvents1 function [sinew] ----
+# Calculate expected events in a single treatment group and stratum
 eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
                      T = 2, Tfinal = NULL, minfup = 0, simple = TRUE) {
+
+  # Compute the followup time to T, i.e., `minfupia`.
+  # Note that users must input either `Tfinal` or `minfup`.
   if (is.null(Tfinal)) {
     Tfinal <- T
     minfupia <- minfup
@@ -9,26 +13,36 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
     minfupia <- max(0, minfup - (Tfinal - T))
   }
 
+  # If the dropout rate is a constant over time,
+  # expand this constant to the same length of the failure rate.
   nlambda <- length(lambda)
   if (length(eta) == 1 & nlambda > 1) {
     eta <- rep(eta, nlambda)
   }
+
+  # Change-points from failure & dropout piecewise model
   T1 <- cumsum(S)
   T1 <- c(T1[T1 < T], T)
+
+  # Change-points from the enrollment piecewise model
   T2 <- T - cumsum(R)
   T2[T2 < minfupia] <- minfupia
   i <- 1:length(gamma)
   gamma[i > length(unique(T2))] <- 0
   T2 <- unique(c(T, T2[T2 > 0]))
+
+  # All possible change-points
   T3 <- sort(unique(c(T1, T2)))
   if (sum(R) >= T) T2 <- c(T2, 0)
   nperiod <- length(T3)
   s <- T3 - c(0, T3[1:(nperiod - 1)])
 
+  # Get the failure rate (`lam`), dropout rate (`et`), and enroll rate (`gam`)
   lam <- rep(lambda[nlambda], nperiod)
   et <- rep(eta[nlambda], nperiod)
   gam <- rep(0, nperiod)
 
+  # Compute the expected events by formula in gsSurv.pdf
   for (i in length(T1):1)
   {
     indx <- T3 <= T1[i]
@@ -126,23 +140,23 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 #' \item{minfup}{as input.} \item{d}{expected number of events.}
 #' \item{n}{expected sample size.} \item{digits}{as input.}
 #' @examples
-#' 
+#'
 #' # 3 enrollment periods, 3 piecewise exponential failure rates
 #' str(eEvents(
 #'   lambda = c(.05, .02, .01), eta = .01, gamma = c(5, 10, 20),
 #'   R = c(2, 1, 2), S = c(1, 1), T = 20
 #' ))
-#' 
+#'
 #' # control group for example from Bernstein and Lagakos (1978)
 #' lamC <- c(1, .8, .5)
 #' n <- eEvents(
 #'   lambda = matrix(c(lamC, lamC * 2 / 3), ncol = 6), eta = 0,
 #'   gamma = matrix(.5, ncol = 6), R = 2, T = 4
 #' )
-#' 
+#'
 #' @aliases print.eEvents
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
-#' @seealso \link{gsDesign package overview}, \link{plot.gsDesign}, 
+#' @seealso \link{gsDesign package overview}, \link{plot.gsDesign},
 #' \code{\link{gsDesign}}, \code{\link{gsHR}},
 #' \code{\link{nSurvival}}
 #' @references Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and
@@ -849,11 +863,11 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' Jennison and Turnbull (2000); default is 18, range is 1 to 80. Larger values
 #' provide larger number of grid points and greater accuracy.  Normally
 #' \code{r} will not be changed by the user.
-#' @param usTime Default is NULL in which case upper bound spending time is 
-#' determined by \code{timing}. Otherwise, this should be a vector of length 
+#' @param usTime Default is NULL in which case upper bound spending time is
+#' determined by \code{timing}. Otherwise, this should be a vector of length
 #' code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).
-#' @param lsTime Default is NULL in which case lower bound spending time is 
-#' determined by \code{timing}. Otherwise, this should be a vector of length 
+#' @param lsTime Default is NULL in which case lower bound spending time is
+#' determined by \code{timing}. Otherwise, this should be a vector of length
 #' \code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).
 #' @param tIA Timing of an interim analysis; should be between 0 and
 #' \code{y$T}.
@@ -966,42 +980,42 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
 #' @keywords design
 #' @examples
-#' 
+#'
 #' # vary accrual rate to obtain power
 #' nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 1, T = 36, minfup = 12)
-#' 
+#'
 #' # vary accrual duration to obtain power
 #' nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 6, minfup = 12)
-#' 
+#'
 #' # vary follow-up duration to obtain power
 #' nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 6, R = 25)
-#' 
+#'
 #' # piecewise constant enrollment rates (vary accrual duration)
 #' nSurv(
 #'   lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = c(1, 3, 6),
 #'   R = c(3, 6, 9), minfup = 12
 #' )
-#' 
+#'
 #' # stratified population (vary accrual duration)
 #' nSurv(
 #'   lambdaC = matrix(log(2) / c(6, 12), ncol = 2), hr = .5, eta = log(2) / 40,
 #'   gamma = matrix(c(2, 4), ncol = 2), minfup = 12
 #' )
-#' 
+#'
 #' # piecewise exponential failure rates (vary accrual duration)
 #' nSurv(lambdaC = log(2) / c(6, 12), hr = .5, eta = log(2) / 40, S = 3, gamma = 6, minfup = 12)
-#' 
+#'
 #' # combine it all: 2 strata, 2 failure rate periods
 #' nSurv(
 #'   lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
 #'   eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
 #'   gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12
 #' )
-#' 
+#'
 #' # example where only 1 month of follow-up is desired
 #' # set failure rate to 0 after 1 month using lambdaC and S
 #' nSurv(lambdaC = c(.4, 0), hr = 2 / 3, S = 1, minfup = 1)
-#' 
+#'
 #' # group sequential design (vary accrual rate to obtain power)
 #' x <- gsSurv(
 #'   k = 4, sfl = sfPower, sflpar = .5, lambdaC = log(2) / 6, hr = .5,
@@ -1014,7 +1028,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' ))
 #' # find expected number of events at time 12 in the above trial
 #' nEventsIA(x = x, tIA = 10)
-#' 
+#'
 #' # find time at which 1/4 of events are expected
 #' tEventsIA(x = x, timing = .25)
 #' @export
@@ -1124,9 +1138,9 @@ gsnSurv <- function(x, nEvents) {
 }
 
 # tEventsIA roxy [sinew] ----
-#' @export 
+#' @export
 #' @rdname nSurv
-#' @seealso 
+#' @seealso
 #'  \code{\link[stats]{uniroot}}
 #' @importFrom stats uniroot
 # tEventsIA function [sinew] ----
@@ -1140,7 +1154,7 @@ tEventsIA <- function(x, timing = .25, tol = .Machine$double.eps^0.25) {
 }
 
 # nEventsIA roxy [sinew] ----
-#' @export 
+#' @export
 #' @rdname nSurv
 # nEventsIA function [sinew] ----
 nEventsIA <- function(tIA = 5, x = NULL, target = 0, simple = TRUE) {
@@ -1180,7 +1194,7 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
                    sfl = sfHSD, sflpar = -2, r = 18,
                    lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
                    gamma = 1, R = 12, S = NULL, T = NULL, minfup = NULL, ratio = 1,
-                   tol = .Machine$double.eps^0.25, 
+                   tol = .Machine$double.eps^0.25,
                    usTime = NULL, lsTime = NULL) # KA: last 2 arguments added 10/8/2017
   {
   x <- nSurv(
@@ -1194,7 +1208,7 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
     sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar, tol = tol,
     delta1 = log(hr), delta0 = log(hr0),
     usTime = usTime, lsTime = lsTime) # KA: last 2 arguments added 10/8/2017
-  
+
   z <- gsnSurv(x, y$n.I[k])
   eDC <- NULL
   eDE <- NULL
@@ -1300,7 +1314,7 @@ print.gsSurv <- function(x, digits = 2, ...) {
 }
 
 # xtable.gsSurv roxy [sinew] ----
-#' @seealso 
+#' @seealso
 #'  \code{\link[stats]{Normal}}
 #'  \code{\link[xtable]{xtable}}
 #' @importFrom stats pnorm
