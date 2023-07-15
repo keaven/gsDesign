@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-#' The following code derives the group sequential design using the method of Lachin and Foulkes.
+#' # The following code derives the group sequential design using the method of Lachin and Foulkes.
 #' 
 #' x <- gsSurv(
 #'   k = 3,                 # 3 analyses
@@ -28,15 +28,15 @@
 #'   R = 16,                # Time period durations for enrollment rates in gamma
 #'   T = 24,                # Planned trial duration
 #'   minfup = 8,            # Planned minimum follow-up
-#'   ratio = 3              # Randomization ratio (experimental:contro)
+#'   ratio = 3              # Randomization ratio (experimental:control)
 #' )
 #' # Convert bounds to exact binomial bounds
 #' toBinomialExact(x)
 toBinomialExact <- function(x){
-  if (class(x)[1] != "gsSurv") stop("toBinomialExact must have class gsSurv as input")
+  if (!inherits(x, "gsSurv")) stop("toBinomialExact must have class gsSurv as input")
   if (x$test.type != 1 && x$test.type != 4) stop("toBinomialExact input test.type must be 1 or 4")
 # Round interim sample size (or events for gsSurv object)
-  xx <- toInteger(x)
+  if (max(round(x$n.I) != x$n.I)){xx <- toInteger(x)}else{xx <- x}
   k <- xx$k
   counts <- xx$n.I
   
@@ -46,13 +46,13 @@ toBinomialExact <- function(x){
   p1 <- x$hr  * x$ratio / (1 + x$hr  * x$ratio)
   
   # Lower bound probabilities are for efficacy and Type I error should be controlled under p0
-  a <- qbinom(p = pnorm(-x$upper$bound), size = counts, prob = p0) - 1
+  a <- qbinom(p = pnorm(-xx$upper$bound), size = counts, prob = p0) - 1
   atem <- a
   alpha_spend <- x$upper$sf(alpha = x$alpha, t = xx$timing, param = x$upper$param)$spend
   if (x$test.type != 1){  
      # Upper bound probabilities are for futility
      # Compute nominal p-values under H0 for futility and corresponding inverse binomial under H1
-     b <- qbinom(p = pnorm(x$lower$bound), size = counts, prob = p1, lower.tail = TRUE)
+     b <- qbinom(p = pnorm(xx$lower$bound), size = counts, prob = p0, lower.tail = TRUE)
      btem <- b
      # Compute target beta-spending
      beta_spend <- xx$lower$sf(alpha = xx$beta, t = xx$timing, param = xx$lower$param)$spend
@@ -63,38 +63,51 @@ toBinomialExact <- function(x){
   for(j in 1:x$k){
     # non-binding bound assumed
     # compute spending through analysis j
-    # NOTE: cannnot call gsBinomialExact with k == 1, so make it at least 2
-    nblowerprob <- sum(gsBinomialExact(k = max(j, 2), theta = p0, n.I = counts[1:max(j, 2)], a = atem[1:max(j, 2)], b = counts[1:max(j, 2)] + 1)$lower$prob[1:j])
-    atem <- a
-    btem <- b
-    while(nblowerprob < alpha_spend[j]){
-      a[j] <- atem[j]
-      atem[j] <- atem[j] + 1
-      nblowerprob <- sum(gsBinomialExact(k = max(j, 2), theta = p0, n.I = counts[1:max(j, 2)], a = atem[1:max(j, 2)], b = counts[1:max(j, 2)] + 1)$lower$prob[1:j])
-    }
-    nblowerprob <- sum(gsBinomialExact(k = max(j, 2), theta = p0, n.I = counts[1:max(j, 2)], a = a[1:max(j, 2)], b = counts[1:max(j, 2)] + 1)$lower$prob[1:j])
-    while(nblowerprob > alpha_spend[j]){
-      a[j] <- atem[j]
-      atem[j] <- atem[j] - 1
-      nblowerprob <- sum(gsBinomialExact(k = max(j, 2), theta = p0, n.I = counts[1:max(j, 2)], a = atem[1:max(j, 2)], b = counts[1:max(j, 2)] + 1)$lower$prob[1:j])
+    # Upper bound set to > counts so that it cannot be crossed; this is to compute lower bound spending
+    # with non-binding futility bound.
+    # NOTE: cannot call gsBinomialExact with k == 1, so make it at least 2
+    # cumulative spending through analysis j
+    nblowerprob <- sum(gsBinomialExact(k = max(j, 2), theta = p0, n.I = counts[1:max(j, 2)], 
+                                       a = atem[1:max(j, 2)], b = counts[1:max(j, 2)] + 1)$lower$prob[1:j])
+    atem <- a # work space for updating efficacy bound, if needed
+    # if less than allowed spending, check if bound can be increased
+    if(nblowerprob < alpha_spend[j]){
+      while(nblowerprob < alpha_spend[j]){
+        a[j] <- atem[j]
+        atem[j] <- atem[j] + 1
+        nblowerprob <- sum(gsBinomialExact(k = max(j, 2), theta = p0, n.I = counts[1:max(j, 2)], 
+                                           a = atem[1:max(j, 2)], b = counts[1:max(j, 2)] + 1)$lower$prob[1:j])
+      }
+    # If > allowed spending, reduce bound appropriately
+    }else if (nblowerprob > alpha_spend[j]){
+      while(nblowerprob > alpha_spend[j]){
+        a[j] <- a[j] - 1
+        nblowerprob <- sum(gsBinomialExact(k = max(j, 2), theta = p0, n.I = counts[1:max(j, 2)], 
+                                           a = a[1:max(j, 2)], b = counts[1:max(j, 2)] + 1)$lower$prob[1:j])
+      }
     }
     # beta-spending, if needed
-    if(x$test.type == 4){
-      upperprob <- sum(gsBinomialExact(k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)], a = a[1:max(j, 2)], b = b[1:max(j, 2)])$upper$prob[1:j])
-      while(upperprob < beta_spend[j]){
-        b[j] <- btem[j]
-        if (btem[j] == a[j] + 1) break # Cannot make a and b bounds the same
-        btem[j] <- btem[j] - 1
-        upperprob <- sum(gsBinomialExact(k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)], a = a[1:max(j, 2)], b = btem[1:max(j, 2)])$upper$prob[1:j])
-      }
-      upperprob <- sum(gsBinomialExact(k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)], a = a[1:max(j, 2)], b = b[1:max(j, 2)])$upper$prob[1:j])
-      while(upperprob > beta_spend[j]){
-        b[j] <- btem[j]
-        btem[j] <- btem[j] + 1
-        upperprob <- sum(gsBinomialExact(k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)], a = a[1:max(j, 2)], b = btem[1:max(j, 2)])$upper$prob[1:j])
+    if(x$test.type == 4 && j < xx$k){
+      upperprob <- sum(gsBinomialExact(k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)], 
+                                       a = a[1:max(j, 2)], b = b[1:max(j, 2)])$upper$prob[1:j])
+      if (upperprob < beta_spend[j]){
+        while(upperprob < beta_spend[j]){
+          b[j] <- btem[j]
+          if (btem[j] == a[j] + 1) break # Cannot make a and b bounds the same
+          btem[j] <- btem[j] - 1
+          upperprob <- sum(gsBinomialExact(k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)], 
+                                           a = a[1:max(j, 2)], b = btem[1:max(j, 2)])$upper$prob[1:j])
+        }
+      }else if (upperprob > beta_spend[j]){
+        while(upperprob > beta_spend[j]){
+          b[j] <- btem[j] + 1
+          upperprob <- sum(gsBinomialExact(k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)], 
+                                           a = a[1:max(j, 2)], b = b[1:max(j, 2)])$upper$prob[1:j])
+        }
       }
     }
   }
+  b[xx$k] <- a[xx$k] + 1 # Final upper bound = lower bound + 1
   xxxx <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = counts, a = a, b = b)
   return(xxxx)
 }

@@ -32,8 +32,7 @@ library(gsDesign)
 
 This article is intended to give a gentle mathematical and statistical introduction to group sequential design. 
 We also provide relatively simple examples from the literature to explain clinical applications.
-There is no programming shown, but by accessing the source for the article all required programming can be accessed; substantial commenting is provided in the source in the hope that users can understand how to implement the concepts.
-There is substantial additional documentation for those wishing to know more.
+There is no programming shown, but by accessing the source for the article all required programming can be accessed; substantial commenting is provided in the source in the hope that users can understand how to implement the concepts developed here.
 Hopefully, the few mathematical and statistical concepts introduced will not discourage those wishing to understand some underlying concepts for group sequential design.
 
 A group sequential design enables repeated analysis of an endpoint for a clinical trial to enable possible early stopping of a trial for either a positive result, for futility, or for a safety issue. This approach can 
@@ -51,7 +50,7 @@ Examples of outcomes that might be considered include:
 Examples of the above include:
 
 - a new treatment for major depression where an interim analysis of a continuous outcome stopped the trial for futility (@binneman20086),
-- a new treatment for patients with unstable angina undergoing balloon angioplasty with a positive interim finding for a binary outcome of death, myocardial infarction or urgent repeat intervention within 30 days (@CAPTURE).
+- a new treatment for patients with unstable angina undergoing balloon angioplasty with a positive interim finding for a binary outcome of death, myocardial infarction or urgent repeat intervention within 30 days (@CAPTURE), and
 - a new treatment for patients with lung cancer based on a positive interim finding for time-to-death (@KEYNOTE189).
 
 ## Group Sequential Design Framework
@@ -59,13 +58,13 @@ Examples of the above include:
 We assume
 
 - A two-arm clinical trial with a control and experimental group.
-- $k$ analyses are planned for some integer $k> 1.$
-- A natural parameter $\delta$ that has an asymptotically normal and efficient estimate $\hat\delta_j$ with variance $\sigma_j^2$ and corresponding statistical information $\mathcal{I}_j=1/\sigma_j^2$, at analysis $j=1,2,\ldots,k$. The parameter $\delta$ denotes an underlying treatment difference between treatment groups with a positive value favoring experimental treatment and negative value favoring control. We assume a consistent estimate $\hat\sigma_j^2$ of $\sigma_j^2, j=1,2,\ldots,k$.
-- Information fraction $t_j=\mathcal{I}_i/\mathcal{I}_j$ at analysis $j=1,\ldots,k$.
-- Correlations 
+- There are $k$ analyses planned for some integer $k> 1.$
+- There is a natural parameter $\delta$ describing the underlying treatment difference with an estimate that has an asymptotically normal and efficient estimate $\hat\delta_j$ with variance $\sigma_j^2$ and corresponding statistical information $\mathcal{I}_j=1/\sigma_j^2$, at analysis $j=1,2,\ldots,k$. A positive value favoring experimental treatment and negative value favoring control. We assume a consistent estimate $\hat\sigma_j^2$ of $\sigma_j^2, j=1,2,\ldots,k$.
+- The information fraction is defined as $t_j=\mathcal{I}_i/\mathcal{I}_j$ at analysis $j=1,\ldots,k$.
+- Correlations between estimates at different analyses are
 $\hbox{Corr}(\hat\delta_i,\hat\delta_j)=\sqrt{\mathcal{I}_i/\mathcal{I}_j}=\sqrt{t_j}$ 
 for $1\le i\le j\le k.$
-- A test $Z_j\approx\hat\delta_j/\hat{\sigma}^2_j.$
+- There is a test test $Z_j\approx\hat\delta_j/\hat{\sigma}^2_j.$
 
 For a time-to-event outcome, $\delta$ would typically represent the logarithm of the hazard ratio for the control group versus the experimental group.
 For a difference in response rates, $\delta$ would represent the underlying response rates.
@@ -172,7 +171,7 @@ $$g(t; \beta) = 2\left(  1-\Phi\left(  \frac{\Phi
 delta1 <- 3 # Treatment effect, alternate hypothesis
 delta0 <- 0 # Treatment effect, null hypothesis
 ratio <- 1  # Randomization ratio (experimental / control)
-sd <- 9.123 # Standard deviation for change in HAM-D score
+sd <- 7.5 # Standard deviation for change in HAM-D score
 alpha <- 0.1# 1-sided Type I error
 beta <- 0.17# Targeted Type II error (1 - targeted power)
 k <- 2      # Number of planned analyses
@@ -230,24 +229,24 @@ This leads to Type I $\alpha$-spending of
 and $\beta$-spending of
 `r round(sfLDOF(alpha = 0.17, t = 0.5)$spend, 3)` at the planned interim.
 An advantage of the spending function approach is that bounds can be adjusted when the number of observations at analyses are different than planned.
-The actual observations at the analysis were 90 as opposed to the planned 98, which resulted in interim spending fraction $t_1=$ `r round(90 / x$n.I[2], 4)`.
+The actual observations for experimental versus control at the analysis were 59 as opposed to the planned 67, which resulted in interim spending fraction $t_1=$ `r round(59 / x$n.I[2], 4)`.
 With the Lan-DeMets spending function to approximate O'Brien-Fleming bounds this results in 
 $\alpha$-spending of
-`r round(sfLDOF(alpha = alpha, t = 90 / x$n.I[2])$spend, 4)` (`P(Cross) if delta=0` row in Efficacy column)
+`r round(sfLDOF(alpha = alpha, t = 59 / x$n.I[2])$spend, 4)` (`P(Cross) if delta=0` row in Efficacy column)
 and $\beta$-spending of 
-`r round(sfLDOF(alpha = beta, t = 90 / x$n.I[2])$spend, 4)` (`P(Cross) if delta=3` row in Futility column).
+`r round(sfLDOF(alpha = beta, t = 59 / x$n.I[2])$spend, 4)` (`P(Cross) if delta=3` row in Futility column).
 We note that the Z-value and 1-sided p-values in the table below correspond exactly and either can be used for evaluation of statistical significance for a trial result.
 The rows labeled `~delta at bound` are approximations that describe approximately what treatment difference is required to cross a bound; these should not be used for a formal evaluation of whether a bound has been crossed.
 The O'Brien-Fleming spending function is generally felt to provide conservative bounds for stopping at interim analysis.
 Most of the error spending is reserved for the final analysis in this example.
-The futility bound only required a small trend in the wrong direction to stop the trial; a nominal p-value of 0.77 was observed which crossed the futility bound, stopping the trial.
+The futility bound only required a small trend in the wrong direction to stop the trial; a nominal p-value of 0.77 was observed which crossed the futility bound, stopping the trial since this was greater than the futility p-value bound of 0.59.
 Finally, we note that at the final analysis, the cumulative probability for `P(Cross) if delta=0` is less than the planned $\alpha=0.10$. This probability represents $\alpha(0)$ which excludes the probability of crossing the lower bound at the interim analysis and the final analysis. 
 The value of the non-binding Type I error is still $\alpha^+(0)=0.10$.
 ```{r}
 # Updated alpha is unchanged
 alphau <- 0.1
 # Updated sample size at each analysis
-n.I <- c(90, 198)
+n.I <- c(59, 134)
 # Updated number of analyses
 ku <- length(n.I)
 # Information fraction is used for spending
@@ -282,5 +281,7 @@ xu <- gsDesign(
 # Summarize bounds
 gsBoundSummary(xu, Nname = "N", digits = 4, ddigits = 2, tdigits = 1)
 ```
+
+
 
 # References

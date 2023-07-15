@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-#' The following code derives the group sequential design using the method of Lachin and Foulkes.
+#' # The following code derives the group sequential design using the method of Lachin and Foulkes.
 #' 
 #' x <- gsSurv(
 #'   k = 3,                 # 3 analyses
@@ -29,7 +29,7 @@
 #'   R = 16,                # Time period durations for enrollment rates in gamma
 #'   T = 24,                # Planned trial duration
 #'   minfup = 8,            # Planned minimum follow-up
-#'   ratio = 3              # Randomization ratio (experimental:contro)
+#'   ratio = 3              # Randomization ratio (experimental:control)
 #' )
 #' # Convert bounds to exact binomial bounds
 #' toInteger(x, ratio = 3)
@@ -40,13 +40,14 @@
 #' For cases other than gsSurv class, rounding of final 
 
 toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
-  if (max(class(x) == "gsDesign") != 1) stop("toInteger must have class gsDesign as input")
+  if (inherits(x, "gsDesign") != 1) stop("toInteger must have class gsDesign as input")
   # Default is to just round counts
   counts <- round(x$n.I) # Round counts
   if(roundUpFinal) counts[x$k] <- ceiling(x$n.I[x$k])
-  if (!is.numeric(ratio) || ratio != round(ratio) || ratio < 0 ) stop("toInteger input ratio must be a non-negative integer")
+  is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
+  if (!is.numeric(ratio) || !is.wholenumber(ratio) || ratio < 0 ) stop("toInteger input ratio must be a non-negative integer")
   # for non-survival designs re-round sample size based on randomization ratio
-  if (max(class(x) == "gsSurv") != 1){
+  if (inherits(x, "gsSurv")){
     if(roundUpFinal){counts[x$k] <- ceiling(x$n.I[x$k] / (ratio + 1)) * (ratio + 1) # Round up for final count
     }else counts[x$k] <- round(x$n.I[x$k] / (ratio + 1)) * (ratio + 1)
   }
@@ -69,6 +70,7 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
     N <- N * (x$ratio + 1)
     # update enrollment rates to achieve new sample size in same time    
     inflateN <- N / as.numeric(x$eNC[x$k] + x$eNE[x$k])
+    # Following is adapted from gsSurv() to construs gsSurv object
     xx <- nSurv(
       lambdaC = x$lambdaC, hr = x$hr, hr0 = x$hr0, eta = x$etaC, etaE = x$etaE,
       gamma = x$gamma * inflateN, R = x$R, S = x$S, T = x$T, minfup = x$minfup, ratio = x$ratio,
