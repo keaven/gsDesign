@@ -1,7 +1,6 @@
 # gsDesign 3.4.1 (July, 2023?)
 
 - Allowed wider parameter range (0,15] for sfPower.
-- Added eDC0, eDC1 to gsSurv() output as specified in help file.
 - toInteger() function added to convert gsDesign or gsSurv classes to integer sample size and event counts.
 - toBinomialExact() function added to convert time-to-event bounds to exact binomial for low event rate studies.
 - Added "A Gentle Introduction to Group Sequential Design" vignette for an introduction to asymptotics for group sequential design.

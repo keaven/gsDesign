@@ -41,15 +41,16 @@
 
 toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
   if (inherits(x, "gsDesign") != 1) stop("toInteger must have class gsDesign as input")
-  # Default is to just round counts
-  counts <- round(x$n.I) # Round counts
-  if(roundUpFinal) counts[x$k] <- ceiling(x$n.I[x$k])
+  if (!is.numeric(ratio) || ratio < 0) stop("toInteger input ratio must be a non-negative integer")
   is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
-  if (!is.numeric(ratio) || !is.wholenumber(ratio) || ratio < 0 ) stop("toInteger input ratio must be a non-negative integer")
-  # for non-survival designs re-round sample size based on randomization ratio
-  if (inherits(x, "gsSurv")){
+  counts <- round(x$n.I) # Round counts (event counts for survival; otherwise sample size)
+  # For time-to-event endpoint or non-integer ratio, just round final count up
+  if(inherits(x, "gsSurv") || !is.wholenumber(ratio)){
+    if(roundUpFinal) counts[x$k] <- ceiling(x$n.I[x$k])
+  }else{
+    # For non-survival designs round sample size based on randomization ratio
     if(roundUpFinal){counts[x$k] <- ceiling(x$n.I[x$k] / (ratio + 1)) * (ratio + 1) # Round up for final count
-    }else counts[x$k] <- round(x$n.I[x$k] / (ratio + 1)) * (ratio + 1)
+    }else{counts[x$k] <- round(x$n.I[x$k] / (ratio + 1)) * (ratio + 1)}
   }
   # update bounds and counts from original design
   xi <- gsDesign(
@@ -115,7 +116,6 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
     xi$variable <- x$variable
     xi$tol <- x$tol
     class(xi) <- c("gsSurv", "gsDesign")
-    
     nameR <- gsDesign:::nameperiod(cumsum(xi$R))
     stratnames <- paste("Stratum", 1:ncol(xi$lambdaC))
     if (is.null(xi$S)) {

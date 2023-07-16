@@ -109,13 +109,17 @@ nBinomial(p1 = .2, p2 = .1, alpha = .025, n = 432, ratio = 2)
 Now we convert the fixed sample size `n.fix` from above to a 1-sided group sequential design  with interims after 50% and 75% of observations. Again, sample size at each analysis is not an integer. We use the Lan-DeMets spending function approximating an O'Brien-Fleming efficacy bound.
 
 ```{r}
+# 1-sided design (efficacy bound only; test.type = 1)
 x <- gsDesign(alpha = .025, beta = .2, n.fix = n.fix, test.type = 1, sfu = sfLDOF, timing = c(.5, .75))
+# Continuous sample size (non-integer) at planned analyses
 x$n.I
 ```
 Next we convert to integer sample sizes at each analysis. Interim sample sizes are rounded to the nearest integer.
 The default `roundUpFinal = TRUE` rounds the final sample size to the nearest integer to 1 + the experimental:control randomization ratio. Thus, the final sample size of 441 below is a multiple of 3.
 
 ```{r}
+# Convert to integer sample size with even multiple of ratio + 1
+# i.e., multiple of 3 in this case at final analysis
 x_integer <- toInteger(x, ratio = 2)
 x_integer$n.I
 ```
@@ -123,14 +127,18 @@ x_integer$n.I
 Next we examine the efficacy bound of the 2 designs.
 
 ```{r}
+# Bound for continuous sample size design
 x$upper$bound
+# Bound for integer sample size design
 x_integer$upper$bound
 ```
 
 The differences are associated with slightly different timing of the analyses associated with the different sample sizes noted above:
 
 ```{r}
+# Continuous design sample size fractions at analyses
 x$timing
+# Integer design sample size fractions at analyses
 x_integer$timing
 ```
 
@@ -148,6 +156,7 @@ x$upper$sf(alpha = x$alpha, t = x$timing, x$upper$param)$spend
 # Integer sample size design
 cumsum(x_integer$upper$prob[,1])
 # Specified spending based on the spending function
+# Slightly different from continuous design due to slightly different information fraction
 x$upper$sf(alpha = x_integer$alpha, t = x_integer$timing, x_integer$upper$param)$spend
 ```
 Finally, we look at cumulative boundary crossing probabilities under the alternate hypothesis for each design.
@@ -155,7 +164,10 @@ Due to rounding up the final sample size, the integer-based design has slightly 
 Interim power is slightly lower for the integer-based design since sample size is rounded to the nearest integer rather than rounded up as at the final analysis.
 
 ```{r}
+# Cumulative upper boundary crossing probability under alternate by analysis
+# under alternate hypothesis for continuous sample size
 cumsum(x$upper$prob[,2])
+# Same for integer sample sizes at each analysis
 cumsum(x_integer$upper$prob[,2])
 ```
 
@@ -167,27 +179,30 @@ The parameter `delta1` is the natural parameter denoting the difference in respo
 
 
 ```{r}
+# 2-sided asymmetric design with non-binding futility bound (test.type = 4)
 xnb <- gsDesign(alpha = .025, beta = .2, n.fix = n.fix, test.type = 4, 
                 sfu = sfLDOF, sfl = sfHSD, sflpar = -2, 
                 timing = c(.5, .75), delta1 = .1)
 # Continuous sample size for non-binding design
 xnb$n.I
-# Continuous sample size for one-sided design is smaller
-x$n.I
 ```
 
 As before, we convert to integer sample sizes at each analysis and see the slight deviations from the interim timing of 0.5 and 0.75.
 
 ```{r}
 xnbi <- toInteger(xnb, ratio = 2)
+# Integer design sample size at each analysis
 xnbi$n.I
+# Information fraction based on integer sample sizes
 xnbi$timing
 ```
 
 These differences also make a difference in the Type I error associated with each analysis
 
 ```{r}
+# Type I error, continuous design
 cumsum(xnb$upper$prob[,1])
+# Type I error, integer design
 cumsum(xnbi$upper$prob[,1])
 ```
 
@@ -195,6 +210,7 @@ The Type I error ignoring the futility bounds just shown does not use the full t
 The non-binding Type I error assuming the trial does not stop for futility is:
 
 ```{r}
+# Type I error for integer design ignoring futility bound
 cumsum(xnbi$falseposnb)
 ```
 
@@ -213,11 +229,8 @@ xnbi$lower$sf(alpha=xnbi$beta, t = xnbi$n.I / max(xnbi$n.I), param = xnbi$lower$
 The $\beta$-spending lower than 0.2 in the first row above is due to the final sample size powering the trial to greater than 0.8 as seen below.
 
 ```{r}
+# beta-spending 
 sum(xnbi$upper$prob[,2])
 ```
-
-
-
-
 
 # References
