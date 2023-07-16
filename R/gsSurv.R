@@ -903,12 +903,11 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' follow-up duration, or "Power" if accrual rates and duration as well as
 #' follow-up duration was specified and \code{beta=NULL} was input.}
 #'
-#' \code{gsSurv()} returns much of the above plus an object of class
-#' \code{gsDesign} in a variable named \code{gs}; see \code{\link{gsDesign}}
+#' \code{gsSurv()} returns much of the above plus variables in the class
+#' \code{gsDesign}; see \code{\link{gsDesign}}
 #' for general documentation on what is returned in \code{gs}.  The value of
 #' \code{gs$n.I} represents the number of endpoints required at each analysis
 #' to adequately power the trial. Other items returned by \code{gsSurv()} are:
-#' \item{gs}{A group sequential design (\code{gsDesign}) object.}
 #' \item{lambdaC}{As input.} \item{etaC}{As input.} \item{etaE}{As input.}
 #' \item{gamma}{As input unless none of the following are \code{NULL}:
 #' \code{T}, \code{minfup}, \code{beta}; otherwise, this is a constant times
@@ -926,10 +925,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' extension for the \code{nSurv} class.} \item{eDC}{A vector of expected
 #' number of events by stratum in the control group under the alternate
 #' hypothesis.} \item{eDE}{A vector of expected number of events by stratum in
-#' the experimental group under the alternate hypothesis.} \item{eDC0}{A vector
-#' of expected number of events by stratum in the control group under the null
-#' hypothesis.} \item{eDE0}{A vector of expected number of events by stratum in
-#' the experimental group under the null hypothesis.} \item{eNC}{A vector of
+#' the experimental group under the alternate hypothesis.} \item{eNC}{A vector of
 #' the expected accrual in each stratum in the control group.} \item{eNE}{A
 #' vector of the expected accrual in each stratum in the experimental group.}
 #' \item{variable}{A text string equal to "Accrual rate" if a design was
@@ -1208,16 +1204,18 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
     T <- c(T, xx$T)
     eDC <- rbind(eDC, xx$eDC)
     eDE <- rbind(eDE, xx$eDE)
-    eDC0 <- rbind(eDC0, xx$eDC0) # Added 6/15/2023
-    eDE0 <- rbind(eDE0, xx$eDE0) # Added 6/15/2023
+    # Following is a placeholder
+    # eDC0 <- rbind(eDC0, xx$eDC0) # Added 6/15/2023
+    # eDE0 <- rbind(eDE0, xx$eDE0) # Added 6/15/2023
     eNC <- rbind(eNC, xx$eNC)
     eNE <- rbind(eNE, xx$eNE)
   }
   y$T <- c(T, z$T)
   y$eDC <- rbind(eDC, z$eDC)
   y$eDE <- rbind(eDE, z$eDE)
-  y$eDC0 <- rbind(eDC0, z$eDC0) # Added 6/15/2023
-  y$eDE0 <- rbind(eDE0, z$eDE0) # Added 6/15/2023
+  # Following is a placeholder
+  # y$eDC0 <- rbind(eDC0, z$eDC0) # Added 6/15/2023
+  # y$eDE0 <- rbind(eDE0, z$eDE0) # Added 6/15/2023
   y$eNC <- rbind(eNC, z$eNC)
   y$eNE <- rbind(eNE, z$eNE)
   y$hr <- hr
