@@ -2,31 +2,37 @@
 % Please edit documentation in R/toInteger.R
 \name{toInteger}
 \alias{toInteger}
-\title{Translate group sequential design to integer events (survival designs) or sample size (other designs)}
+\title{Translate group sequential design to integer events (survival designs)
+or sample size (other designs)}
 \usage{
 toInteger(x, ratio = 0, roundUpFinal = TRUE)
 }
 \arguments{
-\item{x}{an object of class \code{gsDesign}}
+\item{x}{An object of class \code{gsDesign}.}
 
-\item{ratio}{integer indicating randomization ratio; not used for time-to-event outcome;  see details}
+\item{ratio}{Integer indicating randomization ratio; not used for
+time-to-event outcome; see details.}
 
-\item{roundUpFinal}{final value in returned \code{n.I} rounded up if TRUE; otherwise, just rounded}
+\item{roundUpFinal}{Final value in returned \code{n.I} rounded up
+if \code{TRUE}; otherwise, just rounded.}
 }
 \value{
-An object of class \code{gsDesign} with integer vector for \code{n.I}
+An object of class \code{gsDesign} with integer vector for \code{n.I}.
 }
 \description{
-Translate group sequential design to integer events (survival designs) or sample size (other designs)
+Translate group sequential design to integer events (survival designs)
+or sample size (other designs)
 }
 \details{
-Note that if ratio is 0, rounding for n.I is done to the nearest integer.
-For input x of class gsSurv (time-to-event outcome), ratio is taken from the input x rather than
-the value provided in the ratio argument. 
-For cases other than gsSurv class, rounding of final
+Note that if ratio is 0, rounding for \code{n.I} is done to the
+nearest integer. For input x of class \code{gsSurv} (time-to-event outcome),
+ratio is taken from the input \code{x} rather than the value provided
+in the \code{ratio} argument.
+For cases other than \code{gsSurv} class, rounding of final.
 }
 \examples{
-# The following code derives the group sequential design using the method of Lachin and Foulkes.
+# The following code derives the group sequential design using the method
+# of Lachin and Foulkes
 
 x <- gsSurv(
   k = 3,                 # 3 analyses
