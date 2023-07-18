@@ -78,7 +78,7 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
       alpha = x$alpha, beta = NULL, sided = 1, tol = x$tol
     )
     xx$tol <- x$tol
-    z <- gsDesign:::gsnSurv(xx, xi$n.I[xi$k])
+    z <- gsnSurv(xx, xi$n.I[xi$k])
     eDC <- NULL
     eDE <- NULL
     eDC0 <- NULL
@@ -116,12 +116,12 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE){
     xi$variable <- x$variable
     xi$tol <- x$tol
     class(xi) <- c("gsSurv", "gsDesign")
-    nameR <- gsDesign:::nameperiod(cumsum(xi$R))
+    nameR <- nameperiod(cumsum(xi$R))
     stratnames <- paste("Stratum", 1:ncol(xi$lambdaC))
     if (is.null(xi$S)) {
       nameS <- "0-Inf"
     } else {
-      nameS <- gsDesign:::nameperiod(cumsum(c(xi$S, Inf)))
+      nameS <- nameperiod(cumsum(c(xi$S, Inf)))
     }
     rownames(xi$lambdaC) <- nameS
     colnames(xi$lambdaC) <- stratnames
