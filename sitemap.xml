@@ -4,6 +4,9 @@
     <loc>https://keaven.github.io/gsDesign/404.html</loc>
   </url>
   <url>
+    <loc>https://keaven.github.io/gsDesign/articles/GentleIntroductionToGSD.html</loc>
+  </url>
+  <url>
     <loc>https://keaven.github.io/gsDesign/articles/GraphicalMultiplicity.html</loc>
   </url>
   <url>
@@ -29,6 +32,9 @@
   </url>
   <url>
     <loc>https://keaven.github.io/gsDesign/articles/nNormal.html</loc>
+  </url>
+  <url>
+    <loc>https://keaven.github.io/gsDesign/articles/toInteger.html</loc>
   </url>
   <url>
     <loc>https://keaven.github.io/gsDesign/authors.html</loc>
@@ -137,6 +143,12 @@
   </url>
   <url>
     <loc>https://keaven.github.io/gsDesign/reference/ssrCP.html</loc>
+  </url>
+  <url>
+    <loc>https://keaven.github.io/gsDesign/reference/toBinomialExact.html</loc>
+  </url>
+  <url>
+    <loc>https://keaven.github.io/gsDesign/reference/toInteger.html</loc>
   </url>
   <url>
     <loc>https://keaven.github.io/gsDesign/reference/varBinomial.html</loc>

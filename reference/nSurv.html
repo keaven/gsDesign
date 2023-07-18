@@ -38,7 +38,7 @@ group sequential design for a study with a time-to-event endpoint."><meta proper
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.4.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.4.0.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -498,17 +498,14 @@ follow-up duration, or "Power" if accrual rates and duration as well as
 follow-up duration was specified and <code>beta=NULL</code> was input.</p></dd>
 
 
-</dl><p><code>gsSurv()</code> returns much of the above plus an object of class
-<code>gsDesign</code> in a variable named <code>gs</code>; see <code><a href="gsDesign.html">gsDesign</a></code></p>
+</dl><p><code>gsSurv()</code> returns much of the above plus variables in the class
+<code>gsDesign</code>; see <code><a href="gsDesign.html">gsDesign</a></code></p>
 
 
 <p>for general documentation on what is returned in <code>gs</code>.  The value of
 <code>gs$n.I</code> represents the number of endpoints required at each analysis
 to adequately power the trial. Other items returned by <code>gsSurv()</code> are:</p>
-<dl><dt>gs</dt>
-<dd><p>A group sequential design (<code>gsDesign</code>) object.</p></dd>
-
-<dt>lambdaC</dt>
+<dl><dt>lambdaC</dt>
 <dd><p>As input.</p></dd>
  <dt>etaC</dt>
 <dd><p>As input.</p></dd>
@@ -561,13 +558,6 @@ hypothesis.</p></dd>
  <dt>eDE</dt>
 <dd><p>A vector of expected number of events by stratum in
 the experimental group under the alternate hypothesis.</p></dd>
- <dt>eDC0</dt>
-<dd><p>A vector
-of expected number of events by stratum in the control group under the null
-hypothesis.</p></dd>
- <dt>eDE0</dt>
-<dd><p>A vector of expected number of events by stratum in
-the experimental group under the null hypothesis.</p></dd>
  <dt>eNC</dt>
 <dd><p>A vector of
 the expected accrual in each stratum in the control group.</p></dd>
@@ -605,7 +595,7 @@ enrollment in the control group at the output time <code>T</code>.</p></dd>
 expected enrollment in the experimental group at the output time <code>T</code>.</p></dd>
 
 
-</dl><p><code>tEventsIA()</code> returns</p>
+</dl><p><code>tEventsIA()</code> returns the same structure as <code>nEventsIA(..., simple=TRUE)</code> when</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -958,8 +948,8 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-in"><span>  footnote <span class="op">=</span> <span class="st">"This is a footnote; note that it can be wide."</span>,</span></span>
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Caption example."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.3.0 by xtable 1.8-4 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Sun Jun 11 10:59:06 2023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.3.1 by xtable 1.8-4 package</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Tue Jul 18 03:47:37 2023</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{rllll}</span>
