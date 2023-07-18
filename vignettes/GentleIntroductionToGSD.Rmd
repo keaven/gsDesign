@@ -1,11 +1,11 @@
 ---
-title: "A Gentle Introduction to Group Sequential Design"
+title: "A gentle introduction to group sequential design"
 output:
-  html_document:
+  rmarkdown::html_document:
     code_folding: show
 bibliography: gsDesign.bib
 vignette: >
-  %\VignetteIndexEntry{A Gentle Introduction to Group Sequential Design}
+  %\VignetteIndexEntry{A gentle introduction to group sequential design}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,7 +13,6 @@ vignette: >
 ```{r, include=FALSE}
 knitr::opts_chunk$set(
   collapse = FALSE,
-  echo = FALSE,
   comment = "#>",
   dev = "ragg_png",
   dpi = 96,
@@ -25,23 +24,22 @@ knitr::opts_chunk$set(
 )
 
 options(width = 58)
-library(gsDesign)
 ```
 
 ## Introduction
 
-This article is intended to give a gentle mathematical and statistical introduction to group sequential design. 
+This article is intended to give a gentle mathematical and statistical introduction to group sequential design.
 We also provide relatively simple examples from the literature to explain clinical applications.
 There is no programming shown, but by accessing the source for the article all required programming can be accessed; substantial commenting is provided in the source in the hope that users can understand how to implement the concepts developed here.
 Hopefully, the few mathematical and statistical concepts introduced will not discourage those wishing to understand some underlying concepts for group sequential design.
 
-A group sequential design enables repeated analysis of an endpoint for a clinical trial to enable possible early stopping of a trial for either a positive result, for futility, or for a safety issue. This approach can 
+A group sequential design enables repeated analysis of an endpoint for a clinical trial to enable possible early stopping of a trial for either a positive result, for futility, or for a safety issue. This approach can
 
 - limit exposure risk to patients and clinical trial investment past the time where known unacceptable safety risks have been established for the endpoint of interest,
 - limit investment in a trial where interim results suggest further evaluation for a positive efficacy finding is futile, or
 - accelerate the availability of a highly effective treatment by enabling early approval following an early positive finding.
 
-Examples of outcomes that might be considered include: 
+Examples of outcomes that might be considered include:
 
 - a continuous outcome such as change from baseline at some fixed follow-up time in the HAM-D depression score,
 - absolute or difference or risk ratio for a response rate (e.g., in oncology) or failure rate for a binary (yes/no) outcome, and
@@ -53,7 +51,7 @@ Examples of the above include:
 - a new treatment for patients with unstable angina undergoing balloon angioplasty with a positive interim finding for a binary outcome of death, myocardial infarction or urgent repeat intervention within 30 days (@CAPTURE), and
 - a new treatment for patients with lung cancer based on a positive interim finding for time-to-death (@KEYNOTE189).
 
-## Group Sequential Design Framework
+## Group sequential design framework
 
 We assume
 
@@ -62,7 +60,7 @@ We assume
 - There is a natural parameter $\delta$ describing the underlying treatment difference with an estimate that has an asymptotically normal and efficient estimate $\hat\delta_j$ with variance $\sigma_j^2$ and corresponding statistical information $\mathcal{I}_j=1/\sigma_j^2$, at analysis $j=1,2,\ldots,k$. A positive value favoring experimental treatment and negative value favoring control. We assume a consistent estimate $\hat\sigma_j^2$ of $\sigma_j^2, j=1,2,\ldots,k$.
 - The information fraction is defined as $t_j=\mathcal{I}_i/\mathcal{I}_j$ at analysis $j=1,\ldots,k$.
 - Correlations between estimates at different analyses are
-$\hbox{Corr}(\hat\delta_i,\hat\delta_j)=\sqrt{\mathcal{I}_i/\mathcal{I}_j}=\sqrt{t_j}$ 
+$\hbox{Corr}(\hat\delta_i,\hat\delta_j)=\sqrt{\mathcal{I}_i/\mathcal{I}_j}=\sqrt{t_j}$
 for $1\le i\le j\le k.$
 - There is a test test $Z_j\approx\hat\delta_j/\hat{\sigma}^2_j.$
 
@@ -73,13 +71,13 @@ For $j=1,\ldots,k$, the tests $Z_j$ are asymptotically multivariate normal with 
 
 This multivariate asymptotic normal distribution for $Z_1,\ldots,Z_k$ is referred to as the *canonical form* by @JTBook who have also summarized much of the surrounding literature.
 
-## Bounds for Testing
+## Bounds for testing
 
 ### One-sided testing
 
-We assume that the primary test the null hypothesis $H_{0}$: $\delta=0$
-against the alternative $H_{1}$: $\delta=\delta_1$ for a fixed effect size
-$\delta_1>0$ which represents a benefit of experimental treatment compared to cotnrol.
+We assume that the primary test the null hypothesis $H_{0}$: $\delta=0$
+against the alternative $H_{1}$: $\delta = \delta_1$ for a fixed effect size
+$\delta_1 > 0$ which represents a benefit of experimental treatment compared to control.
 We assume further that there is interest in stopping early if
 there is good evidence to reject one hypothesis in favor of the other.
 For $i=1,2,\ldots,k-1$, interim cutoffs $l_{i}< u_{i}$ are set; final
@@ -108,13 +106,13 @@ the amount of Type I error spent at analysis $i$, $1\leq i\leq k$. The
 total upper boundary crossing probability for a trial is denoted in this
 one-sided scenario by
 
-
 $$\alpha^+(\delta) \equiv \sum_{i=1}^{k}\alpha^+_{i}(\delta)$$
+
 and the total Type I error by $\alpha^+(0)$. Assuming
 $\alpha^+(0)=\alpha$ the design will be said to provide a one-sided
 group sequential test at level $\alpha$.
 
-### Asymmetric Two-sided Testing {#binding}
+### Asymmetric two-sided testing {#binding}
 
 With both lower and upper bounds for testing and any real value $\delta$
 representing treatment effect we denote the probability of crossing the
@@ -123,7 +121,7 @@ upper boundary at analysis $i$ without previously crossing a bound by
 $$\alpha_{i}(\delta)=P_{\delta}\{\{Z_{i}\geq u_{i}\}\cap_{j=1}^{i-1}
 \{ l_{j}<Z_{j}< u_{j}\}\},$$
 
-$i=1,2,\ldots,k.$ 
+$i=1,2,\ldots,k.$
 The total probability of crossing an upper bound prior to crossing a lower
 bound is denoted by
 
@@ -133,26 +131,26 @@ Next, we consider analogous notation for the lower bound. For
 $i=1,2,\ldots,k$ denote the probability of crossing a lower bound at
 analysis $i$ without previously crossing any bound by
 $$\beta_{i}(\delta)=P_{\delta}\{\{Z_{i}\leq l_{i}\}\cap_{j=1}^{i-1}\{ l_{j}
-<Z_{j}< u_{j}\}\}.$$ 
+<Z_{j}< u_{j}\}\}.$$
 The total lower boundary crossing probability in this
-case is written as 
+case is written as
 $$\beta(\delta)=
 {\sum\limits_{i=1}^{k}}
-\beta_{i}(\delta).$$ 
+\beta_{i}(\delta).$$
 
 When a design has final bounds equal ($l_k=u_k$), $\beta(\delta_1)$ is the Type II error which is equal to 1  minus the power of the design.
 In this case, $\beta_i(\delta)$ is referred to as the $\beta$-spending at analysis $i, i=1,\ldots,k$.
 
-## Spending Function Design
+## Spending function design
 
 Type I error is most often defined with $\alpha_i^+(0), i=1,\ldots,k$.
 This is referred to as non-binding Type I error since any lower bound is ignored in the calculation.
 This means that if a trial is continued in spite of a lower bound being crossed at an interim analysis that Type I error is still controlled at the design $\alpha$-level.
-For Phase III trials used for approvals of new treatments, non-binding Type I error calculation is generally expected by regulators. 
+For Phase III trials used for approvals of new treatments, non-binding Type I error calculation is generally expected by regulators.
 
 For any given $0<\alpha<1$ we define a non-decreasing $\alpha$-spending function
 $f(t; \alpha)$ for $t\geq 0$ with $\alpha\left(  0\right)  =0$ and for
-$t\geq 1$, $f( t; \alpha)  =\alpha$. 
+$t\geq 1$, $f( t; \alpha)  =\alpha$.
 Letting $t_0=0$, we  set $\alpha_j(0)$ for $j=1,\ldots,k$ through the equation
 $$\alpha^+_{j}(0) = f(t_j;\alpha)-f(t_{j-1}; \alpha).$$
 Assuming an asymmetric lower bound, we similarly use a $\beta$-spending function and to set $\beta$-spending at analysis $j=1,\ldots, k$ as:
@@ -166,26 +164,27 @@ $$f(t; \alpha) = 2\left(  1-\Phi\left(  \frac{\Phi
 $$g(t; \beta) = 2\left(  1-\Phi\left(  \frac{\Phi
 ^{-1}(\beta/2)}{\sqrt{t}}\right)  \right).$$
 
+```{r, message=FALSE, warning=FALSE}
+library(gsDesign)
+```
 
 ```{r}
 delta1 <- 3 # Treatment effect, alternate hypothesis
 delta0 <- 0 # Treatment effect, null hypothesis
-ratio <- 1  # Randomization ratio (experimental / control)
+ratio <- 1 # Randomization ratio (experimental / control)
 sd <- 7.5 # Standard deviation for change in HAM-D score
-alpha <- 0.1# 1-sided Type I error
-beta <- 0.17# Targeted Type II error (1 - targeted power)
-k <- 2      # Number of planned analyses
+alpha <- 0.1 # 1-sided Type I error
+beta <- 0.17 # Targeted Type II error (1 - targeted power)
+k <- 2 # Number of planned analyses
 test.type <- 4 # Asymmetric bound design with non-binding futility bound
 timing <- .5 # information fraction at interim analyses
 sfu <- sfLDOF # O'Brien-Fleming spending function for alpha-spending
-sfupar <- 0   # Parameter for upper spending function
+sfupar <- 0 # Parameter for upper spending function
 sfl <- sfLDOF # O'Brien-Fleming spending function for beta-spending
-sflpar <- 0   # Parameter for lower spending function
-delta <- 0 
-endpoint <- 'normal'
+sflpar <- 0 # Parameter for lower spending function
+delta <- 0
+endpoint <- "normal"
 ```
-
-
 
 ```{r}
 # Derive normal fixed design sample size
@@ -198,8 +197,6 @@ n <- nNormal(
   beta = beta
 )
 ```
-
-
 
 ```{r}
 # Derive group sequential design based on parameters above
@@ -220,28 +217,29 @@ x <- gsDesign(
   n.fix = n
 )
 # Convert sample size at each analysis to integer values
-x <-  toInteger(x)
+x <- toInteger(x)
 ```
 
 The planned design used $\alpha=0.1$, one-sided and Type II error 17% (83% power) with an interim analysis at 50% of the final planned observations.
-This leads to Type I $\alpha$-spending of 
+This leads to Type I $\alpha$-spending of
 `r round(sfLDOF(alpha = 0.1, t = 0.5)$spend, 3)`
 and $\beta$-spending of
 `r round(sfLDOF(alpha = 0.17, t = 0.5)$spend, 3)` at the planned interim.
 An advantage of the spending function approach is that bounds can be adjusted when the number of observations at analyses are different than planned.
 The actual observations for experimental versus control at the analysis were 59 as opposed to the planned 67, which resulted in interim spending fraction $t_1=$ `r round(59 / x$n.I[2], 4)`.
-With the Lan-DeMets spending function to approximate O'Brien-Fleming bounds this results in 
+With the Lan-DeMets spending function to approximate O'Brien-Fleming bounds this results in
 $\alpha$-spending of
 `r round(sfLDOF(alpha = alpha, t = 59 / x$n.I[2])$spend, 4)` (`P(Cross) if delta=0` row in Efficacy column)
-and $\beta$-spending of 
+and $\beta$-spending of
 `r round(sfLDOF(alpha = beta, t = 59 / x$n.I[2])$spend, 4)` (`P(Cross) if delta=3` row in Futility column).
 We note that the Z-value and 1-sided p-values in the table below correspond exactly and either can be used for evaluation of statistical significance for a trial result.
 The rows labeled `~delta at bound` are approximations that describe approximately what treatment difference is required to cross a bound; these should not be used for a formal evaluation of whether a bound has been crossed.
 The O'Brien-Fleming spending function is generally felt to provide conservative bounds for stopping at interim analysis.
 Most of the error spending is reserved for the final analysis in this example.
 The futility bound only required a small trend in the wrong direction to stop the trial; a nominal p-value of 0.77 was observed which crossed the futility bound, stopping the trial since this was greater than the futility p-value bound of 0.59.
-Finally, we note that at the final analysis, the cumulative probability for `P(Cross) if delta=0` is less than the planned $\alpha=0.10$. This probability represents $\alpha(0)$ which excludes the probability of crossing the lower bound at the interim analysis and the final analysis. 
-The value of the non-binding Type I error is still $\alpha^+(0)=0.10$.
+Finally, we note that at the final analysis, the cumulative probability for `P(Cross) if delta=0` is less than the planned $\alpha=0.10$. This probability represents $\alpha(0)$ which excludes the probability of crossing the lower bound at the interim analysis and the final analysis.
+The value of the non-binding Type I error is still $\alpha^+(0) = 0.10$.
+
 ```{r}
 # Updated alpha is unchanged
 alphau <- 0.1
@@ -281,7 +279,5 @@ xu <- gsDesign(
 # Summarize bounds
 gsBoundSummary(xu, Nname = "N", digits = 4, ddigits = 2, tdigits = 1)
 ```
-
-
 
 # References

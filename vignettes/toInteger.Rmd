@@ -1,17 +1,15 @@
 ---
 title: "Integer sample size and event counts"
 author: "Keaven Anderson"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
-
 vignette: >
   %\VignetteIndexEntry{Integer sample size and event counts}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-# Introduction 
+# Introduction
 
 The **gsDesign** package was originally designed to have continuous sample size planned rather than integer-based sample size.
 Designs with time-to-event outcomes also had non-integer event counts at times of analysis.
@@ -26,7 +24,7 @@ The new function as of July, 2023 is the `toInteger()` which operates on group s
 We begin with an abbreviated example for a time-to-event endpoint design to demonstrate basic concepts.
 We follow with a more extended example for a binary endpoint to explain more details.
 
-# Time-to-event Endpoint Example
+# Time-to-event endpoint example
 
 The initial design for a time-to-event endpoint in a 2-arm trial does not have integer sample size and event counts.
 See comments in the code and output from the `summary()` function below to understand inputs.
@@ -35,21 +33,21 @@ See comments in the code and output from the `summary()` function below to under
 library(gsDesign)
 
 x <- gsSurv(
-  k = 3, # number of analyses
-  test.type = 4, # asymmetric 2-sided design with non-binding futility bound
+  k = 3, # Number of analyses
+  test.type = 4, # Asymmetric 2-sided design with non-binding futility bound
   alpha = 0.025, # 1-sided Type I error
   beta = 0.1, # Type II error (1 - power; 90% power)
   timing = c(.25, .7), # Fraction of final planned events at interim analyses
   sfu = sfLDOF, # O'Brien-Fleming-like spending for efficacy
-  sfl = sfHSD,  # Hwang-Shih-DeCani spending for futility
-  sflpar = -2.2,# Futility spending parameter to customize bound 
-  lambdaC = log(2)/12, # 12 month median control survival
+  sfl = sfHSD, # Hwang-Shih-DeCani spending for futility
+  sflpar = -2.2, # Futility spending parameter to customize bound
+  lambdaC = log(2) / 12, # 12 month median control survival
   hr = 0.75, # Alternate hypothesis hazard ratio
   eta = -log(.98) / 12, # 2% dropout rate per year
-  # enrollment accelerates over 6 months to steady state 
+  # Enrollment accelerates over 6 months to steady state
   gamma = c(2.5, 5, 7.5, 10), # Relative enrollment rates
   # Duration of relative enrollment rate
-  R = c(2, 2, 2, 100), 
+  R = c(2, 2, 2, 100),
   # Enrollment duration targeted to T - minfup = 12 months total
   T = 36, # Trial duration
   minfup = 24, # Minimum follow-up duration
@@ -147,14 +145,14 @@ These differences also make a difference in the cumulative Type I error associat
 
 ```{r}
 # Continuous sample size design
-cumsum(x$upper$prob[,1])
+cumsum(x$upper$prob[, 1])
 # Specified spending based on the spending function
 x$upper$sf(alpha = x$alpha, t = x$timing, x$upper$param)$spend
 ```
 
 ```{r}
 # Integer sample size design
-cumsum(x_integer$upper$prob[,1])
+cumsum(x_integer$upper$prob[, 1])
 # Specified spending based on the spending function
 # Slightly different from continuous design due to slightly different information fraction
 x$upper$sf(alpha = x_integer$alpha, t = x_integer$timing, x_integer$upper$param)$spend
@@ -166,9 +164,9 @@ Interim power is slightly lower for the integer-based design since sample size i
 ```{r}
 # Cumulative upper boundary crossing probability under alternate by analysis
 # under alternate hypothesis for continuous sample size
-cumsum(x$upper$prob[,2])
+cumsum(x$upper$prob[, 2])
 # Same for integer sample sizes at each analysis
-cumsum(x_integer$upper$prob[,2])
+cumsum(x_integer$upper$prob[, 2])
 ```
 
 ## Non-binding design
@@ -177,12 +175,13 @@ The default `test.type = 4` has a non-binding futility bound. We examine behavio
 The futility bound is moderately aggressive and, thus, there is a compensatory increase in sample size to retain power.
 The parameter `delta1` is the natural parameter denoting the difference in response (or failure) rates of 0.2 vs. 0.1 that was specified in the call to `nBinomial()` above.
 
-
 ```{r}
 # 2-sided asymmetric design with non-binding futility bound (test.type = 4)
-xnb <- gsDesign(alpha = .025, beta = .2, n.fix = n.fix, test.type = 4, 
-                sfu = sfLDOF, sfl = sfHSD, sflpar = -2, 
-                timing = c(.5, .75), delta1 = .1)
+xnb <- gsDesign(
+  alpha = .025, beta = .2, n.fix = n.fix, test.type = 4,
+  sfu = sfLDOF, sfl = sfHSD, sflpar = -2,
+  timing = c(.5, .75), delta1 = .1
+)
 # Continuous sample size for non-binding design
 xnb$n.I
 ```
@@ -201,9 +200,9 @@ These differences also make a difference in the Type I error associated with eac
 
 ```{r}
 # Type I error, continuous design
-cumsum(xnb$upper$prob[,1])
+cumsum(xnb$upper$prob[, 1])
 # Type I error, integer design
-cumsum(xnbi$upper$prob[,1])
+cumsum(xnbi$upper$prob[, 1])
 ```
 
 The Type I error ignoring the futility bounds just shown does not use the full targeted 0.025 as the calculations assume the trial stops for futility if an interim futility bound is crossed.
@@ -214,23 +213,21 @@ The non-binding Type I error assuming the trial does not stop for futility is:
 cumsum(xnbi$falseposnb)
 ```
 
-
-
 Finally, we look at cumulative lower boundary crossing probabilities under the alternate hypothesis for the integer-based design and compare to the planned $\beta$-spending.
-We note that the final Type II error spending is slightly lower than the targeted 0.2 due to rounding up the final sample size.  
+We note that the final Type II error spending is slightly lower than the targeted 0.2 due to rounding up the final sample size.
 
 ```{r}
 # Actual cumulative beta spent at each analysis
-cumsum(xnbi$lower$prob[,2])
+cumsum(xnbi$lower$prob[, 2])
 # Spending function target is the same at interims, but larger at final
-xnbi$lower$sf(alpha=xnbi$beta, t = xnbi$n.I / max(xnbi$n.I), param = xnbi$lower$param)$spend
+xnbi$lower$sf(alpha = xnbi$beta, t = xnbi$n.I / max(xnbi$n.I), param = xnbi$lower$param)$spend
 ```
 
 The $\beta$-spending lower than 0.2 in the first row above is due to the final sample size powering the trial to greater than 0.8 as seen below.
 
 ```{r}
-# beta-spending 
-sum(xnbi$upper$prob[,2])
+# beta-spending
+sum(xnbi$upper$prob[, 2])
 ```
 
 # References
