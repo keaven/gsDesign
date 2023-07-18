@@ -44,6 +44,10 @@ reference:
   - eEvents
   - nEventsIA
   - tEventsIA
+  - toInteger
+- title: Vaccine/Prevention Efficacy
+  contents:
+  - toBinomialExact
 - title: Spending Functions
   contents:
   - Spending_Function_Overview
@@ -113,16 +117,18 @@ reference:
 articles:
   - title: "Designing for time-to-event endpoints"
     desc: >
-      These vignettes provide an introduction to designing group sequential trials with 
-      time-to-event endpoints using **gsDesign** package.
+      These vignettes provide an introduction to designing group sequential trials with
+      time-to-event endpoints using gsDesign.
     contents:
       - SurvivalOverview
+      - toInteger
       - gsSurvBasicExamples
       - PoissonMixtureModel
   - title: "Other"
     desc: >
         Other vignettes.
     contents:
+      - GentleIntroductionToGSD
       - nNormal
       - hGraph
       - GraphicalMultiplicity

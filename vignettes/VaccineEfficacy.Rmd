@@ -1,7 +1,7 @@
 ---
 title: "Vaccine efficacy trial design"
 output:
-  html_document:
+  rmarkdown::html_document:
     code_folding: show
 bibliography: gsDesign.bib
 vignette: >
@@ -36,13 +36,12 @@ library(dplyr)
 
 This article explores a method of approximating a design using the exact binomial method of @ChanBohidar by a time-to-event design using the method of @LachinFoulkes.
 This allows use of spending functions to derive boundaries for the exact method.
-The time-to-event design can not only be used to set approximate boundaries for the @ChanBohidar method, but to allow specification of enrollment duration and study duration to determine enrollment rates and sample size required.
-This also allows us to illustrate the concept of super-superiority often used in prevention studies.
-Finally, we also demonstrate how to set timing to get an integer event count at each analysis.
+The time-to-event design can not only be used to set boundaries for the @ChanBohidar method, but to allow specification of enrollment duration and study duration to determine enrollment rates and sample size required.
+This vignette also illustrates the concept of super-superiority often used in prevention studies.
 
 # Parameterization
 
-We begin with the assumption that we will a require a large sample size due to a endpoint  with a small incidence rate.
+We begin with the assumption that we will a require a large sample size due to an endpoint with a small incidence rate.
 This could apply to a vaccine study or other prevention study with a relatively small number of events expected.
 
 ## Exact binomial approach
@@ -52,7 +51,7 @@ Vaccine efficacy is defined as
 
 $$\pi = 1 - P_E/P_C.$$
 
-The parameter $\pi$ is also often labelled as $VE$ for vaccine efficacy.
+The parameter $\pi$ is often labelled as $VE$ for vaccine efficacy.
 Taking into account the randomization ratio $r$ (experimental / control) the approximate probability that any given event is in the experimental group is
 
 $$
@@ -65,10 +64,10 @@ $$
 
 This can be inverted to obtain
 
-$$\pi = 1- \frac{1}{r(1/p-1)}. $$
+$$\pi = 1 - \frac{1}{r(1/p-1)}. $$
 
-For our example of interest, we begin with an alternate hypothesis vaccine efficacy $\pi_1 = 0.7$ and $r=3$.
-This converts to an alternate hypothesis approximate probability that any event is in the experimental group of
+For our example of interest, we begin with an alternate hypothesis vaccine efficacy $\pi_1 = 0.7$ and experimental:control randomization ratio $r=3$.
+This converts to an alternate hypothesis (approximate) probability that any event is in the experimental group of
 
 ```{r}
 pi1 <- .7
@@ -83,7 +82,7 @@ We use the inversion formula to revert this to $\pi_1 = 0.7$
 1 - 1 / (ratio * (1 / p1 - 1))
 ```
 
-Letting the null hypothesis vaccine efficacy be $\pi_0 = 0.3$, our exact binomial null hypothesis probability is
+Letting the null hypothesis vaccine efficacy be $\pi_0 = 0.3$, our exact binomial null hypothesis probability that an event is in the experimental group is
 
 ```{r}
 pi0 <- .3
@@ -91,59 +90,71 @@ p0 <- ratio / (ratio + 1 / (1 - pi0))
 p0
 ```
 
-Chapter 12 of @JTBook walks through how to design and analyze such a study using a fixed or group sequential design. This may have
-advantages and disadvantages compared to what is proposed here. However, the time-to-event approximation gives not only proposed bounds, but also sample size and study duration approximations.
+We also translate several vaccine efficacy values to proportion of events in the experimental group:
+
+```{r}
+ve <- c(.5, .6, .65, .7, .75, .8)
+prob_experimental <- ratio / (ratio + 1 / (1 - ve))
+tibble(VE = ve, "P(Experimental)" = prob_experimental) %>%
+  gt() %>%
+  tab_options(data_row.padding = px(1)) %>%
+  fmt_number(columns = 2, decimals = 3)
+```
+
+
+
+Chapter 12 of @JTBook walks through how to design and analyze such a study using a fixed or group sequential design. This may have advantages and disadvantages compared to what is proposed here.
+However, the time-to-event approximation gives not only proposed bounds, but also sample size and study duration approximations.
 
 # The time-to-event approach
 
 For a time-to-event formulation with exponential failure rates $\lambda_C$ for control and $\lambda_E$ for experimental group assigned participants, we would define
 
-$$\pi = 1 - \lambda_E / \lambda_E$$
+$$\pi = 1 - \lambda_E / \lambda_C$$
 
 which is 1 minus the hazard ratio often used in time-to-event studies.
 In the following we examine how closely the time-to-event method using asymptotic distributional assumptions can approximate an appropriate exact binomial design.
-
 We will also define a planned number of events at each of $K$ planned analyses by $D_k, 1\le k\le K$.
 
 # Generating a design
 
 We begin by specifying parameters.
 The `alpha` and `beta` parameters will not be met exactly due to the discrete group sequential probability calculations performed.
-Thus, you may need to adjust these parameters slightly to ensure your final design operating characteristics are within the targeted range.
-The current version includes only designs that use non-binding futility bounds.
+Thus, you may need to adjust these parameters slightly to ensure your final design operating characteristics are within a targeted range.
+The current version includes only designs that use non-binding futility bounds or no futility bounds.
 The design is generated by first using asymptotic theory for a time-to-event design with specified spending functions.
 This design is then adapted to a design using the exact binomial method of @ChanBohidar.
-The randomization ratio (experiemental/control) was assumed to be 3:1 as in the @SPUTNIK2021 trial.
+The randomization ratio (experimental/control) was assumed to be 3:1 as in the @SPUTNIK2021 trial.
 
 ```{r}
 alpha <- 0.023 # Type I error; this was adjusted from .025 to ensure Type I error control
 beta <- 0.09 # Type II error (1 - power); this was reduced from .1 to .09 to ensure power
 k <- 3 # number of analyses in group sequential design
-timing <- c(.5, .8) # Relative timing of interim analyses compared to final
-sfu <- sfLDOF # Efficacy bound spending function (O'Brien-Fleming-like here)
-sfupar <- 0 # Parameter for efficacy spending function
-sfl <- sfHSD # Futility bound spending function (Hwang-Shih-DeCani here)
-sflpar <- -12 # Futility bound spending function parameter (conservative)
+timing <- c(.45, .7) # Relative timing of interim analyses compared to final
+sfu <- sfHSD # Efficacy bound spending function (Hwang-Shih-DeCani)
+sfupar <- -4 # Parameter for efficacy spending function
+sfl <- sfLDOF # Futility bound spending function (O'Brien-Fleming-like here)
+sflpar <- 1 # Futility bound spending function parameter; this is the standard O'Brien-Fleming
 timename <- "Month" # Time unit
 failRate <- .002 # Exponential failure rate
 dropoutRate <- .0001 # Exponential dropout rate
-enrollDuration <- 4 # Enrollment duration
-trialDuration <- 8 # Planned trial duration
+enrollDuration <- 8 # Enrollment duration
+trialDuration <- 24 # Planned trial duration
 VE1 <- .7 # Alternate hypothesis vaccine efficacy
 VE0 <- .3 # Null hypothesis vaccine efficacy
 ratio <- 3 # Experimental/Control enrollment ratio
+test.type <- 4 # 1 for one-sided, 4 for non-binding futility
 ```
 
 ## The time-to-event design
 
 Now we generate the design. If resulting alpha and beta do not satisfy requirements, adjust parameters above until a satisfactory result is obtained.
-Press the code button below to review detailed code, which should not require user alteration.
 
 ```{r}
 # Derive Group Sequential Design
 # This determines final sample size
 x <- gsSurv(
-  k = k, test.type = 4, alpha = alpha, beta = beta, timing = timing,
+  k = k, test.type = test.type, alpha = alpha, beta = beta, timing = timing,
   sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar,
   lambdaC = failRate, eta = dropoutRate,
   # Translate vaccine efficacy to HR
@@ -151,150 +162,139 @@ x <- gsSurv(
   R = enrollDuration, T = trialDuration,
   minfup = trialDuration - enrollDuration, ratio = ratio
 )
-
-gsBoundSummary(x, tdigits = 1) %>%
-  gt() %>%
-  tab_header(title = "Initial group sequential approximation")
 ```
 
-Now we change the event counts at each analysis by rounding at interim analyses and rounding up at final analysis to move away from the continuous, unrounded event counts above.
-This strategy is not restricted to studies using exact binomial methods, but can be used with any time-to-event endpoint.
-There are small changes from the above design.
-
-```{r, class.source = 'fold-hide'}
-# Round up event counts and update spending based on slightly updated timing and then re-derive bounds
-# This will then be used  both to 
-#   - reset time-to-event design for exact event counts
-#   - set event counts and bounds for the exact binomial bounds
-
-counts <- round(x$n.I) # Round for interim counts
-counts[k] <- ceiling(x$n.I[k]) # Round up for final count
-timing <- counts / max(counts)
-xx <- gsDesign(
-  k = k, test.type = 4, n.I = counts, maxn.IPlan = counts[k], # x$n.I[k],
-  alpha = alpha, beta = beta,
-  delta = x$delta, delta1 = x$delta1, delta0 = x$delta0,
-  sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar
-)
-# For non-inferiority and super-superiority trials
-xx$hr0 <- x$hr0
-```
-
-Now we re-derive using `gsSurv()` so we can check calendar timing of the design.
-We note that this does not give an exact integer number of events.
-However, it should be very close.
+Now we convert this to a design with integer event counts at analyses.
+This is achieved by rounding interim analysis event counts from the above design and rounding up the final analysis event count. This will result in a slight change in event fractions at interim analyses as well as a slight change from the targeted 90% power.
+We now explain the rationale behind the spending function choices.
+Recall that the hazard ratio (HR) is 1 minus the VE.
+The `~HR at bound` represents the approximate hazard ratio required to cross a bound.
+Thus, small HR's at the interim analyses along with small cumulative efficacy spending suggest crossing an interim efficacy bound would provide a result strong enough to potentially justify the new treatment.
+The hazard ratio of ~0.7 (VE ~ 0.3) for the interim 1 futility bound mean that the efficacy trend would be no better than the null hypothesis if the futility bound were crossed.
+The second analysis futility bound with approximate VE of 0.5 would be worth discussion with a data monitoring committee as well as other planners for the trial; a custom spending function \citep{AndClark} could be used to set both the first and second interim bounds to desired levels.
 
 ```{r}
-# Derive Group Sequential Design
-# This determines final sample size
-xxx <- gsSurv(
-  k = k, test.type = 4, alpha = alpha, beta = sum(xx$lower$prob[,2]), timing = timing,
-  sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar,
-  lambdaC = failRate, eta = dropoutRate,
-  # Translate vaccine efficacy to HR
-  hr = 1 - VE1, hr0 = 1 - VE0,
-  R = enrollDuration, T = trialDuration,
-  minfup = trialDuration - enrollDuration, ratio = ratio
-)
-zupper <- xx$upper$bound # Updated upper bounds
-zlower <- xx$lower$bound # Updated lower bounds
-cat("Number of events at analyses", xxx$n.I)
+xx <- toInteger(x)
+gsBoundSummary(xx,
+  tdigits = 1, logdelta = TRUE, deltaname = "HR", Nname = "Events",
+  exclude = c("B-value", "CP", "CP H1", "PP")
+) %>%
+  gt() %>%
+  tab_header(
+    title = "Initial group sequential approximation",
+    subtitle = "Integer event counts at analyses"
+  ) %>%
+  tab_options(data_row.padding = px(1))
 ```
 
+A textual summary for the design is:
 
-
-```{r}
-xxxsum <- gsBoundSummary(xxx, deltaname = "HR", logdelta = TRUE, Nname = "Events")
-xxxsum %>%
-  gt() %>%
-  tab_header(title = "Updated design with spending based on integer event counts")
+```{r, results='asis'}
+cat(summary(xx, timeunit = "months"))
 ```
 
 # Converting to an exact binomial design
 
-Now we invert the upper and lower bounds based on the inverse binomial distribution to get $a_k<b_k, 1\le k\le K$ where $N_{E,k}\le a_k$ results in a positive finding in favor of the experimental arm and $N_{E,k}\ge b_k$ results in futility, $1\le k\le K$:
+We now convert this to an exact binomial design.
+The bound counts are described in this initial table displayed.
+`N` is the total event count, `a` the maximum number of events in the experimental group to cross the efficacy bound.
+For example, if 13 or fewer of 32 events at interim 1 are in the experimental group the efficacy bound has been crossed.
+The futility bound is in `b`; at the first interim, if 22 or more of 32 total events are in the experimental group then the futility bound would be crossed and the alternate hypothesis could be rejected.
+The second and third tables below give probabilities of crossing the upper (futility) and lower (efficacy) bounds under the null (`Theta` = 0.6774`) and alternate (`Theta` = 0.4737) hypotheses, respectively; these calculations are done under the exact binomial distribution assumptions.
+Total Type I error of 0.0187 (third table, next to last row) is below the targeted 0.025.
+Total power of 0.9145 (third table, last row) is above the targeted 90%.
 
 ```{r}
-# Translate vaccine efficacy to exact binomial probabilities
-
-p0 <- (1 - VE0) * ratio / (1 + (1 - VE0) * ratio)
-p1 <- (1 - VE1) * ratio / (1 + (1 - VE1) * ratio)
-
-# Lower bound probabilities are for efficacy and Type I error should be controlled under p0
-a <- qbinom(p = pnorm(-zupper), size = counts, prob = p0)
-a[k] <- a[k] - 1
-# Upper bound probabilities are for futility and spending should be under p1
-b <- qbinom(p = pnorm(zlower), size = counts, prob = p0, lower.tail = FALSE)
-# a < b required for each analysis; subtracting 1 makes one bound or the other
-# cross at the end
-xxxx <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = counts, a = a, b = b)
-xxxx
+xb <- toBinomialExact(x)
 ```
 
-Now we make comparisons between the asymptotic, time-to-event design in `xxx` to the exact binomial design in `xxxx`.
-We begin with comparison of nominal one-sided p-values for each of the bounds.
+## Combined summary table
 
 ```{r}
-# Nominal p-values at efficacy bounds
-
-pnorm(-xxx$upper$bound) # Asymptotic
-pbinom(xxxx$lower$bound, prob = p0, size = xxxx$n.I) # Exact binomial
-
-# Nominal p-values for futility bounds
-pnorm(-xxx$lower$bound) # Asymptotic
-pbinom(xxxx$upper$bound, prob = p0, size = xxxx$n.I) # Exact binomial
+# Function to print summary table for VE design
+veTable <- function(xbDesign, tteDesign, ve) {
+  # Analysis, N, Time, Total Cases, Success(Cases, VE, VE lower CI, Spend), Futility (Cases, VE, Spend), Type I Error, Power table
+  ratio <- tteDesign$ratio
+  prob_experimental <- ratio / (ratio + 1 / (1 - ve))
+  power_table <- gsBinomialExact(
+    k = xbDesign$k, theta = prob_experimental,
+    n.I = xbDesign$n.I, a = xbDesign$lower$bound,
+    b = xbDesign$upper$bound
+  )$lower$prob
+  # Cumulative sum within rows
+  power_table <- apply(power_table, 2, cumsum)
+  colnames(power_table) <- paste(ve * 100, "%", sep = "")
+  out_tab <- tibble(
+    Analysis = 1:tteDesign$k,
+    Time = tteDesign$T,
+    N = as.vector(round(tteDesign$eNC + tteDesign$eNE)),
+    Cases = xbDesign$n.I,
+    Success = xb$lower$bound,
+    Futility = xb$upper$bound,
+    ve_efficacy = 1 - 1 / (ratio * (xbDesign$n.I / xbDesign$lower$bound - 1)), # Efficacy bound
+    ve_futility = 1 - 1 / (ratio * (xbDesign$n.I / xbDesign$upper$bound - 1)), # Futility bound
+    alpha = as.vector(cumsum(
+      gsBinomialExact(
+        k = k, theta = xbDesign$theta[1], n.I = xbDesign$n.I,
+        a = xbDesign$lower$bound, b = xbDesign$n.I + 1
+      )$lower$prob
+    )),
+    beta = as.vector(cumsum(xbDesign$upper$prob[, 2]))
+  )
+  out_tab <- cbind(out_tab, power_table)
+}
 ```
 
-Next we examine cumulative non-binding $\alpha$-spending for efficacy bounds.
-While the cumulative interim spending is slightly higher than planned, the cumulative final spending is controlled at the targeted 0.025. If it is desired to lower interim spending to the target, slight adjustments could be made; for the purpose of this example we do not dive into this further.
-
 ```{r}
-# Cumulative non-binding alpha-spending at lower bounds
-cumsum(xxx$upper$spend) # Asymptotic design
-# Exact binomial design
-# Compute by removing futility bounds
-balt <- xxxx$n.I + 1
-xxxxalt <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = counts, a = a, b = balt)
-cumsum(xxxxalt$lower$prob[, 1])
+veTable(xb, x, ve) %>%
+  gt() %>%
+  fmt_number(columns = 2, decimals = 1) %>%
+  fmt_number(columns = c(7:8, 11:16), decimals = 2) %>%
+  fmt_number(columns = 9:10, decimals = 4) %>%
+  tab_spanner(label = "Experimental Cases at Bound", columns = 5:6, id = "cases") %>%
+  tab_spanner(label = "Power by Vaccine Efficacy", columns = 11:16, id = "power") %>%
+  tab_spanner(label = "Error Spending", columns = 9:10, id = "spend") %>%
+  tab_spanner(label = "Vaccine Efficacy at Bound", columns = 7:8, id = "vebound") %>%
+  cols_label(
+    ve_efficacy = "Efficacy",
+    ve_futility = "Futility"
+  ) %>%
+  tab_footnote(
+    footnote = "Cumulative spending at each analysis",
+    locations = cells_column_spanners(spanners = "spend")
+  ) %>%
+  tab_footnote(
+    footnote = "Experimental case counts to cross between success and futility counts do not stop trial",
+    locations = cells_column_spanners(spanners = "cases")
+  ) %>%
+  tab_footnote(
+    footnote = "Exact vaccine efficacy required to cross bound",
+    locations = cells_column_spanners(spanners = "vebound")
+  ) %>%
+  tab_footnote(
+    footnote = "Cumulative power at each analysis by underlying vaccine efficacy",
+    locations = cells_column_spanners(spanners = "power")
+  ) %>%
+  tab_footnote(
+    footnote = "Efficacy spending ignores non-binding futility bound",
+    location = cells_column_labels(columns = alpha)
+  ) %>%
+  tab_header("Design Bounds and Operating Characteristics")
 ```
 
-Next we look at $\beta$-spending for the two bounds.
-The exact bounds control $\beta$-spending close to the asymptotic target at interims and fully controls the complete $\beta=0.10$ at the final analysis, ensuring power is achieved with the exact design.
+Next, we look at $\alpha$- and $\beta$-spending for the time-to-event design to compare to the exact bound restricted by the discrete possible counts at bounds.
+For both $\alpha$- and $\beta$-spending, the exact binomial design has no more spending at each analysis than allowed by each spending function.
 
 ```{r}
-# Cumulative non-binding beta-spending at lower bounds
-cumsum(xxx$lower$spend) # Asymptotic design
-cumsum(xxxx$upper$prob[, 2]) # Exact binomial design
-```
-
-Now we examine the approximate vaccine efficacy at efficacy and futility bounds for the asymptotic design vs. the exact vaccine efficacy for the exact binomial design.
-We begin using the inversion formula from above to convert the proportion of events in the experimental group at the bounds to vaccine efficacy at the bounds.
-
-```{r}
-p_lower <- xxxx$lower$bound / xxx$n.I
-p_upper <- xxxx$upper$bound / xxx$n.I
-p_lower
-p_upper
-```
-
-Now we convert to observed vaccine efficacy at each bound
-
-```{r}
-1 - 1 / (ratio * (1 / p_lower - 1)) # Efficacy bound
-1 - 1 / (ratio * (1 / p_upper - 1)) # Futility bound
-```
-
-This is approximated reasonably by the approximations using the time-to-event design:
-
-```{r}
-# Translate ~HR at efficacy bound to VE for asymptotic design
-1 - xxxsum[c(3, 8, 13), 3] # Efficacy bound
-1 - xxxsum[c(3, 8, 13), 4] # Futility bound
+# Cumulative beta-spending at lower bounds
+cumsum(xx$lower$spend) # Asymptotic design
+# Cumulative alpha-spending at efficacy bounds
+cumsum(gsProbability(k = xx$k, n.I = xx$n.I, a = rep(-20, xx$k), b = xx$upper$bound, theta = 0)$upper$prob)
 ```
 
 # Summary
 
 We have provided an extended example to show that a @ChanBohidar exact binomial using spending function bounds can be derived in a two-step process that delivers sample size and bounds by 1) deriving a related time-to-event design using asymptotic methods and then 2) converting to an exact binomial design.
-Small adjustments were made to target Type I and Type II error probabilities in the asymptotic approximation to ensure the exact binomial Type I and Type II error rates were achieve. The method seems a reasonable and straightforward approach to develop a complete design.
+Adjustments were made to target Type I and Type II error probabilities in the asymptotic approximation to ensure the exact binomial Type I and Type II error rates were achieved. The method seems a reasonable and straightforward approach to develop a complete design.
 
 # References
