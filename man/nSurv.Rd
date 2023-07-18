@@ -275,12 +275,11 @@ accrual duration, "Follow-up duration" if a design was derived by varying
 follow-up duration, or "Power" if accrual rates and duration as well as
 follow-up duration was specified and \code{beta=NULL} was input.}
 
-\code{gsSurv()} returns much of the above plus an object of class
-\code{gsDesign} in a variable named \code{gs}; see \code{\link{gsDesign}}
+\code{gsSurv()} returns much of the above plus variables in the class
+\code{gsDesign}; see \code{\link{gsDesign}}
 for general documentation on what is returned in \code{gs}.  The value of
 \code{gs$n.I} represents the number of endpoints required at each analysis
 to adequately power the trial. Other items returned by \code{gsSurv()} are:
-\item{gs}{A group sequential design (\code{gsDesign}) object.}
 \item{lambdaC}{As input.} \item{etaC}{As input.} \item{etaE}{As input.}
 \item{gamma}{As input unless none of the following are \code{NULL}:
 \code{T}, \code{minfup}, \code{beta}; otherwise, this is a constant times
@@ -298,10 +297,7 @@ and the remaining output below are not printed by the \code{print()}
 extension for the \code{nSurv} class.} \item{eDC}{A vector of expected
 number of events by stratum in the control group under the alternate
 hypothesis.} \item{eDE}{A vector of expected number of events by stratum in
-the experimental group under the alternate hypothesis.} \item{eDC0}{A vector
-of expected number of events by stratum in the control group under the null
-hypothesis.} \item{eDE0}{A vector of expected number of events by stratum in
-the experimental group under the null hypothesis.} \item{eNC}{A vector of
+the experimental group under the alternate hypothesis.} \item{eNC}{A vector of
 the expected accrual in each stratum in the control group.} \item{eNE}{A
 vector of the expected accrual in each stratum in the experimental group.}
 \item{variable}{A text string equal to "Accrual rate" if a design was
@@ -321,7 +317,7 @@ experimental group at the output time \code{T}.} \item{eNC}{The expected
 enrollment in the control group at the output time \code{T}.} \item{eNE}{The
 expected enrollment in the experimental group at the output time \code{T}.}
 
-\code{tEventsIA()} returns
+\code{tEventsIA()} returns the same structure as \code{nEventsIA(..., simple=TRUE)} when
 }
 \description{
 \code{nSurv()} is used to calculate the sample size for a clinical trial
