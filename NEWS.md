@@ -9,7 +9,7 @@
   an introduction to asymptotics for group sequential design.
 - `as_table()` and `as_gt()` methods for `gsBinomialExact` objects added,
   as described in the new "Binomial SPRT" vignette.
-- In `plot.ssrCP()`, the `hat()` call is revised to exclude namespace,
+- In `plot.ssrCP()`, the `hat` syntax in the mathematical expression is revised,
   resolving labeling issues.
 - `ggplot2::qplot()` usage replaced due to its deprecation in ggplot2 3.4.0.
 - Link update for the gsDesign manual in the documentation,
