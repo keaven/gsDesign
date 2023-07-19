@@ -1,12 +1,20 @@
 # gsDesign 3.5.0 (July, 2023)
 
-- Allowed wider parameter range (0, 15] for `sfPower()`.
-- Added function `toInteger()` to convert `gsDesign` or `gsSurv` classes
+- `sfPower()` now allows a wider parameter range (0, 15].
+- `toInteger()` function added to convert `gsDesign` or `gsSurv` classes
   to integer sample size and event counts.
-- Added function `toBinomialExact()` to convert time-to-event bounds to
+- `toBinomialExact()` function added to convert time-to-event bounds to
   exact binomial for low event rate studies.
 - Added "A Gentle Introduction to Group Sequential Design" vignette for
   an introduction to asymptotics for group sequential design.
+- `as_table()` and `as_gt()` methods for `gsBinomialExact` objects added,
+  as described in the new "Binomial SPRT" vignette.
+- In `plot.ssrCP()`, the `hat()` call is revised to exclude namespace,
+  resolving labeling issues.
+- `ggplot2::qplot()` usage replaced due to its deprecation in ggplot2 3.4.0.
+- Link update for the gsDesign manual in the documentation,
+  now directly pointing to the gsDesign technical manual bookdown project.
+- Introduced a new hex sticker logo.
 
 # gsDesign 3.4.0 (October, 2022)
 
