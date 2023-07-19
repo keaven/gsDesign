@@ -171,9 +171,24 @@ n2sizediff <- function(z1, target, beta = .1, z2 = z2NC,
 #' hrpostIA = seq(.4,1,.05)
 #' # in the following, we convert HR into standardized effect size based on the design in x
 #' powr <- condPower(x=x,z1=1,n2=x$n.I[2]-x$n.I[1],theta=log(hrpostIA)/x$delta1*x$theta[2])
-#' qplot(hrpostIA,condPower(x=x,z1=1,n2=x$n.I[2]-x$n.I[1],theta=log(hrpostIA)/x$delta1*x$theta[2]),
-#' geom="line",xlab="HR post IA",ylab="Conditional power",
-#' main ="Conditional power as a function of assumed HR")
+#' ggplot(
+#'   data.frame(
+#'     x = hrpostIA,
+#'     y = condPower(
+#'       x = x,
+#'       z1 = 1,
+#'       n2 = x$n.I[2] - x$n.I[1],
+#'       theta = log(hrpostIA) / x$delta1 * x$theta[2]
+#'     )
+#'   ),
+#'   aes(x = x, y = y)
+#' ) +
+#'   geom_line() +
+#'   labs(
+#'     x = "HR post IA",
+#'     y = "Conditional power",
+#'     title = "Conditional power as a function of assumed HR"
+#'   )
 #' 
 #' # Following is a template for entering parameters for ssrCP
 #' # Natural parameter value null and alternate hypothesis values
