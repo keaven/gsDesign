@@ -217,12 +217,12 @@ Jennison and Turnbull (2000); default is 18, range is 1 to 80. Larger values
 provide larger number of grid points and greater accuracy.  Normally
 \code{r} will not be changed by the user.}
 
-\item{usTime}{Default is NULL in which case upper bound spending time is 
-determined by \code{timing}. Otherwise, this should be a vector of length 
+\item{usTime}{Default is NULL in which case upper bound spending time is
+determined by \code{timing}. Otherwise, this should be a vector of length
 code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
 
-\item{lsTime}{Default is NULL in which case lower bound spending time is 
-determined by \code{timing}. Otherwise, this should be a vector of length 
+\item{lsTime}{Default is NULL in which case lower bound spending time is
+determined by \code{timing}. Otherwise, this should be a vector of length
 \code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
 
 \item{caption}{passed through to generic \code{xtable()}.}
