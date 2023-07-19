@@ -581,22 +581,21 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
         ggplot2::scale_colour_manual(name = "Bound", values = getColor(col), labels = lbls, breaks = lbls) +
         ggplot2::scale_linetype_manual(name = "Bound", values = lty, labels = lbls, breaks = lbls)
         p <- p + ggplot2::ggtitle(label = main)
-    } else { # p <- qplot(x=as.numeric(N), y=as.numeric(CP), data=y, main=main,
-      # 	label=Ztxt, geom="text",
-      # 	xlab=xlab, ylab=ylab, ylim=c(ymin, ymax), xlim=xlim) + geom_line(colour=col[1],lty=lty[1],lwd=lwd[1])
+    } else {
       p <- ggplot2::ggplot(
+        y,
         ggplot2::aes(
-          x = as.numeric(N), 
-          y = as.numeric(CP), 
-          label = Ztxt, 
-          group = factor(Bound)), 
-        data = y
-        ) +
+          x = as.numeric(N),
+          y = as.numeric(CP),
+          label = Ztxt,
+          group = factor(Bound)
+        )
+      ) +
         ggplot2::geom_line(colour = getColor(col[1]), lty = lty[1], lwd = lwd[1]) +
-        ggplot2::geom_text(size = cex * 5) + 
-        ggplot2::xlab(xlab) + 
+        ggplot2::geom_text(size = cex * 5) +
+        ggplot2::xlab(xlab) +
         ggplot2::ylab(ylab)
-        p <- p + ggplot2::ggtitle(label = main)
+      p <- p + ggplot2::ggtitle(label = main)
     }
   }
   if (nlabel == TRUE) {
@@ -693,7 +692,10 @@ plotsf <- function(x,
   else if (x$test.type < 3) {
     spend <- x$upper$sf(x$alpha, t, x$upper$param)$spend
     q <- data.frame(t = t, spend = spend)
-    p <- ggplot2::qplot(x = t, y = spend, data = q, geom = "line", ylab = ylab, xlab = xlab, main = main, ...)
+    p <-
+      ggplot2::ggplot(q, ggplot2::aes(x = t, y = spend)) +
+      ggplot2::geom_line() +
+      ggplot2::labs(x = xlab, y = ylab, title = main)
     return(p)
   }
 
@@ -718,10 +720,10 @@ plotsf <- function(x,
       }
       group <- rep(1, length(t))
       q <- data.frame(t = c(t, t), spend = c(spenda, spendb), group = c(group, 2 * group))
-      p <- ggplot2::qplot(
-        x = t, y = spend, data = q, geom = "line", ylab = ylab, xlab = xlab, main = main,
-        group = factor(group), linetype = factor(group), colour = factor(group)
-      )
+      p <-
+        ggplot2::ggplot(q, ggplot2::aes(x = t, y = spend, group = factor(group))) +
+        ggplot2::geom_line(aes(linetype = factor(group), colour = factor(group))) +
+        ggplot2::labs(x = xlab, y = ylab, title = main)
       p <- p +
         ggplot2::scale_colour_manual(
           name = "Spending", values = getColor(col),
@@ -796,7 +798,10 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
   }
   else {
     q <- data.frame(x = xval, y = x$en)
-    p <- ggplot2::qplot(x = x, y = !!rlang::sym('y'), data = q, geom = "line", ylab = ylab, xlab = xlab, main = main)
+    p <-
+      ggplot2::ggplot(q, ggplot2::aes(x = x, y = !!rlang::sym("y"))) +
+      ggplot2::geom_line() +
+      ggplot2::labs(x = xlab, y = ylab, title = main)
     return(p)
   }
 }
