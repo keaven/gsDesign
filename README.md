@@ -5,6 +5,7 @@
 [![Codecov test coverage](https://codecov.io/gh/keaven/gsDesign/branch/master/graph/badge.svg)](https://app.codecov.io/gh/keaven/gsDesign?branch=master)
 [![pkgdown](https://github.com/keaven/gsDesign/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/keaven/gsDesign/actions/workflows/pkgdown.yaml)
 [![R-CMD-check](https://github.com/keaven/gsDesign/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/keaven/gsDesign/actions/workflows/R-CMD-check.yaml)
+[![shinyapps.io](https://img.shields.io/badge/Shiny-shinyapps.io-blue)](https://rinpharma.shinyapps.io/gsdesign/)
 <!-- badges: end -->
 
 The gsDesign package supports group sequential clinical trial design, largely as presented in the book Group Sequential Methods with Applications to Clinical Trials by Christopher Jennison and Bruce Turnbull (Chapman and Hall/CRC, 2000).
