@@ -61,7 +61,8 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE) {
   }
   # update bounds and counts from original design
   xi <- gsDesign(
-    k = x$k, test.type = x$test.type, n.I = counts, maxn.IPlan = counts[x$k],
+    # 20Aug2023: subtracted .002 from targeted counts to ensure rounding up to integer works
+    k = x$k, test.type = x$test.type, n.I = counts - .002, maxn.IPlan = counts[x$k],
     alpha = x$alpha, beta = x$beta, astar = x$astar,
     delta = x$delta, delta1 = x$delta1, delta0 = x$delta0, endpoint = x$endpoint,
     sfu = x$upper$sf, sfupar = x$upper$param, sfl = x$lower$sf, sflpar = x$lower$param
