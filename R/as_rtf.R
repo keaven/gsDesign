@@ -1,0 +1,85 @@
+#' Print a summary table using gt
+#'
+#' Create RTF file created with \code{\link{as_table}} to summarize
+#' an object; currently only implemented for \code{\link{gsBinomialExact}}.
+#'
+#' @param x   Object to be display on rtf.
+#' @param ... Other parameters that may be specific the object.
+#'
+#' @return NULL.
+#'
+#' @seealso \code{vignette("binomialSPRTExample")}
+#'
+#' @details
+#' Currently only implemented for \code{\link{gsBinomialExact}} objects.
+#' Creates a table to summarize an object.
+#' For \code{\link{gsBinomialExact}}, this summarized operating characteristics
+#' across a range of effect sizes.
+#'
+#' @export
+#'
+#' @examples
+#' safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75)
+#' safety_power <- gsBinomialExact(
+#'   k = length(safety_design$n.I),
+#'   theta = seq(.02, .16, .02),
+#'   n.I = safety_design$n.I,
+#'   a = safety_design$lower$bound,
+#'   b = safety_design$upper$bound
+#' )
+#' safety_power %>%
+#'   as_table() %>%
+#'   as_rtf(
+#'     theta_label = "Underlying\nAE rate",
+#'     prob_decimals = 3,
+#'     bound_label = c("low rate", "high rate"),
+#'     rtf_path = tempfile(fileext = ".rtf")
+#'   )
+as_rtf <- function(x, ...) UseMethod("as_rtf")
+
+#' @rdname as_rtf
+#'
+#' @param title Table title.
+#' @param subtitle Table subtitle.
+#' @param theta_label Label for theta.
+#' @param bound_label Label for bounds.
+#' @param prob_decimals Number of decimal places for probability of crossing.
+#' @param en_decimals Number of decimal places for expected number of
+#'   observations when bound is crossed or when trial ends without crossing.
+#' @param rr_decimals Number of decimal places for response rates.
+#' @param rtf_path Output path for the rtf file.
+#' 
+#' @importFrom r2rtf rtf_title rtf_colheader rtf_body rtf_encode write_rtf
+#'
+#' @export
+as_rtf.gsBinomialExactTable <-
+  function(x,
+           title = "Operating Characteristics for the Truncated SPRT Design",
+           subtitle = "Assumes trial evaluated sequentially after each response",
+           theta_label = "Underlying\nresponse rate",
+           bound_label = c("Futility bound", "Efficacy bound"),
+           prob_decimals = 2,
+           en_decimals = 1,
+           rr_decimals = 0,
+           rtf_path,
+           ...) {
+    x[,2] <- sprintf(paste0("%.", prob_decimals,"f"), unlist(x[,2]))
+    x[,3] <- sprintf(paste0("%.", prob_decimals,"f"), unlist(x[,3]))
+    x[,1] <- paste0(sprintf(paste0("%.", rr_decimals,"f"), unlist(x[,1] * 100)), "%")
+    x[,4] <- sprintf(paste0("%.", en_decimals,"f"), unlist(x[,4]))
+    
+    x %>%
+      rtf_title(title = title, subtitle = subtitle) %>%
+      rtf_colheader(paste0(theta_label, " | ", "Probability of crossing", " | ", "Average\nsample size"),
+                    col_rel_width = c(1, 2, 1)
+      ) %>%
+      rtf_colheader(paste0(" | ", bound_label[1], " | ", bound_label[2], " | "),
+                    col_rel_width = c(1, 1, 1, 1),
+                    border_top = c("", rep("single", 2), ""),
+                    border_left = c("single", "single", "", "single")
+      ) %>%
+        rtf_body() %>%
+        rtf_encode() %>%
+        write_rtf(rtf_path)
+    
+  }
