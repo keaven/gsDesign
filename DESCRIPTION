@@ -28,7 +28,8 @@ Imports:
     tibble,
     tidyr,
     tools,
-    xtable
+    xtable,
+    r2rtf
 Suggests:
     covr,
     gridExtra,
