@@ -27,6 +27,7 @@ as_rtf <- function(x, ...) UseMethod("as_rtf")
 #' @param subtitle Table subtitle.
 #' @param theta_label Label for theta.
 #' @param bound_label Label for bounds.
+#' @param en_label Label for en.
 #' @param prob_decimals Number of decimal places for probability of crossing.
 #' @param en_decimals Number of decimal places for expected number of
 #'   observations when bound is crossed or when trial ends without crossing.
