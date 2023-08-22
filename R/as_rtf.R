@@ -19,22 +19,6 @@
 #' @export
 #'
 #' @examples
-#' safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75)
-#' safety_power <- gsBinomialExact(
-#'   k = length(safety_design$n.I),
-#'   theta = seq(.02, .16, .02),
-#'   n.I = safety_design$n.I,
-#'   a = safety_design$lower$bound,
-#'   b = safety_design$upper$bound
-#' )
-#' safety_power %>%
-#'   as_table() %>%
-#'   as_rtf(
-#'     theta_label = "Underlying\nAE rate",
-#'     prob_decimals = 3,
-#'     bound_label = c("low rate", "high rate"),
-#'     rtf_path = tempfile(fileext = ".rtf")
-#'   )
 as_rtf <- function(x, ...) UseMethod("as_rtf")
 
 #' @rdname as_rtf
@@ -52,12 +36,43 @@ as_rtf <- function(x, ...) UseMethod("as_rtf")
 #' @importFrom r2rtf rtf_title rtf_colheader rtf_body rtf_encode write_rtf
 #'
 #' @export
+#' 
+#' @examples 
+#' zz <- gsBinomialExact(
+#'   k = 3, theta = seq(0, 1, 0.1), n.I = c(12, 24, 36),
+#'   a = c(-1, 0, 11), b = c(5, 9, 12)
+#' )
+#' zz %>% 
+#'   as_table() %>% 
+#'   as_rtf(
+#'     title = "Power/Type I error and expected sample size for a group sequential design",
+#'     subtitle = "in a single-arm trial with a binary outcome",
+#'     rtf_path = tempfile(fileext = ".rtf")
+#'   )
+#'
+#' safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75)
+#' safety_power <- gsBinomialExact(
+#'   k = length(safety_design$n.I),
+#'   theta = seq(.02, .16, .02),
+#'   n.I = safety_design$n.I,
+#'   a = safety_design$lower$bound,
+#'   b = safety_design$upper$bound
+#' )
+#' safety_power %>%
+#'   as_table() %>%
+#'   as_rtf(
+#'     theta_label = "Underlying\nAE rate",
+#'     prob_decimals = 3,
+#'     bound_label = c("low rate", "high rate"),
+#'     rtf_path = tempfile(fileext = ".rtf")
+#'   )
 as_rtf.gsBinomialExactTable <-
   function(x,
            title = "Operating Characteristics for the Truncated SPRT Design",
            subtitle = "Assumes trial evaluated sequentially after each response",
            theta_label = "Underlying\nresponse rate",
            bound_label = c("Futility bound", "Efficacy bound"),
+           en_label = "Expected sample sizes",
            prob_decimals = 2,
            en_decimals = 1,
            rr_decimals = 0,
