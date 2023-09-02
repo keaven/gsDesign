@@ -61,12 +61,13 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE) {
   }
   # update bounds and counts from original design
   xi <- gsDesign(
-    # 20Aug2023: subtracted .002 from targeted counts to ensure rounding up to integer works
-    k = x$k, test.type = x$test.type, n.I = counts - .002, maxn.IPlan = counts[x$k],
+    k = x$k, test.type = x$test.type, n.I = counts, maxn.IPlan = counts[x$k],
     alpha = x$alpha, beta = x$beta, astar = x$astar,
     delta = x$delta, delta1 = x$delta1, delta0 = x$delta0, endpoint = x$endpoint,
     sfu = x$upper$sf, sfupar = x$upper$param, sfl = x$lower$sf, sflpar = x$lower$param
   )
+  if (max(abs(xi$n.I - counts)) > .01) warning("toInteger: check n.I input versus output")
+  xi$n.I <- counts # ensure these are integers as they become real in gsDesign call
   if (x$test.type %in% c(4, 6)) {
     xi$falseposnb <- as.vector(gsprob(0, xi$n.I, rep(-20, xi$k), xi$upper$bound, r = xi$r)$probhi)
   }

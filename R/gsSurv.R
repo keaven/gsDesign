@@ -1283,16 +1283,14 @@ print.gsSurv <- function(x, digits = 2, ...) {
   print.gsDesign(x)
   if (x$test.type != 1) {
     y <- cbind(
-      x$T, (x$eNC + x$eNE) %*% rep(1, ncol(x$eNE)),
-      (x$eDC + x$eDE) %*% rep(1, ncol(x$eNE)),
+      x$T, (x$eNC + x$eNE) %*% rep(1, ncol(x$eNE)), x$n.I,
       round(zn2hr(x$lower$bound, x$n.I, x$ratio, hr0 = x$hr0, hr1 = x$hr), 3),
       round(zn2hr(x$upper$bound, x$n.I, x$ratio, hr0 = x$hr0, hr1 = x$hr), 3)
     )
     colnames(y) <- c("T", "n", "Events", "HR futility", "HR efficacy")
   } else {
     y <- cbind(
-      x$T, (x$eNC + x$eNE) %*% rep(1, ncol(x$eNE)),
-      (x$eDC + x$eDE) %*% rep(1, ncol(x$eNE)),
+      x$T, (x$eNC + x$eNE) %*% rep(1, ncol(x$eNE)), x$n.I,
       round(zn2hr(x$upper$bound, x$n.I, x$ratio, hr0 = x$hr0, hr1 = x$hr), 3)
     )
     colnames(y) <- c("T", "n", "Events", "HR efficacy")
