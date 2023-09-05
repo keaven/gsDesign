@@ -257,8 +257,8 @@ ggplot(event_accrual, aes(x = Time, y = EF, color = Scenario, lty = Hypothesis))
 ## Design assumptions
 
 We choose calendar-based timing for analyses as well as for spending.
-This is not done automatically by the `gsSurv()` function.
-There are two steps in particular that we walk through here:
+This is not done automatically by the `gsSurv()` function, but is done using the `gsSurvCalendar()` function.
+There are two things `gsSurvCalendar()` takes care of::
 
 - How to get information fraction levels that correspond to targeted calendar analysis times to plug in for the planned design.
 - Replacing information fraction levels with calendar fraction levels for $\alpha$- and $\beta$-spending.
@@ -266,13 +266,8 @@ There are two steps in particular that we walk through here:
 We begin by specifying calendar times of analysis and find corresponding fractions of final planned events and calendar time under design assumptions.
 
 ```{r}
-h1s1_EF <- event_accrual %>%
-  filter(Scenario == 1 & Hypothesis == "H1" & Time %in% c(12, 24, 36)) %>%
-  select(Time, EF)
-h1s1_EF
-# Interim analysis timing (information fraction)
-timing <- h1s1_EF$EF
-timing_calendar <- h1s1_EF$Time / study_duration
+# Calendar time from start of randomization until each analysis time
+calendarTime <- c(12, 24, 36, 48)
 ```
 
 Now we move on to other design assumptions.
@@ -320,26 +315,23 @@ We now use the information fractions from the text overlay to set up a calendar-
 
 ```{r}
 design_calendar <-
-  gsSurv(
-    k = length(timing) + 1,
+  gsSurvCalendar(
+    calendarTime = calendarTime,
+    spending = "calendar",
     alpha = alpha,
     beta = beta,
     astar = astar,
     test.type = test.type,
-    timing = timing, # Planned event fractions here
     hr = hr[1],
     R = enroll_duration[1],
     gamma = 1,
-    T = study_duration[1],
     minfup = study_duration[1] - enroll_duration[1],
     ratio = ratio,
     sfu = sfu,
     sfupar = sfupar,
-    usTime = timing_calendar, # Use calendar-based spending
     sfl = sfl,
     sflpar = sflpar,
     lambdaC = lambdaC,
-    lsTime = timing_calendar, # Use calendar-based spending
     S = S
   )
 design_calendar %>%
