@@ -1,3 +1,5 @@
+#' Time-to-event endpoint design with calendar timing of analyses
+#' 
 #' @param test.type 
 #' @param alpha Type I error rate. Default is 0.025 since 1-sided 
 #' testing is default.
@@ -88,6 +90,19 @@
 #' points and greater accuracy. Normally r will not be changed by 
 #' the user.
 #'
+#' @examples
+#' # First example: while timing is calendar-based, spending is event-based
+#' x <- gsSurvCalendar() %>% toInteger()
+#' # Second example: both timing and spending are calendar-based
+#' # This results in less spending at interims and leaves more for final analysis
+#' gsBoundSummary(x)
+#' y <- gsSurvCalendar(spending = "calendar") %>% toInteger()
+#' gsBoundSummary(y)
+#' # Note that calendar timing for spending relates to planned timing for y
+#' # rather than timing in y after toInteger() conversion
+#' y$usTime # Values plugged into spending function for calendar time
+#' y$T / max(y$T) # Actual calendar fraction from design after toInteger() conversion
+#' 
 #' @export
 #' @rdname gsSurvCalendar
 gsSurvCalendar <- function(

@@ -64,7 +64,8 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE) {
     k = x$k, test.type = x$test.type, n.I = counts, maxn.IPlan = counts[x$k],
     alpha = x$alpha, beta = x$beta, astar = x$astar,
     delta = x$delta, delta1 = x$delta1, delta0 = x$delta0, endpoint = x$endpoint,
-    sfu = x$upper$sf, sfupar = x$upper$param, sfl = x$lower$sf, sflpar = x$lower$param
+    sfu = x$upper$sf, sfupar = x$upper$param, sfl = x$lower$sf, sflpar = x$lower$param,
+    lsTime = x$lsTime, usTime = x$usTime
   )
   if (max(abs(xi$n.I - counts)) > .01) warning("toInteger: check n.I input versus output")
   xi$n.I <- counts # ensure these are integers as they become real in gsDesign call
