@@ -66,6 +66,7 @@ library(gsDesign)
 
 x <- gsDesign(n.fix = 200)
 plot(x)
+gsBoundSummary(x)
 ```
 
 # References
