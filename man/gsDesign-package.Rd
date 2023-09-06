@@ -2,8 +2,8 @@
 % Please edit documentation in R/gsDesign-package.R
 \docType{package}
 \name{gsDesign-package}
-\alias{gsDesign}
 \alias{gsDesign-package}
+\alias{_PACKAGE}
 \title{gsDesign: Group Sequential Design}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
