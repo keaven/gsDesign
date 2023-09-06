@@ -125,7 +125,7 @@ Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
 \link{plot.gsDesign}, \code{\link{gsDesign}},
-\link{gsDesign package overview}
+\code{vignette("gsDesignPackageOverview")}
 }
 \author{
 Keaven Anderson \email{keaven_anderson@merck.com}

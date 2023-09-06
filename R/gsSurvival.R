@@ -198,7 +198,7 @@
 #' hrn2z(hr = 1 / .6, n = 75, ratio = 2)
 #' @author Shanhong Guan \email{shanhong.guan@@gmail.com}, Keaven Anderson
 #' \email{keaven_anderson@@merck.com}
-#' @seealso \link{gsDesign package overview}, \link{plot.gsDesign}, 
+#' @seealso \code{vignette("gsDesignPackageOverview")}, \link{plot.gsDesign},
 #' \link{gsDesign}, \link{gsHR}
 #' @references Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and
 #' Power for Analyses of Survival with Allowance for Nonuniform Patient Entry,

@@ -116,8 +116,8 @@ for group sequential trials with random information levels.
 \emph{Journal of biopharmaceutical statistics}; 22(4), 687-699.
 }
 \seealso{
-\link{Spending_Function_Overview}, \code{\link{gsDesign}},
-\link{gsDesign package overview}
+\code{vignette("SpendingFunctionOverview")}, \code{\link{gsDesign}},
+\code{vignette("gsDesignPackageOverview")}
 }
 \author{
 Keaven Anderson \email{keaven_anderson@merck.com}

@@ -274,7 +274,7 @@ Schoenfeld D (1981), The Asymptotic Properties of Nonparametric Tests for
 Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
 }
 \seealso{
-\link{gsDesign package overview}, \link{plot.gsDesign}, 
+\code{vignette("gsDesignPackageOverview")}, \link{plot.gsDesign},
 \link{gsDesign}, \link{gsHR}
 }
 \author{

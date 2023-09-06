@@ -83,7 +83,7 @@ O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds).  For
 one-sided and symmetric two-sided testing is used to completely specify
 spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
 \code{sfHSD} which is a Hwang-Shih-DeCani spending function.  See details,
-\link{Spending_Function_Overview}, manual and examples.}
+\code{vignette("SpendingFunctionOverview")}, manual and examples.}
 
 \item{sfupar}{Real value, default is \eqn{-4} which is an
 O'Brien-Fleming-like conservative bound when used with the default
@@ -244,13 +244,13 @@ size, this is not needed and a more complete output summary is given.}
 \item{endpoint}{As input.} \item{delta1}{As input.} \item{delta0}{As input.}
 \item{overrun}{As input.} \item{usTime}{As input.} \item{lsTime}{As input.} \item{upper}{Upper bound spending function,
 boundary and boundary crossing probabilities under the NULL and alternate
-hypotheses. See \link{Spending_Function_Overview} and manual for further
+hypotheses. See \code{vignette("SpendingFunctionOverview")} and manual for further
 details.} \item{lower}{Lower bound spending function, boundary and boundary
 crossing probabilities at each analysis. Lower spending is under alternative
 hypothesis (beta spending) for \code{test.type=3} or \code{4}.  For
 \code{test.type=2}, \code{5} or \code{6}, lower spending is under the null
 hypothesis. For \code{test.type=1}, output value is \code{NULL}. See
-\link{Spending_Function_Overview} and manual.} \item{theta}{Standarized
+\code{vignette("SpendingFunctionOverview")} and manual.} \item{theta}{Standarized
 effect size under null (0) and alternate hypothesis. If \code{delta} is
 input, \code{theta[1]=delta}. If \code{n.fix} is input, \code{theta[1]} is
 computed using a standard sample size formula (pseudocode):
@@ -367,9 +367,9 @@ Liu, Q, Lim, P, Nuamah, I, and Li, Y (2012), On adaptive error spending approach
 group sequential trials with random information levels. \emph{Journal of biopharmaceutical statistics}; 22(4), 687-699.
 }
 \seealso{
-\link{gsDesign package overview}, \link{gsBoundSummary}, 
+\code{vignette("gsDesignPackageOverview")}, \link{gsBoundSummary},
 \link{plot.gsDesign},
-\code{\link{gsProbability}}, \link{Spending_Function_Overview},
+\code{\link{gsProbability}}, \code{vignette("SpendingFunctionOverview")},
 
 \code{\link[stats]{Normal}}
  \code{\link[xtable]{xtable}}

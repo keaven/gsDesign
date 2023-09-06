@@ -35,7 +35,7 @@
 # @note The gsDesign technical manual is available at
 #   \url{https://keaven.github.io/gsd-tech-manual/}.
 # @author Keaven Anderson \email{keaven_anderson@@merck.com}
-# @seealso \code{\link{Spending_Function_Overview}, \link{gsDesign}},
+# @seealso \code{vignette("SpendingFunctionOverview")}, \code{\link{gsDesign}},
 # \code{\link{gsProbability}}
 # @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 # Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
