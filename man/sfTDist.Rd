@@ -110,8 +110,8 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
-\link{Spending_Function_Overview}, \code{\link{gsDesign}},
-\link{gsDesign package overview}
+\code{vignette("SpendingFunctionOverview")}, \code{\link{gsDesign}},
+\code{vignette("gsDesignPackageOverview")}
 }
 \author{
 Keaven Anderson \email{keaven_anderson@merck.com}

@@ -30,7 +30,7 @@ and param (null for a spending function with no parameters or a scalar or
 vector of parameters needed to fully specify the spending function in sf).}
 }
 \value{
-An object of type \code{spendfn}. See \code{\link{Spending_Function_Overview}} 
+An object of type \code{spendfn}. See \code{vignette("SpendingFunctionOverview")}
 for further details.
 }
 \description{
@@ -153,8 +153,8 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
-\link{Spending_Function_Overview}, \code{\link{gsDesign}},
-\link{gsDesign package overview}
+\code{vignette("SpendingFunctionOverview")}, \code{\link{gsDesign}},
+\code{vignette("gsDesignPackageOverview")}
 }
 \author{
 Keaven Anderson \email{keaven_anderson@merck.com}

@@ -22,7 +22,7 @@ parameter for which Kim-DeMets spending is to be computed; allowable range
 is (0,50]}
 }
 \value{
-An object of type \code{spendfn}. See \link{Spending_Function_Overview} for further details.
+An object of type \code{spendfn}. See \code{vignette("SpendingFunctionOverview")} for further details.
 }
 \description{
 The function \code{sfPower()} implements a Kim-DeMets (power) spending
@@ -84,8 +84,8 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
-\link{Spending_Function_Overview}, \code{\link{gsDesign}},
-\link{gsDesign package overview}
+\code{vignette("SpendingFunctionOverview")}, \code{\link{gsDesign}},
+\code{vignette("gsDesignPackageOverview")}
 }
 \author{
 Keaven Anderson \email{keaven_anderson@merck.com}

@@ -109,7 +109,7 @@ Snedecor GW and Cochran WG (1989), Statistical Methods. 8th ed. Ames, IA:
 Iowa State University Press.
 }
 \seealso{
-\link{gsDesign package overview}
+\code{vignette("gsDesignPackageOverview")}
 }
 \author{
 Keaven Anderson \email{keaven_anderson@merck.com}

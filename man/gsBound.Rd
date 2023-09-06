@@ -130,7 +130,7 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
-\link{gsDesign package overview}, \code{\link{gsDesign}},
+\code{vignette("gsDesignPackageOverview")}, \code{\link{gsDesign}},
 \code{\link{gsProbability}}
 }
 \author{

@@ -45,7 +45,7 @@ performed after the last proportion of final planned information
 (\code{param[m]}) will be the final analysis, using any remaining error that
 was not previously spent.
 
-See \code{\link{Spending_Function_Overview}} for further details.
+See \code{vignette("SpendingFunctionOverview")} for further details.
 }
 \description{
 The function \code{sfLinear()} allows specification of a piecewise linear
@@ -140,8 +140,8 @@ Jennison C and Turnbull BW (2000), \emph{Group Sequential
 Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
 }
 \seealso{
-\link{Spending_Function_Overview}, \code{\link{gsDesign}},
-\link{gsDesign package overview}
+\code{vignette("SpendingFunctionOverview")}, \code{\link{gsDesign}},
+\code{vignette("gsDesignPackageOverview")}
 }
 \author{
 Keaven Anderson \email{keaven_anderson@merck.com}

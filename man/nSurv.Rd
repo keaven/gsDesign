@@ -189,7 +189,7 @@ O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds).  For
 one-sided and symmetric two-sided testing is used to completely specify
 spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
 \code{sfHSD} which is a Hwang-Shih-DeCani spending function.  See details,
-\link{Spending_Function_Overview}, manual and examples.}
+\code{vignette("SpendingFunctionOverview")}, manual and examples.}
 
 \item{sfupar}{Real value, default is \eqn{-4} which is an
 O'Brien-Fleming-like conservative bound when used with the default
@@ -463,7 +463,7 @@ Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
 }
 \seealso{
 \code{\link{gsBoundSummary}}, \code{\link{xprint}},
-\link{gsDesign package overview}, \link{plot.gsDesign},
+\code{vignette("gsDesignPackageOverview")}, \link{plot.gsDesign},
 \code{\link{gsDesign}}, \code{\link{gsHR}}, \code{\link{nSurvival}}
 
 \code{\link[stats]{uniroot}}

@@ -156,7 +156,7 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 #'
 #' @aliases print.eEvents
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
-#' @seealso \link{gsDesign package overview}, \link{plot.gsDesign},
+#' @seealso \code{vignette("gsDesignPackageOverview")}, \link{plot.gsDesign},
 #' \code{\link{gsDesign}}, \code{\link{gsHR}},
 #' \code{\link{nSurvival}}
 #' @references Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and
@@ -840,7 +840,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' one-sided and symmetric two-sided testing is used to completely specify
 #' spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
 #' \code{sfHSD} which is a Hwang-Shih-DeCani spending function.  See details,
-#' \link{Spending_Function_Overview}, manual and examples.
+#' \code{vignette("SpendingFunctionOverview")}, manual and examples.
 #' @param sfupar Real value, default is \eqn{-4} which is an
 #' O'Brien-Fleming-like conservative bound when used with the default
 #' Hwang-Shih-DeCani spending function. This is a real-vector for many spending
@@ -962,7 +962,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' \code{tEventsIA()} returns the same structure as \code{nEventsIA(..., simple=TRUE)} when
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsBoundSummary}}, \code{\link{xprint}},
-#' \link{gsDesign package overview}, \link{plot.gsDesign},
+#' \code{vignette("gsDesignPackageOverview")}, \link{plot.gsDesign},
 #' \code{\link{gsDesign}}, \code{\link{gsHR}}, \code{\link{nSurvival}}
 #' @references Kim KM and Tsiatis AA (1990), Study duration for clinical trials
 #' with survival response and early stopping rule. \emph{Biometrics}, 46, 81-92

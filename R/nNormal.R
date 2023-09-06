@@ -73,7 +73,7 @@
 #' # non-inferiority assuming a better effect than null
 #' nNormal(delta1 = .5, delta0 = -.1, sd = 1.2)
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
-#' @seealso \link{gsDesign package overview}
+#' @seealso \code{vignette("gsDesignPackageOverview")}
 #' @references 
 #' Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
