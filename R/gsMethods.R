@@ -777,6 +777,7 @@ sfprint <- function(x) {
 
 # summary.spendfn roxy [sinew] ----
 #' @export
+#' @rdname spendingFunction
 #' @aliases summary.spendfn
 # summary.spendfn function [sinew] ----
 summary.spendfn <- function(object, ...) {

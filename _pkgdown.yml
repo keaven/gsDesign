@@ -52,10 +52,11 @@ reference:
   - toBinomialExact
 - title: Spending Functions
   desc: >
-    To create new spending functions, start with
-    `vignette("SpendingFunctionOverview")` for an introduction.
-    After that, check out these spending functions for extra details.
+    For an overview of spending functions, see
+    `vignette("SpendingFunctionOverview")`.
   contents:
+  - spendingFunction
+  - summary.spendfn
   - sfLDPocock
   - sfLDOF
   - sfHSD
