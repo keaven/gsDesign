@@ -5,6 +5,9 @@ template:
 
 reference:
 - title: Group Sequential Computation
+  desc: >
+    For an overview of the gsDesign package, see
+    `vignette("gsDesignPackageOverview")`.
   contents:
   - gsDesign
   - plot.gsDesign
@@ -12,7 +15,6 @@ reference:
   - gsBound1
   - gsBound
   - sequentialPValue
-  - gsDesign package overview
 - title: Design Characterization
   contents:
   - gsBoundSummary
@@ -49,8 +51,11 @@ reference:
   contents:
   - toBinomialExact
 - title: Spending Functions
+  desc: >
+    To create new spending functions, start with
+    `vignette("SpendingFunctionOverview")` for an introduction.
+    After that, check out these spending functions for extra details.
   contents:
-  - Spending_Function_Overview
   - sfLDPocock
   - sfLDOF
   - sfHSD
@@ -129,6 +134,8 @@ articles:
         Other vignettes.
     contents:
       - GentleIntroductionToGSD
+      - gsDesignPackageOverview
+      - SpendingFunctionOverview
       - nNormal
       - hGraph
       - GraphicalMultiplicity
