@@ -149,7 +149,7 @@ performed after the last proportion of final planned information
 was not previously spent.</p>
 
 
-<p>See <code><a href="Spending_Function_Overview.html">Spending_Function_Overview</a></code> for further details.</p>
+<p>See <code><a href="../articles/SpendingFunctionOverview.html">vignette("SpendingFunctionOverview")</a></code> for further details.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -163,8 +163,8 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="Spending_Function_Overview.html">Spending_Function_Overview</a>, <code><a href="gsDesign.html">gsDesign</a></code>,
-<a href="gsDesign-package-overview.html">gsDesign package overview</a></p></div>
+    <div class="dont-index"><p><code><a href="../articles/SpendingFunctionOverview.html">vignette("SpendingFunctionOverview")</a></code>, <code><a href="gsDesign.html">gsDesign</a></code>,
+<code><a href="../articles/gsDesignPackageOverview.html">vignette("gsDesignPackageOverview")</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -318,14 +318,14 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span><span class="co"># early or late depending on observed interim z1,</span></span></span>
 <span class="r-in"><span><span class="co"># Type I error is now almost twice the planned .025</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">z1</span> <span class="op">&gt;=</span> <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">|</span> <span class="va">z2</span> <span class="op">&gt;=</span> <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1000000</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.046919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.046824</span>
 <span class="r-in"><span><span class="co"># if stage 2 sample size is random and independent of z1 with same frequency,</span></span></span>
 <span class="r-in"><span><span class="co"># this is not a problem</span></span></span>
 <span class="r-in"><span><span class="va">s1alt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000000</span>, <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">178</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">z1alt</span> <span class="op">&lt;-</span> <span class="va">s1alt</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">178</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">z2alt</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">s1alt</span> <span class="op">+</span> <span class="va">s2</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">178</span> <span class="op">+</span> <span class="va">n2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">z1alt</span> <span class="op">&gt;=</span> <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">|</span> <span class="va">z2alt</span> <span class="op">&gt;=</span> <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1000000</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.025199</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.025159</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

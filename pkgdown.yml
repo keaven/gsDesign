@@ -5,14 +5,16 @@ articles:
   GentleIntroductionToGSD: GentleIntroductionToGSD.html
   GraphicalMultiplicity: GraphicalMultiplicity.html
   PoissonMixtureModel: PoissonMixtureModel.html
+  SpendingFunctionOverview: SpendingFunctionOverview.html
   SurvivalOverview: SurvivalOverview.html
   VaccineEfficacy: VaccineEfficacy.html
   binomialSPRTExample: binomialSPRTExample.html
+  gsDesignPackageOverview: gsDesignPackageOverview.html
   gsSurvBasicExamples: gsSurvBasicExamples.html
   hGraph: hGraph.html
   nNormal: nNormal.html
   toInteger: toInteger.html
-last_built: 2023-07-28T18:05Z
+last_built: 2023-09-06T18:34Z
 urls:
   reference: https://keaven.github.io/gsDesign/reference
   article: https://keaven.github.io/gsDesign/articles

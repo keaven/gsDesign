@@ -13,6 +13,9 @@
     <loc>https://keaven.github.io/gsDesign/articles/PoissonMixtureModel.html</loc>
   </url>
   <url>
+    <loc>https://keaven.github.io/gsDesign/articles/SpendingFunctionOverview.html</loc>
+  </url>
+  <url>
     <loc>https://keaven.github.io/gsDesign/articles/SurvivalOverview.html</loc>
   </url>
   <url>
@@ -20,6 +23,9 @@
   </url>
   <url>
     <loc>https://keaven.github.io/gsDesign/articles/binomialSPRTExample.html</loc>
+  </url>
+  <url>
+    <loc>https://keaven.github.io/gsDesign/articles/gsDesignPackageOverview.html</loc>
   </url>
   <url>
     <loc>https://keaven.github.io/gsDesign/articles/gsSurvBasicExamples.html</loc>
@@ -44,9 +50,6 @@
   </url>
   <url>
     <loc>https://keaven.github.io/gsDesign/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/Spending_Function_Overview.html</loc>
   </url>
   <url>
     <loc>https://keaven.github.io/gsDesign/reference/as_gt.html</loc>
@@ -79,7 +82,7 @@
     <loc>https://keaven.github.io/gsDesign/reference/gsDensity.html</loc>
   </url>
   <url>
-    <loc>https://keaven.github.io/gsDesign/reference/gsDesign-package-overview.html</loc>
+    <loc>https://keaven.github.io/gsDesign/reference/gsDesign-package.html</loc>
   </url>
   <url>
     <loc>https://keaven.github.io/gsDesign/reference/gsDesign.html</loc>
@@ -140,6 +143,9 @@
   </url>
   <url>
     <loc>https://keaven.github.io/gsDesign/reference/sfTDist.html</loc>
+  </url>
+  <url>
+    <loc>https://keaven.github.io/gsDesign/reference/spendingFunction.html</loc>
   </url>
   <url>
     <loc>https://keaven.github.io/gsDesign/reference/ssrCP.html</loc>
