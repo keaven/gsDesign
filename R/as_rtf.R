@@ -3,10 +3,10 @@
 #' Create RTF file output from \code{\link{as_table}} to summarize
 #' an object; currently only implemented for \code{\link{gsBinomialExact}}.
 #'
-#' @param x   Object to be display on rtf.
+#' @param x Object to be displayed on rtf.
 #' @param ... Other parameters that may be specific the object.
 #'
-#' @return NULL.
+#' @return RTF file for summary table.
 #'
 #' @seealso \code{vignette("binomialSPRTExample")}
 #'
@@ -27,7 +27,7 @@
 #'   as_table() %>% 
 #'   as_rtf(
 #'     title = "Power/Type I error and expected sample size for a group sequential design",
-#'     rtf_path = tempfile(fileext = ".rtf")
+#'     file = tempfile(fileext = ".rtf")
 #'   )
 #'
 #' safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75)
@@ -44,7 +44,7 @@
 #'     theta_label = "Underlying\nAE rate",
 #'     prob_decimals = 3,
 #'     bound_label = c("low rate", "high rate"),
-#'     rtf_path = tempfile(fileext = ".rtf")
+#'     file = tempfile(fileext = ".rtf")
 #'   )
 as_rtf <- function(x, ...) UseMethod("as_rtf")
 
@@ -60,7 +60,7 @@ as_rtf <- function(x, ...) UseMethod("as_rtf")
 #' @param en_decimals Number of decimal places for expected number of
 #'   observations when bound is crossed or when trial ends without crossing.
 #' @param rr_decimals Number of decimal places for response rates.
-#' @param rtf_path Output path for the rtf file.
+#' @param file Output path for the rtf file.
 #' 
 #' @importFrom r2rtf rtf_title rtf_colheader rtf_body rtf_encode write_rtf
 #'
@@ -76,7 +76,7 @@ as_rtf.gsBinomialExactTable <-
            prob_decimals = 2,
            en_decimals = 1,
            rr_decimals = 0,
-           rtf_path,
+           file,
            ...) {
     x[,2] <- sprintf(paste0("%.", prob_decimals,"f"), unlist(x[,2]))
     x[,3] <- sprintf(paste0("%.", prob_decimals,"f"), unlist(x[,3]))
@@ -95,8 +95,8 @@ as_rtf.gsBinomialExactTable <-
       ) %>%
         rtf_body() %>%
         rtf_encode() %>%
-        write_rtf(rtf_path)
+        write_rtf(file)
     
-    message("The RTF output is saved in", normalizePath(rtf_path))
+    message("The RTF output is saved in", normalizePath(file))
     
   }

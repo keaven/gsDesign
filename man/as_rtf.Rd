@@ -19,12 +19,12 @@ as_rtf(x, ...)
   prob_decimals = 2,
   en_decimals = 1,
   rr_decimals = 0,
-  rtf_path,
+  file,
   ...
 )
 }
 \arguments{
-\item{x}{Object to be display on rtf.}
+\item{x}{Object to be displayed on rtf.}
 
 \item{...}{Other parameters that may be specific the object.}
 
@@ -46,10 +46,10 @@ observations when bound is crossed or when trial ends without crossing.}
 
 \item{rr_decimals}{Number of decimal places for response rates.}
 
-\item{rtf_path}{Output path for the rtf file.}
+\item{file}{Output path for the rtf file.}
 }
 \value{
-NULL.
+RTF file for summary table.
 }
 \description{
 Create RTF file output from \code{\link{as_table}} to summarize
@@ -70,7 +70,7 @@ zz \%>\%
   as_table() \%>\% 
   as_rtf(
     title = "Power/Type I error and expected sample size for a group sequential design",
-    rtf_path = tempfile(fileext = ".rtf")
+    file = tempfile(fileext = ".rtf")
   )
 
 safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75)
@@ -87,7 +87,7 @@ safety_power \%>\%
     theta_label = "Underlying\nAE rate",
     prob_decimals = 3,
     bound_label = c("low rate", "high rate"),
-    rtf_path = tempfile(fileext = ".rtf")
+    file = tempfile(fileext = ".rtf")
   )
 }
 \seealso{
