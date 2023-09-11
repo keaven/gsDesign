@@ -3,16 +3,19 @@
 \name{as_rtf}
 \alias{as_rtf}
 \alias{as_rtf.gsBinomialExactTable}
-\title{Print a summary table using gt}
+\title{Print a summary table using RTF}
 \usage{
 as_rtf(x, ...)
 
 \method{as_rtf}{gsBinomialExactTable}(
   x,
-  title = "Operating Characteristics for the Truncated SPRT Design",
+  title =
+    "Operating characteristics by underlying response rate for exact binomial group sequential design",
   subtitle = "Assumes trial evaluated sequentially after each response",
-  theta_label = "Underlying\\nresponse rate",
-  bound_label = c("Futility bound", "Efficacy bound"),
+  theta_label = "Underlying response rate",
+  reponse_outcome = TRUE,
+  bound_label = ifelse(reponse_outcome, c("Futility bound", "Efficacy bound"),
+    c("Efficacy bound", "Futility bound")),
   en_label = "Expected sample sizes",
   prob_decimals = 2,
   en_decimals = 1,
@@ -49,7 +52,7 @@ observations when bound is crossed or when trial ends without crossing.}
 NULL.
 }
 \description{
-Create RTF file created with \code{\link{as_table}} to summarize
+Create RTF file output from \code{\link{as_table}} to summarize
 an object; currently only implemented for \code{\link{gsBinomialExact}}.
 }
 \details{

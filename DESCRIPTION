@@ -23,13 +23,13 @@ Imports:
     gt,
     magrittr,
     methods,
+    r2rtf,
     rlang,
     stats,
     tibble,
     tidyr,
     tools,
-    xtable,
-    r2rtf
+    xtable
 Suggests:
     covr,
     gridExtra,

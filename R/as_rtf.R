@@ -1,6 +1,6 @@
-#' Print a summary table using gt
+#' Print a summary table using RTF
 #'
-#' Create RTF file created with \code{\link{as_table}} to summarize
+#' Create RTF file output from \code{\link{as_table}} to summarize
 #' an object; currently only implemented for \code{\link{gsBinomialExact}}.
 #'
 #' @param x   Object to be display on rtf.
@@ -18,26 +18,6 @@
 #'
 #' @export
 #'
-#' @examples
-as_rtf <- function(x, ...) UseMethod("as_rtf")
-
-#' @rdname as_rtf
-#'
-#' @param title Table title.
-#' @param subtitle Table subtitle.
-#' @param theta_label Label for theta.
-#' @param bound_label Label for bounds.
-#' @param en_label Label for en.
-#' @param prob_decimals Number of decimal places for probability of crossing.
-#' @param en_decimals Number of decimal places for expected number of
-#'   observations when bound is crossed or when trial ends without crossing.
-#' @param rr_decimals Number of decimal places for response rates.
-#' @param rtf_path Output path for the rtf file.
-#' 
-#' @importFrom r2rtf rtf_title rtf_colheader rtf_body rtf_encode write_rtf
-#'
-#' @export
-#' 
 #' @examples 
 #' zz <- gsBinomialExact(
 #'   k = 3, theta = seq(0, 1, 0.1), n.I = c(12, 24, 36),
@@ -67,12 +47,32 @@ as_rtf <- function(x, ...) UseMethod("as_rtf")
 #'     bound_label = c("low rate", "high rate"),
 #'     rtf_path = tempfile(fileext = ".rtf")
 #'   )
+as_rtf <- function(x, ...) UseMethod("as_rtf")
+
+#' @rdname as_rtf
+#'
+#' @param title Table title.
+#' @param subtitle Table subtitle.
+#' @param theta_label Label for theta.
+#' @param bound_label Label for bounds.
+#' @param en_label Label for en.
+#' @param prob_decimals Number of decimal places for probability of crossing.
+#' @param en_decimals Number of decimal places for expected number of
+#'   observations when bound is crossed or when trial ends without crossing.
+#' @param rr_decimals Number of decimal places for response rates.
+#' @param rtf_path Output path for the rtf file.
+#' 
+#' @importFrom r2rtf rtf_title rtf_colheader rtf_body rtf_encode write_rtf
+#'
+#' @export
+#' 
 as_rtf.gsBinomialExactTable <-
   function(x,
-           title = "Operating Characteristics for the Truncated SPRT Design",
+           title = "Operating characteristics by underlying response rate for exact binomial group sequential design",
            subtitle = "Assumes trial evaluated sequentially after each response",
-           theta_label = "Underlying\nresponse rate",
-           bound_label = c("Futility bound", "Efficacy bound"),
+           theta_label = "Underlying response rate",
+           reponse_outcome = TRUE, 
+           bound_label = ifelse(reponse_outcome, c("Futility bound", "Efficacy bound"), c("Efficacy bound", "Futility bound")),
            en_label = "Expected sample sizes",
            prob_decimals = 2,
            en_decimals = 1,
@@ -86,7 +86,7 @@ as_rtf.gsBinomialExactTable <-
     
     x %>%
       rtf_title(title = title, subtitle = subtitle) %>%
-      rtf_colheader(paste0(theta_label, " | ", "Probability of crossing", " | ", "Average\nsample size"),
+      rtf_colheader(paste0(theta_label, " | ", "Probability of crossing", " | ", en_label),
                     col_rel_width = c(1, 2, 1)
       ) %>%
       rtf_colheader(paste0(" | ", bound_label[1], " | ", bound_label[2], " | "),
@@ -97,5 +97,7 @@ as_rtf.gsBinomialExactTable <-
         rtf_body() %>%
         rtf_encode() %>%
         write_rtf(rtf_path)
+    
+    message("The RTF output is saved in", normalizePath(rtf_path))
     
   }
