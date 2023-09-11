@@ -159,8 +159,7 @@ ggplot(survival, aes(x = Time, y = Survival, lty = Treatment, col = Scenario)) +
   theme(legend.position = "bottom")
 ```
 
-We also evaluate the failure rate over time, which is higher in scenario 2.
-This is later used in the design derivation.
+We also evaluate the failure rate over time for scenario 1, which is later used in the design derivation.
 Note that the piecewise intervals used to approximate changing hazard rates can be made arbitrarily small to get more precise approximations of the above.
 However, given the uncertainty of the underlying assumptions, it is not clear that this provides any advantage.
 
@@ -185,7 +184,7 @@ ggplot() +
   ylab("Hazard rate") +
   xlab("Time") +
   ggtitle("Step Function Approximated Hazard Rate for Design Cure Model",
-    subtitle = "Control Group"
+    subtitle = "Control Group, Scenario 1"
   ) +
   geom_line(data = hazardC1, aes(x = time_lagged, y = hazard_rate), lty = 2) +
   annotate(geom = "text", x = 35, y = .02, label = "Dashed line shows actual hazard rate")
@@ -200,6 +199,11 @@ We use as a denominator the final planned events under the alternate hypothesis 
 Now we compare event accrual under the null and alternate hypothesis for each scenario, with 100% representing the targeted final events under scenario 1.
 The user should not have to update the code here.
 For the 3 scenarios studied, event accrual is quite different, creating difference spending issues.
+As planned, the expected targeted event fraction reaches 1 for Scenario 1 at 48 months under the alternate hypothesis.
+Under the null hypothesis for this scenario, expected targeted events are reached at approximately 36 months.
+For Scenario 2 the expectation is that targeted events will be achieved in less than 24 months under both the null and alternative hypotheses.
+Under Scenario 3, the expected events under the alternative do not reach the target even by 60 months.
+
 
 ```{r, echo=FALSE, echo=FALSE}
 # DO NOT ALTER CODE
@@ -302,11 +306,11 @@ ratio <- 1
 
 We now assume a trial is enrolled with a constant enrollment rate over `r enroll_duration` months trial duration of `r study_duration`.
 As noted above, the event accumulation pattern is highly sensitive to the assumptions of the design.
-Deviations from plan in accrual, the hazard ratio overall or over time as well as relatively minor deviations from the cure model assumption could substantially change the calendar time of event-based analysis timing.
+That is, deviations from plan in accrual, the hazard ratio overall or over time as well as relatively minor deviations from the cure model assumption could substantially change the calendar time of event-based analysis timing.
 Thus, calendar-based timing and spending (@LanDeMets1989) may have some appeal to make the timing of analyses more predictable.
 The main risk to this would likely be under-accumulation of the final targeted events for the trial.
 The targeted 4-year window may be considered clinically important as well as an important limitation for trial duration.
-Using the above predicted information fractions at 6, 12, 24, 36, 48, and 60 months to plan a calendar-based design.
+Using the above predicted information fractions at 12, 24, 36, and 48 months to plan a calendar-based design.
 We use the arguments `usTime` and `lsTime` to change to calendar-based spending for the upper and lower bounds, respectively.
 However, the pattern of slowing event accumulation over time after year 1 seems reasonably likely to persist.
 This means that calendar-based spending is likely to give more conservative bounds since the calendar fractions are lower than the information fractions in the text overlay of the plot after the first interim: 10%, 20%, 40%, 60%, 80% and 100%, respectively.
