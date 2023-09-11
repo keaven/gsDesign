@@ -56,7 +56,6 @@ toBinomialExact <- function(x) {
     # Upper bound probabilities are for futility
     # Compute nominal p-values under H0 for futility and corresponding inverse binomial under H1
     b <- qbinom(p = pnorm(xx$lower$bound), size = counts, prob = p0, lower.tail = TRUE)
-    btem <- b
     # Compute target beta-spending
     beta_spend <- xx$lower$sf(alpha = xx$beta, t = xx$timing, param = xx$lower$param)$spend
   } else {
@@ -72,9 +71,10 @@ toBinomialExact <- function(x) {
     # cumulative spending through analysis j
     nblowerprob <- sum(gsBinomialExact(
       k = max(j, 2), theta = p0, n.I = counts[1:max(j, 2)],
-      a = atem[1:max(j, 2)], b = counts[1:max(j, 2)] + 1
+      a = a[1:max(j, 2)], b = counts[1:max(j, 2)] + 1
     )$lower$prob[1:j])
-    atem <- a # Work space for updating efficacy bound, if needed
+    atem <- a # Work space for updating efficacy bound
+    btem <- b # Work space for updating futility bound
     # If less than allowed spending, check if bound can be increased
     if (nblowerprob < alpha_spend[j]) {
       while (nblowerprob < alpha_spend[j]) {
@@ -113,7 +113,7 @@ toBinomialExact <- function(x) {
         }
       } else if (upperprob > beta_spend[j]) {
         while (upperprob > beta_spend[j]) {
-          b[j] <- btem[j] + 1
+          b[j] <- b[j] + 1
           upperprob <- sum(gsBinomialExact(
             k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)],
             a = a[1:max(j, 2)], b = b[1:max(j, 2)]
