@@ -84,7 +84,7 @@ as_rtf.gsBinomialExactTable <-
     x[,4] <- sprintf(paste0("%.", en_decimals,"f"), unlist(x[,4]))
     
     x %>%
-      rtf_title(title = title, subtitle = subtitle) %>%
+      rtf_title(title = title) %>%
       rtf_colheader(paste0(theta_label, " | ", "Probability of crossing", " | ", en_label),
                     col_rel_width = c(1, 2, 1)
       ) %>%
