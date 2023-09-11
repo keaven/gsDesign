@@ -52,7 +52,8 @@ as_rtf <- function(x, ...) UseMethod("as_rtf")
 #'
 #' @param title Table title.
 #' @param theta_label Label for theta.
-#' @param response_outcome Is outcome response rate
+#' @param response_outcome Logical values indicating if the outcome is response rate (TRUE) or failure rate (FALSE). 
+#'   The default value is TRUE.
 #' @param bound_label Label for bounds. If outcome is response rate then label is "Futility bound" and "Efficacy bound".
 #'   If outcome is failure rate then label is "Efficacy bound" and "Futility bound".
 #' @param en_label Label for en.
