@@ -11,9 +11,8 @@ as_rtf(x, ...)
   x,
   title =
     "Operating characteristics by underlying response rate for exact binomial group sequential design",
-  subtitle = "Assumes trial evaluated sequentially after each response",
   theta_label = "Underlying response rate",
-  reponse_outcome = TRUE,
+  response_outcome = TRUE,
   bound_label = ifelse(reponse_outcome, c("Futility bound", "Efficacy bound"),
     c("Efficacy bound", "Futility bound")),
   en_label = "Expected sample sizes",
@@ -31,11 +30,12 @@ as_rtf(x, ...)
 
 \item{title}{Table title.}
 
-\item{subtitle}{Table subtitle.}
-
 \item{theta_label}{Label for theta.}
 
-\item{bound_label}{Label for bounds.}
+\item{response_outcome}{Is outcome response rate}
+
+\item{bound_label}{Label for bounds. If outcome is response rate then label is "Futility bound" and "Efficacy bound".
+If outcome is failure rate then label is "Efficacy bound" and "Futility bound".}
 
 \item{en_label}{Label for en.}
 

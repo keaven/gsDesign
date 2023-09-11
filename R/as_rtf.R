@@ -52,9 +52,10 @@ as_rtf <- function(x, ...) UseMethod("as_rtf")
 #' @rdname as_rtf
 #'
 #' @param title Table title.
-#' @param subtitle Table subtitle.
 #' @param theta_label Label for theta.
-#' @param bound_label Label for bounds.
+#' @param response_outcome Is outcome response rate
+#' @param bound_label Label for bounds. If outcome is response rate then label is "Futility bound" and "Efficacy bound".
+#'   If outcome is failure rate then label is "Efficacy bound" and "Futility bound".
 #' @param en_label Label for en.
 #' @param prob_decimals Number of decimal places for probability of crossing.
 #' @param en_decimals Number of decimal places for expected number of
@@ -69,9 +70,8 @@ as_rtf <- function(x, ...) UseMethod("as_rtf")
 as_rtf.gsBinomialExactTable <-
   function(x,
            title = "Operating characteristics by underlying response rate for exact binomial group sequential design",
-           subtitle = "Assumes trial evaluated sequentially after each response",
            theta_label = "Underlying response rate",
-           reponse_outcome = TRUE, 
+           response_outcome = TRUE, 
            bound_label = ifelse(reponse_outcome, c("Futility bound", "Efficacy bound"), c("Efficacy bound", "Futility bound")),
            en_label = "Expected sample sizes",
            prob_decimals = 2,
