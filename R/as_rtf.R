@@ -27,7 +27,6 @@
 #'   as_table() %>% 
 #'   as_rtf(
 #'     title = "Power/Type I error and expected sample size for a group sequential design",
-#'     subtitle = "in a single-arm trial with a binary outcome",
 #'     rtf_path = tempfile(fileext = ".rtf")
 #'   )
 #'
@@ -72,7 +71,7 @@ as_rtf.gsBinomialExactTable <-
            title = "Operating characteristics by underlying response rate for exact binomial group sequential design",
            theta_label = "Underlying response rate",
            response_outcome = TRUE, 
-           bound_label = ifelse(reponse_outcome, c("Futility bound", "Efficacy bound"), c("Efficacy bound", "Futility bound")),
+           bound_label = ifelse(response_outcome, c("Futility bound", "Efficacy bound"), c("Efficacy bound", "Futility bound")),
            en_label = "Expected sample sizes",
            prob_decimals = 2,
            en_decimals = 1,
