@@ -38,8 +38,8 @@ reference:
   - nEvents
   - nSurv
   - gsSurv
-  - nSurvival
   - gsSurvCalendar
+  - nSurvival
   - gsHR
   - zn2hr
   - hrn2z
