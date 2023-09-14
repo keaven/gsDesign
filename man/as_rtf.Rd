@@ -9,6 +9,7 @@ as_rtf(x, ...)
 
 \method{as_rtf}{gsBinomialExactTable}(
   x,
+  file,
   title =
     "Operating characteristics by underlying response rate for exact binomial group sequential design",
   theta_label = "Underlying response rate",
@@ -19,7 +20,6 @@ as_rtf(x, ...)
   prob_decimals = 2,
   en_decimals = 1,
   rr_decimals = 0,
-  file,
   ...
 )
 }
@@ -27,6 +27,8 @@ as_rtf(x, ...)
 \item{x}{Object to be displayed on rtf.}
 
 \item{...}{Other parameters that may be specific the object.}
+
+\item{file}{Output path for the rtf file.}
 
 \item{title}{Table title.}
 
@@ -46,11 +48,9 @@ If outcome is failure rate then label is "Efficacy bound" and "Futility bound".}
 observations when bound is crossed or when trial ends without crossing.}
 
 \item{rr_decimals}{Number of decimal places for response rates.}
-
-\item{file}{Output path for the rtf file.}
 }
 \value{
-RTF file for summary table.
+`as_rtf()` returns the input `x` invisibly.
 }
 \description{
 Create RTF file output from \code{\link{as_table}} to summarize
@@ -70,8 +70,8 @@ zz <- gsBinomialExact(
 zz \%>\% 
   as_table() \%>\% 
   as_rtf(
-    title = "Power/Type I error and expected sample size for a group sequential design",
-    file = tempfile(fileext = ".rtf")
+    file = tempfile(fileext = ".rtf"),
+    title = "Power/Type I error and expected sample size for a group sequential design"
   )
 
 safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75)
@@ -85,10 +85,10 @@ safety_power <- gsBinomialExact(
 safety_power \%>\%
   as_table() \%>\%
   as_rtf(
+    file = tempfile(fileext = ".rtf"),
     theta_label = "Underlying\nAE rate",
     prob_decimals = 3,
-    bound_label = c("low rate", "high rate"),
-    file = tempfile(fileext = ".rtf")
+    bound_label = c("low rate", "high rate")
   )
 }
 \seealso{

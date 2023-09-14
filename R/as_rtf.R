@@ -6,7 +6,7 @@
 #' @param x Object to be displayed on rtf.
 #' @param ... Other parameters that may be specific the object.
 #'
-#' @return RTF file for summary table.
+#' @return `as_rtf()` returns the input `x` invisibly.
 #'
 #' @seealso \code{vignette("binomialSPRTExample")}
 #'
@@ -26,8 +26,8 @@
 #' zz %>% 
 #'   as_table() %>% 
 #'   as_rtf(
-#'     title = "Power/Type I error and expected sample size for a group sequential design",
-#'     file = tempfile(fileext = ".rtf")
+#'     file = tempfile(fileext = ".rtf"),
+#'     title = "Power/Type I error and expected sample size for a group sequential design"
 #'   )
 #'
 #' safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75)
@@ -41,15 +41,16 @@
 #' safety_power %>%
 #'   as_table() %>%
 #'   as_rtf(
+#'     file = tempfile(fileext = ".rtf"),
 #'     theta_label = "Underlying\nAE rate",
 #'     prob_decimals = 3,
-#'     bound_label = c("low rate", "high rate"),
-#'     file = tempfile(fileext = ".rtf")
+#'     bound_label = c("low rate", "high rate")
 #'   )
 as_rtf <- function(x, ...) UseMethod("as_rtf")
 
 #' @rdname as_rtf
-#'
+#' 
+#' @param file Output path for the rtf file.
 #' @param title Table title.
 #' @param theta_label Label for theta.
 #' @param response_outcome Logical values indicating if the outcome is response rate (TRUE) or failure rate (FALSE). 
@@ -61,7 +62,6 @@ as_rtf <- function(x, ...) UseMethod("as_rtf")
 #' @param en_decimals Number of decimal places for expected number of
 #'   observations when bound is crossed or when trial ends without crossing.
 #' @param rr_decimals Number of decimal places for response rates.
-#' @param file Output path for the rtf file.
 #' 
 #' @importFrom r2rtf rtf_title rtf_colheader rtf_body rtf_encode write_rtf
 #'
@@ -69,6 +69,7 @@ as_rtf <- function(x, ...) UseMethod("as_rtf")
 #' 
 as_rtf.gsBinomialExactTable <-
   function(x,
+           file,
            title = "Operating characteristics by underlying response rate for exact binomial group sequential design",
            theta_label = "Underlying response rate",
            response_outcome = TRUE, 
@@ -77,12 +78,11 @@ as_rtf.gsBinomialExactTable <-
            prob_decimals = 2,
            en_decimals = 1,
            rr_decimals = 0,
-           file,
            ...) {
-    x[,2] <- sprintf(paste0("%.", prob_decimals,"f"), unlist(x[,2]))
-    x[,3] <- sprintf(paste0("%.", prob_decimals,"f"), unlist(x[,3]))
-    x[,1] <- paste0(sprintf(paste0("%.", rr_decimals,"f"), unlist(x[,1] * 100)), "%")
-    x[,4] <- sprintf(paste0("%.", en_decimals,"f"), unlist(x[,4]))
+    x[,"lower"] <- sprintf(paste0("%.", prob_decimals,"f"), unlist(x[,2]))
+    x[,"Upper"] <- sprintf(paste0("%.", prob_decimals,"f"), unlist(x[,3]))
+    x[,"theta"] <- paste0(sprintf(paste0("%.", rr_decimals,"f"), unlist(x[,1] * 100)), "%")
+    x[,"en"] <- sprintf(paste0("%.", en_decimals,"f"), unlist(x[,4]))
     
     x %>%
       rtf_title(title = title) %>%
@@ -99,5 +99,7 @@ as_rtf.gsBinomialExactTable <-
         write_rtf(file)
     
     message("The RTF output is saved in", normalizePath(file))
+    
+    return(invisible(x))
     
   }
