@@ -34,7 +34,7 @@ as_rtf(x, ...)
 
 \item{theta_label}{Label for theta.}
 
-\item{response_outcome}{Logical values indicating if the outcome is response rate (TRUE) or failure rate (FALSE). 
+\item{response_outcome}{Logical values indicating if the outcome is response rate (TRUE) or failure rate (FALSE).
 The default value is TRUE.}
 
 \item{bound_label}{Label for bounds. If outcome is response rate then label is "Futility bound" and "Efficacy bound".
@@ -67,8 +67,8 @@ zz <- gsBinomialExact(
   k = 3, theta = seq(0, 1, 0.1), n.I = c(12, 24, 36),
   a = c(-1, 0, 11), b = c(5, 9, 12)
 )
-zz \%>\% 
-  as_table() \%>\% 
+zz \%>\%
+  as_table() \%>\%
   as_rtf(
     file = tempfile(fileext = ".rtf"),
     title = "Power/Type I error and expected sample size for a group sequential design"

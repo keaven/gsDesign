@@ -18,13 +18,13 @@
 #'
 #' @export
 #'
-#' @examples 
+#' @examples
 #' zz <- gsBinomialExact(
 #'   k = 3, theta = seq(0, 1, 0.1), n.I = c(12, 24, 36),
 #'   a = c(-1, 0, 11), b = c(5, 9, 12)
 #' )
-#' zz %>% 
-#'   as_table() %>% 
+#' zz %>%
+#'   as_table() %>%
 #'   as_rtf(
 #'     file = tempfile(fileext = ".rtf"),
 #'     title = "Power/Type I error and expected sample size for a group sequential design"
@@ -49,11 +49,11 @@
 as_rtf <- function(x, ...) UseMethod("as_rtf")
 
 #' @rdname as_rtf
-#' 
+#'
 #' @param file Output path for the rtf file.
 #' @param title Table title.
 #' @param theta_label Label for theta.
-#' @param response_outcome Logical values indicating if the outcome is response rate (TRUE) or failure rate (FALSE). 
+#' @param response_outcome Logical values indicating if the outcome is response rate (TRUE) or failure rate (FALSE).
 #'   The default value is TRUE.
 #' @param bound_label Label for bounds. If outcome is response rate then label is "Futility bound" and "Efficacy bound".
 #'   If outcome is failure rate then label is "Efficacy bound" and "Futility bound".
@@ -62,44 +62,43 @@ as_rtf <- function(x, ...) UseMethod("as_rtf")
 #' @param en_decimals Number of decimal places for expected number of
 #'   observations when bound is crossed or when trial ends without crossing.
 #' @param rr_decimals Number of decimal places for response rates.
-#' 
+#'
 #' @importFrom r2rtf rtf_title rtf_colheader rtf_body rtf_encode write_rtf
 #'
 #' @export
-#' 
+#'
 as_rtf.gsBinomialExactTable <-
   function(x,
            file,
            title = "Operating characteristics by underlying response rate for exact binomial group sequential design",
            theta_label = "Underlying response rate",
-           response_outcome = TRUE, 
+           response_outcome = TRUE,
            bound_label = ifelse(response_outcome, c("Futility bound", "Efficacy bound"), c("Efficacy bound", "Futility bound")),
            en_label = "Expected sample sizes",
            prob_decimals = 2,
            en_decimals = 1,
            rr_decimals = 0,
            ...) {
-    x[,"lower"] <- sprintf(paste0("%.", prob_decimals,"f"), unlist(x[,2]))
-    x[,"Upper"] <- sprintf(paste0("%.", prob_decimals,"f"), unlist(x[,3]))
-    x[,"theta"] <- paste0(sprintf(paste0("%.", rr_decimals,"f"), unlist(x[,1] * 100)), "%")
-    x[,"en"] <- sprintf(paste0("%.", en_decimals,"f"), unlist(x[,4]))
-    
+    x[, "lower"] <- sprintf(paste0("%.", prob_decimals, "f"), unlist(x[, 2]))
+    x[, "Upper"] <- sprintf(paste0("%.", prob_decimals, "f"), unlist(x[, 3]))
+    x[, "theta"] <- paste0(sprintf(paste0("%.", rr_decimals, "f"), unlist(x[, 1] * 100)), "%")
+    x[, "en"] <- sprintf(paste0("%.", en_decimals, "f"), unlist(x[, 4]))
+
     x %>%
       rtf_title(title = title) %>%
       rtf_colheader(paste0(theta_label, " | ", "Probability of crossing", " | ", en_label),
-                    col_rel_width = c(1, 2, 1)
+        col_rel_width = c(1, 2, 1)
       ) %>%
       rtf_colheader(paste0(" | ", bound_label[1], " | ", bound_label[2], " | "),
-                    col_rel_width = c(1, 1, 1, 1),
-                    border_top = c("", rep("single", 2), ""),
-                    border_left = c("single", "single", "", "single")
+        col_rel_width = c(1, 1, 1, 1),
+        border_top = c("", rep("single", 2), ""),
+        border_left = c("single", "single", "", "single")
       ) %>%
-        rtf_body() %>%
-        rtf_encode() %>%
-        write_rtf(file)
-    
+      rtf_body() %>%
+      rtf_encode() %>%
+      write_rtf(file)
+
     message("The RTF output is saved in", normalizePath(file))
-    
+
     return(invisible(x))
-    
   }
