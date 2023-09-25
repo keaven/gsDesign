@@ -79,7 +79,7 @@ as_rtf.gsBinomialExactTable <-
            en_decimals = 1,
            rr_decimals = 0,
            ...) {
-    x[, "lower"] <- sprintf(paste0("%.", prob_decimals, "f"), unlist(x[, "lower"]))
+    x[, "Lower"] <- sprintf(paste0("%.", prob_decimals, "f"), unlist(x[, "Lower"]))
     x[, "Upper"] <- sprintf(paste0("%.", prob_decimals, "f"), unlist(x[, "Upper"]))
     x[, "theta"] <- paste0(sprintf(paste0("%.", rr_decimals, "f"), unlist(x[, "theta"] * 100)), "%")
     x[, "en"] <- sprintf(paste0("%.", en_decimals, "f"), unlist(x[, "en"]))
