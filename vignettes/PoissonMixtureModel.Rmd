@@ -86,7 +86,7 @@ $$S_c(t)=\exp(-\theta(1-\exp(-\lambda t))),$$
 where $\theta = -\log(p)$, $\lambda> 0$ is a constant hazard rate and $t\ge 0$.
 The component $\exp(-\lambda t)$ is an exponential survival distribution; while it could be replaced with an arbitrary survival distribution on $t>0$ for the mixture model, the exponential model is simple, adequately flexible and easy to explain.
 This two-parameter model can be specified by the cure rate and the assumed survival rate $S_c(t_1)$ at some time $0 <t_1<\infty.$
-For this study, the control group cure rate is assumed to be `r cure_rate` and the survival at `r time_unit` is assumed to be `r s1`.
+For this study, the control group cure rate for the 3 scenarios is assumed to be `r cure_rate` and the survival at `r time_unit` is assumed to be `r s1`, respectively.
 We can solve for $\theta$ and $\lambda$ as follows:
 
 $$S_c(\infty) = e^\theta \Rightarrow \theta = -\log(S_c(\infty)) $$
@@ -159,7 +159,7 @@ ggplot(survival, aes(x = Time, y = Survival, lty = Treatment, col = Scenario)) +
   theme(legend.position = "bottom")
 ```
 
-We also evaluate the failure rate over time for scenario 1, which is later used in the design derivation.
+We also evaluate the failure rate over time for scenario 1, which is used below in the design derivation.
 Note that the piecewise intervals used to approximate changing hazard rates can be made arbitrarily small to get more precise approximations of the above.
 However, given the uncertainty of the underlying assumptions, it is not clear that this provides any advantage.
 
@@ -192,13 +192,13 @@ ggplot() +
 
 ## Event Accumulation
 
-Based on the above model, we predict how events will accumulate for the control group, experimental group under the alternate hypothesis and overall based on either the null hypothesis of no failure rate difference or the alternate hypothesis where events accrue more slowly in the experimental group.
+Based on the above model, we predict how events will accumulate based on either the null hypothesis of no failure rate difference or the alternate hypothesis where events accrue more slowly in the experimental group.
 We do this by scenario.
 We use as a denominator the final planned events under the alternate hypothesis for scenario 1.
 
 Now we compare event accrual under the null and alternate hypothesis for each scenario, with 100% representing the targeted final events under scenario 1.
 The user should not have to update the code here.
-For the 3 scenarios studied, event accrual is quite different, creating difference spending issues.
+For the 3 scenarios studied, event accrual is quite different, creating different spending issues.
 As planned, the expected targeted event fraction reaches 1 for Scenario 1 at 48 months under the alternate hypothesis.
 Under the null hypothesis for this scenario, expected targeted events are reached at approximately 36 months.
 For Scenario 2 the expectation is that targeted events will be achieved in less than 24 months under both the null and alternative hypotheses.
@@ -262,16 +262,17 @@ ggplot(event_accrual, aes(x = Time, y = EF, color = Scenario, lty = Hypothesis))
 
 We choose calendar-based timing for analyses as well as for spending.
 This is not done automatically by the `gsSurv()` function, but is done using the `gsSurvCalendar()` function.
-There are two things `gsSurvCalendar()` takes care of::
+There are two things `gsSurvCalendar()` takes care of:
 
 - How to get information fraction levels that correspond to targeted calendar analysis times to plug in for the planned design.
 - Replacing information fraction levels with calendar fraction levels for $\alpha$- and $\beta$-spending.
 
 We begin by specifying calendar times of analysis and find corresponding fractions of final planned events and calendar time under design assumptions.
+Having the first interim at 14 months rather than 12 was selected to get the expected events well above 100.
 
 ```{r}
 # Calendar time from start of randomization until each analysis time
-calendarTime <- c(12, 24, 36, 48)
+calendarTime <- c(14, 24, 36, 48)
 ```
 
 Now we move on to other design assumptions.
@@ -292,8 +293,8 @@ test.type <- 6
 # 1-sided Type I error used for safety (for asymmetric 2-sided design)
 astar <- .2
 # Spending functions (sfu, sfl) and parameters (sfupar, sflpar)
-sfu <- sfHSD # O'Brien-Fleming approximation by Lan and DeMets
-sfupar <- -4 # Not needed for sfLDPocock
+sfu <- sfHSD 
+sfupar <- -3 
 sfl <- sfLDPocock # Near-equal Z-values for each analysis
 sflpar <- NULL # Not needed for Pocock spending
 # Dropout rate (exponential parameter per unit of time)
@@ -304,18 +305,16 @@ ratio <- 1
 
 ## Study Design and Event Accumulation
 
-We now assume a trial is enrolled with a constant enrollment rate over `r enroll_duration` months trial duration of `r study_duration`.
+We now assume a trial is enrolled with a constant enrollment rate over `r enroll_duration[1]` months trial duration of `r study_duration[1]`.
 As noted above, the event accumulation pattern is highly sensitive to the assumptions of the design.
 That is, deviations from plan in accrual, the hazard ratio overall or over time as well as relatively minor deviations from the cure model assumption could substantially change the calendar time of event-based analysis timing.
 Thus, calendar-based timing and spending (@LanDeMets1989) may have some appeal to make the timing of analyses more predictable.
 The main risk to this would likely be under-accumulation of the final targeted events for the trial.
 The targeted 4-year window may be considered clinically important as well as an important limitation for trial duration.
 Using the above predicted information fractions at 12, 24, 36, and 48 months to plan a calendar-based design.
-We use the arguments `usTime` and `lsTime` to change to calendar-based spending for the upper and lower bounds, respectively.
-However, the pattern of slowing event accumulation over time after year 1 seems reasonably likely to persist.
-This means that calendar-based spending is likely to give more conservative bounds since the calendar fractions are lower than the information fractions in the text overlay of the plot after the first interim: 10%, 20%, 40%, 60%, 80% and 100%, respectively.
+Calendar-based spending is likely to give more conservative interim bounds since the calendar fractions are lower than the information fractions in the text overlay of the plot after the first interim: 10%, 20%, 40%, 60%, 80% and 100%, respectively.
 
-We now use the information fractions from the text overlay to set up a calendar-based design.
+We now set up a calendar-based design.
 
 ```{r}
 design_calendar <-
@@ -352,9 +351,8 @@ design_calendar %>%
 There are a few things to note for the above design:
 
 - The futility bounds are advisory only. In particular, the late futility bounds may be ignored since the follow-up for the full time period may merit continuing the trial.
+- The efficacy spending function should be carefully considered to ensure the evidence required to cross any bound is likely to justify early stopping with a definitive demonstration of benefit.
 - Substantial deviations in event accumulation would not change timing of analyses from their calendar times. This should be considered for acceptability at the time of design.
-- The first efficacy bound is so extreme that it essentially makes the first analysis futility only. This is likely reasonable based on the minimal follow-up at that time.
-- The Z-values and hazard ratios required for a positive efficacy finding are not terribly extreme starting from the two-year follow-up analysis. This is also probably reasonable as long as the hazard ratio differences at the bounds are clinically meaningful. A more extreme finding at year 1 may likely be required for a positive finding.
 - The trial may be continued after crossing an efficacy bound for further follow-up as it is unlikely that control patients doing well would cross over to experimental therapy in absence of adverse clinical outcomes. Inference at subsequent analyses using repeated p-values (@JTBook) or sequential p-values (@LiuAnderson2008) are well-specified and interpretable as adjusted p-values.
 
 # References
