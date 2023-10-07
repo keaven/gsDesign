@@ -216,7 +216,15 @@ utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 #' # print out more information for the selected derived sample size
 #' nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, conservative = TRUE,
 #'  outtype = 2)
-#' 
+#' # Reproduce realized Type I error alphaR
+#' stats::pbinom(q = 5, size = 39, prob = .05, lower.tail = FALSE)
+#' # Reproduce realized power
+#' stats::pbinom(q = 5, size = 39, prob = 0.2, lower.tail = FALSE)
+#' # Reproduce critical value for positive finding
+#' stats::qbinom(p = 1 - .025, size = 39, prob = .05) + 1
+#' # Compute p-value for 7 successes
+#' stats::pbinom(q = 6, size = 39, prob = .05, lower.tail = FALSE)
+
 #' # what happens if input sample sizes not sufficient?
 #' \dontrun{ 
 #'   nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)
