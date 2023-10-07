@@ -197,7 +197,7 @@ utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 #' # sample size for single arm exact binomial
 #' 
 #' # plot of table of power by sample size
-#' # note that outtype need no be specified if beta is NULL
+#' # note that outtype need not be specified if beta is NULL
 #' nb1 <- nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=NULL, n = 25:40)
 #' nb1
 #' library(scales)
