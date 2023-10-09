@@ -4,6 +4,7 @@
 #' an object; currently only implemented for \code{\link{gsBinomialExact}}.
 #'
 #' @param x Object to be displayed on rtf.
+#' @param ... Other parameters that may be specific the object.
 #'
 #' @return `as_rtf()` returns the input `x` invisibly.
 #'
@@ -45,9 +46,7 @@
 #'     prob_decimals = 3,
 #'     bound_label = c("low rate", "high rate")
 #'   )
-#'   
 as_rtf <- function(x, ...) UseMethod("as_rtf")
-
 #' @rdname as_rtf
 #'
 #' @param file Output path for the rtf file.
@@ -66,7 +65,6 @@ as_rtf <- function(x, ...) UseMethod("as_rtf")
 #' @importFrom r2rtf rtf_title rtf_colheader rtf_body rtf_encode write_rtf
 #'
 #' @export
-#'
 as_rtf.gsBinomialExactTable <-
   function(x,
            file,
