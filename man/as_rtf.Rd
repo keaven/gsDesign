@@ -5,7 +5,7 @@
 \alias{as_rtf.gsBinomialExactTable}
 \title{Print a summary table using RTF}
 \usage{
-as_rtf(x, ...)
+as_rtf(x)
 
 \method{as_rtf}{gsBinomialExactTable}(
   x,
@@ -24,8 +24,6 @@ as_rtf(x, ...)
 }
 \arguments{
 \item{x}{Object to be displayed on rtf.}
-
-\item{...}{Other parameters that may be specific the object.}
 
 \item{file}{Output path for the rtf file.}
 
@@ -47,6 +45,8 @@ If outcome is failure rate then label is "Efficacy bound" and "Futility bound".}
 observations when bound is crossed or when trial ends without crossing.}
 
 \item{rr_decimals}{Number of decimal places for response rates.}
+
+\item{...}{Other parameters that may be specific the object.}
 }
 \value{
 `as_rtf()` returns the input `x` invisibly.
