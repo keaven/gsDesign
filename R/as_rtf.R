@@ -75,7 +75,8 @@ as_rtf.gsBinomialExactTable <-
            en_label = "Expected sample sizes",
            prob_decimals = 2,
            en_decimals = 1,
-           rr_decimals = 0) {
+           rr_decimals = 0,
+           ...) {
     tbl <- x
     tbl[, "Lower"] <- sprintf(paste0("%.", prob_decimals, "f"), unlist(tbl[, "Lower"]))
     tbl[, "Upper"] <- sprintf(paste0("%.", prob_decimals, "f"), unlist(tbl[, "Upper"]))

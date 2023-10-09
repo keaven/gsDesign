@@ -19,7 +19,8 @@ as_rtf(x, ...)
   en_label = "Expected sample sizes",
   prob_decimals = 2,
   en_decimals = 1,
-  rr_decimals = 0
+  rr_decimals = 0,
+  ...
 )
 }
 \arguments{
