@@ -46,7 +46,10 @@
 #'     prob_decimals = 3,
 #'     bound_label = c("low rate", "high rate")
 #'   )
-as_rtf <- function(x, ...) UseMethod("as_rtf")
+#'   
+as_rtf <- function(x, ...) {
+  UseMethod("as_rtf", x)
+}
 
 #' @rdname as_rtf
 #'
@@ -57,7 +60,7 @@ as_rtf <- function(x, ...) UseMethod("as_rtf")
 #'   The default value is TRUE.
 #' @param bound_label Label for bounds. If outcome is response rate then label is "Futility bound" and "Efficacy bound".
 #'   If outcome is failure rate then label is "Efficacy bound" and "Futility bound".
-#' @param en_label Label for en.
+#' @param en_label Label for expected number.
 #' @param prob_decimals Number of decimal places for probability of crossing.
 #' @param en_decimals Number of decimal places for expected number of
 #'   observations when bound is crossed or when trial ends without crossing.
@@ -77,14 +80,14 @@ as_rtf.gsBinomialExactTable <-
            en_label = "Expected sample sizes",
            prob_decimals = 2,
            en_decimals = 1,
-           rr_decimals = 0,
-           ...) {
-    x[, "Lower"] <- sprintf(paste0("%.", prob_decimals, "f"), unlist(x[, "Lower"]))
-    x[, "Upper"] <- sprintf(paste0("%.", prob_decimals, "f"), unlist(x[, "Upper"]))
-    x[, "theta"] <- paste0(sprintf(paste0("%.", rr_decimals, "f"), unlist(x[, "theta"] * 100)), "%")
-    x[, "en"] <- sprintf(paste0("%.", en_decimals, "f"), unlist(x[, "en"]))
+           rr_decimals = 0) {
+    tbl <- x
+    tbl[, "Lower"] <- sprintf(paste0("%.", prob_decimals, "f"), unlist(tbl[, "Lower"]))
+    tbl[, "Upper"] <- sprintf(paste0("%.", prob_decimals, "f"), unlist(tbl[, "Upper"]))
+    tbl[, "theta"] <- paste0(sprintf(paste0("%.", rr_decimals, "f"), unlist(tbl[, "theta"] * 100)), "%")
+    tbl[, "en"] <- sprintf(paste0("%.", en_decimals, "f"), unlist(tbl[, "en"]))
 
-    x %>%
+    tbl %>%
       rtf_title(title = title) %>%
       rtf_colheader(paste0(theta_label, " | ", "Probability of crossing", " | ", en_label),
         col_rel_width = c(1, 2, 1)
@@ -102,3 +105,4 @@ as_rtf.gsBinomialExactTable <-
 
     return(invisible(x))
   }
+
