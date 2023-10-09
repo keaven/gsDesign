@@ -47,9 +47,7 @@
 #'     bound_label = c("low rate", "high rate")
 #'   )
 #'   
-as_rtf <- function(x, ...) {
-  UseMethod("as_rtf", x)
-}
+as_rtf <- function(x, ...) UseMethod("as_rtf")
 
 #' @rdname as_rtf
 #'
