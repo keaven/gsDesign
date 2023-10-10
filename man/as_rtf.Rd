@@ -3,15 +3,16 @@
 \name{as_rtf}
 \alias{as_rtf}
 \alias{as_rtf.gsBinomialExactTable}
-\title{Print a summary table using RTF}
+\title{Save a summary table object as an RTF file}
 \usage{
 as_rtf(x, ...)
 
 \method{as_rtf}{gsBinomialExactTable}(
   x,
   file,
-  title =
-    "Operating characteristics by underlying response rate for exact binomial group sequential design",
+  ...,
+  title = paste("Operating characteristics by underlying response rate for",
+    "exact binomial group sequential design"),
   theta_label = "Underlying response rate",
   response_outcome = TRUE,
   bound_label = ifelse(response_outcome, c("Futility bound", "Efficacy bound"),
@@ -19,26 +20,29 @@ as_rtf(x, ...)
   en_label = "Expected sample sizes",
   prob_decimals = 2,
   en_decimals = 1,
-  rr_decimals = 0,
-  ...
+  rr_decimals = 0
 )
 }
 \arguments{
-\item{x}{Object to be displayed on rtf.}
+\item{x}{Object to be saved as RTF file.}
 
-\item{...}{Other parameters that may be specific the object.}
+\item{...}{Other parameters that may be specific to the object.}
 
-\item{file}{Output path for the rtf file.}
+\item{file}{File path for the output.}
 
 \item{title}{Table title.}
 
 \item{theta_label}{Label for theta.}
 
-\item{response_outcome}{Logical values indicating if the outcome is response rate (TRUE) or failure rate (FALSE).
-The default value is TRUE.}
+\item{response_outcome}{Logical values indicating if the outcome is
+response rate (\code{TRUE}) or failure rate (\code{FALSE}).
+The default value is \code{TRUE}.}
 
-\item{bound_label}{Label for bounds. If outcome is response rate then label is "Futility bound" and "Efficacy bound".
-If outcome is failure rate then label is "Efficacy bound" and "Futility bound".}
+\item{bound_label}{Label for bounds.
+If the outcome is response rate, then the label is "Futility bound"
+and "Efficacy bound".
+If the outcome is failure rate, then the label is "Efficacy bound"
+and "Futility bound".}
 
 \item{en_label}{Label for expected number.}
 
@@ -50,11 +54,12 @@ observations when bound is crossed or when trial ends without crossing.}
 \item{rr_decimals}{Number of decimal places for response rates.}
 }
 \value{
-`as_rtf()` returns the input `x` invisibly.
+\code{as_rtf()} returns the input \code{x} invisibly.
 }
 \description{
-Create RTF file output from \code{\link{as_table}} to summarize
-an object; currently only implemented for \code{\link{gsBinomialExact}}.
+Convert and save the summary table object created with \code{\link{as_table}}
+to an RTF file using r2rtf; currently only implemented for
+\code{\link{gsBinomialExact}}.
 }
 \details{
 Currently only implemented for \code{\link{gsBinomialExact}} objects.
@@ -74,7 +79,9 @@ zz \%>\%
     title = "Power/Type I error and expected sample size for a group sequential design"
   )
 
-safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75)
+safety_design <- binomialSPRT(
+  p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75
+)
 safety_power <- gsBinomialExact(
   k = length(safety_design$n.I),
   theta = seq(.02, .16, .02),
