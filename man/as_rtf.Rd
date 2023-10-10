@@ -11,13 +11,13 @@ as_rtf(x, ...)
   x,
   file,
   ...,
-  title = paste("Operating characteristics by underlying response rate for",
-    "exact binomial group sequential design"),
-  theta_label = "Underlying response rate",
+  title = paste("Operating Characteristics by Underlying Response Rate for",
+    "Exact Binomial Group Sequential Design"),
+  theta_label = "Underlying Response Rate",
   response_outcome = TRUE,
-  bound_label = ifelse(response_outcome, c("Futility bound", "Efficacy bound"),
-    c("Efficacy bound", "Futility bound")),
-  en_label = "Expected sample sizes",
+  bound_label = if (response_outcome) c("Futility Bound", "Efficacy Bound") else
+    c("Efficacy Bound", "Futility Bound"),
+  en_label = "Expected Sample Sizes",
   prob_decimals = 2,
   en_decimals = 1,
   rr_decimals = 0
@@ -76,7 +76,7 @@ zz \%>\%
   as_table() \%>\%
   as_rtf(
     file = tempfile(fileext = ".rtf"),
-    title = "Power/Type I error and expected sample size for a group sequential design"
+    title = "Power/Type I Error and Expected Sample Size for a Group Sequential Design"
   )
 
 safety_design <- binomialSPRT(
@@ -93,9 +93,9 @@ safety_power \%>\%
   as_table() \%>\%
   as_rtf(
     file = tempfile(fileext = ".rtf"),
-    theta_label = "Underlying\nAE rate",
+    theta_label = "Underlying\nAE Rate",
     prob_decimals = 3,
-    bound_label = c("low rate", "high rate")
+    bound_label = c("Low Rate", "High Rate")
   )
 }
 \seealso{

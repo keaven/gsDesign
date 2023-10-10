@@ -28,7 +28,7 @@
 #'   as_table() %>%
 #'   as_rtf(
 #'     file = tempfile(fileext = ".rtf"),
-#'     title = "Power/Type I error and expected sample size for a group sequential design"
+#'     title = "Power/Type I Error and Expected Sample Size for a Group Sequential Design"
 #'   )
 #'
 #' safety_design <- binomialSPRT(
@@ -45,9 +45,9 @@
 #'   as_table() %>%
 #'   as_rtf(
 #'     file = tempfile(fileext = ".rtf"),
-#'     theta_label = "Underlying\nAE rate",
+#'     theta_label = "Underlying\nAE Rate",
 #'     prob_decimals = 3,
-#'     bound_label = c("low rate", "high rate")
+#'     bound_label = c("Low Rate", "High Rate")
 #'   )
 as_rtf <- function(x, ...) UseMethod("as_rtf")
 
@@ -78,17 +78,13 @@ as_rtf.gsBinomialExactTable <- function(
     file,
     ...,
     title = paste(
-      "Operating characteristics by underlying response rate for",
-      "exact binomial group sequential design"
+      "Operating Characteristics by Underlying Response Rate for",
+      "Exact Binomial Group Sequential Design"
     ),
-    theta_label = "Underlying response rate",
+    theta_label = "Underlying Response Rate",
     response_outcome = TRUE,
-    bound_label = ifelse(
-      response_outcome,
-      c("Futility bound", "Efficacy bound"),
-      c("Efficacy bound", "Futility bound")
-    ),
-    en_label = "Expected sample sizes",
+    bound_label = if(response_outcome) c("Futility Bound", "Efficacy Bound") else c("Efficacy Bound", "Futility Bound"),
+    en_label = "Expected Sample Sizes",
     prob_decimals = 2,
     en_decimals = 1,
     rr_decimals = 0) {
@@ -102,7 +98,7 @@ as_rtf.gsBinomialExactTable <- function(
   x %>%
     rtf_title(title = title) %>%
     rtf_colheader(
-      paste0(theta_label, " | ", "Probability of crossing", " | ", en_label),
+      paste0(theta_label, " | ", "Probability of Crossing", " | ", en_label),
       col_rel_width = c(1, 2, 1)
     ) %>%
     rtf_colheader(paste0(" | ", bound_label[1], " | ", bound_label[2], " | "),
