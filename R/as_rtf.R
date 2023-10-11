@@ -83,7 +83,7 @@ as_rtf.gsBinomialExactTable <- function(
     ),
     theta_label = "Underlying Response Rate",
     response_outcome = TRUE,
-    bound_label = if(response_outcome) c("Futility Bound", "Efficacy Bound") else c("Efficacy Bound", "Futility Bound"),
+    bound_label = if (response_outcome) c("Futility Bound", "Efficacy Bound") else c("Efficacy Bound", "Futility Bound"),
     en_label = "Expected Sample Sizes",
     prob_decimals = 2,
     en_decimals = 1,
