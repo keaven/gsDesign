@@ -23,6 +23,7 @@ Imports:
     gt,
     magrittr,
     methods,
+    r2rtf,
     rlang,
     stats,
     tibble,

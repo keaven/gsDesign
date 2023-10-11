@@ -119,6 +119,8 @@ reference:
   - as_table.gsBinomialExact
   - as_gt
   - as_gt.gsBinomialExactTable
+  - as_rtf
+  - as_rtf.gsBinomialExactTable
 
 articles:
   - title: "Designing for time-to-event endpoints"
