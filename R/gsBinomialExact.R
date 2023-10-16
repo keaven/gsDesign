@@ -260,7 +260,7 @@ gsBinomialExact <- function(k = 2, theta = c(.1, .2), n.I = c(50, 100), a = c(3,
   if (min(b - a) <= 0) stop("Input b-vector must be strictly greater than a")
   if (min(diff(a)) < 0) stop("a must contain a non-decreasing sequence of integers")
   if (min(diff(b)) < 0) stop("b must contain a non-decreasing sequence of integers")
-  if (min(diff(n.I - b)) < 0) stop("n.I - b must be non-decreasing")
+  if (min(diff(n.I - b)) < 0) stop("n.I must be >= b for each value")
 
   plo <- matrix(nrow = k, ncol = ntheta)
   rownames(plo) <- paste(rep("Analysis ", k), 1:k)
