@@ -3,6 +3,7 @@
 \name{as_rtf}
 \alias{as_rtf}
 \alias{as_rtf.gsBinomialExactTable}
+\alias{as_rtf.gsBoundSummary}
 \title{Save a summary table object as an RTF file}
 \usage{
 as_rtf(x, ...)
@@ -21,6 +22,17 @@ as_rtf(x, ...)
   prob_decimals = 2,
   en_decimals = 1,
   rr_decimals = 0
+)
+
+\method{as_rtf}{gsBoundSummary}(
+  x,
+  file,
+  ...,
+  title = "Group Sequential Design for a Time-to-event Endpoint",
+  footnote_p_onesided = "xxx",
+  footnote_hr = "Hazard ratio required to cross bound",
+  footnote_p_cross =
+    "Cumulative power at each analysis by underlying treatment effect either at null/alternative hypothesis"
 )
 }
 \arguments{

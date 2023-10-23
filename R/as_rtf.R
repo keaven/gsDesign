@@ -44,12 +44,14 @@
 #' safety_power %>%
 #'   as_table() %>%
 #'   as_rtf(
-#'     file = tempfile(fileext = ".rtf"),
+#'     file =  "test1.rtf",
 #'     theta_label = "Underlying\nAE Rate",
 #'     prob_decimals = 3,
 #'     bound_label = c("Low Rate", "High Rate")
 #'   )
-as_rtf <- function(x, ...) UseMethod("as_rtf")
+as_rtf <- function(x, ...) {
+  UseMethod("as_rtf", x)
+}
 
 #' @rdname as_rtf
 #'
@@ -110,5 +112,63 @@ as_rtf.gsBinomialExactTable <- function(
     rtf_encode() %>%
     write_rtf(file)
 
+  invisible(x_out)
+}
+#' @rdname as_rtf
+#' 
+#' @importFrom r2rtf rtf_title
+#' @export
+as_rtf.gsBoundSummary <- function(
+    x,
+    file,
+    ...,
+    title = "Group Sequential Design for a Time-to-event Endpoint",
+    footnote_p_onesided = "xxx",
+    footnote_hr = "Hazard ratio required to cross bound",
+    footnote_p_cross = "Cumulative power at each analysis by underlying treatment effect either at null/alternative hypothesis") {
+  x_out <- x
+  
+  # Add c for first instance of "p (1-sided)" in Value column
+  first_instance <- which(x$Value == "p (1-sided)")[1]
+  x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^a}")
+  
+  # Add b for first instance of "~HR at bound" in Value column
+  first_instance <- which(x$Value == "~HR at bound")[1]
+  x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^b}")
+  
+  # Add c for first instance of "P(Cross) if HR=1" in Value column
+  first_instance <- which(x$Value == "P(Cross) if HR=1")[1]
+  x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^c}")
+  
+  # Add c for first instance of "P(Cross) if HR=0.5" in Value column
+  first_instance <- which(x$Value == "P(Cross) if HR=0.5")[1]
+  x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^c}")
+  
+  # Insert blank row when Analysis column is null
+  idx <- which(x$Analysis == "")
+  idx_1 <- c(0, idx)
+  blank_row <- data.frame(matrix(ncol = ncol(x), nrow = 1))
+  colnames(blank_row) <- colnames(x)
+  
+  x_sub <- x[1:idx[1], ]
+  for(i in 1:(length(idx)-1)) {
+    x_sub <- rbind(x_sub, blank_row, x[(idx[i]+1):idx[i+1], ])
+  }
+  
+  x <- x_sub
+  x %>%
+    rtf_title(title = title) %>%
+    rtf_colheader(
+      paste0("Analysis", " | ", "Value", " | ", "Efficacy", " | ", "Futility"),
+      col_rel_width = c(1, 1.5, 1, 1)
+    )  %>%
+    rtf_body(text_justification = c("l", rep("c", 3)),
+             col_rel_width = c(1, 1.5, 1, 1)) %>%
+    rtf_footnote(c(paste0("{^a}", footnote_p_onesided),
+                 paste0("{^b}", footnote_hr),
+                 paste0("{^c}", footnote_p_cross))) %>%
+    rtf_encode() %>%
+    write_rtf(file)
+  
   invisible(x_out)
 }

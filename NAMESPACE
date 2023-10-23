@@ -2,6 +2,7 @@
 
 S3method(as_gt,gsBinomialExactTable)
 S3method(as_rtf,gsBinomialExactTable)
+S3method(as_rtf,gsBoundSummary)
 S3method(as_table,gsBinomialExact)
 S3method(plot,gsBinomialExact)
 S3method(plot,gsDesign)
