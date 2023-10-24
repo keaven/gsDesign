@@ -7,7 +7,14 @@
 #' Only one value can be greater than or equal to \code{x$maxn.IPlan}. 
 #' This determines the case count at each analysis performed. 
 #' Primarily, this is used for updating a design at the time of analysis.
-#'
+#' 
+#' @details
+#' The exact binomial routine \code{gsBinomialExact} has requirements that may not be satisfied
+#' by the initial asymptotic approximation. 
+#' Thus, the approximations are updated to satisfy the following requirements of \code{gsBinomialExact}:
+#' \code{a} (the efficacy bound) must be positive and non-decreasing, 
+#' \code{b} (the futility bound must be positive and non-decreasing)
+#' 
 #' @return An object of class \code{gsBinomialExact}.
 #'
 #' @seealso \code{\link{gsBinomialExact}}
