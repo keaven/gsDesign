@@ -255,12 +255,14 @@ gsBinomialExact <- function(k = 2, theta = c(.1, .2), n.I = c(50, 100), a = c(3,
     stop("Lengths of n.I, a, and b must equal k on input")
   }
   m <- c(n.I[1], diff(n.I))
-  if (min(m) < 1) stop("n.I must must contain an increasing sequence of positive integers")
-  if (min(n.I - a) < 0) stop("Input a-vector must be less than n.I")
-  if (min(b - a) <= 0) stop("Input b-vector must be strictly greater than a")
-  if (min(diff(a)) < 0) stop("a must contain a non-decreasing sequence of integers")
-  if (min(diff(b)) < 0) stop("b must contain a non-decreasing sequence of integers")
-  if (min(diff(n.I - b)) < 0) stop("n.I must be >= b for each value")
+  if (min(m) < 1) stop(paste("n.I must contain an increasing sequence of positive integers\n n.I = ", paste(n.I, collapse = ", ")))
+  if (min(n.I - a) < 0) stop(paste("Input a-vector must be less than n.I\n a = ", paste(a, collapse = ", "), "\n n.I = ", paste(n.I, collapse = ", ")))
+  if (min(b - a) <= 0) stop(paste("Input b-vector must be strictly greater than a\n a = ", paste(a, collapse = ", "), "\n b = ", paste(b, collapse = ", ")))
+  if (min(diff(a)) < 0) stop(paste("a must contain a non-decreasing sequence of integers\n a =", paste(a, collapse = ", ")))
+  if (min(diff(b)) < 0) stop(paste("b must contain a non-decreasing sequence of integers\n b =", paste(b, collapse = ", ")))
+  if (min(diff(n.I - b)) < 0) stop(paste("n.I must be >= b by non-decreasing amounts for each value\n n.I =", 
+                                         paste(n.I, collapse=", "), "\n  b = ", paste(b, collapse=", "),
+                                         "\n n.I - b = ", paste(n.I - b, collapse=", ")))
 
   plo <- matrix(nrow = k, ncol = ntheta)
   rownames(plo) <- paste(rep("Analysis ", k), 1:k)
