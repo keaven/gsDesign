@@ -123,7 +123,8 @@ gsSurvCalendar <- function(
     gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1,
     r = 18, tol = 1e-06) {
   checkVector(calendarTime, isType = "numeric") 
-  if (min(diff(calendarTime)) < 0) stop("calendarTime must be an increasing vector of positive numbers")
+  if (min(diff(calendarTime)) < 0) stop(paste("calendarTime must be an increasing vector of positive numbers, including final analysis\n input calendarTime = ",
+                                              paste(calendarTime, collapse = ", ")))
   x <- nSurv(
     lambdaC = lambdaC, hr = hr, hr0 = hr0, eta = eta, etaE = etaE,
     gamma = gamma, R = R, S = S, T = max(calendarTime),
