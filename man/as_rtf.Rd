@@ -118,7 +118,7 @@ safety_power <- gsBinomialExact(
 safety_power \%>\%
   as_table() \%>\%
   as_rtf(
-    file = "test1.rtf",
+    file = tempfile(fileext = ".rtf"),
     theta_label = "Underlying\nAE Rate",
     prob_decimals = 3,
     bound_label = c("Low Rate", "High Rate")

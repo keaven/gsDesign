@@ -44,7 +44,7 @@
 #' safety_power %>%
 #'   as_table() %>%
 #'   as_rtf(
-#'     file = "test1.rtf",
+#'     file = tempfile(fileext = ".rtf"),
 #'     theta_label = "Underlying\nAE Rate",
 #'     prob_decimals = 3,
 #'     bound_label = c("Low Rate", "High Rate")
@@ -132,7 +132,7 @@ as_rtf.gsBinomialExactTable <- function(
 #' @param footnote_p_cross_hr0.5 Footnote for cumulative power under the alternate hypothesis.
 #' @param footnote_specify Vector of string to put footnote super script.
 #' @param footnote_text Vector of string of footnote text.
-#' @importFrom r2rtf rtf_title
+#' @importFrom r2rtf rtf_title rtf_footnote
 #' @export
 as_rtf.gsBoundSummary <- function(
     x,
