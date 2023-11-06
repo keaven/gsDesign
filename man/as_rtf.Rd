@@ -28,11 +28,13 @@ as_rtf(x, ...)
   x,
   file,
   ...,
-  title = "Group Sequential Design for a Time-to-event Endpoint",
-  footnote_p_onesided = "xxx",
-  footnote_hr = "Hazard ratio required to cross bound",
-  footnote_p_cross =
-    "Cumulative power at each analysis by underlying treatment effect either at null/alternative hypothesis"
+  title = "Boundary Characteristics for Group Sequential Design",
+  footnote_p_onesided = "one-side p-value for experimental better than control",
+  footnote_appx_effect_at_bound = NULL,
+  footnote_p_cross_hr1 = "Cumulative type I error assuming binding futility bound",
+  footnote_p_cross_hr0.5 = "Cumulative power under the alternate hypothesis",
+  footnote_specify = NULL,
+  footnote_text = NULL
 )
 }
 \arguments{
@@ -42,7 +44,7 @@ as_rtf(x, ...)
 
 \item{file}{File path for the output.}
 
-\item{title}{Table title.}
+\item{title}{Title of the report.}
 
 \item{theta_label}{Label for theta.}
 
@@ -64,6 +66,18 @@ and "Futility bound".}
 observations when bound is crossed or when trial ends without crossing.}
 
 \item{rr_decimals}{Number of decimal places for response rates.}
+
+\item{footnote_p_onesided}{Footnote for one-side p-value.}
+
+\item{footnote_appx_effect_at_bound}{Footnote for approximate effect treatment at bound.}
+
+\item{footnote_p_cross_hr1}{Footnote for cumulative type I error.}
+
+\item{footnote_p_cross_hr0.5}{Footnote for cumulative power under the alternate hypothesis.}
+
+\item{footnote_specify}{Vector of string to put footnote super script.}
+
+\item{footnote_text}{Vector of string of footnote text.}
 }
 \value{
 \code{as_rtf()} returns the input \code{x} invisibly.
@@ -104,11 +118,21 @@ safety_power <- gsBinomialExact(
 safety_power \%>\%
   as_table() \%>\%
   as_rtf(
-    file = tempfile(fileext = ".rtf"),
+    file = "test1.rtf",
     theta_label = "Underlying\nAE Rate",
     prob_decimals = 3,
     bound_label = c("Low Rate", "High Rate")
   )
+
+xgs <- gsSurv(lambdaC = .2, hr = .5, eta = .1, T = 2, minfup = 1.5)
+gsBoundSummary(xgs, timename = "Year", tdigits = 1) \%>\% as_rtf(file = tempfile(fileext = ".rtf"))
+
+ss <- nSurvival(
+  lambda1 = .2, lambda2 = .1, eta = .1, Ts = 2, Tr = .5,
+  sided = 1, alpha = .025, ratio = 2
+)
+xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
+gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) \%>\% as_rtf(file = tempfile(fileext = ".rtf"))
 }
 \seealso{
 \code{vignette("binomialSPRTExample")}
