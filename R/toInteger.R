@@ -2,8 +2,7 @@
 #' or sample size (other designs)
 #'
 #' @param x An object of class \code{gsDesign}.
-#' @param ratio Integer indicating randomization ratio; not used for
-#'   time-to-event outcome; see details.
+#' @param ratio Integer indicating randomization ratio; see details.
 #' @param roundUpFinal Final value in returned \code{n.I} rounded up
 #'   if \code{TRUE}; otherwise, just rounded.
 #'
@@ -45,8 +44,8 @@
 #' # Convert bounds to exact binomial bounds
 #' toInteger(x, ratio = 3)
 toInteger <- function(x, ratio = 0, roundUpFinal = TRUE) {
-  if (!inherits(x, "gsDesign")) stop("toInteger must have class gsDesign as input")
-  if (!is.numeric(ratio) || ratio < 0) stop("toInteger input ratio must be a non-negative integer")
+  if (!inherits(x, "gsDesign")) stop("must have class gsDesign as input")
+  if (!isInteger(ratio) || ratio < 0) stop("input ratio must be a non-negative integer")
   counts <- round(x$n.I) # Round counts (event counts for survival; otherwise sample size)
   # For time-to-event endpoint or non-integer ratio, just round final count up
   if (inherits(x, "gsSurv") || !is.wholenumber(ratio)) {
@@ -75,15 +74,20 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE) {
   if ("gsSurv" %in% class(x) || x$nFixSurv > 0) {
     xi$hr0 <- x$hr0 # H0 hazard ratio
     xi$hr <- x$hr # H1 hazard ratio
+    
+    N <- rowSums(x$eNC + x$eNE)[x$k] # get input total sample size
+    N_continuous <- N
+    # if ratio = 0 and x$ratio is positive integer, replace ratio
+    if(ratio == 0 && is.wholenumber(x$ratio))ratio <- x$ratio
     # Update sample size to integer
+    N <- N / (ratio + 1)
     if (roundUpFinal) {
-      N <- ceiling(as.numeric(x$eNC[x$k]))
+      N <- ceiling(N / (ratio + 1)) * (ratio + 1)
     } else {
-      N <- round(as.numeric(x$eNC[x$k]))
+      N <- round(N / (ratio + 1), 0) * (ratio + 1)
     }
-    N <- N * (x$ratio + 1)
     # Update enrollment rates to achieve new sample size in same time
-    inflateN <- N / as.numeric(x$eNC[x$k] + x$eNE[x$k])
+    inflateN <- N / N_continuous
     # Following is adapted from gsSurv() to construct gsSurv object
     xx <- nSurv(
       lambdaC = x$lambdaC, hr = x$hr, hr0 = x$hr0, eta = x$etaC, etaE = x$etaE,
