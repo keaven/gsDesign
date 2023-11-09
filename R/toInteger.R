@@ -1,19 +1,23 @@
 #' Translate group sequential design to integer events (survival designs)
 #' or sample size (other designs)
 #'
-#' @param x An object of class \code{gsDesign}.
-#' @param ratio Integer indicating randomization ratio; see details.
-#' @param roundUpFinal Final value in returned \code{n.I} rounded up
-#'   if \code{TRUE}; otherwise, just rounded.
+#' @param x An object of class \code{gsDesign} or \code{gsSurv}.
+#' @param ratio A non-negative integer, usually corresponding to experimental:control sample size ratio. 
+#' Rounding is done to a multiple of \code{ratio + 1}. If input \code{x} has class \code{gsSurv} (design for time-to-event outcome),
+#' and \code{x$ratio} is a whole number, \code{ratio} is replaced by \code{x$ratio}.
+#' See details.
+#' @param roundUpFinal Final value in returned \code{n.I} is rounded up
+#'   if \code{TRUE}; otherwise, just rounded. For \code{gsSurv} input, final total sample size is also controlled by this. See details. 
 #'
-#' @return An object of class \code{gsDesign} with integer vector for \code{n.I}.
-#'
+#' @return Output is an object of the same class as input \code{x}; i.e., \code{gsDesign} with integer vector for \code{n.I}
+#' or \code{gsSurv} with integer vector \code{n.I} and integer total sample size. See details.
+#' 
 #' @details
-#' Note that if ratio is 0, rounding for \code{n.I} is done to the
-#' nearest integer. For input x of class \code{gsSurv} (time-to-event outcome),
-#' ratio is taken from the input \code{x} rather than the value provided
-#' in the \code{ratio} argument.
-#' For cases other than \code{gsSurv} class, rounding of final.
+#' If \code{ratio = 3}, rounding for final sample size is done to a multiple of 3 + 1 = 4. 
+#' For a \code{gsSurv} object input in \code{x}, event counts output in \code{n.I} are rounded to nearest integer and 
+#' final total sample size is rounded to a multiple of \code{ratio + 1}.
+#' For other input values of \code{x} (\code{gsDesign} class), \code{n.I} is interpreted as sample size; 
+#' final value is rounded to a multiple of \code{ratio + 1}, with \code{roundUpFinal} controlling rounding of last value.
 #'
 #' @export
 #'
@@ -47,8 +51,8 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE) {
   if (!inherits(x, "gsDesign")) stop("must have class gsDesign as input")
   if (!isInteger(ratio) || ratio < 0) stop("input ratio must be a non-negative integer")
   counts <- round(x$n.I) # Round counts (event counts for survival; otherwise sample size)
-  # For time-to-event endpoint or non-integer ratio, just round final count up
-  if (inherits(x, "gsSurv") || !is.wholenumber(ratio)) {
+  # For time-to-event endpoint, just round final count up
+  if (inherits(x, "gsSurv")) {
     if (roundUpFinal) counts[x$k] <- ceiling(x$n.I[x$k])
   } else {
     # For non-survival designs round sample size based on randomization ratio
@@ -78,13 +82,13 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE) {
     N <- rowSums(x$eNC + x$eNE)[x$k] # get input total sample size
     N_continuous <- N
     # if ratio = 0 and x$ratio is positive integer, replace ratio
-    if(ratio == 0 && is.wholenumber(x$ratio))ratio <- x$ratio
+    if(ratio == 0 && is.wholenumber(x$ratio)) ratio <- x$ratio
     # Update sample size to integer
     N <- N / (ratio + 1)
     if (roundUpFinal) {
-      N <- ceiling(N / (ratio + 1)) * (ratio + 1)
+      N <- ceiling(N) * (ratio + 1)
     } else {
-      N <- round(N / (ratio + 1), 0) * (ratio + 1)
+      N <- round(N, 0) * (ratio + 1)
     }
     # Update enrollment rates to achieve new sample size in same time
     inflateN <- N / N_continuous
