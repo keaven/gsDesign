@@ -12,8 +12,9 @@
 #' The exact binomial routine \code{gsBinomialExact} has requirements that may not be satisfied
 #' by the initial asymptotic approximation. 
 #' Thus, the approximations are updated to satisfy the following requirements of \code{gsBinomialExact}:
-#' \code{a} (the efficacy bound) must be positive and non-decreasing, 
-#' \code{b} (the futility bound must be positive and non-decreasing)
+#' \code{a} (the efficacy bound) must be positive, non-decreasing, and strictly less than n.I
+#' \code{b} (the futility bound) must be positive, non-decreasing, strictly greater than a
+#' \code{n.I - b} must be non-decreasing and >= 0
 #' 
 #' @return An object of class \code{gsBinomialExact}.
 #'
@@ -62,7 +63,7 @@ toBinomialExact <- function(x, observedEvents = NULL) {
     if (min(observedEvents - dplyr::lag(observedEvents, default = 0)) < 1) 
       stop("toBinomialExact: observedEvents must be a vector of increasing positive integers")
     counts <- observedEvents
-    if (sum(observedEvents >= xx$maxn.IPlan) > 1) stop("toBinomialExact: at most 1 value in observedEvents")
+    if (sum(observedEvents >= xx$maxn.IPlan) > 1) stop("toBinomialExact: at most 1 value in observedEvents can be >= maximum planned (x$maxn.IPlan)")
     k <- length(observedEvents)
     if (k < 2) stop("toBinomialExact: must have at least 2 values in observedEvents")
     xx <- gsDesign(
@@ -90,6 +91,16 @@ toBinomialExact <- function(x, observedEvents = NULL) {
 
   # Lower bound probabilities are for efficacy and Type I error should be controlled under p0
   a <- qbinom(p = pnorm(-xx$upper$bound), size = counts, prob = p0) - 1
+
+#  print(paste("a = ", paste(a, collapse = ", ")))
+
+  
+  # check that a is non-decreasing, >= -1, and < n.I
+  a <- pmax(a, -1)
+  a <- pmax(a, lag(a, def = -1))
+  a <- pmin(a, counts - 1)
+  
+  
   atem <- a
   timing <- counts / xx$maxn.IPlan
   alpha_spend <- x$upper$sf(alpha = x$alpha, t = timing, param = x$upper$param)$spend
@@ -97,6 +108,20 @@ toBinomialExact <- function(x, observedEvents = NULL) {
     # Upper bound probabilities are for futility
     # Compute nominal p-values under H0 for futility and corresponding inverse binomial under H1
     b <- qbinom(p = pnorm(xx$lower$bound), size = counts, prob = p0, lower.tail = TRUE)
+    
+    
+    
+    # check that b is non-decreasing, > a, and n.I - b is non-decreasing
+    b <- pmin(b, counts + 1)
+    b <- pmax(a + 1, b)
+    b <- pmin(b, counts - lag(counts, def = 0) + lag(b, def = 1))
+
+#    print("toBinomialExact() starting values")
+#    print(paste("a = ", paste(a, collapse = ", ")))
+#    print(paste("b = ", paste(b, collapse = ", ")))
+#    print(paste("n.I = ", paste(counts, collapse = ", ")))
+#    print(paste("n.I - b = ", paste(counts - b, collapse = ", ")))
+    
     # Compute target beta-spending
     beta_spend <- xx$lower$sf(alpha = xx$beta, t = timing, param = xx$lower$param)$spend
   } else {
@@ -116,10 +141,17 @@ toBinomialExact <- function(x, observedEvents = NULL) {
     )$lower$prob[1:j])
     atem <- a # Work space for updating efficacy bound
     btem <- b # Work space for updating futility bound
+    # Set range for possible changes to a[j]
+    # Following is not needed below
+    # amin <- ifelse(j > 1, a[j - 1], -1)
+    amax <- ifelse(j < k, counts[j] - 1, counts[j])
+    amax <- ifelse(j == 1, amax, min(amax, counts[j - 1] - b[j - 1]))
+    a[j] <- ifelse(a[j] > amax, amax, a[j])
     # If less than allowed spending, check if bound can be increased
     if (nblowerprob < alpha_spend[j]) {
       while (nblowerprob < alpha_spend[j]) {
         a[j] <- atem[j]
+        if (a[j] >= amax - 1) break # keep in allowable range 
         atem[j] <- atem[j] + 1
         nblowerprob <- sum(gsBinomialExact(
           k = max(j, 2), theta = p0, n.I = counts[1:max(j, 2)],
@@ -137,23 +169,33 @@ toBinomialExact <- function(x, observedEvents = NULL) {
       }
     }
     # beta-spending, if needed
-    if (x$test.type == 4 && j < x$k) {
+    if (x$test.type == 4)
+      if (j == k){b[j] = a[j] + 1}else{
       upperprob <- sum(gsBinomialExact(
         k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)],
         a = a[1:max(j, 2)], b = b[1:max(j, 2)]
       )$upper$prob[1:j])
+      # Set range for possible values of b[j]
+      bmin <- a[j] + 1 # must be strictly > a[j]
+      bmin <- ifelse(j == 1, bmin, max(bmin, b[j - 1])) # must be non-decreasing 
+      bmax <- counts[j] + 1
+      bmax <- ifelse(j == 1, bmax, min(bmax, counts[j] - counts[j - 1] + b[j - 1]))
+      b[j] <- ifelse(b[j] > bmax, bmax, b[j])
+      b[j] <- ifelse(b[j] < bmin, bmin, b[j])
       if (upperprob < beta_spend[j]) {
         while (upperprob < beta_spend[j]) {
           b[j] <- btem[j]
-          if (btem[j] == a[j] + 1) break # Cannot make a and b bounds the same
+          if (btem[j] == bmin) break # only lower if range allows
           btem[j] <- btem[j] - 1
           upperprob <- sum(gsBinomialExact(
             k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)],
             a = a[1:max(j, 2)], b = btem[1:max(j, 2)]
           )$upper$prob[1:j])
         }
+        
       } else if (upperprob > beta_spend[j]) {
-        while (upperprob > beta_spend[j]) {
+        while (upperprob > beta_spend[j] && 
+               b[j] < bmax) {
           b[j] <- b[j] + 1
           upperprob <- sum(gsBinomialExact(
             k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)],
