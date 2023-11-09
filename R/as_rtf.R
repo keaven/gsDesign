@@ -20,6 +20,7 @@
 #' @export
 #'
 #' @examples
+#' # as_rtf for gsBinomialExact
 #' zz <- gsBinomialExact(
 #'   k = 3, theta = seq(0, 1, 0.1), n.I = c(12, 24, 36),
 #'   a = c(-1, 0, 11), b = c(5, 9, 12)
@@ -49,7 +50,7 @@
 #'     prob_decimals = 3,
 #'     bound_label = c("Low Rate", "High Rate")
 #'   )
-#'
+#' # as_rtf for gsBoundSummary
 #' xgs <- gsSurv(lambdaC = .2, hr = .5, eta = .1, T = 2, minfup = 1.5)
 #' gsBoundSummary(xgs, timename = "Year", tdigits = 1) %>% as_rtf(file = tempfile(fileext = ".rtf"))
 #'
@@ -59,6 +60,12 @@
 #' )
 #' xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
 #' gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) %>% as_rtf(file = tempfile(fileext = ".rtf"))
+#' 
+#' xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
+#' gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) %>% 
+#'   as_rtf(file = tempfile(fileext = ".rtf"),
+#'   footnote_specify = "Z",
+#'   footnote_text = "Z-Score")
 as_rtf <- function(x, ...) {
   UseMethod("as_rtf", x)
 }
@@ -129,7 +136,7 @@ as_rtf.gsBinomialExactTable <- function(
 #' @param footnote_p_onesided Footnote for one-side p-value. 
 #' @param footnote_appx_effect_at_bound Footnote for approximate effect treatment at bound.
 #' @param footnote_p_cross_hr1 Footnote for cumulative type I error.
-#' @param footnote_p_cross_hr0.5 Footnote for cumulative power under the alternate hypothesis.
+#' @param footnote_p_cross_h0 Footnote for cumulative power under the alternate hypothesis.
 #' @param footnote_specify Vector of string to put footnote super script.
 #' @param footnote_text Vector of string of footnote text.
 #' @importFrom r2rtf rtf_title rtf_footnote
@@ -142,7 +149,7 @@ as_rtf.gsBoundSummary <- function(
     footnote_p_onesided = "one-side p-value for experimental better than control",
     footnote_appx_effect_at_bound = NULL,
     footnote_p_cross_hr1 = "Cumulative type I error assuming binding futility bound",
-    footnote_p_cross_hr0.5 = "Cumulative power under the alternate hypothesis",
+    footnote_p_cross_h0 = "Cumulative power under the alternate hypothesis",
     footnote_specify = NULL,
     footnote_text = NULL) {
   x_out <- x

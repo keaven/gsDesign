@@ -32,7 +32,7 @@ as_rtf(x, ...)
   footnote_p_onesided = "one-side p-value for experimental better than control",
   footnote_appx_effect_at_bound = NULL,
   footnote_p_cross_hr1 = "Cumulative type I error assuming binding futility bound",
-  footnote_p_cross_hr0.5 = "Cumulative power under the alternate hypothesis",
+  footnote_p_cross_h0 = "Cumulative power under the alternate hypothesis",
   footnote_specify = NULL,
   footnote_text = NULL
 )
@@ -73,7 +73,7 @@ observations when bound is crossed or when trial ends without crossing.}
 
 \item{footnote_p_cross_hr1}{Footnote for cumulative type I error.}
 
-\item{footnote_p_cross_hr0.5}{Footnote for cumulative power under the alternate hypothesis.}
+\item{footnote_p_cross_h0}{Footnote for cumulative power under the alternate hypothesis.}
 
 \item{footnote_specify}{Vector of string to put footnote super script.}
 
@@ -94,6 +94,7 @@ For \code{\link{gsBinomialExact}}, this summarized operating characteristics
 across a range of effect sizes.
 }
 \examples{
+# as_rtf for gsBinomialExact
 zz <- gsBinomialExact(
   k = 3, theta = seq(0, 1, 0.1), n.I = c(12, 24, 36),
   a = c(-1, 0, 11), b = c(5, 9, 12)
@@ -123,7 +124,7 @@ safety_power \%>\%
     prob_decimals = 3,
     bound_label = c("Low Rate", "High Rate")
   )
-
+# as_rtf for gsBoundSummary
 xgs <- gsSurv(lambdaC = .2, hr = .5, eta = .1, T = 2, minfup = 1.5)
 gsBoundSummary(xgs, timename = "Year", tdigits = 1) \%>\% as_rtf(file = tempfile(fileext = ".rtf"))
 
@@ -133,6 +134,12 @@ ss <- nSurvival(
 )
 xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
 gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) \%>\% as_rtf(file = tempfile(fileext = ".rtf"))
+
+xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
+gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) \%>\% 
+  as_rtf(file = tempfile(fileext = ".rtf"),
+  footnote_specify = "Z",
+  footnote_text = "Z-Score")
 }
 \seealso{
 \code{vignette("binomialSPRTExample")}
