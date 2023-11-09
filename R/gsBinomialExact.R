@@ -81,10 +81,10 @@ utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 #' length k.
 #' @param a Number of "successes" required to cross lower bound cutoffs to
 #' reject \code{p1} in favor of \code{p0} at each analysis; vector of length k;
-#' -1 means no lower bound.
+#' -1 (minimum allowed) means no lower bound.
 #' @param b Number of "successes" required to cross upper bound cutoffs for
 #' rejecting \code{p0} in favor of \code{p1} at each analysis; vector of length
-#' k.
+#' k; value > n.I means no upper bound.
 #' @param p0 Lower of the two response (event) rates hypothesized.
 #' @param p1 Higher of the two response (event) rates hypothesized.
 #' @param alpha Nominal probability of rejecting response (event) rate
@@ -245,9 +245,9 @@ utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 # gsBinomialExact function [sinew] ----
 gsBinomialExact <- function(k = 2, theta = c(.1, .2), n.I = c(50, 100), a = c(3, 7), b = c(20, 30)) {
   checkScalar(k, "integer", c(2, Inf), inclusion = c(TRUE, FALSE))
-  checkVector(theta, "numeric", interval = 0:1, inclusion = c(TRUE, TRUE))
+  checkVector(theta, "numeric", interval = 0:1, inclusion = c(FALSE, FALSE))
   checkVector(n.I, "integer", interval = c(1, Inf), inclusion = c(TRUE, FALSE))
-  checkVector(a, "integer", interval = c(-Inf, Inf), inclusion = c(FALSE, FALSE))
+  checkVector(a, "integer", interval = c(-1, Inf), inclusion = c(TRUE, FALSE))
   checkVector(b, "integer", interval = c(1, Inf), inclusion = c(FALSE, FALSE))
   ntheta <- as.integer(length(theta))
   theta <- as.double(theta)
@@ -256,12 +256,12 @@ gsBinomialExact <- function(k = 2, theta = c(.1, .2), n.I = c(50, 100), a = c(3,
   }
   m <- c(n.I[1], diff(n.I))
   if (min(m) < 1) stop(paste("n.I must contain an increasing sequence of positive integers\n n.I = ", paste(n.I, collapse = ", ")))
-  if (min(n.I - a) < 0) stop(paste("Input a-vector must be less than n.I\n a = ", paste(a, collapse = ", "), "\n n.I = ", paste(n.I, collapse = ", ")))
+  if (min(n.I - a) <= 0) stop(paste("Input a-vector must be strictly less than n.I\n a = ", paste(a, collapse = ", "), "\n n.I = ", paste(n.I, collapse = ", ")))
   if (min(b - a) <= 0) stop(paste("Input b-vector must be strictly greater than a\n a = ", paste(a, collapse = ", "), "\n b = ", paste(b, collapse = ", ")))
-  if (min(diff(a)) < 0) stop(paste("a must contain a non-decreasing sequence of integers\n a =", paste(a, collapse = ", ")))
-  if (min(diff(b)) < 0) stop(paste("b must contain a non-decreasing sequence of integers\n b =", paste(b, collapse = ", ")))
-  if (min(diff(n.I - b)) < 0) stop(paste("n.I must be >= b by non-decreasing amounts for each value\n n.I =", 
-                                         paste(n.I, collapse=", "), "\n  b = ", paste(b, collapse=", "),
+  if (min(diff(a)) < 0) stop(paste("a must contain a non-decreasing sequence of non-negative integers\n a =", paste(a, collapse = ", ")))
+  if (min(diff(b)) < 0) stop(paste("b must contain a non-decreasing sequence of non-negative integers\n b =", paste(b, collapse = ", ")))
+  if (min(diff(n.I - b)) < 0) stop(paste("n.I - b must be non-decreasing\n n.I =", 
+                                         paste(n.I, collapse=", "), "\n b = ", paste(b, collapse=", "),
                                          "\n n.I - b = ", paste(n.I - b, collapse=", ")))
 
   plo <- matrix(nrow = k, ncol = ntheta)
