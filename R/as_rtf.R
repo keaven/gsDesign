@@ -135,7 +135,7 @@ as_rtf.gsBinomialExactTable <- function(
 #' @param title Title of the report.
 #' @param footnote_p_onesided Footnote for one-side p-value. 
 #' @param footnote_appx_effect_at_bound Footnote for approximate effect treatment at bound.
-#' @param footnote_p_cross_hr1 Footnote for cumulative type I error.
+#' @param footnote_p_cross_h1 Footnote for cumulative type I error.
 #' @param footnote_p_cross_h0 Footnote for cumulative power under the alternate hypothesis.
 #' @param footnote_specify Vector of string to put footnote super script.
 #' @param footnote_text Vector of string of footnote text.
@@ -148,7 +148,7 @@ as_rtf.gsBoundSummary <- function(
     title = "Boundary Characteristics for Group Sequential Design",
     footnote_p_onesided = "one-side p-value for experimental better than control",
     footnote_appx_effect_at_bound = NULL,
-    footnote_p_cross_hr1 = "Cumulative type I error assuming binding futility bound",
+    footnote_p_cross_h1 = "Cumulative type I error assuming binding futility bound",
     footnote_p_cross_h0 = "Cumulative power under the alternate hypothesis",
     footnote_specify = NULL,
     footnote_text = NULL) {
@@ -198,7 +198,7 @@ as_rtf.gsBoundSummary <- function(
   if(!is.null(which(x$Value == "P(Cross) if HR=1")[1])) {
     first_instance <- which(x$Value == "P(Cross) if HR=1")[1]
     x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^", letters[letter_order], "}")
-    footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_p_cross_hr1))
+    footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_p_cross_h1))
     letter_order <- letter_order + 1
   }
 
@@ -206,7 +206,7 @@ as_rtf.gsBoundSummary <- function(
   if(!is.null(which(x$Value == "P(Cross) if HR=0.5")[1])) {
     first_instance <- which(x$Value == "P(Cross) if HR=0.5")[1]
     x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^", letters[letter_order], "}")
-    footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_p_cross_hr0.5))
+    footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_p_cross_h0))
     letter_order <- letter_order + 1
   }
   

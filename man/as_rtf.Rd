@@ -31,7 +31,7 @@ as_rtf(x, ...)
   title = "Boundary Characteristics for Group Sequential Design",
   footnote_p_onesided = "one-side p-value for experimental better than control",
   footnote_appx_effect_at_bound = NULL,
-  footnote_p_cross_hr1 = "Cumulative type I error assuming binding futility bound",
+  footnote_p_cross_h1 = "Cumulative type I error assuming binding futility bound",
   footnote_p_cross_h0 = "Cumulative power under the alternate hypothesis",
   footnote_specify = NULL,
   footnote_text = NULL
@@ -71,7 +71,7 @@ observations when bound is crossed or when trial ends without crossing.}
 
 \item{footnote_appx_effect_at_bound}{Footnote for approximate effect treatment at bound.}
 
-\item{footnote_p_cross_hr1}{Footnote for cumulative type I error.}
+\item{footnote_p_cross_h1}{Footnote for cumulative type I error.}
 
 \item{footnote_p_cross_h0}{Footnote for cumulative power under the alternate hypothesis.}
 
