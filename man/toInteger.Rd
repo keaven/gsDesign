@@ -8,27 +8,30 @@ or sample size (other designs)}
 toInteger(x, ratio = 0, roundUpFinal = TRUE)
 }
 \arguments{
-\item{x}{An object of class \code{gsDesign}.}
+\item{x}{An object of class \code{gsDesign} or \code{gsSurv}.}
 
-\item{ratio}{Integer indicating randomization ratio; not used for
-time-to-event outcome; see details.}
+\item{ratio}{A non-negative integer, usually corresponding to experimental:control sample size ratio. 
+Rounding is done to a multiple of \code{ratio + 1}. If input \code{x} has class \code{gsSurv} (design for time-to-event outcome),
+and \code{x$ratio} is a whole number, \code{ratio} is replaced by \code{x$ratio}.
+See details.}
 
-\item{roundUpFinal}{Final value in returned \code{n.I} rounded up
-if \code{TRUE}; otherwise, just rounded.}
+\item{roundUpFinal}{Final value in returned \code{n.I} is rounded up
+if \code{TRUE}; otherwise, just rounded. For \code{gsSurv} input, final total sample size is also controlled by this. See details.}
 }
 \value{
-An object of class \code{gsDesign} with integer vector for \code{n.I}.
+Output is an object of the same class as input \code{x}; i.e., \code{gsDesign} with integer vector for \code{n.I}
+or \code{gsSurv} with integer vector \code{n.I} and integer total sample size. See details.
 }
 \description{
 Translate group sequential design to integer events (survival designs)
 or sample size (other designs)
 }
 \details{
-Note that if ratio is 0, rounding for \code{n.I} is done to the
-nearest integer. For input x of class \code{gsSurv} (time-to-event outcome),
-ratio is taken from the input \code{x} rather than the value provided
-in the \code{ratio} argument.
-For cases other than \code{gsSurv} class, rounding of final.
+If \code{ratio = 3}, rounding for final sample size is done to a multiple of 3 + 1 = 4. 
+For a \code{gsSurv} object input in \code{x}, event counts output in \code{n.I} are rounded to nearest integer and 
+final total sample size is rounded to a multiple of \code{ratio + 1}.
+For other input values of \code{x} (\code{gsDesign} class), \code{n.I} is interpreted as sample size; 
+final value is rounded to a multiple of \code{ratio + 1}, with \code{roundUpFinal} controlling rounding of last value.
 }
 \examples{
 # The following code derives the group sequential design using the method

@@ -51,11 +51,11 @@ length k.}
 
 \item{a}{Number of "successes" required to cross lower bound cutoffs to
 reject \code{p1} in favor of \code{p0} at each analysis; vector of length k;
--1 means no lower bound.}
+-1 (minimum allowed) means no lower bound.}
 
 \item{b}{Number of "successes" required to cross upper bound cutoffs for
 rejecting \code{p0} in favor of \code{p1} at each analysis; vector of length
-k.}
+k; value > n.I means no upper bound.}
 
 \item{p0}{Lower of the two response (event) rates hypothesized.}
 

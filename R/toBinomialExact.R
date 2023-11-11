@@ -94,7 +94,7 @@ toBinomialExact <- function(x, observedEvents = NULL) {
 
   # check that a is non-decreasing, >= -1, and < n.I
   a <- pmax(a, -1)
-  a <- pmax(a, lag(a, def = -1))
+  a <- pmax(a, dplyr::lag(a, def = -1))
   a <- pmin(a, counts - 1)
 
   atem <- a
@@ -109,7 +109,7 @@ toBinomialExact <- function(x, observedEvents = NULL) {
     # check that b is non-decreasing, > a, and n.I - b is non-decreasing
     b <- pmin(b, counts + 1)
     b <- pmax(a + 1, b)
-    b <- pmin(b, counts - lag(counts, def = 0) + lag(b, def = 1))
+    b <- pmin(b, counts - dplyr::lag(counts, def = 0) + dplyr::lag(b, def = 1))
     # Compute target beta-spending
     beta_spend <- xx$lower$sf(alpha = xx$beta, t = timing, param = xx$lower$param)$spend
   } else {

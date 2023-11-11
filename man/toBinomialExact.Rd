@@ -26,8 +26,9 @@ Translate survival design bounds to exact binomial bounds
 The exact binomial routine \code{gsBinomialExact} has requirements that may not be satisfied
 by the initial asymptotic approximation. 
 Thus, the approximations are updated to satisfy the following requirements of \code{gsBinomialExact}:
-\code{a} (the efficacy bound) must be positive and non-decreasing, 
-\code{b} (the futility bound must be positive and non-decreasing)
+\code{a} (the efficacy bound) must be positive, non-decreasing, and strictly less than n.I
+\code{b} (the futility bound) must be positive, non-decreasing, strictly greater than a
+\code{n.I - b} must be non-decreasing and >= 0
 }
 \examples{
 # The following code derives the group sequential design using the method
