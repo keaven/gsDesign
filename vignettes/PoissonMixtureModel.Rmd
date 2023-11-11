@@ -1,5 +1,5 @@
 ---
-title: "A cure model calendar-based design"
+title: "A Cure Model Calendar-Based Design"
 output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
 vignette: >
@@ -33,51 +33,17 @@ library(gt)
 # Introduction
 
 We present a study design for a time-to-event outcome based on a cure model (@PoissonMixture2009).
-In this case, it is assumed that tail behavior of the survival is of substantial interest and there is no desire to stop and do a final analysis before substantial follow-up through 4 years has been allowed to accrue.
+In this case, it is assumed that tail behavior for the survival curve is of substantial interest and there is no desire to stop and do a final analysis before substantial follow-up through 4 years has been allowed to accrue.
 It is assumed further if substantial events have not accrued in this time period, then some sacrifice in power would not be unreasonable.
 Due to this as well as substantial variability in event accrual caused by feasible differences in event rates, we use a calendar-based design, including calendar-based spending (@LanDeMets1989).
 
 We discuss some of the potential advantages and disadvantages of the cure model and calendar-based design cases where hazard rates for events decrease substantially over time and the true underlying distributions may meaningfully deviate from what is anticipated at the time of design.
 
-# The Poisson mixture model
+# The Poisson Mixture Model
 
 The Poisson mixture model is a cure model that can be useful when the failure rate in a population is expected to decline substantially over time based on historical data.
 It also has the property that if control group time-to-event follows a Poisson mixture distribution, then a proportional hazards assumption for treatment effect will yield another Poisson mixture distribution for the experimental group.
 The model is flexible and easy to use in that the control distribution is specified with two parameters in a transparent fashion: the cure rate and one other survival rate at an arbitrarily specified time point.
-
-## Scenario assumptions
-
-We consider three scenarios to demonstrate how spending can impact potential for trial success and fully understanding treatment group differences.
-The following can be adjusted by the reader and the vignette re-run.
-
-```{r}
-# Control group assumptions for three Poisson mixture cure models
-cure_rate <- c(.5, .35, .55)
-# Second time point for respective models
-t1 <- c(24, 24, 24)
-# Survival rate at 2nd time point for respective models
-s1 <- c(.65, .5, .68)
-time_unit <- "month"
-# Hazard ratio for experimental versus control for respective models
-hr <- c(.7, .75, .7)
-# Total study duration
-study_duration <- c(48, 48, 56)
-# Number of bins for piecewise approximation
-bins <- 5
-```
-
-We will assume a constant enrollment rate for the duration of enrollment, allowing different assumed enrollment durations by scenario.
-The following code can be easily changed to study alternate scenarios.
-
-```{r}
-# This code should be updated by user for their scenario
-# Enrollment duration by scenario
-enroll_duration <- c(12, 12, 20)
-# Dropout rate (exponential failure rate per time unit) by scenario
-dropout_rate <- c(.002, .001, .001)
-```
-
-## The Poisson Mixture Model
 
 The Poisson mixture model (@PoissonMixture2009) assumes a cure rate $p$ to represent the patients who benefit long-term.
 The survival function as a function of time $t$ for a control group ($c$) is:
@@ -86,12 +52,15 @@ $$S_c(t)=\exp(-\theta(1-\exp(-\lambda t))),$$
 where $\theta = -\log(p)$, $\lambda> 0$ is a constant hazard rate and $t\ge 0$.
 The component $\exp(-\lambda t)$ is an exponential survival distribution; while it could be replaced with an arbitrary survival distribution on $t>0$ for the mixture model, the exponential model is simple, adequately flexible and easy to explain.
 This two-parameter model can be specified by the cure rate and the assumed survival rate $S_c(t_1)$ at some time $0 <t_1<\infty.$
-For this study, the control group cure rate for the 3 scenarios is assumed to be `r cure_rate` and the survival at `r time_unit` is assumed to be `r s1`, respectively.
 We can solve for $\theta$ and $\lambda$ as follows:
 
 $$S_c(\infty) = e^\theta \Rightarrow \theta = -\log(S_c(\infty)) $$
 and with a little algebra, we can solve for $\lambda$:
 $$S_c(t_1)= \exp(-\theta(1-\exp(-\lambda t_1))) \Rightarrow \lambda =  -\log(1 + \log(S_c(t_1)) / \theta) / t_1$$
+We note that under a proportional hazards assumption with hazard ratio $\gamma > 0$ the survival function for the experimental group (e) is:
+
+$$S_e(t)=\exp(-\theta\gamma(1-\exp(-\lambda t))).$$
+For any setting chosen, it is ideal to be able to cite published literature and other rationale for study assumptions and show that the Poisson mixture assumptions for the control group reasonably match historical data.
 
 ## Supporting functions
 
@@ -117,13 +86,43 @@ hPM <- function(x = 0:20, cure_rate = .5, t1 = 10, s1 = .6) {
 }
 ```
 
+## Scenario Assumptions
+
+We consider three scenarios to demonstrate how spending can impact potential for trial success and fully understanding treatment group differences.
+The following can be adjusted by the reader and the vignette re-run.
+
+```{r}
+# Control group assumptions for three Poisson mixture cure models
+cure_rate <- c(.5, .35, .55)
+# Second time point for respective models
+t1 <- c(24, 24, 24)
+# Survival rate at 2nd time point for respective models
+s1 <- c(.65, .5, .68)
+time_unit <- "month"
+# Hazard ratio for experimental versus control for respective models
+hr <- c(.7, .75, .7)
+# Total study duration
+study_duration <- c(48, 48, 56)
+# Number of bins for piecewise approximation of Poisson mixture rates
+bins <- 5
+```
+
+We will assume a constant enrollment rate for the duration of enrollment, allowing different assumed enrollment durations by scenario.
+The following code can be easily changed to study alternate scenarios.
+
+```{r}
+# This code should be updated by user for their scenario
+# Enrollment duration by scenario
+enroll_duration <- c(12, 12, 20)
+# Dropout rate (exponential failure rate per time unit) by scenario
+dropout_rate <- c(.002, .001, .001)
+```
+
+
+
 ## Examples
 
-We note that under a proportional hazards assumption with hazard ratio $\gamma > 0$ the survival funtion for the experimental group (e) is:
 
-$$S_e(t)=\exp(-\theta\gamma(1-\exp(-\lambda t))).$$
-As noted before, $(1 - \exp(-\lambda t)$ can be replaced with the cumulative distribution for any positive random variable.
-For any setting chosen, it is ideal to be able to cite published literature and other rationale for study assumptions.
 
 The points in the following graph indicate where underlying cumulative hazard matches the piecewise exponential of the specified cure rate models by scenario.
 The piecewise failure model is used to derive the sample size and targeted events over time in the trial.
@@ -265,7 +264,9 @@ This is not done automatically by the `gsSurv()` function, but is done using the
 There are two things `gsSurvCalendar()` takes care of:
 
 - How to get information fraction levels that correspond to targeted calendar analysis times to plug in for the planned design.
-- Replacing information fraction levels with calendar fraction levels for $\alpha$- and $\beta$-spending.
+- Replacing information fraction levels with calendar fraction levels for $\alpha$- and $\beta$-spending. 
+Note that calendar-based analysis timing might often be used with information-based spending in many cases.
+In this case, the calendar-based timing is only used as an approximation to derive information fractions at interim analyses and timing of analyses would still be based on event counts regardless of the amount of time it takes to accumulate targeted events. 
 
 We begin by specifying calendar times of analysis and find corresponding fractions of final planned events and calendar time under design assumptions.
 Having the first interim at 14 months rather than 12 was selected to get the expected events well above 100.
