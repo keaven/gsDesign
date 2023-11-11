@@ -88,40 +88,28 @@ toBinomialExact <- function(x, observedEvents = NULL) {
 
   p0 <- x$hr0 * x$ratio / (1 + x$hr0 * x$ratio)
   p1 <- x$hr * x$ratio / (1 + x$hr * x$ratio)
-
   # Lower bound probabilities are for efficacy and Type I error should be controlled under p0
   a <- qbinom(p = pnorm(-xx$upper$bound), size = counts, prob = p0) - 1
+  init_approx <- list(a = a) # save initial efficacy bound approximation
 
-#  print(paste("a = ", paste(a, collapse = ", ")))
-
-  
   # check that a is non-decreasing, >= -1, and < n.I
   a <- pmax(a, -1)
   a <- pmax(a, lag(a, def = -1))
   a <- pmin(a, counts - 1)
-  
-  
+
   atem <- a
   timing <- counts / xx$maxn.IPlan
   alpha_spend <- x$upper$sf(alpha = x$alpha, t = timing, param = x$upper$param)$spend
   if (x$test.type != 1) {
     # Upper bound probabilities are for futility
     # Compute nominal p-values under H0 for futility and corresponding inverse binomial under H1
-    b <- qbinom(p = pnorm(xx$lower$bound), size = counts, prob = p0, lower.tail = TRUE)
-    
-    
-    
+    b <- qbinom(p = pnorm(-xx$lower$bound), size = counts, prob = p0)
+    init_approx$b <- b # save initial futility bound approximation
+
     # check that b is non-decreasing, > a, and n.I - b is non-decreasing
     b <- pmin(b, counts + 1)
     b <- pmax(a + 1, b)
     b <- pmin(b, counts - lag(counts, def = 0) + lag(b, def = 1))
-
-#    print("toBinomialExact() starting values")
-#    print(paste("a = ", paste(a, collapse = ", ")))
-#    print(paste("b = ", paste(b, collapse = ", ")))
-#    print(paste("n.I = ", paste(counts, collapse = ", ")))
-#    print(paste("n.I - b = ", paste(counts - b, collapse = ", ")))
-    
     # Compute target beta-spending
     beta_spend <- xx$lower$sf(alpha = xx$beta, t = timing, param = xx$lower$param)$spend
   } else {
@@ -142,11 +130,12 @@ toBinomialExact <- function(x, observedEvents = NULL) {
     atem <- a # Work space for updating efficacy bound
     btem <- b # Work space for updating futility bound
     # Set range for possible changes to a[j]
-    # Following is not needed below
-    # amin <- ifelse(j > 1, a[j - 1], -1)
+    amin <- ifelse(j > 1, a[j - 1], -1)
     amax <- ifelse(j < k, counts[j] - 1, counts[j])
-    amax <- ifelse(j == 1, amax, min(amax, counts[j - 1] - b[j - 1]))
     a[j] <- ifelse(a[j] > amax, amax, a[j])
+    a[j] <- ifelse(a[j] < amin, amin, a[j])
+    if (amin > amax) stop(paste("toBinomialExact: amin > amax: amin =", amin, "amax =", amax, "j =", j))
+    atem[j] <- a[j]
     # If less than allowed spending, check if bound can be increased
     if (nblowerprob < alpha_spend[j]) {
       while (nblowerprob < alpha_spend[j]) {
@@ -170,18 +159,19 @@ toBinomialExact <- function(x, observedEvents = NULL) {
     }
     # beta-spending, if needed
     if (x$test.type == 4)
-      if (j == k){b[j] = a[j] + 1}else{
-      upperprob <- sum(gsBinomialExact(
-        k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)],
-        a = a[1:max(j, 2)], b = b[1:max(j, 2)]
-      )$upper$prob[1:j])
       # Set range for possible values of b[j]
       bmin <- a[j] + 1 # must be strictly > a[j]
       bmin <- ifelse(j == 1, bmin, max(bmin, b[j - 1])) # must be non-decreasing 
       bmax <- counts[j] + 1
       bmax <- ifelse(j == 1, bmax, min(bmax, counts[j] - counts[j - 1] + b[j - 1]))
+      if (bmin > bmax) stop(paste("bmin > bmax: bmin =", bmin, "bmax =", bmax, "j =", j))
       b[j] <- ifelse(b[j] > bmax, bmax, b[j])
       b[j] <- ifelse(b[j] < bmin, bmin, b[j])
+      btem[j] <- b[j]
+      upperprob <- sum(gsBinomialExact(
+        k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)],
+        a = a[1:max(j, 2)], b = b[1:max(j, 2)]
+      )$upper$prob[1:j])
       if (upperprob < beta_spend[j]) {
         while (upperprob < beta_spend[j]) {
           b[j] <- btem[j]
@@ -203,9 +193,8 @@ toBinomialExact <- function(x, observedEvents = NULL) {
           )$upper$prob[1:j])
         }
       }
-    }
   }
-  if(xx$n.I[k] >= x$maxn.IPlan) b[xx$k] <- a[xx$k] + 1 # Final upper bound = lower bound + 1
   xxxx <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = counts, a = a, b = b)
+  xxxx$init_approx <- init_approx
   return(xxxx)
 }
