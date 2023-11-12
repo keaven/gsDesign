@@ -1,3 +1,30 @@
+# gsDesign 3.6.0 (November, 2023)
+
+## Breaking changes
+
+- `gsSurv()` and `nSurv()` have updated default values for `T` and `minfup`
+  so that function calls with no arguments will run. Legacy code with `T`
+  or `minfup` not explicitly specified could break (#105).
+
+## New features
+
+- `gsSurvCalendar()` function added to enable group sequential design for
+  time-to-event outcomes using calendar timing of interim analysis
+  specification (#105).
+- `as_rtf()` method for `gsBinomialExact()` objects added,
+  enable RTF table outputs for standard word processing software (#102).
+
+## Improvements
+
+- `toBinomialExact()` and `gsBinomialExact()`: fix error checking in bound
+  computations, improve documentation and error messages (#105).
+- `print.gsSurv()`: Improve the display of targeted events (very minor).
+  The boundary crossing probability computations did not change.
+  The need is made evident by the addition of the `toInteger()` function (#105).
+- `toInteger()`: Fix the documentation and execution based on the `ratio` argument (#105).
+- Update the vaccine efficacy, Poisson mixture model, and toInteger vignettes (#105).
+- Standardize and improve roxygen2 documentation (#104).
+
 # gsDesign 3.5.0 (July, 2023)
 
 - `sfPower()` now allows a wider parameter range (0, 15].
