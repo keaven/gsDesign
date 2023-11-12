@@ -1,20 +1,23 @@
 #' Translate group sequential design to integer events (survival designs)
 #' or sample size (other designs)
 #'
-#' @param x An object of class \code{gsDesign}.
-#' @param ratio Integer indicating randomization ratio; not used for
-#'   time-to-event outcome; see details.
-#' @param roundUpFinal Final value in returned \code{n.I} rounded up
-#'   if \code{TRUE}; otherwise, just rounded.
+#' @param x An object of class \code{gsDesign} or \code{gsSurv}.
+#' @param ratio A non-negative integer, usually corresponding to experimental:control sample size ratio. 
+#' Rounding is done to a multiple of \code{ratio + 1}. If input \code{x} has class \code{gsSurv} (design for time-to-event outcome),
+#' and \code{x$ratio} is a whole number, \code{ratio} is replaced by \code{x$ratio}.
+#' See details.
+#' @param roundUpFinal Final value in returned \code{n.I} is rounded up
+#'   if \code{TRUE}; otherwise, just rounded. For \code{gsSurv} input, final total sample size is also controlled by this. See details. 
 #'
-#' @return An object of class \code{gsDesign} with integer vector for \code{n.I}.
-#'
+#' @return Output is an object of the same class as input \code{x}; i.e., \code{gsDesign} with integer vector for \code{n.I}
+#' or \code{gsSurv} with integer vector \code{n.I} and integer total sample size. See details.
+#' 
 #' @details
-#' Note that if ratio is 0, rounding for \code{n.I} is done to the
-#' nearest integer. For input x of class \code{gsSurv} (time-to-event outcome),
-#' ratio is taken from the input \code{x} rather than the value provided
-#' in the \code{ratio} argument.
-#' For cases other than \code{gsSurv} class, rounding of final.
+#' If \code{ratio = 3}, rounding for final sample size is done to a multiple of 3 + 1 = 4. 
+#' For a \code{gsSurv} object input in \code{x}, event counts output in \code{n.I} are rounded to nearest integer and 
+#' final total sample size is rounded to a multiple of \code{ratio + 1}.
+#' For other input values of \code{x} (\code{gsDesign} class), \code{n.I} is interpreted as sample size; 
+#' final value is rounded to a multiple of \code{ratio + 1}, with \code{roundUpFinal} controlling rounding of last value.
 #'
 #' @export
 #'
@@ -45,11 +48,11 @@
 #' # Convert bounds to exact binomial bounds
 #' toInteger(x, ratio = 3)
 toInteger <- function(x, ratio = 0, roundUpFinal = TRUE) {
-  if (!inherits(x, "gsDesign")) stop("toInteger must have class gsDesign as input")
-  if (!is.numeric(ratio) || ratio < 0) stop("toInteger input ratio must be a non-negative integer")
+  if (!inherits(x, "gsDesign")) stop("must have class gsDesign as input")
+  if (!isInteger(ratio) || ratio < 0) stop("input ratio must be a non-negative integer")
   counts <- round(x$n.I) # Round counts (event counts for survival; otherwise sample size)
-  # For time-to-event endpoint or non-integer ratio, just round final count up
-  if (inherits(x, "gsSurv") || !is.wholenumber(ratio)) {
+  # For time-to-event endpoint, just round final count up
+  if (inherits(x, "gsSurv")) {
     if (roundUpFinal) counts[x$k] <- ceiling(x$n.I[x$k])
   } else {
     # For non-survival designs round sample size based on randomization ratio
@@ -64,23 +67,31 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE) {
     k = x$k, test.type = x$test.type, n.I = counts, maxn.IPlan = counts[x$k],
     alpha = x$alpha, beta = x$beta, astar = x$astar,
     delta = x$delta, delta1 = x$delta1, delta0 = x$delta0, endpoint = x$endpoint,
-    sfu = x$upper$sf, sfupar = x$upper$param, sfl = x$lower$sf, sflpar = x$lower$param
+    sfu = x$upper$sf, sfupar = x$upper$param, sfl = x$lower$sf, sflpar = x$lower$param,
+    lsTime = x$lsTime, usTime = x$usTime
   )
+  if (max(abs(xi$n.I - counts)) > .01) warning("toInteger: check n.I input versus output")
+  xi$n.I <- counts # ensure these are integers as they become real in gsDesign call
   if (x$test.type %in% c(4, 6)) {
     xi$falseposnb <- as.vector(gsprob(0, xi$n.I, rep(-20, xi$k), xi$upper$bound, r = xi$r)$probhi)
   }
   if ("gsSurv" %in% class(x) || x$nFixSurv > 0) {
     xi$hr0 <- x$hr0 # H0 hazard ratio
     xi$hr <- x$hr # H1 hazard ratio
+    
+    N <- rowSums(x$eNC + x$eNE)[x$k] # get input total sample size
+    N_continuous <- N
+    # if ratio = 0 and x$ratio is positive integer, replace ratio
+    if(ratio == 0 && is.wholenumber(x$ratio)) ratio <- x$ratio
     # Update sample size to integer
+    N <- N / (ratio + 1)
     if (roundUpFinal) {
-      N <- ceiling(as.numeric(x$eNC[x$k]))
+      N <- ceiling(N) * (ratio + 1)
     } else {
-      N <- round(as.numeric(x$eNC[x$k]))
+      N <- round(N, 0) * (ratio + 1)
     }
-    N <- N * (x$ratio + 1)
     # Update enrollment rates to achieve new sample size in same time
-    inflateN <- N / as.numeric(x$eNC[x$k] + x$eNE[x$k])
+    inflateN <- N / N_continuous
     # Following is adapted from gsSurv() to construct gsSurv object
     xx <- nSurv(
       lambdaC = x$lambdaC, hr = x$hr, hr0 = x$hr0, eta = x$etaC, etaE = x$etaE,

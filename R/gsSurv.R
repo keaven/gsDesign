@@ -865,7 +865,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' \code{r} will not be changed by the user.
 #' @param usTime Default is NULL in which case upper bound spending time is
 #' determined by \code{timing}. Otherwise, this should be a vector of length
-#' code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).
+#' \code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).
 #' @param lsTime Default is NULL in which case lower bound spending time is
 #' determined by \code{timing}. Otherwise, this should be a vector of length
 #' \code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).
@@ -989,7 +989,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' # piecewise constant enrollment rates (vary accrual duration)
 #' nSurv(
 #'   lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = c(1, 3, 6),
-#'   R = c(3, 6, 9), minfup = 12
+#'   R = c(3, 6, 9), T = NULL, minfup = 12
 #' )
 #'
 #' # stratified population (vary accrual duration)
@@ -1030,7 +1030,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' @export
 # nSurv function [sinew] ----
 nSurv <- function(lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
-                  gamma = 1, R = 12, S = NULL, T = NULL, minfup = NULL, ratio = 1,
+                  gamma = 1, R = 12, S = NULL, T = 18, minfup = 6, ratio = 1,
                   alpha = 0.025, beta = 0.10, sided = 1, tol = .Machine$double.eps^0.25) {
   if (is.null(etaE)) etaE <- eta
   # set up rates as matrices with row and column names
@@ -1189,7 +1189,7 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
                    beta = 0.1, astar = 0, timing = 1, sfu = sfHSD, sfupar = -4,
                    sfl = sfHSD, sflpar = -2, r = 18,
                    lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
-                   gamma = 1, R = 12, S = NULL, T = NULL, minfup = NULL, ratio = 1,
+                   gamma = 1, R = 12, S = NULL, T = 18, minfup = 6, ratio = 1,
                    tol = .Machine$double.eps^0.25,
                    usTime = NULL, lsTime = NULL) # KA: last 2 arguments added 10/8/2017
   {
@@ -1283,16 +1283,14 @@ print.gsSurv <- function(x, digits = 2, ...) {
   print.gsDesign(x)
   if (x$test.type != 1) {
     y <- cbind(
-      x$T, (x$eNC + x$eNE) %*% rep(1, ncol(x$eNE)),
-      (x$eDC + x$eDE) %*% rep(1, ncol(x$eNE)),
+      x$T, (x$eNC + x$eNE) %*% rep(1, ncol(x$eNE)), x$n.I,
       round(zn2hr(x$lower$bound, x$n.I, x$ratio, hr0 = x$hr0, hr1 = x$hr), 3),
       round(zn2hr(x$upper$bound, x$n.I, x$ratio, hr0 = x$hr0, hr1 = x$hr), 3)
     )
     colnames(y) <- c("T", "n", "Events", "HR futility", "HR efficacy")
   } else {
     y <- cbind(
-      x$T, (x$eNC + x$eNE) %*% rep(1, ncol(x$eNE)),
-      (x$eDC + x$eDE) %*% rep(1, ncol(x$eNE)),
+      x$T, (x$eNC + x$eNE) %*% rep(1, ncol(x$eNE)), x$n.I,
       round(zn2hr(x$upper$bound, x$n.I, x$ratio, hr0 = x$hr0, hr1 = x$hr), 3)
     )
     colnames(y) <- c("T", "n", "Events", "HR efficacy")

@@ -13,7 +13,7 @@ testthat::test_that("Testing nSurv vs nSurvival and nEvents", {
     sided = 1, alpha = .025
   )
   ns <- nSurv(lambdaC = .2, hr = .7, eta = .1, T=2, minfup=1.5)
-  nsg <- nSurv(lambdaC = .2, hr = .7, eta = .1, R = 0.5, gamma = ns$gamma)
+  nsg <- nSurv(lambdaC = .2, hr = .7, eta = .1, R = 0.5, T = NULL, minfup = NULL, gamma = ns$gamma)
   ne <- nEvents(hr=.7)
   testthat::expect_equal(ss$n, ns$n, info = "Checking sample size")
   testthat::expect_equal(round(ns$n,3), round(nsg$n,3), info = "Checking sample size")

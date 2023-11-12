@@ -20,7 +20,7 @@ This has a couple of implications on design characteristics:
 - Power on output will not be exactly as input.
 
 This document goes through examples to demonstrate the calculations.
-The new function as of July, 2023 is the `toInteger()` which operates on group sequential designs to convert to integer-based sample size and event counts at analyses.
+The new function as of July, 2023 is the `toInteger()` which operates on group sequential designs to convert to integer-based total sample size and event counts at analyses.
 We begin with an abbreviated example for a time-to-event endpoint design to demonstrate basic concepts.
 We follow with a more extended example for a binary endpoint to explain more details.
 
@@ -122,7 +122,7 @@ x_integer <- toInteger(x, ratio = 2)
 x_integer$n.I
 ```
 
-Next we examine the efficacy bound of the 2 designs.
+Next we examine the efficacy bound of the 2 designs as they are slightly different.
 
 ```{r}
 # Bound for continuous sample size design

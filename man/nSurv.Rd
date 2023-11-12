@@ -21,8 +21,8 @@ nSurv(
   gamma = 1,
   R = 12,
   S = NULL,
-  T = NULL,
-  minfup = NULL,
+  T = 18,
+  minfup = 6,
   ratio = 1,
   alpha = 0.025,
   beta = 0.1,
@@ -55,8 +55,8 @@ gsSurv(
   gamma = 1,
   R = 12,
   S = NULL,
-  T = NULL,
-  minfup = NULL,
+  T = 18,
+  minfup = 6,
   ratio = 1,
   tol = .Machine$double.eps^0.25,
   usTime = NULL,
@@ -219,7 +219,7 @@ provide larger number of grid points and greater accuracy.  Normally
 
 \item{usTime}{Default is NULL in which case upper bound spending time is
 determined by \code{timing}. Otherwise, this should be a vector of length
-code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
+\code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
 
 \item{lsTime}{Default is NULL in which case lower bound spending time is
 determined by \code{timing}. Otherwise, this should be a vector of length
@@ -410,7 +410,7 @@ nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 6, R = 25)
 # piecewise constant enrollment rates (vary accrual duration)
 nSurv(
   lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = c(1, 3, 6),
-  R = c(3, 6, 9), minfup = 12
+  R = c(3, 6, 9), T = NULL, minfup = 12
 )
 
 # stratified population (vary accrual duration)

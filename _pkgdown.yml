@@ -38,6 +38,7 @@ reference:
   - nEvents
   - nSurv
   - gsSurv
+  - gsSurvCalendar
   - nSurvival
   - gsHR
   - zn2hr
