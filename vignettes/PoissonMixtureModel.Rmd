@@ -3,7 +3,7 @@ title: "A Cure Model Calendar-Based Design"
 output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
 vignette: >
-  %\VignetteIndexEntry{A cure model calendar-based design}
+  %\VignetteIndexEntry{A Cure Model Calendar-Based Design}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
