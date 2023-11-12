@@ -989,7 +989,7 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' # piecewise constant enrollment rates (vary accrual duration)
 #' nSurv(
 #'   lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = c(1, 3, 6),
-#'   R = c(3, 6, 9), minfup = 12
+#'   R = c(3, 6, 9), T = NULL, minfup = 12
 #' )
 #'
 #' # stratified population (vary accrual duration)

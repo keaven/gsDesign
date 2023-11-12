@@ -13,7 +13,7 @@ testthat::test_that("Testing nSurv vs nSurvival and nEvents", {
     sided = 1, alpha = .025
   )
   ns <- nSurv(lambdaC = .2, hr = .7, eta = .1, T=2, minfup=1.5)
-  nsg <- nSurv(lambdaC = .2, hr = .7, eta = .1, R = 0.5, gamma = ns$gamma)
+  nsg <- nSurv(lambdaC = .2, hr = .7, eta = .1, R = 0.5, T = NULL, minfup = NULL, gamma = ns$gamma)
   ne <- nEvents(hr=.7)
   testthat::expect_equal(ss$n, ns$n, info = "Checking sample size")
   testthat::expect_equal(round(ns$n,3), round(nsg$n,3), info = "Checking sample size")
@@ -98,7 +98,7 @@ test_that(
   code = {
     x <- nSurv(
       lambdaC = log(2) / 20, hr = .5, gamma = 6,
-      minfup = 12
+      T = NULL, minfup = 12
     )
     # check expected # of events
     expect_lte(abs(x$d - 87.4793), 2)
@@ -116,7 +116,7 @@ test_that(
   code = {
     x <- nSurv(
       lambdaC = log(2) / 20, hr = .5, gamma = 6,
-      R = 25
+      R = 25, T = NULL, minfup = NULL
     )
     # check expected # of events
     expect_lte(abs(x$d - 89.07848), 2)
