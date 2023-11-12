@@ -219,7 +219,7 @@ provide larger number of grid points and greater accuracy.  Normally
 
 \item{usTime}{Default is NULL in which case upper bound spending time is
 determined by \code{timing}. Otherwise, this should be a vector of length
-code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
+\code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
 
 \item{lsTime}{Default is NULL in which case lower bound spending time is
 determined by \code{timing}. Otherwise, this should be a vector of length
