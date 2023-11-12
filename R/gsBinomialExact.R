@@ -167,7 +167,7 @@ utils::globalVariables(c("N", "EN", "Bound", "rr", "Percent", "Outcome"))
 #' library(ggplot2)
 #' 
 #' zz <- gsBinomialExact(
-#'   k = 3, theta = seq(0, 1, 0.1), n.I = c(12, 24, 36),
+#'   k = 3, theta = seq(0.1, 0.9, 0.1), n.I = c(12, 24, 36),
 #'   a = c(-1, 0, 11), b = c(5, 9, 12)
 #' )
 #' 

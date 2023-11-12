@@ -228,7 +228,7 @@ The gsDesign technical manual is available at
 library(ggplot2)
 
 zz <- gsBinomialExact(
-  k = 3, theta = seq(0, 1, 0.1), n.I = c(12, 24, 36),
+  k = 3, theta = seq(0.1, 0.9, 0.1), n.I = c(12, 24, 36),
   a = c(-1, 0, 11), b = c(5, 9, 12)
 )
 
@@ -258,7 +258,7 @@ plot(x, plottype = 6)
 # sample size for single arm exact binomial
 
 # plot of table of power by sample size
-# note that outtype need no be specified if beta is NULL
+# note that outtype need not be specified if beta is NULL
 nb1 <- nBinomial1Sample(p0 = 0.05, p1=0.2,alpha = 0.025, beta=NULL, n = 25:40)
 nb1
 library(scales)
@@ -277,7 +277,14 @@ nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, conse
 # print out more information for the selected derived sample size
 nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:40, conservative = TRUE,
  outtype = 2)
-
+# Reproduce realized Type I error alphaR
+stats::pbinom(q = 5, size = 39, prob = .05, lower.tail = FALSE)
+# Reproduce realized power
+stats::pbinom(q = 5, size = 39, prob = 0.2, lower.tail = FALSE)
+# Reproduce critical value for positive finding
+stats::qbinom(p = 1 - .025, size = 39, prob = .05) + 1
+# Compute p-value for 7 successes
+stats::pbinom(q = 6, size = 39, prob = .05, lower.tail = FALSE)
 # what happens if input sample sizes not sufficient?
 \dontrun{ 
   nBinomial1Sample(p0 = 0.05, p1 = 0.2, alpha = 0.025, beta = .2, n = 25:30)
