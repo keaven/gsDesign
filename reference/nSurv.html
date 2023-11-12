@@ -38,7 +38,7 @@ group sequential design for a study with a time-to-event endpoint."><meta proper
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,8 +108,8 @@ group sequential design for a study with a time-to-event endpoint.</p>
 <span>  gamma <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  R <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  S <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  T <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  minfup <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  T <span class="op">=</span> <span class="fl">18</span>,</span>
+<span>  minfup <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>  ratio <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
@@ -142,8 +142,8 @@ group sequential design for a study with a time-to-event endpoint.</p>
 <span>  gamma <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  R <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  S <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  T <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  minfup <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  T <span class="op">=</span> <span class="fl">18</span>,</span>
+<span>  minfup <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>  ratio <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  tol <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.25</span>,</span>
 <span>  usTime <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -369,7 +369,7 @@ provide larger number of grid points and greater accuracy.  Normally
 <dt>usTime</dt>
 <dd><p>Default is NULL in which case upper bound spending time is
 determined by <code>timing</code>. Otherwise, this should be a vector of length
-codek with the spending time at each analysis (see Details in help for <code>gsDesign</code>).</p></dd>
+<code>k</code> with the spending time at each analysis (see Details in help for <code>gsDesign</code>).</p></dd>
 
 
 <dt>lsTime</dt>
@@ -707,16 +707,16 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-in"><span><span class="fu">nSurv</span><span class="op">(</span>lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">6</span>, hr <span class="op">=</span> <span class="fl">.5</span>, eta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">40</span>, gamma <span class="op">=</span> <span class="fl">6</span>, minfup <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Solving for:  Accrual duration </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Solving for:  Accrual rate </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Hazard ratio                  H1/H0=0.5/1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Study duration:                   T=32.3089</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration:                   20.3089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Study duration:                   T=18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration:                   6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Min. end-of-study follow-up: minfup=12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Expected events (total, H1):        86.3627</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Expected sample size (total):       121.8535</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Expected events (total, H1):        86.8217</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Expected sample size (total):       137.2033</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accrual rates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         Stratum 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0-20.31         6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Stratum 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0-6   22.8672</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control event rates (H1):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Stratum 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0-Inf    0.1155</span>
@@ -731,16 +731,16 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-in"><span><span class="fu">nSurv</span><span class="op">(</span>lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">6</span>, hr <span class="op">=</span> <span class="fl">.5</span>, eta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">40</span>, gamma <span class="op">=</span> <span class="fl">6</span>, R <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Solving for:  Follow-up duration </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Solving for:  Accrual rate </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Hazard ratio                  H1/H0=0.5/1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Study duration:                   T=27.2508</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration:                   25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Min. end-of-study follow-up: minfup=2.2508</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Expected events (total, H1):        86.8927</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Expected sample size (total):       150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Study duration:                   T=18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration:                   12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Min. end-of-study follow-up: minfup=6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Expected events (total, H1):        87.2677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Expected sample size (total):       155.8581</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accrual rates:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Stratum 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0-25         6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0-12   12.9882</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control event rates (H1):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Stratum 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0-Inf    0.1155</span>
@@ -754,7 +754,7 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-in"><span><span class="co"># piecewise constant enrollment rates (vary accrual duration)</span></span></span>
 <span class="r-in"><span><span class="fu">nSurv</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">6</span>, hr <span class="op">=</span> <span class="fl">.5</span>, eta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">40</span>, gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">6</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span><span class="op">)</span>, minfup <span class="op">=</span> <span class="fl">12</span></span></span>
+<span class="r-in"><span>  R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span><span class="op">)</span>, T <span class="op">=</span> <span class="cn">NULL</span>, minfup <span class="op">=</span> <span class="fl">12</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
@@ -787,16 +787,16 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Solving for:  Accrual duration </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Solving for:  Accrual rate </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Hazard ratio                  H1/H0=0.5/1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Study duration:                   T=36.6817</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration:                   24.6817</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Study duration:                   T=18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration:                   6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Min. end-of-study follow-up: minfup=12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Expected events (total, H1):        86.8976</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Expected sample size (total):       148.09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Expected events (total, H1):        87.6736</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Expected sample size (total):       179.9025</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accrual rates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         Stratum 1 Stratum 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0-24.68         2         4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Stratum 1 Stratum 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0-6    9.9946   19.9892</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control event rates (H1):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Stratum 1 Stratum 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0-Inf    0.1155    0.0578</span>
@@ -811,16 +811,16 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-in"><span><span class="fu">nSurv</span><span class="op">(</span>lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">12</span><span class="op">)</span>, hr <span class="op">=</span> <span class="fl">.5</span>, eta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">40</span>, S <span class="op">=</span> <span class="fl">3</span>, gamma <span class="op">=</span> <span class="fl">6</span>, minfup <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Solving for:  Accrual duration </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Solving for:  Accrual rate </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Hazard ratio                  H1/H0=0.5/1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Study duration:                   T=37.3655</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration:                   25.3655</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Study duration:                   T=18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration:                   6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Min. end-of-study follow-up: minfup=12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Expected events (total, H1):        87.1347</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Expected sample size (total):       152.1929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Expected events (total, H1):        87.9869</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Expected sample size (total):       183.8174</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accrual rates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         Stratum 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0-25.37         6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Stratum 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0-6   30.6362</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control event rates (H1):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Stratum 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0-3      0.1155</span>
@@ -841,17 +841,17 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Solving for:  Accrual duration </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Solving for:  Accrual rate </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Hazard ratio                  H1/H0=0.5/1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Study duration:                   T=30.097</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration:                   18.097</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Study duration:                   T=18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration:                   6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Min. end-of-study follow-up: minfup=12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Expected events (total, H1):        88.0958</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Expected sample size (total):       210.2612</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Expected events (total, H1):        88.7326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Expected sample size (total):       255.7917</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accrual rates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Stratum 1 Stratum 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0-5            3         5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5-18.1         6         7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Stratum 1 Stratum 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0-5   14.4788   24.1313</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5-6   28.9576   33.7838</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control event rates (H1):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Stratum 1 Stratum 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0-3      0.1155    0.0385</span>
@@ -869,16 +869,16 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-in"><span><span class="fu">nSurv</span><span class="op">(</span>lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">0</span><span class="op">)</span>, hr <span class="op">=</span> <span class="fl">2</span> <span class="op">/</span> <span class="fl">3</span>, S <span class="op">=</span> <span class="fl">1</span>, minfup <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fixed design, two-arm trial with time-to-event</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> outcome (Lachin and Foulkes, 1986).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Solving for:  Accrual duration </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Solving for:  Accrual rate </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Hazard ratio                  H1/H0=0.6667/1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Study duration:                   T=915.4375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration:                   914.4375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Study duration:                   T=18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual duration:                   17</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Min. end-of-study follow-up: minfup=1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Expected events (total, H1):        257.7578</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Expected sample size (total):       914.4375</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accrual rates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Stratum 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0-914.44         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Stratum 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0-17   53.7904</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control event rates (H1):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Stratum 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0-1         0.4</span>
@@ -932,8 +932,8 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.3489 0.0500 0.0207 0.0159 0.0134 0.1000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              T         n    Events HR futility HR efficacy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> IA 1  12.24228  81.46723  28.76662       0.919       0.308</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IA 2  18.97078 126.24254  57.53321       0.797       0.476</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IA 3  25.02728 159.70989  86.29984       0.730       0.591</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> IA 2  18.97078 126.24254  57.53324       0.797       0.476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> IA 3  25.02728 159.70989  86.29986       0.730       0.591</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Final 36.00000 159.70989 115.06648       0.687       0.687</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accrual rates:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Stratum 1</span>
@@ -948,8 +948,8 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-in"><span>  footnote <span class="op">=</span> <span class="st">"This is a footnote; note that it can be wide."</span>,</span></span>
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Caption example."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.3.1 by xtable 1.8-4 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Wed Oct 11 13:57:53 2023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.3.2 by xtable 1.8-4 package</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Sun Nov 12 00:49:46 2023</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{rllll}</span>

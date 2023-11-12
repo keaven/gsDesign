@@ -14,7 +14,7 @@ or sample size (other designs)"><meta property="og:image" content="https://keave
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,32 +66,37 @@ or sample size (other designs)</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>An object of class <code>gsDesign</code>.</p></dd>
+<dd><p>An object of class <code>gsDesign</code> or <code>gsSurv</code>.</p></dd>
 
 
 <dt>ratio</dt>
-<dd><p>Integer indicating randomization ratio; not used for
-time-to-event outcome; see details.</p></dd>
+<dd><p>A non-negative integer, usually corresponding to experimental:control sample size ratio. 
+Rounding is done to a multiple of <code>ratio + 1</code>. If input <code>x</code> has class <code>gsSurv</code> (design for time-to-event outcome),
+and <code>x$ratio</code> is a whole number, <code>ratio</code> is replaced by <code>x$ratio</code>.
+See details.</p></dd>
 
 
 <dt>roundUpFinal</dt>
-<dd><p>Final value in returned <code>n.I</code> rounded up
-if <code>TRUE</code>; otherwise, just rounded.</p></dd>
+<dd><p>Final value in returned <code>n.I</code> is rounded up
+if <code>TRUE</code>; otherwise, just rounded. For <code>gsSurv</code> input, final total sample size is also controlled by this. See details.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>An object of class <code>gsDesign</code> with integer vector for <code>n.I</code>.</p>
+<p>Output is an object of the same class as input <code>x</code>; i.e., <code>gsDesign</code> with integer vector for <code>n.I</code></p>
+
+
+<p>or <code>gsSurv</code> with integer vector <code>n.I</code> and integer total sample size. See details.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Note that if ratio is 0, rounding for <code>n.I</code> is done to the
-nearest integer. For input x of class <code>gsSurv</code> (time-to-event outcome),
-ratio is taken from the input <code>x</code> rather than the value provided
-in the <code>ratio</code> argument.
-For cases other than <code>gsSurv</code> class, rounding of final.</p>
+    <p>If <code>ratio = 3</code>, rounding for final sample size is done to a multiple of 3 + 1 = 4. 
+For a <code>gsSurv</code> object input in <code>x</code>, event counts output in <code>n.I</code> are rounded to nearest integer and 
+final total sample size is rounded to a multiple of <code>ratio + 1</code>.
+For other input values of <code>x</code> (<code>gsDesign</code> class), <code>n.I</code> is interpreted as sample size; 
+final value is rounded to a multiple of <code>ratio + 1</code>, with <code>roundUpFinal</code> controlling rounding of last value.</p>
     </div>
 
     <div class="section level2">
@@ -154,10 +159,10 @@ For cases other than <code>gsSurv</code> class, rounding of final.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Theta      1      2      3  Total</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.0000 0.5277 0.3439 0.1054 0.9770</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.4065 0.0141 0.0345 0.0487 0.0973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              T        n   Events HR futility HR efficacy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IA 1  15.22419 8624.502 30.99999       0.680       0.217</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IA 2  19.23447 9064.000 48.00004       0.483       0.302</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Final 24.19069 9064.000 69.00000       0.401       0.401</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              T        n Events HR futility HR efficacy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> IA 1  15.22419 8624.502     31       0.680       0.217</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> IA 2  19.23447 9064.000     48       0.483       0.302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Final 24.19069 9064.000     69       0.401       0.401</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accrual rates:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Stratum 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0-16     566.5</span>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +47,32 @@
       <small>Source: <a href="https://github.com/keaven/gsDesign/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.6.0" id="gsdesign-360-november-2023">gsDesign 3.6.0 (November, 2023)<a class="anchor" aria-label="anchor" href="#gsdesign-360-november-2023"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-3-6-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-3-6-0"></a></h3>
+<ul><li>
+<code><a href="../reference/nSurv.html">gsSurv()</a></code> and <code><a href="../reference/nSurv.html">nSurv()</a></code> have updated default values for <code>T</code> and <code>minfup</code> so that function calls with no arguments will run. Legacy code with <code>T</code> or <code>minfup</code> not explicitly specified could break (<a href="https://github.com/keaven/gsDesign/issues/105" class="external-link">#105</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-3-6-0">New features<a class="anchor" aria-label="anchor" href="#new-features-3-6-0"></a></h3>
+<ul><li>
+<code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code> function added to enable group sequential design for time-to-event outcomes using calendar timing of interim analysis specification (<a href="https://github.com/keaven/gsDesign/issues/105" class="external-link">#105</a>).</li>
+<li>
+<code><a href="../reference/as_rtf.html">as_rtf()</a></code> method for <code><a href="../reference/gsBinomialExact.html">gsBinomialExact()</a></code> objects added, enable RTF table outputs for standard word processing software (<a href="https://github.com/keaven/gsDesign/issues/102" class="external-link">#102</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="improvements-3-6-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-3-6-0"></a></h3>
+<ul><li>
+<code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> and <code><a href="../reference/gsBinomialExact.html">gsBinomialExact()</a></code>: fix error checking in bound computations, improve documentation and error messages (<a href="https://github.com/keaven/gsDesign/issues/105" class="external-link">#105</a>).</li>
+<li>
+<code><a href="../reference/nSurv.html">print.gsSurv()</a></code>: Improve the display of targeted events (very minor). The boundary crossing probability computations did not change. The need is made evident by the addition of the <code><a href="../reference/toInteger.html">toInteger()</a></code> function (<a href="https://github.com/keaven/gsDesign/issues/105" class="external-link">#105</a>).</li>
+<li>
+<code><a href="../reference/toInteger.html">toInteger()</a></code>: Fix the documentation and execution based on the <code>ratio</code> argument (<a href="https://github.com/keaven/gsDesign/issues/105" class="external-link">#105</a>).</li>
+<li>Update the vaccine efficacy, Poisson mixture model, and toInteger vignettes (<a href="https://github.com/keaven/gsDesign/issues/105" class="external-link">#105</a>).</li>
+<li>Standardize and improve roxygen2 documentation (<a href="https://github.com/keaven/gsDesign/issues/104" class="external-link">#104</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.5.0" id="gsdesign-350-july-2023">gsDesign 3.5.0 (July, 2023)<a class="anchor" aria-label="anchor" href="#gsdesign-350-july-2023"></a></h2><p class="text-muted">CRAN release: 2023-07-19</p>
 <ul><li>

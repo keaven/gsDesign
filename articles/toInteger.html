@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,11 +102,11 @@ rounding.</li>
 </ul>
 <p>This document goes through examples to demonstrate the calculations.
 The new function as of July, 2023 is the <code><a href="../reference/toInteger.html">toInteger()</a></code> which
-operates on group sequential designs to convert to integer-based sample
-size and event counts at analyses. We begin with an abbreviated example
-for a time-to-event endpoint design to demonstrate basic concepts. We
-follow with a more extended example for a binary endpoint to explain
-more details.</p>
+operates on group sequential designs to convert to integer-based total
+sample size and event counts at analyses. We begin with an abbreviated
+example for a time-to-event endpoint design to demonstrate basic
+concepts. We follow with a more extended example for a binary endpoint
+to explain more details.</p>
 </div>
 <div class="section level2">
 <h2 id="time-to-event-endpoint-example">Time-to-event endpoint example<a class="anchor" aria-label="anchor" href="#time-to-event-endpoint-example"></a>
@@ -163,7 +163,7 @@ of the efficacy column.</p>
 <pre><code><span><span class="co">##     Analysis               Value Efficacy Futility</span></span>
 <span><span class="co">##    IA 1: 25%                   Z   4.3326  -0.6868</span></span>
 <span><span class="co">##       N: 690         p (1-sided)   0.0000   0.7539</span></span>
-<span><span class="co">##  Events: 136        ~HR at bound   0.4744   1.1255</span></span>
+<span><span class="co">##  Events: 135        ~HR at bound   0.4744   1.1255</span></span>
 <span><span class="co">##    Month: 12    P(Cross) if HR=1   0.0000   0.2461</span></span>
 <span><span class="co">##              P(Cross) if HR=0.75   0.0039   0.0091</span></span>
 <span><span class="co">##    IA 2: 70%                   Z   2.4381   1.0548</span></span>
@@ -245,7 +245,8 @@ Thus, the final sample size of 441 below is a multiple of 3.</p>
 <span><span class="va">x_integer</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="va">x</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">x_integer</span><span class="op">$</span><span class="va">n.I</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 219 329 441</span></span></code></pre>
-<p>Next we examine the efficacy bound of the 2 designs.</p>
+<p>Next we examine the efficacy bound of the 2 designs as they are
+slightly different.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Bound for continuous sample size design</span></span>
 <span><span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span></code></pre></div>

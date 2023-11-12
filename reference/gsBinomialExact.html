@@ -126,7 +126,7 @@ NOTE: the one-sided evaluation of significance is more conservative than using t
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -281,13 +281,13 @@ length k.</p></dd>
 <dt>a</dt>
 <dd><p>Number of "successes" required to cross lower bound cutoffs to
 reject <code>p1</code> in favor of <code>p0</code> at each analysis; vector of length k;
--1 means no lower bound.</p></dd>
+-1 (minimum allowed) means no lower bound.</p></dd>
 
 
 <dt>b</dt>
 <dd><p>Number of "successes" required to cross upper bound cutoffs for
 rejecting <code>p0</code> in favor of <code>p1</code> at each analysis; vector of length
-k.</p></dd>
+k; value &gt; n.I means no upper bound.</p></dd>
 
 
 <dt>p0</dt>
@@ -481,7 +481,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">zz</span> <span class="op">&lt;-</span> <span class="fu">gsBinomialExact</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  k <span class="op">=</span> <span class="fl">3</span>, theta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0.1</span><span class="op">)</span>, n.I <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">24</span>, <span class="fl">36</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  k <span class="op">=</span> <span class="fl">3</span>, theta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span><span class="op">)</span>, n.I <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">24</span>, <span class="fl">36</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">11</span><span class="op">)</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">9</span>, <span class="fl">12</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -504,7 +504,6 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-out co"><span class="r-pr">#&gt;</span> Upper boundary</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Analysis</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Theta      1      2      3  Total E{N}</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.0 0.0000 0.0000 0.0000 0.0000 24.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.1 0.0043 0.0002 0.0001 0.0045 34.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.2 0.0726 0.0155 0.0168 0.1048 34.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.3 0.2763 0.0993 0.1164 0.4921 28.2</span>
@@ -514,12 +513,10 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.7 0.9905 0.0093 0.0002 1.0000 12.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.8 0.9994 0.0006 0.0000 1.0000 12.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.9 1.0000 0.0000 0.0000 1.0000 12.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     1.0 1.0000 0.0000 0.0000 1.0000 12.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Lower boundary</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Analysis</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Theta 1      2      3  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.0 0 1.0000 0.0000 1.0000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.1 0 0.0798 0.9157 0.9955</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.2 0 0.0047 0.8905 0.8952</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.3 0 0.0002 0.5077 0.5079</span>
@@ -529,7 +526,6 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.7 0 0.0000 0.0000 0.0000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.8 0 0.0000 0.0000 0.0000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.9 0 0.0000 0.0000 0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     1.0 0 0.0000 0.0000 0.0000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># also plot (see also plots below for \code{binomialSPRT})</span></span></span>
 <span class="r-in"><span><span class="co"># add lines using geom_line()</span></span></span>
@@ -555,7 +551,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span><span class="co"># sample size for single arm exact binomial</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot of table of power by sample size</span></span></span>
-<span class="r-in"><span><span class="co"># note that outtype need no be specified if beta is NULL</span></span></span>
+<span class="r-in"><span><span class="co"># note that outtype need not be specified if beta is NULL</span></span></span>
 <span class="r-in"><span><span class="va">nb1</span> <span class="op">&lt;-</span> <span class="fu">nBinomial1Sample</span><span class="op">(</span>p0 <span class="op">=</span> <span class="fl">0.05</span>, p1<span class="op">=</span><span class="fl">0.2</span>,alpha <span class="op">=</span> <span class="fl">0.025</span>, beta<span class="op">=</span><span class="cn">NULL</span>, n <span class="op">=</span> <span class="fl">25</span><span class="op">:</span><span class="fl">40</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">nb1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      p0  p1 alpha      beta  n b      alphaR     Power</span>
@@ -596,7 +592,18 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span> outtype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     p0  p1 alpha beta  n b     alphaR     Power</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.05 0.2 0.025  0.2 39 6 0.01230419 0.8199868</span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Reproduce realized Type I error alphaR</span></span></span>
+<span class="r-in"><span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">pbinom</a></span><span class="op">(</span>q <span class="op">=</span> <span class="fl">5</span>, size <span class="op">=</span> <span class="fl">39</span>, prob <span class="op">=</span> <span class="fl">.05</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.01230419</span>
+<span class="r-in"><span><span class="co"># Reproduce realized power</span></span></span>
+<span class="r-in"><span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">pbinom</a></span><span class="op">(</span>q <span class="op">=</span> <span class="fl">5</span>, size <span class="op">=</span> <span class="fl">39</span>, prob <span class="op">=</span> <span class="fl">0.2</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8199868</span>
+<span class="r-in"><span><span class="co"># Reproduce critical value for positive finding</span></span></span>
+<span class="r-in"><span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">qbinom</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fl">.025</span>, size <span class="op">=</span> <span class="fl">39</span>, prob <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
+<span class="r-in"><span><span class="co"># Compute p-value for 7 successes</span></span></span>
+<span class="r-in"><span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">pbinom</a></span><span class="op">(</span>q <span class="op">=</span> <span class="fl">6</span>, size <span class="op">=</span> <span class="fl">39</span>, prob <span class="op">=</span> <span class="fl">.05</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.002922829</span>
 <span class="r-in"><span><span class="co"># what happens if input sample sizes not sufficient?</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> </span></span>
 <span class="r-in"><span>  <span class="fu">nBinomial1Sample</span><span class="op">(</span>p0 <span class="op">=</span> <span class="fl">0.05</span>, p1 <span class="op">=</span> <span class="fl">0.2</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">.2</span>, n <span class="op">=</span> <span class="fl">25</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span></span>
