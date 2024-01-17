@@ -208,7 +208,7 @@ hGraph <- function(
     #   scale_alpha(guide="none") + 
     scale_fill_manual(values=palette,
                       labels=labels,
-                      guide_legend(legend.name)) +
+                      guide=guide_legend(legend.name)) +
     theme(legend.position = legend.position) +
     # Add text
     geom_text(data=hData,aes(x=x,y=y,label=txt),size=size) + 
