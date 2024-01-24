@@ -1,0 +1,90 @@
+---
+title: "Inference and Estimation with Group Sequential Testing"
+author: "Keaven Anderson"
+output: rmarkdown::html_vignette
+bibliography: gsDesign.bib
+vignette: >
+  %\VignetteIndexEntry{Inference and Estimation with Group Sequential Testing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+When using a group sequential design, adjusting both p-values and confidence intervals for repeated testing is sometimes desired (@FDA2019adaptive).
+Multiple methods for adjusting p-values and confidence intervals are summarized in @JTBook. 
+While stagewise methods are often used, repeated confidence intervals and p-value have various advantages as noted by @LiuAnderson2008 who extended the methods to sequential p-values and confidence intervals.
+The repeated confidence interval and p-value methods are also useful for testing multiple hypotheses using group sequential design as noted by @MaurerBretz2013.
+While we note the stagewise methods here, we will focus mainly on repeated and sequential p-values and confidence intervals in this document. 
+We also focus on trials using spending functions for efficacy bounds.
+Finally, while the methods have previously been applied to asymptotic normal situations, we extend here to exact binomial methods applied to group sequential design (@ChanBohidar).
+
+Sample space ordering for the outcomes of a group sequential design is key to adjusted estimation and p-values; this is addressed in the next section.
+
+
+# Sample Space Ordering with Group Sequential Design
+
+A literature search reveals many papers on adjusted confidence intervals and testing.
+We do not attempt to be comprehensive here.
+There is a summary of many methods in @JTBook and @rosner1988exact. 
+Repeated confidence intervals of Jennison and Turnbull are extended to methods particularly useful for testing multiple hypotheses by @LiuAnderson2008 and  @MaurerBretz2013. 
+
+We assume initially the usual asymptotic normal theory for group sequential design.
+We assume $k$ standardized normal test statistics $Z_1,\ldots,Z_k$, a natural parameter $\theta$ and statistical information $0 < \mathcal I_1<\mathcal I_2\ldots <\mathcal I_k$ with for $1\le j\le i\le k$ 
+$$\hbox{E}(Z_i)=\theta\sqrt{\mathcal I_i}$$
+$$\hbox{Cov}(Z_j,Z_i)= \sqrt{\mathcal I_j/\mathcal I_i}.$$
+This is the canonical form of @JTBook; we will relax this later for an exact binomial scenario.
+We assume without loss of generality that $\theta=0$ represents the null hypothesis and that an alternative $\theta = \theta_1>0.$ 
+We will assume initially a set of group sequential efficacy bounds $b_1,\ldots b_k$ that control 1-sided Type I error at level $\alpha\in (0,1)$:
+
+$$\alpha = \sum_{i=1}^k\alpha_i = \sum_{i=1}^kP_{\theta=0}(\{Z_i\ge b_i\}\cap_{j=1}^{i-1}\{Z_j<b_j\}).$$
+While there may futility bounds $a_i<b_i, i<k$ and $a_k\le b_k$, the above Type I error formulation assumes futility bounds are non-binding and may be ignored for the purpose of computing Type I error, particularly for regulatory purposes (@FDA2019adaptive, @EMA2011).
+In order to compute a p-value for a group sequential test of the null hypothesis, possible outcomes must be ordered.
+There are different orderings possible (see, e.g., @rosner1988exact, @JTBook) including the above stagewise ordering where the ordering depends on when an $\alpha$-level group sequential bound is first crossed.
+Let $\tau$ denote the analysis at which a bound is first crossed or, if no bound is crossed, then $\tau=k$.
+A stagewise one-sided p-value is defined by
+
+$$p_{sw}=\sum_{i=1}^{\tau - 1}\alpha_i + P_{\theta=0}\left(\{Z_\tau\ge z_{\tau}\}\cap_{i=1}^{\tau-1}\{a_i<Z_i<b_i\}\right).$$
+Stagewise p-values are commonly used.
+If the efficacy bound is crossed at the first interim, $p_{sw}$ is the nominal 1-sided p-value for $Z_1$.
+The value of $p_{sw}$ is only defined when the stopping time $\tau$ for the design has been reached.
+In fact, adjusted p-values can be of interest before a bound is first crossed or by continuation of a trial after an efficacy bound is first crossed when additional analyses are performed as planned or when an adaptive extension is performed (@LiuAnderson2008).
+We consider an alternate order to define repeated and sequential p-values that allow ordering when the stopping time $\tau$ may be other than the first time an efficacy bound is crossed. 
+A family of bounds $b_i(\mu), i=1,\ldots,k$ controls Type I error at level $\mu\in(0,1)$ if 
+
+$$P\left(\cup_{i=1}^k \{Z_i\ge b_i(\mu)\}|H_0\right)\le \mu.$$
+Ideally, we would have 
+
+$$P\left(\cup_{i=1}^k \{Z_i\ge b_i(\mu)\}|H_0\right) = \mu.$$
+
+which would be a completely ordered sample space. @LiuAnderson2008 defined the bounds as well-ordered if $\b_i(\mu)$ is continuous and decreasing in $\mu$ with $b_i(\mu)\uparrow \infty$ as $\mu \downarrow 0$, $i=1,\ldots,k$.
+We define a sequential p-value at analysis $i=1,\ldots,k$ as 
+
+$$p_{i,seq} = \sup[\mu: \max_{1\le j\le i}(Z_j-b_j(\mu))\le 0].$$
+A repeated p-value at analysis $i=1,\ldots,k$ is defined as 
+$$p_{i,rep} = \sup[\mu: \{Z_i-b_i(\mu)\}\le 0].$$
+@LiuAnderson2008 defined bounds $b(\mu)$ using boundary families such as @pocock1977 or @OBF.
+Many spending function families do not provide a complete ordering (e.g., power or Hwang-Shih-DeCani spending functions), but others do (e.g., @OBF or exponential spending families @AndClark). Some descriptive graphs of orderings are provided by @wan2013.
+@MaurerBretz2013 note properties of spending function families required to provide an appropriate ordering of the sample space to compute repeated and sequential p-values; they note that power spending functions and for $\mu < 0.318$ O'Brien-Fleming spending functions satisfy needed conditions.
+
+
+## Appendix: @MaurerBretz2013 criteria for alternate spending function families
+
+Hwang-Shih-DeCani
+For $\gamma \ne 0$, 
+$$f(t,\mu, \gamma) =\mu\frac{1- \exp(-\gamma t)}{1 - \exp(-\gamma)}.$$ 
+$$ \frac{\partial f(t, \mu)}{\partial \mu} = \frac{1- \exp(-\gamma t)}{1 - \exp(-\gamma)}.$$
+
+$$\frac{\partial^2f(t, \mu)}{\partial \mu\partial t} = -\gamma \frac{\exp(-\gamma t)}{1 - \exp(-\gamma)}.$$
+To satisfy the criteria of @MaurerBretz2013 to order the sample space appropriately, we require for a given $\gamma$ that $\partial^2f(t,\mu)/(\partial \mu\partial t) \ge 0.$
+For $\gamma > 0$ and $t\in (0,1)$ we have $\exp(-\gamma t)>1$ and $1 - \exp(-\gamma) < 0$ yielding $\partial^2f(t,\mu)/(\partial \mu\partial t) >0$.
+For $\gamma < 0$ and $t\in (0,1)$ we have $0 < \exp(-\gamma t)<1$ and $1 - \exp(-gamma) > 0$ yielding $\partial^2f(t,\mu)/(\partial \mu\partial t) >0$.
+For $\gamma = 0$ the Hwang-Shih-DeCani spending function is defined as $f(t,\mu,\gamma=0)= \mu t$ for which 
+$$\frac{\partial^2f(t, \mu)}{\partial \mu\partial t} = 0$$
+satisfying the requirement that this is $\ge 0$.
+Thus, any Hwang-Shih-DeCani spending function family for a given $\gamma$ can be used with the @MaurerBretz2013 method.
+
+
+
+
+# References
