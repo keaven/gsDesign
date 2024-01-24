@@ -824,7 +824,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
                         xlab = NULL, lty = NULL, col = NULL, lwd = 1, cex = 1,
                         theta = if (inherits(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta,
                         xval = NULL, base = FALSE, outtype = 1, offset = 0,
-                        titleAnalysisLegend = NULL, ...) {
+                        titleAnalysisLegend = NULL, logdelta = FALSE, ...) {
 
   stopifnot(
     is.numeric(offset) && length(offset) == 1,
@@ -837,7 +837,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       if (inherits(x, "gsSurv")) {
         xval <- exp(xval)
         if (is.null(xlab)) xlab <- "Hazard ratio"
-      } else if (is.null(xlab)) xlab <- expression(delta)
+      }  else if (is.null(xlab)) xlab <- expression(delta)
     } else {
       xval <- theta
       if (is.null(xlab)) xlab <- expression(theta)
