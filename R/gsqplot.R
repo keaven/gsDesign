@@ -31,9 +31,15 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' are used. For a \code{gsDesign} object where \code{theta} is input as
 #' \code{NULL} (the default), \code{theta=seq(0,2,.05)*x$delta}) is used.  For
 #' a \code{gsDesign} object, the x-axis values are rescaled to
+<<<<<<< HEAD
 #' \code{theta/x$delta} and the label for the x-axis \eqn{\theta / \delta}. For a
 #' \code{gsProbability} object, the values of \code{theta} are plotted and are
 #' labeled as \eqn{\theta}. See examples below.
+=======
+#' \code{theta/x$delta} and the label for the x-axis \eqn{theta / delta}. For a
+#' \code{gsProbability} object, the values of \code{theta} are plotted and are
+#' labeled as \eqn{theta}. See examples below.
+>>>>>>> 10cb6ff2 (Mostly reverting to original)
 #'
 #' Approximate treatment effects at boundaries are computed dividing the Z-values
 #' at the boundaries by the square root of \code{n.I} at that analysis.
@@ -824,7 +830,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
                         xlab = NULL, lty = NULL, col = NULL, lwd = 1, cex = 1,
                         theta = if (inherits(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta,
                         xval = NULL, base = FALSE, outtype = 1, offset = 0,
-                        titleAnalysisLegend = NULL, logdelta = FALSE, ...) {
+                        titleAnalysisLegend = NULL, ...) {
 
   stopifnot(
     is.numeric(offset) && length(offset) == 1,
@@ -837,7 +843,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       if (inherits(x, "gsSurv")) {
         xval <- exp(xval)
         if (is.null(xlab)) xlab <- "Hazard ratio"
-      }  else if (is.null(xlab)) xlab <- expression(delta)
+      } else if (is.null(xlab)) xlab <- expression(delta)
     } else {
       xval <- theta
       if (is.null(xlab)) xlab <- expression(theta)
