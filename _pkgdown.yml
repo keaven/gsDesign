@@ -2,6 +2,8 @@ url: https://keaven.github.io/gsDesign/
 
 template:
   bootstrap: 5
+  bslib:
+    preset: "bootstrap"
 
 reference:
 - title: Group Sequential Computation
