@@ -31,9 +31,9 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' are used. For a \code{gsDesign} object where \code{theta} is input as
 #' \code{NULL} (the default), \code{theta=seq(0,2,.05)*x$delta}) is used.  For
 #' a \code{gsDesign} object, the x-axis values are rescaled to
-#' \code{theta/x$delta} and the label for the x-axis \eqn{$theta / $delta}. For a
+#' \code{theta/x$delta} and the label for the x-axis \eqn{\theta / \delta}. For a
 #' \code{gsProbability} object, the values of \code{theta} are plotted and are
-#' labeled as \eqn{$theta}. See examples below.
+#' labeled as \eqn{\theta}. See examples below.
 #'
 #' Approximate treatment effects at boundaries are computed dividing the Z-values
 #' at the boundaries by the square root of \code{n.I} at that analysis.
@@ -57,7 +57,7 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #'
 #' B-values are Z-values multiplied by \code{sqrt(t)=sqrt(x$n.I/x$n.I[x$k])}.
 #' Thus, the expected value of a B-value at an analysis is the true value of
-#' \eqn{theta} multiplied by the proportion of total planned observations at
+#' \eqn{\theta} multiplied by the proportion of total planned observations at
 #' that time. See Proschan, Lan and Wittes (2006).
 #'
 #' @param x Object of class \code{gsDesign} for \code{plot.gsDesign()} or
