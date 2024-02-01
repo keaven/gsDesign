@@ -815,11 +815,12 @@ expect_ev_arm <- function(lambda, drprate, maxstudy, accdur,
 #' @export
 #'
 #' @examples
+#' library(dplyr)
 #' # approximate variance of standard normal (i.e., 1)
-#' gridpts() %>% summarise(var = sum(z^2 * w * dnorm(z)))
+#' gridpts() %>% summarize(var = sum(z^2 * w * dnorm(z)))
 #'
 #' # approximate probability above .95 quantile (i.e., .05)
-#' gridpts(a = qnorm(.95), b = Inf) %>% summarise(p05 = sum(w * dnorm(z)))
+#' gridpts(a = qnorm(.95), b = Inf) %>% summarize(p05 = sum(w * dnorm(z)))
 gridpts <- function(r = 18, mu = 0, a = -Inf, b = Inf){
   # Define odd numbered grid points for real line
   x <- c(mu - 3 - 4 * log(r / (1:(r - 1))),
