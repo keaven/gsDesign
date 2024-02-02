@@ -808,7 +808,7 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
 
 # plotgsPower roxy [sinew] ----
 #' @importFrom stats reshape
-#' @importFrom dplyr group_by summarise
+#' @importFrom dplyr group_by reframe
 #' @importFrom ggplot2 ggplot aes geom_line ylab guides guide_legend xlab scale_linetype_manual scale_color_manual scale_y_continuous ggtitle scale_x_continuous scale_colour_manual geom_text
 #' @importFrom rlang !! sym
 #' @importFrom graphics plot axis lines strwidth text
@@ -856,7 +856,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     
     y2 <- y %>%
              dplyr::group_by(Bound, thetaidx) %>% 
-             dplyr::summarise(Probability = cumsum(Probability))
+             dplyr::reframe(Probability = cumsum(Probability))
     
     y2$Probability[y2$Bound == "1-Lower bound"] <- 1 - y2$Probability[y2$Bound == "1-Lower bound"]
     
