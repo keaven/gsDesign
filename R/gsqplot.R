@@ -1,4 +1,4 @@
-globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "Analysis"))
+globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "Future Analysis"))
 
 # plot.gsDesign roxy [sinew] ----
 #' @title Plots for group sequential designs
@@ -812,13 +812,16 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
 #' @importFrom ggplot2 ggplot aes geom_line ylab guides guide_legend xlab scale_linetype_manual scale_color_manual scale_y_continuous ggtitle scale_x_continuous scale_colour_manual geom_text
 #' @importFrom rlang !! sym
 #' @importFrom graphics plot axis lines strwidth text
+#' @param offset Integer to offset the numeric labels of the Future Analysis
+#'   legend (default: 0)
 # plotgsPower function [sinew] ----
 plotgsPower <- function(x, main = "Boundary crossing probabilities by effect size",
                         ylab = "Cumulative Boundary Crossing Probability",
                         xlab = NULL, lty = NULL, col = NULL, lwd = 1, cex = 1,
                         theta = if (inherits(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta,
-                        xval = NULL, base = FALSE, outtype = 1, ...) {
+                        xval = NULL, base = FALSE, outtype = 1, offset = 0, ...) {
 
+  stopifnot(is.numeric(offset) && length(offset) == 1)
   if (is.null(xval)) {
     if (inherits(x, "gsDesign")) {
       xval <- x$delta0 + (x$delta1 - x$delta0) * theta / x$delta
@@ -860,7 +863,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     
     y2$Probability[y2$Bound == "1-Lower bound"] <- 1 - y2$Probability[y2$Bound == "1-Lower bound"]
     
-    y2$Analysis <- factor(y$id)
+    y2$`Future Analysis` <- factor(y$id + offset)
     
     y2$delta <- xval[y$thetaidx]
     
@@ -869,7 +872,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
                            x = !!rlang::sym('delta'), 
                            y = !!rlang::sym('Probability'), 
                            col = !!rlang::sym('Bound'), 
-                           lty = !!rlang::sym('Analysis'))
+                           lty = !!rlang::sym('Future Analysis'))
                          ) + 
       ggplot2::geom_line(size = lwd) + 
       ggplot2::ylab(ylab) +
