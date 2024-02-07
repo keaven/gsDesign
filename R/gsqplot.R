@@ -814,15 +814,23 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
 #' @importFrom graphics plot axis lines strwidth text
 #' @param offset Integer to offset the numeric labels of the "Analysis" legend
 #'   (default: 0). Only relevant for \code{outtype = 1}. By default will change
-#'   legend title to "Future Analysis".
+#'   legend title to "Future Analysis". To customize the title, pass the label
+#'   to the argument \code{titleAnalysisCustom}
+#' @param titleAnalysisCustom Label to use as the title for the "Analysis"
+#'   legend (default: NULL)
 # plotgsPower function [sinew] ----
 plotgsPower <- function(x, main = "Boundary crossing probabilities by effect size",
                         ylab = "Cumulative Boundary Crossing Probability",
                         xlab = NULL, lty = NULL, col = NULL, lwd = 1, cex = 1,
                         theta = if (inherits(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta,
-                        xval = NULL, base = FALSE, outtype = 1, offset = 0, ...) {
+                        xval = NULL, base = FALSE, outtype = 1, offset = 0,
+                        titleAnalysisCustom = NULL, ...) {
 
-  stopifnot(is.numeric(offset) && length(offset) == 1)
+  stopifnot(
+    is.numeric(offset) && length(offset) == 1,
+    is.null(titleAnalysisCustom) ||
+      (is.character(titleAnalysisCustom) && length(titleAnalysisCustom) == 1)
+  )
   if (is.null(xval)) {
     if (inherits(x, "gsDesign")) {
       xval <- x$delta0 + (x$delta1 - x$delta0) * theta / x$delta
@@ -870,6 +878,9 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     titleAnalysis <- "Analysis"
     if (offset > 0) {
       titleAnalysis <- "Future Analysis"
+    }
+    if (!is.null(titleAnalysisCustom)) {
+      titleAnalysis <- titleAnalysisCustom
     }
 
     y2$delta <- xval[y$thetaidx]
