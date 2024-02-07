@@ -1,4 +1,4 @@
-globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "Future Analysis"))
+globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "Analysis"))
 
 # plot.gsDesign roxy [sinew] ----
 #' @title Plots for group sequential designs
@@ -812,8 +812,9 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
 #' @importFrom ggplot2 ggplot aes geom_line ylab guides guide_legend xlab scale_linetype_manual scale_color_manual scale_y_continuous ggtitle scale_x_continuous scale_colour_manual geom_text
 #' @importFrom rlang !! sym
 #' @importFrom graphics plot axis lines strwidth text
-#' @param offset Integer to offset the numeric labels of the Future Analysis
-#'   legend (default: 0)
+#' @param offset Integer to offset the numeric labels of the "Analysis" legend
+#'   (default: 0). Only relevant for \code{outtype = 1}. By default will change
+#'   legend title to "Future Analysis".
 # plotgsPower function [sinew] ----
 plotgsPower <- function(x, main = "Boundary crossing probabilities by effect size",
                         ylab = "Cumulative Boundary Crossing Probability",
@@ -863,8 +864,14 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     
     y2$Probability[y2$Bound == "1-Lower bound"] <- 1 - y2$Probability[y2$Bound == "1-Lower bound"]
     
-    y2$`Future Analysis` <- factor(y$id + offset)
+    y2$Analysis <- factor(y$id + offset)
     
+    # Determine title of Analysis legend
+    titleAnalysis <- "Analysis"
+    if (offset > 0) {
+      titleAnalysis <- "Future Analysis"
+    }
+
     y2$delta <- xval[y$thetaidx]
     
     p <- ggplot2::ggplot(y2, 
@@ -872,17 +879,17 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
                            x = !!rlang::sym('delta'), 
                            y = !!rlang::sym('Probability'), 
                            col = !!rlang::sym('Bound'), 
-                           lty = !!rlang::sym('Future Analysis'))
+                           lty = !!rlang::sym('Analysis'))
                          ) + 
       ggplot2::geom_line(size = lwd) + 
       ggplot2::ylab(ylab) +
       ggplot2::guides(color = ggplot2::guide_legend(title = "Probability")) + 
       ggplot2::xlab(xlab) +
-      ggplot2::scale_linetype_manual(values = lty) +
+      ggplot2::scale_linetype_manual(values = lty, name = titleAnalysis) +
       ggplot2::scale_color_manual(values = getColor(col)) +
       ggplot2::scale_y_continuous(breaks = seq(0, 1, .2))
     
-      return(p + ggplot2::ggtitle(label = main))
+    return(p + ggplot2::ggtitle(label = main))
   }
   if (is.null(col)) {
     if (base || outtype == 2) {
