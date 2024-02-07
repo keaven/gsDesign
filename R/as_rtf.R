@@ -20,6 +20,7 @@
 #' @export
 #'
 #' @examples
+#' # as_rtf for gsBinomialExact
 #' zz <- gsBinomialExact(
 #'   k = 3, theta = seq(0.1, 0.9, 0.1), n.I = c(12, 24, 36),
 #'   a = c(-1, 0, 11), b = c(5, 9, 12)
@@ -49,7 +50,25 @@
 #'     prob_decimals = 3,
 #'     bound_label = c("Low Rate", "High Rate")
 #'   )
-as_rtf <- function(x, ...) UseMethod("as_rtf")
+#' # as_rtf for gsBoundSummary
+#' xgs <- gsSurv(lambdaC = .2, hr = .5, eta = .1, T = 2, minfup = 1.5)
+#' gsBoundSummary(xgs, timename = "Year", tdigits = 1) %>% as_rtf(file = tempfile(fileext = ".rtf"))
+#'
+#' ss <- nSurvival(
+#'   lambda1 = .2, lambda2 = .1, eta = .1, Ts = 2, Tr = .5,
+#'   sided = 1, alpha = .025, ratio = 2
+#' )
+#' xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
+#' gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) %>% as_rtf(file = tempfile(fileext = ".rtf"))
+#' 
+#' xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
+#' gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) %>% 
+#'   as_rtf(file = tempfile(fileext = ".rtf"),
+#'   footnote_specify = "Z",
+#'   footnote_text = "Z-Score")
+as_rtf <- function(x, ...) {
+  UseMethod("as_rtf", x)
+}
 
 #' @rdname as_rtf
 #'
@@ -107,6 +126,125 @@ as_rtf.gsBinomialExactTable <- function(
       border_left = c("single", "single", "", "single")
     ) %>%
     rtf_body() %>%
+    rtf_encode() %>%
+    write_rtf(file)
+
+  invisible(x_out)
+}
+#' @rdname as_rtf
+#' @param title Title of the report.
+#' @param footnote_p_onesided Footnote for one-side p-value. 
+#' @param footnote_appx_effect_at_bound Footnote for approximate effect treatment at bound.
+#' @param footnote_p_cross_h0 Footnote for cumulative type I error.
+#' @param footnote_p_cross_h1 Footnote for cumulative power under the alternate hypothesis.
+#' @param footnote_specify Vector of string to put footnote super script.
+#' @param footnote_text Vector of string of footnote text.
+#' @importFrom r2rtf rtf_title rtf_footnote
+#' @export
+as_rtf.gsBoundSummary <- function(
+    x,
+    file,
+    ...,
+    title = "Boundary Characteristics for Group Sequential Design",
+    footnote_p_onesided = "one-side p-value for experimental better than control",
+    footnote_appx_effect_at_bound = NULL,
+    footnote_p_cross_h0 = "Cumulative type I error assuming binding futility bound",
+    footnote_p_cross_h1 = "Cumulative power under the alternate hypothesis",
+    footnote_specify = NULL,
+    footnote_text = NULL) {
+  x_out <- x
+  
+  if (is.null(footnote_appx_effect_at_bound)) {
+    footnote_appx_effect_at_bound <- ifelse(!is.null(which(x$Value == "~HR at bound")),
+                                            "Hazard ratio required to cross bound",
+                                            "Approximate treatment effect at bound"
+    )
+  }
+
+  letter_order <- 1
+  footnote <- c()
+  
+  # Check footnote location is specified
+  if(is.null(footnote_specify) & !is.null(footnote_text)){
+    stop("Footnote location is not defined!")
+  } 
+  # Check footnote text is defined
+  if(!is.null(footnote_specify) & is.null(footnote_text)){
+    stop("Footnote text is not defined!")
+  } 
+  # Check length of footnote location and text is matched
+  if(length(footnote_specify) != length(footnote_text)){
+    stop("Length of footnote_specify and footnote_text is not matched!")
+  } 
+  
+  
+  # Add a for first instance of "p (1-sided)" in Value column
+  if(!is.null(which(x$Value == "p (1-sided)")[1])) {
+    first_instance <- which(x$Value == "p (1-sided)")[1]
+    x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^", letters[letter_order], "}")
+    footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_p_onesided))
+    letter_order <- letter_order + 1
+  }
+  
+  # Add b for first instance of "~HR at bound" in Value column
+  if(!is.null(which(x$Value == "~HR at bound")[1])) {
+    first_instance <- which(x$Value == "~HR at bound")[1]
+    x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^", letters[letter_order], "}")
+    footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_appx_effect_at_bound))
+    letter_order <- letter_order + 1
+  }
+
+  # Add c for first instance of "P(Cross) if HR=1" in Value column
+  if(!is.null(which(x$Value == "P(Cross) if HR=1")[1])) {
+    first_instance <- which(x$Value == "P(Cross) if HR=1")[1]
+    x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^", letters[letter_order], "}")
+    footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_p_cross_h0))
+    letter_order <- letter_order + 1
+  }
+
+  # Add d for first instance of "P(Cross) if HR=0.5" in Value column
+  if(!is.null(which(x$Value == "P(Cross) if HR=0.5")[1])) {
+    first_instance <- which(x$Value == "P(Cross) if HR=0.5")[1]
+    x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^", letters[letter_order], "}")
+    footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_p_cross_h1))
+    letter_order <- letter_order + 1
+  }
+  
+  if(!is.null(footnote_specify) & !is.null(footnote_text)){
+    for(k in 1:length(footnote_specify)) {
+      if(length(which(x == footnote_specify[k], arr.ind = TRUE)) == 0){
+        stop("Footnote location not found!")
+      }
+      first_instance <- which(x == footnote_specify[k], arr.ind = TRUE)[1,]
+      x[first_instance[1], first_instance[2]] <- paste0(x[first_instance[1], first_instance[2]] , "{^", letters[letter_order], "}")
+      footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_text[k]))
+      letter_order <- letter_order + 1
+    }
+  }
+  
+  # Insert blank row when Analysis column is null
+  idx <- which(x$Value == "Z")
+  blank_row <- data.frame(matrix(ncol = ncol(x), nrow = 1))
+  colnames(blank_row) <- colnames(x)
+
+  x_sub <- x[1:(idx[2] - 1), ]
+  for (i in 2:length(idx)) {
+    row_end <- ifelse(i == length(idx), length(x$Value), (idx[i + 1] - 1))
+    x_sub <- rbind(x_sub, blank_row, x[idx[i]:row_end, ])
+  }
+
+  x <- x_sub
+  x %>%
+    rtf_title(title = title) %>%
+    rtf_colheader(
+      paste0("Analysis", " | ", "Value", " | ", "Efficacy", " | ", "Futility"),
+      col_rel_width = c(1, 1.5, 1, 1)
+    ) %>%
+    rtf_body(
+      text_justification = c("l", rep("c", 3)),
+      col_rel_width = c(1, 1.5, 1, 1)
+    ) %>%
+    rtf_footnote(footnote) %>%
     rtf_encode() %>%
     write_rtf(file)
 
