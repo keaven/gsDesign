@@ -55,7 +55,7 @@ test_that(desc = 'check plot data values,
   
   res_upper <- subset(plotobj$data, delta == 0 & Analysis == 3 &
                   Bound == 'Upper bound')$Probability
-  res_lower <- subset(plotobj$data, delta == 0 & Analysis == 3 & 
+  res_lower <- subset(plotobj$data, delta == 0 & Analysis == 3 &
                   Bound == '1-Lower bound')$Probability
   res <- 1 - res_lower + res_upper
   expect_lte(abs(res - 0.05000001), 1e-6)
@@ -70,7 +70,7 @@ test_that(desc = 'check plot data values,
   
   res_upper <- subset(plotobj$data, delta == .15 & Analysis == 3 &
                         Bound == 'Upper bound')$Probability
-  res_lower <- subset(plotobj$data, delta == .15 & Analysis == 3 & 
+  res_lower <- subset(plotobj$data, delta == .15 & Analysis == 3 &
                         Bound == '1-Lower bound')$Probability
   res <- 1 - res_lower + res_upper
   expect_lte(abs(res - 0.36688393), 1e-3)
@@ -85,7 +85,7 @@ test_that(desc = 'check plot data values,
    
    res_upper <- subset(plotobj$data, delta == .45 & Analysis == 3 &
                          Bound == 'Upper bound')$Probability
-   res_lower <- subset(plotobj$data, delta == .45 & Analysis == 3 & 
+   res_lower <- subset(plotobj$data, delta == .45 & Analysis == 3 &
                          Bound == '1-Lower bound')$Probability
    res <- 1 - res_lower + res_upper
    expect_lte(abs(res - 0.99808417), 1e-3)
@@ -102,4 +102,51 @@ test_that(desc = 'Test: plotgsPower graphs are correctly rendered,test.type = 1'
   local_edition(3)
   
   expect_snapshot_file(save_plot_obj, "plotgsPower_2.png")
+})
+
+test_that(desc = 'Test: plotgsPower graphs can use offset arg for Future Analysis legend',
+          code = {
+  x <- gsDesign(k = 3, test.type = 1, alpha = 0.025, beta = 0.1,
+                delta1 = 0.3, sfu = sfLDOF)
+
+  # Without offset
+  plotobj <- plotgsPower(x)
+
+  expect_equal(
+    levels(plotobj$data$Analysis),
+    as.character(1:3)
+  )
+
+  expect_equal(
+    plotobj[["plot_env"]][["titleAnalysis"]],
+    "Analysis"
+  )
+
+  # With offset
+  plotobj <- plotgsPower(x, offset = 1)
+
+  expect_equal(
+    levels(plotobj$data$Analysis),
+    as.character(2:4)
+  )
+
+  expect_equal(
+    plotobj[["plot_env"]][["titleAnalysis"]],
+    "Future Analysis"
+  )
+
+  # Enable custom legend title
+  plotobj <- plotgsPower(x, titleAnalysisCustom = "custom")
+
+  expect_equal(
+    plotobj[["plot_env"]][["titleAnalysis"]],
+    "custom"
+  )
+
+  plotobj <- plotgsPower(x, offset = 1, titleAnalysisCustom = "custom")
+
+  expect_equal(
+    plotobj[["plot_env"]][["titleAnalysis"]],
+    "custom"
+  )
 })
