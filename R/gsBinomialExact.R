@@ -344,18 +344,18 @@ binomialSPRT <- function(p0 = .05, p1 = .25, alpha = .1, beta = .15, minn = 10, 
 #' @rdname gsBinomialExact
 #' @export
 #' @importFrom ggplot2 ggplot aes geom_line ylab geom_point xlab
-#' @importFrom rlang !! sym
+#' @importFrom rlang .data
 # plot.gsBinomialExact function [sinew] ----
 plot.gsBinomialExact <- function(x, plottype = 1, ...) {
   if (plottype == 6) {
     theta <- (max(x$theta) - min(x$theta)) * (0:50) / 50 + min(x$theta)
     y <- gsBinomialExact(k = x$k, theta = theta, n.I = x$n.I, a = x$lower$bound, b = x$upper$bound)
     xx <- data.frame(p = theta, EN = y$en)
-    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = p, y = !!rlang::sym('EN'))) + ggplot2::geom_line() + ggplot2::ylab("Expected sample size")
+    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = p, y = .data$EN)) + ggplot2::geom_line() + ggplot2::ylab("Expected sample size")
   } else if (plottype == 3) {
     xx <- data.frame(N = x$n.I, p = x$upper$bound / x$n.I, Bound = "Upper")
     xx <- rbind(xx, data.frame(N = x$n.I, p = x$lower$bound / x$n.I, Bound = "Lower"))
-    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = !!rlang::sym('N'), y = p, group = !!rlang::sym('Bound'))) +
+    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = .data$N, y = p, group = .data$Bound)) +
       ggplot2::geom_point() +
       ggplot2::ylab("Rate at bound")
   } else if (plottype == 2) {
@@ -386,13 +386,13 @@ plot.gsBinomialExact <- function(x, plottype = 1, ...) {
     )
     # combine and plot
     outcome <- rbind(Power, futility, indeterminate)
-    p <- ggplot2::ggplot(data = outcome, ggplot2::aes(x = !!rlang::sym('rr'), y = !!rlang::sym('Percent'), lty = !!rlang::sym('Outcome'))) +
+    p <- ggplot2::ggplot(data = outcome, ggplot2::aes(x = .data$rr, y = .data$Percent, lty = .data$Outcome)) +
       ggplot2::geom_line() +
       ggplot2::xlab("Underlying response rate")
   } else {
     xx <- data.frame(N = x$n.I, x = x$upper$bound, Bound = "Upper")
     xx <- rbind(xx, data.frame(N = x$n.I, x = x$lower$bound, Bound = "Lower"))
-    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = !!rlang::sym('N'), y = x, group = !!rlang::sym('Bound'))) +
+    p <- ggplot2::ggplot(data = xx, ggplot2::aes(x = .data$N, y = x, group = .data$Bound)) +
       ggplot2::geom_point() +
       ggplot2::ylab("Number of responses")
   }
