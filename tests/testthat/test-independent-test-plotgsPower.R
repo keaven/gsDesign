@@ -136,14 +136,14 @@ test_that(desc = 'Test: plotgsPower graphs can use offset arg for Future Analysi
   )
 
   # Enable custom legend title
-  plotobj <- plotgsPower(x, titleAnalysisCustom = "custom")
+  plotobj <- plotgsPower(x, titleAnalysisLegend = "custom")
 
   expect_equal(
     plotobj[["plot_env"]][["titleAnalysis"]],
     "custom"
   )
 
-  plotobj <- plotgsPower(x, offset = 1, titleAnalysisCustom = "custom")
+  plotobj <- plotgsPower(x, offset = 1, titleAnalysisLegend = "custom")
 
   expect_equal(
     plotobj[["plot_env"]][["titleAnalysis"]],
