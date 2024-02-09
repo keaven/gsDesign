@@ -102,9 +102,8 @@ trials:</p>
 <code><a href="../reference/nSurvival.html">nEvents()</a></code>: number of events to achieve power or power
 given number of events with no interim analysis.</li>
 <li>
-<code><a href="../reference/nSurvival.html">zn2hr()</a></code>, <code><a href="../reference/gsBoundSummary.html">gsHR()</a></code> and
-<code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code>: approximate the observed hazard ratio
-(HR) required to achieve a targeted Z-value for a given number of
+<code><a href="../reference/nSurvival.html">zn2hr()</a></code>: approximate the observed hazard ratio (HR)
+required to achieve a targeted Z-value for a given number of
 events.</li>
 <li>
 <code><a href="../reference/nSurvival.html">hrn2z()</a></code>: approximate Z-value corresponding to a
@@ -118,14 +117,15 @@ This is done with the <span class="citation">Lachin and Foulkes
 (1986)</span> method. Functions include:</p>
 <ul>
 <li>
-<code><a href="../reference/nSurvival.html">nSurvival()</a></code>: Sample size restricted to single
-enrollment rate; single analysis.</li>
-<li>
 <code><a href="../reference/nSurv.html">nSurv()</a></code>: More flexible enrollment scenarios; single
 analysis.</li>
 <li>
 <code><a href="../reference/nSurv.html">gsSurv()</a></code>: Group sequential design extension of
 <code><a href="../reference/nSurv.html">nSurv()</a></code>.</li>
+<li>
+<code><a href="../reference/nSurvival.html">nSurvival()</a></code>: Sample size restricted to single
+enrollment rate, single analysis; this has been effectively replaced and
+generalized by <code><a href="../reference/nSurv.html">nSurv()</a></code> and <code><a href="../reference/nSurv.html">gsSurv()</a></code>.</li>
 </ul>
 <p>Output for survival design information is supported in various
 formats:</p>
@@ -149,10 +149,9 @@ We let <span class="math inline">\(\delta = \log\nu\)</span> denote the
 so-called <em>natural parameter</em> for this case. Asymptotically the
 distribution of the Cox model estimate <span class="math inline">\(\hat{\delta}\)</span> under the proportional
 hazards assumption is <span class="math display">\[\hat\delta\sim
-\hbox{Normal}(\delta=\log\nu, (1+r)^2/nr).\]</span> Using a Cox model to
-estimate <span class="math inline">\(\delta\)</span>, the Wald test for
-<span class="math inline">\(\hbox{H_0}: \delta=0\)</span> can be
-approximated with the asymptotic variance from above as:</p>
+\hbox{Normal}(\delta=\log\nu, (1+r)^2/nr)\]</span> where <span class="math inline">\(n\)</span> represents the number of events
+observed. Using a Cox model to estimate <span class="math inline">\(\delta\)</span>, the Wald test for <span class="math inline">\(\hbox{H_0}: \delta=0\)</span> can be approximated
+with the asymptotic variance from above as:</p>
 <p><span class="math display">\[Z_W\approx \frac{\sqrt
 {nr}}{1+r}\hat\delta=\frac{\ln(\hat\nu)\sqrt{nr}}{1+r}.\]</span></p>
 <p>Also, we know that the Wald test <span class="math inline">\(Z_W\)</span> and a standard normal version of the
@@ -173,8 +172,8 @@ standardized Z-test.</p>
 <div class="section level3">
 <h3 id="power-and-sample-size-with-nevents">Power and sample size with nEvents()<a class="anchor" aria-label="anchor" href="#power-and-sample-size-with-nevents"></a>
 </h3>
-<p>Based on the above, the power for the logrank test is approximated
-by</p>
+<p>Based on the above, the power for the logrank test when <span class="math inline">\(n\)</span> events have been observed is
+approximated by</p>
 <p><span class="math display">\[P[Z\le z]=\Phi(z -\sqrt n\theta)=\Phi(z-
 \sqrt{nr}/(1+r)\log\nu).\]</span> Thus, assuming <span class="math inline">\(n=100\)</span> events and <span class="math inline">\(\delta = \log\nu=-\log(.7)\)</span>, and <span class="math inline">\(r=1\)</span> (equal randomization) we approximate
 power for the logrank test when <span class="math inline">\(\alpha=0.025\)</span> as</p>
@@ -261,13 +260,15 @@ effect size is specified in <code>deltaname</code> and the parameter
 needs to be exponentiated to obtain HR in the output below. This example
 code can be useful in practice. We begin by passing the number of events
 for a fixed design in the parameter <code>n.fix</code> (continuous, not
-rounded) to adapt to a group sequential design.</p>
+rounded) to adapt to a group sequential design. By rounding to integer
+event counts with the <code><a href="../reference/toInteger.html">toInteger()</a></code> function we increase the
+power slightly over the targeted 90%.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Schoenfeld</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  n.fix <span class="op">=</span> <span class="fu"><a href="../reference/nSurvival.html">nEvents</a></span><span class="op">(</span>hr <span class="op">=</span> <span class="va">hr</span>, alpha <span class="op">=</span> <span class="va">alpha</span>, beta <span class="op">=</span> <span class="va">beta</span>, r <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  delta1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># Converts to integer event counts at analyses</span></span>
 <span><span class="va">Schoenfeld</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"HR"</span>, logdelta <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
@@ -282,38 +283,38 @@ rounded) to adapt to a group sequential design.</p>
 <tr class="odd">
 <td align="left">IA 1: 50%</td>
 <td align="left">Z</td>
-<td align="right">2.7500</td>
-<td align="right">0.4122</td>
+<td align="right">2.7522</td>
+<td align="right">0.4084</td>
 </tr>
 <tr class="even">
-<td align="left">N: 173</td>
+<td align="left">N: 172</td>
 <td align="left">p (1-sided)</td>
 <td align="right">0.0030</td>
-<td align="right">0.3401</td>
+<td align="right">0.3415</td>
 </tr>
 <tr class="odd">
 <td align="left"></td>
 <td align="left">~HR at bound</td>
-<td align="right">0.6577</td>
-<td align="right">0.9391</td>
+<td align="right">0.6572</td>
+<td align="right">0.9396</td>
 </tr>
 <tr class="even">
 <td align="left"></td>
 <td align="left">P(Cross) if HR=1</td>
 <td align="right">0.0030</td>
-<td align="right">0.6599</td>
+<td align="right">0.6585</td>
 </tr>
 <tr class="odd">
 <td align="left"></td>
 <td align="left">P(Cross) if HR=0.7</td>
-<td align="right">0.3412</td>
-<td align="right">0.0269</td>
+<td align="right">0.3397</td>
+<td align="right">0.0268</td>
 </tr>
 <tr class="even">
 <td align="left">Final</td>
 <td align="left">Z</td>
-<td align="right">1.9811</td>
-<td align="right">1.9811</td>
+<td align="right">1.9810</td>
+<td align="right">1.9810</td>
 </tr>
 <tr class="odd">
 <td align="left">N: 345</td>
@@ -324,8 +325,8 @@ rounded) to adapt to a group sequential design.</p>
 <tr class="even">
 <td align="left"></td>
 <td align="left">~HR at bound</td>
-<td align="right">0.8078</td>
-<td align="right">0.8078</td>
+<td align="right">0.8079</td>
+<td align="right">0.8079</td>
 </tr>
 <tr class="odd">
 <td align="left"></td>
@@ -336,8 +337,8 @@ rounded) to adapt to a group sequential design.</p>
 <tr class="even">
 <td align="left"></td>
 <td align="left">P(Cross) if HR=0.7</td>
-<td align="right">0.9000</td>
-<td align="right">0.1000</td>
+<td align="right">0.9004</td>
+<td align="right">0.0996</td>
 </tr>
 </tbody>
 </table>
@@ -356,7 +357,7 @@ parameter <span class="math inline">\(\theta\)</span>. Thus, the
 value</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Schoenfeld</span><span class="op">$</span><span class="va">n.I</span></span>
-<span><span class="co">#&gt; [1] 172.2757 344.5514</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 172 345</span></span></code></pre></div>
 <p>corresponds both to the number of events and the statistical
 information for the standardized effect size <span class="math inline">\(\theta\)</span> required to power the trial at the
 desired level. Note that if you plug in the natural parameter <span class="math inline">\(\delta= -\log\nu &gt; 0\)</span>, then <span class="math inline">\(n.I\)</span> returns the statistical information
@@ -372,8 +373,7 @@ between events and statistical information for <span class="math inline">\(\delt
 </h3>
 <p>Another application of the <span class="citation">Schoenfeld
 (1981)</span> method is to approximate boundary characteristics of a
-design. As noted in the introduction above, we will consider
-<code><a href="../reference/nSurvival.html">zn2hr()</a></code>, <code><a href="../reference/gsBoundSummary.html">gsHR()</a></code> and
+design. We will consider <code><a href="../reference/nSurvival.html">zn2hr()</a></code>, <code><a href="../reference/gsBoundSummary.html">gsHR()</a></code> and
 <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> to approximate the treatment effect
 required to cross design bounds. <code><a href="../reference/nSurvival.html">zn2hr()</a></code> is complemented by
 the functions <code><a href="../reference/nSurvival.html">hrn2z()</a></code> and <code><a href="../reference/nSurvival.html">hrz2n()</a></code>. We begin
@@ -398,7 +398,7 @@ number of events required: <span class="math display">\[ n =
 up in the table:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Schoenfeld</span><span class="op">$</span><span class="va">n.I</span></span>
-<span><span class="co">#&gt; [1] 172.2757 344.5514</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 172 345</span></span></code></pre></div>
 <p>We reproduce the approximate hazard ratios required to cross efficacy
 bounds using the Schoenfeld approximations above:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -408,7 +408,7 @@ bounds using the Schoenfeld approximations above:</p>
 <span>  x <span class="op">=</span> <span class="va">Schoenfeld</span>, <span class="co"># Group sequential design from above</span></span>
 <span>  ratio <span class="op">=</span> <span class="va">r</span> <span class="co"># Experimental/control randomization ratio</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.6576844 0.8077846</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.6572433 0.8079049</span></span></code></pre></div>
 <p>For the following examples, we assume <span class="math inline">\(r=1\)</span>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></code></pre></div>
@@ -467,13 +467,14 @@ above:</li>
 <h2 id="lachin-and-foulkes-design">Lachin and Foulkes design<a class="anchor" aria-label="anchor" href="#lachin-and-foulkes-design"></a>
 </h2>
 <p>For the purpose of sample size and power for group sequential design,
-the <span class="citation">Lachin and Foulkes (1986)</span> is based on
-substantial evaluation not documented further here. We try to make clear
-here what some of the strengths and weaknesses of both the <span class="citation">Lachin and Foulkes (1986)</span> method as well as its
-implementation in the <code><a href="../reference/nSurv.html">gsDesign::nSurv()</a></code> (fixed design) and
-<code><a href="../reference/nSurv.html">gsDesign::gsSurv()</a></code> (group sequential) functions. For
-historical and testing purposes, we also discuss use of the less
-flexible <code><a href="../reference/nSurvival.html">gsDesign::nSurvival()</a></code> function that was
+the <span class="citation">Lachin and Foulkes (1986)</span> is
+recommended based on substantial evaluation not documented further here.
+We try to make clear here what some of the strengths and weaknesses of
+both the <span class="citation">Lachin and Foulkes (1986)</span> method
+as well as its implementation in the <code><a href="../reference/nSurv.html">gsDesign::nSurv()</a></code>
+(fixed design) and <code><a href="../reference/nSurv.html">gsDesign::gsSurv()</a></code> (group sequential)
+functions. For historical and testing purposes, we also discuss use of
+the less flexible <code><a href="../reference/nSurvival.html">gsDesign::nSurvival()</a></code> function that was
 independently programmed and can be used for some limited validations of
 <code><a href="../reference/nSurv.html">gsDesign::nSurv()</a></code>.</p>
 <div class="section level3">
@@ -483,24 +484,27 @@ independently programmed and can be used for some limited validations of
 the <span class="citation">Lachin and Foulkes (1986)</span> method. The
 model assumes</p>
 <ul>
-<li>A fixed enrollment period with piecewise constant enrollment
-rates</li>
-<li>A fixed minimum follow-up period</li>
-<li>Piecewise exponential failure rates for the control group</li>
-<li>A single, constant hazard ratio for the experimental group</li>
-<li>Piecewise exponential loss-to-follow-up rates</li>
-<li>A stratified population</li>
+<li>Piecewise constant enrollment rates with a target fixed duration of
+enrollment; since inter-arrival times follow a Poisson process, the
+actual enrollment time to achieve the targeted enrollment is
+random.</li>
+<li>A fixed minimum follow-up period.</li>
+<li>Piecewise exponential failure rates for the control group.</li>
+<li>A single, constant hazard ratio for the experimental group relative
+to the control group.</li>
+<li>Piecewise exponential loss-to-follow-up rates.</li>
+<li>A stratified population.</li>
 <li>A fixed randomization ratio of experimental to control group
-assignment</li>
+assignment.</li>
 </ul>
 <p>Other than the proportional hazards assumption, this allows a great
 deal of flexibility in trial design assumptions. While <span class="citation">Lachin and Foulkes (1986)</span> adjusts the piecewise
 constant enrollment rates proportionately to derive a sample size,
-<code>gsDesign$nSurv()</code> also enables the approach of <span class="citation">Kim and Tsiatis (1990)</span> which fixes enrollment
+<code><a href="../reference/nSurv.html">gsDesign::nSurv()</a></code> also enables the approach of <span class="citation">Kim and Tsiatis (1990)</span> which fixes enrollment
 rates and extends the final enrollment rate duration to power the trial;
-the minimum follow-up period is still assumed this approach. We do not
-enable the drop-in option proposed in <span class="citation">Lachin and
-Foulkes (1986)</span>.</p>
+the minimum follow-up period is still assumed with this approach. We do
+not enable the drop-in option proposed in <span class="citation">Lachin
+and Foulkes (1986)</span>.</p>
 <p>The two practical differences the <span class="citation">Lachin and
 Foulkes (1986)</span> method has from the <span class="citation">Schoenfeld (1981)</span> method are:</p>
 <ol style="list-style-type: decimal">
@@ -589,6 +593,10 @@ this example.</p>
 <div class="section level3">
 <h3 id="group-sequential-design-1">Group sequential design<a class="anchor" aria-label="anchor" href="#group-sequential-design-1"></a>
 </h3>
+<p>Now we produce a group sequential design with a default asymmetric
+design with a futility bound based on <span class="math inline">\(\beta\)</span>-spending. We round interim event
+counts and round up the final event count to ensure the targeted
+power.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># Total number of analyses</span></span>
 <span><span class="va">lfgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
@@ -601,7 +609,7 @@ this example.</p>
 <span>  ratio <span class="op">=</span> <span class="va">r</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="va">alpha</span>,</span>
 <span>  beta <span class="op">=</span> <span class="va">beta</span></span>
-<span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">lfgs</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
@@ -617,30 +625,30 @@ this example.</p>
 <td align="left">IA 1: 50%</td>
 <td align="left">Z</td>
 <td align="right">2.7500</td>
-<td align="right">0.4122</td>
+<td align="right">0.4150</td>
 </tr>
 <tr class="even">
 <td align="left">N: 440</td>
 <td align="left">p (1-sided)</td>
 <td align="right">0.0030</td>
-<td align="right">0.3401</td>
+<td align="right">0.3391</td>
 </tr>
 <tr class="odd">
 <td align="left">Events: 172</td>
 <td align="left">~HR at bound</td>
-<td align="right">0.6571</td>
-<td align="right">0.9390</td>
+<td align="right">0.6575</td>
+<td align="right">0.9387</td>
 </tr>
 <tr class="even">
 <td align="left">Month: 13</td>
 <td align="left">P(Cross) if HR=1</td>
 <td align="right">0.0030</td>
-<td align="right">0.6599</td>
+<td align="right">0.6609</td>
 </tr>
 <tr class="odd">
 <td align="left"></td>
 <td align="left">P(Cross) if HR=0.7</td>
-<td align="right">0.3412</td>
+<td align="right">0.3422</td>
 <td align="right">0.0269</td>
 </tr>
 <tr class="even">
@@ -658,8 +666,8 @@ this example.</p>
 <tr class="even">
 <td align="left">Events: 344</td>
 <td align="left">~HR at bound</td>
-<td align="right">0.8074</td>
-<td align="right">0.8074</td>
+<td align="right">0.8076</td>
+<td align="right">0.8076</td>
 </tr>
 <tr class="odd">
 <td align="left">Month: 28</td>
@@ -670,8 +678,8 @@ this example.</p>
 <tr class="even">
 <td align="left"></td>
 <td align="left">P(Cross) if HR=0.7</td>
-<td align="right">0.9000</td>
-<td align="right">0.1000</td>
+<td align="right">0.9006</td>
+<td align="right">0.0994</td>
 </tr>
 </tbody>
 </table>
@@ -682,7 +690,7 @@ at bound calculation above:</p>
 <code class="sourceCode R"><span><span class="va">events</span> <span class="op">&lt;-</span> <span class="va">lfgs</span><span class="op">$</span><span class="va">n.I</span></span>
 <span><span class="va">z</span> <span class="op">&lt;-</span> <span class="va">lfgs</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span>
 <span><span class="fu"><a href="../reference/nSurvival.html">zn2hr</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">z</span>, n <span class="op">=</span> <span class="va">events</span><span class="op">)</span> <span class="co"># Schoenfeld approximation to HR</span></span>
-<span><span class="co">#&gt; [1] 0.6571386 0.8074431</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.6574636 0.8076464</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
@@ -720,13 +728,13 @@ alternate hypothesis with:</p>
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">96.82001</td>
-<td align="right">74.77511</td>
+<td align="right">97.04664</td>
+<td align="right">74.95336</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">184.06813</td>
-<td align="right">159.12213</td>
+<td align="right">184.48403</td>
+<td align="right">159.51599</td>
 </tr>
 </tbody>
 </table>
@@ -754,15 +762,15 @@ that time, you compute using:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">tEventsIA</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lfgs</span>, timing <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
-<span>  <span class="st">" Time: "</span>, <span class="va">b</span><span class="op">$</span><span class="cn">T</span>,</span>
-<span>  <span class="st">"\n Expected enrollment:"</span>, <span class="va">b</span><span class="op">$</span><span class="va">eNC</span> <span class="op">+</span> <span class="va">b</span><span class="op">$</span><span class="va">eNE</span>,</span>
-<span>  <span class="st">"\n Expected control events:"</span>, <span class="va">b</span><span class="op">$</span><span class="va">eDC</span>,</span>
-<span>  <span class="st">"\n Expected experimental events:"</span>, <span class="va">b</span><span class="op">$</span><span class="va">eDE</span>, <span class="st">"\n"</span></span>
+<span>  <span class="st">" Time: "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="cn">T</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="st">"\n Expected enrollment:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="va">eNC</span> <span class="op">+</span> <span class="va">b</span><span class="op">$</span><span class="va">eNE</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="st">"\n Expected control events:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="va">eDC</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="st">"\n Expected experimental events:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="va">eDE</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"\n"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  Time:  8.88072854965729 </span></span>
-<span><span class="co">#&gt;  Expected enrollment: 325.066468979827 </span></span>
-<span><span class="co">#&gt;  Expected control events: 49.0303966242417 </span></span>
-<span><span class="co">#&gt;  Expected experimental events: 36.7672374839294</span></span></code></pre></div>
+<span><span class="co">#&gt;  Time:  8.9 </span></span>
+<span><span class="co">#&gt;  Expected enrollment: 325.7 </span></span>
+<span><span class="co">#&gt;  Expected control events: 49.1 </span></span>
+<span><span class="co">#&gt;  Expected experimental events: 36.9</span></span></code></pre></div>
 <p>For expected accrual of events without a design returned by
 <code><a href="../reference/nSurv.html">gsDesign::gsSurv()</a></code>, see the help file for
 <code><a href="../reference/eEvents.html">gsDesign::eEvents()</a></code>.</p>
