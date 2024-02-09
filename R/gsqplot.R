@@ -31,15 +31,9 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' are used. For a \code{gsDesign} object where \code{theta} is input as
 #' \code{NULL} (the default), \code{theta=seq(0,2,.05)*x$delta}) is used.  For
 #' a \code{gsDesign} object, the x-axis values are rescaled to
-<<<<<<< HEAD
 #' \code{theta/x$delta} and the label for the x-axis \eqn{\theta / \delta}. For a
 #' \code{gsProbability} object, the values of \code{theta} are plotted and are
 #' labeled as \eqn{\theta}. See examples below.
-=======
-#' \code{theta/x$delta} and the label for the x-axis \eqn{theta / delta}. For a
-#' \code{gsProbability} object, the values of \code{theta} are plotted and are
-#' labeled as \eqn{theta}. See examples below.
->>>>>>> 10cb6ff2 (Mostly reverting to original)
 #'
 #' Approximate treatment effects at boundaries are computed dividing the Z-values
 #' at the boundaries by the square root of \code{n.I} at that analysis.
