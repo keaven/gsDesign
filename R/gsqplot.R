@@ -323,7 +323,7 @@ gsCPz <- function(z, i, x, theta = NULL, ylab = NULL, ...) {
 # qplotit roxy [sinew] ----
 #' @importFrom graphics lines text
 #' @importFrom ggplot2 ggplot aes geom_text geom_line scale_x_continuous scale_y_continuous scale_colour_manual scale_linetype_manual ggtitle xlab ylab
-#' @importFrom rlang !! sym
+#' @importFrom rlang .data
 # qplotit function [sinew] ----
 qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "text"),
                     dgt = c(2, 2), lty = c(2, 1), col = c(1, 1),
@@ -398,8 +398,8 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
     lbls <- c("Lower", "Upper")
     if (x$test.type > 1) {
       p <- ggplot2::ggplot(data = y, ggplot2::aes(
-        x = as.numeric(!!rlang::sym('N')), y = as.numeric(!!rlang::sym('Z')), group = factor(!!rlang::sym('Bound')),
-        col = factor(!!rlang::sym('Bound')), label = Ztxt, lty = factor(!!rlang::sym('Bound'))
+        x = as.numeric(.data$N), y = as.numeric(.data$Z), group = factor(.data$Bound),
+        col = factor(.data$Bound), label = Ztxt, lty = factor(.data$Bound)
       )) + 
         ggplot2::geom_text(show.legend = F, size = cex * 5) + 
         ggplot2::geom_line() +
@@ -412,10 +412,10 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
 
     } else {
       p <- ggplot2::ggplot(ggplot2::aes(
-        x = as.numeric(!!rlang::sym('N')),
-        y = as.numeric(!!rlang::sym('Z')),
+        x = as.numeric(.data$N),
+        y = as.numeric(.data$Z),
         label = Ztxt, 
-        group = factor(!!rlang::sym('Bound'))),
+        group = factor(.data$Bound)),
         data = y
         ) +
         ggplot2::geom_line(colour = getColor(col[1]), lty = lty[1], lwd = lwd[1]) +
@@ -441,14 +441,14 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
         graphics::text(x = y2$N, y = y2$Z, paste(rep("r=", x$k), y2$Ztxt, sep = ""), cex = cex)
       } else {
         y2$Ztxt <- paste(rep("r=", x$k), y2$Ztxt, sep = "")
-        p <- p + geom_text(data = y2, aes(group = factor(!!rlang::sym('Bound')), label = Ztxt), size = cex * 5, show.legend = F, colour = getColor(1))
+        p <- p + geom_text(data = y2, aes(group = factor(.data$Bound), label = Ztxt), size = cex * 5, show.legend = F, colour = getColor(1))
       }
     } else {
       if (base) {
         graphics::text(x = y2$N, y = y2$Z, paste(rep("N=", x$k), y2$Ztxt, sep = ""), cex = cex)
       } else {
         y2$Ztxt <- paste(rep("N=", x$k), y2$Ztxt, sep = "")
-        p <- p + ggplot2::geom_text(data = y2, ggplot2::aes(group = factor(!!rlang::sym('Bound')), label = Ztxt), size = cex * 5, show.legend = F, colour = getColor(1))
+        p <- p + ggplot2::geom_text(data = y2, ggplot2::aes(group = factor(.data$Bound), label = Ztxt), size = cex * 5, show.legend = F, colour = getColor(1))
       }
     }
   }
@@ -741,7 +741,7 @@ plotsf <- function(x,
 # plotASN roxy [sinew] ----
 #' @importFrom graphics plot
 #' @importFrom ggplot2 qplot
-#' @importFrom rlang !! sym
+#' @importFrom rlang .data
 # plotASN function [sinew] ----
 plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval = NULL, type = "l",
                     base = FALSE, ...) {
@@ -810,7 +810,7 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
 #' @importFrom stats reshape
 #' @importFrom dplyr group_by reframe
 #' @importFrom ggplot2 ggplot aes geom_line ylab guides guide_legend xlab scale_linetype_manual scale_color_manual scale_y_continuous ggtitle scale_x_continuous scale_colour_manual geom_text
-#' @importFrom rlang !! sym
+#' @importFrom rlang .data
 #' @importFrom graphics plot axis lines strwidth text
 #' @param offset Integer to offset the numeric labels of the "Analysis" legend
 #'   (default: 0). Only relevant for \code{outtype = 1}. By default will change
@@ -887,10 +887,10 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     
     p <- ggplot2::ggplot(y2, 
                          ggplot2::aes(
-                           x = !!rlang::sym('delta'), 
-                           y = !!rlang::sym('Probability'), 
-                           col = !!rlang::sym('Bound'), 
-                           lty = !!rlang::sym('Analysis'))
+                           x = .data$delta,
+                           y = .data$Probability,
+                           col = .data$Bound,
+                           lty = .data$Analysis)
                          ) + 
       ggplot2::geom_line(size = lwd) + 
       ggplot2::ylab(ylab) +

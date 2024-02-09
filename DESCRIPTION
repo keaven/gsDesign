@@ -1,5 +1,5 @@
 Package: gsDesign
-Version: 3.6.0.3
+Version: 3.6.0.4
 Title: Group Sequential Design
 Authors@R: person(given = "Keaven", family = "Anderson", email =
           "keaven_anderson@merck.com", role = c('aut','cre'))
@@ -18,7 +18,7 @@ Depends:
     R (>= 3.5.0)
 Imports:
     dplyr (>= 1.1.0),
-    ggplot2 (>= 0.9.2),
+    ggplot2 (>= 3.1.1),
     graphics,
     gt,
     magrittr,
