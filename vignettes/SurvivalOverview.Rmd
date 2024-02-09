@@ -61,21 +61,22 @@ Output for survival design information is supported in various formats:
 
 We will assume a hazard ratio $\nu < 1$ represents a benefit of experimental treatment over control.
 We let $\delta = \log\nu$ denote the so-called *natural parameter* for this case.
-Asymptotically the distribution of the Cox model estimate $\hat{\delta}$ under the proportional hazards assumption is
-$$\hat\delta\sim \hbox{Normal}(\delta=\log\nu, (1+r)^2/nr)$$ 
-where $n$ represents the number of events observed.
+Asymptotically the distribution of the Cox model estimate $\hat{\delta}$ under the proportional hazards assumption is (@Schoenfeld1981)
+$$\hat\delta\sim \hbox{Normal}(\delta=\log\nu, (1+r)^2/nr).$$
+The inverse of the variance is the statistical information:
+$$\mathcal I = nr/(1 + r)^2.$$
 Using a Cox model to estimate $\delta$, the Wald test for $\hbox{H_0}: \delta=0$ can be approximated with the asymptotic variance from above as:
 
 
 $$Z_W\approx \frac{\sqrt {nr}}{1+r}\hat\delta=\frac{\ln(\hat\nu)\sqrt{nr}}{1+r}.$$
 
 
-Also, we know that the Wald test $Z_W$ and a standard normal version of the logrank $Z$ are both asymptotically efficient and therefore asymptotically equivalent.
+Also, we know that the Wald test $Z_W$ and a standard normal version of the logrank $Z$ are both asymptotically efficient and therefore asymptotically equivalent, at least under a local hypothesis framework.
 We denote the *standardized effect size* as
 
 $$\theta = \delta\sqrt r / (1+r)= \log(\nu)\sqrt r / (1+r).$$
-Letting $\hat\theta = -\sqrt r/(1+r)\hat\delta$ we have
-$$ \hat \theta \sim \hbox{Normal}(\theta, 1/ n).$$
+Letting $\hat\theta = -\sqrt r/(1+r)\hat\delta$ and $n$ representing the number of events observed, we have
+$$\hat \theta \sim \hbox{Normal}(\theta, 1/ n).$$
 Thus, the standardized Z version of the logrank is approximately distributed as
 
 $$Z\sim\hbox{Normal}(\sqrt n\theta,1).$$
@@ -120,7 +121,7 @@ beta <- 0.1
 which, rounding up, matches (with tabular output):
 
 ```{r}
-nEvents(hr = hr, alpha = alpha, beta = beta, r = 1, tbl = TRUE) %>%
+nEvents(hr = hr, alpha = alpha, beta = beta, r = 1, tbl = TRUE) |>
   kable()
 ```
 
@@ -150,9 +151,9 @@ Schoenfeld <- gsDesign(
   k = 2,
   n.fix = nEvents(hr = hr, alpha = alpha, beta = beta, r = 1),
   delta1 = log(hr)
-) |> toInteger() # Converts to integer event counts at analyses
-Schoenfeld %>%
-  gsBoundSummary(deltaname = "HR", logdelta = TRUE) %>%
+) |> toInteger()
+Schoenfeld |>
+  gsBoundSummary(deltaname = "HR", logdelta = TRUE, Nname = "Events") |>
   kable(row.names = FALSE)
 ```
 
@@ -161,7 +162,7 @@ Schoenfeld %>%
 Exactly the same result can be obtained with the following, passing the standardized effect size `theta` from above to the parameter `delta` in `gsDesign()`.
 
 ```{r, eval=FALSE}
-Schoenfeld <- gsDesign(k = 2, delta = -theta, delta1 = log(hr))
+Schoenfeld <- gsDesign(k = 2, delta = -theta, delta1 = log(hr)) |> toInteger()
 ```
 
 We noted above that the asymptotic variance for $\hat\theta$ is $1/n$ which corresponds to statistical information $\mathcal I=n$ for the parameter $\theta$.
@@ -198,7 +199,7 @@ $$ n = (z(1+r)/\log(\hat{\nu}))^2/r.$$
 
 ### Examples
 
-For our first example, we note that the event counts in `Schoenfeld` are actually continuous numbers that are rounded up in the table:
+We continue with the `Schoenfeld` example event counts:
 
 ```{r}
 Schoenfeld$n.I
@@ -361,8 +362,8 @@ lfgs <- gsSurv(
   alpha = alpha,
   beta = beta
 ) |> toInteger()
-lfgs %>%
-  gsBoundSummary() %>%
+lfgs |>
+  gsBoundSummary() |>
   kable(row.names = FALSE)
 ```
 
@@ -379,7 +380,7 @@ zn2hr(z = z, n = events) # Schoenfeld approximation to HR
 There are various plots available. The approximate hazard ratios required to cross bounds again use the @Schoenfeld1981 approximation. For a **ggplot2** version of this plot, use the default `base = FALSE`.
 
 ```{r, fig.asp=1}
-plot(lfgs, pl = "hr", dgt = 4, base = TRUE)
+plot(lfgs, pl = "hr", dgt = 2, base = TRUE)
 ```
 
 ### Event accrual
@@ -393,7 +394,7 @@ tibble::tibble(
   Analysis = 1:2,
   `Control events` = lfgs$eDC,
   `Experimental events` = lfgs$eDE
-) %>%
+) |>
   kable()
 ```
 
