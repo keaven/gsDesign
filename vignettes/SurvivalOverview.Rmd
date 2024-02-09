@@ -40,16 +40,16 @@ If you are not looking for this level of detail and just want to see how to desi
 The following functions support use of the very straightforward @Schoenfeld1981 approximation for 2-arm trials:
 
 - `nEvents()`: number of events to achieve power or power given number of events with no interim analysis.
-- `zn2hr()`, `gsHR()` and `gsBoundSummary()`: approximate the observed hazard ratio (HR) required to achieve a targeted Z-value for a given number of events.
+- `zn2hr()`: approximate the observed hazard ratio (HR) required to achieve a targeted Z-value for a given number of events.
 - `hrn2z()`: approximate Z-value corresponding to a specified HR and event count.
 - `hrz2n()`: approximate event count corresponding to a specified HR and Z-value.
 
 The above functions do not directly support sample size calculations.
 This is done with the @LachinFoulkes method. Functions include:
 
-- `nSurvival()`: Sample size restricted to single enrollment rate; single analysis.
 - `nSurv()`: More flexible enrollment scenarios; single analysis.
 - `gsSurv()`: Group sequential design extension of `nSurv()`.
+- `nSurvival()`: Sample size restricted to single enrollment rate, single analysis; this has been effectively replaced and generalized by `nSurv()` and `gsSurv()`.
 
 Output for survival design information is supported in various formats:
 
@@ -62,7 +62,8 @@ Output for survival design information is supported in various formats:
 We will assume a hazard ratio $\nu < 1$ represents a benefit of experimental treatment over control.
 We let $\delta = \log\nu$ denote the so-called *natural parameter* for this case.
 Asymptotically the distribution of the Cox model estimate $\hat{\delta}$ under the proportional hazards assumption is
-$$\hat\delta\sim \hbox{Normal}(\delta=\log\nu, (1+r)^2/nr).$$
+$$\hat\delta\sim \hbox{Normal}(\delta=\log\nu, (1+r)^2/nr)$$ 
+where $n$ represents the number of events observed.
 Using a Cox model to estimate $\delta$, the Wald test for $\hbox{H_0}: \delta=0$ can be approximated with the asymptotic variance from above as:
 
 
@@ -82,7 +83,7 @@ Treatment effect favoring experimental treatment compared to control in this not
 
 ### Power and sample size with nEvents()
 
-Based on the above, the power for the logrank test is approximated by
+Based on the above, the power for the logrank test when $n$ events have been observed is approximated by
 
 $$P[Z\le z]=\Phi(z -\sqrt n\theta)=\Phi(z- \sqrt{nr}/(1+r)\log\nu).$$
 Thus, assuming $n=100$ events and $\delta = \log\nu=-\log(.7)$, and $r=1$ (equal randomization) we approximate power for the logrank test when $\alpha=0.025$ as
@@ -142,13 +143,14 @@ We can create a group sequential design for the above problem either with $\thet
 The name of the effect size is specified in `deltaname` and the parameter `logdelta = TRUE` indicates that `delta` input needs to be exponentiated to obtain HR in the output below.
 This example code can be useful in practice.
 We begin by passing the number of events for a fixed design in the parameter `n.fix` (continuous, not rounded) to adapt to a group sequential design.
+By rounding to integer event counts with the `toInteger()` function we increase the power slightly over the targeted 90%.
 
 ```{r}
 Schoenfeld <- gsDesign(
   k = 2,
   n.fix = nEvents(hr = hr, alpha = alpha, beta = beta, r = 1),
   delta1 = log(hr)
-)
+) |> toInteger() # Converts to integer event counts at analyses
 Schoenfeld %>%
   gsBoundSummary(deltaname = "HR", logdelta = TRUE) %>%
   kable(row.names = FALSE)
@@ -180,7 +182,8 @@ The reader may wish to look above to derive the exact relationship between event
 
 ### Approximating boundary characteristics
 
-Another application of the @Schoenfeld1981 method is to approximate boundary characteristics of a design. As noted in the introduction above, we will consider `zn2hr()`, `gsHR()` and `gsBoundSummary()` to approximate the treatment effect required to cross design bounds.
+Another application of the @Schoenfeld1981 method is to approximate boundary characteristics of a design. 
+We will consider `zn2hr()`, `gsHR()` and `gsBoundSummary()` to approximate the treatment effect required to cross design bounds.
 `zn2hr()` is complemented by the functions `hrn2z()` and `hrz2n()`.
 We begin with the basic approximation used across all of these functions in this section and follow with a sub-section with example code to reproduce some of what is in the table above.
 
@@ -266,7 +269,7 @@ hrz2n(hr = hr, z = z, ratio = r)
 
 ## Lachin and Foulkes design
 
-For the purpose of sample size and power for group sequential design, the @LachinFoulkes is based on substantial evaluation not documented further here.
+For the purpose of sample size and power for group sequential design, the @LachinFoulkes is recommended based on substantial evaluation not documented further here.
 We try to make clear here what some of the strengths and weaknesses of both the @LachinFoulkes method as well as its implementation in the `gsDesign::nSurv()` (fixed design) and `gsDesign::gsSurv()` (group sequential) functions.
 For historical and testing purposes, we also discuss use of the less flexible `gsDesign::nSurvival()` function that was independently programmed and can be used for some limited validations of `gsDesign::nSurv()`.
 
@@ -275,16 +278,16 @@ For historical and testing purposes, we also discuss use of the less flexible `g
 Some detail in specification comes With the flexibility allowed by the @LachinFoulkes method.
 The model assumes
 
-- A fixed enrollment period with piecewise constant enrollment rates
-- A fixed minimum follow-up period
-- Piecewise exponential failure rates for the control group
-- A single, constant hazard ratio for the experimental group
-- Piecewise exponential loss-to-follow-up rates
-- A stratified population
-- A fixed randomization ratio of experimental to control group assignment
+- Piecewise constant enrollment rates with a target fixed duration of enrollment; since inter-arrival times follow a Poisson process, the actual enrollment time to achieve the targeted enrollment is random.
+- A fixed minimum follow-up period.
+- Piecewise exponential failure rates for the control group.
+- A single, constant hazard ratio for the experimental group relative to the control group.
+- Piecewise exponential loss-to-follow-up rates.
+- A stratified population.
+- A fixed randomization ratio of experimental to control group assignment.
 
 Other than the proportional hazards assumption, this allows a great deal of flexibility in trial design assumptions.
-While @LachinFoulkes adjusts the piecewise constant enrollment rates proportionately to derive a sample size, `gsDesign$nSurv()` also enables the approach of @KimTsiatis which fixes enrollment rates and extends the final enrollment rate duration to power the trial; the minimum follow-up period is still assumed this approach.
+While @LachinFoulkes adjusts the piecewise constant enrollment rates proportionately to derive a sample size, `gsDesign::nSurv()` also enables the approach of @KimTsiatis which fixes enrollment rates and extends the final enrollment rate duration to power the trial; the minimum follow-up period is still assumed with this approach.
 We do not enable the drop-in option proposed in @LachinFoulkes.
 
 The two practical differences the @LachinFoulkes method has from the @Schoenfeld1981 method are:
@@ -342,6 +345,9 @@ nSurvival(
 
 ### Group sequential design
 
+Now we produce a group sequential design with a default asymmetric design with a futility bound based on $\beta$-spending.
+We round interim event counts and round up the final event count to ensure the targeted power.
+
 ```{r}
 k <- 2 # Total number of analyses
 lfgs <- gsSurv(
@@ -354,7 +360,7 @@ lfgs <- gsSurv(
   ratio = r,
   alpha = alpha,
   beta = beta
-)
+) |> toInteger()
 lfgs %>%
   gsBoundSummary() %>%
   kable(row.names = FALSE)
@@ -413,10 +419,10 @@ On the other hand, if you want to know the expected time to accrue 25% of the fi
 ```{r}
 b <- tEventsIA(x = lfgs, timing = 0.25)
 cat(paste(
-  " Time: ", b$T,
-  "\n Expected enrollment:", b$eNC + b$eNE,
-  "\n Expected control events:", b$eDC,
-  "\n Expected experimental events:", b$eDE, "\n"
+  " Time: ", round(b$T, 1),
+  "\n Expected enrollment:", round(b$eNC + b$eNE, 1),
+  "\n Expected control events:", round(b$eDC, 1),
+  "\n Expected experimental events:", round(b$eDE, 1), "\n"
 ))
 ```
 
