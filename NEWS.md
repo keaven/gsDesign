@@ -17,6 +17,9 @@
   recommended practice when using ggplot2 in packages (@jdblischak, #124).
 - `hGraph()` now uses named `guide` argument in the `scale_fill_manual()` call
   to be compatible with ggplot2 3.5.0 (@teunbrand, #115).
+  **Note**: this function has been deprecated and moved to gMCPLite
+  since gsDesign 3.4.0. It will be removed from gsDesign in a future version.
+  Please use `gMCPLite::hGraph()` instead.
 
 ## Documentation
 
