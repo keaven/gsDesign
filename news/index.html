@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +47,29 @@
       <small>Source: <a href="https://github.com/keaven/gsDesign/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.6.1" id="gsdesign-361-february-2024">gsDesign 3.6.1 (February, 2024)<a class="anchor" aria-label="anchor" href="#gsdesign-361-february-2024"></a></h2>
+<div class="section level3">
+<h3 id="new-features-3-6-1">New features<a class="anchor" aria-label="anchor" href="#new-features-3-6-1"></a></h3>
+<ul><li>
+<code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> now has the <code><a href="../reference/as_rtf.html">as_rtf()</a></code> method implemented to generate RTF outputs for bound summary tables (<a href="https://github.com/wangben718" class="external-link">@wangben718</a>, <a href="https://github.com/keaven/gsDesign/issues/107" class="external-link">#107</a>).</li>
+<li>
+<code>plotgsPower()</code> gets new arguments <code>offset</code> and <code>titleAnalysisLegend</code> to enable more flexible and accurate power plots (<code>plottype = 2</code>) (<a href="https://github.com/jdblischak" class="external-link">@jdblischak</a>, <a href="https://github.com/keaven/gsDesign/issues/121" class="external-link">#121</a>, <a href="https://github.com/keaven/gsDesign/issues/123" class="external-link">#123</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="improvements-3-6-1">Improvements<a class="anchor" aria-label="anchor" href="#improvements-3-6-1"></a></h3>
+<ul><li>The plotting functions now use <code><a href="https://dplyr.tidyverse.org/reference/reframe.html" class="external-link">dplyr::reframe()</a></code> to replace <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">dplyr::summarize()</a></code> when performing grouped <code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum()</a></code> (<a href="https://github.com/jdblischak" class="external-link">@jdblischak</a>, <a href="https://github.com/keaven/gsDesign/issues/114" class="external-link">#114</a>).</li>
+<li>The plotting functions are updated to use the <code>.data</code> pronoun from rlang with <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">ggplot2::aes()</a></code>. This simplifies the code and follows the recommended practice when using ggplot2 in packages (<a href="https://github.com/jdblischak" class="external-link">@jdblischak</a>, <a href="https://github.com/keaven/gsDesign/issues/124" class="external-link">#124</a>).</li>
+<li>
+<code><a href="../reference/hGraph.html">hGraph()</a></code> now uses named <code>guide</code> argument in the <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual()</a></code> call to be compatible with ggplot2 3.5.0 (<a href="https://github.com/teunbrand" class="external-link">@teunbrand</a>, <a href="https://github.com/keaven/gsDesign/issues/115" class="external-link">#115</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-3-6-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-3-6-1"></a></h3>
+<ul><li>
+<code>vignettes("SurvivalOverview")</code> is updated with more details and minor corrections (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/126" class="external-link">#126</a>).</li>
+<li>Fix equation syntax in plotting function documentation to render math symbols properly (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/118" class="external-link">#118</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.6.0" id="gsdesign-360-november-2023">gsDesign 3.6.0 (November, 2023)<a class="anchor" aria-label="anchor" href="#gsdesign-360-november-2023"></a></h2><p class="text-muted">CRAN release: 2023-11-12</p>
 <div class="section level3">
