@@ -1,3 +1,30 @@
+# gsDesign 3.6.1 (February, 2024)
+
+## New features
+
+- `gsBoundSummary()` now has the `as_rtf()` method implemented to generate
+  RTF outputs for bound summary tables (@wangben718, #107).
+- `plotgsPower()` gets new arguments `offset` and `titleAnalysisLegend`
+  to enable more flexible and accurate power plots (`plottype = 2`)
+  (@jdblischak, #121, #123).
+
+## Improvements
+
+- The plotting functions now use `dplyr::reframe()` to replace
+  `dplyr::summarize()` when performing grouped `cumsum()` (@jdblischak, #114).
+- The plotting functions are updated to use the `.data` pronoun from rlang
+  with `ggplot2::aes()`. This simplifies the code and follows the
+  recommended practice when using ggplot2 in packages (@jdblischak, #124).
+- `hGraph()` now uses named `guide` argument in the `scale_fill_manual()` call
+  to be compatible with ggplot2 3.5.0 (@teunbrand, #115).
+
+## Documentation
+
+- `vignettes("SurvivalOverview")` is updated with more details and
+  minor corrections (@keaven, #126).
+- Fix equation syntax in plotting function documentation to render
+  math symbols properly (@keaven, #118).
+
 # gsDesign 3.6.0 (November, 2023)
 
 ## Breaking changes
