@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #------------
 ## plotsf
 #-----------

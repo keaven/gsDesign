@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #-----------------------------------
 # Test sfNormal function
 #-----------------------------------
@@ -128,7 +127,7 @@ testthat::test_that("Test: param:  - Checking Variable Type,
 
 
 testthat::test_that("Test: output validation param of length 2,  
-                    Source: gsDesign_independent_code.R",  {
+                    Source: helper.R",  {
   
   t <- c(0.2, 0.5, .7, 1)
   param<-c(0,  1)
@@ -141,7 +140,7 @@ testthat::test_that("Test: output validation param of length 2,
 })
  
 testthat::test_that("Test: output validation with param of length 4,  
-                    Source: gsDesign_independent_code.R",  {
+                    Source: helper.R",  {
   
   t <- c(0.2, 0.5, 0.7, 1)
   param<-c(0.01, 0.1, 0.1, 0.4)

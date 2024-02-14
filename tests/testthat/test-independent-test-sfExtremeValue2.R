@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 ### Testing sfExtremeValue2 function
 #-----------------------------------
 
@@ -136,7 +135,7 @@ testthat::test_that("Test: param - Testing incorrect variable type,
 
 
 testthat::test_that("Test: output validation param length as 2,  
-                     Source: gsDesign_independent_code.R)",  {
+                     Source: helper.R)",  {
   
   t <- c(.25, .5, .75, 1)
   param <- c(.1,  .2)
@@ -150,7 +149,7 @@ testthat::test_that("Test: output validation param length as 2,
  
 
 testthat::test_that("Test: output validation param length as 4,  
-                     Source: gsDesign_independent_code.R",  {
+                     Source: helper.R",  {
   
   t <- c(.25,.5,.75,1)
   param <- c(.4, .5,.2,.3)

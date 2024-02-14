@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #----------------------------------
 ### Testing sfCauchy function
 #----------------------------------
@@ -144,7 +143,7 @@ testthat::test_that("Test: param - Testing incorrect variable type,
 
 
 testthat::test_that("Test: output validation param length as 2, 
-                    Source: gsDesign_independent_code.R", {
+                    Source: helper.R", {
   
   t <- c(0.25, 0.5, 0.75, 1)
   param <- c(1, 2)
@@ -158,7 +157,7 @@ testthat::test_that("Test: output validation param length as 2,
  
 
 testthat::test_that("Test: output validation param length as 4, 
-                    Source: gsDesign_independent_code.R", {
+                    Source: helper.R", {
   t <- c(0.25, 0.5, .75, 1)
   param <- c(0.2, 0.4, 0.1, 0.3)
   alpha <- 0.05

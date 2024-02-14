@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #--------------------------------------------
 ### Testing gsPosterior:
 #---------------------------------------------
@@ -101,7 +100,7 @@ testthat::test_that(desc = "Test: checking z variable types.", code = {
 
 testthat::test_that(
   desc = "Test: checking Output validation, 
-          source: /tests/cytel/gsDesign_independent_code.R",
+          source: helper.R",
   code = {
     x <- gsDesign(k = 3, test.type = 1, n.fix = 800)
     theta <- seq(-3, 3, 0.75)

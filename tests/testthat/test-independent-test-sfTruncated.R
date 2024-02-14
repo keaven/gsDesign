@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #-----------------------------------
 ### Testing sfTruncated function
 #-----------------------------------
@@ -126,7 +125,7 @@ testthat::test_that("Test: param - Checking Variable Type,
 
 
 testthat::test_that("Test: Output validation for sp funtion - sfLogistic, 
-                    Source: gsDesign_independent_code.R)", {
+                    Source: helper.R)", {
   alpha <- 0.05
   tx <- c(0.167, 0.333, 0.5, 0.667, 0.833, 1)
   param <- list(trange = c(.2, .8), sf = gsDesign::sfLogistic, param = c(1, 2))
@@ -150,7 +149,7 @@ testthat::test_that("Test: Output validation sp funtion  - sfHSD,
 
 
 testthat::test_that("Test: output validation for sp funtion - sfLDOF, 
-                     Source: gsDesign_independent_code.R)", {
+                     Source: helper.R)", {
   alpha <- 0.05
   tx <- c(0.167, 0.333, 0.5, 0.667, 0.833, 1)
   param <- list(trange = c(.2, .8), sf = gsDesign::sfLDOF, param = 1)

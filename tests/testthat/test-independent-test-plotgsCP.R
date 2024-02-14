@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #-------------------------------------------------------------------------------
 # expected CP Calculations done using East 6.5
 # source file : tests/benchmarks/gsqplot.cywx

@@ -1,5 +1,3 @@
-source('../gsDesign_independent_code.R')
-
 #-----------------------------------
 ### Testing sfTrimmed function
 #-----------------------------------
@@ -126,7 +124,7 @@ testthat::test_that("Test: param - Checking Variable Type, Out-of-Range, Order-o
 
 
 testthat::test_that("Test: output validation for sp funtion - sfCauchy, 
-                    Source: gsDesign_independent_code.R", {
+                    Source: helper.R", {
   alpha <- 0.05
   tx <- c(0.167, 0.333, 0.5, 0.667, 0.833, 1)
   param <- list(trange = c(.2, .8), sf = gsDesign::sfCauchy, param = c(1, 2))
@@ -138,7 +136,7 @@ testthat::test_that("Test: output validation for sp funtion - sfCauchy,
 
 
 testthat::test_that("Test: output validation for sp funtion - sfPower, 
-                    Source: gsDesign_independent_code.R", {
+                    Source: helper.R", {
   alpha <- 0.05
   tx <- c(0.167, 0.333, 0.5, 0.667, 0.833, 1)
   param <- list(trange = c(.2, .8), sf = gsDesign::sfPower, param = 2)
@@ -150,7 +148,7 @@ testthat::test_that("Test: output validation for sp funtion - sfPower,
 
 
 testthat::test_that("Test: output validation sp funtion - sfExtremeValue
-                     Source: gsDesign_independent_code.R", {
+                     Source: helper.R", {
   alpha <- 0.05
   tx <- c(0.167, 0.333, 0.5, 0.667, 0.833, 1)
   param <- list(trange = c(.2, .8), sf = gsDesign::sfExtremeValue, param = c(0.1, 0.2))

@@ -1,11 +1,10 @@
-source('../gsDesign_independent_code.R')
 #---------------
 ### Testing gsPP:
 #---------------
 
 # testing TestCase1_gsPP test.type = 2
 testthat::test_that(desc = "Test: checking output validation,
-                    source: gsDesign_independent_code.R", 
+                    source: helper.R", 
                     code = {
   x <- gsDesign(k = 4, test.type = 2, n.fix = 800)
   zi <- 1
@@ -25,7 +24,7 @@ testthat::test_that(desc = "Test: checking output validation,
 
 # testing TestCase1_gsPP test.type = 1
 testthat::test_that(desc = "Test: checking output validation,
-                    source: gsDesign_independent_code.R", 
+                    source: helper.R", 
                     code = {
   x <- gsDesign(k = 4, test.type = 1, n.fix = 800)
   zi <- 0

@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #---------------
 ### Testing gsZ:
 #---------------
@@ -6,7 +5,7 @@ source('../gsDesign_independent_code.R')
 
 testthat::test_that(
   desc = "test: checking output validation density = 0, 
-                    source independent R Program gsDesign_independent_code.R",
+                    source independent R Program helper.R",
   code = {
     x <- gsDesign(k = 3, test.type = 1, n.fix = 800)
     theta <- c(0, 0.5)
@@ -33,7 +32,7 @@ testthat::test_that(desc = "test: checking error x$n.I", code = {
 
 testthat::test_that(
   desc = "test : checking output validation,
-                    source : independent R Program gsDesign_independent_code.R",
+                    source : independent R Program helper.R",
   code = {
     x <- gsDesign(k = 3, test.type = 1, n.fix = 800)
     theta <- c(0, 2, 0.5)
@@ -52,7 +51,7 @@ testthat::test_that(
 
 testthat::test_that(
   desc = "test : checking output validation, 
-  source : independent R Program gsDesign_independent_code.R",
+  source : independent R Program helper.R",
   code = {
     x <- gsDesign(k = 4, test.type = 2, n.fix = 800)
     theta <- c(0, 0.1, 0.05)

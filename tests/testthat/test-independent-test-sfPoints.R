@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #-----------------------------------
 ### Testing sfPoints function
 #-----------------------------------
@@ -96,7 +95,7 @@ testthat::test_that("Test: param - Checking Variable Type,
 
 
 testthat::test_that("Test: output validation for equal length t and param
-                     source : gsDesign_independent_code.R)",  {
+                     source : helper.R)",  {
   
   t <- c(.01,  .05,  .1,  .25,  .5, 1)
   param <- c(.01,  .05,  .1,  .25,  .5,  1)

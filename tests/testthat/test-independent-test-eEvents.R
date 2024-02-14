@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 # #----------------------------------
 # ### Testing eEvents function 
 # For comparing floating-point numbers, an exact match cannot be expected. 
@@ -8,7 +7,7 @@ source('../gsDesign_independent_code.R')
 
 test_that(
   desc = "test: checking number of events on a single arm
-          source : gsDesign_independent_code.R",
+          source : helper.R",
   code = {
     nEv <- eEvents(
       lambda = 0.2, eta = 0.1, gamma = 1,

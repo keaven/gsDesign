@@ -1,5 +1,3 @@
-source('../gsDesign_independent_code.R')
-
 #-----------------------------------
 ### Testing sfTDist function
 #-----------------------------------
@@ -182,7 +180,7 @@ testthat::test_that("Test: param - Checking Variable Type, Out-of-Range,
 
 
 testthat::test_that("Test: output validation param of length 3, 
-                    Source: gsDesign_independent_code.R)", {
+                    Source: helper.R)", {
   t <- c(.01, .05, .1, .25, .5, 1, 1.02)
   alpha <- 0.025
   param <- c(.25, .1, 1)
@@ -194,7 +192,7 @@ testthat::test_that("Test: output validation param of length 3,
 
 
 testthat::test_that("Test: output validation param of length 5, 
-                    Source: gsDesign_independent_code.R", {
+                    Source: helper.R", {
   t <- c(.01, .05, .1, .25, .5, 1, 1.02)
   alpha <- 0.025
   param <- c(.1, .25, 0.3, 0.5, 2)

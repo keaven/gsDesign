@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #-----------------------------------
 # Test sfLogistic function
 #-----------------------------------
@@ -152,7 +151,7 @@ testthat::test_that("Test: param - Checking Variable Type,
 
  
 testthat::test_that("Test: output validation param of length 2,  
-                    Source: gsDesign_independent_code.R",  {
+                    Source: helper.R",  {
   
   t <- c(0.33, 0.67, 1)
   param<-c(0, 1)
@@ -164,7 +163,7 @@ testthat::test_that("Test: output validation param of length 2,
 })
 
 testthat::test_that("Test: output validation param of length 2,  t of length 4,  
-                    Source: gsDesign_independent_code.R",  {
+                    Source: helper.R",  {
   
   t <- c(0.2, 0.5, 0.7, 1)
   param<-c(1, 1)
@@ -177,7 +176,7 @@ testthat::test_that("Test: output validation param of length 2,  t of length 4,
 
   
 testthat::test_that("Test: output validation param of length 4,  
-                    Source: gsDesign_independent_code.R",  {
+                    Source: helper.R",  {
 
   t <- c(0.33, 0.67, 1)
   param<-c(0.01, .1, .1, 0.4)
