@@ -1,5 +1,3 @@
-source('../gsDesign_independent_code.R')
-
 testthat::test_that(
   desc = "Test : out of range x",
   code = {
@@ -59,7 +57,7 @@ testthat::test_that(
 
 testthat::test_that(
   desc = "Test : output Validation scale = 'rr' 
-                    source : independent R Program gsDesign_independent_code.R",
+                    source : independent R Program helper.R",
   code = {
     x <- 50
     n <- 100
@@ -76,7 +74,7 @@ testthat::test_that(
 
 testthat::test_that(
   desc = "Test : output Validation scale = 'RR' 
-                    source : independent R Program gsDesign_independent_code.R",
+                    source : independent R Program helper.R",
   code = {
     x <- 36
     n <- 300
@@ -93,7 +91,7 @@ testthat::test_that(
 
 testthat::test_that(
   desc = "Test : output Validation scale = 'OR' 
-                    source : independent R Program gsDesign_independent_code.R",
+                    source : independent R Program helper.R",
   code = {
     x <- 36
     n <- 300
@@ -110,7 +108,7 @@ testthat::test_that(
 
 testthat::test_that(
   desc = "Test : output Validation scale = 'RR' 
-                    source : independent R Program gsDesign_independent_code.R",
+                    source : independent R Program helper.R",
   code = {
     x <- 36
     n <- 300
@@ -127,7 +125,7 @@ testthat::test_that(
 
 testthat::test_that(
   desc = "Test : output Validation scale = 'OR'
-                    source : independent R Program gsDesign_independent_code.R",
+                    source : independent R Program helper.R",
   code = {
     x <- 36
     n <- 300
@@ -144,7 +142,7 @@ testthat::test_that(
 
 testthat::test_that(
   desc = "Test : output Validation scale = 'Difference'
-                    source : independent R Program gsDesign_independent_code.R",
+                    source : independent R Program helper.R",
   code = {
     x <- 50
     n <- 300

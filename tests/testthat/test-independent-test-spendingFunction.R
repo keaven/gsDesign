@@ -1,5 +1,3 @@
-source('../gsDesign_independent_code.R')
-
 #-----------------------------------
 ### Testing spendingFunction  function
 #-----------------------------------
@@ -56,7 +54,7 @@ testthat::test_that("Test: t - Checking Variable Type, Out-of-Range,
 
 
 testthat::test_that("Test: output validation for alpha - 0.025, 
-                    Source: gsDesign_independent_code.R )", {
+                    Source: helper.R )", {
   tx <- c(.025, .05, .25, .75, 1)
   alpha <- 0.025
   param <- 1
@@ -67,7 +65,7 @@ testthat::test_that("Test: output validation for alpha - 0.025,
 })
 
 testthat::test_that("Test: output validation for alpha - 0.02, 
-                    Source: gsDesign_independent_code.R )", {
+                    Source: helper.R )", {
 
   ## spendingFunction ###
   tx <- c(.2, .15, 1)
@@ -82,7 +80,7 @@ testthat::test_that("Test: output validation for alpha - 0.02,
 
 
 testthat::test_that("Test: output validation for param - 0, 
-                    Source: gsDesign_independent_code.R )", {
+                    Source: helper.R )", {
   tx <- c(0.9, .5)
   alpha <- .01
   param <- 0
@@ -95,7 +93,7 @@ testthat::test_that("Test: output validation for param - 0,
 
 
 testthat::test_that("Test: output validation for param - 5, 
-                    Source: gsDesign_independent_code.R )", {
+                    Source: helper.R )", {
   tx <- c(.25, 0.5, 0.75, 1)
   alpha <- .025
   param <- 5

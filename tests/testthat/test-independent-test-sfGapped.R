@@ -1,5 +1,3 @@
-source('../gsDesign_independent_code.R')
-
 #-----------------------------------
 ### Testing sfGapped function
 #-----------------------------------
@@ -145,7 +143,7 @@ testthat::test_that("Test: param - Checking Variable Type,
 
 
 testthat::test_that("Test: sfNormal, 
-                    Source: gsDesign_independent_code.R", {
+                    Source: helper.R", {
   tx <- c(0.167,0.333,0.5,0.667,0.833,1)
   param <- list(trange = c(.2, .8), sf = gsDesign::sfNormal, param = c(1,2))
   alpha<-0.05 
@@ -157,7 +155,7 @@ testthat::test_that("Test: sfNormal,
 
 
 testthat::test_that("Test: sfExponential: Output verification, 
-                    Source: gsDesign_independent_code.R", {
+                    Source: helper.R", {
   
   tx <- c(0.167,0.333,0.5,0.667,0.833,1)
   param <- list(trange = c(.2, .8), sf = gsDesign::sfExponential, param = 1.5 )
@@ -170,7 +168,7 @@ testthat::test_that("Test: sfExponential: Output verification,
 
 
 testthat::test_that("Test:  sfLDPocock: Output verification, 
-                    Source: gsDesign_independent_code.R", {
+                    Source: helper.R", {
   
   
   tx <- c(0.167,0.333,0.5,0.667,0.833,1)

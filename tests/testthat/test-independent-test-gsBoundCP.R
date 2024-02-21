@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #---------------
 ##gsBoundCP
 #--------------
@@ -33,7 +32,7 @@ testthat::test_that(desc = "Test: out of range theta", code = {
 
 
 testthat::test_that(desc = "Test: output validation
-                          source: gsDesign_independent_code.R", 
+                          source: helper.R", 
                     code = {
   x = gsDesign(k =3, test.type=1, delta = 0.22)
   local_edition(3)

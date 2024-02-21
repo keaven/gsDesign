@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #------------
 ## gsCPOS
 #------------
@@ -33,7 +32,7 @@ testthat::test_that(desc = "Test: checking out of range i ", code = {
 
 
 testthat::test_that(desc = "Test: output validation 
-                    source: gsDesign_independent_code.R", code = {
+                    source: helper.R", code = {
   x <- gsDesign(k = 3, test.type = 2, n.fix = 800)
   theta = c(-1.50, -0.75, 0.00, 0.75, 1.50)
   wgts = c(0.064758798, 0.301137432, 0.199471140, 0.301137432, 0.064758798)

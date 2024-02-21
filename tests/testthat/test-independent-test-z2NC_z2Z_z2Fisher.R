@@ -1,7 +1,3 @@
-
-source('../gsDesign_independent_code.R')
-
-
 # combination test (built-in options are: z2Z, z2NC, z2Fisher):
 # that represent the inverse normal combination test (Lehmacher and Wassmer, 1999),
 # the sufficient statistic for the complete data, and Fisher's combination test.
@@ -21,7 +17,7 @@ source('../gsDesign_independent_code.R')
 
 test_that(
   desc = "Test : output validation z2
-                    source : independent R Program gsDesign_independent_code.R",
+                    source : independent R Program helper.R",
   code = {
     x <- gsDesign(
       k = 2, test.type = 1, n.fix = 800, timing = c(0.5, 1),
@@ -43,7 +39,7 @@ test_that(
 
 testthat::test_that(
   desc = "Test : output validation z2NC
-          source : independent R Program-gsDesign_independent_code.R",
+          source : independent R Program-helper.R",
   code = {
     x <- gsDesign(
       k = 2, test.type = 1, n.fix = 800, timing = c(0.5, 1),
@@ -64,7 +60,7 @@ testthat::test_that(
 
 testthat::test_that(
   desc = "Test : output Validation z2Fisher
-          source : independent R Program-gsDesign_independent_code.R", code = {
+          source : independent R Program-helper.R", code = {
             x <- gsDesign(
               k = 2, test.type = 1, n.fix = 3200, timing = c(0.25, 1),
               delta = 0.114605

@@ -1,3 +1,5 @@
+# This file was formerly stored as `tests/gsDesign_independent_code.R` and is
+# now moved to `tests/testthat/helper.R` to follow testthat best practices.
 
 # This script contains independently programmed functions for validating some of 
 # the functions of the gsDesign package.

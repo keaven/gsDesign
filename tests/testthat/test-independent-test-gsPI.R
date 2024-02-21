@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #---------------
 ## gsPI
 
@@ -53,7 +52,7 @@ testthat::test_that(desc = "Test: checking variable type", code = {
 
 
 testthat::test_that(desc = "Test: checking output validation
-                    source: gsDesign_independent_code.R", 
+                    source: helper.R", 
                     code = {
                       
     x <- gsDesign(k = 4, n.fix = 1371, timing = c(0.25,0.5, 0.7),

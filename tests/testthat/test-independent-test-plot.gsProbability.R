@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 # --------------------------------------------
 # Test plot.gsProbability function
 ## save_gg_plot() is used for storing plots created using ggplot2 package,

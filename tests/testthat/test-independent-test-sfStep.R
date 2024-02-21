@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #----------------------------------
 ### Testing sfStep function
 #----------------------------------
@@ -52,7 +51,7 @@ testthat::test_that("test: param - Testing incorrect variable type,
 })
 
 testthat::test_that("Test: Output validation,
-                    Source: gsDesign_independent_code.R", {
+                    Source: helper.R", {
                       
   alpha <- 0.025
   t = c(0, 0.25, .3, .35, 0.5, .65, .9, 1)

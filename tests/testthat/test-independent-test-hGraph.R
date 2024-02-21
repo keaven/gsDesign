@@ -1,4 +1,3 @@
-source('../gsDesign_independent_code.R')
 #-------------------------------------------------------------------------------
 # hGraph : hGraph() plots a multiplicity graph defined by user inputs. The graph
 #          can also be used with the **gMCPLite** package to evaluate a set of 
