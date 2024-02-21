@@ -818,6 +818,7 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
 #'   to the argument \code{titleAnalysisLegend}
 #' @param titleAnalysisLegend Label to use as the title for the "Analysis"
 #'   legend (default: NULL)
+#' @noRd
 # plotgsPower function [sinew] ----
 plotgsPower <- function(x, main = "Boundary crossing probabilities by effect size",
                         ylab = "Cumulative Boundary Crossing Probability",
