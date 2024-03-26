@@ -172,12 +172,12 @@ This provides a single number to summarize the conditional probability of succes
 # set up a flat prior distribution for the treatment effect
 # that is normal with mean .5 of the design standardized effect and
 # a large standard deviation. 
-mu0 <- .5 * design$delta
-sigma0 <- design$delta / 2
+mu0 <- .5 * design$delta 
+sigma0 <- design$delta * 2
 prior <- normalGrid(mu = mu0, sigma = sigma0)
 gsPP(x = update, i = 1, zi = -qnorm(p), theta = prior$z, wgts = prior$wgts)
 ```
-While the conditional power based on the observed effect was essentially 90%, we now have an estimate that effectively shrinks towards a lesser effect based on the uncertainly of the observed treatment effect.
 
+While the conditional power based on the observed effect was essentially 90%, we now have an estimate that effectively shrinks towards a lesser effect based on the uncertainly of the observed treatment effect. The predictive probability is similar whether `mu0` above is `0` or `design$delta`.
 
 ## References
