@@ -142,6 +142,7 @@ articles:
       - GentleIntroductionToGSD
       - gsDesignPackageOverview
       - SpendingFunctionOverview
+      - ConditionalPowerPlot
       - nNormal
       - hGraph
       - GraphicalMultiplicity
