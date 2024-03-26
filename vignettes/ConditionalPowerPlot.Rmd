@@ -36,6 +36,7 @@ library(tibble)
 We provide a simple plot of conditional power at the time of interim analysis.
 While group sequential boundaries should be designed to be the primary decision boundaries, 
 conditional power evaluations can be useful supportive information. 
+In addition to conditional power, we provide a predictive power estimate that averages conditional power based on a flat prior updated using an interim analysis result.
 
 ## Design
 
@@ -161,6 +162,22 @@ plot(cp, xval = hr, xlab = "Future HR", ylab = "Conditional Power/Error",
      main="Conditional probability of crossing future bound", offset = 1)
 ```
 
+## Predictive power
+
+Assuming a flat prior distribution and a constant treatment underlying treatment effect throughout the trial, we can compute a Bayesian predictive power conditioning on the interim $p$-value above. 
+This takes into account the uncertainty of the underlying treatment effect, updating the flat prior based on the interim result and using the resulting posterior distribution to average across total conditional probabilities from the conditional power plot above.
+This provides a single number to summarize the conditional probability of success given the interim result.
+
+```{r}
+# set up a flat prior distribution for the treatment effect
+# that is normal with mean .5 of the design standardized effect and
+# a large standard deviation. 
+mu0 <- .5 * design$delta
+sigma0 <- design$delta / 2
+prior <- normalGrid(mu = mu0, sigma = sigma0)
+gsPP(x = update, i = 1, zi = -qnorm(p), theta = prior$z, wgts = prior$wgts)
+```
+While the conditional power based on the observed effect was essentially 90%, we now have an estimate that effectively shrinks towards a lesser effect based on the uncertainly of the observed treatment effect.
 
 
 ## References
