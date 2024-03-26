@@ -91,7 +91,7 @@ reference:
   - gsPP
   - gsCPOS
   - gsPI
-- title: Sample Size Adaption
+- title: Sample Size Adaptation
   contents:
   - ssrCP
   - condPower
