@@ -1,4 +1,4 @@
-pandoc: 2.19.2
+pandoc: 3.1.11
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
@@ -14,7 +14,7 @@ articles:
   hGraph: hGraph.html
   nNormal: nNormal.html
   toInteger: toInteger.html
-last_built: 2024-02-21T21:33Z
+last_built: 2024-03-26T13:44Z
 urls:
   reference: https://keaven.github.io/gsDesign/reference
   article: https://keaven.github.io/gsDesign/articles
