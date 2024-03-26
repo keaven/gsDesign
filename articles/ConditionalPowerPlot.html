@@ -90,7 +90,9 @@
 <p>We provide a simple plot of conditional power at the time of interim
 analysis. While group sequential boundaries should be designed to be the
 primary decision boundaries, conditional power evaluations can be useful
-supportive information.</p>
+supportive information. In addition to conditional power, we provide a
+predictive power estimate that averages conditional power based on a
+flat prior updated using an interim analysis result.</p>
 </div>
 <div class="section level2">
 <h2 id="design">Design<a class="anchor" aria-label="anchor" href="#design"></a>
@@ -262,6 +264,31 @@ different underlying treatment effect (HR) assumptions.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cp</span>, xval <span class="op">=</span> <span class="va">hr</span>, xlab <span class="op">=</span> <span class="st">"Future HR"</span>, ylab <span class="op">=</span> <span class="st">"Conditional Power/Error"</span>, </span>
 <span>     main<span class="op">=</span><span class="st">"Conditional probability of crossing future bound"</span>, offset <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ConditionalPowerPlot_files/figure-html/unnamed-chunk-12-1.png" width="80%" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level2">
+<h2 id="predictive-power">Predictive power<a class="anchor" aria-label="anchor" href="#predictive-power"></a>
+</h2>
+<p>Assuming a flat prior distribution and a constant treatment
+underlying treatment effect throughout the trial, we can compute a
+Bayesian predictive power conditioning on the interim <span class="math inline">\(p\)</span>-value above. This takes into account
+the uncertainty of the underlying treatment effect, updating the flat
+prior based on the interim result and using the resulting posterior
+distribution to average across total conditional probabilities from the
+conditional power plot above. This provides a single number to summarize
+the conditional probability of success given the interim result.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># set up a flat prior distribution for the treatment effect</span></span>
+<span><span class="co"># that is normal with mean .5 of the design standardized effect and</span></span>
+<span><span class="co"># a large standard deviation. </span></span>
+<span><span class="va">mu0</span> <span class="op">&lt;-</span> <span class="fl">.5</span> <span class="op">*</span> <span class="va">design</span><span class="op">$</span><span class="va">delta</span></span>
+<span><span class="va">sigma0</span> <span class="op">&lt;-</span> <span class="va">design</span><span class="op">$</span><span class="va">delta</span> <span class="op">/</span> <span class="fl">2</span></span>
+<span><span class="va">prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/normalGrid.html">normalGrid</a></span><span class="op">(</span>mu <span class="op">=</span> <span class="va">mu0</span>, sigma <span class="op">=</span> <span class="va">sigma0</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/gsCP.html">gsPP</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">update</span>, i <span class="op">=</span> <span class="fl">1</span>, zi <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, theta <span class="op">=</span> <span class="va">prior</span><span class="op">$</span><span class="va">z</span>, wgts <span class="op">=</span> <span class="va">prior</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.6939905</span></span></code></pre></div>
+<p>While the conditional power based on the observed effect was
+essentially 90%, we now have an estimate that effectively shrinks
+towards a lesser effect based on the uncertainly of the observed
+treatment effect.</p>
 </div>
 <div class="section level2 unnumbered">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
