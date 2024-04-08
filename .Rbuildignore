@@ -5,6 +5,7 @@
 ^pkgdown$
 ^\.github$
 ^codecov\.yml$
+^LICENSE\.md$
 ^cran-comments\.md$
 ^revdep$
 tests/benchmarks
