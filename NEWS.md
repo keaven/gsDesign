@@ -1,3 +1,19 @@
+# gsDesign 3.6.2 (April, 2024)
+
+## Documentation
+
+- Add new vignette on conditional power and conditional error,
+  see `vignette("ConditionalPowerPlot")`
+  ([beb2957](https://github.com/keaven/gsDesign/commit/beb2957),
+  [727fe20](https://github.com/keaven/gsDesign/commit/727fe20),
+  [57394fe](https://github.com/keaven/gsDesign/commit/57394fe)).
+- Fix roxygen2 warning and use magrittr pipes in vignette for consistency (#131).
+
+## Testing
+
+- Move independently programmed functions for validation as
+  standard test helper files (#130).
+
 # gsDesign 3.6.1 (February, 2024)
 
 ## New features
