@@ -209,6 +209,46 @@ testthat::test_that("Test gsBinomialExact for n.I and vector-b for increasing or
 })
 
 
+### Test gsBinomialExact for n.I with propoer increased
+testthat::test_that("Test gsBinomialExact for n.I for propoer increased", code = {
+  testthat::expect_error(gsBinomialExact(
+    k = 2, theta = c(.1, .2), n.I = c(50, 50),
+    a = c(3, 7), b = c(20, 30)
+  ),
+  info = "Checking n.I with propoer increased"
+  )
+})
+
+### Test gsBinomialExact for b greater than a 
+testthat::test_that("Test gsBinomialExact for n.I for propoer increased", code = {
+  testthat::expect_error(gsBinomialExact(
+    k = 2, theta = c(.1, .2), n.I = c(50, 100),
+    a = c(25, 50), b = c(15, 40)
+  ),
+  info = "Checking for b greater than a"
+  )
+})
+
+### Test gsBinomialExact for a with non-decreasing sequence of non-negative integers 
+testthat::test_that("Test gsBinomialExact for n.I for propoer increased", code = {
+  testthat::expect_error(gsBinomialExact(
+    k = 2, theta = c(.1, .2), n.I = c(50, 100),
+    a = c(25, 20), b = c(30, 40)
+  ),
+  info = "Checking a for non-decreasing sequence of non-negative integers"
+  )
+})
+
+### Test gsBinomialExact for n.I - b will non-decreasing sequence  
+testthat::test_that("Test gsBinomialExact for n.I for propoer increased", code = {
+  testthat::expect_error(gsBinomialExact(
+    k = 2, theta = c(.1, .2), n.I = c(50, 100),
+    a = c(3, 7), b = c(25, 100)
+  ),
+  info = "Checking for n.I - b will non-decreasing sequence"
+  )
+})
+
 
 # Test gsBinomial Exact for upper efficacy boundary crossing probabilities: Benchmark values have been obtained from East 6.5
 testthat::test_that(
@@ -378,3 +418,31 @@ testthat::test_that(
   }
 )
 
+### Test binomialPP compare with gsBinomialExact
+testthat::test_that("Testing binomialPP compare with gsBiomialExact", {
+  a <- 0.2
+  b <- 0.8
+  theta <- c(0.2, 0.4)
+  p1 <- 0.4
+  PP <- c(0.025, 0.95)
+  nIA <- c(50, 100)
+  upper <- nIA + 1
+  lower <- rep(-1, length(nIA))
+  j <- 1
+  for (i in nIA) {
+    q <- 0:i
+    post <- stats::pbeta(p1, a + q, b + i - q, lower.tail = F)
+    upper[j] <- sum(post < PP[2])
+    lower[j] <- sum(post <= PP[1])
+    j <- j + 1
+  }
+  
+  ns <- binomialPP(a = a, b = b, theta = theta, p1 = p1, PP = PP, nIA = nIA)
+  
+  nz <- gsBinomialExact(k = 2, theta = theta, a = lower, b = upper, n.I = nIA)
+  
+  testthat::expect_equal(ns$lower$bound, nz$lower$bound, info = "Checking lower bound")
+  testthat::expect_equal(ns$lower$prob, nz$lower$prob, info = "Checking lower probability")
+  testthat::expect_equal(ns$upper$bound, nz$upper$bound, info = "Checking upper bound")
+  testthat::expect_equal(ns$upper$prob, nz$upper$prob, info = "Checking upper probability")
+})
