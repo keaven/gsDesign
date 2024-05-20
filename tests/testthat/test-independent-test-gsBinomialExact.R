@@ -209,10 +209,50 @@ testthat::test_that("Test gsBinomialExact for n.I and vector-b for increasing or
 })
 
 
+### Test gsBinomialExact for properly increasing n.I
+testthat::test_that("Test gsBinomialExact for properly increasing n.I", code = {
+  testthat::expect_error(gsBinomialExact(
+    k = 2, theta = c(.1, .2), n.I = c(50, 50),
+    a = c(3, 7), b = c(20, 30)
+  ),
+  info = "Checking properly increasing n.I"
+  )
+})
+
+### Test gsBinomialExact for b greater than a
+testthat::test_that("Test gsBinomialExact for b greater than a", code = {
+  testthat::expect_error(gsBinomialExact(
+    k = 2, theta = c(.1, .2), n.I = c(50, 100),
+    a = c(25, 50), b = c(15, 40)
+  ),
+  info = "Checking for b greater than a"
+  )
+})
+
+### Test gsBinomialExact for a being a non-decreasing sequence of non-negative integers
+testthat::test_that("Test gsBinomialExact for a being a non-decreasing sequence of non-negative integers", code = {
+  testthat::expect_error(gsBinomialExact(
+    k = 2, theta = c(.1, .2), n.I = c(50, 100),
+    a = c(25, 20), b = c(30, 40)
+  ),
+  info = "Checking a for being a non-decreasing sequence of non-negative integers"
+  )
+})
+
+### Test gsBinomialExact for n.I - b being a non-decreasing sequence
+testthat::test_that("Test gsBinomialExact for n.I - b being a non-decreasing sequence", code = {
+  testthat::expect_error(gsBinomialExact(
+    k = 2, theta = c(.1, .2), n.I = c(50, 100),
+    a = c(3, 7), b = c(25, 100)
+  ),
+  info = "Checking for n.I - b being a non-decreasing sequence"
+  )
+})
+
 
 # Test gsBinomial Exact for upper efficacy boundary crossing probabilities: Benchmark values have been obtained from East 6.5
 testthat::test_that(
-  desc = "Test gsBinomial Exact for  upper efficacy bounday  crossing probabilities :
+  desc = "Test gsBinomial Exact for  upper efficacy boundary  crossing probabilities :
   Benchmark values have been obtained from East 6.5 : BinomialExact-01.html",
   code = {
     x <- gsBinomialExact(
@@ -252,9 +292,9 @@ testthat::test_that(
 )
 
 
-# Test gsBinomial Exact for lower futility bounday crossing probabilities : Benchmark values have been obtained from East 6.5
+# Test gsBinomial Exact for lower futility boundary crossing probabilities : Benchmark values have been obtained from East 6.5
 testthat::test_that(
-  desc = "Test gsBinomial Exact for lower futility bounday crossing probabilities : 
+  desc = "Test gsBinomial Exact for lower futility boundary crossing probabilities : 
   Benchmark values have been obtained from East 6.5 : BinomialExact-02.html",
   code = {
     x <- gsBinomialExact(
@@ -294,10 +334,10 @@ testthat::test_that(
 )
 
 
-# Test gsBinomial Exact for lower futility & upper efficacy bounday crossing
+# Test gsBinomial Exact for lower futility & upper efficacy boundary crossing
 # probabilities : Benchmark values have been obtained from East 6.5
 testthat::test_that(
-  desc = "Test gsBinomial Exact for lower futility & upper efficacy bounday crossing 
+  desc = "Test gsBinomial Exact for lower futility & upper efficacy boundary crossing 
   probabilities : Benchmark values have been obtained from East 6.5 :BinomialExact-03.html",
   code = {
     x <- gsBinomialExact(
@@ -378,3 +418,31 @@ testthat::test_that(
   }
 )
 
+### Test binomialPP by comparing with gsBinomialExact
+testthat::test_that("Testing binomialPP by comparing with gsBinomialExact", {
+  a <- 0.2
+  b <- 0.8
+  theta <- c(0.2, 0.4)
+  p1 <- 0.4
+  PP <- c(0.025, 0.95)
+  nIA <- c(50, 100)
+  upper <- nIA + 1
+  lower <- rep(-1, length(nIA))
+  j <- 1
+  for (i in nIA) {
+    q <- 0:i
+    post <- stats::pbeta(p1, a + q, b + i - q, lower.tail = F)
+    upper[j] <- sum(post < PP[2])
+    lower[j] <- sum(post <= PP[1])
+    j <- j + 1
+  }
+
+  ns <- binomialPP(a = a, b = b, theta = theta, p1 = p1, PP = PP, nIA = nIA)
+
+  nz <- gsBinomialExact(k = 2, theta = theta, a = lower, b = upper, n.I = nIA)
+
+  testthat::expect_equal(ns$lower$bound, nz$lower$bound, info = "Checking lower bound")
+  testthat::expect_equal(ns$lower$prob, nz$lower$prob, info = "Checking lower probability")
+  testthat::expect_equal(ns$upper$bound, nz$upper$bound, info = "Checking upper bound")
+  testthat::expect_equal(ns$upper$prob, nz$upper$prob, info = "Checking upper probability")
+})
