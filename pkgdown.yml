@@ -1,21 +1,21 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
+  binomialSPRTExample: binomialSPRTExample.html
   ConditionalPowerPlot: ConditionalPowerPlot.html
   GentleIntroductionToGSD: GentleIntroductionToGSD.html
   GraphicalMultiplicity: GraphicalMultiplicity.html
-  PoissonMixtureModel: PoissonMixtureModel.html
-  SpendingFunctionOverview: SpendingFunctionOverview.html
-  SurvivalOverview: SurvivalOverview.html
-  VaccineEfficacy: VaccineEfficacy.html
-  binomialSPRTExample: binomialSPRTExample.html
   gsDesignPackageOverview: gsDesignPackageOverview.html
   gsSurvBasicExamples: gsSurvBasicExamples.html
   hGraph: hGraph.html
   nNormal: nNormal.html
+  PoissonMixtureModel: PoissonMixtureModel.html
+  SpendingFunctionOverview: SpendingFunctionOverview.html
+  SurvivalOverview: SurvivalOverview.html
   toInteger: toInteger.html
-last_built: 2024-04-10T01:43Z
+  VaccineEfficacy: VaccineEfficacy.html
+last_built: 2024-05-20T02:33Z
 urls:
   reference: https://keaven.github.io/gsDesign/reference
   article: https://keaven.github.io/gsDesign/articles
