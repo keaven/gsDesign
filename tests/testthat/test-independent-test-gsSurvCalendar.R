@@ -391,3 +391,217 @@ testthat::test_that(
     comparison_outputs(dsgn04, dsgn03)
   }
 )
+
+### Check if gsSurv and gsSurvcalendar can mimic each other with extreme argument values
+
+testthat::test_that(
+  desc = "From information timing to calendar timing (test.type = 4, alpha = 0.0001, and beta = 0.01)",
+  code = {
+    dsgn01 <- gsSurv(k = 3, 
+                     test.type = 4, alpha = 0.0001, sided = 1, beta = 0.01, astar = 0, timing = 1, 
+                     sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                     r = 18, lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                     gamma = 1, R = 12, S = NULL, T = 18, minfup = 6, ratio = 1,
+                     tol = .Machine$double.eps^0.25, usTime = NULL, lsTime = NULL)
+    
+    dsgn02 <- gsSurvCalendar(spending = "information", calendarTime = dsgn01$T, minfup = 6, tol = .Machine$double.eps^0.25, # These arguments' values are different from their default values.
+                             test.type = 4, alpha = 0.0001, sided = 1, beta = 0.01, astar = 0,
+                             sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                             r = 18, lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL, 
+                             gamma = 1, R = 12, S = NULL, ratio = 1)
+    
+    # dsgn02 is supposed to be the same as dsgn01.
+    comparison_names(dsgn01, dsgn02)
+    comparison_inputs(dsgn01, dsgn02)
+    comparison_outputs(dsgn01, dsgn02)
+  }
+)
+
+testthat::test_that(
+  desc = "From calendar timing to information timing (test.type = 4, alpha = 0.0001, and beta = 0.01)",
+  code = {
+    dsgn03 <- gsSurvCalendar(spending = "information",
+                             test.type = 4, alpha = 0.0001, sided = 1, beta = 0.01, astar = 0,
+                             sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                             calendarTime = c(12, 24, 36), 
+                             lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                             gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1, r = 18,
+                             tol = 1e-06)
+    
+    # Calculate the expected numbers of events for time points
+    nevents <- sapply(dsgn03$T, 
+                      function(x) nEventsIA(x = dsgn03, tIA = x, simple = FALSE)[[2]] + 
+                        nEventsIA(x = dsgn03, tIA = x, simple = FALSE)[[3]])
+    
+    dsgn04 <- gsSurv(k = 3, timing = nevents / tail(nevents, 1), T = tail(dsgn03$T, 1), minfup = 18, tol = 1e-06, # These arguments' values are different from their default values.
+                     test.type = 4, alpha = 0.0001, sided = 1, beta = 0.01, astar = 0,
+                     sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2, 
+                     lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                     gamma = 1, R = 12, S = NULL, ratio = 1, r = 18, 
+                     usTime = NULL, lsTime = NULL)
+    
+    # dsgn04 is supposed to be the same as dsgn03.
+    comparison_names(dsgn04, dsgn03)
+    comparison_inputs(dsgn04, dsgn03)
+    comparison_outputs(dsgn04, dsgn03)
+  }
+)
+
+testthat::test_that(
+  desc = "From information timing to calendar timing (test.type = 4 and 9 planned analyses)",
+  code = {
+    dsgn01 <- gsSurv(k = 9, 
+                     test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0, timing = 1, 
+                     sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                     r = 18, lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                     gamma = 1, R = 12, S = NULL, T = 18, minfup = 6, ratio = 1,
+                     tol = .Machine$double.eps^0.25, usTime = NULL, lsTime = NULL)
+    
+    dsgn02 <- gsSurvCalendar(spending = "information", calendarTime = dsgn01$T, minfup = 6, tol = .Machine$double.eps^0.25, # These arguments' values are different from their default values.
+                             test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                             sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                             r = 18, lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL, 
+                             gamma = 1, R = 12, S = NULL, ratio = 1)
+    
+    # dsgn02 is supposed to be the same as dsgn01.
+    comparison_names(dsgn01, dsgn02)
+    comparison_inputs(dsgn01, dsgn02, tolerance = 1e-5) # Please note that we are using tol = 1e-5 instead of 1e-6 for comparison. The number of planned analyses may impact the numerical accuracy or precision of the functions.
+    comparison_outputs(dsgn01, dsgn02, tolerance = 1e-5)
+  }
+)
+
+testthat::test_that(
+  desc = "From calendar timing to information timing (test.type = 4 and 9 planned analyses)",
+  code = {
+    dsgn03 <- gsSurvCalendar(spending = "information",
+                             test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                             sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                             calendarTime = seq(from = 4, to = 36, by = 4), 
+                             lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                             gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1, r = 18,
+                             tol = 1e-06)
+    
+    # Calculate the expected numbers of events for time points
+    nevents <- sapply(dsgn03$T, 
+                      function(x) nEventsIA(x = dsgn03, tIA = x, simple = FALSE)[[2]] + 
+                        nEventsIA(x = dsgn03, tIA = x, simple = FALSE)[[3]])
+    
+    dsgn04 <- gsSurv(k = 9, timing = nevents / tail(nevents, 1), T = tail(dsgn03$T, 1), minfup = 18, tol = 1e-06, # These arguments' values are different from their default values.
+                     test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                     sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2, 
+                     lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                     gamma = 1, R = 12, S = NULL, ratio = 1, r = 18, 
+                     usTime = NULL, lsTime = NULL)
+    
+    # dsgn04 is supposed to be the same as dsgn03.
+    comparison_names(dsgn04, dsgn03)
+    comparison_inputs(dsgn04, dsgn03, tolerance = 1e-5)
+    comparison_outputs(dsgn04, dsgn03, tolerance = 1e-5)
+  }
+)
+
+testthat::test_that(
+  desc = "From information timing to calendar timing (test.type = 4 and sfu = sfl = sfLDOF)",
+  code = {
+    dsgn01 <- gsSurv(k = 3, 
+                     test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0, timing = 1, 
+                     sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                     r = 18, lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                     gamma = 1, R = 12, S = NULL, T = 18, minfup = 6, ratio = 1,
+                     tol = .Machine$double.eps^0.25, usTime = NULL, lsTime = NULL)
+    
+    dsgn02 <- gsSurvCalendar(spending = "information", calendarTime = dsgn01$T, minfup = 6, tol = .Machine$double.eps^0.25, # These arguments' values are different from their default values.
+                             test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                             sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                             r = 18, lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL, 
+                             gamma = 1, R = 12, S = NULL, ratio = 1)
+    
+    # dsgn02 is supposed to be the same as dsgn01.
+    comparison_names(dsgn01, dsgn02)
+    comparison_inputs(dsgn01, dsgn02)
+    comparison_outputs(dsgn01, dsgn02)
+  }
+)
+
+testthat::test_that(
+  desc = "From calendar timing to information timing (test.type = 4 and sfu = sfl = sfLDOF)",
+  code = {
+    dsgn03 <- gsSurvCalendar(spending = "information",
+                             test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                             sfu = gsDesign::sfLDOF, sfupar = NULL, sfl = gsDesign::sfLDOF, sflpar = NULL,
+                             calendarTime = c(12, 24, 36), 
+                             lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                             gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1, r = 18,
+                             tol = 1e-06)
+    
+    # Calculate the expected numbers of events for time points
+    nevents <- sapply(dsgn03$T, 
+                      function(x) nEventsIA(x = dsgn03, tIA = x, simple = FALSE)[[2]] + 
+                        nEventsIA(x = dsgn03, tIA = x, simple = FALSE)[[3]])
+    
+    dsgn04 <- gsSurv(k = 3, timing = nevents / tail(nevents, 1), T = tail(dsgn03$T, 1), minfup = 18, tol = 1e-06, # These arguments' values are different from their default values.
+                     test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                     sfu = gsDesign::sfLDOF, sfupar = NULL, sfl = gsDesign::sfLDOF, sflpar = NULL, 
+                     lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                     gamma = 1, R = 12, S = NULL, ratio = 1, r = 18, 
+                     usTime = NULL, lsTime = NULL)
+    
+    # dsgn04 is supposed to be the same as dsgn03.
+    comparison_names(dsgn04, dsgn03)
+    comparison_inputs(dsgn04, dsgn03)
+    comparison_outputs(dsgn04, dsgn03)
+  }
+)
+
+testthat::test_that(
+  desc = "From information timing to calendar timing (test.type = 4 and sfu = sfl = sfLDPocock)",
+  code = {
+    dsgn01 <- gsSurv(k = 3, 
+                     test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0, timing = 1, 
+                     sfu = gsDesign::sfLDPocock, sfupar = -4, sfl = gsDesign::sfLDPocock, sflpar = -2,
+                     r = 18, lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                     gamma = 1, R = 12, S = NULL, T = 18, minfup = 6, ratio = 1,
+                     tol = .Machine$double.eps^0.25, usTime = NULL, lsTime = NULL)
+    
+    dsgn02 <- gsSurvCalendar(spending = "information", calendarTime = dsgn01$T, minfup = 6, tol = .Machine$double.eps^0.25, # These arguments' values are different from their default values.
+                             test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                             sfu = gsDesign::sfLDPocock, sfupar = -4, sfl = gsDesign::sfLDPocock, sflpar = -2,
+                             r = 18, lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL, 
+                             gamma = 1, R = 12, S = NULL, ratio = 1)
+    
+    # dsgn02 is supposed to be the same as dsgn01.
+    comparison_names(dsgn01, dsgn02)
+    comparison_inputs(dsgn01, dsgn02)
+    comparison_outputs(dsgn01, dsgn02)
+  }
+)
+
+testthat::test_that(
+  desc = "From calendar timing to information timing (test.type = 4 and sfu = sfl = sfLDPocock)",
+  code = {
+    dsgn03 <- gsSurvCalendar(spending = "information",
+                             test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                             sfu = gsDesign::sfLDPocock, sfupar = NULL, sfl = gsDesign::sfLDPocock, sflpar = NULL,
+                             calendarTime = c(12, 24, 36), 
+                             lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                             gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1, r = 18,
+                             tol = 1e-06)
+    
+    # Calculate the expected numbers of events for time points
+    nevents <- sapply(dsgn03$T, 
+                      function(x) nEventsIA(x = dsgn03, tIA = x, simple = FALSE)[[2]] + 
+                        nEventsIA(x = dsgn03, tIA = x, simple = FALSE)[[3]])
+    
+    dsgn04 <- gsSurv(k = 3, timing = nevents / tail(nevents, 1), T = tail(dsgn03$T, 1), minfup = 18, tol = 1e-06, # These arguments' values are different from their default values.
+                     test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                     sfu = gsDesign::sfLDPocock, sfupar = NULL, sfl = gsDesign::sfLDPocock, sflpar = NULL, 
+                     lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                     gamma = 1, R = 12, S = NULL, ratio = 1, r = 18, 
+                     usTime = NULL, lsTime = NULL)
+    
+    # dsgn04 is supposed to be the same as dsgn03.
+    comparison_names(dsgn04, dsgn03)
+    comparison_inputs(dsgn04, dsgn03)
+    comparison_outputs(dsgn04, dsgn03)
+  }
+)
