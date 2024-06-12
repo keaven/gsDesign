@@ -605,3 +605,96 @@ testthat::test_that(
     comparison_outputs(dsgn04, dsgn03)
   }
 )
+
+### Check if gsSurvcalendar (with different spending types) can provide an error when the arguments are not desirable
+
+testthat::test_that(
+  desc = "Performing an interim analysis for each timepoint is not an easy task (with spending = information)",
+  code = {
+    testthat::expect_error(
+      object = gsSurvCalendar(spending = "information",
+                              test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                              sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                              calendarTime = seq(from = 4, to = 36, by = 1), 
+                              lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                              gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1, r = 18,
+                              tol = 1e-06),
+      regexp = NULL)
+  }
+)
+
+testthat::test_that(
+  desc = "A new user may be confused with the meaning of test.type (with spending = information)",
+  code = {
+    testthat::expect_error(
+      object = gsSurvCalendar(spending = "information",
+                              test.type = "one-sided", alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                              sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                              calendarTime = c(12, 24, 36), 
+                              lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                              gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1, r = 18,
+                              tol = 1e-06),
+      regexp = NULL)
+  }
+)
+
+testthat::test_that(
+  desc = "Minimum follow-up must be smaller than study duration (with spending = information)",
+  code = {
+    testthat::expect_error(
+      object = gsSurvCalendar(spending = "information",
+                              test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                              sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                              calendarTime = c(4, 8, 12, 16), 
+                              lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                              gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1, r = 18,
+                              tol = 1e-06),
+      regexp = NULL)
+  }
+)
+
+testthat::test_that(
+  desc = "Performing an interim analysis for each timepoint is not an easy task (with spending = calendar)",
+  code = {
+    testthat::expect_error(
+      object = gsSurvCalendar(spending = "calendar",
+                              test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                              sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                              calendarTime = seq(from = 4, to = 36, by = 1), 
+                              lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                              gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1, r = 18,
+                              tol = 1e-06),
+      regexp = NULL)
+  }
+)
+
+testthat::test_that(
+  desc = "A new user may be confused with the meaning of test.type (with spending = calendar)",
+  code = {
+    testthat::expect_error(
+      object = gsSurvCalendar(spending = "calendar",
+                              test.type = "one-sided", alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                              sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                              calendarTime = c(12, 24, 36), 
+                              lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                              gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1, r = 18,
+                              tol = 1e-06),
+      regexp = NULL)
+  }
+)
+
+testthat::test_that(
+  desc = "Minimum follow-up must be smaller than study duration (with spending = calendar)",
+  code = {
+    testthat::expect_error(
+      object = gsSurvCalendar(spending = "calendar",
+                              test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+                              sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfHSD, sflpar = -2,
+                              calendarTime = c(4, 8, 12, 16), 
+                              lambdaC = log(2)/6, hr = 0.6, hr0 = 1, eta = 0, etaE = NULL,
+                              gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1, r = 18,
+                              tol = 1e-06),
+      regexp = NULL)
+  }
+)
+
