@@ -173,6 +173,9 @@ eEvents1 <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL,
 # eEvents function [sinew] ----
 eEvents <- function(lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL, T = 2,
                     Tfinal = NULL, minfup = 0, digits = 4) {
+  if(is.null(lambda)) {
+    stop("lambda must be specified in eEvents")
+  }
   if (is.null(Tfinal)) {
     if (minfup >= T) {
       stop("Minimum follow-up greater than study duration.")
