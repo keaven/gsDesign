@@ -1853,6 +1853,7 @@ Tdistdiff <- function(x, t0, p0) {
 #' @examples
 #' @author Keaven Anderson \email{keaven_anderson@@merck.}
 #' @seealso \link{Spending_Function_Overview}, \code{\link{gsDesign}},
+#' 
 #' \link{gsDesign package overview}
 #' @references Jennison C and Turnbull BW (2000), \emph{Group Sequential
 #' Methods with Applications to Clinical Trials}. Boca Raton: Chapman and Hall.
@@ -1885,4 +1886,69 @@ sfXG <- function(alpha, t, param) {
     class(x) <- "spendfn"
     x
   }
+}
+
+
+
+sfXG1 <- function(alpha, t, param) {
+  # Check for scalar parameter in [0.5, 1)
+  checkScalar(param, "numeric", c(.5, 1), c(TRUE, FALSE))
+
+  # For values of t > 1, compute value as if t = 1
+  t <- pmin(t, 1)
+  
+  # Compute spending
+  y <- 2 - 2 * pnorm((qnorm(1 - alpha / 2) -
+                      qnorm(1 - param) * sqrt(1 - t)) / sqrt(t))
+  
+  # Assemble return value and return
+  x <- list(name = "Xi-Gallo, method 1", param = param, 
+            parname = "gamma", sf = sfXG1, 
+            spend = y,
+            bound = NULL,
+            prob = NULL)
+  class(x) <- "spendfn"
+  x
+}
+
+sfXG2 <- function(alpha, t, param) {
+  # Check for scalar parameter in appropriate range
+  checkScalar(param, "numeric", c(1 - pnorm(qnorm(1 - alpha / 2)), 1), c(TRUE, FALSE))
+
+  # For values of t > 1, compute value as if t = 1
+  t <- pmin(t, 1)
+  
+  # Compute spending
+  y <- 2 - 2 * pnorm((qnorm(1 - alpha / 2) -
+                      qnorm(1 - param) * (1 - t)) / sqrt(t))
+  
+  # Assemble return value and return
+  x <- list(name = "Xi-Gallo, method 2", param = param, 
+            parname = "gamma", sf = sfXG2, 
+            spend = y,
+            bound = NULL,
+            prob = NULL)
+  class(x) <- "spendfn"
+  x
+}
+
+sfXG3 <- function(alpha, t, param) {
+  # Check for scalar parameter in appropriate range
+  checkScalar(param, "numeric", c(alpha / 2, 1), c(FALSE, FALSE))
+  
+  # For values of t > 1, compute value as if t = 1
+  t <- pmin(t, 1)
+  
+  # Compute spending
+  y <- 2 - 2 * pnorm((qnorm(1 - alpha / 2) -
+                      qnorm(1 - param) * (1 - sqrt(t))) / sqrt(t))
+  
+  # Assemble return value and return
+  x <- list(name = "Xi-Gallo, method 1", param = param, 
+            parname = "gamma", sf = sfXG3, 
+            spend = y,
+            bound = NULL,
+            prob = NULL)
+  class(x) <- "spendfn"
+  x
 }
