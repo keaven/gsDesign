@@ -1,0 +1,167 @@
+---
+title: "Conditional Error Spending Functions"
+output:
+  rmarkdown::html_document:
+    code_folding: show
+bibliography: gsDesign.bib
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Conditional Error Spending Functions}
+---
+
+# Introduction
+
+We describe conditional error spending functions for group sequential designs. These functions are used to calculate conditional error spending boundaries for group sequential designs using spending functions proposed by @xi2019additive. 
+Note that for all spending functions, for $t>1$ we define the spending function as if $t=1$.
+For $\gamma \in [0,1]$ we define
+
+$$z_\gamma = \Phi^{-1}(1-\gamma)$$
+
+where $\Phi$ is the standard normal cumulative distribution function.
+
+
+# Implementation in gsDesign
+
+## Method 1
+
+For $\gamma \in [0.5, 1)$, the spending function is defined as
+
+$$
+\alpha_\gamma(t)= 2 - 2\times \Phi\left(\frac{z_{\alpha/2} - z_\gamma\sqrt{1-t}}{\sqrt t} \right).
+$$
+This is implemented with:
+
+```{r}
+library(gsDesign) # needed for checkScalar function
+sfXG1 <- function(alpha, t, param) {
+  # Check for scalar parameter in [0.5, 1)
+  checkScalar(param, "numeric", c(.5, 1), c(TRUE, FALSE))
+
+  # For values of t > 1, compute value as if t = 1
+  t <- pmin(t, 1)
+  
+  # Compute spending
+  y <- 2 - 2 * pnorm((qnorm(1 - alpha / 2) -
+                      qnorm(1 - param) * sqrt(1 - t)) / sqrt(t))
+  
+  # Assemble return value and return
+  x <- list(name = "Xi-Gallo, method 1", param = param, 
+            parname = "gamma", sf = sfXG1, 
+            spend = y,
+            bound = NULL,
+            prob = NULL)
+  class(x) <- "spendfn"
+  x
+}
+```
+
+Recalling the range $\gamma \in [0.5, 1)$, we plot this spending function for $\gamma=0.5, 0.6, 0.75, 0.9$.
+
+```{r}
+pts <- seq(0,1.2,.01)
+plot(pts, sfXG1(.025, pts, .5)$spend, type="l", xlab="t", ylab="Spending", main="Xi-Gallo, Method 1")
+lines(pts, sfXG1(.025, pts, .6)$spend, col="cyan")
+lines(pts, sfXG1(.025, pts, .75)$spend, col="red")
+lines(pts, sfXG1(.025, pts, .9)$spend, col="blue")
+legend("topleft", legend=c("gamma=0.5", "gamma=0.6", "gamma=0.75", "gamma=0.9"), col=c("black", "cyan", "red", "blue"), lty=1)
+```
+
+
+
+## Method 2
+
+For $\gamma \in [1 - \Phi(z_{\alpha/2}/2), 1)$, the spending function for Method 2 is defined as
+
+$$
+\alpha_\gamma(t)= 2 - 2\times \Phi\left(\frac{z_{\alpha/2} - z_\gamma(1-t)}{\sqrt t} \right)
+$$
+
+```{r}
+sfXG2 <- function(alpha, t, param) {
+  # Check for scalar parameter in appropriate range
+  checkScalar(param, "numeric", c(1 - pnorm(qnorm(1 - alpha / 2)), 1), c(TRUE, FALSE))
+
+  # For values of t > 1, compute value as if t = 1
+  t <- pmin(t, 1)
+  
+  # Compute spending
+  y <- 2 - 2 * pnorm((qnorm(1 - alpha / 2) -
+                      qnorm(1 - param) * (1 - t)) / sqrt(t))
+  
+  # Assemble return value and return
+  x <- list(name = "Xi-Gallo, method 2", param = param, 
+            parname = "gamma", sf = sfXG2, 
+            spend = y,
+            bound = NULL,
+            prob = NULL)
+  class(x) <- "spendfn"
+  x
+}
+```
+
+For $\alpha=0.025$, we restrict $\gamma$ to [`r round(1 - pnorm((qnorm(1 - .025/2)/2)), 3)`, 1)$ and plot the spending function for $\gamma=0.14, 0.25, 0.5, 0.75, 0.9$.
+
+```{r}
+plot(pts, sfXG2(.025, pts, .14)$spend, type="l", xlab="t", ylab="Spending", main="Xi-Gallo, Method 2")
+lines(pts, sfXG2(.025, pts, .25)$spend, col="cyan")
+lines(pts, sfXG2(.025, pts, .5)$spend, col="red")
+lines(pts, sfXG2(.025, pts, .75)$spend, col="blue")
+lines(pts, sfXG2(.025, pts, .9)$spend, col="green")
+legend("topleft", legend=c("gamma=0.14", "gamma=0.25", "gamma=0.5", "gamma=0.75", "gamma=0.9"), 
+       col=c("black", "cyan", "red", "blue", "green"), lty=1)
+```
+
+
+## Method 3
+
+For $\gamma \in (\alpha/2, 1)$
+
+
+$$
+\alpha_\gamma(t)= 2 - 2\times \Phi\left(\frac{z_{\alpha/2} - z_\gamma(1-\sqrt t)}{\sqrt t} \right).
+$$
+
+```{r}
+sfXG3 <- function(alpha, t, param) {
+  # Check for scalar parameter in appropriate range
+  checkScalar(param, "numeric", c(alpha / 2, 1), c(FALSE, FALSE))
+  
+  # For values of t > 1, compute value as if t = 1
+  t <- pmin(t, 1)
+  
+  # Compute spending
+  y <- 2 - 2 * pnorm((qnorm(1 - alpha / 2) -
+                      qnorm(1 - param) * (1 - sqrt(t))) / sqrt(t))
+  
+  # Assemble return value and return
+  x <- list(name = "Xi-Gallo, method 1", param = param, 
+            parname = "gamma", sf = sfXG3, 
+            spend = y,
+            bound = NULL,
+            prob = NULL)
+  class(x) <- "spendfn"
+  x
+}
+```
+
+For $\alpha=0.025$, we restrict $\gamma$ to $(0.0125, 1)$ and plot the spending function for $\gamma=0.013, 0.02, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9$.
+
+```{r}
+plot(pts, sfXG3(.025, pts, .013)$spend, type="l", xlab="t", ylab="Spending", main="Xi-Gallo, Method 3")
+lines(pts, sfXG3(.025, pts, .02)$spend, col="grey")
+lines(pts, sfXG3(.025, pts, .05)$spend, col="brown")
+lines(pts, sfXG3(.025, pts, .1)$spend, col="orange")
+lines(pts, sfXG3(.025, pts, .25)$spend, col="cyan")
+lines(pts, sfXG3(.025, pts, .5)$spend, col="red")
+lines(pts, sfXG3(.025, pts, .75)$spend, col="blue")
+lines(pts, sfXG3(.025, pts, .9)$spend, col="green")
+legend("topleft", legend=c("gamma=0.013", "gamma=0.02", "gamma=0.05", "gamma=0.1", "gamma=0.25", "gamma=0.5", "gamma=0.75", "gamma=0.9"),
+       col=c("black", "grey", "brown", "orange", "cyan", "red", "blue", "green"), lty=1)
+```
+
+# Replicating Published Examples
+
+We replicate published examples of @xi2019additive.
+
+
+# References
