@@ -1837,7 +1837,8 @@ Tdistdiff <- function(x, t0, p0) {
 # 
 #' @title Xi and Gallo conditional error spending
 #' @description Error spending based on Xi and Gallo (2018).
-#' Code revised from https://github.com/xidongdxi/gsd/blob/master/additive_boundary_functions.R
+#' 
+#' Three spending functions are defined: \code{sfXG1}, \code{sfXG2}, and \code{sfXG3}.
 #' 
 #' @param alpha Real value \eqn{> 0} and no more than 1. Normally,
 #' \code{alpha=0.025} for one-sided Type I error specification or
@@ -1847,9 +1848,13 @@ Tdistdiff <- function(x, t0, p0) {
 #' @param t A vector of points with increasing values from 0 to 1, inclusive.
 #' Values of the proportion of sample size/information for which the spending
 #' function will be computed.
-#' @param param NEED TO DESCRIBE
+#' @param param This is the gamma parameter in the Xi and Gallo spending function paper, distinct for each function.
 #' @return An object of type \code{spendfn}. See spending functions for further
 #' details.
+#' 
+#' @details 
+#' Xi and Gallo use an additive boundary for group sequential designs with connection to conditional error.
+#' 
 #' @examples
 #' @author Keaven Anderson \email{keaven_anderson@@merck.}
 #' @seealso \link{Spending_Function_Overview}, \code{\link{gsDesign}},
@@ -1863,7 +1868,7 @@ Tdistdiff <- function(x, t0, p0) {
 #' 
 #' \emph{Journal of biopharmaceutical statistics}; 22(4), 687-699.
 #' @keywords design
-#' @rdname sfXG
+#' @rdname sfXG1
 #' @export
 #' 
 sfXG <- function(alpha, t, param) {
