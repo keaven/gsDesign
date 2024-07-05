@@ -5,6 +5,21 @@
 #' at an efficacy bound is approximately equal to the conditional error rate for crossing the final analysis bound.
 #' This is explained in greater detail in the vignette `r vignette("Conditional Error Spending Functions")`.
 #' 
+#' @param alpha Real value \eqn{> 0} and no more than 1. Normally,
+#' \code{alpha=0.025} for one-sided Type I error specification or
+#' \code{alpha=0.1} for Type II error specification. However, this could be set
+#' to 1 if for descriptive purposes you wish to see the proportion of spending
+#' as a function of the proportion of sample size/information.
+#' @param t A vector of points with increasing values from 0 to 1, inclusive.
+#' Values of the proportion of sample size/information for which the spending
+#' function will be computed.
+#' @param param This is the gamma parameter in the Xi and Gallo spending function paper, distinct for each function. 
+#' See details for functional forms and range of param acceptable for each spending function.
+#' @return An object of type \code{spendfn}. See spending functions for further details.
+#' 
+#' @details 
+#' Xi and Gallo use an additive boundary for group sequential designs with connection to conditional error.
+#' 
 #' Three spending functions are defined: \code{sfXG1}, \code{sfXG2}, and \code{sfXG3}.
 #' Method 1 is defined for \eqn{\gamma \in [0.5, 1)} as
 #' 
@@ -25,21 +40,6 @@
 #' \deqn{f(t; \alpha)= 2 - 2\times \Phi\left(\frac{z_{\alpha/2} - z_\gamma(1-\sqrt t)}{\sqrt t} \right).}
 #' 
 #' 
-#' @param alpha Real value \eqn{> 0} and no more than 1. Normally,
-#' \code{alpha=0.025} for one-sided Type I error specification or
-#' \code{alpha=0.1} for Type II error specification. However, this could be set
-#' to 1 if for descriptive purposes you wish to see the proportion of spending
-#' as a function of the proportion of sample size/information.
-#' @param t A vector of points with increasing values from 0 to 1, inclusive.
-#' Values of the proportion of sample size/information for which the spending
-#' function will be computed.
-#' @param param This is the gamma parameter in the Xi and Gallo spending function paper, distinct for each function.
-#' @return An object of type \code{spendfn}. See spending functions for further
-#' details.
-#' 
-#' @details 
-#' Xi and Gallo use an additive boundary for group sequential designs with connection to conditional error.
-#' 
 #' @examples
 #' @author Keaven Anderson \email{keaven_anderson@@merck.}
 #' @seealso \link{Spending_Function_Overview}, \code{\link{gsDesign}},
@@ -54,7 +54,7 @@
 #' @rdname sfXG1
 #' @aliases sfXG sfXG2 sfXG3
 #' @export
-#' 
+#' @rdname sfXG1 
 sfXG1 <- function(alpha, t, param) {
   # Check for scalar parameter in [0.5, 1)
   checkScalar(param, "numeric", c(.5, 1), c(TRUE, FALSE))
@@ -75,7 +75,9 @@ sfXG1 <- function(alpha, t, param) {
   class(x) <- "spendfn"
   x
 }
-
+#'
+#' @export
+#' @rdname sfXG2
 sfXG2 <- function(alpha, t, param) {
   # Check for scalar parameter in appropriate range
   checkScalar(param, "numeric", c(1 - pnorm(qnorm(1 - alpha / 2)), 1), c(TRUE, FALSE))
@@ -96,7 +98,8 @@ sfXG2 <- function(alpha, t, param) {
   class(x) <- "spendfn"
   x
 }
-
+#' @export
+#' @rdname sfXG3
 sfXG3 <- function(alpha, t, param) {
   # Check for scalar parameter in appropriate range
   checkScalar(param, "numeric", c(alpha / 2, 1), c(FALSE, FALSE))
