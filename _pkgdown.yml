@@ -143,6 +143,7 @@ articles:
       - gsDesignPackageOverview
       - SpendingFunctionOverview
       - ConditionalPowerPlot
+      - ConditionalErrorSpending
       - nNormal
       - hGraph
       - GraphicalMultiplicity
