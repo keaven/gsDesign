@@ -19,6 +19,12 @@ $$z_\gamma = \Phi^{-1}(1-\gamma)$$
 
 where $\Phi$ is the standard normal cumulative distribution function.
 
+There are 3 spending functions proposed by @xi2019additive, which we will refer to as Method 1 (`sfXG1()`), Method 2 (`sfXG2()`), and Method 3 (`sfXG3*()).
+When there is a single interim analysis, conditional error from Method 1 is almost exactly the same as the parameter $\gamma$ but it allows a narrower range of $\gamma. Method 2 provides less accurate approximation but allows a wider range of $\gamma$.
+Method 3 was proposed to approximate Pocock bounds with equal bounds on the Z-scale.
+We replicate spending function bounds of @xi2019additive along with corresponding conditional error computations below.
+We also compare results to other commonly used spending functions.
+
 
 # Implementation in gsDesign
 
@@ -57,7 +63,7 @@ $$
 $$
 
 
-For $\alpha=0.025$, we restrict $\gamma$ to [`r round(1 - pnorm((qnorm(1 - .025/2)/2)), 3)`, 1)$ and plot the spending function for $\gamma=0.14, 0.25, 0.5, 0.75, 0.9$.
+For $\alpha=0.025$, we restrict $\gamma$ to [`r round(1 - pnorm((qnorm(1 - .025/2)/2)), 3)`, 1) and plot the spending function for $\gamma=0.14, 0.25, 0.5, 0.75, 0.9$.
 
 ```{r}
 plot(pts, sfXG2(.025, pts, .14)$spend, type="l", xlab="t", ylab="Spending", main="Xi-Gallo, Method 2")
@@ -286,7 +292,15 @@ xx %>%
 
 # Summary
 
-@xi2019additive proposed conditional error spending functions for group sequential designs are implemented in the `gsDesign` package. These may prove useful to some trial designers. Results duplicated findings from the original paper.
+@xi2019additive proposed conditional error spending functions for group sequential designs are implemented in the `gsDesign` package. 
+When there is a single interim analysis, conditional error from Method 1 is almost exactly the same as the parameter $\gamma$ but it allows a narrower range of $\gamma. Method 2 provides less accurate approximation but allows a wider range of $\gamma$.
+Using $\gamma=0.5$ replicates the Lan-DeMets spending function to approximate O'Brien-Fleming bounds.
+An exponential spending function provides a possibly better approximation of O'Brien-Fleming bounds.
+Simply selecting a smaller $\gamma$ than the targeted conditional error may provide a better match for the targeted bounds.
+While Method 3 provides a reasonable approximation of a Pocock bound with equal bounds on the Z-scale, its stated objective, traditional approximations 
+of Pocock bounds with the Lan-DeMets and Hwang-Shih-DeCani spending functions may be slightly better.
+
+Results duplicated findings from the original paper.
 
 
 # References
