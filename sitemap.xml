@@ -1,177 +1,61 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://keaven.github.io/gsDesign/404.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/ConditionalPowerPlot.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/GentleIntroductionToGSD.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/GraphicalMultiplicity.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/PoissonMixtureModel.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/SpendingFunctionOverview.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/SurvivalOverview.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/VaccineEfficacy.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/binomialSPRTExample.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/gsDesignPackageOverview.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/gsSurvBasicExamples.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/hGraph.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/nNormal.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/articles/toInteger.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/index.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/as_gt.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/as_rtf.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/as_table.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/checkScalar.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/eEvents.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/gsBinomialExact.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/gsBound.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/gsBoundCP.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/gsBoundSummary.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/gsCP.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/gsDensity.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/gsDesign-package.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/gsDesign.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/gsProbability.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/gsSurvCalendar.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/hGraph.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/nNormal.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/nSurv.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/nSurvival.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/normalGrid.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/plot.gsDesign.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/sequentiaPValue.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/sfDistribution.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/sfExponential.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/sfHSD.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/sfLDOF.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/sfLinear.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/sfPoints.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/sfPower.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/sfSpecial.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/sfTDist.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/spendingFunction.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/ssrCP.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/toBinomialExact.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/toInteger.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/varBinomial.html</loc>
-  </url>
-  <url>
-    <loc>https://keaven.github.io/gsDesign/reference/xtable.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://keaven.github.io/gsDesign/404.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/LICENSE.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/ConditionalPowerPlot.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/GentleIntroductionToGSD.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/GraphicalMultiplicity.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/PoissonMixtureModel.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/SpendingFunctionOverview.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/SurvivalOverview.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/VaccineEfficacy.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/binomialSPRTExample.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/gsDesignPackageOverview.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/gsSurvBasicExamples.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/hGraph.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/index.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/nNormal.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/toInteger.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/authors.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/index.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/news/index.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/as_gt.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/as_rtf.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/as_table.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/checkScalar.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/eEvents.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/gsBinomialExact.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/gsBound.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/gsBoundCP.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/gsBoundSummary.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/gsCP.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/gsDensity.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/gsDesign-package.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/gsDesign.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/gsProbability.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/gsSurvCalendar.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/hGraph.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/index.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/nNormal.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/nSurv.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/nSurvival.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/normalGrid.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/pipe.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/plot.gsDesign.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/sequentiaPValue.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/sfDistribution.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/sfExponential.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/sfHSD.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/sfLDOF.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/sfLinear.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/sfPoints.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/sfPower.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/sfSpecial.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/sfTDist.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/spendingFunction.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/ssrCP.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/toBinomialExact.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/toInteger.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/varBinomial.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/xtable.html</loc></url>
 </urlset>
+
