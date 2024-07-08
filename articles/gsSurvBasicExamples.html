@@ -316,9 +316,8 @@ time-to-event is assumed to be 12 months in the control group.</p>
 <span><span class="co">#&gt; Attaching package: 'gt'</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:gsDesign':</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     as_rtf</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt;     as_rtf</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  Period <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Month"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -807,7 +806,7 @@ additional descriptions for design bounds such as conditional or
 predictive power; see the help file for details or just provide
 <code>exclude = NULL</code> to <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> to see all
 options.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Footnote text for table</span></span>
 <span><span class="va">footnote1</span> <span class="op">&lt;-</span> <span class="st">"P{Cross} is the probability of crossing the given bound (efficacy or futility) at or before the given analysis under the assumed hazard ratio (HR)."</span></span>
 <span><span class="va">footnote2</span> <span class="op">&lt;-</span> <span class="st">" Design assumes futility bound is discretionary (non-binding); upper boundary crossing probabilities shown here assume trial stops at first boundary crossed and thus total less than the design Type I error."</span></span>
@@ -829,7 +828,7 @@ options.</p>
 <span>  <span class="fl">100</span> <span class="op">*</span> <span class="va">alpha</span>, <span class="st">"% Type I error"</span>,</span>
 <span>  sep <span class="op">=</span> <span class="st">""</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Time-to-event group sequential design"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -1441,7 +1440,7 @@ at interim 2 is represented by the black dashed line. The red dotted
 line is 1 minus the probability of crossing the futility bound on the
 percentage scale. The red dashed line is 1 minus the cumulative
 probability of crossing the futility bound by interim 2.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span></span>
 <span></span>
@@ -1464,14 +1463,14 @@ predictive power.</p>
 <p>First, we update the actual number of events for interims 1 and 2 and
 assume the final analysis event count is still as originally
 planned:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Number of events (final is still planned number)</span></span>
 <span><span class="va">n.I</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">115</span>, <span class="fl">364</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">k</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The simple updates to Z-values and p-values for the design based on
 information fraction just requires the fraction of final events planned,
 but does not include the number of events or treatment effect in the
 output:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">xu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
 <span>  alpha <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">alpha</span>, beta <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">beta</span>, test.type <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">test.type</span>,</span>
 <span>  maxn.IPlan <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">k</span><span class="op">]</span>, n.I <span class="op">=</span> <span class="va">n.I</span>,</span>
@@ -1485,7 +1484,7 @@ below. Here we have assumed futility guidance is based on the hazard
 ratio at interim analysis; this is not generally the case, but is an
 option as these bounds are guidance rather than having strict
 inferential interpretation.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span></span>
 <span>  <span class="va">xu</span>,</span>
 <span>  deltaname <span class="op">=</span> <span class="st">"HR"</span>,</span>
@@ -2068,12 +2067,12 @@ positive conclusion.</li>
 <p>For these summaries, we will assume the updated interim event counts
 used above along with interim Z-values of 0.25 and 2 at interim 1 and
 interim 2, respectively.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p>Conditional power at interim analysis 2 is computed for the current
 trend, under the null hypothesis (HR=1), and under the alternate
 hypothesis (HR=0.75 in this case) as follows:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsCP.html">gsCP</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">xu</span>, <span class="co"># Updated design</span></span>
 <span>  i <span class="op">=</span> <span class="fl">2</span>, <span class="co"># Interim analysis 2</span></span>
@@ -2093,7 +2092,7 @@ weak prior with mean half-way between the alternative
 to observing 5% (=1/20) of the targeted events at the final analysis;
 the following shows that the standard deviation for the prior is well
 over twice the mean, so the prior is relatively weak.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/normalGrid.html">normalGrid</a></span><span class="op">(</span></span>
 <span>  mu <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">delta</span> <span class="op">/</span> <span class="fl">2</span>,</span>
 <span>  sigma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">20</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span><span class="op">)</span></span>
@@ -2106,7 +2105,7 @@ over twice the mean, so the prior is relatively weak.</p>
 <span><span class="co">#&gt;  Prior standard deviation 0.215</span></span></code></pre></div>
 <p>Now based on the interim 2 result, we compute the predictive power of
 a positive final analysis.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsCP.html">gsPP</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">xu</span>, <span class="co"># Updated design</span></span>
 <span>  i <span class="op">=</span> <span class="fl">2</span>, <span class="co"># Interim analysis 2</span></span>
@@ -2132,7 +2131,7 @@ projected final test is based on the dashed line which represents a
 linear trend based on the most recent B-value computed; this projection
 is what was used in the conditional power calculation under the current
 trend that was computed above.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">maxx</span> <span class="op">&lt;-</span> <span class="fl">450</span> <span class="co"># Max for x-axis specified by user</span></span>
 <span><span class="va">ylim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span> <span class="co"># User-specified y-axis limits</span></span>
 <span><span class="va">analysis</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># Current analysis specified by user</span></span>
