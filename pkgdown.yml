@@ -3,6 +3,7 @@ pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   binomialSPRTExample: binomialSPRTExample.html
+  ConditionalErrorSpending: ConditionalErrorSpending.html
   ConditionalPowerPlot: ConditionalPowerPlot.html
   GentleIntroductionToGSD: GentleIntroductionToGSD.html
   GraphicalMultiplicity: GraphicalMultiplicity.html
@@ -15,7 +16,7 @@ articles:
   SurvivalOverview: SurvivalOverview.html
   toInteger: toInteger.html
   VaccineEfficacy: VaccineEfficacy.html
-last_built: 2024-07-08T17:09Z
+last_built: 2024-07-08T20:20Z
 urls:
   reference: https://keaven.github.io/gsDesign/reference
   article: https://keaven.github.io/gsDesign/articles

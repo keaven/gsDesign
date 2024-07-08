@@ -1,6 +1,7 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://keaven.github.io/gsDesign/404.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign/LICENSE.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/articles/ConditionalErrorSpending.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign/articles/ConditionalPowerPlot.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign/articles/GentleIntroductionToGSD.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign/articles/GraphicalMultiplicity.html</loc></url>
@@ -51,6 +52,7 @@
 <url><loc>https://keaven.github.io/gsDesign/reference/sfPower.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign/reference/sfSpecial.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign/reference/sfTDist.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign/reference/sfXG.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign/reference/spendingFunction.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign/reference/ssrCP.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign/reference/toBinomialExact.html</loc></url>
