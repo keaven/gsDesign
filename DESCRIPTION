@@ -32,6 +32,7 @@ Imports:
     xtable
 Suggests:
     covr,
+    data.table,
     gridExtra,
     kableExtra,
     knitr,
@@ -43,4 +44,4 @@ Suggests:
     utils
 VignetteBuilder:
     knitr
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
