@@ -78,6 +78,9 @@ reference:
   - sfTrimmed
   - sfTruncated
   - sfGapped
+  - sfXG1
+  - sfXG2
+  - sfXG3
 - title: Conditional and Predictive Power
   contents:
   - gsCP
