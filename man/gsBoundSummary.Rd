@@ -195,7 +195,7 @@ frame.  This can also be used to along with functions such as
 package, \code{addTable.RTF()} (from the rtf package) to produce console or
 R Markdown output or output to a variety of file types. \code{xprint()} is
 provided for LaTeX output by setting default options for
-\code{\link{print.xtable}()} when producing tables summarizing design
+\code{\link[xtable]{print.xtable}} when producing tables summarizing design
 bounds.
 
 Individual transformation of z-value test statistics for interim and final
