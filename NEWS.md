@@ -1,3 +1,23 @@
+# gsDesign 3.6.3 (July, 2024)
+
+## New features
+
+- Implemented conditional error spending functions `sfXG1()`, `sfXG2()`,
+  and `sfXG3()` based on Xi and Gallo (2019).
+  See `vignette("ConditionalErrorSpending")` for details and reproduced
+  examples from the literature (@keaven, #147. Thanks, @xidongdxi,
+  for comments on vignette).
+
+## Improvements
+
+- Enhanced `eEvents()` with input validation to ensure `lambda` is not `NULL`
+  (@keaven, [97f629d](https://github.com/keaven/gsDesign/commit/97f629d)).
+
+## Testing
+
+- Added independent testing for `gsSurvCalendar()` (@myeongjong, #144).
+- Expanded test coverage for `gsBinomialExact()` (@menglu2, #143).
+
 # gsDesign 3.6.2 (April, 2024)
 
 ## Documentation
