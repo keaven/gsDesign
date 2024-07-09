@@ -82,7 +82,7 @@ Thus, the standardized Z version of the logrank is approximately distributed as
 $$Z\sim\hbox{Normal}(\sqrt n\theta,1).$$
 Treatment effect favoring experimental treatment compared to control in this notation corresponds to a hazard ratio $\nu < 1$, as well as negative values of the standardized effect $\theta$, natural parameter $\delta$ and standardized Z-test.
 
-### Power and sample size with nEvents()
+### Power and sample size with `nEvents()`
 
 Based on the above, the power for the logrank test when $n$ events have been observed is approximated by
 

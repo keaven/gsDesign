@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Introduction
+## Introduction
 
 The **gsDesign** package was originally designed to have continuous sample size planned rather than integer-based sample size.
 Designs with time-to-event outcomes also had non-integer event counts at times of analysis.
@@ -24,7 +24,7 @@ The new function as of July, 2023 is the `toInteger()` which operates on group s
 We begin with an abbreviated example for a time-to-event endpoint design to demonstrate basic concepts.
 We follow with a more extended example for a binary endpoint to explain more details.
 
-# Time-to-event endpoint example
+## Time-to-event endpoint example
 
 The initial design for a time-to-event endpoint in a 2-arm trial does not have integer sample size and event counts.
 See comments in the code and output from the `summary()` function below to understand inputs.
@@ -86,9 +86,9 @@ xi$eNE
 ```
 
 
-# Binomial endpoint designs
+## Binomial endpoint designs
 
-## Fixed sample size
+### Fixed sample size
 
 We present a simple example based on comparing binomial rates with interim analyses after 50% and 75% of events. We assume a 2:1 experimental:control randomization ratio. Note that the sample size is not an integer.
 
@@ -102,7 +102,7 @@ If we replace the `beta` argument above with a integer sample size that is a mul
 nBinomial(p1 = .2, p2 = .1, alpha = .025, n = 432, ratio = 2)
 ```
 
-## 1-sided design
+### 1-sided design
 
 Now we convert the fixed sample size `n.fix` from above to a 1-sided group sequential design  with interims after 50% and 75% of observations. Again, sample size at each analysis is not an integer. We use the Lan-DeMets spending function approximating an O'Brien-Fleming efficacy bound.
 
@@ -169,7 +169,7 @@ cumsum(x$upper$prob[, 2])
 cumsum(x_integer$upper$prob[, 2])
 ```
 
-## Non-binding design
+### Non-binding design
 
 The default `test.type = 4` has a non-binding futility bound. We examine behavior of this design next.
 The futility bound is moderately aggressive and, thus, there is a compensatory increase in sample size to retain power.
@@ -230,4 +230,4 @@ The $\beta$-spending lower than 0.2 in the first row above is due to the final s
 sum(xnbi$upper$prob[, 2])
 ```
 
-# References
+## References

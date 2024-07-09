@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Overview
+## Overview
 
 The sequential probability ratio test (SPRT) was proposed by @wald1947sequential, @wald1948optimum.
 as a way to do continuous sampling to establish or raise concerns about product quality.
@@ -34,7 +34,7 @@ While comparative SPRT tests are also available for comparing multiple arms, we 
 You may think that having an sequential design for a trial obligates you to do an evaluation after every observation.
 An alternative view is that you can analyze whenever you want and not worry about whether Type I error is controlled.
 
-# Response rate example
+## Response rate example
 
 Consider a single arm where there is historical data suggesting the a positive response to treatment occurs in no more than 10% of patients with currently available treatments.
 Assume that there is interest in having the trial be well-powered to detect a response rate of 35% in a new treatment.
@@ -60,7 +60,7 @@ We see at the maximum sample size of 25:
 - If 7 or more patients have responded we will reject the null hypothesis in favor of a larger response rate.
 - If 5 or 6 patients respond we have an indeterminate result where we can reject neither the null hypothesis of a 10% response rate nor the alternate hypothesis of a 35% response rate.
 
-# Summarizing design properties
+## Summarizing design properties
 
 Functions are available to summarize design properties. For example, we can make a power plot:
 
@@ -100,7 +100,7 @@ b_power %>%
   as_gt()
 ```
 
-# Safety monitoring example
+## Safety monitoring example
 
 Next we consider a safety monitoring example.
 Suppose a new treatment has a mechanism of action that has potential for an elevated rate of a specific adverse experience (AE);  e.g., serious rash.
@@ -144,7 +144,7 @@ safety_power %>%
   )
 ```
 
-# Summary
+## Summary
 
 We have shown how to:
 
@@ -159,4 +159,4 @@ This means the user needs to consider inputs on an iterative basis to control op
 This design can be use for both responses and failures.
 For instance, it can provide a method of early monitoring for excessive risk of key adverse events in a study.
 
-# References
+## References

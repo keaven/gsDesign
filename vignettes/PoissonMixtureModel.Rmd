@@ -1,9 +1,9 @@
 ---
-title: "A Cure Model Calendar-Based Design"
+title: "A cure model calendar-based design"
 output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
 vignette: >
-  %\VignetteIndexEntry{A Cure Model Calendar-Based Design}
+  %\VignetteIndexEntry{A cure model calendar-based design}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -30,7 +30,7 @@ library(ggplot2)
 library(gt)
 ```
 
-# Introduction
+## Introduction
 
 We present a study design for a time-to-event outcome based on a cure model (@PoissonMixture2009).
 In this case, it is assumed that tail behavior for the survival curve is of substantial interest and there is no desire to stop and do a final analysis before substantial follow-up through 4 years has been allowed to accrue.
@@ -39,7 +39,7 @@ Due to this as well as substantial variability in event accrual caused by feasib
 
 We discuss some of the potential advantages and disadvantages of the cure model and calendar-based design cases where hazard rates for events decrease substantially over time and the true underlying distributions may meaningfully deviate from what is anticipated at the time of design.
 
-# The Poisson Mixture Model
+## The Poisson mixture model
 
 The Poisson mixture model is a cure model that can be useful when the failure rate in a population is expected to decline substantially over time based on historical data.
 It also has the property that if control group time-to-event follows a Poisson mixture distribution, then a proportional hazards assumption for treatment effect will yield another Poisson mixture distribution for the experimental group.
@@ -62,7 +62,7 @@ We note that under a proportional hazards assumption with hazard ratio $\gamma >
 $$S_e(t)=\exp(-\theta\gamma(1-\exp(-\lambda t))).$$
 For any setting chosen, it is ideal to be able to cite published literature and other rationale for study assumptions and show that the Poisson mixture assumptions for the control group reasonably match historical data.
 
-## Supporting functions
+### Supporting functions
 
 We create the following functions to support examples below.
 
@@ -86,7 +86,7 @@ hPM <- function(x = 0:20, cure_rate = .5, t1 = 10, s1 = .6) {
 }
 ```
 
-## Scenario Assumptions
+### Scenario assumptions
 
 We consider three scenarios to demonstrate how spending can impact potential for trial success and fully understanding treatment group differences.
 The following can be adjusted by the reader and the vignette re-run.
@@ -118,11 +118,7 @@ enroll_duration <- c(12, 12, 20)
 dropout_rate <- c(.002, .001, .001)
 ```
 
-
-
-## Examples
-
-
+### Examples
 
 The points in the following graph indicate where underlying cumulative hazard matches the piecewise exponential of the specified cure rate models by scenario.
 The piecewise failure model is used to derive the sample size and targeted events over time in the trial.
@@ -189,7 +185,7 @@ ggplot() +
   annotate(geom = "text", x = 35, y = .02, label = "Dashed line shows actual hazard rate")
 ```
 
-## Event Accumulation
+### Event accumulation
 
 Based on the above model, we predict how events will accumulate based on either the null hypothesis of no failure rate difference or the alternate hypothesis where events accrue more slowly in the experimental group.
 We do this by scenario.
@@ -255,9 +251,9 @@ ggplot(event_accrual, aes(x = Time, y = EF, color = Scenario, lty = Hypothesis))
   theme(legend.position = "bottom")
 ```
 
-# Study design
+## Study design
 
-## Design assumptions
+### Design assumptions
 
 We choose calendar-based timing for analyses as well as for spending.
 This is not done automatically by the `gsSurv()` function, but is done using the `gsSurvCalendar()` function.
@@ -304,7 +300,7 @@ dropout_rate <- 0.002
 ratio <- 1
 ```
 
-## Study Design and Event Accumulation
+### Study design and event accumulation
 
 We now assume a trial is enrolled with a constant enrollment rate over `r enroll_duration[1]` months trial duration of `r study_duration[1]`.
 As noted above, the event accumulation pattern is highly sensitive to the assumptions of the design.
@@ -347,13 +343,13 @@ design_calendar %>%
   )
 ```
 
-# Considerations
+## Considerations
 
 There are a few things to note for the above design:
 
 - The futility bounds are advisory only. In particular, the late futility bounds may be ignored since the follow-up for the full time period may merit continuing the trial.
 - The efficacy spending function should be carefully considered to ensure the evidence required to cross any bound is likely to justify early stopping with a definitive demonstration of benefit.
 - Substantial deviations in event accumulation would not change timing of analyses from their calendar times. This should be considered for acceptability at the time of design.
-- The trial may be continued after crossing an efficacy bound for further follow-up as it is unlikely that control patients doing well would cross over to experimental therapy in absence of adverse clinical outcomes. Inference at subsequent analyses using repeated p-values (@JTBook) or sequential p-values (@LiuAnderson2008) are well-specified and interpretable as adjusted p-values.
+- The trial may be continued after crossing an efficacy bound for further follow-up as it is unlikely that control patients doing well would cross over to experimental therapy in absence of adverse clinical outcomes. Inference at subsequent analyses using repeated $p$-values (@JTBook) or sequential $p$-values (@LiuAnderson2008) are well-specified and interpretable as adjusted $p$-values.
 
-# References
+## References

@@ -1,9 +1,9 @@
 ---
-title: "Vaccine Efficacy Trial Design"
+title: "Vaccine efficacy trial design"
 output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
 vignette: >
-  %\VignetteIndexEntry{Vaccine Efficacy Trial Design}
+  %\VignetteIndexEntry{Vaccine efficacy trial design}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -30,7 +30,7 @@ library(gt)
 library(dplyr)
 ```
 
-# Introduction
+## Introduction
 
 This article explores a method of approximating a design using the exact binomial method of @ChanBohidar by a time-to-event design using the method of @LachinFoulkes.
 This allows use of spending functions to derive boundaries for the exact method.
@@ -38,12 +38,12 @@ The time-to-event design can not only be used to set boundaries for the @ChanBoh
 This vignette also illustrates the concept of super-superiority often used in prevention studies.
 Finally, since this procedure is new as of November, 2023 we suggest checks and potential revisions to spending function choices to optimize design boundaries.
 
-# Parameterization
+## Parameterization
 
 We begin with the assumption that we will a require a large sample size due to an endpoint with a small incidence rate.
 This could apply to a vaccine study or other prevention study with a relatively small number of events expected.
 
-## Exact binomial approach
+### Exact binomial approach
 
 Paralleling the notation of @ChanBohidar, we assume $N_C, P_C$ to be binomial sample size and probability of an event for each participant assigned to control; for the experimental treatment group, these are labeled $N_E, P_E$.
 Vaccine efficacy is defined as
@@ -106,7 +106,7 @@ tibble(VE = ve, "P(Experimental)" = prob_experimental) %>%
 Chapter 12 of @JTBook walks through how to design and analyze such a study using a fixed or group sequential design.
 The time-to-event approximation provides an initial approximation to computing bounds; more importantly, it provides sample size and study duration approximations that are not given by the Jennison and Turnbull approach.
 
-# The time-to-event approach
+## The time-to-event approach
 
 For a time-to-event formulation with exponential failure rates $\lambda_C$ for control and $\lambda_E$ for experimental group assigned participants, we would define
 
@@ -116,7 +116,7 @@ which is 1 minus the hazard ratio often used in time-to-event studies.
 In the following we examine how closely the time-to-event method using asymptotic distributional assumptions can approximate an appropriate exact binomial design.
 We will also define a planned number of events at each of $K$ planned analyses by $D_k, 1\le k\le K$.
 
-# Generating a design
+## Generating a design
 
 We begin by specifying parameters.
 The `alpha` and `beta` parameters will not be met exactly due to the discrete group sequential probability calculations performed.
@@ -145,7 +145,7 @@ ratio <- 3 # Experimental/Control enrollment ratio
 test.type <- 4 # 1 for one-sided, 4 for non-binding futility
 ```
 
-## The time-to-event design
+### The time-to-event design
 
 Now we generate the design. If resulting alpha and beta do not satisfy requirements, adjust parameters above until a satisfactory result is obtained.
 
@@ -193,7 +193,7 @@ A textual summary for the design is:
 cat(summary(xx, timeunit = "months"))
 ```
 
-# Converting to an exact binomial design
+## Converting to an exact binomial design
 
 We now convert this to an exact binomial design.
 The bound counts are described in this initial table displayed.
@@ -206,7 +206,7 @@ The second and third tables below give probabilities of crossing the upper (futi
 xb <- toBinomialExact(x)
 ```
 
-## Combined summary table
+### Combined summary table
 
 We produce a summary table. Code for this is provided in the R markdown for this vignette provided with the package.
 This combines information from the time-to-event design for calendar timing of analyses (Time) and expected sample size at each analysis (N) along with bounds and operating characteristics for the design.
@@ -316,13 +316,13 @@ xb$upper$bound
 
 The vaccine efficacy at bounds should be checked to see if the evidence is convincing enough to be accepted as a clinically relevant benefit in addition to statistical benefit (efficacy bounds) or a less than relevant benefit for futility bounds.
 
-## Checking design properties
+### Checking design properties
 
 Next, we look at $\alpha$- and $\beta$-spending for the time-to-event design to compare to the exact bound restricted by the discrete possible counts at bounds.
 For both $\alpha$- and $\beta$-spending, the exact binomial design has no more spending at each analysis than allowed by each spending function.
 We also confirm that changing any of the exact bounds by 1 exceeds the targeting spending.
 
-### $\alpha$-spending
+#### $\alpha$-spending
 
 ```{r}
 # Exact design cumulative alpha-spending at efficacy bounds
@@ -350,7 +350,7 @@ for(i in 1:xb$k){
 excess_alpha_spend
 ```
 
-### $\beta$-spending
+#### $\beta$-spending
 
 ```{r}
 # Cumulative beta-spending for exact design
@@ -376,7 +376,7 @@ for(i in 1:(xb$k - 1)){
 excess_beta_spend
 ```
 
-### Bound Update at Time of Analysis for Example 2
+#### Bound update at time of analysis for example 2
 
 We now use the second interim analysis outcome from the SPUTNIK trial to show how to update bounds from above when event counts differ from planned.
 The first database was on November 18, 2020 and included 20 endpoints.
@@ -458,9 +458,9 @@ We hide the code to produce the table; this is available in package vignette cod
   tab_header(title = "Updated Bounds for Actual Analyses from SPUTNIK trial")
 ```
 
-# Summary
+## Summary
 
 We have provided an extended example to show that a @ChanBohidar exact binomial using spending function bounds can be derived in a two-step process that delivers sample size and bounds by 1) deriving a related time-to-event design using asymptotic methods and then 2) converting to an exact binomial design.
 Adjustments were made to target Type I and Type II error probabilities in the asymptotic approximation to ensure the exact binomial Type I and Type II error rates were achieved. The method seems a reasonable and straightforward approach to develop a complete design that accounts for the impact of enrollment, failure rates dropout rates, and trial duration.
 
-# References
+## References
