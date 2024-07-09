@@ -1,8 +1,6 @@
 ---
 title: "Conditional Error Spending Functions"
-output:
-  rmarkdown::html_document:
-    code_folding: hide
+output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
 vignette: >
   %\VignetteIndexEntry{Conditional Error Spending Functions}
@@ -168,7 +166,7 @@ corresponding conditional error computations.
 We have two utility functions. Transposing a tibble and a custom function
 to compute conditional error.
 
-```{r, class.source = 'fold-hide'}
+```{r}
 # Custom function to transpose while preserving names
 # From https://stackoverflow.com/questions/42790219/how-do-i-transpose-a-tibble-in-r
 transpose_df <- function(df) {
