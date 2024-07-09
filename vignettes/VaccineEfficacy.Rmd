@@ -1,8 +1,6 @@
 ---
 title: "Vaccine Efficacy Trial Design"
-output:
-  rmarkdown::html_document:
-    code_folding: show
+output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
 vignette: >
   %\VignetteIndexEntry{Vaccine Efficacy Trial Design}
@@ -26,7 +24,7 @@ knitr::opts_chunk$set(
 options(width = 58)
 ```
 
-```{r, message=FALSE, warning=FALSE, class.source="fold-hide"}
+```{r, message=FALSE, warning=FALSE}
 library(gsDesign)
 library(gt)
 library(dplyr)
@@ -63,7 +61,7 @@ p &= rP_E/(rP_E+ P_C)\\
 \end{aligned}
 $$
 
-As noted, this approximation is dependent on a large sample size and small probability of events. 
+As noted, this approximation is dependent on a large sample size and small probability of events.
 The above can be inverted to obtain
 
 $$\pi = 1 - \frac{1}{r(1/p-1)}. $$
@@ -105,7 +103,7 @@ tibble(VE = ve, "P(Experimental)" = prob_experimental) %>%
 
 
 
-Chapter 12 of @JTBook walks through how to design and analyze such a study using a fixed or group sequential design. 
+Chapter 12 of @JTBook walks through how to design and analyze such a study using a fixed or group sequential design.
 The time-to-event approximation provides an initial approximation to computing bounds; more importantly, it provides sample size and study duration approximations that are not given by the Jennison and Turnbull approach.
 
 # The time-to-event approach
@@ -166,7 +164,7 @@ x <- gsSurv(
 ```
 
 Now we convert this to a design with integer event counts at analyses.
-This is achieved by rounding interim analysis event counts from the above design and rounding up the final analysis event count. 
+This is achieved by rounding interim analysis event counts from the above design and rounding up the final analysis event count.
 This will result in a slight change in event fractions at interim analyses as well as a slight change from the targeted 90% power.
 We now explain the rationale behind the spending function choices.
 Recall that the hazard ratio (HR) is 1 minus the VE.
@@ -316,7 +314,7 @@ xb$upper$bound
 
 
 
-The vaccine efficacy at bounds should be checked to see if the evidence is convincing enough to be accepted as a clinically relevant benefit in addition to statistical benefit (efficacy bounds) or a less than relevant benefit for futility bounds. 
+The vaccine efficacy at bounds should be checked to see if the evidence is convincing enough to be accepted as a clinically relevant benefit in addition to statistical benefit (efficacy bounds) or a less than relevant benefit for futility bounds.
 
 ## Checking design properties
 
@@ -346,7 +344,7 @@ excess_alpha_spend <- matrix(0, nrow = nb$k, ncol=nb$k)
 for(i in 1:xb$k){
   a <- xb$lower$bound
   a[i] <- a[i] + 1
-  excess_alpha_spend[i,] <- 
+  excess_alpha_spend[i,] <-
     cumsum(gsBinomialExact(k = xb$k, theta = xb$theta, n.I = xb$n.I, b= xb$n.I + 1, a = a)$lower$prob[,1])
 }
 excess_alpha_spend
@@ -372,7 +370,7 @@ excess_beta_spend <- matrix(0, nrow = nb$k - 1, ncol=nb$k)
 for(i in 1:(xb$k - 1)){
   b <- xb$upper$bound
   b[i] <- b[i] - 1
-  excess_beta_spend[i,] <- 
+  excess_beta_spend[i,] <-
     cumsum(as.numeric(gsBinomialExact(k = xb$k, theta = xb$theta, n.I = xb$n.I, b = b, a = xb$lower$bound)$upper$prob[,2]))
 }
 excess_beta_spend
@@ -463,6 +461,6 @@ We hide the code to produce the table; this is available in package vignette cod
 # Summary
 
 We have provided an extended example to show that a @ChanBohidar exact binomial using spending function bounds can be derived in a two-step process that delivers sample size and bounds by 1) deriving a related time-to-event design using asymptotic methods and then 2) converting to an exact binomial design.
-Adjustments were made to target Type I and Type II error probabilities in the asymptotic approximation to ensure the exact binomial Type I and Type II error rates were achieved. The method seems a reasonable and straightforward approach to develop a complete design that accounts for the impact of enrollment, failure rates dropout rates, and trial duration. 
+Adjustments were made to target Type I and Type II error probabilities in the asymptotic approximation to ensure the exact binomial Type I and Type II error rates were achieved. The method seems a reasonable and straightforward approach to develop a complete design that accounts for the impact of enrollment, failure rates dropout rates, and trial duration.
 
 # References

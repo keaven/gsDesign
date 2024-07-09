@@ -1,8 +1,6 @@
 ---
 title: "A gentle introduction to group sequential design"
-output:
-  rmarkdown::html_document:
-    code_folding: show
+output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
 vignette: >
   %\VignetteIndexEntry{A gentle introduction to group sequential design}

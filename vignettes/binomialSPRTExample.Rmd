@@ -1,16 +1,11 @@
 ---
 title: "Binomial SPRT"
-output:
-  rmarkdown::html_document:
-    toc: true
-    toc_float: true
-    toc_depth: 2
-    number_sections: true
-    highlight: "textmate"
+output: rmarkdown::html_vignette
 bibliography: "gsDesign.bib"
 vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Binomial SPRT}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include=FALSE}
