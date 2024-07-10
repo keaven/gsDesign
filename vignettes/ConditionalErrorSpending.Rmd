@@ -1,9 +1,9 @@
 ---
-title: "Conditional Error Spending Functions"
+title: "Conditional error spending functions"
 output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
 vignette: >
-  %\VignetteIndexEntry{Conditional Error Spending Functions}
+  %\VignetteIndexEntry{Conditional error spending functions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

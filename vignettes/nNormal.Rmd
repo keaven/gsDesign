@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Introduction
+## Introduction
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(gsDesign)
@@ -34,7 +34,7 @@ Limited support is provided for 2-sample design with a normally distributed rand
 Users are encouraged to look at guidance such as in @JTBook.
 We provide a tool where for a large sample case where a reasonable estimate of standard deviation is available, a reasonable sample size can be computed based straightforward distribution theory outlined below.
 
-# The problem considered
+## The problem considered
 
 The overall sample size notation used for **gsDesign** is to consider a standardized effect size parameter which is referred to as $\theta$ in @JTBook.
 We begin with the 2-sample normal problem where we assume a possibly different standard deviation in each treatment group.
@@ -52,7 +52,7 @@ where $\bar X_j$ is the sample mean and $s_j^2$ is the sample variance for group
 The far right hand side of this is Welch's t-test.
 For our examples we use this $t$-test and show that the sample size computation based on the $Z$-test above works well for the chosen problems.
 
-# Sample size
+## Sample size
 
 Thus, $n_2=rn/(1+r)$, $n_1=n/(1+r)$ and when $r=1$ we have $n_1=n_2=n/2$.
 Now that we have completed needed notation, those not interested in the theory behind the sample size and power calculation used may skip the rest of this section.
@@ -81,13 +81,13 @@ $$n= \left(\frac{\Phi^{-1}(1-\beta)+\Phi^{-1}(1-\alpha)}{\theta_1}\right)^2.$$
 
 For 2-sided testing, we simply substitute $\alpha/2$ for $\alpha$ in the above two formulas.
 
-# Examples
+## Examples
 
 We consider two examples to check the above formulas vs. `nNormal()`.
 We then confirm that the approximation is working well by simulating and confirming that the power and Type I error approximations are useful.
 Finally, we provide a simple group sequential design example.
 
-## Sample size
+### Sample size
 
 We consider an example with $\sigma_2=1.25$, $\sigma_1=1.6$, $\delta=0.8$ and $\delta_0=0$.
 We let the sample size ratio be 2 experimental group observations per control observation.
@@ -102,7 +102,7 @@ theta <- 0.8 / sigma
 ((qnorm(.9) + qnorm(.975)) / theta)^2
 ```
 
-## Power
+### Power
 
 Now, assume we let the sample size be 200 and compute power under the same scenario.
 
@@ -133,7 +133,7 @@ pwrdelta1 <- nNormal(delta1 = delta1, sd = 1.6, sd2 = 1.25, alpha = 0.025, n = 2
 plot(delta1, pwrdelta1, type = "l")
 ```
 
-## Verification with simulation
+### Verification with simulation
 
 Rather than simulate individual observations, we will take advantage of the fact that for $j=1,2$
 
@@ -171,7 +171,7 @@ sqrt(pwr * (1 - pwr) / nsim)
 
 suggesting we should be within less than about 0.001 if the actual power, which suggests the normal power approximation is reasonable for this scenario.
 
-## Group sequential design
+### Group sequential design
 
 Now we derive a group sequential design under the above scenario.
 We will largely use default parameters and show two methods.
@@ -208,4 +208,4 @@ gsDesign(
 
 We leave it to the reader to verify the properties of the above design using simulation as in the fixed design example.
 
-# References
+## References

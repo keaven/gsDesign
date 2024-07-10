@@ -1,9 +1,9 @@
 ---
-title: "Conditional Power and Conditional Error"
+title: "Conditional power and conditional error"
 output: rmarkdown::html_vignette
 bibliography: gsDesign.bib
 vignette: >
-  %\VignetteIndexEntry{Conditional Power and Conditional Error}
+  %\VignetteIndexEntry{Conditional power and conditional error}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

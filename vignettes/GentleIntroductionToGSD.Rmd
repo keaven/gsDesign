@@ -278,4 +278,4 @@ xu <- gsDesign(
 gsBoundSummary(xu, Nname = "N", digits = 4, ddigits = 2, tdigits = 1)
 ```
 
-# References
+## References
