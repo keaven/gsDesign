@@ -59,15 +59,15 @@
       <img src="../logo.png" class="logo" alt=""><h1>A gentle introduction to group sequential design</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/v3.6.3/vignettes/GentleIntroductionToGSD.Rmd" class="external-link"><code>vignettes/GentleIntroductionToGSD.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/master/vignettes/GentleIntroductionToGSD.Rmd" class="external-link"><code>vignettes/GentleIntroductionToGSD.Rmd</code></a></small>
       <div class="d-none name"><code>GentleIntroductionToGSD.Rmd</code></div>
     </div>
 
     
     
-<div class="section level3">
-<h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h3>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>This article is intended to give a gentle mathematical and
 statistical introduction to group sequential design. We also provide
 relatively simple examples from the literature to explain clinical
@@ -116,9 +116,9 @@ interim finding for time-to-death (<span class="citation">Gandhi et al.
 (2018)</span>).</li>
 </ul>
 </div>
-<div class="section level3">
-<h3 id="group-sequential-design-framework">Group sequential design framework<a class="anchor" aria-label="anchor" href="#group-sequential-design-framework"></a>
-</h3>
+<div class="section level2">
+<h2 id="group-sequential-design-framework">Group sequential design framework<a class="anchor" aria-label="anchor" href="#group-sequential-design-framework"></a>
+</h2>
 <p>We assume</p>
 <ul>
 <li>A two-arm clinical trial with a control and experimental group.</li>
@@ -178,12 +178,12 @@ and
 is referred to as the <em>canonical form</em> by <span class="citation">Jennison and Turnbull (2000)</span> who have also
 summarized much of the surrounding literature.</p>
 </div>
+<div class="section level2">
+<h2 id="bounds-for-testing">Bounds for testing<a class="anchor" aria-label="anchor" href="#bounds-for-testing"></a>
+</h2>
 <div class="section level3">
-<h3 id="bounds-for-testing">Bounds for testing<a class="anchor" aria-label="anchor" href="#bounds-for-testing"></a>
+<h3 id="one-sided-testing">One-sided testing<a class="anchor" aria-label="anchor" href="#one-sided-testing"></a>
 </h3>
-<div class="section level4">
-<h4 id="one-sided-testing">One-sided testing<a class="anchor" aria-label="anchor" href="#one-sided-testing"></a>
-</h4>
 <p>We assume that the primary test the null hypothesis
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_{0}</annotation></semantics></math>:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta=0</annotation></semantics></math>
@@ -270,9 +270,9 @@ the design will be said to provide a one-sided group sequential test at
 level
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>.</p>
 </div>
-<div class="section level4">
-<h4 id="binding">Asymmetric two-sided testing<a class="anchor" aria-label="anchor" href="#binding"></a>
-</h4>
+<div class="section level3">
+<h3 id="binding">Asymmetric two-sided testing<a class="anchor" aria-label="anchor" href="#binding"></a>
+</h3>
 <p>With both lower and upper bounds for testing and any real value
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>
 representing treatment effect we denote the probability of crossing the
@@ -308,9 +308,9 @@ at analysis
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>,</mo><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">i, i=1,\ldots,k</annotation></semantics></math>.</p>
 </div>
 </div>
-<div class="section level3">
-<h3 id="spending-function-design">Spending function design<a class="anchor" aria-label="anchor" href="#spending-function-design"></a>
-</h3>
+<div class="section level2">
+<h2 id="spending-function-design">Spending function design<a class="anchor" aria-label="anchor" href="#spending-function-design"></a>
+</h2>
 <p>Type I error is most often defined with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>α</mi><mi>i</mi><mo>+</mo></msubsup><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">\alpha_i^+(0), i=1,\ldots,k</annotation></semantics></math>.
 This is referred to as non-binding Type I error since any lower bound is
@@ -496,7 +496,7 @@ Type I error is still
 <span><span class="co">#&gt;            P(Cross) if delta=0   0.0965   0.9035</span></span>
 <span><span class="co">#&gt;            P(Cross) if delta=3   0.8350   0.1650</span></span></code></pre>
 </div>
-<div class="section level2">
+<div class="section level2 unnumbered">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
