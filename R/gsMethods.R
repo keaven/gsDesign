@@ -808,7 +808,16 @@ summary.spendfn <- function(object, ...) {
     if (!is.null(object$param$parname)) {
       s <- paste(s, " with", paste(object$param$parname, collapse = " "), "=", paste(object$param$param, collapse = " "))
     }
-  } else {
+  }
+  else if (object$name == "Lan-DeMets O'Brien-Fleming approximation") {
+    if (object$parname == "none") {
+      s <- "Lan-DeMets O'Brien-Fleming approximation spending function (no parameters)"
+    }
+    else {
+      s <- paste(s, "with", paste(object$parname, collapse = " "), "=", paste(object$param, collapse = " "))
+    }
+  }
+  else {
     s <- paste(object$name, "spending function")
     if (!is.null(object$parname) && !is.null(object$param)) {
       s <- paste(s, "with", paste(object$parname, collapse = " "), "=", paste(object$param, collapse = " "))
