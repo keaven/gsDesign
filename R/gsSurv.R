@@ -851,6 +851,8 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #' the spending function specified by \code{sfu}; this will be ignored for
 #' spending functions (\code{sfLDOF}, \code{sfLDPocock}) or bound types
 #' (\dQuote{OF}, \dQuote{Pocock}) that do not require parameters.
+#' Note that \code{sfupar} can be specified as a positive scalar for
+#' \code{sfLDOF} for a generalized O'Brien-Fleming spending function.
 #' @param sfl Specifies the spending function for lower boundary crossing
 #' probabilities when asymmetric, two-sided testing is performed
 #' (\code{test.type = 3}, \code{4}, \code{5}, or \code{6}).  Unlike the upper
