@@ -12,11 +12,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="A gentle introduction to group sequential design">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
+<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="A gentle introduction to group sequential design">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -122,61 +124,37 @@ interim finding for time-to-death (<span class="citation">Gandhi et al.
 <p>We assume</p>
 <ul>
 <li>A two-arm clinical trial with a control and experimental group.</li>
-<li>There are
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
-analyses planned for some integer
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>&gt;</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">k&gt; 1.</annotation></semantics></math>
+<li>There are <span class="math inline">k</span> analyses planned for
+some integer <span class="math inline">k&gt; 1.</span>
 </li>
-<li>There is a natural parameter
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>
+<li>There is a natural parameter <span class="math inline">\delta</span>
 describing the underlying treatment difference with an estimate that has
-an asymptotically normal and efficient estimate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>δ</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><annotation encoding="application/x-tex">\hat\delta_j</annotation></semantics></math>
-with variance
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><annotation encoding="application/x-tex">\sigma_j^2</annotation></semantics></math>
-and corresponding statistical information
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℐ</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mi>/</mi><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\mathcal{I}_j=1/\sigma_j^2</annotation></semantics></math>,
-at analysis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">j=1,2,\ldots,k</annotation></semantics></math>.
-A positive value favoring experimental treatment and negative value
-favoring control. We assume a consistent estimate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>j</mi><mn>2</mn></msubsup><annotation encoding="application/x-tex">\hat\sigma_j^2</annotation></semantics></math>
-of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo>,</mo><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">\sigma_j^2, j=1,2,\ldots,k</annotation></semantics></math>.</li>
-<li>The information fraction is defined as
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>j</mi></msub><mo>=</mo><msub><mi>ℐ</mi><mi>i</mi></msub><mi>/</mi><msub><mi>ℐ</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">t_j=\mathcal{I}_i/\mathcal{I}_j</annotation></semantics></math>
-at analysis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">j=1,\ldots,k</annotation></semantics></math>.</li>
-<li>Correlations between estimates at different analyses are <span class="math inline">$\hbox{Corr}(\hat\delta_i,\hat\delta_j)=\sqrt{\mathcal{I}_i/\mathcal{I}_j}=\sqrt{t_j}$</span>
-for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>≤</mo><mi>i</mi><mo>≤</mo><mi>j</mi><mo>≤</mo><mi>k</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">1\le i\le j\le k.</annotation></semantics></math>
+an asymptotically normal and efficient estimate <span class="math inline">\hat\delta_j</span> with variance <span class="math inline">\sigma_j^2</span> and corresponding statistical
+information <span class="math inline">\mathcal{I}_j=1/\sigma_j^2</span>,
+at analysis <span class="math inline">j=1,2,\ldots,k</span>. A positive
+value favoring experimental treatment and negative value favoring
+control. We assume a consistent estimate <span class="math inline">\hat\sigma_j^2</span> of <span class="math inline">\sigma_j^2, j=1,2,\ldots,k</span>.</li>
+<li>The information fraction is defined as <span class="math inline">t_j=\mathcal{I}_i/\mathcal{I}_j</span> at analysis
+<span class="math inline">j=1,\ldots,k</span>.</li>
+<li>Correlations between estimates at different analyses are <span class="math inline">\text{Corr}(\hat\delta_i,\hat\delta_j)=\sqrt{\mathcal{I}_i/\mathcal{I}_j}=\sqrt{t_j}</span>
+for <span class="math inline">1\le i\le j\le k.</span>
 </li>
-<li>There is a test test
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>j</mi></msub><mo>≈</mo><msub><mover><mi>δ</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mi>/</mi><msubsup><mover><mi>σ</mi><mo accent="true">̂</mo></mover><mi>j</mi><mn>2</mn></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">Z_j\approx\hat\delta_j/\hat{\sigma}^2_j.</annotation></semantics></math>
+<li>There is a test test <span class="math inline">Z_j\approx\hat\delta_j/\hat{\sigma}^2_j.</span>
 </li>
 </ul>
-<p>For a time-to-event outcome,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>
+<p>For a time-to-event outcome, <span class="math inline">\delta</span>
 would typically represent the logarithm of the hazard ratio for the
 control group versus the experimental group. For a difference in
-response rates,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>
-would represent the underlying response rates. For a continuous outcome
-such as the HAM-D, we would examine the difference in change from
-baseline at a milestone time point (e.g., at 6 weeks as in <span class="citation">Binneman et al. (2008)</span>). For
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">j=1,\ldots,k</annotation></semantics></math>,
-the tests
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mi>j</mi></msub><annotation encoding="application/x-tex">Z_j</annotation></semantics></math>
-are asymptotically multivariate normal with correlations as above, and
-for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">i=1,\ldots,k</annotation></semantics></math>
-have <span class="math inline">$\hbox{Cov}(Z_i,Z_j)=\hbox{Corr}(\hat\delta_i,\hat\delta_j)$</span>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>Z</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>δ</mi><msqrt><msub><mi>I</mi><mi>j</mi></msub></msqrt><mi>.</mi></mrow><annotation encoding="application/x-tex">E(Z_j)=\delta\sqrt{I_j}.</annotation></semantics></math></p>
-<p>This multivariate asymptotic normal distribution for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>Z</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">Z_1,\ldots,Z_k</annotation></semantics></math>
-is referred to as the <em>canonical form</em> by <span class="citation">Jennison and Turnbull (2000)</span> who have also
-summarized much of the surrounding literature.</p>
+response rates, <span class="math inline">\delta</span> would represent
+the underlying response rates. For a continuous outcome such as the
+HAM-D, we would examine the difference in change from baseline at a
+milestone time point (e.g., at 6 weeks as in <span class="citation">Binneman et al. (2008)</span>). For <span class="math inline">j=1,\ldots,k</span>, the tests <span class="math inline">Z_j</span> are asymptotically multivariate normal
+with correlations as above, and for <span class="math inline">i=1,\ldots,k</span> have <span class="math inline">\text{Cov}(Z_i,Z_j)=\text{Corr}(\hat\delta_i,\hat\delta_j)</span>
+and <span class="math inline">E(Z_j)=\delta\sqrt{I_j}.</span></p>
+<p>This multivariate asymptotic normal distribution for <span class="math inline">Z_1,\ldots,Z_k</span> is referred to as the
+<em>canonical form</em> by <span class="citation">Jennison and Turnbull
+(2000)</span> who have also summarized much of the surrounding
+literature.</p>
 </div>
 <div class="section level2">
 <h2 id="bounds-for-testing">Bounds for testing<a class="anchor" aria-label="anchor" href="#bounds-for-testing"></a>
@@ -184,183 +162,90 @@ summarized much of the surrounding literature.</p>
 <div class="section level3">
 <h3 id="one-sided-testing">One-sided testing<a class="anchor" aria-label="anchor" href="#one-sided-testing"></a>
 </h3>
-<p>We assume that the primary test the null hypothesis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_{0}</annotation></semantics></math>:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta=0</annotation></semantics></math>
-against the alternative
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>1</mn></msub><annotation encoding="application/x-tex">H_{1}</annotation></semantics></math>:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><msub><mi>δ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\delta = \delta_1</annotation></semantics></math>
-for a fixed effect size
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mn>1</mn></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta_1 &gt; 0</annotation></semantics></math>
-which represents a benefit of experimental treatment compared to
-control. We assume further that there is interest in stopping early if
-there is good evidence to reject one hypothesis in favor of the other.
-For
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">i=1,2,\ldots,k-1</annotation></semantics></math>,
-interim cutoffs
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>l</mi><mi>i</mi></msub><mo>&lt;</mo><msub><mi>u</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">l_{i}&lt; u_{i}</annotation></semantics></math>
-are set; final cutoffs
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>l</mi><mi>k</mi></msub><mo>≤</mo><msub><mi>u</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">l_{k}\leq u_{k}</annotation></semantics></math>
-are also set. For
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">i=1,2,\ldots,k</annotation></semantics></math>,
-the trial is stopped at analysis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
-to reject
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_{0}</annotation></semantics></math>
-if
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>l</mi><mi>j</mi></msub><mo>&lt;</mo><msub><mi>Z</mi><mi>j</mi></msub><mo>&lt;</mo><msub><mi>u</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">l_{j}&lt;Z_{j}&lt; u_{j}</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>i</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">j=1,2,\dots,i-1</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>i</mi></msub><mo>≥</mo><msub><mi>u</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">Z_{i}\geq u_{i}</annotation></semantics></math>.
-If the trial continues until stage
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_{0}</annotation></semantics></math>
-is not rejected at stage
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>,
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>i</mi></msub><mo>≤</mo><msub><mi>l</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">Z_{i}\leq l_{i}</annotation></semantics></math>
-then
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>1</mn></msub><annotation encoding="application/x-tex">H_{1}</annotation></semantics></math>
-is rejected in favor of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_{0}</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">i=1,2,\ldots,k</annotation></semantics></math>.
-Thus,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mi>k</mi></mrow><annotation encoding="application/x-tex">3k</annotation></semantics></math>
-parameters define a group sequential design:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>l</mi><mi>i</mi></msub><annotation encoding="application/x-tex">l_{i}</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mi>i</mi></msub><annotation encoding="application/x-tex">u_{i}</annotation></semantics></math>,
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ℐ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\mathcal{I}_{i}</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">i=1,2,\ldots,k</annotation></semantics></math>.
-Note that if
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>l</mi><mi>k</mi></msub><mo>&lt;</mo><msub><mi>u</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">l_{k}&lt; u_{k}</annotation></semantics></math>
-there is the possibility of completing the trial without rejecting
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_{0}</annotation></semantics></math>
-or
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>1</mn></msub><annotation encoding="application/x-tex">H_{1}</annotation></semantics></math>.
-We will often restrict
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>l</mi><mi>k</mi></msub><mo>=</mo><msub><mi>u</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">l_{k}= u_{k}</annotation></semantics></math>
-so that one hypothesis is rejected.</p>
+<p>We assume that the primary test the null hypothesis <span class="math inline">H_{0}</span>: <span class="math inline">\delta=0</span> against the alternative <span class="math inline">H_{1}</span>: <span class="math inline">\delta =
+\delta_1</span> for a fixed effect size <span class="math inline">\delta_1 &gt; 0</span> which represents a benefit of
+experimental treatment compared to control. We assume further that there
+is interest in stopping early if there is good evidence to reject one
+hypothesis in favor of the other. For <span class="math inline">i=1,2,\ldots,k-1</span>, interim cutoffs <span class="math inline">l_{i}&lt; u_{i}</span> are set; final cutoffs <span class="math inline">l_{k}\leq u_{k}</span> are also set. For <span class="math inline">i=1,2,\ldots,k</span>, the trial is stopped at
+analysis <span class="math inline">i</span> to reject <span class="math inline">H_{0}</span> if <span class="math inline">l_{j}&lt;Z_{j}&lt; u_{j}</span>, <span class="math inline">j=1,2,\dots,i-1</span> and <span class="math inline">Z_{i}\geq u_{i}</span>. If the trial continues until
+stage <span class="math inline">i</span>, <span class="math inline">H_{0}</span> is not rejected at stage <span class="math inline">i</span>, and <span class="math inline">Z_{i}\leq
+l_{i}</span> then <span class="math inline">H_{1}</span> is rejected in
+favor of <span class="math inline">H_{0}</span>, <span class="math inline">i=1,2,\ldots,k</span>. Thus, <span class="math inline">3k</span> parameters define a group sequential
+design: <span class="math inline">l_{i}</span>, <span class="math inline">u_{i}</span>, and <span class="math inline">\mathcal{I}_{i}</span>, <span class="math inline">i=1,2,\ldots,k</span>. Note that if <span class="math inline">l_{k}&lt; u_{k}</span> there is the possibility of
+completing the trial without rejecting <span class="math inline">H_{0}</span> or <span class="math inline">H_{1}</span>. We will often restrict <span class="math inline">l_{k}= u_{k}</span> so that one hypothesis is
+rejected.</p>
 <p>We begin with a one-sided test. In this case there is no interest in
-stopping early for a lower bound and thus
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>l</mi><mi>i</mi></msub><mo>=</mo><mo>−</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">l_i= -\infty</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">i=1,2,\ldots,k</annotation></semantics></math>.
-The probability of first crossing an upper bound at analysis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">i=1,2,\ldots,k</annotation></semantics></math>,
-is</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>α</mi><mi>i</mi><mo>+</mo></msubsup><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>P</mi><mi>δ</mi></msub><mo stretchy="false" form="prefix">{</mo><mo stretchy="false" form="prefix">{</mo><msub><mi>Z</mi><mi>i</mi></msub><mo>≥</mo><msub><mi>u</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">}</mo><msubsup><mo>∩</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mo stretchy="false" form="prefix">{</mo><msub><mi>Z</mi><mi>j</mi></msub><mo>&lt;</mo><msub><mi>u</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">}</mo><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\alpha_{i}^{+}(\delta)=P_{\delta}\{\{Z_{i}\geq u_{i}\}\cap_{j=1}^{i-1}
-\{Z_{j}&lt; u_{j}\}\}</annotation></semantics></math></p>
+stopping early for a lower bound and thus <span class="math inline">l_i=
+-\infty</span>, <span class="math inline">i=1,2,\ldots,k</span>. The
+probability of first crossing an upper bound at analysis <span class="math inline">i</span>, <span class="math inline">i=1,2,\ldots,k</span>, is</p>
+<p><span class="math display">\alpha_{i}^{+}(\delta)=P_{\delta}\{\{Z_{i}\geq
+u_{i}\}\cap_{j=1}^{i-1}
+\{Z_{j}&lt; u_{j}\}\}</span></p>
 <p>The Type I error is the probability of ever crossing the upper bound
-when
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta=0</annotation></semantics></math>.
-The value
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>α</mi><mi>i</mi><mo>+</mo></msubsup><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha^+_{i}(0)</annotation></semantics></math>
-is commonly referred to as the amount of Type I error spent at analysis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>≤</mo><mi>i</mi><mo>≤</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">1\leq i\leq k</annotation></semantics></math>.
-The total upper boundary crossing probability for a trial is denoted in
-this one-sided scenario by</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>α</mi><mo>+</mo></msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>≡</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></munderover><msubsup><mi>α</mi><mi>i</mi><mo>+</mo></msubsup><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha^+(\delta) \equiv \sum_{i=1}^{k}\alpha^+_{i}(\delta)</annotation></semantics></math></p>
-<p>and the total Type I error by
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>α</mi><mo>+</mo></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha^+(0)</annotation></semantics></math>.
-Assuming
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>α</mi><mo>+</mo></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha^+(0)=\alpha</annotation></semantics></math>
-the design will be said to provide a one-sided group sequential test at
-level
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>.</p>
+when <span class="math inline">\delta=0</span>. The value <span class="math inline">\alpha^+_{i}(0)</span> is commonly referred to as
+the amount of Type I error spent at analysis <span class="math inline">i</span>, <span class="math inline">1\leq i\leq
+k</span>. The total upper boundary crossing probability for a trial is
+denoted in this one-sided scenario by</p>
+<p><span class="math display">\alpha^+(\delta) \equiv
+\sum_{i=1}^{k}\alpha^+_{i}(\delta)</span></p>
+<p>and the total Type I error by <span class="math inline">\alpha^+(0)</span>. Assuming <span class="math inline">\alpha^+(0)=\alpha</span> the design will be said to
+provide a one-sided group sequential test at level <span class="math inline">\alpha</span>.</p>
 </div>
 <div class="section level3">
 <h3 id="binding">Asymmetric two-sided testing<a class="anchor" aria-label="anchor" href="#binding"></a>
 </h3>
-<p>With both lower and upper bounds for testing and any real value
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>
-representing treatment effect we denote the probability of crossing the
-upper boundary at analysis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
-without previously crossing a bound by</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>i</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>P</mi><mi>δ</mi></msub><mo stretchy="false" form="prefix">{</mo><mo stretchy="false" form="prefix">{</mo><msub><mi>Z</mi><mi>i</mi></msub><mo>≥</mo><msub><mi>u</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">}</mo><msubsup><mo>∩</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mo stretchy="false" form="prefix">{</mo><msub><mi>l</mi><mi>j</mi></msub><mo>&lt;</mo><msub><mi>Z</mi><mi>j</mi></msub><mo>&lt;</mo><msub><mi>u</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">}</mo><mo stretchy="false" form="postfix">}</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">\alpha_{i}(\delta)=P_{\delta}\{\{Z_{i}\geq u_{i}\}\cap_{j=1}^{i-1}
-\{ l_{j}&lt;Z_{j}&lt; u_{j}\}\},</annotation></semantics></math></p>
-<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">i=1,2,\ldots,k.</annotation></semantics></math>
-The total probability of crossing an upper bound prior to crossing a
-lower bound is denoted by</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>≡</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></munderover><msub><mi>α</mi><mi>i</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\alpha(\delta)\equiv\sum_{i=1}^{k}\alpha_{i}(\delta).</annotation></semantics></math></p>
-<p>Next, we consider analogous notation for the lower bound. For
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">i=1,2,\ldots,k</annotation></semantics></math>
-denote the probability of crossing a lower bound at analysis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
-without previously crossing any bound by
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>i</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>P</mi><mi>δ</mi></msub><mo stretchy="false" form="prefix">{</mo><mo stretchy="false" form="prefix">{</mo><msub><mi>Z</mi><mi>i</mi></msub><mo>≤</mo><msub><mi>l</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">}</mo><msubsup><mo>∩</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mo stretchy="false" form="prefix">{</mo><msub><mi>l</mi><mi>j</mi></msub><mo>&lt;</mo><msub><mi>Z</mi><mi>j</mi></msub><mo>&lt;</mo><msub><mi>u</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">}</mo><mo stretchy="false" form="postfix">}</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta_{i}(\delta)=P_{\delta}\{\{Z_{i}\leq l_{i}\}\cap_{j=1}^{i-1}\{ l_{j}
-&lt;Z_{j}&lt; u_{j}\}\}.</annotation></semantics></math> The total lower
-boundary crossing probability in this case is written as
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></munderover><msub><mi>β</mi><mi>i</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta(\delta)=
+<p>With both lower and upper bounds for testing and any real value <span class="math inline">\delta</span> representing treatment effect we
+denote the probability of crossing the upper boundary at analysis <span class="math inline">i</span> without previously crossing a bound by</p>
+<p><span class="math display">\alpha_{i}(\delta)=P_{\delta}\{\{Z_{i}\geq
+u_{i}\}\cap_{j=1}^{i-1}
+\{ l_{j}&lt;Z_{j}&lt; u_{j}\}\},</span></p>
+<p><span class="math inline">i=1,2,\ldots,k.</span> The total
+probability of crossing an upper bound prior to crossing a lower bound
+is denoted by</p>
+<p><span class="math display">\alpha(\delta)\equiv\sum_{i=1}^{k}\alpha_{i}(\delta).</span></p>
+<p>Next, we consider analogous notation for the lower bound. For <span class="math inline">i=1,2,\ldots,k</span> denote the probability of
+crossing a lower bound at analysis <span class="math inline">i</span>
+without previously crossing any bound by <span class="math display">\beta_{i}(\delta)=P_{\delta}\{\{Z_{i}\leq
+l_{i}\}\cap_{j=1}^{i-1}\{ l_{j}
+&lt;Z_{j}&lt; u_{j}\}\}.</span> The total lower boundary crossing
+probability in this case is written as <span class="math display">\beta(\delta)=
 {\sum\limits_{i=1}^{k}}
-\beta_{i}(\delta).</annotation></semantics></math></p>
-<p>When a design has final bounds equal
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>l</mi><mi>k</mi></msub><mo>=</mo><msub><mi>u</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">l_k=u_k</annotation></semantics></math>),
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>δ</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\beta(\delta_1)</annotation></semantics></math>
-is the Type II error which is equal to 1 minus the power of the design.
-In this case,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>i</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\beta_i(\delta)</annotation></semantics></math>
-is referred to as the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>-spending
-at analysis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>,</mo><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">i, i=1,\ldots,k</annotation></semantics></math>.</p>
+\beta_{i}(\delta).</span></p>
+<p>When a design has final bounds equal (<span class="math inline">l_k=u_k</span>), <span class="math inline">\beta(\delta_1)</span> is the Type II error which is
+equal to 1 minus the power of the design. In this case, <span class="math inline">\beta_i(\delta)</span> is referred to as the <span class="math inline">\beta</span>-spending at analysis <span class="math inline">i, i=1,\ldots,k</span>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="spending-function-design">Spending function design<a class="anchor" aria-label="anchor" href="#spending-function-design"></a>
 </h2>
-<p>Type I error is most often defined with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>α</mi><mi>i</mi><mo>+</mo></msubsup><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">\alpha_i^+(0), i=1,\ldots,k</annotation></semantics></math>.
-This is referred to as non-binding Type I error since any lower bound is
-ignored in the calculation. This means that if a trial is continued in
-spite of a lower bound being crossed at an interim analysis that Type I
-error is still controlled at the design
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-level.
+<p>Type I error is most often defined with <span class="math inline">\alpha_i^+(0), i=1,\ldots,k</span>. This is referred
+to as non-binding Type I error since any lower bound is ignored in the
+calculation. This means that if a trial is continued in spite of a lower
+bound being crossed at an interim analysis that Type I error is still
+controlled at the design <span class="math inline">\alpha</span>-level.
 For Phase III trials used for approvals of new treatments, non-binding
 Type I error calculation is generally expected by regulators.</p>
-<p>For any given
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>α</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0&lt;\alpha&lt;1</annotation></semantics></math>
-we define a non-decreasing
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-spending
-function
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo>;</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">f(t; \alpha)</annotation></semantics></math>
-for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t\geq 0</annotation></semantics></math>
-with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha\left(  0\right)  =0</annotation></semantics></math>
-and for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t\geq 1</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo>;</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">f( t; \alpha)  =\alpha</annotation></semantics></math>.
-Letting
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t_0=0</annotation></semantics></math>,
-we set
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>j</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha_j(0)</annotation></semantics></math>
-for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">j=1,\ldots,k</annotation></semantics></math>
-through the equation
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>α</mi><mi>j</mi><mo>+</mo></msubsup><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>t</mi><mi>j</mi></msub><mo>;</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>t</mi><mrow><mi>j</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>;</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\alpha^+_{j}(0) = f(t_j;\alpha)-f(t_{j-1}; \alpha).</annotation></semantics></math>
-Assuming an asymmetric lower bound, we similarly use a
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>-spending
-function and to set
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>-spending
-at analysis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">j=1,\ldots, k</annotation></semantics></math>
-as:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>δ</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>g</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>t</mi><mi>j</mi></msub><mo>;</mo><msub><mi>δ</mi><mn>1</mn></msub><mo>,</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mi>g</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>t</mi><mrow><mi>j</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>;</mo><msub><mi>δ</mi><mn>1</mn></msub><mo>,</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta_{j}(\delta_1) = g(t_j;\delta_1, \beta) - g(t_{j-1};\delta_1, \beta).</annotation></semantics></math></p>
-<p>In the following example, the function
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Φ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\Phi()</annotation></semantics></math>
-represents the cumulative distribution function for the standard normal
-distribution function (i.e., mean 0, standard deviation 1). The major
-depression study of <span class="citation">Binneman et al. (2008)</span>
-considered above used the <span class="citation">Lan and DeMets
-(1983)</span> spending function approximating an O’Brien-Fleming bound
-for a single interim analysis half way through the trial with</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo>;</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>2</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>Φ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>α</mi><mi>/</mi><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msqrt><mi>t</mi></msqrt></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">f(t; \alpha) = 2\left(  1-\Phi\left(  \frac{\Phi
-^{-1}(\alpha/2)}{\sqrt{t}}\right)  \right).</annotation></semantics></math></p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo>;</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>2</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>Φ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>β</mi><mi>/</mi><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msqrt><mi>t</mi></msqrt></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">g(t; \beta) = 2\left(  1-\Phi\left(  \frac{\Phi
-^{-1}(\beta/2)}{\sqrt{t}}\right)  \right).</annotation></semantics></math></p>
+<p>For any given <span class="math inline">0&lt;\alpha&lt;1</span> we
+define a non-decreasing <span class="math inline">\alpha</span>-spending
+function <span class="math inline">f(t; \alpha)</span> for <span class="math inline">t\geq 0</span> with <span class="math inline">\alpha\left(  0\right)  =0</span> and for <span class="math inline">t\geq 1</span>, <span class="math inline">f( t;
+\alpha)  =\alpha</span>. Letting <span class="math inline">t_0=0</span>,
+we set <span class="math inline">\alpha_j(0)</span> for <span class="math inline">j=1,\ldots,k</span> through the equation <span class="math display">\alpha^+_{j}(0) = f(t_j;\alpha)-f(t_{j-1};
+\alpha).</span> Assuming an asymmetric lower bound, we similarly use a
+<span class="math inline">\beta</span>-spending function and to set
+<span class="math inline">\beta</span>-spending at analysis <span class="math inline">j=1,\ldots, k</span> as: <span class="math display">\beta_{j}(\delta_1) = g(t_j;\delta_1, \beta) -
+g(t_{j-1};\delta_1, \beta).</span></p>
+<p>In the following example, the function <span class="math inline">\Phi()</span> represents the cumulative distribution
+function for the standard normal distribution function (i.e., mean 0,
+standard deviation 1). The major depression study of <span class="citation">Binneman et al. (2008)</span> considered above used the
+<span class="citation">Lan and DeMets (1983)</span> spending function
+approximating an O’Brien-Fleming bound for a single interim analysis
+half way through the trial with</p>
+<p><span class="math display">f(t; \alpha) =
+2\left(  1-\Phi\left(  \frac{\Phi
+^{-1}(\alpha/2)}{\sqrt{t}}\right)  \right).</span></p>
+<p><span class="math display">g(t; \beta) =
+2\left(  1-\Phi\left(  \frac{\Phi
+^{-1}(\beta/2)}{\sqrt{t}}\right)  \right).</span></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://keaven.github.io/gsDesign/">gsDesign</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -409,47 +294,34 @@ for a single interim analysis half way through the trial with</p>
 <span><span class="op">)</span></span>
 <span><span class="co"># Convert sample size at each analysis to integer values</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
-<p>The planned design used
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\alpha=0.1</annotation></semantics></math>,
+<p>The planned design used <span class="math inline">\alpha=0.1</span>,
 one-sided and Type II error 17% (83% power) with an interim analysis at
-50% of the final planned observations. This leads to Type I
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-spending
-of 0.02 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>-spending
-of 0.052 at the planned interim. An advantage of the spending function
-approach is that bounds can be adjusted when the number of observations
-at analyses are different than planned. The actual observations for
-experimental versus control at the analysis were 59 as opposed to the
-planned 67, which resulted in interim spending fraction
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mn>1</mn></msub><mo>=</mo></mrow><annotation encoding="application/x-tex">t_1=</annotation></semantics></math>
-0.4403. With the Lan-DeMets spending function to approximate
-O’Brien-Fleming bounds this results in
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-spending
-of 0.0132 (<code>P(Cross) if delta=0</code> row in Efficacy column) and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>-spending
-of 0.0386 (<code>P(Cross) if delta=3</code> row in Futility column). We
-note that the Z-value and 1-sided p-values in the table below correspond
-exactly and either can be used for evaluation of statistical
-significance for a trial result. The rows labeled
-<code>~delta at bound</code> are approximations that describe
-approximately what treatment difference is required to cross a bound;
-these should not be used for a formal evaluation of whether a bound has
-been crossed. The O’Brien-Fleming spending function is generally felt to
-provide conservative bounds for stopping at interim analysis. Most of
-the error spending is reserved for the final analysis in this example.
-The futility bound only required a small trend in the wrong direction to
-stop the trial; a nominal p-value of 0.77 was observed which crossed the
-futility bound, stopping the trial since this was greater than the
-futility p-value bound of 0.59. Finally, we note that at the final
-analysis, the cumulative probability for
-<code>P(Cross) if delta=0</code> is less than the planned
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.10</mn></mrow><annotation encoding="application/x-tex">\alpha=0.10</annotation></semantics></math>.
-This probability represents
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha(0)</annotation></semantics></math>
-which excludes the probability of crossing the lower bound at the
-interim analysis and the final analysis. The value of the non-binding
-Type I error is still
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>α</mi><mo>+</mo></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0.10</mn></mrow><annotation encoding="application/x-tex">\alpha^+(0) = 0.10</annotation></semantics></math>.</p>
+50% of the final planned observations. This leads to Type I <span class="math inline">\alpha</span>-spending of 0.02 and <span class="math inline">\beta</span>-spending of 0.052 at the planned
+interim. An advantage of the spending function approach is that bounds
+can be adjusted when the number of observations at analyses are
+different than planned. The actual observations for experimental versus
+control at the analysis were 59 as opposed to the planned 67, which
+resulted in interim spending fraction <span class="math inline">t_1=</span> 0.4403. With the Lan-DeMets spending
+function to approximate O’Brien-Fleming bounds this results in <span class="math inline">\alpha</span>-spending of 0.0132
+(<code>P(Cross) if delta=0</code> row in Efficacy column) and <span class="math inline">\beta</span>-spending of 0.0386
+(<code>P(Cross) if delta=3</code> row in Futility column). We note that
+the Z-value and 1-sided p-values in the table below correspond exactly
+and either can be used for evaluation of statistical significance for a
+trial result. The rows labeled <code>~delta at bound</code> are
+approximations that describe approximately what treatment difference is
+required to cross a bound; these should not be used for a formal
+evaluation of whether a bound has been crossed. The O’Brien-Fleming
+spending function is generally felt to provide conservative bounds for
+stopping at interim analysis. Most of the error spending is reserved for
+the final analysis in this example. The futility bound only required a
+small trend in the wrong direction to stop the trial; a nominal p-value
+of 0.77 was observed which crossed the futility bound, stopping the
+trial since this was greater than the futility p-value bound of 0.59.
+Finally, we note that at the final analysis, the cumulative probability
+for <code>P(Cross) if delta=0</code> is less than the planned <span class="math inline">\alpha=0.10</span>. This probability represents
+<span class="math inline">\alpha(0)</span> which excludes the
+probability of crossing the lower bound at the interim analysis and the
+final analysis. The value of the non-binding Type I error is still <span class="math inline">\alpha^+(0) = 0.10</span>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Updated alpha is unchanged</span></span>
 <span><span class="va">alphau</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
@@ -503,10 +375,9 @@ Type I error is still
 <div id="ref-binneman20086" class="csl-entry">
 Binneman, Brendon, Douglas Feltner, Sheela Kolluri, Yuanjun Shi, Ruolun
 Qiu, and Thomas Stiger. 2008. <span>“A 6-Week Randomized,
-Placebo-Controlled Trial of <span>CP-316,311</span> (a Selective
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi>C</mi><mi>R</mi><mi>H</mi></mrow><mn>1</mn></msub><annotation encoding="application/x-tex">{CRH}_{1}</annotation></semantics></math>
-Antagonist) in the Treatment of Major Depression.”</span> <em>American
-Journal of Psychiatry</em> 165 (5): 617–20.
+Placebo-Controlled Trial of <span>CP-316,311</span> (a Selective <span class="math inline">{CRH}_{1}</span> Antagonist) in the Treatment of
+Major Depression.”</span> <em>American Journal of Psychiatry</em> 165
+(5): 617–20.
 </div>
 <div id="ref-KEYNOTE189" class="csl-entry">
 Gandhi, Leena, Delvys Rodrı́guez-Abreu, Shirish Gadgeel, Emilio Esteban,

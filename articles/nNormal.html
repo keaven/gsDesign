@@ -12,11 +12,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Two-sample normal sample size">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
+<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Two-sample normal sample size">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -81,97 +83,54 @@ outlined below.</p>
 </h2>
 <p>The overall sample size notation used for <strong>gsDesign</strong>
 is to consider a standardized effect size parameter which is referred to
-as
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
-in <span class="citation">Jennison and Turnbull (2000)</span>. We begin
-with the 2-sample normal problem where we assume a possibly different
-standard deviation in each treatment group. For
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">j = 1, 2</annotation></semantics></math>,
-we let
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mrow><mi>j</mi><mo>,</mo><mi>i</mi></mrow></msub><annotation encoding="application/x-tex">X_{j, i}</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><msub><mi>n</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">i = 1, 2, \ldots n_j</annotation></semantics></math>
-represent independent and identically distributed observations following
-a normal distribution with mean
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>μ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\mu_j</annotation></semantics></math>
-and standard deviation
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>σ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\sigma_j</annotation></semantics></math>.
-The natural parameter for comparing the two distributions is</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><msub><mi>μ</mi><mn>2</mn></msub><mo>−</mo><msub><mi>μ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\delta = \mu_2 - \mu_1</annotation></semantics></math></p>
-<p>and we wish to test if
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta &gt; 0</annotation></semantics></math>
+as <span class="math inline">\theta</span> in <span class="citation">Jennison and Turnbull (2000)</span>. We begin with the
+2-sample normal problem where we assume a possibly different standard
+deviation in each treatment group. For <span class="math inline">j = 1,
+2</span>, we let <span class="math inline">X_{j, i}</span>, <span class="math inline">i = 1, 2, \ldots n_j</span> represent independent
+and identically distributed observations following a normal distribution
+with mean <span class="math inline">\mu_j</span> and standard deviation
+<span class="math inline">\sigma_j</span>. The natural parameter for
+comparing the two distributions is</p>
+<p><span class="math display">\delta = \mu_2 - \mu_1</span></p>
+<p>and we wish to test if <span class="math inline">\delta &gt; 0</span>
 in a one-sided testing scenario to test for superiority of treatment 2
-over treatment 1. We could also consider testing, say,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>&gt;</mo><msub><mi>δ</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">\delta &gt; \delta_0</annotation></semantics></math>
-for a non-inferiority scenario with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mn>0</mn></msub><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta_0&lt;0</annotation></semantics></math>
-or <strong>super superiority</strong> if
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mn>0</mn></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta_0&gt;0</annotation></semantics></math>.
-While normally a t-test would be used for this, for large sample sizes
-this would be nearly equivalent to a Z-test defined by:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mfrac><mrow><msub><mover><mi>X</mi><mo accent="true">‾</mo></mover><mn>2</mn></msub><mo>−</mo><msub><mover><mi>X</mi><mo accent="true">‾</mo></mover><mn>1</mn></msub><mo>−</mo><msub><mi>δ</mi><mn>0</mn></msub></mrow><msqrt><mrow><msubsup><mi>σ</mi><mn>2</mn><mn>2</mn></msubsup><mi>/</mi><msub><mi>n</mi><mn>2</mn></msub><mo>+</mo><msubsup><mi>σ</mi><mn>1</mn><mn>2</mn></msubsup><mi>/</mi><msub><mi>n</mi><mn>1</mn></msub></mrow></msqrt></mfrac><mo>≈</mo><mfrac><mrow><msub><mover><mi>X</mi><mo accent="true">‾</mo></mover><mn>2</mn></msub><mo>−</mo><msub><mover><mi>X</mi><mo accent="true">‾</mo></mover><mn>1</mn></msub></mrow><msqrt><mrow><msubsup><mi>s</mi><mn>2</mn><mn>2</mn></msubsup><mi>/</mi><msub><mi>n</mi><mn>2</mn></msub><mo>+</mo><msubsup><mi>s</mi><mn>1</mn><mn>2</mn></msubsup><mi>/</mi><msub><mi>n</mi><mn>1</mn></msub></mrow></msqrt></mfrac><mo>=</mo><mi>t</mi></mrow><annotation encoding="application/x-tex">Z=\frac{\bar X_2 - \bar X_1-\delta_0}{\sqrt{\sigma^2_2/n_2 + \sigma_1^2/n_1}}\approx \frac{\bar X_2 - \bar X_1}{\sqrt{s^2_2/n_2 + s_1^2/n_1}}=t</annotation></semantics></math>
-where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>X</mi><mo accent="true">‾</mo></mover><mi>j</mi></msub><annotation encoding="application/x-tex">\bar X_j</annotation></semantics></math>
-is the sample mean and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>s</mi><mi>j</mi><mn>2</mn></msubsup><annotation encoding="application/x-tex">s_j^2</annotation></semantics></math>
-is the sample variance for group
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">j=1,2</annotation></semantics></math>.
-The far right hand side of this is Welch’s t-test. For our examples we
-use this
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-test
-and show that the sample size computation based on the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>-test
-above works well for the chosen problems.</p>
+over treatment 1. We could also consider testing, say, <span class="math inline">\delta &gt; \delta_0</span> for a non-inferiority
+scenario with <span class="math inline">\delta_0&lt;0</span> or
+<strong>super superiority</strong> if <span class="math inline">\delta_0&gt;0</span>. While normally a t-test would
+be used for this, for large sample sizes this would be nearly equivalent
+to a Z-test defined by:</p>
+<p><span class="math display">Z=\frac{\bar X_2 - \bar
+X_1-\delta_0}{\sqrt{\sigma^2_2/n_2 + \sigma_1^2/n_1}}\approx \frac{\bar
+X_2 - \bar X_1}{\sqrt{s^2_2/n_2 + s_1^2/n_1}}=t</span> where <span class="math inline">\bar X_j</span> is the sample mean and <span class="math inline">s_j^2</span> is the sample variance for group <span class="math inline">j=1,2</span>. The far right hand side of this is
+Welch’s t-test. For our examples we use this <span class="math inline">t</span>-test and show that the sample size
+computation based on the <span class="math inline">Z</span>-test above
+works well for the chosen problems.</p>
 </div>
 <div class="section level2">
 <h2 id="sample-size">Sample size<a class="anchor" aria-label="anchor" href="#sample-size"></a>
 </h2>
-<p>Thus,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>2</mn></msub><mo>=</mo><mi>r</mi><mi>n</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">n_2=rn/(1+r)</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>1</mn></msub><mo>=</mo><mi>n</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">n_1=n/(1+r)</annotation></semantics></math>
-and when
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">r=1</annotation></semantics></math>
-we have
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mn>1</mn></msub><mo>=</mo><msub><mi>n</mi><mn>2</mn></msub><mo>=</mo><mi>n</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">n_1=n_2=n/2</annotation></semantics></math>.
-Now that we have completed needed notation, those not interested in the
-theory behind the sample size and power calculation used may skip the
-rest of this section.</p>
-<p>We let
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>σ</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>σ</mi><mn>2</mn><mn>2</mn></msubsup><mi>/</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\sigma^2=(1+r)(\sigma_1^2+\sigma_2^2/r)</annotation></semantics></math>
-and define
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>δ</mi><mo>−</mo><msub><mi>δ</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mi>σ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex"> \theta= (\delta -\delta_0)/\sigma.</annotation></semantics></math>
-Under the given assumptions, <span class="math display">$$Z \sim
-\hbox{Normal}\left(\sqrt n\theta,1\right).$$</span> Under the null
-hypothesis that
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><msub><mi>δ</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">\delta=\delta_0</annotation></semantics></math>,
-we have <span class="math inline">$Z\sim \hbox{Normal}(0,1)$</span>.
-Thus, regardless of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-we have
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mn>0</mn></msub><mrow><mo stretchy="true" form="prefix">[</mo><mi>Z</mi><mo>≥</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mi>α</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">P_0[Z\ge \Phi^{-1}(1-\alpha)]=\alpha.</annotation></semantics></math>
-Under the alternate hypothesis that
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><msub><mi>δ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\delta=\delta_1</annotation></semantics></math>
-and we denote a corresponding
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\theta_1</annotation></semantics></math>.
-We define the type II error
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
-and power
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>β</mi></mrow><annotation encoding="application/x-tex">1-\beta</annotation></semantics></math>
-by</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mn>1</mn><mo>−</mo><mi>β</mi><mo>=</mo></mtd><mtd columnalign="left" style="text-align: left"><msub><mi>P</mi><mn>1</mn></msub><mrow><mo stretchy="true" form="prefix">[</mo><mi>Z</mi><mo>≥</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mo>=</mo></mtd><mtd columnalign="left" style="text-align: left"><mi>P</mi><mrow><mo stretchy="true" form="prefix">[</mo><mi>Z</mi><mo>−</mo><msqrt><mi>n</mi></msqrt><msub><mi>θ</mi><mn>1</mn></msub><mo>≥</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><msqrt><mi>n</mi></msqrt><msub><mi>θ</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">]</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"><mo>=</mo></mtd><mtd columnalign="left" style="text-align: left"><mi>Φ</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><msqrt><mi>n</mi></msqrt><msub><mi>θ</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">
+<p>Thus, <span class="math inline">n_2=rn/(1+r)</span>, <span class="math inline">n_1=n/(1+r)</span> and when <span class="math inline">r=1</span> we have <span class="math inline">n_1=n_2=n/2</span>. Now that we have completed
+needed notation, those not interested in the theory behind the sample
+size and power calculation used may skip the rest of this section.</p>
+<p>We let <span class="math display">\sigma^2=(1+r)(\sigma_1^2+\sigma_2^2/r)</span> and
+define <span class="math display"> \theta= (\delta
+-\delta_0)/\sigma.</span> Under the given assumptions, <span class="math display">Z \sim \text{Normal}\left(\sqrt
+n\theta,1\right).</span> Under the null hypothesis that <span class="math inline">\delta=\delta_0</span>, we have <span class="math inline">Z\sim \text{Normal}(0,1)</span>. Thus, regardless of
+<span class="math inline">n</span> we have <span class="math display">P_0[Z\ge \Phi^{-1}(1-\alpha)]=\alpha.</span> Under
+the alternate hypothesis that <span class="math inline">\delta=\delta_1</span> and we denote a corresponding
+<span class="math inline">\theta_1</span>. We define the type II error
+<span class="math inline">\beta</span> and power <span class="math inline">1-\beta</span> by</p>
+<p><span class="math display">
 \begin{align}
 1-\beta =&amp; P_1[Z\ge \Phi^{-1}(1-\alpha)]\\
 =&amp; P[Z-\sqrt n\theta_1\ge \Phi^{-1}(1-\alpha)-\sqrt n\theta_1]\\
 =&amp;\Phi(\Phi^{-1}(1-\alpha)-\sqrt n\theta_1)).
-\end{align}</annotation></semantics></math></p>
-<p>If the power
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>β</mi></mrow><annotation encoding="application/x-tex">1-\beta</annotation></semantics></math>
-is fixed, we can invert this formula to compute sample size with:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><msub><mi>θ</mi><mn>1</mn></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">n= \left(\frac{\Phi^{-1}(1-\beta)+\Phi^{-1}(1-\alpha)}{\theta_1}\right)^2.</annotation></semantics></math></p>
-<p>For 2-sided testing, we simply substitute
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha/2</annotation></semantics></math>
-for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
-in the above two formulas.</p>
+\end{align}</span></p>
+<p>If the power <span class="math inline">1-\beta</span> is fixed, we
+can invert this formula to compute sample size with:</p>
+<p><span class="math display">n=
+\left(\frac{\Phi^{-1}(1-\beta)+\Phi^{-1}(1-\alpha)}{\theta_1}\right)^2.</span></p>
+<p>For 2-sided testing, we simply substitute <span class="math inline">\alpha/2</span> for <span class="math inline">\alpha</span> in the above two formulas.</p>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -184,18 +143,10 @@ sequential design example.</p>
 <div class="section level3">
 <h3 id="sample-size-1">Sample size<a class="anchor" aria-label="anchor" href="#sample-size-1"></a>
 </h3>
-<p>We consider an example with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mn>2</mn></msub><mo>=</mo><mn>1.25</mn></mrow><annotation encoding="application/x-tex">\sigma_2=1.25</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mn>1</mn></msub><mo>=</mo><mn>1.6</mn></mrow><annotation encoding="application/x-tex">\sigma_1=1.6</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">\delta=0.8</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta_0=0</annotation></semantics></math>.
-We let the sample size ratio be 2 experimental group observations per
-control observation. We compute sample size with <code><a href="../reference/nNormal.html">nNormal()</a></code>
-assuming one-sided Type I error
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.025</mn></mrow><annotation encoding="application/x-tex">\alpha=0.025</annotation></semantics></math>
-and 90% power
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>β</mi><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">1-\beta=0.9</annotation></semantics></math>).</p>
+<p>We consider an example with <span class="math inline">\sigma_2=1.25</span>, <span class="math inline">\sigma_1=1.6</span>, <span class="math inline">\delta=0.8</span> and <span class="math inline">\delta_0=0</span>. We let the sample size ratio be 2
+experimental group observations per control observation. We compute
+sample size with <code><a href="../reference/nNormal.html">nNormal()</a></code> assuming one-sided Type I error
+<span class="math inline">\alpha=0.025</span> and 90% power (<span class="math inline">1-\beta=0.9</span>).</p>
 <p>Checking using the sample size formula above, we have:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
@@ -236,16 +187,14 @@ different treatment effect assumptions:</p>
 <h3 id="verification-with-simulation">Verification with simulation<a class="anchor" aria-label="anchor" href="#verification-with-simulation"></a>
 </h3>
 <p>Rather than simulate individual observations, we will take advantage
-of the fact that for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">j=1,2</annotation></semantics></math></p>
-<p><span class="math display">$$\bar X_j\sim
-\hbox{Normal}(\mu_j,\sigma_j^2/n_j)$$</span></p>
+of the fact that for <span class="math inline">j=1,2</span></p>
+<p><span class="math display">\bar X_j\sim
+\text{Normal}(\mu_j,\sigma_j^2/n_j)</span></p>
 <p>and</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>j</mi></msub><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><msubsup><mi>s</mi><mi>j</mi><mn>2</mn></msubsup><mi>/</mi><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>n</mi><mi>j</mi></msub></munderover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>X</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>−</mo><msub><mover><mi>X</mi><mo accent="true">‾</mo></mover><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><msup><mi>σ</mi><mn>2</mn></msup><mo>∼</mo><msubsup><mi>χ</mi><mrow><msub><mi>n</mi><mi>j</mi></msub><mo>−</mo><mn>1</mn></mrow><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">(n_j-1)s_j^2/\sigma_j^2=\sum_{i=1}^{n_j} (X_{ij}-\bar X_j)/\sigma^2 \sim \chi ^2_{n_j-1}</annotation></semantics></math></p>
-<p>are independent. Thus, we can simulate trial power with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>200</mn></mrow><annotation encoding="application/x-tex">n=200</annotation></semantics></math>
-1 million times with a t-statistic with unequal variances quickly as
-follows under the alternate hypothesis:</p>
+<p><span class="math display">(n_j-1)s_j^2/\sigma_j^2=\sum_{i=1}^{n_j}
+(X_{ij}-\bar X_j)/\sigma^2 \sim \chi ^2_{n_j-1}</span></p>
+<p>are independent. Thus, we can simulate trial power with <span class="math inline">n=200</span> 1 million times with a t-statistic with
+unequal variances quickly as follows under the alternate hypothesis:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">1000000</span></span>
 <span><span class="va">delta</span> <span class="op">&lt;-</span> <span class="fl">0.8</span></span>

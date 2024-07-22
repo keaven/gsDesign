@@ -12,11 +12,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="A cure model calendar-based design">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
+<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="A cure model calendar-based design">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -97,48 +99,33 @@ flexible and easy to use in that the control distribution is specified
 with two parameters in a transparent fashion: the cure rate and one
 other survival rate at an arbitrarily specified time point.</p>
 <p>The Poisson mixture model (<span class="citation">Rodrigues et al.
-(2009)</span>) assumes a cure rate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
-to represent the patients who benefit long-term. The survival function
-as a function of time
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
-for a control group
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>)
-is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>c</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>θ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>λ</mi><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">S_c(t)=\exp(-\theta(1-\exp(-\lambda t))),</annotation></semantics></math>
-where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mo>−</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\theta = -\log(p)</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda&gt; 0</annotation></semantics></math>
-is a constant hazard rate and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t\ge 0</annotation></semantics></math>.
-The component
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>λ</mi><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\exp(-\lambda t)</annotation></semantics></math>
-is an exponential survival distribution; while it could be replaced with
-an arbitrary survival distribution on
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t&gt;0</annotation></semantics></math>
-for the mixture model, the exponential model is simple, adequately
-flexible and easy to explain. This two-parameter model can be specified
-by the cure rate and the assumed survival rate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>c</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>t</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">S_c(t_1)</annotation></semantics></math>
-at some time
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><msub><mi>t</mi><mn>1</mn></msub><mo>&lt;</mo><mi>∞</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">0 &lt;t_1&lt;\infty.</annotation></semantics></math>
-We can solve for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
-as follows:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>c</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>∞</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msup><mi>e</mi><mi>θ</mi></msup><mo>⇒</mo><mi>θ</mi><mo>=</mo><mo>−</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>S</mi><mi>c</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>∞</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">S_c(\infty) = e^\theta \Rightarrow \theta = -\log(S_c(\infty)) </annotation></semantics></math>
-and with a little algebra, we can solve for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>c</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>t</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>θ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>λ</mi><msub><mi>t</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>⇒</mo><mi>λ</mi><mo>=</mo><mo>−</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>S</mi><mi>c</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>t</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><msub><mi>t</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">S_c(t_1)= \exp(-\theta(1-\exp(-\lambda t_1))) \Rightarrow \lambda =  -\log(1 + \log(S_c(t_1)) / \theta) / t_1</annotation></semantics></math>
+(2009)</span>) assumes a cure rate <span class="math inline">p</span> to
+represent the patients who benefit long-term. The survival function as a
+function of time <span class="math inline">t</span> for a control group
+(<span class="math inline">c</span>) is:</p>
+<p><span class="math display">S_c(t)=\exp(-\theta(1-\exp(-\lambda
+t))),</span> where <span class="math inline">\theta = -\log(p)</span>,
+<span class="math inline">\lambda&gt; 0</span> is a constant hazard rate
+and <span class="math inline">t\ge 0</span>. The component <span class="math inline">\exp(-\lambda t)</span> is an exponential survival
+distribution; while it could be replaced with an arbitrary survival
+distribution on <span class="math inline">t&gt;0</span> for the mixture
+model, the exponential model is simple, adequately flexible and easy to
+explain. This two-parameter model can be specified by the cure rate and
+the assumed survival rate <span class="math inline">S_c(t_1)</span> at
+some time <span class="math inline">0 &lt;t_1&lt;\infty.</span> We can
+solve for <span class="math inline">\theta</span> and <span class="math inline">\lambda</span> as follows:</p>
+<p><span class="math display">S_c(\infty) = e^\theta \Rightarrow \theta
+= -\log(S_c(\infty)) </span> and with a little algebra, we can solve for
+<span class="math inline">\lambda</span>: <span class="math display">S_c(t_1)= \exp(-\theta(1-\exp(-\lambda t_1)))
+\Rightarrow \lambda =  -\log(1 + \log(S_c(t_1)) / \theta) / t_1</span>
 We note that under a proportional hazards assumption with hazard ratio
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\gamma &gt; 0</annotation></semantics></math>
-the survival function for the experimental group (e) is:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>e</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>θ</mi><mi>γ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mo>−</mo><mi>λ</mi><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">S_e(t)=\exp(-\theta\gamma(1-\exp(-\lambda t))).</annotation></semantics></math>
-For any setting chosen, it is ideal to be able to cite published
-literature and other rationale for study assumptions and show that the
-Poisson mixture assumptions for the control group reasonably match
-historical data.</p>
+<span class="math inline">\gamma &gt; 0</span> the survival function for
+the experimental group (e) is:</p>
+<p><span class="math display">S_e(t)=\exp(-\theta\gamma(1-\exp(-\lambda
+t))).</span> For any setting chosen, it is ideal to be able to cite
+published literature and other rationale for study assumptions and show
+that the Poisson mixture assumptions for the control group reasonably
+match historical data.</p>
 <div class="section level3">
 <h3 id="supporting-functions">Supporting functions<a class="anchor" aria-label="anchor" href="#supporting-functions"></a>
 </h3>
@@ -249,16 +236,12 @@ two things <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a>
 <li>How to get information fraction levels that correspond to targeted
 calendar analysis times to plug in for the planned design.</li>
 <li>Replacing information fraction levels with calendar fraction levels
-for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>-
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>-spending.
-Note that calendar-based analysis timing might often be used with
-information-based spending in many cases. In this case, the
-calendar-based timing is only used as an approximation to derive
-information fractions at interim analyses and timing of analyses would
-still be based on event counts regardless of the amount of time it takes
-to accumulate targeted events.</li>
+for <span class="math inline">\alpha</span>- and <span class="math inline">\beta</span>-spending. Note that calendar-based
+analysis timing might often be used with information-based spending in
+many cases. In this case, the calendar-based timing is only used as an
+approximation to derive information fractions at interim analyses and
+timing of analyses would still be based on event counts regardless of
+the amount of time it takes to accumulate targeted events.</li>
 </ul>
 <p>We begin by specifying calendar times of analysis and find
 corresponding fractions of final planned events and calendar time under
@@ -974,14 +957,10 @@ acceptability at the time of design.</li>
 <li>The trial may be continued after crossing an efficacy bound for
 further follow-up as it is unlikely that control patients doing well
 would cross over to experimental therapy in absence of adverse clinical
-outcomes. Inference at subsequent analyses using repeated
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values
-(<span class="citation">Jennison and Turnbull (2000)</span>) or
-sequential
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values
-(<span class="citation">Liu and Anderson (2008)</span>) are
-well-specified and interpretable as adjusted
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values.</li>
+outcomes. Inference at subsequent analyses using repeated <span class="math inline">p</span>-values (<span class="citation">Jennison and
+Turnbull (2000)</span>) or sequential <span class="math inline">p</span>-values (<span class="citation">Liu and
+Anderson (2008)</span>) are well-specified and interpretable as adjusted
+<span class="math inline">p</span>-values.</li>
 </ul>
 </div>
 <div class="section level2 unnumbered">

@@ -12,11 +12,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Binomial SPRT">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
+<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Binomial SPRT">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -94,10 +96,7 @@ new treatment. The SPRT is defined as a continuous testing procedure
 without a maximum sample size. Practically speaking, this is implemented
 with a minimum and maximum sample size. For our example we assume a
 minimum sample size of 10 and a maximum sample size of 25. We will
-initially set a one-sided Type I error of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.08</mn></mrow><annotation encoding="application/x-tex">\alpha=0.08</annotation></semantics></math>
-and power of 80%
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>β</mi><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">1-\beta = 0.2</annotation></semantics></math>):</p>
+initially set a one-sided Type I error of <span class="math inline">\alpha=0.08</span> and power of 80% (<span class="math inline">1-\beta = 0.2</span>):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://keaven.github.io/gsDesign/">gsDesign</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -140,8 +139,7 @@ half-way between the null and alternative hypotheses.</li>
 <li>Short-dashed line: reject H0. While we targeted a 10% Type I error
 rate, we can see here that since we have truncated the design to analyze
 only after 10 to 25 patient that the Type I error is less 5%; this is
-below the targeted 1-sided
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.08</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\alpha=0.08.</annotation></semantics></math>
+below the targeted 1-sided <span class="math inline">\alpha=0.08.</span>
 </li>
 <li>Long-dashed line: Reject H1. We can see that we have &gt; 90% chance
 of rejecting a 35% response rate if the true response rate is 10%.</li>
@@ -1285,11 +1283,9 @@ adverse events in a study.</p>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-wald1947sequential" class="csl-entry">
 Wald, Abraham. 1947. <span>“The Sequential Probability Ratio Test for
-Testing a Simple Hypothesis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>
-Against a Single Alternative
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>1</mn></msub><annotation encoding="application/x-tex">H_1</annotation></semantics></math>.”</span>
-In <em>Sequential Analysis</em>. Dover New York.
+Testing a Simple Hypothesis <span class="math inline">H_0</span> Against
+a Single Alternative <span class="math inline">H_1</span>.”</span> In
+<em>Sequential Analysis</em>. Dover New York.
 </div>
 <div id="ref-wald1948optimum" class="csl-entry">
 Wald, Abraham, and Jacob Wolfowitz. 1948. <span>“Optimum Character of

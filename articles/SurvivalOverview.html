@@ -12,11 +12,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Overview of survival endpoint design">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
+<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Overview of survival endpoint design">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -124,63 +126,42 @@ design.</li>
 <div class="section level2">
 <h2 id="schoenfeld-approximation-support">Schoenfeld approximation support<a class="anchor" aria-label="anchor" href="#schoenfeld-approximation-support"></a>
 </h2>
-<p>We will assume a hazard ratio
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ν</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\nu &lt; 1</annotation></semantics></math>
-represents a benefit of experimental treatment over control. We let
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mo>log</mo><mi>ν</mi></mrow><annotation encoding="application/x-tex">\delta = \log\nu</annotation></semantics></math>
-denote the so-called <em>natural parameter</em> for this case.
-Asymptotically the distribution of the Cox model estimate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>δ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\delta}</annotation></semantics></math>
-under the proportional hazards assumption is (<span class="citation">Schoenfeld (1981)</span>) <span class="math display">$$\hat\delta\sim \hbox{Normal}(\delta=\log\nu,
-(1+r)^2/nr).$$</span> The inverse of the variance is the statistical
-information:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℐ</mi><mo>=</mo><mi>n</mi><mi>r</mi><mi>/</mi><msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal I = nr/(1 + r)^2.</annotation></semantics></math>
-Using a Cox model to estimate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>,
-the Wald test for <span class="math inline">$\hbox{H_0}:
-\delta=0$</span> can be approximated with the asymptotic variance from
-above as:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mi>W</mi></msub><mo>≈</mo><mfrac><msqrt><mrow><mi>n</mi><mi>r</mi></mrow></msqrt><mrow><mn>1</mn><mo>+</mo><mi>r</mi></mrow></mfrac><mover><mi>δ</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><mrow><mo>ln</mo><mrow><mo stretchy="true" form="prefix">(</mo><mover><mi>ν</mi><mo accent="true">̂</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><msqrt><mrow><mi>n</mi><mi>r</mi></mrow></msqrt></mrow><mrow><mn>1</mn><mo>+</mo><mi>r</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">Z_W\approx \frac{\sqrt {nr}}{1+r}\hat\delta=\frac{\ln(\hat\nu)\sqrt{nr}}{1+r}.</annotation></semantics></math></p>
-<p>Also, we know that the Wald test
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mi>W</mi></msub><annotation encoding="application/x-tex">Z_W</annotation></semantics></math>
-and a standard normal version of the logrank
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Z</mi><annotation encoding="application/x-tex">Z</annotation></semantics></math>
-are both asymptotically efficient and therefore asymptotically
-equivalent, at least under a local hypothesis framework. We denote the
-<em>standardized effect size</em> as</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>=</mo><mi>δ</mi><msqrt><mi>r</mi></msqrt><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>ν</mi><mo stretchy="true" form="postfix">)</mo></mrow><msqrt><mi>r</mi></msqrt><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta = \delta\sqrt r / (1+r)= \log(\nu)\sqrt r / (1+r).</annotation></semantics></math>
-Letting
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>=</mo><mo>−</mo><msqrt><mi>r</mi></msqrt><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mover><mi>δ</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\hat\theta = -\sqrt r/(1+r)\hat\delta</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-representing the number of events observed, we have <span class="math display">$$\hat \theta \sim \hbox{Normal}(\theta, 1/
-n).$$</span> Thus, the standardized Z version of the logrank is
-approximately distributed as</p>
-<p><span class="math display">$$Z\sim\hbox{Normal}(\sqrt
-n\theta,1).$$</span> Treatment effect favoring experimental treatment
-compared to control in this notation corresponds to a hazard ratio
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ν</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\nu &lt; 1</annotation></semantics></math>,
-as well as negative values of the standardized effect
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>,
-natural parameter
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>
-and standardized Z-test.</p>
+<p>We will assume a hazard ratio <span class="math inline">\nu &lt;
+1</span> represents a benefit of experimental treatment over control. We
+let <span class="math inline">\delta = \log\nu</span> denote the
+so-called <em>natural parameter</em> for this case. Asymptotically the
+distribution of the Cox model estimate <span class="math inline">\hat{\delta}</span> under the proportional hazards
+assumption is (<span class="citation">Schoenfeld (1981)</span>) <span class="math display">\hat\delta\sim \text{Normal}(\delta=\log\nu,
+(1+r)^2/nr).</span> The inverse of the variance is the statistical
+information: <span class="math display">\mathcal I = nr/(1 +
+r)^2.</span> Using a Cox model to estimate <span class="math inline">\delta</span>, the Wald test for <span class="math inline">\text{H}_0: \delta=0</span> can be approximated with
+the asymptotic variance from above as:</p>
+<p><span class="math display">Z_W\approx \frac{\sqrt
+{nr}}{1+r}\hat\delta=\frac{\ln(\hat\nu)\sqrt{nr}}{1+r}.</span></p>
+<p>Also, we know that the Wald test <span class="math inline">Z_W</span>
+and a standard normal version of the logrank <span class="math inline">Z</span> are both asymptotically efficient and
+therefore asymptotically equivalent, at least under a local hypothesis
+framework. We denote the <em>standardized effect size</em> as</p>
+<p><span class="math display">\theta = \delta\sqrt r / (1+r)=
+\log(\nu)\sqrt r / (1+r).</span> Letting <span class="math inline">\hat\theta = -\sqrt r/(1+r)\hat\delta</span> and
+<span class="math inline">n</span> representing the number of events
+observed, we have <span class="math display">\hat \theta \sim
+\text{Normal}(\theta, 1/ n).</span> Thus, the standardized Z version of
+the logrank is approximately distributed as</p>
+<p><span class="math display">Z\sim\text{Normal}(\sqrt
+n\theta,1).</span> Treatment effect favoring experimental treatment
+compared to control in this notation corresponds to a hazard ratio <span class="math inline">\nu &lt; 1</span>, as well as negative values of the
+standardized effect <span class="math inline">\theta</span>, natural
+parameter <span class="math inline">\delta</span> and standardized
+Z-test.</p>
 <div class="section level3">
 <h3 id="power-and-sample-size-with-nevents">Power and sample size with <code>nEvents()</code><a class="anchor" aria-label="anchor" href="#power-and-sample-size-with-nevents"></a>
 </h3>
-<p>Based on the above, the power for the logrank test when
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-events have been observed is approximated by</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">[</mo><mi>Z</mi><mo>≤</mo><mi>z</mi><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mi>Φ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>z</mi><mo>−</mo><msqrt><mi>n</mi></msqrt><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>Φ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>z</mi><mo>−</mo><msqrt><mrow><mi>n</mi><mi>r</mi></mrow></msqrt><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>log</mo><mi>ν</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">P[Z\le z]=\Phi(z -\sqrt n\theta)=\Phi(z- \sqrt{nr}/(1+r)\log\nu).</annotation></semantics></math>
-Thus, assuming
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">n=100</annotation></semantics></math>
-events and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mo>log</mo><mi>ν</mi><mo>=</mo><mo>−</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>.7</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\delta = \log\nu=-\log(.7)</annotation></semantics></math>,
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">r=1</annotation></semantics></math>
-(equal randomization) we approximate power for the logrank test when
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.025</mn></mrow><annotation encoding="application/x-tex">\alpha=0.025</annotation></semantics></math>
-as</p>
+<p>Based on the above, the power for the logrank test when <span class="math inline">n</span> events have been observed is approximated
+by</p>
+<p><span class="math display">P[Z\le z]=\Phi(z -\sqrt n\theta)=\Phi(z-
+\sqrt{nr}/(1+r)\log\nu).</span> Thus, assuming <span class="math inline">n=100</span> events and <span class="math inline">\delta = \log\nu=-\log(.7)</span>, and <span class="math inline">r=1</span> (equal randomization) we approximate
+power for the logrank test when <span class="math inline">\alpha=0.025</span> as</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
 <span><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">.7</span></span>
@@ -193,18 +174,15 @@ as</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nSurvival.html">nEvents</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">n</span>, alpha <span class="op">=</span> <span class="va">alpha</span>, hr <span class="op">=</span> <span class="va">hr</span>, r <span class="op">=</span> <span class="va">r</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.4299155</span></span></code></pre></div>
-<p>We solve for the number of events
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+<p>We solve for the number of events <span class="math inline">n</span>
 to see how many events are required to obtain a desired power</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>β</mi><mo>=</mo><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>Z</mi><mo>≥</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">1-\beta=P(Z\ge \Phi^{-1}(1-\alpha))</annotation></semantics></math>
+<p><span class="math display">1-\beta=P(Z\ge \Phi^{-1}(1-\alpha))</span>
 with</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mi>θ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>=</mo><mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mrow><mi>r</mi><msup><mrow><mo stretchy="true" form="prefix">(</mo><mo>log</mo><mi>ν</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mrow></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">n = \left(\frac{\Phi^{-1} (1-\alpha)+\Phi^{-1}(1-\beta)}{\theta}\right)^2
-=\frac{(1+r)^2}{r(\log\nu)^2}\left({\Phi^{-1} (1-\alpha)+\Phi^{-1}(1-\beta)}\right)^2.</annotation></semantics></math>
-Thus, the approximate number of events required to power for HR=0.7 with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.025</mn></mrow><annotation encoding="application/x-tex">\alpha=0.025</annotation></semantics></math>
-one-sided and power
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>β</mi><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">1-\beta=0.9</annotation></semantics></math>
-is</p>
+<p><span class="math display">n = \left(\frac{\Phi^{-1}
+(1-\alpha)+\Phi^{-1}(1-\beta)}{\theta}\right)^2
+=\frac{(1+r)^2}{r(\log\nu)^2}\left({\Phi^{-1}
+(1-\alpha)+\Phi^{-1}(1-\beta)}\right)^2.</span> Thus, the approximate
+number of events required to power for HR=0.7 with <span class="math inline">\alpha=0.025</span> one-sided and power <span class="math inline">1-\beta=0.9</span> is</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
 <span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">r</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="va">r</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">alpha</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">beta</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span></span>
@@ -240,16 +218,13 @@ is</p>
 </tr></tbody>
 </table>
 <p>The notation <code>delta</code> in the above table changes the sign
-for the standardized treatment effect
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
-in the above:</p>
+for the standardized treatment effect <span class="math inline">\theta</span> in the above:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="va">delta</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">r</span><span class="op">)</span></span>
 <span><span class="va">theta</span></span>
 <span><span class="co">#&gt; [1] -0.1783375</span></span></code></pre></div>
 <p>The <code>se</code> in the table is the estimated standard error for
-the log hazard ratio
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mo>log</mo><mover><mi>ν</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\delta=\log\hat\nu</annotation></semantics></math></p>
+the log hazard ratio <span class="math inline">\delta=\log\hat\nu</span></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">r</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fl">331</span> <span class="op">*</span> <span class="va">r</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.1099299</span></span></code></pre></div>
@@ -258,23 +233,19 @@ the log hazard ratio
 <h3 id="group-sequential-design">Group sequential design<a class="anchor" aria-label="anchor" href="#group-sequential-design"></a>
 </h3>
 <p>We can create a group sequential design for the above problem either
-with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
-or with the fixed design sample size. The parameter <code>delta</code>
-in <code><a href="../reference/gsDesign.html">gsDesign()</a></code> corresponds to standardized effect size with
-sign changed
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mi>θ</mi></mrow><annotation encoding="application/x-tex">-\theta</annotation></semantics></math>
-in notation used above and by <span class="citation">Jennison and
-Turnbull (2000)</span>, while the natural parameter, <span class="math inline">$\log(\hbox{HR})$</span> is in the parameter
-<code>delta1</code> passed to <code><a href="../reference/gsDesign.html">gsDesign()</a></code>. The name of the
-effect size is specified in <code>deltaname</code> and the parameter
-<code>logdelta = TRUE</code> indicates that <code>delta</code> input
-needs to be exponentiated to obtain HR in the output below. This example
-code can be useful in practice. We begin by passing the number of events
-for a fixed design in the parameter <code>n.fix</code> (continuous, not
-rounded) to adapt to a group sequential design. By rounding to integer
-event counts with the <code><a href="../reference/toInteger.html">toInteger()</a></code> function we increase the
-power slightly over the targeted 90%.</p>
+with <span class="math inline">\theta</span> or with the fixed design
+sample size. The parameter <code>delta</code> in <code><a href="../reference/gsDesign.html">gsDesign()</a></code>
+corresponds to standardized effect size with sign changed <span class="math inline">-\theta</span> in notation used above and by <span class="citation">Jennison and Turnbull (2000)</span>, while the natural
+parameter, <span class="math inline">\log(\text{HR})</span> is in the
+parameter <code>delta1</code> passed to <code><a href="../reference/gsDesign.html">gsDesign()</a></code>. The
+name of the effect size is specified in <code>deltaname</code> and the
+parameter <code>logdelta = TRUE</code> indicates that <code>delta</code>
+input needs to be exponentiated to obtain HR in the output below. This
+example code can be useful in practice. We begin by passing the number
+of events for a fixed design in the parameter <code>n.fix</code>
+(continuous, not rounded) to adapt to a group sequential design. By
+rounding to integer event counts with the <code><a href="../reference/toInteger.html">toInteger()</a></code>
+function we increase the power slightly over the targeted 90%.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Schoenfeld</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fl">2</span>,</span>
@@ -363,33 +334,21 @@ the standardized effect size <code>theta</code> from above to the
 parameter <code>delta</code> in <code><a href="../reference/gsDesign.html">gsDesign()</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Schoenfeld</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">2</span>, delta <span class="op">=</span> <span class="op">-</span><span class="va">theta</span>, delta1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>We noted above that the asymptotic variance for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\theta</annotation></semantics></math>
-is
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">1/n</annotation></semantics></math>
-which corresponds to statistical information
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℐ</mi><mo>=</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">\mathcal I=n</annotation></semantics></math>
-for the parameter
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>.
-Thus, the value</p>
+<p>We noted above that the asymptotic variance for <span class="math inline">\hat\theta</span> is <span class="math inline">1/n</span> which corresponds to statistical
+information <span class="math inline">\mathcal I=n</span> for the
+parameter <span class="math inline">\theta</span>. Thus, the value</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Schoenfeld</span><span class="op">$</span><span class="va">n.I</span></span>
 <span><span class="co">#&gt; [1] 172 345</span></span></code></pre></div>
 <p>corresponds both to the number of events and the statistical
-information for the standardized effect size
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
-required to power the trial at the desired level. Note that if you plug
-in the natural parameter
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mo>−</mo><mo>log</mo><mi>ν</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\delta= -\log\nu &gt; 0</annotation></semantics></math>,
-then
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mi>.</mi><mi>I</mi></mrow><annotation encoding="application/x-tex">n.I</annotation></semantics></math>
-returns the statistical information for the log hazard ratio.</p>
+information for the standardized effect size <span class="math inline">\theta</span> required to power the trial at the
+desired level. Note that if you plug in the natural parameter <span class="math inline">\delta= -\log\nu &gt; 0</span>, then <span class="math inline">n.I</span> returns the statistical information for
+the log hazard ratio.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">2</span>, delta <span class="op">=</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">n.I</span></span>
 <span><span class="co">#&gt; [1] 43.06893 86.13786</span></span></code></pre></div>
 <p>The reader may wish to look above to derive the exact relationship
-between events and statistical information for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>.</p>
+between events and statistical information for <span class="math inline">\delta</span>.</p>
 </div>
 <div class="section level3">
 <h3 id="approximating-boundary-characteristics">Approximating boundary characteristics<a class="anchor" aria-label="anchor" href="#approximating-boundary-characteristics"></a>
@@ -404,19 +363,13 @@ with the basic approximation used across all of these functions in this
 section and follow with a sub-section with example code to reproduce
 some of what is in the table above.</p>
 <p>We return to the following equation from above:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>≈</mo><msub><mi>Z</mi><mi>W</mi></msub><mo>≈</mo><mfrac><msqrt><mrow><mi>n</mi><mi>r</mi></mrow></msqrt><mrow><mn>1</mn><mo>+</mo><mi>r</mi></mrow></mfrac><mover><mi>δ</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><mrow><mo>ln</mo><mrow><mo stretchy="true" form="prefix">(</mo><mover><mi>ν</mi><mo accent="true">̂</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><msqrt><mrow><mi>n</mi><mi>r</mi></mrow></msqrt></mrow><mrow><mn>1</mn><mo>+</mo><mi>r</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">Z\approx Z_W\approx \frac{\sqrt {nr}}{1+r}\hat\delta=\frac{\ln(\hat\nu)\sqrt{nr}}{1+r}.</annotation></semantics></math>
-By fixing
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mi>z</mi><mo>,</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">Z=z, n</annotation></semantics></math>
-we can solve for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>ν</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\nu</annotation></semantics></math>
-from the above:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>ν</mi><mo accent="true">̂</mo></mover><mo>=</mo><mo>exp</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>z</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><msqrt><mrow><mi>r</mi><mi>n</mi></mrow></msqrt><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat{\nu} = \exp(z(1+r)/\sqrt{rn}).</annotation></semantics></math>
-By fixing
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>ν</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\nu</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>,
-we can solve for the corresponding number of events required:
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>z</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>+</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mover><mi>ν</mi><mo accent="true">̂</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mi>/</mi><mi>r</mi><mi>.</mi></mrow><annotation encoding="application/x-tex"> n = (z(1+r)/\log(\hat{\nu}))^2/r.</annotation></semantics></math></p>
+<p><span class="math display">Z\approx Z_W\approx \frac{\sqrt
+{nr}}{1+r}\hat\delta=\frac{\ln(\hat\nu)\sqrt{nr}}{1+r}.</span> By fixing
+<span class="math inline">Z=z, n</span> we can solve for <span class="math inline">\hat\nu</span> from the above:</p>
+<p><span class="math display">\hat{\nu} = \exp(z(1+r)/\sqrt{rn}).</span>
+By fixing <span class="math inline">\hat\nu</span> and <span class="math inline">z</span>, we can solve for the corresponding number
+of events required: <span class="math display"> n =
+(z(1+r)/\log(\hat{\nu}))^2/r.</span></p>
 </div>
 <div class="section level3">
 <h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -436,15 +389,13 @@ bounds using the Schoenfeld approximations above:</p>
 <span>  ratio <span class="op">=</span> <span class="va">r</span> <span class="co"># Experimental/control randomization ratio</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.6572433 0.8079049</span></span></code></pre></div>
-<p>For the following examples, we assume
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">r=1</annotation></semantics></math>.</p>
+<p>For the following examples, we assume <span class="math inline">r=1</span>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></code></pre></div>
 <ol style="list-style-type: decimal">
-<li>Assuming a Cox model estimate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>ν</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\nu</annotation></semantics></math>
-and a corresponding event count, approximately what Z-value (p-value)
-does this correspond to? We use the first equation above:</li>
+<li>Assuming a Cox model estimate <span class="math inline">\hat\nu</span> and a corresponding event count,
+approximately what Z-value (p-value) does this correspond to? We use the
+first equation above:</li>
 </ol>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hr</span> <span class="op">&lt;-</span> <span class="fl">.73</span> <span class="co"># Observed hr</span></span>
@@ -474,11 +425,9 @@ for all of these functions and often is not specified:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nSurvival.html">zn2hr</a></span><span class="op">(</span>z <span class="op">=</span> <span class="op">-</span><span class="va">z</span>, n <span class="op">=</span> <span class="va">events</span>, ratio <span class="op">=</span> <span class="va">r</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.6991858</span></span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
-<li>Finally, if we want an observed hazard ratio
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>ν</mi><mo accent="true">̂</mo></mover><mo>=</mo><mn>.8</mn></mrow><annotation encoding="application/x-tex">\hat\nu = .8</annotation></semantics></math>
-to represent a positive result, how many events would be need to observe
-to achieve a 1-sided p-value of 0.025? assuming 2:1 randomization? We
-use the third equation above:</li>
+<li>Finally, if we want an observed hazard ratio <span class="math inline">\hat\nu = .8</span> to represent a positive result,
+how many events would be need to observe to achieve a 1-sided p-value of
+0.025? assuming 2:1 randomization? We use the third equation above:</li>
 </ol>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
@@ -539,20 +488,16 @@ and Foulkes (1986)</span>.</p>
 Foulkes (1986)</span> method has from the <span class="citation">Schoenfeld (1981)</span> method are:</p>
 <ol style="list-style-type: decimal">
 <li>By assuming enrollment, failure and dropout rates the method
-delivers sample size
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>
-as well as events required.</li>
-<li>The variance for the log hazard ratio
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>δ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\delta</annotation></semantics></math>
-is computed differently and both a null
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>σ</mi><mn>0</mn><mn>2</mn></msubsup><annotation encoding="application/x-tex">\sigma^2_0</annotation></semantics></math>)
-and alternate hypothesis
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>σ</mi><mn>1</mn><mn>2</mn></msubsup><annotation encoding="application/x-tex">\sigma^2_1</annotation></semantics></math>)
-variance are incorporated through the formula
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>σ</mi><mn>0</mn></msub><mo>+</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>σ</mi><mn>1</mn></msub></mrow><mi>δ</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">N = \left(\frac{\Phi^{-1}(1-\alpha)\sigma_0 + \Phi^{-1}(1-\beta)\sigma_1}{\delta}\right).</annotation></semantics></math>
-The null hypothesis is derived by averaging the alternate hypothesis
-rates, weighting according to the proportion randomized in each
-group.</li>
+delivers sample size <span class="math inline">N</span> as well as
+events required.</li>
+<li>The variance for the log hazard ratio <span class="math inline">\hat\delta</span> is computed differently and both a
+null (<span class="math inline">\sigma^2_0</span>) and alternate
+hypothesis (<span class="math inline">\sigma^2_1</span>) variance are
+incorporated through the formula <span class="math display">N =
+\left(\frac{\Phi^{-1}(1-\alpha)\sigma_0 +
+\Phi^{-1}(1-\beta)\sigma_1}{\delta}\right).</span> The null hypothesis
+is derived by averaging the alternate hypothesis rates, weighting
+according to the proportion randomized in each group.</li>
 </ol>
 </div>
 <div class="section level3">
@@ -561,15 +506,10 @@ group.</li>
 <p>We will use the same hazard ratio 0.7 as for the <span class="citation">Schoenfeld (1981)</span> sample size calculations
 above. We assume further that the trial will enroll for a constant rate
 for 12 months, have a control group median of 8 months (exponential
-failure rate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mo>log</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mn>8</mn></mrow><annotation encoding="application/x-tex">\lambda = \log(2)/8</annotation></semantics></math>),
-a dropout rate of 0.001 per month, and 16 months of minimum follow-up.
-As before, we assume a randomization ratio
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">r=1</annotation></semantics></math>,
-one-sided Type I error
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.025</mn></mrow><annotation encoding="application/x-tex">\alpha=0.025</annotation></semantics></math>,
-90% power which is equivalent to Type II error
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\beta=0.1</annotation></semantics></math>.</p>
+failure rate <span class="math inline">\lambda = \log(2)/8</span>), a
+dropout rate of 0.001 per month, and 16 months of minimum follow-up. As
+before, we assume a randomization ratio <span class="math inline">r=1</span>, one-sided Type I error <span class="math inline">\alpha=0.025</span>, 90% power which is equivalent
+to Type II error <span class="math inline">\beta=0.1</span>.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="co"># Experimental/control randomization ratio</span></span>
 <span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.025</span> <span class="co"># 1-sided Type I error</span></span>
@@ -634,10 +574,8 @@ this example.</p>
 <h3 id="group-sequential-design-1">Group sequential design<a class="anchor" aria-label="anchor" href="#group-sequential-design-1"></a>
 </h3>
 <p>Now we produce a group sequential design with a default asymmetric
-design with a futility bound based on
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>-spending.
-We round interim event counts and round up the final event count to
-ensure the targeted power.</p>
+design with a futility bound based on <span class="math inline">\beta</span>-spending. We round interim event counts
+and round up the final event count to ensure the targeted power.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># Total number of analyses</span></span>
 <span><span class="va">lfgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
