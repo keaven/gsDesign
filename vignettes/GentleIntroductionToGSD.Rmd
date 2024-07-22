@@ -58,14 +58,14 @@ We assume
 - There is a natural parameter $\delta$ describing the underlying treatment difference with an estimate that has an asymptotically normal and efficient estimate $\hat\delta_j$ with variance $\sigma_j^2$ and corresponding statistical information $\mathcal{I}_j=1/\sigma_j^2$, at analysis $j=1,2,\ldots,k$. A positive value favoring experimental treatment and negative value favoring control. We assume a consistent estimate $\hat\sigma_j^2$ of $\sigma_j^2, j=1,2,\ldots,k$.
 - The information fraction is defined as $t_j=\mathcal{I}_i/\mathcal{I}_j$ at analysis $j=1,\ldots,k$.
 - Correlations between estimates at different analyses are
-$\hbox{Corr}(\hat\delta_i,\hat\delta_j)=\sqrt{\mathcal{I}_i/\mathcal{I}_j}=\sqrt{t_j}$
+$\text{Corr}(\hat\delta_i,\hat\delta_j)=\sqrt{\mathcal{I}_i/\mathcal{I}_j}=\sqrt{t_j}$
 for $1\le i\le j\le k.$
 - There is a test test $Z_j\approx\hat\delta_j/\hat{\sigma}^2_j.$
 
 For a time-to-event outcome, $\delta$ would typically represent the logarithm of the hazard ratio for the control group versus the experimental group.
 For a difference in response rates, $\delta$ would represent the underlying response rates.
 For a continuous outcome such as the HAM-D, we would examine the difference in change from baseline at a milestone time point (e.g., at 6 weeks as in @binneman20086).
-For $j=1,\ldots,k$, the tests $Z_j$ are asymptotically multivariate normal with correlations as above, and for $i=1,\ldots,k$ have $\hbox{Cov}(Z_i,Z_j)=\hbox{Corr}(\hat\delta_i,\hat\delta_j)$ and $E(Z_j)=\delta\sqrt{I_j}.$
+For $j=1,\ldots,k$, the tests $Z_j$ are asymptotically multivariate normal with correlations as above, and for $i=1,\ldots,k$ have $\text{Cov}(Z_i,Z_j)=\text{Corr}(\hat\delta_i,\hat\delta_j)$ and $E(Z_j)=\delta\sqrt{I_j}.$
 
 This multivariate asymptotic normal distribution for $Z_1,\ldots,Z_k$ is referred to as the *canonical form* by @JTBook who have also summarized much of the surrounding literature.
 
