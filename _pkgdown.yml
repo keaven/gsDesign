@@ -4,6 +4,7 @@ template:
   bootstrap: 5
   bslib:
     preset: "bootstrap"
+  math-rendering: "katex"
 
 reference:
 - title: Group Sequential Computation
