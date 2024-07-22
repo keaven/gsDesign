@@ -61,8 +61,8 @@ We let $$\sigma^2=(1+r)(\sigma_1^2+\sigma_2^2/r)$$
 and define
 $$ \theta= (\delta -\delta_0)/\sigma.$$
 Under the given assumptions,
-$$Z \sim \hbox{Normal}\left(\sqrt n\theta,1\right).$$
-Under the null hypothesis that $\delta=\delta_0$, we have $Z\sim \hbox{Normal}(0,1)$.
+$$Z \sim \text{Normal}\left(\sqrt n\theta,1\right).$$
+Under the null hypothesis that $\delta=\delta_0$, we have $Z\sim \text{Normal}(0,1)$.
 Thus, regardless of $n$ we have
 $$P_0[Z\ge \Phi^{-1}(1-\alpha)]=\alpha.$$
 Under the alternate hypothesis that $\delta=\delta_1$ and we denote a corresponding $\theta_1$.
@@ -137,7 +137,7 @@ plot(delta1, pwrdelta1, type = "l")
 
 Rather than simulate individual observations, we will take advantage of the fact that for $j=1,2$
 
-$$\bar X_j\sim \hbox{Normal}(\mu_j,\sigma_j^2/n_j)$$
+$$\bar X_j\sim \text{Normal}(\mu_j,\sigma_j^2/n_j)$$
 
 and
 

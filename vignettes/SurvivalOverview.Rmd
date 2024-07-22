@@ -62,10 +62,10 @@ Output for survival design information is supported in various formats:
 We will assume a hazard ratio $\nu < 1$ represents a benefit of experimental treatment over control.
 We let $\delta = \log\nu$ denote the so-called *natural parameter* for this case.
 Asymptotically the distribution of the Cox model estimate $\hat{\delta}$ under the proportional hazards assumption is (@Schoenfeld1981)
-$$\hat\delta\sim \hbox{Normal}(\delta=\log\nu, (1+r)^2/nr).$$
+$$\hat\delta\sim \text{Normal}(\delta=\log\nu, (1+r)^2/nr).$$
 The inverse of the variance is the statistical information:
 $$\mathcal I = nr/(1 + r)^2.$$
-Using a Cox model to estimate $\delta$, the Wald test for $\hbox{H_0}: \delta=0$ can be approximated with the asymptotic variance from above as:
+Using a Cox model to estimate $\delta$, the Wald test for $\text{H}_0: \delta=0$ can be approximated with the asymptotic variance from above as:
 
 
 $$Z_W\approx \frac{\sqrt {nr}}{1+r}\hat\delta=\frac{\ln(\hat\nu)\sqrt{nr}}{1+r}.$$
@@ -76,10 +76,10 @@ We denote the *standardized effect size* as
 
 $$\theta = \delta\sqrt r / (1+r)= \log(\nu)\sqrt r / (1+r).$$
 Letting $\hat\theta = -\sqrt r/(1+r)\hat\delta$ and $n$ representing the number of events observed, we have
-$$\hat \theta \sim \hbox{Normal}(\theta, 1/ n).$$
+$$\hat \theta \sim \text{Normal}(\theta, 1/ n).$$
 Thus, the standardized Z version of the logrank is approximately distributed as
 
-$$Z\sim\hbox{Normal}(\sqrt n\theta,1).$$
+$$Z\sim\text{Normal}(\sqrt n\theta,1).$$
 Treatment effect favoring experimental treatment compared to control in this notation corresponds to a hazard ratio $\nu < 1$, as well as negative values of the standardized effect $\theta$, natural parameter $\delta$ and standardized Z-test.
 
 ### Power and sample size with `nEvents()`
@@ -140,7 +140,7 @@ The `se` in the table is the estimated standard error for the log hazard ratio $
 
 ### Group sequential design
 
-We can create a group sequential design for the above problem either with $\theta$ or with the fixed design sample size. The parameter `delta` in `gsDesign()` corresponds to standardized effect size with sign changed $-\theta$ in notation used above and by @JTBook, while the natural parameter, $\log(\hbox{HR})$ is in the parameter `delta1` passed to `gsDesign()`.
+We can create a group sequential design for the above problem either with $\theta$ or with the fixed design sample size. The parameter `delta` in `gsDesign()` corresponds to standardized effect size with sign changed $-\theta$ in notation used above and by @JTBook, while the natural parameter, $\log(\text{HR})$ is in the parameter `delta1` passed to `gsDesign()`.
 The name of the effect size is specified in `deltaname` and the parameter `logdelta = TRUE` indicates that `delta` input needs to be exponentiated to obtain HR in the output below.
 This example code can be useful in practice.
 We begin by passing the number of events for a fixed design in the parameter `n.fix` (continuous, not rounded) to adapt to a group sequential design.
