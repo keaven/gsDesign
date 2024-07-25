@@ -820,7 +820,11 @@ summary.spendfn <- function(object, ...) {
   else {
     s <- paste(object$name, "spending function")
     if (!is.null(object$parname) && !is.null(object$param)) {
-      s <- paste(s, "with", paste(object$parname, collapse = " "), "=", paste(object$param, collapse = " "))
+      # Use %s for the numeric object$param in order to preserve the decimal
+      # places entered by the user
+      params <- sprintf("%s = %s", object$parname, round(object$param, digits = 5))
+      params <- paste(params, collapse = ", ")
+      s <- paste(s, "with", params)
     }
   }
   return(s)
