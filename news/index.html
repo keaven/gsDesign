@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,21 @@
       <small>Source: <a href="https://github.com/keaven/gsDesign/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.6.4" id="gsdesign-364-july-2024">gsDesign 3.6.4 (July, 2024)<a class="anchor" aria-label="anchor" href="#gsdesign-364-july-2024"></a></h2>
+<div class="section level3">
+<h3 id="improvements-3-6-4">Improvements<a class="anchor" aria-label="anchor" href="#improvements-3-6-4"></a></h3>
+<p>We have made the spending function summary output more readable and informative.</p>
+<ul><li>Text summaries for spending functions with multiple parameters are now properly formatted. For instance, <code>a b = 0.5 1.5</code> is now displayed as <code>a = 0.5, b = 1.5</code> (<a href="https://github.com/jdblischak" class="external-link">@jdblischak</a>, <a href="https://github.com/keaven/gsDesign/issues/162" class="external-link">#162</a>).</li>
+<li>The <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> method for <code><a href="../reference/sfLDOF.html">sfLDOF()</a></code> no longer includes the redundant <code>none = 1</code> in its output (<a href="https://github.com/jdblischak" class="external-link">@jdblischak</a>, <a href="https://github.com/keaven/gsDesign/issues/159" class="external-link">#159</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-3-6-4">Documentation<a class="anchor" aria-label="anchor" href="#documentation-3-6-4"></a></h3>
+<ul><li>Added a note about using a positive scalar for <code>sfupar</code> in <code><a href="../reference/sfLDOF.html">sfLDOF()</a></code> to create a generalized O’Brien-Fleming spending function (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/commit/52cc711" class="external-link">52cc711</a>, <a href="https://github.com/keaven/gsDesign/commit/99996b" class="external-link">99996b</a>).</li>
+<li>Improved math rendering in our pkgdown site vignettes by switching to KaTeX, which is now supported in pkgdown 2.1.0 (<a href="https://github.com/nanxstats" class="external-link">@nanxstats</a>, <a href="https://github.com/keaven/gsDesign/issues/161" class="external-link">#161</a>).</li>
+<li>Standardized vignette titles and headings by using h2 as the base level and adopting sentence case throughout (<a href="https://github.com/nanxstats" class="external-link">@nanxstats</a>, <a href="https://github.com/keaven/gsDesign/issues/158" class="external-link">#158</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.6.3" id="gsdesign-363-july-2024">gsDesign 3.6.3 (July, 2024)<a class="anchor" aria-label="anchor" href="#gsdesign-363-july-2024"></a></h2><p class="text-muted">CRAN release: 2024-07-09</p>
 <div class="section level3">

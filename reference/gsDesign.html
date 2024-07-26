@@ -91,7 +91,7 @@ hypothesis."><meta property="og:image" content="https://keaven.github.io/gsDesig
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -271,9 +271,11 @@ spending (<code>test.type=1, 2</code>), <code>sfu</code>.  The default value is
 O'Brien-Fleming-like conservative bound when used with the default
 Hwang-Shih-DeCani spending function. This is a real-vector for many spending
 functions.  The parameter <code>sfupar</code> specifies any parameters needed for
-the spending function specified by <code>sfu</code>; this will be ignored for
+the spending function specified by <code>sfu</code>; this is not needed for
 spending functions (<code>sfLDOF</code>, <code>sfLDPocock</code>) or bound types
-(“OF”, “Pocock”) that do not require parameters.</p></dd>
+(“OF”, “Pocock”) that do not require parameters.
+Note that <code>sfupar</code> can be specified as a positive scalar for
+<code>sfLDOF</code> for a generalized O'Brien-Fleming spending function.</p></dd>
 
 
 <dt id="arg-sfl">sfl<a class="anchor" aria-label="anchor" href="#arg-sfl"></a></dt>

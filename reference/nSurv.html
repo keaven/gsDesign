@@ -35,7 +35,7 @@ group sequential design for a study with a time-to-event endpoint."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -326,7 +326,9 @@ Hwang-Shih-DeCani spending function. This is a real-vector for many spending
 functions.  The parameter <code>sfupar</code> specifies any parameters needed for
 the spending function specified by <code>sfu</code>; this will be ignored for
 spending functions (<code>sfLDOF</code>, <code>sfLDPocock</code>) or bound types
-(“OF”, “Pocock”) that do not require parameters.</p></dd>
+(“OF”, “Pocock”) that do not require parameters.
+Note that <code>sfupar</code> can be specified as a positive scalar for
+<code>sfLDOF</code> for a generalized O'Brien-Fleming spending function.</p></dd>
 
 
 <dt id="arg-sfl">sfl<a class="anchor" aria-label="anchor" href="#arg-sfl"></a></dt>
@@ -932,7 +934,7 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Caption example."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.4.1 by xtable 1.8-4 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Fri Jul 26 17:04:44 2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Fri Jul 26 19:50:48 2024</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{rllll}</span>
