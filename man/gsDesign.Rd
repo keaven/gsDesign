@@ -89,9 +89,11 @@ spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
 O'Brien-Fleming-like conservative bound when used with the default
 Hwang-Shih-DeCani spending function. This is a real-vector for many spending
 functions.  The parameter \code{sfupar} specifies any parameters needed for
-the spending function specified by \code{sfu}; this will be ignored for
+the spending function specified by \code{sfu}; this is not needed for
 spending functions (\code{sfLDOF}, \code{sfLDPocock}) or bound types
-(\dQuote{OF}, \dQuote{Pocock}) that do not require parameters.}
+(\dQuote{OF}, \dQuote{Pocock}) that do not require parameters.
+Note that \code{sfupar} can be specified as a positive scalar for
+\code{sfLDOF} for a generalized O'Brien-Fleming spending function.}
 
 \item{sfl}{Specifies the spending function for lower boundary crossing
 probabilities when asymmetric, two-sided testing is performed

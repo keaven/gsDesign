@@ -1,3 +1,26 @@
+# gsDesign 3.6.4 (July, 2024)
+
+## Improvements
+
+We have made the spending function summary output more readable and informative.
+
+- Text summaries for spending functions with multiple parameters are now
+  properly formatted. For instance, `a b = 0.5 1.5` is now displayed as
+  `a = 0.5, b = 1.5` (@jdblischak, #162).
+- The `summary()` method for `sfLDOF()` no longer includes the redundant
+  `none = 1` in its output (@jdblischak, #159).
+
+## Documentation
+
+- Added a note about using a positive scalar for `sfupar` in `sfLDOF()`
+  to create a generalized O'Brien-Fleming spending function
+  (@keaven, [52cc711](https://github.com/keaven/gsDesign/commit/52cc711),
+  [99996b](https://github.com/keaven/gsDesign/commit/99996b)).
+- Improved math rendering in our pkgdown site vignettes by switching to KaTeX,
+  which is now supported in pkgdown 2.1.0 (@nanxstats, #161).
+- Standardized vignette titles and headings by using h2 as the base level
+  and adopting sentence case throughout (@nanxstats, #158).
+
 # gsDesign 3.6.3 (July, 2024)
 
 ## New features
