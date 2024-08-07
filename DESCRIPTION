@@ -1,8 +1,10 @@
 Package: gsDesign
 Version: 3.6.4
 Title: Group Sequential Design
-Authors@R: person(given = "Keaven", family = "Anderson", email =
-          "keaven_anderson@merck.com", role = c('aut','cre'))
+Authors@R: c(
+    person("Keaven", "Anderson", email = "keaven_anderson@merck.com", role = c("aut", "cre")),
+    person("Merck & Co., Inc., Rahway, NJ, USA and its affiliates", role = "cph")
+    )
 Description: Derives group sequential clinical trial designs and describes
     their properties. Particular focus on time-to-event, binary, and
     continuous outcomes. Largely based on methods described in
@@ -10,7 +12,6 @@ Description: Derives group sequential clinical trial designs and describes
     "Group Sequential Methods with Applications to Clinical Trials"
     ISBN: 0-8493-0316-8.
 License: GPL (>= 3)
-Copyright: Copyright 2010, Merck Research Laboratories
 URL: https://keaven.github.io/gsDesign/, https://github.com/keaven/gsDesign
 BugReports: https://github.com/keaven/gsDesign/issues
 Encoding: UTF-8
