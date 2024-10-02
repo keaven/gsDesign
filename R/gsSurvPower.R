@@ -29,7 +29,8 @@
 #'   \code{sfLDPocock}) or bound types (\code{"OF"}, \code{"Pocock"})
 #'   that do not require parameters. 
 #'   For \code{sfu = "sfLDOF"}, \code{sfupar} can be missing in which
-#'   case the Lan-DeMets
+#'   case the Lan-DeMets O'Brien-Fleming spending function is used; 
+#'   otherwise can be > 0 for a generalized O'Brien-Fleming spending function.
 #' @param sfl Specifies the spending function for lower
 #'   boundary crossing probabilities when asymmetric,
 #'   two-sided testing is performed
@@ -53,7 +54,9 @@
 #' @param hr0 Hazard ratio (experimental/control) under the null
 #'   hypothesis (scalar).
 #' @param hr1 Hazard ratio (experimental/control) under the alternate
-#'   hypothesis (scalar).
+#'   hypothesis (scalar); this is used when \code{test.type = 3} or 
+#'   \code{test.type = 4} and \code{beta} is specified to set spending
+#'   for futility.
 #' @param eta Scalar, vector or matrix of dropout hazard rates
 #'   for the control group; rows represent time periods while
 #'   columns represent strata; if entered as a scalar, rate is
@@ -76,10 +79,9 @@
 #'   this is \code{NULL} if there is a single event rate per stratum
 #'   (exponential failure) or length of the number of rows in \code{lambda}
 #'   minus 1, otherwise.
-#' @param minfup A non-negative scalar less than the maximum value
-#'   in \code{calendarTime}. Enrollment will be cut off at the
-#'   difference between the maximum value in \code{calendarTime}
-#'   and \code{minfup}.
+#' @param T time of final analysis; this is also the study
+#' duration.
+#' @param minfup A non-negative scalar specifying minimum follow-up.
 #' @param ratio Randomization ratio of experimental treatment
 #'   divided by control; normally a scalar, but may be a vector with
 #'   length equal to number of strata.
@@ -95,22 +97,7 @@
 #' @rdname gsSurvPower
 #'
 #' @examples
-#' # First example: while timing is calendar-based, spending is event-based
-#' x <- gsSurvPower() %>% toInteger()
-#' gsBoundSummary(x)
-#' 
-#' # Second example: both timing and spending are calendar-based
-#' # This results in less spending at interims and leaves more for final analysis
-#' y <- gsSurvPower(spending = "calendar") %>% toInteger()
-#' gsBoundSummary(y)
-#'
-#' # Note that calendar timing for spending relates to planned timing for y
-#' # rather than timing in y after toInteger() conversion
-#'
-#' # Values plugged into spending function for calendar time
-#' y$usTime
-#' # Actual calendar fraction from design after toInteger() conversion
-#' y$T / max(y$T)
+#' # TBD
 gsSurvPower <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
                         beta = 0.1, astar = 0, timing = 1, sfu = sfHSD, sfupar = -4,
                         sfl = sfHSD, sflpar = -2, r = 18,
