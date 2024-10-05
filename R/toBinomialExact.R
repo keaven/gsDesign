@@ -50,26 +50,46 @@
 #' toBinomialExact(x)
 #' # Update bounds at time of analysis
 #' toBinomialExact(x, observedEvents = c(20,55,80))
-toBinomialExact <- function(x, observedEvents = NULL) {
+toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NULL, lsTime = NULL) {
   if (!inherits(x, "gsSurv")) stop("toBinomialExact must have class gsSurv as input")
   if (x$test.type != 1 && x$test.type != 4) stop("toBinomialExact input test.type must be 1 or 4")
-  # Round interim sample size (or events for gsSurv object)
+  if (is.null(alpha)) alpha <- x$alpha
+  if (!is.null(usTime)){
+  # Check usTime is numeric increasing vector of positive numbers
+  # with at most 1 value >= 1
+     if (!is.numeric(usTime)) stop("toBinomialExact: usTime must be a numeric vector")
+     if (min(usTime) < 0) stop("toBinomialExact: usTime must be a vector of positive numbers")
+     if (min(diff(usTime)) <= 0) stop("toBinomialExact: usTime must be an increasing vector of positive numbers")
+     if (sum(usTime >= 1) > 1)  
+       stop("toBinomialExact: at most 1 value in usTime can be >= 1")
+  }
+  if (!is.null(lsTime)){
+  # Check lsTime is numeric increasing vector of positive numbers
+  # with at most 1 value >= 1
+     if (!is.numeric(lsTime)) stop("toBinomialExact: lsTime must be a numeric vector")
+     if (min(lsTime) < 0) stop("toBinomialExact: lsTime must be a vector of positive numbers")
+     if (min(diff(lsTime)) <= 0) stop("toBinomialExact: lsTime must be an increasing vector of positive numbers")
+     if (sum(lsTime >= 1) > 1)  
+       stop("toBinomialExact: at most 1 value in usTime can be >= 1")
+  }
   xx <- if (max(round(x$n.I) != x$n.I)) toInteger(x) else x
   if(is.null(observedEvents)){
     counts <- xx$n.I
     k <- xx$k
   }else{
     if (!isInteger(observedEvents)) stop("toBinomialExact: observedEvents must be a vector of increasing positive integers")
-    if (min(observedEvents - dplyr::lag(observedEvents, default = 0)) < 1) 
+    if (min(diff(observedEvents)) < 1) 
       stop("toBinomialExact: observedEvents must be a vector of increasing positive integers")
     counts <- observedEvents
     if (sum(observedEvents >= xx$maxn.IPlan) > 1) stop("toBinomialExact: at most 1 value in observedEvents can be >= maximum planned (x$maxn.IPlan)")
     k <- length(observedEvents)
     if (k < 2) stop("toBinomialExact: must have at least 2 values in observedEvents")
+    if (!is.null(usTime) && length(usTime) != k) stop("toBinomialExact: length of usTime must be equal to length of observedEvents")
+    if (!is.null(lsTime) && length(lsTime) != k) stop("toBinomialExact: length of lsTime must be equal to length of observedEvents")
     xx <- gsDesign(
       k = k,
       test.type = x$test.type,
-      alpha = x$alpha,
+      alpha = alpha,
       beta = x$beta,
       astar = x$astar,
       sfu = x$upper$sf,
@@ -80,7 +100,9 @@ toBinomialExact <- function(x, observedEvents = NULL) {
       maxn.IPlan = xx$n.I[x$k],
       delta = x$delta,
       delta1 = x$delta1,
-      delta0 = x$delta0
+      delta0 = x$delta0,
+      usTime = usTime,
+      lsTime = lsTime
     )
     xx$hr0 <- x$hr0
   }
@@ -98,8 +120,9 @@ toBinomialExact <- function(x, observedEvents = NULL) {
   a <- pmin(a, counts - 1)
 
   atem <- a
-  timing <- counts / xx$maxn.IPlan
-  alpha_spend <- x$upper$sf(alpha = x$alpha, t = timing, param = x$upper$param)$spend
+  # NEED TO CHECK IF THIS IS WORKING RIGHT
+  if(is.null(usTime)){usTime <- counts / xx$maxn.IPlan}
+  alpha_spend <- x$upper$sf(alpha = alpha, t = usTime, param = x$upper$param)$spend
   if (x$test.type != 1) {
     # Upper bound probabilities are for futility
     # Compute nominal p-values under H0 for futility and corresponding inverse binomial under H1
@@ -111,7 +134,8 @@ toBinomialExact <- function(x, observedEvents = NULL) {
     b <- pmax(a + 1, b)
     b <- pmin(b, counts - dplyr::lag(counts, def = 0) + dplyr::lag(b, def = 1))
     # Compute target beta-spending
-    beta_spend <- xx$lower$sf(alpha = xx$beta, t = timing, param = xx$lower$param)$spend
+    if(is.null(lsTime)){lsTime <- counts / xx$maxn.IPlan}
+    beta_spend <- xx$lower$sf(alpha = xx$beta, t = lsTime, param = xx$lower$param)$spend
   } else {
     b <- counts + 1 # test.type = 1 means no futility bound
     nbupperprob <- 0
