@@ -3,21 +3,25 @@
 #'
 #' @param x An object of class \code{gsDesign} or \code{gsSurv}.
 #' @param ratio A non-negative integer, usually corresponding to experimental:control sample size ratio. 
-#' Rounding is done to a multiple of \code{ratio + 1}. If input \code{x} has class \code{gsSurv} (design for time-to-event outcome),
-#' and \code{x$ratio} is a whole number, \code{ratio} is replaced by \code{x$ratio}.
+#' A non-negative integer is required.
+#' Rounding is done to a multiple of \code{ratio + 1}. 
 #' See details.
-#' @param roundUpFinal Final value in returned \code{n.I} is rounded up
-#'   if \code{TRUE}; otherwise, just rounded. For \code{gsSurv} input, final total sample size is also controlled by this. See details. 
+#' @param roundUpFinal Sample size is rounded up to a value of \code{ratio + 1} with the default \code{roundUpFinal = TRUE}.
+#' If \code{roundUpFinal = FALSE}, sample size is rounded to the nearest multiple of \code{ratio + 1}.
+#' For event counts, \code{roundUpFinal=TRUE} rounds final event count up; otherwise, just rounded if \code{roundUpFinal = FALSE}.
+#' See details. 
 #'
 #' @return Output is an object of the same class as input \code{x}; i.e., \code{gsDesign} with integer vector for \code{n.I}
 #' or \code{gsSurv} with integer vector \code{n.I} and integer total sample size. See details.
 #' 
 #' @details
-#' If \code{ratio = 3}, rounding for final sample size is done to a multiple of 3 + 1 = 4. 
-#' For a \code{gsSurv} object input in \code{x}, event counts output in \code{n.I} are rounded to nearest integer and 
-#' final total sample size is rounded to a multiple of \code{ratio + 1}.
-#' For other input values of \code{x} (\code{gsDesign} class), \code{n.I} is interpreted as sample size; 
-#' final value is rounded to a multiple of \code{ratio + 1}, with \code{roundUpFinal} controlling rounding of last value.
+#' The default of \code{ratio = 0, roundUpFinal = TRUE} will just round up the sample size (also event count) being rounded up.
+#' Rounding of event count targets is not impacted by \code{ratio}.
+#' A positive integer value of \code{ratio} is required and the sample size will be rounded to a multiple of \code{ratio + 1}.
+#' The most common example would be if there is 1:1 randomization and the user wishes an even sample size, then set \code{ratio = 1}.
+#' If \code{ratio = 3}, rounding for final sample size is done to a multiple of 3 + 1 = 4; 
+#' this could represent a 3:1 or 1:3 randomization ratio.
+#' For 3:2 randomization, \code{ratio = 4} would ensure rounding sample size to a multiple of 5.
 #'
 #' @export
 #'
@@ -49,14 +53,19 @@
 #' toInteger(x, ratio = 3)
 toInteger <- function(x, ratio = 0, roundUpFinal = TRUE) {
   if (!inherits(x, "gsDesign")) stop("must have class gsDesign as input")
-  if (!isInteger(ratio) || ratio < 0) stop("input ratio must be a non-negative integer")
+  if (!isInteger(ratio) || ratio < 0) stop("toInteger: input ratio must be a non-negative integer")
   counts <- round(x$n.I) # Round counts (event counts for survival; otherwise sample size)
-  # For time-to-event endpoint, just round final count up
+  # For time-to-event endpoint, just round final event count up
   if (inherits(x, "gsSurv")) {
-    if (roundUpFinal) counts[x$k] <- ceiling(x$n.I[x$k])
+    if (abs(counts[x$k] - x$n.I[x$k]) <= .01){
+      counts[x$k] <- round(x$n.I[x$k])
+    } else if (roundUpFinal) counts[x$k] <- ceiling(x$n.I[x$k])
   } else {
+    # Check if control size is close to integer multiple of ratio + 1
+    if (abs(x$n.I[x$k] - round(x$n.I[x$k] / (ratio + 1)) * (ratio + 1)) <= .01) {
+      counts[x$k] <- round(x$n.I[x$k] / (ratio + 1)) * (ratio + 1)
     # For non-survival designs round sample size based on randomization ratio
-    if (roundUpFinal) {
+    }else if (roundUpFinal) {
       counts[x$k] <- ceiling(x$n.I[x$k] / (ratio + 1)) * (ratio + 1) # Round up for final count
     } else {
       counts[x$k] <- round(x$n.I[x$k] / (ratio + 1)) * (ratio + 1)
@@ -71,18 +80,17 @@ toInteger <- function(x, ratio = 0, roundUpFinal = TRUE) {
     lsTime = x$lsTime, usTime = x$usTime
   )
   if (max(abs(xi$n.I - counts)) > .01) warning("toInteger: check n.I input versus output")
-  xi$n.I <- counts # ensure these are integers as they become real in gsDesign call
+  xi$n.I <- counts # ensure these are integers as they became real in gsDesign call
+  # Non-binding futility designs have x$test.type either 4 or 6
   if (x$test.type %in% c(4, 6)) {
     xi$falseposnb <- as.vector(gsprob(0, xi$n.I, rep(-20, xi$k), xi$upper$bound, r = xi$r)$probhi)
   }
-  if ("gsSurv" %in% class(x) || x$nFixSurv > 0) {
+  if (inherits(x, "gsSurv") || x$nFixSurv > 0) {
     xi$hr0 <- x$hr0 # H0 hazard ratio
     xi$hr <- x$hr # H1 hazard ratio
     
     N <- rowSums(x$eNC + x$eNE)[x$k] # get input total sample size
     N_continuous <- N
-    # if ratio = 0 and x$ratio is positive integer, replace ratio
-    if(ratio == 0 && is.wholenumber(x$ratio)) ratio <- x$ratio
     # Update sample size to integer
     N <- N / (ratio + 1)
     if (roundUpFinal) {
