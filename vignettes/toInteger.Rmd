@@ -21,15 +21,29 @@ This has a couple of implications on design characteristics:
 
 This document goes through examples to demonstrate the calculations.
 The new function as of July, 2023 is the `toInteger()` which operates on group sequential designs to convert to integer-based total sample size and event counts at analyses.
-We begin with an abbreviated example for a time-to-event endpoint design to demonstrate basic concepts.
+As of November, 2024 the rounding defaults are changing as documented below.
+We begin with a summary of the method.
+Then we provide an abbreviated example for a time-to-event endpoint design to demonstrate basic concepts.
 We follow with a more extended example for a binary endpoint to explain more details.
 
+## Summary of method
+
+- With defaults, `gsSurv() |> toInteger(ratio = 0, roundUpFinal = TRUE)` 
+  - rounds event counts at interim analyses
+  - rounds event count up at final analysis
+  - rounds up sample size at final analysis, but allows continuous (expected) values at interim analyses
+- When `ratio` is a positive integer, the final sample size is rounded to a multiple of `ratio + 1`.
+  - For 1:1 randomization (experimental:control), set `ratio = 1` to round to an even sample size.
+  - For 2:1 randomization, set `ratio = 2` to round to a multiple of 3.
+  - For 3:2 randomization, set `ratio = 4` to round to a multiple of 5.
+  - Note that for the final analysis the sample size is rounded up to the nearest multiple of `ratio + 1` when `roundUpFinal = TRUE` is specified. If `roundUpFinal = FALSE`, the final sample size is rounded to the nearest multiple of `ratio + 1`.
+  
 ## Time-to-event endpoint example
 
 The initial design for a time-to-event endpoint in a 2-arm trial does not have integer sample size and event counts.
 See comments in the code and output from the `summary()` function below to understand inputs.
 
-```{r}
+```{r, message=FALSE}
 library(gsDesign)
 
 x <- gsSurv(
@@ -61,42 +75,57 @@ We can summarize this textually as:
 cat(summary(x))
 ```
 
-We now adapt this design to integer targeted events at each analysis as well as an sample size per arm at the end of the trial.
+We now adapt this design to integer targeted events at each analysis as well as the sample size at the end of the trial.
 We provide a table summarizing bounds.
 Due to rounding up of the final event count, we see slightly larger than the targeted 90% trial power in the last row of the efficacy column.
 
 ```{r}
 # Adjust design to integer-based event counts at analyses
-# and even integer-based final event count
-xi <- toInteger(x)
+# Final sample size is rounded up to the nearest even number
+# Implied default arguments are toInteger(x, ratio = 0, roundUpFinal = TRUE)
+xi <- toInteger(x) 
 gsBoundSummary(xi) # Summarize design bounds
 ```
 
-We now summarize sample size and targeted events at analyses.
+We now summarize sample size and targeted events at analyses for continuous design `x` and integer-based design `xi`.
 
 ```{r}
 # Integer event counts at analyses are integer
 xi$n.I
-# Control planned sample size at analyses
-# Final analysis is integer; interim analyses before enrollment completion
-# are continuous
-xi$eNC
-# Experimental analysis planned sample size at analyses
-xi$eNE
+# Prior to rounding
+x$n.I
+# Final analysis sample size is integer
+# Interim analysis before enrollment completion are continuous
+# In this case at IA 2 the enrollment is complete
+xi$eNC + xi$eNE
+# Prior to rounding
+x$eNC + x$eNE
 ```
+ Note that if we set `roundUpFinal = FALSE` in the call to `toInteger()`, the final sample size is rounded to the nearest even number rather than rounded up.
+ 
+```{r}
+# Note that ratio = 0 is default
+x2 <- x |> toInteger(ratio = 0, roundUpFinal = FALSE)
+x2$eNE + x2$eNC
+```
+If we had rounded up sample size to an even integer, we get a slightly larger final sample size.
 
+```{r}
+x3 <- x |> toInteger(ratio = 1, roundUpFinal = TRUE)
+x3$eNE + x3$eNC
+```
 
 ## Binomial endpoint designs
 
 ### Fixed sample size
 
-We present a simple example based on comparing binomial rates with interim analyses after 50% and 75% of events. We assume a 2:1 experimental:control randomization ratio. Note that the sample size is not an integer.
+We present a simple example based on comparing binomial rates with interim analyses after 50% and 75% of events. We assume a 2:1 experimental:control randomization ratio. Note that the sample size is not an integer. We target 80% power (`beta = .2`).
 
 ```{r}
 n.fix <- nBinomial(p1 = .2, p2 = .1, alpha = .025, beta = .2, ratio = 2)
 n.fix
 ```
-If we replace the `beta` argument above with a integer sample size that is a multiple of 3 so that we get the desired 2:1 integer sample sizes per arm (432 = 144 control + 288 experimental targeted) we get slightly larger thant the targeted 80% power:
+If we replace the `beta` argument above with a integer sample size that is a multiple of 3 so that we get the desired 2:1 integer sample sizes per arm (432 = 144 control + 288 experimental targeted) we get slightly larger than the targeted 80% power:
 
 ```{r}
 nBinomial(p1 = .2, p2 = .1, alpha = .025, n = 432, ratio = 2)
@@ -108,9 +137,9 @@ Now we convert the fixed sample size `n.fix` from above to a 1-sided group seque
 
 ```{r}
 # 1-sided design (efficacy bound only; test.type = 1)
-x <- gsDesign(alpha = .025, beta = .2, n.fix = n.fix, test.type = 1, sfu = sfLDOF, timing = c(.5, .75))
+xb <- gsDesign(alpha = .025, beta = .2, n.fix = n.fix, test.type = 1, sfu = sfLDOF, timing = c(.5, .75))
 # Continuous sample size (non-integer) at planned analyses
-x$n.I
+xb$n.I
 ```
 Next we convert to integer sample sizes at each analysis. Interim sample sizes are rounded to the nearest integer.
 The default `roundUpFinal = TRUE` rounds the final sample size to the nearest integer to 1 + the experimental:control randomization ratio. Thus, the final sample size of 441 below is a multiple of 3.
@@ -118,7 +147,7 @@ The default `roundUpFinal = TRUE` rounds the final sample size to the nearest in
 ```{r}
 # Convert to integer sample size with even multiple of ratio + 1
 # i.e., multiple of 3 in this case at final analysis
-x_integer <- toInteger(x, ratio = 2)
+x_integer <- toInteger(xb, ratio = 2)
 x_integer$n.I
 ```
 
@@ -126,7 +155,7 @@ Next we examine the efficacy bound of the 2 designs as they are slightly differe
 
 ```{r}
 # Bound for continuous sample size design
-x$upper$bound
+xb$upper$bound
 # Bound for integer sample size design
 x_integer$upper$bound
 ```
@@ -135,7 +164,7 @@ The differences are associated with slightly different timing of the analyses as
 
 ```{r}
 # Continuous design sample size fractions at analyses
-x$timing
+xb$timing
 # Integer design sample size fractions at analyses
 x_integer$timing
 ```
@@ -145,9 +174,9 @@ These differences also make a difference in the cumulative Type I error associat
 
 ```{r}
 # Continuous sample size design
-cumsum(x$upper$prob[, 1])
+cumsum(xb$upper$prob[, 1])
 # Specified spending based on the spending function
-x$upper$sf(alpha = x$alpha, t = x$timing, x$upper$param)$spend
+xb$upper$sf(alpha = xb$alpha, t = xb$timing, xb$upper$param)$spend
 ```
 
 ```{r}
@@ -164,7 +193,7 @@ Interim power is slightly lower for the integer-based design since sample size i
 ```{r}
 # Cumulative upper boundary crossing probability under alternate by analysis
 # under alternate hypothesis for continuous sample size
-cumsum(x$upper$prob[, 2])
+cumsum(xb$upper$prob[, 2])
 # Same for integer sample sizes at each analysis
 cumsum(x_integer$upper$prob[, 2])
 ```

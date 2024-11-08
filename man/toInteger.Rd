@@ -10,28 +10,43 @@ toInteger(x, ratio = 0, roundUpFinal = TRUE)
 \arguments{
 \item{x}{An object of class \code{gsDesign} or \code{gsSurv}.}
 
-\item{ratio}{A non-negative integer, usually corresponding to experimental:control sample size ratio. 
-Rounding is done to a multiple of \code{ratio + 1}. If input \code{x} has class \code{gsSurv} (design for time-to-event outcome),
-and \code{x$ratio} is a whole number, \code{ratio} is replaced by \code{x$ratio}.
+\item{ratio}{A non-negative integer, usually corresponding to
+experimental:control sample size ratio.
+A non-negative integer is required.
+Rounding is done to a multiple of \code{ratio + 1}.
 See details.}
 
-\item{roundUpFinal}{Final value in returned \code{n.I} is rounded up
-if \code{TRUE}; otherwise, just rounded. For \code{gsSurv} input, final total sample size is also controlled by this. See details.}
+\item{roundUpFinal}{Sample size is rounded up to a value of \code{ratio + 1}
+with the default \code{roundUpFinal = TRUE}.
+If \code{roundUpFinal = FALSE}, sample size is rounded to the nearest
+multiple of \code{ratio + 1}.
+For event counts, \code{roundUpFinal = TRUE} rounds final event count up;
+otherwise, just rounded if \code{roundUpFinal = FALSE}.
+See details.}
 }
 \value{
-Output is an object of the same class as input \code{x}; i.e., \code{gsDesign} with integer vector for \code{n.I}
-or \code{gsSurv} with integer vector \code{n.I} and integer total sample size. See details.
+Output is an object of the same class as input \code{x}; i.e.,
+  \code{gsDesign} with integer vector for \code{n.I} or \code{gsSurv}
+  with integer vector \code{n.I} and integer total sample size. See details.
 }
 \description{
 Translate group sequential design to integer events (survival designs)
 or sample size (other designs)
 }
 \details{
-If \code{ratio = 3}, rounding for final sample size is done to a multiple of 3 + 1 = 4. 
-For a \code{gsSurv} object input in \code{x}, event counts output in \code{n.I} are rounded to nearest integer and 
-final total sample size is rounded to a multiple of \code{ratio + 1}.
-For other input values of \code{x} (\code{gsDesign} class), \code{n.I} is interpreted as sample size; 
-final value is rounded to a multiple of \code{ratio + 1}, with \code{roundUpFinal} controlling rounding of last value.
+The default of \code{ratio = 0, roundUpFinal = TRUE} will just round up
+the sample size (also event count) being rounded up.
+Rounding of event count targets is not impacted by \code{ratio}.
+A positive integer value of \code{ratio} is required and the sample size
+will be rounded to a multiple of \code{ratio + 1}.
+The most common example would be if there is 1:1 randomization and the user
+wishes an even sample size, then set \code{ratio = 1}.
+If \code{ratio = 3}, rounding for final sample size is done to a multiple of
+3 + 1 = 4;  this could represent a 3:1 or 1:3 randomization ratio.
+For 3:2 randomization, \code{ratio = 4} would ensure rounding sample size
+to a multiple of 5.
+
+See \code{vignette("toInteger")} for more examples with further details.
 }
 \examples{
 # The following code derives the group sequential design using the method
