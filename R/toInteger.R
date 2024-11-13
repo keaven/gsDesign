@@ -6,20 +6,27 @@
 #' A non-negative integer is required.
 #' Rounding is done to a multiple of \code{ratio + 1}. 
 #' See details.
-#' @param roundUpFinal Sample size is rounded up to a value of \code{ratio + 1} with the default \code{roundUpFinal = TRUE}.
+#' @param roundUpFinal Sample size is rounded up to a value of \code{ratio + 1} with the default 
+#' \code{roundUpFinal = TRUE}.
 #' If \code{roundUpFinal = FALSE}, sample size is rounded to the nearest multiple of \code{ratio + 1}.
-#' For event counts, \code{roundUpFinal=TRUE} rounds final event count up; otherwise, just rounded if \code{roundUpFinal = FALSE}.
+#' For event counts, \code{roundUpFinal=TRUE} rounds final event count up; interim event counts are
+#' just rounded.
 #' See details. 
 #'
 #' @return Output is an object of the same class as input \code{x}; i.e., \code{gsDesign} with integer vector for \code{n.I}
 #' or \code{gsSurv} with integer vector \code{n.I} and integer total sample size. See details.
 #' 
 #' @details
-#' The default of \code{ratio = 0, roundUpFinal = TRUE} will just round up the sample size (also event count) being rounded up.
+#' It is useful to explicitly provide the argument \code{ratio} when a \code{gsDesign} object is input since \code{gsDesign} 
+#' does not have a \code{ratio} in return.
+#' \code{ratio = 0, roundUpFinal = TRUE} will just round up the sample size (also event count).
 #' Rounding of event count targets is not impacted by \code{ratio}.
-#' A positive integer value of \code{ratio} is required and the sample size will be rounded to a multiple of \code{ratio + 1}.
-#' The most common example would be if there is 1:1 randomization and the user wishes an even sample size, then set \code{ratio = 1}.
-#' If \code{ratio = 3}, rounding for final sample size is done to a multiple of 3 + 1 = 4; 
+#' Since \code{x <- gsSurv(ratio = M)} returns a value for \code{ratio}, \code{toInteger(x)} will round to a multiple of 
+#' \code{M + 1} if \code{M} is a non-negative integer; otherwise, just rounding will occur.
+#' The most common example would be if there is 1:1 randomization (2:1) and the user wishes an even (multiple of 3) sample size, 
+#' then \code{toInteger) will operate as expected.
+#' To just round without concern for randomization ratio, set \code{ratio = 0}.
+#' If \code{toInteger(x, ratio = 3)}, rounding for final sample size is done to a multiple of 3 + 1 = 4; 
 #' this could represent a 3:1 or 1:3 randomization ratio.
 #' For 3:2 randomization, \code{ratio = 4} would ensure rounding sample size to a multiple of 5.
 #'
@@ -49,11 +56,15 @@
 #'   minfup = 8,            # Planned minimum follow-up
 #'   ratio = 3              # Randomization ratio (experimental:control)
 #' )
-#' # Convert bounds to exact binomial bounds
-#' toInteger(x, ratio = 3)
-toInteger <- function(x, ratio = 0, roundUpFinal = TRUE) {
+#' # Convert sample size to multiple of ratio + 1 = 4, round event counts.
+#' # Default is to round up both event count and sample size for final analysis
+#' toInteger(x)
+toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
   if (!inherits(x, "gsDesign")) stop("must have class gsDesign as input")
-  if (!isInteger(ratio) || ratio < 0) stop("toInteger: input ratio must be a non-negative integer")
+  if (!(isInteger(ratio) && ratio >= 0)){
+    message("toInteger: rounding done to nearest integer since ratio was not specified as postive integer .")
+    ratio <- 0
+  }
   counts <- round(x$n.I) # Round counts (event counts for survival; otherwise sample size)
   # For time-to-event endpoint, just round final event count up
   if (inherits(x, "gsSurv")) {
