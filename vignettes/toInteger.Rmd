@@ -28,92 +28,31 @@ We follow with a more extended example for a binary endpoint to explain more det
 
 ## Summary of method
 
-- With defaults, `gsSurv() |> toInteger(ratio = 0, roundUpFinal = TRUE)` 
-  - rounds event counts at interim analyses
-  - rounds event count up at final analysis
-  - rounds up sample size at final analysis, but allows continuous (expected) values at interim analyses
+```{r}
+library(gsDesign)
+x <- gsSurv(ratio = 1, hr = .74)
+y <- x |> toInteger()
+# Continuous event counts
+x$n.I
+# Rounded event counts at interims, rounded up at final analysis
+y$n.I
+# Continuous sample size at interim and final analyses
+as.numeric(x$eNE + x$eNC)
+# Rounded up to even final sample size given that x$ratio = 1
+# and rounding to multiple of x$ratio + 1
+as.numeric(y$eNE + y$eNC)
+# With roundUpFinal = FALSE, final sample size rounded to nearest integer
+z <- x |> toInteger(roundUpFinal = FALSE)
+as.numeric(z$eNE + z$eNC)
+```
+
+
 - When `ratio` is a positive integer, the final sample size is rounded to a multiple of `ratio + 1`.
   - For 1:1 randomization (experimental:control), set `ratio = 1` to round to an even sample size.
   - For 2:1 randomization, set `ratio = 2` to round to a multiple of 3.
   - For 3:2 randomization, set `ratio = 4` to round to a multiple of 5.
   - Note that for the final analysis the sample size is rounded up to the nearest multiple of `ratio + 1` when `roundUpFinal = TRUE` is specified. If `roundUpFinal = FALSE`, the final sample size is rounded to the nearest multiple of `ratio + 1`.
   
-## Time-to-event endpoint example
-
-The initial design for a time-to-event endpoint in a 2-arm trial does not have integer sample size and event counts.
-See comments in the code and output from the `summary()` function below to understand inputs.
-
-```{r, message=FALSE}
-library(gsDesign)
-
-x <- gsSurv(
-  k = 3, # Number of analyses
-  test.type = 4, # Asymmetric 2-sided design with non-binding futility bound
-  alpha = 0.025, # 1-sided Type I error
-  beta = 0.1, # Type II error (1 - power; 90% power)
-  timing = c(.25, .7), # Fraction of final planned events at interim analyses
-  sfu = sfLDOF, # O'Brien-Fleming-like spending for efficacy
-  sfl = sfHSD, # Hwang-Shih-DeCani spending for futility
-  sflpar = -2.2, # Futility spending parameter to customize bound
-  lambdaC = log(2) / 12, # 12 month median control survival
-  hr = 0.75, # Alternate hypothesis hazard ratio
-  eta = -log(.98) / 12, # 2% dropout rate per year
-  # Enrollment accelerates over 6 months to steady state
-  gamma = c(2.5, 5, 7.5, 10), # Relative enrollment rates
-  # Duration of relative enrollment rate
-  R = c(2, 2, 2, 100),
-  # Enrollment duration targeted to T - minfup = 12 months total
-  T = 36, # Trial duration
-  minfup = 24, # Minimum follow-up duration
-  ratio = 1 # Randomization ratio is 1:1
-)
-```
-
-We can summarize this textually as:
-
-```{r, results='asis'}
-cat(summary(x))
-```
-
-We now adapt this design to integer targeted events at each analysis as well as the sample size at the end of the trial.
-We provide a table summarizing bounds.
-Due to rounding up of the final event count, we see slightly larger than the targeted 90% trial power in the last row of the efficacy column.
-
-```{r}
-# Adjust design to integer-based event counts at analyses
-# Final sample size is rounded up to the nearest even number
-# Implied default arguments are toInteger(x, ratio = 0, roundUpFinal = TRUE)
-xi <- toInteger(x) 
-gsBoundSummary(xi) # Summarize design bounds
-```
-
-We now summarize sample size and targeted events at analyses for continuous design `x` and integer-based design `xi`.
-
-```{r}
-# Integer event counts at analyses are integer
-xi$n.I
-# Prior to rounding
-x$n.I
-# Final analysis sample size is integer
-# Interim analysis before enrollment completion are continuous
-# In this case at IA 2 the enrollment is complete
-xi$eNC + xi$eNE
-# Prior to rounding
-x$eNC + x$eNE
-```
- Note that if we set `roundUpFinal = FALSE` in the call to `toInteger()`, the final sample size is rounded to the nearest even number rather than rounded up.
- 
-```{r}
-# Note that ratio = 0 is default
-x2 <- x |> toInteger(ratio = 0, roundUpFinal = FALSE)
-x2$eNE + x2$eNC
-```
-If we had rounded up sample size to an even integer, we get a slightly larger final sample size.
-
-```{r}
-x3 <- x |> toInteger(ratio = 1, roundUpFinal = TRUE)
-x3$eNE + x3$eNC
-```
 
 ## Binomial endpoint designs
 
