@@ -2,20 +2,23 @@
 #' or sample size (other designs)
 #'
 #' @param x An object of class \code{gsDesign} or \code{gsSurv}.
-#' @param ratio A non-negative integer, usually corresponding to experimental:control sample size ratio. 
-#' A non-negative integer is required.
-#' Rounding is done to a multiple of \code{ratio + 1}. 
-#' See details.
-#' @param roundUpFinal Sample size is rounded up to a value of \code{ratio + 1} with the default 
-#' \code{roundUpFinal = TRUE}.
-#' If \code{roundUpFinal = FALSE}, sample size is rounded to the nearest multiple of \code{ratio + 1}.
-#' For event counts, \code{roundUpFinal=TRUE} rounds final event count up; interim event counts are
-#' just rounded.
-#' See details. 
+#' @param ratio Usually corresponds to
+#'   experimental:control sample size ratio.
+#'   If an integer is provided, rounding is done to a multiple of \code{ratio + 1}.
+#'   See details.
+#'   If input is non integer, rounding is done to the nearest integer or nearest larger integer depending on `roundUpFinal`.
+#' @param roundUpFinal Sample size is rounded up to a value of \code{ratio + 1}
+#'   with the default \code{roundUpFinal = TRUE} if `ratio` is a non-negative integer.
+#'   If \code{roundUpFinal = FALSE} and `ratio` is a non-negative integer, sample size is rounded to the nearest
+#'   multiple of \code{ratio + 1}.
+#'   For event counts, \code{roundUpFinal = TRUE} rounds final event count up;
+#'   otherwise, just rounded if \code{roundUpFinal = FALSE}.
+#'   See details.
 #'
-#' @return Output is an object of the same class as input \code{x}; i.e., \code{gsDesign} with integer vector for \code{n.I}
-#' or \code{gsSurv} with integer vector \code{n.I} and integer total sample size. See details.
-#' 
+#' @return Output is an object of the same class as input \code{x}; i.e.,
+#'   \code{gsDesign} with integer vector for \code{n.I} or \code{gsSurv}
+#'   with integer vector \code{n.I} and integer total sample size. See details.
+#'
 #' @details
 #' It is useful to explicitly provide the argument \code{ratio} when a \code{gsDesign} object is input since \code{gsDesign} 
 #' does not have a \code{ratio} in return.
@@ -99,7 +102,7 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
   if (inherits(x, "gsSurv") || x$nFixSurv > 0) {
     xi$hr0 <- x$hr0 # H0 hazard ratio
     xi$hr <- x$hr # H1 hazard ratio
-    
+
     N <- rowSums(x$eNC + x$eNE)[x$k] # get input total sample size
     N_continuous <- N
     # Update sample size to integer
