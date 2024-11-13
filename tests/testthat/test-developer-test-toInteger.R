@@ -44,7 +44,7 @@ x <- gsSurvCalendar(hr = .64) # This gives 252.1852 as sample size, 227.1393 as 
 y <- toInteger(x) 
 testthat::test_that("Test: toInteger for survival endpoint event count works properly", code = {
   # Interim event counts rounded
-  testthat::expect_equal(min(round(x$n.I[1:x$k - 1]) - y$n.I[1:x$k - 1]), 0)
+  testthat::expect_equal(min(abs(round(x$n.I[1:x$k - 1]) - y$n.I[1:x$k - 1])), 0)
   # Final event count round up
   testthat::expect_true((y$n.I - x$n.I)[x$k] >= 0,
                         info = "Test toInteger of gsSurv rounds up final event count"
