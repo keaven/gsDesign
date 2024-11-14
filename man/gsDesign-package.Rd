@@ -21,5 +21,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Keaven Anderson \email{keaven_anderson@merck.com}
 
+Other contributors:
+\itemize{
+  \item Merck & Co., Inc., Rahway, NJ, USA and its affiliates [copyright holder]
+}
+
 }
 \keyword{internal}

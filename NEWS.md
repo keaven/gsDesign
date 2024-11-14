@@ -1,3 +1,24 @@
+# gsDesign 3.6.5 (November, 2024)
+
+## Improvements
+
+- `toInteger()` (introduced in gsDesign 3.5.0) is updated to match broader,
+  non-gsDesign conventions for deriving integer sample size and event counts
+  (@keaven, #172).
+
+  This update may result in different outputs compared to previous versions.
+  Users who use this function should review the updated function documentation
+  (`?toInteger`) and `vignette("toInteger")` for details.
+
+## Testing
+
+- Add snapshot tests for `as_rtf()` methods (@DMuriuki, #168).
+
+## Documentation
+
+- Add the `cph` role to the `Authors@R` field following best practices
+  (@nanxstats, #166).
+
 # gsDesign 3.6.4 (July, 2024)
 
 ## Improvements
