@@ -20,16 +20,19 @@ This has a couple of implications on design characteristics:
 - Power on output will not be exactly as input.
 
 This document goes through examples to demonstrate the calculations.
-The new function as of July, 2023 is the `toInteger()` which operates on group sequential designs to convert to integer-based total sample size and event counts at analyses.
-As of November, 2024 the rounding defaults are changing as documented below.
+The new function as of July 2023 is the `toInteger()` which operates on group sequential designs to convert to integer-based total sample size and event counts at analyses.
+As of November 2024, the rounding defaults are changing as documented below.
 We begin with a summary of the method.
 Then we provide an abbreviated example for a time-to-event endpoint design to demonstrate basic concepts.
 We follow with a more extended example for a binary endpoint to explain more details.
 
 ## Summary of method
 
-```{r}
+```{r,message=FALSE, warning=FALSE}
 library(gsDesign)
+```
+
+```{r}
 x <- gsSurv(ratio = 1, hr = .74)
 y <- x |> toInteger()
 # Continuous event counts
@@ -46,13 +49,11 @@ z <- x |> toInteger(roundUpFinal = FALSE)
 as.numeric(z$eNE + z$eNC)
 ```
 
-
 - When `ratio` is a positive integer, the final sample size is rounded to a multiple of `ratio + 1`.
   - For 1:1 randomization (experimental:control), set `ratio = 1` to round to an even sample size.
   - For 2:1 randomization, set `ratio = 2` to round to a multiple of 3.
   - For 3:2 randomization, set `ratio = 4` to round to a multiple of 5.
   - Note that for the final analysis the sample size is rounded up to the nearest multiple of `ratio + 1` when `roundUpFinal = TRUE` is specified. If `roundUpFinal = FALSE`, the final sample size is rounded to the nearest multiple of `ratio + 1`.
-  
 
 ## Binomial endpoint designs
 
@@ -109,7 +110,6 @@ x_integer$timing
 ```
 
 These differences also make a difference in the cumulative Type I error associated with each analysis as shown below.
-
 
 ```{r}
 # Continuous sample size design
