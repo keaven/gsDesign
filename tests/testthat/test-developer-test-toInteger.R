@@ -62,7 +62,7 @@ test_that("Test: toInteger for survival endpoint event count works properly", {
     info = "Test toInteger of gsSurv rounds up final event count"
   )
   # Final sample size rounds to even
-  expect_true((y$eNC + y$eNE)[x$k] %% 2 == 0)
+  expect_true(as.integer((y$eNC + y$eNE)[x$k]) %% 2 == 0)
   # Final event count rounds up
   expect_gte((y$eNC + y$eNE - x$eNC - x$eNE)[x$k], 0)
 })
