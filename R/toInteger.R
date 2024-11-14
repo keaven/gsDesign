@@ -22,7 +22,7 @@
 #'
 #' @details
 #' It is useful to explicitly provide the argument \code{ratio} when a
-#' \code{gsDesign} object is input since \code{gsDesign} does not have a
+#' \code{gsDesign} object is input since \code{gsDesign()} does not have a
 #' \code{ratio} in return.
 #' \code{ratio = 0, roundUpFinal = TRUE} will just round up the sample size
 #' (also event count).
