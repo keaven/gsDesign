@@ -294,6 +294,7 @@ half way through the trial with</p>
 <span><span class="op">)</span></span>
 <span><span class="co"># Convert sample size at each analysis to integer values</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; toInteger: rounding done to nearest integer since ratio was not specified as postive integer .</span></span></code></pre>
 <p>The planned design used <span class="math inline">\alpha=0.1</span>,
 one-sided and Type II error 17% (83% power) with an interim analysis at
 50% of the final planned observations. This leads to Type I <span class="math inline">\alpha</span>-spending of 0.02 and <span class="math inline">\beta</span>-spending of 0.052 at the planned
@@ -322,7 +323,7 @@ for <code>P(Cross) if delta=0</code> is less than the planned <span class="math 
 <span class="math inline">\alpha(0)</span> which excludes the
 probability of crossing the lower bound at the interim analysis and the
 final analysis. The value of the non-binding Type I error is still <span class="math inline">\alpha^+(0) = 0.10</span>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Updated alpha is unchanged</span></span>
 <span><span class="va">alphau</span> <span class="op">&lt;-</span> <span class="fl">0.1</span></span>
 <span><span class="co"># Updated sample size at each analysis</span></span>
@@ -332,7 +333,7 @@ final analysis. The value of the non-binding Type I error is still <span class="
 <span><span class="co"># Information fraction is used for spending</span></span>
 <span><span class="va">usTime</span> <span class="op">&lt;-</span> <span class="va">n.I</span> <span class="op">/</span> <span class="va">x</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">k</span><span class="op">]</span></span>
 <span><span class="va">lsTime</span> <span class="op">&lt;-</span> <span class="va">usTime</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Update design based on actual interim sample size and planned final sample size</span></span>
 <span><span class="va">xu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="va">ku</span>,</span>
@@ -353,7 +354,7 @@ final analysis. The value of the non-binding Type I error is still <span class="
 <span>  usTime <span class="op">=</span> <span class="va">usTime</span>,</span>
 <span>  lsTime <span class="op">=</span> <span class="va">lsTime</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summarize bounds</span></span>
 <span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xu</span>, Nname <span class="op">=</span> <span class="st">"N"</span>, digits <span class="op">=</span> <span class="fl">4</span>, ddigits <span class="op">=</span> <span class="fl">2</span>, tdigits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt;   Analysis               Value Efficacy Futility</span></span>
