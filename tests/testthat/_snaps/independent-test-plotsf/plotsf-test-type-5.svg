@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='svglite' data-engine-version='2.0' width='720.00pt' height='576.00pt' viewBox='0 0 720.00 576.00'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA='>
+    <rect x='0.00' y='0.00' width='720.00' height='576.00' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+</g>
+<defs>
+  <clipPath id='cpODIuODB8NjU1LjIwfDY0LjgwfDQ4Ni4wMA=='>
+    <rect x='82.80' y='64.80' width='572.40' height='421.20' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpODIuODB8NjU1LjIwfDY0LjgwfDQ4Ni4wMA==)'>
+<polyline points='104.00,470.40 117.25,470.40 130.50,470.40 143.75,470.40 157.00,470.40 170.25,470.40 183.50,470.40 196.75,470.40 210.00,470.39 223.25,470.36 236.50,470.29 249.75,470.10 263.00,469.73 276.25,469.08 289.50,468.04 302.75,466.47 316.00,464.25 329.25,461.26 342.50,457.39 355.75,452.53 369.00,446.60 382.25,439.53 395.50,431.27 408.75,421.76 422.00,410.99 435.25,398.95 448.50,385.63 461.75,371.04 475.00,355.20 488.25,338.13 501.50,319.87 514.75,300.44 528.00,279.90 541.25,258.27 554.50,235.60 567.75,211.94 581.00,187.34 594.25,161.84 607.50,135.48 620.75,108.32 634.00,80.40 ' style='stroke-width: 0.38;' />
+</g>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+<line x1='104.00' y1='486.00' x2='634.00' y2='486.00' style='stroke-width: 0.75;' />
+<line x1='104.00' y1='486.00' x2='104.00' y2='493.20' style='stroke-width: 0.75;' />
+<line x1='210.00' y1='486.00' x2='210.00' y2='493.20' style='stroke-width: 0.75;' />
+<line x1='316.00' y1='486.00' x2='316.00' y2='493.20' style='stroke-width: 0.75;' />
+<line x1='422.00' y1='486.00' x2='422.00' y2='493.20' style='stroke-width: 0.75;' />
+<line x1='528.00' y1='486.00' x2='528.00' y2='493.20' style='stroke-width: 0.75;' />
+<line x1='634.00' y1='486.00' x2='634.00' y2='493.20' style='stroke-width: 0.75;' />
+<text x='104.00' y='511.92' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='16.68px' lengthAdjust='spacingAndGlyphs'>0.0</text>
+<text x='210.00' y='511.92' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='16.68px' lengthAdjust='spacingAndGlyphs'>0.2</text>
+<text x='316.00' y='511.92' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='16.68px' lengthAdjust='spacingAndGlyphs'>0.4</text>
+<text x='422.00' y='511.92' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='16.68px' lengthAdjust='spacingAndGlyphs'>0.6</text>
+<text x='528.00' y='511.92' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='16.68px' lengthAdjust='spacingAndGlyphs'>0.8</text>
+<text x='634.00' y='511.92' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='16.68px' lengthAdjust='spacingAndGlyphs'>1.0</text>
+<line x1='82.80' y1='470.40' x2='82.80' y2='80.40' style='stroke-width: 0.75;' />
+<line x1='82.80' y1='470.40' x2='75.60' y2='470.40' style='stroke-width: 0.75;' />
+<line x1='82.80' y1='392.40' x2='75.60' y2='392.40' style='stroke-width: 0.75;' />
+<line x1='82.80' y1='314.40' x2='75.60' y2='314.40' style='stroke-width: 0.75;' />
+<line x1='82.80' y1='236.40' x2='75.60' y2='236.40' style='stroke-width: 0.75;' />
+<line x1='82.80' y1='158.40' x2='75.60' y2='158.40' style='stroke-width: 0.75;' />
+<line x1='82.80' y1='80.40' x2='75.60' y2='80.40' style='stroke-width: 0.75;' />
+<text transform='translate(65.52,470.40) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='30.03px' lengthAdjust='spacingAndGlyphs'>0.000</text>
+<text transform='translate(65.52,392.40) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='30.03px' lengthAdjust='spacingAndGlyphs'>0.005</text>
+<text transform='translate(65.52,314.40) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='30.03px' lengthAdjust='spacingAndGlyphs'>0.010</text>
+<text transform='translate(65.52,236.40) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='30.03px' lengthAdjust='spacingAndGlyphs'>0.015</text>
+<text transform='translate(65.52,158.40) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='30.03px' lengthAdjust='spacingAndGlyphs'>0.020</text>
+<text transform='translate(65.52,80.40) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='30.03px' lengthAdjust='spacingAndGlyphs'>0.025</text>
+<polygon points='82.80,486.00 655.20,486.00 655.20,64.80 82.80,64.80 ' style='stroke-width: 0.75; fill: none;' />
+</g>
+<defs>
+  <clipPath id='cpMjguODB8NjkxLjIwfDI4LjgwfDU0Ny4yMA=='>
+    <rect x='28.80' y='28.80' width='662.40' height='518.40' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMjguODB8NjkxLjIwfDI4LjgwfDU0Ny4yMA==)'>
+<text x='369.00' y='51.76' text-anchor='middle' style='font-size: 14.40px; font-weight: bold; font-family: sans;' textLength='142.52px' lengthAdjust='spacingAndGlyphs'>Spending function plot</text>
+<text x='369.00' y='540.72' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='161.43px' lengthAdjust='spacingAndGlyphs'>Proportion of total sample size</text>
+<text transform='translate(34.23,305.36) rotate(-90)' style='font-size: 12.00px; font-family: sans;' textLength='7.20px' lengthAdjust='spacingAndGlyphs'>α</text>
+<text transform='translate(34.23,298.16) rotate(-90)' style='font-size: 12.00px; font-family: sans;' textLength='52.71px' lengthAdjust='spacingAndGlyphs'>-spending</text>
+</g>
+<g clip-path='url(#cpODIuODB8NjU1LjIwfDY0LjgwfDQ4Ni4wMA==)'>
+<rect x='104.00' y='80.40' width='227.90' height='58.50' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<line x1='114.80' y1='94.80' x2='136.40' y2='94.80' style='stroke-width: 0.38;' />
+<line x1='114.80' y1='109.20' x2='136.40' y2='109.20' style='stroke-width: 0.38; stroke-dasharray: 4.00,4.00;' />
+<text x='147.20' y='98.93' style='font-size: 12.00px; font-family: sans;' textLength='69.39px' lengthAdjust='spacingAndGlyphs'>Upper bound</text>
+<text x='147.20' y='113.33' style='font-size: 12.00px; font-family: sans;' textLength='69.39px' lengthAdjust='spacingAndGlyphs'>Lower bound</text>
+<polyline points='104.00,470.40 117.25,467.27 130.50,463.98 143.75,460.52 157.00,456.89 170.25,453.06 183.50,449.04 196.75,444.82 210.00,440.38 223.25,435.71 236.50,430.80 249.75,425.64 263.00,420.22 276.25,414.51 289.50,408.52 302.75,402.22 316.00,395.59 329.25,388.63 342.50,381.30 355.75,373.61 369.00,365.51 382.25,357.01 395.50,348.06 408.75,338.66 422.00,328.78 435.25,318.38 448.50,307.46 461.75,295.98 475.00,283.90 488.25,271.21 501.50,257.87 514.75,243.84 528.00,229.10 541.25,213.60 554.50,197.30 567.75,180.17 581.00,162.16 594.25,143.23 607.50,123.32 620.75,102.40 634.00,80.40 ' style='stroke-width: 0.38; stroke-dasharray: 4.00,4.00;' />
+</g>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+<line x1='104.00' y1='486.00' x2='634.00' y2='486.00' style='stroke-width: 0.75;' />
+<line x1='104.00' y1='486.00' x2='104.00' y2='493.20' style='stroke-width: 0.75;' />
+<line x1='210.00' y1='486.00' x2='210.00' y2='493.20' style='stroke-width: 0.75;' />
+<line x1='316.00' y1='486.00' x2='316.00' y2='493.20' style='stroke-width: 0.75;' />
+<line x1='422.00' y1='486.00' x2='422.00' y2='493.20' style='stroke-width: 0.75;' />
+<line x1='528.00' y1='486.00' x2='528.00' y2='493.20' style='stroke-width: 0.75;' />
+<line x1='634.00' y1='486.00' x2='634.00' y2='493.20' style='stroke-width: 0.75;' />
+<text x='104.00' y='511.92' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='16.68px' lengthAdjust='spacingAndGlyphs'>0.0</text>
+<text x='210.00' y='511.92' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='16.68px' lengthAdjust='spacingAndGlyphs'>0.2</text>
+<text x='316.00' y='511.92' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='16.68px' lengthAdjust='spacingAndGlyphs'>0.4</text>
+<text x='422.00' y='511.92' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='16.68px' lengthAdjust='spacingAndGlyphs'>0.6</text>
+<text x='528.00' y='511.92' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='16.68px' lengthAdjust='spacingAndGlyphs'>0.8</text>
+<text x='634.00' y='511.92' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='16.68px' lengthAdjust='spacingAndGlyphs'>1.0</text>
+<polygon points='82.80,486.00 655.20,486.00 655.20,64.80 82.80,64.80 ' style='stroke-width: 0.75; fill: none;' />
+</g>
+<g clip-path='url(#cpMjguODB8NjkxLjIwfDI4LjgwfDU0Ny4yMA==)'>
+<text x='369.00' y='51.76' text-anchor='middle' style='font-size: 14.40px; font-weight: bold; font-family: sans;' textLength='142.52px' lengthAdjust='spacingAndGlyphs'>Spending function plot</text>
+<text x='369.00' y='540.72' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='161.43px' lengthAdjust='spacingAndGlyphs'>Proportion of total sample size</text>
+<text transform='translate(34.23,305.36) rotate(-90)' style='font-size: 12.00px; font-family: sans;' textLength='7.20px' lengthAdjust='spacingAndGlyphs'>α</text>
+<text transform='translate(34.23,298.16) rotate(-90)' style='font-size: 12.00px; font-family: sans;' textLength='52.71px' lengthAdjust='spacingAndGlyphs'>-spending</text>
+</g>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+<line x1='655.20' y1='470.40' x2='655.20' y2='80.40' style='stroke-width: 0.75;' />
+<line x1='655.20' y1='470.40' x2='662.40' y2='470.40' style='stroke-width: 0.75;' />
+<line x1='655.20' y1='392.40' x2='662.40' y2='392.40' style='stroke-width: 0.75;' />
+<line x1='655.20' y1='314.40' x2='662.40' y2='314.40' style='stroke-width: 0.75;' />
+<line x1='655.20' y1='236.40' x2='662.40' y2='236.40' style='stroke-width: 0.75;' />
+<line x1='655.20' y1='158.40' x2='662.40' y2='158.40' style='stroke-width: 0.75;' />
+<line x1='655.20' y1='80.40' x2='662.40' y2='80.40' style='stroke-width: 0.75;' />
+<text transform='translate(681.12,470.40) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='23.36px' lengthAdjust='spacingAndGlyphs'>0.00</text>
+<text transform='translate(681.12,392.40) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='23.36px' lengthAdjust='spacingAndGlyphs'>0.02</text>
+<text transform='translate(681.12,314.40) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='23.36px' lengthAdjust='spacingAndGlyphs'>0.04</text>
+<text transform='translate(681.12,236.40) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='23.36px' lengthAdjust='spacingAndGlyphs'>0.06</text>
+<text transform='translate(681.12,158.40) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='23.36px' lengthAdjust='spacingAndGlyphs'>0.08</text>
+<text transform='translate(681.12,80.40) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='23.36px' lengthAdjust='spacingAndGlyphs'>0.10</text>
+<text transform='translate(702.72,288.00) rotate(-90)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='120.76px' lengthAdjust='spacingAndGlyphs'>Proportion of spending</text>
+</g>
+<g clip-path='url(#cpODIuODB8NjU1LjIwfDY0LjgwfDQ4Ni4wMA==)'>
+</g>
+</svg>
