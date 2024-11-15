@@ -994,40 +994,6 @@ Validate_comp_sprt_bnd <- function(alpha, beta, p0, p1, nmin, nmax) {
 }
 
 #-------------------------------------------------------------------------------
-#save_gg_plot() : Function to save plots created with ggplot2 package and saved
-#                 with ggsave() function.
-#
-# plot	: Plot to save, defaults to last plot displayed.
-# path	:  Path of the directory to save plot to: path and filename are 
-#        combined to create the fully qualified file name.
-# width : the width of the device (in inches).
-# height: the height of the device (in inches).
-# dpi	  : Plot resolution.
-
-# Plot size in units ("in", "cm", or "mm")
-#-------------------------------------------------------------------------------
-save_gg_plot <- function(code, width = 4, height = 4) {
-  path <- tempfile(fileext = ".png")
-  ggplot2::ggsave(path, plot = code, width = width, height = height, dpi = 72, units = "in")
-  path
-}
-
-#-------------------------------------------------------------------------------
-# save_gr_plot(): Function to save plots created with graphics package and saved
-#                 with png() function.
-# width: the width of the device (in pixels).
-# height: the height of the device (in pixels).
-#-------------------------------------------------------------------------------
-save_gr_plot <- function(code, width = 400, height = 400) {
-  path <- tempfile(fileext = ".png")
-  png(path, width = width, height = height)
-  oldpar <- par(no.readonly = TRUE)
-  on.exit(par(oldpar))
-  code
-  invisible(dev.off())
-  path
-}
-#-------------------------------------------------------------------------------
 #ssrCP : ssrCP() adapts 2-stage group sequential designs to 2-stage sample size
 # re-estimation designs based on interim analysis conditional power.
 

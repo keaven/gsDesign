@@ -43,9 +43,6 @@ test_that(
   }
 )
 
-
-test_that("Test plotHR graphs are correctly rendered ", {
-  save_plot_obj <- save_gg_plot(plotHR(xgs))
-  local_edition(3)
-  expect_snapshot_file(save_plot_obj, "plot_plotHR_1.png")
+test_that("plotHR: plots are correctly rendered", {
+  vdiffr::expect_doppelganger("plotHR", plotHR(xgs))
 })

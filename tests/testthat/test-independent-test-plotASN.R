@@ -63,17 +63,10 @@ test_that( desc = "check expected sample sizes", code = {
   }
 )
 
-
-# save_gg_plot() will be used when storing plot objects created with graphics package.
-
-test_that("Test plotASN graphs for gSurv are correctly rendered ", {
-  save_plot_obj <- save_gg_plot(plotASN(x))
-  local_edition(3)
-  expect_snapshot_file(save_plot_obj, "plot_plotastn_1.png")
+test_that("plotASN: plots for gSurv objects are correctly rendered", {
+  vdiffr::expect_doppelganger("plotASN gSurv", plotASN(x))
 })
 
-test_that("Test plotASN graphs for gsDesign are correctly rendered ", {
-  save_plot_obj <- save_gg_plot(plotASN(xx))
-  local_edition(3)
-  expect_snapshot_file(save_plot_obj, "plot_plotastn_3.png")
+test_that("plotASN: plots for gsDesign objects are correctly rendered", {
+  vdiffr::expect_doppelganger("plotASN gsDesign", plotASN(xx))
 })

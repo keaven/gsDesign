@@ -44,10 +44,6 @@ test_that(
   }
 )
 
-
-
-test_that("Test plotRR graphs are correctly rendered ", {
-  save_plot_obj <- save_gg_plot(plotRR(x))
-  local_edition(3)
-  expect_snapshot_file(save_plot_obj, "plot_plotRR_1.png")
+test_that("plotRR: plots are correctly rendered", {
+  vdiffr::expect_doppelganger("plotRR", plotRR(x))
 })
