@@ -30,20 +30,17 @@ test_that(desc = 'check plot data values,
    expect_lte(abs(res$Probability[3] - 0.12486698), 1e-3)
  })
 
+test_that("plotgsPower: plots are correctly rendered, test.type = 1", {
+  x <- gsDesign(
+    k = 3, test.type = 1, alpha = 0.025, beta = 0.1,
+    delta1 = 0.3, sfu = sfLDOF
+  )
 
-
-test_that(desc = 'Test: plotgsPower graphs are correctly rendered,test.type = 1', 
-          code = {
-      x <- gsDesign(k = 3, test.type = 1, alpha = 0.025,beta = 0.1, 
-                    delta1 = 0.3, sfu = sfLDOF)
-      
-      save_plot_obj <- save_gg_plot( plotgsPower(x = x))
-      
-      local_edition(3)
-      
-      expect_snapshot_file(save_plot_obj, "plotgsPower_1.png")
+  vdiffr::expect_doppelganger(
+    "gsPower test type 1",
+    plotgsPower(x = x)
+  )
 })
-
 
 test_that(desc = 'check plot data values,
                  source: Probability Calculations done using East 6.5', 
@@ -90,17 +87,16 @@ test_that(desc = 'check plot data values,
    expect_lte(abs(res - 0.99808417), 1e-3)
  })
 
+test_that("plotgsPower: plots are correctly rendered, test.type = 2", {
+  x <- gsDesign(
+    k = 3, test.type = 2, alpha = 0.025,
+    beta = 0.1, delta1 = 0.3, sfu = sfLDOF
+  )
 
-test_that(desc = 'Test: plotgsPower graphs are correctly rendered,test.type = 1', 
-          code = {
-  x <- gsDesign(k = 3, test.type = 2, alpha = 0.025, 
-                beta = 0.1, delta1 = 0.3, sfu = sfLDOF)
-  
-  save_plot_obj <- save_gg_plot(plotgsPower(x = x))
-  
-  local_edition(3)
-  
-  expect_snapshot_file(save_plot_obj, "plotgsPower_2.png")
+  vdiffr::expect_doppelganger(
+    "gsPower test type 2",
+    plotgsPower(x = x)
+  )
 })
 
 test_that(desc = 'Test: plotgsPower graphs can use offset arg for Future Analysis legend',

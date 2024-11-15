@@ -47,13 +47,6 @@ test_that(
   }
 )
 
-
-
-
-## save_gg_plot() function will be used when storing plot objects created with graphics package.
-
-test_that("Test plotBval graphs are correctly rendered ", {
-  save_plot_obj <- save_gg_plot(plotBval(x))
-  local_edition(3)
-  expect_snapshot_file(save_plot_obj, "plot_plotBval_1.png")
+test_that("plotBval: plots are correctly rendered", {
+  vdiffr::expect_doppelganger("plotBval", plotBval(x))
 })
