@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/gsDesign)](https://CRAN.R-project.org/package=gsDesign)
-[![Codecov test coverage](https://codecov.io/gh/keaven/gsDesign/branch/master/graph/badge.svg)](https://app.codecov.io/gh/keaven/gsDesign?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/keaven/gsDesign/graph/badge.svg)](https://app.codecov.io/gh/keaven/gsDesign)
 [![pkgdown](https://github.com/keaven/gsDesign/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/keaven/gsDesign/actions/workflows/pkgdown.yaml)
 [![R-CMD-check](https://github.com/keaven/gsDesign/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/keaven/gsDesign/actions/workflows/R-CMD-check.yaml)
 [![shinyapps.io](https://img.shields.io/badge/Shiny-shinyapps.io-blue)](https://rinpharma.shinyapps.io/gsdesign/)
