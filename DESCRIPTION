@@ -42,7 +42,8 @@ Suggests:
     rmarkdown,
     scales,
     testthat,
-    utils
+    utils,
+    vdiffr
 VignetteBuilder:
     knitr
 RoxygenNote: 7.3.2

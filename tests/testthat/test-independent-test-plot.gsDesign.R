@@ -1,120 +1,133 @@
-# --------------------------------------------
-# Test plot.gsDesign function
-## save_gg_plot() is used for storing plots created using ggplot2 package,
-## whereas save_gr_plot() is used with plots created using graphics package.
-#----------------------------------------------
-
-test_that("Test plot.gsDesign graphs are correctly rendered for plottype 1 and base R plotting package set to TRUE", code = {
+test_that("plot.gsDesign: plots are correctly rendered for plottype 1 and base set to TRUE", {
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
-  local_edition(3)
-  save_plot_obj <- save_gr_plot(plot.gsDesign(x, plottype = 1, base = TRUE))
-  expect_snapshot_file(save_plot_obj, "plotgsds1.png")
+
+  vdiffr::expect_doppelganger(
+    "plottype 1 base TRUE",
+    plot.gsDesign(x, plottype = 1, base = TRUE)
+  )
 })
 
-test_that("Test plot.gsDesign graphs are correctly rendered for plottype 1 and base R plotting package set to FALSE.", code = {
+test_that("plot.gsDesign: plots are correctly rendered for plottype 1 and base set to FALSE", {
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
-  local_edition(3)
-  save_plot_obj <- save_gg_plot(plot.gsDesign(x, plottype = 1, base = FALSE))
-  expect_snapshot_file(save_plot_obj, "plotgsds2.png")
+
+  vdiffr::expect_doppelganger(
+    "plottype 1 base FALSE",
+    plot.gsDesign(x, plottype = 1, base = FALSE)
+  )
 })
 
-
-test_that("Test plot.gsDesign graphs are correctly rendered for plottype = power and base R plotting package set to FALSE.", {
+test_that("plot.gsDesign: plots are correctly rendered for plottype = power and base set to FALSE", {
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
-  local_edition(3)
-  save_plot_obj <- save_gg_plot(plot.gsDesign(x, plottype = "power", base = FALSE))
-  expect_snapshot_file(save_plot_obj, "plot_plotgsds_3.png")
+
+  vdiffr::expect_doppelganger(
+    "plottype power base FALSE",
+    plot.gsDesign(x, plottype = "power", base = FALSE)
+  )
 })
 
-test_that("Test plot.gsDesign graphs are correctly rendered for plottype 2 and base R plotting package set to TRUE", {
+test_that("plot.gsDesign: plots are correctly rendered for plottype 2 and base set to TRUE", {
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
-  local_edition(3)
-  save_plot_obj <- save_gr_plot(plot.gsDesign(x, plottype = 2, base = TRUE))
-  expect_snapshot_file(save_plot_obj, "plot_plotgsds_4.png")
+
+  vdiffr::expect_doppelganger(
+    "plottype 2 base TRUE",
+    plot.gsDesign(x, plottype = 2, base = TRUE)
+  )
 })
 
-
-test_that("Test plot.gsDesign graphs are correctly rendered for plottype 3 and base R plotting package set to TRUE", {
+test_that("plot.gsDesign: plots are correctly rendered for plottype 3 and base set to TRUE", {
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
-  local_edition(3)
-  save_plot_obj <- save_gr_plot(plot.gsDesign(x, plottype = 3, base = TRUE))
-  expect_snapshot_file(save_plot_obj, "plot_plotgsds_5.png")
+
+  vdiffr::expect_doppelganger(
+    "plottype 3 base TRUE",
+    plot.gsDesign(x, plottype = 3, base = TRUE)
+  )
 })
 
-
-test_that("Test plot.gsDesign graphs are correctly rendered for plottype 4 and base R plotting package set to FALSE", {
+test_that("plot.gsDesign: graphs are correctly rendered for plottype 4 and base set to FALSE", {
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
-  local_edition(3)
-  save_plot_obj <- save_gg_plot(plot.gsDesign(x, plottype = 4, base = FALSE))
-  expect_snapshot_file(save_plot_obj, "plot_plotgsds_6.png")
+
+  vdiffr::expect_doppelganger(
+    "plottype 4 base FALSE",
+    plot.gsDesign(x, plottype = 4, base = FALSE)
+  )
 })
 
-test_that("Test plot.gsDesign graphs are correctly rendered for plottype 4 and base R plotting package set to TRUE", {
+test_that("plot.gsDesign: plots are correctly rendered for plottype 4 and base set to TRUE", {
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
-  local_edition(3)
-  save_plot_obj <- save_gr_plot(plot.gsDesign(x, plottype = 4, base = TRUE))
-  expect_snapshot_file(save_plot_obj, "plot_plotgsds_7.png")
+
+  vdiffr::expect_doppelganger(
+    "plottype 4 base TRUE",
+    plot.gsDesign(x, plottype = 4, base = TRUE)
+  )
 })
 
-
-test_that("Test plot.gsDesign graphs are correctly rendered for plottype 5 and base R plotting package set to TRUE", {
+test_that("plot.gsDesign: plots are correctly rendered for plottype 5 and base set to TRUE", {
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
-  local_edition(3)
-  save_plot_obj <- save_gr_plot(plot.gsDesign(x, plottype = 5, base = TRUE))
-  expect_snapshot_file(save_plot_obj, "plot_plotgsds_8.png")
+
+  vdiffr::expect_doppelganger(
+    "plottype 5 base TRUE",
+    plot.gsDesign(x, plottype = 5, base = TRUE)
+  )
 })
 
-
-test_that("Test plot.gsDesign graphs are correctly rendered for plottype 6 and base R plotting package set to FALSE", {
+test_that("plot.gsDesign: plots are correctly rendered for plottype 6 and base set to FALSE", {
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
-  local_edition(3)
-  save_plot_obj <- save_gg_plot(plot.gsDesign(x, plottype = 6, base = FALSE))
-  expect_snapshot_file(save_plot_obj, "plot_plotgsds_9.png")
+
+  vdiffr::expect_doppelganger(
+    "plottype 6 base FALSE",
+    plot.gsDesign(x, plottype = 6, base = FALSE)
+  )
 })
 
-
-test_that("Test plot.gsDesign graphs are correctly rendered for plottype 6 and base R plotting package set to TRUE", {
+test_that("plot.gsDesign: plots are correctly rendered for plottype 6 and base set to TRUE", {
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
-  local_edition(3)
-  save_plot_obj <- save_gr_plot(plot.gsDesign(x, plottype = 6, base = TRUE))
-  expect_snapshot_file(save_plot_obj, "plot_plotgsds_11.png")
+
+  vdiffr::expect_doppelganger(
+    "plottype 6 base TRUE",
+    plot.gsDesign(x, plottype = 6, base = TRUE)
+  )
 })
 
-test_that("Test plot.gsDesign graphs are correctly rendered for plottype 7 and base R plotting package set to TRUE", {
+test_that("plot.gsDesign: plots are correctly rendered for plottype 7 and base set to TRUE", {
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
-  local_edition(3)
-  save_plot_obj <- save_gr_plot(plot.gsDesign(x, plottype = 7, base = TRUE))
-  expect_snapshot_file(save_plot_obj, "plot_plotgsds_12.png")
+
+  vdiffr::expect_doppelganger(
+    "plottype 7 base TRUE",
+    plot.gsDesign(x, plottype = 7, base = TRUE)
+  )
 })
 
-
-test_that("Test plot.gsDesign graphs are correctly rendered for gsSurvR and base R plotting package set to TRUE", {
+test_that("plot.gsDesign: plots are correctly rendered for gsSurv objects and base set to TRUE", {
   z <- gsSurv(
     k = 3, sfl = sfPower, sflpar = .5,
     lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40,
     gamma = 1, T = 36, minfup = 12
   )
 
-  local_edition(3)
-  save_plot_obj <- save_gr_plot(plot.gsDesign(z, plottype = 2, base = TRUE))
-  expect_snapshot_file(save_plot_obj, "plot_plotgsdsa_3.png")
+  vdiffr::expect_doppelganger(
+    "gsSurv base TRUE",
+    plot.gsDesign(z, plottype = 2, base = TRUE)
+  )
 })
 
-
-test_that("Test plotgsDesign graphs are correctly rendered for gSurv and base R plotting package set to False", {
+test_that("plot.gsDesign: plots are correctly rendered for gSurv objects and base set to FALSE", {
   z <- gsSurv(
     k = 3, sfl = sfPower, sflpar = .5,
     lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40,
     gamma = 1, T = 36, minfup = 12
   )
-  save_plot_obj <- save_gg_plot(plot.gsDesign(z, plottype = 2, base = FALSE))
-  local_edition(3)
-  expect_snapshot_file(save_plot_obj, "plot_plotgsdsa_4.png")
+
+  vdiffr::expect_doppelganger(
+    "gsSurv base FALSE",
+    plot.gsDesign(z, plottype = 2, base = FALSE)
+  )
 })
 
-test_that("Test plot.gsDesign graphs are correctly rendered for testtype 1 and plottype 2", {
+test_that("plot.gsDesign: plots are correctly rendered for test.type 1 and plottype 2", {
   y <- gsDesign(k = 5, test.type = 1, n.fix = 1)
-  local_edition(3)
-  save_plot_obj <- save_gr_plot(plot.gsDesign(y, plottype = 2, base = TRUE))
-  expect_snapshot_file(save_plot_obj, "plot_plotgsdsa_8.png")
+
+  vdiffr::expect_doppelganger(
+    "test type 1 plottype 2",
+    plot.gsDesign(y, plottype = 2, base = TRUE)
+  )
 })

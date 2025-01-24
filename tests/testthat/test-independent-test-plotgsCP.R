@@ -33,25 +33,26 @@ test_that(desc = "check plot data values for sample size,",
     expect_lte(abs(nplot[2] - x$n.I[2]), 1e-6)
 })
 
+test_that("plotgsCP: plots are correctly rendered, test.type = 1", {
+  x <- gsDesign(
+    k = 3, test.type = 1, alpha = 0.025, beta = 0.1,
+    delta1 = 0.3, sfu = sfLDOF
+  )
 
-test_that(desc = "Test plotgsCP graphs are correctly rendered, test.type = 1",
-          code = {
-    x <- gsDesign(k = 3, test.type = 1, alpha = 0.025, beta = 0.1,
-                  delta1 = 0.3, sfu = sfLDOF)
-
-    save_plot_obj <- save_gg_plot(plotgsCP(x = x))
-    local_edition(3)
-    expect_snapshot_file(save_plot_obj, "plotgsCP_1.png")
+  vdiffr::expect_doppelganger(
+    "plotgsCP test type 1",
+    plotgsCP(x = x)
+  )
 })
 
+test_that("plotgsCP: plots are correctly rendered, test.type = 2", {
+  x <- gsDesign(
+    k = 3, test.type = 2, alpha = 0.025, beta = 0.1,
+    delta1 = 0.3, sfu = sfLDOF
+  )
 
-test_that(
-  desc = "Test plotgsCP graphs are correctly rendered, test.type = 2",
-  code = {
-    x <- gsDesign(k = 3, test.type = 2, alpha = 0.025, beta = 0.1,
-                  delta1 = 0.3, sfu = sfLDOF)
-
-    save_plot_obj <- save_gg_plot(plotgsCP(x = x))
-    local_edition(3)
-    expect_snapshot_file(save_plot_obj, "plotgsCP_2.png")
+  vdiffr::expect_doppelganger(
+    "plotgsCP test type 2",
+    plotgsCP(x = x)
+  )
 })

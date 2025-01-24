@@ -1,9 +1,4 @@
-# --------------------------------------------
-# Test plot.binomialSPRT function
-#----------------------------------------------
-
-testthat::test_that(desc = "Test: plot.binomialSPRT graphs are correctly rendered ", 
-                    code = {
+testthat::test_that("plot.binomialSPRT: plots are correctly rendered", {
   plotBSPRT <- binomialSPRT(
     p0 = 0.05,
     p1 = 0.25,
@@ -13,17 +8,13 @@ testthat::test_that(desc = "Test: plot.binomialSPRT graphs are correctly rendere
     maxn = 35
   )
 
-  save_plot_obj <- save_gg_plot(plot.binomialSPRT(plotBSPRT))
-  
-  local_edition(3)
-
-  testthat::expect_snapshot_file(save_plot_obj, "plotbinomialSPRT.png")
+  vdiffr::expect_doppelganger(
+    "binomial SPRT",
+    plot.binomialSPRT(plotBSPRT)
+  )
 })
 
-
-testthat::test_that(desc = "Test: plot.binomialSPRT graphs are correctly rendered, 
-                      plottype = 1 ", 
-                    code = {
+testthat::test_that("plot.binomialSPRT: plots are correctly rendered, plottype = 1", {
   plotBSPRT <- binomialSPRT(
     p0 = 0.05,
     p1 = 0.25,
@@ -33,9 +24,8 @@ testthat::test_that(desc = "Test: plot.binomialSPRT graphs are correctly rendere
     maxn = 35
   )
 
-  save_plot_obj <- save_gg_plot(plot.binomialSPRT(plotBSPRT, plottype = 1))
-  
-  local_edition(3)
-
-  testthat::expect_snapshot_file(save_plot_obj, "plotbinomialSPRT_plottype_1.png")
+  vdiffr::expect_doppelganger(
+    "binomial SPRT plottype 1",
+    plot.binomialSPRT(plotBSPRT, plottype = 1)
+  )
 })

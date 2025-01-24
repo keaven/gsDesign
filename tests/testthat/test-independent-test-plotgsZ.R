@@ -51,9 +51,6 @@ test_that(
   }
 )
 
-
-test_that("Test plotgsZ graphs are correctly rendered ", {
-  save_plot_obj <- save_gg_plot(plotgsZ(x))
-  local_edition(3)
-  expect_snapshot_file(save_plot_obj, "plot_plotgsz_1.png")
+test_that("plotgsZ: plots are correctly rendered", {
+  vdiffr::expect_doppelganger("plotgsZ", plotgsZ(x))
 })
