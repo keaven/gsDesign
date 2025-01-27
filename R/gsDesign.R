@@ -29,10 +29,13 @@
 #' @param tol Tolerance for error (scalar; default is 0.000001). Normally this
 #' will not be changed by the user.  This does not translate directly to number
 #' of digits of accuracy, so use extra decimal places.
-#' @param r Single integer value controlling grid for numerical integration as
-#' in Jennison and Turnbull (2000); default is 18, range is 1 to 80.  Larger
-#' values provide larger number of grid points and greater accuracy.  Normally
-#' \code{r} will not be changed by the user.
+#' @param r Integer value (>= 1 and <= 80) controlling the number of numerical
+#' integration grid points. Default is 18, as recommended by Jennison and
+#' Turnbull (2000). Grid points are spread out in the tails for accurate
+#' probability calculations. Larger values provide more grid points and greater
+#' accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
+#' accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
+#' not changed by users.
 #' @param printerr If this scalar argument set to 1, this will print messages
 #' from underlying C program.  Mainly intended to notify user when an output
 #' solution does not match input specifications.  This is not intended to stop
@@ -305,10 +308,13 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' @param tol Tolerance for error (default is 0.000001). Normally this will not
 #' be changed by the user.  This does not translate directly to number of
 #' digits of accuracy, so use extra decimal places.
-#' @param r Integer value controlling grid for numerical integration as in
-#' Jennison and Turnbull (2000); default is 18, range is 1 to 80.  Larger
-#' values provide larger number of grid points and greater accuracy.  Normally
-#' \code{r} will not be changed by the user.
+#' @param r Integer value (>= 1 and <= 80) controlling the number of numerical
+#' integration grid points. Default is 18, as recommended by Jennison and
+#' Turnbull (2000). Grid points are spread out in the tails for accurate
+#' probability calculations. Larger values provide more grid points and greater
+#' accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
+#' accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
+#' not changed by users.
 #' @param n.I Used for re-setting bounds when timing of analyses changes from
 #' initial design; see examples.
 #' @param maxn.IPlan Used for re-setting bounds when timing of analyses changes
@@ -573,8 +579,13 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
 #' analysis, vector of length k.
 #' @param b Upper bound cutoffs (z-values) for futility at each analysis;
 #' vector of length k.
-#' @param r Control for grid as in Jennison and Turnbull (2000); default is 18,
-#' range is 1 to 80.  Normally this will not be changed by the user.
+#' @param r Integer value (>= 1 and <= 80) controlling the number of numerical
+#' integration grid points. Default is 18, as recommended by Jennison and
+#' Turnbull (2000). Grid points are spread out in the tails for accurate
+#' probability calculations. Larger values provide more grid points and greater
+#' accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
+#' accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
+#' not changed by users.
 #' @param d If not \code{NULL}, this should be an object of type
 #' \code{gsDesign} returned by a call to \code{gsDesign()}.  When this is
 #' specified, the values of \code{k}, \code{n.I}, \code{a}, \code{b}, and
@@ -731,10 +742,13 @@ gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0
 #' @param i analysis at which interim z-values are given; must be from 1 to
 #' \code{x$k}
 #' @param zi interim z-value at analysis \code{i} (scalar)
-#' @param r Integer value controlling grid for numerical integration as in
-#' Jennison and Turnbull (2000); default is 18, range is 1 to 80.  Larger
-#' values provide larger number of grid points and greater accuracy.  Normally
-#' \code{r} will not be changed by the user.
+#' @param r Integer value (>= 1 and <= 80) controlling the number of numerical
+#' integration grid points. Default is 18, as recommended by Jennison and
+#' Turnbull (2000). Grid points are spread out in the tails for accurate
+#' probability calculations. Larger values provide more grid points and greater
+#' accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
+#' accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
+#' not changed by users.
 #' @return \item{zi}{The input vector \code{zi}.} \item{theta}{The input vector
 #' \code{theta}.} \item{density}{A matrix with \code{length(zi)} rows and
 #' \code{length(theta)} columns.  The subdensity function for \code{z[j]},
