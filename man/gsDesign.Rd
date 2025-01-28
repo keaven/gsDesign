@@ -112,10 +112,13 @@ rate than the default for the upper bound.}
 be changed by the user.  This does not translate directly to number of
 digits of accuracy, so use extra decimal places.}
 
-\item{r}{Integer value controlling grid for numerical integration as in
-Jennison and Turnbull (2000); default is 18, range is 1 to 80.  Larger
-values provide larger number of grid points and greater accuracy.  Normally
-\code{r} will not be changed by the user.}
+\item{r}{Integer value (>= 1 and <= 80) controlling the number of numerical
+integration grid points. Default is 18, as recommended by Jennison and
+Turnbull (2000). Grid points are spread out in the tails for accurate
+probability calculations. Larger values provide more grid points and greater
+accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
+accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
+not changed by users.}
 
 \item{n.I}{Used for re-setting bounds when timing of analyses changes from
 initial design; see examples.}

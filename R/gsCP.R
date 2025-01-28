@@ -60,10 +60,13 @@
 #' @param zi interim z-value at analysis i (scalar)
 #' @param j specific analysis for which prediction is being made; must be
 #' \code{>i} and no more than \code{x$k}
-#' @param r Integer value controlling grid for numerical integration as in
-#' Jennison and Turnbull (2000); default is 18, range is 1 to 80.  Larger
-#' values provide larger number of grid points and greater accuracy.  Normally
-#' \code{r} will not be changed by the user.
+#' @param r Integer value (>= 1 and <= 80) controlling the number of numerical
+#' integration grid points. Default is 18, as recommended by Jennison and
+#' Turnbull (2000). Grid points are spread out in the tails for accurate
+#' probability calculations. Larger values provide more grid points and greater
+#' accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
+#' accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
+#' not changed by users.
 #' @param total The default of \code{total=TRUE} produces the combined
 #' probability for all planned analyses after the interim analysis specified in
 #' \code{i}. Otherwise, information on each analysis is provided separately.
@@ -331,10 +334,13 @@ gsPI <- function(x, i = 1, zi = 0, j = 2, level = .95, theta = c(0, 3), wgts = c
 #' \code{zi} and interim sample size/statistical information of
 #' \code{x$n.I[i]}). Otherwise, conditional power is computed assuming the
 #' input scalar value \code{theta}.
-#' @param r Integer value controlling grid for numerical integration as in
-#' Jennison and Turnbull (2000); default is 18, range is 1 to 80.  Larger
-#' values provide larger number of grid points and greater accuracy.  Normally
-#' \code{r} will not be changed by the user.
+#' @param r Integer value (>= 1 and <= 80) controlling the number of numerical
+#' integration grid points. Default is 18, as recommended by Jennison and
+#' Turnbull (2000). Grid points are spread out in the tails for accurate
+#' probability calculations. Larger values provide more grid points and greater
+#' accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
+#' accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
+#' not changed by users.
 #' @return A list containing two vectors, \code{CPlo} and \code{CPhi}.
 #' \item{CPlo}{A vector of length \code{x$k-1} with conditional powers of
 #' crossing upper bounds given interim test statistics at each lower bound}
