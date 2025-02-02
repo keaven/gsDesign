@@ -691,7 +691,7 @@ gsBoundSummary0 <- function(x, deltaname = NULL, logdelta = FALSE, Nname = NULL,
     statframe[statframe$Value == statframe$Value[4], ]$Analysis <- paste(timename, ": ", as.character(Time), sep = "")
   }
   statframe[statframe$Value == statframe$Value[2], ]$Analysis <- paste(Nname, ": ", N, sep = "")
-  # add POS and predicitive POS, if requested
+  # add POS and predictive POS, if requested
   if (POS) {
     ppos <- rep("", x$k)
     for (i in 1:(x$k - 1)) ppos[i] <- paste("Post IA POS: ", as.character(round(100 * gsCPOS(i = i, x = x, theta = prior$z, wgts = prior$wgts), 1)), "%", sep = "")
@@ -727,32 +727,46 @@ gsBoundSummary <- function(x,
                            r = 18, 
                            alpha = NULL,
                            ...) {
+  # Get initial table
+  out <- gsBoundSummary0(
+    x, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
+    exclude = exclude, POS = POS, ratio = ratio, r = r, prior = prior
+  ) 
+  # Return unchanged if alpha is NULL or if test.type is not 1, 4, or 6
+  if (is.null(alpha)) return(out)
+  if (!(x$test.type %in% c(1, 4, 6))){
+    message("Alternate alpha levels only available for test.type 1, 4, and 6. Ignoring alpha levels.")
+    return(out)
+  }
+
   # Input validation for alpha
   if (!is.null(alpha)) {
     if (!all(alpha > 0 & alpha < 1 - x$beta)) {
       stop("All alpha levels must be > 0 and < 1 - beta")
     }
   }
-
-  # Get initial table
-  out <- gsBoundSummary0(
-    x, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
-    exclude = exclude, POS = POS, ratio = ratio, r = r
-  )
-
-  # Return unchanged if alpha is NULL
-  if (is.null(alpha)) {
-    return(out)
+  # For test.type 4 or 6, save Futility column
+  if (x$test.type > 1){
+    # save futility column for later
+    fut_col <- out$Futility
+    out <- out[ , 1:3]
   }
-
+  # Rename efficacy column with alpha label
+  names(out)[3] <- paste("\u03b1=", x$alpha, sep = '')
+  
+  # Initialize number of alpha columns
+  n_alpha <- 1
   # Process each alpha level
   for (a in alpha) {
-    if (a == x$alpha) next  # Skip if it's the original alpha
+    if (all.equal(a, x$alpha) == TRUE) next  # Skip if it's the original alpha 
+    n_alpha <- n_alpha + 1  # increment # of alpha columns
     
-    # Create new design with current alpha
+    # Create design with new alpha
     y <- gsDesign(
       k = x$k,
-      test.type = x$test.type,
+      n.I = x$n.I,
+      maxn.IPlan = max(x$n.I),
+      test.type = 1, # This simplifies the design creation (tolerance 1e-8)
       alpha = a,
       beta = x$beta,
       timing = x$timing,
@@ -766,78 +780,65 @@ gsBoundSummary <- function(x,
       delta0 = x$delta0,
       r = r
     )
-
-    # Get summary for new design
-    yout <- gsBoundSummary0(
+    
+    # Get summary for design with new alpha
+    yout <- gsDesign:::gsBoundSummary0(
       y, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
-      exclude = exclude, POS = POS, ratio = ratio, r = r
+      # POS is only computed for original alpha level
+      exclude = exclude, POS = FALSE, ratio = ratio, r = r, prior = prior
     )
 
-    # Add new efficacy bounds
-    if (x$test.type %in% c(4, 6)) {
-      # For test.type 4 or 6, keep original Efficacy column and add new ones
-      if (length(alpha) > 1) {
-        names(out)[names(out) == "Efficacy"] <- paste0("Efficacy (α=", x$alpha, ")")
-        out[paste0("Efficacy (α=", a, ")")] <- yout$Efficacy
+    # now if test.type is not 1, we need to add futility bounds 
+    # from original and recompute conditional power values and boundary crossing values
+    if (x$test.type > 1){
+      y2 <- gsProbability(k = x$k, theta = x$theta, a = x$lower$bound, b = y$upper$bound, r = r,
+                          n.I = x$n.I)
+      
+      # Get names for effect measure
+      if(is.null(deltaname)){
+        if ("gsSurv" %in% class(x) || x$nFixSurv>0){deltaname="HR"}else{deltaname="delta"}
       }
-    } else {
-      # For other test types, add alpha to column name with carriage return
-      names(yout)[names(yout) == "Efficacy"] <- paste0("Efficacy\n(α=", a, ")")
-      out[paste0("Efficacy\n(α=", a, ")")] <- yout$Efficacy
-    }
+      # Get delta value for label
+      delta <- x$delta0 + (x$delta1 - x$delta0) * x$theta / x$delta
+      if (logdelta || "gsSurv" %in% class(x)) delta <- exp(delta)
 
-    # Handle futility bounds based on test.type
-    if (x$test.type == 2) {
-      # For test.type 2, add futility bounds with alpha
-      names(yout)[names(yout) == "Futility"] <- paste0("Futility\n(α=", a, ")")
-      out[paste0("Futility\n(α=", a, ")")] <- yout$Futility
-    }
-  }
-
-  # Rename original columns if there are multiple alpha levels
-  if (length(alpha) > 1 && !(x$test.type %in% c(4, 6))) {
-    names(out)[names(out) == "Efficacy"] <- paste0("Efficacy\n(α=", x$alpha, ")")
-    if (x$test.type == 2) {
-      names(out)[names(out) == "Futility"] <- paste0("Futility\n(α=", x$alpha, ")")
-    }
-  }
-
-  # For test.type 4 or 6, move Futility column to the end
-  if (x$test.type %in% c(4, 6) && "Futility" %in% names(out)) {
-    fut_col <- out$Futility
-    out$Futility <- NULL
-    out$Futility <- fut_col
-  }
-
-  # For test.type 1, ensure all alpha columns are included
-  if (x$test.type == 1 && length(alpha) > 1) {
-    # Keep original efficacy column
-    names(out)[names(out) == "Efficacy"] <- paste0("Efficacy\n(α=", x$alpha, ")")
-    
-    # Add columns for other alpha levels
-    for (a in setdiff(alpha, x$alpha)) {
-      y <- gsDesign(
-        k = x$k,
-        test.type = x$test.type,
-        alpha = a,
-        beta = x$beta,
-        timing = x$timing,
-        sfu = x$upper$sf,
-        sfupar = x$upper$param,
-        endpoint = x$endpoint,
-        delta = x$delta,
-        delta1 = x$delta1,
-        delta0 = x$delta0,
-        r = r
-      )
+      # We only need to fix rows for CP, CP H1, PP, and P(Cross) if test.type is not 1;
+      # This uses futility bound from original alpha level
       
-      yout <- gsBoundSummary0(
-        y, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
-        exclude = exclude, POS = POS, ratio = ratio, r = r
-      )
-      
-      out[paste0("Efficacy\n(α=", a, ")")] <- yout$Efficacy
+      # Set rows for H0 boundary crossing probabilities
+      h0Rows <- (yout$Value == paste("P(Cross) if ", deltaname, "=", round(delta[1], ddigits), sep = ""))
+      # Set rows for H1 boundary crossing probabilities
+      h1Rows <- (yout$Value == paste("P(Cross) if ", deltaname, "=", round(delta[2], ddigits), sep = ""))
+      # Fix probability of crossing under H0, if included
+      if (!all(!h0Rows)) yout[h0Rows, 3] <- round(cumsum(y2$upper$prob[,1]), digits)
+      # Fix probability of crossing under H1, if included
+      if (!all(!h1Rows)) yout[h1Rows, 3] <- round(cumsum(y2$upper$prob[,2]), digits)
+      # Fix CP, if included
+      # Set rows for CP
+      CPRows <- (yout$Value == "CP")
+      if(!all(!CPRows)) yout[CPRows, 3] <- gsBoundCP(y2, r = r)[,2]
+      # Fix CP H1, if included
+      CPH1Rows <- (yout$Value == "CP H1")
+      if(!all(!CPH1Rows)) yout[CPH1Rows, 3] <- gsBoundCP(y2, theta = x$delta, r = r)[,2]
+      # Fix PP, if included
+      PPRows <- (yout$Value == "PP")
+      if(!all(!PPRows)){
+        PP <- rep(0, x$k - 1)
+        for(i in 1:(x$k - 1)){
+          PP[i] <-  gsPP(y2, i = i, zi = y$upper$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
+        }
+        yout[PPRows, 3] <- PP
+      }
     }
+    # Save new column
+    out <- cbind(out, round(yout[ , 3], digits))
+    names(out)[ncol(out)] <- paste("\u03b1=", a, sep = '')
+  }
+
+  # Add futility column if test.type is 4 or 6
+  if (x$test.type > 1) {
+    out <- cbind(out, fut_col)
+    names(out)[ncol(out)] <- "Futility"
   }
 
   class(out) <- c("gsBoundSummary", "data.frame")
