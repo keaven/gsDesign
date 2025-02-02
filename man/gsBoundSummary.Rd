@@ -31,6 +31,7 @@ gsBoundSummary(
   ratio = NULL,
   exclude = c("B-value", "Spending", "CP", "CP H1", "PP"),
   r = 18,
+  alpha = NULL,
   ...
 )
 
@@ -130,6 +131,11 @@ values. A value of \code{NULL} produces all available summaries.}
 \item{r}{See \code{\link{gsDesign}}. This is an integer used to control the
 degree of accuracy of group sequential calculations which will normally not
 be changed.}
+
+\item{alpha}{If used, a vector of alternate alpha-levels to print boundaries
+for. Only works with test.type 1, 4, and 6. If specified, efficacy bound
+columns are headed by individual alpha levels. The alpha level of the input
+design is always included as the first column.}
 
 \item{include.rownames}{indicator of whether or not to include row names in
 output.}
@@ -328,8 +334,9 @@ xOR <- gsDesign(k = 2, n.fix = n.fix, delta1 = log(.15 / .3 / .85 * .7), endpoin
 gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE)
 
 # for nice LaTeX table output, use xprint
-xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE), 
-                                          caption = "Table caption."))
+xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE),
+  caption = "Table caption."
+))
 }
 \references{
 Jennison C and Turnbull BW (2000), \emph{Group Sequential
