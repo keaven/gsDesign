@@ -176,17 +176,17 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
     if (is.null(n)) {
       n <- ((z.alpha * sigma0 + z.beta * sigma1) / (p1 - p2 - delta0))^2
       if (outtype == 2) {
-        return(data.frame(cbind(n1 = n / (ratio + 1), n2 = ratio *
-          n / (ratio + 1))))
+        return(data.frame(n1 = n / (ratio + 1), n2 = ratio *
+          n / (ratio + 1)))
       }
       else if (outtype == 3) {
-        return(data.frame(cbind(
+        return(data.frame(
           n = n, n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1), alpha = alpha,
           sided = sided, beta = beta, Power = 1 - beta,
           sigma0 = sigma0, sigma1 = sigma1, p1 = p1,
           p2 = p2, delta0 = delta0, p10 = p10, p20 = p20
-        )))
+        ))
       }
       else {
         return(n = n)
@@ -196,17 +196,17 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
       pwr <- stats::pnorm(-(stats::qnorm(1 - alpha / sided) - sqrt(n) *
         ((p1 - p2 - delta0) / sigma0)) * sigma0 / sigma1)
       if (outtype == 2) {
-        return(data.frame(cbind(n1 = n / (ratio + 1), n2 = ratio *
-          n / (ratio + 1), Power = pwr)))
+        return(data.frame(n1 = n / (ratio + 1), n2 = ratio *
+          n / (ratio + 1), Power = pwr))
       }
       else if (outtype == 3) {
-        return(data.frame(cbind(
+        return(data.frame(
           n = n, n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1), alpha = alpha,
           sided = sided, beta = 1 - pwr, Power = pwr,
           sigma0 = sigma0, sigma1 = sigma1, p1 = p1,
           p2 = p2, delta0 = delta0, p10 = p10, p20 = p20
-        )))
+        ))
       }
       else {
         return(Power = pwr)
@@ -232,19 +232,19 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
     if (is.null(n)) {
       n <- ((z.alpha * sigma0 + z.beta * sigma1) / (p1 - p2 * RR))^2
       if (outtype == 2) {
-        return(data.frame(cbind(
+        return(data.frame(
           n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1)
-        )))
+        ))
       }
       else if (outtype == 3) {
-        return(data.frame(cbind(
+        return(data.frame(
           n = n, n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1), alpha = alpha,
           sided = sided, beta = beta, Power = 1 - beta,
           sigma0 = sigma0, sigma1 = sigma1, p1 = p1,
           p2 = p2, delta0 = delta0, p10 = p10, p20 = p20
-        )))
+        ))
       }
       else {
         return(n = n)
@@ -254,17 +254,17 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
       pwr <- stats::pnorm(-(stats::qnorm(1 - alpha / sided) - sqrt(n) *
         ((p1 - p2 * RR) / sigma0)) * sigma0 / sigma1)
       if (outtype == 2) {
-        return(data.frame(cbind(n1 = n / (ratio + 1), n2 = ratio *
-          n / (ratio + 1), Power = pwr)))
+        return(data.frame(n1 = n / (ratio + 1), n2 = ratio *
+          n / (ratio + 1), Power = pwr))
       }
       else if (outtype == 3) {
-        return(data.frame(cbind(
+        return(data.frame(
           n = n, n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1), alpha = alpha,
           sided = sided, beta = 1 - pwr, Power = pwr,
           sigma0 = sigma0, sigma1 = sigma1, p1 = p1,
           p2 = p2, delta0 = delta0, p10 = p10, p20 = p20
-        )))
+        ))
       }
       else {
         return(Power = pwr)
@@ -288,17 +288,17 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
     if (is.null(n)) {
       n <- ((z.alpha * sigma0 + z.beta * sigma1) / log(OR / p2 * (1 - p2) * p1 / (1 - p1)))^2
       if (outtype == 2) {
-        return(data.frame(cbind(n1 = n / (ratio + 1), n2 = ratio *
-          n / (ratio + 1))))
+        return(data.frame(n1 = n / (ratio + 1), n2 = ratio *
+          n / (ratio + 1)))
       }
       else if (outtype == 3) {
-        return(data.frame(cbind(
+        return(data.frame(
           n = n, n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1), alpha = alpha,
           sided = sided, beta = beta, Power = 1 - beta,
           sigma0 = sigma0, sigma1 = sigma1, p1 = p1,
           p2 = p2, delta0 = delta0, p10 = p10, p20 = p20
-        )))
+        ))
       }
       else {
         return(n = n)
@@ -309,17 +309,17 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
         (log(OR / p2 * (1 - p2) * p1 / (1 - p1)) / sigma0)) *
         sigma0 / sigma1)
       if (outtype == 2) {
-        return(data.frame(cbind(n1 = n / (ratio + 1), n2 = ratio *
-          n / (ratio + 1), Power = pwr)))
+        return(data.frame(n1 = n / (ratio + 1), n2 = ratio *
+          n / (ratio + 1), Power = pwr))
       }
       else if (outtype == 3) {
-        return(data.frame(cbind(
+        return(data.frame(
           n = n, n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1), alpha = alpha,
           sided = sided, beta = 1 - pwr, Power = pwr,
           sigma0 = sigma0, sigma1 = sigma1, p1 = p1,
           p2 = p2, delta0 = delta0, p10 = p10, p20 = p20
-        )))
+        ))
       }
       else {
         return(Power = pwr)

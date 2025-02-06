@@ -110,14 +110,14 @@ nNormal <- function(delta1 = 1, sd = 1.7, sd2 = NULL, alpha = .025,
   if (is.null(n)) {
     n <- ((stats::qnorm(alpha / sided) + stats::qnorm(beta)) / theta1)^2
     if (outtype == 2) {
-      return(data.frame(cbind(n1 = n / (ratio + 1), n2 = ratio * n / (ratio + 1))))
+      return(data.frame(n1 = n / (ratio + 1), n2 = ratio * n / (ratio + 1)))
     }
     else if (outtype == 3) {
-      return(data.frame(cbind(
+      return(data.frame(
         n = n, n1 = n / (ratio + 1), n2 = ratio * n / (ratio + 1),
         alpha = alpha, sided = sided, beta = beta, Power = 1 - beta,
         sd = sd, sd2 = sd2, delta1 = delta1, delta0 = delta0, se = se / sqrt(n)
-      )))
+      ))
     }
     else {
       return(n = n)
@@ -125,13 +125,13 @@ nNormal <- function(delta1 = 1, sd = 1.7, sd2 = NULL, alpha = .025,
   } else {
     powr <- stats::pnorm(sqrt(n) * theta1 - stats::qnorm(1 - alpha / sided))
     if (outtype == 2) {
-      return(data.frame(cbind(n1 = n / (ratio + 1), n2 = ratio * n / (ratio + 1), Power = powr)))
+      return(data.frame(n1 = n / (ratio + 1), n2 = ratio * n / (ratio + 1), Power = powr))
     } else if (outtype == 3) {
-      return(data.frame(cbind(
+      return(data.frame(
         n = n, n1 = n / (ratio + 1), n2 = ratio * n / (ratio + 1),
         alpha = alpha, sided = sided, beta = 1 - powr, Power = powr,
         sd = sd, sd2 = sd2, delta1 = delta1, delta0 = delta0, se = se / sqrt(n)
-      )))
+      ))
     }
     else {
       (return(Power = powr))
