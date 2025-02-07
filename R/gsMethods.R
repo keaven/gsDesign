@@ -732,42 +732,57 @@ gsBoundSummary <- function(x,
   out <- gsBoundSummary0(
     x, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
     exclude = exclude, POS = POS, ratio = ratio, r = r, prior = prior
-  ) 
+  )
   # Return unchanged if alpha is NULL or if test.type is not 1, 4, or 6
   if (is.null(alpha)) return(out)
-  if (!(x$test.type %in% c(1, 4, 6))){
+  if (!(x$test.type %in% c(1, 4, 6) && !is.null(alpha))){
     message("Alternate alpha levels only available for test.type 1, 4, and 6. Ignoring alpha levels.")
     return(out)
   }
-
+  
   # Input validation for alpha
-  if (!is.null(alpha)) {
-    if (!all(alpha > 0 & alpha < 1 - x$beta)) {
-      stop("All alpha levels must be > 0 and < 1 - beta")
-    }
+  if (!is.vector(alpha) || !is.numeric(alpha)) {
+    stop("alpha must be NULL or a numeric vector")
+      }
+
+  if (!all(alpha > 0)) {
+    stop("alpha values must be positive")
   }
+
+  if (!all(alpha < 1 - x$beta)) {
+    stop("All alpha levels must be less than 1 - beta")
+    }
+    
   # For test.type 4 or 6, save Futility column
-  if (x$test.type > 1){
+  if (x$test.type %in% c(4, 6)) {
     # save futility column for later
     fut_col <- out$Futility
     out <- out[ , 1:3]
+    }
+    
+  # Format for efficacy column names based on test.type
+  if (x$test.type %in% c(4, 6)) {
+    efficacy_format <- "α=%s"  # Simplified format
+  } else {
+    efficacy_format <- "α=%s"  # Same simplified format for all test types
   }
+      
   # Rename efficacy column with alpha label
-  names(out)[3] <- paste("\u03b1=", x$alpha, sep = '')
+  names(out)[names(out) == "Efficacy"] <- sprintf(efficacy_format, x$alpha)
   
   # Initialize number of alpha columns
   n_alpha <- 1
   # Process each alpha level
   for (a in alpha) {
-    if (all.equal(a, x$alpha) == TRUE) next  # Skip if it's the original alpha 
+    if (isTRUE(all.equal(a, x$alpha))) next  # Skip if it's the original alpha 
     n_alpha <- n_alpha + 1  # increment # of alpha columns
-    
+      
     # Create design with new alpha
     y <- gsDesign(
       k = x$k,
       n.I = x$n.I,
       maxn.IPlan = max(x$n.I),
-      test.type = 1, # This simplifies the design creation (tolerance 1e-8)
+      test.type = 1,  # Use test.type = 1 for all new alpha levels
       alpha = a,
       beta = x$beta,
       timing = x$timing,
@@ -780,68 +795,40 @@ gsBoundSummary <- function(x,
       delta1 = x$delta1,
       delta0 = x$delta0,
       r = r
-    )
-    
+      )
+      
     # Get summary for design with new alpha
     yout <- gsBoundSummary0(
       y, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
       # POS is only computed for original alpha level
       exclude = exclude, POS = FALSE, ratio = ratio, r = r, prior = prior
-    )
+      )
 
-    # now if test.type is not 1, we need to add futility bounds 
-    # from original and recompute conditional power values and boundary crossing values
-    if (x$test.type > 1){
-      y2 <- gsProbability(k = x$k, theta = x$theta, a = x$lower$bound, b = y$upper$bound, r = r,
-                          n.I = x$n.I)
-      
-      # Get names for effect measure
-      if(is.null(deltaname)){
-        if ("gsSurv" %in% class(x) || x$nFixSurv>0){deltaname="HR"}else{deltaname="delta"}
-      }
-      # Get delta value for label
-      delta <- x$delta0 + (x$delta1 - x$delta0) * x$theta / x$delta
-      if (logdelta || "gsSurv" %in% class(x)) delta <- exp(delta)
-
-      # We only need to fix rows for CP, CP H1, PP, and P(Cross) if test.type is not 1;
-      # This uses futility bound from original alpha level
-      
-      # Set rows for H0 boundary crossing probabilities
-      h0Rows <- (yout$Value == paste("P(Cross) if ", deltaname, "=", round(delta[1], ddigits), sep = ""))
-      # Set rows for H1 boundary crossing probabilities
-      h1Rows <- (yout$Value == paste("P(Cross) if ", deltaname, "=", round(delta[2], ddigits), sep = ""))
-      # Fix probability of crossing under H0, if included
-      if (!all(!h0Rows)) yout[h0Rows, 3] <- round(cumsum(y2$upper$prob[,1]), digits)
-      # Fix probability of crossing under H1, if included
-      if (!all(!h1Rows)) yout[h1Rows, 3] <- round(cumsum(y2$upper$prob[,2]), digits)
-      # Fix CP, if included
-      # Set rows for CP
-      CPRows <- (yout$Value == "CP")
-      if(!all(!CPRows)) yout[CPRows, 3] <- gsBoundCP(y2, r = r)[,2]
-      # Fix CP H1, if included
-      CPH1Rows <- (yout$Value == "CP H1")
-      if(!all(!CPH1Rows)) yout[CPH1Rows, 3] <- gsBoundCP(y2, theta = x$delta, r = r)[,2]
-      # Fix PP, if included
-      PPRows <- (yout$Value == "PP")
-      if(!all(!PPRows)){
-        PP <- rep(0, x$k - 1)
-        for(i in 1:(x$k - 1)){
-          PP[i] <-  gsPP(y2, i = i, zi = y$upper$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
-        }
-        yout[PPRows, 3] <- PP
-      }
-    }
-    # Save new column
-    out <- cbind(out, round(yout[ , 3], digits))
-    names(out)[ncol(out)] <- paste("\u03b1=", a, sep = '')
-  }
+   }
 
   # Add futility column if test.type is 4 or 6
-  if (x$test.type > 1) {
+  if (x$test.type %in% c(4, 6)) {
     out <- cbind(out, fut_col)
     names(out)[ncol(out)] <- "Futility"
   }
-
+  
+  # Move CP, CP H1, and PP columns to the end (before Futility if it exists)
+  power_cols <- c("CP", "CP H1", "PP")
+  if (any(power_cols %in% names(out))) {
+    # Get indices of power columns that exist
+    power_idx <- which(names(out) %in% power_cols)
+    # Get indices of all other columns
+    other_idx <- setdiff(1:ncol(out), power_idx)
+    # If Futility exists, put power columns before it
+    if ("Futility" %in% names(out)) {
+      fut_idx <- which(names(out) == "Futility")
+      other_idx <- setdiff(other_idx, fut_idx)
+      out <- out[, c(other_idx, power_idx, fut_idx)]
+    } else {
+      out <- out[, c(other_idx, power_idx)]
+    }
+  }
+  
   class(out) <- c("gsBoundSummary", "data.frame")
   return(out)
 }
@@ -850,7 +837,9 @@ gsBoundSummary <- function(x,
 #' @export
 #' @rdname gsBoundSummary
 # xprint function [sinew] ----
-xprint <- function(x, include.rownames = FALSE, hline.after = c(-1, which(x$Value == x[1, ]$Value) - 1, nrow(x)), ...) {
+xprint <- function(x, include.rownames = FALSE, 
+                  hline.after = c(-1, which(x$Value == x[1, ]$Value) - 1, nrow(x)), 
+                  ...) {
   xtable::print.xtable(x, hline.after = hline.after, include.rownames = include.rownames, ...)
 }
 
