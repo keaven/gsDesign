@@ -81,7 +81,8 @@
     Sample size (computed):           n=396
     Events required (computed): nEvents=94
 
-# Test: checking type of sample size calculation:                     risk ratio (type = rr) with approximate computation
+# Test: checking type of sample size calculation: 
+                    risk ratio (type = rr) with approximate computation
 
     Fixed design, two-arm trial with time-to-event
     outcome (Lachin and Foulkes, 1986).
@@ -101,7 +102,8 @@
     Sample size (computed):           n=4308
     Events required (computed): nEvents=92
 
-# Test: checking type of sample size calculation:                     risk difference (type = rd) with approximate computation
+# Test: checking type of sample size calculation: 
+                    risk difference (type = rd) with approximate computation
 
     Fixed design, two-arm trial with time-to-event
     outcome (Lachin and Foulkes, 1986).
@@ -122,7 +124,8 @@
     Sample size (computed):           n=416
     Events required (computed): nEvents=95
 
-# Test: checking type of sample size calculation:                     risk difference (type = rd) with approx set to FALSE
+# Test: checking type of sample size calculation: 
+                    risk difference (type = rd) with approx set to FALSE
 
     Fixed design, two-arm trial with time-to-event
     outcome (Lachin and Foulkes, 1986).

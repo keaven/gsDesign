@@ -783,7 +783,7 @@ gsBoundSummary <- function(x,
   h1Rows <- (out$Value == paste("P(Cross) if ", deltaname, "=", round(delta[2], ddigits), sep = ""))
   # Set rows for CP, CP H1, PP
   CPRows <- (out$Value == "CP")
-  CPH1Rows <- (yout$Value == "CP H1")
+  CPH1Rows <- (out$Value == "CP H1")
   PPRows <- (out$Value == "PP")
   
   # Initialize number of alpha columns

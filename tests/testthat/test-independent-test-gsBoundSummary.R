@@ -110,11 +110,11 @@ testthat::test_that(desc = "Test gsBoundSummary correctly handles valid alpha ve
   out1 <- gsBoundSummary(x1, alpha = alpha_vec)
   
   # Check that original alpha bounds exist
-  expect_true(paste0("α=", x1$alpha, ")", sep = '') %in% names(out1))
+  expect_true(paste0("α=", x1$alpha, sep = '') %in% names(out1))
   
   # Check that new alpha bounds exist
   for (a in setdiff(alpha_vec, x1$alpha)) {
-    expect_true(paste0("α=", a, ")", sep = '') %in% names(out1))
+    expect_true(paste0("α=", a, sep = '') %in% names(out1))
   }
   
   # Test for test.type = 4 (asymmetric two-sided)
@@ -181,18 +181,18 @@ testthat::test_that(desc = "Test CP, CP H1, and PP computations with multiple al
     x4p <- gsProbability(k = x4$k, theta = 0, n.I = x4$n.I, a = x4$lower$bound, b = x4_1s$upper$bound)
     # Check conditional power with observed treatment effect from gsBoundSummary vs gsBoundCP
     cp <- out4[out4$Value == "CP", 3 + a]
-    CP <- gsBoundCP(x = x4p, theta = "thetahat")
+    CP <- round(gsBoundCP(x = x4p, theta = "thetahat"), 4)
     expect_equal(CP[,2], cp, label = "CP at estimated effect size is incorrect")
     # Check conditional power with H1 treatment effect from gsBoundSummary vs gsBoundCP
     cph1 <- out4[out4$Value == "CP H1", 3 + a]
-    CPH1 <- gsBoundCP(x = x4p, theta = x4$delta)
+    CPH1 <- round(gsBoundCP(x = x4p, theta = x4$delta), 4)
     expect_equal(CPH1[,2], cph1, label = "CP at H1 effect size is incorrect")
     # Check PP for updated alpha
     pp <- out4[out4$Value == "PP", 3 + a]
     PP <- rep(0, 2)
     for(i in 1:2){
-      PP[i] <- gsPP(z = x4p$upper$bound[i], i = i, x = x4, theta = prior$z, wgts = prior$wgts)
+      PP[i] <- gsPP(z = x4p$upper$bound[i], i = i, x = x4p, theta = prior$z, wgts = prior$wgts)
     }
-    expect_equal(PP, pp[i], label = "PP is incorrect")
+    expect_equal(round(PP, 4), pp, label = "PP is incorrect")
   }
 })
