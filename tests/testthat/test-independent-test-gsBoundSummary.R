@@ -99,7 +99,7 @@ testthat::test_that(desc = "Test gsBoundSummary fails appropriately with invalid
   # Test with values > 1
   expect_error(
     gsBoundSummary(x, alpha = c(0.025, 1.5)),
-    "alpha values must be less than 1"
+    "alpha must be NULL or a numeric vector with values strictly between 0 and 1 - x$beta"
   )
 })
 
