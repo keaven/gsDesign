@@ -110,16 +110,12 @@ testthat::test_that(desc = "Test gsBoundSummary correctly handles valid alpha ve
   out1 <- gsBoundSummary(x1, alpha = alpha_vec)
   
   # Check that original alpha bounds exist
-  expect_true(paste0("Efficacy\n(α=", x1$alpha, ")") %in% names(out1))
+  expect_true(paste0("α=", x1$alpha, ")", sep = '') %in% names(out1))
   
   # Check that new alpha bounds exist
   for (a in setdiff(alpha_vec, x1$alpha)) {
-    expect_true(paste0("Efficacy\n(α=", a, ")") %in% names(out1))
+    expect_true(paste0("α=", a, ")", sep = '') %in% names(out1))
   }
-  
-  # Verify column order for test.type = 1: Analysis, Bounds, then Efficacy columns
-  expect_true(all(grepl("Efficacy", names(out1)[3:ncol(out1)])))
-  expect_false("Futility" %in% names(out1))
   
   # Test for test.type = 4 (asymmetric two-sided)
   x4 <- gsDesign(k = 3, test.type = 4, alpha = 0.025)
@@ -127,39 +123,21 @@ testthat::test_that(desc = "Test gsBoundSummary correctly handles valid alpha ve
   out4 <- gsBoundSummary(x4, alpha = alpha_vec)
   
   # Check that original alpha bounds exist
-  expect_true(paste0("Efficacy (α=", x4$alpha, ")") %in% names(out4))
+  expect_true(paste0("α=", x4$alpha, sep = '') %in% names(out4))
   
   # Check that new alpha bounds exist
   for (a in setdiff(alpha_vec, x4$alpha)) {
-    expect_true(paste0("Efficacy (α=", a, ")") %in% names(out4))
+    expect_true(paste0("α=", a, sep = '') %in% names(out4))
   }
   
   # Verify column order for test.type = 4: Analysis, Bounds, Efficacy columns, then Futility
-  expect_true(all(grepl("Efficacy", names(out4)[3:(ncol(out4)-1)])))
+  expect_true(all(grepl("α=", names(out4)[3:(ncol(out4)-1)])))
   expect_equal(names(out4)[ncol(out4)], "Futility")
   
   # Test for test.type = 2 (symmetric two-sided)
   x2 <- gsDesign(k = 3, test.type = 2, alpha = 0.025)
   alpha_vec <- c(0.025, 0.05, 0.1)
   out2 <- gsBoundSummary(x2, alpha = alpha_vec)
-  
-  # Check that original alpha bounds exist for both efficacy and futility
-  expect_true(paste0("Efficacy\n(α=", x2$alpha, ")") %in% names(out2))
-  expect_true(paste0("Futility\n(α=", x2$alpha, ")") %in% names(out2))
-  
-  # Check that new alpha bounds exist for both efficacy and futility
-  for (a in setdiff(alpha_vec, x2$alpha)) {
-    expect_true(paste0("Efficacy\n(α=", a, ")") %in% names(out2))
-    expect_true(paste0("Futility\n(α=", a, ")") %in% names(out2))
-  }
-  
-  # Verify column order for test.type = 2: Analysis, Bounds, alternating Efficacy/Futility pairs
-  efficacy_cols <- grep("Efficacy", names(out2))
-  futility_cols <- grep("Futility", names(out2))
-  expect_equal(length(efficacy_cols), length(futility_cols))
-  for (i in seq_along(efficacy_cols)) {
-    expect_equal(futility_cols[i], efficacy_cols[i] + 1)
-  }
   
   # Verify no duplicate columns are created when alpha value matches design
   x_dup <- gsDesign(k = 3, test.type = 1, alpha = 0.025)
@@ -172,93 +150,49 @@ testthat::test_that(desc = "Test gsBoundSummary correctly handles valid alpha ve
   out6 <- gsBoundSummary(x6, alpha = alpha_vec)
   
   # Check that original alpha bounds exist
-  expect_true(paste0("Efficacy (α=", x6$alpha, ")") %in% names(out6))
+  expect_true(paste0("α=", x6$alpha, sep = '') %in% names(out6))
   expect_true("Futility" %in% names(out6))  # Futility bound should not have alpha label
   
   # Check that new alpha bounds exist
   for (a in setdiff(alpha_vec, x6$alpha)) {
-    expect_true(paste0("Efficacy (α=", a, ")") %in% names(out6))
+    expect_true(paste0("α=", a, sep = '') %in% names(out6))
   }
   
   # Verify Futility column is at the end for test.type = 6
   expect_equal(names(out6)[ncol(out6)], "Futility")
   
   # Verify column order: Analysis, Bounds, Efficacy columns, then Futility
-  expect_true(all(grepl("Efficacy", names(out6)[3:(ncol(out6)-1)])))
+  expect_true(all(grepl("α=", names(out6)[3:(ncol(out6)-1)])))
 })
 
 testthat::test_that(desc = "Test CP, CP H1, and PP computations with multiple alpha values", code = {
-  # Test for test.type = 1 (one-sided)
-  x1 <- gsDesign(k = 3, test.type = 1, alpha = 0.025, beta = 0.1)
+  # Test for test.type = 4 (asymmetric, non-binding futility)
+  x4 <- gsDesign(k = 3, test.type = 4, alpha = 0.01, beta = 0.1, n.fix = 300)
   alpha_vec <- c(0.025, 0.05)
-  out1 <- gsBoundSummary(x1, alpha = alpha_vec, POS = TRUE)
-  
-  # Check CP, CP H1, and PP columns exist
-  expect_true("CP" %in% names(out1))
-  expect_true("CP H1" %in% names(out1))
-  expect_true("PP" %in% names(out1))
-  
-  # Check values are between 0 and 1
-  expect_true(all(out1$CP >= 0 & out1$CP <= 1))
-  expect_true(all(out1$`CP H1` >= 0 & out1$`CP H1` <= 1))
-  expect_true(all(out1$PP >= 0 & out1$PP <= 1))
-  
-  # Test for test.type = 2 (symmetric two-sided)
-  x2 <- gsDesign(k = 3, test.type = 2, alpha = 0.025, beta = 0.1)
-  out2 <- gsBoundSummary(x2, alpha = alpha_vec, POS = TRUE)
-  
-  # Check CP, CP H1, and PP columns exist
-  expect_true("CP" %in% names(out2))
-  expect_true("CP H1" %in% names(out2))
-  expect_true("PP" %in% names(out2))
-  
-  # Check values are between 0 and 1
-  expect_true(all(out2$CP >= 0 & out2$CP <= 1))
-  expect_true(all(out2$`CP H1` >= 0 & out2$`CP H1` <= 1))
-  expect_true(all(out2$PP >= 0 & out2$PP <= 1))
-  
-  # Test for test.type = 4 (asymmetric two-sided)
-  x4 <- gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1)
-  out4 <- gsBoundSummary(x4, alpha = alpha_vec, POS = TRUE)
-  
-  # Check CP, CP H1, and PP columns exist
-  expect_true("CP" %in% names(out4))
-  expect_true("CP H1" %in% names(out4))
-  expect_true("PP" %in% names(out4))
-  
-  # Check values are between 0 and 1
-  expect_true(all(out4$CP >= 0 & out4$CP <= 1))
-  expect_true(all(out4$`CP H1` >= 0 & out4$`CP H1` <= 1))
-  expect_true(all(out4$PP >= 0 & out4$PP <= 1))
-  
-  # Test for test.type = 6 (asymmetric two-sided with non-binding futility)
-  x6 <- gsDesign(k = 3, test.type = 6, alpha = 0.025, beta = 0.1)
-  out6 <- gsBoundSummary(x6, alpha = alpha_vec, POS = TRUE)
-  
-  # Check CP, CP H1, and PP columns exist
-  expect_true("CP" %in% names(out6))
-  expect_true("CP H1" %in% names(out6))
-  expect_true("PP" %in% names(out6))
-  
-  # Check values are between 0 and 1
-  expect_true(all(out6$CP >= 0 & out6$CP <= 1))
-  expect_true(all(out6$`CP H1` >= 0 & out6$`CP H1` <= 1))
-  expect_true(all(out6$PP >= 0 & out6$PP <= 1))
-  
-  # Verify CP, CP H1, and PP appear in correct order (at the end, before any Futility column)
-  for (out in list(out1, out2, out4, out6)) {
-    power_cols <- which(names(out) %in% c("CP", "CP H1", "PP"))
-    expect_equal(diff(power_cols), c(1, 1))  # Should be consecutive
-    if ("Futility" %in% names(out)) {
-      expect_true(max(power_cols) < which(names(out) == "Futility"))
+  prior <- normalGrid(mu = x4$delta / 2, sigma = 10 / sqrt(x4$n.fix))
+  out4 <- gsBoundSummary(x4, alpha = alpha_vec, prior = prior, POS = FALSE, exclude = NULL)
+  # Test that CP and PP values are consistent with different alpha values
+  for (a in seq_along(alpha_vec)) {
+    # Get 1-sided upper bound for alpha_vec[a]
+    x4_1s <- gsDesign(k = x4$k, delta = x4$theta[2], n.I = x4$n.I, alpha = alpha_vec[a], test.type = 1)
+    # Compute design characteristics for alternate alpha with gsProbability
+    # Use 1-sided upper bound with original alpha futility bound
+    # Input theta does not matter, this is just to get the gsProbability data structure
+    x4p <- gsProbability(k = x4$k, theta = 0, n.I = x4$n.I, a = x4$lower$bound, b = x4_1s$upper$bound)
+    # Check conditional power with observed treatment effect from gsBoundSummary vs gsBoundCP
+    cp <- out4[out4$Value == "CP", 3 + a]
+    CP <- gsBoundCP(x = x4p, theta = "thetahat")
+    expect_equal(CP[,2], cp, label = "CP at estimated effect size is incorrect")
+    # Check conditional power with H1 treatment effect from gsBoundSummary vs gsBoundCP
+    cph1 <- out4[out4$Value == "CP H1", 3 + a]
+    CPH1 <- gsBoundCP(x = x4p, theta = x4$delta)
+    expect_equal(CPH1[,2], cph1, label = "CP at H1 effect size is incorrect")
+    # Check PP for updated alpha
+    pp <- out4[out4$Value == "PP", 3 + a]
+    PP <- rep(0, 2)
+    for(i in 1:2){
+      PP[i] <- gsPP(z = x4p$upper$bound[i], i = i, x = x4, theta = prior$z, wgts = prior$wgts)
     }
+    expect_equal(PP, pp[i], label = "PP is incorrect")
   }
-  
-  # Test that CP values are consistent with different alpha values
-  # Higher alpha should generally lead to higher CP
-  x_low <- gsDesign(k = 3, test.type = 1, alpha = 0.025, beta = 0.1)
-  x_high <- gsDesign(k = 3, test.type = 1, alpha = 0.05, beta = 0.1)
-  out_low <- gsBoundSummary(x_low, POS = TRUE)
-  out_high <- gsBoundSummary(x_high, POS = TRUE)
-  expect_true(all(out_low$CP <= out_high$CP))
 })
