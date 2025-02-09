@@ -69,19 +69,19 @@ testthat::test_that(desc = "Test gsBoundSummary fails appropriately with invalid
   # Test with character input
   expect_error(
     gsBoundSummary(x, alpha = "0.025"),
-    "alpha must be NULL or a numeric vector"
+    "alpha must be NULL or a numeric vector with values strictly between 0 and 1 - x$beta"
   )
   
   # Test with matrix input
   expect_error(
     gsBoundSummary(x, alpha = matrix(c(0.025, 0.05), nrow = 1)),
-    "alpha must be NULL or a numeric vector"
+    "alpha must be NULL or a numeric vector with values strictly between 0 and 1 - x$beta"
   )
   
   # Test with list input
   expect_error(
     gsBoundSummary(x, alpha = list(0.025, 0.05)),
-    "alpha must be NULL or a numeric vector"
+    "alpha must be NULL or a numeric vector with values strictly between 0 and 1 - x$beta"
   )
   
   # Test with non-finite values
