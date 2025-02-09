@@ -781,8 +781,9 @@ gsBoundSummary <- function(x,
   h0Rows <- (out$Value == paste("P(Cross) if ", deltaname, "=", round(delta[1], ddigits), sep = ""))
   # Set rows for H1 boundary crossing probabilities
   h1Rows <- (out$Value == paste("P(Cross) if ", deltaname, "=", round(delta[2], ddigits), sep = ""))
-  # Set rows for CP, PP
+  # Set rows for CP, CP H1, PP
   CPRows <- (out$Value == "CP")
+  CPH1Rows <- (yout$Value == "CP H1")
   PPRows <- (out$Value == "PP")
   
   # Initialize number of alpha columns
@@ -831,21 +832,20 @@ gsBoundSummary <- function(x,
       # This uses futility bound from original alpha level
       
       # Fix probability of crossing under H0, if included
-      if (!all(!h0Rows)) yout[h0Rows, 3] <- round(cumsum(y2$upper$prob[,1]), digits)
+      if (!all(!h0Rows)) out[h0Rows, n_alpha + 2] <- round(cumsum(y2$upper$prob[,1]), digits)
       # Fix probability of crossing under H1, if included
-      if (!all(!h1Rows)) yout[h1Rows, 3] <- round(cumsum(y2$upper$prob[,2]), digits)
+      if (!all(!h1Rows)) out[h1Rows, n_alpha + 2] <- round(cumsum(y2$upper$prob[,2]), digits)
       # Fix CP, if included
-      if(!all(!CPRows)) yout[CPRows, 3] <- gsBoundCP(y2, r = r)[,2]
+      if(!all(!CPRows)) out[CPRows, n_alpha + 2] <- round(gsBoundCP(y2, r = r, theta = "thetahat")[,2], digits)
       # Fix CP H1, if included
-      CPH1Rows <- (yout$Value == "CP H1")
-      if(!all(!CPH1Rows)) yout[CPH1Rows, 3] <- gsBoundCP(y2, theta = x$delta, r = r)[,2]
+      if(!all(!CPH1Rows)) out[CPH1Rows, n_alpha + 2] <- round(gsBoundCP(y2, theta = x$delta, r = r)[,2], digits)
       # Fix PP, if included
       if(!all(!PPRows)){
         PP <- rep(0, x$k - 1)
         for(i in 1:(x$k - 1)){
           PP[i] <-  gsPP(y2, i = i, zi = y$upper$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
         }
-        yout[PPRows, 3] <- PP
+        out[PPRows, n_alpha + 2] <- round(PP, digits)
       }
     }
   }
