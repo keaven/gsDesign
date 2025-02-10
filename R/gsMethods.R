@@ -761,7 +761,7 @@ gsBoundSummary <- function(x,
   }
     
   # Format for efficacy column names based on test.type
-  efficacy_format <- "α=%s"  # Simplified format
+  efficacy_format <- "\u03b1=%s"  # Simplified format
 
   # Rename efficacy column with alpha label
   names(out)[names(out) == "Efficacy"] <- sprintf(efficacy_format, x$alpha)
