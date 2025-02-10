@@ -384,7 +384,8 @@ gsBoundSummary0 <- function(
     } else {
       Futility <- NULL
     }
-    pp <- data.frame(Efficacy, Futility, i = 1:(x$k - 1))
+    # cbind() required here to drop Futility column when it is NULL
+    pp <- data.frame(cbind(Efficacy, Futility, i = 1:(x$k - 1)))
     pp$Value <- "PP"
   }
   # start a frame for other statistics
