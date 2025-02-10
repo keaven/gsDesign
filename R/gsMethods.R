@@ -304,9 +304,10 @@ print.nSurvival <- function(x, ...) {
 
 # Old version of gsBoundSummary is now gsBoundSummary0()
 # This is not exported, but is called by the new version of gsBoundSummary() below
-gsBoundSummary0 <- function(x, deltaname = NULL, logdelta = FALSE, Nname = NULL, digits = 4, ddigits = 2, tdigits = 0, timename = "Month",
-                            prior = normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix)),
-                            POS = FALSE, ratio = NULL, exclude = c("B-value", "Spending", "CP", "CP H1", "PP"), r = 18, ...) {
+gsBoundSummary0 <- function(
+    x, deltaname = NULL, logdelta = FALSE, Nname = NULL, digits = 4, ddigits = 2, tdigits = 0, timename = "Month",
+    prior = normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix)),
+    POS = FALSE, ratio = NULL, exclude = c("B-value", "Spending", "CP", "CP H1", "PP"), r = 18, ...) {
   k <- x$k
   if (is.null(Nname)) {
     if (x$n.fix == 1) {
@@ -315,8 +316,12 @@ gsBoundSummary0 <- function(x, deltaname = NULL, logdelta = FALSE, Nname = NULL,
       Nname <- "N"
     }
   }
-  if(is.null(deltaname)){
-    if ("gsSurv" %in% class(x) || x$nFixSurv>0){deltaname="HR"}else{deltaname="delta"}
+  if (is.null(deltaname)) {
+    if ("gsSurv" %in% class(x) || x$nFixSurv > 0) {
+      deltaname <- "HR"
+    } else {
+      deltaname <- "delta"
+    }
   }
   # delta values corresponding to x$theta
   delta <- x$delta0 + (x$delta1 - x$delta0) * x$theta / x$delta
@@ -334,7 +339,7 @@ gsBoundSummary0 <- function(x, deltaname = NULL, logdelta = FALSE, Nname = NULL,
       deltafutility <- gsRR(x = x, i = 1:x$k, z = x$lower$bound[1:x$k], ratio = ratio)
     } else {
       deltafutility <- gsDelta(x = x, i = 1:x$k, z = x$lower$bound[1:x$k])
-      if (logdelta==TRUE) deltafutility <- exp(deltafutility)
+      if (logdelta == TRUE) deltafutility <- exp(deltafutility)
     }
   }
   if (x$nFixSurv > 0 || "gsSurv" %in% class(x) || toupper(deltaname) == "HR") {
@@ -343,7 +348,7 @@ gsBoundSummary0 <- function(x, deltaname = NULL, logdelta = FALSE, Nname = NULL,
     deltaefficacy <- gsRR(x = x, i = 1:x$k, z = x$upper$bound[1:x$k], ratio = ratio)
   } else {
     deltaefficacy <- gsDelta(x = x, i = 1:x$k, z = x$upper$bound[1:x$k])
-    if (logdelta==TRUE) deltaefficacy <- exp(deltaefficacy)
+    if (logdelta == TRUE) deltaefficacy <- exp(deltaefficacy)
   }
   # create delta names for boundary crossing probabilities
   deltanames <- paste("P(Cross) if ", deltaname, "=", round(delta, ddigits), sep = "")
@@ -392,10 +397,10 @@ gsBoundSummary0 <- function(x, deltaname = NULL, logdelta = FALSE, Nname = NULL,
   if (x$test.type > 2) tem <- data.frame(cbind(tem, "Futility" = stats::pnorm(x$lower$bound, lower.tail = FALSE)))
   statframe <- rbind(statframe, tem)
   # delta values at bounds
-  tem <- data.frame("Value" = paste("~",deltaname, " at bound", sep = ""), "Efficacy" = deltaefficacy, i = 1:x$k)
+  tem <- data.frame("Value" = paste("~", deltaname, " at bound", sep = ""), "Efficacy" = deltaefficacy, i = 1:x$k)
   if (x$test.type > 1) tem$Futility <- deltafutility
   statframe <- rbind(statframe, tem)
-  
+
   # spending
   tem <- data.frame("Value" = "Spending", i = 1:x$k, "Efficacy" = x$upper$spend)
   if (x$test.type > 1) tem$Futility <- x$lower$spend
@@ -713,37 +718,40 @@ gsBoundSummary0 <- function(x, deltaname = NULL, logdelta = FALSE, Nname = NULL,
 #' @export
 #' @importFrom stats pnorm
 # gsBoundSummary function [sinew] ----
-gsBoundSummary <- function(x,
-                           deltaname = NULL,
-                           logdelta = FALSE,
-                           Nname = NULL,
-                           digits = 4,
-                           ddigits = 2,
-                           tdigits = 0,
-                           timename = "Month",
-                           prior = normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix)),
-                           POS = FALSE,
-                           ratio = NULL,
-                           exclude = c("B-value", "Spending", "CP", "CP H1", "PP"),
-                           r = 18, 
-                           alpha = NULL,
-                           ...) {
+gsBoundSummary <- function(
+    x,
+    deltaname = NULL,
+    logdelta = FALSE,
+    Nname = NULL,
+    digits = 4,
+    ddigits = 2,
+    tdigits = 0,
+    timename = "Month",
+    prior = normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix)),
+    POS = FALSE,
+    ratio = NULL,
+    exclude = c("B-value", "Spending", "CP", "CP H1", "PP"),
+    r = 18,
+    alpha = NULL,
+    ...) {
   # Get initial table
   out <- gsBoundSummary0(
     x, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
     exclude = exclude, POS = POS, ratio = ratio, r = r, prior = prior
   )
   # Return unchanged if alpha is NULL or if test.type is not 1, 4, or 6
-  if (is.null(alpha)) return(out)
-  if (!(x$test.type %in% c(1, 4, 6) && !is.null(alpha))){
+  if (is.null(alpha)) {
+    return(out)
+  }
+  if (!(x$test.type %in% c(1, 4, 6) && !is.null(alpha))) {
     message("Alternate alpha levels only available for test.type 1, 4, and 6. Ignoring alpha levels.")
     return(out)
   }
-  
+
   # Input validation for alpha
   if (!is.vector(alpha) || !is.numeric(alpha)) {
     stop("alpha must be NULL or a numeric vector with values strictly between 0 and 1 - x$beta")
-      }
+  }
 
   if (!all(alpha > 0)) {
     stop("alpha must be NULL or a numeric vector with values strictly between 0 and 1 - x$beta")
@@ -751,24 +759,24 @@ gsBoundSummary <- function(x,
 
   if (!all(alpha < 1 - x$beta)) {
     stop("alpha must be NULL or a numeric vector with values strictly between 0 and 1 - x$beta")
-    }
-    
+  }
+
   # For test.type 4 or 6, save Futility column
   if (x$test.type %in% c(4, 6)) {
     # save futility column for later
     fut_col <- out$Futility
-    out <- out[ , 1:3]
+    out <- out[, 1:3]
   }
-    
+
   # Format for efficacy column names based on test.type
-  efficacy_format <- "\u03b1=%s"  # Simplified format
+  efficacy_format <- "\u03b1=%s" # Simplified format
 
   # Rename efficacy column with alpha label
   names(out)[names(out) == "Efficacy"] <- sprintf(efficacy_format, x$alpha)
 
   # Get delta values for labels
   delta <- c(x$delta0, x$delta1)
-  
+
   # If "~HR at bound" is in row names, we need to specify "HR" as deltaname and logdelta = TRUE
   # Also fix delta value for label that we need for P(Cross) rows
   if (is.null(deltaname) && any(grepl("~HR at bound", out$Value))) {
@@ -785,20 +793,20 @@ gsBoundSummary <- function(x,
   CPRows <- (out$Value == "CP")
   CPH1Rows <- (out$Value == "CP H1")
   PPRows <- (out$Value == "PP")
-  
+
   # Initialize number of alpha columns
   n_alpha <- 1
   # Process each alpha level
   for (a in alpha) {
-    if (isTRUE(all.equal(a, x$alpha, tolerance = 1e-7))) next  # Skip if it's the original alpha 
-    n_alpha <- n_alpha + 1  # increment # of alpha columns
-      
+    if (isTRUE(all.equal(a, x$alpha, tolerance = 1e-7))) next # Skip if it's the original alpha
+    n_alpha <- n_alpha + 1 # increment # of alpha columns
+
     # Create design with new alpha
     y <- gsDesign(
       k = x$k,
       n.I = x$n.I,
       maxn.IPlan = max(x$n.I),
-      test.type = 1,  # Use test.type = 1 for all new alpha levels
+      test.type = 1, # Use test.type = 1 for all new alpha levels
       alpha = a,
       beta = x$beta,
       timing = x$timing,
@@ -811,8 +819,8 @@ gsBoundSummary <- function(x,
       delta1 = x$delta1,
       delta0 = x$delta0,
       r = r
-      )
-      
+    )
+
     # Get summary for design with new alpha
     yout <- gsBoundSummary0(
       y, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
@@ -821,29 +829,31 @@ gsBoundSummary <- function(x,
     )
     out <- cbind(out, yout$Efficacy)
     names(out)[ncol(out)] <- sprintf(efficacy_format, a)
-    
-    # now if test.type is not 1, we need to add futility bounds 
+
+    # now if test.type is not 1, we need to add futility bounds
     # from original and recompute conditional power, and boundary crossing probabilities
-    if (x$test.type > 1){
-      y2 <- gsProbability(k = x$k, theta = x$theta, a = x$lower$bound, b = y$upper$bound, r = r,
-                          n.I = x$n.I)
-      
+    if (x$test.type > 1) {
+      y2 <- gsProbability(
+        k = x$k, theta = x$theta, a = x$lower$bound, b = y$upper$bound, r = r,
+        n.I = x$n.I
+      )
+
       # We only need to fix rows for CP, CP H1, PP, and P(Cross), if test.type is not 1;
       # This uses futility bound from original alpha level
-      
+
       # Fix probability of crossing under H0, if included
-      if (!all(!h0Rows)) out[h0Rows, n_alpha + 2] <- round(cumsum(y2$upper$prob[,1]), digits)
+      if (!all(!h0Rows)) out[h0Rows, n_alpha + 2] <- round(cumsum(y2$upper$prob[, 1]), digits)
       # Fix probability of crossing under H1, if included
-      if (!all(!h1Rows)) out[h1Rows, n_alpha + 2] <- round(cumsum(y2$upper$prob[,2]), digits)
+      if (!all(!h1Rows)) out[h1Rows, n_alpha + 2] <- round(cumsum(y2$upper$prob[, 2]), digits)
       # Fix CP, if included
-      if(!all(!CPRows)) out[CPRows, n_alpha + 2] <- round(gsBoundCP(y2, r = r, theta = "thetahat")[,2], digits)
+      if (!all(!CPRows)) out[CPRows, n_alpha + 2] <- round(gsBoundCP(y2, r = r, theta = "thetahat")[, 2], digits)
       # Fix CP H1, if included
-      if(!all(!CPH1Rows)) out[CPH1Rows, n_alpha + 2] <- round(gsBoundCP(y2, theta = x$delta, r = r)[,2], digits)
+      if (!all(!CPH1Rows)) out[CPH1Rows, n_alpha + 2] <- round(gsBoundCP(y2, theta = x$delta, r = r)[, 2], digits)
       # Fix PP, if included
-      if(!all(!PPRows)){
+      if (!all(!PPRows)) {
         PP <- rep(0, x$k - 1)
-        for(i in 1:(x$k - 1)){
-          PP[i] <-  gsPP(y2, i = i, zi = y$upper$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
+        for (i in 1:(x$k - 1)) {
+          PP[i] <- gsPP(y2, i = i, zi = y$upper$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
         }
         out[PPRows, n_alpha + 2] <- round(PP, digits)
       }
@@ -855,7 +865,7 @@ gsBoundSummary <- function(x,
     out <- cbind(out, fut_col)
     names(out)[ncol(out)] <- "Futility"
   }
-  
+
   class(out) <- c("gsBoundSummary", "data.frame")
   return(out)
 }
@@ -864,9 +874,9 @@ gsBoundSummary <- function(x,
 #' @export
 #' @rdname gsBoundSummary
 # xprint function [sinew] ----
-xprint <- function(x, include.rownames = FALSE, 
-                  hline.after = c(-1, which(x$Value == x[1, ]$Value) - 1, nrow(x)), 
-                  ...) {
+xprint <- function(x, include.rownames = FALSE,
+                   hline.after = c(-1, which(x$Value == x[1, ]$Value) - 1, nrow(x)),
+                   ...) {
   xtable::print.xtable(x, hline.after = hline.after, include.rownames = include.rownames, ...)
 }
 
