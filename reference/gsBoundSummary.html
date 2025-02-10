@@ -260,6 +260,7 @@ interest.</p>
 <span>  ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B-value"</span>, <span class="st">"Spending"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, <span class="st">"PP"</span><span class="op">)</span>,</span>
 <span>  r <span class="op">=</span> <span class="fl">18</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -397,6 +398,13 @@ values. A value of <code>NULL</code> produces all available summaries.</p></dd>
 <dd><p>See <code><a href="gsDesign.html">gsDesign</a></code>. This is an integer used to control the
 degree of accuracy of group sequential calculations which will normally not
 be changed.</p></dd>
+
+
+<dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
+<dd><p>If used, a vector of alternate alpha-levels to print boundaries
+for. Only works with test.type 1, 4, and 6. If specified, efficacy bound
+columns are headed by individual alpha levels. The alpha level of the input
+design is always included as the first column.</p></dd>
 
 
 <dt id="arg-include-rownames">include.rownames<a class="anchor" aria-label="anchor" href="#arg-include-rownames"></a></dt>
@@ -687,10 +695,11 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-out co"><span class="r-pr">#&gt;</span>            P(Cross) if OR=0.41   0.9000   0.1000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># for nice LaTeX table output, use xprint</span></span></span>
-<span class="r-in"><span><span class="fu">xprint</span><span class="op">(</span><span class="fu">xtable</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xtable/man/xtable.html" class="external-link">xtable</a></span><span class="op">(</span><span class="fu">gsBoundSummary</span><span class="op">(</span><span class="va">xOR</span>, deltaname <span class="op">=</span> <span class="st">"OR"</span>, logdelta <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span></span>
-<span class="r-in"><span>                                          caption <span class="op">=</span> <span class="st">"Table caption."</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">xprint</span><span class="op">(</span><span class="fu">xtable</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xtable/man/xtable.html" class="external-link">xtable</a></span><span class="op">(</span><span class="fu">gsBoundSummary</span><span class="op">(</span><span class="va">xOR</span>, deltaname <span class="op">=</span> <span class="st">"OR"</span>, logdelta <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Table caption."</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.4.2 by xtable 1.8-4 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Mon Jan 27 02:02:58 2025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Mon Feb 10 19:32:44 2025</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{llrr}</span>
