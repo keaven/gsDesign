@@ -5,8 +5,6 @@ Authors@R: c(
     person("Keaven", "Anderson", email = "keaven_anderson@merck.com", role = c("aut", "cre")),
     person("Merck & Co., Inc., Rahway, NJ, USA and its affiliates", role = "cph")
     )
-Author: Keaven Anderson [aut, cre], Merck & Co., Inc., Rahway, NJ, USA and its affiliates [cph]
-Maintainer: Keaven Anderson <keaven_anderson@merck.com>
 Description: Derives group sequential clinical trial designs and describes
     their properties. Particular focus on time-to-event, binary, and
     continuous outcomes. Largely based on methods described in
