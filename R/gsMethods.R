@@ -20,8 +20,7 @@ print.gsProbability <- function(x, ...) {
     cat("Bounds")
     y <- cbind(1:x$k, nval, x$lower$bound, round(x$upper$bound, 2))
     colnames(y) <- c("Analysis", "  N", "  a", "  b")
-  }
-  else {
+  } else {
     cat("Lower bounds   Upper bounds")
     y <- cbind(
       1:x$k, nval, round(x$lower$bound, 2), round(stats::pnorm(x$lower$bound), 4),
@@ -134,11 +133,9 @@ print.gsDesign <- function(x, ...) {
 
   if (x$test.type == 1) {
     cat("One-sided")
-  }
-  else if (x$test.type == 2) {
+  } else if (x$test.type == 2) {
     cat("Symmetric two-sided")
-  }
-  else {
+  } else {
     cat("Asymmetric two-sided")
   }
 
@@ -147,8 +144,7 @@ print.gsDesign <- function(x, ...) {
   if (x$test.type > 1) {
     if (x$test.type == 4 || x$test.type == 6) {
       cat("Upper bound spending computations assume\ntrial continues if lower bound is crossed.\n\n")
-    }
-    else {
+    } else {
       cat("Spending computations assume trial stops\nif a bound is crossed.\n\n")
     }
   }
@@ -161,8 +157,7 @@ print.gsDesign <- function(x, ...) {
       cat(" ")
     }
     cat("            ")
-  }
-  else {
+  } else {
     ntxt <- "Ratio*"
     nval <- round(x$n.I, 3)
     cat("           Sample\n")
@@ -179,8 +174,7 @@ print.gsDesign <- function(x, ...) {
       round(x$upper$spend, 4)
     )
     colnames(y) <- c("Analysis", ntxt, "Z  ", "Nominal p", "Spend+", "Z  ", "Nominal p", "Spend++")
-  }
-  else {
+  } else {
     y <- cbind(
       1:x$k, nval, round(x$upper$bound, 2), round(stats::pnorm(-x$upper$bound), 4),
       round(x$upper$spend, 4)
@@ -196,8 +190,7 @@ print.gsDesign <- function(x, ...) {
     {
       cat(" ")
     }
-  }
-  else {
+  } else {
     cat("     ")
   }
   cat("                  ")
@@ -213,8 +206,7 @@ print.gsDesign <- function(x, ...) {
 
   if (x$test.type > 4) {
     cat("+ lower bound spending (under H0):\n ")
-  }
-  else if (x$test.type > 2) {
+  } else if (x$test.type > 2) {
     cat("+ lower bound beta spending (under H1):\n ")
   }
 
@@ -310,8 +302,157 @@ print.nSurvival <- function(x, ...) {
   invisible(x)
 }
 
+# Old version of gsBoundSummary is now gsBoundSummary0()
+# This is not exported, but is called by the new version of gsBoundSummary() below
+gsBoundSummary0 <- function(
+    x, deltaname = NULL, logdelta = FALSE, Nname = NULL, digits = 4, ddigits = 2, tdigits = 0, timename = "Month",
+    prior = normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix)),
+    POS = FALSE, ratio = NULL, exclude = c("B-value", "Spending", "CP", "CP H1", "PP"), r = 18, ...) {
+  k <- x$k
+  if (is.null(Nname)) {
+    if (x$n.fix == 1) {
+      Nname <- "N/Fixed design N"
+    } else {
+      Nname <- "N"
+    }
+  }
+  if (is.null(deltaname)) {
+    if ("gsSurv" %in% class(x) || x$nFixSurv > 0) {
+      deltaname <- "HR"
+    } else {
+      deltaname <- "delta"
+    }
+  }
+  # delta values corresponding to x$theta
+  delta <- x$delta0 + (x$delta1 - x$delta0) * x$theta / x$delta
+  if (logdelta || "gsSurv" %in% class(x)) delta <- exp(delta)
+  # ratio is only used for RR and HR calculations at boundaries
+  if ("gsSurv" %in% class(x)) {
+    ratio <- x$ratio
+  } else if (is.null(ratio)) ratio <- 1
+  # delta values at bounds
+  # note that RR and HR are treated specially
+  if (x$test.type > 1) {
+    if (x$nFixSurv > 0 || "gsSurv" %in% class(x) || toupper(deltaname) == "HR") {
+      deltafutility <- gsHR(x = x, i = 1:x$k, z = x$lower$bound[1:x$k], ratio = ratio)
+    } else if (tolower(deltaname) == "rr") {
+      deltafutility <- gsRR(x = x, i = 1:x$k, z = x$lower$bound[1:x$k], ratio = ratio)
+    } else {
+      deltafutility <- gsDelta(x = x, i = 1:x$k, z = x$lower$bound[1:x$k])
+      if (logdelta == TRUE) deltafutility <- exp(deltafutility)
+    }
+  }
+  if (x$nFixSurv > 0 || "gsSurv" %in% class(x) || toupper(deltaname) == "HR") {
+    deltaefficacy <- gsHR(x = x, i = 1:x$k, z = x$upper$bound[1:x$k], ratio = ratio)
+  } else if (tolower(deltaname) == "rr") {
+    deltaefficacy <- gsRR(x = x, i = 1:x$k, z = x$upper$bound[1:x$k], ratio = ratio)
+  } else {
+    deltaefficacy <- gsDelta(x = x, i = 1:x$k, z = x$upper$bound[1:x$k])
+    if (logdelta == TRUE) deltaefficacy <- exp(deltaefficacy)
+  }
+  # create delta names for boundary crossing probabilities
+  deltanames <- paste("P(Cross) if ", deltaname, "=", round(delta, ddigits), sep = "")
+  pframe <- NULL
+  for (i in 1:length(x$theta)) pframe <- rbind(pframe, data.frame("Value" = deltanames[i], "Efficacy" = cumsum(x$upper$prob[, i]), i = 1:x$k))
+  if (x$test.type > 1) {
+    pframe2 <- NULL
+    for (i in 1:length(x$theta)) pframe2 <- rbind(pframe2, data.frame("Futility" = cumsum(x$lower$prob[, i])))
+    pframe <- data.frame(cbind("Value" = pframe[, 1], pframe2, pframe[, -1]))
+  }
+  # conditional power at bound, theta=hat(theta)
+  cp <- data.frame(gsBoundCP(x, r = r))
+  # conditional power at bound, theta=theta[1]
+  cp1 <- data.frame(gsBoundCP(x, theta = x$delta, r = r))
+  if (x$test.type > 1) {
+    colnames(cp) <- c("Futility", "Efficacy")
+    colnames(cp1) <- c("Futility", "Efficacy")
+  } else {
+    colnames(cp) <- "Efficacy"
+    colnames(cp1) <- "Efficacy"
+  }
+  cp <- data.frame(cp, "Value" = "CP", i = 1:(x$k - 1))
+  cp1 <- data.frame(cp1, "Value" = "CP H1", i = 1:(x$k - 1))
+  if ("PP" %in% exclude) {
+    pp <- NULL
+  } else {
+    # predictive probability
+    Efficacy <- as.vector(1:(x$k - 1))
+    for (i in 1:(x$k - 1)) Efficacy[i] <- gsPP(x = x, i = i, zi = x$upper$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
+    if (x$test.type > 1) {
+      Futility <- Efficacy
+      for (i in 1:(x$k - 1)) Futility[i] <- gsPP(x = x, i = i, zi = x$lower$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
+    } else {
+      Futility <- NULL
+    }
+    pp <- data.frame(cbind(Efficacy, Futility, i = 1:(x$k - 1)))
+    pp$Value <- "PP"
+  }
+  # start a frame for other statistics
+  # z at bounds
+  statframe <- data.frame("Value" = "Z", "Efficacy" = x$upper$bound, i = 1:x$k)
+  if (x$test.type > 1) statframe <- data.frame(cbind(statframe, "Futility" = x$lower$bound))
+  # add nominal p-values at each bound
+  tem <- data.frame("Value" = "p (1-sided)", "Efficacy" = stats::pnorm(x$upper$bound, lower.tail = FALSE), i = 1:x$k)
+  if (x$test.type == 2) tem <- data.frame(cbind(tem, "Futility" = stats::pnorm(x$lower$bound, lower.tail = TRUE)))
+  if (x$test.type > 2) tem <- data.frame(cbind(tem, "Futility" = stats::pnorm(x$lower$bound, lower.tail = FALSE)))
+  statframe <- rbind(statframe, tem)
+  # delta values at bounds
+  tem <- data.frame("Value" = paste("~", deltaname, " at bound", sep = ""), "Efficacy" = deltaefficacy, i = 1:x$k)
+  if (x$test.type > 1) tem$Futility <- deltafutility
+  statframe <- rbind(statframe, tem)
 
-
+  # spending
+  tem <- data.frame("Value" = "Spending", i = 1:x$k, "Efficacy" = x$upper$spend)
+  if (x$test.type > 1) tem$Futility <- x$lower$spend
+  statframe <- rbind(statframe, tem)
+  # B-values
+  tem <- data.frame("Value" = "B-value", i = 1:x$k, "Efficacy" = gsBValue(x = x, z = x$upper$bound, i = 1:x$k))
+  if (x$test.type > 1) tem$Futility <- gsBValue(x = x, i = 1:x$k, z = x$lower$bound)
+  statframe <- rbind(statframe, tem)
+  # put it all together
+  statframe <- rbind(statframe, cp, cp1, pp, pframe)
+  # exclude rows not wanted
+  statframe <- statframe[!(statframe$Value %in% exclude), ]
+  # sort by analysis
+  statframe <- statframe[order(statframe$i), ]
+  # add analysis and timing
+  statframe$Analysis <- ""
+  aname <- paste("IA ", 1:x$k, ": ", round(100 * x$timing, 0), "%", sep = "")
+  aname[x$k] <- "Final"
+  statframe[statframe$Value == statframe$Value[1], ]$Analysis <- aname
+  # sample size, events or information at analyses
+  if (!("gsSurv" %in% class(x))) {
+    if (x$n.fix > 1) N <- ceiling(x$n.I) else N <- round(x$n.I, 2)
+    if (Nname == "Information") N <- round(x$n.I, 2)
+    nstat <- 2
+  } else {
+    nstat <- 4
+    statframe[statframe$Value == statframe$Value[3], ]$Analysis <- paste("Events:", ceiling(x$n.I))
+    if (x$ratio == 1) N <- 2 * ceiling(rowSums(x$eNE)) else N <- ceiling(rowSums(x$eNE)) + ceiling(rowSums(x$eNC))
+    Time <- round(x$T, tdigits)
+    statframe[statframe$Value == statframe$Value[4], ]$Analysis <- paste(timename, ": ", as.character(Time), sep = "")
+  }
+  statframe[statframe$Value == statframe$Value[2], ]$Analysis <- paste(Nname, ": ", N, sep = "")
+  # add POS and predictive POS, if requested
+  if (POS) {
+    ppos <- rep("", x$k)
+    for (i in 1:(x$k - 1)) ppos[i] <- paste("Post IA POS: ", as.character(round(100 * gsCPOS(i = i, x = x, theta = prior$z, wgts = prior$wgts), 1)), "%", sep = "")
+    statframe[statframe$Value == statframe$Value[nstat + 1], ]$Analysis <- ppos
+    statframe[nstat + 2, ]$Analysis <- ppos[1]
+    statframe[nstat + 1, ]$Analysis <- paste("Trial POS: ", as.character(round(100 * gsPOS(x = x, theta = prior$z, wgts = prior$wgts), 1)), "%", sep = "")
+  }
+  # add futility column to data frame
+  scol <- c(1, 2, if (x$test.type > 1) {
+    4
+  } else {
+    NULL
+  })
+  rval <- statframe[c(ncol(statframe), scol)]
+  rval$Efficacy <- round(rval$Efficacy, digits)
+  if (x$test.type > 1) rval$Futility <- round(rval$Futility, digits)
+  class(rval) <- c("gsBoundSummary", "data.frame")
+  return(rval)
+}
 # gsBoundSummary roxy [sinew] ----
 #' @title Bound Summary and Z-transformations
 #' @description  A tabular summary of a group sequential design's bounds and their properties
@@ -450,6 +591,10 @@ print.nSurvival <- function(x, ...) {
 #' @param r See \code{\link{gsDesign}}. This is an integer used to control the
 #' degree of accuracy of group sequential calculations which will normally not
 #' be changed.
+#' @param alpha If used, a vector of alternate alpha-levels to print boundaries
+#' for. Only works with test.type 1, 4, and 6. If specified, efficacy bound
+#' columns are headed by individual alpha levels. The alpha level of the input
+#' design is always included as the first column.
 #' @param row.names indicator of whether or not to print row names
 #' @param include.rownames indicator of whether or not to include row names in
 #' output.
@@ -499,7 +644,7 @@ print.nSurvival <- function(x, ...) {
 #' xgs <- gsSurv(lambdaC = .2, hr = .5, eta = .1, T = 2, minfup = 1.5)
 #' gsBoundSummary(xgs, timename = "Year", tdigits = 1)
 #' summary(xgs)
-#' 
+#'
 #' # survival endpoint using nSurvival
 #' # NOTE: generally recommend gsSurv above for this!
 #' ss <- nSurvival(
@@ -518,19 +663,19 @@ print.nSurvival <- function(x, ...) {
 #' gsCPz(z = z[1:2], i = 1:2, x = xs)
 #' # conditional power at H1 treatment effect
 #' gsCPz(z = z[1:2], i = 1:2, x = xs, theta = xs$delta)
-#' 
+#'
 #' # information-based design
 #' xinfo <- gsDesign(delta = .3, delta1 = .3)
 #' gsBoundSummary(xinfo, Nname = "Information")
-#' 
+#'
 #' # show all available boundary descriptions
 #' gsBoundSummary(xinfo, Nname = "Information", exclude = NULL)
-#' 
+#'
 #' # add intermediate parameter value
 #' xinfo <- gsProbability(d = xinfo, theta = c(0, .15, .3))
 #' class(xinfo) # note this is still as gsDesign class object
 #' gsBoundSummary(xinfo, Nname = "Information")
-#' 
+#'
 #' # now look at a binomial endpoint; specify H0 treatment difference as p1-p2=.05
 #' # now treatment effect at bound (say, thetahat) is transformed to
 #' # xp$delta0 + xp$delta1*(thetahat-xp$delta0)/xp$delta
@@ -543,22 +688,23 @@ print.nSurvival <- function(x, ...) {
 #' # treatment effect at bounds is scaled to these differences
 #' # in this case, this is the difference in event rates
 #' gsDelta(z = xp$lower$bound, i = 1:3, xp)
-#' 
+#'
 #' # binomial endpoint with risk ratio estimates
 #' n.fix <- nBinomial(p1 = .3, p2 = .15, scale = "RR")
 #' xrr <- gsDesign(k = 2, n.fix = n.fix, delta1 = log(.15 / .3), endpoint = "Binomial")
 #' gsBoundSummary(xrr, deltaname = "RR", logdelta = TRUE)
 #' gsRR(z = xp$lower$bound, i = 1:3, xrr)
 #' plot(xrr, plottype = "RR")
-#' 
+#'
 #' # delta is odds-ratio: sample size slightly smaller than for relative risk or risk difference
 #' n.fix <- nBinomial(p1 = .3, p2 = .15, scale = "OR")
 #' xOR <- gsDesign(k = 2, n.fix = n.fix, delta1 = log(.15 / .3 / .85 * .7), endpoint = "Binomial")
 #' gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE)
-#' 
+#'
 #' # for nice LaTeX table output, use xprint
-#' xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE), 
-#'                                           caption = "Table caption."))
+#' xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE),
+#'   caption = "Table caption."
+#' ))
 #' @note The gsDesign technical manual is available at
 #'   \url{https://keaven.github.io/gsd-tech-manual/}.
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
@@ -572,156 +718,165 @@ print.nSurvival <- function(x, ...) {
 #' @export
 #' @importFrom stats pnorm
 # gsBoundSummary function [sinew] ----
-gsBoundSummary <- function(x, deltaname = NULL, logdelta = FALSE, Nname = NULL, digits = 4, ddigits = 2, tdigits = 0, timename = "Month",
-                           prior = normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix)),
-                           POS = FALSE, ratio = NULL, exclude = c("B-value", "Spending", "CP", "CP H1", "PP"), r = 18, ...) {
-  k <- x$k
-  if (is.null(Nname)) {
-    if (x$n.fix == 1) {
-      Nname <- "N/Fixed design N"
-    } else {
-      Nname <- "N"
-    }
+gsBoundSummary <- function(
+    x,
+    deltaname = NULL,
+    logdelta = FALSE,
+    Nname = NULL,
+    digits = 4,
+    ddigits = 2,
+    tdigits = 0,
+    timename = "Month",
+    prior = normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix)),
+    POS = FALSE,
+    ratio = NULL,
+    exclude = c("B-value", "Spending", "CP", "CP H1", "PP"),
+    r = 18,
+    alpha = NULL,
+    ...) {
+  # Get initial table
+  out <- gsBoundSummary0(
+    x, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
+    exclude = exclude, POS = POS, ratio = ratio, r = r, prior = prior
+  )
+  # Return unchanged if alpha is NULL or if test.type is not 1, 4, or 6
+  if (is.null(alpha)) {
+    return(out)
   }
-  if(is.null(deltaname)){
-    if ("gsSurv" %in% class(x) || x$nFixSurv>0){deltaname="HR"}else{deltaname="delta"}
+  if (!(x$test.type %in% c(1, 4, 6) && !is.null(alpha))) {
+    message("Alternate alpha levels only available for test.type 1, 4, and 6. Ignoring alpha levels.")
+    return(out)
   }
-  # delta values corresponding to x$theta
-  delta <- x$delta0 + (x$delta1 - x$delta0) * x$theta / x$delta
-  if (logdelta || "gsSurv" %in% class(x)) delta <- exp(delta)
-  # ratio is only used for RR and HR calculations at boundaries
-  if ("gsSurv" %in% class(x)) {
-    ratio <- x$ratio
-  } else if (is.null(ratio)) ratio <- 1
-  # delta values at bounds
-  # note that RR and HR are treated specially
-  if (x$test.type > 1) {
-    if (x$nFixSurv > 0 || "gsSurv" %in% class(x) || toupper(deltaname) == "HR") {
-      deltafutility <- gsHR(x = x, i = 1:x$k, z = x$lower$bound[1:x$k], ratio = ratio)
-    } else if (tolower(deltaname) == "rr") {
-      deltafutility <- gsRR(x = x, i = 1:x$k, z = x$lower$bound[1:x$k], ratio = ratio)
-    } else {
-      deltafutility <- gsDelta(x = x, i = 1:x$k, z = x$lower$bound[1:x$k])
-      if (logdelta==TRUE) deltafutility <- exp(deltafutility)
-    }
-  }
-  if (x$nFixSurv > 0 || "gsSurv" %in% class(x) || toupper(deltaname) == "HR") {
-    deltaefficacy <- gsHR(x = x, i = 1:x$k, z = x$upper$bound[1:x$k], ratio = ratio)
-  } else if (tolower(deltaname) == "rr") {
-    deltaefficacy <- gsRR(x = x, i = 1:x$k, z = x$upper$bound[1:x$k], ratio = ratio)
-  } else {
-    deltaefficacy <- gsDelta(x = x, i = 1:x$k, z = x$upper$bound[1:x$k])
-    if (logdelta==TRUE) deltaefficacy <- exp(deltaefficacy)
-  }
-  # create delta names for boundary crossing probabilities
-  deltanames <- paste("P(Cross) if ", deltaname, "=", round(delta, ddigits), sep = "")
-  pframe <- NULL
-  for (i in 1:length(x$theta)) pframe <- rbind(pframe, data.frame("Value" = deltanames[i], "Efficacy" = cumsum(x$upper$prob[, i]), i = 1:x$k))
-  if (x$test.type > 1) {
-    pframe2 <- NULL
-    for (i in 1:length(x$theta)) pframe2 <- rbind(pframe2, data.frame("Futility" = cumsum(x$lower$prob[, i])))
-    pframe <- data.frame(cbind("Value" = pframe[, 1], pframe2, pframe[, -1]))
-  }
-  # conditional power at bound, theta=hat(theta)
-  cp <- data.frame(gsBoundCP(x, r = r))
-  # conditional power at bound, theta=theta[1]
-  cp1 <- data.frame(gsBoundCP(x, theta = x$delta, r = r))
-  if (x$test.type > 1) {
-    colnames(cp) <- c("Futility", "Efficacy")
-    colnames(cp1) <- c("Futility", "Efficacy")
-  } else {
-    colnames(cp) <- "Efficacy"
-    colnames(cp1) <- "Efficacy"
-  }
-  cp <- data.frame(cp, "Value" = "CP", i = 1:(x$k - 1))
-  cp1 <- data.frame(cp1, "Value" = "CP H1", i = 1:(x$k - 1))
-  if ("PP" %in% exclude) {
-    pp <- NULL
-  } else {
-    # predictive probability
-    Efficacy <- as.vector(1:(x$k - 1))
-    for (i in 1:(x$k - 1)) Efficacy[i] <- gsPP(x = x, i = i, zi = x$upper$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
-    if (x$test.type > 1) {
-      Futility <- Efficacy
-      for (i in 1:(x$k - 1)) Futility[i] <- gsPP(x = x, i = i, zi = x$lower$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
-    } else {
-      Futility <- NULL
-    }
-    pp <- data.frame(cbind(Efficacy, Futility, i = 1:(x$k - 1)))
-    pp$Value <- "PP"
-  }
-  # start a frame for other statistics
-  # z at bounds
-  statframe <- data.frame("Value" = "Z", "Efficacy" = x$upper$bound, i = 1:x$k)
-  if (x$test.type > 1) statframe <- data.frame(cbind(statframe, "Futility" = x$lower$bound))
-  # add nominal p-values at each bound
-  tem <- data.frame("Value" = "p (1-sided)", "Efficacy" = stats::pnorm(x$upper$bound, lower.tail = FALSE), i = 1:x$k)
-  if (x$test.type == 2) tem <- data.frame(cbind(tem, "Futility" = stats::pnorm(x$lower$bound, lower.tail = TRUE)))
-  if (x$test.type > 2) tem <- data.frame(cbind(tem, "Futility" = stats::pnorm(x$lower$bound, lower.tail = FALSE)))
-  statframe <- rbind(statframe, tem)
-  # delta values at bounds
-  tem <- data.frame("Value" = paste("~",deltaname, " at bound", sep = ""), "Efficacy" = deltaefficacy, i = 1:x$k)
-  if (x$test.type > 1) tem$Futility <- deltafutility
-  statframe <- rbind(statframe, tem)
 
-  # spending
-  tem <- data.frame("Value" = "Spending", i = 1:x$k, "Efficacy" = x$upper$spend)
-  if (x$test.type > 1) tem$Futility <- x$lower$spend
-  statframe <- rbind(statframe, tem)
-  # B-values
-  tem <- data.frame("Value" = "B-value", i = 1:x$k, "Efficacy" = gsBValue(x = x, z = x$upper$bound, i = 1:x$k))
-  if (x$test.type > 1) tem$Futility <- gsBValue(x = x, i = 1:x$k, z = x$lower$bound)
-  statframe <- rbind(statframe, tem)
-  # put it all together
-  statframe <- rbind(statframe, cp, cp1, pp, pframe)
-  # exclude rows not wanted
-  statframe <- statframe[!(statframe$Value %in% exclude), ]
-  # sort by analysis
-  statframe <- statframe[order(statframe$i), ]
-  # add analysis and timing
-  statframe$Analysis <- ""
-  aname <- paste("IA ", 1:x$k, ": ", round(100 * x$timing, 0), "%", sep = "")
-  aname[x$k] <- "Final"
-  statframe[statframe$Value == statframe$Value[1], ]$Analysis <- aname
-  # sample size, events or information at analyses
-  if (!("gsSurv" %in% class(x))) {
-    if (x$n.fix > 1) N <- ceiling(x$n.I) else N <- round(x$n.I, 2)
-    if (Nname == "Information") N <- round(x$n.I, 2)
-    nstat <- 2
-  } else {
-    nstat <- 4
-    statframe[statframe$Value == statframe$Value[3], ]$Analysis <- paste("Events:", ceiling(x$n.I))
-    if (x$ratio == 1) N <- 2 * ceiling(rowSums(x$eNE)) else N <- ceiling(rowSums(x$eNE)) + ceiling(rowSums(x$eNC))
-    Time <- round(x$T, tdigits)
-    statframe[statframe$Value == statframe$Value[4], ]$Analysis <- paste(timename, ": ", as.character(Time), sep = "")
+  # Input validation for alpha
+  if (!is.vector(alpha) || !is.numeric(alpha)) {
+    stop("alpha must be NULL or a numeric vector with values strictly between 0 and 1 - x$beta")
   }
-  statframe[statframe$Value == statframe$Value[2], ]$Analysis <- paste(Nname, ": ", N, sep = "")
-  # add POS and predicitive POS, if requested
-  if (POS) {
-    ppos <- rep("", x$k)
-    for (i in 1:(x$k - 1)) ppos[i] <- paste("Post IA POS: ", as.character(round(100 * gsCPOS(i = i, x = x, theta = prior$z, wgts = prior$wgts), 1)), "%", sep = "")
-    statframe[statframe$Value == statframe$Value[nstat + 1], ]$Analysis <- ppos
-    statframe[nstat + 2, ]$Analysis <- ppos[1]
-    statframe[nstat + 1, ]$Analysis <- paste("Trial POS: ", as.character(round(100 * gsPOS(x = x, theta = prior$z, wgts = prior$wgts), 1)), "%", sep = "")
+
+  if (!all(alpha > 0)) {
+    stop("alpha must be NULL or a numeric vector with values strictly between 0 and 1 - x$beta")
   }
-  # add futility column to data frame
-  scol <- c(1, 2, if (x$test.type > 1) {
-    4
-  } else {
-    NULL
-  })
-  rval <- statframe[c(ncol(statframe), scol)]
-  rval$Efficacy <- round(rval$Efficacy, digits)
-  if (x$test.type > 1) rval$Futility <- round(rval$Futility, digits)
-  class(rval) <- c("gsBoundSummary", "data.frame")
-  return(rval)
+
+  if (!all(alpha < 1 - x$beta)) {
+    stop("alpha must be NULL or a numeric vector with values strictly between 0 and 1 - x$beta")
+  }
+
+  # For test.type 4 or 6, save Futility column
+  if (x$test.type %in% c(4, 6)) {
+    # save futility column for later
+    fut_col <- out$Futility
+    out <- out[, 1:3]
+  }
+
+  # Format for efficacy column names based on test.type
+  efficacy_format <- "\u03b1=%s" # Simplified format
+
+  # Rename efficacy column with alpha label
+  names(out)[names(out) == "Efficacy"] <- sprintf(efficacy_format, x$alpha)
+
+  # Get delta values for labels
+  delta <- c(x$delta0, x$delta1)
+
+  # If "~HR at bound" is in row names, we need to specify "HR" as deltaname and logdelta = TRUE
+  # Also fix delta value for label that we need for P(Cross) rows
+  if (is.null(deltaname) && any(grepl("~HR at bound", out$Value))) {
+    deltaname <- "HR"
+    logdelta <- TRUE
+    delta <- exp(delta)
+  }
+
+  # Set rows for H0 boundary crossing probabilities
+  h0Rows <- (out$Value == paste("P(Cross) if ", deltaname, "=", round(delta[1], ddigits), sep = ""))
+  # Set rows for H1 boundary crossing probabilities
+  h1Rows <- (out$Value == paste("P(Cross) if ", deltaname, "=", round(delta[2], ddigits), sep = ""))
+  # Set rows for CP, CP H1, PP
+  CPRows <- (out$Value == "CP")
+  CPH1Rows <- (out$Value == "CP H1")
+  PPRows <- (out$Value == "PP")
+
+  # Initialize number of alpha columns
+  n_alpha <- 1
+  # Process each alpha level
+  for (a in alpha) {
+    if (isTRUE(all.equal(a, x$alpha, tolerance = 1e-7))) next # Skip if it's the original alpha
+    n_alpha <- n_alpha + 1 # increment # of alpha columns
+
+    # Create design with new alpha
+    y <- gsDesign(
+      k = x$k,
+      n.I = x$n.I,
+      maxn.IPlan = max(x$n.I),
+      test.type = 1, # Use test.type = 1 for all new alpha levels
+      alpha = a,
+      beta = x$beta,
+      timing = x$timing,
+      sfu = x$upper$sf,
+      sfupar = x$upper$param,
+      sfl = x$lower$sf,
+      sflpar = x$lower$param,
+      endpoint = x$endpoint,
+      delta = x$delta,
+      delta1 = x$delta1,
+      delta0 = x$delta0,
+      r = r
+    )
+
+    # Get summary for design with new alpha
+    yout <- gsBoundSummary0(
+      y, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
+      # POS is only computed for original alpha level
+      exclude = exclude, POS = FALSE, ratio = ratio, r = r, prior = prior
+    )
+    out <- cbind(out, yout$Efficacy)
+    names(out)[ncol(out)] <- sprintf(efficacy_format, a)
+
+    # now if test.type is not 1, we need to add futility bounds
+    # from original and recompute conditional power, and boundary crossing probabilities
+    if (x$test.type > 1) {
+      y2 <- gsProbability(
+        k = x$k, theta = x$theta, a = x$lower$bound, b = y$upper$bound, r = r,
+        n.I = x$n.I
+      )
+
+      # We only need to fix rows for CP, CP H1, PP, and P(Cross), if test.type is not 1;
+      # This uses futility bound from original alpha level
+
+      # Fix probability of crossing under H0, if included
+      if (!all(!h0Rows)) out[h0Rows, n_alpha + 2] <- round(cumsum(y2$upper$prob[, 1]), digits)
+      # Fix probability of crossing under H1, if included
+      if (!all(!h1Rows)) out[h1Rows, n_alpha + 2] <- round(cumsum(y2$upper$prob[, 2]), digits)
+      # Fix CP, if included
+      if (!all(!CPRows)) out[CPRows, n_alpha + 2] <- round(gsBoundCP(y2, r = r, theta = "thetahat")[, 2], digits)
+      # Fix CP H1, if included
+      if (!all(!CPH1Rows)) out[CPH1Rows, n_alpha + 2] <- round(gsBoundCP(y2, theta = x$delta, r = r)[, 2], digits)
+      # Fix PP, if included
+      if (!all(!PPRows)) {
+        PP <- rep(0, x$k - 1)
+        for (i in 1:(x$k - 1)) {
+          PP[i] <- gsPP(y2, i = i, zi = y$upper$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
+        }
+        out[PPRows, n_alpha + 2] <- round(PP, digits)
+      }
+    }
+  }
+
+  # Add futility column if test.type is 4 or 6
+  if (x$test.type %in% c(4, 6)) {
+    out <- cbind(out, fut_col)
+    names(out)[ncol(out)] <- "Futility"
+  }
+
+  class(out) <- c("gsBoundSummary", "data.frame")
+  return(out)
 }
 
 # xprint roxy [sinew] ----
 #' @export
 #' @rdname gsBoundSummary
 # xprint function [sinew] ----
-xprint <- function(x, include.rownames = FALSE, hline.after = c(-1, which(x$Value == x[1, ]$Value) - 1, nrow(x)), ...) {
+xprint <- function(x, include.rownames = FALSE,
+                   hline.after = c(-1, which(x$Value == x[1, ]$Value) - 1, nrow(x)),
+                   ...) {
   xtable::print.xtable(x, hline.after = hline.after, include.rownames = include.rownames, ...)
 }
 
@@ -736,8 +891,9 @@ print.gsBoundSummary <- function(x, row.names = FALSE, digits = 4, ...) {
 # gsLegendText function [sinew] ----
 gsLegendText <- function(test.type) {
   switch(as.character(test.type),
-    "1" = c(expression(paste("Reject ", H[0])), "Continue"),
+    "1" = expression(paste("Reject ", H[0])),
     "2" = c(expression(paste("Reject ", H[0])), "Continue", expression(paste("Reject ", H[0]))),
+    "3" = c(expression(paste("Reject ", H[0])), "Continue", expression(paste("Reject ", H[1]))),
     c(expression(paste("Reject ", H[0])), "Continue", expression(paste("Reject ", H[1])))
   )
 }
@@ -747,26 +903,21 @@ sfprint <- function(x) {
   # print spending function information
   if (x$name == "OF") {
     cat("O'Brien-Fleming boundary")
-  }
-  else if (x$name == "Pocock") {
+  } else if (x$name == "Pocock") {
     cat("Pocock boundary")
-  }
-  else if (x$name == "WT") {
+  } else if (x$name == "WT") {
     cat("Wang-Tsiatis boundary with Delta =", x$param)
-  }
-  else if (x$name == "Truncated") {
+  } else if (x$name == "Truncated") {
     cat(x$param$name, " spending function compressed to ", x$param$trange[1], ", ", x$param$trange[2], sep = "")
     if (!is.null(x$param$parname)) {
       cat(" with", x$param$parname, "=", x$param$param)
     }
-  }
-  else if (x$name == "Trimmed") {
+  } else if (x$name == "Trimmed") {
     cat(x$param$name, " spending function trimmed at ", x$param$trange[1], ", ", x$param$trange[2], sep = "")
     if (!is.null(x$param$parname)) {
       cat(" with", x$param$parname, "=", x$param$param)
     }
-  }
-  else {
+  } else {
     cat(x$name, "spending function")
     if (!is.null(x$parname) && !is.null(x$param)) {
       cat(" with", x$parname, "=", x$param)
@@ -784,40 +935,32 @@ summary.spendfn <- function(object, ...) {
   # print spending function information
   if (object$name == "OF") {
     s <- "O'Brien-Fleming boundary"
-  }
-  else if (object$name == "Pocock") {
+  } else if (object$name == "Pocock") {
     s <- "Pocock boundary"
-  }
-  else if (object$name == "WT") {
+  } else if (object$name == "WT") {
     s <- paste("Wang-Tsiatis boundary with Delta =", object$param)
-  }
-  else if (object$name == "Truncated") {
+  } else if (object$name == "Truncated") {
     s <- paste(object$param$name, " spending function compressed to ", object$param$trange[1], ", ", object$param$trange[2], sep = "")
     if (!is.null(object$param$parname)) {
       s <- paste(s, " with", paste(object$param$parname, collapse = " "), "=", paste(object$param$param, collapse = " "))
     }
-  }
-  else if (object$name == "Trimmed") {
+  } else if (object$name == "Trimmed") {
     s <- paste(object$param$name, " spending function trimmed at ", object$param$trange[1], ", ", object$param$trange[2], sep = "")
     if (!is.null(object$param$parname)) {
       s <- paste(s, " with", paste(object$param$parname, collapse = " "), "=", paste(object$param$param, collapse = " "))
     }
-  }
-  else if (object$name == "Gapped") {
+  } else if (object$name == "Gapped") {
     s <- paste(object$param$name, " spending function no spending in ", object$param$trange[1], ", ", object$param$trange[2], sep = "")
     if (!is.null(object$param$parname)) {
       s <- paste(s, " with", paste(object$param$parname, collapse = " "), "=", paste(object$param$param, collapse = " "))
     }
-  }
-  else if (object$name == "Lan-DeMets O'Brien-Fleming approximation") {
+  } else if (object$name == "Lan-DeMets O'Brien-Fleming approximation") {
     if (object$parname == "none") {
       s <- "Lan-DeMets O'Brien-Fleming approximation spending function (no parameters)"
-    }
-    else {
+    } else {
       s <- paste(s, "with", paste(object$parname, collapse = " "), "=", paste(object$param, collapse = " "))
     }
-  }
-  else {
+  } else {
     s <- paste(object$name, "spending function")
     if (!is.null(object$parname) && !is.null(object$param)) {
       # Use %s for the numeric object$param in order to preserve the decimal
