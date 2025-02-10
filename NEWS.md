@@ -1,3 +1,21 @@
+# gsDesign 3.6.6 (February, 2025)
+
+## New features
+
+- `gsBoundSummary()` gains a new argument `alpha` to assemble a summary
+  table with multiple efficacy boundaries (@keaven, #183).
+
+## Testing
+
+- Add essential unit tests for `gsSurvCalendar()` (@keaven, #178).
+- Refactor graphical tests with `vdiffr::expect_doppelganger()` (@nanxstats, #176)
+- Use `CODECOV_TOKEN` to fix code coverage uploads (@jdblischak, #179).
+
+## Documentation
+
+- Add more details to the parameter `r` for controlling numerical
+  integration grid points (@nanxstats, #181).
+
 # gsDesign 3.6.5 (November, 2024)
 
 ## Improvements
