@@ -1383,10 +1383,10 @@ xtable.gsSurv <- function(x, caption = NULL, label = NULL, align = NULL, digits 
       paste(eff[neff], "\\\\ \\hline \\multicolumn{4}{p{", fnwid, "}}{\\footnotesize", footnote, "}")
   }
   if (x$test.type != 1) {
-    xxtab <- data.frame(cbind(an, stat, fut, eff))
+    xxtab <- data.frame(an, stat, fut, eff)
     colnames(xxtab) <- c("Analysis", "Value", "Futility", "Efficacy")
   } else {
-    xxtab <- data.frame(cbind(an, stat, eff))
+    xxtab <- data.frame(an, stat, eff)
     colnames(xxtab) <- c("Analysis", "Value", "Efficacy")
   }
   return(xtable::xtable(xxtab,

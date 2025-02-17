@@ -99,7 +99,7 @@ xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digit
       fnwid, "}}{\\footnotesize", footnote, "}"
     )
   }
-  x <- data.frame(cbind(an, stat, fut, eff))
+  x <- data.frame(an, stat, fut, eff)
   colnames(x) <- c("Analysis", "Value", "Futility", "Efficacy")
   xtable::xtable(x, caption = caption, label = label, align = align, digits = digits, display = display, ...)
 }

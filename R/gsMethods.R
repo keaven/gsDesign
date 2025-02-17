@@ -357,7 +357,7 @@ gsBoundSummary0 <- function(
   if (x$test.type > 1) {
     pframe2 <- NULL
     for (i in 1:length(x$theta)) pframe2 <- rbind(pframe2, data.frame("Futility" = cumsum(x$lower$prob[, i])))
-    pframe <- data.frame(cbind("Value" = pframe[, 1], pframe2, pframe[, -1]))
+    pframe <- data.frame("Value" = pframe[, 1], pframe2, pframe[, -1])
   }
   # conditional power at bound, theta=hat(theta)
   cp <- data.frame(gsBoundCP(x, r = r))
@@ -384,17 +384,18 @@ gsBoundSummary0 <- function(
     } else {
       Futility <- NULL
     }
+    # cbind() required here to drop Futility column when it is NULL
     pp <- data.frame(cbind(Efficacy, Futility, i = 1:(x$k - 1)))
     pp$Value <- "PP"
   }
   # start a frame for other statistics
   # z at bounds
   statframe <- data.frame("Value" = "Z", "Efficacy" = x$upper$bound, i = 1:x$k)
-  if (x$test.type > 1) statframe <- data.frame(cbind(statframe, "Futility" = x$lower$bound))
+  if (x$test.type > 1) statframe <- data.frame(statframe, "Futility" = x$lower$bound)
   # add nominal p-values at each bound
   tem <- data.frame("Value" = "p (1-sided)", "Efficacy" = stats::pnorm(x$upper$bound, lower.tail = FALSE), i = 1:x$k)
-  if (x$test.type == 2) tem <- data.frame(cbind(tem, "Futility" = stats::pnorm(x$lower$bound, lower.tail = TRUE)))
-  if (x$test.type > 2) tem <- data.frame(cbind(tem, "Futility" = stats::pnorm(x$lower$bound, lower.tail = FALSE)))
+  if (x$test.type == 2) tem <- data.frame(tem, "Futility" = stats::pnorm(x$lower$bound, lower.tail = TRUE))
+  if (x$test.type > 2) tem <- data.frame(tem, "Futility" = stats::pnorm(x$lower$bound, lower.tail = FALSE))
   statframe <- rbind(statframe, tem)
   # delta values at bounds
   tem <- data.frame("Value" = paste("~", deltaname, " at bound", sep = ""), "Efficacy" = deltaefficacy, i = 1:x$k)
