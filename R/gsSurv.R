@@ -1040,7 +1040,14 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 nSurv <- function(lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
                   gamma = 1, R = 12, S = NULL, T = 18, minfup = 6, ratio = 1,
                   alpha = 0.025, beta = 0.10, sided = 1, tol = .Machine$double.eps^0.25) {
-  if (is.null(etaE)) etaE <- eta
+  # Check if R is a numeric vector
+  if (!is.numeric(R)) stop("R must be a numeric vector")
+  if (min(R) <= R) stop("R must be a numeric vector with all elements > 0")
+  # If T != NULL, check that it is numeric and >= sum(R)
+  if (!is.null(T)){
+    if (!is.numeric(T)) stop("T must be numeric and >= sum(R)")
+    if (T < sum(R)) stop("T must be numeric and >= sum(R)")
+  }
   # set up rates as matrices with row and column names
   # default is 1 stratum if lambdaC not input as matrix
   if (is.vector(lambdaC)) lambdaC <- matrix(lambdaC)
@@ -1201,6 +1208,14 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
                    tol = .Machine$double.eps^0.25,
                    usTime = NULL, lsTime = NULL) # KA: last 2 arguments added 10/8/2017
   {
+  # Check if R is a numeric vector
+  if (!is.numeric(R)) stop("R must be a numeric vector")
+  if (min(R) <= R) stop("R must be a numeric vector with all elements > 0")
+  # If T != NULL, check that it is numeric and >= sum(R)
+  if (!is.null(T)){
+     if (!is.numeric(T)) stop("T must be numeric and >= sum(R)")
+     if (T < sum(R)) stop("T must be numeric and >= sum(R)")
+  }
   x <- nSurv(
     lambdaC = lambdaC, hr = hr, hr0 = hr0, eta = eta, etaE = etaE,
     gamma = gamma, R = R, S = S, T = T, minfup = minfup, ratio = ratio,
