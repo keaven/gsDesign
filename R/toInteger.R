@@ -72,7 +72,7 @@
 toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
   if (!inherits(x, "gsDesign")) stop("must have class gsDesign as input")
   if (!(isInteger(ratio) && ratio >= 0)){
-    message("toInteger: rounding done to nearest integer since ratio was not specified as postive integer .")
+    message("toInteger: rounding done to nearest integer since ratio was not specified as positive integer.")
     ratio <- 0
   }
   counts <- round(x$n.I) # Round counts (event counts for survival; otherwise sample size)
