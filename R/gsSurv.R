@@ -1230,7 +1230,7 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
   }
   x <- nSurv(
     lambdaC = lambdaC, hr = hr, hr0 = hr0, eta = eta, etaE = etaE,
-    gamma = gamma, R = R, S = S, T = T, minfup = minfup, ratio = ratio,
+    gamma = gamma, R = R, S = S, T = max(T), minfup = minfup, ratio = ratio,
     alpha = alpha, beta = beta, sided = sided, tol = tol
   )
   y <- gsDesign(
