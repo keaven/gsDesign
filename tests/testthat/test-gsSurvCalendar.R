@@ -19,7 +19,7 @@ test_that("gsSurvCalendar basic functionality works", {
   # Test minimum follow-up validation
   expect_error(
     gsSurvCalendar(calendarTime = c(12, 24), minfup = 25),
-    "Minimum follow-up greater than study duration."
+    "calendarTime must be numeric and increasing with final value > minfup"
   )
 })
 
