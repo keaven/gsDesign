@@ -1044,10 +1044,15 @@ nSurv <- function(lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
   # Check if R is a numeric vector
   if (!is.numeric(R)) stop("R must be a numeric vector")
   if (min(R) <= 0) stop("R must be a numeric vector with all elements > 0")
-  # If T != NULL, check that it is numeric and >= sum(R)
+  # If T != NULL, check that it is numeric and > minfup, if minfup is non-NULL
   if (!is.null(T)){
-    if (!is.numeric(T)) stop("T must be numeric")
-    if (minfup T < sum(R)) stop("T must be numeric and >= sum(R)")
+    if (!is.numeric(T)) stop("T must be a single numeric value")
+    if (length(T) > 1) stop("T must be a single numeric value")
+    if (!is.null(minfup)){
+      if (!is.numeric(minfup)) stop("minfup must be NULL or a single numeric value")
+      if (length(minfup) > 1) stop("minfup must be NULL or a single numeric value")
+      if (minfup >= T) stop("T must be a single numeric value and > minfup")
+    }
   }
   # set up rates as matrices with row and column names
   # default is 1 stratum if lambdaC not input as matrix
@@ -1213,10 +1218,15 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
   # Check if R is a numeric vector
   if (!is.numeric(R)) stop("R must be a numeric vector")
   if (min(R) <= 0) stop("R must be a numeric vector with all elements > 0")
-  # If T != NULL, check that it is numeric and >= sum(R)
+  # If T != NULL, check that it is numeric and > minfup, if minfup is non-NULL
   if (!is.null(T)){
-     if (!is.numeric(T)) stop("T must be numeric")
-#     if (T < sum(R)) stop("T must be numeric and >= sum(R)")
+    if (!is.numeric(T)) stop("T must be a single numeric value")
+    if (length(T) > 1) stop("T must be a single numeric value")
+    if (!is.null(minfup)){
+      if (!is.numeric(minfup)) stop("minfup must be NULL or a single numeric value")
+      if (length(minfup) > 1) stop("minfup must be NULL or a single numeric value")
+      if (minfup >= T) stop("T must be a single numeric value and > minfup")
+    }
   }
   x <- nSurv(
     lambdaC = lambdaC, hr = hr, hr0 = hr0, eta = eta, etaE = etaE,
