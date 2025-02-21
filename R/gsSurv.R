@@ -736,8 +736,8 @@ KT <- function(alpha = .025, sided = 1, beta = .1,
 #'
 #' When study duration (\code{T}) and follow-up duration (\code{minfup}) are
 #' fixed, \code{nSurv} applies exactly the Lachin and Foulkes (1986) method of
-#' computing sample size under the proportional hazards assumption when For
-#' this computation, enrollment rates are altered proportionately to those
+#' computing sample size under the proportional hazards assumption.
+#' For this computation, enrollment rates are altered proportionately to those
 #' input in \code{gamma} to achieve the power of interest.
 #'
 #' Given the specified enrollment rate(s) input in \code{gamma}, \code{nSurv}
@@ -1041,6 +1041,19 @@ nSurv <- function(lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
                   gamma = 1, R = 12, S = NULL, T = 18, minfup = 6, ratio = 1,
                   alpha = 0.025, beta = 0.10, sided = 1, tol = .Machine$double.eps^0.25) {
   if (is.null(etaE)) etaE <- eta
+  # Check if R is a numeric vector
+  if (!is.numeric(R)) stop("R must be a numeric vector")
+  if (min(R) <= 0) stop("R must be a numeric vector with all elements > 0")
+  # If T != NULL, check that it is numeric and > minfup, if minfup is non-NULL
+  if (!is.null(T)){
+    if (!is.numeric(T)) stop("T must be a single numeric value")
+    if (length(T) > 1) stop("T must be a single numeric value")
+    if (!is.null(minfup)){
+      if (!is.numeric(minfup)) stop("minfup must be NULL or a single numeric value")
+      if (length(minfup) > 1) stop("minfup must be NULL or a single numeric value")
+      if (minfup >= T) stop("T must be a single numeric value and > minfup")
+    }
+  }
   # set up rates as matrices with row and column names
   # default is 1 stratum if lambdaC not input as matrix
   if (is.vector(lambdaC)) lambdaC <- matrix(lambdaC)
@@ -1201,9 +1214,23 @@ gsSurv <- function(k = 3, test.type = 4, alpha = 0.025, sided = 1,
                    tol = .Machine$double.eps^0.25,
                    usTime = NULL, lsTime = NULL) # KA: last 2 arguments added 10/8/2017
   {
+  if (is.null(etaE)) etaE <- eta
+  # Check if R is a numeric vector
+  if (!is.numeric(R)) stop("R must be a numeric vector")
+  if (min(R) <= 0) stop("R must be a numeric vector with all elements > 0")
+  # If T != NULL, check that it is numeric and > minfup, if minfup is non-NULL
+  if (!is.null(T)){
+    if (!is.numeric(T)) stop("T must be a single numeric value")
+    if (length(T) > 1) stop("T must be a single numeric value")
+    if (!is.null(minfup)){
+      if (!is.numeric(minfup)) stop("minfup must be NULL or a single numeric value")
+      if (length(minfup) > 1) stop("minfup must be NULL or a single numeric value")
+      if (minfup >= T) stop("T must be a single numeric value and > minfup")
+    }
+  }
   x <- nSurv(
     lambdaC = lambdaC, hr = hr, hr0 = hr0, eta = eta, etaE = etaE,
-    gamma = gamma, R = R, S = S, T = T, minfup = minfup, ratio = ratio,
+    gamma = gamma, R = R, S = S, T = max(T), minfup = minfup, ratio = ratio,
     alpha = alpha, beta = beta, sided = sided, tol = tol
   )
   y <- gsDesign(
