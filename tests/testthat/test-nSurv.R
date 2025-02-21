@@ -40,6 +40,7 @@ testthat::test_that("Checking consistency nEvents power vs sample size", {
 testthat::test_that("Checking inputs T and R for nSurv and gsSurv", {
 # Check for error when T or R are not numeric or have any value < 0
   testthat::expect_error(nSurv(lambdaC = .2, hr = .7, eta = .1, T = "a", minfup = 1.5), info = "Checking T")
+  testthat::expect_error(nSurv(lambdaC = .2, hr = .7, eta = .1, T = 1, minfup = 1.5), info = "Checking T")
   testthat::expect_error(nSurv(lambdaC = .2, hr = .7, eta = .1, T = 2, R = "a", minfup = 1.5), info = "Checking R")
   testthat::expect_error(nSurv(lambdaC = .2, hr = .7, eta = .1, T = 2, R = -1, minfup = 1.5), info = "Checking R")
   testthat::expect_error(nSurv(lambdaC = .2, hr = .7, eta = .1, T = 2, R = 0, minfup = 1.5), info = "Checking R")
@@ -47,6 +48,7 @@ testthat::test_that("Checking inputs T and R for nSurv and gsSurv", {
 #  testthat::expect_error(nSurv(lambdaC = .2, hr = .7, eta = .1, T = 2, R = 2.5, minfup = 1.5), info = "Checking R and T")
 # Do same checks for gsSurv()
   testthat::expect_error(gsSurv(lambdaC = .2, hr = .7, eta = .1, T = "a", minfup = 1.5), info = "Checking T")
+  testthat::expect_error(gsSurv(lambdaC = .2, hr = .7, eta = .1, T = 1, minfup = 1.5), info = "Checking T")
   testthat::expect_error(gsSurv(lambdaC = .2, hr = .7, eta = .1, T = 2, R = "a", minfup = 1.5), info = "Checking R")
   testthat::expect_error(gsSurv(lambdaC = .2, hr = .7, eta = .1, T = 2, R = -1, minfup = 1.5), info = "Checking R")
   testthat::expect_error(gsSurv(lambdaC = .2, hr = .7, eta = .1, T = 2, R = 0, minfup = 1.5), info = "Checking R")
