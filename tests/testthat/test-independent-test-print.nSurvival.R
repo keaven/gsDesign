@@ -52,8 +52,7 @@ testthat::test_that(desc = 'Test: checking entry set to "expo",eta = 0,ratio != 
 })
 
 
-testthat::test_that(desc = "Test: checking type of sample size calculation: 
-                    risk ratio (type = rr) with approximate computation", 
+testthat::test_that(desc = "Test: checking type of sample size calculation: risk ratio (type = rr) with approximate computation", 
                     code = {
   ss <- nSurvival(
     lambda1 = .2, lambda2 = .1, eta = 6.9, Ts = 2, Tr = .5,
@@ -64,8 +63,7 @@ testthat::test_that(desc = "Test: checking type of sample size calculation:
 })
 
 
-testthat::test_that(desc = "Test: checking type of sample size calculation: 
-                    risk difference (type = rd) with approximate computation",
+testthat::test_that(desc = "Test: checking type of sample size calculation: risk difference (type = rd) with approximate computation",
                     code = {
   ss <- nSurvival(
     lambda1 = .2, lambda2 = .1, eta = 0, Ts = 2, Tr = .5,
@@ -76,8 +74,7 @@ testthat::test_that(desc = "Test: checking type of sample size calculation:
 })
 
 
-testthat::test_that(desc = "Test: checking type of sample size calculation: 
-                    risk difference (type = rd) with approx set to FALSE", 
+testthat::test_that(desc = "Test: checking type of sample size calculation: risk difference (type = rd) with approx set to FALSE", 
                     code = {
   ss <- nSurvival(
     lambda1 = .2, lambda2 = .1, eta = 0, Ts = 2, Tr = .5,
