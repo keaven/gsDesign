@@ -1047,7 +1047,7 @@ nSurv <- function(lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
   # If T != NULL, check that it is numeric and >= sum(R)
   if (!is.null(T)){
     if (!is.numeric(T)) stop("T must be numeric")
- #   if (T < sum(R)) stop("T must be numeric and >= sum(R)")
+    if (minfup T < sum(R)) stop("T must be numeric and >= sum(R)")
   }
   # set up rates as matrices with row and column names
   # default is 1 stratum if lambdaC not input as matrix
