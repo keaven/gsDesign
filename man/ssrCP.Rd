@@ -301,9 +301,9 @@ xxFisher <- ssrCP(
 )
 # combine data frames from these designs
 y <- rbind(
-  data.frame(cbind(xx$dat, Test = "Normal combination")),
-  data.frame(cbind(xxZ$dat, Test = "Sufficient statistic")),
-  data.frame(cbind(xxFisher$dat, Test = "Fisher combination"))
+  data.frame(xx$dat, Test = "Normal combination"),
+  data.frame(xxZ$dat, Test = "Sufficient statistic"),
+  data.frame(xxFisher$dat, Test = "Fisher combination")
 )
 # plot stage 2 statistic required for positive combination test
 ggplot2::ggplot(data = y, ggplot2::aes(x = z1, y = z2, col = Test)) + 
@@ -321,8 +321,8 @@ xxtheta1 <- ssrCP(
 )
 # combine data frames for the 2 designs
 y <- rbind(
-  data.frame(cbind(xx$dat, "CP effect size" = "Obs. at IA")),
-  data.frame(cbind(xxtheta1$dat, "CP effect size" = "Alt. hypothesis"))
+  data.frame(xx$dat, "CP effect size" = "Obs. at IA"),
+  data.frame(xxtheta1$dat, "CP effect size" = "Alt. hypothesis")
 )
 # plot stage 2 sample size by design
 ggplot2::ggplot(data = y, ggplot2::aes(x = z1, y = n2, col = CP.effect.size)) + 
@@ -332,8 +332,8 @@ y1 <- Power.ssrCP(x = xx)
 y2 <- Power.ssrCP(x = xxtheta1)
 # combine data frames for the 2 designs
 y3 <- rbind(
-  data.frame(cbind(y1, "CP effect size" = "Obs. at IA")),
-  data.frame(cbind(y2, "CP effect size" = "Alt. hypothesis"))
+  data.frame(y1, "CP effect size" = "Obs. at IA"),
+  data.frame(y2, "CP effect size" = "Alt. hypothesis")
 )
 # plot expected sample size by design and effect size
 ggplot2::ggplot(data = y3, ggplot2::aes(x = delta, y = en, col = CP.effect.size)) + 
