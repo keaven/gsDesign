@@ -372,8 +372,8 @@ enrollment rate.
 
 When study duration (\code{T}) and follow-up duration (\code{minfup}) are
 fixed, \code{nSurv} applies exactly the Lachin and Foulkes (1986) method of
-computing sample size under the proportional hazards assumption when For
-this computation, enrollment rates are altered proportionately to those
+computing sample size under the proportional hazards assumption.
+For this computation, enrollment rates are altered proportionately to those
 input in \code{gamma} to achieve the power of interest.
 
 Given the specified enrollment rate(s) input in \code{gamma}, \code{nSurv}

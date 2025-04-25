@@ -90,25 +90,25 @@ test_that("toInteger() prints a message for invalid ratio values", {
   # Test for negative ratio
   expect_message(
     toInteger(x_test, ratio = -1),
-    "rounding done to nearest integer since ratio was not specified as positive integer"
+    "toInteger: rounding done to nearest integer since ratio was not specified as positive integer"
   )
 
   # Test for non-integer ratio (numeric)
   expect_message(
     toInteger(x_test, ratio = 2.5),
-    "rounding done to nearest integer since ratio was not specified as positive integer"
+    "toInteger: rounding done to nearest integer since ratio was not specified as positive integer"
   )
 
   # Test for non-numeric ratio
   expect_message(
     toInteger(x_test, ratio = "two"),
-    "rounding done to nearest integer since ratio was not specified as positive integer"
+    "toInteger: rounding done to nearest integer since ratio was not specified as positive integer"
   )
 
   # Test for NULL ratio
   expect_message(
     toInteger(x_test, ratio = NULL),
-    "rounding done to nearest integer since ratio was not specified as positive integer"
+    "toInteger: rounding done to nearest integer since ratio was not specified as positive integer"
   )
 })
 
