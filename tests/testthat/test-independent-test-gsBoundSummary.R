@@ -209,6 +209,7 @@ testthat::test_that(desc = "Test gsBoundSummary for correct use of spending time
   ku <- length(n.I)
   usTime <- pmin(x$n.I, n.I) / x$n.I[x$k]
   usTime[ku] <- 1
+  lsTime <- NULL
   xu <- gsDesign(
     k = ku,
     test.type = x$test.type,
@@ -238,7 +239,7 @@ testthat::test_that(desc = "Test gsBoundSummary for correct use of spending time
     tdigits = 1,
     exclude = c(
       "B-value", "CP", "CP H1", "PP",
-      paste0("P(Cross) if HR=", round(c(hr0, hr), digits = 2))
+      paste0("P(Cross) if HR=", round(c(x$hr0, x$hr), digits = 2))
     ), 
     alpha = c(0.02, 0.025)
   )
@@ -254,4 +255,14 @@ testthat::test_that(desc = "Test gsBoundSummary for correct use of spending time
     expect_equal(round(sp, 4), spending, 
                  label = "Upper spending time is incorrect")
   }
+  
+  # Futility spending
+  lsTime <- xu$timing # Will just use information time!
+  spending <- xu2[xu2$Value == "Spending", 6]
+  # Test if spending is as expected for alpha
+  sp <- x$lower$sf(alpha = x$beta, t = lsTime, 
+                   param = x$lower$param)$spend
+  sp <- c(sp[1], diff(sp))
+  expect_equal(round(sp, 4), spending, 
+               label = "Upper spending time is incorrect")
   })
