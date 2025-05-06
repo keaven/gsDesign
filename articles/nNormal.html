@@ -6,19 +6,22 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Two-sample normal sample size • gsDesign</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
-<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Two-sample normal sample size">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Two-sample normal sample size">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -83,54 +86,57 @@ outlined below.</p>
 </h2>
 <p>The overall sample size notation used for <strong>gsDesign</strong>
 is to consider a standardized effect size parameter which is referred to
-as <span class="math inline">\theta</span> in <span class="citation">Jennison and Turnbull (2000)</span>. We begin with the
+as <span class="math inline">\(\theta\)</span> in <span class="citation">Jennison and Turnbull (2000)</span>. We begin with the
 2-sample normal problem where we assume a possibly different standard
-deviation in each treatment group. For <span class="math inline">j = 1,
-2</span>, we let <span class="math inline">X_{j, i}</span>, <span class="math inline">i = 1, 2, \ldots n_j</span> represent independent
-and identically distributed observations following a normal distribution
-with mean <span class="math inline">\mu_j</span> and standard deviation
-<span class="math inline">\sigma_j</span>. The natural parameter for
-comparing the two distributions is</p>
-<p><span class="math display">\delta = \mu_2 - \mu_1</span></p>
-<p>and we wish to test if <span class="math inline">\delta &gt; 0</span>
-in a one-sided testing scenario to test for superiority of treatment 2
-over treatment 1. We could also consider testing, say, <span class="math inline">\delta &gt; \delta_0</span> for a non-inferiority
-scenario with <span class="math inline">\delta_0&lt;0</span> or
-<strong>super superiority</strong> if <span class="math inline">\delta_0&gt;0</span>. While normally a t-test would
-be used for this, for large sample sizes this would be nearly equivalent
-to a Z-test defined by:</p>
-<p><span class="math display">Z=\frac{\bar X_2 - \bar
+deviation in each treatment group. For <span class="math inline">\(j =
+1, 2\)</span>, we let <span class="math inline">\(X_{j, i}\)</span>,
+<span class="math inline">\(i = 1, 2, \ldots n_j\)</span> represent
+independent and identically distributed observations following a normal
+distribution with mean <span class="math inline">\(\mu_j\)</span> and
+standard deviation <span class="math inline">\(\sigma_j\)</span>. The
+natural parameter for comparing the two distributions is</p>
+<p><span class="math display">\[\delta = \mu_2 - \mu_1\]</span></p>
+<p>and we wish to test if <span class="math inline">\(\delta &gt;
+0\)</span> in a one-sided testing scenario to test for superiority of
+treatment 2 over treatment 1. We could also consider testing, say, <span class="math inline">\(\delta &gt; \delta_0\)</span> for a
+non-inferiority scenario with <span class="math inline">\(\delta_0&lt;0\)</span> or <strong>super
+superiority</strong> if <span class="math inline">\(\delta_0&gt;0\)</span>. While normally a t-test
+would be used for this, for large sample sizes this would be nearly
+equivalent to a Z-test defined by:</p>
+<p><span class="math display">\[Z=\frac{\bar X_2 - \bar
 X_1-\delta_0}{\sqrt{\sigma^2_2/n_2 + \sigma_1^2/n_1}}\approx \frac{\bar
-X_2 - \bar X_1}{\sqrt{s^2_2/n_2 + s_1^2/n_1}}=t</span> where <span class="math inline">\bar X_j</span> is the sample mean and <span class="math inline">s_j^2</span> is the sample variance for group <span class="math inline">j=1,2</span>. The far right hand side of this is
-Welch’s t-test. For our examples we use this <span class="math inline">t</span>-test and show that the sample size
-computation based on the <span class="math inline">Z</span>-test above
-works well for the chosen problems.</p>
+X_2 - \bar X_1}{\sqrt{s^2_2/n_2 + s_1^2/n_1}}=t\]</span> where <span class="math inline">\(\bar X_j\)</span> is the sample mean and <span class="math inline">\(s_j^2\)</span> is the sample variance for group
+<span class="math inline">\(j=1,2\)</span>. The far right hand side of
+this is Welch’s t-test. For our examples we use this <span class="math inline">\(t\)</span>-test and show that the sample size
+computation based on the <span class="math inline">\(Z\)</span>-test
+above works well for the chosen problems.</p>
 </div>
 <div class="section level2">
 <h2 id="sample-size">Sample size<a class="anchor" aria-label="anchor" href="#sample-size"></a>
 </h2>
-<p>Thus, <span class="math inline">n_2=rn/(1+r)</span>, <span class="math inline">n_1=n/(1+r)</span> and when <span class="math inline">r=1</span> we have <span class="math inline">n_1=n_2=n/2</span>. Now that we have completed
+<p>Thus, <span class="math inline">\(n_2=rn/(1+r)\)</span>, <span class="math inline">\(n_1=n/(1+r)\)</span> and when <span class="math inline">\(r=1\)</span> we have <span class="math inline">\(n_1=n_2=n/2\)</span>. Now that we have completed
 needed notation, those not interested in the theory behind the sample
 size and power calculation used may skip the rest of this section.</p>
-<p>We let <span class="math display">\sigma^2=(1+r)(\sigma_1^2+\sigma_2^2/r)</span> and
-define <span class="math display"> \theta= (\delta
--\delta_0)/\sigma.</span> Under the given assumptions, <span class="math display">Z \sim \text{Normal}\left(\sqrt
-n\theta,1\right).</span> Under the null hypothesis that <span class="math inline">\delta=\delta_0</span>, we have <span class="math inline">Z\sim \text{Normal}(0,1)</span>. Thus, regardless of
-<span class="math inline">n</span> we have <span class="math display">P_0[Z\ge \Phi^{-1}(1-\alpha)]=\alpha.</span> Under
-the alternate hypothesis that <span class="math inline">\delta=\delta_1</span> and we denote a corresponding
-<span class="math inline">\theta_1</span>. We define the type II error
-<span class="math inline">\beta</span> and power <span class="math inline">1-\beta</span> by</p>
-<p><span class="math display">
+<p>We let <span class="math display">\[\sigma^2=(1+r)(\sigma_1^2+\sigma_2^2/r)\]</span>
+and define <span class="math display">\[ \theta= (\delta
+-\delta_0)/\sigma.\]</span> Under the given assumptions, <span class="math display">\[Z \sim \text{Normal}\left(\sqrt
+n\theta,1\right).\]</span> Under the null hypothesis that <span class="math inline">\(\delta=\delta_0\)</span>, we have <span class="math inline">\(Z\sim \text{Normal}(0,1)\)</span>. Thus,
+regardless of <span class="math inline">\(n\)</span> we have <span class="math display">\[P_0[Z\ge \Phi^{-1}(1-\alpha)]=\alpha.\]</span>
+Under the alternate hypothesis that <span class="math inline">\(\delta=\delta_1\)</span> and we denote a
+corresponding <span class="math inline">\(\theta_1\)</span>. We define
+the type II error <span class="math inline">\(\beta\)</span> and power
+<span class="math inline">\(1-\beta\)</span> by</p>
+<p><span class="math display">\[
 \begin{align}
 1-\beta =&amp; P_1[Z\ge \Phi^{-1}(1-\alpha)]\\
 =&amp; P[Z-\sqrt n\theta_1\ge \Phi^{-1}(1-\alpha)-\sqrt n\theta_1]\\
 =&amp;\Phi(\Phi^{-1}(1-\alpha)-\sqrt n\theta_1)).
-\end{align}</span></p>
-<p>If the power <span class="math inline">1-\beta</span> is fixed, we
-can invert this formula to compute sample size with:</p>
-<p><span class="math display">n=
-\left(\frac{\Phi^{-1}(1-\beta)+\Phi^{-1}(1-\alpha)}{\theta_1}\right)^2.</span></p>
-<p>For 2-sided testing, we simply substitute <span class="math inline">\alpha/2</span> for <span class="math inline">\alpha</span> in the above two formulas.</p>
+\end{align}\]</span></p>
+<p>If the power <span class="math inline">\(1-\beta\)</span> is fixed,
+we can invert this formula to compute sample size with:</p>
+<p><span class="math display">\[n=
+\left(\frac{\Phi^{-1}(1-\beta)+\Phi^{-1}(1-\alpha)}{\theta_1}\right)^2.\]</span></p>
+<p>For 2-sided testing, we simply substitute <span class="math inline">\(\alpha/2\)</span> for <span class="math inline">\(\alpha\)</span> in the above two formulas.</p>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -143,10 +149,10 @@ sequential design example.</p>
 <div class="section level3">
 <h3 id="sample-size-1">Sample size<a class="anchor" aria-label="anchor" href="#sample-size-1"></a>
 </h3>
-<p>We consider an example with <span class="math inline">\sigma_2=1.25</span>, <span class="math inline">\sigma_1=1.6</span>, <span class="math inline">\delta=0.8</span> and <span class="math inline">\delta_0=0</span>. We let the sample size ratio be 2
-experimental group observations per control observation. We compute
+<p>We consider an example with <span class="math inline">\(\sigma_2=1.25\)</span>, <span class="math inline">\(\sigma_1=1.6\)</span>, <span class="math inline">\(\delta=0.8\)</span> and <span class="math inline">\(\delta_0=0\)</span>. We let the sample size ratio
+be 2 experimental group observations per control observation. We compute
 sample size with <code><a href="../reference/nNormal.html">nNormal()</a></code> assuming one-sided Type I error
-<span class="math inline">\alpha=0.025</span> and 90% power (<span class="math inline">1-\beta=0.9</span>).</p>
+<span class="math inline">\(\alpha=0.025\)</span> and 90% power (<span class="math inline">\(1-\beta=0.9\)</span>).</p>
 <p>Checking using the sample size formula above, we have:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
@@ -187,14 +193,15 @@ different treatment effect assumptions:</p>
 <h3 id="verification-with-simulation">Verification with simulation<a class="anchor" aria-label="anchor" href="#verification-with-simulation"></a>
 </h3>
 <p>Rather than simulate individual observations, we will take advantage
-of the fact that for <span class="math inline">j=1,2</span></p>
-<p><span class="math display">\bar X_j\sim
-\text{Normal}(\mu_j,\sigma_j^2/n_j)</span></p>
+of the fact that for <span class="math inline">\(j=1,2\)</span></p>
+<p><span class="math display">\[\bar X_j\sim
+\text{Normal}(\mu_j,\sigma_j^2/n_j)\]</span></p>
 <p>and</p>
-<p><span class="math display">(n_j-1)s_j^2/\sigma_j^2=\sum_{i=1}^{n_j}
-(X_{ij}-\bar X_j)/\sigma^2 \sim \chi ^2_{n_j-1}</span></p>
-<p>are independent. Thus, we can simulate trial power with <span class="math inline">n=200</span> 1 million times with a t-statistic with
-unequal variances quickly as follows under the alternate hypothesis:</p>
+<p><span class="math display">\[(n_j-1)s_j^2/\sigma_j^2=\sum_{i=1}^{n_j}
+(X_{ij}-\bar X_j)/\sigma^2 \sim \chi ^2_{n_j-1}\]</span></p>
+<p>are independent. Thus, we can simulate trial power with <span class="math inline">\(n=200\)</span> 1 million times with a t-statistic
+with unequal variances quickly as follows under the alternate
+hypothesis:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">1000000</span></span>
 <span><span class="va">delta</span> <span class="op">&lt;-</span> <span class="fl">0.8</span></span>
@@ -419,7 +426,7 @@ Chapman; Hall/CRC.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer>

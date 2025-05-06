@@ -6,19 +6,22 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Vaccine efficacy trial design • gsDesign</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
+<!-- mathjax math --><script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script><script>
+  window.MathJax = {
+    chtml: {
+      fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
+    }
+  };
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
-<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Vaccine efficacy trial design">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Vaccine efficacy trial design">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -98,43 +101,44 @@ of events expected.</p>
 <h3 id="exact-binomial-approach">Exact binomial approach<a class="anchor" aria-label="anchor" href="#exact-binomial-approach"></a>
 </h3>
 <p>Paralleling the notation of <span class="citation">Chan and Bohidar
-(1998)</span>, we assume <span class="math inline">N_C, P_C</span> to be
-binomial sample size and probability of an event for each participant
-assigned to control; for the experimental treatment group, these are
-labeled <span class="math inline">N_E, P_E</span>. Vaccine efficacy is
-defined as</p>
-<p><span class="math display">\pi = 1 - P_E/P_C.</span></p>
-<p>The parameter <span class="math inline">\pi</span> is often labeled
-as VE for vaccine efficacy. Taking into account the randomization ratio
-<span class="math inline">r</span> (experimental / control) the
-approximate probability that any given event is in the experimental
-group is</p>
-<p><span class="math display">
+(1998)</span>, we assume <span class="math inline">\(N_C, P_C\)</span>
+to be binomial sample size and probability of an event for each
+participant assigned to control; for the experimental treatment group,
+these are labeled <span class="math inline">\(N_E, P_E\)</span>. Vaccine
+efficacy is defined as</p>
+<p><span class="math display">\[\pi = 1 - P_E/P_C.\]</span></p>
+<p>The parameter <span class="math inline">\(\pi\)</span> is often
+labeled as VE for vaccine efficacy. Taking into account the
+randomization ratio <span class="math inline">\(r\)</span> (experimental
+/ control) the approximate probability that any given event is in the
+experimental group is</p>
+<p><span class="math display">\[
 \begin{aligned}
 p &amp;= rP_E/(rP_E+ P_C)\\
   &amp;= r/(r + P_C/P_E)\\
   &amp;= r/(r + (1-\pi)^{-1}).
 \end{aligned}
-</span></p>
+\]</span></p>
 <p>As noted, this approximation is dependent on a large sample size and
 small probability of events. The above can be inverted to obtain</p>
-<p><span class="math display">\pi = 1 - \frac{1}{r(1/p-1)}. </span></p>
+<p><span class="math display">\[\pi = 1 - \frac{1}{r(1/p-1)}.
+\]</span></p>
 <p>For our example of interest, we begin with an alternate hypothesis
-vaccine efficacy <span class="math inline">\pi_1 = 0.7</span> and
-experimental:control randomization ratio <span class="math inline">r=3</span>. This converts to an alternate hypothesis
-(approximate) probability that any event is in the experimental group
-of</p>
+vaccine efficacy <span class="math inline">\(\pi_1 = 0.7\)</span> and
+experimental:control randomization ratio <span class="math inline">\(r=3\)</span>. This converts to an alternate
+hypothesis (approximate) probability that any event is in the
+experimental group of</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pi1</span> <span class="op">&lt;-</span> <span class="fl">.7</span></span>
 <span><span class="va">ratio</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
 <span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">ratio</span> <span class="op">/</span> <span class="op">(</span><span class="va">ratio</span> <span class="op">+</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">pi1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">p1</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; [1] 0.4736842</span></span></code></pre>
-<p>We use the inversion formula to revert this to <span class="math inline">\pi_1 = 0.7</span></p>
+<p>We use the inversion formula to revert this to <span class="math inline">\(\pi_1 = 0.7\)</span></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fl">1</span> <span class="op">-</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="va">ratio</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="va">p1</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; [1] 0.7</span></span></code></pre>
-<p>Letting the null hypothesis vaccine efficacy be <span class="math inline">\pi_0 = 0.3</span>, our exact binomial null
+<p>Letting the null hypothesis vaccine efficacy be <span class="math inline">\(\pi_0 = 0.3\)</span>, our exact binomial null
 hypothesis probability that an event is in the experimental group is</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pi0</span> <span class="op">&lt;-</span> <span class="fl">.3</span></span>
@@ -643,15 +647,16 @@ given by the Jennison and Turnbull approach.</p>
 <div class="section level2">
 <h2 id="the-time-to-event-approach">The time-to-event approach<a class="anchor" aria-label="anchor" href="#the-time-to-event-approach"></a>
 </h2>
-<p>For a time-to-event formulation with exponential failure rates <span class="math inline">\lambda_C</span> for control and <span class="math inline">\lambda_E</span> for experimental group assigned
+<p>For a time-to-event formulation with exponential failure rates <span class="math inline">\(\lambda_C\)</span> for control and <span class="math inline">\(\lambda_E\)</span> for experimental group assigned
 participants, we would define</p>
-<p><span class="math display">\pi = 1 - \lambda_E / \lambda_C</span></p>
+<p><span class="math display">\[\pi = 1 - \lambda_E /
+\lambda_C\]</span></p>
 <p>which is 1 minus the hazard ratio often used in time-to-event
 studies. In the following we examine how closely the time-to-event
 method using asymptotic distributional assumptions can approximate an
 appropriate exact binomial design. We will also define a planned number
-of events at each of <span class="math inline">K</span> planned analyses
-by <span class="math inline">D_k, 1\le k\le K</span>.</p>
+of events at each of <span class="math inline">\(K\)</span> planned
+analyses by <span class="math inline">\(D_k, 1\le k\le K\)</span>.</p>
 </div>
 <div class="section level2">
 <h2 id="generating-a-design">Generating a design<a class="anchor" aria-label="anchor" href="#generating-a-design"></a>
@@ -710,15 +715,15 @@ analyses as well as a slight change from the targeted 90% power. We now
 explain the rationale behind the spending function choices. Recall that
 the hazard ratio (HR) is 1 minus the VE. The <code>~HR at bound</code>
 represents the approximate hazard ratio required to cross a bound. Thus,
-small HR’s at the interim analyses along with small cumulative <span class="math inline">\alpha</span>-spending suggest crossing an interim
-efficacy bound would provide a result strong enough to potentially
-justify the new treatment. The hazard ratio of ~0.69 (VE ~ 0.31) for the
-interim 1 futility bound mean that the efficacy trend would be
-essentially no better than the null hypothesis if the futility bound
-were crossed. The second analysis futility bound with approximate VE of
-0.5 would be worth discussion with a data monitoring committee as well
-as other planners for the trial; a custom spending function could be
-used to set both the first and second interim bounds to desired
+small HR’s at the interim analyses along with small cumulative <span class="math inline">\(\alpha\)</span>-spending suggest crossing an
+interim efficacy bound would provide a result strong enough to
+potentially justify the new treatment. The hazard ratio of ~0.69 (VE ~
+0.31) for the interim 1 futility bound mean that the efficacy trend
+would be essentially no better than the null hypothesis if the futility
+bound were crossed. The second analysis futility bound with approximate
+VE of 0.5 would be worth discussion with a data monitoring committee as
+well as other planners for the trial; a custom spending function could
+be used to set both the first and second interim bounds to desired
 levels.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">xx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
@@ -1959,15 +1964,16 @@ than relevant benefit for futility bounds.</p>
 <div class="section level3">
 <h3 id="checking-design-properties">Checking design properties<a class="anchor" aria-label="anchor" href="#checking-design-properties"></a>
 </h3>
-<p>Next, we look at <span class="math inline">\alpha</span>- and <span class="math inline">\beta</span>-spending for the time-to-event design
-to compare to the exact bound restricted by the discrete possible counts
-at bounds. For both <span class="math inline">\alpha</span>- and <span class="math inline">\beta</span>-spending, the exact binomial design has
-no more spending at each analysis than allowed by each spending
+<p>Next, we look at <span class="math inline">\(\alpha\)</span>- and
+<span class="math inline">\(\beta\)</span>-spending for the
+time-to-event design to compare to the exact bound restricted by the
+discrete possible counts at bounds. For both <span class="math inline">\(\alpha\)</span>- and <span class="math inline">\(\beta\)</span>-spending, the exact binomial design
+has no more spending at each analysis than allowed by each spending
 function. We also confirm that changing any of the exact bounds by 1
 exceeds the targeting spending.</p>
 <div class="section level4">
 <h4 id="alpha-spending">
-<span class="math inline">\alpha</span>-spending<a class="anchor" aria-label="anchor" href="#alpha-spending"></a>
+<span class="math inline">\(\alpha\)</span>-spending<a class="anchor" aria-label="anchor" href="#alpha-spending"></a>
 </h4>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Exact design cumulative alpha-spending at efficacy bounds</span></span>
@@ -1980,18 +1986,19 @@ exceeds the targeting spending.</p>
 <code class="sourceCode R"><span><span class="co"># Targeted alpha-spending</span></span>
 <span><span class="va">xx</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="fu">sf</span><span class="op">(</span><span class="va">alpha</span>, t <span class="op">=</span> <span class="va">xx</span><span class="op">$</span><span class="va">timing</span>, <span class="va">xx</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">param</span><span class="op">)</span><span class="op">$</span><span class="va">spend</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; [1] 0.003610924 0.009107476 0.025000000</span></span></code></pre>
-<p>Above we see the achieved <span class="math inline">\alpha</span>-spending ignoring the futility bound
-is controlled at the targeted level at each analysis; because of the
-exact bound, control is below the target. For this particular example,
-we show below that increasing any efficacy bound by 1 not only increases
-above the targeted cumulative spend compared to above at each analysis
-(diagonal elements), but also exceeds the targeted total spend of 0.025
-at the final analysis (final column). The latter property will not
-always hold. Choosing your spending function carefully (in this case,
-using the spending function parameter) to ensure cumulative spending for
-the exact design is close to the targeted <span class="math inline">\alpha</span> is worth careful examination. For this
-case, choosing the Hwang-Shih-DeCani efficacy spending parameter as
-<span class="math inline">\gamma=-4</span> instead of <span class="math inline">\gamma=-3</span> second property would not hold.</p>
+<p>Above we see the achieved <span class="math inline">\(\alpha\)</span>-spending ignoring the futility
+bound is controlled at the targeted level at each analysis; because of
+the exact bound, control is below the target. For this particular
+example, we show below that increasing any efficacy bound by 1 not only
+increases above the targeted cumulative spend compared to above at each
+analysis (diagonal elements), but also exceeds the targeted total spend
+of 0.025 at the final analysis (final column). The latter property will
+not always hold. Choosing your spending function carefully (in this
+case, using the spending function parameter) to ensure cumulative
+spending for the exact design is close to the targeted <span class="math inline">\(\alpha\)</span> is worth careful examination. For
+this case, choosing the Hwang-Shih-DeCani efficacy spending parameter as
+<span class="math inline">\(\gamma=-4\)</span> instead of <span class="math inline">\(\gamma=-3\)</span> second property would not
+hold.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check that increasing any bound goes above cumulative spend</span></span>
 <span><span class="va">excess_alpha_spend</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow <span class="op">=</span> <span class="va">nb</span><span class="op">$</span><span class="va">k</span>, ncol<span class="op">=</span><span class="va">nb</span><span class="op">$</span><span class="va">k</span><span class="op">)</span></span>
@@ -2009,7 +2016,7 @@ case, choosing the Hwang-Shih-DeCani efficacy spending parameter as
 </div>
 <div class="section level4">
 <h4 id="beta-spending">
-<span class="math inline">\beta</span>-spending<a class="anchor" aria-label="anchor" href="#beta-spending"></a>
+<span class="math inline">\(\beta\)</span>-spending<a class="anchor" aria-label="anchor" href="#beta-spending"></a>
 </h4>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cumulative beta-spending for exact design</span></span>
@@ -2062,7 +2069,7 @@ was non-binding the futility bound could be ignored for decision-making
 purposes without inflating Type I error. The VE = -0.33 at the futility
 bound favored placebo. Since we have overrun the targeted event count at
 the second analysis we exceed the targeted power and never reach the
-allowed <span class="math inline">\beta</span>-spending for Type II
+allowed <span class="math inline">\(\beta\)</span>-spending for Type II
 error. Note that for this table, the expected sample size and calendar
 timing are no longer needed.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
@@ -2666,7 +2673,7 @@ Lancet</em> 397 (10275): 671–81.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer>
