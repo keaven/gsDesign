@@ -23,7 +23,7 @@ Useful links:
 
 Other contributors:
 \itemize{
-  \item Merck & Co., Inc., Rahway, NJ, USA and its affiliates [copyright holder]
+  \item Merck & Co., Inc., Rahway, NJ, USA and its affiliates (02891sr49) [copyright holder]
 }
 
 }
