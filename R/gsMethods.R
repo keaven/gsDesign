@@ -819,7 +819,9 @@ gsBoundSummary <- function(
       delta = x$delta,
       delta1 = x$delta1,
       delta0 = x$delta0,
-      r = r
+      r = r,
+      usTime = x$upper$sTime,
+      lsTime = x$lower$sTime
     )
 
     # Get summary for design with new alpha
