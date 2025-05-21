@@ -14,10 +14,3 @@ TODO
 docs/
 vignettes/*.html
 vignettes/*.R
-# Build artifacts
-*.tar.gz
-*.Rcheck/
-.Rcheck/
-src/symbols.rds
-# Temporary directories
-tryANewOne/
