@@ -1,3 +1,25 @@
+# gsDesign 3.6.8 (May 2025)
+
+## Bug fixes
+
+- `gsBoundSummary()` (as updated in gsDesign 3.6.6) did not consider
+  spending time for alternate alpha levels when the `alpha` argument
+  was specified. This issue has been resolved; `lsTime` and `usTime`
+  are now correctly used for updated bounds with these alternate alpha levels
+  (@keaven, #203).
+
+## Testing
+
+- Added independent unit tests for `as_gt()` (@DMuriuki, #196).
+
+## Documentation
+
+- Switched the pkgdown math renderer from KaTeX to MathJaX for improved
+  compatibility, as the MathJaX support was improved in pkgdown 2.1.2
+  (@nanxstats, #200).
+- Added Research Organization Registry (ROR) ID to `DESCRIPTION`
+  (@jdblischak, #201).
+
 # gsDesign 3.6.7 (March 2025)
 
 ## Improvements
