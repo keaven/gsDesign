@@ -2,14 +2,12 @@
 # Test gsBoundSummary function
 #-----------------------------------
 
-
 testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object", code = {
   x <- gsDesign(nFixSurv = 0, k = 5, test.type = 1, n.fix = 1)
 
   local_edition(3) # use 3rd edition of testthat for this testcase
   expect_snapshot_output(x = gsBoundSummary(x, Nname = NULL))
 })
-
 
 testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object with Nname set", code = {
   x <- gsDesign(nFixSurv = 0, k = 5, test.type = 1, n.fix = 1)
@@ -18,14 +16,12 @@ testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object with Nname s
   expect_snapshot_output(x = gsBoundSummary(x, Nname = "samplesize"))
 })
 
-
 testthat::test_that(desc = "Test gsBoundSummary for gsSurv Object", code = {
   xgs <- gsSurv(lambdaC = .2, hr = .5, eta = .1, T = 2, minfup = 1.5)
 
   local_edition(3) # use 3rd edition of testthat for this testcase
   expect_snapshot_output(x = gsBoundSummary(xgs))
 })
-
 
 testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object, test.type > 1", 
                     code = {
@@ -35,7 +31,6 @@ testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object, test.type >
   expect_snapshot_output(x = gsBoundSummary(x, Nname = NULL))
 })
 
-
 testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object, when nFixSurv is set", 
                     code = {
   x <- gsDesign(nFixSurv = 0.8, k = 5, test.type = 4, n.fix = 1)
@@ -44,7 +39,6 @@ testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object, when nFixSu
   expect_snapshot_output(x = gsBoundSummary(x, deltaname = "RR", ratio = .3))
 })
 
-
 testthat::test_that(desc = "Test with Probability Of Success(POS) set to TRUE", 
                     code = {
   x <- gsDesign(nFixSurv = 0, delta = .3, delta1 = .3)
@@ -52,7 +46,6 @@ testthat::test_that(desc = "Test with Probability Of Success(POS) set to TRUE",
   local_edition(3) # use 3rd edition of testthat for this testcase
   expect_snapshot_output(x = gsBoundSummary(x, Nname = "Information", POS = TRUE))
 })
-
 
 testthat::test_that(desc = 'Test gsBoundSummary with "Spending" in exclude"', 
                     code = {
@@ -201,4 +194,85 @@ testthat::test_that(desc = "Test CP, CP H1, and PP computations with multiple al
     }
     expect_equal(round(PP, 4), pp, label = "PP is incorrect")
   }
+})
+
+testthat::test_that(desc = "Test gsBoundSummary for correct use of spending time", {
+  x <- gsSurv(alpha = 0.01, k = 3, timing = 1, sfu = sfLDOF, sfl = sfLDPocock) |> toInteger()
+
+  # New timing
+  events <- x$n.I + c(10, -10, -10)
+  usTime <- pmin(x$timing, events / max(x$n.I))
+
+  # Now get updated bound with a new alpha-level and upper spending time
+  # Note that for this example, lower spending time is still information-based
+  n.I <- c(89, 169, 228)
+  ku <- length(n.I)
+  usTime <- pmin(x$n.I, n.I) / x$n.I[x$k]
+  usTime[ku] <- 1
+  lsTime <- NULL
+  xu <- gsDesign(
+    k = ku,
+    test.type = x$test.type,
+    alpha = x$alpha,
+    beta = x$beta,
+    astar = x$astar,
+    sfu = x$upper$sf,
+    sfupar = x$upper$param,
+    sfl = x$lower$sf,
+    sflpar = x$lower$param,
+    n.I = n.I,
+    maxn.IPlan = x$n.I[x$k],
+    delta = x$delta,
+    delta1 = x$delta1,
+    delta0 = x$delta0,
+    usTime = usTime,
+    lsTime = lsTime
+  )
+
+  xu2 <- gsBoundSummary(
+    xu,
+    deltaname = "HR",
+    logdelta = TRUE,
+    Nname = "Events",
+    digits = 4,
+    ddigits = 2,
+    tdigits = 1,
+    exclude = c(
+      "B-value", "CP", "CP H1", "PP",
+      paste0("P(Cross) if HR=", round(c(x$hr0, x$hr), digits = 2))
+    ),
+    alpha = c(0.02, 0.025)
+  )
+
+  alpha_vec <- c(0.01, 0.02, 0.025)
+  # Get spending rows
+  for (i in 1:3) {
+    spending <- xu2[xu2$Value == "Spending", 2 + i]
+    # Test if spending is as expected for alpha
+    sp <- x$upper$sf(
+      alpha = alpha_vec[i], t = usTime,
+      param = x$upper$param
+    )$spend
+    sp <- c(sp[1], diff(sp))
+
+    expect_equal(
+      round(sp, 4), spending,
+      label = "Upper spending time is incorrect"
+    )
+  }
+
+  # Futility spending
+  lsTime <- xu$timing # Will just use information time!
+  spending <- xu2[xu2$Value == "Spending", 6]
+  # Test if spending is as expected for alpha
+  sp <- x$lower$sf(
+    alpha = x$beta, t = lsTime,
+    param = x$lower$param
+  )$spend
+  sp <- c(sp[1], diff(sp))
+
+  expect_equal(
+    round(sp, 4), spending,
+    label = "Upper spending time is incorrect"
+  )
 })
