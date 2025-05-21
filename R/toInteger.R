@@ -72,7 +72,7 @@
 toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
   if (!inherits(x, "gsDesign")) stop("must have class gsDesign as input")
   if (!(isInteger(ratio) && ratio >= 0)){
-    message("toInteger: rounding done to nearest integer since ratio was not specified as postive integer .")
+    message("toInteger: rounding done to nearest integer since ratio was not specified as positive integer.")
     ratio <- 0
   }
   counts <- round(x$n.I) # Round counts (event counts for survival; otherwise sample size)
@@ -124,7 +124,7 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     # Following is adapted from gsSurv() to construct gsSurv object
     xx <- nSurv(
       lambdaC = x$lambdaC, hr = x$hr, hr0 = x$hr0, eta = x$etaC, etaE = x$etaE,
-      gamma = x$gamma * inflateN, R = x$R, S = x$S, T = x$T, minfup = x$minfup, ratio = x$ratio,
+      gamma = x$gamma * inflateN, R = x$R, S = x$S, T = max(x$T), minfup = x$minfup, ratio = x$ratio,
       alpha = x$alpha, beta = NULL, sided = 1, tol = x$tol
     )
     xx$tol <- x$tol
