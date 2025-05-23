@@ -1,0 +1,181 @@
+---
+title: "Binomial two arm trial design and analysis: risk difference"
+output: rmarkdown::html_vignette
+bibliography: "gsDesign.bib"
+vignette: >
+  %\VignetteIndexEntry{Binomial risk difference design and analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "svg",
+  fig.ext = "svg",
+  fig.width = 7.2916667,
+  fig.asp = 0.618,
+  fig.align = "center",
+  out.width = "80%"
+)
+```
+
+## Overview and notation
+
+```{r, message = FALSE, warning = FALSE}
+library(gsDesign)
+```
+
+
+This vignette provides an overview of the binomial two arm trial design and analysis.
+We consider designs for superiority, non-inferiority, and super-superiority trials.
+These can reflect binary endpoints measuring successful outcomes (e.g., response) or unsuccessful outcomes (e.g., failure).
+We focus here on risk-difference and fixed (not group sequential) designs to limit the scope. 
+Both risk ratio and odds ratio are also available in the package as outlined in @miettinen1985.
+
+The basic method for computing the fixed sample size that is the basis for group sequential design sizes for superiority was developed by @FTU, but is applied here without the continuity correction as recommended by @gordonwatson. This method was extended to noninferiority super-superiority trials by @farringtonmanning.
+
+The binomial two arm trial design and analysis is based on the following notation:
+
+- $p_E=$ probability of an event in the experimental group (`pE` in code)
+- $p_C=$ probability of an event in the control group (`pC` in code)
+- $\delta_0=$ null hypothesis value of the difference between `pE` and `pC` (`delta0` in code)
+- $\alpha=$ one-sided Type I error (`alpha` in code)
+- $\beta=$ Type II error (`beta` in code)
+- $n=$ sample size in combined groups (`n` in code)
+- $r$ sample size ratio of group (`ratio` in code); further discussion below
+
+## Sample size
+
+Rate arguments in `nbinomial()` are `p1` and `p2`. 
+The difference under the null hypothesis is `p1 - p2 = delta0`.
+`ratio` is the sample size ratio of group 2 divided by group 1.
+The sample size is computed as the total number of events in both groups to achieve power `1 - beta` at a 1-sided level of `alpha`.
+
+Success endpoint:
+
+```{r}
+pE <- .2
+pC <- .1
+ceiling(nBinomial(p1 = pE, p2 = pC, alpha = 0.025, beta = 0.15, 
+                  ratio = 2, delta0 = c(-0.02, 0, 0.02)))
+```
+
+Failure endpoint:
+
+```{r}
+ceiling(nBinomial(p1 = pC, p2 = pE, alpha = 0.025, beta = 0.15, 
+                  ratio = 0.5, delta0 = c(0.02, 0, -0.02)))
+```
+
+Thus, for a risk difference it does not matter which rate is given by `p1` and `p2`.
+For these examples, the smaller sample size is for a non-inferiority design with an allowable non-inferiority margin of 0.02.
+The intermediate sample size is required to demonstrate superiority.
+The largest sample size is required to demonstrate super-superiority with a benefit of more than 0.02.
+You can see how `ratio` and `delta0` are used differently for success or failure rates.
+
+## Testing and confidence intervals
+
+The `testBinomial()` function computes Z-values for a binomial tests of the null hypothesis that the difference between the two groups is equal to `delta0` (the null hypothesis value); the default is to use the rate difference over its estimated standard error.
+When there are no events in either treatment group, the convention is to return a value Z-value of 0.
+`ciBinomial()` uses the same asymptotic normal variance to compute a confidence interval.
+The default method for both the test and CI is from @farringtonmanning. 
+The confidence interval is the inverse of the testing method in `testBinomial()`.
+For both `testBinomial()` and `ciBinomial()`, the `adj = 1` specifies the @miettinen1985 method which multiplies the 
+variance estimate of the rate difference by `n / (n - 1)` .
+
+We provide an example applying both methods to the same data with 20 / 30 and 10 / 30 successes in the two groups.
+
+```{r}
+fm <- testBinomial(x1 = 20, n1 = 30, x2 = 10, n2 = 30)
+mn <- testBinomial(x1 = 20, n1 = 30, x2 = 10, n2 = 30, adj = 1)
+ci <- ciBinomial(x1 = 20, n1 = 30, x2 = 10, n2 = 30)
+cimn <- ciBinomial(x1 = 20, n1 = 30, x2 = 10, n2 = 30, adj = 1)
+# Make a data frame with Method, rate difference, Z-value, CI
+library(dplyr)
+df <- data.frame(
+  Method = c("Farrington-Manning", "Miettinen-Nurminen"),
+  Rate1 = c(20 / 30, 20 / 30),
+  Rate2 = c(10 / 30, 10 / 30),
+  RateDiff = rep(20 / 30 - 10 / 30, 2),
+  Z = c(fm, mn),
+  CI = c(paste0("[", round(ci[1], 3), ", ", round(ci[2], 3), "]"), 
+         paste0("[", round(cimn[1], 3), ", ", round(cimn[2], 3), "]"))
+)
+library(gt)
+df |> gt() |> fmt_number(
+  columns = c("Rate1", "Rate2", "RateDiff", "Z"),
+  decimals = 3
+) |> fmt_markdown(
+  columns = c("Method", "CI")
+) |> cols_label(
+  Method = "Method",
+  Rate1 = "Rate in Group 1",
+  Rate2 = "Rate in Group 2",
+  RateDiff = "Rate Difference",
+  Z = "Z-value"
+) |> tab_header(title = "Binomial Two Sample Test and Confidence Interval")
+```
+
+We see that the Farrington-Manning method has a larger Z-value and tighter confidence interval for the rate difference than the Miettinen-Nurminen method.
+We will examine Type I error and power for the two methods using simulation below.
+
+
+## Simulation
+
+The function `simBinomial()` has the same arguments as `testBinomial()` but simulates the binomial distribution to compute the Z-value; `nsim` specifies the number of simulations and is the sole additional argument.
+
+```{r}
+x <- simBinomial(p1=.15, p2 = .15, n1 = 35, n2 = 35, nsim = 1000000)
+xalpha <- quantile(x, .975)
+xalpha
+```
+
+Using the cutoff `x > xalpha` controls Type I error at 0.025.
+Since the distribution of Z-values is discrete, `x >= xalpha` does not control Type I error at 0.025.
+
+```{r}
+c(mean(x > xalpha), mean(x >= xalpha))
+```
+
+To get power, we simulate for a given rate difference and use the cutoff from the Type I error simulation.
+For this particular instance, power is low.
+
+```{r}
+xx <- simBinomial(p1 = .2, p2 = .1, n1 = 35, n2 = 35, nsim = 1000000)
+mean(xx > xalpha)
+```
+
+For 50 observations per group, simulation and asymptotic cutoffs are nearly identical.
+
+```{r}
+x <- simBinomial(p1 = .15, p2 = .15, n1 = 50, n2 = 50, nsim = 1000000)
+c(quantile(x, .975), qnorm(.975))
+```
+
+Thus power can be computed with either.
+First, we look at the asymptotic power.
+
+```{r}
+nBinomial(p1 = .2, p2 = .1, n = 100)
+```
+
+Next, we use the cutoff from the simulation with the same average rate as the null hypothesis rate for both groups.
+The asymptotic power calculation is quite close to the simulation approximation with 1 million replications ($2 \times se <= 0.0005$.
+The `simBinomial()` function is fast enough due to not simulating individual observations to make the simulation approximation quite accurate and fast.
+
+```{r}
+xx <- simBinomial(p1 = .2, p2 = .1, n1 = 50, n2 = 50, nsim = 1000000)
+mean(xx > quantile(x, .975))
+```
+
+## Power
+
+
+
+## Group sequential design
+
+
+
+## References
