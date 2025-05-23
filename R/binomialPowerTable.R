@@ -33,19 +33,7 @@ binomialPowerTable <- function(
     )
     return(pC_grid)
   }else{
-    # Loop through each row in the data frame and compute the probability of non-inferiority
-    pC_grid$Power <- foreach(i = 1:nrow(pC_grid), .combine = "c") %do% {
-      z <- simBinomial(p1 = pE, p2 = pC, delta0 = delta0, n = n, nsim = nsim, 
-                       scale = scale, ratio = ratio, sided = 1)
-      # Compute proportion of positive tests
-      if(failureEndpoint) {
-        mean(z >= qnorm(1 - alpha))
-      }else{
-        mean(-z <= qnorm(alpha))
-      }
-    }
-    return(pC_grid)
-  }
+    simPower()
 }
 
 
@@ -89,18 +77,12 @@ simPower <- function(
       pC <- longTable$pC[i]
       pE <- longTable$pE[i]
       if(failureEndpoint) {
-        #       gsDesign::nBinomial(p1 = pE, p2 = pC, delta0 = delta0, 
-        #                           n = n, alpha = alpha, scale = scale, 
-        #                           sided = 1)
         sim <- gsDesign::simBinomial(
           n1 = nE, n2 = nC, p1 = pE, p2 = pC,
           delta0 = delta0, nsim = nsim,
           scale = scale)
         retval <- mean(sim >= qnorm(.975))
       }else{
-        #       gsDesign::nBinomial(p1 = pC, p2 = pE, delta0 = delta0, 
-        #                           n = n, alpha = alpha, scale = scale, 
-        #                           sided = 1)
         sim <- gsDesign::simBinomial(
           n1 = nC, n2 = nE, p1 = pC, p2 = pE,
           delta0 = delta0, nsim = nsim,
@@ -110,5 +92,5 @@ simPower <- function(
     }
   return(longTable)
 }
-
+}
 
