@@ -21,3 +21,5 @@ vignettes/*.R
 src/symbols.rds
 # Temporary directories
 tryANewOne/
+/doc/
+/Meta/

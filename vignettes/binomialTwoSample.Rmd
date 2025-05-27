@@ -34,7 +34,9 @@ These can reflect binary endpoints measuring successful outcomes (e.g., response
 We focus here on risk-difference and fixed (not group sequential) designs to limit the scope. 
 Both risk ratio and odds ratio are also available in the package as outlined in @miettinen1985.
 
-The basic method for computing the fixed sample size that is the basis for group sequential design sizes for superiority was developed by @FTU, but is applied here without the continuity correction as recommended by @gordonwatson. This method was extended to noninferiority super-superiority trials by @farringtonmanning.
+The basic method for computing the fixed sample size that is the basis for group sequential design sizes for superiority 
+was developed by @FTU, but is applied here without the continuity correction as recommended by @gordonwatson. 
+This method was extended to noninferiority super-superiority trials by @farringtonmanning.
 
 The binomial two arm trial design and analysis is based on the following notation:
 
@@ -42,18 +44,174 @@ The binomial two arm trial design and analysis is based on the following notatio
 - $p_C=$ probability of an event in the control group (`pC` in code)
 - $\delta_0=$ null hypothesis value of the difference between `pE` and `pC` (`delta0` in code)
 - $\alpha=$ one-sided Type I error (`alpha` in code)
-- $\beta=$ Type II error (`beta` in code)
+- $\beta=$ Type II error (`beta` in code); 1 - power
 - $n=$ sample size in combined groups (`n` in code)
-- $r$ sample size ratio of group (`ratio` in code); further discussion below
+- $r$ sample size ratio of group 1 relative to group 2 (`ratio` in code); further discussion below
 
 ## Sample size
 
-Rate arguments in `nbinomial()` are `p1` and `p2`. 
-The difference under the null hypothesis is `p1 - p2 = delta0`.
-`ratio` is the sample size ratio of group 2 divided by group 1.
-The sample size is computed as the total number of events in both groups to achieve power `1 - beta` at a 1-sided level of `alpha`.
+The rate arguments in `nBinomial()` are `p1` and `p2`. 
+`p1` is the rate in group 1 and `p2` is the rate in group 2.
+For a simple example, we can compute the sample size for a superiority design with a 2:1 sample size ratio
+where the experimental and control groups have assumed success rates of 0.2 and 0.1, respectively.
+One-sided Type I error is 0.025 and Type II error is 0.15 (power is 85%).
 
-Success endpoint:
+```{r}
+nBinomial(p1 = .2, p2 = .1, ratio = 2, alpha = 0.025, beta = 0.15) |> ceiling()
+```
+
+This gives the same result as:
+
+```{r}
+nBinomial(p1 = .1, p2 = .2, ratio = 0.5, alpha = 0.025, beta = 0.15) |> ceiling()
+```
+
+The above results apply as well to a failure endpoint, but now 0.2 would be the control group rate and 0.1 would be the experimental group rate.
+Results can also be computed using the risk-ratio and odds-ratio methods of @miettinen1985.
+We see the results are the same for the risk-ratio method as the risk-difference method from above (default `scale = "Difference"`).
+For the odds-ratio method, we see the sample size is larger in this case.
+We will see in simulations below that this default risk-difference and the equivalent risk-ratio methods are likely preferred.
+
+```{r}
+nBinomial(p1 = .2, p2 = .1, ratio = 2, alpha = 0.025, beta = 0.15, scale = "RR") |> ceiling()
+nBinomial(p1 = .2, p2 = .1, ratio = 2, alpha = 0.025, beta = 0.15, scale = "OR") |> ceiling()
+```
+
+## Testing and confidence intervals
+
+Next we assume we have results from a trial with 20 / 30 and 10 / 30 successes in the two groups.
+The `testBinomial()` function computes the Z-value for a binomial test.
+
+```{r}
+testBinomial(x1 = 20, n1 = 30, x2 = 10, n2 = 30)
+```
+
+As opposed to `nBinomial()`, it makes a difference how treatment groups are assigned.
+For example, if we have 20 / 30 and 10 / 30 successes in the two groups, we can compute the Z-value for a binomial test of the null hypothesis that the difference between the two groups is equal to 0.
+
+```{r}
+testBinomial(x1 = 10, n1 = 30, x2 = 20, n2 = 30)
+```
+
+We compute a one-sided asymptotic p-value using the default method of @farringtonmanning.
+With `adj = 1`, we use the @miettinen1985 method which multiplies the 
+variance estimate of the rate difference by `n / (n - 1)` (continuity correction).
+Generally, not using the continuity correction is preferred (@gordonwatson).
+The `adj` argument is available in `testBinomial()`, `ciBinomial()` and `simBinomial()`,
+but is not used in `nBinomial()`.
+
+```{r}
+testBinomial(x1 = 10, n1 = 30, x2 = 20, n2 = 30) |> pnorm(lower.tail = TRUE)
+testBinomial(x1 = 10, n1 = 30, x2 = 20, n2 = 30, adj = 1) |> pnorm(lower.tail = TRUE)
+```
+
+We can compute a confidence interval for the rate difference using the `ciBinomial()` function.
+
+```{r}
+ciBinomial(x1 = 10, n1 = 30, x2 = 20, n2 = 30)
+```
+
+Again, how treatment groups are assigned makes a difference.
+
+```{r}
+ciBinomial(x1 = 20, n1 = 30, x2 = 10, n2 = 30)
+```
+
+
+For the risk-ratio method, we have
+
+```{r}
+ciBinomial(x1 = 10, n1 = 30, x2 = 20, n2 = 30, scale = "RR")
+```
+while using the odds-ratio method, we have
+
+```{r}
+ciBinomial(x1 = 10, n1 = 30, x2 = 20, n2 = 30, scale = "OR")
+```
+
+## Simulation
+
+The `simBinomial()` function simulates the binomial distribution to compute the Z-value.
+It does not simulate individual observations, but rather simulates the binomial distribution to compute a Z-value.
+`simBinomial()` has the same arguments as `testBinomial()` but also includes the number of simulated trials in the
+argument `nsim`.
+A vector of Z-values is returned.
+
+```{r}
+simBinomial(p1 = .2, p2 = .1, n1 = 30, n2 = 30, nsim = 10)
+```
+
+To see if the asymptotic method controls Type I error at the desired level, we can compute the Type I error rate from the simulated Z-values.
+
+```{r}
+z <- simBinomial(p1 = .15, p2 = .15, n1 = 30, n2 = 30, nsim = 1000000) 
+mean(z > qnorm(.975)) # Type I error rate
+```
+
+We see that the Type I error rate is close slightly inflated.
+To get an exact Type I error rate, we can compute the appropriate quantile 
+of the simulated Z-values.
+We say exact, but the degree of exactness depends on the number of simulations 
+which is 1 million in this case.
+Since the `simBinomial()` function is fast enough, 
+we can use a large number of simulations.
+
+```{r}
+zcut <- quantile(z, .975)
+pnorm(zcut, lower.tail = FALSE)
+```
+
+Now we examine power with the asymptotic and exact cutoffs.
+
+```{r}
+z <- simBinomial(p1 = .2, p2 = .1, n1 = 30, n2 = 30, nsim = 1000000) 
+mean(z > qnorm(.975)) # Power with asymptotic cutoff
+mean(z > zcut) # Power with exact cutoff
+```
+
+The `binomialPowerTable()` function computes power for a given sample size and 
+treatment effect.
+Both the asymptotic and simulation methods are available.
+The simulation method with a large simulation size is an accurate exact method.
+Thus, `binomialPowerTable()` provides a shortcut for the exact method power calculation.
+
+```{r}
+binomialPowerTable(pC = seq(0.1, 0.2, 0.02), delta = 0, delta0 = 0, n = 70,
+  ratio = 1, alpha = 0.025)
+```
+
+
+We see that the exact Type I error rate is 0.025.
+
+
+
+
+We have `p1 = p2 + delta0` under the null hypothesis and `p1 = p2 + delta` under the 
+alternative hypothesis where `delta > delta0` is the treatment effect.
+When we wish to compute the sample size (default when Type 2 error `beta` is provided and `n = NULL`), 
+we cannot have `p1 = p2 + delta0` because the sample size would be infinite.
+However, we can compute Type I error at the desired level by setting `p1 = p2 + delta0` when `n` is not `NULL`.
+`ratio` is the sample size ratio of group 2 divided by group 1.
+The sample size is computed as the total number of events in 
+both groups to achieve power `1 - beta` at a 
+1-sided level of `alpha`.
+
+When the outcome represents success, we set `p1 = pE` and `p2 = pC`.
+
+- For a superiority design, we wish to show that $p_E > p_C$; i.e., $\delta_0 = 0.$
+- For a non-inferiority design, we wish to show, for example, that $p_E \geq p_C - 0.02$; i.e., $\delta_0 = -0.02.$
+- For a super-superiority design, we wish to show, for example, that $p_E > p_C + 0.02.$  $\delta_0 = 0.02.$
+
+- 'delta0 = 0' is used for a superiority design where we wish to show 
+that $p_E > p_C.$ For a failure endpoint, we wish to show that 
+$p_C > p_E.$
+- 'delta0 = -0.02 < 0' is used for a non-inferiority design where we wish to show 
+that $p_E \leq p_C + 0.02.$ For a failure endpoint, we wish to show that 
+$p_C \leq p_E - 0.02.$
+- 'delta0 = 0.02' is used for a super-superiority design where we wish to show 
+that $p_E > p_C + 0.02.$ 
+For a failure endpoint, we wish to show that  $p_C < p_E - 0.02.$
+
 
 ```{r}
 pE <- .2
@@ -62,7 +220,7 @@ ceiling(nBinomial(p1 = pE, p2 = pC, alpha = 0.025, beta = 0.15,
                   ratio = 2, delta0 = c(-0.02, 0, 0.02)))
 ```
 
-Failure endpoint:
+When the outcome represents failure, we set `p1 = pC` and `p2 = pE`.
 
 ```{r}
 ceiling(nBinomial(p1 = pC, p2 = pE, alpha = 0.025, beta = 0.15, 
@@ -124,7 +282,12 @@ We will examine Type I error and power for the two methods using simulation belo
 
 ## Simulation
 
-The function `simBinomial()` has the same arguments as `testBinomial()` but simulates the binomial distribution to compute the Z-value; `nsim` specifies the number of simulations and is the sole additional argument.
+The function `simBinomial()` has the same arguments as `testBinomial()` but simulates the binomial distribution to compute the Z-value; 
+`nsim` specifies the number of simulations and is the sole additional argument.
+With 1 million simulations, the simulation standard error for an underlying Type I error rate of 0.025 is 0.000156 
+and the 95% confidence interval if a Type I error is approximated as 0.025 is 0.025 +/- 1.96 * SE = 0.025 +/- 0.000306.
+For an exact test, we can find a cutoff to control Type I error at 0.025.
+We see that the cutoff for this case is 1.99, greater than the 1.96 cutoff from the normal approximation.
 
 ```{r}
 x <- simBinomial(p1=.15, p2 = .15, n1 = 35, n2 = 35, nsim = 1000000)
@@ -133,7 +296,7 @@ xalpha
 ```
 
 Using the cutoff `x > xalpha` controls Type I error at 0.025.
-Since the distribution of Z-values is discrete, `x >= xalpha` does not control Type I error at 0.025.
+Since the distribution of Z-values is discrete, `x >= xalpha` does not control Type I error at exactly 0.025.
 
 ```{r}
 c(mean(x > xalpha), mean(x >= xalpha))
@@ -170,12 +333,48 @@ xx <- simBinomial(p1 = .2, p2 = .1, n1 = 50, n2 = 50, nsim = 1000000)
 mean(xx > quantile(x, .975))
 ```
 
-## Power
+## Power tables and power curves
 
+The `binomialPowerTable()` function computes power for a range of control group response rates and treatment effects.
+Here we compute power for a range of control group response rates and treatment effects for a trial with 70 patients per group.
+We use the `simulation = TRUE` argument to compute power through simulation.
+The `exact = TRUE` argument is used to compute exact power values.
+The `nsim` argument is used to specify the number of simulations to run.
 
+```{r}
+power_table <- binomialPowerTable(
+  pC = c(0.8, 0.9),
+  delta = seq(-0.05, 0.05, 0.025),
+  n = 70
+)
+```
 
-## Group sequential design
+We can plot the power curve for the control group response rate of 0.8 and the treatment effect of 0.025.
 
+```{r}
+library(ggplot2)
+ggplot(power_table, aes(x = delta, y = Power, color = as.factor(pC))) +
+  geom_line() +
+  labs(x = "Treatment Effect", y = "Power", color = "Control Group Response Rate")
+```
 
+A wide format may be more useful for printing a power table.
+
+```{r}
+library(tidyr)
+library(gt)
+power_table |> select(-pE)|> pivot_wider(
+  names_from = delta,
+  values_from = Power
+) |> gt() |> fmt_number(
+  columns = -pC,
+  decimals = 3
+) |> cols_label(
+  pC = "Control rate"
+) |> tab_header(title = "Power Table") |> tab_spanner(
+  label = "Treatment effect (delta = pC - pE)",
+  columns = -pC
+)
+```
 
 ## References
