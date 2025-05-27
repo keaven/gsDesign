@@ -10,3 +10,5 @@
 ^revdep$
 tests/benchmarks
 tests/testthat/_snaps$
+^doc$
+^Meta$

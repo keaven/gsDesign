@@ -99,18 +99,26 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
 #' @export
 #' @importFrom stats qnorm pnorm
 # nBinomial function [sinew] ----
-nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, sided = 1, outtype = 1, scale = "Difference", n = NULL) {
-  checkVector(p1, "numeric", c(0, 1), c(FALSE, FALSE))
+nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
+                      sided = 1, outtype = 1, scale = "Difference", n = NULL) {
+  
+  # Check for out-of-range values of p1 and p2
+  if (any(p1 < 0 | p1 > 1)) {
+    warning("p1 must be between 0 and 1")
+    return(NA)
+  }
+  if (any(p2 < 0 | p2 > 1)) {
+    warning("p2 must be between 0 and 1")
+    return(NA)
+  }
+  
   checkVector(p2, "numeric", c(0, 1), c(FALSE, FALSE))
   checkScalar(sided, "integer", c(1, 2))
   checkScalar(alpha, "numeric", c(0, 1 / sided), c(FALSE, FALSE))
-  checkVector(beta, "numeric", c(0, 1 - alpha / sided), c(
-    FALSE,
-    FALSE
-  ))
+  checkVector(beta, "numeric", c(0, 1 - alpha / sided), c(FALSE, FALSE))
   checkVector(delta0, "numeric")
   checkVector(ratio, "numeric", c(0, Inf), c(FALSE, FALSE))
-  checkScalar(outtype, "integer", c(1, 3))
+  checkScalar(outtype, "integer", c(1, 3), c(TRUE, TRUE))
   checkScalar(scale, "character")
   if (!is.null(n)) {
     checkVector(n, "numeric")
@@ -119,12 +127,19 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
     "difference", "rr",
     "or", "lnor"
   ))
+  # Initialize result vector with NA
+  len <- max(sapply(list(p1, p2, beta, delta0, ratio), length))
+  result <- rep(NA, len)  
+
+  # Continue with existing code for valid inputs
+  scale <- match.arg(tolower(scale), c("difference", "rr", "or", "lnor"))
   if (is.null(n)) {
     checkLengths(p1, p2, beta, delta0, ratio, allowSingle = TRUE)
+    len <- max(sapply(list(p1, p2, beta, delta0, ratio), length))
   } else {
     checkLengths(n, p1, p2, delta0, ratio, allowSingle = TRUE)
+    len <- max(sapply(list(n, p1, p2, delta0, ratio), length))
   }
-  len <- max(sapply(list(p1, p2, beta, delta0, ratio), length))
   if (len > 1) {
     if (length(p1) == 1) {
       p1 <- rep(p1, len)
@@ -145,18 +160,10 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
       ratio <- rep(ratio, len)
     }
   }
-  if (max(delta0 == 0) > 0 && max(p1[delta0 == 0] == p2[delta0 ==
-    0]) > 0) {
-    stop("p1 may not equal p2 when delta0 is zero")
-  }
   z.beta <- stats::qnorm(1 - beta)
-  sided[sided != 2] <- 1
   z.alpha <- stats::qnorm(1 - alpha / sided)
   d0 <- (delta0 == 0)
   if (scale == "difference") {
-    if (min(abs(p1 - p2 - delta0)) < 1e-11) {
-      stop("p1 - p2 may not equal delta0 when scale is \"Difference\"")
-    }
     a <- 1 + ratio
     b <- -(a + p1 + ratio * p2 + delta0 * (ratio + 2))
     c <- delta0^2 + delta0 * (2 * p1 + a) + p1 + ratio *
@@ -174,7 +181,11 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
     sigma1 <- sqrt((p1 * (1 - p1) + p2 * (1 - p2) / ratio) *
       (ratio + 1))
     if (is.null(n)) {
-      n <- ((z.alpha * sigma0 + z.beta * sigma1) / (p1 - p2 - delta0))^2
+      # for cases with p1 - p2 - delta0 < 1e-11, we return NA
+      # otherwise, we compute the sample size
+      OK <- (abs(p1 - p2 - delta0) >= 1e-11)
+      n[OK] <-
+         ((z.alpha[OK] * sigma0[OK] + z.beta[OK] * sigma1[OK]) / (p1[OK] - p2[OK] - delta0[OK]))^2
       if (outtype == 2) {
         return(data.frame(n1 = n / (ratio + 1), n2 = ratio *
           n / (ratio + 1)))
@@ -215,9 +226,6 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
   }
   else if (scale == "rr") {
     RR <- exp(delta0)
-    if (min(abs(p1 / p2 - RR)) < 1e-07) {
-      stop("p1/p2 may not equal exp(delta0) when scale=\"RR\"")
-    }
     a <- (1 + ratio)
     b <- -(RR * (1 + ratio * p2) + ratio + p1)
     c <- RR * (p1 + ratio * p2)
@@ -230,7 +238,10 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
     sigma1 <- sqrt((ratio + 1) * (p1 * (1 - p1) + RR^2 *
       p2 * (1 - p2) / ratio))
     if (is.null(n)) {
-      n <- ((z.alpha * sigma0 + z.beta * sigma1) / (p1 - p2 * RR))^2
+      n <- rep(NA, len)
+      OK <- (abs(p1 - p2 * RR - delta0) > 1e-11)
+      n[OK] <- ((z.alpha[OK] * sigma0[OK] + z.beta[OK] * sigma1[OK]) / 
+               (p1[OK] - p2[OK] * RR[OK]))^2
       if (outtype == 2) {
         return(data.frame(
           n1 = n / (ratio + 1),
@@ -286,7 +297,10 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
     sigma0 <- sqrt((ratio + 1) * (1 / p10 / (1 - p10) + 1 / p20 / (1 - p20) / ratio))
     sigma1 <- sqrt((ratio + 1) * (1 / p1 / (1 - p1) + 1 / p2 / (1 - p2) / ratio))
     if (is.null(n)) {
-      n <- ((z.alpha * sigma0 + z.beta * sigma1) / log(OR / p2 * (1 - p2) * p1 / (1 - p1)))^2
+      n <- rep(NA, len)
+      OK <- (abs(p1 / (1 - p1) / p2 * (1 - p2) * OR - 1) > 1e-07)
+      n[OK] <- ((z.alpha[OK] * sigma0[OK] + z.beta[OK] * sigma1[OK]) / 
+               log(OR[OK] / p2[OK] * (1 - p2[OK]) * p1[OK] / (1 - p1[OK])))^2
       if (outtype == 2) {
         return(data.frame(n1 = n / (ratio + 1), n2 = ratio *
           n / (ratio + 1)))
