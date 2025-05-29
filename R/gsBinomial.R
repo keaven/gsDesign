@@ -30,7 +30,7 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
     else {
       lower <- stats::uniroot(bpdiff,
         interval = c(-.9999, delta), x1 = x1, x2 = x2,
-        n1 = n1, n2 = n2, adj = adj, alpha = alpha
+        n1 = n1, n2 = n2, adj = adj, alpha = alpha, tol = 1e-10
       )$root
     }
 
@@ -45,7 +45,7 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
       upper <- stats::uniroot(bpdiff,
         interval = c(delta, .9999), lower.tail = TRUE,
         x1 = x1, x2 = x2, n1 = n1, n2 = n2, adj = adj,
-        alpha = alpha
+        alpha = alpha, tol = 1e-10
       )$root
     }
   }
@@ -55,7 +55,7 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
     } else {
       lower <- stats::uniroot(bpdiff,
         interval = c(-20, 20), x1 = x1, x2 = x2,
-        n1 = n1, n2 = n2, adj = adj, scale = "RR", alpha = alpha
+        n1 = n1, n2 = n2, adj = adj, scale = "RR", alpha = alpha, tol = 1e-10
       )$root
       lower <- exp(lower)
     }
@@ -65,7 +65,7 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
       upper <- stats::uniroot(bpdiff,
         interval = c(-20, 20), lower.tail = TRUE,
         x1 = x1, x2 = x2, n1 = n1, n2 = n2, adj = adj, scale = "RR",
-        alpha = alpha
+        alpha = alpha, tol = 1e-10
       )$root
       upper <- exp(upper)
     }
@@ -76,7 +76,7 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
     } else {
       lower <- stats::uniroot(bpdiff,
         interval = c(-10, 10), x1 = x1, x2 = x2,
-        n1 = n1, n2 = n2, adj = adj, scale = scale, alpha = alpha
+        n1 = n1, n2 = n2, adj = adj, scale = scale, alpha = alpha, tol = 1e-10
       )$root
       lower <- exp(lower)
     }
@@ -86,7 +86,7 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
       upper <- stats::uniroot(bpdiff,
         interval = c(-10, 10), lower.tail = TRUE,
         x1 = x1, x2 = x2, n1 = n1, n2 = n2, adj = adj, scale = scale,
-        alpha = alpha
+        alpha = alpha, tol = 1e-10
       )$root
       upper <- exp(upper)
     }
