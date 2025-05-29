@@ -2,7 +2,7 @@
 #' 
 #' @description
 #' Creates a power table for binomial tests with various control group response rates and treatment effects.
-#' The function can compute power either analytically or through simulation.
+#' The function can compute power and Type I error either analytically or through simulation.
 #' With large simulations, the function is still fast and can produces exact power values to within
 #' simulation error.
 #' 
@@ -70,14 +70,16 @@ binomialPowerTable <- function(
     scale = "Difference",
     failureEndpoint = TRUE,
     simulation = FALSE,
-    exact = FALSE,
-    nsim = 1000000) {
+    nsim = 1000000,  
+    adj = 0,
+    chisq = 0
+) {
   # Create a grid of all combinations of pC and delta
   pC_grid <- expand.grid(pC = pC, delta = delta)
   # Compute the experimental group response rate
-  pC_grid <- pC_grid |>
-    mutate(pE = pC + delta) |>
-    filter(pE < 1) |> # Filter out experimental rate >= 1
+  pC_grid <- pC_grid %>%
+    mutate(pE = pC + delta) %>%
+    filter(pE < 1) %>% # Filter out experimental rate >= 1
     select(pC, delta, pE)
 
   # Compute the probability of non-inferiority using the nBinomial function
@@ -120,7 +122,7 @@ simPower <- function(
   nE <- n - nC
 
   # Initialize vector for simulation results
-  simPower <- numeric(nrow(longTable))
+  Power <- numeric(nrow(longTable))
 
   # Loop through each row in the table
   for (i in 1:nrow(longTable)) {
@@ -132,19 +134,19 @@ simPower <- function(
         delta0 = delta0, nsim = nsim,
         scale = scale
       )
-      simPower[i] <- mean(sim >= qnorm(.975))
+      Power[i] <- mean(sim >= qnorm(1 - alpha))
     } else {
       sim <- gsDesign::simBinomial(
         n1 = nC, n2 = nE, p1 = pC, p2 = pE,
         delta0 = delta0, nsim = nsim,
         scale = scale
       )
-      simPower[i] <- mean(sim >= qnorm(.975))
+      Power[i] <- mean(sim >= qnorm(1 - alpha))
     }
   }
 
   # Add simulation results to the table
-  longTable$simPower <- simPower
+  longTable$Power <- Power
   return(longTable)
 }
 
