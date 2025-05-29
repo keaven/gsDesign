@@ -3,7 +3,7 @@
 #' @description
 #' Creates a power table for binomial tests with various control group response rates and treatment effects.
 #' The function can compute power and Type I error either analytically or through simulation.
-#' With large simulations, the function is still fast and can produces exact power values to within
+#' With large simulations, the function is still fast and can produce exact power values to within
 #' simulation error.
 #' 
 #' 
@@ -16,22 +16,23 @@
 #' @param scale Scale for the test ("Difference", "RR", or "OR")
 #' @param failureEndpoint Logical indicating if the endpoint is a failure (TRUE) or success (FALSE)
 #' @param simulation Logical indicating whether to use simulation (TRUE) or analytical (FALSE) power calculation
-#' @param exact Logical indicating whether to use exact binomial test
 #' @param nsim Number of simulations to run when simulation=TRUE
+#' @param adj Use continuity correction for the testing (default is 0; only used if simulation=TRUE)
+#' @param chisq Chi-squared value for the test (default is 0; only used if simulation=TRUE)
 #' 
 #' @return A data frame containing:
 #' \itemize{
-#'   \item pC: Control group response rate
+#'   \item pC: Control group response or failure rate
 #'   \item delta: Treatment effect
-#'   \item pE: Experimental group response rate
-#'   \item Power: Power for the test
-#'   \item simPower: Power from simulation (when simulation=TRUE)
+#'   \item pE: Experimental group response or failure rate
+#'   \item Power: Power for the test (asymptotic or simulated)
 #' }
 #' 
 #' @details
-#' The function creates a grid of all combinations of control group response rates and treatment effects.
+#' The function binomialPowerTable() creates a grid of all combinations of control group response rates and treatment effects.
 #' For each combination, it computes the power either analytically using \code{nBinomial} or through
-#' simulation using \code{simBinomial}. When using simulation, the \code{simPower} function is called
+#' simulation using \code{simBinomial}. 
+#' When using simulation, the \code{simPowerBinomial} function (not exported) is called
 #' internally to perform the simulations.
 #' Assuming p is the true probability of a positive test, the simulation standard error is
 #' \deqn{SE = \sqrt{p(1-p)/nsim}}.
@@ -66,7 +67,7 @@ binomialPowerTable <- function(
     n = 70,
     ratio = 1,
     alpha = .025,
-    delta0 = -.2,
+    delta0 = 0,
     scale = "Difference",
     failureEndpoint = TRUE,
     simulation = FALSE,
@@ -104,11 +105,11 @@ binomialPowerTable <- function(
     }, pC_grid$pC, pC_grid$pE, pC_grid$delta)
     return(pC_grid)
   } else {
-    simPower(pC_grid, n, ratio, alpha, delta0, scale, failureEndpoint, nsim)
+    simPowerBinomial(pC_grid, n, ratio, alpha, delta0, scale, failureEndpoint, nsim)
   }
 }
 
-simPower <- function(
+simPowerBinomial <- function(
     longTable,
     n = 70,
     ratio = 1,
