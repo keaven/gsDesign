@@ -1,9 +1,9 @@
 ---
-title: "Binomial two arm trial design and analysis: risk difference"
+title: "Binomial two arm trial design and analysis"
 output: rmarkdown::html_vignette
 bibliography: "gsDesign.bib"
 vignette: >
-  %\VignetteIndexEntry{Binomial risk difference design and analysis}
+  %\VignetteIndexEntry{Binomial two arm trial design and analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -40,10 +40,9 @@ The R packages we use are as follows:
 ```{r, message = FALSE, warning = FALSE}
 library(gsDesign)
 library(ggplot2)
-library(dplyr)
 library(tidyr)
-library(dplyr)
 library(gt)
+library(dplyr)
 ```
 
 ## Sample size
