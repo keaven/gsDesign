@@ -262,8 +262,6 @@ ptab %>% gt() %>%
 
 ## Power table
 
-
-
 The `binomialPowerTable()` function computes power for a given sample size and 
 treatment effect across a range of underlying control event rates (`pC`) and effect sizes (`delta`).
 Both the asymptotic and simulation methods are available.

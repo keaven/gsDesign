@@ -30,6 +30,7 @@
 #' 
 #' @details
 #' The function binomialPowerTable() creates a grid of all combinations of control group response rates and treatment effects.
+#' All out of range values (i.e., where the experimental group response rate is not between 0 and 1) are filtered out.
 #' For each combination, it computes the power either analytically using \code{nBinomial} or through
 #' simulation using \code{simBinomial}. 
 #' When using simulation, the \code{simPowerBinomial} function (not exported) is called
@@ -80,7 +81,7 @@ binomialPowerTable <- function(
   # Compute the experimental group response rate
   pC_grid <- pC_grid %>%
     mutate(pE = pC + delta) %>%
-    filter(pE < 1) %>% # Filter out experimental rate >= 1
+    filter(pE < 1 && pE > 0 && pC < 1 && pC > 0) %>% # Filter out of range values
     select(pC, delta, pE)
 
   # Compute the probability of non-inferiority using the nBinomial function
