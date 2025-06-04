@@ -61,6 +61,7 @@ simulation error.
 }
 \details{
 The function binomialPowerTable() creates a grid of all combinations of control group response rates and treatment effects.
+All out of range values (i.e., where the experimental group response rate is not between 0 and 1) are filtered out.
 For each combination, it computes the power either analytically using \code{nBinomial} or through
 simulation using \code{simBinomial}. 
 When using simulation, the \code{simPowerBinomial} function (not exported) is called
