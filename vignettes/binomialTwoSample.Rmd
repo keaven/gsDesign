@@ -31,11 +31,11 @@ Both risk ratio and odds ratio are also available in the package as outlined in 
 
 The basic method for computing the fixed sample size that is the basis for group sequential design sizes for superiority 
 was developed by @FTU, but is applied here without the continuity correction as recommended by @gordonwatson. 
-This method was extended to noninferiority super-superiority trials by @farringtonmanning.
+This method was extended to non-inferiority and super-superiority trials by @farringtonmanning.
 
 We will see that while asymptotic formulations are generally good approximations, fast simulation methods can provide more accurate results both for Type I error and power.
 
-The R packages we use are as follows:
+The R packages we use are:
 
 ```{r, message = FALSE, warning = FALSE}
 library(gsDesign)
@@ -139,14 +139,9 @@ Again, how treatment groups are assigned makes a difference.
 ciBinomial(x1 = 10, n1 = 30, x2 = 20, n2 = 30)
 ```
 
-Finally, we compute power for the 2 sample sizes we computed previously under the assumption of a 
-control group failure rate of 0.1 and an experimental group failure rate of 0.1.
-With 2:1 randomization (Experimental:Control)
-
-
 ## Non-inferiority and super-superiority
 
-By setting a non-inferiority margin, we can loosen the stringency on what is required for a design compared to a superiority study.
+By setting a non-inferiority margin, we can loosen the stringency on what is required compared to a superiority study.
 The trial need only show the experimental treatment is *close to* as good as control treatment. 
 By setting a super-superiority margin, we can show that the experimental treatment is *better than* the control treatment by at least a specified amount.
 This increases the stringency of the design compared to a superiority study.
@@ -183,11 +178,13 @@ tibble(
 Testing for non-inferiority and super-superiority is equivalent to whether or not the confidence intervals contain the margin `delta0`.
 Since both the superiority and non-inferiority Z-tests exceed the critical value of 1.96, both tests are significant.
 The third test fails to establish super-superiority since the Z-value is less than 1.96.
+Since the confidence interval contains 0.02 but neither 0 nor -0.02, it comes to the same conclusion as all 3 of these tests.
 
 ```{r}
 testBinomial(x1 = 18, n1 = 30, x2 = 10, n2 = 30, delta0 = 0) # superiority
 testBinomial(x1 = 18, n1 = 30, x2 = 10, n2 = 30, delta0 = -0.02) # non-inferiority
 testBinomial(x1 = 18, n1 = 30, x2 = 10, n2 = 30, delta0 = 0.02) # super-superiority
+ciBinomial(x1 = 18, n1 = 30, x2 = 10, n2 = 30) # CI
 ```
 
 
@@ -195,7 +192,7 @@ testBinomial(x1 = 18, n1 = 30, x2 = 10, n2 = 30, delta0 = 0.02) # super-superior
 ## Simulation
 
 The `simBinomial()` function simulates the binomial distribution to compute the Z-value.
-It does not simulate individual observations, but rather simulates the binomial distribution to compute a Z-value.
+It does not simulate individual observations, but rather simulates the binomial distribution.
 `simBinomial()` has the same arguments as `testBinomial()` but also includes the number of simulated trials in the
 argument `nsim`.
 A vector of Z-values is returned.
@@ -295,7 +292,6 @@ binomialPowerTable(pC = seq(0.1, 0.2, 0.02), delta = 0, delta0 = 0, n = 70, fail
 
 Now we look at power for a range of control rates and treatment effects.
 `binomialPowerTable()` uses all combinations of the input control group rate (`pC`) and treatment effect (`delta`).
-Here we transform the output to a wide format before printing.
 We use a nominal `alpha = 0.023` based on the simulations above to control Type I error.
 Initially we base power on the asymptotic approximation.
 
@@ -323,7 +319,7 @@ power_table_simulation <- binomialPowerTable(
 )
 ```
 
-Now we produce a plot comparing these results and see that simulations suggest the asymptotic approximation slightly underestimates power.
+We summarize these results in a plot and see that simulations suggest the asymptotic approximation slightly underestimates power.
 However, for all the `pC` and `delta` combinations evaluated, power is above 90% for all cases.
 
 ```{r}
@@ -340,7 +336,7 @@ ggplot(aes(x = delta, y = Power, color = factor(pC), lty = Method)) +
   # Put y-axis scale on percent scale
   scale_y_continuous(labels = scales::percent_format(accuracy = 1),
                      breaks = seq(.2, .8, by = 0.2)) +
-  coord_cartesian(ylim = c(0.9, 1)) + 
+  coord_cartesian(ylim = c(0.2, .8)) + 
   ggtitle("Power for Binomial Two Arm Trial Design with n = 70")
 ```
 
@@ -368,7 +364,8 @@ power_table_simulation %>%
 
 ## Summary
 
-We have demonstrated asymptotic approximations for sample size and power for 2-arm binomial trial designs.
+We have demonstrated sample size and power calculations for 2-arm binomial trial designs.
+Both asymptotic approximations and exact methods based on large simulations have been used. 
 We focus on the @miettinen1985 risk-difference asymptotic method for testing of differences, but without continuity correction as recommended by @gordonwatson.
 This method generalizes to non-inferiority and super-superiority trials as proposed by @farringtonmanning.
 The risk-ratio and odds-ratio methods are also available.

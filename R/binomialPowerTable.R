@@ -36,7 +36,7 @@
 #' When using simulation, the \code{simPowerBinomial} function (not exported) is called
 #' internally to perform the simulations.
 #' Assuming p is the true probability of a positive test, the simulation standard error is
-#' \deqn{SE = \sqrt{p(1-p)/nsim}}.
+#' \deqn{SE = \sqrt{p(1-p)/nsim}.}
 #' For example, when approximating an underlying Type I error rate of 0.025, the simulation standard error is
 #' 0.000156 with 1000000 simulations and the approximated power 95% confidence interval 
 #' is 0.025 +/- 1.96 * SE = 0.025 +/- 0.000306.
