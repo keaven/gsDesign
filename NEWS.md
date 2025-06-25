@@ -1,3 +1,19 @@
+# gsDesign 3.6.9 (June 2025)
+
+## Documentation
+
+- New vignette `vignette("binomialTwoSample")` provides a practical guide for
+  binomial two-arm trial design and analysis (@keaven, #202). It covers
+  superiority, non-inferiority, and super-superiority designs with both
+  asymptotic and simulation methods. Also includes examples for power,
+  sample size, and confidence interval calculations.
+
+## New features
+
+- New exported function `binomialPowerTable()` generates power tables across
+  ranges of control rates and treatment effects. Supports both analytical
+  calculations and fast simulation for exact results.
+
 # gsDesign 3.6.8 (May 2025)
 
 ## Bug fixes
