@@ -1,46 +1,55 @@
 #' Power Table for Binomial Tests
-#' 
-#' @description
+#'
 #' Creates a power table for binomial tests with various control group response rates and treatment effects.
 #' The function can compute power and Type I error either analytically or through simulation.
 #' With large simulations, the function is still fast and can produce exact power values to within
 #' simulation error.
-#' 
-#' 
-#' @param pC Vector of control group response rates
-#' @param delta Vector of treatment effects (differences in response rates)
-#' @param n Total sample size
-#' @param ratio Ratio of experimental to control sample size
-#' @param alpha Type I error rate
-#' @param delta0 Non-inferiority margin
-#' @param scale Scale for the test ("Difference", "RR", or "OR")
-#' @param failureEndpoint Logical indicating if the endpoint is a failure (TRUE) or success (FALSE)
-#' @param simulation Logical indicating whether to use simulation (TRUE) or analytical (FALSE) power calculation
-#' @param nsim Number of simulations to run when simulation=TRUE
-#' @param adj Use continuity correction for the testing (default is 0; only used if simulation=TRUE)
-#' @param chisq Chi-squared value for the test (default is 0; only used if simulation=TRUE)
-#' 
+#'
+#' @param pC Vector of control group response rates.
+#' @param delta Vector of treatment effects (differences in response rates).
+#' @param n Total sample size.
+#' @param ratio Ratio of experimental to control sample size.
+#' @param alpha Type I error rate.
+#' @param delta0 Non-inferiority margin.
+#' @param scale Scale for the test
+#'   (\code{"Difference"}, \code{"RR"}, or \code{"OR"}).
+#' @param failureEndpoint Logical indicating if the endpoint is a
+#'   failure (\code{TRUE}) or success (\code{FALSE}).
+#' @param simulation Logical indicating whether to use simulation (\code{TRUE})
+#'   or analytical (\code{FALSE}) power calculation.
+#' @param nsim Number of simulations to run when \code{simulation = TRUE}.
+#' @param adj Use continuity correction for the testing (default is 0;
+#'   only used if \code{simulation = TRUE}).
+#' @param chisq Chi-squared value for the test (default is 0;
+#'   only used if \code{simulation = TRUE}).
+#'
 #' @return A data frame containing:
-#' \itemize{
-#'   \item pC: Control group response or failure rate
-#'   \item delta: Treatment effect
-#'   \item pE: Experimental group response or failure rate
-#'   \item Power: Power for the test (asymptotic or simulated)
+#' \describe{
+#'   \item{\code{pC}}{Control group response or failure rate.}
+#'   \item{\code{delta}}{Treatment effect.}
+#'   \item{\code{pE}}{Experimental group response or failure rate.}
+#'   \item{\code{Power}}{Power for the test (asymptotic or simulated).}
 #' }
-#' 
+#'
 #' @details
-#' The function binomialPowerTable() creates a grid of all combinations of control group response rates and treatment effects.
+#' The function \code{binomialPowerTable()} creates a grid of all combinations of control group response rates and treatment effects.
 #' All out of range values (i.e., where the experimental group response rate is not between 0 and 1) are filtered out.
-#' For each combination, it computes the power either analytically using \code{nBinomial} or through
-#' simulation using \code{simBinomial}. 
-#' When using simulation, the \code{simPowerBinomial} function (not exported) is called
+#' For each combination, it computes the power either analytically using \code{nBinomial()} or through
+#' simulation using \code{simBinomial()}.
+#' When using simulation, the \code{simPowerBinomial()} function (not exported) is called
 #' internally to perform the simulations.
-#' Assuming p is the true probability of a positive test, the simulation standard error is
-#' \deqn{SE = \sqrt{p(1-p)/nsim}.}
+#' Assuming \eqn{p} is the true probability of a positive test, the simulation standard error is
+#' \deqn{\text{SE} = \sqrt{p(1 - p) / \text{nsim}}.}
 #' For example, when approximating an underlying Type I error rate of 0.025, the simulation standard error is
-#' 0.000156 with 1000000 simulations and the approximated power 95% confidence interval 
+#' 0.000156 with 1000000 simulations and the approximated power 95% confidence interval
 #' is 0.025 +/- 1.96 * SE = 0.025 +/- 0.000306.
-#' 
+#'
+#' @seealso \code{\link{nBinomial}}, \code{\link{simBinomial}}
+#'
+#' @rdname binomialPowerTable
+#'
+#' @export
+#'
 #' @examples
 #' # Create a power table with analytical power calculation
 #' power_table <- binomialPowerTable(
@@ -48,7 +57,7 @@
 #'   delta = seq(-0.05, 0.05, 0.025),
 #'   n = 70
 #' )
-#' 
+#'
 #' # Create a power table with simulation
 #' power_table_sim <- binomialPowerTable(
 #'   pC = c(0.8, 0.9),
@@ -57,11 +66,6 @@
 #'   simulation = TRUE,
 #'   nsim = 10000
 #' )
-#' 
-#' @seealso \code{\link{nBinomial}}, \code{\link{simBinomial}}
-#' 
-#' @rdname binomialPowerTable
-#' @export
 binomialPowerTable <- function(
     pC = c(.8, .9, .95),
     delta = seq(-.05, .05, .025),
@@ -72,10 +76,9 @@ binomialPowerTable <- function(
     scale = "Difference",
     failureEndpoint = TRUE,
     simulation = FALSE,
-    nsim = 1000000,  
+    nsim = 1000000,
     adj = 0,
-    chisq = 0
-) {
+    chisq = 0) {
   # Create a grid of all combinations of pC and delta
   pC_grid <- expand.grid(pC = pC, delta = delta)
   # Compute the experimental group response rate
@@ -151,4 +154,3 @@ simPowerBinomial <- function(
   longTable$Power <- Power
   return(longTable)
 }
-
