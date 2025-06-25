@@ -36,6 +36,7 @@ reference:
   - testBinomial
   - varBinomial
   - ciBinomial
+  - binomialPowerTable
 - title: Time-to-Event Endpoint Design
   contents:
   - nEvents
@@ -152,4 +153,5 @@ articles:
       - hGraph
       - GraphicalMultiplicity
       - VaccineEfficacy
+      - binomialTwoSample
       - binomialSPRTExample
