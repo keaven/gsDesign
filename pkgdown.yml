@@ -1,8 +1,9 @@
 pandoc: 3.1.11
-pkgdown: 2.1.2
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   binomialSPRTExample: binomialSPRTExample.html
+  binomialTwoSample: binomialTwoSample.html
   ConditionalErrorSpending: ConditionalErrorSpending.html
   ConditionalPowerPlot: ConditionalPowerPlot.html
   GentleIntroductionToGSD: GentleIntroductionToGSD.html
@@ -16,7 +17,7 @@ articles:
   SurvivalOverview: SurvivalOverview.html
   toInteger: toInteger.html
   VaccineEfficacy: VaccineEfficacy.html
-last_built: 2025-05-21T15:14Z
+last_built: 2025-06-25T05:39Z
 urls:
   reference: https://keaven.github.io/gsDesign/reference
   article: https://keaven.github.io/gsDesign/articles
