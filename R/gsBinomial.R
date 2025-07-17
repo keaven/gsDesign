@@ -22,12 +22,10 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
 
     if (delta == -1) {
       lower <- -1
-    }
-    else if (testBinomial(delta0 = -.9999, x1 = x1, x2 = x2, n1 = n1, n2 = n2, adj = adj)
+    } else if (testBinomial(delta0 = -.9999, x1 = x1, x2 = x2, n1 = n1, n2 = n2, adj = adj)
     < stats::qnorm(alpha / 2)) {
       lower <- -1
-    }
-    else {
+    } else {
       lower <- stats::uniroot(bpdiff,
         interval = c(-.9999, delta), x1 = x1, x2 = x2,
         n1 = n1, n2 = n2, adj = adj, alpha = alpha
@@ -36,20 +34,17 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
 
     if (delta == 1) {
       upper <- 1
-    }
-    else if (testBinomial(delta0 = .9999, x1 = x1, x2 = x2, n1 = n1, n2 = n2, adj = adj)
+    } else if (testBinomial(delta0 = .9999, x1 = x1, x2 = x2, n1 = n1, n2 = n2, adj = adj)
     > -stats::qnorm(alpha / 2)) {
       upper <- 1
-    }
-    else {
+    } else {
       upper <- stats::uniroot(bpdiff,
         interval = c(delta, .9999), lower.tail = TRUE,
         x1 = x1, x2 = x2, n1 = n1, n2 = n2, adj = adj,
         alpha = alpha
       )$root
     }
-  }
-  else if (scale == "rr") {
+  } else if (scale == "rr") {
     if (x1 == 0) {
       lower <- 0
     } else {
@@ -69,8 +64,7 @@ ciBinomial <- function(x1, x2, n1, n2, alpha = .05, adj = 0, scale = "Difference
       )$root
       upper <- exp(upper)
     }
-  }
-  else {
+  } else {
     if (x1 == 0 || x2 == n2) {
       lower <- -Inf
     } else {
@@ -178,8 +172,7 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
       if (outtype == 2) {
         return(data.frame(n1 = n / (ratio + 1), n2 = ratio *
           n / (ratio + 1)))
-      }
-      else if (outtype == 3) {
+      } else if (outtype == 3) {
         return(data.frame(
           n = n, n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1), alpha = alpha,
@@ -187,19 +180,16 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
           sigma0 = sigma0, sigma1 = sigma1, p1 = p1,
           p2 = p2, delta0 = delta0, p10 = p10, p20 = p20
         ))
-      }
-      else {
+      } else {
         return(n = n)
       }
-    }
-    else {
+    } else {
       pwr <- stats::pnorm(-(stats::qnorm(1 - alpha / sided) - sqrt(n) *
         ((p1 - p2 - delta0) / sigma0)) * sigma0 / sigma1)
       if (outtype == 2) {
         return(data.frame(n1 = n / (ratio + 1), n2 = ratio *
           n / (ratio + 1), Power = pwr))
-      }
-      else if (outtype == 3) {
+      } else if (outtype == 3) {
         return(data.frame(
           n = n, n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1), alpha = alpha,
@@ -207,13 +197,11 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
           sigma0 = sigma0, sigma1 = sigma1, p1 = p1,
           p2 = p2, delta0 = delta0, p10 = p10, p20 = p20
         ))
-      }
-      else {
+      } else {
         return(Power = pwr)
       }
     }
-  }
-  else if (scale == "rr") {
+  } else if (scale == "rr") {
     RR <- exp(delta0)
     if (min(abs(p1 / p2 - RR)) < 1e-07) {
       stop("p1/p2 may not equal exp(delta0) when scale=\"RR\"")
@@ -236,8 +224,7 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
           n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1)
         ))
-      }
-      else if (outtype == 3) {
+      } else if (outtype == 3) {
         return(data.frame(
           n = n, n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1), alpha = alpha,
@@ -245,19 +232,16 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
           sigma0 = sigma0, sigma1 = sigma1, p1 = p1,
           p2 = p2, delta0 = delta0, p10 = p10, p20 = p20
         ))
-      }
-      else {
+      } else {
         return(n = n)
       }
-    }
-    else {
+    } else {
       pwr <- stats::pnorm(-(stats::qnorm(1 - alpha / sided) - sqrt(n) *
         ((p1 - p2 * RR) / sigma0)) * sigma0 / sigma1)
       if (outtype == 2) {
         return(data.frame(n1 = n / (ratio + 1), n2 = ratio *
           n / (ratio + 1), Power = pwr))
-      }
-      else if (outtype == 3) {
+      } else if (outtype == 3) {
         return(data.frame(
           n = n, n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1), alpha = alpha,
@@ -265,13 +249,11 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
           sigma0 = sigma0, sigma1 = sigma1, p1 = p1,
           p2 = p2, delta0 = delta0, p10 = p10, p20 = p20
         ))
-      }
-      else {
+      } else {
         return(Power = pwr)
       }
     }
-  }
-  else {
+  } else {
     OR <- exp(-delta0)
     if (min(abs(p1 / (1 - p1) / p2 * (1 - p2) * OR - 1)) < 1e-07) {
       stop("p1/(1-p1)/p2*(1-p2) may not equal exp(delta0) when scale=\"OR\"")
@@ -290,8 +272,7 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
       if (outtype == 2) {
         return(data.frame(n1 = n / (ratio + 1), n2 = ratio *
           n / (ratio + 1)))
-      }
-      else if (outtype == 3) {
+      } else if (outtype == 3) {
         return(data.frame(
           n = n, n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1), alpha = alpha,
@@ -299,20 +280,17 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
           sigma0 = sigma0, sigma1 = sigma1, p1 = p1,
           p2 = p2, delta0 = delta0, p10 = p10, p20 = p20
         ))
-      }
-      else {
+      } else {
         return(n = n)
       }
-    }
-    else {
+    } else {
       pwr <- stats::pnorm(-(stats::qnorm(1 - alpha / sided) - sqrt(n) *
         (log(OR / p2 * (1 - p2) * p1 / (1 - p1)) / sigma0)) *
         sigma0 / sigma1)
       if (outtype == 2) {
         return(data.frame(n1 = n / (ratio + 1), n2 = ratio *
           n / (ratio + 1), Power = pwr))
-      }
-      else if (outtype == 3) {
+      } else if (outtype == 3) {
         return(data.frame(
           n = n, n1 = n / (ratio + 1),
           n2 = ratio * n / (ratio + 1), alpha = alpha,
@@ -320,8 +298,7 @@ nBinomial <- function(p1, p2, alpha = 0.025, beta = 0.1, delta0 = 0, ratio = 1, 
           sigma0 = sigma0, sigma1 = sigma1, p1 = p1,
           p2 = p2, delta0 = delta0, p10 = p10, p20 = p20
         ))
-      }
-      else {
+      } else {
         return(Power = pwr)
       }
     }
@@ -464,7 +441,7 @@ testBinomial <- function(x1, x2, n1, n2, delta0 = 0, chisq = 0, adj = 0, scale =
   chisq <- chisq & one
   if (length(z) == 1) z <- z * one
   z[chisq] <- z[chisq]^2 / V[chisq]
-  z[ !chisq] <- z[ !chisq] / sqrt(V[ !chisq])
+  z[!chisq] <- z[!chisq] / sqrt(V[!chisq])
 
   z
 }

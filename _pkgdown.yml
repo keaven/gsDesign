@@ -4,7 +4,7 @@ template:
   bootstrap: 5
   bslib:
     preset: "bootstrap"
-  math-rendering: "katex"
+  math-rendering: "mathjax"
 
 reference:
 - title: Group Sequential Computation
@@ -36,6 +36,7 @@ reference:
   - testBinomial
   - varBinomial
   - ciBinomial
+  - binomialPowerTable
 - title: Time-to-Event Endpoint Design
   contents:
   - nEvents
@@ -152,4 +153,5 @@ articles:
       - hGraph
       - GraphicalMultiplicity
       - VaccineEfficacy
+      - binomialTwoSample
       - binomialSPRTExample

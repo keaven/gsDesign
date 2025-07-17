@@ -1,9 +1,10 @@
 Package: gsDesign
-Version: 3.6.7
+Version: 3.6.9
 Title: Group Sequential Design
 Authors@R: c(
     person("Keaven", "Anderson", email = "keaven_anderson@merck.com", role = c("aut", "cre")),
-    person("Merck & Co., Inc., Rahway, NJ, USA and its affiliates", role = "cph")
+    person("Merck & Co., Inc., Rahway, NJ, USA and its affiliates", role = "cph",
+           comment = c(ROR = "02891sr49"))
     )
 Description: Derives group sequential clinical trial designs and describes
     their properties. Particular focus on time-to-event, binary, and

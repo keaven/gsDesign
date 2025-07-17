@@ -1,3 +1,41 @@
+# gsDesign 3.6.9 (June 2025)
+
+## Documentation
+
+- Added new vignette `vignette("binomialTwoSample")` for binomial two-arm
+  trial design and analysis (@keaven, #202). Covers superiority,
+  non-inferiority, and super-superiority designs using risk-difference methods.
+  Includes sample size calculations, power analysis, and protocol wording with
+  both asymptotic approximations and simulation approaches.
+
+## New features
+
+- New function `binomialPowerTable()` generates power tables across control
+  rates and treatment effects. Supports both analytical calculations and
+  fast simulation for exact results.
+
+# gsDesign 3.6.8 (May 2025)
+
+## Bug fixes
+
+- `gsBoundSummary()` (as updated in gsDesign 3.6.6) did not consider
+  spending time for alternate alpha levels when the `alpha` argument
+  was specified. This issue has been resolved; `lsTime` and `usTime`
+  are now correctly used for updated bounds with these alternate alpha levels
+  (@keaven, #203).
+
+## Testing
+
+- Added independent unit tests for `as_gt()` (@DMuriuki, #196).
+
+## Documentation
+
+- Switched the pkgdown math renderer from KaTeX to MathJaX for improved
+  compatibility, as the MathJaX support was improved in pkgdown 2.1.2
+  (@nanxstats, #200).
+- Added Research Organization Registry (ROR) ID to `DESCRIPTION`
+  (@jdblischak, #201).
+
 # gsDesign 3.6.7 (March 2025)
 
 ## Improvements
