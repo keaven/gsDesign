@@ -1,3 +1,14 @@
+# gsDesign 3.7.0 (August 2025)
+
+## Breaking changes
+
+- `hGraph()` has been formally removed from gsDesign. It was soft-deprecated
+  in gsDesign 3.4.0 and moved to gMCPLite. Use `gMCPLite::hGraph()` instead.
+
+  This change also preemptively fixes an `R CMD check` issue with
+  ggplot2 (>= 4.0.0) that would otherwise require declaring MASS as
+  an explicit dependency (tidyverse/ggplot2#6578).
+
 # gsDesign 3.6.9 (June 2025)
 
 ## Documentation
