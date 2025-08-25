@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.6.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,21 @@
       <small>Source: <a href="https://github.com/keaven/gsDesign/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.7.0" id="gsdesign-370-august-2025">gsDesign 3.7.0 (August 2025)<a class="anchor" aria-label="anchor" href="#gsdesign-370-august-2025"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-3-7-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-3-7-0"></a></h3>
+<ul><li>
+<p><code>hGraph()</code> has been formally removed from gsDesign (<a href="https://github.com/nanxstats" class="external-link">@nanxstats</a>, <a href="https://github.com/keaven/gsDesign/issues/215" class="external-link">#215</a>). It was soft-deprecated in gsDesign 3.4.0 and moved to gMCPLite. Use <code>gMCPLite::hGraph()</code> instead.</p>
+<p>This change also preemptively fixes an <code>R CMD check</code> issue with ggplot2 (&gt;= 4.0.0) that would otherwise require declaring MASS as an explicit dependency (tidyverse/ggplot2#6578).</p>
+</li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-3-7-0">Testing<a class="anchor" aria-label="anchor" href="#testing-3-7-0"></a></h3>
+<ul><li>Added independent unit tests for <code>gsAdaptSim()</code> and <code>gsSimulate()</code> (<a href="https://github.com/DMuriuki" class="external-link">@DMuriuki</a>, <a href="https://github.com/keaven/gsDesign/issues/212" class="external-link">#212</a>).</li>
+<li>Added independent unit tests for <code><a href="../reference/binomialPowerTable.html">binomialPowerTable()</a></code> (<a href="https://github.com/DMuriuki" class="external-link">@DMuriuki</a>, <a href="https://github.com/keaven/gsDesign/issues/214" class="external-link">#214</a>).</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.6.9" id="gsdesign-369-june-2025">gsDesign 3.6.9 (June 2025)<a class="anchor" aria-label="anchor" href="#gsdesign-369-june-2025"></a></h2><p class="text-muted">CRAN release: 2025-06-25</p>
 <div class="section level3">
@@ -170,7 +185,7 @@
 <ul><li>The plotting functions now use <code><a href="https://dplyr.tidyverse.org/reference/reframe.html" class="external-link">dplyr::reframe()</a></code> to replace <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">dplyr::summarize()</a></code> when performing grouped <code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum()</a></code> (<a href="https://github.com/jdblischak" class="external-link">@jdblischak</a>, <a href="https://github.com/keaven/gsDesign/issues/114" class="external-link">#114</a>).</li>
 <li>The plotting functions are updated to use the <code>.data</code> pronoun from rlang with <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">ggplot2::aes()</a></code>. This simplifies the code and follows the recommended practice when using ggplot2 in packages (<a href="https://github.com/jdblischak" class="external-link">@jdblischak</a>, <a href="https://github.com/keaven/gsDesign/issues/124" class="external-link">#124</a>).</li>
 <li>
-<code><a href="../reference/hGraph.html">hGraph()</a></code> now uses named <code>guide</code> argument in the <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual()</a></code> call to be compatible with ggplot2 3.5.0 (<a href="https://github.com/teunbrand" class="external-link">@teunbrand</a>, <a href="https://github.com/keaven/gsDesign/issues/115" class="external-link">#115</a>). <strong>Note</strong>: this function has been deprecated and moved to gMCPLite since gsDesign 3.4.0. It will be removed from gsDesign in a future version. Please use <code>gMCPLite::hGraph()</code> instead.</li>
+<code>hGraph()</code> now uses named <code>guide</code> argument in the <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual()</a></code> call to be compatible with ggplot2 3.5.0 (<a href="https://github.com/teunbrand" class="external-link">@teunbrand</a>, <a href="https://github.com/keaven/gsDesign/issues/115" class="external-link">#115</a>). <strong>Note</strong>: this function has been deprecated and moved to gMCPLite since gsDesign 3.4.0. It will be removed from gsDesign in a future version. Please use <code>gMCPLite::hGraph()</code> instead.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-3-6-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-3-6-1"></a></h3>
@@ -226,7 +241,7 @@
 <h2 class="pkg-version" data-toc-text="3.4.0" id="gsdesign-340-october-2022">gsDesign 3.4.0 (October 2022)<a class="anchor" aria-label="anchor" href="#gsdesign-340-october-2022"></a></h2><p class="text-muted">CRAN release: 2022-10-12</p>
 <ul><li>Removed restriction on <code><a href="../reference/gsCP.html">gsCP()</a></code> interim test statistic zi (<a href="https://github.com/keaven/gsDesign/issues/63" class="external-link">#63</a>).</li>
 <li>Removed gMCP dependency. Updated vignettes and linked to vignettes in gMCPLite (<a href="https://github.com/keaven/gsDesign/issues/69" class="external-link">#69</a>).</li>
-<li>Added deprecation warning to <code><a href="../reference/hGraph.html">hGraph()</a></code> and suggested using <code>gMCPLite::hGraph()</code> instead (<a href="https://github.com/keaven/gsDesign/issues/70" class="external-link">#70</a>).</li>
+<li>Added deprecation warning to <code>hGraph()</code> and suggested using <code>gMCPLite::hGraph()</code> instead (<a href="https://github.com/keaven/gsDesign/issues/70" class="external-link">#70</a>).</li>
 <li>Moved ggplot2 from <code>Depends</code> to <code>Imports</code> (<a href="https://github.com/keaven/gsDesign/issues/56" class="external-link">#56</a>).</li>
 </ul></div>
     <div class="section level2">
@@ -263,7 +278,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.1.1" id="gsdesign-311-may-2020">gsDesign 3.1.1 (May 2020)<a class="anchor" aria-label="anchor" href="#gsdesign-311-may-2020"></a></h2><p class="text-muted">CRAN release: 2020-05-07</p>
 <ul><li>Vignettes updated</li>
-<li>Added <code><a href="../reference/hGraph.html">hGraph()</a></code> to support ggplot2 versions of multiplicity graphs</li>
+<li>Added <code>hGraph()</code> to support ggplot2 versions of multiplicity graphs</li>
 <li>Eliminated unnecessary check from <code>sequentialPValue</code>
 </li>
 <li>Targeted release to CRAN</li>
