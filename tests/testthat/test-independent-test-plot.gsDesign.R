@@ -12,7 +12,7 @@ test_that("plot.gsDesign: plots are correctly rendered for plottype 1 and base s
 
   vdiffr::expect_doppelganger(
     "plottype 1 base FALSE",
-    capture.output(plot.gsDesign(x, plottype = 1, base = FALSE))
+    plot.gsDesign(x, plottype = 1, base = FALSE)
   )
 })
 
@@ -21,7 +21,7 @@ test_that("plot.gsDesign: plots are correctly rendered for plottype = power and 
 
   vdiffr::expect_doppelganger(
     "plottype power base FALSE",
-    capture.output(plot.gsDesign(x, plottype = "power", base = FALSE))
+    plot.gsDesign(x, plottype = "power", base = FALSE)
   )
 })
 
@@ -48,7 +48,7 @@ test_that("plot.gsDesign: graphs are correctly rendered for plottype 4 and base 
 
   vdiffr::expect_doppelganger(
     "plottype 4 base FALSE",
-    capture.output(plot.gsDesign(x, plottype = 4, base = FALSE))
+    plot.gsDesign(x, plottype = 4, base = FALSE)
   )
 })
 
@@ -75,7 +75,7 @@ test_that("plot.gsDesign: plots are correctly rendered for plottype 6 and base s
 
   vdiffr::expect_doppelganger(
     "plottype 6 base FALSE",
-    capture.output(plot.gsDesign(x, plottype = 6, base = FALSE))
+    plot.gsDesign(x, plottype = 6, base = FALSE)
   )
 })
 
@@ -119,7 +119,7 @@ test_that("plot.gsDesign: plots are correctly rendered for gSurv objects and bas
 
   vdiffr::expect_doppelganger(
     "gsSurv base FALSE",
-    capture.output(plot.gsDesign(z, plottype = 2, base = FALSE))
+    plot.gsDesign(z, plottype = 2, base = FALSE)
   )
 })
 

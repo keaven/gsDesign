@@ -11,14 +11,14 @@ test_that("plot.gsProbability: plots are correctly rendered for plottype 1 and b
 test_that("plot.gsProbability: plots are correctly rendered for plottype 1 and base set to FALSE", {
   vdiffr::expect_doppelganger(
     "plottype 1 base FALSE",
-    capture.output(plot.gsProbability(y, plottype = 1, base = FALSE))
+    plot.gsProbability(y, plottype = 1, base = FALSE)
   )
 })
 
 test_that("plot.gsProbability: plots are correctly rendered for plottype power and base set to FALSE", {
   vdiffr::expect_doppelganger(
     "plottype power base FALSE",
-    capture.output(plot.gsProbability(y, plottype = "power", base = FALSE))
+    plot.gsProbability(y, plottype = "power", base = FALSE)
   )
 })
 
@@ -32,7 +32,7 @@ test_that("plot.gsProbability: plots are correctly rendered for plottype 2 and b
 test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and base set to FALSE", {
   vdiffr::expect_doppelganger(
     "plottype 4 base FALSE",
-    capture.output(plot.gsProbability(y, plottype = 4, base = FALSE))
+    plot.gsProbability(y, plottype = 4, base = FALSE)
   )
 })
 
@@ -46,7 +46,7 @@ test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and b
 test_that("plot.gsProbability: plots are correctly rendered for plottype 6 and base set to FALSE", {
   vdiffr::expect_doppelganger(
     "plottype 6 base FALSE",
-    capture.output(plot.gsProbability(y, plottype = 6, base = FALSE))
+    plot.gsProbability(y, plottype = 6, base = FALSE)
   )
 })
 
