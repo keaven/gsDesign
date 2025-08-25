@@ -1,5 +1,5 @@
 Package: gsDesign
-Version: 3.6.9
+Version: 3.7.0
 Title: Group Sequential Design
 Authors@R: c(
     person("Keaven", "Anderson", email = "keaven_anderson@merck.com", role = c("aut", "cre")),
