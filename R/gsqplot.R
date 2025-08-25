@@ -893,7 +893,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
                            col = .data$Bound,
                            lty = .data$Analysis)
                          ) + 
-      ggplot2::geom_line(size = lwd) + 
+      ggplot2::geom_line(lwd = lwd) + 
       ggplot2::ylab(ylab) +
       ggplot2::guides(color = ggplot2::guide_legend(title = "Probability")) + 
       ggplot2::xlab(xlab) +
