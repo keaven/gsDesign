@@ -180,7 +180,7 @@ getColor <- function(.col_vector) {
     X = .col_vector, 
     FUN = function(.col){
       if(!is.na(suppressWarnings(as.integer(.col)))){
-        rep(palette(), .col)[as.integer(.col)]
+        rep(grDevices::palette(), .col)[as.integer(.col)]
       } else {
         .col
       }

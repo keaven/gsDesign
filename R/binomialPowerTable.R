@@ -48,6 +48,8 @@
 #'
 #' @rdname binomialPowerTable
 #'
+#' @importFrom dplyr filter mutate select
+#'
 #' @export
 #'
 #' @examples

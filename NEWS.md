@@ -1,3 +1,20 @@
+# gsDesign 3.7.0 (August 2025)
+
+## Breaking changes
+
+- `hGraph()` has been formally removed from gsDesign (@nanxstats, #215).
+  It was soft-deprecated in gsDesign 3.4.0 and moved to gMCPLite.
+  Use `gMCPLite::hGraph()` instead.
+
+  This change also preemptively fixes an `R CMD check` issue with
+  ggplot2 (>= 4.0.0) that would otherwise require declaring MASS as
+  an explicit dependency (tidyverse/ggplot2#6578).
+
+## Testing
+
+- Added independent unit tests for `gsAdaptSim()` and `gsSimulate()` (@DMuriuki, #212).
+- Added independent unit tests for `binomialPowerTable()` (@DMuriuki, #214).
+
 # gsDesign 3.6.9 (June 2025)
 
 ## Documentation
