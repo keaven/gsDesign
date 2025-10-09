@@ -248,6 +248,7 @@
 <path clip-rule="nonzero" d="M 497 23.957031 L 499 23.957031 L 499 250.648438 L 497 250.648438 Z M 497 23.957031 "/>
 </clipPath>
 </defs>
+<rect x="-52.5" y="-32.4" width="630" height="388.8" fill="rgb(100%, 100%, 100%)" fill-opacity="1"/>
 <g clip-path="url(#clip-0)">
 <path fill="none" stroke-width="0.533489" stroke-linecap="butt" stroke-linejoin="round" stroke="rgb(92.156863%, 92.156863%, 92.156863%)" stroke-opacity="1" stroke-miterlimit="10" d="M 43.152344 206 L 519.519531 206 "/>
 </g>
