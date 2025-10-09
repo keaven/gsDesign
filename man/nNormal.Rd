@@ -109,7 +109,9 @@ Snedecor GW and Cochran WG (1989), Statistical Methods. 8th ed. Ames, IA:
 Iowa State University Press.
 }
 \seealso{
-\code{vignette("gsDesignPackageOverview")}
+See \code{vignette("nNormal")} for the full story, including the
+derivation of the sample size formula, power checks via simulation,
+and a group sequential design example.
 }
 \author{
 Keaven Anderson \email{keaven_anderson@merck.com}
