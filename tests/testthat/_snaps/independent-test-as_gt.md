@@ -2,10 +2,10 @@
 
     \begin{table}[t]
     \caption*{
-    {\large Operating Characteristics for the Truncated SPRT Design} \\ 
-    {\small Assumes trial evaluated sequentially after each response}
+    {\fontsize{20}{25}\selectfont  Operating Characteristics for the Truncated SPRT Design\fontsize{12}{15}\selectfont } \\ 
+    {\fontsize{14}{17}\selectfont  Assumes trial evaluated sequentially after each response\fontsize{12}{15}\selectfont }
     } 
-    \fontsize{12.0pt}{14.4pt}\selectfont
+    \fontsize{12.0pt}{14.0pt}\selectfont
     \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}rrrr}
     \toprule
      & \multicolumn{2}{c}{Probability of crossing} &  \\ 
