@@ -66,6 +66,6 @@
 <text x='660.71' y='277.36' style='font-size: 8.80px; font-family: sans;' textLength='53.81px' lengthAdjust='spacingAndGlyphs'>Indeterminate</text>
 <text x='660.71' y='294.64' style='font-size: 8.80px; font-family: sans;' textLength='38.64px' lengthAdjust='spacingAndGlyphs'>Reject H0</text>
 <text x='660.71' y='311.92' style='font-size: 8.80px; font-family: sans;' textLength='38.64px' lengthAdjust='spacingAndGlyphs'>Reject H1</text>
-<text x='37.69' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='145.30px' lengthAdjust='spacingAndGlyphs'>binomial exact plottype 2</text>
+<text x='37.69' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='57.25px' lengthAdjust='spacingAndGlyphs'>plottype 2</text>
 </g>
 </svg>
