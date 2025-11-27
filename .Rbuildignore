@@ -9,4 +9,3 @@
 ^cran-comments\.md$
 ^revdep$
 tests/benchmarks
-tests/testthat/_snaps$

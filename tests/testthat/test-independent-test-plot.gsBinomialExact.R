@@ -8,7 +8,7 @@ testthat::test_that("plot.gsBinomialExact: plots are correctly rendered, plottyp
   )
 
   vdiffr::expect_doppelganger(
-    "binomial exact plottype 1",
+    "plottype 1",
     plot.gsBinomialExact(x, plottype = 1)
   )
 })
@@ -23,7 +23,7 @@ testthat::test_that("plot.gsBinomialExact: plots are correctly rendered, plottyp
   )
 
   vdiffr::expect_doppelganger(
-    "binomial exact plottype 2",
+    "plottype 2",
     plot.gsBinomialExact(x, plottype = 2)
   )
 })
@@ -38,7 +38,7 @@ testthat::test_that("plot.gsBinomialExact: plots are correctly rendered, plottyp
   )
 
   vdiffr::expect_doppelganger(
-    "binomial exact plottype 6",
+    "plottype 6",
     plot.gsBinomialExact(x, plottype = 6)
   )
 })
@@ -53,7 +53,7 @@ testthat::test_that("plot.gsBinomialExact: plots are correctly rendered, plottyp
   )
 
   vdiffr::expect_doppelganger(
-    "binomial exact plottype 3",
+    "plottype 3",
     plot.gsBinomialExact(x, plottype = 3)
   )
 })
@@ -68,7 +68,7 @@ testthat::test_that("plot.gsBinomialExact: plots are correctly rendered, for plo
   )
 
   vdiffr::expect_doppelganger(
-    "binomial exact plottype default",
+    "plottype default",
     plot.gsBinomialExact(x)
   )
 })
