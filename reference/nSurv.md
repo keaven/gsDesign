@@ -984,7 +984,7 @@ print(xtable::xtable(x,
   caption = "Caption example."
 ))
 #> % latex table generated in R 4.5.2 by xtable 1.8-4 package
-#> % Thu Nov 27 02:58:37 2025
+#> % Fri Dec  5 05:47:10 2025
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}
