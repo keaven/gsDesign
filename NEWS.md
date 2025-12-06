@@ -1,3 +1,12 @@
+# gsDesign 3.8.0 (December 2025)
+
+## Bug fixes
+
+- Fixed base plotting for conditional power (`plottype = 4`) so labels passed
+  to `text()` match the plotted points. This prevents r-devel (R 4.6.0)
+  truncation warnings and keeps vdiffr snapshots bitwise reproducible
+  across R versions.
+
 # gsDesign 3.7.0 (August 2025)
 
 ## Breaking changes
