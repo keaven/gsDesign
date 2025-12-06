@@ -192,7 +192,7 @@ sfXG3 <- function(alpha, t, param) {
 
   # Assemble return value and return
   x <- list(
-    name = "Xi-Gallo, method 1", param = param,
+    name = "Xi-Gallo, method 3", param = param,
     parname = "gamma", sf = sfXG3,
     spend = y,
     bound = NULL,
