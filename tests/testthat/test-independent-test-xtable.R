@@ -1,36 +1,35 @@
-test_that("xtable returns xtable object correctly", {
-  # Example
-  x <- gsDesign(
+test_that("xtable summaries align with gsDesign bounds", {
+  design <- gsDesign(
     k = 2,
     alpha = 0.025,
     beta = 0.1,
-    timing = c(0.5),
+    timing = 0.5,
     sfu = sfHSD,
     sfl = sfLDOF
   )
 
-  # Expect a warning for .Deprecated
-  expect_warning(
-    xtab <- xtable.gsDesign(x, caption = "Test gsDesign Table", Nname = "N"),
-    regexp = "Deprecated"
+  xtab <- expect_warning(
+    xtable(design, caption = "Test gsDesign Table", Nname = "N"),
+    "Deprecated"
   )
 
-  # xtable returned
   expect_s3_class(xtab, "xtable")
 
-  # Check columns exist
-  expect_true(all(c("Analysis", "Value", "Futility", "Efficacy") %in% colnames(xtab)))
+  tab_df <- as.data.frame(xtab)
+  bound_rows <- seq(1, by = 5, length.out = design$k)
 
-  # Check some values are non-empty
-  expect_true(all(nchar(as.character(xtab$Analysis)) > 0))
-  expect_true(all(nchar(as.character(xtab$Futility)) > 0))
-  expect_true(all(nchar(as.character(xtab$Efficacy)) > 0))
+  expect_equal(nrow(tab_df), design$k * 5)
+  expect_equal(colnames(tab_df), c("Analysis", "Value", "Futility", "Efficacy"))
 
-  # Extract numeric futility and efficacy bounds from xtable
-  fut_vals <- as.numeric(xtab$Futility[seq(1, nrow(xtab), 5)])
-  eff_vals <- as.numeric(xtab$Efficacy[seq(1, nrow(xtab), 5)])
+  expect_match(tab_df$Analysis[bound_rows[1]], "IA 1")
+  expect_match(tab_df$Analysis[bound_rows[length(bound_rows)]], "Final analysis")
 
-  # Compare with lower and upper bounds in gsDesign object
-  expect_equal(fut_vals, round(x$lower$bound, 2))
-  expect_equal(eff_vals, round(x$upper$bound, 2))
+  expect_equal(
+    as.numeric(tab_df$Futility[bound_rows]),
+    round(design$lower$bound, 2)
+  )
+  expect_equal(
+    as.numeric(tab_df$Efficacy[bound_rows]),
+    round(design$upper$bound, 2)
+  )
 })
