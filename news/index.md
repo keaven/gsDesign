@@ -2,12 +2,80 @@
 
 ## gsDesign 3.8.0 (December 2025)
 
+### New features
+
+- [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+  now displays calendar time for `gsNB` objects from the gsDesignNB
+  package when analysis times are provided
+  ([@keaven](https://github.com/keaven),
+  [\#229](https://github.com/keaven/gsDesign/issues/229),
+  [\#233](https://github.com/keaven/gsDesign/issues/233)).
+
+### Improvements
+
+- `plotgsPower()` now uses `linewidth` instead of deprecated `size`
+  aesthetic for
+  [`geom_line()`](https://ggplot2.tidyverse.org/reference/geom_path.html)
+  calls, avoiding ggplot2 (\>= 3.4.0) warnings
+  ([@nanxstats](https://github.com/nanxstats),
+  [\#217](https://github.com/keaven/gsDesign/issues/217)).
+
 ### Bug fixes
 
+- [`sfXG3()`](https://keaven.github.io/gsDesign/reference/sfXG.md) now
+  correctly reports its name as “Xi-Gallo, method 3” instead of
+  “Xi-Gallo, method 1” ([@DMuriuki](https://github.com/DMuriuki),
+  [\#223](https://github.com/keaven/gsDesign/issues/223)).
 - Fixed base plotting for conditional power (`plottype = 4`) so labels
   passed to [`text()`](https://rdrr.io/r/graphics/text.html) match the
   plotted points. This prevents r-devel (R 4.6.0) truncation warnings
-  and keeps vdiffr snapshots bitwise reproducible across R versions.
+  and keeps vdiffr snapshots bitwise reproducible across R versions
+  ([@nanxstats](https://github.com/nanxstats),
+  [\#231](https://github.com/keaven/gsDesign/issues/231)).
+
+### Testing
+
+- Added independent unit tests for
+  [`sfXG1()`](https://keaven.github.io/gsDesign/reference/sfXG.md),
+  [`sfXG2()`](https://keaven.github.io/gsDesign/reference/sfXG.md), and
+  [`sfXG3()`](https://keaven.github.io/gsDesign/reference/sfXG.md)
+  ([@DMuriuki](https://github.com/DMuriuki),
+  [\#223](https://github.com/keaven/gsDesign/issues/223)).
+- Added independent unit tests for
+  [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
+  and
+  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md)
+  ([@DMuriuki](https://github.com/DMuriuki),
+  [\#224](https://github.com/keaven/gsDesign/issues/224)).
+- Updated
+  [`as_gt()`](https://keaven.github.io/gsDesign/reference/as_gt.md)
+  snapshot tests for gt 1.1.0 compatibility
+  ([@nanxstats](https://github.com/nanxstats),
+  [\#221](https://github.com/keaven/gsDesign/issues/221)).
+- Snapshot files are now included in the built package to satisfy
+  testthat (\>= 3.3.0) requirements
+  ([@jdblischak](https://github.com/jdblischak),
+  [\#227](https://github.com/keaven/gsDesign/issues/227)).
+- Reduced visual regression test output verbosity by wrapping base
+  graphics plotting expressions in
+  [`capture.output()`](https://rdrr.io/r/utils/capture.output.html)
+  ([@nanxstats](https://github.com/nanxstats),
+  [\#217](https://github.com/keaven/gsDesign/issues/217)).
+
+### Documentation
+
+- [`nNormal()`](https://keaven.github.io/gsDesign/reference/nNormal.md)
+  now links to
+  [`vignette("nNormal")`](https://keaven.github.io/gsDesign/articles/nNormal.md)
+  in its See Also section for the full derivation and examples
+  ([@keaven](https://github.com/keaven),
+  [\#220](https://github.com/keaven/gsDesign/issues/220)).
+
+### Maintenance
+
+- Added `workflow_dispatch` trigger to `R CMD check` workflow for easier
+  testing on forks ([@jdblischak](https://github.com/jdblischak),
+  [\#225](https://github.com/keaven/gsDesign/issues/225)).
 
 ## gsDesign 3.7.0 (August 2025)
 

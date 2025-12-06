@@ -14,12 +14,12 @@ Source:
 [`DESCRIPTION`](https://github.com/keaven/gsDesign/blob/master/DESCRIPTION)
 
 Anderson K (2025). *gsDesign: Group Sequential Design*. R package
-version 3.7.0, <https://keaven.github.io/gsDesign/>.
+version 3.8.0, <https://keaven.github.io/gsDesign/>.
 
     @Manual{,
       title = {gsDesign: Group Sequential Design},
       author = {Keaven Anderson},
       year = {2025},
-      note = {R package version 3.7.0},
+      note = {R package version 3.8.0},
       url = {https://keaven.github.io/gsDesign/},
     }

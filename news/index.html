@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,8 +41,37 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.8.0" id="gsdesign-380-december-2025">gsDesign 3.8.0 (December 2025)<a class="anchor" aria-label="anchor" href="#gsdesign-380-december-2025"></a></h2>
 <div class="section level3">
+<h3 id="new-features-3-8-0">New features<a class="anchor" aria-label="anchor" href="#new-features-3-8-0"></a></h3>
+<ul><li>
+<code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> now displays calendar time for <code>gsNB</code> objects from the gsDesignNB package when analysis times are provided (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/229" class="external-link">#229</a>, <a href="https://github.com/keaven/gsDesign/issues/233" class="external-link">#233</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="improvements-3-8-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-3-8-0"></a></h3>
+<ul><li>
+<code>plotgsPower()</code> now uses <code>linewidth</code> instead of deprecated <code>size</code> aesthetic for <code><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line()</a></code> calls, avoiding ggplot2 (&gt;= 3.4.0) warnings (<a href="https://github.com/nanxstats" class="external-link">@nanxstats</a>, <a href="https://github.com/keaven/gsDesign/issues/217" class="external-link">#217</a>).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-3-8-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-8-0"></a></h3>
-<ul><li>Fixed base plotting for conditional power (<code>plottype = 4</code>) so labels passed to <code><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text()</a></code> match the plotted points. This prevents r-devel (R 4.6.0) truncation warnings and keeps vdiffr snapshots bitwise reproducible across R versions.</li>
+<ul><li>
+<code><a href="../reference/sfXG.html">sfXG3()</a></code> now correctly reports its name as “Xi-Gallo, method 3” instead of “Xi-Gallo, method 1” (<a href="https://github.com/DMuriuki" class="external-link">@DMuriuki</a>, <a href="https://github.com/keaven/gsDesign/issues/223" class="external-link">#223</a>).</li>
+<li>Fixed base plotting for conditional power (<code>plottype = 4</code>) so labels passed to <code><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text()</a></code> match the plotted points. This prevents r-devel (R 4.6.0) truncation warnings and keeps vdiffr snapshots bitwise reproducible across R versions (<a href="https://github.com/nanxstats" class="external-link">@nanxstats</a>, <a href="https://github.com/keaven/gsDesign/issues/231" class="external-link">#231</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-3-8-0">Testing<a class="anchor" aria-label="anchor" href="#testing-3-8-0"></a></h3>
+<ul><li>Added independent unit tests for <code><a href="../reference/sfXG.html">sfXG1()</a></code>, <code><a href="../reference/sfXG.html">sfXG2()</a></code>, and <code><a href="../reference/sfXG.html">sfXG3()</a></code> (<a href="https://github.com/DMuriuki" class="external-link">@DMuriuki</a>, <a href="https://github.com/keaven/gsDesign/issues/223" class="external-link">#223</a>).</li>
+<li>Added independent unit tests for <code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> and <code><a href="../reference/xtable.html">xtable()</a></code> (<a href="https://github.com/DMuriuki" class="external-link">@DMuriuki</a>, <a href="https://github.com/keaven/gsDesign/issues/224" class="external-link">#224</a>).</li>
+<li>Updated <code><a href="../reference/as_gt.html">as_gt()</a></code> snapshot tests for gt 1.1.0 compatibility (<a href="https://github.com/nanxstats" class="external-link">@nanxstats</a>, <a href="https://github.com/keaven/gsDesign/issues/221" class="external-link">#221</a>).</li>
+<li>Snapshot files are now included in the built package to satisfy testthat (&gt;= 3.3.0) requirements (<a href="https://github.com/jdblischak" class="external-link">@jdblischak</a>, <a href="https://github.com/keaven/gsDesign/issues/227" class="external-link">#227</a>).</li>
+<li>Reduced visual regression test output verbosity by wrapping base graphics plotting expressions in <code><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output()</a></code> (<a href="https://github.com/nanxstats" class="external-link">@nanxstats</a>, <a href="https://github.com/keaven/gsDesign/issues/217" class="external-link">#217</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-3-8-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-3-8-0"></a></h3>
+<ul><li>
+<code><a href="../reference/nNormal.html">nNormal()</a></code> now links to <code><a href="../articles/nNormal.html">vignette("nNormal")</a></code> in its See Also section for the full derivation and examples (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/220" class="external-link">#220</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="maintenance-3-8-0">Maintenance<a class="anchor" aria-label="anchor" href="#maintenance-3-8-0"></a></h3>
+<ul><li>Added <code>workflow_dispatch</code> trigger to <code>R CMD check</code> workflow for easier testing on forks (<a href="https://github.com/jdblischak" class="external-link">@jdblischak</a>, <a href="https://github.com/keaven/gsDesign/issues/225" class="external-link">#225</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
