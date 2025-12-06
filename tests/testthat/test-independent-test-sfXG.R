@@ -1,6 +1,17 @@
 # Generalized test template for Xi-Gallo spending functions
-test_sfXG_function <- function(fun, name, compute_expected, valid_param, param_bounds, alpha = 0.025) {
+test_sfXG_function <- function(
+  fun,
+  name,
+  compute_expected,
+  valid_param,
+  param_bounds_fn,
+  lower_inclusive,
+  alpha = 0.025
+) {
   t_vals <- c(0.25, 0.5, 1)
+  param_bounds <- param_bounds_fn(alpha)
+  lower_bound <- param_bounds[1]
+  upper_bound <- param_bounds[2]
 
   # Tests to check that the correct structure is returned
   test_that(paste0(name, " returns correct structure"), {
@@ -13,21 +24,21 @@ test_sfXG_function <- function(fun, name, compute_expected, valid_param, param_b
     expect_identical(res$sf, fun)
   })
 
-  # Tests for Spending values
+  # Tests for spending values
   test_that(paste0(name, " computes expected spending values"), {
     res <- fun(alpha, t_vals, valid_param)
     expected <- compute_expected(alpha, t_vals, valid_param)
     expect_equal(res$spend, expected)
   })
 
-  # tests for t > 1
+  # Tests for t > 1
   test_that(paste0(name, " caps t > 1 at 1"), {
     spend_at_1 <- fun(alpha, 1, valid_param)$spend
     spend_over_1 <- fun(alpha, c(2, 3, 10), valid_param)$spend
     expect_equal(spend_over_1, rep(spend_at_1, length(spend_over_1)))
   })
 
-  # tests for spending < 1
+  # Tests for spending < 1
   test_that(paste0(name, " spending is always < 1"), {
     res1 <- fun(alpha, 1, valid_param)$spend
     res2 <- fun(alpha, 2, valid_param)$spend
@@ -35,11 +46,8 @@ test_sfXG_function <- function(fun, name, compute_expected, valid_param, param_b
     expect_true(all(res2 < 1))
   })
 
-  # test for invalid parameter handling
+  # Test for invalid parameter handling
   test_that(paste0(name, " rejects invalid gamma"), {
-    lower_bound <- param_bounds[1]
-    upper_bound <- param_bounds[2]
-
     # Below lower bound
     expect_error(fun(alpha, 0.5, lower_bound - 0.001))
 
@@ -51,6 +59,15 @@ test_sfXG_function <- function(fun, name, compute_expected, valid_param, param_b
 
     # Wrong type
     expect_error(fun(alpha, 0.5, "bad"))
+  })
+
+  # Test for lower boundary inclusivity/exclusivity
+  test_that(paste0(name, " enforces lower bound correctly"), {
+    if (lower_inclusive) {
+      expect_error(fun(alpha, 0.5, lower_bound), NA)
+    } else {
+      expect_error(fun(alpha, 0.5, lower_bound))
+    }
   })
 }
 
@@ -81,21 +98,24 @@ sfXG_specs <- list(
     name = "Xi-Gallo, method 1",
     expected = expected_sfXG1,
     valid_param = 0.6, # Note: For sfXG1, valid_param must be in [0.5, 1)
-    param_bounds = c(0.5, 1) # lower inclusive, upper exclusive
+    param_bounds = function(alpha) c(0.5, 1), # lower inclusive, upper exclusive
+    lower_inclusive = TRUE
   ),
   list(
     fun = sfXG2,
     name = "Xi-Gallo, method 2",
     expected = expected_sfXG2,
-    valid_param = 0.8, # Note: For sfXG2, valid_param must be in [1 - pnorm(qnorm(1 - 0.025 / 2)), 1)
-    param_bounds = c(1 - pnorm(qnorm(1 - 0.025 / 2)), 1)
+    valid_param = 0.8, # Note: For sfXG2, valid_param must be in [1 - pnorm(qnorm(1 - alpha / 2)), 1)
+    param_bounds = function(alpha) c(1 - pnorm(qnorm(1 - alpha / 2)), 1),
+    lower_inclusive = TRUE
   ),
   list(
     fun = sfXG3,
-    name = "Xi-Gallo, method 1",
+    name = "Xi-Gallo, method 3",
     expected = expected_sfXG3,
-    valid_param = 0.6, # Note: For sfXG3, valid_param must be in (0.025 / 2, 1)
-    param_bounds = c(0.025 / 2, 1)
+    valid_param = 0.6, # Note: For sfXG3, valid_param must be in (alpha / 2, 1)
+    param_bounds = function(alpha) c(alpha / 2, 1),
+    lower_inclusive = FALSE
   )
 )
 
@@ -106,6 +126,7 @@ for (spec in sfXG_specs) {
     name = spec$name,
     compute_expected = spec$expected,
     valid_param = spec$valid_param,
-    param_bounds = spec$param_bounds
+    param_bounds_fn = spec$param_bounds,
+    lower_inclusive = spec$lower_inclusive
   )
 }
