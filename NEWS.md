@@ -1,11 +1,45 @@
 # gsDesign 3.8.0 (December 2025)
 
+## New features
+
+- `gsBoundSummary()` now displays calendar time for `gsNB` objects from the
+  gsDesignNB package when analysis times are provided (@keaven, #229, #233).
+
+## Improvements
+
+- `plotgsPower()` now uses `linewidth` instead of deprecated `size` aesthetic
+  for `geom_line()` calls, avoiding ggplot2 (>= 3.4.0) warnings (@nanxstats, #217).
+
 ## Bug fixes
 
+- `sfXG3()` now correctly reports its name as "Xi-Gallo, method 3" instead of
+  "Xi-Gallo, method 1" (@DMuriuki, #223).
 - Fixed base plotting for conditional power (`plottype = 4`) so labels passed
   to `text()` match the plotted points. This prevents r-devel (R 4.6.0)
   truncation warnings and keeps vdiffr snapshots bitwise reproducible
-  across R versions.
+  across R versions (@nanxstats, #231).
+
+## Testing
+
+- Added independent unit tests for `sfXG1()`, `sfXG2()`, and `sfXG3()`
+  (@DMuriuki, #223).
+- Added independent unit tests for `toBinomialExact()` and `xtable()`
+  (@DMuriuki, #224).
+- Updated `as_gt()` snapshot tests for gt 1.1.0 compatibility (@nanxstats, #221).
+- Snapshot files are now included in the built package to satisfy
+  testthat (>= 3.3.0) requirements (@jdblischak, #227).
+- Reduced visual regression test output verbosity by wrapping base graphics
+  plotting expressions in `capture.output()` (@nanxstats, #217).
+
+## Documentation
+
+- `nNormal()` now links to `vignette("nNormal")` in its See Also section for
+  the full derivation and examples (@keaven, #220).
+
+## Maintenance
+
+- Added `workflow_dispatch` trigger to `R CMD check` workflow for easier testing
+  on forks (@jdblischak, #225).
 
 # gsDesign 3.7.0 (August 2025)
 
