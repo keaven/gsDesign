@@ -426,7 +426,7 @@ gsBoundSummary0 <- function(
     if (x$n.fix > 1) N <- ceiling(x$n.I) else N <- round(x$n.I, 2)
     if (Nname == "Information") N <- round(x$n.I, 2)
     # Check if calendar time T is provided (for non-gsSurv objects like gsNB)
-    if (!is.null(x$T)) {
+    if (inherits(x, "gsNB") && !is.null(x$T)) {
       nstat <- 3
       Time <- round(x$T, tdigits)
       statframe[statframe$Value == statframe$Value[3], ]$Analysis <- paste(timename, ": ", as.character(Time), sep = "")
