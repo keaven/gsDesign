@@ -2,6 +2,8 @@
 
 ## gsDesign 3.8.0 (December 2025)
 
+CRAN release: 2025-12-07
+
 ### New features
 
 - [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
