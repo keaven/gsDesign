@@ -17,13 +17,12 @@ URL: https://keaven.github.io/gsDesign/, https://github.com/keaven/gsDesign
 BugReports: https://github.com/keaven/gsDesign/issues
 Encoding: UTF-8
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.1.0)
 Imports:
     dplyr (>= 1.1.0),
     ggplot2 (>= 3.1.1),
     graphics,
     gt,
-    magrittr,
     methods,
     r2rtf,
     rlang,
