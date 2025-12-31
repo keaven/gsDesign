@@ -208,8 +208,8 @@ library(tibble)
 tibble(
   Period = paste("Month", rownames(x$gamma)),
   Rate = as.numeric(x$gamma)
-) %>%
-  gt() %>%
+) |>
+  gt() |>
   tab_header(title = "Enrollment rate requirements")
 ```
 
@@ -243,15 +243,15 @@ caption <- paste(
 ```
 
 ```{r, echo=TRUE, message=FALSE}
-gsBoundSummary(x) %>%
-  gt() %>%
-  tab_header(title = "Time-to-event group sequential design") %>%
-  cols_align("left") %>%
-  tab_footnote(footnoteUS, locations = cells_column_labels(columns = 3)) %>%
-  tab_footnote(footnoteLS, locations = cells_column_labels(columns = 4)) %>%
-  tab_footnote(footnoteHR, locations = cells_body(columns = 2, rows = c(3, 8, 13))) %>%
-  tab_footnote(footnoteM, locations = cells_body(columns = 1, rows = c(4, 9, 14))) %>%
-  tab_footnote(footnote1, locations = cells_body(columns = 2, rows = c(4, 5, 9, 10, 14, 15))) %>%
+gsBoundSummary(x) |>
+  gt() |>
+  tab_header(title = "Time-to-event group sequential design") |>
+  cols_align("left") |>
+  tab_footnote(footnoteUS, locations = cells_column_labels(columns = 3)) |>
+  tab_footnote(footnoteLS, locations = cells_column_labels(columns = 4)) |>
+  tab_footnote(footnoteHR, locations = cells_body(columns = 2, rows = c(3, 8, 13))) |>
+  tab_footnote(footnoteM, locations = cells_body(columns = 1, rows = c(4, 9, 14))) |>
+  tab_footnote(footnote1, locations = cells_body(columns = 2, rows = c(4, 5, 9, 10, 14, 15))) |>
   tab_footnote(footnote2, locations = cells_body(columns = 2, rows = c(4, 9, 14)))
 ```
 
@@ -314,21 +314,21 @@ gsBoundSummary(
     "Spending", "B-value", "CP", "CP H1",
     "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.75"
   )
-) %>%
-  gt() %>%
-  cols_align("left") %>%
+) |>
+  gt() |>
+  cols_align("left") |>
   tab_header(
     title = "Time-to-event group sequential bound guidance",
     subtitle = "Bounds updated based on event counts through IA2"
-  ) %>%
+  ) |>
   tab_footnote(
     "Nominal p-value required to establish statistical significance.",
     locations = cells_body(columns = 3, rows = c(2, 5, 8))
-  ) %>%
+  ) |>
   tab_footnote(
     "Interim futility guidance based on observed HR is non-binding.",
     locations = cells_body(columns = 4, rows = c(3, 6))
-  ) %>%
+  ) |>
   tab_footnote(
     "HR bounds are approximations; decisions on crossing are based solely on p-values.",
     locations = cells_body(column = 2, rows = c(3, 6, 9))

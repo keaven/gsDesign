@@ -144,7 +144,7 @@ for (scenario in 1:length(cure_rate)) {
     )
   )
 }
-survival <- survival %>% mutate(Scenario = as.factor(Scenario))
+survival <- survival |> mutate(Scenario = as.factor(Scenario))
 ggplot(survival, aes(x = Time, y = Survival, lty = Treatment, col = Scenario)) +
   geom_point() +
   scale_x_continuous(breaks = seq(0, study_duration[1] + 12, (study_duration[1] + 12) / bins)) +
@@ -158,21 +158,21 @@ Note that the piecewise intervals used to approximate changing hazard rates can 
 However, given the uncertainty of the underlying assumptions, it is not clear that this provides any advantage.
 
 ```{r, echo = FALSE}
-hazard <- survival %>%
-  filter(Time > 0) %>%
-  group_by(Scenario, Treatment) %>%
+hazard <- survival |>
+  filter(Time > 0) |>
+  group_by(Scenario, Treatment) |>
   mutate(
     cumulative_hazard = -log(Survival),
     time_lagged = lag(Time, default = 0),
     hazard_rate = (cumulative_hazard - lag(cumulative_hazard, default = 0)) /
       (Time - time_lagged),
-  ) %>%
+  ) |>
   ungroup()
-hazardC1 <- tibble(time_lagged = seq(0, study_duration[1] + 12, .5)) %>%
+hazardC1 <- tibble(time_lagged = seq(0, study_duration[1] + 12, .5)) |>
   mutate(hazard_rate = hPM(time_lagged, cure_rate = cure_rate[1], t1 = t1[1], s1 = s1[1]))
 ggplot() +
   geom_step(
-    data = hazard %>% filter(Treatment == "Control", Scenario == 1),
+    data = hazard |> filter(Treatment == "Control", Scenario == 1),
     aes(x = time_lagged, y = hazard_rate)
   ) +
   ylab("Hazard rate") +
@@ -204,8 +204,8 @@ Under Scenario 3, the expected events under the alternative do not reach the tar
 event_accrual <- NULL
 for (scenario in 1:length(cure_rate)) {
   control_accrual <- tibble(Time = 0, Events = 0, Treatment = "Control")
-  experimental_accrual <- control_accrual %>% mutate(Treatment = "Experimental")
-  control <- hazard %>% filter(Scenario == scenario, Treatment == "Control")
+  experimental_accrual <- control_accrual |> mutate(Treatment = "Experimental")
+  control <- hazard |> filter(Scenario == scenario, Treatment == "Control")
   for (T in 1:(study_duration[1] + 12)) {
     xc <- eEvents(
       lambda = control$hazard_rate, S = (control$Time - control$time_lagged)[1:(bins - 1)],
@@ -220,15 +220,15 @@ for (scenario in 1:length(cure_rate)) {
     )
     experimental_accrual <- rbind(experimental_accrual, tibble(Time = xe$T, Events = xe$d, Treatment = "Experimental"))
   }
-  overall_accrual <- rbind(control_accrual, experimental_accrual) %>%
-    group_by(Time) %>%
+  overall_accrual <- rbind(control_accrual, experimental_accrual) |>
+    group_by(Time) |>
     summarize(Events = sum(Events), Scenario = scenario, Hypothesis = "H1")
   # Get max planned events for enrollment rates for scenario 1 under H1
   # This will be modified for the design, but relative accrual will remain the same
   if (scenario == 1) max_events_planned <- overall_accrual$Events[study_duration[1] + 1]
-  overallH0_accrual <- rbind(control_accrual, control_accrual) %>%
-    group_by(Time) %>%
-    summarize(Events = sum(Events), Scenario = scenario, Hypothesis = "H0") %>%
+  overallH0_accrual <- rbind(control_accrual, control_accrual) |>
+    group_by(Time) |>
+    summarize(Events = sum(Events), Scenario = scenario, Hypothesis = "H0") |>
     ungroup()
   # Combine for all scenarios
   event_accrual <- rbind(
@@ -237,7 +237,7 @@ for (scenario in 1:length(cure_rate)) {
     overallH0_accrual
   )
 }
-event_accrual <- event_accrual %>% mutate(EF = Events / max_events_planned, Scenario = as.factor(Scenario))
+event_accrual <- event_accrual |> mutate(EF = Events / max_events_planned, Scenario = as.factor(Scenario))
 ggplot(event_accrual, aes(x = Time, y = EF, color = Scenario, lty = Hypothesis)) +
   geom_line() +
   scale_y_continuous(breaks = seq(0, 2, .2)) +
@@ -275,7 +275,7 @@ Now we move on to other design assumptions.
 
 ```{r}
 # Get hazard rate info for Scenario 1 control group
-control <- hazard %>% filter(Scenario == 1, Treatment == "Control")
+control <- hazard |> filter(Scenario == 1, Treatment == "Control")
 # Failure rates
 lambdaC <- control$hazard_rate
 # Interval durations
@@ -333,9 +333,9 @@ design_calendar <-
     lambdaC = lambdaC,
     S = S
   )
-design_calendar %>%
-  gsBoundSummary(exclude = c("B-value", "CP", "CP H1", "PP")) %>%
-  gt() %>%
+design_calendar |>
+  gsBoundSummary(exclude = c("B-value", "CP", "CP H1", "PP")) |>
+  gt() |>
   tab_header(
     title = "Calendar-Based Design",
     subtitle = "Calendar Spending"

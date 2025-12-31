@@ -26,7 +26,6 @@ options(width = 58)
 ```{r, message=FALSE, warning=FALSE}
 library(gsDesign)
 library(gt)
-library(dplyr)
 ```
 
 ## Introduction
@@ -94,9 +93,9 @@ We also translate several vaccine efficacy values to proportion of events in the
 ```{r}
 ve <- c(.5, .6, .65, .7, .75, .8)
 prob_experimental <- ratio / (ratio + 1 / (1 - ve))
-tibble(VE = ve, "P(Experimental)" = prob_experimental) %>%
-  gt() %>%
-  tab_options(data_row.padding = px(1)) %>%
+tibble::tibble(VE = ve, "P(Experimental)" = prob_experimental) |>
+  gt() |>
+  tab_options(data_row.padding = px(1)) |>
   fmt_number(columns = 2, decimals = 3)
 ```
 
@@ -177,12 +176,12 @@ xx <- toInteger(x)
 gsBoundSummary(xx,
   tdigits = 1, logdelta = TRUE, deltaname = "HR", Nname = "Events",
   exclude = c("B-value", "CP", "CP H1", "PP")
-) %>%
-  gt() %>%
+) |>
+  gt() |>
   tab_header(
     title = "Initial group sequential approximation",
     subtitle = "Integer event counts at analyses"
-  ) %>%
+  ) |>
   tab_options(data_row.padding = px(1))
 ```
 
@@ -224,7 +223,7 @@ veTable <- function(xbDesign, tteDesign, ve) {
   # Cumulative sum within rows
   power_table <- apply(power_table, 2, cumsum)
   colnames(power_table) <- paste(ve * 100, "%", sep = "")
-  out_tab <- tibble(
+  out_tab <- tibble::tibble(
     Analysis = 1:tteDesign$k,
     Time = tteDesign$T,
     N = as.vector(round(tteDesign$eNC + tteDesign$eNE)),
@@ -246,39 +245,39 @@ veTable <- function(xbDesign, tteDesign, ve) {
 ```
 
 ```{r, echo=FALSE}
-veTable(xb, x, ve) %>%
-  gt() %>%
-  fmt_number(columns = 2, decimals = 1) %>%
-  fmt_number(columns = c(7:8, 11:16), decimals = 2) %>%
-  fmt_number(columns = 9:10, decimals = 4) %>%
-  tab_spanner(label = "Experimental Cases at Bound", columns = 5:6, id = "cases") %>%
-  tab_spanner(label = "Power by Vaccine Efficacy", columns = 11:16, id = "power") %>%
-  tab_spanner(label = "Error Spending", columns = 9:10, id = "spend") %>%
-  tab_spanner(label = "Vaccine Efficacy at Bound", columns = 7:8, id = "vebound") %>%
+veTable(xb, x, ve) |>
+  gt() |>
+  fmt_number(columns = 2, decimals = 1) |>
+  fmt_number(columns = c(7:8, 11:16), decimals = 2) |>
+  fmt_number(columns = 9:10, decimals = 4) |>
+  tab_spanner(label = "Experimental Cases at Bound", columns = 5:6, id = "cases") |>
+  tab_spanner(label = "Power by Vaccine Efficacy", columns = 11:16, id = "power") |>
+  tab_spanner(label = "Error Spending", columns = 9:10, id = "spend") |>
+  tab_spanner(label = "Vaccine Efficacy at Bound", columns = 7:8, id = "vebound") |>
   cols_label(
     ve_efficacy = "Efficacy",
     ve_futility = "Futility"
-  ) %>%
+  ) |>
   tab_footnote(
     footnote = "Cumulative spending at each analysis",
     locations = cells_column_spanners(spanners = "spend")
-  ) %>%
+  ) |>
   tab_footnote(
     footnote = "Experimental case counts to cross between success and futility counts do not stop trial",
     locations = cells_column_spanners(spanners = "cases")
-  ) %>%
+  ) |>
   tab_footnote(
     footnote = "Exact vaccine efficacy required to cross bound",
     locations = cells_column_spanners(spanners = "vebound")
-  ) %>%
+  ) |>
   tab_footnote(
     footnote = "Cumulative power at each analysis by underlying vaccine efficacy",
     locations = cells_column_spanners(spanners = "power")
-  ) %>%
+  ) |>
   tab_footnote(
     footnote = "alpha-spending for efficacy ignores non-binding futility bound",
     location = cells_column_labels(columns = alpha)
-  ) %>%
+  ) |>
   tab_header("Design Bounds and Operating Characteristics")
 ```
 The initial approximation of bounds for the exact binomial design was generated from the time-to-event design as follows.
@@ -407,7 +406,7 @@ We hide the code to produce the table; this is available in package vignette cod
   # Cumulative sum within rows
   power_table <- apply(power_table, 2, cumsum)
   colnames(power_table) <- paste(ve * 100, "%", sep = "")
-  out_tab <- tibble(
+  out_tab <- tibble::tibble(
     Analysis = 1:ebUpdate$k,
     Cases = ebUpdate$n.I,
     Success = ebUpdate$lower$bound,
@@ -423,37 +422,37 @@ We hide the code to produce the table; this is available in package vignette cod
     beta = as.vector(cumsum(ebUpdate$upper$prob[, 2]))
   )
   out_tab <- cbind(out_tab, power_table)
-  out_tab %>% gt() %>%
-  fmt_number(columns = c(5:6, 9:11), decimals = 2) %>%
-  fmt_number(columns = 7:8, decimals = 4) %>%
-  tab_spanner(label = "Cases at Bound", columns = 3:4, id = "cases") %>%
-  tab_spanner(label = "Power by VE", columns = 9:11, id = "power") %>%
-  tab_spanner(label = "Error Spending", columns = 7:8, id = "spend") %>%
-  tab_spanner(label = "VE at Bound", columns = 5:6, id = "vebound") %>%
+  out_tab |> gt() |>
+  fmt_number(columns = c(5:6, 9:11), decimals = 2) |>
+  fmt_number(columns = 7:8, decimals = 4) |>
+  tab_spanner(label = "Cases at Bound", columns = 3:4, id = "cases") |>
+  tab_spanner(label = "Power by VE", columns = 9:11, id = "power") |>
+  tab_spanner(label = "Error Spending", columns = 7:8, id = "spend") |>
+  tab_spanner(label = "VE at Bound", columns = 5:6, id = "vebound") |>
   cols_label(
     ve_efficacy = "Efficacy",
     ve_futility = "Futility"
-  ) %>%
+  ) |>
   tab_footnote(
     footnote = "Cumulative spending at each analysis",
     locations = cells_column_spanners(spanners = "spend")
-  ) %>%
+  ) |>
   tab_footnote(
     footnote = "Experimental case counts; counts between success and futility bounds do not stop trial",
     locations = cells_column_spanners(spanners = "cases")
-  ) %>%
+  ) |>
   tab_footnote(
     footnote = "Exact vaccine efficacy required to cross bound",
     locations = cells_column_spanners(spanners = "vebound")
-  ) %>%
+  ) |>
   tab_footnote(
     footnote = "Cumulative power at each analysis by underlying vaccine efficacy",
     locations = cells_column_spanners(spanners = "power")
-  ) %>%
+  ) |>
   tab_footnote(
     footnote = "Efficacy spending ignores non-binding futility bound",
     location = cells_column_labels(columns = alpha)
-  ) %>%
+  ) |>
   tab_header(title = "Updated Bounds for Actual Analyses from SPUTNIK trial")
 ```
 

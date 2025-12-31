@@ -100,12 +100,12 @@
 #'
 #' @examples
 #' # First example: while timing is calendar-based, spending is event-based
-#' x <- gsSurvCalendar() %>% toInteger()
+#' x <- gsSurvCalendar() |> toInteger()
 #' gsBoundSummary(x)
 #' 
 #' # Second example: both timing and spending are calendar-based
 #' # This results in less spending at interims and leaves more for final analysis
-#' y <- gsSurvCalendar(spending = "calendar") %>% toInteger()
+#' y <- gsSurvCalendar(spending = "calendar") |> toInteger()
 #' gsBoundSummary(y)
 #'
 #' # Note that calendar timing for spending relates to planned timing for y

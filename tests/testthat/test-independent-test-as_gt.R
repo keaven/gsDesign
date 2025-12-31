@@ -11,8 +11,8 @@ test_that("Snapshot test for gsBinomialExact safety table", {
     a = safety_design$lower$bound,
     b = safety_design$upper$bound
   )
-  output <- safety_power %>%
-    as_table() %>%
+  output <- safety_power |>
+    as_table() |>
     as_gt(
       theta_label = gt::html("Underlying<br>AE rate"),
       prob_decimals = 3,
@@ -34,8 +34,8 @@ test_that("Number of set decimals for `Probability of crossing` are respected", 
     a = safety_design$lower$bound,
     b = safety_design$upper$bound
   )
-  output <- safety_power %>%
-    as_table() %>%
+  output <- safety_power |>
+    as_table() |>
     as_gt(
       theta_label = gt::html("Underlying<br>AE rate"),
       prob_decimals = 3,
@@ -61,8 +61,8 @@ test_that("We can set custom title and subtitles", {
     a = safety_design$lower$bound,
     b = safety_design$upper$bound
   )
-  output <- safety_power %>%
-    as_table() %>%
+  output <- safety_power |>
+    as_table() |>
     as_gt(
       title = "Custom Title",
       subtitle = "Custom Subtitle",

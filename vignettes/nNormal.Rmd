@@ -182,8 +182,8 @@ d <- gsDesign(
   n.fix = nNormal(delta1 = 0.8, sd = 1.6, sd2 = 1.25, alpha = 0.025, beta = .1, ratio = 2),
   delta1 = 0.8
 )
-d %>%
-  gsBoundSummary(deltaname = "Mean difference") %>%
+d |>
+  gsBoundSummary(deltaname = "Mean difference") |>
   kable(row.names = FALSE)
 ```
 
@@ -200,8 +200,8 @@ gsDesign(
   k = 2,
   delta = theta,
   delta1 = 0.8
-) %>%
-  gsBoundSummary(deltaname = "Mean difference") %>%
+) |>
+  gsBoundSummary(deltaname = "Mean difference") |>
   kable(row.names = FALSE)
 ```
 

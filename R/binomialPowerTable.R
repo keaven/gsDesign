@@ -84,9 +84,9 @@ binomialPowerTable <- function(
   # Create a grid of all combinations of pC and delta
   pC_grid <- expand.grid(pC = pC, delta = delta)
   # Compute the experimental group response rate
-  pC_grid <- pC_grid %>%
-    mutate(pE = pC + delta) %>%
-    filter(pE < 1 & pE > 0 & pC < 1 & pC > 0) %>% # Filter out of range values
+  pC_grid <- pC_grid |>
+    mutate(pE = pC + delta) |>
+    filter(pE < 1 & pE > 0 & pC < 1 & pC > 0) |> # Filter out of range values
     select(pC, delta, pE)
 
   # Compute the probability of non-inferiority using the nBinomial function

@@ -25,8 +25,8 @@
 #'   k = 3, theta = seq(0.1, 0.9, 0.1), n.I = c(12, 24, 36),
 #'   a = c(-1, 0, 11), b = c(5, 9, 12)
 #' )
-#' zz %>%
-#'   as_table() %>%
+#' zz |>
+#'   as_table() |>
 #'   as_rtf(
 #'     file = tempfile(fileext = ".rtf"),
 #'     title = "Power/Type I Error and Expected Sample Size for a Group Sequential Design"
@@ -42,8 +42,8 @@
 #'   a = safety_design$lower$bound,
 #'   b = safety_design$upper$bound
 #' )
-#' safety_power %>%
-#'   as_table() %>%
+#' safety_power |>
+#'   as_table() |>
 #'   as_rtf(
 #'     file = tempfile(fileext = ".rtf"),
 #'     theta_label = "Underlying\nAE Rate",
@@ -52,17 +52,17 @@
 #'   )
 #' # as_rtf for gsBoundSummary
 #' xgs <- gsSurv(lambdaC = .2, hr = .5, eta = .1, T = 2, minfup = 1.5)
-#' gsBoundSummary(xgs, timename = "Year", tdigits = 1) %>% as_rtf(file = tempfile(fileext = ".rtf"))
+#' gsBoundSummary(xgs, timename = "Year", tdigits = 1) |> as_rtf(file = tempfile(fileext = ".rtf"))
 #'
 #' ss <- nSurvival(
 #'   lambda1 = .2, lambda2 = .1, eta = .1, Ts = 2, Tr = .5,
 #'   sided = 1, alpha = .025, ratio = 2
 #' )
 #' xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
-#' gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) %>% as_rtf(file = tempfile(fileext = ".rtf"))
+#' gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) |> as_rtf(file = tempfile(fileext = ".rtf"))
 #' 
 #' xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
-#' gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) %>% 
+#' gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) |>
 #'   as_rtf(file = tempfile(fileext = ".rtf"),
 #'   footnote_specify = "Z",
 #'   footnote_text = "Z-Score")
@@ -114,19 +114,19 @@ as_rtf.gsBinomialExactTable <- function(
   x[, "theta"] <- paste0(sprintf(paste0("%.", rr_decimals, "f"), unlist(x[, "theta"] * 100)), "%")
   x[, "en"] <- sprintf(paste0("%.", en_decimals, "f"), unlist(x[, "en"]))
 
-  x %>%
-    rtf_title(title = title) %>%
+  x |>
+    rtf_title(title = title) |>
     rtf_colheader(
       paste0(theta_label, " | ", "Probability of Crossing", " | ", en_label),
       col_rel_width = c(1, 2, 1)
-    ) %>%
+    ) |>
     rtf_colheader(paste0(" | ", bound_label[1], " | ", bound_label[2], " | "),
       col_rel_width = c(1, 1, 1, 1),
       border_top = c("", rep("single", 2), ""),
       border_left = c("single", "single", "", "single")
-    ) %>%
-    rtf_body() %>%
-    rtf_encode() %>%
+    ) |>
+    rtf_body() |>
+    rtf_encode() |>
     write_rtf(file)
 
   invisible(x_out)
@@ -234,18 +234,18 @@ as_rtf.gsBoundSummary <- function(
   }
 
   x <- x_sub
-  x %>%
-    rtf_title(title = title) %>%
+  x |>
+    rtf_title(title = title) |>
     rtf_colheader(
       paste0("Analysis", " | ", "Value", " | ", "Efficacy", " | ", "Futility"),
       col_rel_width = c(1, 1.5, 1, 1)
-    ) %>%
+    ) |>
     rtf_body(
       text_justification = c("l", rep("c", 3)),
       col_rel_width = c(1, 1.5, 1, 1)
-    ) %>%
-    rtf_footnote(footnote) %>%
-    rtf_encode() %>%
+    ) |>
+    rtf_footnote(footnote) |>
+    rtf_encode() |>
     write_rtf(file)
 
   invisible(x_out)
