@@ -26,8 +26,8 @@ and slightly altered interim timing (117/353 = 0.3314, 235/353 = 0.6657)
 compared to plan (0.3333, 0.6667).
 
 ``` r
-design <- gsSurv(hr = 0.7, lambdaC = log(2) / 12, minfup = 24, T = 36) %>% toInteger()
-design %>% gsBoundSummary()
+design <- gsSurv(hr = 0.7, lambdaC = log(2) / 12, minfup = 24, T = 36) |> toInteger()
+design |> gsBoundSummary()
 #>     Analysis              Value Efficacy Futility
 #>    IA 1: 33%                  Z   3.0139  -0.2451
 #>       N: 464        p (1-sided)   0.0013   0.5968
@@ -49,7 +49,7 @@ design %>% gsBoundSummary()
 We also provide a textual summary.
 
 ``` r
-cat(design %>% summary())
+cat(design |> summary())
 ```
 
 Asymmetric two-sided group sequential design with non-binding futility

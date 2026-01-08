@@ -192,7 +192,7 @@ Now we move on to other design assumptions.
 
 ``` r
 # Get hazard rate info for Scenario 1 control group
-control <- hazard %>% filter(Scenario == 1, Treatment == "Control")
+control <- hazard |> filter(Scenario == 1, Treatment == "Control")
 # Failure rates
 lambdaC <- control$hazard_rate
 # Interval durations
@@ -259,9 +259,9 @@ design_calendar <-
     lambdaC = lambdaC,
     S = S
   )
-design_calendar %>%
-  gsBoundSummary(exclude = c("B-value", "CP", "CP H1", "PP")) %>%
-  gt() %>%
+design_calendar |>
+  gsBoundSummary(exclude = c("B-value", "CP", "CP H1", "PP")) |>
+  gt() |>
   tab_header(
     title = "Calendar-Based Design",
     subtitle = "Calendar Spending"

@@ -131,7 +131,7 @@ beta <- 0.1
 which, rounding up, matches (with tabular output):
 
 ``` r
-nEvents(hr = hr, alpha = alpha, beta = beta, r = 1, tbl = TRUE) %>%
+nEvents(hr = hr, alpha = alpha, beta = beta, r = 1, tbl = TRUE) |>
   kable()
 ```
 
@@ -181,10 +181,10 @@ Schoenfeld <- gsDesign(
   k = 2,
   n.fix = nEvents(hr = hr, alpha = alpha, beta = beta, r = 1),
   delta1 = log(hr)
-) %>% toInteger()
+) |> toInteger()
 #> toInteger: rounding done to nearest integer since ratio was not specified as postive integer .
-Schoenfeld %>%
-  gsBoundSummary(deltaname = "HR", logdelta = TRUE, Nname = "Events") %>%
+Schoenfeld |>
+  gsBoundSummary(deltaname = "HR", logdelta = TRUE, Nname = "Events") |>
   kable(row.names = FALSE)
 ```
 
@@ -208,7 +208,7 @@ standardized effect size `theta` from above to the parameter `delta` in
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md).
 
 ``` r
-Schoenfeld <- gsDesign(k = 2, delta = -theta, delta1 = log(hr)) %>% toInteger()
+Schoenfeld <- gsDesign(k = 2, delta = -theta, delta1 = log(hr)) |> toInteger()
 ```
 
 We noted above that the asymptotic variance for \\\hat\theta\\ is
@@ -505,9 +505,9 @@ lfgs <- gsSurv(
   ratio = r,
   alpha = alpha,
   beta = beta
-) %>% toInteger()
-lfgs %>%
-  gsBoundSummary() %>%
+) |> toInteger()
+lfgs |>
+  gsBoundSummary() |>
   kable(row.names = FALSE)
 ```
 
@@ -560,7 +560,7 @@ tibble::tibble(
   Analysis = 1:2,
   `Control events` = lfgs$eDC,
   `Experimental events` = lfgs$eDE
-) %>%
+) |>
   kable()
 ```
 

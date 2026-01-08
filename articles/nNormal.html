@@ -180,14 +180,14 @@ same scenario.</p>
 <code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span><span class="op">:</span><span class="fl">200</span></span>
 <span><span class="va">pwrn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1 <span class="op">=</span> <span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">1.6</span>, sd2 <span class="op">=</span> <span class="fl">1.25</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, n <span class="op">=</span> <span class="va">n</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">pwrn</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="nNormal_files/figure-html/unnamed-chunk-6-1.svg" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="nNormal_files/figure-html/unnamed-chunk-6-1.svg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p>Alternatively, you could fix sample size at 200 and plot power under
 different treatment effect assumptions:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">delta1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">1</span>, <span class="fl">.025</span><span class="op">)</span></span>
 <span><span class="va">pwrdelta1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1 <span class="op">=</span> <span class="va">delta1</span>, sd <span class="op">=</span> <span class="fl">1.6</span>, sd2 <span class="op">=</span> <span class="fl">1.25</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, n <span class="op">=</span> <span class="fl">200</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">delta1</span>, <span class="va">pwrdelta1</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="nNormal_files/figure-html/unnamed-chunk-7-1.svg" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="nNormal_files/figure-html/unnamed-chunk-7-1.svg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="verification-with-simulation">Verification with simulation<a class="anchor" aria-label="anchor" href="#verification-with-simulation"></a>
@@ -239,8 +239,8 @@ we plug in the fixed sample size above as follows:</p>
 <span>  n.fix <span class="op">=</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1 <span class="op">=</span> <span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">1.6</span>, sd2 <span class="op">=</span> <span class="fl">1.25</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">.1</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  delta1 <span class="op">=</span> <span class="fl">0.8</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">d</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">d</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -327,8 +327,8 @@ size we computed above:</p>
 <span>  k <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  delta <span class="op">=</span> <span class="va">theta</span>,</span>
 <span>  delta1 <span class="op">=</span> <span class="fl">0.8</span></span>
-<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"Mean difference"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">

@@ -195,7 +195,7 @@ number of events required to power for HR=0.7 with <span class="math inline">\(\
 <span><span class="co">#&gt; [1] 330.3779</span></span></code></pre></div>
 <p>which, rounding up, matches (with tabular output):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/nSurvival.html">nEvents</a></span><span class="op">(</span>hr <span class="op">=</span> <span class="va">hr</span>, alpha <span class="op">=</span> <span class="va">alpha</span>, beta <span class="op">=</span> <span class="va">beta</span>, r <span class="op">=</span> <span class="fl">1</span>, tbl <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/nSurvival.html">nEvents</a></span><span class="op">(</span>hr <span class="op">=</span> <span class="va">hr</span>, alpha <span class="op">=</span> <span class="va">alpha</span>, beta <span class="op">=</span> <span class="va">beta</span>, r <span class="op">=</span> <span class="fl">1</span>, tbl <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -259,10 +259,10 @@ power slightly over the targeted 90%.</p>
 <span>  k <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  n.fix <span class="op">=</span> <span class="fu"><a href="../reference/nSurvival.html">nEvents</a></span><span class="op">(</span>hr <span class="op">=</span> <span class="va">hr</span>, alpha <span class="op">=</span> <span class="va">alpha</span>, beta <span class="op">=</span> <span class="va">beta</span>, r <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  delta1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; toInteger: rounding done to nearest integer since ratio was not specified as postive integer .</span></span>
-<span><span class="va">Schoenfeld</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"HR"</span>, logdelta <span class="op">=</span> <span class="cn">TRUE</span>, Nname <span class="op">=</span> <span class="st">"Events"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">Schoenfeld</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>deltaname <span class="op">=</span> <span class="st">"HR"</span>, logdelta <span class="op">=</span> <span class="cn">TRUE</span>, Nname <span class="op">=</span> <span class="st">"Events"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -342,7 +342,7 @@ power slightly over the targeted 90%.</p>
 the standardized effect size <code>theta</code> from above to the
 parameter <code>delta</code> in <code><a href="../reference/gsDesign.html">gsDesign()</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Schoenfeld</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">2</span>, delta <span class="op">=</span> <span class="op">-</span><span class="va">theta</span>, delta1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Schoenfeld</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">2</span>, delta <span class="op">=</span> <span class="op">-</span><span class="va">theta</span>, delta1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">hr</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>We noted above that the asymptotic variance for <span class="math inline">\(\hat\theta\)</span> is <span class="math inline">\(1/n\)</span> which corresponds to statistical
 information <span class="math inline">\(\mathcal I=n\)</span> for the
 parameter <span class="math inline">\(\theta\)</span>. Thus, the
@@ -600,9 +600,9 @@ power.</p>
 <span>  ratio <span class="op">=</span> <span class="va">r</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="va">alpha</span>,</span>
 <span>  beta <span class="op">=</span> <span class="va">beta</span></span>
-<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">lfgs</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">lfgs</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span>row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -692,7 +692,7 @@ required to cross bounds again use the <span class="citation">Schoenfeld
 this plot, use the default <code>base = FALSE</code>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lfgs</span>, pl <span class="op">=</span> <span class="st">"hr"</span>, dgt <span class="op">=</span> <span class="fl">2</span>, base <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-26-1.svg" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-26-1.svg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="event-accrual">Event accrual<a class="anchor" aria-label="anchor" href="#event-accrual"></a>
@@ -708,7 +708,7 @@ alternate hypothesis with:</p>
 <span>  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
 <span>  `Control events` <span class="op">=</span> <span class="va">lfgs</span><span class="op">$</span><span class="va">eDC</span>,</span>
 <span>  `Experimental events` <span class="op">=</span> <span class="va">lfgs</span><span class="op">$</span><span class="va">eDE</span></span>
-<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -746,7 +746,7 @@ computed as follows:</p>
 <span>  type <span class="op">=</span> <span class="st">"l"</span>, xlab <span class="op">=</span> <span class="st">"Month"</span>, ylab <span class="op">=</span> <span class="st">"Expected events"</span>,</span>
 <span>  main <span class="op">=</span> <span class="st">"Expected event accrual over time"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-28-1.svg" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="SurvivalOverview_files/figure-html/unnamed-chunk-28-1.svg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p>On the other hand, if you want to know the expected time to accrue
 25% of the final events and what the expected enrollment accrual is at
 that time, you compute using:</p>

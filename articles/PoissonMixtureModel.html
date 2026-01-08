@@ -192,14 +192,14 @@ scenarios.</p>
 cumulative hazard matches the piecewise exponential of the specified
 cure rate models by scenario. The piecewise failure model is used to
 derive the sample size and targeted events over time in the trial.</p>
-<p><img src="PoissonMixtureModel_files/figure-html/unnamed-chunk-6-1.svg" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="PoissonMixtureModel_files/figure-html/unnamed-chunk-6-1.svg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p>We also evaluate the failure rate over time for scenario 1, which is
 used below in the design derivation. Note that the piecewise intervals
 used to approximate changing hazard rates can be made arbitrarily small
 to get more precise approximations of the above. However, given the
 uncertainty of the underlying assumptions, it is not clear that this
 provides any advantage.</p>
-<p><img src="PoissonMixtureModel_files/figure-html/unnamed-chunk-7-1.svg" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="PoissonMixtureModel_files/figure-html/unnamed-chunk-7-1.svg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="event-accumulation">Event accumulation<a class="anchor" aria-label="anchor" href="#event-accumulation"></a>
@@ -221,7 +221,7 @@ the expectation is that targeted events will be achieved in less than 24
 months under both the null and alternative hypotheses. Under Scenario 3,
 the expected events under the alternative do not reach the target even
 by 60 months.</p>
-<p><img src="PoissonMixtureModel_files/figure-html/unnamed-chunk-8-1.svg" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="PoissonMixtureModel_files/figure-html/unnamed-chunk-8-1.svg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -255,7 +255,7 @@ was selected to get the expected events well above 100.</p>
 <p>Now we move on to other design assumptions.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get hazard rate info for Scenario 1 control group</span></span>
-<span><span class="va">control</span> <span class="op">&lt;-</span> <span class="va">hazard</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Scenario</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">Treatment</span> <span class="op">==</span> <span class="st">"Control"</span><span class="op">)</span></span>
+<span><span class="va">control</span> <span class="op">&lt;-</span> <span class="va">hazard</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Scenario</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">Treatment</span> <span class="op">==</span> <span class="st">"Control"</span><span class="op">)</span></span>
 <span><span class="co"># Failure rates</span></span>
 <span><span class="va">lambdaC</span> <span class="op">&lt;-</span> <span class="va">control</span><span class="op">$</span><span class="va">hazard_rate</span></span>
 <span><span class="co"># Interval durations</span></span>
@@ -321,9 +321,9 @@ respectively.</p>
 <span>    lambdaC <span class="op">=</span> <span class="va">lambdaC</span>,</span>
 <span>    S <span class="op">=</span> <span class="va">S</span></span>
 <span>  <span class="op">)</span></span>
-<span><span class="va">design_calendar</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B-value"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, <span class="st">"PP"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">design_calendar</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span>exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B-value"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, <span class="st">"PP"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Calendar-Based Design"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"Calendar Spending"</span></span>

@@ -3,7 +3,6 @@
 ``` r
 library(gsDesign)
 library(gt)
-library(dplyr)
 ```
 
 ## Introduction
@@ -89,9 +88,9 @@ events in the experimental group:
 ``` r
 ve <- c(.5, .6, .65, .7, .75, .8)
 prob_experimental <- ratio / (ratio + 1 / (1 - ve))
-tibble(VE = ve, "P(Experimental)" = prob_experimental) %>%
-  gt() %>%
-  tab_options(data_row.padding = px(1)) %>%
+tibble::tibble(VE = ve, "P(Experimental)" = prob_experimental) |>
+  gt() |>
+  tab_options(data_row.padding = px(1)) |>
   fmt_number(columns = 2, decimals = 3)
 ```
 
@@ -201,12 +200,12 @@ xx <- toInteger(x)
 gsBoundSummary(xx,
   tdigits = 1, logdelta = TRUE, deltaname = "HR", Nname = "Events",
   exclude = c("B-value", "CP", "CP H1", "PP")
-) %>%
-  gt() %>%
+) |>
+  gt() |>
   tab_header(
     title = "Initial group sequential approximation",
     subtitle = "Integer event counts at analyses"
-  ) %>%
+  ) |>
   tab_options(data_row.padding = px(1))
 ```
 

@@ -105,7 +105,7 @@ initially set a one-sided Type I error of <span class="math inline">\(\alpha=0.0
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsBinomialExact.html">binomialSPRT</a></span><span class="op">(</span>p0 <span class="op">=</span> <span class="fl">.1</span>, p1 <span class="op">=</span> <span class="fl">.35</span>, alpha <span class="op">=</span> <span class="fl">.08</span>, beta <span class="op">=</span> <span class="fl">.2</span>, minn <span class="op">=</span> <span class="fl">10</span>, maxn <span class="op">=</span> <span class="fl">25</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span></span></code></pre></div>
-<p><img src="binomialSPRTExample_files/figure-html/unnamed-chunk-3-1.svg" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="binomialSPRTExample_files/figure-html/unnamed-chunk-3-1.svg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p>The above plot tests first after 10 patients. If 4/10 have responded,
 you can reject the null hypothesis of a 10% response rate. If 0 or 1 of
 10 have responded, you can conclude that the targeted 35% response rate
@@ -132,7 +132,7 @@ we can make a power plot:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">b</span>, plottype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">90</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="binomialSPRTExample_files/figure-html/unnamed-chunk-5-1.svg" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="binomialSPRTExample_files/figure-html/unnamed-chunk-5-1.svg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p>Probability of three possible outcomes are summarized by the
 underlying response rate:</p>
 <ul>
@@ -151,17 +151,14 @@ of rejecting a 35% response rate if the true response rate is 10%.</li>
 user can ignore reviewing the code, but may copy if wishing to produce a
 similar table.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute boundary crossing probabilities for selected response rates</span></span>
 <span><span class="va">b_power</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsBinomialExact.html">gsBinomialExact</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>, theta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.45</span>, <span class="fl">.05</span><span class="op">)</span>, n.I <span class="op">=</span> <span class="va">b</span><span class="op">$</span><span class="va">n.I</span>,</span>
 <span>  a <span class="op">=</span> <span class="va">b</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>, b <span class="op">=</span> <span class="va">b</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">b_power</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/as_table.html">as_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">b_power</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/as_table.html">as_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#mwlefoodfi table {
@@ -698,10 +695,10 @@ with an SPRT, we demonstrate here a monitoring bound for the
 experimental arm only. We assume the proposed sample size for the study
 is 75 per arm and that we will not stop the trial for serious rash
 before 4 patients have been studied in the experimental group.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">safety_design</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsBinomialExact.html">binomialSPRT</a></span><span class="op">(</span>p0 <span class="op">=</span> <span class="fl">.04</span>, p1 <span class="op">=</span> <span class="fl">.1</span>, alpha <span class="op">=</span> <span class="fl">.04</span>, beta <span class="op">=</span> <span class="fl">.2</span>, minn <span class="op">=</span> <span class="fl">4</span>, maxn <span class="op">=</span> <span class="fl">75</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">safety_design</span><span class="op">)</span></span></code></pre></div>
-<p><img src="binomialSPRTExample_files/figure-html/unnamed-chunk-9-1.svg" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="binomialSPRTExample_files/figure-html/unnamed-chunk-8-1.svg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p>We see above that if we have no serious rashes in the first 25
 experimental group patients or 1 in the first 40 that we reject the 10%
 rate of concern. On the other hand, if the first 4 of the first 4 to 14
@@ -710,9 +707,9 @@ serious rashes we can reject the hypothesis that there is no elevation
 over the presumed 4% population rate.</p>
 <p>The design operating characteristics are now summarized both in a
 plot and a table.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">safety_design</span>, plottype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="binomialSPRTExample_files/figure-html/unnamed-chunk-10-1.svg" class="r-plt" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="binomialSPRTExample_files/figure-html/unnamed-chunk-9-1.svg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p>We see that there can be a fairly high possibility of an
 indeterminate outcome at the end of the trial. If we include more
 extreme values in the summary table, we can see that the indeterminate
@@ -724,7 +721,7 @@ be analyzed, but if you cross a high rate bound with some incomplete
 data included as <em>safe</em> that you can still declare that you
 crossed the high rate bound as the number of adverse experience cases
 cannot go down when the missing cases filled in.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">safety_power</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsBinomialExact.html">gsBinomialExact</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">safety_design</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,</span>
 <span>  theta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">.02</span>, <span class="fl">.16</span>, <span class="fl">.02</span><span class="op">)</span>,</span>
@@ -732,8 +729,8 @@ cannot go down when the missing cases filled in.</p>
 <span>  a <span class="op">=</span> <span class="va">safety_design</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>,</span>
 <span>  b <span class="op">=</span> <span class="va">safety_design</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">safety_power</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/as_table.html">as_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">safety_power</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/as_table.html">as_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/as_gt.html">as_gt</a></span><span class="op">(</span></span>
 <span>    theta_label <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/html.html" class="external-link">html</a></span><span class="op">(</span><span class="st">"Underlying&lt;br&gt;AE rate"</span><span class="op">)</span>,</span>
 <span>    prob_decimals <span class="op">=</span> <span class="fl">3</span>,</span>

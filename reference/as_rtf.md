@@ -141,8 +141,8 @@ zz <- gsBinomialExact(
   k = 3, theta = seq(0.1, 0.9, 0.1), n.I = c(12, 24, 36),
   a = c(-1, 0, 11), b = c(5, 9, 12)
 )
-zz %>%
-  as_table() %>%
+zz |>
+  as_table() |>
   as_rtf(
     file = tempfile(fileext = ".rtf"),
     title = "Power/Type I Error and Expected Sample Size for a Group Sequential Design"
@@ -158,8 +158,8 @@ safety_power <- gsBinomialExact(
   a = safety_design$lower$bound,
   b = safety_design$upper$bound
 )
-safety_power %>%
-  as_table() %>%
+safety_power |>
+  as_table() |>
   as_rtf(
     file = tempfile(fileext = ".rtf"),
     theta_label = "Underlying\nAE Rate",
@@ -168,17 +168,17 @@ safety_power %>%
   )
 # as_rtf for gsBoundSummary
 xgs <- gsSurv(lambdaC = .2, hr = .5, eta = .1, T = 2, minfup = 1.5)
-gsBoundSummary(xgs, timename = "Year", tdigits = 1) %>% as_rtf(file = tempfile(fileext = ".rtf"))
+gsBoundSummary(xgs, timename = "Year", tdigits = 1) |> as_rtf(file = tempfile(fileext = ".rtf"))
 
 ss <- nSurvival(
   lambda1 = .2, lambda2 = .1, eta = .1, Ts = 2, Tr = .5,
   sided = 1, alpha = .025, ratio = 2
 )
 xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
-gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) %>% as_rtf(file = tempfile(fileext = ".rtf"))
+gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) |> as_rtf(file = tempfile(fileext = ".rtf"))
 
 xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
-gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) %>% 
+gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) |>
   as_rtf(file = tempfile(fileext = ".rtf"),
   footnote_specify = "Z",
   footnote_text = "Z-Score")

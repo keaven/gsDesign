@@ -93,11 +93,6 @@ can ignore reviewing the code, but may copy if wishing to produce a
 similar table.
 
 ``` r
-library(dplyr)
-library(tidyr)
-```
-
-``` r
 # Compute boundary crossing probabilities for selected response rates
 b_power <- gsBinomialExact(
   k = length(b$n.I), theta = seq(.1, .45, .05), n.I = b$n.I,
@@ -106,8 +101,8 @@ b_power <- gsBinomialExact(
 ```
 
 ``` r
-b_power %>%
-  as_table() %>%
+b_power |>
+  as_table() |>
   as_gt()
 ```
 
@@ -131,7 +126,7 @@ safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 
 plot(safety_design)
 ```
 
-![](binomialSPRTExample_files/figure-html/unnamed-chunk-9-1.svg)
+![](binomialSPRTExample_files/figure-html/unnamed-chunk-8-1.svg)
 
 We see above that if we have no serious rashes in the first 25
 experimental group patients or 1 in the first 40 that we reject the 10%
@@ -147,7 +142,7 @@ and a table.
 plot(safety_design, plottype = 2)
 ```
 
-![](binomialSPRTExample_files/figure-html/unnamed-chunk-10-1.svg)
+![](binomialSPRTExample_files/figure-html/unnamed-chunk-9-1.svg)
 
 We see that there can be a fairly high possibility of an indeterminate
 outcome at the end of the trial. If we include more extreme values in
@@ -169,8 +164,8 @@ safety_power <- gsBinomialExact(
   a = safety_design$lower$bound,
   b = safety_design$upper$bound
 )
-safety_power %>%
-  as_table() %>%
+safety_power |>
+  as_table() |>
   as_gt(
     theta_label = gt::html("Underlying<br>AE rate"),
     prob_decimals = 3,

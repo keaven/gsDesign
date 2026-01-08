@@ -137,8 +137,8 @@ across a range of effect sizes.</p>
 <span class="r-in"><span>  a <span class="op">=</span> <span class="va">safety_design</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>,</span></span>
 <span class="r-in"><span>  b <span class="op">=</span> <span class="va">safety_design</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">safety_power</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="as_table.html">as_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="va">safety_power</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="as_table.html">as_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">as_gt</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    theta_label <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/html.html" class="external-link">html</a></span><span class="op">(</span><span class="st">"Underlying&lt;br&gt;AE rate"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    prob_decimals <span class="op">=</span> <span class="fl">3</span>,</span></span>
