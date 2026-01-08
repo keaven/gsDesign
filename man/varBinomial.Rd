@@ -297,7 +297,7 @@ len <- length(p1)
 p2 <- c(p1 * .75, p1 * 2/3, p1 * .6, p1 * .5)
 Reduction <- c(rep("25 percent", len), rep("33 percent", len), 
                rep("40 percent", len), rep("50 percent", len))
-df <- tibble(p1 = rep(p1, 4), p2, Reduction) \%>\% 
+df <- tibble(p1 = rep(p1, 4), p2, Reduction) |>
   mutate(`Sample size` = nBinomial(p1, p2, beta = .2, alpha = .025, sided = 1))
 ggplot(df, aes(x = p1, y = `Sample size`, col = Reduction)) + 
   geom_line() + 

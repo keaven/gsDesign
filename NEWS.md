@@ -1,3 +1,10 @@
+# gsDesign (development version)
+
+## Piping
+
+- The R native pipe operator `|>` is now used throughout the code and
+  documentation. As a result, R >= 4.1.0 is now required (#236).
+
 # gsDesign 3.8.0 (December 2025)
 
 ## New features

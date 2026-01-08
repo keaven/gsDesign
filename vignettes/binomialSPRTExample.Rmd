@@ -80,11 +80,6 @@ Probability of three possible outcomes are summarized by the underlying response
 
 We now provide a summary table for operating characteristics. The user can ignore reviewing the code, but may copy if wishing to produce a similar table.
 
-```{r, warning=FALSE, message=FALSE}
-library(dplyr)
-library(tidyr)
-```
-
 ```{r}
 # Compute boundary crossing probabilities for selected response rates
 b_power <- gsBinomialExact(
@@ -94,8 +89,8 @@ b_power <- gsBinomialExact(
 ```
 
 ```{r}
-b_power %>%
-  as_table() %>%
+b_power |>
+  as_table() |>
   as_gt()
 ```
 
@@ -134,8 +129,8 @@ safety_power <- gsBinomialExact(
   a = safety_design$lower$bound,
   b = safety_design$upper$bound
 )
-safety_power %>%
-  as_table() %>%
+safety_power |>
+  as_table() |>
   as_gt(
     theta_label = gt::html("Underlying<br>AE rate"),
     prob_decimals = 3,

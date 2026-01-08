@@ -44,14 +44,14 @@ We note that the expected interim analysis timing leaves enough time for a data 
 We use the `toInteger()` function to round sample size and event counts to appropriate integers resulting in a slightly larger power (90.05% versus the targeted 90%) and slightly altered interim timing (117/353 = 0.3314, 235/353 = 0.6657) compared to plan (0.3333, 0.6667).
 
 ```{r}
-design <- gsSurv(hr = 0.7, lambdaC = log(2) / 12, minfup = 24, T = 36) %>% toInteger()
-design %>% gsBoundSummary()
+design <- gsSurv(hr = 0.7, lambdaC = log(2) / 12, minfup = 24, T = 36) |> toInteger()
+design |> gsBoundSummary()
 ```
 
 We also provide a textual summary. 
 
 ```{r, results = 'asis'}
-cat(design %>% summary())
+cat(design |> summary())
 ```
 
 ## Update design at time of interim analysis

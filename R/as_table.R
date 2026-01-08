@@ -28,8 +28,8 @@
 #'   k = length(b$n.I), theta = seq(.1, .45, .05), n.I = b$n.I,
 #'   a = b$lower$bound, b = b$upper$bound
 #' )
-#' b_power %>%
-#'   as_table() %>%
+#' b_power |>
+#'   as_table() |>
 #'   as_gt()
 as_table <- function(x, ...) UseMethod("as_table")
 
@@ -38,19 +38,19 @@ as_table <- function(x, ...) UseMethod("as_table")
 as_table.gsBinomialExact <- function(x, ...) {
   sum_lower <- t(x$lower$prob)
   theta <- as.double(names(t(x$lower$prob)[, 1]))
-  sum_lower <- sum_lower %>%
-    as_tibble() %>%
-    mutate(theta = theta) %>%
-    pivot_longer(cols = !theta, names_to = "Analysis", values_to = "Probability") %>%
-    group_by(theta) %>%
+  sum_lower <- sum_lower |>
+    as_tibble() |>
+    mutate(theta = theta) |>
+    pivot_longer(cols = !theta, names_to = "Analysis", values_to = "Probability") |>
+    group_by(theta) |>
     summarize(Lower = sum(Probability))
 
   sum_upper <- t(x$upper$prob)
-  sum_upper <- sum_upper %>%
-    as_tibble() %>%
-    mutate(theta = theta) %>%
-    pivot_longer(cols = !theta, names_to = "Analysis", values_to = "Probability") %>%
-    group_by(theta) %>%
+  sum_upper <- sum_upper |>
+    as_tibble() |>
+    mutate(theta = theta) |>
+    pivot_longer(cols = !theta, names_to = "Analysis", values_to = "Probability") |>
+    group_by(theta) |>
     summarize(Upper = sum(Probability))
 
   tab <- left_join(sum_lower, sum_upper, by = "theta")

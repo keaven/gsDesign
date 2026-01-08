@@ -867,8 +867,8 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     
     Probability <- NULL
     
-    y2 <- y %>%
-             dplyr::group_by(Bound, thetaidx) %>% 
+    y2 <- y |>
+             dplyr::group_by(Bound, thetaidx) |>
              dplyr::reframe(Probability = cumsum(Probability))
     
     y2$Probability[y2$Bound == "1-Lower bound"] <- 1 - y2$Probability[y2$Bound == "1-Lower bound"]

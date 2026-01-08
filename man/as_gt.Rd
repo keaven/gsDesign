@@ -65,8 +65,8 @@ safety_power <- gsBinomialExact(
   a = safety_design$lower$bound,
   b = safety_design$upper$bound
 )
-safety_power \%>\%
-  as_table() \%>\%
+safety_power |>
+  as_table() |>
   as_gt(
     theta_label = gt::html("Underlying<br>AE rate"),
     prob_decimals = 3,

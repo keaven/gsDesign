@@ -31,8 +31,8 @@
 #'   a = safety_design$lower$bound,
 #'   b = safety_design$upper$bound
 #' )
-#' safety_power %>%
-#'   as_table() %>%
+#' safety_power |>
+#'   as_table() |>
 #'   as_gt(
 #'     theta_label = gt::html("Underlying<br>AE rate"),
 #'     prob_decimals = 3,
@@ -64,18 +64,18 @@ as_gt.gsBinomialExactTable <- function(
     prob_decimals = 2,
     en_decimals = 1,
     rr_decimals = 0) {
-  out_gt <- x %>%
-    gt() %>%
-    tab_spanner(label = "Probability of crossing", columns = c(Lower, Upper)) %>%
+  out_gt <- x |>
+    gt() |>
+    tab_spanner(label = "Probability of crossing", columns = c(Lower, Upper)) |>
     cols_label(
       theta = theta_label,
       Lower = bound_label[1],
       Upper = bound_label[2],
       en = html("Average<br>sample size")
-    ) %>%
-    fmt_number(columns = c(Lower, Upper), decimals = prob_decimals) %>%
-    fmt_number(columns = en, decimals = en_decimals) %>%
-    fmt_percent(columns = theta, decimals = rr_decimals) %>%
+    ) |>
+    fmt_number(columns = c(Lower, Upper), decimals = prob_decimals) |>
+    fmt_number(columns = en, decimals = en_decimals) |>
+    fmt_percent(columns = theta, decimals = rr_decimals) |>
     tab_header(title = title, subtitle = subtitle)
 
   out_gt
