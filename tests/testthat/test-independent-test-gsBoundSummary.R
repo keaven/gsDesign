@@ -197,7 +197,10 @@ testthat::test_that(desc = "Test CP, CP H1, and PP computations with multiple al
 })
 
 testthat::test_that(desc = "Test gsBoundSummary for correct use of spending time", {
-  x <- gsSurv(alpha = 0.01, k = 3, timing = 1, sfu = sfLDOF, sfl = sfLDPocock) |> toInteger()
+  x <- gsSurv(
+    alpha = 0.01, k = 3, timing = 1, sfu = sfLDOF, sfl = sfLDPocock,
+    T = 18, minfup = 6
+  ) |> toInteger()
 
   # New timing
   events <- x$n.I + c(10, -10, -10)

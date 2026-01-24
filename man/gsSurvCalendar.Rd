@@ -2,7 +2,11 @@
 % Please edit documentation in R/gsSurvCalendar.R
 \name{gsSurvCalendar}
 \alias{gsSurvCalendar}
-\title{Time-to-event endpoint design with calendar timing of analyses}
+\title{Group sequential design with calendar-based timing of analyses.
+This is like gsSurv(), but the timing of analyses is specified in calendar time units.
+Information fraction is computed from the input rates and the calendar times.
+Spending can be based on information fraction as in Lan and DeMets (1983) or calendar 
+time units as in Lan and DeMets (1989).}
 \usage{
 gsSurvCalendar(
   test.type = 4,
@@ -27,144 +31,75 @@ gsSurvCalendar(
   minfup = 18,
   ratio = 1,
   r = 18,
-  tol = 1e-06
+  tol = .Machine$double.eps^0.25,
+  method = c("LachinFoulkes", "Schoenfeld", "Freedman", "BernsteinLagakos")
 )
 }
 \arguments{
-\item{test.type}{Test type. See \code{\link{gsSurv}}.}
+\item{test.type}{}
 
-\item{alpha}{Type I error rate. Default is 0.025 since 1-sided
-testing is default.}
+\item{alpha}{Type I error rate. Default is 0.025 since 1-sided testing is default.}
 
-\item{sided}{\code{1} for 1-sided testing, \code{2} for 2-sided testing.}
+\item{sided}{1 for 1-sided testing, 2 for 2-sided testing.}
 
-\item{beta}{Type II error rate. Default is 0.10
-(90\% power); \code{NULL} if power is to be computed based on
-other input values.}
+\item{beta}{Type II error rate. Default is 0.10 (90\% power); NULL if power is to be computed based on other input values.}
 
-\item{astar}{Normally not specified. If \code{test.type = 5}
-or \code{6}, \code{astar} specifies the total probability
-of crossing a lower bound at all analyses combined. This
-will be changed to \code{1 - alpha} when default value of
-\code{0} is used. Since this is the expected usage,
-normally \code{astar} is not specified by the user.}
+\item{astar}{Normally not specified. If \code{test.type=5} or \code{6}, \code{astar} specifies the total probability of crossing a lower bound at all analyses combined. This will be changed to \code{1−alpha} when default value of \code{0} is used. Since this is the expected usage, normally \code{astar} is not specified by the user.}
 
-\item{sfu}{A spending function or a character string
-indicating a boundary type (that is, \code{"WT"} for
-Wang-Tsiatis bounds, \code{"OF"} for O'Brien-Fleming bounds and
-\code{"Pocock"} for Pocock bounds). For one-sided and symmetric
-two-sided testing is used to completely specify spending
-(\code{test.type = 1}, \code{2}), \code{sfu}. The default value is
-\code{sfHSD} which is a Hwang-Shih-DeCani spending function.}
+\item{sfu}{A spending function or a character string indicating a boundary type (that is, “WT” for Wang-Tsiatis bounds, “OF” for O'Brien-Fleming bounds and “Pocock” for Pocock bounds). For one-sided and symmetric two-sided testing is used to completely specify spending (\code{test.type=1, 2}), \code{sfu}. The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function.}
 
-\item{sfupar}{Real value, default is \code{-4} which is an
-O'Brien-Fleming-like conservative bound when used with the
-default Hwang-Shih-DeCani spending function. This is a
-real-vector for many spending functions. The parameter
-\code{sfupar} specifies any parameters needed for the spending
-function specified by \code{sfu}; this will be ignored for
-spending functions (\code{sfLDOF}, \code{sfLDPocock})
-or bound types (\code{"OF"}, \code{"Pocock"})
-that do not require parameters.}
+\item{sfupar}{Real value, default is −4 which is an O'Brien-Fleming-like conservative bound when used with the default Hwang-Shih-DeCani spending function. This is a real-vector for many spending functions. The parameter sfupar specifies any parameters needed for the spending function specified by sfu; this will be ignored for spending functions (\code{sfLDOF}, \code{sfLDPocock}) or bound types (\code{“OF”, “Pocock”}) that do not require parameters.}
 
-\item{sfl}{Specifies the spending function for lower
-boundary crossing probabilities when asymmetric,
-two-sided testing is performed
-(\code{test.type = 3}, \code{4}, \code{5}, or \code{6}).
-Unlike the upper bound,
-only spending functions are used to specify the lower bound.
-The default value is \code{sfHSD} which is a
-Hwang-Shih-DeCani spending function. The parameter
-\code{sfl} is ignored for one-sided testing
-(\code{test.type = 1}) or symmetric 2-sided testing
-(\code{test.type = 2}).}
+\item{sfl}{Specifies the spending function for lower boundary crossing probabilities when asymmetric, two-sided testing is performed (\code{test.type = 3, 4, 5, or 6}). Unlike the upper bound, only spending functions are used to specify the lower bound. The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function. The parameter \code{sfl} is ignored for one-sided testing (\code{test.type=1}) or symmetric 2-sided testing (\code{test.type=2}).}
 
-\item{sflpar}{Real value, default is \code{-2}, which, with the
-default Hwang-Shih-DeCani spending function, specifies a
-less conservative spending rate than the default for the
-upper bound.}
+\item{sflpar}{Real value, default is −2, which, with the default Hwang-Shih-DeCani spending function, specifies a less conservative spending rate than the default for the upper bound.}
 
-\item{calendarTime}{Vector of increasing positive numbers
-with calendar times of analyses. Time 0 is start of
-randomization.}
+\item{calendarTime}{Vector of increasing positive numbers with calendar times of analyses. Time 0 is start of randomization.}
 
-\item{spending}{Select between calendar-based spending and
-information-based spending.}
+\item{spending}{Select between calendar-based spending and information-based spending.}
 
-\item{lambdaC}{Scalar, vector or matrix of event hazard
-rates for the control group; rows represent time periods while
-columns represent strata; a vector implies a single stratum.}
+\item{lambdaC}{scalar, vector or matrix of event hazard rates for the control group; rows represent time periods while columns represent strata; a vector implies a single stratum.}
 
-\item{hr}{Hazard ratio (experimental/control) under the
-alternate hypothesis (scalar).}
+\item{hr}{hazard ratio (experimental/control) under the alternate hypothesis (scalar).}
 
-\item{hr0}{Hazard ratio (experimental/control) under the null
-hypothesis (scalar).}
+\item{hr0}{hazard ratio (experimental/control) under the null hypothesis (scalar).}
 
-\item{eta}{Scalar, vector or matrix of dropout hazard rates
-for the control group; rows represent time periods while
-columns represent strata; if entered as a scalar, rate is
-constant across strata and time periods; if entered as a
-vector, rates are constant across strata.}
+\item{eta}{scalar, vector or matrix of dropout hazard rates for the control group; rows represent time periods while columns represent strata; if entered as a scalar, rate is constant across strata and time periods; if entered as a vector, rates are constant across strata.}
 
-\item{etaE}{Matrix dropout hazard rates for the experimental
-group specified in like form as \code{eta}; if \code{NULL},
-this is set equal to \code{eta}.}
+\item{etaE}{matrix dropout hazard rates for the experimental group specified in like form as \code{eta}; if \code{NULL}, this is set equal to \code{eta}.}
 
-\item{gamma}{A scalar, vector or matrix of rates of entry by
-time period (rows) and strata (columns); if entered as a
-scalar, rate is constant across strata and time periods;
-if entered as a vector, rates are constant across strata.}
+\item{gamma}{a scalar, vector or matrix of rates of entry by time period (rows) and strata (columns); if entered as a scalar, rate is constant across strata and time periods; if entered as a vector, rates are constant across strata.}
 
-\item{R}{A scalar or vector of durations of time periods for
-recruitment rates specified in rows of \code{gamma}. Length is the
-same as number of rows in \code{gamma}. Note that when variable
-enrollment duration is specified (input \code{T = NULL}), the final
-enrollment period is extended as long as needed.}
+\item{R}{a scalar or vector of durations of time periods for recruitment rates specified in rows of gamma. Length is the same as number of rows in gamma. Note that when variable enrollment duration is specified (input T=NULL), the final enrollment period is extended as long as needed.}
 
-\item{S}{A scalar or vector of durations of piecewise constant
-event rates specified in rows of \code{lambda}, \code{eta} and \code{etaE};
-this is \code{NULL} if there is a single event rate per stratum
-(exponential failure) or length of the number of rows in \code{lambda}
-minus 1, otherwise.}
+\item{S}{a scalar or vector of durations of piecewise constant event rates specified in rows of lambda, eta and etaE; this is NULL if there is a single event rate per stratum (exponential failure) or length of the number of rows in lambda minus 1, otherwise.}
 
-\item{minfup}{A non-negative scalar less than the maximum value
-in \code{calendarTime}. Enrollment will be cut off at the
-difference between the maximum value in \code{calendarTime}
-and \code{minfup}.}
+\item{minfup}{A non-negative scalar less than the maximum value in \code{calendarTime}. Enrollment will be cut off at the difference between the maximum value in \code{calendarTime} and \code{minfup}.}
 
-\item{ratio}{Randomization ratio of experimental treatment
-divided by control; normally a scalar, but may be a vector with
-length equal to number of strata.}
+\item{ratio}{randomization ratio of experimental treatment divided by control; normally a scalar, but may be a vector with length equal to number of strata.}
 
-\item{r}{Integer value (>= 1 and <= 80) controlling the number of numerical
-integration grid points. Default is 18, as recommended by Jennison and
-Turnbull (2000). Grid points are spread out in the tails for accurate
-probability calculations. Larger values provide more grid points and greater
-accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
-accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
-not changed by users.}
+\item{r}{Integer value controlling grid for numerical integration as in Jennison and Turnbull (2000); default is 18, range is 1 to 80. Larger values provide larger number of grid points and greater accuracy. Normally r will not be changed by the user.}
 
-\item{tol}{Tolerance for error passed to the \code{\link{gsDesign}} function.}
+\item{method}{Sample-size variance formulation; one of
+`"LachinFoulkes"` (default), `"Schoenfeld"`, `"Freedman"`,
+or `"BernsteinLagakos"`. Note: `"Schoenfeld"` and `"Freedman"`
+methods only support superiority testing (`hr0 = 1`). Additionally,
+`"Freedman"` does not support stratified populations.}
 }
 \description{
-Time-to-event endpoint design with calendar timing of analyses
+Group sequential design with calendar-based timing of analyses.
+This is like gsSurv(), but the timing of analyses is specified in calendar time units.
+Information fraction is computed from the input rates and the calendar times.
+Spending can be based on information fraction as in Lan and DeMets (1983) or calendar 
+time units as in Lan and DeMets (1989).
 }
-\examples{
-# First example: while timing is calendar-based, spending is event-based
-x <- gsSurvCalendar() |> toInteger()
-gsBoundSummary(x)
+\references{
+Lan KKG and DeMets DL (1983), Discrete Sequential Boundaries for Clinical
+Trials. \emph{Biometrika}, 70, 659-663.
 
-# Second example: both timing and spending are calendar-based
-# This results in less spending at interims and leaves more for final analysis
-y <- gsSurvCalendar(spending = "calendar") |> toInteger()
-gsBoundSummary(y)
-
-# Note that calendar timing for spending relates to planned timing for y
-# rather than timing in y after toInteger() conversion
-
-# Values plugged into spending function for calendar time
-y$usTime
-# Actual calendar fraction from design after toInteger() conversion
-y$T / max(y$T)
+Lan KKG and DeMets DL (1989), Group Sequential Procedures: Calendar vs.
+Information Time. \emph{Statistics in Medicine}, 8, 1191-1198.
+}
+\seealso{
+\code{\link{gsSurv}}, \code{\link{gsDesign}}, \code{\link{gsBoundSummary}}
 }
