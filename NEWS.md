@@ -1,4 +1,16 @@
-# gsDesign (development version)
+# gsDesign 3.9.0 (January 2026)
+
+## Improvements
+
+- Increased unit test coverage across core gsDesign, spending, and binomial utilities.
+- Updated `nSurv()` and `gsSurv()` to incorporate Schoenfeld and Freedman methods for
+sample size and power for time-to-event studies with proportional hazards. 
+This allows matching versus other software. 
+- Refreshed `print.nSurv()`/`print.gsSurv()` output formatting.
+- Corrected weighting for stratified time-to-event studies with proportional hazards.
+This was done for Lachin-Foulkes method, but we also added Bernstein and Lagakos method.
+
+# gsDesign 3.9.1 (development version)
 
 ## Piping
 

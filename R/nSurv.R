@@ -185,7 +185,7 @@
 #' one-sided and symmetric two-sided testing is used to completely specify
 #' spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
 #' \code{sfHSD} which is a Hwang-Shih-DeCani spending function.  See details,
-#' \link{Spending_Function_Overview}, manual and examples.
+#' \code{vignette("SpendingFunctionOverview")}, manual and examples.
 #' @param sfupar Real value, default is \eqn{-4} which is an
 #' O'Brien-Fleming-like conservative bound when used with the default
 #' Hwang-Shih-DeCani spending function. This is a real-vector for many spending
@@ -210,12 +210,14 @@
 #' \code{r} will not be changed by the user.
 #' @param usTime Default is NULL in which case upper bound spending time is
 #' determined by \code{timing}. Otherwise, this should be a vector of length
-#' code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).
+#' \code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).
 #' @param lsTime Default is NULL in which case lower bound spending time is
 #' determined by \code{timing}. Otherwise, this should be a vector of length
 #' \code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).
 #' @param tIA Timing of an interim analysis; should be between 0 and
 #' \code{y$T}.
+#' @param show_gsDesign Logical; for \code{print.gsSurv()}, include gsDesign details.
+#' @param show_strata Logical; for \code{print.gsSurv()}, include strata summaries.
 #' @param target The targeted proportion of events at an interim analysis. This
 #' is used for root-finding will be 0 for normal use.
 #' @param simple See output specification for \code{nEventsIA()}.
@@ -327,7 +329,7 @@
 #' \code{tEventsIA()} returns
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #' @seealso \code{\link{gsBoundSummary}}, \code{\link{xprint}},
-#' \code{\link{gsSurvCalendar}}, \link{gsDesign package overview},
+#' \code{\link{gsSurvCalendar}}, \link{gsDesign-package},
 #' \link{plot.gsDesign}, \code{\link{gsDesign}}, \code{\link{gsHR}},
 #' \code{\link{nSurvival}}
 #' @references Kim KM and Tsiatis AA (1990), Study duration for clinical trials

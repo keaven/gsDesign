@@ -77,7 +77,7 @@
 #'
 #' @aliases print.eEvents
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
-#' @seealso \link{gsDesign package overview}, \link{plot.gsDesign},
+#' @seealso \link{gsDesign-package}, \link{plot.gsDesign},
 #' \code{\link{gsDesign}}, \code{\link{gsHR}},
 #' \code{\link{nSurvival}}
 #' @references Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and

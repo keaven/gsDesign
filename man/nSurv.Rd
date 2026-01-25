@@ -121,7 +121,7 @@ O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds).  For
 one-sided and symmetric two-sided testing is used to completely specify
 spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
 \code{sfHSD} which is a Hwang-Shih-DeCani spending function.  See details,
-\link{Spending_Function_Overview}, manual and examples.}
+\code{vignette("SpendingFunctionOverview")}, manual and examples.}
 
 \item{sfupar}{Real value, default is \eqn{-4} which is an
 O'Brien-Fleming-like conservative bound when used with the default
@@ -202,7 +202,7 @@ root-finding function. The default is the same as for \code{\link{uniroot}}.}
 
 \item{usTime}{Default is NULL in which case upper bound spending time is
 determined by \code{timing}. Otherwise, this should be a vector of length
-code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
+\code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
 
 \item{lsTime}{Default is NULL in which case lower bound spending time is
 determined by \code{timing}. Otherwise, this should be a vector of length
@@ -232,6 +232,10 @@ is used for root-finding will be 0 for normal use.}
 \item{digits}{Number of digits past the decimal place to print
 (\code{print.gsSurv.}); also a pass through to generic \code{xtable()} from
 \code{xtable.gsSurv()}.}
+
+\item{show_gsDesign}{Logical; for \code{print.gsSurv()}, include gsDesign details.}
+
+\item{show_strata}{Logical; for \code{print.gsSurv()}, include strata summaries.}
 
 \item{...}{other arguments that may be passed to generic functions
 underlying the methods here.}
@@ -569,7 +573,7 @@ Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
 }
 \seealso{
 \code{\link{gsBoundSummary}}, \code{\link{xprint}},
-\code{\link{gsSurvCalendar}}, \link{gsDesign package overview},
+\code{\link{gsSurvCalendar}}, \link{gsDesign-package},
 \link{plot.gsDesign}, \code{\link{gsDesign}}, \code{\link{gsHR}},
 \code{\link{nSurvival}}
 

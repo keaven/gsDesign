@@ -5,16 +5,22 @@
 #' time units as in Lan and DeMets (1989).
 #'
 #' @rdname gsSurvCalendar
-#' @param test.type
+#' @param test.type \code{1=}one-sided \cr \code{2=}two-sided symmetric \cr
+#' \code{3=}two-sided, asymmetric, beta-spending with binding lower bound \cr
+#' \code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound
+#' \cr \code{5=}two-sided, asymmetric, lower bound spending under the null
+#' hypothesis with binding lower bound \cr \code{6=}two-sided, asymmetric,
+#' lower bound spending under the null hypothesis with non-binding lower bound.
+#' \cr See details, examples and manual.
 #'
 #' @param alpha Type I error rate. Default is 0.025 since 1-sided testing is default.
 #' @param sided 1 for 1-sided testing, 2 for 2-sided testing.
 #' @param beta Type II error rate. Default is 0.10 (90\% power); NULL if power is to be computed based on other input values.
-#' @param astar Normally not specified. If \code{test.type=5} or \code{6}, \code{astar} specifies the total probability of crossing a lower bound at all analyses combined. This will be changed to \code{1−alpha} when default value of \code{0} is used. Since this is the expected usage, normally \code{astar} is not specified by the user.
-#' @param sfu A spending function or a character string indicating a boundary type (that is, “WT” for Wang-Tsiatis bounds, “OF” for O'Brien-Fleming bounds and “Pocock” for Pocock bounds). For one-sided and symmetric two-sided testing is used to completely specify spending (\code{test.type=1, 2}), \code{sfu}. The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function.
-#' @param sfupar Real value, default is −4 which is an O'Brien-Fleming-like conservative bound when used with the default Hwang-Shih-DeCani spending function. This is a real-vector for many spending functions. The parameter sfupar specifies any parameters needed for the spending function specified by sfu; this will be ignored for spending functions (\code{sfLDOF}, \code{sfLDPocock}) or bound types (\code{“OF”, “Pocock”}) that do not require parameters.
+#' @param astar Normally not specified. If \code{test.type=5} or \code{6}, \code{astar} specifies the total probability of crossing a lower bound at all analyses combined. This will be changed to \code{1 - alpha} when default value of \code{0} is used. Since this is the expected usage, normally \code{astar} is not specified by the user.
+#' @param sfu A spending function or a character string indicating a boundary type (that is, \dQuote{WT} for Wang-Tsiatis bounds, \dQuote{OF} for O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds). For one-sided and symmetric two-sided testing is used to completely specify spending (\code{test.type=1, 2}), \code{sfu}. The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function.
+#' @param sfupar Real value, default is \eqn{-4} which is an O'Brien-Fleming-like conservative bound when used with the default Hwang-Shih-DeCani spending function. This is a real-vector for many spending functions. The parameter sfupar specifies any parameters needed for the spending function specified by sfu; this will be ignored for spending functions (\code{sfLDOF}, \code{sfLDPocock}) or bound types (\dQuote{OF}, \dQuote{Pocock}) that do not require parameters.
 #' @param sfl Specifies the spending function for lower boundary crossing probabilities when asymmetric, two-sided testing is performed (\code{test.type = 3, 4, 5, or 6}). Unlike the upper bound, only spending functions are used to specify the lower bound. The default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending function. The parameter \code{sfl} is ignored for one-sided testing (\code{test.type=1}) or symmetric 2-sided testing (\code{test.type=2}).
-#' @param sflpar Real value, default is −2, which, with the default Hwang-Shih-DeCani spending function, specifies a less conservative spending rate than the default for the upper bound.
+#' @param sflpar Real value, default is \eqn{-2}, which, with the default Hwang-Shih-DeCani spending function, specifies a less conservative spending rate than the default for the upper bound.
 #' @param calendarTime Vector of increasing positive numbers with calendar times of analyses. Time 0 is start of randomization.
 #' @param spending Select between calendar-based spending and information-based spending.
 #' @param lambdaC scalar, vector or matrix of event hazard rates for the control group; rows represent time periods while columns represent strata; a vector implies a single stratum.
@@ -28,6 +34,7 @@
 #' @param minfup A non-negative scalar less than the maximum value in \code{calendarTime}. Enrollment will be cut off at the difference between the maximum value in \code{calendarTime} and \code{minfup}.
 #' @param ratio randomization ratio of experimental treatment divided by control; normally a scalar, but may be a vector with length equal to number of strata.
 #' @param r Integer value controlling grid for numerical integration as in Jennison and Turnbull (2000); default is 18, range is 1 to 80. Larger values provide larger number of grid points and greater accuracy. Normally r will not be changed by the user.
+#' @param tol Error tolerance for numerical root finding.
 #' @param method Sample-size variance formulation; one of
 #' `"LachinFoulkes"` (default), `"Schoenfeld"`, `"Freedman"`,
 #' or `"BernsteinLagakos"`. Note: `"Schoenfeld"` and `"Freedman"`
