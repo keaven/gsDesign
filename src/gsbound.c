@@ -159,7 +159,7 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
         if (bdelta > tol)
           Rprintf("\n last 2 upper boundary values: %lf %lf\n", btem, btem2);
         if (adelta > tol)
-          Rprintf("\n last 2 lower boundary values: %lf %lf\n", atem, atem);
+          Rprintf("\n last 2 lower boundary values: %lf %lf\n", atem, atem2);
       }
       retval[0] = 1;
       return;
