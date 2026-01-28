@@ -8,7 +8,7 @@
     \fontsize{12.0pt}{14.0pt}\selectfont
     \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}rrrr}
     \toprule
-     & \multicolumn{2}{c}{Probability of crossing} &  \\ 
+     & \multicolumn{2}{c}{{Probability of crossing}} &  \\ 
     \cmidrule(lr){2-3}
     Underlying<br>AE rate & low rate & high rate & Average<br>sample size \\ 
     \midrule\addlinespace[2.5pt]
