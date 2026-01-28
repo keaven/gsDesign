@@ -1,23 +1,32 @@
 #include "R.h"
 #include "Rmath.h"
 #include "gsDesign.h"
-/* Group sequential boundary crossing probability computation per Jennison &
-   Turnbull. This version uses all pointer arguments so that it can be called
-   from R or S-Plus.
 
-   xnanal  - # of possible analyses in the group-sequential designs (interims + final)
-   ntheta  - # of theta values for which boundary crossing probabilities are to be computed
-   theta   - vector of drift parameters
-   I       - statistical information available at each analysis
-   a       - lower cutoff points for z statistic at each analysis
-   b       - upper cutoff points for z statistic at each analysis
-   xprobhi - vector to return probability of rejecting (Z>bj) at
-             j-th interim analysis, j=1...nanal
-   xproblo - vector to return probability of rejecting (Z<aj) at
-             j-th interim analysis, j=1...nanal
-   xr      - determinant of # of grid points for numerical integration
-             r=17 will give a max of 201 points which is what they recommend
-*/
+/**
+ * @brief Compute group sequential boundary crossing probabilities.
+ *
+ * For each drift value in @p xtheta, computes the probability of crossing the
+ * lower boundary @p a and the upper boundary @p b at each analysis time. The
+ * implementation follows the Jennison & Turnbull numerical integration scheme
+ * and is written with pointer arguments to support calling via R's `.C()`
+ * interface.
+ *
+ * @param[in] xnanal Number of analyses (`nanal = xnanal[0]`).
+ * @param[in] ntheta Number of drift values (`ntheta = ntheta[0]`).
+ * @param[in] xtheta Drift values (length `ntheta`).
+ * @param[in] I Statistical information at each analysis (length `nanal`).
+ * @param[in] a Lower Z cutoffs at each analysis (length `nanal`).
+ * @param[in] b Upper Z cutoffs at each analysis (length `nanal`).
+ * @param[out] xproblo Output probabilities of crossing the lower boundary.
+ *   Array length is `ntheta * nanal`, stored as contiguous blocks of length
+ *   `nanal` for each drift value.
+ * @param[out] xprobhi Output probabilities of crossing the upper boundary.
+ *   Array length is `ntheta * nanal`, stored as contiguous blocks of length
+ *   `nanal` for each drift value.
+ * @param[in] xr Grid parameter controlling the number of integration points
+ *   (`r = xr[0]`).
+ * @return Nothing.
+ */
 void probrej(int *xnanal, int *ntheta, double *xtheta, double *I, double *a,
              double *b, double *xproblo, double *xprobhi, int *xr) {
   int r, i, m1, m2, nanal, k;

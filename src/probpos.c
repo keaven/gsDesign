@@ -1,5 +1,24 @@
 #include "R.h"
 #include "Rmath.h"
+
+/**
+ * @brief Compute probability of crossing the lower boundary at the next
+ * analysis.
+ *
+ * Given a weighted density representation on the previous analysis grid, this
+ * computes the (approximate) probability of crossing a lower Z boundary at the
+ * next information time.
+ *
+ * @param[in] theta Drift parameter.
+ * @param[in] m Last valid index in @p z and @p h.
+ * @param[in] ak Lower Z boundary at the next analysis.
+ * @param[in] z Grid points at the previous analysis (length `m + 1`).
+ * @param[in] h Weighted densities at the previous analysis (length `m + 1`).
+ * @param[in] Ikm1 Statistical information at the previous analysis.
+ * @param[in] Ik Statistical information at the next analysis.
+ * @return Approximate probability of crossing the lower boundary at the next
+ * analysis.
+ */
 double probneg(double theta, int m, double ak, double *z, double *h,
                double Ikm1, double Ik) {
   int i;
@@ -15,6 +34,25 @@ double probneg(double theta, int m, double ak, double *z, double *h,
   }
   return (prob);
 }
+
+/**
+ * @brief Compute probability of crossing the upper boundary at the next
+ * analysis.
+ *
+ * Given a weighted density representation on the previous analysis grid, this
+ * computes the (approximate) probability of crossing an upper Z boundary at the
+ * next information time.
+ *
+ * @param[in] theta Drift parameter.
+ * @param[in] m Last valid index in @p z and @p h.
+ * @param[in] bk Upper Z boundary at the next analysis.
+ * @param[in] z Grid points at the previous analysis (length `m + 1`).
+ * @param[in] h Weighted densities at the previous analysis (length `m + 1`).
+ * @param[in] Ikm1 Statistical information at the previous analysis.
+ * @param[in] Ik Statistical information at the next analysis.
+ * @return Approximate probability of crossing the upper boundary at the next
+ * analysis.
+ */
 double probpos(double theta, int m, double bk, double *z, double *h,
                double Ikm1, double Ik) {
   int i;

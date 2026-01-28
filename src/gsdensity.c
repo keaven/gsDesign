@@ -1,8 +1,34 @@
 #include "R.h"
 #include "Rmath.h"
 #include "gsDesign.h"
-/* sub-density function (integrates to < 1) between bounds at interim
-   analysis for group sequential design */
+
+/**
+ * @brief Compute the sub-density of the Z statistic under group sequential
+ * boundaries.
+ *
+ * Returns the density of the standardized statistic evaluated at @p xz for each
+ * drift value in @p xtheta. For multi-analysis designs (`xnanal[0] > 1`), this
+ * is a sub-density (it integrates to less than 1) because probability mass is
+ * removed by boundary crossing at earlier analyses.
+ *
+ * This routine is written with pointer arguments to support calling via R's
+ * `.C()` interface.
+ *
+ * @param[out] den Output densities of length `ntheta[0] * zlen[0]`. Results are
+ *   stored in `ntheta[0]` contiguous blocks of length `zlen[0]`, one block per
+ *   drift value.
+ * @param[in] xnanal Number of analyses (`nanal = xnanal[0]`).
+ * @param[in] ntheta Number of drift values (`ntheta = ntheta[0]`).
+ * @param[in] xtheta Drift values (length `ntheta`).
+ * @param[in] I Statistical information at each analysis (length `nanal`).
+ * @param[in] a Lower Z cutoffs at each analysis (length `nanal`).
+ * @param[in] b Upper Z cutoffs at each analysis (length `nanal`).
+ * @param[in] xz Z values where the density is evaluated (length `zlen[0]`).
+ * @param[in] zlen Length of @p xz (`nz = zlen[0]`).
+ * @param[in] xr Grid parameter controlling the number of integration points
+ *   (`r = xr[0]`).
+ * @return Nothing.
+ */
 void gsdensity(double *den, int *xnanal, int *ntheta, double *xtheta, double *I,
                double *a, double *b, double *xz, int *zlen, int *xr) {
   int r, i, j, k, m1, m2, nanal, nz;

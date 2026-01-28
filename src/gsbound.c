@@ -6,18 +6,33 @@
 #include "R.h"
 #include "Rmath.h"
 #include "gsDesign.h"
-/* Group sequential probability computation per Jennison & Turnbull
-   xnanal - # of possible analyses in the group-sequential designs (interims + final)
-   I      - statistical information available at each analysis
-   a      - lower cutoff points for z statistic at each analysis (output)
-   b      - upper cutoff points for z statistic at each analysis (output)
-   probhi - input vector with probability of rejecting (Z>bj) at j-th interim analysis, j=1...nanal
-   problo - input vector with probability of rejecting (Z<aj) at j-th interim analysis, j=1...nanal
-   xtol   - relative change between iterations required to stop for 'convergence'
-   xr     - determinant of # of grid points for numerical integration r=17 will give a max of 201 points which is what they recommend
-   retval - error flag returned; 0 if convergence; 1 indicates error
-   printerr - 1 if error messages to be printed - other values suppress printing
-*/
+
+/**
+ * @brief Compute group sequential Z-boundaries from target crossing
+ * probabilities.
+ *
+ * Uses the Jennison & Turnbull numerical integration grid (p. 349) and a
+ * Newton-Raphson iteration to find lower and upper Z cutoffs for each analysis.
+ * This routine is written with pointer arguments to support calling via R's
+ * `.C()` interface.
+ *
+ * @param[in] xnanal Number of analyses (`nanal = xnanal[0]`).
+ * @param[in] I Statistical information at each analysis (length `nanal`).
+ * @param[out] a Lower Z cutoffs at each analysis (length `nanal`).
+ * @param[out] b Upper Z cutoffs at each analysis (length `nanal`).
+ * @param[in] problo Target probability of crossing the lower boundary at each
+ *   analysis (length `nanal`).
+ * @param[in] probhi Target probability of crossing the upper boundary at each
+ *   analysis (length `nanal`).
+ * @param[in] xtol Relative convergence tolerance (`tol = xtol[0]`).
+ * @param[in] xr Grid parameter controlling the number of integration points
+ *   (`r = xr[0]`).
+ * @param[out] retval Error flag (`retval[0]`): 0 on success, 1 on illegal
+ *   arguments or failure to converge.
+ * @param[in] printerr If non-zero (`printerr[0] != 0`), print diagnostics via
+ *   `Rprintf()`.
+ * @return Nothing.
+ */
 void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
              double *probhi, double *xtol, int *xr, int *retval,
              int *printerr) {

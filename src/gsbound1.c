@@ -4,22 +4,34 @@
 #include "R.h"
 #include "Rmath.h"
 #include "gsDesign.h"
-/* Group sequential probability computation per Jennison & Turnbull.
-   Computes upper bound to have input crossing probabilities given fixed input
-   lower bound.
 
-   xnanal   - # of possible analyses in the group-sequential designs (interims + final)
-   xtheta   - drift parameter
-   I        - statistical information available at each analysis
-   a        - lower cutoff points for z statistic at each analysis (input)
-   b        - upper cutoff points for z statistic at each analysis (output)
-   problo   - output vector with probability of rejecting (Z<aj) at j-th interim analysis, j=1...nanal
-   probhi   - input vector with probability of rejecting (Z>bj) at j-th interim analysis, j=1...nanal
-   tol      - relative change between iterations required to stop for 'convergence'
-   xr       - controls # of grid points for numerical integration per Jennison & Turnbull they recommend r=17 (r=18 is default - a little more accuracy)
-   retval   - error flag returned; 0 if convergence; 1 indicates error
-   printerr - 1 if error messages to be printed - other values suppress printing
-*/
+/**
+ * @brief Compute upper group sequential Z-boundaries given fixed lower
+ * boundaries.
+ *
+ * For a given drift parameter @p xtheta and fixed lower cutoffs @p a, finds the
+ * upper cutoffs @p b that match the target upper-tail crossing probabilities
+ * @p probhi. The implied lower-tail crossing probabilities are returned in
+ * @p problo. This routine is written with pointer arguments to support calling
+ * via R's `.C()` interface.
+ *
+ * @param[in] xnanal Number of analyses (`nanal = xnanal[0]`).
+ * @param[in] xtheta Drift parameter (`theta = xtheta[0]`).
+ * @param[in] I Statistical information at each analysis (length `nanal`).
+ * @param[in] a Fixed lower Z cutoffs at each analysis (length `nanal`).
+ * @param[out] b Upper Z cutoffs at each analysis (length `nanal`).
+ * @param[out] problo Output vector of lower-tail crossing probabilities (length
+ *   `nanal`).
+ * @param[in] probhi Target upper-tail crossing probabilities (length `nanal`).
+ * @param[in] xtol Relative convergence tolerance (`tol = xtol[0]`).
+ * @param[in] xr Grid parameter controlling the number of integration points
+ *   (`r = xr[0]`).
+ * @param[out] retval Error flag (`retval[0]`): 0 on success, 1 on illegal
+ *   arguments or failure to converge.
+ * @param[in] printerr If non-zero (`printerr[0] != 0`), print diagnostics via
+ *   `Rprintf()`.
+ * @return Nothing.
+ */
 void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
               double *problo, double *probhi, double *xtol, int *xr,
               int *retval, int *printerr) {

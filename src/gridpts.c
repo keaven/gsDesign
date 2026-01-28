@@ -1,4 +1,17 @@
 #include <math.h>
+
+/**
+ * @brief Generate grid points around a mean value.
+ *
+ * This helper generates a fixed set of grid points used by the Jennison &
+ * Turnbull numerical integration scheme (p. 349). The output does not apply any
+ * truncation to bounds and does not compute integration weights.
+ *
+ * @param[in] r Controls the number of grid points generated.
+ * @param[in] mu Mean (location) parameter used to center the grid.
+ * @param[out] z Output array of grid points (length at least `6 * r - 1`).
+ * @return Nothing.
+ */
 void gridpts1(int r, double mu, double *z) {
   int i, r5, r6;
   double rdbl, r2dbl;
@@ -13,9 +26,26 @@ void gridpts1(int r, double mu, double *z) {
   for (i = r5 + 1; i < r6; i++)
     z[i - 1] = mu + 3. + 4. * log(rdbl / (r6 - i));
 }
-/* returns gridpoints per Jennison & Turnbull, p. 349
-   returned value is # of grid pts
-*/
+
+/**
+ * @brief Compute integration grid points and weights between bounds.
+ *
+ * Computes the Jennison & Turnbull (p. 349) integration grid between the
+ * provided bounds. The output arrays interleave grid points and midpoints
+ * (even indices are grid points; odd indices are midpoints). The corresponding
+ * Simpson-rule weights are returned in @p w.
+ *
+ * @param[in] r Grid parameter controlling the number of points.
+ * @param[in] mu Mean (location) parameter for the grid.
+ * @param[in] a Lower truncation bound.
+ * @param[in] b Upper truncation bound.
+ * @param[out] z Output array of grid points and midpoints (length at least
+ *   `12 * r - 3`).
+ * @param[out] w Output array of Simpson integration weights corresponding to @p
+ * z (length at least `12 * r - 3`).
+ * @return The last valid index written to @p z and @p w (i.e., arrays are valid
+ *   for indices 0..return_value, with a total of `return_value + 1` points).
+ */
 int gridpts(int r, double mu, double a, double b, double *z, double *w) {
   int i, r5, r6, j = 0, done = 0;
   double rdbl, r2dbl, ztem;
