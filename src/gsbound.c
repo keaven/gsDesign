@@ -40,7 +40,7 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
   double plo, phi, dplo, dphi, btem = 0., atem = 0., atem2, btem2, rtdeltak,
                                rtIk, rtIkm1, xlo, xhi;
   double adelta, bdelta, tol;
-  /* note: should allocat zwk & wwk dynamically...*/
+  /* note: should allocate zwk & wwk dynamically...*/
   double zwk[1000], wwk[1000], hwk[1000], zwk2[1000], wwk2[1000], hwk2[1000],
       *z1, *z2, *w1, *w2, *h, *h2, *tem, rt2pi;
   void h1(double, int, double *, double, double *, double *);
