@@ -34,7 +34,7 @@ void probrej(int *xnanal, int *ntheta, double *xtheta, double *I, double *a,
   double *problo, *probhi;
   double probneg(double, int, double, double *, double *, double, double);
   double probpos(double, int, double, double *, double *, double, double);
-  /* note: should allocat zwk & wwk dynamically...*/
+  /* note: should allocate zwk & wwk dynamically...*/
   double mu, zwk[1000], wwk[1000], hwk[1000], zwk2[1000], wwk2[1000],
       hwk2[1000], *z1, *z2, *w1, *w2, *h, *h2, *tem;
   void h1(double, int, double *, double, double *, double *);
