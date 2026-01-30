@@ -51,7 +51,7 @@ void gsdensity(double *den, int *xnanal, int *ntheta, double *xtheta, double *I,
       mu = sqrt(I[0]) * xtheta[k];
       for (i = 0; i < nz; i++) {
         z = xz[i] - mu;
-        den[j++] = exp(-z * z / 2) / 2.506628275;
+        den[j++] = dnorm4(z, 0., 1., 0);
       }
     }
     return;

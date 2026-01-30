@@ -1,11 +1,25 @@
 #define DEBUG 0
-/* note: EXTREMEZ > 3 + log(r) +  Z(1-alpha) + Z(1-beta)
-   per bottom of p 349 in Jennison and Turnbull */
-#define EXTREMEZ 20
+/*
+ * Historically the code used finite truncation at +/-20 for the numerical
+ * integration bounds. This value is still used as a "practically infinite"
+ * sentinel for the public .C() interface, but the integration grid itself now
+ * treats values at (or beyond) this sentinel as infinite.
+ */
+#define GSBOUND_Z_MAX_ABS 20.0
+#define GSBOUND_MAX_NR_ITER 20
 #define MAXR 83
 #include "R.h"
 #include "Rmath.h"
+#include "R_ext/Arith.h"
 #include "gsDesign.h"
+
+static double gsbound_to_infinite(double z) {
+  if (z <= -GSBOUND_Z_MAX_ABS)
+    return R_NegInf;
+  if (z >= GSBOUND_Z_MAX_ABS)
+    return R_PosInf;
+  return z;
+}
 
 /**
  * @brief Compute group sequential Z-boundaries from target crossing
@@ -42,7 +56,7 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
   double adelta, bdelta, tol;
   /* note: should allocate zwk & wwk dynamically...*/
   double zwk[1000], wwk[1000], hwk[1000], zwk2[1000], wwk2[1000], hwk2[1000],
-      *z1, *z2, *w1, *w2, *h, *h2, *tem, rt2pi;
+      *z1, *z2, *w1, *w2, *h, *h2, *tem;
   void h1(double, int, double *, double, double *, double *);
   void hupdate(double, double *, int, double, double *, double *, int, double,
                double *, double *);
@@ -50,7 +64,6 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
   r = xr[0];
   nanal = xnanal[0];
   tol = xtol[0];
-  rt2pi = 2.506628274631;
   /* compute bounds at 1st interim analysis using inverse normal */
   if (nanal < 1 || r < 1 || r > MAXR) {
     retval[0] = 1;
@@ -65,11 +78,11 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
     return;
   }
   if (problo[0] <= 0)
-    a[0] = -EXTREMEZ;
+    a[0] = -GSBOUND_Z_MAX_ABS;
   else
     a[0] = qnorm(problo[0], 0., 1., 1, 0);
   if (probhi[0] <= 0)
-    b[0] = EXTREMEZ;
+    b[0] = GSBOUND_Z_MAX_ABS;
   else
     b[0] = qnorm(probhi[0], 0., 1., 0, 0);
   /* set up work vectors */
@@ -79,7 +92,8 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
   z2 = zwk2;
   w2 = wwk2;
   h2 = hwk2;
-  m1 = gridpts(r, 0., a[0], b[0], z1, w1);
+  m1 = gridpts(r, 0., gsbound_to_infinite(a[0]), gsbound_to_infinite(b[0]), z1,
+               w1);
   h1(0., m1, w1, I[0], z1, h);
   rtIk = sqrt(I[0]);
   /* use Newton-Raphson to find subsequent interim analysis cutpoints */
@@ -88,17 +102,17 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
     rtIk = sqrt(I[i]);
     rtdeltak = sqrt(I[i] - I[i - 1]);
     if (problo[i] <= 0.)
-      atem2 = -EXTREMEZ;
+      atem2 = -GSBOUND_Z_MAX_ABS;
     else
       atem2 = qnorm(problo[i], 0., 1., 1, 0);
     if (probhi[i] <= 0.)
-      btem2 = EXTREMEZ;
+      btem2 = GSBOUND_Z_MAX_ABS;
     else
       btem2 = qnorm(probhi[i], 0., 1., 0, 0);
     adelta = 1.;
     bdelta = 1.;
     j = 0;
-    while ((adelta > tol || bdelta > tol) && j++ < EXTREMEZ) {
+    while ((adelta > tol || bdelta > tol) && j++ < GSBOUND_MAX_NR_ITER) {
       plo = 0.;
       phi = 0.;
       dplo = 0.;
@@ -111,8 +125,8 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
         xhi = (z1[ii] * rtIkm1 - btem * rtIk) / rtdeltak;
         plo += h[ii] * pnorm(xlo, 0., 1., 0, 0);
         phi += h[ii] * pnorm(xhi, 0., 1., 1, 0);
-        dplo += h[ii] * exp(-xlo * xlo / 2) / rt2pi * rtIk / rtdeltak;
-        dphi -= h[ii] * exp(-xhi * xhi / 2) / rt2pi * rtIk / rtdeltak;
+        dplo += h[ii] * dnorm4(xlo, 0., 1., 0) * rtIk / rtdeltak;
+        dphi -= h[ii] * dnorm4(xhi, 0., 1., 0) * rtIk / rtdeltak;
       }
       /* use 1st order Taylor's series to update boundaries */
       /* maximum allowed change is 1 */
@@ -124,10 +138,10 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
         atem2 = atem - 1.;
       else
         atem2 = atem + (problo[i] - plo) / dplo;
-      if (atem2 > EXTREMEZ)
-        atem2 = EXTREMEZ;
-      else if (atem2 < -EXTREMEZ)
-        atem2 = -EXTREMEZ;
+      if (atem2 > GSBOUND_Z_MAX_ABS)
+        atem2 = GSBOUND_Z_MAX_ABS;
+      else if (atem2 < -GSBOUND_Z_MAX_ABS)
+        atem2 = -GSBOUND_Z_MAX_ABS;
       bdelta = probhi[i] - phi;
       if (bdelta < dphi)
         btem2 = btem + 1.;
@@ -135,10 +149,10 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
         btem2 = btem - 1.;
       else
         btem2 = btem + (probhi[i] - phi) / dphi;
-      if (btem2 > EXTREMEZ)
-        btem2 = EXTREMEZ;
-      else if (btem2 < -EXTREMEZ)
-        btem2 = -EXTREMEZ;
+      if (btem2 > GSBOUND_Z_MAX_ABS)
+        btem2 = GSBOUND_Z_MAX_ABS;
+      else if (btem2 < -GSBOUND_Z_MAX_ABS)
+        btem2 = -GSBOUND_Z_MAX_ABS;
       if (atem2 > btem2)
         atem2 = btem2;
       adelta = atem2 - atem;
@@ -165,7 +179,8 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
       return;
     }
     if (i < nanal - 1) {
-      m2 = gridpts(r, 0., a[i], b[i], z2, w2);
+      m2 = gridpts(r, 0., gsbound_to_infinite(a[i]), gsbound_to_infinite(b[i]),
+                   z2, w2);
       hupdate(0., w2, m1, I[i - 1], z1, h, m2, I[i], z2, h2);
       m1 = m2;
       tem = z1;

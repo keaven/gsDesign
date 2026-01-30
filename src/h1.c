@@ -1,5 +1,5 @@
 #include <math.h>
-#include <stdio.h>
+#include "Rmath.h"
 
 /**
  * @brief Initialize weighted density values on an integration grid.
@@ -22,6 +22,6 @@ void h1(double theta, int m, double *wgt, double I, double *z, double *h) {
   mu = theta * sqrt(I);
   for (i = 0; i <= m; i++) {
     x = z[i] - mu;
-    h[i] = wgt[i] * exp(-x * x / 2) / 2.506628275;
+    h[i] = wgt[i] * dnorm4(x, 0., 1., 0);
   }
 }

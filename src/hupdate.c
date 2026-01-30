@@ -1,5 +1,5 @@
 #include <math.h>
-#include <stdio.h>
+#include "Rmath.h"
 
 /**
  * @brief Propagate weighted densities from one analysis to the next.
@@ -35,7 +35,7 @@ void hupdate(double theta, double *wgt, int m1, double Ikm1, double *zkm1,
     hk[i] = 0.;
     for (ii = 0; ii <= m1; ii++) {
       x = (zk[i] * rtIk - zkm1[ii] * rtIkm1 - theta * deltak) / rtdeltak;
-      hk[i] += hkm1[ii] * exp(-x * x / 2) / 2.506628275 * rtIk / rtdeltak;
+      hk[i] += hkm1[ii] * dnorm4(x, 0., 1., 0) * rtIk / rtdeltak;
     }
     hk[i] *= wgt[i];
   }

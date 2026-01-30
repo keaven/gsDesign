@@ -1,9 +1,25 @@
 #define DEBUG 0
-#define EXTREMEZ 20
+/*
+ * Historically the code used finite truncation at +/-20 for the numerical
+ * integration bounds. This value is still used as a "practically infinite"
+ * sentinel for the public .C() interface, but the integration grid itself now
+ * treats values at (or beyond) this sentinel as infinite.
+ */
+#define GSBOUND_Z_MAX_ABS 20.0
+#define GSBOUND1_MAX_NR_ITER 20
 #define MAXR 83
 #include "R.h"
 #include "Rmath.h"
+#include "R_ext/Arith.h"
 #include "gsDesign.h"
+
+static double gsbound1_to_infinite(double z) {
+  if (z <= -GSBOUND_Z_MAX_ABS)
+    return R_NegInf;
+  if (z >= GSBOUND_Z_MAX_ABS)
+    return R_PosInf;
+  return z;
+}
 
 /**
  * @brief Compute upper group sequential Z-boundaries given fixed lower
@@ -66,7 +82,7 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
   problo[0] = pnorm(mu - a[0], 0., 1., 0,
                     0); /* probability of crossing lower bound at 1st interim */
   if (probhi[0] <= 0.)
-    b[0] = EXTREMEZ;
+    b[0] = GSBOUND_Z_MAX_ABS;
   else
     b[0] = qnorm(probhi[0], mu, 1, 0, 0); /* upper bound at 1st interim */
   if (nanal == 1) {
@@ -82,7 +98,8 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
   h2 = hwk2;
   if (DEBUG)
     Rprintf("r=%d mu=%lf a[0]=%lf b[0]=%lf\n", r, mu, a[0], b[0]);
-  m1 = gridpts(r, mu, a[0], b[0], z1, w1);
+  m1 = gridpts(r, mu, gsbound1_to_infinite(a[0]), gsbound1_to_infinite(b[0]),
+               z1, w1);
   h1(theta, m1, w1, I[0], z1, h);
   /* use Newton-Raphson to find subsequent interim analysis cutpoints */
   retval[0] = 0;
@@ -92,12 +109,12 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
     mu = rtIk * theta;
     rtdeltak = sqrt(I[i] - I[i - 1]);
     if (probhi[i] <= 0.)
-      btem2 = EXTREMEZ;
+      btem2 = GSBOUND_Z_MAX_ABS;
     else
       btem2 = qnorm(probhi[i], mu, 1., 0, 0);
     bdelta = 1.;
     j = 0;
-    while ((bdelta > tol) && j++ < 20) {
+    while ((bdelta > tol) && j++ < GSBOUND1_MAX_NR_ITER) {
       phi = 0.;
       dphi = 0.;
       plo = 0.;
@@ -112,14 +129,14 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
         xlo = (z1[ii] * rtIkm1 - a[i] * rtIk + theta * (I[i] - I[i - 1])) /
               rtdeltak;
         plo += pnorm(xlo, 0., 1., 0, 0) * h[ii];
-        dphi -= h[ii] * exp(-xhi * xhi / 2) / 2.506628275 * rtIk / rtdeltak;
+        dphi -= h[ii] * dnorm4(xhi, 0., 1., 0) * rtIk / rtdeltak;
         if (DEBUG)
           Rprintf("m1=%d ii=%d xhi=%lf phi=%lf xlo=%lf plo=%lf dphi=%lf\n", m1,
                   ii, xhi, phi, xlo, plo, dphi);
       }
       /* use 1st order Taylor's series to update boundaries */
       /* maximum allowed change is 1 */
-      /* maximum value allowed is EXTREMEZ */
+      /* maximum value allowed is GSBOUND_Z_MAX_ABS */
       if (DEBUG)
         Rprintf("i=%2d j=%2d plo=%lf btem=%lf phi=%lf dphi=%lf\n", i, j, plo,
                 btem, phi, dphi);
@@ -130,10 +147,10 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
         btem2 = btem - 1.;
       else
         btem2 = btem + (probhi[i] - phi) / dphi;
-      if (btem2 > EXTREMEZ)
-        btem2 = EXTREMEZ;
-      else if (btem2 < -EXTREMEZ)
-        btem2 = -EXTREMEZ;
+      if (btem2 > GSBOUND_Z_MAX_ABS)
+        btem2 = GSBOUND_Z_MAX_ABS;
+      else if (btem2 < -GSBOUND_Z_MAX_ABS)
+        btem2 = -GSBOUND_Z_MAX_ABS;
       bdelta = btem2 - btem;
       if (bdelta < 0)
         bdelta = -bdelta;
@@ -149,7 +166,8 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
       retval[0] = 1;
     }
     if (i < nanal - 1) {
-      m2 = gridpts(r, mu, a[i], b[i], z2, w2);
+      m2 = gridpts(r, mu, gsbound1_to_infinite(a[i]), gsbound1_to_infinite(b[i]),
+                   z2, w2);
       hupdate(theta, w2, m1, I[i - 1], z1, h, m2, I[i], z2, h2);
       m1 = m2;
       tem = z1;
