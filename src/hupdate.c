@@ -36,7 +36,7 @@ void hupdate(double theta, double *wgt, int m1, double Ikm1, double *zkm1,
     hk[i] = 0.;
     for (ii = 0; ii <= m1; ii++) {
       x = (zk[i] * rtIk - zkm1[ii] * rtIkm1 - theta * deltak) / rtdeltak;
-      hk[i] += hkm1[ii] * exp(-x * x / 2) / gs_sqrt_2pi * rtIk / rtdeltak;
+      hk[i] += hkm1[ii] * exp(-x * x / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
     }
     hk[i] *= wgt[i];
   }

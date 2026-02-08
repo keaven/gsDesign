@@ -112,7 +112,7 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
         xlo = (z1[ii] * rtIkm1 - a[i] * rtIk + theta * (I[i] - I[i - 1])) /
               rtdeltak;
         plo += pnorm(xlo, 0., 1., 0, 0) * h[ii];
-        dphi -= h[ii] * exp(-xhi * xhi / 2) / gs_sqrt_2pi * rtIk / rtdeltak;
+        dphi -= h[ii] * exp(-xhi * xhi / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
         if (DEBUG)
           Rprintf("m1=%d ii=%d xhi=%lf phi=%lf xlo=%lf plo=%lf dphi=%lf\n", m1,
                   ii, xhi, phi, xlo, plo, dphi);

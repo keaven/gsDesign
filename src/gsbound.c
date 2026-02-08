@@ -110,8 +110,8 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
         xhi = (z1[ii] * rtIkm1 - btem * rtIk) / rtdeltak;
         plo += h[ii] * pnorm(xlo, 0., 1., 0, 0);
         phi += h[ii] * pnorm(xhi, 0., 1., 1, 0);
-        dplo += h[ii] * exp(-xlo * xlo / 2) / gs_sqrt_2pi * rtIk / rtdeltak;
-        dphi -= h[ii] * exp(-xhi * xhi / 2) / gs_sqrt_2pi * rtIk / rtdeltak;
+        dplo += h[ii] * exp(-xlo * xlo / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
+        dphi -= h[ii] * exp(-xhi * xhi / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
       }
       /* use 1st order Taylor's series to update boundaries */
       /* maximum allowed change is 1 */

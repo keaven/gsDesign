@@ -1,8 +1,8 @@
 #ifndef GSDESIGN_H
 #define GSDESIGN_H
 
-/* sqrt(2 * pi): shared scale factor for the standard normal density. */
-extern const double gs_sqrt_2pi;
+/* 1 / sqrt(2 * pi): shared scale factor for standard normal density. */
+static const double gs_inv_sqrt_2pi = 0.3989422804014327;
 
 void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
              double *probhi, double *xtol, int *xr, int *retval, int *printerr);
