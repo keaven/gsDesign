@@ -9,21 +9,6 @@ piecewise uniform enrollment. A stratified population is allowed. Output
 is the expected number of events observed given a trial duration and the
 above rate parameters.
 
-`eEvents()` produces an object of class `eEvents` with the number of
-subjects and events for a set of pre-specified trial parameters, such as
-accrual duration and follow-up period. The underlying power calculation
-is based on Lachin and Foulkes (1986) method for proportional hazards
-assuming a fixed underlying hazard ratio between 2 treatment groups. The
-method has been extended here to enable designs to test non-inferiority.
-Piecewise constant enrollment and failure rates are assumed and a
-stratified population is allowed. See also
-[`nSurvival`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-for other Lachin and Foulkes (1986) methods assuming a constant hazard
-difference or exponential enrollment rate.
-
-`print.eEvents()` formats the output for an object of class `eEvents`
-and returns the input value.
-
 ## Usage
 
 ``` r
@@ -47,41 +32,41 @@ print(x, digits = 4, ...)
 
 - lambda:
 
-  scalar, vector or matrix of event hazard rates; rows represent time
+  Scalar, vector or matrix of event hazard rates; rows represent time
   periods while columns represent strata; a vector implies a single
   stratum.
 
 - eta:
 
-  scalar, vector or matrix of dropout hazard rates; rows represent time
+  Scalar, vector or matrix of dropout hazard rates; rows represent time
   periods while columns represent strata; if entered as a scalar, rate
   is constant across strata and time periods; if entered as a vector,
   rates are constant across strata.
 
 - gamma:
 
-  a scalar, vector or matrix of rates of entry by time period (rows) and
+  A scalar, vector or matrix of rates of entry by time period (rows) and
   strata (columns); if entered as a scalar, rate is constant across
   strata and time periods; if entered as a vector, rates are constant
   across strata.
 
 - R:
 
-  a scalar or vector of durations of time periods for recruitment rates
+  A scalar or vector of durations of time periods for recruitment rates
   specified in rows of `gamma`. Length is the same as number of rows in
   `gamma`. Note that the final enrollment period is extended as long as
   needed.
 
 - S:
 
-  a scalar or vector of durations of piecewise constant event rates
+  A scalar or vector of durations of piecewise constant event rates
   specified in rows of `lambda`, `eta` and `etaE`; this is NULL if there
   is a single event rate per stratum (exponential failure) or length of
   the number of rows in `lambda` minus 1, otherwise.
 
 - T:
 
-  time of analysis; if `Tfinal=NULL`, this is also the study duration.
+  Time of analysis; if `Tfinal=NULL`, this is also the study duration.
 
 - Tfinal:
 
@@ -89,16 +74,16 @@ print(x, digits = 4, ...)
 
 - minfup:
 
-  time from end of planned enrollment (`sum(R)` from output value of
+  Time from end of planned enrollment (`sum(R)` from output value of
   `R`) until `Tfinal`.
 
 - digits:
 
-  which controls number of digits for printing.
+  Which controls number of digits for printing.
 
 - x:
 
-  an object of class `eEvents` returned from `eEvents()`.
+  An object of class `eEvents` returned from `eEvents()`.
 
 - ...:
 
@@ -111,47 +96,64 @@ which contains the following items:
 
 - lambda:
 
-  as input; converted to a matrix on output.
+  As input; converted to a matrix on output.
 
 - eta:
 
-  as input; converted to a matrix on output.
+  As input; converted to a matrix on output.
 
 - gamma:
 
-  as input.
+  As input.
 
 - R:
 
-  as input.
+  As input.
 
 - S:
 
-  as input.
+  As input.
 
 - T:
 
-  as input.
+  As input.
 
 - Tfinal:
 
-  planned duration of study.
+  Planned duration of study.
 
 - minfup:
 
-  as input.
+  As input.
 
 - d:
 
-  expected number of events.
+  Expected number of events.
 
 - n:
 
-  expected sample size.
+  Expected sample size.
 
 - digits:
 
-  as input.
+  As input.
+
+## Details
+
+`eEvents()` produces an object of class `eEvents` with the number of
+subjects and events for a set of pre-specified trial parameters, such as
+accrual duration and follow-up period. The underlying power calculation
+is based on Lachin and Foulkes (1986) method for proportional hazards
+assuming a fixed underlying hazard ratio between 2 treatment groups. The
+method has been extended here to enable designs to test non-inferiority.
+Piecewise constant enrollment and failure rates are assumed and a
+stratified population is allowed. See also
+[`nSurvival`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+for other Lachin and Foulkes (1986) methods assuming a constant hazard
+difference or exponential enrollment rate.
+
+`print.eEvents()` formats the output for an object of class `eEvents`
+and returns the input value.
 
 ## References
 
@@ -207,7 +209,7 @@ str(eEvents(
 #>  $ digits: num 4
 #>  - attr(*, "class")= chr "eEvents"
 
-# control group for example from Bernstein and Lagakos (1978)
+# Control group for example from Bernstein and Lagakos (1978)
 lamC <- c(1, .8, .5)
 n <- eEvents(
   lambda = matrix(c(lamC, lamC * 2 / 3), ncol = 6), eta = 0,

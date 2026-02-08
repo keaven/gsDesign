@@ -5,7 +5,7 @@ a time-to-event endpoint and an assumption of proportional hazards. This
 set of routines is new with version 2.7 and will continue to be modified
 and refined to improve input error checking and output format with
 subsequent versions. It allows both the Lachin and Foulkes (1986) method
-(fixed trial duration) as well as the Kim and Tsiatis(1990) method
+(fixed trial duration) as well as the Kim and Tsiatis (1990) method
 (fixed enrollment rates and either fixed enrollment duration or fixed
 minimum follow-up). Piecewise exponential survival is supported as well
 as piecewise constant enrollment and dropout rates. The methods are for
@@ -21,8 +21,9 @@ endpoint.
 ## Usage
 
 ``` r
-# S3 method for class 'nSurv'
-print(x, digits = 4, ...)
+tEventsIA(x, timing = 0.25, tol = .Machine$double.eps^0.25)
+
+nEventsIA(tIA = 5, x = NULL, target = 0, simple = TRUE)
 
 nSurv(
   lambdaC = log(2)/6,
@@ -42,9 +43,23 @@ nSurv(
   tol = .Machine$double.eps^0.25
 )
 
-tEventsIA(x, timing = 0.25, tol = .Machine$double.eps^0.25)
+# S3 method for class 'nSurv'
+print(x, digits = 4, ...)
 
-nEventsIA(tIA = 5, x = NULL, target = 0, simple = TRUE)
+# S3 method for class 'gsSurv'
+xtable(
+  x,
+  caption = NULL,
+  label = NULL,
+  align = NULL,
+  digits = NULL,
+  display = NULL,
+  auto = FALSE,
+  footnote = NULL,
+  fnwid = "9cm",
+  timename = "months",
+  ...
+)
 
 gsSurv(
   k = 3,
@@ -77,21 +92,6 @@ gsSurv(
 
 # S3 method for class 'gsSurv'
 print(x, digits = 2, ...)
-
-# S3 method for class 'gsSurv'
-xtable(
-  x,
-  caption = NULL,
-  label = NULL,
-  align = NULL,
-  digits = NULL,
-  display = NULL,
-  auto = FALSE,
-  footnote = NULL,
-  fnwid = "9cm",
-  timename = "months",
-  ...
-)
 ```
 
 ## Arguments
@@ -104,105 +104,6 @@ xtable(
   will generally be output from `gsSurv()`. `nEventsIA` and `tEventsIA`
   operate on both the `nSurv` and `gsSurv` class.
 
-- digits:
-
-  Number of digits past the decimal place to print (`print.gsSurv.`);
-  also a pass through to generic
-  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md)
-  from `xtable.gsSurv()`.
-
-- ...:
-
-  other arguments that may be passed to generic functions underlying the
-  methods here.
-
-- lambdaC:
-
-  scalar, vector or matrix of event hazard rates for the control group;
-  rows represent time periods while columns represent strata; a vector
-  implies a single stratum.
-
-- hr:
-
-  hazard ratio (experimental/control) under the alternate hypothesis
-  (scalar).
-
-- hr0:
-
-  hazard ratio (experimental/control) under the null hypothesis
-  (scalar).
-
-- eta:
-
-  scalar, vector or matrix of dropout hazard rates for the control
-  group; rows represent time periods while columns represent strata; if
-  entered as a scalar, rate is constant across strata and time periods;
-  if entered as a vector, rates are constant across strata.
-
-- etaE:
-
-  matrix dropout hazard rates for the experimental group specified in
-  like form as `eta`; if NULL, this is set equal to `eta`.
-
-- gamma:
-
-  a scalar, vector or matrix of rates of entry by time period (rows) and
-  strata (columns); if entered as a scalar, rate is constant across
-  strata and time periods; if entered as a vector, rates are constant
-  across strata.
-
-- R:
-
-  a scalar or vector of durations of time periods for recruitment rates
-  specified in rows of `gamma`. Length is the same as number of rows in
-  `gamma`. Note that when variable enrollment duration is specified
-  (input `T=NULL`), the final enrollment period is extended as long as
-  needed.
-
-- S:
-
-  a scalar or vector of durations of piecewise constant event rates
-  specified in rows of `lambda`, `eta` and `etaE`; this is NULL if there
-  is a single event rate per stratum (exponential failure) or length of
-  the number of rows in `lambda` minus 1, otherwise.
-
-- T:
-
-  study duration; if `T` is input as `NULL`, this will be computed on
-  output; see details.
-
-- minfup:
-
-  follow-up of last patient enrolled; if `minfup` is input as `NULL`,
-  this will be computed on output; see details.
-
-- ratio:
-
-  randomization ratio of experimental treatment divided by control;
-  normally a scalar, but may be a vector with length equal to number of
-  strata.
-
-- alpha:
-
-  type I error rate. Default is 0.025 since 1-sided testing is default.
-
-- beta:
-
-  type II error rate. Default is 0.10 (90% power); NULL if power is to
-  be computed based on other input values.
-
-- sided:
-
-  1 for 1-sided testing, 2 for 2-sided testing.
-
-- tol:
-
-  for cases when `T` or `minfup` values are derived through root finding
-  (`T` or `minfup` input as `NULL`), `tol` provides the level of error
-  input to the [`uniroot()`](https://rdrr.io/r/stats/uniroot.html)
-  root-finding function. The default is the same as for
-  [`uniroot`](https://rdrr.io/r/stats/uniroot.html).
-
 - timing:
 
   Sets relative timing of interim analyses in `gsSurv`. Default of 1
@@ -212,6 +113,14 @@ xtable(
   `tEventsIA`, this is a scalar strictly between 0 and 1 that indicates
   the targeted proportion of final planned events available at an
   interim analysis.
+
+- tol:
+
+  For cases when `T` or `minfup` values are derived through root finding
+  (`T` or `minfup` input as `NULL`), `tol` provides the level of error
+  input to the [`uniroot()`](https://rdrr.io/r/stats/uniroot.html)
+  root-finding function. The default is the same as for
+  [`uniroot`](https://rdrr.io/r/stats/uniroot.html).
 
 - tIA:
 
@@ -225,6 +134,136 @@ xtable(
 - simple:
 
   See output specification for `nEventsIA()`.
+
+- lambdaC:
+
+  Scalar, vector or matrix of event hazard rates for the control group;
+  rows represent time periods while columns represent strata; a vector
+  implies a single stratum.
+
+- hr:
+
+  Hazard ratio (experimental/control) under the alternate hypothesis
+  (scalar).
+
+- hr0:
+
+  Hazard ratio (experimental/control) under the null hypothesis
+  (scalar).
+
+- eta:
+
+  Scalar, vector or matrix of dropout hazard rates for the control
+  group; rows represent time periods while columns represent strata; if
+  entered as a scalar, rate is constant across strata and time periods;
+  if entered as a vector, rates are constant across strata.
+
+- etaE:
+
+  Matrix dropout hazard rates for the experimental group specified in
+  like form as `eta`; if NULL, this is set equal to `eta`.
+
+- gamma:
+
+  A scalar, vector or matrix of rates of entry by time period (rows) and
+  strata (columns); if entered as a scalar, rate is constant across
+  strata and time periods; if entered as a vector, rates are constant
+  across strata.
+
+- R:
+
+  A scalar or vector of durations of time periods for recruitment rates
+  specified in rows of `gamma`. Length is the same as number of rows in
+  `gamma`. Note that when variable enrollment duration is specified
+  (input `T=NULL`), the final enrollment period is extended as long as
+  needed.
+
+- S:
+
+  A scalar or vector of durations of piecewise constant event rates
+  specified in rows of `lambda`, `eta` and `etaE`; this is NULL if there
+  is a single event rate per stratum (exponential failure) or length of
+  the number of rows in `lambda` minus 1, otherwise.
+
+- T:
+
+  Study duration; if `T` is input as `NULL`, this will be computed on
+  output; see details.
+
+- minfup:
+
+  Follow-up of last patient enrolled; if `minfup` is input as `NULL`,
+  this will be computed on output; see details.
+
+- ratio:
+
+  Randomization ratio of experimental treatment divided by control;
+  normally a scalar, but may be a vector with length equal to number of
+  strata.
+
+- alpha:
+
+  Type I error rate. Default is 0.025 since 1-sided testing is default.
+
+- beta:
+
+  Type II error rate. Default is 0.10 (90% power); NULL if power is to
+  be computed based on other input values.
+
+- sided:
+
+  1 for 1-sided testing, 2 for 2-sided testing.
+
+- digits:
+
+  Number of digits past the decimal place to print (`print.gsSurv.`);
+  also a pass through to generic
+  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md)
+  from `xtable.gsSurv()`.
+
+- ...:
+
+  Other arguments that may be passed to generic functions underlying the
+  methods here.
+
+- caption:
+
+  Passed through to generic
+  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md).
+
+- label:
+
+  Passed through to generic
+  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md).
+
+- align:
+
+  Passed through to generic
+  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md).
+
+- display:
+
+  Passed through to generic
+  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md).
+
+- auto:
+
+  Passed through to generic
+  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md).
+
+- footnote:
+
+  Footnote for xtable output; may be useful for describing some of the
+  design parameters.
+
+- fnwid:
+
+  A text string controlling the width of footnote text at the bottom of
+  the xtable output.
+
+- timename:
+
+  Character string with plural of time units (e.g., "months")
 
 - k:
 
@@ -312,45 +351,6 @@ xtable(
   Default is NULL in which case lower bound spending time is determined
   by `timing`. Otherwise, this should be a vector of length `k` with the
   spending time at each analysis (see Details in help for `gsDesign`).
-
-- caption:
-
-  passed through to generic
-  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md).
-
-- label:
-
-  passed through to generic
-  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md).
-
-- align:
-
-  passed through to generic
-  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md).
-
-- display:
-
-  passed through to generic
-  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md).
-
-- auto:
-
-  passed through to generic
-  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md).
-
-- footnote:
-
-  footnote for xtable output; may be useful for describing some of the
-  design parameters.
-
-- fnwid:
-
-  a text string controlling the width of footnote text at the bottom of
-  the xtable output.
-
-- timename:
-
-  character string with plural of time units (e.g., "months")
 
 ## Value
 
@@ -694,6 +694,8 @@ for Comparing Survival Distributions. *Biometrika*, 68, 316-319.
 
 ## See also
 
+[`uniroot`](https://rdrr.io/r/stats/uniroot.html)
+
 [`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
 [`xprint`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
 [`vignette("gsDesignPackageOverview")`](https://keaven.github.io/gsDesign/articles/gsDesignPackageOverview.md),
@@ -701,8 +703,6 @@ for Comparing Survival Distributions. *Biometrika*, 68, 316-319.
 [`gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md),
 [`gsHR`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
 [`nSurvival`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-
-[`uniroot`](https://rdrr.io/r/stats/uniroot.html)
 
 [`Normal`](https://rdrr.io/r/stats/Normal.html)
 [`xtable`](https://rdrr.io/pkg/xtable/man/xtable.html)
@@ -714,7 +714,7 @@ Keaven Anderson <keaven_anderson@merck.com>
 ## Examples
 
 ``` r
-# vary accrual rate to obtain power
+# Vary accrual rate to obtain power
 nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 1, T = 36, minfup = 12)
 #> Fixed design, two-arm trial with time-to-event
 #> outcome (Lachin and Foulkes, 1986).
@@ -738,7 +738,7 @@ nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 1, T = 36, minfu
 #> Type I error (1-sided):   100*alpha=2.5%
 #> Equal randomization:          ratio=1
 
-# vary accrual duration to obtain power
+# Vary accrual duration to obtain power
 nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 6, minfup = 12)
 #> Fixed design, two-arm trial with time-to-event
 #> outcome (Lachin and Foulkes, 1986).
@@ -762,7 +762,7 @@ nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 6, minfup = 12)
 #> Type I error (1-sided):   100*alpha=2.5%
 #> Equal randomization:          ratio=1
 
-# vary follow-up duration to obtain power
+# Vary follow-up duration to obtain power
 nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 6, R = 25)
 #> Fixed design, two-arm trial with time-to-event
 #> outcome (Lachin and Foulkes, 1986).
@@ -786,7 +786,7 @@ nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 6, R = 25)
 #> Type I error (1-sided):   100*alpha=2.5%
 #> Equal randomization:          ratio=1
 
-# piecewise constant enrollment rates (vary accrual duration)
+# Piecewise constant enrollment rates (vary accrual duration)
 nSurv(
   lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = c(1, 3, 6),
   R = c(3, 6, 9), T = NULL, minfup = 12
@@ -815,7 +815,7 @@ nSurv(
 #> Type I error (1-sided):   100*alpha=2.5%
 #> Equal randomization:          ratio=1
 
-# stratified population (vary accrual duration)
+# Stratified population (vary accrual duration)
 nSurv(
   lambdaC = matrix(log(2) / c(6, 12), ncol = 2), hr = .5, eta = log(2) / 40,
   gamma = matrix(c(2, 4), ncol = 2), minfup = 12
@@ -842,7 +842,7 @@ nSurv(
 #> Type I error (1-sided):   100*alpha=2.5%
 #> Equal randomization:          ratio=1
 
-# piecewise exponential failure rates (vary accrual duration)
+# Piecewise exponential failure rates (vary accrual duration)
 nSurv(lambdaC = log(2) / c(6, 12), hr = .5, eta = log(2) / 40, S = 3, gamma = 6, minfup = 12)
 #> Fixed design, two-arm trial with time-to-event
 #> outcome (Lachin and Foulkes, 1986).
@@ -868,7 +868,7 @@ nSurv(lambdaC = log(2) / c(6, 12), hr = .5, eta = log(2) / 40, S = 3, gamma = 6,
 #> Type I error (1-sided):   100*alpha=2.5%
 #> Equal randomization:          ratio=1
 
-# combine it all: 2 strata, 2 failure rate periods
+# Combine it all: 2 strata, 2 failure rate periods
 nSurv(
   lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
   eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
@@ -899,8 +899,8 @@ nSurv(
 #> Type I error (1-sided):   100*alpha=2.5%
 #> Equal randomization:          ratio=1
 
-# example where only 1 month of follow-up is desired
-# set failure rate to 0 after 1 month using lambdaC and S
+# Example where only 1 month of follow-up is desired.
+# Set failure rate to 0 after 1 month using lambdaC and S.
 nSurv(lambdaC = c(.4, 0), hr = 2 / 3, S = 1, minfup = 1)
 #> Fixed design, two-arm trial with time-to-event
 #> outcome (Lachin and Foulkes, 1986).
@@ -926,7 +926,7 @@ nSurv(lambdaC = c(.4, 0), hr = 2 / 3, S = 1, minfup = 1)
 #> Type I error (1-sided):   100*alpha=2.5%
 #> Equal randomization:          ratio=1
 
-# group sequential design (vary accrual rate to obtain power)
+# Group sequential design (vary accrual rate to obtain power)
 x <- gsSurv(
   k = 4, sfl = sfPower, sflpar = .5, lambdaC = log(2) / 6, hr = .5,
   eta = log(2) / 40, gamma = 1, T = 36, minfup = 12
@@ -984,7 +984,7 @@ print(xtable::xtable(x,
   caption = "Caption example."
 ))
 #> % latex table generated in R 4.5.2 by xtable 1.8-4 package
-#> % Thu Jan 29 02:23:07 2026
+#> % Sun Feb  8 13:26:48 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}
@@ -1015,11 +1015,11 @@ print(xtable::xtable(x,
 #> \end{tabular}
 #> \caption{Caption example.} 
 #> \end{table}
-# find expected number of events at time 12 in the above trial
+# Find expected number of events at time 12 in the above trial
 nEventsIA(x = x, tIA = 10)
 #> [1] 20.51876
 
-# find time at which 1/4 of events are expected
+# Find time at which 1/4 of events are expected
 tEventsIA(x = x, timing = .25)
 #> $T
 #> [1] 12.24228

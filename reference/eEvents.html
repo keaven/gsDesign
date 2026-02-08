@@ -11,37 +11,13 @@ demonstrated in Lachin and Foulkes (1986) and is fundamental in computations
 for the sample size method they propose. Piecewise exponential survival and
 dropout rates are supported as well as piecewise uniform enrollment. A
 stratified population is allowed. Output is the expected number of events
-observed given a trial duration and the above rate parameters.
-eEvents() produces an object of class eEvents with the number
-of subjects and events for a set of pre-specified trial parameters, such as
-accrual duration and follow-up period. The underlying power calculation is
-based on Lachin and Foulkes (1986) method for proportional hazards assuming
-a fixed underlying hazard ratio between 2 treatment groups. The method has
-been extended here to enable designs to test non-inferiority. Piecewise
-constant enrollment and failure rates are assumed and a stratified
-population is allowed. See also nSurvival for other Lachin and
-Foulkes (1986) methods assuming a constant hazard difference or exponential
-enrollment rate.
-print.eEvents() formats the output for an object of class
-eEvents and returns the input value."><meta property="og:description" content="eEvents() is used to calculate the expected number of events for a
+observed given a trial duration and the above rate parameters."><meta property="og:description" content="eEvents() is used to calculate the expected number of events for a
 population with a time-to-event endpoint.  It is based on calculations
 demonstrated in Lachin and Foulkes (1986) and is fundamental in computations
 for the sample size method they propose. Piecewise exponential survival and
 dropout rates are supported as well as piecewise uniform enrollment. A
 stratified population is allowed. Output is the expected number of events
-observed given a trial duration and the above rate parameters.
-eEvents() produces an object of class eEvents with the number
-of subjects and events for a set of pre-specified trial parameters, such as
-accrual duration and follow-up period. The underlying power calculation is
-based on Lachin and Foulkes (1986) method for proportional hazards assuming
-a fixed underlying hazard ratio between 2 treatment groups. The method has
-been extended here to enable designs to test non-inferiority. Piecewise
-constant enrollment and failure rates are assumed and a stratified
-population is allowed. See also nSurvival for other Lachin and
-Foulkes (1986) methods assuming a constant hazard difference or exponential
-enrollment rate.
-print.eEvents() formats the output for an object of class
-eEvents and returns the input value."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
+observed given a trial duration and the above rate parameters."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -71,7 +47,7 @@ eEvents and returns the input value."><meta property="og:image" content="https:/
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Expected number of events for a time-to-event study</h1>
-      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/master/R/gsSurv.R" class="external-link"><code>R/gsSurv.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/master/R/gsSurv-eEvents.R" class="external-link"><code>R/gsSurv-eEvents.R</code></a></small>
       <div class="d-none name"><code>eEvents.Rd</code></div>
     </div>
 
@@ -83,18 +59,6 @@ for the sample size method they propose. Piecewise exponential survival and
 dropout rates are supported as well as piecewise uniform enrollment. A
 stratified population is allowed. Output is the expected number of events
 observed given a trial duration and the above rate parameters.</p>
-<p><code>eEvents()</code> produces an object of class <code>eEvents</code> with the number
-of subjects and events for a set of pre-specified trial parameters, such as
-accrual duration and follow-up period. The underlying power calculation is
-based on Lachin and Foulkes (1986) method for proportional hazards assuming
-a fixed underlying hazard ratio between 2 treatment groups. The method has
-been extended here to enable designs to test non-inferiority. Piecewise
-constant enrollment and failure rates are assumed and a stratified
-population is allowed. See also <code><a href="nSurvival.html">nSurvival</a></code> for other Lachin and
-Foulkes (1986) methods assuming a constant hazard difference or exponential
-enrollment rate.</p>
-<p><code>print.eEvents()</code> formats the output for an object of class
-<code>eEvents</code> and returns the input value.</p>
     </div>
 
     <div class="section level2">
@@ -120,41 +84,41 @@ enrollment rate.</p>
 
 
 <dl><dt id="arg-lambda">lambda<a class="anchor" aria-label="anchor" href="#arg-lambda"></a></dt>
-<dd><p>scalar, vector or matrix of event hazard rates; rows represent
+<dd><p>Scalar, vector or matrix of event hazard rates; rows represent
 time periods while columns represent strata; a vector implies a single
 stratum.</p></dd>
 
 
 <dt id="arg-eta">eta<a class="anchor" aria-label="anchor" href="#arg-eta"></a></dt>
-<dd><p>scalar, vector or matrix of dropout hazard rates; rows represent
+<dd><p>Scalar, vector or matrix of dropout hazard rates; rows represent
 time periods while columns represent strata; if entered as a scalar, rate is
 constant across strata and time periods; if entered as a vector, rates are
 constant across strata.</p></dd>
 
 
 <dt id="arg-gamma">gamma<a class="anchor" aria-label="anchor" href="#arg-gamma"></a></dt>
-<dd><p>a scalar, vector or matrix of rates of entry by time period
+<dd><p>A scalar, vector or matrix of rates of entry by time period
 (rows) and strata (columns); if entered as a scalar, rate is constant
 across strata and time periods; if entered as a vector, rates are constant
 across strata.</p></dd>
 
 
 <dt id="arg-r">R<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
-<dd><p>a scalar or vector of durations of time periods for recruitment
+<dd><p>A scalar or vector of durations of time periods for recruitment
 rates specified in rows of <code>gamma</code>. Length is the same as number of
 rows in <code>gamma</code>. Note that the final enrollment period is extended as
 long as needed.</p></dd>
 
 
 <dt id="arg-s">S<a class="anchor" aria-label="anchor" href="#arg-s"></a></dt>
-<dd><p>a scalar or vector of durations of piecewise constant event rates
+<dd><p>A scalar or vector of durations of piecewise constant event rates
 specified in rows of <code>lambda</code>, <code>eta</code> and <code>etaE</code>; this is NULL
 if there is a single event rate per stratum (exponential failure) or length
 of the number of rows in <code>lambda</code> minus 1, otherwise.</p></dd>
 
 
 <dt id="arg-t">T<a class="anchor" aria-label="anchor" href="#arg-t"></a></dt>
-<dd><p>time of analysis; if <code>Tfinal=NULL</code>, this is also the study
+<dd><p>Time of analysis; if <code>Tfinal=NULL</code>, this is also the study
 duration.</p></dd>
 
 
@@ -164,16 +128,16 @@ duration.</p></dd>
 
 
 <dt id="arg-minfup">minfup<a class="anchor" aria-label="anchor" href="#arg-minfup"></a></dt>
-<dd><p>time from end of planned enrollment (<code>sum(R)</code> from output
+<dd><p>Time from end of planned enrollment (<code>sum(R)</code> from output
 value of <code>R</code>) until <code>Tfinal</code>.</p></dd>
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
-<dd><p>which controls number of digits for printing.</p></dd>
+<dd><p>Which controls number of digits for printing.</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>an object of class <code>eEvents</code> returned from <code>eEvents()</code>.</p></dd>
+<dd><p>An object of class <code>eEvents</code> returned from <code>eEvents()</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -183,36 +147,56 @@ value of <code>R</code>) until <code>Tfinal</code>.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p><code>eEvents()</code> and <code>print.eEvents()</code> return an object of
-class <code>eEvents</code> which contains the following items:</p>
+  class <code>eEvents</code> which contains the following items:</p>
 <dl><dt>lambda</dt>
-<dd><p>as
-input; converted to a matrix on output.</p></dd>
- <dt>eta</dt>
-<dd><p>as input; converted to a
-matrix on output.</p></dd>
- <dt>gamma</dt>
-<dd><p>as input.</p></dd>
- <dt>R</dt>
-<dd><p>as input.</p></dd>
- <dt>S</dt>
-<dd><p>as
-input.</p></dd>
- <dt>T</dt>
-<dd><p>as input.</p></dd>
- <dt>Tfinal</dt>
-<dd><p>planned duration of study.</p></dd>
+<dd><p>As input; converted to a matrix on output.</p></dd>
 
-<dt>minfup</dt>
-<dd><p>as input.</p></dd>
- <dt>d</dt>
-<dd><p>expected number of events.</p></dd>
+  <dt>eta</dt>
+<dd><p>As input; converted to a matrix on output.</p></dd>
 
-<dt>n</dt>
-<dd><p>expected sample size.</p></dd>
- <dt>digits</dt>
-<dd><p>as input.</p></dd>
+  <dt>gamma</dt>
+<dd><p>As input.</p></dd>
+
+  <dt>R</dt>
+<dd><p>As input.</p></dd>
+
+  <dt>S</dt>
+<dd><p>As input.</p></dd>
+
+  <dt>T</dt>
+<dd><p>As input.</p></dd>
+
+  <dt>Tfinal</dt>
+<dd><p>Planned duration of study.</p></dd>
+
+  <dt>minfup</dt>
+<dd><p>As input.</p></dd>
+
+  <dt>d</dt>
+<dd><p>Expected number of events.</p></dd>
+
+  <dt>n</dt>
+<dd><p>Expected sample size.</p></dd>
+
+  <dt>digits</dt>
+<dd><p>As input.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p><code>eEvents()</code> produces an object of class <code>eEvents</code> with the number
+of subjects and events for a set of pre-specified trial parameters, such as
+accrual duration and follow-up period. The underlying power calculation is
+based on Lachin and Foulkes (1986) method for proportional hazards assuming
+a fixed underlying hazard ratio between 2 treatment groups. The method has
+been extended here to enable designs to test non-inferiority. Piecewise
+constant enrollment and failure rates are assumed and a stratified
+population is allowed. See also <code><a href="nSurvival.html">nSurvival</a></code> for other Lachin and
+Foulkes (1986) methods assuming a constant hazard difference or exponential
+enrollment rate.</p>
+<p><code>print.eEvents()</code> formats the output for an object of class
+<code>eEvents</code> and returns the input value.</p>
+    </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Lachin JM and Foulkes MA (1986), Evaluation of Sample Size and
@@ -226,8 +210,8 @@ Simulation</em>, 8:65-73.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="../articles/gsDesignPackageOverview.html">vignette("gsDesignPackageOverview")</a></code>, <a href="plot.gsDesign.html">plot.gsDesign</a>,
-<code><a href="gsDesign.html">gsDesign</a></code>, <code><a href="gsBoundSummary.html">gsHR</a></code>,
-<code><a href="nSurvival.html">nSurvival</a></code></p></div>
+  <code><a href="gsDesign.html">gsDesign</a></code>, <code><a href="gsBoundSummary.html">gsHR</a></code>,
+  <code><a href="nSurvival.html">nSurvival</a></code></p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -236,8 +220,7 @@ Simulation</em>, 8:65-73.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># 3 enrollment periods, 3 piecewise exponential failure rates</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># 3 enrollment periods, 3 piecewise exponential failure rates</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">eEvents</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  lambda <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.02</span>, <span class="fl">.01</span><span class="op">)</span>, eta <span class="op">=</span> <span class="fl">.01</span>, gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, S <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, T <span class="op">=</span> <span class="fl">20</span></span></span>
@@ -265,13 +248,12 @@ Simulation</em>, 8:65-73.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ digits: num 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr "eEvents"</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># control group for example from Bernstein and Lagakos (1978)</span></span></span>
+<span class="r-in"><span><span class="co"># Control group for example from Bernstein and Lagakos (1978)</span></span></span>
 <span class="r-in"><span><span class="va">lamC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">.8</span>, <span class="fl">.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu">eEvents</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  lambda <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">lamC</span>, <span class="va">lamC</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">/</span> <span class="fl">3</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>, eta <span class="op">=</span> <span class="fl">0</span>,</span></span>
 <span class="r-in"><span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">.5</span>, ncol <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>, R <span class="op">=</span> <span class="fl">2</span>, T <span class="op">=</span> <span class="fl">4</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

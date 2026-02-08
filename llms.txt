@@ -142,13 +142,13 @@ For an overview of the gsDesign package, see
   [`hrn2z()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
   [`hrz2n()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
   : Time-to-event sample size calculation (Lachin-Foulkes)
-- [`print(`*`<nSurv>`*`)`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  [`tEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+- [`tEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   [`nEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  [`print(`*`<nSurv>`*`)`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  [`xtable(`*`<gsSurv>`*`)`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   [`print(`*`<gsSurv>`*`)`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  [`xtable(`*`<gsSurv>`*`)`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   : Advanced time-to-event sample size calculation
 - [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
   : Time-to-event endpoint design with calendar timing of analyses
