@@ -42,7 +42,7 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
   double adelta, bdelta, tol;
   /* note: should allocate zwk & wwk dynamically...*/
   double zwk[1000], wwk[1000], hwk[1000], zwk2[1000], wwk2[1000], hwk2[1000],
-      *z1, *z2, *w1, *w2, *h, *h2, *tem, rt2pi;
+      *z1, *z2, *w1, *w2, *h, *h2, *tem;
   void h1(double, int, double *, double, double *, double *);
   void hupdate(double, double *, int, double, double *, double *, int, double,
                double *, double *);
@@ -50,7 +50,6 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
   r = xr[0];
   nanal = xnanal[0];
   tol = xtol[0];
-  rt2pi = 2.506628274631;
   /* compute bounds at 1st interim analysis using inverse normal */
   if (nanal < 1 || r < 1 || r > MAXR) {
     retval[0] = 1;
@@ -111,8 +110,8 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
         xhi = (z1[ii] * rtIkm1 - btem * rtIk) / rtdeltak;
         plo += h[ii] * pnorm(xlo, 0., 1., 0, 0);
         phi += h[ii] * pnorm(xhi, 0., 1., 1, 0);
-        dplo += h[ii] * exp(-xlo * xlo / 2) / rt2pi * rtIk / rtdeltak;
-        dphi -= h[ii] * exp(-xhi * xhi / 2) / rt2pi * rtIk / rtdeltak;
+        dplo += h[ii] * exp(-xlo * xlo / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
+        dphi -= h[ii] * exp(-xhi * xhi / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
       }
       /* use 1st order Taylor's series to update boundaries */
       /* maximum allowed change is 1 */
