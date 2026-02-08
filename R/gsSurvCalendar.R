@@ -102,7 +102,7 @@
 #' # First example: while timing is calendar-based, spending is event-based
 #' x <- gsSurvCalendar() |> toInteger()
 #' gsBoundSummary(x)
-#' 
+#'
 #' # Second example: both timing and spending are calendar-based
 #' # This results in less spending at interims and leaves more for final analysis
 #' y <- gsSurvCalendar(spending = "calendar") |> toInteger()
@@ -116,17 +116,22 @@
 #' # Actual calendar fraction from design after toInteger() conversion
 #' y$T / max(y$T)
 gsSurvCalendar <- function(
-    test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
-    sfu = gsDesign::sfHSD, sfupar = -4,
-    sfl = gsDesign::sfHSD, sflpar = -2,
-    calendarTime = c(12, 24, 36),
-    spending = c("information", "calendar"),
-    lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
-    gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1,
-    r = 18, tol = 1e-06) {
-  checkVector(calendarTime, isType = "numeric") 
-  if (min(diff(calendarTime)) < 0) stop(paste("calendarTime must be an increasing vector of positive numbers, including final analysis\n input calendarTime = ",
-                                              paste(calendarTime, collapse = ", ")))
+  test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
+  sfu = gsDesign::sfHSD, sfupar = -4,
+  sfl = gsDesign::sfHSD, sflpar = -2,
+  calendarTime = c(12, 24, 36),
+  spending = c("information", "calendar"),
+  lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
+  gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1,
+  r = 18, tol = 1e-06
+) {
+  checkVector(calendarTime, isType = "numeric")
+  if (min(diff(calendarTime)) < 0) {
+    stop(paste(
+      "calendarTime must be an increasing vector of positive numbers, including final analysis\n input calendarTime = ",
+      paste(calendarTime, collapse = ", ")
+    ))
+  }
   x <- nSurv(
     lambdaC = lambdaC, hr = hr, hr0 = hr0, eta = eta, etaE = etaE,
     gamma = gamma, R = R, S = S, T = max(calendarTime),
@@ -151,7 +156,7 @@ gsSurvCalendar <- function(
   }
   timing <- rowSums(eDC) + rowSums(eDE)
   timing <- timing / max(timing)
-  # if calendar spending, set usTime, lsTime
+  # If calendar spending, set usTime, lsTime
   if (spending[1] == "calendar") {
     lsTime <- calendarTime / max(calendarTime)
   } else {
