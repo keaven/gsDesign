@@ -299,7 +299,7 @@ t(CP$upper$prob) %*% c(1, 1, 1)
 #>             [,1]
 #> [1,] 0.002238566
 #> [2,] 0.002561570
-#> [3,] 0.367657693
+#> [3,] 0.367657692
 
 # compute predictive probability based on above assumptions
 gsPP(x, i = 2, zi = x$lower$bound[2], theta = prior$z, wgts = prior$wgts)

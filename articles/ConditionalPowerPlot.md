@@ -30,17 +30,17 @@ design <- gsSurv(hr = 0.7, lambdaC = log(2) / 12, minfup = 24, T = 36) |> toInte
 design |> gsBoundSummary()
 #>     Analysis              Value Efficacy Futility
 #>    IA 1: 33%                  Z   3.0139  -0.2451
-#>       N: 464        p (1-sided)   0.0013   0.5968
+#>       N: 466        p (1-sided)   0.0013   0.5968
 #>  Events: 117       ~HR at bound   0.5728   1.0464
 #>    Month: 12   P(Cross) if HR=1   0.0013   0.4032
 #>              P(Cross) if HR=0.7   0.1398   0.0147
 #>    IA 2: 67%                  Z   2.5478   0.9413
-#>       N: 464        p (1-sided)   0.0054   0.1733
+#>       N: 466        p (1-sided)   0.0054   0.1733
 #>  Events: 235       ~HR at bound   0.7172   0.8844
 #>    Month: 21   P(Cross) if HR=1   0.0062   0.8347
 #>              P(Cross) if HR=0.7   0.5814   0.0436
 #>        Final                  Z   1.9991   1.9991
-#>       N: 464        p (1-sided)   0.0228   0.0228
+#>       N: 466        p (1-sided)   0.0228   0.0228
 #>  Events: 353       ~HR at bound   0.8083   0.8083
 #>    Month: 36   P(Cross) if HR=1   0.0233   0.9767
 #>              P(Cross) if HR=0.7   0.9005   0.0995
@@ -53,7 +53,7 @@ cat(design |> summary())
 ```
 
 Asymmetric two-sided group sequential design with non-binding futility
-bound, 3 analyses, time-to-event outcome with sample size 464 and 353
+bound, 3 analyses, time-to-event outcome with sample size 466 and 353
 events required, 90 percent power, 2.5 percent (1-sided) Type I error to
 detect a hazard ratio of 0.7. Enrollment and total study durations are
 assumed to be 12 and 36.1 months, respectively. Efficacy bounds derived

@@ -214,19 +214,19 @@ gsBoundSummary(xx,
 | Integer event counts at analyses       |                    |          |          |
 | Analysis                               | Value              | Efficacy | Futility |
 | IA 1: 44%                              | Z                  | 2.6864   | 0.0424   |
-| Events: 3606                           | p (1-sided)        | 0.0036   | 0.4831   |
+| Events: 3604                           | p (1-sided)        | 0.0036   | 0.4831   |
 | Events: 30                             | ~HR at bound       | 0.2255   | 0.6876   |
 | Month: 12.8                            | Spending           | 0.0036   | 0.0144   |
 |                                        | P(Cross) if HR=0.7 | 0.0036   | 0.5169   |
 |                                        | P(Cross) if HR=0.3 | 0.3231   | 0.0144   |
 | IA 2: 69%                              | Z                  | 2.4494   | 0.9143   |
-| Events: 3606                           | p (1-sided)        | 0.0072   | 0.1803   |
+| Events: 3604                           | p (1-sided)        | 0.0072   | 0.1803   |
 | Events: 47                             | ~HR at bound       | 0.3067   | 0.5144   |
 | Month: 17.9                            | Spending           | 0.0055   | 0.0220   |
 |                                        | P(Cross) if HR=0.7 | 0.0091   | 0.8287   |
 |                                        | P(Cross) if HR=0.3 | 0.6455   | 0.0364   |
 | Final                                  | Z                  | 2.0296   | 2.0296   |
-| Events: 3606                           | p (1-sided)        | 0.0212   | 0.0212   |
+| Events: 3604                           | p (1-sided)        | 0.0212   | 0.0212   |
 | Events: 68                             | ~HR at bound       | 0.3965   | 0.3965   |
 | Month: 24.2                            | Spending           | 0.0159   | 0.0636   |
 |                                        | P(Cross) if HR=0.7 | 0.0239   | 0.9761   |
@@ -239,7 +239,7 @@ cat(summary(xx, timeunit = "months"))
 ```
 
 Asymmetric two-sided group sequential design with non-binding futility
-bound, 3 analyses, time-to-event outcome with sample size 3606 and 68
+bound, 3 analyses, time-to-event outcome with sample size 3604 and 68
 events required, 90 percent power, 2.5 percent (1-sided) Type I error to
 detect a hazard ratio of 0.3 with a null hypothesis hazard ratio of 0.7.
 Enrollment and total study durations are assumed to be 8 and 24.2

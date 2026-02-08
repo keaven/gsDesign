@@ -966,7 +966,7 @@ x
 #>   0.0000 0.5895 0.2470 0.1079 0.0369 0.9813
 #>   0.3489 0.0500 0.0207 0.0159 0.0134 0.1000
 #>              T         n    Events HR futility HR efficacy
-#> IA 1  12.24228  81.46723  28.76662       0.919       0.308
+#> IA 1  12.24228  81.46722  28.76662       0.919       0.308
 #> IA 2  18.97078 126.24254  57.53324       0.797       0.476
 #> IA 3  25.02728 159.70989  86.29986       0.730       0.591
 #> Final 36.00000 159.70989 115.06648       0.687       0.687
@@ -984,7 +984,7 @@ print(xtable::xtable(x,
   caption = "Caption example."
 ))
 #> % latex table generated in R 4.5.2 by xtable 1.8-4 package
-#> % Sun Feb  8 13:26:48 2026
+#> % Sun Feb  8 22:04:39 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}
