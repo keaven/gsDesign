@@ -186,9 +186,10 @@ print.gsSurv <- function(x, digits = 3, show_gsDesign = FALSE, show_strata = TRU
   test_type_desc <- switch(as.character(x$test.type),
     "1" = "One-sided (efficacy only)",
     "2" = "Two-sided symmetric",
-    "3" = "Two-sided asymmetric (efficacy and futility)",
+    "3" = "Two-sided asymmetric with binding futility",
     "4" = "Two-sided asymmetric with non-binding futility",
-    "5" = "Two-sided asymmetric with binding futility",
+    "5" = "Two-sided asymmetric with binding harm bound",
+    "6" = "Two-sided asymmetric with non-binding harm bound",
     paste("Test type", x$test.type)
   )
 
