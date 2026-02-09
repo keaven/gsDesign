@@ -58,6 +58,7 @@
 
 # Test gsBoundSummary for gsSurv Object
 
+    Method: LachinFoulkes 
        Analysis              Value Efficacy Futility
       IA 1: 33%                  Z   3.0107  -0.2388
          N: 460        p (1-sided)   0.0013   0.5944

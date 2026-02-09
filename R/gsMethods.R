@@ -459,6 +459,9 @@ gsBoundSummary0 <- function(
   rval$Efficacy <- round(rval$Efficacy, digits)
   if (x$test.type > 1) rval$Futility <- round(rval$Futility, digits)
   class(rval) <- c("gsBoundSummary", "data.frame")
+  if ("gsSurv" %in% class(x) && !is.null(x$method)) {
+    attr(rval, "method") <- x$method
+  }
   return(rval)
 }
 # gsBoundSummary roxy [sinew] ----
@@ -895,6 +898,10 @@ xprint <- function(x, include.rownames = FALSE,
 #' @rdname gsBoundSummary
 # print.gsBoundSummary function [sinew] ----
 print.gsBoundSummary <- function(x, row.names = FALSE, digits = 4, ...) {
+  method <- attr(x, "method", exact = TRUE)
+  if (!is.null(method)) {
+    cat("Method:", method, "\n")
+  }
   print.data.frame(x, row.names = row.names, digits = digits, ...)
 }
 

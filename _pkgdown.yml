@@ -38,12 +38,14 @@ reference:
   - ciBinomial
   - binomialPowerTable
 - title: Time-to-Event Endpoint Design
+  desc: >
+    Early, independent and more limited implementation of Lachin and Foulkes
+    methods are in `nSurvival()` and `print.nSurvival()`.
   contents:
   - nEvents
   - nSurv
   - gsSurv
   - gsSurvCalendar
-  - nSurvival
   - gsHR
   - zn2hr
   - hrn2z
@@ -52,6 +54,8 @@ reference:
   - nEventsIA
   - tEventsIA
   - toInteger
+  - nSurvival
+  - print.nSurvival
 - title: Vaccine/Prevention Efficacy
   contents:
   - toBinomialExact

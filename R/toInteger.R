@@ -124,7 +124,7 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     # Following is adapted from gsSurv() to construct gsSurv object
     xx <- nSurv(
       lambdaC = x$lambdaC, hr = x$hr, hr0 = x$hr0, eta = x$etaC, etaE = x$etaE,
-      gamma = x$gamma * inflateN, R = x$R, S = x$S, T = x$T, minfup = x$minfup, ratio = x$ratio,
+      gamma = x$gamma * inflateN, R = x$R, S = x$S, T = max(x$T), minfup = x$minfup, ratio = x$ratio,
       alpha = x$alpha, beta = NULL, sided = 1, tol = x$tol
     )
     xx$tol <- x$tol

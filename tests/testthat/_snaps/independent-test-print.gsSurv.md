@@ -1,237 +1,199 @@
 # Test: checking hazard ratio hr0 = 1
 
-    Time to event group sequential design with HR= 0.5 
-    Equal randomization:          ratio=1
-    Asymmetric two-sided group sequential design with
-    90 % power and 2.5 % Type I Error.
-    Upper bound spending computations assume
-    trial continues if lower bound is crossed.
+    Group sequential design (method=LachinFoulkes; k=3 analyses; Two-sided asymmetric with non-binding futility)
+    N=187.2 subjects | D=93.5 events | T=18.5 study duration | accrual=18.0 Accrual duration | minfup=0.5 minimum follow-up | ratio=1 randomization ratio (experimental/control)
     
-                    ----Lower bounds----  ----Upper bounds-----
-      Analysis N    Z   Nominal p Spend+  Z   Nominal p Spend++
-             1 31 -0.24    0.4056 0.0148 3.01    0.0013  0.0013
-             2 62  0.94    0.8267 0.0289 2.55    0.0054  0.0049
-             3 93  2.00    0.9772 0.0563 2.00    0.0228  0.0188
-         Total                    0.1000                 0.0250 
-    + lower bound beta spending (under H1):
-     Hwang-Shih-DeCani spending function with gamma = -2.
-    ++ alpha spending:
-     Hwang-Shih-DeCani spending function with gamma = -4.
+    Spending functions:
+      Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
+      Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2.
     
-    Boundary crossing probabilities and expected sample size
-    assume any cross stops the trial
+    Analysis summary:
+    Method: LachinFoulkes 
+       Analysis              Value Efficacy Futility
+      IA 1: 33%                  Z   3.0107  -0.2388
+         N: 100        p (1-sided)   0.0013   0.5944
+     Events: 32       ~HR at bound   0.3401   1.0893
+      Month: 10   P(Cross) if HR=1   0.0013   0.4056
+                P(Cross) if HR=0.5   0.1412   0.0148
+      IA 2: 67%                  Z   2.5465   0.9410
+         N: 150        p (1-sided)   0.0054   0.1733
+     Events: 63       ~HR at bound   0.5246   0.7879
+      Month: 14   P(Cross) if HR=1   0.0062   0.8347
+                P(Cross) if HR=0.5   0.5815   0.0437
+          Final                  Z   1.9992   1.9992
+         N: 188        p (1-sided)   0.0228   0.0228
+     Events: 94       ~HR at bound   0.6613   0.6613
+      Month: 18   P(Cross) if HR=1   0.0233   0.9767
+                P(Cross) if HR=0.5   0.9000   0.1000
     
-    Upper boundary (power or Type I Error)
-              Analysis
-       Theta      1      2      3  Total E{N}
-      0.0000 0.0013 0.0049 0.0171 0.0233 54.2
-      0.3481 0.1412 0.4403 0.3185 0.9000 68.6
-    
-    Lower boundary (futility or Type II Error)
-              Analysis
-       Theta      1      2      3  Total
-      0.0000 0.4056 0.4290 0.1420 0.9767
-      0.3481 0.0148 0.0289 0.0563 0.1000
-                  T         n   Events HR futility HR efficacy
-    IA 1   43.16196  43.16196 30.92271       1.090       0.339
-    IA 2   74.71327  74.71327 61.84542       0.787       0.523
-    Final 105.74376 105.24376 92.76813       0.660       0.660
-    Accrual rates:
-             Stratum 1
-    0-105.24         1
-    Control event rates (H1):
-          Stratum 1
-    0-Inf      0.12
-    Censoring rates:
-          Stratum 1
-    0-Inf         0
+    Key inputs (names preserved):
+                                   desc    item  value input
+                        Accrual rate(s)   gamma 10.401     1
+               Accrual rate duration(s)       R     18    18
+                 Control hazard rate(s) lambdaC  0.116 0.116
+                Control dropout rate(s)     eta      0     0
+           Experimental dropout rate(s)    etaE      0  etaE
+     Event and dropout rate duration(s)       S   NULL     S
 
 # Test: checking hazard ratio hr0 != 1
 
-    Time to event group sequential design with HR= 0.5 
-    Non-inferiority design with null HR= 1.5 
-    Equal randomization:          ratio=1
-    Asymmetric two-sided group sequential design with
-    90 % power and 2.5 % Type I Error.
-    Upper bound spending computations assume
-    trial continues if lower bound is crossed.
+    Group sequential design (method=LachinFoulkes; k=3 analyses; Two-sided asymmetric with non-binding futility)
+    N=75.7 subjects | D=37.8 events | T=18.5 study duration | accrual=18.0 Accrual duration | minfup=0.5 minimum follow-up | ratio=1 randomization ratio (experimental/control)
     
-                    ----Lower bounds----  ----Upper bounds-----
-      Analysis N    Z   Nominal p Spend+  Z   Nominal p Spend++
-             1 13 -0.24    0.4056 0.0148 3.01    0.0013  0.0013
-             2 25  0.94    0.8267 0.0289 2.55    0.0054  0.0049
-             3 38  2.00    0.9772 0.0563 2.00    0.0228  0.0188
-         Total                    0.1000                 0.0250 
-    + lower bound beta spending (under H1):
-     Hwang-Shih-DeCani spending function with gamma = -2.
-    ++ alpha spending:
-     Hwang-Shih-DeCani spending function with gamma = -4.
+    Spending functions:
+      Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
+      Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2.
     
-    Boundary crossing probabilities and expected sample size
-    assume any cross stops the trial
+    Analysis summary:
+    Method: LachinFoulkes 
+       Analysis              Value Efficacy Futility
+      IA 1: 33%                  Z   3.0107  -0.2388
+          N: 42        p (1-sided)   0.0013   0.5944
+     Events: 13       ~HR at bound   0.2750   1.7160
+      Month: 10 P(Cross) if HR=1.5   0.0013   0.4056
+                P(Cross) if HR=0.5   0.1412   0.0148
+      IA 2: 67%                  Z   2.5465   0.9410
+          N: 62        p (1-sided)   0.0054   0.1733
+     Events: 26       ~HR at bound   0.5438   1.0310
+      Month: 14 P(Cross) if HR=1.5   0.0062   0.8347
+                P(Cross) if HR=0.5   0.5815   0.0437
+          Final                  Z   1.9992   1.9992
+          N: 76        p (1-sided)   0.0228   0.0228
+     Events: 38       ~HR at bound   0.7827   0.7827
+      Month: 18 P(Cross) if HR=1.5   0.0233   0.9767
+                P(Cross) if HR=0.5   0.9000   0.1000
     
-    Upper boundary (power or Type I Error)
-              Analysis
-       Theta      1      2      3  Total E{N}
-      0.0000 0.0013 0.0049 0.0171 0.0233 21.7
-      0.5506 0.1412 0.4403 0.3185 0.9000 27.4
-    
-    Lower boundary (futility or Type II Error)
-              Analysis
-       Theta      1      2      3  Total
-      0.0000 0.4056 0.4290 0.1420 0.9767
-      0.5506 0.0148 0.0289 0.0563 0.1000
-                 T        n   Events HR futility HR efficacy
-    IA 1  22.69529 22.69529 12.35900       1.718       0.271
-    IA 2  36.59355 36.59355 24.71799       1.027       0.539
-    Final 49.56349 49.06349 37.07699       0.778       0.778
-    Accrual rates:
-            Stratum 1
-    0-49.06         1
-    Control event rates (H1):
-          Stratum 1
-    0-Inf      0.12
-    Censoring rates:
-          Stratum 1
-    0-Inf         0
+    Key inputs (names preserved):
+                                   desc    item value input
+                        Accrual rate(s)   gamma 4.204     1
+               Accrual rate duration(s)       R    18    18
+                 Control hazard rate(s) lambdaC 0.116 0.116
+                Control dropout rate(s)     eta     0     0
+           Experimental dropout rate(s)    etaE     0  etaE
+     Event and dropout rate duration(s)       S  NULL     S
 
 # Test: checking test.type > 1
 
-    Time to event group sequential design with HR= 0.5 
-    Equal randomization:          ratio=1
-    Asymmetric two-sided group sequential design with
-    90 % power and 2.5 % Type I Error.
-    Spending computations assume trial stops
-    if a bound is crossed.
+    Group sequential design (method=LachinFoulkes; k=4 analyses; Two-sided asymmetric (efficacy and futility))
+    N=147.8 subjects | D=106.5 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
     
-                    ----Lower bounds----  ----Upper bounds-----
-      Analysis  N   Z   Nominal p Spend+  Z   Nominal p Spend++
-             1  27 0.16    0.5618 0.0500 3.16    0.0008  0.0008
-             2  54 0.76    0.7769 0.0207 2.82    0.0024  0.0022
-             3  80 1.34    0.9092 0.0159 2.42    0.0078  0.0059
-             4 107 1.86    0.9685 0.0134 1.86    0.0315  0.0161
-         Total                    0.1000                 0.0250 
-    + lower bound beta spending (under H1):
-     Kim-DeMets (power) spending function with rho = 0.5.
-    ++ alpha spending:
-     Hwang-Shih-DeCani spending function with gamma = -4.
+    Spending functions:
+      Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
+      Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
     
-    Boundary crossing probabilities and expected sample size
-    assume any cross stops the trial
+    Analysis summary:
+    Method: LachinFoulkes 
+        Analysis              Value Efficacy Futility
+       IA 1: 25%                  Z   3.1554   0.1555
+           N: 76        p (1-sided)   0.0008   0.4382
+      Events: 27       ~HR at bound   0.2944   0.9415
+       Month: 12   P(Cross) if HR=1   0.0008   0.5618
+                 P(Cross) if HR=0.5   0.0877   0.0500
+       IA 2: 50%                  Z   2.8175   0.7616
+          N: 118        p (1-sided)   0.0024   0.2231
+      Events: 54       ~HR at bound   0.4620   0.8116
+       Month: 19   P(Cross) if HR=1   0.0030   0.8116
+                 P(Cross) if HR=0.5   0.4004   0.0707
+       IA 3: 75%                  Z   2.4200   1.3357
+          N: 148        p (1-sided)   0.0078   0.0908
+      Events: 80       ~HR at bound   0.5819   0.7416
+       Month: 25   P(Cross) if HR=1   0.0089   0.9300
+                 P(Cross) if HR=0.5   0.7493   0.0866
+           Final                  Z   1.8598   1.8598
+          N: 148        p (1-sided)   0.0315   0.0315
+     Events: 107       ~HR at bound   0.6974   0.6974
+       Month: 36   P(Cross) if HR=1   0.0249   0.9751
+                 P(Cross) if HR=0.5   0.9000   0.1000
     
-    Upper boundary (power or Type I Error)
-              Analysis
-       Theta      1      2      3      4  Total E{N}
-      0.0000 0.0008 0.0022 0.0059 0.0160 0.0249 44.8
-      0.3489 0.0877 0.3127 0.3489 0.1507 0.9000 68.0
-    
-    Lower boundary (futility or Type II Error)
-              Analysis
-       Theta      1      2      3      4  Total
-      0.0000 0.5618 0.2498 0.1184 0.0451 0.9751
-      0.3489 0.0500 0.0207 0.0159 0.0134 0.1000
-                 T        n    Events HR futility HR efficacy
-    IA 1  12.24228  75.4103  26.62788       0.942       0.294
-    IA 2  18.97078 116.8567  53.25576       0.812       0.462
-    IA 3  25.02728 147.8358  79.88364       0.742       0.582
-    Final 36.00000 147.8358 106.51151       0.697       0.697
-    Accrual rates:
-         Stratum 1
-    0-24      6.16
-    Control event rates (H1):
-          Stratum 1
-    0-Inf      0.12
-    Censoring rates:
-          Stratum 1
-    0-Inf      0.02
+    Key inputs (names preserved):
+                                   desc    item value input
+                        Accrual rate(s)   gamma  6.16     1
+               Accrual rate duration(s)       R    24    12
+                 Control hazard rate(s) lambdaC 0.116 0.116
+                Control dropout rate(s)     eta 0.017 0.017
+           Experimental dropout rate(s)    etaE 0.017  etaE
+     Event and dropout rate duration(s)       S  NULL     S
 
 # Test: checking test.type = 1
 
-    Time to event group sequential design with HR= 0.5 
-    Equal randomization:          ratio=1
-    One-sided group sequential design with
-    90 % power and 2.5 % Type I Error.
-                 
-      Analysis N   Z   Nominal p  Spend
-             1 23 3.16    0.0008 0.0008
-             2 45 2.82    0.0024 0.0022
-             3 67 2.44    0.0074 0.0059
-             4 89 2.01    0.0220 0.0161
-         Total                   0.0250 
+    Group sequential design (method=LachinFoulkes; k=4 analyses; One-sided (efficacy only))
+    N=122.2 subjects | D=88.0 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
     
-    ++ alpha spending:
-     Hwang-Shih-DeCani spending function with gamma = -4.
+    Spending functions:
+      Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
     
-    Boundary crossing probabilities and expected sample size
-    assume any cross stops the trial
+    Analysis summary:
+    Method: LachinFoulkes 
+       Analysis              Value Efficacy
+      IA 1: 25%                  Z   3.1554
+          N: 64        p (1-sided)   0.0008
+     Events: 23       ~HR at bound   0.2605
+      Month: 12   P(Cross) if HR=1   0.0008
+                P(Cross) if HR=0.5   0.0644
+      IA 2: 50%                  Z   2.8183
+          N: 98        p (1-sided)   0.0024
+     Events: 45       ~HR at bound   0.4276
+      Month: 19   P(Cross) if HR=1   0.0030
+                P(Cross) if HR=0.5   0.3151
+      IA 3: 75%                  Z   2.4390
+         N: 124        p (1-sided)   0.0074
+     Events: 67       ~HR at bound   0.5486
+      Month: 25   P(Cross) if HR=1   0.0089
+                P(Cross) if HR=0.5   0.6631
+          Final                  Z   2.0136
+         N: 124        p (1-sided)   0.0220
+     Events: 89       ~HR at bound   0.6510
+      Month: 36   P(Cross) if HR=1   0.0250
+                P(Cross) if HR=0.5   0.9000
     
-    Upper boundary (power or Type I Error)
-              Analysis
-       Theta      1      2      3      4 Total E{N}
-      0.0000 0.0008 0.0022 0.0059 0.0161 0.025 87.8
-      0.3489 0.0644 0.2507 0.3480 0.2369 0.900 65.1
-                 T         n   Events HR efficacy
-    IA 1  12.24228  62.33412 22.01059       0.261
-    IA 2  18.97078  96.59366 44.02119       0.428
-    IA 3  25.02728 122.20099 66.03178       0.549
-    Final 36.00000 122.20099 88.04237       0.651
-    Accrual rates:
-         Stratum 1
-    0-24      5.09
-    Control event rates (H1):
-          Stratum 1
-    0-Inf      0.12
-    Censoring rates:
-          Stratum 1
-    0-Inf      0.02
+    Key inputs (names preserved):
+                                   desc    item value input
+                        Accrual rate(s)   gamma 5.092     1
+               Accrual rate duration(s)       R    24    12
+                 Control hazard rate(s) lambdaC 0.116 0.116
+                Control dropout rate(s)     eta 0.017 0.017
+           Experimental dropout rate(s)    etaE 0.017  etaE
+     Event and dropout rate duration(s)       S  NULL     S
 
 # Test: checking ratio = 0.6
 
-    Time to event group sequential design with HR= 0.5 
-    Randomization (Exp/Control):  ratio= 0.6 
-    Asymmetric two-sided group sequential design with
-    90 % power and 2.5 % Type I Error.
-    Spending computations assume trial stops
-    if a bound is crossed.
+    Group sequential design (method=LachinFoulkes; k=4 analyses; Two-sided asymmetric (efficacy and futility))
+    N=157.1 subjects | D=117.0 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=0.6 randomization ratio (experimental/control)
     
-                    ----Lower bounds----  ----Upper bounds-----
-      Analysis  N   Z   Nominal p Spend+  Z   Nominal p Spend++
-             1  30 0.16    0.5618 0.0500 3.16    0.0008  0.0008
-             2  59 0.76    0.7769 0.0207 2.82    0.0024  0.0022
-             3  88 1.34    0.9092 0.0159 2.42    0.0078  0.0059
-             4 117 1.86    0.9685 0.0134 1.86    0.0315  0.0161
-         Total                    0.1000                 0.0250 
-    + lower bound beta spending (under H1):
-     Kim-DeMets (power) spending function with rho = 0.5.
-    ++ alpha spending:
-     Hwang-Shih-DeCani spending function with gamma = -4.
+    Spending functions:
+      Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
+      Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
     
-    Boundary crossing probabilities and expected sample size
-    assume any cross stops the trial
+    Analysis summary:
+    Method: LachinFoulkes 
+        Analysis              Value Efficacy Futility
+       IA 1: 25%                  Z   3.1554   0.1555
+           N: 80        p (1-sided)   0.0008   0.4382
+      Events: 30       ~HR at bound   0.2996   0.9424
+       Month: 12   P(Cross) if HR=1   0.0008   0.5618
+                 P(Cross) if HR=0.5   0.0877   0.0500
+       IA 2: 50%                  Z   2.8175   0.7616
+          N: 123        p (1-sided)   0.0024   0.2231
+      Events: 59       ~HR at bound   0.4672   0.8141
+       Month: 19   P(Cross) if HR=1   0.0030   0.8116
+                 P(Cross) if HR=0.5   0.4004   0.0707
+       IA 3: 75%                  Z   2.4200   1.3357
+          N: 158        p (1-sided)   0.0078   0.0908
+      Events: 88       ~HR at bound   0.5865   0.7449
+       Month: 25   P(Cross) if HR=1   0.0089   0.9300
+                 P(Cross) if HR=0.5   0.7493   0.0866
+           Final                  Z   1.8598   1.8598
+          N: 158        p (1-sided)   0.0315   0.0315
+     Events: 117       ~HR at bound   0.7011   0.7011
+       Month: 36   P(Cross) if HR=1   0.0249   0.9751
+                 P(Cross) if HR=0.5   0.9000   0.1000
     
-    Upper boundary (power or Type I Error)
-              Analysis
-       Theta      1      2      3      4  Total E{N}
-      0.0000 0.0008 0.0022 0.0059 0.0160 0.0249 49.3
-      0.3329 0.0877 0.3127 0.3489 0.1507 0.9000 74.7
-    
-    Lower boundary (futility or Type II Error)
-              Analysis
-       Theta      1      2      3      4  Total
-      0.0000 0.5618 0.2498 0.1184 0.0451 0.9751
-      0.3329 0.0500 0.0207 0.0159 0.0134 0.1000
-                 T         n    Events HR futility HR efficacy
-    IA 1  12.04139  78.84331  29.24741       0.942       0.300
-    IA 2  18.73390 122.66381  58.49482       0.814       0.467
-    IA 3  24.77333 157.14461  87.74223       0.745       0.586
-    Final 36.00000 157.14461 116.98964       0.701       0.701
-    Accrual rates:
-         Stratum 1
-    0-24      6.55
-    Control event rates (H1):
-          Stratum 1
-    0-Inf      0.12
-    Censoring rates:
-          Stratum 1
-    0-Inf      0.02
+    Key inputs (names preserved):
+                                   desc    item value input
+                        Accrual rate(s)   gamma 6.548     1
+               Accrual rate duration(s)       R    24    12
+                 Control hazard rate(s) lambdaC 0.116 0.116
+                Control dropout rate(s)     eta 0.017 0.017
+           Experimental dropout rate(s)    etaE 0.017  etaE
+     Event and dropout rate duration(s)       S  NULL     S
 

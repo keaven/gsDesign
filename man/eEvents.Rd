@@ -36,8 +36,10 @@ across strata.}
 
 \item{R}{A scalar or vector of durations of time periods for recruitment
 rates specified in rows of \code{gamma}. Length is the same as number of
-rows in \code{gamma}. Note that the final enrollment period is extended as
-long as needed.}
+rows in \code{gamma}. In \code{eEvents()}, recruitment after the final
+period is assumed to be 0 if \code{T} exceeds \code{sum(R)}; the final
+period is only extended in designs where \code{T} is solved for (e.g.,
+\code{nSurv} with \code{T = NULL}).}
 
 \item{S}{A scalar or vector of durations of piecewise constant event rates
 specified in rows of \code{lambda}, \code{eta} and \code{etaE}; this is NULL
