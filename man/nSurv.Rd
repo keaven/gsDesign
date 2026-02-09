@@ -5,10 +5,10 @@
 \alias{tEventsIA}
 \alias{nEventsIA}
 \alias{nSurv}
+\alias{gsSurv}
 \alias{print.nSurv}
 \alias{print.gsSurv}
 \alias{xtable.gsSurv}
-\alias{gsSurv}
 \title{Advanced time-to-event sample size calculation}
 \usage{
 tEventsIA(x, timing = 0.25, tol = .Machine$double.eps^0.25)
@@ -30,10 +30,11 @@ nSurv(
   alpha = 0.025,
   beta = 0.1,
   sided = 1,
-  tol = .Machine$double.eps^0.25
+  tol = .Machine$double.eps^0.25,
+  method = c("LachinFoulkes", "Schoenfeld", "Freedman", "BernsteinLagakos")
 )
 
-\method{print}{nSurv}(x, digits = 4, ...)
+\method{print}{nSurv}(x, digits = 3, show_strata = TRUE, ...)
 
 \method{xtable}{gsSurv}(
   x,
@@ -75,10 +76,11 @@ gsSurv(
   ratio = 1,
   tol = .Machine$double.eps^0.25,
   usTime = NULL,
-  lsTime = NULL
+  lsTime = NULL,
+  method = c("LachinFoulkes", "Schoenfeld", "Freedman", "BernsteinLagakos")
 )
 
-\method{print}{gsSurv}(x, digits = 2, ...)
+\method{print}{gsSurv}(x, digits = 3, show_gsDesign = FALSE, show_strata = TRUE, ...)
 }
 \arguments{
 \item{x}{An object of class \code{nSurv} or \code{gsSurv}.
@@ -111,7 +113,8 @@ is used for root-finding will be 0 for normal use.}
 
 \item{lambdaC}{Scalar, vector or matrix of event hazard rates for the
 control group; rows represent time periods while columns represent strata; a
-vector implies a single stratum.}
+vector implies a single stratum.
+Note that rates corresponding the final time period are extended indefinitely.}
 
 \item{hr}{Hazard ratio (experimental/control) under the alternate hypothesis
 (scalar).}
@@ -136,12 +139,13 @@ across strata.}
 rates specified in rows of \code{gamma}. Length is the same as number of
 rows in \code{gamma}. Note that when variable enrollment duration is
 specified (input \code{T=NULL}), the final enrollment period is extended as
-long as needed.}
+long as needed; otherwise enrollment after \code{sum(R)} is 0.}
 
 \item{S}{A scalar or vector of durations of piecewise constant event rates
 specified in rows of \code{lambda}, \code{eta} and \code{etaE}; this is NULL
 if there is a single event rate per stratum (exponential failure) or length
-of the number of rows in \code{lambda} minus 1, otherwise.}
+of the number of rows in \code{lambda} minus 1, otherwise.
+The final time period is extended indefinitely for each stratum.}
 
 \item{T}{Study duration; if \code{T} is input as \code{NULL}, this will be
 computed on output; see details.}
@@ -161,9 +165,17 @@ is to be computed based on other input values.}
 
 \item{sided}{1 for 1-sided testing, 2 for 2-sided testing.}
 
+\item{method}{One of \code{"LachinFoulkes"} (default), \code{"Schoenfeld"},
+\code{"Freedman"}, or \code{"BernsteinLagakos"}.
+Note: \code{"Schoenfeld"} and \code{"Freedman"} methods only support
+superiority testing (\code{hr0 = 1}). \code{"Freedman"} does not support
+stratified populations.}
+
 \item{digits}{Number of digits past the decimal place to print
 (\code{print.gsSurv.}); also a pass through to generic \code{xtable()} from
 \code{xtable.gsSurv()}.}
+
+\item{show_strata}{Logical; for \code{print.gsSurv()}, include strata summaries.}
 
 \item{...}{Other arguments that may be passed to generic functions
 underlying the methods here.}
@@ -248,6 +260,8 @@ determined by \code{timing}. Otherwise, this should be a vector of length
 \item{lsTime}{Default is NULL in which case lower bound spending time is
 determined by \code{timing}. Otherwise, this should be a vector of length
 \code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
+
+\item{show_gsDesign}{Logical; for \code{print.gsSurv()}, include gsDesign details.}
 }
 \value{
 \code{nSurv()} returns an object of type \code{nSurv} with the
@@ -298,11 +312,12 @@ determined by \code{timing}. Otherwise, this should be a vector of length
   duration as well as follow-up duration was specified and
   \code{beta=NULL} was input.}
 
-  \code{gsSurv()} returns much of the above plus variables in the class
-  \code{gsDesign}; see \code{\link{gsDesign}}
+  \code{gsSurv()} returns much of the above plus an object of class
+  \code{gsDesign} in a variable named \code{gs}; see \code{\link{gsDesign}}
   for general documentation on what is returned in \code{gs}.  The value of
   \code{gs$n.I} represents the number of endpoints required at each analysis
   to adequately power the trial. Other items returned by \code{gsSurv()} are:
+  \item{gs}{A group sequential design (\code{gsDesign}) object.}
   \item{lambdaC}{As input.}
   \item{etaC}{As input.}
   \item{etaE}{As input.}
@@ -330,6 +345,10 @@ determined by \code{timing}. Otherwise, this should be a vector of length
   control group under the alternate hypothesis.}
   \item{eDE}{A vector of expected number of events by stratum in the
   experimental group under the alternate hypothesis.}
+  \item{eDC0}{A vector of expected number of events by stratum in the
+  control group under the null hypothesis.}
+  \item{eDE0}{A vector of expected number of events by stratum in the
+  experimental group under the null hypothesis.}
   \item{eNC}{A vector of the expected accrual in each stratum in the
   control group.}
   \item{eNE}{A vector of the expected accrual in each stratum in the
@@ -358,23 +377,47 @@ determined by \code{timing}. Otherwise, this should be a vector of length
   \code{tEventsIA()} returns the same structure as \code{nEventsIA(..., simple=TRUE)} when
 }
 \description{
-\code{nSurv()} is used to calculate the sample size for a clinical trial
-with a time-to-event endpoint and an assumption of proportional hazards.
-This set of routines is new with version 2.7 and will continue to be
-modified and refined to improve input error checking and output format with
-subsequent versions. It allows both the Lachin and Foulkes (1986) method
-(fixed trial duration) as well as the Kim and Tsiatis (1990) method (fixed
-enrollment rates and either fixed enrollment duration or fixed minimum
-follow-up). Piecewise exponential survival is supported as well as piecewise
-constant enrollment and dropout rates. The methods are for a 2-arm trial
-with treatment groups referred to as experimental and control. A stratified
-population is allowed as in Lachin and Foulkes (1986); this method has been
-extended to derive non-inferiority as well as superiority trials.
-Stratification also allows power calculation for meta-analyses.
+\code{nSurv()} is used to calculate the sample size for a two-arm clinical trial
+with a time-to-event endpoint under the assumption of proportional hazards.
+The default method assumes a fixed enrollment duration and fixed trial duration;
+in this case the required sample size is achieved by increasing enrollment rates.
+\code{nSurv()} implements the \code{Lachin and Foulkes (1986)} method as default.
+Schoenfeld (1981), Freedman (1982), and Bernstein and Lagakos (1989) methods
+are also supported; see Details.
 \code{gsSurv()} combines \code{nSurv()} with \code{gsDesign()} to derive a
 group sequential design for a study with a time-to-event endpoint.
 }
 \details{
+The Lachin and Foulkes method uses both null and alternate hypothesis
+variances to derive sample size and is extended here to support
+non-inferiority, super-superiority, and stratified designs.
+As an alternative, the Kim and Tsiatis (1990) method can be used with fixed
+enrollment rates and either fixed enrollment duration or fixed minimum
+follow-up.
+The Schoenfeld approach uses the asymptotic distribution of the log-rank
+statistic under the assumption of proportional hazards and local alternatives
+(i.e., \eqn{\log(HR)} is small). The Freedman approach uses the same
+asymptotic distribution and, like the Schoenfeld approach, uses just the
+null hypothesis variance to derive sample size.
+The Bernstein and Lagakos (1989) approach was derived to compute sample size
+for a stratified model with a common proportional hazards assumption across
+strata. Like the Lachin and Foulkes (1986) method, it uses both null and
+alternate hypothesis variances to compute sample size; however, the null
+hypothesis variance is computed differently. The Bernstein and Lagakos (1989)
+approach uses the alternate hypothesis failure rate assumptions for both the
+control and experimental groups, while the Lachin and Foulkes method uses
+null hypothesis rates that average the alternate hypothesis failure rates to
+get similar numbers of expected events under the null and alternate
+hypotheses. Since the Lachin and Foulkes method has fewer events under the
+null hypothesis (less statistical information), it calculates less power
+than the Bernstein and Lagakos method.
+Piecewise exponential survival is supported as well as piecewise constant
+enrollment and dropout rates. The methods are for a 2-arm trial with
+treatment groups referred to as experimental and control. A stratified
+population is allowed as in Lachin and Foulkes (1986); this method has been
+extended to derive non-inferiority as well as superiority trials.
+Stratification also allows power calculation for meta-analyses.
+
 \code{print()}, \code{xtable()} and \code{summary()} methods are provided to
 operate on the returned value from \code{gsSurv()}, an object of class
 \code{gsSurv}. \code{print()} is also extended to \code{nSurv} objects. The
@@ -435,56 +478,128 @@ fixed design to obtain a sufficient number of events to power a group
 sequential design.
 }
 \examples{
-# Vary accrual rate to obtain power
-nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 1, T = 36, minfup = 12)
 
-# Vary accrual duration to obtain power
-nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 6, minfup = 12)
-
-# Vary follow-up duration to obtain power
-nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 6, R = 25)
-
-# Piecewise constant enrollment rates (vary accrual duration)
-nSurv(
-  lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = c(1, 3, 6),
-  R = c(3, 6, 9), T = NULL, minfup = 12
+# Vary accrual rate gamma to obtain power
+# T, minfup and R all specified, although R will be adjusted on output
+# gamma as input will be multiplied in output to achieve desired power
+# Default method is Lachin and Foulkes
+x_nsurv <- nSurv(
+  lambdaC = log(2) / 6, R = 10, hr = .5, eta = .001, gamma = 1,
+  alpha = 0.02, beta = .15, T = 36, minfup = 12, method = "LachinFoulkes"
 )
-
-# Stratified population (vary accrual duration)
-nSurv(
-  lambdaC = matrix(log(2) / c(6, 12), ncol = 2), hr = .5, eta = log(2) / 40,
-  gamma = matrix(c(2, 4), ncol = 2), minfup = 12
+# Demonstrate print method
+print(x_nsurv)
+# Same assumptions for group sequential design
+x_gs <- gsSurv(
+  k = 4, sfl = gsDesign::sfPower, sflpar = .5, lambdaC = log(2) / 6, hr = .5,
+  eta = .001, gamma = 1, T = 36, minfup = 12, method = "LachinFoulkes"
 )
+print(x_gs)
+# Demonstrate xtable method for gsSurv
+print(xtable::xtable(x_gs,
+  footnote = "This is a footnote; note that it can be wide.",
+  caption = "Caption example for xtable output."
+))
+# Demonstrate nEventsIA method
+# find expected number of events at time 12 in the above trial
+nEventsIA(x = x_gs, tIA = 10)
 
-# Piecewise exponential failure rates (vary accrual duration)
-nSurv(lambdaC = log(2) / c(6, 12), hr = .5, eta = log(2) / 40, S = 3, gamma = 6, minfup = 12)
+# find time at which 1/4 of events are expected
+tEventsIA(x = x_gs, timing = .25)
 
-# Combine it all: 2 strata, 2 failure rate periods
+# Adjust accrual duration R to achieve desired power
+# Trial duration T input as NULL and will be computed based on
+# accrual duration R and minimum follow-up duration minfup
+# Minimum follow-up duration minfup is specified
+# We use the Schoenfeld method to compute accrual duration R
+# Control median survival time is 6
+nSurv(
+  lambdaC = log(2) / 6, hr = .5, eta = .001, gamma = 6,
+  alpha = .025, beta = .1, minfup = 12, T = NULL, method = "Schoenfeld"
+)
+# Same assumptions for group sequential design
+gsSurv(
+  k = 4, sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfPower, sflpar = .5,
+  lambdaC = log(2) / 6, hr = .5, eta = .001, gamma = 6,
+  T = 36, minfup = 12, method = "Schoenfeld"
+) |>
+  print()
+
+# Vary minimum follow-up duration minfup to obtain power
+# Accrual duration R rate gamma are fixed and will not change on output.
+# Trial duration T and minimum follow-up minfup are input as NULL
+# and will be computed on output.
+# We will use the Freedman method to compute sample size
+# Control median survival time is 6
+# Often this method will fail as the accrual duration and rate provide too
+# little or too much sample size.
+nSurv(
+  lambdaC = log(2) / 6, hr = .5, eta = .001, gamma = 6, R = 25,
+  alpha = .025, beta = .1, minfup = NULL, T = NULL, method = "Freedman"
+)
+# Same assumptions for group sequential design
+gsSurv(
+  k = 4, sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfPower, sflpar = .5,
+  lambdaC = log(2) / 6, hr = .5, eta = .001, gamma = 6,
+  T = 36, minfup = 12, method = "Freedman"
+) |>
+  print()
+
+# piecewise constant enrollment rates (vary accrual rate to achieve power)
+# also piecewise constant failure rates
+# will specify annualized enrollment and failure rates
+nSurv(
+  lambdaC = -log(c(.95, .97, .98)), # 5\%, 3\% and 2\% annual failure rates
+  S = c(1, 1), # 1 year duration for first 2 failure rates, 3rd continues indefinitely
+  R = c(.25, .25, 1.5), # 2-year enrollment with ramp-up over first 1/2 year
+  gamma = c(1, 3, 6), # 1, 3 and 6 annualized enrollment rates will be
+  # multiplied by ratio to achieve desired power
+  hr = .5, eta = -log(1 - .01), # 1\% annual censoring rate
+  minfup = 3, T = 5, # 5-year trial duration with 3-year minimum follow-up
+  alpha = .025, beta = .1, method = "LachinFoulkes"
+)
+# Same assumptions for group sequential design
+gsSurv(
+  k = 4, sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfPower, sflpar = .5,
+  lambdaC = -log(c(.95, .97, .98)), # 5\%, 3\% and 2\% annual failure rates
+  S = c(1, 1), # 1 year duration for first 2 failure rates, 3rd continues indefinitely
+  R = c(.25, .25, 1.5), # 2-year enrollment with ramp-up over first 1/2 year
+  gamma = c(1, 3, 6), # 1, 3 and 6 annualized enrollment rates will be
+  # multiplied by ratio to achieve desired power
+  hr = .5, eta = -log(1 - .01), # 1\% annual censoring rate
+  minfup = 3, T = 5, # 5-year trial duration with 3-year minimum follow-up
+  alpha = .025, beta = .1, method = "LachinFoulkes"
+) |>
+  print()
+
+# combine it all: 2 strata, 2 failure rate periods
+# Note that method = "LachinFoulkes" may be preferred here
 nSurv(
   lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
   eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
-  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12
+  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12,
+  alpha = .025, beta = .1, method = "BernsteinLagakos"
 )
+# Same assumptions for group sequential design
+gsSurv(
+  k = 4, sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfPower, sflpar = .5,
+  lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
+  eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
+  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12,
+  alpha = .025, beta = .1, method = "BernsteinLagakos"
+) |>
+  print()
 
-# Example where only 1 month of follow-up is desired.
-# Set failure rate to 0 after 1 month using lambdaC and S.
-nSurv(lambdaC = c(.4, 0), hr = 2 / 3, S = 1, minfup = 1)
-
-# Group sequential design (vary accrual rate to obtain power)
-x <- gsSurv(
-  k = 4, sfl = sfPower, sflpar = .5, lambdaC = log(2) / 6, hr = .5,
-  eta = log(2) / 40, gamma = 1, T = 36, minfup = 12
-)
-x
-print(xtable::xtable(x,
-  footnote = "This is a footnote; note that it can be wide.",
-  caption = "Caption example."
-))
-# Find expected number of events at time 12 in the above trial
-nEventsIA(x = x, tIA = 10)
-
-# Find time at which 1/4 of events are expected
-tEventsIA(x = x, timing = .25)
+# Example to compute power for a fixed design.
+# Trial duration T, minimum follow-up minfup and accrual duration R are all
+# specified and will not change on output.
+# beta=NULL will compute power and output will be the same as if beta were specified.
+# This option is not available for group sequential designs.
+nSurv(
+  lambdaC = log(2) / 6, hr = .5, eta = .001, gamma = 6, R = 25,
+  alpha = .025, beta = NULL, minfup = 12, T = 36, method = "LachinFoulkes"
+) |>
+  print()
 }
 \references{
 Kim KM and Tsiatis AA (1990), Study duration for clinical trials
@@ -502,8 +617,9 @@ Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
 \code{\link[stats]{uniroot}}
 
 \code{\link{gsBoundSummary}}, \code{\link{xprint}},
-  \code{vignette("gsDesignPackageOverview")}, \link{plot.gsDesign},
-  \code{\link{gsDesign}}, \code{\link{gsHR}}, \code{\link{nSurvival}}
+  \code{\link{gsSurvCalendar}}, \link{gsDesign-package},
+  \link{plot.gsDesign}, \code{\link{gsDesign}}, \code{\link{gsHR}},
+  \code{\link{nSurvival}}
 
 \code{\link[stats]{Normal}}
  \code{\link[xtable]{xtable}}
@@ -511,4 +627,20 @@ Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
 \author{
 Keaven Anderson \email{keaven_anderson@merck.com}
 }
+\keyword{Bernstein}
+\keyword{Foulkes}
+\keyword{Freedman}
+\keyword{Lachin}
+\keyword{Lagakos}
+\keyword{Schoenfeld}
+\keyword{and}
 \keyword{design}
+\keyword{hazards}
+\keyword{non-inferiority}
+\keyword{power}
+\keyword{proportional}
+\keyword{sample}
+\keyword{size}
+\keyword{stratified}
+\keyword{super-superiority}
+\keyword{survival}

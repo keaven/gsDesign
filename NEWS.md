@@ -1,5 +1,16 @@
 # gsDesign (development version)
 
+## Improvements
+
+- Updated `nSurv()` and `gsSurv()` to incorporate Schoenfeld and Freedman methods
+  for sample size and power for time-to-event studies with proportional hazards.
+  This allows matching versus other software (@keaven, #243).
+- Corrected weighting for stratified time-to-event studies with proportional
+  hazards. This was done for Lachin-Foulkes method, but we also added
+  Bernstein and Lagakos method (@keaven, #243).
+- Refreshed `print.nSurv()`/`print.gsSurv()` output formatting (@keaven, #243).
+- Increased unit test coverage across core gsDesign, spending, and binomial utilities.
+
 ## Piping
 
 - The R native pipe operator `|>` is now used throughout the code and

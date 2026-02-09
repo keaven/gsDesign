@@ -34,6 +34,8 @@ Thus, the intent of the gsDesign package is to easily create, fully characterize
 
 ## A little history
 
+In 2026 we have updated survival sample size and power methods (`nSurv()` and `gsSurv()`) to allow methods by 1) Schoenfeld, 2) Freedman, and 3) Bernstein and Lagakos.
+While we still recommend the default Lachin and Foulkes method, these additions allow replication of results from other software.
 Updates in late 2018 and early 2019 largely enabled by Metrum Research Group (Devin Pastoor, Harsh Baid, Jonathan Sidi).
 These include, but are not limited to, converting unit testing to use testthat package as well as developing the github web pages and implementing covrpage to document unit testing. 
 Yilong Zhang implemented 3.1.1 continuous integration at github.

@@ -117,8 +117,10 @@ eEvents1 <- function(
 #'   across strata.
 #' @param R A scalar or vector of durations of time periods for recruitment
 #'   rates specified in rows of \code{gamma}. Length is the same as number of
-#'   rows in \code{gamma}. Note that the final enrollment period is extended as
-#'   long as needed.
+#'   rows in \code{gamma}. In \code{eEvents()}, recruitment after the final
+#'   period is assumed to be 0 if \code{T} exceeds \code{sum(R)}; the final
+#'   period is only extended in designs where \code{T} is solved for (e.g.,
+#'   \code{nSurv} with \code{T = NULL}).
 #' @param S A scalar or vector of durations of piecewise constant event rates
 #'   specified in rows of \code{lambda}, \code{eta} and \code{etaE}; this is NULL
 #'   if there is a single event rate per stratum (exponential failure) or length
@@ -189,9 +191,6 @@ eEvents <- function(
   lambda = 1, eta = 0, gamma = 1, R = 1, S = NULL, T = 2,
   Tfinal = NULL, minfup = 0, digits = 4
 ) {
-  if (is.null(lambda)) {
-    stop("lambda must be specified in eEvents")
-  }
   if (is.null(Tfinal)) {
     if (minfup >= T) {
       stop("Minimum follow-up greater than study duration.")
@@ -200,6 +199,11 @@ eEvents <- function(
     minfupia <- minfup
   } else {
     minfupia <- max(0, minfup - (Tfinal - T))
+  }
+  if (!is.null(S)) {
+    if (!is.numeric(S) || any(is.na(S)) || any(!is.finite(S)) || any(S <= 0)) {
+      stop("S must be a numeric vector of positive values")
+    }
   }
 
   if (!is.matrix(lambda)) {
@@ -213,7 +217,7 @@ eEvents <- function(
   }
   n <- rep(0, ncol(lambda))
   d <- n
-  for (i in 1:ncol(lambda)) {
+  for (i in seq_len(ncol(lambda))) {
     # KA: updated following line with as.vector statements 10/16/2017
     a <- eEvents1(
       lambda = as.vector(lambda[, i]), eta = as.vector(eta[, i]),
@@ -237,8 +241,8 @@ eEvents <- function(
   }
   rownames(lambda) <- namesper
   rownames(eta) <- namesper
-  colnames(lambda) <- paste("Stratum", 1:ncol(lambda))
-  colnames(eta) <- paste("Stratum", 1:ncol(eta))
+  colnames(lambda) <- paste("Stratum", seq_len(ncol(lambda)))
+  colnames(eta) <- paste("Stratum", seq_len(ncol(eta)))
   T2 <- cumsum(R)
   T2[T - T2 < minfupia] <- T - minfupia
   T2 <- unique(c(0, T2))
@@ -250,7 +254,7 @@ eEvents <- function(
     gamma <- matrix(gamma[1:nper, ], nrow = nper)
   }
   rownames(gamma) <- namesper
-  colnames(gamma) <- paste("Stratum", 1:ncol(gamma))
+  colnames(gamma) <- paste("Stratum", seq_len(ncol(gamma)))
   x <- list(
     lambda = lambda, eta = eta, gamma = gamma, R = R,
     S = S, T = T, Tfinal = Tfinal,

@@ -1,6 +1,18 @@
-#' Time-to-event endpoint design with calendar timing of analyses
+#' Group sequential design with calendar-based timing of analyses
 #'
-#' @param test.type Test type. See \code{\link{gsSurv}}.
+#' This is like [gsSurv()], but the timing of analyses is specified in
+#' calendar time units.
+#' Information fraction is computed from the input rates and the calendar times.
+#' Spending can be based on information fraction as in Lan and DeMets (1983) or
+#' calendar  time units as in Lan and DeMets (1989).
+#'
+#' @param test.type \code{1=}one-sided \cr \code{2=}two-sided symmetric \cr
+#'   \code{3=}two-sided, asymmetric, beta-spending with binding lower bound \cr
+#'   \code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound
+#'   \cr \code{5=}two-sided, asymmetric, lower bound spending under the null
+#'   hypothesis with binding lower bound \cr \code{6=}two-sided, asymmetric,
+#'   lower bound spending under the null hypothesis with non-binding lower bound.
+#'   \cr See details, examples, and manual.
 #' @param alpha Type I error rate. Default is 0.025 since 1-sided
 #'   testing is default.
 #' @param sided \code{1} for 1-sided testing, \code{2} for 2-sided testing.
@@ -93,10 +105,24 @@
 #'   accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
 #'   not changed by users.
 #' @param tol Tolerance for error passed to the \code{\link{gsDesign}} function.
+#' @param method Sample-size variance formulation; one of
+#'   `"LachinFoulkes"` (default), `"Schoenfeld"`, `"Freedman"`,
+#'   or `"BernsteinLagakos"`. Note: `"Schoenfeld"` and `"Freedman"`
+#'   methods only support superiority testing (`hr0 = 1`). Additionally,
+#'   `"Freedman"` does not support stratified populations.
 #'
 #' @export
 #'
 #' @rdname gsSurvCalendar
+#'
+#' @seealso \code{\link{gsSurv}}, \code{\link{gsDesign}}, \code{\link{gsBoundSummary}}
+#'
+#' @references
+#' Lan KKG and DeMets DL (1983), Discrete Sequential Boundaries for Clinical
+#' Trials. \emph{Biometrika}, 70, 659-663.
+#'
+#' Lan KKG and DeMets DL (1989), Group Sequential Procedures: Calendar vs.
+#' Information Time. \emph{Statistics in Medicine}, 8, 1191-1198.
 #'
 #' @examples
 #' # First example: while timing is calendar-based, spending is event-based
@@ -123,20 +149,31 @@ gsSurvCalendar <- function(
   spending = c("information", "calendar"),
   lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
   gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1,
-  r = 18, tol = 1e-06
+  r = 18, tol = .Machine$double.eps^0.25,
+  method = c("LachinFoulkes", "Schoenfeld", "Freedman", "BernsteinLagakos")
 ) {
-  checkVector(calendarTime, isType = "numeric")
-  if (min(diff(calendarTime)) < 0) {
-    stop(paste(
-      "calendarTime must be an increasing vector of positive numbers, including final analysis\n input calendarTime = ",
-      paste(calendarTime, collapse = ", ")
-    ))
+  method <- match.arg(method)
+  input_vals <- list(
+    gamma = gamma,
+    R = R,
+    lambdaC = lambdaC,
+    eta = eta,
+    etaE = etaE,
+    S = S
+  )
+  if (!is.numeric(calendarTime) || any(is.na(calendarTime)) ||
+    any(!is.finite(calendarTime)) || any(diff(calendarTime) <= 0)) {
+    stop("calendarTime must be an increasing vector")
+  }
+  # Validate ratio is a single positive scalar
+  if (!is.numeric(ratio) || length(ratio) != 1 || ratio <= 0) {
+    stop("ratio must be a single positive scalar")
   }
   x <- nSurv(
     lambdaC = lambdaC, hr = hr, hr0 = hr0, eta = eta, etaE = etaE,
     gamma = gamma, R = R, S = S, T = max(calendarTime),
     minfup = minfup, ratio = ratio,
-    alpha = alpha, beta = beta, sided = sided
+    alpha = alpha, beta = beta, sided = sided, method = method # , tol = tol
   )
 
   # Get interim expected event counts and sample size based on
@@ -145,7 +182,6 @@ gsSurvCalendar <- function(
   eDE <- NULL
   eNC <- NULL
   eNE <- NULL
-  T <- NULL
   k <- length(calendarTime)
   for (i in 1:k) {
     xx <- nEventsIA(tIA = calendarTime[i], x = x, simple = FALSE)
@@ -191,10 +227,13 @@ gsSurvCalendar <- function(
   y$variable <- x$variable
   y$tol <- tol
   y$T <- calendarTime
+  y$method <- x$method
+  y$call <- match.call()
+  y$inputs <- input_vals
   class(y) <- c("gsSurv", "gsDesign")
 
   nameR <- nameperiod(cumsum(y$R))
-  stratnames <- paste("Stratum", 1:ncol(y$lambdaC))
+  stratnames <- paste("Stratum", seq_len(ncol(y$lambdaC)))
   if (is.null(y$S)) {
     nameS <- "0-Inf"
   } else {

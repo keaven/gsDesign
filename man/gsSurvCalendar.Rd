@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsSurvCalendar.R
 \name{gsSurvCalendar}
 \alias{gsSurvCalendar}
-\title{Time-to-event endpoint design with calendar timing of analyses}
+\title{Group sequential design with calendar-based timing of analyses}
 \usage{
 gsSurvCalendar(
   test.type = 4,
@@ -27,11 +27,18 @@ gsSurvCalendar(
   minfup = 18,
   ratio = 1,
   r = 18,
-  tol = 1e-06
+  tol = .Machine$double.eps^0.25,
+  method = c("LachinFoulkes", "Schoenfeld", "Freedman", "BernsteinLagakos")
 )
 }
 \arguments{
-\item{test.type}{Test type. See \code{\link{gsSurv}}.}
+\item{test.type}{\code{1=}one-sided \cr \code{2=}two-sided symmetric \cr
+\code{3=}two-sided, asymmetric, beta-spending with binding lower bound \cr
+\code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound
+\cr \code{5=}two-sided, asymmetric, lower bound spending under the null
+hypothesis with binding lower bound \cr \code{6=}two-sided, asymmetric,
+lower bound spending under the null hypothesis with non-binding lower bound.
+\cr See details, examples, and manual.}
 
 \item{alpha}{Type I error rate. Default is 0.025 since 1-sided
 testing is default.}
@@ -146,9 +153,19 @@ accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
 not changed by users.}
 
 \item{tol}{Tolerance for error passed to the \code{\link{gsDesign}} function.}
+
+\item{method}{Sample-size variance formulation; one of
+`"LachinFoulkes"` (default), `"Schoenfeld"`, `"Freedman"`,
+or `"BernsteinLagakos"`. Note: `"Schoenfeld"` and `"Freedman"`
+methods only support superiority testing (`hr0 = 1`). Additionally,
+`"Freedman"` does not support stratified populations.}
 }
 \description{
-Time-to-event endpoint design with calendar timing of analyses
+This is like [gsSurv()], but the timing of analyses is specified in
+calendar time units.
+Information fraction is computed from the input rates and the calendar times.
+Spending can be based on information fraction as in Lan and DeMets (1983) or
+calendar  time units as in Lan and DeMets (1989).
 }
 \examples{
 # First example: while timing is calendar-based, spending is event-based
@@ -167,4 +184,14 @@ gsBoundSummary(y)
 y$usTime
 # Actual calendar fraction from design after toInteger() conversion
 y$T / max(y$T)
+}
+\references{
+Lan KKG and DeMets DL (1983), Discrete Sequential Boundaries for Clinical
+Trials. \emph{Biometrika}, 70, 659-663.
+
+Lan KKG and DeMets DL (1989), Group Sequential Procedures: Calendar vs.
+Information Time. \emph{Statistics in Medicine}, 8, 1191-1198.
+}
+\seealso{
+\code{\link{gsSurv}}, \code{\link{gsDesign}}, \code{\link{gsBoundSummary}}
 }
