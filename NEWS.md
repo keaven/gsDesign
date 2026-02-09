@@ -9,7 +9,8 @@
   hazards. This was done for Lachin-Foulkes method, but we also added
   Bernstein and Lagakos method (@keaven, #243).
 - Refreshed `print.nSurv()`/`print.gsSurv()` output formatting (@keaven, #243).
-- Increased unit test coverage across core gsDesign, spending, and binomial utilities.
+- Increased unit test coverage across core gsDesign, spending, and binomial
+  utilities (@keaven, #243).
 
 ## Piping
 
