@@ -41,6 +41,13 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gsdesign-development-version">gsDesign (development version)<a class="anchor" aria-label="anchor" href="#gsdesign-development-version"></a></h2>
 <div class="section level3">
+<h3 id="improvements-development-version">Improvements<a class="anchor" aria-label="anchor" href="#improvements-development-version"></a></h3>
+<ul><li>Updated <code><a href="../reference/nSurv.html">nSurv()</a></code> and <code><a href="../reference/nSurv.html">gsSurv()</a></code> to incorporate Schoenfeld and Freedman methods for sample size and power for time-to-event studies with proportional hazards. This allows matching versus other software (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/243" class="external-link">#243</a>).</li>
+<li>Corrected weighting for stratified time-to-event studies with proportional hazards. This was done for Lachin-Foulkes method, but we also added Bernstein and Lagakos method (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/243" class="external-link">#243</a>).</li>
+<li>Refreshed <code><a href="../reference/nSurv.html">print.nSurv()</a></code>/<code><a href="../reference/nSurv.html">print.gsSurv()</a></code> output formatting (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/243" class="external-link">#243</a>).</li>
+<li>Increased unit test coverage across core gsDesign, spending, and binomial utilities (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/243" class="external-link">#243</a>).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="piping-development-version">Piping<a class="anchor" aria-label="anchor" href="#piping-development-version"></a></h3>
 <ul><li>The R native pipe operator <code>|&gt;</code> is now used throughout the code and documentation. As a result, R &gt;= 4.1.0 is now required (<a href="https://github.com/keaven/gsDesign/issues/236" class="external-link">#236</a>).</li>
 </ul></div>

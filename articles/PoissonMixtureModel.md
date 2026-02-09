@@ -290,7 +290,7 @@ design_calendar |>
 | Month: 36             | Spending           | 0.0066   | 0.0416   |
 |                       | P(Cross) if HR=1   | 0.0111   | 0.1656   |
 |                       | P(Cross) if HR=0.7 | 0.7683   | 0.0004   |
-| Final                 | Z                  | 2.0027   | -1.0839  |
+| Final                 | Z                  | 2.0027   | -1.0838  |
 | N: 892                | p (1-sided)        | 0.0226   | 0.8608   |
 | Events: 337           | ~HR at bound       | 0.8039   | 1.1254   |
 | Month: 48             | Spending           | 0.0139   | 0.0344   |

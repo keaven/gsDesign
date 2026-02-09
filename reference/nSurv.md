@@ -1,19 +1,13 @@
 # Advanced time-to-event sample size calculation
 
-`nSurv()` is used to calculate the sample size for a clinical trial with
-a time-to-event endpoint and an assumption of proportional hazards. This
-set of routines is new with version 2.7 and will continue to be modified
-and refined to improve input error checking and output format with
-subsequent versions. It allows both the Lachin and Foulkes (1986) method
-(fixed trial duration) as well as the Kim and Tsiatis (1990) method
-(fixed enrollment rates and either fixed enrollment duration or fixed
-minimum follow-up). Piecewise exponential survival is supported as well
-as piecewise constant enrollment and dropout rates. The methods are for
-a 2-arm trial with treatment groups referred to as experimental and
-control. A stratified population is allowed as in Lachin and Foulkes
-(1986); this method has been extended to derive non-inferiority as well
-as superiority trials. Stratification also allows power calculation for
-meta-analyses. `gsSurv()` combines `nSurv()` with
+`nSurv()` is used to calculate the sample size for a two-arm clinical
+trial with a time-to-event endpoint under the assumption of proportional
+hazards. The default method assumes a fixed enrollment duration and
+fixed trial duration; in this case the required sample size is achieved
+by increasing enrollment rates. `nSurv()` implements the
+`Lachin and Foulkes (1986)` method as default. Schoenfeld (1981),
+Freedman (1982), and Bernstein and Lagakos (1989) methods are also
+supported; see Details. `gsSurv()` combines `nSurv()` with
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
 to derive a group sequential design for a study with a time-to-event
 endpoint.
@@ -40,11 +34,12 @@ nSurv(
   alpha = 0.025,
   beta = 0.1,
   sided = 1,
-  tol = .Machine$double.eps^0.25
+  tol = .Machine$double.eps^0.25,
+  method = c("LachinFoulkes", "Schoenfeld", "Freedman", "BernsteinLagakos")
 )
 
 # S3 method for class 'nSurv'
-print(x, digits = 4, ...)
+print(x, digits = 3, show_strata = TRUE, ...)
 
 # S3 method for class 'gsSurv'
 xtable(
@@ -87,11 +82,12 @@ gsSurv(
   ratio = 1,
   tol = .Machine$double.eps^0.25,
   usTime = NULL,
-  lsTime = NULL
+  lsTime = NULL,
+  method = c("LachinFoulkes", "Schoenfeld", "Freedman", "BernsteinLagakos")
 )
 
 # S3 method for class 'gsSurv'
-print(x, digits = 2, ...)
+print(x, digits = 3, show_gsDesign = FALSE, show_strata = TRUE, ...)
 ```
 
 ## Arguments
@@ -139,7 +135,8 @@ print(x, digits = 2, ...)
 
   Scalar, vector or matrix of event hazard rates for the control group;
   rows represent time periods while columns represent strata; a vector
-  implies a single stratum.
+  implies a single stratum. Note that rates corresponding the final time
+  period are extended indefinitely.
 
 - hr:
 
@@ -176,14 +173,15 @@ print(x, digits = 2, ...)
   specified in rows of `gamma`. Length is the same as number of rows in
   `gamma`. Note that when variable enrollment duration is specified
   (input `T=NULL`), the final enrollment period is extended as long as
-  needed.
+  needed; otherwise enrollment after `sum(R)` is 0.
 
 - S:
 
   A scalar or vector of durations of piecewise constant event rates
   specified in rows of `lambda`, `eta` and `etaE`; this is NULL if there
   is a single event rate per stratum (exponential failure) or length of
-  the number of rows in `lambda` minus 1, otherwise.
+  the number of rows in `lambda` minus 1, otherwise. The final time
+  period is extended indefinitely for each stratum.
 
 - T:
 
@@ -214,12 +212,23 @@ print(x, digits = 2, ...)
 
   1 for 1-sided testing, 2 for 2-sided testing.
 
+- method:
+
+  One of `"LachinFoulkes"` (default), `"Schoenfeld"`, `"Freedman"`, or
+  `"BernsteinLagakos"`. Note: `"Schoenfeld"` and `"Freedman"` methods
+  only support superiority testing (`hr0 = 1`). `"Freedman"` does not
+  support stratified populations.
+
 - digits:
 
   Number of digits past the decimal place to print (`print.gsSurv.`);
   also a pass through to generic
   [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md)
   from `xtable.gsSurv()`.
+
+- show_strata:
+
+  Logical; for `print.gsSurv()`, include strata summaries.
 
 - ...:
 
@@ -352,6 +361,10 @@ print(x, digits = 2, ...)
   by `timing`. Otherwise, this should be a vector of length `k` with the
   spending time at each analysis (see Details in help for `gsDesign`).
 
+- show_gsDesign:
+
+  Logical; for `print.gsSurv()`, include gsDesign details.
+
 ## Value
 
 `nSurv()` returns an object of type `nSurv` with the following
@@ -474,12 +487,16 @@ components:
   duration as well as follow-up duration was specified and `beta=NULL`
   was input.
 
-`gsSurv()` returns much of the above plus variables in the class
-`gsDesign`; see
+`gsSurv()` returns much of the above plus an object of class `gsDesign`
+in a variable named `gs`; see
 [`gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
 for general documentation on what is returned in `gs`. The value of
 `gs$n.I` represents the number of endpoints required at each analysis to
 adequately power the trial. Other items returned by `gsSurv()` are:
+
+- gs:
+
+  A group sequential design (`gsDesign`) object.
 
 - lambdaC:
 
@@ -562,6 +579,16 @@ adequately power the trial. Other items returned by `gsSurv()` are:
   A vector of expected number of events by stratum in the experimental
   group under the alternate hypothesis.
 
+- eDC0:
+
+  A vector of expected number of events by stratum in the control group
+  under the null hypothesis.
+
+- eDE0:
+
+  A vector of expected number of events by stratum in the experimental
+  group under the null hypothesis.
+
 - eNC:
 
   A vector of the expected accrual in each stratum in the control group.
@@ -612,6 +639,36 @@ following components:
 `nEventsIA(..., simple=TRUE)` when
 
 ## Details
+
+The Lachin and Foulkes method uses both null and alternate hypothesis
+variances to derive sample size and is extended here to support
+non-inferiority, super-superiority, and stratified designs. As an
+alternative, the Kim and Tsiatis (1990) method can be used with fixed
+enrollment rates and either fixed enrollment duration or fixed minimum
+follow-up. The Schoenfeld approach uses the asymptotic distribution of
+the log-rank statistic under the assumption of proportional hazards and
+local alternatives (i.e., \\\log(HR)\\ is small). The Freedman approach
+uses the same asymptotic distribution and, like the Schoenfeld approach,
+uses just the null hypothesis variance to derive sample size. The
+Bernstein and Lagakos (1989) approach was derived to compute sample size
+for a stratified model with a common proportional hazards assumption
+across strata. Like the Lachin and Foulkes (1986) method, it uses both
+null and alternate hypothesis variances to compute sample size; however,
+the null hypothesis variance is computed differently. The Bernstein and
+Lagakos (1989) approach uses the alternate hypothesis failure rate
+assumptions for both the control and experimental groups, while the
+Lachin and Foulkes method uses null hypothesis rates that average the
+alternate hypothesis failure rates to get similar numbers of expected
+events under the null and alternate hypotheses. Since the Lachin and
+Foulkes method has fewer events under the null hypothesis (less
+statistical information), it calculates less power than the Bernstein
+and Lagakos method. Piecewise exponential survival is supported as well
+as piecewise constant enrollment and dropout rates. The methods are for
+a 2-arm trial with treatment groups referred to as experimental and
+control. A stratified population is allowed as in Lachin and Foulkes
+(1986); this method has been extended to derive non-inferiority as well
+as superiority trials. Stratification also allows power calculation for
+meta-analyses.
 
 [`print()`](https://rdrr.io/r/base/print.html),
 [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md) and
@@ -698,7 +755,8 @@ for Comparing Survival Distributions. *Biometrika*, 68, 316-319.
 
 [`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
 [`xprint`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
-[`vignette("gsDesignPackageOverview")`](https://keaven.github.io/gsDesign/articles/gsDesignPackageOverview.md),
+[`gsSurvCalendar`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md),
+[gsDesign-package](https://keaven.github.io/gsDesign/reference/gsDesign-package.md),
 [plot.gsDesign](https://keaven.github.io/gsDesign/reference/plot.gsDesign.md),
 [`gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md),
 [`gsHR`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
@@ -714,277 +772,80 @@ Keaven Anderson <keaven_anderson@merck.com>
 ## Examples
 
 ``` r
-# Vary accrual rate to obtain power
-nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 1, T = 36, minfup = 12)
-#> Fixed design, two-arm trial with time-to-event
-#> outcome (Lachin and Foulkes, 1986).
-#> Solving for:  Accrual rate 
-#> Hazard ratio                  H1/H0=0.5/1
-#> Study duration:                   T=36
-#> Accrual duration:                   24
-#> Min. end-of-study follow-up: minfup=12
-#> Expected events (total, H1):        86.3258
-#> Expected sample size (total):       119.8184
-#> Accrual rates:
-#>      Stratum 1
-#> 0-24    4.9924
-#> Control event rates (H1):
-#>       Stratum 1
-#> 0-Inf    0.1155
-#> Censoring rates:
-#>       Stratum 1
-#> 0-Inf    0.0173
-#> Power:                 100*(1-beta)=90%
-#> Type I error (1-sided):   100*alpha=2.5%
-#> Equal randomization:          ratio=1
-
-# Vary accrual duration to obtain power
-nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 6, minfup = 12)
-#> Fixed design, two-arm trial with time-to-event
-#> outcome (Lachin and Foulkes, 1986).
-#> Solving for:  Accrual rate 
-#> Hazard ratio                  H1/H0=0.5/1
-#> Study duration:                   T=18
-#> Accrual duration:                   6
-#> Min. end-of-study follow-up: minfup=12
-#> Expected events (total, H1):        86.8217
-#> Expected sample size (total):       137.2033
-#> Accrual rates:
-#>     Stratum 1
-#> 0-6   22.8672
-#> Control event rates (H1):
-#>       Stratum 1
-#> 0-Inf    0.1155
-#> Censoring rates:
-#>       Stratum 1
-#> 0-Inf    0.0173
-#> Power:                 100*(1-beta)=90%
-#> Type I error (1-sided):   100*alpha=2.5%
-#> Equal randomization:          ratio=1
-
-# Vary follow-up duration to obtain power
-nSurv(lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = 6, R = 25)
-#> Fixed design, two-arm trial with time-to-event
-#> outcome (Lachin and Foulkes, 1986).
-#> Solving for:  Accrual rate 
-#> Hazard ratio                  H1/H0=0.5/1
-#> Study duration:                   T=18
-#> Accrual duration:                   12
-#> Min. end-of-study follow-up: minfup=6
-#> Expected events (total, H1):        87.2677
-#> Expected sample size (total):       155.8581
-#> Accrual rates:
-#>      Stratum 1
-#> 0-12   12.9882
-#> Control event rates (H1):
-#>       Stratum 1
-#> 0-Inf    0.1155
-#> Censoring rates:
-#>       Stratum 1
-#> 0-Inf    0.0173
-#> Power:                 100*(1-beta)=90%
-#> Type I error (1-sided):   100*alpha=2.5%
-#> Equal randomization:          ratio=1
-
-# Piecewise constant enrollment rates (vary accrual duration)
-nSurv(
-  lambdaC = log(2) / 6, hr = .5, eta = log(2) / 40, gamma = c(1, 3, 6),
-  R = c(3, 6, 9), T = NULL, minfup = 12
+# Vary accrual rate gamma to obtain power
+# T, minfup and R all specified, although R will be adjusted on output
+# gamma as input will be multiplied in output to achieve desired power
+# Default method is Lachin and Foulkes
+x_nsurv <- nSurv(
+  lambdaC = log(2) / 6, R = 10, hr = .5, eta = .001, gamma = 1,
+  alpha = 0.02, beta = .15, T = 36, minfup = 12, method = "LachinFoulkes"
 )
-#> Fixed design, two-arm trial with time-to-event
-#> outcome (Lachin and Foulkes, 1986).
-#> Solving for:  Accrual duration 
-#> Hazard ratio                  H1/H0=0.5/1
-#> Study duration:                   T=37.7809
-#> Accrual duration:                   25.7809
-#> Min. end-of-study follow-up: minfup=12
-#> Expected events (total, H1):        86.3632
-#> Expected sample size (total):       121.6855
-#> Accrual rates:
-#>         Stratum 1
-#> 0-3             1
-#> 3-9             3
-#> 9-25.78         6
-#> Control event rates (H1):
-#>       Stratum 1
-#> 0-Inf    0.1155
-#> Censoring rates:
-#>       Stratum 1
-#> 0-Inf    0.0173
-#> Power:                 100*(1-beta)=90%
-#> Type I error (1-sided):   100*alpha=2.5%
-#> Equal randomization:          ratio=1
-
-# Stratified population (vary accrual duration)
-nSurv(
-  lambdaC = matrix(log(2) / c(6, 12), ncol = 2), hr = .5, eta = log(2) / 40,
-  gamma = matrix(c(2, 4), ncol = 2), minfup = 12
+# Demonstrate print method
+print(x_nsurv)
+#> nSurv fixed-design summary (method=LachinFoulkes; target=Accrual rate)
+#> HR=0.500 vs HR0=1.000 | alpha=0.020 (sided=1) | power=85.0%
+#> N=95.7 subjects | D=78.1 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> 
+#> Key inputs (names preserved):
+#>                                desc    item value input
+#>                     Accrual rate(s)   gamma 3.986     1
+#>            Accrual rate duration(s)       R    24    10
+#>              Control hazard rate(s) lambdaC 0.116 0.116
+#>             Control dropout rate(s)     eta 0.001 0.001
+#>        Experimental dropout rate(s)    etaE 0.001  etaE
+#>  Event and dropout rate duration(s)       S  NULL     S
+# Same assumptions for group sequential design
+x_gs <- gsSurv(
+  k = 4, sfl = gsDesign::sfPower, sflpar = .5, lambdaC = log(2) / 6, hr = .5,
+  eta = .001, gamma = 1, T = 36, minfup = 12, method = "LachinFoulkes"
 )
-#> Fixed design, two-arm trial with time-to-event
-#> outcome (Lachin and Foulkes, 1986).
-#> Solving for:  Accrual rate 
-#> Hazard ratio                  H1/H0=0.5/1
-#> Study duration:                   T=18
-#> Accrual duration:                   6
-#> Min. end-of-study follow-up: minfup=12
-#> Expected events (total, H1):        87.6736
-#> Expected sample size (total):       179.9025
-#> Accrual rates:
-#>     Stratum 1 Stratum 2
-#> 0-6    9.9946   19.9892
-#> Control event rates (H1):
-#>       Stratum 1 Stratum 2
-#> 0-Inf    0.1155    0.0578
-#> Censoring rates:
-#>       Stratum 1 Stratum 2
-#> 0-Inf    0.0173    0.0173
-#> Power:                 100*(1-beta)=90%
-#> Type I error (1-sided):   100*alpha=2.5%
-#> Equal randomization:          ratio=1
-
-# Piecewise exponential failure rates (vary accrual duration)
-nSurv(lambdaC = log(2) / c(6, 12), hr = .5, eta = log(2) / 40, S = 3, gamma = 6, minfup = 12)
-#> Fixed design, two-arm trial with time-to-event
-#> outcome (Lachin and Foulkes, 1986).
-#> Solving for:  Accrual rate 
-#> Hazard ratio                  H1/H0=0.5/1
-#> Study duration:                   T=18
-#> Accrual duration:                   6
-#> Min. end-of-study follow-up: minfup=12
-#> Expected events (total, H1):        87.9869
-#> Expected sample size (total):       183.8174
-#> Accrual rates:
-#>     Stratum 1
-#> 0-6   30.6362
-#> Control event rates (H1):
-#>       Stratum 1
-#> 0-3      0.1155
-#> 3-Inf    0.0578
-#> Censoring rates:
-#>       Stratum 1
-#> 0-3      0.0173
-#> 3-Inf    0.0173
-#> Power:                 100*(1-beta)=90%
-#> Type I error (1-sided):   100*alpha=2.5%
-#> Equal randomization:          ratio=1
-
-# Combine it all: 2 strata, 2 failure rate periods
-nSurv(
-  lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
-  eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
-  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12
-)
-#> Fixed design, two-arm trial with time-to-event
-#> outcome (Lachin and Foulkes, 1986).
-#> Solving for:  Accrual rate 
-#> Hazard ratio                  H1/H0=0.5/1
-#> Study duration:                   T=18
-#> Accrual duration:                   6
-#> Min. end-of-study follow-up: minfup=12
-#> Expected events (total, H1):        88.7326
-#> Expected sample size (total):       255.7917
-#> Accrual rates:
-#>     Stratum 1 Stratum 2
-#> 0-5   14.4788   24.1313
-#> 5-6   28.9576   33.7838
-#> Control event rates (H1):
-#>       Stratum 1 Stratum 2
-#> 0-3      0.1155    0.0385
-#> 3-Inf    0.0578    0.0289
-#> Censoring rates:
-#>       Stratum 1 Stratum 2
-#> 0-3      0.0173    0.0154
-#> 3-Inf    0.0139    0.0126
-#> Power:                 100*(1-beta)=90%
-#> Type I error (1-sided):   100*alpha=2.5%
-#> Equal randomization:          ratio=1
-
-# Example where only 1 month of follow-up is desired.
-# Set failure rate to 0 after 1 month using lambdaC and S.
-nSurv(lambdaC = c(.4, 0), hr = 2 / 3, S = 1, minfup = 1)
-#> Fixed design, two-arm trial with time-to-event
-#> outcome (Lachin and Foulkes, 1986).
-#> Solving for:  Accrual rate 
-#> Hazard ratio                  H1/H0=0.6667/1
-#> Study duration:                   T=18
-#> Accrual duration:                   17
-#> Min. end-of-study follow-up: minfup=1
-#> Expected events (total, H1):        257.7578
-#> Expected sample size (total):       914.4375
-#> Accrual rates:
-#>      Stratum 1
-#> 0-17   53.7904
-#> Control event rates (H1):
-#>       Stratum 1
-#> 0-1         0.4
-#> 1-Inf       0.0
-#> Censoring rates:
-#>       Stratum 1
-#> 0-1           0
-#> 1-Inf         0
-#> Power:                 100*(1-beta)=90%
-#> Type I error (1-sided):   100*alpha=2.5%
-#> Equal randomization:          ratio=1
-
-# Group sequential design (vary accrual rate to obtain power)
-x <- gsSurv(
-  k = 4, sfl = sfPower, sflpar = .5, lambdaC = log(2) / 6, hr = .5,
-  eta = log(2) / 40, gamma = 1, T = 36, minfup = 12
-)
-x
-#> Time to event group sequential design with HR= 0.5 
-#> Equal randomization:          ratio=1
-#> Asymmetric two-sided group sequential design with
-#> 90 % power and 2.5 % Type I Error.
-#> Upper bound spending computations assume
-#> trial continues if lower bound is crossed.
+print(x_gs)
+#> Group sequential design (method=LachinFoulkes; k=4 analyses; Two-sided asymmetric with non-binding futility)
+#> N=140.7 subjects | D=114.8 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
 #> 
-#>                 ----Lower bounds----  ----Upper bounds-----
-#>   Analysis  N   Z   Nominal p Spend+  Z   Nominal p Spend++
-#>          1  29 0.23    0.5895 0.0500 3.16    0.0008  0.0008
-#>          2  58 0.86    0.8056 0.0207 2.82    0.0024  0.0022
-#>          3  87 1.46    0.9277 0.0159 2.44    0.0074  0.0059
-#>          4 116 2.01    0.9780 0.0134 2.01    0.0220  0.0161
-#>      Total                    0.1000                 0.0250 
-#> + lower bound beta spending (under H1):
-#>  Kim-DeMets (power) spending function with rho = 0.5.
-#> ++ alpha spending:
-#>  Hwang-Shih-DeCani spending function with gamma = -4.
+#> Spending functions:
+#>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
+#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
 #> 
-#> Boundary crossing probabilities and expected sample size
-#> assume any cross stops the trial
+#> Analysis summary:
+#> Method: LachinFoulkes 
+#>     Analysis              Value Efficacy Futility
+#>    IA 1: 25%                  Z   3.1554   0.2264
+#>        N: 76        p (1-sided)   0.0008   0.4105
+#>   Events: 29       ~HR at bound   0.3079   0.9190
+#>    Month: 13   P(Cross) if HR=1   0.0008   0.5895
+#>              P(Cross) if HR=0.5   0.0995   0.0500
+#>    IA 2: 50%                  Z   2.8183   0.8619
+#>       N: 116        p (1-sided)   0.0024   0.1944
+#>   Events: 58       ~HR at bound   0.4752   0.7965
+#>    Month: 20   P(Cross) if HR=1   0.0030   0.8366
+#>              P(Cross) if HR=0.5   0.4388   0.0707
+#>    IA 3: 75%                  Z   2.4390   1.4589
+#>       N: 142        p (1-sided)   0.0074   0.0723
+#>   Events: 87       ~HR at bound   0.5912   0.7302
+#>    Month: 26   P(Cross) if HR=1   0.0085   0.9445
+#>              P(Cross) if HR=0.5   0.7776   0.0866
+#>        Final                  Z   2.0136   2.0136
+#>       N: 142        p (1-sided)   0.0220   0.0220
+#>  Events: 115       ~HR at bound   0.6867   0.6867
+#>    Month: 36   P(Cross) if HR=1   0.0187   0.9813
+#>              P(Cross) if HR=0.5   0.9000   0.1000
 #> 
-#> Upper boundary (power or Type I Error)
-#>           Analysis
-#>    Theta      1      2      3      4  Total E{N}
-#>   0.0000 0.0008 0.0022 0.0055 0.0102 0.0187 46.5
-#>   0.3489 0.0995 0.3393 0.3388 0.1224 0.9000 71.2
-#> 
-#> Lower boundary (futility or Type II Error)
-#>           Analysis
-#>    Theta      1      2      3      4  Total
-#>   0.0000 0.5895 0.2470 0.1079 0.0369 0.9813
-#>   0.3489 0.0500 0.0207 0.0159 0.0134 0.1000
-#>              T         n    Events HR futility HR efficacy
-#> IA 1  12.24228  81.46722  28.76662       0.919       0.308
-#> IA 2  18.97078 126.24254  57.53324       0.797       0.476
-#> IA 3  25.02728 159.70989  86.29986       0.730       0.591
-#> Final 36.00000 159.70989 115.06648       0.687       0.687
-#> Accrual rates:
-#>      Stratum 1
-#> 0-24      6.65
-#> Control event rates (H1):
-#>       Stratum 1
-#> 0-Inf      0.12
-#> Censoring rates:
-#>       Stratum 1
-#> 0-Inf      0.02
-print(xtable::xtable(x,
+#> Key inputs (names preserved):
+#>                                desc    item value input
+#>                     Accrual rate(s)   gamma 5.863     1
+#>            Accrual rate duration(s)       R    24    12
+#>              Control hazard rate(s) lambdaC 0.116 0.116
+#>             Control dropout rate(s)     eta 0.001 0.001
+#>        Experimental dropout rate(s)    etaE 0.001  etaE
+#>  Event and dropout rate duration(s)       S  NULL     S
+# Demonstrate xtable method for gsSurv
+print(xtable::xtable(x_gs,
   footnote = "This is a footnote; note that it can be wide.",
-  caption = "Caption example."
+  caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.5.2 by xtable 1.8-4 package
-#> % Sun Feb  8 22:04:39 2026
+#> % Mon Feb  9 13:23:17 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}
@@ -992,48 +853,397 @@ print(xtable::xtable(x,
 #>  & Analysis & Value & Futility & Efficacy \\ 
 #>   \hline
 #> 1 & IA 1: 25$\backslash$\% & Z-value & 0.23 & 3.16 \\ 
-#>   2 & N: 82 & HR & 0.92 & 0.31 \\ 
+#>   2 & N: 76 & HR & 0.92 & 0.31 \\ 
 #>   3 & Events: 29 & p (1-sided) & 0.4105 & 8e-04 \\ 
-#>   4 & 12.2 months & P$\backslash$\{Cross$\backslash$\} if HR=1 & 0.5895 & 8e-04 \\ 
+#>   4 & 12.8 months & P$\backslash$\{Cross$\backslash$\} if HR=1 & 0.5895 & 8e-04 \\ 
 #>   5 &   & P$\backslash$\{Cross$\backslash$\} if HR=0.5 & 0.05 & 0.0995 \\ 
 #>   6 & $\backslash$hline IA 2: 50$\backslash$\% & Z-value & 0.86 & 2.82 \\ 
-#>   7 & N: 128 & HR & 0.8 & 0.48 \\ 
+#>   7 & N: 116 & HR & 0.8 & 0.48 \\ 
 #>   8 & Events: 58 & p (1-sided) & 0.1944 & 0.0024 \\ 
-#>   9 & 19 months & P$\backslash$\{Cross$\backslash$\} if HR=1 & 0.8366 & 0.003 \\ 
+#>   9 & 19.6 months & P$\backslash$\{Cross$\backslash$\} if HR=1 & 0.8366 & 0.003 \\ 
 #>   10 &   & P$\backslash$\{Cross$\backslash$\} if HR=0.5 & 0.0707 & 0.4388 \\ 
 #>   11 & $\backslash$hline IA 3: 75$\backslash$\% & Z-value & 1.46 & 2.44 \\ 
-#>   12 & N: 160 & HR & 0.73 & 0.59 \\ 
+#>   12 & N: 142 & HR & 0.73 & 0.59 \\ 
 #>   13 & Events: 87 & p (1-sided) & 0.0723 & 0.0074 \\ 
-#>   14 & 25 months & P$\backslash$\{Cross$\backslash$\} if HR=1 & 0.9445 & 0.0085 \\ 
+#>   14 & 25.7 months & P$\backslash$\{Cross$\backslash$\} if HR=1 & 0.9445 & 0.0085 \\ 
 #>   15 &   & P$\backslash$\{Cross$\backslash$\} if HR=0.5 & 0.0866 & 0.7776 \\ 
 #>   16 & $\backslash$hline Final analysis & Z-value & 2.01 & 2.01 \\ 
-#>   17 & N: 160 & HR & 0.69 & 0.69 \\ 
-#>   18 & Events: 116 & p (1-sided) & 0.022 & 0.022 \\ 
+#>   17 & N: 142 & HR & 0.69 & 0.69 \\ 
+#>   18 & Events: 115 & p (1-sided) & 0.022 & 0.022 \\ 
 #>   19 & 36 months & P$\backslash$\{Cross$\backslash$\} if HR=1 & 0.9813 & 0.0187 \\ 
 #>   20 &   & P$\backslash$\{Cross$\backslash$\} if HR=0.5 & 0.1 & 0.9 $\backslash$$\backslash$ $\backslash$hline $\backslash$multicolumn\{4\}\{p\{ 9cm \}\}\{$\backslash$footnotesize This is a footnote; note that it can be wide. \} \\ 
 #>    \hline
 #> \end{tabular}
-#> \caption{Caption example.} 
+#> \caption{Caption example for xtable output.} 
 #> \end{table}
-# Find expected number of events at time 12 in the above trial
-nEventsIA(x = x, tIA = 10)
-#> [1] 20.51876
+# Demonstrate nEventsIA method
+# find expected number of events at time 12 in the above trial
+nEventsIA(x = x_gs, tIA = 10)
+#> [1] 18.92635
 
-# Find time at which 1/4 of events are expected
-tEventsIA(x = x, timing = .25)
+# find time at which 1/4 of events are expected
+tEventsIA(x = x_gs, timing = .25)
 #> $T
-#> [1] 12.24228
+#> [1] 12.76571
 #> 
 #> $eDC
-#> [1] 17.92465
+#> [1] 17.79583
 #> 
 #> $eDE
-#> [1] 10.84196
+#> [1] 10.90882
 #> 
 #> $eNC
-#> [1] 40.73361
+#> [1] 37.42481
 #> 
 #> $eNE
-#> [1] 40.73361
+#> [1] 37.42481
 #> 
+
+# Adjust accrual duration R to achieve desired power
+# Trial duration T input as NULL and will be computed based on
+# accrual duration R and minimum follow-up duration minfup
+# Minimum follow-up duration minfup is specified
+# We use the Schoenfeld method to compute accrual duration R
+# Control median survival time is 6
+nSurv(
+  lambdaC = log(2) / 6, hr = .5, eta = .001, gamma = 6,
+  alpha = .025, beta = .1, minfup = 12, T = NULL, method = "Schoenfeld"
+)
+#> nSurv fixed-design summary (method=Schoenfeld; target=Accrual duration)
+#> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
+#> N=109.5 subjects | D=86.2 events | T=30.2 study duration | accrual=18.2 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> 
+#> Key inputs (names preserved):
+#>                                desc    item  value input
+#>                     Accrual rate(s)   gamma      6     6
+#>            Accrual rate duration(s)       R 18.243    12
+#>              Control hazard rate(s) lambdaC  0.116 0.116
+#>             Control dropout rate(s)     eta  0.001 0.001
+#>        Experimental dropout rate(s)    etaE  0.001  etaE
+#>  Event and dropout rate duration(s)       S   NULL     S
+# Same assumptions for group sequential design
+gsSurv(
+  k = 4, sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfPower, sflpar = .5,
+  lambdaC = log(2) / 6, hr = .5, eta = .001, gamma = 6,
+  T = 36, minfup = 12, method = "Schoenfeld"
+) |>
+  print()
+#> Group sequential design (method=Schoenfeld; k=4 analyses; Two-sided asymmetric with non-binding futility)
+#> N=142.9 subjects | D=116.6 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> 
+#> Spending functions:
+#>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
+#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
+#> 
+#> Analysis summary:
+#> Method: Schoenfeld 
+#>     Analysis              Value Efficacy Futility
+#>    IA 1: 25%                  Z   3.1554   0.2264
+#>        N: 78        p (1-sided)   0.0008   0.4105
+#>   Events: 30       ~HR at bound   0.3107   0.9196
+#>    Month: 13   P(Cross) if HR=1   0.0008   0.5895
+#>              P(Cross) if HR=0.5   0.0995   0.0500
+#>    IA 2: 50%                  Z   2.8183   0.8619
+#>       N: 118        p (1-sided)   0.0024   0.1944
+#>   Events: 59       ~HR at bound   0.4780   0.7979
+#>    Month: 20   P(Cross) if HR=1   0.0030   0.8366
+#>              P(Cross) if HR=0.5   0.4388   0.0707
+#>    IA 3: 75%                  Z   2.4390   1.4589
+#>       N: 144        p (1-sided)   0.0074   0.0723
+#>   Events: 88       ~HR at bound   0.5936   0.7320
+#>    Month: 26   P(Cross) if HR=1   0.0085   0.9445
+#>              P(Cross) if HR=0.5   0.7776   0.0866
+#>        Final                  Z   2.0136   2.0136
+#>       N: 144        p (1-sided)   0.0220   0.0220
+#>  Events: 117       ~HR at bound   0.6887   0.6887
+#>    Month: 36   P(Cross) if HR=1   0.0187   0.9813
+#>              P(Cross) if HR=0.5   0.9000   0.1000
+#> 
+#> Key inputs (names preserved):
+#>                                desc    item value input
+#>                     Accrual rate(s)   gamma 5.955     6
+#>            Accrual rate duration(s)       R    24    12
+#>              Control hazard rate(s) lambdaC 0.116 0.116
+#>             Control dropout rate(s)     eta 0.001 0.001
+#>        Experimental dropout rate(s)    etaE 0.001  etaE
+#>  Event and dropout rate duration(s)       S  NULL     S
+
+# Vary minimum follow-up duration minfup to obtain power
+# Accrual duration R rate gamma are fixed and will not change on output.
+# Trial duration T and minimum follow-up minfup are input as NULL
+# and will be computed on output.
+# We will use the Freedman method to compute sample size
+# Control median survival time is 6
+# Often this method will fail as the accrual duration and rate provide too
+# little or too much sample size.
+nSurv(
+  lambdaC = log(2) / 6, hr = .5, eta = .001, gamma = 6, R = 25,
+  alpha = .025, beta = .1, minfup = NULL, T = NULL, method = "Freedman"
+)
+#> nSurv fixed-design summary (method=Freedman; target=Follow-up duration)
+#> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
+#> N=150.0 subjects | D=86.8 events | T=25.3 study duration | accrual=25.0 Accrual duration | minfup=0.3 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> 
+#> Key inputs (names preserved):
+#>                                desc    item value input
+#>                     Accrual rate(s)   gamma     6     6
+#>            Accrual rate duration(s)       R    25    25
+#>              Control hazard rate(s) lambdaC 0.116 0.116
+#>             Control dropout rate(s)     eta 0.001 0.001
+#>        Experimental dropout rate(s)    etaE 0.001  etaE
+#>  Event and dropout rate duration(s)       S  NULL     S
+# Same assumptions for group sequential design
+gsSurv(
+  k = 4, sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfPower, sflpar = .5,
+  lambdaC = log(2) / 6, hr = .5, eta = .001, gamma = 6,
+  T = 36, minfup = 12, method = "Freedman"
+) |>
+  print()
+#> Group sequential design (method=Freedman; k=4 analyses; Two-sided asymmetric with non-binding futility)
+#> N=154.5 subjects | D=126.1 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> 
+#> Spending functions:
+#>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
+#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
+#> 
+#> Analysis summary:
+#> Method: Freedman 
+#>     Analysis              Value Efficacy Futility
+#>    IA 1: 25%                  Z   3.1554   0.2264
+#>        N: 84        p (1-sided)   0.0008   0.4105
+#>   Events: 32       ~HR at bound   0.3249   0.9225
+#>    Month: 13   P(Cross) if HR=1   0.0008   0.5895
+#>              P(Cross) if HR=0.5   0.0995   0.0500
+#>    IA 2: 50%                  Z   2.8183   0.8619
+#>       N: 128        p (1-sided)   0.0024   0.1944
+#>   Events: 64       ~HR at bound   0.4916   0.8048
+#>    Month: 20   P(Cross) if HR=1   0.0030   0.8366
+#>              P(Cross) if HR=0.5   0.4388   0.0707
+#>    IA 3: 75%                  Z   2.4390   1.4589
+#>       N: 156        p (1-sided)   0.0074   0.0723
+#>   Events: 95       ~HR at bound   0.6055   0.7407
+#>    Month: 26   P(Cross) if HR=1   0.0085   0.9445
+#>              P(Cross) if HR=0.5   0.7776   0.0866
+#>        Final                  Z   2.0136   2.0136
+#>       N: 156        p (1-sided)   0.0220   0.0220
+#>  Events: 127       ~HR at bound   0.6986   0.6986
+#>    Month: 36   P(Cross) if HR=1   0.0187   0.9813
+#>              P(Cross) if HR=0.5   0.9000   0.1000
+#> 
+#> Key inputs (names preserved):
+#>                                desc    item value input
+#>                     Accrual rate(s)   gamma 6.437     6
+#>            Accrual rate duration(s)       R    24    12
+#>              Control hazard rate(s) lambdaC 0.116 0.116
+#>             Control dropout rate(s)     eta 0.001 0.001
+#>        Experimental dropout rate(s)    etaE 0.001  etaE
+#>  Event and dropout rate duration(s)       S  NULL     S
+
+# piecewise constant enrollment rates (vary accrual rate to achieve power)
+# also piecewise constant failure rates
+# will specify annualized enrollment and failure rates
+nSurv(
+  lambdaC = -log(c(.95, .97, .98)), # 5%, 3% and 2% annual failure rates
+  S = c(1, 1), # 1 year duration for first 2 failure rates, 3rd continues indefinitely
+  R = c(.25, .25, 1.5), # 2-year enrollment with ramp-up over first 1/2 year
+  gamma = c(1, 3, 6), # 1, 3 and 6 annualized enrollment rates will be
+  # multiplied by ratio to achieve desired power
+  hr = .5, eta = -log(1 - .01), # 1% annual censoring rate
+  minfup = 3, T = 5, # 5-year trial duration with 3-year minimum follow-up
+  alpha = .025, beta = .1, method = "LachinFoulkes"
+)
+#> nSurv fixed-design summary (method=LachinFoulkes; target=Accrual rate)
+#> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
+#> N=1088.8 subjects | D=91.1 events | T=5.0 study duration | accrual=2.0 Accrual duration | minfup=3.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> 
+#> Key inputs (names preserved):
+#>                                desc    item                     value
+#>                     Accrual rate(s)   gamma 108.876, 326.629, 653.258
+#>            Accrual rate duration(s)       R           0.25, 0.25, 1.5
+#>              Control hazard rate(s) lambdaC         0.051, 0.03, 0.02
+#>             Control dropout rate(s)     eta          0.01, 0.01, 0.01
+#>        Experimental dropout rate(s)    etaE          0.01, 0.01, 0.01
+#>  Event and dropout rate duration(s)       S                      1, 1
+#>              input
+#>            1, 3, 6
+#>    0.25, 0.25, 1.5
+#>  0.051, 0.03, 0.02
+#>               0.01
+#>               etaE
+#>               1, 1
+# Same assumptions for group sequential design
+gsSurv(
+  k = 4, sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfPower, sflpar = .5,
+  lambdaC = -log(c(.95, .97, .98)), # 5%, 3% and 2% annual failure rates
+  S = c(1, 1), # 1 year duration for first 2 failure rates, 3rd continues indefinitely
+  R = c(.25, .25, 1.5), # 2-year enrollment with ramp-up over first 1/2 year
+  gamma = c(1, 3, 6), # 1, 3 and 6 annualized enrollment rates will be
+  # multiplied by ratio to achieve desired power
+  hr = .5, eta = -log(1 - .01), # 1% annual censoring rate
+  minfup = 3, T = 5, # 5-year trial duration with 3-year minimum follow-up
+  alpha = .025, beta = .1, method = "LachinFoulkes"
+) |>
+  print()
+#> Group sequential design (method=LachinFoulkes; k=4 analyses; Two-sided asymmetric with non-binding futility)
+#> N=1451.2 subjects | D=121.4 events | T=5.0 study duration | accrual=2.0 Accrual duration | minfup=3.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> 
+#> Spending functions:
+#>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
+#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
+#> 
+#> Analysis summary:
+#> Method: LachinFoulkes 
+#>     Analysis              Value Efficacy Futility
+#>    IA 1: 25%                  Z   3.1554   0.2264
+#>      N: 1198        p (1-sided)   0.0008   0.4105
+#>   Events: 31       ~HR at bound   0.3181   0.9211
+#>     Month: 2   P(Cross) if HR=1   0.0008   0.5895
+#>              P(Cross) if HR=0.5   0.0995   0.0500
+#>    IA 2: 50%                  Z   2.8183   0.8619
+#>      N: 1452        p (1-sided)   0.0024   0.1944
+#>   Events: 61       ~HR at bound   0.4851   0.8015
+#>     Month: 2   P(Cross) if HR=1   0.0030   0.8366
+#>              P(Cross) if HR=0.5   0.4388   0.0707
+#>    IA 3: 75%                  Z   2.4390   1.4589
+#>      N: 1452        p (1-sided)   0.0074   0.0723
+#>   Events: 92       ~HR at bound   0.5998   0.7366
+#>     Month: 3   P(Cross) if HR=1   0.0085   0.9445
+#>              P(Cross) if HR=0.5   0.7776   0.0866
+#>        Final                  Z   2.0136   2.0136
+#>      N: 1452        p (1-sided)   0.0220   0.0220
+#>  Events: 122       ~HR at bound   0.6939   0.6939
+#>     Month: 5   P(Cross) if HR=1   0.0187   0.9813
+#>              P(Cross) if HR=0.5   0.9000   0.1000
+#> 
+#> Key inputs (names preserved):
+#>                                desc    item                     value
+#>                     Accrual rate(s)   gamma 145.125, 435.375, 870.749
+#>            Accrual rate duration(s)       R           0.25, 0.25, 1.5
+#>              Control hazard rate(s) lambdaC         0.051, 0.03, 0.02
+#>             Control dropout rate(s)     eta          0.01, 0.01, 0.01
+#>        Experimental dropout rate(s)    etaE          0.01, 0.01, 0.01
+#>  Event and dropout rate duration(s)       S                      1, 1
+#>              input
+#>            1, 3, 6
+#>    0.25, 0.25, 1.5
+#>  0.051, 0.03, 0.02
+#>               0.01
+#>               etaE
+#>               1, 1
+
+# combine it all: 2 strata, 2 failure rate periods
+# Note that method = "LachinFoulkes" may be preferred here
+nSurv(
+  lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
+  eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
+  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12,
+  alpha = .025, beta = .1, method = "BernsteinLagakos"
+)
+#> nSurv fixed-design summary (method=BernsteinLagakos; target=Accrual rate)
+#> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
+#> N=226.8 subjects | D=78.7 events | T=18.0 study duration | accrual=6.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> 
+#> Expected events by stratum (H1):
+#>   control experimental  total
+#> 1  26.517       16.431 42.949
+#> 2  22.980       12.761 35.741
+#> 
+#> Key inputs (names preserved):
+#>                                desc    item                           value
+#>                     Accrual rate(s)   gamma  12.84, 25.68, 21.4 ... (len=4)
+#>            Accrual rate duration(s)       R                            5, 1
+#>              Control hazard rate(s) lambdaC 0.116, 0.058, 0.039 ... (len=4)
+#>             Control dropout rate(s)     eta 0.017, 0.014, 0.015 ... (len=4)
+#>        Experimental dropout rate(s)    etaE 0.017, 0.014, 0.015 ... (len=4)
+#>  Event and dropout rate duration(s)       S                               3
+#>                            input
+#>              3, 6, 5 ... (len=4)
+#>                            5, 10
+#>  0.116, 0.058, 0.039 ... (len=4)
+#>  0.017, 0.014, 0.015 ... (len=4)
+#>                             etaE
+#>                                3
+# Same assumptions for group sequential design
+gsSurv(
+  k = 4, sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfPower, sflpar = .5,
+  lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
+  eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
+  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12,
+  alpha = .025, beta = .1, method = "BernsteinLagakos"
+) |>
+  print()
+#> Group sequential design (method=BernsteinLagakos; k=4 analyses; Two-sided asymmetric with non-binding futility)
+#> N=302.4 subjects | D=104.9 events | T=18.0 study duration | accrual=6.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> 
+#> Spending functions:
+#>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
+#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
+#> 
+#> Analysis summary:
+#> Method: BernsteinLagakos 
+#>     Analysis              Value Efficacy Futility
+#>    IA 1: 25%                  Z   3.1554   0.2264
+#>       N: 250        p (1-sided)   0.0008   0.4105
+#>   Events: 27       ~HR at bound   0.2916   0.9154
+#>     Month: 5   P(Cross) if HR=1   0.0008   0.5895
+#>              P(Cross) if HR=0.5   0.0995   0.0500
+#>    IA 2: 50%                  Z   2.8183   0.8619
+#>       N: 304        p (1-sided)   0.0024   0.1944
+#>   Events: 53       ~HR at bound   0.4592   0.7882
+#>     Month: 8   P(Cross) if HR=1   0.0030   0.8366
+#>              P(Cross) if HR=0.5   0.4388   0.0707
+#>    IA 3: 75%                  Z   2.4390   1.4589
+#>       N: 304        p (1-sided)   0.0074   0.0723
+#>   Events: 79       ~HR at bound   0.5770   0.7197
+#>    Month: 12   P(Cross) if HR=1   0.0085   0.9445
+#>              P(Cross) if HR=0.5   0.7776   0.0866
+#>        Final                  Z   2.0136   2.0136
+#>       N: 304        p (1-sided)   0.0220   0.0220
+#>  Events: 105       ~HR at bound   0.6749   0.6749
+#>    Month: 18   P(Cross) if HR=1   0.0187   0.9813
+#>              P(Cross) if HR=0.5   0.9000   0.1000
+#> 
+#> Key inputs (names preserved):
+#>                                desc    item                             value
+#>                     Accrual rate(s)   gamma 17.115, 28.525, 34.23 ... (len=4)
+#>            Accrual rate duration(s)       R                              5, 1
+#>              Control hazard rate(s) lambdaC   0.116, 0.039, 0.058 ... (len=4)
+#>             Control dropout rate(s)     eta   0.017, 0.015, 0.014 ... (len=4)
+#>        Experimental dropout rate(s)    etaE   0.017, 0.015, 0.014 ... (len=4)
+#>  Event and dropout rate duration(s)       S                                 3
+#>                            input
+#>              3, 5, 6 ... (len=4)
+#>                            5, 10
+#>  0.116, 0.039, 0.058 ... (len=4)
+#>  0.017, 0.015, 0.014 ... (len=4)
+#>                             etaE
+#>                                3
+#> 
+#> Expected events by stratum (H1) at final analysis:
+#>    stratum control experimental  total
+#>  Stratum 1  35.346       21.902 57.248
+#>  Stratum 2  30.631       17.010 47.641
+
+# Example to compute power for a fixed design.
+# Trial duration T, minimum follow-up minfup and accrual duration R are all
+# specified and will not change on output.
+# beta=NULL will compute power and output will be the same as if beta were specified.
+# This option is not available for group sequential designs.
+nSurv(
+  lambdaC = log(2) / 6, hr = .5, eta = .001, gamma = 6, R = 25,
+  alpha = .025, beta = NULL, minfup = 12, T = 36, method = "LachinFoulkes"
+) |>
+  print()
+#> nSurv fixed-design summary (method=LachinFoulkes; target=Power)
+#> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=96.5%
+#> N=144.0 subjects | D=117.5 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> 
+#> Key inputs (names preserved):
+#>                                desc    item value input
+#>                     Accrual rate(s)   gamma     6     6
+#>            Accrual rate duration(s)       R    24    25
+#>              Control hazard rate(s) lambdaC 0.116 0.116
+#>             Control dropout rate(s)     eta 0.001 0.001
+#>        Experimental dropout rate(s)    etaE 0.001  etaE
+#>  Event and dropout rate duration(s)       S  NULL     S
 ```

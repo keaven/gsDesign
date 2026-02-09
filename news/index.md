@@ -2,6 +2,28 @@
 
 ## gsDesign (development version)
 
+### Improvements
+
+- Updated
+  [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) to
+  incorporate Schoenfeld and Freedman methods for sample size and power
+  for time-to-event studies with proportional hazards. This allows
+  matching versus other software ([@keaven](https://github.com/keaven),
+  [\#243](https://github.com/keaven/gsDesign/issues/243)).
+- Corrected weighting for stratified time-to-event studies with
+  proportional hazards. This was done for Lachin-Foulkes method, but we
+  also added Bernstein and Lagakos method
+  ([@keaven](https://github.com/keaven),
+  [\#243](https://github.com/keaven/gsDesign/issues/243)).
+- Refreshed
+  [`print.nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)/[`print.gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  output formatting ([@keaven](https://github.com/keaven),
+  [\#243](https://github.com/keaven/gsDesign/issues/243)).
+- Increased unit test coverage across core gsDesign, spending, and
+  binomial utilities ([@keaven](https://github.com/keaven),
+  [\#243](https://github.com/keaven/gsDesign/issues/243)).
+
 ### Piping
 
 - The R native pipe operator `|>` is now used throughout the code and

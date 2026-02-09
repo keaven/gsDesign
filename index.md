@@ -53,6 +53,12 @@ well as provide a tool to evaluate innovative designs.
 
 ## A little history
 
+In 2026 we have updated survival sample size and power methods
+([`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)) to
+allow methods by 1) Schoenfeld, 2) Freedman, and 3) Bernstein and
+Lagakos. While we still recommend the default Lachin and Foulkes method,
+these additions allow replication of results from other software.
 Updates in late 2018 and early 2019 largely enabled by Metrum Research
 Group (Devin Pastoor, Harsh Baid, Jonathan Sidi). These include, but are
 not limited to, converting unit testing to use testthat package as well

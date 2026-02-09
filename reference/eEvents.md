@@ -54,8 +54,9 @@ print(x, digits = 4, ...)
 
   A scalar or vector of durations of time periods for recruitment rates
   specified in rows of `gamma`. Length is the same as number of rows in
-  `gamma`. Note that the final enrollment period is extended as long as
-  needed.
+  `gamma`. In `eEvents()`, recruitment after the final period is assumed
+  to be 0 if `T` exceeds `sum(R)`; the final period is only extended in
+  designs where `T` is solved for (e.g., `nSurv` with `T = NULL`).
 
 - S:
 

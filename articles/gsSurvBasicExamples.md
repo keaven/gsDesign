@@ -109,30 +109,32 @@ be shown.
 
 ``` r
 x
-#> Fixed design, two-arm trial with time-to-event
-#> outcome (Lachin and Foulkes, 1986).
-#> Solving for:  Accrual rate 
-#> Hazard ratio                  H1/H0=0.75/1
-#> Study duration:                   T=36
-#> Accrual duration:                   24
-#> Min. end-of-study follow-up: minfup=12
-#> Expected events (total, H1):        507.1519
-#> Expected sample size (total):       775.0306
-#> Accrual rates:
-#>      Stratum 1
-#> 0-1     9.2818
-#> 1-3    13.9227
-#> 3-6    23.2045
-#> 6-24   37.1272
-#> Control event rates (H1):
-#>       Stratum 1
-#> 0-Inf    0.0578
-#> Censoring rates:
-#>       Stratum 1
-#> 0-Inf     0.001
-#> Power:                 100*(1-beta)=90%
-#> Type I error (1-sided):   100*alpha=2.5%
-#> Equal randomization:          ratio=1
+#> nSurv fixed-design summary (method=LachinFoulkes; target=Accrual rate)
+#> HR=0.750 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
+#> N=775.0 subjects | D=507.2 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> 
+#> Key inputs (names preserved):
+#>                                desc    item
+#>                     Accrual rate(s)   gamma
+#>            Accrual rate duration(s)       R
+#>              Control hazard rate(s) lambdaC
+#>             Control dropout rate(s)     eta
+#>        Experimental dropout rate(s)    etaE
+#>  Event and dropout rate duration(s)       S
+#>                              value
+#>  9.282, 13.923, 23.205 ... (len=4)
+#>                1, 2, 3 ... (len=4)
+#>                              0.058
+#>                              0.001
+#>                              0.001
+#>                               NULL
+#>                    input
+#>  1, 1.5, 2.5 ... (len=4)
+#>      1, 2, 3 ... (len=4)
+#>                    0.058
+#>                    0.001
+#>                     etaE
+#>                        S
 ```
 
 ### Varying enrollment duration to power trial

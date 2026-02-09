@@ -84,50 +84,37 @@ x <- gsSurv(
 # Convert sample size to multiple of ratio + 1 = 4, round event counts.
 # Default is to round up both event count and sample size for final analysis
 toInteger(x)
-#> Time to event group sequential design with HR= 0.3 
-#> Non-inferiority design with null HR= 0.7 
-#> Randomization (Exp/Control):  ratio= 3 
-#> Asymmetric two-sided group sequential design with
-#> 90 % power and 2.5 % Type I Error.
-#> Upper bound spending computations assume
-#> trial continues if lower bound is crossed.
+#> Group sequential design (method=; k=3 analyses; Two-sided asymmetric with non-binding futility)
+#> N=9064.0 subjects | D=69.0 events | T=24.2 study duration | accrual=16.0 Accrual duration | minfup=8.2 minimum follow-up | ratio=3 randomization ratio (experimental/control)
 #> 
-#>                ----Lower bounds----  ----Upper bounds-----
-#>   Analysis N   Z   Nominal p Spend+  Z   Nominal p Spend++
-#>          1 31 0.07    0.5277 0.0141 2.83    0.0023  0.0023
-#>          2 48 1.11    0.8673 0.0345 2.52    0.0059  0.0047
-#>          3 69 2.00    0.9774 0.0514 2.00    0.0226  0.0179
-#>      Total                   0.1000                 0.0250 
-#> + lower bound beta spending (under H1):
-#>  Lan-DeMets O'Brien-Fleming approximation spending function (no parameters).
-#> ++ alpha spending:
-#>  Hwang-Shih-DeCani spending function with gamma = -4.
+#> Spending functions:
+#>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
+#>   Futility bounds derived using a Lan-DeMets O'Brien-Fleming approximation spending function (no parameters).
 #> 
-#> Boundary crossing probabilities and expected sample size
-#> assume any cross stops the trial
+#> Analysis summary:
+#>    Analysis              Value Efficacy Futility
+#>   IA 1: 45%                  Z   2.8273   0.0695
+#>     N: 8626        p (1-sided)   0.0023   0.4723
+#>  Events: 31       ~HR at bound   0.2167   0.6801
+#>   Month: 15 P(Cross) if HR=0.7   0.0023   0.5277
+#>             P(Cross) if HR=0.3   0.2863   0.0141
+#>   IA 2: 70%                  Z   2.5197   1.1139
+#>     N: 9064        p (1-sided)   0.0059   0.1327
+#>  Events: 48       ~HR at bound   0.3022   0.4829
+#>   Month: 19 P(Cross) if HR=0.7   0.0071   0.8716
+#>             P(Cross) if HR=0.3   0.6265   0.0486
+#>       Final                  Z   2.0035   2.0035
+#>     N: 9064        p (1-sided)   0.0226   0.0226
+#>  Events: 69       ~HR at bound   0.4010   0.4010
+#>   Month: 24 P(Cross) if HR=0.7   0.0230   0.9770
+#>             P(Cross) if HR=0.3   0.9027   0.0973
 #> 
-#> Upper boundary (power or Type I Error)
-#>           Analysis
-#>    Theta      1      2      3  Total E{N}
-#>   0.0000 0.0023 0.0047 0.0159 0.0230 41.5
-#>   0.4065 0.2863 0.3402 0.2762 0.9027 49.7
-#> 
-#> Lower boundary (futility or Type II Error)
-#>           Analysis
-#>    Theta      1      2      3  Total
-#>   0.0000 0.5277 0.3439 0.1054 0.9770
-#>   0.4065 0.0141 0.0345 0.0487 0.0973
-#>              T        n Events HR futility HR efficacy
-#> IA 1  15.22419 8624.502     31       0.680       0.217
-#> IA 2  19.23447 9064.000     48       0.483       0.302
-#> Final 24.19069 9064.000     69       0.401       0.401
-#> Accrual rates:
-#>      Stratum 1
-#> 0-16     566.5
-#> Control event rates (H1):
-#>       Stratum 1
-#> 0-Inf         0
-#> Censoring rates:
-#>       Stratum 1
-#> 0-Inf         0
+#> Key inputs (names preserved):
+#>                                desc    item value   input
+#>                     Accrual rate(s)   gamma 566.5   gamma
+#>            Accrual rate duration(s)       R    16       R
+#>              Control hazard rate(s) lambdaC 0.001 lambdaC
+#>             Control dropout rate(s)     eta     0     eta
+#>        Experimental dropout rate(s)    etaE     0    etaE
+#>  Event and dropout rate duration(s)       S  NULL       S
 ```

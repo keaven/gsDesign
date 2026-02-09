@@ -350,6 +350,7 @@ library(ggplot2)
 # generally preferred over nSurv since time computations are shown
 xgs <- gsSurv(lambdaC = .2, hr = .5, eta = .1, T = 2, minfup = 1.5)
 gsBoundSummary(xgs, timename = "Year", tdigits = 1)
+#> Method: LachinFoulkes 
 #>    Analysis              Value Efficacy Futility
 #>   IA 1: 33%                  Z   3.0107  -0.2388
 #>      N: 460        p (1-sided)   0.0013   0.5944
@@ -556,7 +557,7 @@ xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE),
   caption = "Table caption."
 ))
 #> % latex table generated in R 4.5.2 by xtable 1.8-4 package
-#> % Sun Feb  8 22:04:34 2026
+#> % Mon Feb  9 13:23:12 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{llrr}

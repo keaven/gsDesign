@@ -66,6 +66,12 @@ For an overview of the gsDesign package, see
 
 ## Time-to-Event Endpoint Design
 
+Early, independent and more limited implementation of Lachin and Foulkes
+methods are in
+[`nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+and
+[`print.nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md).
+
 - [`print(`*`<nSurvival>`*`)`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
   [`nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
   [`nEvents()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
@@ -82,7 +88,7 @@ For an overview of the gsDesign package, see
   [`print(`*`<gsSurv>`*`)`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   : Advanced time-to-event sample size calculation
 - [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
-  : Time-to-event endpoint design with calendar timing of analyses
+  : Group sequential design with calendar-based timing of analyses
 - [`summary(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   [`print(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)

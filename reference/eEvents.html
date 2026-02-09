@@ -106,8 +106,10 @@ across strata.</p></dd>
 <dt id="arg-r">R<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
 <dd><p>A scalar or vector of durations of time periods for recruitment
 rates specified in rows of <code>gamma</code>. Length is the same as number of
-rows in <code>gamma</code>. Note that the final enrollment period is extended as
-long as needed.</p></dd>
+rows in <code>gamma</code>. In <code>eEvents()</code>, recruitment after the final
+period is assumed to be 0 if <code>T</code> exceeds <code>sum(R)</code>; the final
+period is only extended in designs where <code>T</code> is solved for (e.g.,
+<code>nSurv</code> with <code>T = NULL</code>).</p></dd>
 
 
 <dt id="arg-s">S<a class="anchor" aria-label="anchor" href="#arg-s"></a></dt>

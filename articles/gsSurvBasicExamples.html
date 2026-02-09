@@ -173,30 +173,32 @@ group sequential design shown later, much more complete formatted output
 will be shown.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span></span>
-<span><span class="co">#&gt; Fixed design, two-arm trial with time-to-event</span></span>
-<span><span class="co">#&gt; outcome (Lachin and Foulkes, 1986).</span></span>
-<span><span class="co">#&gt; Solving for:  Accrual rate </span></span>
-<span><span class="co">#&gt; Hazard ratio                  H1/H0=0.75/1</span></span>
-<span><span class="co">#&gt; Study duration:                   T=36</span></span>
-<span><span class="co">#&gt; Accrual duration:                   24</span></span>
-<span><span class="co">#&gt; Min. end-of-study follow-up: minfup=12</span></span>
-<span><span class="co">#&gt; Expected events (total, H1):        507.1519</span></span>
-<span><span class="co">#&gt; Expected sample size (total):       775.0306</span></span>
-<span><span class="co">#&gt; Accrual rates:</span></span>
-<span><span class="co">#&gt;      Stratum 1</span></span>
-<span><span class="co">#&gt; 0-1     9.2818</span></span>
-<span><span class="co">#&gt; 1-3    13.9227</span></span>
-<span><span class="co">#&gt; 3-6    23.2045</span></span>
-<span><span class="co">#&gt; 6-24   37.1272</span></span>
-<span><span class="co">#&gt; Control event rates (H1):</span></span>
-<span><span class="co">#&gt;       Stratum 1</span></span>
-<span><span class="co">#&gt; 0-Inf    0.0578</span></span>
-<span><span class="co">#&gt; Censoring rates:</span></span>
-<span><span class="co">#&gt;       Stratum 1</span></span>
-<span><span class="co">#&gt; 0-Inf     0.001</span></span>
-<span><span class="co">#&gt; Power:                 100*(1-beta)=90%</span></span>
-<span><span class="co">#&gt; Type I error (1-sided):   100*alpha=2.5%</span></span>
-<span><span class="co">#&gt; Equal randomization:          ratio=1</span></span></code></pre></div>
+<span><span class="co">#&gt; nSurv fixed-design summary (method=LachinFoulkes; target=Accrual rate)</span></span>
+<span><span class="co">#&gt; HR=0.750 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%</span></span>
+<span><span class="co">#&gt; N=775.0 subjects | D=507.2 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Key inputs (names preserved):</span></span>
+<span><span class="co">#&gt;                                desc    item</span></span>
+<span><span class="co">#&gt;                     Accrual rate(s)   gamma</span></span>
+<span><span class="co">#&gt;            Accrual rate duration(s)       R</span></span>
+<span><span class="co">#&gt;              Control hazard rate(s) lambdaC</span></span>
+<span><span class="co">#&gt;             Control dropout rate(s)     eta</span></span>
+<span><span class="co">#&gt;        Experimental dropout rate(s)    etaE</span></span>
+<span><span class="co">#&gt;  Event and dropout rate duration(s)       S</span></span>
+<span><span class="co">#&gt;                              value</span></span>
+<span><span class="co">#&gt;  9.282, 13.923, 23.205 ... (len=4)</span></span>
+<span><span class="co">#&gt;                1, 2, 3 ... (len=4)</span></span>
+<span><span class="co">#&gt;                              0.058</span></span>
+<span><span class="co">#&gt;                              0.001</span></span>
+<span><span class="co">#&gt;                              0.001</span></span>
+<span><span class="co">#&gt;                               NULL</span></span>
+<span><span class="co">#&gt;                    input</span></span>
+<span><span class="co">#&gt;  1, 1.5, 2.5 ... (len=4)</span></span>
+<span><span class="co">#&gt;      1, 2, 3 ... (len=4)</span></span>
+<span><span class="co">#&gt;                    0.058</span></span>
+<span><span class="co">#&gt;                    0.001</span></span>
+<span><span class="co">#&gt;                     etaE</span></span>
+<span><span class="co">#&gt;                        S</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="varying-enrollment-duration-to-power-trial">Varying enrollment duration to power trial<a class="anchor" aria-label="anchor" href="#varying-enrollment-duration-to-power-trial"></a>

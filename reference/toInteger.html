@@ -134,52 +134,39 @@ to a multiple of 5.</p>
 <span class="r-in"><span><span class="co"># Convert sample size to multiple of ratio + 1 = 4, round event counts.</span></span></span>
 <span class="r-in"><span><span class="co"># Default is to round up both event count and sample size for final analysis</span></span></span>
 <span class="r-in"><span><span class="fu">toInteger</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Time to event group sequential design with HR= 0.3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Non-inferiority design with null HR= 0.7 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Randomization (Exp/Control):  ratio= 3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Asymmetric two-sided group sequential design with</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90 % power and 2.5 % Type I Error.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Upper bound spending computations assume</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> trial continues if lower bound is crossed.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Group sequential design (method=; k=3 analyses; Two-sided asymmetric with non-binding futility)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N=9064.0 subjects | D=69.0 events | T=24.2 study duration | accrual=16.0 Accrual duration | minfup=8.2 minimum follow-up | ratio=3 randomization ratio (experimental/control)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                ----Lower bounds----  ----Upper bounds-----</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Analysis N   Z   Nominal p Spend+  Z   Nominal p Spend++</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1 31 0.07    0.5277 0.0141 2.83    0.0023  0.0023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          2 48 1.11    0.8673 0.0345 2.52    0.0059  0.0047</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          3 69 2.00    0.9774 0.0514 2.00    0.0226  0.0179</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Total                   0.1000                 0.0250 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> + lower bound beta spending (under H1):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Lan-DeMets O'Brien-Fleming approximation spending function (no parameters).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ++ alpha spending:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Hwang-Shih-DeCani spending function with gamma = -4.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Spending functions:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Futility bounds derived using a Lan-DeMets O'Brien-Fleming approximation spending function (no parameters).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Boundary crossing probabilities and expected sample size</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> assume any cross stops the trial</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Analysis summary:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Analysis              Value Efficacy Futility</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   IA 1: 45%                  Z   2.8273   0.0695</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     N: 8626        p (1-sided)   0.0023   0.4723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 31       ~HR at bound   0.2167   0.6801</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Month: 15 P(Cross) if HR=0.7   0.0023   0.5277</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             P(Cross) if HR=0.3   0.2863   0.0141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   IA 2: 70%                  Z   2.5197   1.1139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     N: 9064        p (1-sided)   0.0059   0.1327</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 48       ~HR at bound   0.3022   0.4829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Month: 19 P(Cross) if HR=0.7   0.0071   0.8716</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             P(Cross) if HR=0.3   0.6265   0.0486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Final                  Z   2.0035   2.0035</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     N: 9064        p (1-sided)   0.0226   0.0226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 69       ~HR at bound   0.4010   0.4010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Month: 24 P(Cross) if HR=0.7   0.0230   0.9770</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             P(Cross) if HR=0.3   0.9027   0.0973</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Upper boundary (power or Type I Error)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           Analysis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Theta      1      2      3  Total E{N}</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0000 0.0023 0.0047 0.0159 0.0230 41.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.4065 0.2863 0.3402 0.2762 0.9027 49.7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lower boundary (futility or Type II Error)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           Analysis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Theta      1      2      3  Total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0000 0.5277 0.3439 0.1054 0.9770</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.4065 0.0141 0.0345 0.0487 0.0973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              T        n Events HR futility HR efficacy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IA 1  15.22419 8624.502     31       0.680       0.217</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> IA 2  19.23447 9064.000     48       0.483       0.302</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Final 24.19069 9064.000     69       0.401       0.401</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accrual rates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Stratum 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0-16     566.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Control event rates (H1):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       Stratum 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0-Inf         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Censoring rates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       Stratum 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0-Inf         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key inputs (names preserved):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                desc    item value   input</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     Accrual rate(s)   gamma 566.5   gamma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Accrual rate duration(s)       R    16       R</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              Control hazard rate(s) lambdaC 0.001 lambdaC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Control dropout rate(s)     eta     0     eta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Experimental dropout rate(s)    etaE     0    etaE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Event and dropout rate duration(s)       S  NULL       S</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
