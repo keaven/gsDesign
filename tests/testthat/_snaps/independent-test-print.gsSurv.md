@@ -74,7 +74,7 @@
 
 # Test: checking test.type > 1
 
-    Group sequential design (method=LachinFoulkes; k=4 analyses; Two-sided asymmetric (efficacy and futility))
+    Group sequential design (method=LachinFoulkes; k=4 analyses; Two-sided asymmetric with binding futility)
     N=147.8 subjects | D=106.5 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
     
     Spending functions:
@@ -157,7 +157,7 @@
 
 # Test: checking ratio = 0.6
 
-    Group sequential design (method=LachinFoulkes; k=4 analyses; Two-sided asymmetric (efficacy and futility))
+    Group sequential design (method=LachinFoulkes; k=4 analyses; Two-sided asymmetric with binding futility)
     N=157.1 subjects | D=117.0 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=0.6 randomization ratio (experimental/control)
     
     Spending functions:
