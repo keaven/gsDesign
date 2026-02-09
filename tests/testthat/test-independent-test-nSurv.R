@@ -130,21 +130,20 @@ test_that(
 # the benchmark values have been obtained by creating an
 # equivalent design in East 6.5. The sample size used to
 # create the design in East is taken from the output of
-# nSurv() : TestnSurv_EastData_Des1.html
+# nSurv() : TestnSurv_EastData_Des1.html.
+# With method = "Schoenfeld", should get a good match with East 6.5.
+# Note: previously T was adjusted; with new nSurv(), R is adjusted instead.
 test_that(
   desc = "check computed events and power",
   code = {
     x <- nSurv(
-      lambdaC = log(2) / 10, hr = .5, gamma = 4, T = 50,
-      minfup = 30, beta = NULL
+      lambdaC = log(2) / 10, hr = .5, gamma = 4, T = 42,
+      minfup = 30, beta = NULL, method = "Schoenfeld"
     )
-    
+
     ## compare the expected # of events
-    expect_lte(abs(x$d - 39.02121789), 2)
-    
-    ## compare the power x$power
-    ## tolerance is high as the power computation depends 
-    ## upon # of events which have differences between different gsDesign and East 6.5.
-    expect_lte(abs(x$power - 0.58120457), 0.02)
+    expect_lte(abs(x$d - 39.02121789), 1e-6)
+    ## compare the power
+    expect_lte(abs(x$power - 0.58120457), 1e-6)
   }
 )
