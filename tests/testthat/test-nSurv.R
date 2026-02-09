@@ -38,8 +38,17 @@ testthat::test_that("Checking consistency nEvents power vs sample size", {
 })
 
 testthat::test_that("nSurv matches rpact for Schoenfeld and Freedman", {
-  testthat::skip_if_not(requireNamespace("rpact", quietly = TRUE))
-  design <- rpact::getDesignGroupSequential(
+  getDesignGroupSequential <- tryCatch(
+    utils::getFromNamespace("getDesignGroupSequential", "rpact"),
+    error = function(e) NULL
+  )
+  getSampleSizeSurvival <- tryCatch(
+    utils::getFromNamespace("getSampleSizeSurvival", "rpact"),
+    error = function(e) NULL
+  )
+  testthat::skip_if_not(!is.null(getDesignGroupSequential) && !is.null(getSampleSizeSurvival))
+
+  design <- getDesignGroupSequential(
     kMax = 1, alpha = 0.025, beta = 0.1, sided = 1
   )
   lambdaC <- log(2) / 6
@@ -49,7 +58,7 @@ testthat::test_that("nSurv matches rpact for Schoenfeld and Freedman", {
   T <- R + minfup
 
   for (ratio in c(0.5, 1, 2)) {
-    rp_schoen <- rpact::getSampleSizeSurvival(
+    rp_schoen <- getSampleSizeSurvival(
       design = design,
       lambda2 = lambdaC,
       hazardRatio = hr,
@@ -75,7 +84,7 @@ testthat::test_that("nSurv matches rpact for Schoenfeld and Freedman", {
   }
 
   for (ratio in c(0.5, 1, 2)) {
-    rp_freed <- rpact::getSampleSizeSurvival(
+    rp_freed <- getSampleSizeSurvival(
       design = design,
       lambda2 = lambdaC,
       hazardRatio = hr,
