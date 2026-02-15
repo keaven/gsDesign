@@ -1,34 +1,77 @@
 # Changelog
 
-## gsDesign (development version)
+## gsDesign 3.9.0 (February 2026)
 
-### Improvements
+### Breaking changes
 
-- Updated
-  [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
-  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) to
+- The R native pipe operator `|>` is now used throughout the code and
+  documentation, so R \>= 4.1.0 is now required
+  ([@nanxstats](https://github.com/nanxstats),
+  [\#236](https://github.com/keaven/gsDesign/issues/236)).
+
+### New features
+
+- [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) now
   incorporate Schoenfeld and Freedman methods for sample size and power
   for time-to-event studies with proportional hazards. This allows
   matching versus other software ([@keaven](https://github.com/keaven),
   [\#243](https://github.com/keaven/gsDesign/issues/243)).
+
+### Improvements
+
 - Corrected weighting for stratified time-to-event studies with
   proportional hazards. This was done for Lachin-Foulkes method, but we
   also added Bernstein and Lagakos method
   ([@keaven](https://github.com/keaven),
   [\#243](https://github.com/keaven/gsDesign/issues/243)).
-- Refreshed
-  [`print.nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)/[`print.gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  output formatting ([@keaven](https://github.com/keaven),
+- [`print.nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  and
+  [`print.gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  now use refreshed output formatting
+  ([@keaven](https://github.com/keaven),
   [\#243](https://github.com/keaven/gsDesign/issues/243)).
+- C code under `src/` is now consistently formatted with `clang-format`,
+  and C function comments now use Doxygen blocks with clearer parameter
+  and return documentation ([@nanxstats](https://github.com/nanxstats),
+  [\#238](https://github.com/keaven/gsDesign/issues/238)).
+- C normal density calculations now use a shared `gs_inv_sqrt_2pi`
+  constant from `src/gsDesign.h`, which now also has include guards,
+  replacing duplicated magic numbers and repeated division
+  ([@nanxstats](https://github.com/nanxstats),
+  [\#241](https://github.com/keaven/gsDesign/issues/241)).
+- Time-to-event design code is now split into focused `R/gsSurv-*.R`
+  files, improving maintainability and future extension without changing
+  user-facing behavior ([@nanxstats](https://github.com/nanxstats),
+  [\#240](https://github.com/keaven/gsDesign/issues/240)).
+
+### Bug fixes
+
+- [`gsBound()`](https://keaven.github.io/gsDesign/reference/gsBound.md)
+  now prints the last two lower boundary values correctly in an internal
+  diagnostic message (`atem` and `atem2`) when `printerr` is enabled
+  ([@nanxstats](https://github.com/nanxstats),
+  [\#238](https://github.com/keaven/gsDesign/issues/238)).
+
+### Testing
+
+- Added regression tests for
+  [`gsBound()`](https://keaven.github.io/gsDesign/reference/gsBound.md),
+  [`gsBound1()`](https://keaven.github.io/gsDesign/reference/gsBound.md),
+  [`gsDensity()`](https://keaven.github.io/gsDesign/reference/gsDensity.md),
+  and
+  [`gsProbability()`](https://keaven.github.io/gsDesign/reference/gsProbability.md)
+  to verify stable behavior after normal density constant refactoring
+  ([@nanxstats](https://github.com/nanxstats),
+  [\#241](https://github.com/keaven/gsDesign/issues/241)).
 - Increased unit test coverage across core gsDesign, spending, and
   binomial utilities ([@keaven](https://github.com/keaven),
   [\#243](https://github.com/keaven/gsDesign/issues/243)).
-
-### Piping
-
-- The R native pipe operator `|>` is now used throughout the code and
-  documentation. As a result, R \>= 4.1.0 is now required
-  ([\#236](https://github.com/keaven/gsDesign/issues/236)).
+- Updated
+  [`as_gt()`](https://keaven.github.io/gsDesign/reference/as_gt.md)
+  snapshots for gt 1.3.0 LaTeX output changes so tests pass reliably
+  across environments ([@nanxstats](https://github.com/nanxstats),
+  [\#239](https://github.com/keaven/gsDesign/issues/239)).
 
 ## gsDesign 3.8.0 (December 2025)
 
