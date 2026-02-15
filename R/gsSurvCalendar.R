@@ -1,7 +1,7 @@
 #' Group sequential design with calendar-based timing of analyses
 #'
-#' This is like [gsSurv()], but the timing of analyses is specified in
-#' calendar time units.
+#' This is like \code{\link{gsSurv()}}, but the timing of analyses is specified
+#' in calendar time units.
 #' Information fraction is computed from the input rates and the calendar times.
 #' Spending can be based on information fraction as in Lan and DeMets (1983) or
 #' calendar  time units as in Lan and DeMets (1989).
