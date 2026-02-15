@@ -1,21 +1,48 @@
-# gsDesign (development version)
+# gsDesign 3.9.0 (February 2026)
+
+## Breaking changes
+
+- The R native pipe operator `|>` is now used throughout the code and
+  documentation, so R >= 4.1.0 is now required (@nanxstats, #236).
+
+## New features
+
+- `nSurv()` and `gsSurv()` now incorporate Schoenfeld and Freedman methods for
+  sample size and power for time-to-event studies with proportional hazards.
+  This allows matching versus other software (@keaven, #243).
 
 ## Improvements
 
-- Updated `nSurv()` and `gsSurv()` to incorporate Schoenfeld and Freedman methods
-  for sample size and power for time-to-event studies with proportional hazards.
-  This allows matching versus other software (@keaven, #243).
 - Corrected weighting for stratified time-to-event studies with proportional
   hazards. This was done for Lachin-Foulkes method, but we also added
   Bernstein and Lagakos method (@keaven, #243).
-- Refreshed `print.nSurv()`/`print.gsSurv()` output formatting (@keaven, #243).
+- `print.nSurv()` and `print.gsSurv()` now use refreshed output formatting
+  (@keaven, #243).
+- C code under `src/` is now consistently formatted with `clang-format`, and C
+  function comments now use Doxygen blocks with clearer parameter and return
+  documentation (@nanxstats, #238).
+- C normal density calculations now use a shared `gs_inv_sqrt_2pi` constant
+  from `src/gsDesign.h`, which now also has include guards, replacing
+  duplicated magic numbers and repeated division (@nanxstats, #241).
+- Time-to-event design code is now split into focused `R/gsSurv-*.R` files,
+  improving maintainability and future extension without changing user-facing
+  behavior (@nanxstats, #240).
+
+## Bug fixes
+
+- `gsBound()` now prints the last two lower boundary values correctly in an
+  internal diagnostic message (`atem` and `atem2`) when `printerr` is enabled
+  (@nanxstats, #238).
+
+## Testing
+
+- Added regression tests for `gsBound()`, `gsBound1()`, `gsDensity()`, and
+  `gsProbability()` to verify stable behavior after normal density constant
+  refactoring (@nanxstats, #241).
 - Increased unit test coverage across core gsDesign, spending, and binomial
   utilities (@keaven, #243).
-
-## Piping
-
-- The R native pipe operator `|>` is now used throughout the code and
-  documentation. As a result, R >= 4.1.0 is now required (#236).
+- Updated `as_gt()` snapshots for gt 1.3.0 LaTeX output changes
+  so tests pass reliably across environments (@nanxstats, #239).
 
 # gsDesign 3.8.0 (December 2025)
 
