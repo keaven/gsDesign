@@ -43,12 +43,19 @@
 #' # Analysis at IA2
 #' sequentialPValue(gsD=x,n.I=c(100,160),Z=c(1.5,2))
 #' # Use planned spending instead of information fraction; do final analysis
-#' sequentialPValue(gsD=x,n.I=c(100,160,190,230),Z=c(1.5,2,2.5,3),usTime=x$timing)
+#' seqp <- sequentialPValue(gsD=x,n.I=c(100,160,190,230),Z=c(1.5,2,2.5,3),usTime=x$timing)
+#' seqp
 #' # Check bounds for updated design to verify at least one was crossed
 #' xupdate <- gsDesign(maxn.IPlan=max(x$n.I),n.I=c(100,160,190,230),usTime=x$timing,
 #'                     delta=x$delta,delta1=x$delta1,k=4,alpha=x$alpha,test.type=1,
 #'                     sfu=x$upper$sf,sfupar=x$upper$param)
-# gsBoundSummary(xupdate,logdelta=TRUE,Nname="Events",deltaname="HR")
+#' gsBoundSummary(xupdate,logdelta=TRUE,Nname="Events",deltaname="HR")
+#' # Now update bound using sequential p-value as alpha level
+#' xupdate <- gsDesign(maxn.IPlan=max(x$n.I),n.I=c(100,160,190,230),usTime=x$timing,
+#'                     delta=x$delta,delta1=x$delta1,k=4,alpha=seqp,test.type=1,
+#'                     sfu=x$upper$sf,sfupar=x$upper$param)
+#' # Check that we are at bound for 1 (or more) analysis and did not exceed bound for others
+#' gsBoundSummary(xupdate,logdelta=TRUE,Nname="Events",deltaname="HR")
 #' @rdname sequentiaPValue
 #' @details 
 #' Solution is found with a search using \code{uniroot}.
