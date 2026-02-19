@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/keaven/gsDesign/blob/v3.9.0/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/keaven/gsDesign/blob/master/DESCRIPTION)
 
 Anderson K (2026). *gsDesign: Group Sequential Design*. R package
 version 3.9.0, <https://keaven.github.io/gsDesign/>.
