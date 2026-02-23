@@ -11,6 +11,8 @@ trials with time-to-event endpoints using gsDesign.
   counts](https://keaven.github.io/gsDesign/articles/toInteger.md):
 - [Basic time-to-event group sequential design using
   gsSurv](https://keaven.github.io/gsDesign/articles/gsSurvBasicExamples.md):
+- [Futility and harm bounds for overall survival
+  monitoring](https://keaven.github.io/gsDesign/articles/HarmBound.md):
 - [A cure model calendar-based
   design](https://keaven.github.io/gsDesign/articles/PoissonMixtureModel.md):
 

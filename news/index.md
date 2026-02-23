@@ -1,8 +1,6 @@
 # Changelog
 
-## gsDesign 3.9.0 (February 2026)
-
-CRAN release: 2026-02-15
+## gsDesign 3.10.0 (February 2026)
 
 ### Breaking changes
 
