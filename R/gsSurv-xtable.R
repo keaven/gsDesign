@@ -59,7 +59,22 @@ xtable.gsSurv <- function(
     eff[neff] <-
       paste(eff[neff], "\\\\ \\hline \\multicolumn{4}{p{", fnwid, "}}{\\footnotesize", footnote, "}")
   }
-  if (x$test.type != 1) {
+  if (x$test.type %in% c(7, 8) && !is.null(x$harm)) {
+    harm <- rep(" ", 5 * k)
+    harm[5 * (0:(k - 1)) + 1] <- as.character(round(x$harm$bound, 2))
+    harm[5 * (0:(k - 1)) + 2] <- as.character(round(gsHR(z = x$harm$bound, i = 1:k, x, ratio = x$ratio) * x$hr0, 2))
+    hsp <- as.character(round(stats::pnorm(-x$harm$bound), 4))
+    hsp[hsp == "0"] <- " $< 0.0001$"
+    harm[5 * (0:(k - 1)) + 3] <- hsp
+    hsp <- as.character(round(cumsum(x$harm$prob[, 1]), 4))
+    hsp[hsp == "0"] <- "$< 0.0001$"
+    harm[5 * (0:(k - 1)) + 4] <- hsp
+    hsp <- as.character(round(cumsum(x$harm$prob[, 2]), 4))
+    hsp[hsp == "0"] <- "$< 0.0001$"
+    harm[5 * (0:(k - 1)) + 5] <- hsp
+    xxtab <- data.frame(an, stat, harm, fut, eff)
+    colnames(xxtab) <- c("Analysis", "Value", "Harm", "Futility", "Efficacy")
+  } else if (x$test.type != 1) {
     xxtab <- data.frame(an, stat, fut, eff)
     colnames(xxtab) <- c("Analysis", "Value", "Futility", "Efficacy")
   } else {

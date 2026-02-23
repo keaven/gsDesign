@@ -101,7 +101,7 @@ testthat::test_that("test.gsDesign.test.type", {
   testthat::expect_error(gsDesign::gsDesign(test.type = "abc"), info = "Checking for incorrect variable type")
   testthat::expect_error(gsDesign::gsDesign(test.type = 1.2), info = "Checking for incorrect variable type")
   testthat::expect_error(gsDesign::gsDesign(test.type = 0), info = "Checking for out-of-range variable value")
-  testthat::expect_error(gsDesign::gsDesign(test.type = 7), info = "Checking for out-of-range variable value")
+  testthat::expect_error(gsDesign::gsDesign(test.type = 9), info = "Checking for out-of-range variable value")
   testthat::expect_error(gsDesign::gsDesign(test.type = seq(2)), info = "Checking for incorrect variable length")
   testthat::expect_error(gsDesign::gsDesign(test.type = 3, sfu = "WT"), info = "Checking for out-of-range variable value")
   testthat::expect_error(gsDesign::gsDesign(test.type = 4, sfu = "WT"), info = "Checking for out-of-range variable value")

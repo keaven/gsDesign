@@ -242,12 +242,18 @@ plotBval <- function(x, ylab = "B-value", main = "B-values at bounds", ...) {
 
 # plotreleffect function [sinew] ----
 plotreleffect <- function(x = x, ylab = NULL, main = "Treatment effect at bounds", ...) {
-  qplotit(x, fn = gsDelta, main = main, ylab = ifelse(!is.null(ylab), ylab,
-    ifelse(tolower(x$endpoint) == "binomial",
-      expression(hat(p)[C] - hat(p)[E]),
-      expression(hat(theta) / theta[1])
-    )
-  ), ...)
+  if (is.null(ylab)) {
+    if (inherits(x, "gsSurv")) {
+      ylab <- "Observed HR"
+    } else if (!is.null(x$endpoint) && nchar(x$endpoint) > 0 && tolower(x$endpoint) == "binomial") {
+      ylab <- expression(hat(p)[C] - hat(p)[E])
+    } else {
+      ylab <- expression(hat(theta) / theta[1])
+    }
+  }
+  # Use gsHR for survival designs to plot on HR scale instead of log(HR)
+  fn <- if (inherits(x, "gsSurv")) gsHR else gsDelta
+  qplotit(x, fn = fn, main = main, ylab = ylab, ...)
 }
 
 # plotHR function [sinew] ----
@@ -336,14 +342,22 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
   if (length(col) == 1) col <- rep(col, 2)
   if (length(lwd) == 1) lwd <- rep(lwd, 2)
   if (length(dgt) == 1) dgt <- rep(dgt, 2)
+  has_harm <- !is.null(x$test.type) && x$test.type %in% c(7, 8) && !is.null(x$harm)
+  if (has_harm) {
+    if (length(lty) < 3) lty <- c(lty, 3)
+    if (length(col) < 3) col <- c(col, 1)
+    if (length(lwd) < 3) lwd <- c(lwd, 1)
+    if (length(dgt) < 3) dgt <- c(dgt, dgt[1])
+  }
+  is_surv <- inherits(x, "gsSurv")
   if (x$n.fix == 1) {
     nround <- 3
     ntx <- "r="
     if (is.null(xlab)) xlab <- "Information relative to fixed sample design"
-  } else if (x$nFixSurv > 0) {
+  } else if (is_surv || x$nFixSurv > 0) {
     ntx <- "d="
     nround <- 0
-    if (is.null(xlab)) xlab <- "Number of events"
+    if (is.null(xlab)) xlab <- "Events"
   } else {
     nround <- 0
     ntx <- "n="
@@ -367,6 +381,22 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
       Bound = c(rep("Upper", length(indxu)), rep("Lower", length(indxl))),
       Ztxt = Ztxt[c(indxu, x$k + indxl)]
     )
+    # Add harm bound data for test.type 7/8
+    if (has_harm) {
+      zh <- fn(
+        z = x$harm$bound, i = 1:x$k, x = x,
+        ratio = ratio, delta0 = delta0, delta = delta
+      )
+      Ztxth <- as.character(round(zh, dgt[3]))
+      indxh <- (1:x$k)[x$harm$bound > -20]
+      yh <- data.frame(
+        N = as.numeric(x$n.I[indxh]),
+        Z = as.numeric(zh[indxh]),
+        Bound = rep("Harm", length(indxh)),
+        Ztxt = Ztxth[indxh]
+      )
+      y <- rbind(y, yh)
+    }
   } else {
     z <- fn(
       z = x$upper$bound, i = 1:x$k, x = x,
@@ -394,8 +424,19 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
       main = main, lty = lty[1], col = col[1], lwd = lwd[1], xlab = xlab, ylab = ylab, ...
     )
     graphics::lines(x = y$N[y$Bound == "Lower"], y = y$Z[y$Bound == "Lower"], lty = lty[2], col = col[2], lwd = lwd[2])
+    if (has_harm) {
+      graphics::lines(x = y$N[y$Bound == "Harm"], y = y$Z[y$Bound == "Harm"], lty = lty[3], col = col[3], lwd = lwd[3])
+    }
   } else {
-    lbls <- c("Lower", "Upper")
+    if (has_harm) {
+      lbls <- c("Harm", "Lower", "Upper")
+      col_vals <- setNames(getColor(c(col[3], col[1], col[2])), lbls)
+      lty_vals <- setNames(c(lty[3], lty[1], lty[2]), lbls)
+    } else {
+      lbls <- c("Lower", "Upper")
+      col_vals <- setNames(getColor(col[1:2]), lbls)
+      lty_vals <- setNames(lty[1:2], lbls)
+    }
     if (x$test.type > 1) {
       p <- ggplot2::ggplot(data = y, ggplot2::aes(
         x = as.numeric(.data$N), y = as.numeric(.data$Z), group = factor(.data$Bound),
@@ -405,8 +446,8 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
         ggplot2::geom_line() +
         ggplot2::scale_x_continuous(xlab) + 
         ggplot2::scale_y_continuous(ylab) +
-        ggplot2::scale_colour_manual(name = "Bound", values = getColor(col), labels = lbls, breaks = lbls) +
-        ggplot2::scale_linetype_manual(name = "Bound", values = lty, labels = lbls, breaks = lbls)
+        ggplot2::scale_colour_manual(name = "Bound", values = col_vals, labels = lbls, breaks = lbls) +
+        ggplot2::scale_linetype_manual(name = "Bound", values = lty_vals, labels = lbls, breaks = lbls)
       
         p <- p + ggplot2::ggtitle(label = main)
 
@@ -466,7 +507,7 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
 # plotgsCP function [sinew] ----
 plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim stopping boundaries",
                      ylab = NULL, geom = c("line","text"),
-                     xlab = ifelse(x$n.fix == 1, "Sample size relative to fixed design", "N"), xlim = NULL,
+                     xlab = NULL, xlim = NULL,
                      lty = c(1,2), col = c(1,1), lwd = c(1,1), pch = " ", cex = 1, legtext = NULL,  dgt = c(3,2), nlabel = TRUE, 
                      base = FALSE,...){
 
@@ -475,11 +516,25 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
   if (length(lwd) == 1) lwd <- rep(lwd, 2)
   if (length(dgt) == 1) dgt <- rep(dgt, 2)
   if (x$k == 2) stop("No conditional power plot available for k=2")
+  has_harm <- !is.null(x$test.type) && x$test.type %in% c(7, 8) && !is.null(x$harm)
+  if (has_harm) {
+    if (length(lty) < 3) lty <- c(lty, 3)
+    if (length(col) < 3) col <- c(col, 1)
+    if (length(lwd) < 3) lwd <- c(lwd, 1)
+    if (length(dgt) < 3) dgt <- c(dgt, dgt[1])
+  }
   # switch order of parameters
-  lty <- lty[2:1]
-  col <- col[2:1]
-  lwd <- lwd[2:1]
-  dgt <- dgt[2:1]
+  if (has_harm) {
+    lty <- c(lty[2:1], lty[3])
+    col <- c(col[2:1], col[3])
+    lwd <- c(lwd[2:1], lwd[3])
+    dgt <- c(dgt[2:1], dgt[3])
+  } else {
+    lty <- lty[2:1]
+    col <- col[2:1]
+    lwd <- lwd[2:1]
+    dgt <- dgt[2:1]
+  }
   if (is.null(ylab)) {
     ylab <- ifelse(theta == "thetahat",
       expression(paste("Conditional power at",
@@ -498,6 +553,10 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
     nround <- 3
     ntx <- "r="
     if (is.null(xlab)) xlab <- "Information relative to fixed sample design"
+  } else if (inherits(x, "gsSurv")) {
+    nround <- 0
+    ntx <- "d="
+    if (is.null(xlab)) xlab <- "Events"
   } else {
     nround <- 0
     ntx <- "n="
@@ -562,9 +621,24 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
       Bound <- c(Bound, rep("Lower", x$k - 1))
       Ztxt <- as.character(c(Ztxt, round(y[, 1], dgt[1])))
     }
+    # Add harm bound CP for test.type 7/8
+    if (has_harm && ncol(as.matrix(y)) >= 3) {
+      N <- c(N, as.numeric(x$n.I[1:(x$k - 1)]))
+      CP <- c(CP, y[, 3])
+      Bound <- c(Bound, rep("Harm", x$k - 1))
+      Ztxt <- c(Ztxt, as.character(round(y[, 3], dgt[1])))
+    }
     y <- data.frame(N = N, CP = CP, Bound = Bound, Ztxt = Ztxt)
     if (test.type > 1) {
-      lbls <- c("Lower", "Upper")
+      if (has_harm) {
+        lbls <- c("Harm", "Lower", "Upper")
+        col_vals <- setNames(getColor(c(col[3], col[1], col[2])), lbls)
+        lty_vals <- setNames(c(lty[3], lty[1], lty[2]), lbls)
+      } else {
+        lbls <- c("Lower", "Upper")
+        col_vals <- setNames(getColor(col[1:2]), lbls)
+        lty_vals <- setNames(lty[1:2], lbls)
+      }
       p <- ggplot2::ggplot(
         data = y, 
         ggplot2::aes(
@@ -578,8 +652,8 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
         ggplot2::geom_text(show.legend = F, size = cex * 5) + geom_line() +
         ggplot2::scale_x_continuous(xlab) + 
         ggplot2::scale_y_continuous(ylab) +
-        ggplot2::scale_colour_manual(name = "Bound", values = getColor(col), labels = lbls, breaks = lbls) +
-        ggplot2::scale_linetype_manual(name = "Bound", values = lty, labels = lbls, breaks = lbls)
+        ggplot2::scale_colour_manual(name = "Bound", values = col_vals, labels = lbls, breaks = lbls) +
+        ggplot2::scale_linetype_manual(name = "Bound", values = lty_vals, labels = lbls, breaks = lbls)
         p <- p + ggplot2::ggtitle(label = main)
     } else {
       p <- ggplot2::ggplot(
@@ -633,7 +707,7 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
 #' @importFrom ggplot2 qplot scale_colour_manual scale_linetype_manual
 # plotsf function [sinew] ----
 plotsf <- function(x,
-                   xlab = "Proportion of total sample size",
+                   xlab = NULL,
                    ylab = NULL, main = "Spending function plot",
                    ylab2 = NULL, oma = c(2, 2, 2, 2),
                    legtext = NULL,
@@ -641,10 +715,19 @@ plotsf <- function(x,
                    mai = c(.85, .75, .5, .5), xmax = 1, base = FALSE, ...) {
   
   if (is.null(legtext)) {
-    if (x$test.type > 4) {
+    if (x$test.type %in% c(7, 8)) {
+      legtext <- c("Efficacy", "Futility", "Harm")
+    } else if (x$test.type > 4) {
       legtext <- c("Upper bound", "Lower bound")
     } else {
       legtext <- c(expression(paste(alpha, "-spending")), expression(paste(beta, "-spending")))
+    }
+  }
+  if (is.null(xlab)) {
+    if (inherits(x, "gsSurv")) {
+      xlab <- "Proportion of final planned events"
+    } else {
+      xlab <- "Proportion of total sample size"
     }
   }
   if (is.null(ylab)) {
@@ -664,6 +747,11 @@ plotsf <- function(x,
   if (length(lty) == 1) lty <- rep(lty, 2)
   if (length(col) == 1) col <- rep(col, 2)
   if (length(lwd) == 1) lwd <- rep(lwd, 2)
+  if (x$test.type %in% c(7, 8)) {
+    if (length(lty) < 3) lty <- c(lty, 3)
+    if (length(col) < 3) col <- c(col, 1)
+    if (length(lwd) < 3) lwd <- c(lwd, 1)
+  }
 
   # K. Wills (GSD-31)
   if (inherits(x, "gsProbability")) {
@@ -713,7 +801,26 @@ plotsf <- function(x,
       graphics::mtext(text = ylab2, side = 4, outer = TRUE)
     } else {
       spenda <- x$upper$sf(x$alpha, t, x$upper$param)$spend / x$alpha
-      if (x$test.type < 5) {
+      if (x$test.type %in% c(7, 8)) {
+        spendb <- x$lower$sf(x$beta, t, x$lower$param)$spend / x$beta
+        spendh <- x$harm$sf(x$astar, t, x$harm$param)$spend / x$astar
+        group <- rep(1, length(t))
+        q <- data.frame(t = c(t, t, t), spend = c(spenda, spendb, spendh), group = c(group, 2 * group, 3 * group))
+        p <-
+          ggplot2::ggplot(q, ggplot2::aes(x = t, y = spend, group = factor(group))) +
+          ggplot2::geom_line(aes(linetype = factor(group), colour = factor(group))) +
+          ggplot2::labs(x = xlab, y = ylab, title = main)
+        p <- p +
+          ggplot2::scale_colour_manual(
+            name = "Spending", values = getColor(col),
+            labels = c(expression(alpha), expression(beta), "Harm"), breaks = 1:3
+          ) +
+          ggplot2::scale_linetype_manual(
+            name = "Spending", values = lty,
+            labels = c(expression(alpha), expression(beta), "Harm"), breaks = 1:3
+          )
+        return(p)
+      } else if (x$test.type < 5) {
         spendb <- x$lower$sf(x$beta, t, x$lower$param)$spend / x$beta
       } else {
         spendb <- x$lower$sf(x$astar, t, x$lower$param)$spend / x$astar
@@ -823,7 +930,7 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
 plotgsPower <- function(x, main = "Boundary crossing probabilities by effect size",
                         ylab = "Cumulative Boundary Crossing Probability",
                         xlab = NULL, lty = NULL, col = NULL, lwd = 1, cex = 1,
-                        theta = if (inherits(x, "gsDesign")) seq(0, 2, .05) * x$delta else x$theta,
+                        theta = NULL,
                         xval = NULL, base = FALSE, outtype = 1, offset = 0,
                         titleAnalysisLegend = NULL, ...) {
 
@@ -832,6 +939,23 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     is.null(titleAnalysisLegend) ||
       (is.character(titleAnalysisLegend) && length(titleAnalysisLegend) == 1)
   )
+  # Set default theta range if not provided
+  if (is.null(theta)) {
+    if (inherits(x, "gsDesign")) {
+      if (x$test.type %in% c(7, 8) && inherits(x, "gsSurv")) {
+        # For survival harm bound designs, extend to HR = 1.5
+        theta_harm <- x$delta * (log(1.5) - x$delta0) / (x$delta1 - x$delta0)
+        theta <- seq(theta_harm, 2 * x$delta, length.out = 41)
+      } else if (x$test.type %in% c(7, 8)) {
+        # For non-survival harm bound designs, extend to -1 * delta
+        theta <- seq(-1, 2, .05) * x$delta
+      } else {
+        theta <- seq(0, 2, .05) * x$delta
+      }
+    } else {
+      theta <- x$theta
+    }
+  }
   if (is.null(xval)) {
     if (inherits(x, "gsDesign")) {
       xval <- x$delta0 + (x$delta1 - x$delta0) * theta / x$delta
@@ -851,6 +975,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     gsProbability(k = x$k, a = x$lower$bound, b = x$upper$bound, n.I = x$n.I, theta = theta)
   }
   test.type <- ifelse(inherits(x, "gsProbability"), 3, x$test.type)
+  has_harm <- test.type %in% c(7, 8) && !is.null(x$harm)
   theta <- xval
   if (!base && outtype == 1) {
     if (is.null(lty)) lty <- x$k:1
@@ -858,11 +983,20 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     y <- cbind(stats::reshape(xu, varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = "Upper bound")
     if (is.null(col)) col <- 1
     if (is.null(x$test.type) || x$test.type > 1) {
+      lower_label <- if (has_harm) "1-Futility bound" else "1-Lower bound"
       y <- rbind(
-        cbind(stats::reshape(data.frame(x$lower$prob), varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = "1-Lower bound"),
+        cbind(stats::reshape(data.frame(x$lower$prob), varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = lower_label),
         y
       )
       if (length(col) == 1) col <- c(2, 1)
+    }
+    # Add harm bound for test.type 7/8
+    if (has_harm) {
+      y <- rbind(
+        cbind(stats::reshape(data.frame(x$harm$prob), varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = "1-Harm bound"),
+        y
+      )
+      if (length(col) == 2) col <- c(4, col)
     }
     
     Probability <- NULL
@@ -871,7 +1005,11 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
              dplyr::group_by(Bound, thetaidx) |>
              dplyr::reframe(Probability = cumsum(Probability))
     
-    y2$Probability[y2$Bound == "1-Lower bound"] <- 1 - y2$Probability[y2$Bound == "1-Lower bound"]
+    lower_label <- if (has_harm) "1-Futility bound" else "1-Lower bound"
+    y2$Probability[y2$Bound == lower_label] <- 1 - y2$Probability[y2$Bound == lower_label]
+    if (has_harm) {
+      y2$Probability[y2$Bound == "1-Harm bound"] <- 1 - y2$Probability[y2$Bound == "1-Harm bound"]
+    }
     
     y2$Analysis <- factor(y$id + offset)
     
@@ -920,6 +1058,11 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
   }
   if (length(lty) == 1) lty <- rep(lty, 2)
   if (length(lwd) == 1) lwd <- rep(lwd, 2)
+  if (has_harm) {
+    if (length(col) < 3) col <- c(col, 4)
+    if (length(lty) < 3) lty <- c(lty, 3)
+    if (length(lwd) < 3) lwd <- c(lwd, lwd[1])
+  }
 
 
   interim <- rep(1, length(xval))
@@ -958,11 +1101,23 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
   } else {
     itxt <- c(itxt, "Final")
   }
+  # Add harm bound data for test.type 7/8
+  if (has_harm) {
+    boundprob_harm <- rep(1, length(xval))
+    bound <- c(bound, rep(3, length(xval) * (x$k - 1)))
+    for (j in 1:(x$k - 1))
+    {
+      theta <- c(theta, xval)
+      interim <- c(interim, rep(j, length(xval)))
+      boundprob_harm <- boundprob_harm - x$harm$prob[j, ]
+      prob <- c(prob, boundprob_harm)
+    }
+  }
   y <- data.frame(
     theta = as.numeric(theta), interim = interim, bound = bound, prob = as.numeric(prob),
     itxt = as.character(round(prob, 2))
   )
-  y$group <- (y$bound == 2) * x$k + y$interim
+  y$group <- (y$bound == 2) * x$k + (y$bound == 3) * 2 * x$k + y$interim
   bound <- rep(1, x$k)
   interim <- 1:x$k
   if (test.type > 1) {
@@ -1012,16 +1167,40 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
         graphics::lines(xval, 1 - plo, lty = lty2, col = col2, lwd = lwd2)
       }
 
+      # Add harm bound lines for test.type 7/8
+      if (has_harm) {
+        col3 <- col[3]
+        lwd3 <- lwd[3]
+        lty3 <- lty[3]
+        graphics::lines(xval, 1 - x$harm$prob[1, ], lty = lty3, col = col3, lwd = lwd3)
+        plo_harm <- x$harm$prob[1, ]
+        for (i in 2:x$k) {
+          plo_harm <- plo_harm + x$harm$prob[i, ]
+          graphics::lines(xval, 1 - plo_harm, lty = lty3, col = col3, lwd = lwd3)
+        }
+      }
+
+      if (has_harm) {
+        leg_labels <- c("Upper", "Futility", "Harm")
+        leg_col <- col[1:3]
+        leg_lwd <- lwd[1:3]
+        leg_lty <- lty[1:3]
+      } else {
+        leg_labels <- c("Upper", "Lower")
+        leg_col <- col[1:2]
+        leg_lwd <- lwd[1:2]
+        leg_lty <- lty[1:2]
+      }
       temp <- legend("topleft",
-        legend = c(" ", " "), col = col,
-        text.width = max(graphics::strwidth(c("Upper", "Lower"))), lwd = lwd,
-        lty = lty, xjust = 1, yjust = 1,
+        legend = rep(" ", length(leg_labels)), col = leg_col,
+        text.width = max(graphics::strwidth(leg_labels)), lwd = leg_lwd,
+        lty = leg_lty, xjust = 1, yjust = 1,
         title = "Boundary"
       )
 
       graphics::text(temp$rect$left + temp$rect$w, temp$text$y,
-        c("Upper", "Lower"),
-        col = col, pos = 2
+        leg_labels,
+        col = leg_col, pos = 2
       )
     }
 
@@ -1066,6 +1245,16 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
 
         p <- p + ggplot2::ggtitle(label = main)
 
+    } else if (has_harm) {
+      p <- p + 
+        ggplot2::scale_colour_manual(
+        name = "Probability", values = getColor(col[1:3]), breaks = 1:3,
+        labels = c("Upper bound", "1-Futility bound", "1-Harm bound")
+      ) +
+        ggplot2::scale_linetype_manual(
+          name = "Probability", values = lty[1:3], breaks = 1:3,
+          labels = c("Upper bound", "1-Futility bound", "1-Harm bound")
+        )
     } else {
       p <- p + 
         ggplot2::scale_colour_manual(
@@ -1086,6 +1275,11 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     if (test.type > 2) {
       for (i in 1:(x$k - 1)) {
         p <- p + ggplot2::geom_line(data = subset(y, interim == i & bound == 2), colour = getColor(col[2]), lty = lty[2], lwd = lwd[2])
+      }
+    }
+    if (has_harm) {
+      for (i in 1:(x$k - 1)) {
+        p <- p + ggplot2::geom_line(data = subset(y, interim == i & bound == 3), colour = getColor(col[3]), lty = lty[3], lwd = lwd[3])
       }
     }
     return(p)

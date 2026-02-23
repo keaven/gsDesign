@@ -19,12 +19,13 @@
 #' @param beta Type II error rate. Default is 0.10
 #'   (90\% power); \code{NULL} if power is to be computed based on
 #'   other input values.
-#' @param astar Normally not specified. If \code{test.type = 5}
-#'   or \code{6}, \code{astar} specifies the total probability
-#'   of crossing a lower bound at all analyses combined. This
-#'   will be changed to \code{1 - alpha} when default value of
-#'   \code{0} is used. Since this is the expected usage,
-#'   normally \code{astar} is not specified by the user.
+#' @param astar Total spending for the lower (test.type 5 or 6) or harm
+#'   (test.type 7 or 8) bound under the null hypothesis. Default is 0.
+#'   For \code{test.type} 5 or 6, \code{astar} specifies the total probability
+#'   of crossing a lower bound at all analyses combined.
+#'   For \code{test.type} 7 or 8, \code{astar} specifies the total probability
+#'   of crossing the harm bound at all analyses combined under the null hypothesis.
+#'   If \code{astar = 0}, it will be changed to \code{1 - alpha}.
 #' @param sfu A spending function or a character string
 #'   indicating a boundary type (that is, \code{"WT"} for
 #'   Wang-Tsiatis bounds, \code{"OF"} for O'Brien-Fleming bounds and
@@ -145,6 +146,7 @@ gsSurvCalendar <- function(
   test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
   sfu = gsDesign::sfHSD, sfupar = -4,
   sfl = gsDesign::sfHSD, sflpar = -2,
+  sfharm = gsDesign::sfHSD, sfharmparam = -2,
   calendarTime = c(12, 24, 36),
   spending = c("information", "calendar"),
   lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
@@ -204,7 +206,8 @@ gsSurvCalendar <- function(
   y <- gsDesign::gsDesign(
     k = k, test.type = test.type, alpha = alpha / sided,
     beta = beta, astar = astar, n.fix = x$d, timing = timing,
-    sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar, tol = tol,
+    sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar,
+    sfharm = sfharm, sfharmparam = sfharmparam, tol = tol,
     delta1 = log(hr), delta0 = log(hr0),
     usTime = usTime, lsTime = lsTime
   )

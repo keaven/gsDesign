@@ -53,6 +53,11 @@
 <polygon points='59.04,502.56 689.76,502.56 689.76,59.04 59.04,59.04 ' style='stroke-width: 0.75; fill: none;' />
 <text x='374.40' y='34.48' text-anchor='middle' style='font-size: 14.40px; font-weight: bold; font-family: sans;' textLength='172.12px' lengthAdjust='spacingAndGlyphs'>Treatment effect at bounds</text>
 <text x='374.40' y='557.28' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='65.38px' lengthAdjust='spacingAndGlyphs'>Sample size</text>
+<text transform='translate(10.74,292.05) rotate(-90)' style='font-size: 12.00px; font-family: sans;' textLength='5.74px' lengthAdjust='spacingAndGlyphs'>θ</text>
+<text transform='translate(5.14,291.99) rotate(-90)' style='font-size: 12.00px; font-family: sans;' textLength='5.63px' lengthAdjust='spacingAndGlyphs'>^</text>
+<polyline points='12.47,284.72 0.75,281.55 ' style='stroke-width: 0.75;' />
+<text transform='translate(10.74,279.96) rotate(-90)' style='font-size: 12.00px; font-family: sans;' textLength='5.74px' lengthAdjust='spacingAndGlyphs'>θ</text>
+<text transform='translate(12.96,274.23) rotate(-90)' style='font-size: 8.40px; font-family: sans;' textLength='4.67px' lengthAdjust='spacingAndGlyphs'>1</text>
 </g>
 <g clip-path='url(#cpNTkuMDR8Njg5Ljc2fDU5LjA0fDUwMi41Ng==)'>
 <polyline points='108.95,448.80 241.67,383.31 374.40,351.32 507.13,330.24 639.85,314.11 ' style='stroke-width: 0.75;' />

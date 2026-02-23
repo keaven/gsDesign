@@ -169,11 +169,13 @@
 #'   hypothesis with binding lower bound \cr \code{6=}two-sided, asymmetric,
 #'   lower bound spending under the null hypothesis with non-binding lower bound.
 #'   \cr See details, examples and manual.
-#' @param astar Normally not specified. If \code{test.type=5} or \code{6},
-#'   \code{astar} specifies the total probability of crossing a lower bound at
-#'   all analyses combined.  This will be changed to \eqn{1 - }\code{alpha} when
-#'   default value of 0 is used.  Since this is the expected usage, normally
-#'   \code{astar} is not specified by the user.
+#' @param astar Total spending for the lower (test.type 5 or 6) or harm
+#'   (test.type 7 or 8) bound under the null hypothesis. Default is 0.
+#'   For \code{test.type} 5 or 6, \code{astar} specifies the total probability
+#'   of crossing a lower bound at all analyses combined.
+#'   For \code{test.type} 7 or 8, \code{astar} specifies the total probability
+#'   of crossing the harm bound at all analyses combined under the null hypothesis.
+#'   If \code{astar = 0}, it will be changed to \eqn{1 - }\code{alpha}.
 #' @param timing Sets relative timing of interim analyses in \code{gsSurv}.
 #'   Default of 1 produces equally spaced analyses.  Otherwise, this is a vector
 #'   of length \code{k} or \code{k-1}.  The values should satisfy \code{0 <

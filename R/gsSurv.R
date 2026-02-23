@@ -5,7 +5,7 @@
 gsSurv <- function(
   k = 3, test.type = 4, alpha = 0.025, sided = 1,
   beta = 0.1, astar = 0, timing = 1, sfu = sfHSD, sfupar = -4,
-  sfl = sfHSD, sflpar = -2, r = 18,
+  sfl = sfHSD, sflpar = -2, sfharm = sfHSD, sfharmparam = -2, r = 18,
   lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
   gamma = 1, R = 12, S = NULL, T = 18, minfup = 6, ratio = 1,
   tol = .Machine$double.eps^0.25,
@@ -40,7 +40,8 @@ gsSurv <- function(
   y <- gsDesign(
     k = k, test.type = test.type, alpha = alpha / sided,
     beta = beta, astar = astar, n.fix = x$d, timing = timing,
-    sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar, tol = tol,
+    sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar,
+    sfharm = sfharm, sfharmparam = sfharmparam, tol = tol,
     delta1 = log(hr), delta0 = log(hr0),
     usTime = usTime, lsTime = lsTime
   ) # KA: usTime and lsTime added 10/8/2017
@@ -190,6 +191,8 @@ print.gsSurv <- function(x, digits = 3, show_gsDesign = FALSE, show_strata = TRU
     "4" = "Two-sided asymmetric with non-binding futility",
     "5" = "Two-sided asymmetric with binding harm bound",
     "6" = "Two-sided asymmetric with non-binding harm bound",
+    "7" = "Two-sided asymmetric with binding futility and harm bounds",
+    "8" = "Two-sided asymmetric with non-binding futility and harm bounds",
     paste("Test type", x$test.type)
   )
 
