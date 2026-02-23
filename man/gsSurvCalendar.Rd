@@ -14,6 +14,8 @@ gsSurvCalendar(
   sfupar = -4,
   sfl = gsDesign::sfHSD,
   sflpar = -2,
+  sfharm = gsDesign::sfHSD,
+  sfharmparam = -2,
   calendarTime = c(12, 24, 36),
   spending = c("information", "calendar"),
   lambdaC = log(2)/6,
@@ -90,6 +92,13 @@ Hwang-Shih-DeCani spending function. The parameter
 default Hwang-Shih-DeCani spending function, specifies a
 less conservative spending rate than the default for the
 upper bound.}
+
+\item{sfharm}{A spending function for the harm bound, used with
+\code{test.type = 7} or \code{test.type = 8}. Default is \code{sfHSD}.
+See \code{\link{Spending_functions}} for details.}
+
+\item{sfharmparam}{Real value, default is \code{-2}. Parameter for the harm
+bound spending function \code{sfharm}.}
 
 \item{calendarTime}{Vector of increasing positive numbers
 with calendar times of analyses. Time 0 is start of

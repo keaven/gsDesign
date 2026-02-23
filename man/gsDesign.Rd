@@ -18,6 +18,8 @@ gsDesign(
   sfupar = -4,
   sfl = sfHSD,
   sflpar = -2,
+  sfharm = sfHSD,
+  sfharmparam = -2,
   tol = 1e-06,
   r = 18,
   n.I = 0,
@@ -107,6 +109,13 @@ details, spending functions, manual and examples.}
 \item{sflpar}{Real value, default is \eqn{-2}, which, with the default
 Hwang-Shih-DeCani spending function, specifies a less conservative spending
 rate than the default for the upper bound.}
+
+\item{sfharm}{A spending function for the harm bound, used with
+\code{test.type = 7} or \code{test.type = 8}. Default is \code{sfHSD}.
+See \code{\link{Spending_functions}} for details.}
+
+\item{sfharmparam}{Real value, default is \eqn{-2}. Parameter for the harm
+bound spending function \code{sfharm}.}
 
 \item{tol}{Tolerance for error (default is 0.000001). Normally this will not
 be changed by the user.  This does not translate directly to number of
