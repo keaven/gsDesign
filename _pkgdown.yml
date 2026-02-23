@@ -140,6 +140,7 @@ articles:
       - SurvivalOverview
       - toInteger
       - gsSurvBasicExamples
+      - HarmBound
       - PoissonMixtureModel
   - title: "Other"
     desc: >

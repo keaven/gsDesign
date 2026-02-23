@@ -1,4 +1,4 @@
-# gsDesign 3.9.0 (February 2026)
+# gsDesign 3.10.0 (February 2026)
 
 ## Breaking changes
 

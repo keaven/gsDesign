@@ -1,0 +1,273 @@
+---
+title: "Futility and Harm Bounds for Overall Survival Monitoring"
+subtitle: "gsDesign 3.10.0 — `test.type = 7` and `test.type = 8`"
+author: "Keaven Anderson"
+format:
+  revealjs:
+    theme: default
+    slide-number: true
+    width: 1050
+    height: 700
+    code-line-numbers: false
+    code-overflow: wrap
+    fig-align: center
+    fig-width: 7
+    fig-asp: 0.618
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+## Motivation
+
+- Oncology trials often use **accelerated approval** based on surrogate endpoints, with overall survival (OS) as a confirmatory endpoint.
+- OS monitoring requires pre-specified boundaries for **efficacy**, **futility**, and **harm**.
+- FDA draft guidance (*Assessment of Overall Survival Evidence in Support of Accelerated Approval*, 2024) expects:
+  - Pre-specified statistical analysis plan for interim OS
+  - Monitoring for OS **harm** (detrimental survival trend)
+  - Separate **futility** boundary
+  - Spending functions for each boundary
+
+## Three-Boundary Design Framework
+
+Standard asymmetric designs (`test.type = 3` / `4`) have two boundaries:
+
+| Region | Action |
+|--------|--------|
+| $Z >$ Efficacy bound | Stop for efficacy |
+| Futility $< Z \leq$ Efficacy | Continue |
+| $Z \leq$ Futility bound | Stop for futility |
+
+. . .
+
+**Harm bound extension** (`test.type = 7` / `8`) adds a third:
+
+| Region | Action |
+|--------|--------|
+| $Z >$ Efficacy bound | Stop for efficacy |
+| Futility $< Z \leq$ Efficacy | Continue |
+| Harm $< Z \leq$ Futility | Stop for futility |
+| $Z \leq$ Harm bound | **Stop for harm** |
+
+## Binding vs Non-Binding
+
+- **`test.type = 8` (non-binding)**: Type I error is controlled regardless of whether stopping rules are followed. Preferred in most regulatory settings.
+
+- **`test.type = 7` (binding)**: Assumes trial *will* stop at lower bounds. Yields slightly easier efficacy bounds and fewer required events, but Type I error may inflate if rules are not followed.
+
+. . .
+
+> In practice, **`test.type = 8`** is almost always preferred because DMCs retain discretion to continue or stop based on the totality of evidence.
+
+## Example Design Setup {.smaller}
+
+```{r}
+#| echo: true
+library(gsDesign)
+
+x8 <- gsSurvCalendar(
+  test.type = 8,
+  alpha = 0.0125, beta = 0.1, astar = 0.1,
+  calendarTime = c(12, 24, 36, 48, 60),
+  sfu = sfLDOF,
+  sfl = sfHSD, sflpar = -2,
+  sfharm = sfLDPocock,
+  lambdaC = log(2) / 36,
+  hr = 0.75, R = 18, minfup = 42
+)
+```
+
+- 1:1 randomized, median control survival 36 months, target HR = 0.75
+- 90% power, one-sided $\alpha = 0.0125$
+- Analyses at 12, 24, 36, 48, 60 months
+- `astar = 0.1`: 10% probability of crossing harm bound under $H_0$
+
+## Spending Functions
+
+| Boundary | Function | Rationale |
+|----------|----------|-----------|
+| Efficacy | Lan-DeMets O'Brien-Fleming (`sfLDOF`) | Conservative; spends little $\alpha$ early |
+| Futility | Hwang-Shih-DeCani ($\gamma = -2$) | Moderate $\beta$-spending under $H_1$ |
+| Harm | Lan-DeMets Pocock (`sfLDPocock`) | More aggressive early spending for safety |
+
+. . .
+
+```{r}
+#| fig-cap: "Three spending functions for the harm bound design"
+#| echo: false
+plot(x8, plottype = 5)
+```
+
+## Design Summary
+
+```{r}
+#| echo: false
+cat(strwrap(summary(x8), width = 80), sep = "\n")
+```
+
+## Detailed Boundary Summary {.smaller}
+
+::: {style="font-size: 0.55em;"}
+```{r}
+#| echo: false
+knitr::kable(gsBoundSummary(x8), row.names = FALSE)
+```
+:::
+
+## Boundary Table {.smaller}
+
+```{r}
+#| echo: false
+knitr::kable(
+  data.frame(
+    Analysis = 1:x8$k,
+    Month = x8$T,
+    Events = ceiling(x8$n.I),
+    Harm = round(x8$harm$bound, 2),
+    Futility = round(x8$lower$bound, 2),
+    Efficacy = round(x8$upper$bound, 2)
+  ),
+  caption = "Z-value boundaries at each analysis"
+)
+```
+
+- Harm bound $\leq$ Futility bound $\leq$ Efficacy bound at every analysis
+- Early efficacy bound is extreme (very unlikely to cross)
+- Harm and futility bounds allow early stopping
+
+## Z-Value Boundaries
+
+```{r}
+#| echo: false
+#| fig-cap: "Z-value boundaries: efficacy (upper), futility (lower), harm (lowest)"
+plot(x8)
+```
+
+## Power Plot
+
+```{r}
+#| echo: false
+#| fig-cap: "Boundary crossing probabilities as a function of treatment effect"
+plot(x8, plottype = 2)
+```
+
+- Three boundary regions shown
+- When treatment effect favors control, harm bound is triggered with high probability
+
+## Treatment Effect at Boundaries
+
+```{r}
+#| echo: false
+#| fig-cap: "Approximate hazard ratio at each boundary"
+plot(x8, plottype = 3)
+```
+
+## B-Values at Boundaries
+
+```{r}
+#| echo: false
+#| fig-cap: "B-values at boundaries (Proschan, Lan, Wittes 2006)"
+plot(x8, plottype = 7)
+```
+
+B-values $= Z \times \sqrt{t}$. Under proportional hazards, expected B-values increase **linearly** with information fraction — useful for visual assessment of treatment effect trends.
+
+## Boundary Crossing Probabilities {.smaller}
+
+```{r}
+#| echo: false
+probs <- data.frame(
+  Scenario = c(rep("Under H0 (HR=1)", x8$k), rep("Under H1 (HR=0.75)", x8$k)),
+  Analysis = rep(1:x8$k, 2),
+  `P(Efficacy)` = c(x8$upper$prob[, 1], x8$upper$prob[, 2]),
+  `P(Futility)` = c(x8$lower$prob[, 1], x8$lower$prob[, 2]),
+  `P(Harm)` = c(x8$harm$prob[, 1], x8$harm$prob[, 2]),
+  check.names = FALSE
+)
+knitr::kable(probs, digits = 4)
+```
+
+Under $H_0$: cumulative harm probability $\approx$ `r round(sum(x8$harm$prob[, 1]), 3)`. Under $H_1$: harm crossing is negligible.
+
+## Binding vs Non-Binding Comparison {.smaller}
+
+```{r}
+#| echo: false
+x7 <- gsSurvCalendar(
+  test.type = 7,
+  alpha = 0.0125, beta = 0.1, astar = 0.1,
+  calendarTime = c(12, 24, 36, 48, 60),
+  sfu = sfLDOF,
+  sfl = sfHSD, sflpar = -2,
+  sfharm = sfLDPocock,
+  lambdaC = log(2) / 36,
+  hr = 0.75, R = 18, minfup = 42
+)
+
+knitr::kable(
+  data.frame(
+    Bound = c("Efficacy", "Futility", "Harm"),
+    `Binding (type 7)` = c(
+      paste(round(x7$upper$bound, 3), collapse = ", "),
+      paste(round(x7$lower$bound, 3), collapse = ", "),
+      paste(round(x7$harm$bound, 3), collapse = ", ")
+    ),
+    `Non-binding (type 8)` = c(
+      paste(round(x8$upper$bound, 3), collapse = ", "),
+      paste(round(x8$lower$bound, 3), collapse = ", "),
+      paste(round(x8$harm$bound, 3), collapse = ", ")
+    ),
+    check.names = FALSE
+  ),
+  caption = "Z-value boundaries"
+)
+```
+
+- Type 7 efficacy bounds are slightly lower (easier to cross)
+- Max events: type 7 = `r ceiling(max(x7$n.I))` vs type 8 = `r ceiling(max(x8$n.I))`
+
+## Alternate Alpha Levels {.smaller}
+
+`gsBoundSummary()` with `alpha = 0.025` shows efficacy bounds at both the design $\alpha = 0.0125$ **and** $\alpha = 0.025$ — useful when the OS endpoint may later receive a larger share of $\alpha$.
+
+::: {style="font-size: 0.50em;"}
+```{r}
+#| echo: false
+knitr::kable(gsBoundSummary(x8, alpha = 0.025), row.names = FALSE)
+```
+:::
+
+## Harm Bound Mechanics
+
+- Harm spending is computed **under $H_0$** (no treatment effect)
+  - Controls the probability of a *false harm signal*
+- Harm bound is automatically **capped** at the futility bound
+  - Ensures ordering: harm $\leq$ futility $\leq$ efficacy
+- The `astar` parameter controls total harm boundary spending
+  - Default `astar = 0` auto-converts to `1 - alpha`
+  - Set explicitly (e.g., `astar = 0.1`) for practical designs
+
+## Key API Parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `test.type` | 7 (binding) or 8 (non-binding) |
+| `astar` | Total harm boundary spending under $H_0$ |
+| `sfharm` | Spending function for harm bound |
+| `sfharmpar` | Parameters for harm spending function |
+| `alpha` | One-sided Type I error for efficacy |
+| `sfu` / `sfl` | Spending functions for efficacy / futility |
+
+Works with both `gsDesign()` and `gsSurvCalendar()`.
+
+## Summary
+
+1. **Three boundaries** — efficacy, futility, harm — address FDA guidance on OS monitoring
+2. **`test.type = 8`** (non-binding) is preferred for regulatory submissions
+3. **Spending functions** independently control each boundary's aggressiveness
+4. **`astar`** parameter gives direct control over harm boundary spending
+5. **All 6 plot types** supported for visualization
+6. **`gsBoundSummary()`** supports alternate $\alpha$ levels for test.type 7/8
+
+Available in **gsDesign ≥ 3.10.0**.

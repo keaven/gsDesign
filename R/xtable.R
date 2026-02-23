@@ -99,8 +99,28 @@ xtable.gsDesign <- function(x, caption = NULL, label = NULL, align = NULL, digit
       fnwid, "}}{\\footnotesize", footnote, "}"
     )
   }
-  x <- data.frame(an, stat, fut, eff)
-  colnames(x) <- c("Analysis", "Value", "Futility", "Efficacy")
+  if (x$test.type %in% c(7, 8) && !is.null(x$harm)) {
+    harm <- rep(" ", 5 * k)
+    harm[5 * (0:(k - 1)) + 1] <- as.character(round(x$harm$bound, 2))
+    hsp <- as.character(round(stats::pnorm(-x$harm$bound), 4))
+    hsp[hsp == "0"] <- " $< 0.0001$"
+    harm[5 * (0:(k - 1)) + 2] <- hsp
+    deltaharm <- gsDelta(x = x, i = 1:x$k, z = x$harm$bound[1:x$k])
+    if (logdelta) deltaharm <- exp(deltaharm)
+    hsp <- as.character(round(deltaharm, 4))
+    harm[5 * (0:(k - 1)) + 3] <- hsp
+    hsp <- as.character(round(cumsum(x$harm$prob[, 1]), 5))
+    hsp[hsp == "0"] <- "$< 0.0001$"
+    harm[5 * (0:(k - 1)) + 4] <- hsp
+    hsp <- as.character(round(cumsum(x$harm$prob[, 2]), 4))
+    hsp[hsp == "0"] <- "$< 0.0001$"
+    harm[5 * (0:(k - 1)) + 5] <- hsp
+    x <- data.frame(an, stat, harm, fut, eff)
+    colnames(x) <- c("Analysis", "Value", "Harm", "Futility", "Efficacy")
+  } else {
+    x <- data.frame(an, stat, fut, eff)
+    colnames(x) <- c("Analysis", "Value", "Futility", "Efficacy")
+  }
   xtable::xtable(x, caption = caption, label = label, align = align, digits = digits, display = display, ...)
 }
 

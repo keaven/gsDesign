@@ -408,7 +408,28 @@ gsBoundCP <- function(x, theta = "thetahat", r = 18) {
     CPhi[i] <- sum(xhi$upper$prob)
   }
 
-  if (test.type > 1) cbind(CPlo, CPhi) else CPhi
+  if (test.type > 1) {
+    result <- cbind(CPlo, CPhi)
+  } else {
+    result <- CPhi
+  }
+
+  # Add harm bound CP for test.type 7/8
+  if (test.type %in% c(7, 8) && !is.null(x$harm)) {
+    CPharm <- rep(0, len)
+    if (!is.character(theta)) {
+      thetaharm <- rep(theta, len)
+    } else {
+      thetaharm <- x$harm$bound[1:len] / sqrt(x$n.I[1:len])
+    }
+    for (i in 1:len) {
+      xharm <- gsCP(x, thetaharm[i], i, x$harm$bound[i])
+      CPharm[i] <- sum(xharm$upper$prob)
+    }
+    result <- cbind(result, CPharm)
+  }
+
+  result
 }
 
 # gsPosterior roxy [sinew] ----

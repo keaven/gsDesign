@@ -261,11 +261,13 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' \cr See details, examples and manual.
 #' @param alpha Type I error, always one-sided. Default value is 0.025.
 #' @param beta Type II error, default value is 0.1 (90\% power).
-#' @param astar Normally not specified. If \code{test.type=5} or \code{6},
-#' \code{astar} specifies the total probability of crossing a lower bound at
-#' all analyses combined.  This will be changed to \eqn{1 - }\code{alpha} when
-#' default value of 0 is used.  Since this is the expected usage, normally
-#' \code{astar} is not specified by the user.
+#' @param astar Total spending for the lower (test.type 5 or 6) or harm
+#' (test.type 7 or 8) bound under the null hypothesis. Default is 0.
+#' For \code{test.type} 5 or 6, \code{astar} specifies the total probability
+#' of crossing a lower bound at all analyses combined.
+#' For \code{test.type} 7 or 8, \code{astar} specifies the total probability
+#' of crossing the harm bound at all analyses combined under the null hypothesis.
+#' If \code{astar = 0}, it will be changed to \eqn{1 - }\code{alpha}.
 #' @param delta Effect size for theta under alternative hypothesis. This can be
 #' set to the standardized effect size to generate a sample size if
 #' \code{n.fix=NULL}. See details and examples.
@@ -449,7 +451,8 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 # gsDesign function [sinew] ----
 gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
                      delta = 0, n.fix = 1, timing = 1, sfu = sfHSD, sfupar = -4,
-                     sfl = sfHSD, sflpar = -2, tol = 0.000001, r = 18, n.I = 0, maxn.IPlan = 0,
+                     sfl = sfHSD, sflpar = -2, sfharm = sfHSD, sfharmparam = -2,
+                     tol = 0.000001, r = 18, n.I = 0, maxn.IPlan = 0,
                      nFixSurv = 0, endpoint = NULL, delta1 = 1, delta0 = 0, overrun = 0, usTime = NULL, lsTime = NULL) {
   # Derive a group sequential design and return in a gsDesign structure
   # set up class variable x for gsDesign being requested
@@ -523,8 +526,9 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
     if (!is.function(sfl)) {
       stop("Lower spending function must return object with class spendfn")
     }
-    else if (is.element(test.type, 3:4)) {
+    else if (is.element(test.type, c(3, 4, 7, 8))) {
       x$lower <- sfl(x$beta, lsTime, sflpar)
+      x$lower$sTime <- lsTime
     }
     else if (is.element(test.type, 5:6)) {
       if (x$astar == 0) {
@@ -532,6 +536,14 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
       }
       x$lower <- sfl(x$astar, lsTime, sflpar)
       x$lower$sTime <- lsTime
+    }
+    # set up harm spending for test.type 7/8
+    if (is.element(test.type, 7:8)) {
+      if (!is.function(sfharm)) {
+        stop("Harm spending function must return object with class spendfn")
+      }
+      x$harm <- sfharm(x$astar, lsTime, sfharmparam)
+      x$harm$sTime <- lsTime
     }
   }
 
@@ -542,7 +554,9 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
     gsDType3(x),
     gsDType4(x),
     gsDType2and5(x),
-    gsDType6(x)
+    gsDType6(x),
+    gsDType7(x),
+    gsDType8(x)
   )
   if (x$nFixSurv > 0) x$nSurv <- ceiling(x$nFixSurv * x$n.I[x$k] / n.fix / 2) * 2
   x
@@ -1349,6 +1363,72 @@ gsDType6 <- function(x) {
   x
 }
 
+# gsDType7 function [sinew] ----
+gsDType7 <- function(x) {
+  # test.type 7: binding futility (test.type 3) + binding harm bound (test.type 5)
+  # Step 1: Compute design as test.type 3 (binding beta-spending futility bound)
+  saved_test_type <- x$test.type
+  saved_harm <- x$harm
+  x$test.type <- 3L
+  x <- gsDType3(x)
+  x$test.type <- saved_test_type
+  x$harm <- saved_harm
+
+  # Step 2: Compute harm bound under H0
+  harm_spend <- x$harm$spend
+  harm_spend <- harm_spend - c(0, harm_spend[1:x$k - 1])
+  x$harm$spend <- harm_spend
+
+  # Find harm bound under H0 given upper bound (binding)
+  xx <- gsBound1(theta = 0, I = x$n.I, a = -x$upper$bound, probhi = harm_spend, tol = x$tol, r = x$r)
+  x$harm$bound <- -xx$b
+
+  # Cap harm bound: if harm > futility, set to futility
+  cap_idx <- x$harm$bound > x$lower$bound
+  if (any(cap_idx)) {
+    x$harm$bound[cap_idx] <- x$lower$bound[cap_idx]
+  }
+
+  # Compute harm crossing probabilities
+  y <- gsprob(x$theta, x$n.I, x$harm$bound, x$upper$bound, r = x$r)
+  x$harm$prob <- y$problo
+
+  x
+}
+
+# gsDType8 function [sinew] ----
+gsDType8 <- function(x) {
+  # test.type 8: non-binding futility (test.type 4) + non-binding harm bound (test.type 6)
+  # Step 1: Compute design as test.type 4 (non-binding beta-spending futility bound)
+  saved_test_type <- x$test.type
+  saved_harm <- x$harm
+  x$test.type <- 4L
+  x <- gsDType4(x)
+  x$test.type <- saved_test_type
+  x$harm <- saved_harm
+
+  # Step 2: Compute harm bound under H0 (non-binding)
+  harm_spend <- x$harm$spend
+  harm_spend <- harm_spend - c(0, harm_spend[1:x$k - 1])
+  x$harm$spend <- harm_spend
+
+  # For non-binding, upper bound was already computed ignoring lower bound
+  xx <- gsBound1(theta = 0, I = x$n.I, a = -x$upper$bound, probhi = harm_spend, tol = x$tol, r = x$r)
+  x$harm$bound <- -xx$b
+
+  # Cap harm bound: if harm > futility, set to futility
+  cap_idx <- x$harm$bound > x$lower$bound
+  if (any(cap_idx)) {
+    x$harm$bound[cap_idx] <- x$lower$bound[cap_idx]
+  }
+
+  # Compute harm crossing probabilities (non-binding: ignore lower bound in computation)
+  y <- gsprob(x$theta, x$n.I, x$harm$bound, x$upper$bound, r = x$r)
+  x$harm$prob <- y$problo
+
+  x
+}
+
 # gsbetadiff function [sinew] ----
 gsbetadiff <- function(Imax, theta, beta, time, a, b, tol = 0.000001, r = 18) {
   # compute difference between actual and desired Type II error
@@ -1484,6 +1564,17 @@ gsDProb <- function(theta, d) {
     d$lower$prob <- plo
   }
 
+  # Compute harm crossing probabilities for test.type 7/8
+  if (d$test.type %in% c(7, 8)) {
+    harm_plo <- as.double(c(1:(k * ntheta)))
+    harm_phi <- as.double(c(1:(k * ntheta)))
+    xx2 <- .C(
+      "probrej", k, ntheta, as.double(theta), as.double(n.I),
+      as.double(d$harm$bound), as.double(b), harm_plo, harm_phi, r
+    )
+    d$harm$prob <- matrix(xx2[[7]], k, ntheta)
+  }
+
   d
 }
 
@@ -1495,7 +1586,7 @@ gsDErrorCheck <- function(x) {
 
   # check input value of k, test.type, alpha, beta, astar
   checkScalar(x$k, "integer", c(1, Inf))
-  checkScalar(x$test.type, "integer", c(1, 6))
+  checkScalar(x$test.type, "integer", c(1, 8))
   checkScalar(x$alpha, "numeric", 0:1, c(FALSE, FALSE))
   if (x$test.type == 2 && x$alpha > 0.5) {
     checkScalar(x$alpha, "numeric", c(0, 0.5), c(FALSE, TRUE))
@@ -1506,6 +1597,10 @@ gsDErrorCheck <- function(x) {
     if (x$astar == 0) {
       x$astar <- 1 - x$alpha
     }
+  }
+  # For test.type 7/8, also need astar for harm bound
+  if (x$test.type %in% c(7, 8) && x$astar == 0) {
+    x$astar <- 1 - x$alpha
   }
 
   # check delta, n.fix
