@@ -1,0 +1,32 @@
+Package: gsDesign
+Version: 3.8.0
+Title: Group Sequential Design
+Authors@R: c(
+    person("Keaven", "Anderson", email = "keaven_anderson@merck.com", role = c("aut", "cre")),
+    person("Merck & Co., Inc., Rahway, NJ, USA and its affiliates", role = "cph",
+           comment = c(ROR = "02891sr49"))
+    )
+Description: Derives group sequential clinical trial designs and describes
+    their properties. Particular focus on time-to-event, binary, and
+    continuous outcomes. Largely based on methods described in
+    Jennison, Christopher and Turnbull, Bruce W., 2000,
+    "Group Sequential Methods with Applications to Clinical Trials"
+    ISBN: 0-8493-0316-8.
+License: GPL (>= 3)
+URL: https://keaven.github.io/gsDesign/,
+        https://github.com/keaven/gsDesign
+BugReports: https://github.com/keaven/gsDesign/issues
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports: dplyr (>= 1.1.0), ggplot2 (>= 3.1.1), graphics, gt, methods,
+        r2rtf, rlang, stats, tibble, tidyr, tools, xtable
+Suggests: covr, data.table, gridExtra, kableExtra, knitr, mvtnorm,
+        rmarkdown, scales, testthat, utils, vdiffr
+VignetteBuilder: knitr
+RoxygenNote: 7.3.3
+NeedsCompilation: yes
+Packaged: 2026-02-09 17:16:00 UTC; Anderkea
+Author: Keaven Anderson [aut, cre],
+  Merck & Co., Inc., Rahway, NJ, USA and its affiliates [cph] (ROR:
+    <https://ror.org/02891sr49>)
+Maintainer: Keaven Anderson <keaven_anderson@merck.com>

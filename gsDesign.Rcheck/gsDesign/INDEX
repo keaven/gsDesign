@@ -1,0 +1,50 @@
+as_gt                   Convert a summary table object to a gt object
+as_rtf                  Save a summary table object as an RTF file
+as_table                Create a summary table
+binomialPowerTable      Power Table for Binomial Tests
+checkLengths            Utility functions to verify variable properties
+ciBinomial              Testing, Confidence Intervals, Sample Size and
+                        Power for Comparing Two Binomial Rates
+condPower               Sample size re-estimation based on conditional
+                        power
+eEvents                 Expected number of events for a time-to-event
+                        study
+gsBinomialExact         One-Sample Binomial Routines
+gsBound                 Boundary derivation - low level
+gsBoundCP               Conditional Power at Interim Boundaries
+gsCP                    Conditional and Predictive Power, Overall and
+                        Conditional Probability of Success
+gsDensity               Group sequential design interim density
+                        function
+gsDesign                Design Derivation
+gsProbability           Boundary Crossing Probabilities
+gsSurvCalendar          Group sequential design with calendar-based
+                        timing of analyses
+nNormal                 Normal distribution sample size (2-sample)
+normalGrid              Normal Density Grid
+plot.gsDesign           Plots for group sequential designs
+print.nSurvival         Time-to-event sample size calculation
+                        (Lachin-Foulkes)
+sequentialPValue        Sequential p-value computation
+sfExponential           Exponential Spending Function
+sfHSD                   Hwang-Shih-DeCani Spending Function
+sfLDOF                  Lan-DeMets Spending function overview
+sfLinear                Piecewise Linear and Step Function Spending
+                        Functions
+sfLogistic              Two-parameter Spending Function Families
+sfPoints                Pointwise Spending Function
+sfPower                 Kim-DeMets (power) Spending Function
+sfTDist                 t-distribution Spending Function
+sfTruncated             Truncated, trimmed and gapped spending
+                        functions
+sfXG1                   Xi and Gallo conditional error spending
+                        functions
+summary.gsDesign        Bound Summary and Z-transformations
+summary.spendfn         Spending Function
+tEventsIA               Advanced time-to-event sample size calculation
+toBinomialExact         Translate survival design bounds to exact
+                        binomial bounds
+toInteger               Translate group sequential design to integer
+                        events (survival designs) or sample size (other
+                        designs)
+xtable                  xtable
