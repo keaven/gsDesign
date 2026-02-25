@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 inst/doc
+inst/slides/
 *.o
 *.so
 *.dll

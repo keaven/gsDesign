@@ -47,6 +47,9 @@ Key points include:
 
 This motivates the design framework with `test.type = 7` (binding futility and harm bounds) or `test.type = 8` (non-binding futility and harm bounds), where three boundaries are simultaneously specified using spending functions.
 
+The harm bound implemented in gsDesign is a new method that is easy to use --- a principled, straightforward extension of the widely used group sequential spending function framework.
+While we believe this approach is understandable, useful, and flexible, other methods for monitoring potential harm may also be considered.
+
 ### Design framework overview
 
 In a standard two-sided asymmetric group sequential design (`test.type = 3` or `4`), there are two boundaries:
@@ -131,7 +134,8 @@ Crossing the harm bound is a stronger indication that the treatment may be harmf
 gsBoundSummary(x8)
 ```
 
-To include all statistics:
+Conditional power (CP, CP H1) and predictive power (PP) can also be included in the summary.
+Below we show the full table with all statistics, including conditional and predictive power at each boundary:
 
 ```{r}
 gsBoundSummary(x8, exclude = c())
@@ -173,12 +177,12 @@ probs <- data.frame(
   Scenario = c(rep("Under H0 (HR=1)", x8$k), rep("Under H1 (HR=0.75)", x8$k)),
   Analysis = rep(1:x8$k, 2),
   Month = rep(x8$T, 2),
-  `P(Efficacy)` = c(x8$upper$prob[, 1], x8$upper$prob[, 2]),
-  `P(Futility)` = c(x8$lower$prob[, 1], x8$lower$prob[, 2]),
-  `P(Harm)` = c(x8$harm$prob[, 1], x8$harm$prob[, 2]),
+  `P(Efficacy)` = c(cumsum(x8$upper$prob[, 1]), cumsum(x8$upper$prob[, 2])),
+  `P(Futility)` = c(cumsum(x8$lower$prob[, 1]), cumsum(x8$lower$prob[, 2])),
+  `P(Harm)` = c(cumsum(x8$harm$prob[, 1]), cumsum(x8$harm$prob[, 2])),
   check.names = FALSE
 )
-kable(probs, digits = 4, caption = "Boundary crossing probabilities")
+kable(probs, digits = 4, caption = "Cumulative boundary crossing probabilities")
 ```
 
 Under $H_0$, the cumulative probability of crossing the harm bound across all analyses is approximately `r round(sum(x8$harm$prob[, 1]), 4)`, reflecting the spending allocated to the harm boundary.
@@ -335,5 +339,15 @@ This ensures the ordering: harm bound $\leq$ futility bound $\leq$ efficacy boun
 - **`test.type = 7` (binding)** is appropriate when there is a firm commitment to stop the trial upon crossing any boundary. This provides a small efficiency gain (slightly easier efficacy bounds and fewer required events) but requires strict protocol adherence. If the trial does not stop after crossing a binding boundary, Type I error may be inflated.
 
 In most regulatory settings, `test.type = 8` is the safer and more common choice.
+
+### Adjusting the boundaries
+
+The boundaries are adjustable through several design parameters:
+
+- **Alternate `astar`**: Controls the Type I error allocated to excess OS harm detection.
+- **Alternate spending functions**: Different spending functions for efficacy, futility, and harm boundaries change the aggressiveness of each boundary across analyses.
+- **Alternate timing of analyses**: Changing the calendar times of interim analyses shifts the information available at each look.
+
+Regardless of the statistical design, bounds must be clinically, ethically, and statistically sound.
 
 ## References
