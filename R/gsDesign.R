@@ -350,10 +350,12 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' that are not included in each interim analysis.
 #' @param usTime Default is NULL in which case upper bound spending time is 
 #' determined by \code{timing}. Otherwise, this should be a vector of length 
-#' \code{k} with the spending time at each analysis (see Details).
+#' \code{k} with the spending time at each analysis
+#' (see Details section of \code{\link{gsDesign}}).
 #' @param lsTime Default is NULL in which case lower bound spending time is 
 #' determined by \code{timing}. Otherwise, this should be a vector of length 
-#' \code{k} with the spending time at each analysis (see Details).
+#' \code{k} with the spending time at each analysis
+#' (see Details section of \code{\link{gsDesign}}).
 #' @return An object of the class \code{gsDesign}. This class has the following
 #' elements and upon return from \code{gsDesign()} contains: \item{k}{As
 #' input.} \item{test.type}{As input.} \item{alpha}{As input.} \item{beta}{As

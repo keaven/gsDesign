@@ -166,11 +166,13 @@ that are not included in each interim analysis.}
 
 \item{usTime}{Default is NULL in which case upper bound spending time is 
 determined by \code{timing}. Otherwise, this should be a vector of length 
-\code{k} with the spending time at each analysis (see Details).}
+\code{k} with the spending time at each analysis
+(see Details section of \code{\link{gsDesign}}).}
 
 \item{lsTime}{Default is NULL in which case lower bound spending time is 
 determined by \code{timing}. Otherwise, this should be a vector of length 
-\code{k} with the spending time at each analysis (see Details).}
+\code{k} with the spending time at each analysis
+(see Details section of \code{\link{gsDesign}}).}
 
 \item{x}{An \R object of class found among \code{methods(xtable)}.  See
     below on how to write additional method functions for \code{xtable}.}

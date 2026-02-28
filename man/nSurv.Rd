@@ -130,7 +130,7 @@ entered as a scalar, rate is constant across strata and time periods; if
 entered as a vector, rates are constant across strata.}
 
 \item{etaE}{Matrix dropout hazard rates for the experimental group specified
-in like form as \code{eta}; if NULL, this is set equal to \code{eta}.}
+in like form as \code{eta}; if \code{NULL}, this is set equal to \code{eta}.}
 
 \item{gamma}{A scalar, vector or matrix of rates of entry by time period
 (rows) and strata (columns); if entered as a scalar, rate is constant
@@ -144,7 +144,7 @@ specified (input \code{T=NULL}), the final enrollment period is extended as
 long as needed; otherwise enrollment after \code{sum(R)} is 0.}
 
 \item{S}{A scalar or vector of durations of piecewise constant event rates
-specified in rows of \code{lambda}, \code{eta} and \code{etaE}; this is NULL
+specified in rows of \code{lambda}, \code{eta} and \code{etaE}; this is \code{NULL}
 if there is a single event rate per stratum (exponential failure) or length
 of the number of rows in \code{lambda} minus 1, otherwise.
 The final time period is extended indefinitely for each stratum.}
@@ -162,10 +162,10 @@ of strata.}
 \item{alpha}{Type I error rate. Default is 0.025 since 1-sided testing is
 default.}
 
-\item{beta}{Type II error rate. Default is 0.10 (90\% power); NULL if power
+\item{beta}{Type II error rate. Default is 0.10 (90\% power); \code{NULL} if power
 is to be computed based on other input values.}
 
-\item{sided}{1 for 1-sided testing, 2 for 2-sided testing.}
+\item{sided}{\code{1} for 1-sided testing, \code{2} for 2-sided testing.}
 
 \item{method}{One of \code{"LachinFoulkes"} (default), \code{"Schoenfeld"},
 \code{"Freedman"}, or \code{"BernsteinLagakos"}.
@@ -209,7 +209,7 @@ bottom of the xtable output.}
 hypothesis with binding lower bound \cr \code{6=}two-sided, asymmetric,
 lower bound spending under the null hypothesis with non-binding lower bound
 \cr \code{7=}two-sided, asymmetric, with binding futility and binding harm bounds
-\cr \code{8=}two-sided, asymmetric, with non-binding futility and non-binding harm bounds
+\cr \code{8=}two-sided, asymmetric, with non-binding futility and non-binding harm bounds.
 \cr See details, examples and manual.}
 
 \item{astar}{Total spending for the lower (test.type 5 or 6) or harm
@@ -232,7 +232,7 @@ spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
 O'Brien-Fleming-like conservative bound when used with the default
 Hwang-Shih-DeCani spending function. This is a real-vector for many spending
 functions.  The parameter \code{sfupar} specifies any parameters needed for
-the spending function specified by \code{sfu}; this will be ignored for
+the spending function specified by \code{sfu}; this is not needed for
 spending functions (\code{sfLDOF}, \code{sfLDPocock}) or bound types
 (\dQuote{OF}, \dQuote{Pocock}) that do not require parameters.
 Note that \code{sfupar} can be specified as a positive scalar for
@@ -266,13 +266,15 @@ accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
 accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
 not changed by users.}
 
-\item{usTime}{Default is NULL in which case upper bound spending time is
-determined by \code{timing}. Otherwise, this should be a vector of length
-\code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
+\item{usTime}{Default is NULL in which case upper bound spending time is 
+determined by \code{timing}. Otherwise, this should be a vector of length 
+\code{k} with the spending time at each analysis
+(see Details section of \code{\link{gsDesign}}).}
 
-\item{lsTime}{Default is NULL in which case lower bound spending time is
-determined by \code{timing}. Otherwise, this should be a vector of length
-\code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
+\item{lsTime}{Default is NULL in which case lower bound spending time is 
+determined by \code{timing}. Otherwise, this should be a vector of length 
+\code{k} with the spending time at each analysis
+(see Details section of \code{\link{gsDesign}}).}
 
 \item{show_gsDesign}{Logical; for \code{print.gsSurv()}, include gsDesign details.}
 }

@@ -15,6 +15,13 @@
 - Added `HarmBound` vignette demonstrating harm bound design and interpretation
   (@keaven, #237).
 
+## Documentation
+
+- Consolidated shared roxygen2 `@param` documentation using `@inheritParams`
+  so that `test.type`, spending function parameters, and other shared arguments
+  are defined once in `gsDesign()` or `nSurv()` and inherited by `gsSurv()`
+  and `gsSurvCalendar()` (@keaven, #237).
+
 # gsDesign 3.9.0 (February 2026)
 
 ## Breaking changes

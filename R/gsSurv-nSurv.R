@@ -125,7 +125,7 @@
 #'   entered as a scalar, rate is constant across strata and time periods; if
 #'   entered as a vector, rates are constant across strata.
 #' @param etaE Matrix dropout hazard rates for the experimental group specified
-#'   in like form as \code{eta}; if NULL, this is set equal to \code{eta}.
+#'   in like form as \code{eta}; if \code{NULL}, this is set equal to \code{eta}.
 #' @param gamma A scalar, vector or matrix of rates of entry by time period
 #'   (rows) and strata (columns); if entered as a scalar, rate is constant
 #'   across strata and time periods; if entered as a vector, rates are constant
@@ -136,7 +136,7 @@
 #'   specified (input \code{T=NULL}), the final enrollment period is extended as
 #'   long as needed; otherwise enrollment after \code{sum(R)} is 0.
 #' @param S A scalar or vector of durations of piecewise constant event rates
-#'   specified in rows of \code{lambda}, \code{eta} and \code{etaE}; this is NULL
+#'   specified in rows of \code{lambda}, \code{eta} and \code{etaE}; this is \code{NULL}
 #'   if there is a single event rate per stratum (exponential failure) or length
 #'   of the number of rows in \code{lambda} minus 1, otherwise.
 #'   The final time period is extended indefinitely for each stratum.
@@ -147,10 +147,10 @@
 #' @param ratio Randomization ratio of experimental treatment divided by
 #'   control; normally a scalar, but may be a vector with length equal to number
 #'   of strata.
-#' @param sided 1 for 1-sided testing, 2 for 2-sided testing.
+#' @param sided \code{1} for 1-sided testing, \code{2} for 2-sided testing.
 #' @param alpha Type I error rate. Default is 0.025 since 1-sided testing is
 #'   default.
-#' @param beta Type II error rate. Default is 0.10 (90\% power); NULL if power
+#' @param beta Type II error rate. Default is 0.10 (90\% power); \code{NULL} if power
 #'   is to be computed based on other input values.
 #' @param tol For cases when \code{T} or \code{minfup} values are derived
 #'   through root finding (\code{T} or \code{minfup} input as \code{NULL}),
@@ -161,23 +161,6 @@
 #'   Note: \code{"Schoenfeld"} and \code{"Freedman"} methods only support
 #'   superiority testing (\code{hr0 = 1}). \code{"Freedman"} does not support
 #'   stratified populations.
-#' @param k Number of analyses planned, including interim and final.
-#' @param test.type \code{1=}one-sided \cr \code{2=}two-sided symmetric \cr
-#'   \code{3=}two-sided, asymmetric, beta-spending with binding lower bound \cr
-#'   \code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound
-#'   \cr \code{5=}two-sided, asymmetric, lower bound spending under the null
-#'   hypothesis with binding lower bound \cr \code{6=}two-sided, asymmetric,
-#'   lower bound spending under the null hypothesis with non-binding lower bound
-#'   \cr \code{7=}two-sided, asymmetric, with binding futility and binding harm bounds
-#'   \cr \code{8=}two-sided, asymmetric, with non-binding futility and non-binding harm bounds
-#'   \cr See details, examples and manual.
-#' @param astar Total spending for the lower (test.type 5 or 6) or harm
-#'   (test.type 7 or 8) bound under the null hypothesis. Default is 0.
-#'   For \code{test.type} 5 or 6, \code{astar} specifies the total probability
-#'   of crossing a lower bound at all analyses combined.
-#'   For \code{test.type} 7 or 8, \code{astar} specifies the total probability
-#'   of crossing the harm bound at all analyses combined under the null hypothesis.
-#'   If \code{astar = 0}, it will be changed to \eqn{1 - }\code{alpha}.
 #' @param timing Sets relative timing of interim analyses in \code{gsSurv}.
 #'   Default of 1 produces equally spaced analyses.  Otherwise, this is a vector
 #'   of length \code{k} or \code{k-1}.  The values should satisfy \code{0 <
@@ -185,51 +168,6 @@
 #'   \code{tEventsIA}, this is a scalar strictly between 0 and 1 that indicates
 #'   the targeted proportion of final planned events available at an interim
 #'   analysis.
-#' @param sfu A spending function or a character string indicating a boundary
-#'   type (that is, \dQuote{WT} for Wang-Tsiatis bounds, \dQuote{OF} for
-#'   O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds).  For
-#'   one-sided and symmetric two-sided testing is used to completely specify
-#'   spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
-#'   \code{sfHSD} which is a Hwang-Shih-DeCani spending function.  See details,
-#'   \code{vignette("SpendingFunctionOverview")}, manual and examples.
-#' @param sfupar Real value, default is \eqn{-4} which is an
-#'   O'Brien-Fleming-like conservative bound when used with the default
-#'   Hwang-Shih-DeCani spending function. This is a real-vector for many spending
-#'   functions.  The parameter \code{sfupar} specifies any parameters needed for
-#'   the spending function specified by \code{sfu}; this will be ignored for
-#'   spending functions (\code{sfLDOF}, \code{sfLDPocock}) or bound types
-#'   (\dQuote{OF}, \dQuote{Pocock}) that do not require parameters.
-#'   Note that \code{sfupar} can be specified as a positive scalar for
-#'   \code{sfLDOF} for a generalized O'Brien-Fleming spending function.
-#' @param sfl Specifies the spending function for lower boundary crossing
-#'   probabilities when asymmetric, two-sided testing is performed
-#'   (\code{test.type = 3}, \code{4}, \code{5}, or \code{6}).  Unlike the upper
-#'   bound, only spending functions are used to specify the lower bound.  The
-#'   default value is \code{sfHSD} which is a Hwang-Shih-DeCani spending
-#'   function.  The parameter \code{sfl} is ignored for one-sided testing
-#'   (\code{test.type=1}) or symmetric 2-sided testing (\code{test.type=2}).  See
-#'   details, spending functions, manual and examples.
-#' @param sflpar Real value, default is \eqn{-2}, which, with the default
-#'   Hwang-Shih-DeCani spending function, specifies a less conservative spending
-#'   rate than the default for the upper bound.
-#' @param sfharm A spending function for the harm bound, used with
-#'   \code{test.type = 7} or \code{test.type = 8}.
-#'   Default is \code{sfHSD}. See \code{\link{spendingFunction}} for details.
-#' @param sfharmparam Real value, default is \eqn{-2}. Parameter for the harm
-#'   bound spending function \code{sfharm}.
-#' @param r Integer value (>= 1 and <= 80) controlling the number of numerical
-#'   integration grid points. Default is 18, as recommended by Jennison and
-#'   Turnbull (2000). Grid points are spread out in the tails for accurate
-#'   probability calculations. Larger values provide more grid points and greater
-#'   accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
-#'   accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
-#'   not changed by users.
-#' @param usTime Default is NULL in which case upper bound spending time is
-#'   determined by \code{timing}. Otherwise, this should be a vector of length
-#'   \code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).
-#' @param lsTime Default is NULL in which case lower bound spending time is
-#'   determined by \code{timing}. Otherwise, this should be a vector of length
-#'   \code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).
 #' @param tIA Timing of an interim analysis; should be between 0 and
 #'   \code{y$T}.
 #' @param show_gsDesign Logical; for \code{print.gsSurv()}, include gsDesign details.

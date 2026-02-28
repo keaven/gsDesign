@@ -6,118 +6,24 @@
 #' Spending can be based on information fraction as in Lan and DeMets (1983) or
 #' calendar  time units as in Lan and DeMets (1989).
 #'
-#' @param test.type \code{1=}one-sided \cr \code{2=}two-sided symmetric \cr
-#'   \code{3=}two-sided, asymmetric, beta-spending with binding lower bound \cr
-#'   \code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound
-#'   \cr \code{5=}two-sided, asymmetric, lower bound spending under the null
-#'   hypothesis with binding lower bound \cr \code{6=}two-sided, asymmetric,
-#'   lower bound spending under the null hypothesis with non-binding lower bound
-#'   \cr \code{7=}two-sided, asymmetric, with binding futility and binding harm bounds
-#'   \cr \code{8=}two-sided, asymmetric, with non-binding futility and non-binding harm bounds
-#'   \cr See details, examples, and manual.
-#' @param alpha Type I error rate. Default is 0.025 since 1-sided
-#'   testing is default.
-#' @param sided \code{1} for 1-sided testing, \code{2} for 2-sided testing.
-#' @param beta Type II error rate. Default is 0.10
-#'   (90\% power); \code{NULL} if power is to be computed based on
-#'   other input values.
-#' @param astar Total spending for the lower (test.type 5 or 6) or harm
-#'   (test.type 7 or 8) bound under the null hypothesis. Default is 0.
-#'   For \code{test.type} 5 or 6, \code{astar} specifies the total probability
-#'   of crossing a lower bound at all analyses combined.
-#'   For \code{test.type} 7 or 8, \code{astar} specifies the total probability
-#'   of crossing the harm bound at all analyses combined under the null hypothesis.
-#'   If \code{astar = 0}, it will be changed to \code{1 - alpha}.
-#' @param sfu A spending function or a character string
-#'   indicating a boundary type (that is, \code{"WT"} for
-#'   Wang-Tsiatis bounds, \code{"OF"} for O'Brien-Fleming bounds and
-#'   \code{"Pocock"} for Pocock bounds). For one-sided and symmetric
-#'   two-sided testing is used to completely specify spending
-#'   (\code{test.type = 1}, \code{2}), \code{sfu}. The default value is
-#'   \code{sfHSD} which is a Hwang-Shih-DeCani spending function.
-#' @param sfupar Real value, default is \code{-4} which is an
-#'   O'Brien-Fleming-like conservative bound when used with the
-#'   default Hwang-Shih-DeCani spending function. This is a
-#'   real-vector for many spending functions. The parameter
-#'   \code{sfupar} specifies any parameters needed for the spending
-#'   function specified by \code{sfu}; this will be ignored for
-#'   spending functions (\code{sfLDOF}, \code{sfLDPocock})
-#'   or bound types (\code{"OF"}, \code{"Pocock"})
-#'   that do not require parameters.
-#' @param sfl Specifies the spending function for lower
-#'   boundary crossing probabilities when asymmetric,
-#'   two-sided testing is performed
-#'   (\code{test.type = 3}, \code{4}, \code{5}, or \code{6}).
-#'   Unlike the upper bound,
-#'   only spending functions are used to specify the lower bound.
-#'   The default value is \code{sfHSD} which is a
-#'   Hwang-Shih-DeCani spending function. The parameter
-#'   \code{sfl} is ignored for one-sided testing
-#'   (\code{test.type = 1}) or symmetric 2-sided testing
-#'   (\code{test.type = 2}).
-#' @param sflpar Real value, default is \code{-2}, which, with the
-#'   default Hwang-Shih-DeCani spending function, specifies a
-#'   less conservative spending rate than the default for the
-#'   upper bound.
-#' @param sfharm A spending function for the harm bound, used with
-#'   \code{test.type = 7} or \code{test.type = 8}.
-#'   Default is \code{sfHSD}. See \code{\link{spendingFunction}} for details.
-#' @param sfharmparam Real value, default is \code{-2}. Parameter for the harm
-#'   bound spending function \code{sfharm}.
+#' @inheritParams nSurv
+#' @inheritParams gsDesign
+#'
 #' @param calendarTime Vector of increasing positive numbers
 #'   with calendar times of analyses. Time 0 is start of
 #'   randomization.
 #' @param spending Select between calendar-based spending and
 #'   information-based spending.
-#' @param lambdaC Scalar, vector or matrix of event hazard
-#'   rates for the control group; rows represent time periods while
-#'   columns represent strata; a vector implies a single stratum.
-#' @param hr Hazard ratio (experimental/control) under the
-#'   alternate hypothesis (scalar).
-#' @param hr0 Hazard ratio (experimental/control) under the null
-#'   hypothesis (scalar).
-#' @param eta Scalar, vector or matrix of dropout hazard rates
-#'   for the control group; rows represent time periods while
-#'   columns represent strata; if entered as a scalar, rate is
-#'   constant across strata and time periods; if entered as a
-#'   vector, rates are constant across strata.
-#' @param etaE Matrix dropout hazard rates for the experimental
-#'   group specified in like form as \code{eta}; if \code{NULL},
-#'   this is set equal to \code{eta}.
-#' @param gamma A scalar, vector or matrix of rates of entry by
-#'   time period (rows) and strata (columns); if entered as a
-#'   scalar, rate is constant across strata and time periods;
-#'   if entered as a vector, rates are constant across strata.
 #' @param R A scalar or vector of durations of time periods for
 #'   recruitment rates specified in rows of \code{gamma}. Length is the
 #'   same as number of rows in \code{gamma}. Note that when variable
 #'   enrollment duration is specified (input \code{T = NULL}), the final
 #'   enrollment period is extended as long as needed.
-#' @param S A scalar or vector of durations of piecewise constant
-#'   event rates specified in rows of \code{lambda}, \code{eta} and \code{etaE};
-#'   this is \code{NULL} if there is a single event rate per stratum
-#'   (exponential failure) or length of the number of rows in \code{lambda}
-#'   minus 1, otherwise.
 #' @param minfup A non-negative scalar less than the maximum value
 #'   in \code{calendarTime}. Enrollment will be cut off at the
 #'   difference between the maximum value in \code{calendarTime}
 #'   and \code{minfup}.
-#' @param ratio Randomization ratio of experimental treatment
-#'   divided by control; normally a scalar, but may be a vector with
-#'   length equal to number of strata.
-#' @param r Integer value (>= 1 and <= 80) controlling the number of numerical
-#'   integration grid points. Default is 18, as recommended by Jennison and
-#'   Turnbull (2000). Grid points are spread out in the tails for accurate
-#'   probability calculations. Larger values provide more grid points and greater
-#'   accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
-#'   accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
-#'   not changed by users.
 #' @param tol Tolerance for error passed to the \code{\link{gsDesign}} function.
-#' @param method Sample-size variance formulation; one of
-#'   `"LachinFoulkes"` (default), `"Schoenfeld"`, `"Freedman"`,
-#'   or `"BernsteinLagakos"`. Note: `"Schoenfeld"` and `"Freedman"`
-#'   methods only support superiority testing (`hr0 = 1`). Additionally,
-#'   `"Freedman"` does not support stratified populations.
 #'
 #' @export
 #'
