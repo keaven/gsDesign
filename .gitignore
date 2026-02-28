@@ -13,5 +13,6 @@ TODO
 *.html
 *.rnw
 docs/
+*.Rcheck/
 vignettes/*.html
 vignettes/*.R

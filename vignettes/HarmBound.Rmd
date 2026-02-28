@@ -31,24 +31,44 @@ library(gsDesign)
 library(knitr)
 ```
 
-When clinical trials include overall survival (OS) as a secondary or exploratory endpoint, regulators may recommend not only monitoring for early evidence of efficacy and futility, but also for potential *harm* --- that is, evidence that the experimental treatment may be *worsening* survival relative to control.
-This article demonstrates how the **gsDesign** package supports group sequential designs with three boundaries: an **efficacy** (upper) bound, a **futility** (lower) bound, and a **harm** bound, using `test.type = 8` (non-binding) and `test.type = 7` (binding).
+When clinical trials include overall survival (OS) as a secondary or exploratory endpoint, 
+regulators may recommend not only monitoring for early evidence of efficacy and futility, 
+but also for potential *harm* --- that is, evidence that the experimental treatment may 
+be *worsening* survival relative to control.
+This article demonstrates how the **gsDesign** package supports group sequential designs with 
+three boundaries: an **efficacy** (upper) bound, a **futility** (lower) bound, and a **harm** bound, 
+using `test.type = 7` (binding) and `test.type = 8` (non-binding).
+
 
 ### Regulatory context: FDA guidance on OS monitoring in oncology
 
-The FDA draft guidance *Assessment of Overall Survival Evidence in Support of Accelerated Approval of Oncology Therapeutics* [@FDAOS2024] describes expectations for monitoring OS in the context of trials that may receive accelerated approval based on surrogate endpoints.
-The guidance states that sponsors should specify pre-planned boundaries for interim OS monitoring, including criteria for stopping a trial early if there is evidence of a *detrimental effect on OS*.
+The FDA draft guidance *Assessment of Overall Survival Evidence in Support of Accelerated Approval of Oncology 
+Therapeutics* [@FDAOS2024] describes expectations for monitoring OS in the context of trials that may receive 
+accelerated approval based on surrogate endpoints.
+The guidance states that sponsors should specify pre-planned boundaries for interim OS monitoring, 
+including criteria for stopping a trial early if there is evidence of a *detrimental effect on OS*.
 Key points include:
 
-- Sponsors should include a **pre-specified statistical analysis plan** for interim OS analyses, including the timing and number of interim looks.
-- At a minimum, the guidance expects monitoring for **OS harm** (i.e., a detrimental trend in overall survival) using pre-specified boundaries.
-- Separate from the harm boundary, the sponsor should establish a **futility boundary** to stop the trial if the experimental treatment is unlikely to demonstrate an OS benefit.
-- The statistical plan should describe the spending functions used for each boundary and how the overall Type I error and Type II error are controlled.
+- Sponsors should include a **pre-specified statistical analysis plan** for interim OS analyses, 
+including the timing and number of interim looks.
+- At a minimum, the guidance expects monitoring for **OS harm** (i.e., a detrimental trend in overall survival) 
+using pre-specified boundaries.
+- Separate from the harm boundary, the sponsor should establish a **futility boundary** to stop the trial if 
+the experimental treatment is unlikely to demonstrate an OS benefit.
+- The statistical plan should describe the spending functions used for each boundary and how the overall 
+Type I error and Type II error are controlled.
 
-This motivates the design framework with `test.type = 7` (binding futility and harm bounds) or `test.type = 8` (non-binding futility and harm bounds), where three boundaries are simultaneously specified using spending functions.
+This motivates the design framework with `test.type = 7` (binding futility and harm bounds) and 
+`test.type = 8` (non-binding futility and harm bounds), where three boundaries are simultaneously 
+specified using spending functions.
 
-The harm bound implemented in gsDesign is a new method that is easy to use --- a principled, straightforward extension of the widely used group sequential spending function framework.
-While we believe this approach is understandable, useful, and flexible, other methods for monitoring potential harm may also be considered.
+The harm bound implemented in gsDesign is a new method that is easy to use --- a principled, straightforward 
+extension of the widely used group sequential spending function framework.
+While we believe this approach is understandable, useful, and flexible, other methods for monitoring potential 
+harm may also be considered.
+However, there are limitations with this approach.
+The example presented here has higher mortality risk than many cases.
+With lower mortality risk, modifications of this approach or other approaches may be preferable.
 
 ### Design framework overview
 
@@ -340,6 +360,18 @@ This ensures the ordering: harm bound $\leq$ futility bound $\leq$ efficacy boun
 
 In most regulatory settings, `test.type = 8` is the safer and more common choice.
 
+### Why a separate "binding harm / non-binding futility" option is unnecessary
+
+One might consider a design where the futility bound is non-binding but the harm bound is binding.
+In practice, such a distinction has no computational effect.
+The harm bound is computed *after* the efficacy and futility bounds are set and does not feed back into those computations.
+When the futility bound is non-binding (as in `test.type = 8`), the efficacy bound is computed ignoring all lower-bound stopping.
+Since the harm bound lies below the futility bound, making the harm bound "binding" while the futility bound remains non-binding would not change the efficacy boundary, the required number of events, the final Z-values, or the p-values --- the results are identical.
+
+The only difference would be in *interpretation*: whether crossing the harm bound is treated as a firm commitment to stop or as advisory information for the DMC.
+This interpretive distinction does not require a separate `test.type`; it can be addressed in the protocol language and the DMC charter.
+The `test.type = 8` framework already provides full flexibility for the DMC to treat the harm bound as either advisory or mandatory.
+
 ### Adjusting the boundaries
 
 The boundaries are adjustable through several design parameters:
@@ -349,5 +381,7 @@ The boundaries are adjustable through several design parameters:
 - **Alternate timing of analyses**: Changing the calendar times of interim analyses shifts the information available at each look.
 
 Regardless of the statistical design, bounds must be clinically, ethically, and statistically sound.
+As previously noted, this approach is one option to address the regulatory expectation for OS harm monitoring, 
+but other approaches may also be considered.
 
 ## References

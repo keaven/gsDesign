@@ -51,18 +51,22 @@ gsDesign(
 \code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound
 \cr \code{5=}two-sided, asymmetric, lower bound spending under the null
 hypothesis with binding lower bound \cr \code{6=}two-sided, asymmetric,
-lower bound spending under the null hypothesis with non-binding lower bound.
+lower bound spending under the null hypothesis with non-binding lower bound
+\cr \code{7=}two-sided, asymmetric, with binding futility and binding harm bounds
+\cr \code{8=}two-sided, asymmetric, with non-binding futility and non-binding harm bounds.
 \cr See details, examples and manual.}
 
 \item{alpha}{Type I error, always one-sided. Default value is 0.025.}
 
 \item{beta}{Type II error, default value is 0.1 (90\% power).}
 
-\item{astar}{Normally not specified. If \code{test.type=5} or \code{6},
-\code{astar} specifies the total probability of crossing a lower bound at
-all analyses combined.  This will be changed to \eqn{1 - }\code{alpha} when
-default value of 0 is used.  Since this is the expected usage, normally
-\code{astar} is not specified by the user.}
+\item{astar}{Total spending for the lower (test.type 5 or 6) or harm
+(test.type 7 or 8) bound under the null hypothesis. Default is 0.
+For \code{test.type} 5 or 6, \code{astar} specifies the total probability
+of crossing a lower bound at all analyses combined.
+For \code{test.type} 7 or 8, \code{astar} specifies the total probability
+of crossing the harm bound at all analyses combined under the null hypothesis.
+If \code{astar = 0}, it will be changed to \eqn{1 - }\code{alpha}.}
 
 \item{delta}{Effect size for theta under alternative hypothesis. This can be
 set to the standardized effect size to generate a sample size if
@@ -111,8 +115,8 @@ Hwang-Shih-DeCani spending function, specifies a less conservative spending
 rate than the default for the upper bound.}
 
 \item{sfharm}{A spending function for the harm bound, used with
-\code{test.type = 7} or \code{test.type = 8}. Default is \code{sfHSD}.
-See \code{\link{spendingFunction}} for details.}
+\code{test.type = 7} or \code{test.type = 8}.
+Default is \code{sfHSD}. See \code{\link{spendingFunction}} for details.}
 
 \item{sfharmparam}{Real value, default is \eqn{-2}. Parameter for the harm
 bound spending function \code{sfharm}.}

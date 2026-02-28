@@ -167,7 +167,9 @@
 #'   \code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound
 #'   \cr \code{5=}two-sided, asymmetric, lower bound spending under the null
 #'   hypothesis with binding lower bound \cr \code{6=}two-sided, asymmetric,
-#'   lower bound spending under the null hypothesis with non-binding lower bound.
+#'   lower bound spending under the null hypothesis with non-binding lower bound
+#'   \cr \code{7=}two-sided, asymmetric, with binding futility and binding harm bounds
+#'   \cr \code{8=}two-sided, asymmetric, with non-binding futility and non-binding harm bounds
 #'   \cr See details, examples and manual.
 #' @param astar Total spending for the lower (test.type 5 or 6) or harm
 #'   (test.type 7 or 8) bound under the null hypothesis. Default is 0.
@@ -210,6 +212,11 @@
 #' @param sflpar Real value, default is \eqn{-2}, which, with the default
 #'   Hwang-Shih-DeCani spending function, specifies a less conservative spending
 #'   rate than the default for the upper bound.
+#' @param sfharm A spending function for the harm bound, used with
+#'   \code{test.type = 7} or \code{test.type = 8}.
+#'   Default is \code{sfHSD}. See \code{\link{spendingFunction}} for details.
+#' @param sfharmparam Real value, default is \eqn{-2}. Parameter for the harm
+#'   bound spending function \code{sfharm}.
 #' @param r Integer value (>= 1 and <= 80) controlling the number of numerical
 #'   integration grid points. Default is 18, as recommended by Jennison and
 #'   Turnbull (2000). Grid points are spread out in the tails for accurate
@@ -375,6 +382,9 @@
 #'
 #' Schoenfeld D (1981), The Asymptotic Properties of Nonparametric Tests for
 #' Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
+#'
+#' Freedman LS (1982), Tables of the Number of Patients Required in Clinical
+#' Trials Using the Logrank Test. \emph{Statistics in Medicine}, 1, 121-129.
 #'
 #' @keywords design
 #' @keywords survival

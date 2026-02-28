@@ -39,7 +39,9 @@ gsSurvCalendar(
 \code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound
 \cr \code{5=}two-sided, asymmetric, lower bound spending under the null
 hypothesis with binding lower bound \cr \code{6=}two-sided, asymmetric,
-lower bound spending under the null hypothesis with non-binding lower bound.
+lower bound spending under the null hypothesis with non-binding lower bound
+\cr \code{7=}two-sided, asymmetric, with binding futility and binding harm bounds
+\cr \code{8=}two-sided, asymmetric, with non-binding futility and non-binding harm bounds
 \cr See details, examples, and manual.}
 
 \item{alpha}{Type I error rate. Default is 0.025 since 1-sided
@@ -51,12 +53,13 @@ testing is default.}
 (90\% power); \code{NULL} if power is to be computed based on
 other input values.}
 
-\item{astar}{Normally not specified. If \code{test.type = 5}
-or \code{6}, \code{astar} specifies the total probability
-of crossing a lower bound at all analyses combined. This
-will be changed to \code{1 - alpha} when default value of
-\code{0} is used. Since this is the expected usage,
-normally \code{astar} is not specified by the user.}
+\item{astar}{Total spending for the lower (test.type 5 or 6) or harm
+(test.type 7 or 8) bound under the null hypothesis. Default is 0.
+For \code{test.type} 5 or 6, \code{astar} specifies the total probability
+of crossing a lower bound at all analyses combined.
+For \code{test.type} 7 or 8, \code{astar} specifies the total probability
+of crossing the harm bound at all analyses combined under the null hypothesis.
+If \code{astar = 0}, it will be changed to \code{1 - alpha}.}
 
 \item{sfu}{A spending function or a character string
 indicating a boundary type (that is, \code{"WT"} for
@@ -94,8 +97,8 @@ less conservative spending rate than the default for the
 upper bound.}
 
 \item{sfharm}{A spending function for the harm bound, used with
-\code{test.type = 7} or \code{test.type = 8}. Default is \code{sfHSD}.
-See \code{\link{spendingFunction}} for details.}
+\code{test.type = 7} or \code{test.type = 8}.
+Default is \code{sfHSD}. See \code{\link{spendingFunction}} for details.}
 
 \item{sfharmparam}{Real value, default is \code{-2}. Parameter for the harm
 bound spending function \code{sfharm}.}
@@ -200,6 +203,12 @@ Trials. \emph{Biometrika}, 70, 659-663.
 
 Lan KKG and DeMets DL (1989), Group Sequential Procedures: Calendar vs.
 Information Time. \emph{Statistics in Medicine}, 8, 1191-1198.
+
+Schoenfeld D (1981), The Asymptotic Properties of Nonparametric Tests for
+Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
+
+Freedman LS (1982), Tables of the Number of Patients Required in Clinical
+Trials Using the Logrank Test. \emph{Statistics in Medicine}, 1, 121-129.
 }
 \seealso{
 \code{\link{gsSurv}}, \code{\link{gsDesign}}, \code{\link{gsBoundSummary}}

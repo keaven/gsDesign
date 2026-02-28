@@ -1,5 +1,22 @@
 # gsDesign 3.10.0 (February 2026)
 
+## New features
+
+- Added `test.type = 7` (binding futility and binding harm bounds) and
+  `test.type = 8` (non-binding futility and non-binding harm bounds) to
+  `gsDesign()`, `gsSurv()`, and `gsSurvCalendar()`. These three-boundary
+  designs support monitoring for efficacy, futility, and potential harm
+  simultaneously, motivated by FDA guidance on overall survival monitoring
+  in oncology trials (@keaven, #237).
+- New `sfharm` and `sfharmparam` parameters control the spending function for
+  the harm bound independently from efficacy and futility spending (@keaven, #237).
+- All six `plot()` types, `gsBoundSummary()`, `print()`, `summary()`, and
+  `xtable()` methods support the new three-boundary designs (@keaven, #237).
+- Added `HarmBound` vignette demonstrating harm bound design and interpretation
+  (@keaven, #237).
+
+# gsDesign 3.9.0 (February 2026)
+
 ## Breaking changes
 
 - The R native pipe operator `|>` is now used throughout the code and
