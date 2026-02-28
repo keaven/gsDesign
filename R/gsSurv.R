@@ -1,5 +1,6 @@
 # gsSurv roxy [sinew] ----
 #' @rdname nSurv
+#' @inheritParams gsDesign
 #' @export
 # gsSurv function [sinew] ----
 gsSurv <- function(

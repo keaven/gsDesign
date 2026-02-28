@@ -133,7 +133,7 @@ degree of accuracy of group sequential calculations which will normally not
 be changed.}
 
 \item{alpha}{If used, a vector of alternate alpha-levels to print boundaries
-for. Only works with test.type 1, 4, and 6. If specified, efficacy bound
+for. Only works with test.type 1, 4, 6, 7, and 8. If specified, efficacy bound
 columns are headed by individual alpha levels. The alpha level of the input
 design is always included as the first column.}
 

@@ -257,7 +257,9 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' \code{4=}two-sided, asymmetric, beta-spending with non-binding lower bound
 #' \cr \code{5=}two-sided, asymmetric, lower bound spending under the null
 #' hypothesis with binding lower bound \cr \code{6=}two-sided, asymmetric,
-#' lower bound spending under the null hypothesis with non-binding lower bound.
+#' lower bound spending under the null hypothesis with non-binding lower bound
+#' \cr \code{7=}two-sided, asymmetric, with binding futility and binding harm bounds
+#' \cr \code{8=}two-sided, asymmetric, with non-binding futility and non-binding harm bounds.
 #' \cr See details, examples and manual.
 #' @param alpha Type I error, always one-sided. Default value is 0.025.
 #' @param beta Type II error, default value is 0.1 (90\% power).
@@ -307,6 +309,11 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' @param sflpar Real value, default is \eqn{-2}, which, with the default
 #' Hwang-Shih-DeCani spending function, specifies a less conservative spending
 #' rate than the default for the upper bound.
+#' @param sfharm A spending function for the harm bound, used with
+#' \code{test.type = 7} or \code{test.type = 8}.
+#' Default is \code{sfHSD}. See \code{\link{spendingFunction}} for details.
+#' @param sfharmparam Real value, default is \eqn{-2}. Parameter for the harm
+#' bound spending function \code{sfharm}.
 #' @param tol Tolerance for error (default is 0.000001). Normally this will not
 #' be changed by the user.  This does not translate directly to number of
 #' digits of accuracy, so use extra decimal places.
@@ -343,10 +350,12 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' that are not included in each interim analysis.
 #' @param usTime Default is NULL in which case upper bound spending time is 
 #' determined by \code{timing}. Otherwise, this should be a vector of length 
-#' \code{k} with the spending time at each analysis (see Details).
+#' \code{k} with the spending time at each analysis
+#' (see Details section of \code{\link{gsDesign}}).
 #' @param lsTime Default is NULL in which case lower bound spending time is 
 #' determined by \code{timing}. Otherwise, this should be a vector of length 
-#' \code{k} with the spending time at each analysis (see Details).
+#' \code{k} with the spending time at each analysis
+#' (see Details section of \code{\link{gsDesign}}).
 #' @return An object of the class \code{gsDesign}. This class has the following
 #' elements and upon return from \code{gsDesign()} contains: \item{k}{As
 #' input.} \item{test.type}{As input.} \item{alpha}{As input.} \item{beta}{As

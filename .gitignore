@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 inst/doc
+inst/slides/
 *.o
 *.so
 *.dll
@@ -12,5 +13,6 @@ TODO
 *.html
 *.rnw
 docs/
+*.Rcheck/
 vignettes/*.html
 vignettes/*.R

@@ -914,7 +914,7 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
 }
 
 # plotgsPower roxy [sinew] ----
-#' @importFrom stats reshape
+#' @importFrom stats reshape setNames
 #' @importFrom dplyr group_by reframe
 #' @importFrom ggplot2 ggplot aes geom_line ylab guides guide_legend xlab scale_linetype_manual scale_color_manual scale_y_continuous ggtitle scale_x_continuous scale_colour_manual geom_text
 #' @importFrom rlang .data
