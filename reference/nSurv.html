@@ -122,6 +122,8 @@ group sequential design for a study with a time-to-event endpoint.</p>
 <span>  sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">4</span>,</span>
 <span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>,</span>
 <span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
+<span>  sfharm <span class="op">=</span> <span class="va">sfHSD</span>,</span>
+<span>  sfharmparam <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
 <span>  r <span class="op">=</span> <span class="fl">18</span>,</span>
 <span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">/</span><span class="fl">6</span>,</span>
 <span>  hr <span class="op">=</span> <span class="fl">0.6</span>,</span>
@@ -214,7 +216,7 @@ entered as a vector, rates are constant across strata.</p></dd>
 
 <dt id="arg-etae">etaE<a class="anchor" aria-label="anchor" href="#arg-etae"></a></dt>
 <dd><p>Matrix dropout hazard rates for the experimental group specified
-in like form as <code>eta</code>; if NULL, this is set equal to <code>eta</code>.</p></dd>
+in like form as <code>eta</code>; if <code>NULL</code>, this is set equal to <code>eta</code>.</p></dd>
 
 
 <dt id="arg-gamma">gamma<a class="anchor" aria-label="anchor" href="#arg-gamma"></a></dt>
@@ -234,7 +236,7 @@ long as needed; otherwise enrollment after <code>sum(R)</code> is 0.</p></dd>
 
 <dt id="arg-s">S<a class="anchor" aria-label="anchor" href="#arg-s"></a></dt>
 <dd><p>A scalar or vector of durations of piecewise constant event rates
-specified in rows of <code>lambda</code>, <code>eta</code> and <code>etaE</code>; this is NULL
+specified in rows of <code>lambda</code>, <code>eta</code> and <code>etaE</code>; this is <code>NULL</code>
 if there is a single event rate per stratum (exponential failure) or length
 of the number of rows in <code>lambda</code> minus 1, otherwise.
 The final time period is extended indefinitely for each stratum.</p></dd>
@@ -262,12 +264,12 @@ default.</p></dd>
 
 
 <dt id="arg-beta">beta<a class="anchor" aria-label="anchor" href="#arg-beta"></a></dt>
-<dd><p>Type II error rate. Default is 0.10 (90% power); NULL if power
+<dd><p>Type II error rate. Default is 0.10 (90% power); <code>NULL</code> if power
 is to be computed based on other input values.</p></dd>
 
 
 <dt id="arg-sided">sided<a class="anchor" aria-label="anchor" href="#arg-sided"></a></dt>
-<dd><p>1 for 1-sided testing, 2 for 2-sided testing.</p></dd>
+<dd><p><code>1</code> for 1-sided testing, <code>2</code> for 2-sided testing.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -335,16 +337,20 @@ bottom of the xtable output.</p></dd>
 <dd><p><code>1=</code>one-sided <br><code>2=</code>two-sided symmetric <br><code>3=</code>two-sided, asymmetric, beta-spending with binding lower bound <br><code>4=</code>two-sided, asymmetric, beta-spending with non-binding lower bound
 <br><code>5=</code>two-sided, asymmetric, lower bound spending under the null
 hypothesis with binding lower bound <br><code>6=</code>two-sided, asymmetric,
-lower bound spending under the null hypothesis with non-binding lower bound.
+lower bound spending under the null hypothesis with non-binding lower bound
+<br><code>7=</code>two-sided, asymmetric, with binding futility and binding harm bounds
+<br><code>8=</code>two-sided, asymmetric, with non-binding futility and non-binding harm bounds.
 <br> See details, examples and manual.</p></dd>
 
 
 <dt id="arg-astar">astar<a class="anchor" aria-label="anchor" href="#arg-astar"></a></dt>
-<dd><p>Normally not specified. If <code>test.type=5</code> or <code>6</code>,
-<code>astar</code> specifies the total probability of crossing a lower bound at
-all analyses combined.  This will be changed to \(1 - \)<code>alpha</code> when
-default value of 0 is used.  Since this is the expected usage, normally
-<code>astar</code> is not specified by the user.</p></dd>
+<dd><p>Total spending for the lower (test.type 5 or 6) or harm
+(test.type 7 or 8) bound under the null hypothesis. Default is 0.
+For <code>test.type</code> 5 or 6, <code>astar</code> specifies the total probability
+of crossing a lower bound at all analyses combined.
+For <code>test.type</code> 7 or 8, <code>astar</code> specifies the total probability
+of crossing the harm bound at all analyses combined under the null hypothesis.
+If <code>astar = 0</code>, it will be changed to \(1 - \)<code>alpha</code>.</p></dd>
 
 
 <dt id="arg-sfu">sfu<a class="anchor" aria-label="anchor" href="#arg-sfu"></a></dt>
@@ -362,7 +368,7 @@ spending (<code>test.type=1, 2</code>), <code>sfu</code>.  The default value is
 O'Brien-Fleming-like conservative bound when used with the default
 Hwang-Shih-DeCani spending function. This is a real-vector for many spending
 functions.  The parameter <code>sfupar</code> specifies any parameters needed for
-the spending function specified by <code>sfu</code>; this will be ignored for
+the spending function specified by <code>sfu</code>; this is not needed for
 spending functions (<code>sfLDOF</code>, <code>sfLDPocock</code>) or bound types
 (“OF”, “Pocock”) that do not require parameters.
 Note that <code>sfupar</code> can be specified as a positive scalar for
@@ -386,6 +392,17 @@ Hwang-Shih-DeCani spending function, specifies a less conservative spending
 rate than the default for the upper bound.</p></dd>
 
 
+<dt id="arg-sfharm">sfharm<a class="anchor" aria-label="anchor" href="#arg-sfharm"></a></dt>
+<dd><p>A spending function for the harm bound, used with
+<code>test.type = 7</code> or <code>test.type = 8</code>.
+Default is <code>sfHSD</code>. See <code><a href="spendingFunction.html">spendingFunction</a></code> for details.</p></dd>
+
+
+<dt id="arg-sfharmparam">sfharmparam<a class="anchor" aria-label="anchor" href="#arg-sfharmparam"></a></dt>
+<dd><p>Real value, default is \(-2\). Parameter for the harm
+bound spending function <code>sfharm</code>.</p></dd>
+
+
 <dt id="arg-r">r<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
 <dd><p>Integer value (&gt;= 1 and &lt;= 80) controlling the number of numerical
 integration grid points. Default is 18, as recommended by Jennison and
@@ -399,13 +416,15 @@ not changed by users.</p></dd>
 <dt id="arg-ustime">usTime<a class="anchor" aria-label="anchor" href="#arg-ustime"></a></dt>
 <dd><p>Default is NULL in which case upper bound spending time is
 determined by <code>timing</code>. Otherwise, this should be a vector of length
-<code>k</code> with the spending time at each analysis (see Details in help for <code>gsDesign</code>).</p></dd>
+<code>k</code> with the spending time at each analysis
+(see Details section of <code><a href="gsDesign.html">gsDesign</a></code>).</p></dd>
 
 
 <dt id="arg-lstime">lsTime<a class="anchor" aria-label="anchor" href="#arg-lstime"></a></dt>
 <dd><p>Default is NULL in which case lower bound spending time is
 determined by <code>timing</code>. Otherwise, this should be a vector of length
-<code>k</code> with the spending time at each analysis (see Details in help for <code>gsDesign</code>).</p></dd>
+<code>k</code> with the spending time at each analysis
+(see Details section of <code><a href="gsDesign.html">gsDesign</a></code>).</p></dd>
 
 
 <dt id="arg-show-gsdesign">show_gsDesign<a class="anchor" aria-label="anchor" href="#arg-show-gsdesign"></a></dt>
@@ -727,6 +746,8 @@ Follow-Up, Noncompliance, and Stratification. <em>Biometrics</em>, 42,
 507-519.</p>
 <p>Schoenfeld D (1981), The Asymptotic Properties of Nonparametric Tests for
 Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
+<p>Freedman LS (1982), Tables of the Number of Patients Required in Clinical
+Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -819,7 +840,7 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Caption example for xtable output."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.5.2 by xtable 1.8-8 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Mon Feb 23 21:35:26 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Sat Feb 28 21:19:42 2026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{rllll}</span>

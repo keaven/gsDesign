@@ -9,8 +9,8 @@ that is, evidence that the experimental treatment may be *worsening*
 survival relative to control. This article demonstrates how the
 **gsDesign** package supports group sequential designs with three
 boundaries: an **efficacy** (upper) bound, a **futility** (lower) bound,
-and a **harm** bound, using `test.type = 8` (non-binding) and
-`test.type = 7` (binding).
+and a **harm** bound, using `test.type = 7` (binding) and
+`test.type = 8` (non-binding).
 
 ### Regulatory context: FDA guidance on OS monitoring in oncology
 
@@ -36,9 +36,18 @@ OS*. Key points include:
   controlled.
 
 This motivates the design framework with `test.type = 7` (binding
-futility and harm bounds) or `test.type = 8` (non-binding futility and
+futility and harm bounds) and `test.type = 8` (non-binding futility and
 harm bounds), where three boundaries are simultaneously specified using
 spending functions.
+
+The harm bound implemented in gsDesign is a new method that is easy to
+use — a principled, straightforward extension of the widely used group
+sequential spending function framework. While we believe this approach
+is understandable, useful, and flexible, other methods for monitoring
+potential harm may also be considered. However, there are limitations
+with this approach. The example presented here has higher mortality risk
+than many cases. With lower mortality risk, modifications of this
+approach or other approaches may be preferable.
 
 ### Design framework overview
 
@@ -187,7 +196,9 @@ gsBoundSummary(x8)
 #>              P(Cross) if HR=0.75  0.0004   0.1000   0.9000
 ```
 
-To include all statistics:
+Conditional power (CP, CP H1) and predictive power (PP) can also be
+included in the summary. Below we show the full table with all
+statistics, including conditional and predictive power at each boundary:
 
 ``` r
 gsBoundSummary(x8, exclude = c())
@@ -293,28 +304,28 @@ probs <- data.frame(
   Scenario = c(rep("Under H0 (HR=1)", x8$k), rep("Under H1 (HR=0.75)", x8$k)),
   Analysis = rep(1:x8$k, 2),
   Month = rep(x8$T, 2),
-  `P(Efficacy)` = c(x8$upper$prob[, 1], x8$upper$prob[, 2]),
-  `P(Futility)` = c(x8$lower$prob[, 1], x8$lower$prob[, 2]),
-  `P(Harm)` = c(x8$harm$prob[, 1], x8$harm$prob[, 2]),
+  `P(Efficacy)` = c(cumsum(x8$upper$prob[, 1]), cumsum(x8$upper$prob[, 2])),
+  `P(Futility)` = c(cumsum(x8$lower$prob[, 1]), cumsum(x8$lower$prob[, 2])),
+  `P(Harm)` = c(cumsum(x8$harm$prob[, 1]), cumsum(x8$harm$prob[, 2])),
   check.names = FALSE
 )
-kable(probs, digits = 4, caption = "Boundary crossing probabilities")
+kable(probs, digits = 4, caption = "Cumulative boundary crossing probabilities")
 ```
 
 | Scenario           | Analysis | Month | P(Efficacy) | P(Futility) | P(Harm) |
 |:-------------------|---------:|------:|------------:|------------:|--------:|
 | Under H0 (HR=1)    |        1 |    12 |      0.0000 |      0.0748 |  0.0173 |
-| Under H0 (HR=1)    |        2 |    24 |      0.0001 |      0.4806 |  0.0334 |
-| Under H0 (HR=1)    |        3 |    36 |      0.0016 |      0.3087 |  0.0229 |
-| Under H0 (HR=1)    |        4 |    48 |      0.0045 |      0.0990 |  0.0154 |
-| Under H0 (HR=1)    |        5 |    60 |      0.0050 |      0.0257 |  0.0110 |
+| Under H0 (HR=1)    |        2 |    24 |      0.0001 |      0.5554 |  0.0507 |
+| Under H0 (HR=1)    |        3 |    36 |      0.0017 |      0.8641 |  0.0736 |
+| Under H0 (HR=1)    |        4 |    48 |      0.0062 |      0.9631 |  0.0890 |
+| Under H0 (HR=1)    |        5 |    60 |      0.0112 |      0.9888 |  0.1000 |
 | Under H1 (HR=0.75) |        1 |    12 |      0.0000 |      0.0039 |  0.0004 |
-| Under H1 (HR=0.75) |        2 |    24 |      0.0574 |      0.0143 |  0.0000 |
-| Under H1 (HR=0.75) |        3 |    36 |      0.4416 |      0.0217 |  0.0000 |
-| Under H1 (HR=0.75) |        4 |    48 |      0.3006 |      0.0277 |  0.0000 |
-| Under H1 (HR=0.75) |        5 |    60 |      0.1004 |      0.0325 |  0.0000 |
+| Under H1 (HR=0.75) |        2 |    24 |      0.0574 |      0.0181 |  0.0004 |
+| Under H1 (HR=0.75) |        3 |    36 |      0.4990 |      0.0398 |  0.0004 |
+| Under H1 (HR=0.75) |        4 |    48 |      0.7996 |      0.0675 |  0.0004 |
+| Under H1 (HR=0.75) |        5 |    60 |      0.9000 |      0.1000 |  0.0004 |
 
-Boundary crossing probabilities
+Cumulative boundary crossing probabilities
 
 Under \\H_0\\, the cumulative probability of crossing the harm bound
 across all analyses is approximately 0.1, reflecting the spending
@@ -618,6 +629,45 @@ never exceeds the futility bound. This ensures the ordering: harm bound
 
 In most regulatory settings, `test.type = 8` is the safer and more
 common choice.
+
+### Why a separate “binding harm / non-binding futility” option is unnecessary
+
+One might consider a design where the futility bound is non-binding but
+the harm bound is binding. In practice, such a distinction has no
+computational effect. The harm bound is computed *after* the efficacy
+and futility bounds are set and does not feed back into those
+computations. When the futility bound is non-binding (as in
+`test.type = 8`), the efficacy bound is computed ignoring all
+lower-bound stopping. Since the harm bound lies below the futility
+bound, making the harm bound “binding” while the futility bound remains
+non-binding would not change the efficacy boundary, the required number
+of events, the final Z-values, or the p-values — the results are
+identical.
+
+The only difference would be in *interpretation*: whether crossing the
+harm bound is treated as a firm commitment to stop or as advisory
+information for the DMC. This interpretive distinction does not require
+a separate `test.type`; it can be addressed in the protocol language and
+the DMC charter. The `test.type = 8` framework already provides full
+flexibility for the DMC to treat the harm bound as either advisory or
+mandatory.
+
+### Adjusting the boundaries
+
+The boundaries are adjustable through several design parameters:
+
+- **Alternate `astar`**: Controls the Type I error allocated to excess
+  OS harm detection.
+- **Alternate spending functions**: Different spending functions for
+  efficacy, futility, and harm boundaries change the aggressiveness of
+  each boundary across analyses.
+- **Alternate timing of analyses**: Changing the calendar times of
+  interim analyses shifts the information available at each look.
+
+Regardless of the statistical design, bounds must be clinically,
+ethically, and statistically sound. As previously noted, this approach
+is one option to address the regulatory expectation for OS harm
+monitoring, but other approaches may also be considered.
 
 ## References
 

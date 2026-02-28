@@ -67,6 +67,8 @@ calendar  time units as in Lan and DeMets (1989).</p>
 <span>  sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">4</span>,</span>
 <span>  sfl <span class="op">=</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="va"><a href="sfHSD.html">sfHSD</a></span>,</span>
 <span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
+<span>  sfharm <span class="op">=</span> <span class="fu">gsDesign</span><span class="fu">::</span><span class="va"><a href="sfHSD.html">sfHSD</a></span>,</span>
+<span>  sfharmparam <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
 <span>  calendarTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">24</span>, <span class="fl">36</span><span class="op">)</span>,</span>
 <span>  spending <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"information"</span>, <span class="st">"calendar"</span><span class="op">)</span>,</span>
 <span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">/</span><span class="fl">6</span>,</span>
@@ -93,13 +95,15 @@ calendar  time units as in Lan and DeMets (1989).</p>
 <dd><p><code>1=</code>one-sided <br><code>2=</code>two-sided symmetric <br><code>3=</code>two-sided, asymmetric, beta-spending with binding lower bound <br><code>4=</code>two-sided, asymmetric, beta-spending with non-binding lower bound
 <br><code>5=</code>two-sided, asymmetric, lower bound spending under the null
 hypothesis with binding lower bound <br><code>6=</code>two-sided, asymmetric,
-lower bound spending under the null hypothesis with non-binding lower bound.
-<br> See details, examples, and manual.</p></dd>
+lower bound spending under the null hypothesis with non-binding lower bound
+<br><code>7=</code>two-sided, asymmetric, with binding futility and binding harm bounds
+<br><code>8=</code>two-sided, asymmetric, with non-binding futility and non-binding harm bounds.
+<br> See details, examples and manual.</p></dd>
 
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
-<dd><p>Type I error rate. Default is 0.025 since 1-sided
-testing is default.</p></dd>
+<dd><p>Type I error rate. Default is 0.025 since 1-sided testing is
+default.</p></dd>
 
 
 <dt id="arg-sided">sided<a class="anchor" aria-label="anchor" href="#arg-sided"></a></dt>
@@ -107,61 +111,68 @@ testing is default.</p></dd>
 
 
 <dt id="arg-beta">beta<a class="anchor" aria-label="anchor" href="#arg-beta"></a></dt>
-<dd><p>Type II error rate. Default is 0.10
-(90% power); <code>NULL</code> if power is to be computed based on
-other input values.</p></dd>
+<dd><p>Type II error rate. Default is 0.10 (90% power); <code>NULL</code> if power
+is to be computed based on other input values.</p></dd>
 
 
 <dt id="arg-astar">astar<a class="anchor" aria-label="anchor" href="#arg-astar"></a></dt>
-<dd><p>Normally not specified. If <code>test.type = 5</code>
-or <code>6</code>, <code>astar</code> specifies the total probability
-of crossing a lower bound at all analyses combined. This
-will be changed to <code>1 - alpha</code> when default value of
-<code>0</code> is used. Since this is the expected usage,
-normally <code>astar</code> is not specified by the user.</p></dd>
+<dd><p>Total spending for the lower (test.type 5 or 6) or harm
+(test.type 7 or 8) bound under the null hypothesis. Default is 0.
+For <code>test.type</code> 5 or 6, <code>astar</code> specifies the total probability
+of crossing a lower bound at all analyses combined.
+For <code>test.type</code> 7 or 8, <code>astar</code> specifies the total probability
+of crossing the harm bound at all analyses combined under the null hypothesis.
+If <code>astar = 0</code>, it will be changed to \(1 - \)<code>alpha</code>.</p></dd>
 
 
 <dt id="arg-sfu">sfu<a class="anchor" aria-label="anchor" href="#arg-sfu"></a></dt>
-<dd><p>A spending function or a character string
-indicating a boundary type (that is, <code>"WT"</code> for
-Wang-Tsiatis bounds, <code>"OF"</code> for O'Brien-Fleming bounds and
-<code>"Pocock"</code> for Pocock bounds). For one-sided and symmetric
-two-sided testing is used to completely specify spending
-(<code>test.type = 1</code>, <code>2</code>), <code>sfu</code>. The default value is
-<code>sfHSD</code> which is a Hwang-Shih-DeCani spending function.</p></dd>
+<dd><p>A spending function or a character string indicating a boundary
+type (that is, “WT” for Wang-Tsiatis bounds, “OF” for
+O'Brien-Fleming bounds and “Pocock” for Pocock bounds).  For
+one-sided and symmetric two-sided testing is used to completely specify
+spending (<code>test.type=1, 2</code>), <code>sfu</code>.  The default value is
+<code>sfHSD</code> which is a Hwang-Shih-DeCani spending function.  See details,
+<code><a href="../articles/SpendingFunctionOverview.html">vignette("SpendingFunctionOverview")</a></code>, manual and examples.</p></dd>
 
 
 <dt id="arg-sfupar">sfupar<a class="anchor" aria-label="anchor" href="#arg-sfupar"></a></dt>
-<dd><p>Real value, default is <code>-4</code> which is an
-O'Brien-Fleming-like conservative bound when used with the
-default Hwang-Shih-DeCani spending function. This is a
-real-vector for many spending functions. The parameter
-<code>sfupar</code> specifies any parameters needed for the spending
-function specified by <code>sfu</code>; this will be ignored for
-spending functions (<code>sfLDOF</code>, <code>sfLDPocock</code>)
-or bound types (<code>"OF"</code>, <code>"Pocock"</code>)
-that do not require parameters.</p></dd>
+<dd><p>Real value, default is \(-4\) which is an
+O'Brien-Fleming-like conservative bound when used with the default
+Hwang-Shih-DeCani spending function. This is a real-vector for many spending
+functions.  The parameter <code>sfupar</code> specifies any parameters needed for
+the spending function specified by <code>sfu</code>; this is not needed for
+spending functions (<code>sfLDOF</code>, <code>sfLDPocock</code>) or bound types
+(“OF”, “Pocock”) that do not require parameters.
+Note that <code>sfupar</code> can be specified as a positive scalar for
+<code>sfLDOF</code> for a generalized O'Brien-Fleming spending function.</p></dd>
 
 
 <dt id="arg-sfl">sfl<a class="anchor" aria-label="anchor" href="#arg-sfl"></a></dt>
-<dd><p>Specifies the spending function for lower
-boundary crossing probabilities when asymmetric,
-two-sided testing is performed
-(<code>test.type = 3</code>, <code>4</code>, <code>5</code>, or <code>6</code>).
-Unlike the upper bound,
-only spending functions are used to specify the lower bound.
-The default value is <code>sfHSD</code> which is a
-Hwang-Shih-DeCani spending function. The parameter
-<code>sfl</code> is ignored for one-sided testing
-(<code>test.type = 1</code>) or symmetric 2-sided testing
-(<code>test.type = 2</code>).</p></dd>
+<dd><p>Specifies the spending function for lower boundary crossing
+probabilities when asymmetric, two-sided testing is performed
+(<code>test.type = 3</code>, <code>4</code>, <code>5</code>, or <code>6</code>).  Unlike the upper
+bound, only spending functions are used to specify the lower bound.  The
+default value is <code>sfHSD</code> which is a Hwang-Shih-DeCani spending
+function.  The parameter <code>sfl</code> is ignored for one-sided testing
+(<code>test.type=1</code>) or symmetric 2-sided testing (<code>test.type=2</code>).  See
+details, spending functions, manual and examples.</p></dd>
 
 
 <dt id="arg-sflpar">sflpar<a class="anchor" aria-label="anchor" href="#arg-sflpar"></a></dt>
-<dd><p>Real value, default is <code>-2</code>, which, with the
-default Hwang-Shih-DeCani spending function, specifies a
-less conservative spending rate than the default for the
-upper bound.</p></dd>
+<dd><p>Real value, default is \(-2\), which, with the default
+Hwang-Shih-DeCani spending function, specifies a less conservative spending
+rate than the default for the upper bound.</p></dd>
+
+
+<dt id="arg-sfharm">sfharm<a class="anchor" aria-label="anchor" href="#arg-sfharm"></a></dt>
+<dd><p>A spending function for the harm bound, used with
+<code>test.type = 7</code> or <code>test.type = 8</code>.
+Default is <code>sfHSD</code>. See <code><a href="spendingFunction.html">spendingFunction</a></code> for details.</p></dd>
+
+
+<dt id="arg-sfharmparam">sfharmparam<a class="anchor" aria-label="anchor" href="#arg-sfharmparam"></a></dt>
+<dd><p>Real value, default is \(-2\). Parameter for the harm
+bound spending function <code>sfharm</code>.</p></dd>
 
 
 <dt id="arg-calendartime">calendarTime<a class="anchor" aria-label="anchor" href="#arg-calendartime"></a></dt>
@@ -176,40 +187,39 @@ information-based spending.</p></dd>
 
 
 <dt id="arg-lambdac">lambdaC<a class="anchor" aria-label="anchor" href="#arg-lambdac"></a></dt>
-<dd><p>Scalar, vector or matrix of event hazard
-rates for the control group; rows represent time periods while
-columns represent strata; a vector implies a single stratum.</p></dd>
+<dd><p>Scalar, vector or matrix of event hazard rates for the
+control group; rows represent time periods while columns represent strata; a
+vector implies a single stratum.
+Note that rates corresponding the final time period are extended indefinitely.</p></dd>
 
 
 <dt id="arg-hr">hr<a class="anchor" aria-label="anchor" href="#arg-hr"></a></dt>
-<dd><p>Hazard ratio (experimental/control) under the
-alternate hypothesis (scalar).</p></dd>
+<dd><p>Hazard ratio (experimental/control) under the alternate hypothesis
+(scalar).</p></dd>
 
 
 <dt id="arg-hr-">hr0<a class="anchor" aria-label="anchor" href="#arg-hr-"></a></dt>
-<dd><p>Hazard ratio (experimental/control) under the null
-hypothesis (scalar).</p></dd>
+<dd><p>Hazard ratio (experimental/control) under the null hypothesis
+(scalar).</p></dd>
 
 
 <dt id="arg-eta">eta<a class="anchor" aria-label="anchor" href="#arg-eta"></a></dt>
-<dd><p>Scalar, vector or matrix of dropout hazard rates
-for the control group; rows represent time periods while
-columns represent strata; if entered as a scalar, rate is
-constant across strata and time periods; if entered as a
-vector, rates are constant across strata.</p></dd>
+<dd><p>Scalar, vector or matrix of dropout hazard rates for the control
+group; rows represent time periods while columns represent strata; if
+entered as a scalar, rate is constant across strata and time periods; if
+entered as a vector, rates are constant across strata.</p></dd>
 
 
 <dt id="arg-etae">etaE<a class="anchor" aria-label="anchor" href="#arg-etae"></a></dt>
-<dd><p>Matrix dropout hazard rates for the experimental
-group specified in like form as <code>eta</code>; if <code>NULL</code>,
-this is set equal to <code>eta</code>.</p></dd>
+<dd><p>Matrix dropout hazard rates for the experimental group specified
+in like form as <code>eta</code>; if <code>NULL</code>, this is set equal to <code>eta</code>.</p></dd>
 
 
 <dt id="arg-gamma">gamma<a class="anchor" aria-label="anchor" href="#arg-gamma"></a></dt>
-<dd><p>A scalar, vector or matrix of rates of entry by
-time period (rows) and strata (columns); if entered as a
-scalar, rate is constant across strata and time periods;
-if entered as a vector, rates are constant across strata.</p></dd>
+<dd><p>A scalar, vector or matrix of rates of entry by time period
+(rows) and strata (columns); if entered as a scalar, rate is constant
+across strata and time periods; if entered as a vector, rates are constant
+across strata.</p></dd>
 
 
 <dt id="arg-r">R<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
@@ -221,11 +231,11 @@ enrollment period is extended as long as needed.</p></dd>
 
 
 <dt id="arg-s">S<a class="anchor" aria-label="anchor" href="#arg-s"></a></dt>
-<dd><p>A scalar or vector of durations of piecewise constant
-event rates specified in rows of <code>lambda</code>, <code>eta</code> and <code>etaE</code>;
-this is <code>NULL</code> if there is a single event rate per stratum
-(exponential failure) or length of the number of rows in <code>lambda</code>
-minus 1, otherwise.</p></dd>
+<dd><p>A scalar or vector of durations of piecewise constant event rates
+specified in rows of <code>lambda</code>, <code>eta</code> and <code>etaE</code>; this is <code>NULL</code>
+if there is a single event rate per stratum (exponential failure) or length
+of the number of rows in <code>lambda</code> minus 1, otherwise.
+The final time period is extended indefinitely for each stratum.</p></dd>
 
 
 <dt id="arg-minfup">minfup<a class="anchor" aria-label="anchor" href="#arg-minfup"></a></dt>
@@ -236,9 +246,9 @@ and <code>minfup</code>.</p></dd>
 
 
 <dt id="arg-ratio">ratio<a class="anchor" aria-label="anchor" href="#arg-ratio"></a></dt>
-<dd><p>Randomization ratio of experimental treatment
-divided by control; normally a scalar, but may be a vector with
-length equal to number of strata.</p></dd>
+<dd><p>Randomization ratio of experimental treatment divided by
+control; normally a scalar, but may be a vector with length equal to number
+of strata.</p></dd>
 
 
 <dt id="arg-r">r<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
@@ -256,11 +266,11 @@ not changed by users.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>Sample-size variance formulation; one of
-`"LachinFoulkes"` (default), `"Schoenfeld"`, `"Freedman"`,
-or `"BernsteinLagakos"`. Note: `"Schoenfeld"` and `"Freedman"`
-methods only support superiority testing (`hr0 = 1`). Additionally,
-`"Freedman"` does not support stratified populations.</p></dd>
+<dd><p>One of <code>"LachinFoulkes"</code> (default), <code>"Schoenfeld"</code>,
+<code>"Freedman"</code>, or <code>"BernsteinLagakos"</code>.
+Note: <code>"Schoenfeld"</code> and <code>"Freedman"</code> methods only support
+superiority testing (<code>hr0 = 1</code>). <code>"Freedman"</code> does not support
+stratified populations.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -269,6 +279,10 @@ methods only support superiority testing (`hr0 = 1`). Additionally,
 Trials. <em>Biometrika</em>, 70, 659-663.</p>
 <p>Lan KKG and DeMets DL (1989), Group Sequential Procedures: Calendar vs.
 Information Time. <em>Statistics in Medicine</em>, 8, 1191-1198.</p>
+<p>Schoenfeld D (1981), The Asymptotic Properties of Nonparametric Tests for
+Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
+<p>Freedman LS (1982), Tables of the Number of Patients Required in Clinical
+Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

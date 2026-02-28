@@ -66,6 +66,8 @@ gsDesign(
   sfupar = -4,
   sfl = sfHSD,
   sflpar = -2,
+  sfharm = sfHSD,
+  sfharmparam = -2,
   tol = 1e-06,
   r = 18,
   n.I = 0,
@@ -107,7 +109,11 @@ xtable(
   `5=`two-sided, asymmetric, lower bound spending under the null
   hypothesis with binding lower bound  
   `6=`two-sided, asymmetric, lower bound spending under the null
-  hypothesis with non-binding lower bound.  
+  hypothesis with non-binding lower bound  
+  `7=`two-sided, asymmetric, with binding futility and binding harm
+  bounds  
+  `8=`two-sided, asymmetric, with non-binding futility and non-binding
+  harm bounds.  
   See details, examples and manual.
 
 - alpha:
@@ -120,11 +126,13 @@ xtable(
 
 - astar:
 
-  Normally not specified. If `test.type=5` or `6`, `astar` specifies the
-  total probability of crossing a lower bound at all analyses combined.
-  This will be changed to \\1 - \\`alpha` when default value of 0 is
-  used. Since this is the expected usage, normally `astar` is not
-  specified by the user.
+  Total spending for the lower (test.type 5 or 6) or harm (test.type 7
+  or 8) bound under the null hypothesis. Default is 0. For `test.type` 5
+  or 6, `astar` specifies the total probability of crossing a lower
+  bound at all analyses combined. For `test.type` 7 or 8, `astar`
+  specifies the total probability of crossing the harm bound at all
+  analyses combined under the null hypothesis. If `astar = 0`, it will
+  be changed to \\1 - \\`alpha`.
 
 - delta:
 
@@ -186,6 +194,18 @@ xtable(
   Real value, default is \\-2\\, which, with the default
   Hwang-Shih-DeCani spending function, specifies a less conservative
   spending rate than the default for the upper bound.
+
+- sfharm:
+
+  A spending function for the harm bound, used with `test.type = 7` or
+  `test.type = 8`. Default is `sfHSD`. See
+  [`spendingFunction`](https://keaven.github.io/gsDesign/reference/spendingFunction.md)
+  for details.
+
+- sfharmparam:
+
+  Real value, default is \\-2\\. Parameter for the harm bound spending
+  function `sfharm`.
 
 - tol:
 
@@ -254,13 +274,13 @@ xtable(
 
   Default is NULL in which case upper bound spending time is determined
   by `timing`. Otherwise, this should be a vector of length `k` with the
-  spending time at each analysis (see Details).
+  spending time at each analysis (see Details section of `gsDesign`).
 
 - lsTime:
 
   Default is NULL in which case lower bound spending time is determined
   by `timing`. Otherwise, this should be a vector of length `k` with the
-  spending time at each analysis (see Details).
+  spending time at each analysis (see Details section of `gsDesign`).
 
 - x:
 

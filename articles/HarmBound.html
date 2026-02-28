@@ -83,8 +83,8 @@ early evidence of efficacy and futility, but also for potential
 demonstrates how the <strong>gsDesign</strong> package supports group
 sequential designs with three boundaries: an <strong>efficacy</strong>
 (upper) bound, a <strong>futility</strong> (lower) bound, and a
-<strong>harm</strong> bound, using <code>test.type = 8</code>
-(non-binding) and <code>test.type = 7</code> (binding).</p>
+<strong>harm</strong> bound, using <code>test.type = 7</code> (binding)
+and <code>test.type = 8</code> (non-binding).</p>
 <div class="section level3">
 <h3 id="regulatory-context-fda-guidance-on-os-monitoring-in-oncology">Regulatory context: FDA guidance on OS monitoring in oncology<a class="anchor" aria-label="anchor" href="#regulatory-context-fda-guidance-on-os-monitoring-in-oncology"></a>
 </h3>
@@ -111,9 +111,17 @@ each boundary and how the overall Type I error and Type II error are
 controlled.</li>
 </ul>
 <p>This motivates the design framework with <code>test.type = 7</code>
-(binding futility and harm bounds) or <code>test.type = 8</code>
+(binding futility and harm bounds) and <code>test.type = 8</code>
 (non-binding futility and harm bounds), where three boundaries are
 simultaneously specified using spending functions.</p>
+<p>The harm bound implemented in gsDesign is a new method that is easy
+to use — a principled, straightforward extension of the widely used
+group sequential spending function framework. While we believe this
+approach is understandable, useful, and flexible, other methods for
+monitoring potential harm may also be considered. However, there are
+limitations with this approach. The example presented here has higher
+mortality risk than many cases. With lower mortality risk, modifications
+of this approach or other approaches may be preferable.</p>
 </div>
 <div class="section level3">
 <h3 id="design-framework-overview">Design framework overview<a class="anchor" aria-label="anchor" href="#design-framework-overview"></a>
@@ -286,7 +294,10 @@ recommendation to review the safety and other endpoint data.</p>
 <span><span class="co">#&gt;  Events: 657        ~HR at bound  1.1433   0.8352   0.8352</span></span>
 <span><span class="co">#&gt;    Month: 60    P(Cross) if HR=1  0.1000   0.9888   0.0112</span></span>
 <span><span class="co">#&gt;              P(Cross) if HR=0.75  0.0004   0.1000   0.9000</span></span></code></pre></div>
-<p>To include all statistics:</p>
+<p>Conditional power (CP, CP H1) and predictive power (PP) can also be
+included in the summary. Below we show the full table with all
+statistics, including conditional and predictive power at each
+boundary:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x8</span>, exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Method: LachinFoulkes </span></span>
@@ -435,14 +446,14 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <span>  Scenario <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Under H0 (HR=1)"</span>, <span class="va">x8</span><span class="op">$</span><span class="va">k</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Under H1 (HR=0.75)"</span>, <span class="va">x8</span><span class="op">$</span><span class="va">k</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  Analysis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">x8</span><span class="op">$</span><span class="va">k</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  Month <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="cn">T</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>  `P(Efficacy)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, <span class="va">x8</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>  `P(Futility)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, <span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>  `P(Harm)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, <span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  `P(Efficacy)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  `P(Futility)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  `P(Harm)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu">kable</span><span class="op">(</span><span class="va">probs</span>, digits <span class="op">=</span> <span class="fl">4</span>, caption <span class="op">=</span> <span class="st">"Boundary crossing probabilities"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">kable</span><span class="op">(</span><span class="va">probs</span>, digits <span class="op">=</span> <span class="fl">4</span>, caption <span class="op">=</span> <span class="st">"Cumulative boundary crossing probabilities"</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
-<caption>Boundary crossing probabilities</caption>
+<caption>Cumulative boundary crossing probabilities</caption>
 <colgroup>
 <col width="28%">
 <col width="13%">
@@ -473,32 +484,32 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <td align="right">2</td>
 <td align="right">24</td>
 <td align="right">0.0001</td>
-<td align="right">0.4806</td>
-<td align="right">0.0334</td>
+<td align="right">0.5554</td>
+<td align="right">0.0507</td>
 </tr>
 <tr class="odd">
 <td align="left">Under H0 (HR=1)</td>
 <td align="right">3</td>
 <td align="right">36</td>
-<td align="right">0.0016</td>
-<td align="right">0.3087</td>
-<td align="right">0.0229</td>
+<td align="right">0.0017</td>
+<td align="right">0.8641</td>
+<td align="right">0.0736</td>
 </tr>
 <tr class="even">
 <td align="left">Under H0 (HR=1)</td>
 <td align="right">4</td>
 <td align="right">48</td>
-<td align="right">0.0045</td>
-<td align="right">0.0990</td>
-<td align="right">0.0154</td>
+<td align="right">0.0062</td>
+<td align="right">0.9631</td>
+<td align="right">0.0890</td>
 </tr>
 <tr class="odd">
 <td align="left">Under H0 (HR=1)</td>
 <td align="right">5</td>
 <td align="right">60</td>
-<td align="right">0.0050</td>
-<td align="right">0.0257</td>
-<td align="right">0.0110</td>
+<td align="right">0.0112</td>
+<td align="right">0.9888</td>
+<td align="right">0.1000</td>
 </tr>
 <tr class="even">
 <td align="left">Under H1 (HR=0.75)</td>
@@ -513,32 +524,32 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <td align="right">2</td>
 <td align="right">24</td>
 <td align="right">0.0574</td>
-<td align="right">0.0143</td>
-<td align="right">0.0000</td>
+<td align="right">0.0181</td>
+<td align="right">0.0004</td>
 </tr>
 <tr class="even">
 <td align="left">Under H1 (HR=0.75)</td>
 <td align="right">3</td>
 <td align="right">36</td>
-<td align="right">0.4416</td>
-<td align="right">0.0217</td>
-<td align="right">0.0000</td>
+<td align="right">0.4990</td>
+<td align="right">0.0398</td>
+<td align="right">0.0004</td>
 </tr>
 <tr class="odd">
 <td align="left">Under H1 (HR=0.75)</td>
 <td align="right">4</td>
 <td align="right">48</td>
-<td align="right">0.3006</td>
-<td align="right">0.0277</td>
-<td align="right">0.0000</td>
+<td align="right">0.7996</td>
+<td align="right">0.0675</td>
+<td align="right">0.0004</td>
 </tr>
 <tr class="even">
 <td align="left">Under H1 (HR=0.75)</td>
 <td align="right">5</td>
 <td align="right">60</td>
-<td align="right">0.1004</td>
-<td align="right">0.0325</td>
-<td align="right">0.0000</td>
+<td align="right">0.9000</td>
+<td align="right">0.1000</td>
+<td align="right">0.0004</td>
 </tr>
 </tbody>
 </table>
@@ -879,6 +890,51 @@ Type I error may be inflated.</li>
 </ul>
 <p>In most regulatory settings, <code>test.type = 8</code> is the safer
 and more common choice.</p>
+</div>
+<div class="section level3">
+<h3 id="why-a-separate-binding-harm-non-binding-futility-option-is-unnecessary">Why a separate “binding harm / non-binding futility” option is
+unnecessary<a class="anchor" aria-label="anchor" href="#why-a-separate-binding-harm-non-binding-futility-option-is-unnecessary"></a>
+</h3>
+<p>One might consider a design where the futility bound is non-binding
+but the harm bound is binding. In practice, such a distinction has no
+computational effect. The harm bound is computed <em>after</em> the
+efficacy and futility bounds are set and does not feed back into those
+computations. When the futility bound is non-binding (as in
+<code>test.type = 8</code>), the efficacy bound is computed ignoring all
+lower-bound stopping. Since the harm bound lies below the futility
+bound, making the harm bound “binding” while the futility bound remains
+non-binding would not change the efficacy boundary, the required number
+of events, the final Z-values, or the p-values — the results are
+identical.</p>
+<p>The only difference would be in <em>interpretation</em>: whether
+crossing the harm bound is treated as a firm commitment to stop or as
+advisory information for the DMC. This interpretive distinction does not
+require a separate <code>test.type</code>; it can be addressed in the
+protocol language and the DMC charter. The <code>test.type = 8</code>
+framework already provides full flexibility for the DMC to treat the
+harm bound as either advisory or mandatory.</p>
+</div>
+<div class="section level3">
+<h3 id="adjusting-the-boundaries">Adjusting the boundaries<a class="anchor" aria-label="anchor" href="#adjusting-the-boundaries"></a>
+</h3>
+<p>The boundaries are adjustable through several design parameters:</p>
+<ul>
+<li>
+<strong>Alternate <code>astar</code></strong>: Controls the Type I
+error allocated to excess OS harm detection.</li>
+<li>
+<strong>Alternate spending functions</strong>: Different spending
+functions for efficacy, futility, and harm boundaries change the
+aggressiveness of each boundary across analyses.</li>
+<li>
+<strong>Alternate timing of analyses</strong>: Changing the calendar
+times of interim analyses shifts the information available at each
+look.</li>
+</ul>
+<p>Regardless of the statistical design, bounds must be clinically,
+ethically, and statistically sound. As previously noted, this approach
+is one option to address the regulatory expectation for OS harm
+monitoring, but other approaches may also be considered.</p>
 </div>
 </div>
 <div class="section level2 unnumbered">

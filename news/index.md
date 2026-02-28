@@ -2,6 +2,53 @@
 
 ## gsDesign 3.10.0 (February 2026)
 
+### New features
+
+- Added `test.type = 7` (binding futility and binding harm bounds) and
+  `test.type = 8` (non-binding futility and non-binding harm bounds) to
+  [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md),
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md),
+  and
+  [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md).
+  These three-boundary designs support monitoring for efficacy,
+  futility, and potential harm simultaneously, motivated by FDA guidance
+  on overall survival monitoring in oncology trials
+  ([@keaven](https://github.com/keaven),
+  [\#237](https://github.com/keaven/gsDesign/issues/237)).
+- New `sfharm` and `sfharmparam` parameters control the spending
+  function for the harm bound independently from efficacy and futility
+  spending ([@keaven](https://github.com/keaven),
+  [\#237](https://github.com/keaven/gsDesign/issues/237)).
+- All six [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
+  types,
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
+  [`print()`](https://rdrr.io/r/base/print.html),
+  [`summary()`](https://rdrr.io/r/base/summary.html), and
+  [`xtable()`](https://keaven.github.io/gsDesign/reference/xtable.md)
+  methods support the new three-boundary designs
+  ([@keaven](https://github.com/keaven),
+  [\#237](https://github.com/keaven/gsDesign/issues/237)).
+- Added `HarmBound` vignette demonstrating harm bound design and
+  interpretation ([@keaven](https://github.com/keaven),
+  [\#237](https://github.com/keaven/gsDesign/issues/237)).
+
+### Documentation
+
+- Consolidated shared roxygen2 `@param` documentation using
+  `@inheritParams` so that `test.type`, spending function parameters,
+  and other shared arguments are defined once in
+  [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
+  or [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  and inherited by
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+  [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
+  ([@keaven](https://github.com/keaven),
+  [\#237](https://github.com/keaven/gsDesign/issues/237)).
+
+## gsDesign 3.9.0 (February 2026)
+
+CRAN release: 2026-02-15
+
 ### Breaking changes
 
 - The R native pipe operator `|>` is now used throughout the code and

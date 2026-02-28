@@ -107,10 +107,60 @@ x$n.I
 sequentialPValue(gsD=x,n.I=c(100,160),Z=c(1.5,2))
 #> [1] 0.05363369
 # Use planned spending instead of information fraction; do final analysis
-sequentialPValue(gsD=x,n.I=c(100,160,190,230),Z=c(1.5,2,2.5,3),usTime=x$timing)
+seqp <- sequentialPValue(gsD=x,n.I=c(100,160,190,230),Z=c(1.5,2,2.5,3),usTime=x$timing)
+seqp
 #> [1] 0.001452684
 # Check bounds for updated design to verify at least one was crossed
 xupdate <- gsDesign(maxn.IPlan=max(x$n.I),n.I=c(100,160,190,230),usTime=x$timing,
                     delta=x$delta,delta1=x$delta1,k=4,alpha=x$alpha,test.type=1,
                     sfu=x$upper$sf,sfupar=x$upper$param)
+gsBoundSummary(xupdate,logdelta=TRUE,Nname="Events",deltaname="HR")
+#>     Analysis              Value Efficacy
+#>    IA 1: 46%                  Z   2.9626
+#>  Events: 100        p (1-sided)   0.0015
+#>                    ~HR at bound   0.5529
+#>                P(Cross) if HR=1   0.0015
+#>              P(Cross) if HR=0.6   0.3456
+#>    IA 2: 73%                  Z   2.6020
+#>  Events: 160        p (1-sided)   0.0046
+#>                    ~HR at bound   0.6627
+#>                P(Cross) if HR=1   0.0054
+#>              P(Cross) if HR=0.6   0.7459
+#>    IA 3: 87%                  Z   2.3051
+#>  Events: 190        p (1-sided)   0.0106
+#>                    ~HR at bound   0.7157
+#>                P(Cross) if HR=1   0.0122
+#>              P(Cross) if HR=0.6   0.8953
+#>        Final                  Z   2.0241
+#>  Events: 230        p (1-sided)   0.0215
+#>                    ~HR at bound   0.7657
+#>                P(Cross) if HR=1   0.0250
+#>              P(Cross) if HR=0.6   0.9709
+# Now update bound using sequential p-value as alpha level
+xupdate <- gsDesign(maxn.IPlan=max(x$n.I),n.I=c(100,160,190,230),usTime=x$timing,
+                    delta=x$delta,delta1=x$delta1,k=4,alpha=seqp,test.type=1,
+                    sfu=x$upper$sf,sfupar=x$upper$param)
+# Check that we are at bound for 1 (or more) analysis and did not exceed bound for others
+gsBoundSummary(xupdate,logdelta=TRUE,Nname="Events",deltaname="HR")
+#>     Analysis              Value Efficacy
+#>    IA 1: 46%                  Z   4.3533
+#>  Events: 100        p (1-sided)   0.0000
+#>                    ~HR at bound   0.4187
+#>                P(Cross) if HR=1   0.0000
+#>              P(Cross) if HR=0.6   0.0369
+#>    IA 2: 73%                  Z   3.7935
+#>  Events: 160        p (1-sided)   0.0001
+#>                    ~HR at bound   0.5489
+#>                P(Cross) if HR=1   0.0001
+#>              P(Cross) if HR=0.6   0.2930
+#>    IA 3: 87%                  Z   3.3900
+#>  Events: 190        p (1-sided)   0.0003
+#>                    ~HR at bound   0.6115
+#>                P(Cross) if HR=1   0.0004
+#>              P(Cross) if HR=0.6   0.5612
+#>        Final                  Z   3.0000
+#>  Events: 230        p (1-sided)   0.0013
+#>                    ~HR at bound   0.6733
+#>                P(Cross) if HR=1   0.0015
+#>              P(Cross) if HR=0.6   0.8161
 ```

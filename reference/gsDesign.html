@@ -184,6 +184,8 @@ hypothesis.</p>
 <span>  sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">4</span>,</span>
 <span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>,</span>
 <span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
+<span>  sfharm <span class="op">=</span> <span class="va">sfHSD</span>,</span>
+<span>  sfharmparam <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
 <span>  tol <span class="op">=</span> <span class="fl">1e-06</span>,</span>
 <span>  r <span class="op">=</span> <span class="fl">18</span>,</span>
 <span>  n.I <span class="op">=</span> <span class="fl">0</span>,</span>
@@ -221,7 +223,9 @@ hypothesis.</p>
 <dd><p><code>1=</code>one-sided <br><code>2=</code>two-sided symmetric <br><code>3=</code>two-sided, asymmetric, beta-spending with binding lower bound <br><code>4=</code>two-sided, asymmetric, beta-spending with non-binding lower bound
 <br><code>5=</code>two-sided, asymmetric, lower bound spending under the null
 hypothesis with binding lower bound <br><code>6=</code>two-sided, asymmetric,
-lower bound spending under the null hypothesis with non-binding lower bound.
+lower bound spending under the null hypothesis with non-binding lower bound
+<br><code>7=</code>two-sided, asymmetric, with binding futility and binding harm bounds
+<br><code>8=</code>two-sided, asymmetric, with non-binding futility and non-binding harm bounds.
 <br> See details, examples and manual.</p></dd>
 
 
@@ -234,11 +238,13 @@ lower bound spending under the null hypothesis with non-binding lower bound.
 
 
 <dt id="arg-astar">astar<a class="anchor" aria-label="anchor" href="#arg-astar"></a></dt>
-<dd><p>Normally not specified. If <code>test.type=5</code> or <code>6</code>,
-<code>astar</code> specifies the total probability of crossing a lower bound at
-all analyses combined.  This will be changed to \(1 - \)<code>alpha</code> when
-default value of 0 is used.  Since this is the expected usage, normally
-<code>astar</code> is not specified by the user.</p></dd>
+<dd><p>Total spending for the lower (test.type 5 or 6) or harm
+(test.type 7 or 8) bound under the null hypothesis. Default is 0.
+For <code>test.type</code> 5 or 6, <code>astar</code> specifies the total probability
+of crossing a lower bound at all analyses combined.
+For <code>test.type</code> 7 or 8, <code>astar</code> specifies the total probability
+of crossing the harm bound at all analyses combined under the null hypothesis.
+If <code>astar = 0</code>, it will be changed to \(1 - \)<code>alpha</code>.</p></dd>
 
 
 <dt id="arg-delta">delta<a class="anchor" aria-label="anchor" href="#arg-delta"></a></dt>
@@ -299,6 +305,17 @@ details, spending functions, manual and examples.</p></dd>
 <dd><p>Real value, default is \(-2\), which, with the default
 Hwang-Shih-DeCani spending function, specifies a less conservative spending
 rate than the default for the upper bound.</p></dd>
+
+
+<dt id="arg-sfharm">sfharm<a class="anchor" aria-label="anchor" href="#arg-sfharm"></a></dt>
+<dd><p>A spending function for the harm bound, used with
+<code>test.type = 7</code> or <code>test.type = 8</code>.
+Default is <code>sfHSD</code>. See <code><a href="spendingFunction.html">spendingFunction</a></code> for details.</p></dd>
+
+
+<dt id="arg-sfharmparam">sfharmparam<a class="anchor" aria-label="anchor" href="#arg-sfharmparam"></a></dt>
+<dd><p>Real value, default is \(-2\). Parameter for the harm
+bound spending function <code>sfharm</code>.</p></dd>
 
 
 <dt id="arg-tol">tol<a class="anchor" aria-label="anchor" href="#arg-tol"></a></dt>
@@ -365,13 +382,15 @@ that are not included in each interim analysis.</p></dd>
 <dt id="arg-ustime">usTime<a class="anchor" aria-label="anchor" href="#arg-ustime"></a></dt>
 <dd><p>Default is NULL in which case upper bound spending time is
 determined by <code>timing</code>. Otherwise, this should be a vector of length
-<code>k</code> with the spending time at each analysis (see Details).</p></dd>
+<code>k</code> with the spending time at each analysis
+(see Details section of <code>gsDesign</code>).</p></dd>
 
 
 <dt id="arg-lstime">lsTime<a class="anchor" aria-label="anchor" href="#arg-lstime"></a></dt>
 <dd><p>Default is NULL in which case lower bound spending time is
 determined by <code>timing</code>. Otherwise, this should be a vector of length
-<code>k</code> with the spending time at each analysis (see Details).</p></dd>
+<code>k</code> with the spending time at each analysis
+(see Details section of <code>gsDesign</code>).</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>

@@ -254,9 +254,9 @@ gsCPz(z, i, x, theta = NULL, ylab = NULL, ...)
 - alpha:
 
   If used, a vector of alternate alpha-levels to print boundaries for.
-  Only works with test.type 1, 4, and 6. If specified, efficacy bound
-  columns are headed by individual alpha levels. The alpha level of the
-  input design is always included as the first column.
+  Only works with test.type 1, 4, 6, 7, and 8. If specified, efficacy
+  bound columns are headed by individual alpha levels. The alpha level
+  of the input design is always included as the first column.
 
 - include.rownames:
 
@@ -557,7 +557,7 @@ xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE),
   caption = "Table caption."
 ))
 #> % latex table generated in R 4.5.2 by xtable 1.8-8 package
-#> % Mon Feb 23 21:35:21 2026
+#> % Sat Feb 28 21:19:37 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{llrr}

@@ -151,12 +151,62 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span><span class="fu">sequentialPValue</span><span class="op">(</span>gsD<span class="op">=</span><span class="va">x</span>,n.I<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">160</span><span class="op">)</span>,Z<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.05363369</span>
 <span class="r-in"><span><span class="co"># Use planned spending instead of information fraction; do final analysis</span></span></span>
-<span class="r-in"><span><span class="fu">sequentialPValue</span><span class="op">(</span>gsD<span class="op">=</span><span class="va">x</span>,n.I<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">160</span>,<span class="fl">190</span>,<span class="fl">230</span><span class="op">)</span>,Z<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>,<span class="fl">2</span>,<span class="fl">2.5</span>,<span class="fl">3</span><span class="op">)</span>,usTime<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">timing</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">seqp</span> <span class="op">&lt;-</span> <span class="fu">sequentialPValue</span><span class="op">(</span>gsD<span class="op">=</span><span class="va">x</span>,n.I<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">160</span>,<span class="fl">190</span>,<span class="fl">230</span><span class="op">)</span>,Z<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>,<span class="fl">2</span>,<span class="fl">2.5</span>,<span class="fl">3</span><span class="op">)</span>,usTime<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">timing</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">seqp</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.001452684</span>
 <span class="r-in"><span><span class="co"># Check bounds for updated design to verify at least one was crossed</span></span></span>
 <span class="r-in"><span><span class="va">xupdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span>maxn.IPlan<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,n.I<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">160</span>,<span class="fl">190</span>,<span class="fl">230</span><span class="op">)</span>,usTime<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">timing</span>,</span></span>
 <span class="r-in"><span>                    delta<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">delta</span>,delta1<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">delta1</span>,k<span class="op">=</span><span class="fl">4</span>,alpha<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">alpha</span>,test.type<span class="op">=</span><span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                    sfu<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">sf</span>,sfupar<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">param</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xupdate</span>,logdelta<span class="op">=</span><span class="cn">TRUE</span>,Nname<span class="op">=</span><span class="st">"Events"</span>,deltaname<span class="op">=</span><span class="st">"HR"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Analysis              Value Efficacy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    IA 1: 46%                  Z   2.9626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 100        p (1-sided)   0.0015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    ~HR at bound   0.5529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.3456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    IA 2: 73%                  Z   2.6020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 160        p (1-sided)   0.0046</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    ~HR at bound   0.6627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.7459</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    IA 3: 87%                  Z   2.3051</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 190        p (1-sided)   0.0106</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    ~HR at bound   0.7157</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.8953</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Final                  Z   2.0241</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 230        p (1-sided)   0.0215</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    ~HR at bound   0.7657</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.9709</span>
+<span class="r-in"><span><span class="co"># Now update bound using sequential p-value as alpha level</span></span></span>
+<span class="r-in"><span><span class="va">xupdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span>maxn.IPlan<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,n.I<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">160</span>,<span class="fl">190</span>,<span class="fl">230</span><span class="op">)</span>,usTime<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">timing</span>,</span></span>
+<span class="r-in"><span>                    delta<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">delta</span>,delta1<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">delta1</span>,k<span class="op">=</span><span class="fl">4</span>,alpha<span class="op">=</span><span class="va">seqp</span>,test.type<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                    sfu<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">sf</span>,sfupar<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">param</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Check that we are at bound for 1 (or more) analysis and did not exceed bound for others</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xupdate</span>,logdelta<span class="op">=</span><span class="cn">TRUE</span>,Nname<span class="op">=</span><span class="st">"Events"</span>,deltaname<span class="op">=</span><span class="st">"HR"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Analysis              Value Efficacy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    IA 1: 46%                  Z   4.3533</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 100        p (1-sided)   0.0000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    ~HR at bound   0.4187</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.0369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    IA 2: 73%                  Z   3.7935</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 160        p (1-sided)   0.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    ~HR at bound   0.5489</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.2930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    IA 3: 87%                  Z   3.3900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 190        p (1-sided)   0.0003</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    ~HR at bound   0.6115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.5612</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Final                  Z   3.0000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 230        p (1-sided)   0.0013</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    ~HR at bound   0.6733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.8161</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
