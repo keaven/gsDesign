@@ -13,6 +13,7 @@ TODO
 *.html
 *.rnw
 docs/
-*.Rcheck/
+/*.tar.gz
+/*.Rcheck/
 vignettes/*.html
 vignettes/*.R
