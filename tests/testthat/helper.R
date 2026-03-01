@@ -1031,15 +1031,3 @@ validate_ssrCP <- function(x, z1){
   return(expected_out)
 }
 #------------------------------------------------------------------------------
-
-# Shim for testthat::skip_unless_r() which is not available until testthat
-# 3.3.0 (dev). Skips the current test unless the running R version satisfies
-# the given constraint string, e.g. "< 4.6.0" or ">= 4.6.0".
-if (!exists("skip_unless_r", mode = "function", envir = globalenv())) {
-  skip_unless_r <- function(min_version) {
-    m <- regmatches(min_version, regexpr("^[<>=!]+", trimws(min_version)))
-    ver <- sub("^[^0-9]*", "", trimws(min_version))
-    result <- do.call(m, list(getRversion(), numeric_version(ver)))
-    skip_if_not(result, paste("Requires R", min_version))
-  }
-}
