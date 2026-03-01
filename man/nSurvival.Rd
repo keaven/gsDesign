@@ -85,10 +85,11 @@ is \code{"unif"} (uniform). A non-zero value is supplied if entry type is
 \code{"expo"} (exponential).}
 
 \item{hr}{Hazard ratio. For \code{nEvents}, this is the hazard ratio under
-the alternative hypothesis (>0).}
+the alternative hypothesis (> 0, \code{!= hr0}). Both \code{hr < hr0}
+(experimental is beneficial when lower hazard is better) and \code{hr > hr0}
+(e.g., time-to-response or safety designs) are supported.}
 
-\item{hr0}{Hazard ratio under the null hypothesis (>0, for \code{nEvents},
-\code{!= hr}).}
+\item{hr0}{Hazard ratio under the null hypothesis (> 0, \code{!= hr}).}
 
 \item{n}{Number of events. For \code{nEvents} may be input to compute power
 rather than sample size.}
@@ -99,7 +100,8 @@ desired for \code{nEvents()}.}
 \item{z}{A z-statistic.}
 
 \item{hr1}{Hazard ratio under the alternate hypothesis for \code{hrn2z,
-zn2hr} (>0, \code{!= hr0})}
+zn2hr} (> 0, \code{!= hr0}). Used to set the sign convention for converting
+between hazard ratios and Z-values.}
 }
 \value{
 \code{nSurvival} produces a list with the following component

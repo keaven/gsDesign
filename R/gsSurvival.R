@@ -88,11 +88,13 @@
 #' (optional: used for output; "months" or "years" would be the 'usual'
 #' choices).
 #' @param hr Hazard ratio. For \code{nEvents}, this is the hazard ratio under
-#' the alternative hypothesis (>0).
-#' @param hr0 Hazard ratio under the null hypothesis (>0, for \code{nEvents},
-#' \code{!= hr}).
+#' the alternative hypothesis (> 0, \code{!= hr0}). Both \code{hr < hr0}
+#' (experimental is beneficial when lower hazard is better) and \code{hr > hr0}
+#' (e.g., time-to-response or safety designs) are supported.
+#' @param hr0 Hazard ratio under the null hypothesis (> 0, \code{!= hr}).
 #' @param hr1 Hazard ratio under the alternate hypothesis for \code{hrn2z,
-#' zn2hr} (>0, \code{!= hr0})
+#' zn2hr} (> 0, \code{!= hr0}). Used to set the sign convention for converting
+#' between hazard ratios and Z-values.
 #' @param n Number of events. For \code{nEvents} may be input to compute power
 #' rather than sample size.
 #' @param tbl Indicator of whether or not scalar (vector) or tabular output is

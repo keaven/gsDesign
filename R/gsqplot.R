@@ -301,7 +301,9 @@ gsHR <- function(z, i, x, ratio = 1, ylab = "Approximate hazard ratio", ...) {
     x$hr0 <- 1
   }
 
-  hrHat <- exp(-z / sqrt(x$n.I[i] * psi)) * x$hr0
+  # Determine sign: when hr > hr0, positive Z corresponds to HR > hr0
+  s <- if (!is.null(x$hr) && x$hr > x$hr0) -1 else 1
+  hrHat <- exp(-s * z / sqrt(x$n.I[i] * psi)) * x$hr0
   hrHat
 }
 

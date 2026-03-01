@@ -111,10 +111,12 @@ vector implies a single stratum.
 Note that rates corresponding the final time period are extended indefinitely.}
 
 \item{hr}{Hazard ratio (experimental/control) under the alternate hypothesis
-(scalar).}
+(scalar, > 0, must differ from \code{hr0}). Both \code{hr < hr0}
+(experimental is beneficial when lower hazard is better) and \code{hr > hr0}
+(e.g., time-to-response or safety designs) are supported.}
 
 \item{hr0}{Hazard ratio (experimental/control) under the null hypothesis
-(scalar).}
+(scalar, > 0, must differ from \code{hr}).}
 
 \item{eta}{Scalar, vector or matrix of dropout hazard rates for the control
 group; rows represent time periods while columns represent strata; if

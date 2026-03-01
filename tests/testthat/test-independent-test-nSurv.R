@@ -23,8 +23,8 @@ testthat::test_that("Testing nSurv vs nSurvival and nEvents", {
 
 testthat::test_that("Checking consistency of Schoenfeld approximations", {
   z <- hrn2z(hr = .7, n = 100, ratio = 1.5)
-  hr <- zn2hr(z = -z, n = 100, ratio = 1.5)
-  n <- hrz2n(z = -z, hr = .7, ratio = 1.5)
+  hr <- zn2hr(z = z, n = 100, ratio = 1.5)
+  n <- hrz2n(z = z, hr = .7, ratio = 1.5)
   testthat::expect_equal(hr, .7, info = "Checking zn2hr vs hrn2z")
   testthat::expect_equal(n, 100, info = "Checking hrz2n vs hrn2z")
 })

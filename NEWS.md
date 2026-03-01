@@ -1,3 +1,21 @@
+# gsDesign 3.10.1 (February 2026)
+
+## New features
+
+- Survival design functions (`nEvents()`, `nSurv()`, `gsSurv()`,
+  `gsSurvCalendar()`) now support `hr > hr0` for time-to-event designs
+  where a larger hazard ratio is the alternative hypothesis. This enables
+  direct specification of designs for time-to-response, safety endpoints,
+  or reversed HR conventions. All sample size methods (Lachin-Foulkes,
+  Schoenfeld, Freedman, Bernstein-Lagakos) and plotting functions handle
+  both directions symmetrically (@keaven, #251).
+
+## Bug fixes
+
+- Fixed sign inconsistency in `hrn2z()` which used `sign(hr0 - hr1)`
+  while `zn2hr()` used `sign(hr1 - hr0)`, preventing correct round-trip
+  conversion. Both now use `sign(hr1 - hr0)` (@keaven, #251).
+
 # gsDesign 3.10.0 (February 2026)
 
 ## New features
