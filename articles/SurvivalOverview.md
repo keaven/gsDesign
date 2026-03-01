@@ -307,7 +307,7 @@ We replicate the Z-value with
 
 ``` r
 hrn2z(hr = hr, n = events, ratio = r)
-#> [1] -1.759287
+#> [1] 1.759287
 ```
 
 2.  Assuming an efficacy bound Z-value and event count, approximately

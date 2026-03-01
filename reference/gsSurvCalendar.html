@@ -21,7 +21,7 @@ calendar  time units as in Lan and DeMets (1989)."><meta property="og:image" con
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -195,12 +195,14 @@ Note that rates corresponding the final time period are extended indefinitely.</
 
 <dt id="arg-hr">hr<a class="anchor" aria-label="anchor" href="#arg-hr"></a></dt>
 <dd><p>Hazard ratio (experimental/control) under the alternate hypothesis
-(scalar).</p></dd>
+(scalar, &gt; 0, must differ from <code>hr0</code>). Both <code>hr &lt; hr0</code>
+(experimental is beneficial when lower hazard is better) and <code>hr &gt; hr0</code>
+(e.g., time-to-response or safety designs) are supported.</p></dd>
 
 
 <dt id="arg-hr-">hr0<a class="anchor" aria-label="anchor" href="#arg-hr-"></a></dt>
 <dd><p>Hazard ratio (experimental/control) under the null hypothesis
-(scalar).</p></dd>
+(scalar, &gt; 0, must differ from <code>hr</code>).</p></dd>
 
 
 <dt id="arg-eta">eta<a class="anchor" aria-label="anchor" href="#arg-eta"></a></dt>

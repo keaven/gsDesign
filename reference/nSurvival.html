@@ -123,7 +123,7 @@ hazard ratio &amp;gt; or &amp;lt; the null hazard ratio hr0.'><meta property="og
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -320,12 +320,13 @@ is <code>"unif"</code> (uniform). A non-zero value is supplied if entry type is
 
 <dt id="arg-hr">hr<a class="anchor" aria-label="anchor" href="#arg-hr"></a></dt>
 <dd><p>Hazard ratio. For <code>nEvents</code>, this is the hazard ratio under
-the alternative hypothesis (&gt;0).</p></dd>
+the alternative hypothesis (&gt; 0, <code>!= hr0</code>). Both <code>hr &lt; hr0</code>
+(experimental is beneficial when lower hazard is better) and <code>hr &gt; hr0</code>
+(e.g., time-to-response or safety designs) are supported.</p></dd>
 
 
 <dt id="arg-hr-">hr0<a class="anchor" aria-label="anchor" href="#arg-hr-"></a></dt>
-<dd><p>Hazard ratio under the null hypothesis (&gt;0, for <code>nEvents</code>,
-<code>!= hr</code>).</p></dd>
+<dd><p>Hazard ratio under the null hypothesis (&gt; 0, <code>!= hr</code>).</p></dd>
 
 
 <dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
@@ -344,7 +345,8 @@ desired for <code>nEvents()</code>.</p></dd>
 
 <dt id="arg-hr-">hr1<a class="anchor" aria-label="anchor" href="#arg-hr-"></a></dt>
 <dd><p>Hazard ratio under the alternate hypothesis for <code>hrn2z,
-zn2hr</code> (&gt;0, <code>!= hr0</code>)</p></dd>
+zn2hr</code> (&gt; 0, <code>!= hr0</code>). Used to set the sign convention for converting
+between hazard ratios and Z-values.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -591,9 +593,9 @@ Comparing Survival Distributions. <em>Biometrika</em>, 68, 316-319.</p>
 <span class="r-in"><span><span class="co"># and estimated hazard ratio of .6 (or 1/.6)</span></span></span>
 <span class="r-in"><span><span class="co"># assuming 2-to-1 randomization of experimental to control</span></span></span>
 <span class="r-in"><span><span class="fu">hrn2z</span><span class="op">(</span>hr <span class="op">=</span> <span class="fl">.6</span>, n <span class="op">=</span> <span class="fl">75</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -2.085437</span>
-<span class="r-in"><span><span class="fu">hrn2z</span><span class="op">(</span>hr <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">.6</span>, n <span class="op">=</span> <span class="fl">75</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.085437</span>
+<span class="r-in"><span><span class="fu">hrn2z</span><span class="op">(</span>hr <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">.6</span>, n <span class="op">=</span> <span class="fl">75</span>, ratio <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -2.085437</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

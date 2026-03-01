@@ -170,11 +170,13 @@ hrz2n(hr, z, ratio = 1, hr0 = 1)
 - hr:
 
   Hazard ratio. For `nEvents`, this is the hazard ratio under the
-  alternative hypothesis (\>0).
+  alternative hypothesis (\> 0, `!= hr0`). Both `hr < hr0` (experimental
+  is beneficial when lower hazard is better) and `hr > hr0` (e.g.,
+  time-to-response or safety designs) are supported.
 
 - hr0:
 
-  Hazard ratio under the null hypothesis (\>0, for `nEvents`, `!= hr`).
+  Hazard ratio under the null hypothesis (\> 0, `!= hr`).
 
 - n:
 
@@ -192,8 +194,9 @@ hrz2n(hr, z, ratio = 1, hr0 = 1)
 
 - hr1:
 
-  Hazard ratio under the alternate hypothesis for `hrn2z, zn2hr` (\>0,
-  `!= hr0`)
+  Hazard ratio under the alternate hypothesis for `hrn2z, zn2hr` (\> 0,
+  `!= hr0`). Used to set the sign convention for converting between
+  hazard ratios and Z-values.
 
 ## Value
 
@@ -474,7 +477,7 @@ hrz2n(hr = 2, z = 2)
 # and estimated hazard ratio of .6 (or 1/.6)
 # assuming 2-to-1 randomization of experimental to control
 hrn2z(hr = .6, n = 75, ratio = 2)
-#> [1] -2.085437
-hrn2z(hr = 1 / .6, n = 75, ratio = 2)
 #> [1] 2.085437
+hrn2z(hr = 1 / .6, n = 75, ratio = 2)
+#> [1] -2.085437
 ```

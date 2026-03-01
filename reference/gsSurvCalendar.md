@@ -153,12 +153,14 @@ gsSurvCalendar(
 - hr:
 
   Hazard ratio (experimental/control) under the alternate hypothesis
-  (scalar).
+  (scalar, \> 0, must differ from `hr0`). Both `hr < hr0` (experimental
+  is beneficial when lower hazard is better) and `hr > hr0` (e.g.,
+  time-to-response or safety designs) are supported.
 
 - hr0:
 
-  Hazard ratio (experimental/control) under the null hypothesis
-  (scalar).
+  Hazard ratio (experimental/control) under the null hypothesis (scalar,
+  \> 0, must differ from `hr`).
 
 - eta:
 

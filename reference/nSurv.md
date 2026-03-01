@@ -143,12 +143,14 @@ print(x, digits = 3, show_gsDesign = FALSE, show_strata = TRUE, ...)
 - hr:
 
   Hazard ratio (experimental/control) under the alternate hypothesis
-  (scalar).
+  (scalar, \> 0, must differ from `hr0`). Both `hr < hr0` (experimental
+  is beneficial when lower hazard is better) and `hr > hr0` (e.g.,
+  time-to-response or safety designs) are supported.
 
 - hr0:
 
-  Hazard ratio (experimental/control) under the null hypothesis
-  (scalar).
+  Hazard ratio (experimental/control) under the null hypothesis (scalar,
+  \> 0, must differ from `hr`).
 
 - eta:
 
@@ -871,7 +873,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.5.2 by xtable 1.8-8 package
-#> % Sun Mar  1 13:35:11 2026
+#> % Sun Mar  1 17:16:16 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}
