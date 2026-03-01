@@ -11,6 +11,7 @@ gsSurv <- function(
   gamma = 1, R = 12, S = NULL, T = 18, minfup = 6, ratio = 1,
   tol = .Machine$double.eps^0.25,
   usTime = NULL, lsTime = NULL,
+  testUpper = TRUE, testLower = TRUE, testHarm = TRUE,
   method = c("LachinFoulkes", "Schoenfeld", "Freedman", "BernsteinLagakos")
 ) { # KA: usTime and lsTime added 10/8/2017
   method <- match.arg(method)
@@ -44,8 +45,9 @@ gsSurv <- function(
     sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar,
     sfharm = sfharm, sfharmparam = sfharmparam, tol = tol,
     delta1 = log(hr), delta0 = log(hr0),
-    usTime = usTime, lsTime = lsTime
-  ) # KA: usTime and lsTime added 10/8/2017
+    usTime = usTime, lsTime = lsTime,
+    testUpper = testUpper, testLower = testLower, testHarm = testHarm
+  )
 
   z <- gsnSurv(x, y$n.I[k])
   eDC <- NULL

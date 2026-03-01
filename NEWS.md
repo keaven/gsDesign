@@ -1,3 +1,18 @@
+# gsDesign 3.11.0 (March 2026)
+
+## New features
+
+- Added `testUpper`, `testLower`, and `testHarm` parameters to `gsDesign()`,
+  `gsSurv()`, and `gsSurvCalendar()` for selective bound testing at interim
+  analyses. Each accepts a logical scalar or vector of length `k` specifying
+  which analyses should include that boundary. Inactive bounds are set to
+  extreme values (±20 on Z-scale) and displayed as `NA` in `print()` and
+  `gsBoundSummary()` output. This enables designs such as futility-only at
+  early interims, deferred efficacy testing, or selective harm monitoring
+  (@keaven, #141).
+- New vignette "Selective bound testing at interim analyses"
+  (`SelectiveBoundTesting`) with worked examples for all supported scenarios.
+
 # gsDesign 3.10.1 (February 2026)
 
 ## New features

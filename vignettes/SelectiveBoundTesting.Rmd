@@ -1,0 +1,312 @@
+---
+title: "Selective bound testing at interim analyses"
+author: "Keaven Anderson"
+output: rmarkdown::html_vignette
+bibliography: gsDesign.bib
+vignette: >
+  %\VignetteIndexEntry{Selective bound testing at interim analyses}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "svg",
+  fig.ext = "svg",
+  fig.width = 7.2916667,
+  fig.asp = 0.618,
+  fig.align = "center",
+  out.width = "80%"
+)
+
+options(width = 68)
+```
+
+## Introduction
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(gsDesign)
+library(knitr)
+```
+
+In many clinical trial designs, it is desirable to test only certain boundaries at specific interim analyses.
+For example:
+
+- **Futility testing at early interims only**: In some trial designs, a futility assessment is only meaningful at the first interim analysis.
+  Later analyses focus solely on efficacy.
+- **No efficacy testing at the first interim**: Some regulatory or operational considerations may preclude testing for efficacy at the very first interim.
+- **Selective harm monitoring**: For designs with harm bounds (`test.type = 7` or `8`), harm monitoring may be needed only at certain analyses.
+
+The `testUpper`, `testLower`, and `testHarm` parameters in `gsDesign()`, `gsSurv()`, and `gsSurvCalendar()` allow fine-grained control over which bounds are active at each analysis.
+When a bound is inactive at a given analysis, it is set to an extreme value ($\pm 20$ on the Z-scale) so that it cannot be crossed, and is displayed as `NA` in summaries.
+
+## Parameters
+
+Each of `testUpper`, `testLower`, and `testHarm` accepts either a single logical value (recycled to all analyses) or a logical vector of length `k` (the number of analyses):
+
+| Parameter | Description | Default | Constraints |
+|-----------|-------------|---------|-------------|
+| `testUpper` | Test the upper (efficacy) bound | `TRUE` | Must be `TRUE` at the final analysis. For `test.type` 1 and 2, overridden to all `TRUE`. |
+| `testLower` | Test the lower (futility) bound | `TRUE` | Ignored for `test.type = 1` (one-sided). Overridden to all `TRUE` for `test.type = 2` (symmetric). For `test.type >= 3`, at least one analysis must have `testLower = TRUE`. |
+| `testHarm` | Test the harm bound | `TRUE` | Only applies to `test.type = 7` or `8`. At least one analysis must have `testHarm = TRUE`. |
+
+**Validation**: At every analysis, at least one of the active bounds must be `TRUE`.
+If all three are `FALSE` at any analysis, an error is raised.
+
+## Example 1: Futility testing only at the first interim
+
+A common scenario is to test for futility only at the first interim analysis, with efficacy testing at all analyses.
+This is useful when the trial's data monitoring committee wants an early "go/no-go" decision, but not ongoing futility monitoring.
+
+```{r}
+# 3-analysis design with non-binding futility (test.type = 4)
+# Futility testing only at IA1
+x1 <- gsDesign(
+  k = 3,
+  test.type = 4,
+  alpha = 0.025,
+  beta = 0.1,
+  sfu = sfHSD,
+  sfupar = -4,
+  sfl = sfHSD,
+  sflpar = -2,
+  testLower = c(TRUE, FALSE, FALSE)
+)
+```
+
+The lower bound is active only at IA1.
+At IA2 and the final analysis, the futility bound shows as `NA`:
+
+```{r}
+gsBoundSummary(x1)
+```
+
+The probabilities under the null and alternative are recomputed accounting for the inactive bounds.
+Notice the cumulative futility crossing probability does not increase after IA1 since no further futility testing occurs.
+
+We can also see the bounds in the `print()` output:
+
+```{r}
+x1
+```
+
+### Plotting
+
+The standard plot shows the active bounds, with inactive bounds omitted:
+
+```{r, fig.cap="Power plot with futility only at IA1"}
+plot(x1, plottype = 1)
+```
+
+## Example 2: No efficacy testing at the first interim
+
+In some settings, particularly early-phase or adaptive designs, efficacy testing may be deferred until sufficient data have accrued.
+Here we skip the efficacy bound at the first interim:
+
+```{r}
+# 3-analysis design with binding futility (test.type = 3)
+# No efficacy testing at IA1
+x2 <- gsDesign(
+  k = 3,
+  test.type = 3,
+  alpha = 0.025,
+  beta = 0.1,
+  sfu = sfHSD,
+  sfupar = -4,
+  sfl = sfHSD,
+  sflpar = -2,
+  testUpper = c(FALSE, TRUE, TRUE)
+)
+```
+
+```{r}
+gsBoundSummary(x2)
+```
+
+At IA1, only the futility bound is active.
+The efficacy bound appears as `NA` for that analysis.
+
+## Example 3: Survival design with selective bounds via gsSurv
+
+The `testUpper`, `testLower`, and `testHarm` parameters pass through to `gsSurv()` and `gsSurvCalendar()`:
+
+```{r}
+# Survival design with futility only at IA1
+xs <- gsSurv(
+  k = 3,
+  test.type = 4,
+  alpha = 0.025,
+  beta = 0.1,
+  hr = 0.7,
+  timing = c(0.5, 0.75),
+  sfu = sfHSD,
+  sfupar = -4,
+  sfl = sfHSD,
+  sflpar = -2,
+  lambdaC = log(2) / 12,
+  eta = 0.01,
+  gamma = 10,
+  R = 12,
+  T = 36,
+  minfup = 24,
+  testLower = c(TRUE, FALSE, FALSE)
+)
+gsBoundSummary(xs)
+```
+
+## Example 4: Selective harm monitoring (test.type 7/8)
+
+For designs with a separate harm bound, the `testHarm` parameter controls which analyses include harm monitoring.
+This can be useful when harm monitoring is most critical during early enrollment, before longer-term safety data are available.
+
+```{r}
+# Harm bound design with harm monitoring only at IA1 and IA2
+xh <- gsDesign(
+  k = 3,
+  test.type = 8,
+  alpha = 0.025,
+  beta = 0.1,
+  astar = 0.05,
+  sfu = sfHSD,
+  sfupar = -4,
+  sfl = sfHSD,
+  sflpar = -2,
+  sfharm = sfHSD,
+  sfharmparam = 1,
+  testHarm = c(TRUE, TRUE, FALSE)
+)
+gsBoundSummary(xh)
+```
+
+The harm bound is `NA` at the final analysis.
+
+## Example 5: Combining selective efficacy and futility
+
+Both `testUpper` and `testLower` can be specified simultaneously.
+For example, a design with futility-only at IA1 and efficacy-only at IA2:
+
+```{r}
+# Futility only at IA1, efficacy only at IA2, both at Final
+x5 <- gsDesign(
+  k = 3,
+  test.type = 4,
+  alpha = 0.025,
+  beta = 0.1,
+  sfu = sfHSD,
+  sfupar = -4,
+  sfl = sfHSD,
+  sflpar = -2,
+  testUpper = c(FALSE, TRUE, TRUE),
+  testLower = c(TRUE, FALSE, FALSE)
+)
+gsBoundSummary(x5)
+```
+
+Note the `NA` values: efficacy is `NA` at IA1, and futility is `NA` at IA2 and the final analysis.
+
+## Validation rules
+
+The following rules are enforced:
+
+1. **`testUpper` must be `TRUE` at the final analysis** (the trial must always be able to reject $H_0$).
+2. **At least one bound must be active at every analysis**.
+   For example, setting `testUpper = c(FALSE, TRUE, TRUE)` and `testLower = c(FALSE, TRUE, TRUE)` would fail because no bound is active at IA1.
+3. **`test.type = 1`**: Only one-sided efficacy testing. `testLower` is ignored (set to `FALSE` internally).
+4. **`test.type = 2`**: Symmetric two-sided testing. Both `testUpper` and `testLower` are overridden to all `TRUE`.
+5. **`test.type` 3--8**: `testLower` must be `TRUE` for at least one analysis.
+6. **`test.type` 7 and 8**: `testHarm` must be `TRUE` for at least one analysis.
+
+```{r, error=TRUE}
+# This fails: testUpper must be TRUE at the final analysis
+try(gsDesign(k = 3, test.type = 3, testUpper = c(TRUE, TRUE, FALSE)))
+```
+
+```{r, error=TRUE}
+# This fails: no bound active at analysis 1
+try(gsDesign(k = 3, test.type = 4,
+  testUpper = c(FALSE, TRUE, TRUE),
+  testLower = c(FALSE, TRUE, TRUE)
+))
+```
+
+## Accessing stored flags
+
+The `testUpper`, `testLower`, and `testHarm` logical vectors are stored on the returned `gsDesign` object:
+
+```{r}
+x1$testUpper
+x1$testLower
+x1$testHarm
+```
+
+These can be inspected programmatically for downstream analyses or reporting.
+
+## Type I Error Preservation
+
+A key property of the selective bounds implementation is that **Type I error is preserved at the nominal level** regardless of which analyses are skipped.
+
+### How it works
+
+When bounds are selectively deactivated, the cumulative spending at each *performed* analysis remains at the spending function's planned value.
+At inactive analyses, the cumulative spending is frozen (no incremental spend), causing the C code to produce $\pm$EXTREMEZ bounds.
+At the next active analysis, the incremental spend absorbs the budget from any prior skipped analyses, so the cumulative spend catches up to the planned level.
+The efficacy bounds at active analyses are then recomputed using the modified spending with the sample size held fixed, ensuring the total alpha spent equals the nominal level.
+
+### Non-binding futility (test.type 4 or 6)
+
+For non-binding designs, the efficacy bounds are computed under the assumption that the trial *may continue past the futility bound* (i.e., futility does not contribute to the upper alpha calculation).
+Since upper bounds are independent of lower bounds, removing futility has no effect on the upper (efficacy) bounds or the non-binding alpha:
+
+```{r}
+# Baseline non-binding design
+x_nb <- gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1)
+
+# Remove futility at IA2 and final
+x_nb_sel <- gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1,
+  testLower = c(TRUE, FALSE, FALSE))
+
+# Non-binding alpha (computed ignoring lower bounds)
+nb_alpha_base <- sum(gsprob(0, x_nb$n.I, rep(-20, 3), x_nb$upper$bound, r = x_nb$r)$probhi)
+nb_alpha_sel  <- sum(gsprob(0, x_nb_sel$n.I, rep(-20, 3), x_nb_sel$upper$bound, r = x_nb_sel$r)$probhi)
+cat("Baseline non-binding alpha: ", nb_alpha_base, "\n")
+cat("Selective non-binding alpha:", nb_alpha_sel , "\n")
+cat("Upper bounds identical:     ", all.equal(x_nb$upper$bound, x_nb_sel$upper$bound), "\n")
+```
+
+When removing early efficacy bounds, the upper bounds at active analyses adjust to absorb the redistributed spending, still totalling exactly $\alpha = 0.025$:
+
+```{r}
+# Remove efficacy at IA1
+x_nb_eff <- gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1,
+  testUpper = c(FALSE, TRUE, TRUE))
+nb_alpha_eff <- sum(gsprob(0, x_nb_eff$n.I, rep(-20, 3), x_nb_eff$upper$bound, r = x_nb_eff$r)$probhi)
+cat("Non-binding alpha (skip IA1 efficacy):", nb_alpha_eff, "\n")
+```
+
+### Binding futility (test.type 3 or 5)
+
+For binding designs, the efficacy bounds depend on the futility bounds.
+When futility bounds are selectively removed, the bounds are recomputed with the modified spending while holding sample size fixed.
+This ensures the cumulative Type I error remains at the nominal level:
+
+```{r}
+# Baseline binding design
+x_b <- gsDesign(k = 3, test.type = 3, alpha = 0.025, beta = 0.1)
+cat("Baseline alpha:", sum(x_b$upper$prob[, 1]), "\n")
+
+# Remove futility at IA2 and final
+x_b_sel <- gsDesign(k = 3, test.type = 3, alpha = 0.025, beta = 0.1,
+  testLower = c(TRUE, FALSE, FALSE))
+cat("Selective alpha:", sum(x_b_sel$upper$prob[, 1]), "\n")
+
+# Remove efficacy at IA1
+x_b_eff <- gsDesign(k = 3, test.type = 3, alpha = 0.025, beta = 0.1,
+  testUpper = c(FALSE, TRUE, TRUE))
+cat("Skip IA1 efficacy alpha:", sum(x_b_eff$upper$prob[, 1]), "\n")
+```
+
+In all cases, the actual Type I error is exactly $\alpha = 0.025$ (within numerical tolerance).
+The sample size remains unchanged from the baseline design, and the bounds at active analyses adjust to properly allocate the spending budget.
+

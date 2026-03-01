@@ -128,8 +128,7 @@ gsBound <- function(I, trueneg, falsepos, tol = 0.000001, r = 18, printerr = 0) 
   checkLengths(trueneg, falsepos, I)
 
   k <- as.integer(length(I))
-  if (trueneg[k] <= 0.) stop("Final futility spend must be > 0")
-  if (falsepos[k] <= 0.) stop("Final efficacy spend must be > 0")
+  # Note: 0 final spend is allowed; C code returns +/-EXTREMEZ bound
   r <- as.integer(r)
   printerr <- as.integer(printerr)
   storage.mode(I) <- "double"
@@ -170,7 +169,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 
   # coerce type
   k <- as.integer(length(I))
-  if (probhi[k] <= 0.) stop("Final spend must be > 0")
+  # Note: probhi[k] <= 0 is allowed; C code returns EXTREMEZ bound
   r <- as.integer(r)
   printerr <- as.integer(printerr)
 
@@ -356,6 +355,36 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' determined by \code{timing}. Otherwise, this should be a vector of length 
 #' \code{k} with the spending time at each analysis
 #' (see Details section of \code{\link{gsDesign}}).
+#' @param testUpper Indicator of which analyses should include an upper
+#' (efficacy) bound.
+#' A single value of \code{TRUE} (default) indicates all analyses have an
+#' efficacy bound.
+#' Otherwise, a logical vector of length \code{k} indicating which analyses
+#' will have an efficacy bound.
+#' Overridden to all \code{TRUE} for \code{test.type} 1 and 2.
+#' Must be \code{TRUE} at the final analysis to achieve targeted power.
+#' At each analysis, at least one of \code{testUpper}, \code{testLower}, or
+#' \code{testHarm} must be \code{TRUE}.
+#' Where \code{testUpper} is \code{FALSE}, the upper bound is set to
+#' \code{+20} (effectively \code{Inf}) and displayed as \code{NA} in output.
+#' @param testLower Indicator of which analyses should include a lower
+#' (futility) bound.
+#' A single value of \code{TRUE} (default) indicates all analyses have a
+#' lower bound; \code{FALSE} indicates none.
+#' Otherwise, a logical vector of length \code{k}.
+#' Ignored for \code{test.type} 1 (one-sided, no lower bound).
+#' Overridden to all \code{TRUE} for \code{test.type} 2 (symmetric).
+#' For \code{test.type} 3--8, at least one analysis must be \code{TRUE}.
+#' Where \code{testLower} is \code{FALSE}, the lower bound is set to
+#' \code{-20} (effectively \code{-Inf}) and displayed as \code{NA} in output.
+#' @param testHarm Indicator of which analyses should include a harm bound.
+#' A single value of \code{TRUE} (default) indicates all analyses have a
+#' harm bound; \code{FALSE} indicates none.
+#' Otherwise, a logical vector of length \code{k}.
+#' Only used for \code{test.type} 7 or 8; at least one analysis must be
+#' \code{TRUE} for those types.
+#' Where \code{testHarm} is \code{FALSE}, the harm bound is set to
+#' \code{-20} (effectively \code{-Inf}) and displayed as \code{NA} in output.
 #' @return An object of the class \code{gsDesign}. This class has the following
 #' elements and upon return from \code{gsDesign()} contains: \item{k}{As
 #' input.} \item{test.type}{As input.} \item{alpha}{As input.} \item{beta}{As
@@ -383,7 +412,14 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' \code{nSurv}. Note that if you use \code{gsSurv} for time-to-event sample
 #' size, this is not needed and a more complete output summary is given.}
 #' \item{endpoint}{As input.} \item{delta1}{As input.} \item{delta0}{As input.}
-#' \item{overrun}{As input.} \item{usTime}{As input.} \item{lsTime}{As input.} \item{upper}{Upper bound spending function,
+#' \item{overrun}{As input.} \item{usTime}{As input.} \item{lsTime}{As input.}
+#' \item{testUpper}{Logical vector of length \code{k} indicating which
+#' analyses have an efficacy (upper) bound.}
+#' \item{testLower}{Logical vector of length \code{k} indicating which
+#' analyses have a futility (lower) bound.}
+#' \item{testHarm}{Logical vector of length \code{k} indicating which
+#' analyses have a harm bound (only for \code{test.type} 7 or 8).}
+#' \item{upper}{Upper bound spending function,
 #' boundary and boundary crossing probabilities under the NULL and alternate
 #' hypotheses. See \code{vignette("SpendingFunctionOverview")} and manual for further
 #' details.} \item{lower}{Lower bound spending function, boundary and boundary
@@ -462,7 +498,9 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
                      delta = 0, n.fix = 1, timing = 1, sfu = sfHSD, sfupar = -4,
                      sfl = sfHSD, sflpar = -2, sfharm = sfHSD, sfharmparam = -2,
                      tol = 0.000001, r = 18, n.I = 0, maxn.IPlan = 0,
-                     nFixSurv = 0, endpoint = NULL, delta1 = 1, delta0 = 0, overrun = 0, usTime = NULL, lsTime = NULL) {
+                     nFixSurv = 0, endpoint = NULL, delta1 = 1, delta0 = 0, overrun = 0,
+                     usTime = NULL, lsTime = NULL,
+                     testUpper = TRUE, testLower = TRUE, testHarm = TRUE) {
   # Derive a group sequential design and return in a gsDesign structure
   # set up class variable x for gsDesign being requested
   x <- list(
@@ -475,6 +513,9 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
 
   # check parameters other than spending functions
   x <- gsDErrorCheck(x)
+
+  # --- Validate and expand testUpper, testLower, testHarm ---
+  testBounds <- gsTestBoundsCheck(x$k, x$test.type, testUpper, testLower, testHarm)
   # if usTime (upper spending time) is specified, check it
   if (!is.null(usTime)){
     checkVector(usTime[1:(x$k-1)],"numeric",c(0,1),c(FALSE,FALSE)) # interim fractions in (0,1)
@@ -568,6 +609,10 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
     gsDType8(x)
   )
   if (x$nFixSurv > 0) x$nSurv <- ceiling(x$nFixSurv * x$n.I[x$k] / n.fix / 2) * 2
+
+  # --- Apply testUpper/testLower/testHarm: recompute bounds at active analyses ---
+  x <- gsApplyTestBounds(x, testBounds)
+
   x
 }
 
@@ -1585,6 +1630,169 @@ gsDProb <- function(theta, d) {
   }
 
   d
+}
+
+# gsTestBoundsCheck: validate and expand testUpper/testLower/testHarm ----
+gsTestBoundsCheck <- function(k, test.type, testUpper, testLower, testHarm) {
+  # --- testUpper ---
+  # test.type 1 and 2: override to all TRUE
+  if (test.type %in% 1:2) {
+    testUpper <- rep(TRUE, k)
+  } else {
+    if (length(testUpper) == 1) testUpper <- rep(testUpper, k)
+    if (!is.logical(testUpper) || length(testUpper) != k) {
+      stop("testUpper must be a logical scalar or vector of length k")
+    }
+    if (!testUpper[k]) stop("testUpper must be TRUE at the final analysis")
+  }
+
+
+  # --- testLower ---
+  # test.type 1: no lower bound, ignore
+  if (test.type == 1) {
+    testLower <- rep(FALSE, k)
+  } else if (test.type == 2) {
+    # test.type 2: override to all TRUE (symmetric)
+    testLower <- rep(TRUE, k)
+  } else {
+    if (length(testLower) == 1) testLower <- rep(testLower, k)
+    if (!is.logical(testLower) || length(testLower) != k) {
+      stop("testLower must be a logical scalar or vector of length k")
+    }
+    if (test.type %in% 3:8 && !any(testLower)) {
+      stop("For test.type > 2, testLower must be TRUE for at least one analysis")
+    }
+  }
+
+  # --- testHarm ---
+  if (test.type %in% 7:8) {
+    if (length(testHarm) == 1) testHarm <- rep(testHarm, k)
+    if (!is.logical(testHarm) || length(testHarm) != k) {
+      stop("testHarm must be a logical scalar or vector of length k")
+    }
+    if (!any(testHarm)) {
+      stop("For test.type 7 or 8, testHarm must be TRUE for at least one analysis")
+    }
+  } else {
+    testHarm <- rep(FALSE, k)
+  }
+
+  # At each analysis, at least one bound must be active
+  for (i in seq_len(k)) {
+    if (!testUpper[i] && !testLower[i] && !testHarm[i]) {
+      stop(paste("At analysis", i, "at least one of testUpper, testLower, or testHarm must be TRUE"))
+    }
+  }
+
+  list(testUpper = testUpper, testLower = testLower, testHarm = testHarm)
+}
+
+# gsModifySpend: flatten cumulative spending at inactive analyses ----
+# At skipped analyses, cumulative spend stays at the previous value (0 incremental).
+# At active analyses, cumulative spend remains at the spending function target.
+# This ensures the C code produces +/-EXTREMEZ at inactive analyses and
+# the correct bounds at active analyses, preserving cumulative alpha/beta.
+gsModifySpend <- function(cumspend, active) {
+  for (i in seq_along(cumspend)) {
+    if (!active[i]) {
+      cumspend[i] <- if (i == 1) 0 else cumspend[i - 1]
+    }
+  }
+  cumspend
+}
+
+# gsApplyTestBounds: recompute bounds with modified spending at inactive analyses ----
+# Strategy: after the initial design computation (which determines sample size),
+# reconstruct modified cumulative spending (flattened at inactive analyses) and
+# re-call the gsDType bound computation with fixed n.I.
+# At skipped analyses, incremental spend = 0 → C code returns ±EXTREMEZ bounds.
+# At active analyses, the incremental spend absorbs the skipped budget, so
+# bounds adjust and cumulative alpha/beta at performed analyses is preserved.
+gsApplyTestBounds <- function(x, testBounds) {
+  x$testUpper <- testBounds$testUpper
+  x$testLower <- testBounds$testLower
+  x$testHarm  <- testBounds$testHarm
+
+  # Check if any bounds are inactive
+  all_active <- all(testBounds$testUpper) &&
+    (x$test.type <= 2 || all(testBounds$testLower)) &&
+    (!(x$test.type %in% c(7, 8)) || all(testBounds$testHarm))
+
+  if (!all_active) {
+    k <- x$k
+
+    # Reconstruct modified cumulative spending from incremental
+    # (gsDType stores INCREMENTAL in x$upper$spend / x$lower$spend)
+    orig_cum_upper <- cumsum(x$upper$spend)
+    mod_cum_upper <- gsModifySpend(orig_cum_upper, testBounds$testUpper)
+    x$upper$spend <- mod_cum_upper  # gsDType expects cumulative on input
+
+    if (x$test.type > 2) {
+      orig_cum_lower <- cumsum(x$lower$spend)
+      mod_cum_lower <- gsModifySpend(orig_cum_lower, testBounds$testLower)
+      x$lower$spend <- mod_cum_lower
+    }
+
+    if (x$test.type %in% c(7, 8)) {
+      orig_cum_harm <- cumsum(x$harm$spend)
+      mod_cum_harm <- gsModifySpend(orig_cum_harm, testBounds$testHarm)
+      x$harm$spend <- mod_cum_harm
+    }
+
+    # For test.type 6, ensure maxn.IPlan is set for the fixed-n.I code path
+    if (x$test.type == 6 && x$maxn.IPlan == 0) {
+      x$maxn.IPlan <- x$n.I[k]
+    }
+
+    # Re-call gsDType with fixed n.I (length(x$n.I) == k triggers the
+    # bound-recomputation path in each gsDType variant)
+    x <- switch(x$test.type,
+      gsDType1(x),
+      gsDType2and5(x),
+      gsDType3(x),
+      gsDType4(x),
+      gsDType2and5(x),
+      gsDType6(x),
+      gsDType7(x),
+      gsDType8(x)
+    )
+
+    # Re-store test bounds flags (gsDType doesn't know about them)
+    x$testUpper <- testBounds$testUpper
+    x$testLower <- testBounds$testLower
+    x$testHarm  <- testBounds$testHarm
+
+    # Safety net: ensure inactive bounds are at ±EXTREMEZ.
+    # Most gsDType functions already produce this via 0 incremental spend,
+    # but some (e.g. gsDType6) hardcode the final lower = upper.
+    EXTREMEZ <- 20
+    for (i in seq_len(k)) {
+      if (!testBounds$testUpper[i]) x$upper$bound[i] <- EXTREMEZ
+      if (x$test.type > 2 && !testBounds$testLower[i]) x$lower$bound[i] <- -EXTREMEZ
+      if (x$test.type %in% c(7, 8) && !testBounds$testHarm[i]) x$harm$bound[i] <- -EXTREMEZ
+    }
+  }
+
+  # Recompute crossing probabilities with the final bounds
+  if (x$test.type == 1) {
+    a <- rep(-20, x$k)
+  } else {
+    a <- x$lower$bound
+  }
+  y <- gsprob(x$theta, x$n.I, a, x$upper$bound, r = x$r, overrun = x$overrun)
+  x$upper$prob <- y$probhi
+  x$en <- as.vector(y$en)
+  if (x$test.type > 1) {
+    x$lower$prob <- y$problo
+  }
+
+  # Recompute harm crossing probabilities
+  if (x$test.type %in% c(7, 8)) {
+    y2 <- gsprob(x$theta, x$n.I, x$harm$bound, x$upper$bound, r = x$r)
+    x$harm$prob <- y2$problo
+  }
+
+  x
 }
 
 # gsDErrorCheck roxy [sinew] ----
