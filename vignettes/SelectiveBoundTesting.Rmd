@@ -268,8 +268,8 @@ x_nb_sel <- gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1,
   testLower = c(TRUE, FALSE, FALSE))
 
 # Non-binding alpha (computed ignoring lower bounds)
-nb_alpha_base <- sum(gsprob(0, x_nb$n.I, rep(-20, 3), x_nb$upper$bound, r = x_nb$r)$probhi)
-nb_alpha_sel  <- sum(gsprob(0, x_nb_sel$n.I, rep(-20, 3), x_nb_sel$upper$bound, r = x_nb_sel$r)$probhi)
+nb_alpha_base <- sum(gsDesign:::gsprob(0, x_nb$n.I, rep(-20, 3), x_nb$upper$bound, r = x_nb$r)$probhi)
+nb_alpha_sel  <- sum(gsDesign:::gsprob(0, x_nb_sel$n.I, rep(-20, 3), x_nb_sel$upper$bound, r = x_nb_sel$r)$probhi)
 cat("Baseline non-binding alpha: ", nb_alpha_base, "\n")
 cat("Selective non-binding alpha:", nb_alpha_sel , "\n")
 cat("Upper bounds identical:     ", all.equal(x_nb$upper$bound, x_nb_sel$upper$bound), "\n")
@@ -281,7 +281,7 @@ When removing early efficacy bounds, the upper bounds at active analyses adjust 
 # Remove efficacy at IA1
 x_nb_eff <- gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1,
   testUpper = c(FALSE, TRUE, TRUE))
-nb_alpha_eff <- sum(gsprob(0, x_nb_eff$n.I, rep(-20, 3), x_nb_eff$upper$bound, r = x_nb_eff$r)$probhi)
+nb_alpha_eff <- sum(gsDesign:::gsprob(0, x_nb_eff$n.I, rep(-20, 3), x_nb_eff$upper$bound, r = x_nb_eff$r)$probhi)
 cat("Non-binding alpha (skip IA1 efficacy):", nb_alpha_eff, "\n")
 ```
 
