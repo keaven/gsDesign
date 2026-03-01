@@ -1,6 +1,56 @@
 # Changelog
 
-## gsDesign (development version)
+## gsDesign 3.11.0 (March 2026)
+
+### New features
+
+- Added `testUpper`, `testLower`, and `testHarm` parameters to
+  [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md),
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md),
+  and
+  [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
+  for selective bound testing at interim analyses. Each accepts a
+  logical scalar or vector of length `k` specifying which analyses
+  should include that boundary. Inactive bounds are set to extreme
+  values (±20 on Z-scale) and displayed as `NA` in
+  [`print()`](https://rdrr.io/r/base/print.html) and
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+  output. This enables designs such as futility-only at early interims,
+  deferred efficacy testing, or selective harm monitoring
+  ([@keaven](https://github.com/keaven),
+  [\#141](https://github.com/keaven/gsDesign/issues/141)).
+- New vignette “Selective bound testing at interim analyses”
+  (`SelectiveBoundTesting`) with worked examples for all supported
+  scenarios.
+
+## gsDesign 3.10.1 (February 2026)
+
+### New features
+
+- Survival design functions
+  ([`nEvents()`](https://keaven.github.io/gsDesign/reference/nSurvival.md),
+  [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md),
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md),
+  [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md))
+  now support `hr > hr0` for time-to-event designs where a larger hazard
+  ratio is the alternative hypothesis. This enables direct specification
+  of designs for time-to-response, safety endpoints, or reversed HR
+  conventions. All sample size methods (Lachin-Foulkes, Schoenfeld,
+  Freedman, Bernstein-Lagakos) and plotting functions handle both
+  directions symmetrically ([@keaven](https://github.com/keaven),
+  [\#251](https://github.com/keaven/gsDesign/issues/251)).
+
+### Bug fixes
+
+- Fixed sign inconsistency in
+  [`hrn2z()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  which used `sign(hr0 - hr1)` while
+  [`zn2hr()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  used `sign(hr1 - hr0)`, preventing correct round-trip conversion. Both
+  now use `sign(hr1 - hr0)` ([@keaven](https://github.com/keaven),
+  [\#251](https://github.com/keaven/gsDesign/issues/251)).
+
+## gsDesign 3.10.0 (February 2026)
 
 ### New features
 

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,9 +39,28 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="gsdesign-development-version">gsDesign (development version)<a class="anchor" aria-label="anchor" href="#gsdesign-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="3.11.0" id="gsdesign-3110-march-2026">gsDesign 3.11.0 (March 2026)<a class="anchor" aria-label="anchor" href="#gsdesign-3110-march-2026"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-3-11-0">New features<a class="anchor" aria-label="anchor" href="#new-features-3-11-0"></a></h3>
+<ul><li>Added <code>testUpper</code>, <code>testLower</code>, and <code>testHarm</code> parameters to <code><a href="../reference/gsDesign.html">gsDesign()</a></code>, <code><a href="../reference/nSurv.html">gsSurv()</a></code>, and <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code> for selective bound testing at interim analyses. Each accepts a logical scalar or vector of length <code>k</code> specifying which analyses should include that boundary. Inactive bounds are set to extreme values (±20 on Z-scale) and displayed as <code>NA</code> in <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> output. This enables designs such as futility-only at early interims, deferred efficacy testing, or selective harm monitoring (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/141" class="external-link">#141</a>).</li>
+<li>New vignette “Selective bound testing at interim analyses” (<code>SelectiveBoundTesting</code>) with worked examples for all supported scenarios.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.10.1" id="gsdesign-3101-february-2026">gsDesign 3.10.1 (February 2026)<a class="anchor" aria-label="anchor" href="#gsdesign-3101-february-2026"></a></h2>
+<div class="section level3">
+<h3 id="new-features-3-10-1">New features<a class="anchor" aria-label="anchor" href="#new-features-3-10-1"></a></h3>
+<ul><li>Survival design functions (<code><a href="../reference/nSurvival.html">nEvents()</a></code>, <code><a href="../reference/nSurv.html">nSurv()</a></code>, <code><a href="../reference/nSurv.html">gsSurv()</a></code>, <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>) now support <code>hr &gt; hr0</code> for time-to-event designs where a larger hazard ratio is the alternative hypothesis. This enables direct specification of designs for time-to-response, safety endpoints, or reversed HR conventions. All sample size methods (Lachin-Foulkes, Schoenfeld, Freedman, Bernstein-Lagakos) and plotting functions handle both directions symmetrically (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/251" class="external-link">#251</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-3-10-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-10-1"></a></h3>
+<ul><li>Fixed sign inconsistency in <code><a href="../reference/nSurvival.html">hrn2z()</a></code> which used <code>sign(hr0 - hr1)</code> while <code><a href="../reference/nSurvival.html">zn2hr()</a></code> used <code>sign(hr1 - hr0)</code>, preventing correct round-trip conversion. Both now use <code>sign(hr1 - hr0)</code> (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/251" class="external-link">#251</a>).</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.10.0" id="gsdesign-3100-february-2026">gsDesign 3.10.0 (February 2026)<a class="anchor" aria-label="anchor" href="#gsdesign-3100-february-2026"></a></h2>
+<div class="section level3">
+<h3 id="new-features-3-10-0">New features<a class="anchor" aria-label="anchor" href="#new-features-3-10-0"></a></h3>
 <ul><li>Added <code>test.type = 7</code> (binding futility and binding harm bounds) and <code>test.type = 8</code> (non-binding futility and non-binding harm bounds) to <code><a href="../reference/gsDesign.html">gsDesign()</a></code>, <code><a href="../reference/nSurv.html">gsSurv()</a></code>, and <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>. These three-boundary designs support monitoring for efficacy, futility, and potential harm simultaneously, motivated by FDA guidance on overall survival monitoring in oncology trials (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/237" class="external-link">#237</a>).</li>
 <li>New <code>sfharm</code> and <code>sfharmparam</code> parameters control the spending function for the harm bound independently from efficacy and futility spending (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/237" class="external-link">#237</a>).</li>
 <li>All six <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> types, <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code>, <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, and <code><a href="../reference/xtable.html">xtable()</a></code> methods support the new three-boundary designs (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/237" class="external-link">#237</a>).</li>
@@ -49,11 +68,11 @@
 <li>Survival design functions (<code><a href="../reference/nSurvival.html">nEvents()</a></code>, <code><a href="../reference/nSurv.html">nSurv()</a></code>, <code><a href="../reference/nSurv.html">gsSurv()</a></code>, <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>) now support <code>hr &gt; hr0</code> for time-to-event designs where a larger hazard ratio is the alternative hypothesis. This enables direct specification of designs for time-to-response, safety endpoints, or reversed HR conventions. All sample size methods (Lachin-Foulkes, Schoenfeld, Freedman, Bernstein-Lagakos) and plotting functions handle both directions symmetrically (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/251" class="external-link">#251</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-3-10-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-10-0"></a></h3>
 <ul><li>Fixed sign inconsistency in <code><a href="../reference/nSurvival.html">hrn2z()</a></code> which used <code>sign(hr0 - hr1)</code> while <code><a href="../reference/nSurvival.html">zn2hr()</a></code> used <code>sign(hr1 - hr0)</code>, preventing correct round-trip conversion. Both now use <code>sign(hr1 - hr0)</code> (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/251" class="external-link">#251</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<h3 id="documentation-3-10-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-3-10-0"></a></h3>
 <ul><li>Consolidated shared roxygen2 <code>@param</code> documentation using <code>@inheritParams</code> so that <code>test.type</code>, spending function parameters, and other shared arguments are defined once in <code><a href="../reference/gsDesign.html">gsDesign()</a></code> or <code><a href="../reference/nSurv.html">nSurv()</a></code> and inherited by <code><a href="../reference/nSurv.html">gsSurv()</a></code> and <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code> (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/237" class="external-link">#237</a>).</li>
 </ul></div>
 </div>

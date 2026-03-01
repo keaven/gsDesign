@@ -36,6 +36,9 @@ gsSurvCalendar(
   ratio = 1,
   r = 18,
   tol = .Machine$double.eps^0.25,
+  testUpper = TRUE,
+  testLower = TRUE,
+  testHarm = TRUE,
   method = c("LachinFoulkes", "Schoenfeld", "Freedman", "BernsteinLagakos")
 )
 ```
@@ -224,6 +227,38 @@ gsSurvCalendar(
   Tolerance for error passed to the
   [`gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
   function.
+
+- testUpper:
+
+  Indicator of which analyses should include an upper (efficacy) bound.
+  A single value of `TRUE` (default) indicates all analyses have an
+  efficacy bound. Otherwise, a logical vector of length `k` indicating
+  which analyses will have an efficacy bound. Overridden to all `TRUE`
+  for `test.type` 1 and 2. Must be `TRUE` at the final analysis to
+  achieve targeted power. At each analysis, at least one of `testUpper`,
+  `testLower`, or `testHarm` must be `TRUE`. Where `testUpper` is
+  `FALSE`, the upper bound is set to `+20` (effectively `Inf`) and
+  displayed as `NA` in output.
+
+- testLower:
+
+  Indicator of which analyses should include a lower (futility) bound. A
+  single value of `TRUE` (default) indicates all analyses have a lower
+  bound; `FALSE` indicates none. Otherwise, a logical vector of length
+  `k`. Ignored for `test.type` 1 (one-sided, no lower bound). Overridden
+  to all `TRUE` for `test.type` 2 (symmetric). For `test.type` 3–8, at
+  least one analysis must be `TRUE`. Where `testLower` is `FALSE`, the
+  lower bound is set to `-20` (effectively `-Inf`) and displayed as `NA`
+  in output.
+
+- testHarm:
+
+  Indicator of which analyses should include a harm bound. A single
+  value of `TRUE` (default) indicates all analyses have a harm bound;
+  `FALSE` indicates none. Otherwise, a logical vector of length `k`.
+  Only used for `test.type` 7 or 8; at least one analysis must be `TRUE`
+  for those types. Where `testHarm` is `FALSE`, the harm bound is set to
+  `-20` (effectively `-Inf`) and displayed as `NA` in output.
 
 - method:
 

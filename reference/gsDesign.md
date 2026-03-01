@@ -78,7 +78,10 @@ gsDesign(
   delta0 = 0,
   overrun = 0,
   usTime = NULL,
-  lsTime = NULL
+  lsTime = NULL,
+  testUpper = TRUE,
+  testLower = TRUE,
+  testHarm = TRUE
 )
 
 # S3 method for class 'gsDesign'
@@ -282,6 +285,38 @@ xtable(
   by `timing`. Otherwise, this should be a vector of length `k` with the
   spending time at each analysis (see Details section of `gsDesign`).
 
+- testUpper:
+
+  Indicator of which analyses should include an upper (efficacy) bound.
+  A single value of `TRUE` (default) indicates all analyses have an
+  efficacy bound. Otherwise, a logical vector of length `k` indicating
+  which analyses will have an efficacy bound. Overridden to all `TRUE`
+  for `test.type` 1 and 2. Must be `TRUE` at the final analysis to
+  achieve targeted power. At each analysis, at least one of `testUpper`,
+  `testLower`, or `testHarm` must be `TRUE`. Where `testUpper` is
+  `FALSE`, the upper bound is set to `+20` (effectively `Inf`) and
+  displayed as `NA` in output.
+
+- testLower:
+
+  Indicator of which analyses should include a lower (futility) bound. A
+  single value of `TRUE` (default) indicates all analyses have a lower
+  bound; `FALSE` indicates none. Otherwise, a logical vector of length
+  `k`. Ignored for `test.type` 1 (one-sided, no lower bound). Overridden
+  to all `TRUE` for `test.type` 2 (symmetric). For `test.type` 3–8, at
+  least one analysis must be `TRUE`. Where `testLower` is `FALSE`, the
+  lower bound is set to `-20` (effectively `-Inf`) and displayed as `NA`
+  in output.
+
+- testHarm:
+
+  Indicator of which analyses should include a harm bound. A single
+  value of `TRUE` (default) indicates all analyses have a harm bound;
+  `FALSE` indicates none. Otherwise, a logical vector of length `k`.
+  Only used for `test.type` 7 or 8; at least one analysis must be `TRUE`
+  for those types. Where `testHarm` is `FALSE`, the harm bound is set to
+  `-20` (effectively `-Inf`) and displayed as `NA` in output.
+
 - x:
 
   An R object of class found among `methods(xtable)`. See below on how
@@ -448,6 +483,21 @@ and upon return from `gsDesign()` contains:
 - lsTime:
 
   As input.
+
+- testUpper:
+
+  Logical vector of length `k` indicating which analyses have an
+  efficacy (upper) bound.
+
+- testLower:
+
+  Logical vector of length `k` indicating which analyses have a futility
+  (lower) bound.
+
+- testHarm:
+
+  Logical vector of length `k` indicating which analyses have a harm
+  bound (only for `test.type` 7 or 8).
 
 - upper:
 

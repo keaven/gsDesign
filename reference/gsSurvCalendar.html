@@ -21,7 +21,7 @@ calendar  time units as in Lan and DeMets (1989)."><meta property="og:image" con
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,6 +83,9 @@ calendar  time units as in Lan and DeMets (1989).</p>
 <span>  ratio <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  r <span class="op">=</span> <span class="fl">18</span>,</span>
 <span>  tol <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.25</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  testLower <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  testHarm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LachinFoulkes"</span>, <span class="st">"Schoenfeld"</span>, <span class="st">"Freedman"</span>, <span class="st">"BernsteinLagakos"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -265,6 +268,45 @@ not changed by users.</p></dd>
 
 <dt id="arg-tol">tol<a class="anchor" aria-label="anchor" href="#arg-tol"></a></dt>
 <dd><p>Tolerance for error passed to the <code><a href="gsDesign.html">gsDesign</a></code> function.</p></dd>
+
+
+<dt id="arg-testupper">testUpper<a class="anchor" aria-label="anchor" href="#arg-testupper"></a></dt>
+<dd><p>Indicator of which analyses should include an upper
+(efficacy) bound.
+A single value of <code>TRUE</code> (default) indicates all analyses have an
+efficacy bound.
+Otherwise, a logical vector of length <code>k</code> indicating which analyses
+will have an efficacy bound.
+Overridden to all <code>TRUE</code> for <code>test.type</code> 1 and 2.
+Must be <code>TRUE</code> at the final analysis to achieve targeted power.
+At each analysis, at least one of <code>testUpper</code>, <code>testLower</code>, or
+<code>testHarm</code> must be <code>TRUE</code>.
+Where <code>testUpper</code> is <code>FALSE</code>, the upper bound is set to
+<code>+20</code> (effectively <code>Inf</code>) and displayed as <code>NA</code> in output.</p></dd>
+
+
+<dt id="arg-testlower">testLower<a class="anchor" aria-label="anchor" href="#arg-testlower"></a></dt>
+<dd><p>Indicator of which analyses should include a lower
+(futility) bound.
+A single value of <code>TRUE</code> (default) indicates all analyses have a
+lower bound; <code>FALSE</code> indicates none.
+Otherwise, a logical vector of length <code>k</code>.
+Ignored for <code>test.type</code> 1 (one-sided, no lower bound).
+Overridden to all <code>TRUE</code> for <code>test.type</code> 2 (symmetric).
+For <code>test.type</code> 3–8, at least one analysis must be <code>TRUE</code>.
+Where <code>testLower</code> is <code>FALSE</code>, the lower bound is set to
+<code>-20</code> (effectively <code>-Inf</code>) and displayed as <code>NA</code> in output.</p></dd>
+
+
+<dt id="arg-testharm">testHarm<a class="anchor" aria-label="anchor" href="#arg-testharm"></a></dt>
+<dd><p>Indicator of which analyses should include a harm bound.
+A single value of <code>TRUE</code> (default) indicates all analyses have a
+harm bound; <code>FALSE</code> indicates none.
+Otherwise, a logical vector of length <code>k</code>.
+Only used for <code>test.type</code> 7 or 8; at least one analysis must be
+<code>TRUE</code> for those types.
+Where <code>testHarm</code> is <code>FALSE</code>, the harm bound is set to
+<code>-20</code> (effectively <code>-Inf</code>) and displayed as <code>NA</code> in output.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>

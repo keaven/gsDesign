@@ -13,6 +13,8 @@ trials with time-to-event endpoints using gsDesign.
   gsSurv](https://keaven.github.io/gsDesign/articles/gsSurvBasicExamples.md):
 - [Futility and harm bounds for overall survival
   monitoring](https://keaven.github.io/gsDesign/articles/HarmBound.md):
+- [Selective bound testing at interim
+  analyses](https://keaven.github.io/gsDesign/articles/SelectiveBoundTesting.md):
 - [A cure model calendar-based
   design](https://keaven.github.io/gsDesign/articles/PoissonMixtureModel.md):
 
