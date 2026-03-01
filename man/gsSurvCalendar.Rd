@@ -30,6 +30,9 @@ gsSurvCalendar(
   ratio = 1,
   r = 18,
   tol = .Machine$double.eps^0.25,
+  testUpper = TRUE,
+  testLower = TRUE,
+  testHarm = TRUE,
   method = c("LachinFoulkes", "Schoenfeld", "Freedman", "BernsteinLagakos")
 )
 }
@@ -161,6 +164,39 @@ accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
 not changed by users.}
 
 \item{tol}{Tolerance for error passed to the \code{\link{gsDesign}} function.}
+
+\item{testUpper}{Indicator of which analyses should include an upper
+(efficacy) bound.
+A single value of \code{TRUE} (default) indicates all analyses have an
+efficacy bound.
+Otherwise, a logical vector of length \code{k} indicating which analyses
+will have an efficacy bound.
+Overridden to all \code{TRUE} for \code{test.type} 1 and 2.
+Must be \code{TRUE} at the final analysis to achieve targeted power.
+At each analysis, at least one of \code{testUpper}, \code{testLower}, or
+\code{testHarm} must be \code{TRUE}.
+Where \code{testUpper} is \code{FALSE}, the upper bound is set to
+\code{+20} (effectively \code{Inf}) and displayed as \code{NA} in output.}
+
+\item{testLower}{Indicator of which analyses should include a lower
+(futility) bound.
+A single value of \code{TRUE} (default) indicates all analyses have a
+lower bound; \code{FALSE} indicates none.
+Otherwise, a logical vector of length \code{k}.
+Ignored for \code{test.type} 1 (one-sided, no lower bound).
+Overridden to all \code{TRUE} for \code{test.type} 2 (symmetric).
+For \code{test.type} 3--8, at least one analysis must be \code{TRUE}.
+Where \code{testLower} is \code{FALSE}, the lower bound is set to
+\code{-20} (effectively \code{-Inf}) and displayed as \code{NA} in output.}
+
+\item{testHarm}{Indicator of which analyses should include a harm bound.
+A single value of \code{TRUE} (default) indicates all analyses have a
+harm bound; \code{FALSE} indicates none.
+Otherwise, a logical vector of length \code{k}.
+Only used for \code{test.type} 7 or 8; at least one analysis must be
+\code{TRUE} for those types.
+Where \code{testHarm} is \code{FALSE}, the harm bound is set to
+\code{-20} (effectively \code{-Inf}) and displayed as \code{NA} in output.}
 
 \item{method}{One of \code{"LachinFoulkes"} (default), \code{"Schoenfeld"},
 \code{"Freedman"}, or \code{"BernsteinLagakos"}.

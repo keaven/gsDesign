@@ -304,38 +304,34 @@ testthat::test_that("gsBoundSummary for test.type=7 with Nname=Information", {
   testthat::expect_true("Harm" %in% names(bs))
 })
 
-# ---- gsBound/gsBound1 edge cases (uncovered lines 131-132, 173) ----
+# ---- gsBound/gsBound1 with 0 final spend (produces EXTREMEZ bounds) ----
 
-testthat::test_that("gsBound final futility spend must be > 0", {
-  testthat::expect_error(
-    gsBound(
-      I = c(1, 2, 3),
-      trueneg = c(0.1, 0.1, 0),
-      falsepos = c(0.01, 0.01, 0.005)
-    ),
-    "Final futility spend must be > 0"
+testthat::test_that("gsBound handles 0 final futility spend (returns EXTREMEZ)", {
+  # With 0 final futility spend, the C code returns -EXTREMEZ lower bound
+  result <- gsBound(
+    I = c(1, 2, 3),
+    trueneg = c(0.1, 0.1, 0),
+    falsepos = c(0.01, 0.01, 0.005)
   )
+  testthat::expect_true(result$a[3] <= -19)  # near -EXTREMEZ
 })
 
-testthat::test_that("gsBound final efficacy spend must be > 0", {
-  testthat::expect_error(
-    gsBound(
-      I = c(1, 2, 3),
-      trueneg = c(0.1, 0.1, 0.1),
-      falsepos = c(0.01, 0.01, 0)
-    ),
-    "Final efficacy spend must be > 0"
+testthat::test_that("gsBound handles 0 final efficacy spend (returns EXTREMEZ)", {
+  result <- gsBound(
+    I = c(1, 2, 3),
+    trueneg = c(0.1, 0.1, 0.1),
+    falsepos = c(0.01, 0.01, 0)
   )
+  testthat::expect_true(result$b[3] >= 19)  # near +EXTREMEZ
 })
 
-testthat::test_that("gsBound1 final spend must be > 0", {
-  testthat::expect_error(
-    gsBound1(
-      theta = 0,
-      I = c(1, 2, 3),
-      a = c(-3, -3, -3),
-      probhi = c(0.01, 0.01, 0)
-    ),
-    "Final spend must be > 0"
+testthat::test_that("gsBound1 handles 0 final spend (returns EXTREMEZ)", {
+  result <- gsBound1(
+    theta = 0,
+    I = c(1, 2, 3),
+    a = c(-3, -3, -3),
+    probhi = c(0.01, 0.01, 0)
   )
+  testthat::expect_true(result$b[3] >= 19)  # near +EXTREMEZ
 })
+

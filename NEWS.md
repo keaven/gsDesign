@@ -1,4 +1,37 @@
-# gsDesign (development version)
+# gsDesign 3.11.0 (March 2026)
+
+## New features
+
+- Added `testUpper`, `testLower`, and `testHarm` parameters to `gsDesign()`,
+  `gsSurv()`, and `gsSurvCalendar()` for selective bound testing at interim
+  analyses. Each accepts a logical scalar or vector of length `k` specifying
+  which analyses should include that boundary. Inactive bounds are set to
+  extreme values (±20 on Z-scale) and displayed as `NA` in `print()` and
+  `gsBoundSummary()` output. This enables designs such as futility-only at
+  early interims, deferred efficacy testing, or selective harm monitoring
+  (@keaven, #141).
+- New vignette "Selective bound testing at interim analyses"
+  (`SelectiveBoundTesting`) with worked examples for all supported scenarios.
+
+# gsDesign 3.10.1 (February 2026)
+
+## New features
+
+- Survival design functions (`nEvents()`, `nSurv()`, `gsSurv()`,
+  `gsSurvCalendar()`) now support `hr > hr0` for time-to-event designs
+  where a larger hazard ratio is the alternative hypothesis. This enables
+  direct specification of designs for time-to-response, safety endpoints,
+  or reversed HR conventions. All sample size methods (Lachin-Foulkes,
+  Schoenfeld, Freedman, Bernstein-Lagakos) and plotting functions handle
+  both directions symmetrically (@keaven, #251).
+
+## Bug fixes
+
+- Fixed sign inconsistency in `hrn2z()` which used `sign(hr0 - hr1)`
+  while `zn2hr()` used `sign(hr1 - hr0)`, preventing correct round-trip
+  conversion. Both now use `sign(hr1 - hr0)` (@keaven, #251).
+
+# gsDesign 3.10.0 (February 2026)
 
 ## New features
 

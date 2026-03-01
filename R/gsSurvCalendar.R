@@ -71,6 +71,7 @@ gsSurvCalendar <- function(
   lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
   gamma = 1, R = 12, S = NULL, minfup = 18, ratio = 1,
   r = 18, tol = .Machine$double.eps^0.25,
+  testUpper = TRUE, testLower = TRUE, testHarm = TRUE,
   method = c("LachinFoulkes", "Schoenfeld", "Freedman", "BernsteinLagakos")
 ) {
   method <- match.arg(method)
@@ -128,7 +129,8 @@ gsSurvCalendar <- function(
     sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar,
     sfharm = sfharm, sfharmparam = sfharmparam, tol = tol,
     delta1 = log(hr), delta0 = log(hr0),
-    usTime = usTime, lsTime = lsTime
+    usTime = usTime, lsTime = lsTime,
+    testUpper = testUpper, testLower = testLower, testHarm = testHarm
   )
   y$hr <- hr
   y$hr0 <- hr0
