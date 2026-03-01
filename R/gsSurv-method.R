@@ -328,7 +328,7 @@ KTZ <- function(
     R = R, S = S, T = T, minfup = minfup
   )
   # Compute Z-value related to power from power equation
-  zb <- (log(hr0 / hr) -
+  zb <- (abs(log(hr0 / hr)) -
     zalpha * sqrt(1 / sum(eDC0$d) + 1 / sum(eDE0$d))) /
     sqrt(1 / sum(eDC$d) + 1 / sum(eDE$d))
   # If that is all that is needed, return difference from targeted value

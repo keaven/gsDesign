@@ -5,7 +5,7 @@
 nEvents <- function(hr = .6, alpha = .025, beta = .1, ratio = 1, sided = 1, hr0 = 1, n = 0, tbl = FALSE) {
   if (sided != 1 && sided != 2) stop("sided must be 1 or 2")
   c <- sqrt(ratio) / (1 + ratio)
-  delta <- -c * (log(hr) - log(hr0))
+  delta <- c * abs(log(hr / hr0))
   if (n[1] == 0) {
     n <- (stats::qnorm(1 - alpha / sided) + stats::qnorm(1 - beta))^2 / delta^2
     if (tbl) {
@@ -46,7 +46,7 @@ zn2hr <- function(z, n, ratio = 1, hr0 = 1, hr1 = .7) {
 hrn2z <- function(hr, n, ratio = 1, hr0 = 1, hr1 = .7) {
   c <- 1 / (1 + ratio)
   psi <- c * (1 - c)
-  log(hr / hr0) * sqrt(n * psi) * sign(hr0 - hr1)
+  log(hr / hr0) * sqrt(n * psi) * sign(hr1 - hr0)
 }
 
 # hrz2n function [sinew] ----
