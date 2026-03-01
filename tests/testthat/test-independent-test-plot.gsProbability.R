@@ -36,10 +36,29 @@ test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and b
   )
 })
 
-test_that("plot.gsProbability: plottype 4 base TRUE runs without error", {
-  # Replaced vdiffr snapshot: base R math expressions (H_0 subscripts) produce
-  # sub-pixel SVG differences across R versions.
-  expect_no_error(capture.output(plot.gsProbability(x, plottype = 4, base = TRUE)))
+# R 4.6.0 fixes plotmath subscript placement (tall subscripts were previously
+# positioned too high), which changes text rendering and breaks vdiffr
+# snapshots. Keep two expectations, one for R < 4.6.0 and one for R >= 4.6.0.
+test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and base set to TRUE (R < 4.6.0)", {
+  local_edition(3)
+  announce_snapshot_file("independent-test-plot.gsProbability/plottype-4-base-true.svg")
+  skip_unless_r("< 4.6.0")
+
+  vdiffr::expect_doppelganger(
+    "plottype 4 base TRUE",
+    capture.output(plot.gsProbability(x, plottype = 4, base = TRUE))
+  )
+})
+
+test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and base set to TRUE (R >= 4.6.0)", {
+  local_edition(3)
+  announce_snapshot_file("independent-test-plot.gsProbability/plottype-4-base-true-r460plus.svg")
+  skip_unless_r(">= 4.6.0")
+
+  vdiffr::expect_doppelganger(
+    "plottype 4 base TRUE R460plus",
+    capture.output(plot.gsProbability(x, plottype = 4, base = TRUE))
+  )
 })
 
 test_that("plot.gsProbability: plots are correctly rendered for plottype 6 and base set to FALSE", {

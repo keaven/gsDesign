@@ -9,6 +9,3 @@
 ^cran-comments\.md$
 ^revdep$
 tests/benchmarks
-^test_astar\.R$
-^inst/slides/HarmBound_files$
-^inst/slides/HarmBound\.html$
