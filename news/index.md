@@ -1,6 +1,6 @@
 # Changelog
 
-## gsDesign 3.11.0 (March 2026)
+## gsDesign (development version)
 
 ### New features
 
@@ -19,41 +19,6 @@
   deferred efficacy testing, or selective harm monitoring
   ([@keaven](https://github.com/keaven),
   [\#141](https://github.com/keaven/gsDesign/issues/141)).
-- New vignette “Selective bound testing at interim analyses”
-  (`SelectiveBoundTesting`) with worked examples for all supported
-  scenarios.
-
-## gsDesign 3.10.1 (February 2026)
-
-### New features
-
-- Survival design functions
-  ([`nEvents()`](https://keaven.github.io/gsDesign/reference/nSurvival.md),
-  [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md),
-  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md),
-  [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md))
-  now support `hr > hr0` for time-to-event designs where a larger hazard
-  ratio is the alternative hypothesis. This enables direct specification
-  of designs for time-to-response, safety endpoints, or reversed HR
-  conventions. All sample size methods (Lachin-Foulkes, Schoenfeld,
-  Freedman, Bernstein-Lagakos) and plotting functions handle both
-  directions symmetrically ([@keaven](https://github.com/keaven),
-  [\#251](https://github.com/keaven/gsDesign/issues/251)).
-
-### Bug fixes
-
-- Fixed sign inconsistency in
-  [`hrn2z()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  which used `sign(hr0 - hr1)` while
-  [`zn2hr()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  used `sign(hr1 - hr0)`, preventing correct round-trip conversion. Both
-  now use `sign(hr1 - hr0)` ([@keaven](https://github.com/keaven),
-  [\#251](https://github.com/keaven/gsDesign/issues/251)).
-
-## gsDesign 3.10.0 (February 2026)
-
-### New features
-
 - Added `test.type = 7` (binding futility and binding harm bounds) and
   `test.type = 8` (non-binding futility and non-binding harm bounds) to
   [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md),
@@ -116,6 +81,11 @@
   [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
   ([@keaven](https://github.com/keaven),
   [\#237](https://github.com/keaven/gsDesign/issues/237)).
+- New vignette “Selective bound testing at interim analyses”
+  ([`vignette("SelectiveBoundTesting")`](https://keaven.github.io/gsDesign/articles/SelectiveBoundTesting.md))
+  with worked examples for all supported scenarios
+  ([@keaven](https://github.com/keaven),
+  [\#255](https://github.com/keaven/gsDesign/issues/255)).
 
 ## gsDesign 3.9.0 (February 2026)
 
