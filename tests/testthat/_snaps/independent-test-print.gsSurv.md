@@ -1,6 +1,7 @@
 # Test: checking hazard ratio hr0 = 1
 
     Group sequential design (method=LachinFoulkes; k=3 analyses; Two-sided asymmetric with non-binding futility)
+    HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=2) | power=90.0%
     N=187.2 subjects | D=93.5 events | T=18.5 study duration | accrual=18.0 Accrual duration | minfup=0.5 minimum follow-up | ratio=1 randomization ratio (experimental/control)
     
     Spending functions:
@@ -38,6 +39,7 @@
 # Test: checking hazard ratio hr0 != 1
 
     Group sequential design (method=LachinFoulkes; k=3 analyses; Two-sided asymmetric with non-binding futility)
+    HR=0.500 vs HR0=1.500 | alpha=0.025 (sided=2) | power=90.0%
     N=75.7 subjects | D=37.8 events | T=18.5 study duration | accrual=18.0 Accrual duration | minfup=0.5 minimum follow-up | ratio=1 randomization ratio (experimental/control)
     
     Spending functions:
@@ -75,6 +77,7 @@
 # Test: checking test.type > 1
 
     Group sequential design (method=LachinFoulkes; k=4 analyses; Two-sided asymmetric with binding futility)
+    HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=2) | power=90.0%
     N=147.8 subjects | D=106.5 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
     
     Spending functions:
@@ -117,6 +120,7 @@
 # Test: checking test.type = 1
 
     Group sequential design (method=LachinFoulkes; k=4 analyses; One-sided (efficacy only))
+    HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
     N=122.2 subjects | D=88.0 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
     
     Spending functions:
@@ -158,6 +162,7 @@
 # Test: checking ratio = 0.6
 
     Group sequential design (method=LachinFoulkes; k=4 analyses; Two-sided asymmetric with binding futility)
+    HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=2) | power=90.0%
     N=157.1 subjects | D=117.0 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=0.6 randomization ratio (experimental/control)
     
     Spending functions:
