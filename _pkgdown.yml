@@ -46,6 +46,7 @@ reference:
   - nSurv
   - gsSurv
   - gsSurvCalendar
+  - gsSurvPower
   - gsHR
   - zn2hr
   - hrn2z
@@ -140,6 +141,7 @@ articles:
       - SurvivalOverview
       - toInteger
       - gsSurvBasicExamples
+      - gssurvpower
       - HarmBound
       - SelectiveBoundTesting
       - PoissonMixtureModel

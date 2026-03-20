@@ -20,8 +20,10 @@
 #' \strong{Hazard ratio roles:}
 #' Two distinct hazard ratios serve different purposes. \code{hr} is the
 #' assumed treatment effect under which power is evaluated.
-#' \code{hr1} is the design alternative used to calibrate futility/harm bounds
-#' (for \code{test.type} 3--6). When \code{x} is provided, \code{hr1} defaults
+#' \code{hr1} is the design alternative used to calibrate futility bounds
+#' (for \code{test.type} 3, 4, 7, 8). It is not used for \code{test.type}
+#' 5 or 6 (which use H0 spending for the lower bound) or for harm bounds.
+#' When \code{x} is provided, \code{hr1} defaults
 #' to \code{x$hr}, so futility bounds remain calibrated to the original design
 #' even when power is evaluated under a different \code{hr}.
 #'
@@ -111,7 +113,8 @@
 #' @param hr Assumed hazard ratio (experimental/control) for power computation.
 #'   This is the "what-if" treatment effect.
 #' @param hr0 Null hazard ratio. Set \code{hr0 > 1} for non-inferiority.
-#' @param hr1 Design alternative hazard ratio used to calibrate futility bounds.
+#' @param hr1 Design alternative hazard ratio used to calibrate futility bounds
+#'   (\code{test.type} 3, 4, 7, 8 only; not used for 5, 6 or harm bounds).
 #'   Defaults to \code{x$hr} when \code{x} is provided, otherwise \code{hr}.
 #' @param eta Scalar, vector, or matrix of control dropout hazard rates.
 #' @param etaE Experimental dropout hazard rates; if \code{NULL}, set to
