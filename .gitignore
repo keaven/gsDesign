@@ -12,6 +12,9 @@ TODO
 *.pdf
 *.html
 *.rnw
+Meta/
+doc/
+gsDesign/
 docs/
 /*.tar.gz
 /*.Rcheck/
