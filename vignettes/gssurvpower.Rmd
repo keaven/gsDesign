@@ -31,10 +31,38 @@ Common scenarios include:
 `gsSurvPower()` addresses these questions by computing power for a group
 sequential survival design under user-specified assumptions.
 
-## Design
+## Quick start
 
-`gsSurvPower()` accepts an optional `gsSurv` object `x` that provides defaults
-for all parameters. Any parameter the user explicitly specifies overrides the
+If you already have a design object, the most common workflow is to reuse its
+defaults and override only the assumptions you want to stress-test.
+
+```{r gssurvpower_quick_start}
+design <- gsSurv(
+  k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+  sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+  lambdaC = log(2) / 12, hr = 0.7, hr0 = 1,
+  eta = 0.01, gamma = 10, R = 16, minfup = 12, T = 28
+)
+
+pwr_design <- gsSurvPower(x = design, plannedCalendarTime = design$T)
+pwr_design$power
+```
+
+The returned object contains the same design-style structure as `gsSurv()`, but
+with `variable = "Power"`. The most useful components to inspect first are:
+
+- `pwr_design$power` for overall power.
+- `pwr_design$n.I` for expected events at each analysis.
+- `pwr_design$T` for analysis times.
+- `pwr_design$timing` for information fractions.
+- `pwr_design$upper$bound` and `pwr_design$lower$bound` for the bounds being
+  applied.
+
+## How gsSurvPower uses your inputs
+
+`gsSurvPower()` accepts an optional `gsSurv`-class object `x`, including output
+from `gsSurv()` and `gsSurvCalendar()`, that provides defaults for all
+parameters. Any parameter the user explicitly specifies overrides the
 corresponding value from `x`. When `x` is not provided, all design parameters
 must be specified directly.
 
@@ -73,6 +101,13 @@ Both modes are useful. Calendar-time analyses are natural when the protocol
 specifies analysis dates; event-driven analyses are natural when the protocol
 specifies event targets.
 
+### Quick decision guide
+
+| If the protocol fixes... | Use... | What changes in a sensitivity analysis |
+| --- | --- | --- |
+| Analysis dates | `plannedCalendarTime` | Expected events and information fractions |
+| Event targets | `targetEvents` | Calendar times needed to reach those events |
+
 Additional criteria can be combined per-analysis, each specified as a scalar
 (recycled to all `k` analyses) or a vector of length `k` with `NA` for
 "not applicable":
@@ -94,7 +129,8 @@ when no calendar time is specified), even if other criteria such as
 - **`spending`**: One of `"information"` (default) or `"calendar"`.
   Information-based spending tracks the fraction of statistical information
   accumulated; calendar-based spending sets `usTime = lsTime = T / max(T)`.
-  Custom spending times can also be passed via `usTime` and `lsTime`.
+  Custom spending times can also be passed via `usTime` and `lsTime`, but they
+  are ignored when `spending = "calendar"`.
 
 - **`method`**: One of `"LachinFoulkes"` (default), `"Schoenfeld"`,
   `"Freedman"`, or `"BernsteinLagakos"`. Controls how fixed-design events
@@ -109,22 +145,7 @@ when no calendar time is specified), even if other criteria such as
 always interpreted as overall targets; to specify per-stratum targets
 for a single analysis, use a 1-row matrix.
 
-## Example: design and power computation
-
-We first create a group sequential design, then evaluate power under the
-design assumptions and under an alternative hazard ratio.
-
-```{r gssurvpower_design}
-design <- gsSurv(
-  k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
-  sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
-  lambdaC = log(2) / 12, hr = 0.7, hr0 = 1,
-  eta = 0.01, gamma = 10, R = 16, minfup = 12, T = 28
-)
-design
-```
-
-### Power at design assumptions
+## Power under alternative assumptions
 
 Passing the design's analysis times with the same hazard ratio exactly
 reproduces the design power (90%). Internally, `gsSurvPower()` uses `x$n.fix`
@@ -143,7 +164,6 @@ correctly for other hazard ratios, matching `rpact::getPowerSurvival()`
 to within 0.5% across methods.
 
 ```{r gssurvpower_at_design}
-pwr_design <- gsSurvPower(x = design, plannedCalendarTime = design$T)
 cat("Design power:", round((1 - design$beta) * 100, 1), "%\n")
 cat("gsSurvPower:  ", round(pwr_design$power * 100, 1), "%\n")
 ```
@@ -346,6 +366,25 @@ cat("Analysis times:", round(pwr_events$T, 1), "\n")
 cat("Events at each analysis:",
     round(pwr_events$n.I, 1), "\n")
 cat("Power:", round(pwr_events$power * 100, 1), "%\n")
+```
+
+## Example: slower enrollment at fixed analysis times
+
+Another common sensitivity analysis is slower-than-planned enrollment. When
+calendar analysis times are fixed, slower enrollment reduces the expected number
+of events available at each look and therefore reduces power.
+
+```{r gssurvpower_slower_enrollment}
+pwr_slow_enroll <- gsSurvPower(
+  x = design,
+  gamma = design$gamma / 2,
+  plannedCalendarTime = design$T
+)
+
+cat("Original final expected events:", round(pwr_design$n.I[design$k], 1), "\n")
+cat("Slower-enrollment final events:", round(pwr_slow_enroll$n.I[design$k], 1), "\n")
+cat("Original power:", round(pwr_design$power * 100, 1), "%\n")
+cat("Slower-enrollment power:", round(pwr_slow_enroll$power * 100, 1), "%\n")
 ```
 
 ## Example: biomarker subgroup to stratified design

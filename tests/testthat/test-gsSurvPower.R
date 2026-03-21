@@ -12,6 +12,9 @@ test_that("gsSurvPower works with plannedCalendarTime from gsSurv design", {
   expect_s3_class(pwr, "gsDesign")
   expect_equal(pwr$k, 3)
   expect_true(pwr$power > 0 && pwr$power < 1)
+  expect_equal(pwr$T, design$T)
+  expect_equal(pwr$n.I, rowSums(pwr$eDC) + rowSums(pwr$eDE))
+  expect_equal(pwr$timing, pwr$n.I / max(pwr$n.I))
   expect_equal(pwr$hr, design$hr)
   expect_equal(pwr$hr1, design$hr)
   expect_equal(pwr$variable, "Power")
@@ -46,7 +49,8 @@ test_that("gsSurvPower works with targetEvents", {
   expect_equal(pwr$k, 2)
   expect_true(pwr$T[1] < pwr$T[2])
   events <- rowSums(pwr$eDC) + rowSums(pwr$eDE)
-  expect_true(all(events > 0))
+  expect_equal(events, c(50, 100), tolerance = 1e-6)
+  expect_equal(pwr$n.I, events)
 })
 
 test_that("gsSurvPower works without x (all parameters specified)", {
@@ -58,6 +62,8 @@ test_that("gsSurvPower works without x (all parameters specified)", {
   )
   expect_s3_class(pwr, "gsSurv")
   expect_equal(pwr$k, 2)
+  expect_equal(pwr$T, c(24, 36))
+  expect_equal(pwr$variable, "Power")
   expect_true(pwr$power > 0)
 })
 
@@ -112,23 +118,110 @@ test_that("maxExtension caps targetEvents and minTimeFromPreviousAnalysis", {
   expect_true(events_2 < 500)
 })
 
-test_that("gsSurvPower with calendar spending", {
-  pwr_info <- gsSurvPower(
+test_that("gsSurvPower calendar spending ignores usTime and lsTime", {
+  base_args <- list(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1,
+    lambdaC = log(2) / 12, hr = 0.7, hr0 = 1,
+    eta = 0.01, gamma = 10, R = 16, minfup = 12,
+    plannedCalendarTime = c(12, 24, 36)
+  )
+
+  pwr_cal <- do.call(gsSurvPower, c(base_args, list(spending = "calendar")))
+  pwr_cal_custom <- do.call(gsSurvPower, c(base_args, list(
+    spending = "calendar",
+    usTime = c(0.2, 0.6, 1),
+    lsTime = c(0.3, 0.8, 1)
+  )))
+
+  expect_equal(pwr_cal$upper$bound, pwr_cal_custom$upper$bound)
+  expect_equal(pwr_cal$lower$bound, pwr_cal_custom$lower$bound)
+  expect_equal(pwr_cal$spending, "calendar")
+})
+
+test_that("gsSurvPower information spending respects usTime and lsTime", {
+  base_args <- list(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1,
+    lambdaC = log(2) / 12, hr = 0.7, hr0 = 1,
+    eta = 0.01, gamma = 10, R = 16, minfup = 12,
+    plannedCalendarTime = c(12, 24, 36)
+  )
+
+  pwr_default <- do.call(gsSurvPower, c(base_args, list(spending = "information")))
+  pwr_custom <- do.call(gsSurvPower, c(base_args, list(
+    spending = "information",
+    usTime = c(0.2, 0.6, 1),
+    lsTime = c(0.3, 0.8, 1)
+  )))
+
+  expect_false(isTRUE(all.equal(pwr_default$upper$bound, pwr_custom$upper$bound)))
+  expect_false(isTRUE(all.equal(pwr_default$lower$bound, pwr_custom$lower$bound)))
+})
+
+test_that("gsSurvPower uses row sums of matrix targetEvents for timing", {
+  target_matrix <- matrix(c(20, 10, 40, 20), nrow = 2, byrow = TRUE)
+  base_args <- list(
+    k = 2, test.type = 1, alpha = 0.025, sided = 1,
+    lambdaC = matrix(log(2) / c(6, 12), ncol = 2),
+    hr = 0.7, hr0 = 1,
+    eta = matrix(c(0.01, 0.02), ncol = 2),
+    gamma = matrix(c(5, 5), ncol = 2),
+    R = 12, ratio = 1
+  )
+
+  pwr_matrix <- do.call(gsSurvPower, c(base_args, list(targetEvents = target_matrix)))
+  pwr_vector <- do.call(gsSurvPower, c(base_args, list(
+    targetEvents = rowSums(target_matrix)
+  )))
+
+  expect_equal(pwr_matrix$T, pwr_vector$T, tolerance = 1e-6)
+  expect_equal(pwr_matrix$n.I, pwr_vector$n.I, tolerance = 1e-6)
+})
+
+test_that("gsSurvPower uses etaE separately from eta", {
+  pwr_equal_dropout <- gsSurvPower(
     k = 2, test.type = 1, alpha = 0.025, sided = 1,
     lambdaC = log(2) / 6, hr = 0.7, hr0 = 1,
+    eta = 0.01, etaE = 0.01,
     gamma = 10, R = 12, ratio = 1,
-    plannedCalendarTime = c(24, 36),
-    spending = "information"
+    plannedCalendarTime = c(24, 36)
   )
-  pwr_cal <- gsSurvPower(
+  pwr_high_exp_dropout <- gsSurvPower(
     k = 2, test.type = 1, alpha = 0.025, sided = 1,
     lambdaC = log(2) / 6, hr = 0.7, hr0 = 1,
+    eta = 0.01, etaE = 0.05,
     gamma = 10, R = 12, ratio = 1,
-    plannedCalendarTime = c(24, 36),
-    spending = "calendar"
+    plannedCalendarTime = c(24, 36)
   )
-  expect_s3_class(pwr_info, "gsSurv")
-  expect_s3_class(pwr_cal, "gsSurv")
+
+  expect_true(all(pwr_high_exp_dropout$etaE == 0.05))
+  expect_true(tail(pwr_high_exp_dropout$n.I, 1) < tail(pwr_equal_dropout$n.I, 1))
+})
+
+test_that("gsSurvPower supports piecewise failure periods", {
+  pwr_piecewise <- gsSurvPower(
+    k = 2, test.type = 1, alpha = 0.025, sided = 1,
+    lambdaC = c(log(2) / 6, log(2) / 12), hr = 0.7, hr0 = 1,
+    eta = 0.01, gamma = 10, R = 12, S = 6, ratio = 1,
+    plannedCalendarTime = c(12, 24)
+  )
+
+  expect_equal(pwr_piecewise$S, 6)
+  expect_equal(nrow(pwr_piecewise$lambdaC), 2)
+  expect_true(all(pwr_piecewise$n.I > 0))
+})
+
+test_that("gsSurvPower preserves testUpper and testLower flags on output", {
+  pwr <- gsSurvPower(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1,
+    lambdaC = log(2) / 12, hr = 0.7, hr0 = 1,
+    eta = 0.01, gamma = 10, R = 16, minfup = 12,
+    plannedCalendarTime = c(12, 24, 36),
+    testUpper = c(FALSE, TRUE, TRUE),
+    testLower = c(TRUE, FALSE, FALSE)
+  )
+
+  expect_equal(pwr$testUpper, c(FALSE, TRUE, TRUE))
+  expect_equal(pwr$testLower, c(TRUE, FALSE, FALSE))
 })
 
 test_that("gsSurvPower minTimeFromPreviousAnalysis works", {
