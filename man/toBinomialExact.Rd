@@ -23,7 +23,11 @@ An object of class \code{gsBinomialExact}.
 Translate survival design bounds to exact binomial bounds
 }
 \details{
-The exact binomial routine \code{gsBinomialExact} has requirements that may not be satisfied
+#' Only \\code{test.type = 1} (one-sided) and \\code{test.type = 4}
+(non-binding futility) are supported. Other test types (including
+\\code{test.type = 7} and \\code{8} with harm bounds) will produce
+an error.
+#' The exact binomial routine \code{gsBinomialExact} has requirements that may not be satisfied
 by the initial asymptotic approximation. 
 Thus, the approximations are updated to satisfy the following requirements of \code{gsBinomialExact}:
 \code{a} (the efficacy bound) must be positive, non-decreasing, and strictly less than n.I

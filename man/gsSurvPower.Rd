@@ -15,9 +15,14 @@ gsSurvPower(
   sfupar = NULL,
   sfl = NULL,
   sflpar = NULL,
+  sfharm = NULL,
+  sfharmparam = NULL,
   r = NULL,
   usTime = NULL,
   lsTime = NULL,
+  testUpper = NULL,
+  testLower = NULL,
+  testHarm = NULL,
   lambdaC = NULL,
   hr = NULL,
   hr0 = NULL,
@@ -51,9 +56,13 @@ overrides the corresponding value from \code{x}.}
 \code{3} = two-sided asymmetric with binding futility,
 \code{4} = two-sided asymmetric with non-binding futility,
 \code{5} = two-sided with binding lower bound (alpha-spending),
-\code{6} = two-sided with non-binding lower bound (alpha-spending).}
+\code{6} = two-sided with non-binding lower bound (alpha-spending),
+\code{7} = two-sided asymmetric with binding futility and harm bounds,
+\code{8} = two-sided asymmetric with non-binding futility and harm bounds.}
 
-\item{alpha}{Type I error rate. Default 0.025 for 1-sided testing.}
+\item{alpha}{One-sided Type I error rate (upper bound spending).
+Default 0.025. This is always one-sided, matching the \code{gsDesign()}
+convention.}
 
 \item{sided}{1 for 1-sided, 2 for 2-sided testing.}
 
@@ -68,6 +77,12 @@ overrides the corresponding value from \code{x}.}
 
 \item{sflpar}{Parameter for \code{sfl} (default -2).}
 
+\item{sfharm}{Spending function for the harm bound, used with
+\code{test.type = 7} or \code{test.type = 8}. Default \code{sfHSD}.}
+
+\item{sfharmparam}{Real value, default \eqn{-2}. Parameter for the harm
+bound spending function \code{sfharm}.}
+
 \item{r}{Integer grid parameter for numerical integration (default 18).}
 
 \item{usTime}{Upper spending time override; vector of length \code{k}
@@ -75,6 +90,18 @@ or \code{NULL} (default) to use information fractions.}
 
 \item{lsTime}{Lower spending time override; vector of length \code{k}
 or \code{NULL} (default) to use information fractions.}
+
+\item{testUpper}{Indicator of which analyses include an efficacy test.
+\code{TRUE} (default) for all analyses. A logical vector of length
+\code{k} may be specified.}
+
+\item{testLower}{Indicator of which analyses include a futility test.
+\code{TRUE} (default) for all analyses. A logical vector of length
+\code{k} may be specified.}
+
+\item{testHarm}{Indicator of which analyses include a harm bound.
+\code{TRUE} (default) for all analyses. A logical vector of length
+\code{k} may be specified. Only used for \code{test.type} 7 or 8.}
 
 \item{lambdaC}{Scalar, vector, or matrix of control event hazard rates.
 Rows = time periods, columns = strata.}
@@ -241,6 +268,25 @@ exactly.
 \code{nstrata} columns (per-stratum targets). A vector of length \code{k}
 is always interpreted as overall targets; use a matrix for per-stratum
 specification.
+
+\strong{Bound recalculation when parameters change:}
+When \code{x} is provided, the handling of bounds depends on which
+parameters change relative to the original design:
+\itemize{
+  \item \strong{No bound parameters changed} (same \code{alpha}, \code{sfu},
+    \code{sfupar}) and timing matches: both bounds are reused from \code{x}
+    exactly.
+  \item \strong{Upper-bound parameters changed} (\code{alpha}, \code{sfu},
+    or \code{sfupar}) but timing matches: new efficacy bounds are computed
+    via \code{gsDesign(test.type = 1)} at the new alpha, while the
+    original futility bounds from \code{x} are preserved. Any futility
+    bound that exceeds the new efficacy bound is clipped. This follows
+    the same convention as \code{gsBoundSummary()} and avoids
+    complications with \code{astar} validation for binding types.
+  \item \strong{Timing changed} (different target events or calendar
+    times): both bounds are recomputed from scratch using the full
+    \code{test.type} and all spending parameters.
+}
 }
 \examples{
 # Create a design, then evaluate power at the design HR

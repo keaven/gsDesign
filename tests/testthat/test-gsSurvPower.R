@@ -350,3 +350,407 @@ test_that("gsSurvPower Freedman matches rpact getPowerSurvival", {
       label = paste("Freedman HR =", h))
   }
 })
+
+# ---- Tests for bound recalculation when parameters change ----
+# When gsSurvPower uses targetEvents that match the design's information
+# fractions, bounds must still be recomputed if alpha or spending parameters
+# differ from the original design.
+
+test_that("gsSurvPower recalculates bounds when alpha changes (test.type 4, non-binding)", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  events <- rowSums(design$eDC) + rowSums(design$eDE)
+
+  pwr_orig <- gsSurvPower(x = design, targetEvents = events)
+  pwr_new <- gsSurvPower(x = design, alpha = 0.05, targetEvents = events)
+
+  # Bounds must differ
+
+  expect_false(isTRUE(all.equal(pwr_orig$upper$bound, pwr_new$upper$bound)))
+  # More alpha -> less stringent efficacy bound
+  expect_true(all(pwr_new$upper$bound < pwr_orig$upper$bound))
+  # Cross-check: efficacy bounds match gsDesign with test.type = 1
+  gs_ref <- gsDesign(
+    k = 3, test.type = 1, alpha = 0.05, beta = 0.1,
+    n.fix = design$n.fix, timing = design$timing,
+    sfu = sfHSD, sfupar = -4,
+    delta1 = log(0.7), delta0 = log(1)
+  )
+  expect_equal(pwr_new$upper$bound, gs_ref$upper$bound, tolerance = 1e-4)
+  # Lower bounds are kept from original, clipped where they would exceed upper
+  expect_equal(pwr_new$lower$bound, pmin(design$lower$bound, pwr_new$upper$bound))
+})
+
+test_that("gsSurvPower recalculates bounds when alpha changes (test.type 3, binding)", {
+  design <- gsSurv(
+    k = 3, test.type = 3, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  events <- rowSums(design$eDC) + rowSums(design$eDE)
+
+  pwr_orig <- gsSurvPower(x = design, targetEvents = events)
+  pwr_new <- gsSurvPower(x = design, alpha = 0.05, targetEvents = events)
+
+  # Efficacy bounds must differ
+  expect_false(isTRUE(all.equal(pwr_orig$upper$bound, pwr_new$upper$bound)))
+  # Lower bounds preserved from original (clipped where needed)
+  expect_equal(pwr_new$lower$bound,
+    pmin(design$lower$bound, pwr_new$upper$bound))
+  # Cross-check efficacy bounds with gsDesign test.type = 1
+  gs_ref <- gsDesign(
+    k = 3, test.type = 1, alpha = 0.05, beta = 0.1,
+    n.fix = design$n.fix, timing = design$timing,
+    sfu = sfHSD, sfupar = -4,
+    delta1 = log(0.7), delta0 = log(1)
+  )
+  expect_equal(pwr_new$upper$bound, gs_ref$upper$bound, tolerance = 1e-4)
+})
+
+test_that("gsSurvPower recalculates bounds when alpha changes (test.type 1, one-sided)", {
+  design <- gsSurv(
+    k = 3, test.type = 1, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  events <- rowSums(design$eDC) + rowSums(design$eDE)
+
+  pwr_orig <- gsSurvPower(x = design, targetEvents = events)
+  pwr_new <- gsSurvPower(x = design, alpha = 0.05, targetEvents = events)
+
+  expect_false(isTRUE(all.equal(pwr_orig$upper$bound, pwr_new$upper$bound)))
+  expect_true(all(pwr_new$upper$bound < pwr_orig$upper$bound))
+  expect_true(pwr_new$power > pwr_orig$power)
+})
+
+test_that("gsSurvPower recalculates bounds when alpha changes (test.type 5, binding alpha-spending lower)", {
+  # Default gsSurv test.type 5 sets astar = 1 - alpha (= 0.975).
+  # gsSurvPower now uses test.type = 1 for efficacy, avoiding astar issues.
+  design <- gsSurv(
+    k = 3, test.type = 5, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  events <- rowSums(design$eDC) + rowSums(design$eDE)
+
+  pwr_orig <- gsSurvPower(x = design, targetEvents = events)
+  pwr_new <- gsSurvPower(x = design, alpha = 0.05, targetEvents = events)
+
+  expect_false(isTRUE(all.equal(pwr_orig$upper$bound, pwr_new$upper$bound)))
+  # Lower bounds preserved from original (clipped where needed)
+  expect_equal(pwr_new$lower$bound,
+    pmin(design$lower$bound, pwr_new$upper$bound))
+  # Cross-check efficacy with gsDesign test.type = 1
+  gs_ref <- gsDesign(
+    k = 3, test.type = 1, alpha = 0.05, beta = 0.1,
+    n.fix = design$n.fix, timing = design$timing,
+    sfu = sfHSD, sfupar = -4,
+    delta1 = log(0.7), delta0 = log(1)
+  )
+  expect_equal(pwr_new$upper$bound, gs_ref$upper$bound, tolerance = 1e-4)
+})
+
+test_that("gsSurvPower preserves test.type and alpha in output when alpha changes", {
+  for (tt in c(3, 4, 5)) {
+    design <- gsSurv(
+      k = 3, test.type = tt, alpha = 0.025, sided = 1, beta = 0.1,
+      sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+      lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+      gamma = 10, R = 16, minfup = 12, T = 28
+    )
+    events <- rowSums(design$eDC) + rowSums(design$eDE)
+
+    pwr <- gsSurvPower(x = design, alpha = 0.05, targetEvents = events)
+
+    expect_equal(pwr$test.type, tt, label = paste("test.type preserved for tt =", tt))
+    expect_equal(pwr$alpha, 0.05, label = paste("alpha updated for tt =", tt))
+  }
+})
+
+test_that("gsSurvPower recalculates bounds when sfupar changes", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  events <- rowSums(design$eDC) + rowSums(design$eDE)
+
+  pwr_orig <- gsSurvPower(x = design, targetEvents = events)
+  # Different upper spending parameter (less conservative)
+  pwr_new <- gsSurvPower(x = design, sfupar = -2, targetEvents = events)
+
+  expect_false(isTRUE(all.equal(pwr_orig$upper$bound, pwr_new$upper$bound)))
+})
+
+test_that("gsSurvPower keeps lower bounds when sflpar changes (x provided)", {
+  design <- gsSurv(
+    k = 3, test.type = 3, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  events <- rowSums(design$eDC) + rowSums(design$eDE)
+
+  pwr_orig <- gsSurvPower(x = design, targetEvents = events)
+  # Changing sflpar triggers recalculation, but lower bounds are
+  # kept from original design (gsBoundSummary approach).
+  pwr_new <- gsSurvPower(x = design, sflpar = -4, targetEvents = events)
+
+  # Lower bounds unchanged (from original design)
+  expect_equal(pwr_new$lower$bound, design$lower$bound)
+  # Upper bounds also unchanged (same alpha + sfu + sfupar)
+  expect_equal(pwr_new$upper$bound, design$upper$bound)
+})
+
+test_that("gsSurvPower recalculates bounds when sfu changes", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  events <- rowSums(design$eDC) + rowSums(design$eDE)
+
+  pwr_orig <- gsSurvPower(x = design, targetEvents = events)
+  # Switch from HSD to O'Brien-Fleming
+  pwr_new <- gsSurvPower(x = design, sfu = sfLDOF, targetEvents = events)
+
+  expect_false(isTRUE(all.equal(pwr_orig$upper$bound, pwr_new$upper$bound)))
+})
+
+test_that("gsSurvPower reuses bounds when no design parameters change", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  events <- rowSums(design$eDC) + rowSums(design$eDE)
+
+  # Same alpha, same everything -- bounds should be reused exactly
+  pwr <- gsSurvPower(x = design, targetEvents = events)
+  expect_equal(pwr$upper$bound, design$upper$bound)
+  expect_equal(pwr$lower$bound, design$lower$bound)
+
+  # Different HR doesn't affect bounds when timing matches
+  pwr_hr <- gsSurvPower(x = design, hr = 0.8, targetEvents = events)
+  expect_equal(pwr_hr$upper$bound, design$upper$bound)
+  expect_equal(pwr_hr$lower$bound, design$lower$bound)
+  # But power differs
+  expect_false(isTRUE(all.equal(pwr$power, pwr_hr$power)))
+})
+
+test_that("gsSurvPower alpha change with plannedCalendarTime works same as targetEvents", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+
+  # Use plannedCalendarTime (timing will match design)
+  pwr <- gsSurvPower(x = design, alpha = 0.05, plannedCalendarTime = design$T)
+
+  # Bounds must differ from original
+  expect_false(isTRUE(all.equal(pwr$upper$bound, design$upper$bound)))
+  expect_true(all(pwr$upper$bound < design$upper$bound))
+})
+
+test_that("gsSurvPower alpha matches gsBoundSummary approach for binding type 3", {
+  design <- gsSurv(
+    k = 3, test.type = 3, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  events <- rowSums(design$eDC) + rowSums(design$eDE)
+
+  pwr <- gsSurvPower(x = design, alpha = 0.05, targetEvents = events)
+
+  # gsBoundSummary computes efficacy at alternate alpha via gsDesign
+  # with test.type = 1, then keeps original lower bounds.
+  # gsSurvPower now follows the same approach.
+  gs_ref <- gsDesign(
+    k = 3, test.type = 1, alpha = 0.05, beta = 0.1,
+    n.fix = design$n.fix, timing = design$timing,
+    sfu = sfHSD, sfupar = -4,
+    delta1 = log(0.7), delta0 = log(1)
+  )
+  expect_equal(pwr$upper$bound, gs_ref$upper$bound, tolerance = 1e-4)
+  # Lower bounds preserved from original (clipped at final where lower = upper)
+  expect_equal(pwr$lower$bound,
+    pmin(design$lower$bound, pwr$upper$bound))
+})
+
+test_that("gsSurvPower recalculates both bounds when timing changes", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+
+  # Use different targetEvents so timing changes
+  design_events <- rowSums(design$eDC) + rowSums(design$eDE)
+  new_events <- design_events * c(0.5, 0.8, 1)
+
+  pwr <- gsSurvPower(x = design, targetEvents = new_events)
+
+  # Timing has changed, so both bounds should be recomputed
+  expect_false(isTRUE(all.equal(pwr$timing, design$timing)))
+  expect_false(isTRUE(all.equal(pwr$upper$bound, design$upper$bound)))
+  expect_false(isTRUE(all.equal(pwr$lower$bound, design$lower$bound)))
+
+  # Cross-check: bounds should match gsDesign at the new timing
+  gs_ref <- gsDesign(
+    k = 3, test.type = 4, alpha = 0.025, beta = 0.1,
+    n.fix = design$n.fix, timing = pwr$timing,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    delta1 = log(0.7), delta0 = log(1)
+  )
+  expect_equal(pwr$upper$bound, gs_ref$upper$bound, tolerance = 1e-3)
+  expect_equal(pwr$lower$bound, gs_ref$lower$bound, tolerance = 1e-3)
+})
+
+test_that("gsSurvPower recalculates both bounds when timing changes (binding type 3)", {
+  design <- gsSurv(
+    k = 3, test.type = 3, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+
+  # Different target events -> different timing -> full recalculation
+  design_events <- rowSums(design$eDC) + rowSums(design$eDE)
+  new_events <- design_events * c(0.5, 0.8, 1)
+
+  pwr <- gsSurvPower(x = design, targetEvents = new_events)
+
+  expect_false(isTRUE(all.equal(pwr$timing, design$timing)))
+  # Both bounds should differ from original
+  expect_false(isTRUE(all.equal(pwr$upper$bound, design$upper$bound)))
+  expect_false(isTRUE(all.equal(pwr$lower$bound, design$lower$bound)))
+})
+
+# ---- test.type 7 and 8 (harm bounds) ----
+
+test_that("gsSurvPower works with test.type = 7 (binding futility + harm)", {
+  design7 <- gsSurv(
+    k = 3, test.type = 7, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    sfharm = sfHSD, sfharmparam = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+
+  pwr <- gsSurvPower(x = design7, plannedCalendarTime = design7$T)
+  expect_s3_class(pwr, "gsSurv")
+  expect_equal(pwr$test.type, 7)
+  expect_true(pwr$power > 0 && pwr$power < 1)
+  # Harm bounds should be present
+  expect_false(is.null(pwr$harm))
+  expect_equal(length(pwr$harm$bound), 3)
+})
+
+test_that("gsSurvPower works with test.type = 8 (non-binding futility + harm)", {
+  design8 <- gsSurv(
+    k = 3, test.type = 8, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    sfharm = sfHSD, sfharmparam = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+
+  pwr <- gsSurvPower(x = design8, plannedCalendarTime = design8$T)
+  expect_s3_class(pwr, "gsSurv")
+  expect_equal(pwr$test.type, 8)
+  expect_true(pwr$power > 0 && pwr$power < 1)
+  expect_false(is.null(pwr$harm))
+})
+
+test_that("gsSurvPower test.type 7: reuses bounds when params match", {
+  design7 <- gsSurv(
+    k = 3, test.type = 7, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    sfharm = sfHSD, sfharmparam = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  design_events <- rowSums(design7$eDC) + rowSums(design7$eDE)
+  pwr <- gsSurvPower(x = design7, targetEvents = design_events)
+  expect_identical(pwr$upper$bound, design7$upper$bound)
+  expect_identical(pwr$lower$bound, design7$lower$bound)
+  expect_identical(pwr$harm$bound, design7$harm$bound)
+})
+
+test_that("gsSurvPower test.type 7: alpha change preserves futility and harm", {
+  design7 <- gsSurv(
+    k = 3, test.type = 7, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    sfharm = sfHSD, sfharmparam = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  design_events <- rowSums(design7$eDC) + rowSums(design7$eDE)
+  pwr <- gsSurvPower(x = design7, alpha = 0.05, targetEvents = design_events)
+  # Efficacy bounds should change
+  expect_false(isTRUE(all.equal(pwr$upper$bound, design7$upper$bound)))
+  # Futility bounds preserved (clipped if needed)
+  expect_true(all(pwr$lower$bound <= pwr$upper$bound))
+  # Harm bounds preserved from original
+  expect_equal(pwr$harm$bound, design7$harm$bound)
+})
+
+test_that("gsSurvPower test.type 8: timing changed recomputes all bounds", {
+  design8 <- gsSurv(
+    k = 3, test.type = 8, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    sfharm = sfHSD, sfharmparam = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  design_events <- rowSums(design8$eDC) + rowSums(design8$eDE)
+  new_events <- design_events * c(0.5, 0.8, 1)
+
+  pwr <- gsSurvPower(x = design8, targetEvents = new_events)
+  expect_false(isTRUE(all.equal(pwr$timing, design8$timing)))
+  # All bounds recomputed
+  expect_false(isTRUE(all.equal(pwr$upper$bound, design8$upper$bound)))
+  expect_false(is.null(pwr$harm))
+})
+
+test_that("gsSurvPower test.type 7 without x reference design", {
+  pwr <- gsSurvPower(
+    k = 3, test.type = 7, alpha = 0.025, sided = 1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    sfharm = sfHSD, sfharmparam = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, ratio = 1,
+    plannedCalendarTime = c(12, 24, 36)
+  )
+  expect_s3_class(pwr, "gsSurv")
+  expect_equal(pwr$test.type, 7)
+  expect_false(is.null(pwr$harm))
+  expect_true(pwr$power > 0 && pwr$power < 1)
+})
+
+test_that("gsSurvPower preserves testHarm on output for test.type 7/8", {
+  design7 <- gsSurv(
+    k = 3, test.type = 7, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    sfharm = sfHSD, sfharmparam = -2,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28,
+    testHarm = c(TRUE, TRUE, FALSE)
+  )
+  pwr <- gsSurvPower(x = design7, plannedCalendarTime = design7$T)
+  expect_equal(pwr$testHarm, c(TRUE, TRUE, FALSE))
+})

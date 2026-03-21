@@ -86,6 +86,25 @@
 #' is always interpreted as overall targets; use a matrix for per-stratum
 #' specification.
 #'
+#' \strong{Bound recalculation when parameters change:}
+#' When \code{x} is provided, the handling of bounds depends on which
+#' parameters change relative to the original design:
+#' \itemize{
+#'   \item \strong{No bound parameters changed} (same \code{alpha}, \code{sfu},
+#'     \code{sfupar}) and timing matches: both bounds are reused from \code{x}
+#'     exactly.
+#'   \item \strong{Upper-bound parameters changed} (\code{alpha}, \code{sfu},
+#'     or \code{sfupar}) but timing matches: new efficacy bounds are computed
+#'     via \code{gsDesign(test.type = 1)} at the new alpha, while the
+#'     original futility bounds from \code{x} are preserved. Any futility
+#'     bound that exceeds the new efficacy bound is clipped. This follows
+#'     the same convention as \code{gsBoundSummary()} and avoids
+#'     complications with \code{astar} validation for binding types.
+#'   \item \strong{Timing changed} (different target events or calendar
+#'     times): both bounds are recomputed from scratch using the full
+#'     \code{test.type} and all spending parameters.
+#' }
+#'
 #' @param x Optional \code{gsSurv} or \code{gsSurvCalendar} object providing
 #'   defaults for all parameters. When provided, any user-specified parameter
 #'   overrides the corresponding value from \code{x}.
@@ -94,8 +113,12 @@
 #'   \code{3} = two-sided asymmetric with binding futility,
 #'   \code{4} = two-sided asymmetric with non-binding futility,
 #'   \code{5} = two-sided with binding lower bound (alpha-spending),
-#'   \code{6} = two-sided with non-binding lower bound (alpha-spending).
-#' @param alpha Type I error rate. Default 0.025 for 1-sided testing.
+#'   \code{6} = two-sided with non-binding lower bound (alpha-spending),
+#'   \code{7} = two-sided asymmetric with binding futility and harm bounds,
+#'   \code{8} = two-sided asymmetric with non-binding futility and harm bounds.
+#' @param alpha One-sided Type I error rate (upper bound spending).
+#'   Default 0.025. This is always one-sided, matching the \code{gsDesign()}
+#'   convention.
 #' @param sided 1 for 1-sided, 2 for 2-sided testing.
 #' @param astar Lower bound total crossing probability for \code{test.type}
 #'   5 or 6. Default 0.
@@ -103,6 +126,19 @@
 #' @param sfupar Parameter for \code{sfu} (default -4).
 #' @param sfl Lower bound spending function (default \code{sfHSD}).
 #' @param sflpar Parameter for \code{sfl} (default -2).
+#' @param sfharm Spending function for the harm bound, used with
+#'   \code{test.type = 7} or \code{test.type = 8}. Default \code{sfHSD}.
+#' @param sfharmparam Real value, default \eqn{-2}. Parameter for the harm
+#'   bound spending function \code{sfharm}.
+#' @param testUpper Indicator of which analyses include an efficacy test.
+#'   \code{TRUE} (default) for all analyses. A logical vector of length
+#'   \code{k} may be specified.
+#' @param testLower Indicator of which analyses include a futility test.
+#'   \code{TRUE} (default) for all analyses. A logical vector of length
+#'   \code{k} may be specified.
+#' @param testHarm Indicator of which analyses include a harm bound.
+#'   \code{TRUE} (default) for all analyses. A logical vector of length
+#'   \code{k} may be specified. Only used for \code{test.type} 7 or 8.
 #' @param r Integer grid parameter for numerical integration (default 18).
 #' @param usTime Upper spending time override; vector of length \code{k}
 #'   or \code{NULL} (default) to use information fractions.
@@ -181,7 +217,7 @@
 #' gsSurvPower(x = design, hr = 0.8, plannedCalendarTime = design$T)$power
 #'
 #' # Event-driven timing (matches gsDesign power plot)
-#' design_events <- rowSums(design$eDC) + rowSums(design$eDE)
+#' design_events <- design$n.I
 #' gsSurvPower(x = design, hr = 0.8, targetEvents = design_events)$power
 #'
 #' # Without a reference design
@@ -201,7 +237,9 @@ gsSurvPower <- function(
     k = NULL,
     test.type = NULL, alpha = NULL, sided = NULL, astar = NULL,
     sfu = NULL, sfupar = NULL, sfl = NULL, sflpar = NULL,
+    sfharm = NULL, sfharmparam = NULL,
     r = NULL, usTime = NULL, lsTime = NULL,
+    testUpper = NULL, testLower = NULL, testHarm = NULL,
     lambdaC = NULL, hr = NULL, hr0 = NULL, hr1 = NULL,
     eta = NULL, etaE = NULL,
     gamma = NULL, R = NULL, S = NULL,
@@ -228,12 +266,17 @@ gsSurvPower <- function(
     if (is.null(sided)) sided <- sided_infer(
       if (!is.null(test.type)) test.type else x$test.type
     )
-    if (is.null(alpha)) alpha <- x$alpha * sided
+    if (is.null(alpha)) alpha <- x$alpha
     if (is.null(astar)) astar <- x$astar
     if (is.null(sfu)) sfu <- x$upper$sf
     if (is.null(sfupar)) sfupar <- x$upper$param
     if (is.null(sfl)) sfl <- x$lower$sf
     if (is.null(sflpar)) sflpar <- x$lower$param
+    if (is.null(sfharm)) sfharm <- if (!is.null(x$harm) && is.function(x$harm$sf)) x$harm$sf else gsDesign::sfHSD
+    if (is.null(sfharmparam)) sfharmparam <- if (!is.null(x$harm) && !is.null(x$harm$param)) x$harm$param else -2
+    if (is.null(testUpper)) testUpper <- if (!is.null(x$testUpper)) x$testUpper else TRUE
+    if (is.null(testLower)) testLower <- if (!is.null(x$testLower)) x$testLower else TRUE
+    if (is.null(testHarm)) testHarm <- if (!is.null(x$testHarm)) x$testHarm else TRUE
     if (is.null(r)) r <- x$r
     if (is.null(lambdaC)) lambdaC <- x$lambdaC
     if (is.null(hr)) hr <- x$hr
@@ -260,6 +303,11 @@ gsSurvPower <- function(
     if (is.null(sfupar)) sfupar <- -4
     if (is.null(sfl)) sfl <- gsDesign::sfHSD
     if (is.null(sflpar)) sflpar <- -2
+    if (is.null(sfharm)) sfharm <- gsDesign::sfHSD
+    if (is.null(sfharmparam)) sfharmparam <- -2
+    if (is.null(testUpper)) testUpper <- TRUE
+    if (is.null(testLower)) testLower <- TRUE
+    if (is.null(testHarm)) testHarm <- TRUE
     if (is.null(r)) r <- 18
     if (is.null(lambdaC)) lambdaC <- log(2) / 6
     if (is.null(hr)) hr <- 0.6
@@ -439,7 +487,7 @@ gsSurvPower <- function(
     n_fix <- nSurv(
       lambdaC = lambdaC, hr = hr1, hr0 = hr0, eta = eta, etaE = etaE,
       gamma = gamma, R = R, S = S, T = T_final, minfup = minfup_nfix,
-      ratio = ratio, alpha = alpha, beta = beta_design, sided = sided,
+      ratio = ratio, alpha = alpha, beta = beta_design, sided = 1,
       tol = tol, method = method
     )$d
   }
@@ -457,7 +505,7 @@ gsSurvPower <- function(
     # Fixed design: gsDesign requires k >= 2, so compute directly.
     # Use gsDesign's normalization: theta = delta stored by gsDesign,
     # which equals (z_alpha + z_beta) / sqrt(n_fix).
-    z_alpha <- qnorm(1 - alpha / sided)
+    z_alpha <- qnorm(1 - alpha)
     theta_design <- (z_alpha + qnorm(1 - beta_design)) / sqrt(n_fix)
     theta_assumed <- theta_design * compute_delta_ratio(hr, hr1)
     drift <- theta_assumed * sqrt(total_d[1])
@@ -465,7 +513,7 @@ gsSurvPower <- function(
 
     design <- list(
       k = 1, test.type = test.type,
-      alpha = alpha / sided, sided = sided,
+      alpha = alpha, sided = sided,
       n.I = total_d[1], n.fix = n_fix,
       timing = 1, tol = tol, r = r,
       upper = list(bound = z_alpha, prob = matrix(c(alpha / sided, power_val), nrow = 1)),
@@ -477,31 +525,70 @@ gsSurvPower <- function(
     )
     class(design) <- "gsDesign"
 
+    upper_bounds <- design$upper$bound
+    lower_bounds <- design$lower$bound
+
     pwr <- list(
       upper = list(prob = design$upper$prob),
       lower = list(prob = design$lower$prob),
       en = design$en, theta = design$theta
     )
   } else {
-    # Reuse original design bounds when x is provided and timing matches,
-    # avoiding numerical noise from re-running gsDesign's iteration.
-    reuse_bounds <- !is.null(x) && !is.null(x$timing) && length(x$timing) == k &&
+    timing_matches <- !is.null(x) && !is.null(x$timing) &&
+      length(x$timing) == k &&
       isTRUE(all.equal(timing, x$timing, tolerance = 1e-4))
+
+    upper_params_match <- !is.null(x) &&
+      isTRUE(all.equal(alpha, x$alpha, tolerance = 1e-7)) &&
+      identical(sfu, x$upper$sf) &&
+      isTRUE(all.equal(sfupar, x$upper$param, tolerance = 1e-7))
+
+    # Reuse original design bounds when x is provided, timing matches,
+    # and upper-bound parameters are unchanged.
+    reuse_bounds <- timing_matches && upper_params_match
 
     if (reuse_bounds) {
       design <- x
       lower_bounds <- x$lower$bound
       upper_bounds <- x$upper$bound
-    } else {
+    } else if (timing_matches && !is.null(x)) {
+      # Timing matches but alpha/sfu/sfupar changed.
+      # Follow the gsBoundSummary approach: compute new efficacy bounds
+      # with test.type = 1 (avoids astar validation issues), keep original
+      # lower bounds, and clip if a lower bound exceeds the new upper.
       gs_args <- list(
-        k = k, test.type = test.type, alpha = alpha / sided,
+        k = k, test.type = 1, alpha = alpha,
+        beta = beta_design,
+        n.fix = n_fix,
+        timing = timing,
+        sfu = sfu, sfupar = sfupar,
+        tol = tol,
+        delta1 = log(hr1), delta0 = log(hr0),
+        usTime = usTime_use,
+        r = r
+      )
+      design <- do.call(gsDesign::gsDesign, gs_args)
+      upper_bounds <- design$upper$bound
+      lower_bounds <- x$lower$bound
+      # Clip: if a futility bound exceeds the new efficacy bound, cap it
+      lower_bounds <- pmin(lower_bounds, upper_bounds)
+      # For test.type 7/8, preserve harm bounds from original design
+      if (test.type %in% c(7, 8) && !is.null(x$harm)) {
+        design$harm <- x$harm
+      }
+    } else {
+      # Timing changed or no x provided: compute both bounds from scratch.
+      gs_args <- list(
+        k = k, test.type = test.type, alpha = alpha,
         beta = beta_design, astar = astar,
         n.fix = n_fix,
         timing = timing,
         sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar,
+        sfharm = sfharm, sfharmparam = sfharmparam,
         tol = tol,
         delta1 = log(hr1), delta0 = log(hr0),
         usTime = usTime_use, lsTime = lsTime_use,
+        testUpper = testUpper, testLower = testLower, testHarm = testHarm,
         r = r
       )
       design <- do.call(gsDesign::gsDesign, gs_args)
@@ -543,15 +630,24 @@ gsSurvPower <- function(
   y$etaC <- etaC
   y$etaE <- etaE_mat
   y$variable <- "Power"
+  y$test.type <- test.type
+  y$alpha <- alpha
   y$sided <- sided
   y$tol <- tol
   y$method <- method
   y$spending <- spending
   y$call <- match.call()
   y$timing <- timing
+  y$testUpper <- if (length(testUpper) == 1 && isTRUE(testUpper)) rep(TRUE, k) else testUpper
+  y$testLower <- if (length(testLower) == 1 && isTRUE(testLower)) rep(TRUE, k) else testLower
+  if (test.type %in% c(7, 8)) {
+    y$testHarm <- if (length(testHarm) == 1 && isTRUE(testHarm)) rep(TRUE, k) else testHarm
+  }
 
   y$upper$prob <- pwr$upper$prob
+  y$upper$bound <- upper_bounds
   y$lower$prob <- pwr$lower$prob
+  y$lower$bound <- lower_bounds
   y$en <- pwr$en
   y$theta <- pwr$theta
   y$power <- sum(pwr$upper$prob[, 2])
