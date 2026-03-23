@@ -22,8 +22,8 @@ Common scenarios include:
 
 - **Sensitivity analysis**: What happens to power if the true hazard ratio
   is 0.75 instead of the design assumption of 0.65?
-- **Changing alpha**: What if the multiplicity scheme allows one-sided $\alpha = 0.025$
-  instead of $\alpha = 0.0125$?
+- **Changing alpha**: What if the multiplicity scheme initially allocates
+  $\alpha = 0.0125$ and later allows $\alpha = 0.025$?
 - **Modified enrollment**: What if enrollment is slower than planned?
 - **Different analysis times**: What if interim analyses occur at calendar
   times that differ from the original design?
@@ -92,7 +92,8 @@ sensitivity analyses:
   treatment effect influences event accrual.
 
 - **`targetEvents`** fixes the event count at each analysis. The calendar
-  time is solved for under the assumed HR. Since the event counts are held
+  time is the time until expected events reach the target under the
+  assumed HR. Since the event counts are held
   constant, the information fractions do not change with HR, and the
   resulting power matches the `gsDesign` power plot (`plot(x, plottype = 2)`)
   to numerical precision.
@@ -106,7 +107,7 @@ specifies event targets.
 | If the protocol fixes... | Use... | What changes in a sensitivity analysis |
 | --- | --- | --- |
 | Analysis dates | `plannedCalendarTime` | Expected events and information fractions |
-| Event targets | `targetEvents` | Calendar times needed to reach those events |
+| Event targets | `targetEvents` | Time until expected events reach those targets |
 
 Additional criteria can be combined per-analysis, each specified as a scalar
 (recycled to all `k` analyses) or a vector of length `k` with `NA` for
@@ -132,10 +133,22 @@ when no calendar time is specified), even if other criteria such as
   Custom spending times can also be passed via `usTime` and `lsTime`, but they
   are ignored when `spending = "calendar"`.
 
+- **`informationRates`**: Planned information fractions (vector of
+  length `k`). When provided, spending fractions are
+  `pmin(informationRates, actual_timing)` at each analysis,
+  preventing over-spending when events arrive faster than planned
+  and under-spending when behind.
+
+- **`fullSpendingAtFinal`**: When `TRUE`, the spending fraction at the
+  final analysis is forced to 1 regardless of the actual information
+  fraction. This ensures full alpha spending even when expected events
+  fall short of the design target.
+
 - **`method`**: One of `"LachinFoulkes"` (default), `"Schoenfeld"`,
   `"Freedman"`, or `"BernsteinLagakos"`. Controls how fixed-design events
-  (`n.fix`) are computed when `x` is not provided. When `x` is provided,
-  `x$n.fix` is used directly for exact consistency with the design.
+  (`n.fix`) and drift parameter $\theta$ are computed when `x` is not provided.
+  When `x` is provided, `x$n.fix` and, implicitly, $\theta$ are used directly for
+  exact consistency with the design.
 
 ### Stratified targetEvents
 
@@ -192,6 +205,200 @@ power_vals <- sapply(hr_grid, function(h) {
 results <- data.frame(HR = hr_grid, Power = round(power_vals * 100, 1))
 results
 ```
+
+## Multiple timing criteria
+
+Real trials often use multiple criteria for analysis timing. In practice,
+a protocol may specify target event counts, planned calendar times,
+minimum follow-up after enrollment completes, and caps on how long
+analyses can be delayed. `gsSurvPower()` lets you combine all of these
+in a single call. Approximations are based on expected event accumulation under the assumed HR.
+Thus, computations do not take into account the stochastic variability in event accrual.
+While `gsSurvPower()` should be adequate for most purposes, verification
+for key scenarios should consider simulation using the **simtrial** R
+package.
+
+### Setup
+
+The design enrolls at rate `r round(design$gamma, 1)` patients/month for
+`r sum(design$R)` months (`r floor(sum(design$gamma * design$R))` patients total),
+with a 12-month control median and HR = 0.7.
+The three analyses are planned at months
+`r paste(round(design$T, 1), collapse = ", ")`,
+so IA1 occurs *before* planned enrollment completion and IA2/FA occur *after*.
+
+We layer four criteria:
+
+| Criterion | IA1 | IA2 | FA |
+|-----------|-----|-----|-----|
+| `plannedCalendarTime` | `r round(design$T[1],1)` | `r round(design$T[2],1)` | `r round(design$T[3],1)` |
+| `targetEvents` | `r round(design$n.I[1],1)` | `r round(design$n.I[2],1)` | `r round(design$n.I[3],1)` |
+| `minN + minFollowUp` | — | all enrolled + 2 mo | all enrolled + 12 mo |
+| `maxExtension` | 3 mo | 12 mo | 20 mo |
+
+The floor for each analysis is the *latest* of the applicable
+`plannedCalendarTime`, `minN + minFollowUp`, and previous-analysis
+constraints. If expected events have not reached the target at the
+floor, the analysis can be extended until the time that expected
+events reach the target, up to `plannedCalendarTime + maxExtension`.
+
+```{r timing_setup}
+total_N <- floor(sum(design$gamma * design$R))
+```
+
+### Baseline: design assumptions
+
+Under design assumptions the criteria reproduce the planned timing
+exactly. The `minN + minFollowUp` floor for IA2 is
+`r sum(design$R)` + 2 = `r sum(design$R) + 2` months, which is below
+the planned time of `r round(design$T[2], 1)` months, so the planned
+calendar time drives IA2. The FA floor from `minN + minFollowUp`
+is `r sum(design$R)` + 12 = 28, which coincides with the planned time.
+Since the design's expected event counts match the targets,
+the `maxExtension` is not needed and the result matches the design power.
+
+```{r timing_baseline}
+pwr_multi <- gsSurvPower(
+  x = design,
+  targetEvents = design$n.I,
+  plannedCalendarTime = design$T,
+  minN = c(NA, total_N, total_N),
+  minFollowUp = c(NA, 2, 12),
+  maxExtension = c(3, 12, 20)
+)
+
+data.frame(
+  Analysis = 1:design$k,
+  Planned_Time = round(design$T, 1),
+  Actual_Time = round(pwr_multi$T, 1),
+  Target_Events = round(design$n.I, 1),
+  Actual_Events = round(pwr_multi$n.I, 1)
+)
+cat("Power:", round(pwr_multi$power * 100, 1), "%\n")
+```
+
+### Scenario 1: slower enrollment
+
+If enrollment proceeds at half the planned rate, it takes
+`r 2 * sum(design$R)` months to reach `r total_N` patients.
+With `maxExtension = c(3, 12, 20)`, each analysis can extend
+beyond `plannedCalendarTime` by the specified amount while waiting
+for expected events to reach the target—but never past the cap.
+The `minN + minFollowUp` floor for IA2 is
+`r 2 * sum(design$R)` + 2 = `r 2 * sum(design$R) + 2` months,
+far beyond `plannedCalendarTime[2] + maxExtension[2]`, so the cap
+overrides. Note that `maxExtension` is always measured from
+`plannedCalendarTime`, not from the floor, so it acts as a hard
+deadline on how long the sponsor is willing to wait.
+
+```{r timing_slow_enrollment}
+pwr_slow <- gsSurvPower(
+  x = design,
+  gamma = design$gamma / 2,
+  targetEvents = design$n.I,
+  plannedCalendarTime = design$T,
+  minN = c(NA, total_N, total_N),
+  minFollowUp = c(NA, 2, 12),
+  maxExtension = c(3, 12, 20)
+)
+
+data.frame(
+  Analysis = 1:design$k,
+  Planned_Time = round(design$T, 1),
+  Actual_Time = round(pwr_slow$T, 1),
+  Target_Events = round(design$n.I, 1),
+  Actual_Events = round(pwr_slow$n.I, 1)
+)
+cat("Power:", round(pwr_slow$power * 100, 1), "%\n")
+```
+
+Each analysis is capped by `plannedCalendarTime + maxExtension`.
+The final analysis achieves
+only `r round(pwr_slow$n.I[design$k], 0)` of the targeted
+`r round(design$n.I[design$k], 0)` events, and power drops from 90%
+to `r round(pwr_slow$power * 100, 1)`%.
+
+### Scenario 2: higher control failure rate
+
+If the control median is 8 months instead of 12, events accumulate
+faster. Expected events reach the target well before the planned
+calendar times, so the `plannedCalendarTime` floor determines the
+analysis schedule. The trial over-runs its event targets
+substantially, yielding higher-than-planned power.
+
+```{r timing_fast_failure}
+pwr_fast <- gsSurvPower(
+  x = design,
+  lambdaC = log(2) / 8,
+  targetEvents = design$n.I,
+  plannedCalendarTime = design$T,
+  minN = c(NA, total_N, total_N),
+  minFollowUp = c(NA, 2, 12),
+  maxExtension = c(3, 12, 20)
+)
+
+data.frame(
+  Analysis = 1:design$k,
+  Planned_Time = round(design$T, 1),
+  Actual_Time = round(pwr_fast$T, 1),
+  Target_Events = round(design$n.I, 1),
+  Actual_Events = round(pwr_fast$n.I, 1)
+)
+cat("Power:", round(pwr_fast$power * 100, 1), "%\n")
+```
+
+The final analysis collects `r round(pwr_fast$n.I[design$k], 0)` events
+vs. the target of `r round(design$n.I[design$k], 0)`, and power rises to
+`r round(pwr_fast$power * 100, 1)`%.
+
+### Controlling spending with informationRates
+
+When events fall short of the target (as in Scenario 1), the actual
+information fraction at each analysis may be lower than planned.
+By default, bounds are computed at the actual information fractions.
+The `informationRates` parameter lets you cap spending at
+`pmin(informationRates, actual_timing)` — preventing over-spending
+if events arrive faster than planned, and under-spending if they
+arrive slower. This is useful when the protocol pre-specifies
+spending based on planned information fractions.
+
+Setting `fullSpendingAtFinal = TRUE` forces the spending fraction
+at the final analysis to 1, ensuring full alpha is spent even when
+expected events fall short of the design target. Without this,
+the final spending fraction would be less than 1, leaving some
+alpha unspent.
+
+```{r informationRates_demo}
+# Scenario 1 with informationRates and fullSpendingAtFinal
+pwr_slow_ir <- gsSurvPower(
+  x = design,
+  gamma = design$gamma / 2,
+  targetEvents = design$n.I,
+  plannedCalendarTime = design$T,
+  minN = c(NA, total_N, total_N),
+  minFollowUp = c(NA, 2, 12),
+  maxExtension = c(3, 12, 20),
+  informationRates = design$timing,
+  fullSpendingAtFinal = TRUE
+)
+
+data.frame(
+  Analysis = 1:design$k,
+  Actual_Events = round(pwr_slow_ir$n.I, 1),
+  Actual_InfoFrac = round(pwr_slow_ir$timing, 3),
+  Planned_InfoFrac = round(design$timing, 3),
+  Spending_Frac = round(
+    pmin(design$timing, pwr_slow_ir$timing), 3
+  )
+)
+cat("Power (default spending):       ", round(pwr_slow$power * 100, 1), "%\n")
+cat("Power (capped + full final):    ", round(pwr_slow_ir$power * 100, 1), "%\n")
+```
+
+With `fullSpendingAtFinal = TRUE`, the final spending fraction is 1
+even though the actual information fraction is less than 1. This
+produces slightly different final bounds compared to the default,
+which would use the actual (sub-1) fraction for spending.
 
 ## Comparison with gsDesign power plots
 
@@ -281,41 +488,52 @@ are appropriately recomputed via `gsDesign::gsDesign()`.
 ## Changing alpha
 
 A common use case is evaluating power at a different one-sided alpha level —
-for example, when a graphical multiplicity procedure allocates
-$\alpha = 0.05$ to one hypothesis instead of the design's $\alpha = 0.025$.
+for example, when a graphical multiplicity procedure initially allocates
+$\alpha = 0.0125$ to one hypothesis and later, after another hypothesis is
+rejected, propagates alpha so that $\alpha = 0.025$ is available.
+
+Here we design at $\alpha = 0.0125$ and then ask: what is the power if
+we can test at $\alpha = 0.025$?
 
 When `x` is provided and the information fractions (timing) match the
 original design, `gsSurvPower()` recalculates **efficacy bounds** at the
 new alpha using `gsDesign(test.type = 1)` (efficacy-only) while
 **preserving the original futility bounds** from `x`. This follows the
 same convention as `gsBoundSummary()`. Any futility bound that would
-exceed the new (less stringent) efficacy bound is clipped.
+exceed the new efficacy bound is clipped.
 
 When timing changes (e.g., different `targetEvents`), both bounds are
 recomputed from scratch using the full `test.type` and spending functions.
 
 ```{r alpha_change}
-# Original design: one-sided alpha = 0.025
-cat("=== Original design (alpha = 0.025) ===\n")
-cat("Efficacy bounds:", round(design$upper$bound, 4), "\n")
-cat("Futility bounds:", round(design$lower$bound, 4), "\n\n")
+# Design at one-sided alpha = 0.0125
+design_a0125 <- gsSurv(
+  k = 3, test.type = 4, alpha = 0.0125, sided = 1, beta = 0.1,
+  sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+  lambdaC = log(2) / 12, hr = 0.7, hr0 = 1,
+  eta = 0.01, gamma = 10, R = 16, minfup = 12, T = 28
+)
 
-# Power at alpha = 0.05 with same event counts (timing preserved)
-design_events <- design$n.I
-pwr_a05 <- gsSurvPower(x = design, alpha = 0.05, targetEvents = design_events)
+cat("=== Original design (alpha = 0.0125) ===\n")
+cat("Efficacy bounds:", round(design_a0125$upper$bound, 4), "\n")
+cat("Futility bounds:", round(design_a0125$lower$bound, 4), "\n\n")
 
-cat("=== gsSurvPower at alpha = 0.05 ===\n")
-cat("Efficacy bounds:", round(pwr_a05$upper$bound, 4), "\n")
-cat("Futility bounds:", round(pwr_a05$lower$bound, 4), "\n")
-cat("Power:          ", round(pwr_a05$power * 100, 1), "%\n\n")
+# Power at alpha = 0.025 with same event counts (timing preserved)
+events_a0125 <- design_a0125$n.I
+pwr_a025 <- gsSurvPower(x = design_a0125, alpha = 0.025, targetEvents = events_a0125)
+
+cat("=== gsSurvPower at alpha = 0.025 ===\n")
+cat("Efficacy bounds:", round(pwr_a025$upper$bound, 4), "\n")
+cat("Futility bounds:", round(pwr_a025$lower$bound, 4), "\n")
+cat("Power:          ", round(pwr_a025$power * 100, 1), "%\n\n")
 
 # Cross-check: gsBoundSummary at the same alternate alpha
 # (only test.type 1, 4, 6, 7, 8 are supported)
-cat("=== gsBoundSummary (alpha = 0.05) ===\n")
-print(gsBoundSummary(design, alpha = 0.05))
+cat("=== gsBoundSummary (alpha = 0.025) ===\n")
+print(gsBoundSummary(design_a0125, alpha = 0.025))
 ```
 
-Note that `gsBoundSummary()` adds an $\alpha = 0.05$ column for
+Note that `gsBoundSummary()` adds an $\alpha = 0.025$ column for
 `test.type` 1, 4, 6, 7, and 8. For binding types (3, 5),
 `gsBoundSummary()` does not support alternate alpha, but
 `gsSurvPower()` handles them using the same approach: recompute efficacy
@@ -325,21 +543,21 @@ with `test.type = 1` at the new alpha and keep original futility bounds.
 
 ```{r alpha_binding}
 design3 <- gsSurv(
-  k = 3, test.type = 3, alpha = 0.025, sided = 1, beta = 0.1,
+  k = 3, test.type = 3, alpha = 0.0125, sided = 1, beta = 0.1,
   sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
   lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
   gamma = 10, R = 16, minfup = 12, T = 28
 )
 events3 <- design3$n.I
 
-pwr3_a05 <- gsSurvPower(x = design3, alpha = 0.05, targetEvents = events3)
+pwr3_a025 <- gsSurvPower(x = design3, alpha = 0.025, targetEvents = events3)
 
-cat("=== Binding futility (test.type=3) at alpha = 0.05 ===\n")
+cat("=== Binding futility (test.type=3) at alpha = 0.025 ===\n")
 cat("Original efficacy:", round(design3$upper$bound, 4), "\n")
-cat("New efficacy:     ", round(pwr3_a05$upper$bound, 4), "\n")
+cat("New efficacy:     ", round(pwr3_a025$upper$bound, 4), "\n")
 cat("Original futility:", round(design3$lower$bound, 4), "\n")
-cat("New futility:     ", round(pwr3_a05$lower$bound, 4), "\n")
-cat("Power:            ", round(pwr3_a05$power * 100, 1), "%\n")
+cat("New futility:     ", round(pwr3_a025$lower$bound, 4), "\n")
+cat("Power:            ", round(pwr3_a025$power * 100, 1), "%\n")
 ```
 
 The futility bounds are preserved from the original design. At the final
@@ -349,8 +567,8 @@ bound, the new efficacy bound (which is lower) becomes the clip point.
 The output retains the original `test.type` and records the new `alpha`:
 
 ```{r alpha_output_fields}
-cat("test.type:", pwr3_a05$test.type, "(same as input design)\n")
-cat("alpha:    ", pwr3_a05$alpha, "(updated to new value)\n")
+cat("test.type:", pwr3_a025$test.type, "(same as input design)\n")
+cat("alpha:    ", pwr3_a025$alpha, "(updated to new value)\n")
 ```
 
 ## Example: event-based timing
@@ -386,6 +604,119 @@ cat("Slower-enrollment final events:", round(pwr_slow_enroll$n.I[design$k], 1), 
 cat("Original power:", round(pwr_design$power * 100, 1), "%\n")
 cat("Slower-enrollment power:", round(pwr_slow_enroll$power * 100, 1), "%\n")
 ```
+
+## Example: calendar-based spending
+
+By default, alpha and beta spending track statistical **information fractions**
+(`n.I / max(n.I)`). Setting `spending = "calendar"` instead ties spending to
+calendar time fractions (`T / max(T)`).
+This distinction matters when analysis times are unevenly spaced:
+event accrual is slow early in the trial (enrollment is ongoing),
+so by the time one-third of the statistical information has accumulated
+the trial is already well past one-third of its calendar duration.
+The first analysis in this design occurs about 12.4 months into a
+28-month trial—an information fraction of 0.333 but a calendar fraction
+of 0.444. Calendar spending therefore spends more alpha early,
+producing a less conservative interim efficacy bound and a slightly
+more conservative final bound.
+
+When `spending = "calendar"`, any user-supplied `usTime` and `lsTime`
+overrides are **ignored**; the realized analysis times determine spending
+fractions automatically.
+
+```{r calendar_spending}
+# Information-based spending (default)
+pwr_info <- gsSurvPower(
+  x = design,
+  plannedCalendarTime = design$T,
+  spending = "information"
+)
+
+# Calendar-based spending
+pwr_cal <- gsSurvPower(
+  x = design,
+  plannedCalendarTime = design$T,
+  spending = "calendar"
+)
+
+# Compare spending fractions and bounds
+data.frame(
+  Analysis = 1:design$k,
+  Calendar_Time = round(pwr_info$T, 1),
+  InfoFraction = round(pwr_info$timing, 3),
+  CalendarFraction = round(pwr_cal$T / max(pwr_cal$T), 3),
+  Bound_Info = round(pwr_info$upper$bound, 4),
+  Bound_Calendar = round(pwr_cal$upper$bound, 4)
+)
+```
+
+At analysis 1 (month ~12), the calendar fraction (0.444) substantially
+exceeds the information fraction (0.333). Calendar spending allocates
+more alpha to this look, so the efficacy bound drops from 3.01 to 2.84—
+a meaningful difference for interim decision-making. By the final
+analysis the bounds nearly converge because both fractions equal 1.
+
+Note that passing `usTime` or `lsTime` with `spending = "calendar"`
+has no effect—the calendar fractions override them:
+
+```{r calendar_ignores_usTime}
+pwr_cal_override <- gsSurvPower(
+  x = design,
+  plannedCalendarTime = design$T,
+  spending = "calendar",
+  usTime = c(0.2, 0.6, 1),
+  lsTime = c(0.3, 0.8, 1)
+)
+
+# Bounds are identical regardless of usTime/lsTime
+identical(pwr_cal$upper$bound, pwr_cal_override$upper$bound)
+```
+
+## Example: stratified event targets
+
+When a trial enrolls patients from multiple strata with different event
+rates, you may want to specify per-stratum event targets rather than a
+single overall number. `targetEvents` accepts a matrix with `k` rows
+(analyses) and `nstrata` columns (strata). Row sums give the overall
+target used to solve each analysis time.
+
+Consider a two-stratum design where stratum 1 has median survival of
+6 months and stratum 2 has 12 months. We target 30 events (20 + 10) at
+the interim and 60 events (40 + 20) at the final analysis:
+
+```{r stratified_events}
+# Per-stratum event targets: rows = analyses, columns = strata
+event_matrix <- matrix(
+  c(20, 10,   # interim: 20 from stratum 1, 10 from stratum 2
+    40, 20),  # final:   40 from stratum 1, 20 from stratum 2
+  nrow = 2, byrow = TRUE
+)
+
+pwr_strat <- gsSurvPower(
+  k = 2, test.type = 1, alpha = 0.025, sided = 1,
+  lambdaC = matrix(log(2) / c(6, 12), ncol = 2),
+  hr = 0.7, eta = 0.01,
+  gamma = matrix(c(5, 5), ncol = 2), R = 12, ratio = 1,
+  targetEvents = event_matrix
+)
+
+# The analysis times are solved so that total expected events
+# match the row sums of the target matrix
+data.frame(
+  Analysis = 1:2,
+  Target_Stratum1 = event_matrix[, 1],
+  Target_Stratum2 = event_matrix[, 2],
+  Target_Total = rowSums(event_matrix),
+  Expected_Events = round(pwr_strat$n.I, 1),
+  Calendar_Time = round(pwr_strat$T, 1)
+)
+
+cat("Power:", round(pwr_strat$power * 100, 1), "%\n")
+```
+
+The matrix format is also used in the biomarker example below,
+where `lambdaC` and `gamma` vary by stratum but `plannedCalendarTime`
+drives the timing.
 
 ## Example: biomarker subgroup to stratified design
 

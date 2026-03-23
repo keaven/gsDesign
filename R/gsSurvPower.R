@@ -123,13 +123,14 @@
 #'   bounds,
 #'   \code{8} = two-sided, asymmetric, with non-binding futility and
 #'   non-binding harm bounds.
-#' @param alpha One-sided Type I error rate (upper bound spending).
-#'   Default 0.025. This is always one-sided, matching the \code{gsDesign()}
-#'   convention.
-#' @param sided 1 for 1-sided, 2 for 2-sided testing. For \code{k > 1},
-#'   boundary structure is determined primarily by \code{test.type}, matching
-#'   \code{gsDesign()} conventions; \code{sided} is stored on the output and is
-#'   used directly for the \code{k = 1} fixed-design shortcut.
+#' @param alpha Type I error rate. Default is 0.025 since 1-sided testing
+#'   is default. Internally divided by \code{sided} before passing to
+#'   \code{gsDesign()}, matching the convention used by \code{gsSurv()} and
+#'   \code{gsSurvCalendar()}.
+#' @param sided 1 for 1-sided, 2 for 2-sided testing. Used to convert
+#'   \code{alpha} to one-sided via \code{alpha / sided} for internal
+#'   calculations, matching the convention of \code{gsSurv()} and
+#'   \code{nSurv()}.
 #' @param astar Lower bound total crossing probability for \code{test.type}
 #'   5 or 6. Default 0.
 #' @param sfu Upper bound spending function (default \code{sfHSD}).
@@ -202,6 +203,19 @@
 #'   Scalar or vector of length \code{k}.
 #' @param minFollowUp Minimum follow-up time after \code{minN} is reached.
 #'   Scalar or vector of length \code{k}. Must be >= 0.
+#' @param informationRates Numeric vector of length \code{k} specifying
+#'   planned information fractions. When provided, spending fractions are
+#'   \code{pmin(informationRates, actual_timing)} at each analysis, where
+#'   \code{actual_timing} is expected events divided by maximum expected
+#'   events. This prevents over-spending when events are ahead of schedule
+#'   and under-spends when behind. Default \code{NULL} uses actual
+#'   information fractions (or calendar fractions when
+#'   \code{spending = "calendar"}).
+#' @param fullSpendingAtFinal Logical. When \code{TRUE}, the spending
+#'   fraction at the final analysis is forced to 1 regardless of the actual
+#'   (or capped) information fraction. This ensures full alpha spending
+#'   even when expected events fall short of the design target. Default
+#'   \code{FALSE}.
 #' @param tol Tolerance for \code{\link[stats]{uniroot}} when solving for
 #'   analysis times.
 #'
@@ -245,24 +259,6 @@
 #' design_events <- design$n.I
 #' gsSurvPower(x = design, hr = 0.8, targetEvents = design_events)$power
 #'
-#' # Calendar spending uses realized analysis times rather than usTime/lsTime
-#' gsSurvPower(
-#'   x = design,
-#'   plannedCalendarTime = design$T,
-#'   spending = "calendar",
-#'   usTime = c(0.2, 0.6, 1),
-#'   lsTime = c(0.3, 0.8, 1)
-#' )$upper$bound
-#'
-#' # Stratified event targets are summed within each analysis to solve timing
-#' gsSurvPower(
-#'   k = 2, test.type = 1, alpha = 0.025, sided = 1,
-#'   lambdaC = matrix(log(2) / c(6, 12), ncol = 2),
-#'   hr = 0.7, eta = 0.01,
-#'   gamma = matrix(c(5, 5), ncol = 2), R = 12, ratio = 1,
-#'   targetEvents = matrix(c(20, 10, 40, 20), nrow = 2, byrow = TRUE)
-#' )$power
-#'
 #' # Without a reference design
 #' gsSurvPower(
 #'   k = 2, test.type = 4, alpha = 0.025, sided = 1,
@@ -271,7 +267,11 @@
 #'   plannedCalendarTime = c(24, 36)
 #' )$power
 #'
-#' @seealso \code{\link{gsSurv}}, \code{\link{gsSurvCalendar}},
+#' @seealso \code{vignette("gssurvpower", package = "gsDesign")} for
+#'   worked examples including calendar spending, stratified event targets,
+#'   and biomarker subgroup analyses.
+#'
+#'   \code{\link{gsSurv}}, \code{\link{gsSurvCalendar}},
 #'   \code{\link[gsDesign]{gsDesign}}, \code{\link[gsDesign]{gsProbability}}
 #'
 #' @export
@@ -295,12 +295,14 @@ gsSurvPower <- function(
     minTimeFromPreviousAnalysis = NULL,
     minN = NULL,
     minFollowUp = NULL,
+    informationRates = NULL,
+    fullSpendingAtFinal = FALSE,
     tol = .Machine$double.eps^0.25) {
   spending <- match.arg(spending)
 
-  infer_sided_from_test_type <- function(current_test_type) {
-    if (current_test_type == 1) 1L else 2L
-  }
+  # Track whether user explicitly provided alpha; used below to decide
+  # whether the gsSurv alpha/sided convention applies.
+  alpha_provided_by_user <- !is.null(alpha)
 
   recycle_to_k <- function(value, name, analysis_count) {
     if (is.null(value)) return(rep(NA_real_, analysis_count))
@@ -319,7 +321,7 @@ gsSurvPower <- function(
         k = if (is.null(k)) x$k else k,
         test.type = resolved_test_type,
         sided = if (is.null(sided)) {
-          infer_sided_from_test_type(resolved_test_type)
+          if (!is.null(x$sided)) x$sided else 1L
         } else {
           sided
         },
@@ -710,7 +712,17 @@ gsSurvPower <- function(
     )$d
   }
 
-  resolve_spending_times <- function(analysis_time) {
+  resolve_spending_times <- function(analysis_time, actual_timing) {
+    # When informationRates is provided, spending fractions are
+    # min(planned, actual) information fractions at each analysis.
+    if (!is.null(informationRates)) {
+      capped <- pmin(informationRates, actual_timing)
+      if (isTRUE(fullSpendingAtFinal)) {
+        capped[length(capped)] <- 1
+      }
+      return(list(usTime = capped, lsTime = capped))
+    }
+
     if (spending == "calendar") {
       # Calendar spending always tracks realized analysis times.
       upper_spending_time <- analysis_time / max(analysis_time)
@@ -718,6 +730,14 @@ gsSurvPower <- function(
     } else {
       upper_spending_time <- usTime
       lower_spending_time <- lsTime
+    }
+
+    # Force full spending at final analysis.
+    if (isTRUE(fullSpendingAtFinal)) {
+      if (is.null(upper_spending_time)) upper_spending_time <- actual_timing
+      if (is.null(lower_spending_time)) lower_spending_time <- actual_timing
+      upper_spending_time[length(upper_spending_time)] <- 1
+      lower_spending_time[length(lower_spending_time)] <- 1
     }
 
     list(usTime = upper_spending_time, lsTime = lower_spending_time)
@@ -742,11 +762,11 @@ gsSurvPower <- function(
       r = r,
       upper = list(
         bound = z_alpha,
-        prob = matrix(c(alpha / sided, power_value), nrow = 1)
+        prob = matrix(c(alpha, power_value), nrow = 1)
       ),
       lower = list(
         bound = -20,
-        prob = matrix(c(1 - alpha / sided, 1 - power_value), nrow = 1)
+        prob = matrix(c(1 - alpha, 1 - power_value), nrow = 1)
       ),
       theta = c(0, theta_assumed),
       en = list(en = total_events[1]),
@@ -771,18 +791,23 @@ gsSurvPower <- function(
     )
   }
 
-  choose_bound_strategy <- function(current_timing) {
+  choose_bound_strategy <- function(current_timing, spending_times) {
     timing_matches <- !is.null(x) && !is.null(x$timing) &&
       length(x$timing) == k &&
       isTRUE(all.equal(current_timing, x$timing, tolerance = 1e-4))
+
+    # Custom spending times (e.g. calendar spending) change bound computation
+    # even when information fractions match the original design.
+    has_custom_spending <- !is.null(spending_times$usTime) ||
+      !is.null(spending_times$lsTime)
 
     upper_params_match <- !is.null(x) &&
       isTRUE(all.equal(alpha, x$alpha, tolerance = 1e-7)) &&
       identical(sfu, x$upper$sf) &&
       isTRUE(all.equal(sfupar, x$upper$param, tolerance = 1e-7))
 
-    if (timing_matches && upper_params_match) return("reuse")
-    if (timing_matches && !is.null(x)) return("update_upper")
+    if (timing_matches && upper_params_match && !has_custom_spending) return("reuse")
+    if (timing_matches && !is.null(x) && !has_custom_spending) return("update_upper")
     "recompute_all"
   }
 
@@ -791,7 +816,7 @@ gsSurvPower <- function(
       current_timing,
       total_events,
       spending_times) {
-    bound_strategy <- choose_bound_strategy(current_timing)
+    bound_strategy <- choose_bound_strategy(current_timing, spending_times)
 
     if (bound_strategy == "reuse") {
       design_object <- x
@@ -919,6 +944,8 @@ gsSurvPower <- function(
     result$tol <- tol
     result$method <- method
     result$spending <- spending
+    result$informationRates <- informationRates
+    result$fullSpendingAtFinal <- fullSpendingAtFinal
     result$call <- match.call()
     result$timing <- analysis_schedule$timing
     result$testUpper <- format_test_flag(testUpper, k)
@@ -945,6 +972,14 @@ gsSurvPower <- function(
   test.type <- resolved_inputs$test.type
   sided <- resolved_inputs$sided
   alpha <- resolved_inputs$alpha
+
+  # Apply gsSurv/gsSurvCalendar convention: user-facing alpha is divided
+  # by sided to obtain the one-sided alpha used by gsDesign().  When
+  # inheriting from x, x$alpha is already one-sided (stored by gsDesign),
+  # so conversion is skipped.
+  if (is.null(x) || alpha_provided_by_user) {
+    alpha <- alpha / sided
+  }
   astar <- resolved_inputs$astar
   sfu <- resolved_inputs$sfu
   sfupar <- resolved_inputs$sfupar
@@ -978,6 +1013,16 @@ gsSurvPower <- function(
   timing_inputs <- resolve_timing_inputs(k)
   k <- timing_inputs$k
 
+  # Validate informationRates
+  if (!is.null(informationRates)) {
+    if (length(informationRates) != k) {
+      stop("informationRates must have length k (", k, ")")
+    }
+    if (any(informationRates <= 0 | informationRates > 1)) {
+      stop("informationRates values must be in (0, 1]")
+    }
+  }
+
   normalized_rates <- normalize_rate_inputs(
     control_hazard = lambdaC_input,
     control_dropout = eta_input,
@@ -1007,7 +1052,8 @@ gsSurvPower <- function(
     analysis_time = analysis_schedule$analysis_time
   )
   spending_times <- resolve_spending_times(
-    analysis_time = analysis_schedule$analysis_time
+    analysis_time = analysis_schedule$analysis_time,
+    actual_timing = analysis_schedule$timing
   )
 
   if (k == 1) {

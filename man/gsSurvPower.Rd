@@ -42,6 +42,8 @@ gsSurvPower(
   minTimeFromPreviousAnalysis = NULL,
   minN = NULL,
   minFollowUp = NULL,
+  informationRates = NULL,
+  fullSpendingAtFinal = FALSE,
   tol = .Machine$double.eps^0.25
 )
 }
@@ -53,18 +55,26 @@ overrides the corresponding value from \code{x}.}
 \item{k}{Number of analyses planned, including interim and final.}
 
 \item{test.type}{\code{1} = one-sided, \code{2} = two-sided symmetric,
-\code{3} = two-sided asymmetric with binding futility,
-\code{4} = two-sided asymmetric with non-binding futility,
-\code{5} = two-sided with binding lower bound (alpha-spending),
-\code{6} = two-sided with non-binding lower bound (alpha-spending),
-\code{7} = two-sided asymmetric with binding futility and harm bounds,
-\code{8} = two-sided asymmetric with non-binding futility and harm bounds.}
+\code{3} = two-sided, asymmetric, beta-spending with binding lower bound,
+\code{4} = two-sided, asymmetric, beta-spending with non-binding lower bound,
+\code{5} = two-sided, asymmetric, lower bound spending under the null
+hypothesis with binding lower bound,
+\code{6} = two-sided, asymmetric, lower bound spending under the null
+hypothesis with non-binding lower bound,
+\code{7} = two-sided, asymmetric, with binding futility and binding harm
+bounds,
+\code{8} = two-sided, asymmetric, with non-binding futility and
+non-binding harm bounds.}
 
-\item{alpha}{One-sided Type I error rate (upper bound spending).
-Default 0.025. This is always one-sided, matching the \code{gsDesign()}
-convention.}
+\item{alpha}{Type I error rate. Default is 0.025 since 1-sided testing
+is default. Internally divided by \code{sided} before passing to
+\code{gsDesign()}, matching the convention used by \code{gsSurv()} and
+\code{gsSurvCalendar()}.}
 
-\item{sided}{1 for 1-sided, 2 for 2-sided testing.}
+\item{sided}{1 for 1-sided, 2 for 2-sided testing. Used to convert
+\code{alpha} to one-sided via \code{alpha / sided} for internal
+calculations, matching the convention of \code{gsSurv()} and
+\code{nSurv()}.}
 
 \item{astar}{Lower bound total crossing probability for \code{test.type}
 5 or 6. Default 0.}
@@ -86,10 +96,13 @@ bound spending function \code{sfharm}.}
 \item{r}{Integer grid parameter for numerical integration (default 18).}
 
 \item{usTime}{Upper spending time override; vector of length \code{k}
-or \code{NULL} (default) to use information fractions.}
+or \code{NULL} (default) to use information fractions. Ignored when
+\code{spending = "calendar"}, because realized analysis times determine
+the spending fractions.}
 
 \item{lsTime}{Lower spending time override; vector of length \code{k}
-or \code{NULL} (default) to use information fractions.}
+or \code{NULL} (default) to use information fractions. Ignored when
+\code{spending = "calendar"}.}
 
 \item{testUpper}{Indicator of which analyses include an efficacy test.
 \code{TRUE} (default) for all analyses. A logical vector of length
@@ -139,7 +152,9 @@ computation when \code{x} is not provided.}
 
 \item{spending}{One of \code{"information"} (default) or \code{"calendar"}.
 Controls whether alpha/beta spending tracks information fractions or
-calendar time fractions (\code{T / max(T)}).}
+calendar time fractions (\code{T / max(T)}). With calendar spending,
+\code{usTime} and \code{lsTime} are derived from the realized analysis
+times and any user-supplied overrides are ignored.}
 
 \item{plannedCalendarTime}{Calendar times for analyses (time 0 = start of
 randomization). Scalar (recycled) or vector of length \code{k}. Use
@@ -148,7 +163,9 @@ randomization). Scalar (recycled) or vector of length \code{k}. Use
 \item{targetEvents}{Target number of events at each analysis. Scalar
 (recycled), vector of length \code{k} (overall targets), or matrix
 with \code{k} rows and \code{nstrata} columns (per-stratum targets).
-Use \code{NA} for analyses not determined by events.}
+Use \code{NA} for analyses not determined by events. When a matrix is
+supplied, row sums give the total event target used to solve each
+analysis time.}
 
 \item{maxExtension}{Maximum time extension beyond the floor time to wait
 for \code{targetEvents}. Scalar or vector of length \code{k}.}
@@ -163,6 +180,21 @@ Scalar or vector of length \code{k}.}
 \item{minFollowUp}{Minimum follow-up time after \code{minN} is reached.
 Scalar or vector of length \code{k}. Must be >= 0.}
 
+\item{informationRates}{Numeric vector of length \code{k} specifying
+planned information fractions. When provided, spending fractions are
+\code{pmin(informationRates, actual_timing)} at each analysis, where
+\code{actual_timing} is expected events divided by maximum expected
+events. This prevents over-spending when events are ahead of schedule
+and under-spends when behind. Default \code{NULL} uses actual
+information fractions (or calendar fractions when
+\code{spending = "calendar"}).}
+
+\item{fullSpendingAtFinal}{Logical. When \code{TRUE}, the spending
+fraction at the final analysis is forced to 1 regardless of the actual
+(or capped) information fraction. This ensures full alpha spending
+even when expected events fall short of the design target. Default
+\code{FALSE}.}
+
 \item{tol}{Tolerance for \code{\link[stats]{uniroot}} when solving for
 analysis times.}
 }
@@ -175,12 +207,20 @@ An object of class \code{c("gsSurv", "gsDesign")} containing:
 \item{eDC, eDE}{Expected events by stratum (control, experimental).}
 \item{eNC, eNE}{Expected sample sizes by stratum (control, experimental).}
 \item{upper, lower}{Bounds and crossing probabilities.}
+\item{harm}{Harm-bound information when \code{test.type} is 7 or 8.}
+\item{en, theta}{Expected sample size summary and drift values returned by
+  \code{gsDesign::gsProbability()}.}
 \item{hr, hr0, hr1}{Assumed, null, and design hazard ratios.}
 \item{power}{Overall power (sum of upper-bound crossing probabilities
   under the assumed HR).}
 \item{beta}{Type II error (\code{1 - power}).}
-\item{lambdaC, etaC, etaE, gamma, R, S, ratio, minfup}{As input.}
-\item{method, spending, variable, call}{As input.}
+\item{variable}{Always \code{"Power"}.}
+\item{test.type, alpha, sided, method, spending, call}{Design settings used
+  for the power calculation.}
+\item{testUpper, testLower, testHarm}{Logical indicators of which analyses
+  include each bound type, when relevant.}
+\item{lambdaC, etaC, etaE, gamma, R, S, ratio, minfup}{Rate and timing inputs
+  used in the calculation.}
 }
 \description{
 \code{gsSurvPower()} computes power for a group sequential survival design
@@ -193,10 +233,11 @@ with separate calls.
 }
 \details{
 \strong{Accepting a gsSurv object:}
-An optional \code{gsSurv} object \code{x} provides defaults for all
-parameters. User-specified parameters override these defaults, enabling
-"what-if" analyses: e.g., \code{gsSurvPower(x = design, hr = 0.8)} evaluates
-power under HR = 0.8 using all other parameters from the design.
+An optional \code{gsSurv}-class object \code{x} provides defaults for all
+parameters. This includes output from \code{gsSurv()} and
+\code{gsSurvCalendar()}. User-specified parameters override these defaults,
+enabling "what-if" analyses: e.g., \code{gsSurvPower(x = design, hr = 0.8)}
+evaluates power under HR = 0.8 using all other parameters from the design.
 When \code{x} is not provided, all design parameters must be specified
 directly.
 
@@ -281,7 +322,9 @@ parameters change relative to the original design:
     via \code{gsDesign(test.type = 1)} at the new alpha, while the
     original futility bounds from \code{x} are preserved. Any futility
     bound that exceeds the new efficacy bound is clipped. This follows
-    the same convention as \code{gsBoundSummary()} and avoids
+    the same convention as \code{gsBoundSummary()}. Lower-bound spending
+    settings from \code{x} are intentionally kept in this branch, which
+    avoids
     complications with \code{astar} validation for binding types.
   \item \strong{Timing changed} (different target events or calendar
     times): both bounds are recomputed from scratch using the full
@@ -302,7 +345,7 @@ pwr$power  # should be 0.9
 gsSurvPower(x = design, hr = 0.8, plannedCalendarTime = design$T)$power
 
 # Event-driven timing (matches gsDesign power plot)
-design_events <- rowSums(design$eDC) + rowSums(design$eDE)
+design_events <- design$n.I
 gsSurvPower(x = design, hr = 0.8, targetEvents = design_events)$power
 
 # Without a reference design
@@ -315,6 +358,10 @@ gsSurvPower(
 
 }
 \seealso{
-\code{\link{gsSurv}}, \code{\link{gsSurvCalendar}},
+\code{vignette("gssurvpower", package = "gsDesign")} for
+  worked examples including calendar spending, stratified event targets,
+  and biomarker subgroup analyses.
+
+  \code{\link{gsSurv}}, \code{\link{gsSurvCalendar}},
   \code{\link[gsDesign]{gsDesign}}, \code{\link[gsDesign]{gsProbability}}
 }
