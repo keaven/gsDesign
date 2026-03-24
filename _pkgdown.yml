@@ -42,11 +42,12 @@ reference:
     Early, independent and more limited implementation of Lachin and Foulkes
     methods are in `nSurvival()` and `print.nSurvival()`.
   contents:
-  - nEvents
-  - nSurv
   - gsSurv
+  - print.gsSurv
   - gsSurvCalendar
   - gsSurvPower
+  - nSurv
+  - nEvents
   - gsHR
   - zn2hr
   - hrn2z

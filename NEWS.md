@@ -29,11 +29,27 @@
   or reversed HR conventions. All sample size methods (Lachin-Foulkes,
   Schoenfeld, Freedman, Bernstein-Lagakos) and plotting functions handle
   both directions symmetrically (@keaven, #251).
+- New `gsSurvPower()` function computes power for a group sequential survival
+  design with specified enrollment, dropout, treatment effect, and analysis
+  timing. Unlike `gsSurv()` and `gsSurvCalendar()` which solve for sample
+  size, `gsSurvPower()` takes fixed assumptions and computes power. Supports
+  calendar-time and event-driven timing, stratified designs, all test types
+  (1–8 including harm bounds), and flexible analysis timing criteria
+  (`targetEvents`, `plannedCalendarTime`, `maxExtension`,
+  `minTimeFromPreviousAnalysis`, `minN`, `minFollowUp`). When an existing
+  `gsSurv` design is provided via `x`, parameters can be selectively
+  overridden for "what-if" sensitivity analyses. Changing `alpha` preserves
+  original futility bounds (following `gsBoundSummary()` convention) while
+  recomputing efficacy bounds (@keaven, #109).
 - `gsSurvPower()` now supports `informationRates` to cap spending at planned
   versus realized information fractions and `fullSpendingAtFinal` to force the
   final spending fraction to 1 when desired. This makes it easier to evaluate
   delayed event accrual while keeping spending tied to a planned information
   schedule.
+- New vignette "Power Computation for Group Sequential Survival Designs"
+  (`vignette("gssurvpower")`) with worked examples for sensitivity analysis,
+  alpha reallocation, biomarker subgroup to stratified design, and
+  event-driven timing (@keaven, #109).
 
 ## Bug fixes
 
@@ -46,6 +62,9 @@
 
 ## Documentation
 
+- Documented `test.type` restriction in `toBinomialExact()`: only
+  `test.type = 1` and `4` are supported; other types (including 7 and 8)
+  produce an error (@keaven, #109).
 - Consolidated shared roxygen2 `@param` documentation using `@inheritParams`
   so that `test.type`, spending function parameters, and other shared arguments
   are defined once in `gsDesign()` or `nSurv()` and inherited by `gsSurv()`

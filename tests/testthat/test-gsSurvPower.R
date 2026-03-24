@@ -943,3 +943,110 @@ test_that("gsSurvPower preserves testHarm on output for test.type 7/8", {
   pwr <- gsSurvPower(x = design7, plannedCalendarTime = design7$T)
   expect_equal(pwr$testHarm, c(TRUE, TRUE, FALSE))
 })
+
+# --- alpha / sided convention tests ---
+
+test_that("gsSurvPower inherits one-sided alpha from x without conversion", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    lambdaC = log(2) / 6, hr = 0.6, eta = 0.01,
+    gamma = 10, R = 12, minfup = 18, T = 30
+  )
+  pwr <- gsSurvPower(x = design, plannedCalendarTime = design$T)
+  # Stored alpha should match the one-sided alpha from design
+  expect_equal(pwr$alpha, design$alpha)
+  # Power should reproduce the design
+  expect_equal(pwr$power, 1 - design$beta, tolerance = 1e-4)
+})
+
+test_that("user-provided alpha is divided by sided (sided=1)", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    lambdaC = log(2) / 6, hr = 0.6, eta = 0.01,
+    gamma = 10, R = 12, minfup = 18, T = 30
+  )
+  # alpha=0.05 with sided=1 → one-sided alpha = 0.05
+  pwr <- gsSurvPower(
+    x = design, alpha = 0.05,
+    plannedCalendarTime = design$T
+  )
+  expect_equal(pwr$alpha, 0.05)
+  # Efficacy bounds should be less strict than the original
+  pwr_orig <- gsSurvPower(x = design, plannedCalendarTime = design$T)
+  expect_true(all(pwr$upper$bound < pwr_orig$upper$bound))
+})
+
+test_that("user-provided alpha is divided by sided (sided=2)", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    lambdaC = log(2) / 6, hr = 0.6, eta = 0.01,
+    gamma = 10, R = 12, minfup = 18, T = 30
+  )
+  # alpha=0.05, sided=2 → one-sided alpha = 0.025 (same as design)
+  pwr <- gsSurvPower(
+    x = design, alpha = 0.05, sided = 2,
+    plannedCalendarTime = design$T
+  )
+  expect_equal(pwr$alpha, 0.025)
+  expect_equal(pwr$sided, 2)
+  # Should match the original design power
+  expect_equal(pwr$power, 1 - design$beta, tolerance = 1e-4)
+})
+
+test_that("standalone alpha follows gsSurv convention", {
+  pwr1 <- gsSurvPower(
+    k = 2, test.type = 1, alpha = 0.025, sided = 1,
+    lambdaC = log(2) / 6, hr = 0.65, eta = 0.01,
+    gamma = 8, R = 18, ratio = 1,
+    plannedCalendarTime = c(24, 36)
+  )
+  # alpha=0.05, sided=2 should give same one-sided alpha=0.025
+  pwr2 <- gsSurvPower(
+    k = 2, test.type = 1, alpha = 0.05, sided = 2,
+    lambdaC = log(2) / 6, hr = 0.65, eta = 0.01,
+    gamma = 8, R = 18, ratio = 1,
+    plannedCalendarTime = c(24, 36)
+  )
+  expect_equal(pwr1$alpha, 0.025)
+  expect_equal(pwr2$alpha, 0.025)
+  expect_equal(pwr1$power, pwr2$power, tolerance = 1e-6)
+})
+
+test_that("gsSurvPower matches gsBoundSummary for alternate alpha", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    lambdaC = log(2) / 6, hr = 0.6, eta = 0.01,
+    gamma = 10, R = 12, minfup = 18, T = 30
+  )
+  # gsBoundSummary uses one-sided alpha directly;
+  # gsSurvPower with sided=1 (default from x) should match
+  pwr_a05 <- gsSurvPower(
+    x = design, alpha = 0.05,
+    targetEvents = design$n.I
+  )
+  # Cross-check: gsDesign with test.type=1 at same alpha
+  gs_check <- gsDesign(
+    k = design$k, test.type = 1, alpha = 0.05, beta = design$beta,
+    n.fix = design$n.fix, timing = design$timing,
+    sfu = design$upper$sf, sfupar = design$upper$param, r = design$r,
+    delta1 = log(design$hr), delta0 = log(design$hr0)
+  )
+  expect_equal(pwr_a05$upper$bound, gs_check$upper$bound, tolerance = 1e-3)
+})
+
+test_that("sided defaults to x$sided when stored on gsSurvPower output", {
+  pwr1 <- gsSurvPower(
+    k = 2, test.type = 4, alpha = 0.05, sided = 2,
+    lambdaC = log(2) / 6, hr = 0.65, eta = 0.01,
+    gamma = 8, R = 18, ratio = 1,
+    plannedCalendarTime = c(24, 36)
+  )
+  # pwr1 stores sided=2 and one-sided alpha=0.025
+  expect_equal(pwr1$sided, 2)
+  expect_equal(pwr1$alpha, 0.025)
+
+  # When re-passed as x, sided=2 should be inherited
+  pwr2 <- gsSurvPower(x = pwr1, plannedCalendarTime = pwr1$T)
+  expect_equal(pwr2$sided, 2)
+  expect_equal(pwr2$alpha, pwr1$alpha)
+})
