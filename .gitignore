@@ -14,7 +14,6 @@ TODO
 *.rnw
 Meta/
 doc/
-gsDesign/
 docs/
 /*.tar.gz
 /*.Rcheck/
