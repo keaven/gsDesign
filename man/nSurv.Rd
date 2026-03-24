@@ -263,7 +263,7 @@ O'Brien-Fleming bounds and \dQuote{Pocock} for Pocock bounds).  For
 one-sided and symmetric two-sided testing is used to completely specify
 spending (\code{test.type=1, 2}), \code{sfu}.  The default value is
 \code{sfHSD} which is a Hwang-Shih-DeCani spending function.  See details,
-\link{Spending_Function_Overview}, manual and examples.}
+\link{spendingFunction}, manual and examples.}
 
 \item{sfupar}{Real value, default is \eqn{-4} which is an
 O'Brien-Fleming-like conservative bound when used with the default
@@ -300,7 +300,7 @@ provide larger number of grid points and greater accuracy.  Normally
 
 \item{usTime}{Default is NULL in which case upper bound spending time is
 determined by \code{timing}. Otherwise, this should be a vector of length
-code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
+\code{k} with the spending time at each analysis (see Details in help for \code{gsDesign}).}
 
 \item{lsTime}{Default is NULL in which case lower bound spending time is
 determined by \code{timing}. Otherwise, this should be a vector of length
@@ -922,7 +922,7 @@ Comparing Survival Distributions. \emph{Biometrika}, 68, 316-319.
  \code{\link[xtable]{xtable}}
 
 \code{\link{gsBoundSummary}}, \code{\link{xprint}},
-\link{gsDesign package overview}, \link{plot.gsDesign},
+\link{gsDesign-package}, \link{plot.gsDesign},
 \code{\link{gsDesign}}, \code{\link{gsHR}}, \code{\link{nSurvival}}
 
 \code{\link[stats]{uniroot}}

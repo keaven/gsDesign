@@ -39,6 +39,7 @@ Suggests:
     knitr,
     mvtnorm,
     rmarkdown,
+    rpact,
     scales,
     testthat,
     utils,
