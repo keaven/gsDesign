@@ -29,12 +29,20 @@
   or reversed HR conventions. All sample size methods (Lachin-Foulkes,
   Schoenfeld, Freedman, Bernstein-Lagakos) and plotting functions handle
   both directions symmetrically (@keaven, #251).
+- `gsSurvPower()` now supports `informationRates` to cap spending at planned
+  versus realized information fractions and `fullSpendingAtFinal` to force the
+  final spending fraction to 1 when desired. This makes it easier to evaluate
+  delayed event accrual while keeping spending tied to a planned information
+  schedule.
 
 ## Bug fixes
 
 - Fixed sign inconsistency in `hrn2z()` which used `sign(hr0 - hr1)`
   while `zn2hr()` used `sign(hr1 - hr0)`, preventing correct round-trip
   conversion. Both now use `sign(hr1 - hr0)` (@keaven, #251).
+- `gsSurvPower()` now preserves the original one-sided versus two-sided design
+  convention when inheriting defaults from an existing `gsSurv` object, so
+  printed alpha and related metadata stay aligned with the source design.
 
 ## Documentation
 
@@ -45,6 +53,16 @@
 - New vignette "Selective bound testing at interim analyses"
   (`vignette("SelectiveBoundTesting")`) with worked examples
   for all supported scenarios (@keaven, #255).
+- Expanded `gsSurvPower()` documentation and vignette guidance for
+  `informationRates`, calendar spending, and `fullSpendingAtFinal`, including
+  a corrected worked example of the spending fractions used at the final
+  analysis.
+
+## Testing
+
+- Added focused `gsSurvPower()` regression tests for `informationRates`,
+  `fullSpendingAtFinal`, and inherited sidedness behavior from existing
+  time-to-event designs.
 
 # gsDesign 3.9.0 (February 2026)
 

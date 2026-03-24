@@ -137,12 +137,15 @@ when no calendar time is specified), even if other criteria such as
   length `k`). When provided, spending fractions are
   `pmin(informationRates, actual_timing)` at each analysis,
   preventing over-spending when events arrive faster than planned
-  and under-spending when behind.
+  and under-spending when behind. This planned-vs-actual
+  information scale takes precedence over `spending`, `usTime`,
+  and `lsTime`; upper and lower spending both use the same capped vector.
 
-- **`fullSpendingAtFinal`**: When `TRUE`, the spending fraction at the
-  final analysis is forced to 1 regardless of the actual information
-  fraction. This ensures full alpha spending even when expected events
-  fall short of the design target.
+- **`fullSpendingAtFinal`**: When `TRUE`, the final element of the
+  spending-time vector is forced to 1 after applying
+  `informationRates`, calendar spending, or user-supplied `usTime` /
+  `lsTime`. This is useful when the selected spending-time vector would
+  otherwise end below 1.
 
 - **`method`**: One of `"LachinFoulkes"` (default), `"Schoenfeld"`,
   `"Freedman"`, or `"BernsteinLagakos"`. Controls how fixed-design events
@@ -360,16 +363,20 @@ The `informationRates` parameter lets you cap spending at
 `pmin(informationRates, actual_timing)` — preventing over-spending
 if events arrive faster than planned, and under-spending if they
 arrive slower. This is useful when the protocol pre-specifies
-spending based on planned information fractions.
+spending based on planned information fractions. If `informationRates`
+is supplied, this information-based cap takes precedence over
+`spending = "calendar"` and over manual `usTime` / `lsTime` overrides.
 
 Setting `fullSpendingAtFinal = TRUE` forces the spending fraction
-at the final analysis to 1, ensuring full alpha is spent even when
-expected events fall short of the design target. Without this,
-the final spending fraction would be less than 1, leaving some
-alpha unspent.
+at the final analysis to 1 after the capped spending fractions are
+computed. The example below uses a final planned spending fraction of
+0.95 to show the effect explicitly. Without `fullSpendingAtFinal`,
+the final spending fraction would remain 0.95 rather than 1.
 
 ```{r informationRates_demo}
 # Scenario 1 with informationRates and fullSpendingAtFinal
+planned_info_rates <- c(design$timing[-design$k], 0.95)
+
 pwr_slow_ir <- gsSurvPower(
   x = design,
   gamma = design$gamma / 2,
@@ -378,27 +385,28 @@ pwr_slow_ir <- gsSurvPower(
   minN = c(NA, total_N, total_N),
   minFollowUp = c(NA, 2, 12),
   maxExtension = c(3, 12, 20),
-  informationRates = design$timing,
+  informationRates = planned_info_rates,
   fullSpendingAtFinal = TRUE
 )
+
+spending_frac_used <- pmin(planned_info_rates, pwr_slow_ir$timing)
+spending_frac_used[design$k] <- 1
 
 data.frame(
   Analysis = 1:design$k,
   Actual_Events = round(pwr_slow_ir$n.I, 1),
   Actual_InfoFrac = round(pwr_slow_ir$timing, 3),
-  Planned_InfoFrac = round(design$timing, 3),
-  Spending_Frac = round(
-    pmin(design$timing, pwr_slow_ir$timing), 3
-  )
+  Planned_InfoFrac = round(planned_info_rates, 3),
+  Spending_Frac = round(spending_frac_used, 3)
 )
 cat("Power (default spending):       ", round(pwr_slow$power * 100, 1), "%\n")
 cat("Power (capped + full final):    ", round(pwr_slow_ir$power * 100, 1), "%\n")
 ```
 
 With `fullSpendingAtFinal = TRUE`, the final spending fraction is 1
-even though the actual information fraction is less than 1. This
-produces slightly different final bounds compared to the default,
-which would use the actual (sub-1) fraction for spending.
+even though the capped planned-vs-actual fraction would otherwise be
+0.95. This produces slightly different final bounds compared to the
+same `informationRates` specification with `fullSpendingAtFinal = FALSE`.
 
 ## Comparison with gsDesign power plots
 

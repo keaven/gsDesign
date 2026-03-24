@@ -74,7 +74,9 @@ is default. Internally divided by \code{sided} before passing to
 \item{sided}{1 for 1-sided, 2 for 2-sided testing. Used to convert
 \code{alpha} to one-sided via \code{alpha / sided} for internal
 calculations, matching the convention of \code{gsSurv()} and
-\code{nSurv()}.}
+\code{nSurv()}. When \code{x} is provided and \code{sided} is omitted,
+\code{gsSurvPower()} reuses the stored sided value from the design call
+when available.}
 
 \item{astar}{Lower bound total crossing probability for \code{test.type}
 5 or 6. Default 0.}
@@ -185,15 +187,19 @@ planned information fractions. When provided, spending fractions are
 \code{pmin(informationRates, actual_timing)} at each analysis, where
 \code{actual_timing} is expected events divided by maximum expected
 events. This prevents over-spending when events are ahead of schedule
-and under-spends when behind. Default \code{NULL} uses actual
+and under-spends when behind. When supplied, these planned-vs-actual
+information fractions take precedence over \code{spending},
+\code{usTime}, and \code{lsTime}; both upper and lower spending times
+use the same capped vector. Default \code{NULL} uses actual
 information fractions (or calendar fractions when
 \code{spending = "calendar"}).}
 
 \item{fullSpendingAtFinal}{Logical. When \code{TRUE}, the spending
-fraction at the final analysis is forced to 1 regardless of the actual
-(or capped) information fraction. This ensures full alpha spending
-even when expected events fall short of the design target. Default
-\code{FALSE}.}
+fraction at the final analysis is forced to 1 after applying
+\code{informationRates}, calendar spending, or user-supplied
+\code{usTime}/\code{lsTime}. This ensures full alpha spending whenever
+the selected spending-time vector would otherwise end below 1.
+Default \code{FALSE}.}
 
 \item{tol}{Tolerance for \code{\link[stats]{uniroot}} when solving for
 analysis times.}
@@ -324,8 +330,7 @@ parameters change relative to the original design:
     bound that exceeds the new efficacy bound is clipped. This follows
     the same convention as \code{gsBoundSummary()}. Lower-bound spending
     settings from \code{x} are intentionally kept in this branch, which
-    avoids
-    complications with \code{astar} validation for binding types.
+    avoids complications with \code{astar} validation for binding types.
   \item \strong{Timing changed} (different target events or calendar
     times): both bounds are recomputed from scratch using the full
     \code{test.type} and all spending parameters.

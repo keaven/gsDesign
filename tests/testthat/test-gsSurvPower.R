@@ -157,6 +157,85 @@ test_that("gsSurvPower information spending respects usTime and lsTime", {
   expect_false(isTRUE(all.equal(pwr_default$lower$bound, pwr_custom$lower$bound)))
 })
 
+test_that("gsSurvPower informationRates take precedence over calendar spending", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, hr0 = 1,
+    eta = 0.01, gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  info_rates <- c(0.2, 0.6, 1)
+
+  pwr_info <- gsSurvPower(
+    x = design,
+    plannedCalendarTime = design$T,
+    informationRates = info_rates,
+    spending = "information"
+  )
+  pwr_calendar <- gsSurvPower(
+    x = design,
+    plannedCalendarTime = design$T,
+    informationRates = info_rates,
+    spending = "calendar",
+    usTime = c(0.3, 0.7, 1),
+    lsTime = c(0.4, 0.8, 1)
+  )
+
+  expect_equal(pwr_info$upper$bound, pwr_calendar$upper$bound)
+  expect_equal(pwr_info$lower$bound, pwr_calendar$lower$bound)
+  expect_equal(pwr_info$informationRates, info_rates)
+})
+
+test_that("gsSurvPower fullSpendingAtFinal forces final spending fraction to one", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, hr0 = 1,
+    eta = 0.01, gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  partial_final <- c(0.25, 0.6, 0.95)
+  full_final <- c(0.25, 0.6, 1)
+
+  pwr_partial <- gsSurvPower(
+    x = design,
+    plannedCalendarTime = design$T,
+    informationRates = partial_final,
+    fullSpendingAtFinal = FALSE
+  )
+  pwr_full <- gsSurvPower(
+    x = design,
+    plannedCalendarTime = design$T,
+    informationRates = partial_final,
+    fullSpendingAtFinal = TRUE
+  )
+
+  gs_partial <- gsDesign(
+    k = design$k, test.type = design$test.type,
+    alpha = design$alpha, beta = design$beta,
+    n.fix = design$n.fix, timing = design$timing,
+    sfu = design$upper$sf, sfupar = design$upper$param,
+    sfl = design$lower$sf, sflpar = design$lower$param,
+    delta1 = log(design$hr), delta0 = log(design$hr0),
+    usTime = partial_final, lsTime = partial_final
+  )
+  gs_full <- gsDesign(
+    k = design$k, test.type = design$test.type,
+    alpha = design$alpha, beta = design$beta,
+    n.fix = design$n.fix, timing = design$timing,
+    sfu = design$upper$sf, sfupar = design$upper$param,
+    sfl = design$lower$sf, sflpar = design$lower$param,
+    delta1 = log(design$hr), delta0 = log(design$hr0),
+    usTime = full_final, lsTime = full_final
+  )
+
+  expect_equal(pwr_partial$upper$bound, gs_partial$upper$bound, tolerance = 1e-4)
+  expect_equal(pwr_partial$lower$bound, gs_partial$lower$bound, tolerance = 1e-4)
+  expect_equal(pwr_full$upper$bound, gs_full$upper$bound, tolerance = 1e-4)
+  expect_equal(pwr_full$lower$bound, gs_full$lower$bound, tolerance = 1e-4)
+  expect_false(isTRUE(all.equal(pwr_partial$upper$bound, pwr_full$upper$bound)))
+  expect_true(isTRUE(pwr_full$fullSpendingAtFinal))
+})
+
 test_that("gsSurvPower uses row sums of matrix targetEvents for timing", {
   target_matrix <- matrix(c(20, 10, 40, 20), nrow = 2, byrow = TRUE)
   base_args <- list(
@@ -247,6 +326,23 @@ test_that("gsSurvPower print method works for power output", {
   expect_true(any(grepl("Power computation", out)))
   expect_true(any(grepl("Assumed HR", out)))
   expect_true(any(grepl("Design HR", out)))
+})
+
+test_that("gsSurvPower infers sided from test.type when x does not store it", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.05, sided = 2, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, hr0 = 1,
+    eta = 0.01, gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  pwr <- gsSurvPower(x = design, plannedCalendarTime = design$T)
+
+  expect_null(design$sided)
+  expect_equal(pwr$sided, 2)
+  expect_equal(pwr$alpha * pwr$sided, 0.05, tolerance = 1e-8)
+
+  out <- capture.output(print(pwr))
+  expect_true(any(grepl("alpha=0.0500 \\(sided=2\\)", out)))
 })
 
 test_that("gsSurvPower validates inputs", {

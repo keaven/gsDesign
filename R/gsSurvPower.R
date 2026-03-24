@@ -101,8 +101,7 @@
 #'     bound that exceeds the new efficacy bound is clipped. This follows
 #'     the same convention as \code{gsBoundSummary()}. Lower-bound spending
 #'     settings from \code{x} are intentionally kept in this branch, which
-#'     avoids
-#'     complications with \code{astar} validation for binding types.
+#'     avoids complications with \code{astar} validation for binding types.
 #'   \item \strong{Timing changed} (different target events or calendar
 #'     times): both bounds are recomputed from scratch using the full
 #'     \code{test.type} and all spending parameters.
@@ -130,7 +129,9 @@
 #' @param sided 1 for 1-sided, 2 for 2-sided testing. Used to convert
 #'   \code{alpha} to one-sided via \code{alpha / sided} for internal
 #'   calculations, matching the convention of \code{gsSurv()} and
-#'   \code{nSurv()}.
+#'   \code{nSurv()}. When \code{x} is provided and \code{sided} is omitted,
+#'   \code{gsSurvPower()} reuses the stored sided value from the design call
+#'   when available.
 #' @param astar Lower bound total crossing probability for \code{test.type}
 #'   5 or 6. Default 0.
 #' @param sfu Upper bound spending function (default \code{sfHSD}).
@@ -208,14 +209,18 @@
 #'   \code{pmin(informationRates, actual_timing)} at each analysis, where
 #'   \code{actual_timing} is expected events divided by maximum expected
 #'   events. This prevents over-spending when events are ahead of schedule
-#'   and under-spends when behind. Default \code{NULL} uses actual
+#'   and under-spends when behind. When supplied, these planned-vs-actual
+#'   information fractions take precedence over \code{spending},
+#'   \code{usTime}, and \code{lsTime}; both upper and lower spending times
+#'   use the same capped vector. Default \code{NULL} uses actual
 #'   information fractions (or calendar fractions when
 #'   \code{spending = "calendar"}).
 #' @param fullSpendingAtFinal Logical. When \code{TRUE}, the spending
-#'   fraction at the final analysis is forced to 1 regardless of the actual
-#'   (or capped) information fraction. This ensures full alpha spending
-#'   even when expected events fall short of the design target. Default
-#'   \code{FALSE}.
+#'   fraction at the final analysis is forced to 1 after applying
+#'   \code{informationRates}, calendar spending, or user-supplied
+#'   \code{usTime}/\code{lsTime}. This ensures full alpha spending whenever
+#'   the selected spending-time vector would otherwise end below 1.
+#'   Default \code{FALSE}.
 #' @param tol Tolerance for \code{\link[stats]{uniroot}} when solving for
 #'   analysis times.
 #'
@@ -304,6 +309,15 @@ gsSurvPower <- function(
   # whether the gsSurv alpha/sided convention applies.
   alpha_provided_by_user <- !is.null(alpha)
 
+  extract_sided_from_design_call <- function(design_object) {
+    if (is.null(design_object$call) || is.null(design_object$call$sided)) {
+      return(NULL)
+    }
+
+    sided_value <- suppressWarnings(as.integer(design_object$call$sided))
+    if (length(sided_value) == 1 && !is.na(sided_value)) sided_value else NULL
+  }
+
   recycle_to_k <- function(value, name, analysis_count) {
     if (is.null(value)) return(rep(NA_real_, analysis_count))
     if (length(value) == 1) return(rep(value, analysis_count))
@@ -321,7 +335,13 @@ gsSurvPower <- function(
         k = if (is.null(k)) x$k else k,
         test.type = resolved_test_type,
         sided = if (is.null(sided)) {
-          if (!is.null(x$sided)) x$sided else 1L
+          if (!is.null(x$sided)) {
+            x$sided
+          } else if (!is.null(extract_sided_from_design_call(x))) {
+            extract_sided_from_design_call(x)
+          } else {
+            1L
+          }
         } else {
           sided
         },
@@ -713,8 +733,8 @@ gsSurvPower <- function(
   }
 
   resolve_spending_times <- function(analysis_time, actual_timing) {
-    # When informationRates is provided, spending fractions are
-    # min(planned, actual) information fractions at each analysis.
+    # informationRates defines a planned information-time scale and takes
+    # precedence over calendar spending or manual usTime/lsTime overrides.
     if (!is.null(informationRates)) {
       capped <- pmin(informationRates, actual_timing)
       if (isTRUE(fullSpendingAtFinal)) {
