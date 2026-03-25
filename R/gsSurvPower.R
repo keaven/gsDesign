@@ -985,7 +985,13 @@ gsSurvPower <- function(
       r = settings$r
     ))
     upper_bounds <- design_object$upper$bound
-    lower_bounds <- pmin(settings$x$lower$bound, upper_bounds)
+    if (!is.null(settings$x$lower$bound)) {
+      lower_bounds <- pmin(settings$x$lower$bound, upper_bounds)
+      design_object$lower <- settings$x$lower
+      design_object$lower$bound <- lower_bounds
+    } else {
+      lower_bounds <- numeric(0)
+    }
     if (settings$test.type %in% c(7, 8) && !is.null(settings$x$harm)) {
       design_object$harm <- settings$x$harm
     }
