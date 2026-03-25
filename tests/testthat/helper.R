@@ -1,21 +1,6 @@
 # This file was formerly stored as `tests/gsDesign_independent_code.R` and is
 # now moved to `tests/testthat/helper.R` to follow testthat best practices.
 
-# Skip helpers for version-conditional vdiffr snapshot tests.
-# R 4.6.0 changed plotmath subscript placement, so SVG snapshots differ.
-skip_unless_r <- function(version_spec) {
-  current <- getRversion()
-  if (grepl("^>=", version_spec)) {
-    threshold <- package_version(sub("^>=\\s*", "", version_spec))
-    if (current < threshold) testthat::skip(paste("Requires R", version_spec))
-  } else if (grepl("^<", version_spec)) {
-    threshold <- package_version(sub("^<\\s*", "", version_spec))
-    if (current >= threshold) testthat::skip(paste("Requires R", version_spec))
-  } else {
-    stop("skip_unless_r: version_spec must start with '>=' or '<'")
-  }
-}
-
 # This script contains independently programmed functions for validating some of 
 # the functions of the gsDesign package.
 #-------------------------------------------------------------------------------

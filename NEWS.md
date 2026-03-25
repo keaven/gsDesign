@@ -45,7 +45,8 @@
   versus realized information fractions and `fullSpendingAtFinal` to force the
   final spending fraction to 1 when desired. This makes it easier to evaluate
   delayed event accrual while keeping spending tied to a planned information
-  schedule.
+  schedule. It also preserves the original one-sided versus two-sided design
+  convention when inheriting defaults from an existing `gsSurv` object.
 - New vignette "Power Computation for Group Sequential Survival Designs"
   (`vignette("gssurvpower")`) with worked examples for sensitivity analysis,
   alpha reallocation, biomarker subgroup to stratified design, and
@@ -56,9 +57,6 @@
 - Fixed sign inconsistency in `hrn2z()` which used `sign(hr0 - hr1)`
   while `zn2hr()` used `sign(hr1 - hr0)`, preventing correct round-trip
   conversion. Both now use `sign(hr1 - hr0)` (@keaven, #251).
-- `gsSurvPower()` now preserves the original one-sided versus two-sided design
-  convention when inheriting defaults from an existing `gsSurv` object, so
-  printed alpha and related metadata stay aligned with the source design.
 
 ## Documentation
 

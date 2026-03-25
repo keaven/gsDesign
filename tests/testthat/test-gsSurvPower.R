@@ -102,7 +102,7 @@ test_that("maxExtension is a hard cap even when other criteria push later", {
 })
 
 test_that("maxExtension caps targetEvents and minTimeFromPreviousAnalysis", {
-  suppressWarnings({
+  expect_warning(
     pwr <- gsSurvPower(
       k = 2, test.type = 1, alpha = 0.025, sided = 1,
       lambdaC = log(2) / 12, hr = 0.7, hr0 = 1,
@@ -111,8 +111,9 @@ test_that("maxExtension caps targetEvents and minTimeFromPreviousAnalysis", {
       targetEvents = c(20, 500),
       maxExtension = c(NA, 6),
       minTimeFromPreviousAnalysis = c(NA, 18)
-    )
-  })
+    ),
+    "Target 500 events may not be achievable"
+  )
   expect_true(pwr$T[2] <= 24 + 6 + 1e-6)
   events_2 <- sum(pwr$eDC[2, ] + pwr$eDE[2, ])
   expect_true(events_2 < 500)

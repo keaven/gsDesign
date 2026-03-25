@@ -2,7 +2,7 @@ testthat::test_that("plot.ssrCP: plots are correctly rendered (R < 4.6.0)", {
   local_edition(3)
   announce_snapshot_file("independent-test-plot.ssrCP/ssr-cp.svg")
   skip_on_ci()
-  skip_unless_r("< 4.6.0")
+  skip_if_not(getRversion() < "4.6.0")
 
   ssr_cp_des <- ssrCP(
     z1 = seq(-3, 3, 0.1), theta = NULL, maxinc = 2,
@@ -28,7 +28,7 @@ testthat::test_that("plot.ssrCP: plots are correctly rendered (R >= 4.6.0)", {
   local_edition(3)
   announce_snapshot_file("independent-test-plot.ssrCP/ssr-cp-r460plus.svg")
   skip_on_ci()
-  skip_unless_r(">= 4.6.0")
+  skip_if_not(getRversion() >= "4.6.0")
 
   ssr_cp_des <- ssrCP(
     z1 = seq(-3, 3, 0.1), theta = NULL, maxinc = 2,

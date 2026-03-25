@@ -43,7 +43,7 @@ test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and b
   local_edition(3)
   announce_snapshot_file("independent-test-plot.gsProbability/plottype-4-base-true.svg")
   skip_on_ci()
-  skip_unless_r("< 4.6.0")
+  skip_if_not(getRversion() < "4.6.0")
 
   vdiffr::expect_doppelganger(
     "plottype 4 base TRUE",
@@ -55,7 +55,7 @@ test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and b
   local_edition(3)
   announce_snapshot_file("independent-test-plot.gsProbability/plottype-4-base-true-r460plus.svg")
   skip_on_ci()
-  skip_unless_r(">= 4.6.0")
+  skip_if_not(getRversion() >= "4.6.0")
 
   vdiffr::expect_doppelganger(
     "plottype 4 base TRUE R460plus",
