@@ -26,7 +26,7 @@ testthat::test_that("plot.ssrCP: plots are correctly rendered (R < 4.5.3)", {
 testthat::test_that("plot.ssrCP: plots are correctly rendered (R >= 4.5.3)", {
   local_edition(3)
   announce_snapshot_file("independent-test-plot.ssrCP/ssr-cp-r453plus.svg")
-  skip_unless_r("< 4.5.3")
+  skip_unless_r(">= 4.5.3")
 
   ssr_cp_des <- ssrCP(
     z1 = seq(-3, 3, 0.1), theta = NULL, maxinc = 2,
