@@ -72,13 +72,6 @@ methods are in
 and
 [`print.nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md).
 
-- [`print(`*`<nSurvival>`*`)`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`nEvents()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`zn2hr()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`hrn2z()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`hrz2n()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  : Time-to-event sample size calculation (Lachin-Foulkes)
 - [`tEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   [`nEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
@@ -89,6 +82,15 @@ and
   : Advanced time-to-event sample size calculation
 - [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
   : Group sequential design with calendar-based timing of analyses
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  : Compute power for a group sequential survival design
+- [`print(`*`<nSurvival>`*`)`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`nEvents()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`zn2hr()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`hrn2z()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`hrz2n()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  : Time-to-event sample size calculation (Lachin-Foulkes)
 - [`summary(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   [`print(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)

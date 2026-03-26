@@ -9,7 +9,8 @@ usage without coding and to generate code to be able to reproduce the
 design; this is being enhanced to support more features on an ongoing
 basis. See the [talk](https://www.youtube.com/watch?v=8uZRuvzma9M)
 presented at the R/Pharma Conference to get started with the web
-interface.
+interface. With improving large language models since late 2025, updates
+and additions to the gsDesign package have accelerated.
 
 ## Installation
 

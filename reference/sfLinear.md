@@ -249,5 +249,5 @@ s1alt <- rnorm(1000000, 0, sqrt(178))
 z1alt <- s1alt / sqrt(178)
 z2alt <- (s1alt + s2) / sqrt(178 + n2)
 sum(z1alt >= x$upper$bound[1] | z2alt >= x$upper$bound[2]) / 1000000
-#> [1] 0.025279
+#> [1] 0.02528
 ```

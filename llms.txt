@@ -9,7 +9,8 @@ usage without coding and to generate code to be able to reproduce the
 design; this is being enhanced to support more features on an ongoing
 basis. See the [talk](https://www.youtube.com/watch?v=8uZRuvzma9M)
 presented at the R/Pharma Conference to get started with the web
-interface.
+interface. With improving large language models since late 2025, updates
+and additions to the gsDesign package have accelerated.
 
 ## Installation
 
@@ -147,13 +148,6 @@ methods are in
 and
 [`print.nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md).
 
-- [`print(`*`<nSurvival>`*`)`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`nEvents()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`zn2hr()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`hrn2z()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`hrz2n()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  : Time-to-event sample size calculation (Lachin-Foulkes)
 - [`tEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   [`nEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
@@ -164,6 +158,15 @@ and
   : Advanced time-to-event sample size calculation
 - [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
   : Group sequential design with calendar-based timing of analyses
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  : Compute power for a group sequential survival design
+- [`print(`*`<nSurvival>`*`)`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`nEvents()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`zn2hr()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`hrn2z()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`hrz2n()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  : Time-to-event sample size calculation (Lachin-Foulkes)
 - [`summary(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   [`print(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
@@ -306,6 +309,8 @@ trials with time-to-event endpoints using gsDesign.
   counts](https://keaven.github.io/gsDesign/articles/toInteger.md):
 - [Basic time-to-event group sequential design using
   gsSurv](https://keaven.github.io/gsDesign/articles/gsSurvBasicExamples.md):
+- [Power Computation for Group Sequential Survival
+  Designs](https://keaven.github.io/gsDesign/articles/gsSurvPower.md):
 - [Futility and harm bounds for overall survival
   monitoring](https://keaven.github.io/gsDesign/articles/HarmBound.md):
 - [Selective bound testing at interim

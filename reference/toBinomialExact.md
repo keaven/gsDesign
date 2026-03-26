@@ -31,6 +31,10 @@ An object of class `gsBinomialExact`.
 
 ## Details
 
+Only `test.type` 1 (one-sided) and `test.type` 4 (non-binding futility)
+are supported. Other test types (including `test.type` 7 and 8 with harm
+bounds) will produce an error.
+
 The exact binomial routine `gsBinomialExact` has requirements that may
 not be satisfied by the initial asymptotic approximation. Thus, the
 approximations are updated to satisfy the following requirements of

@@ -85,6 +85,7 @@ x <- gsSurv(
 # Default is to round up both event count and sample size for final analysis
 toInteger(x)
 #> Group sequential design (method=; k=3 analyses; Two-sided asymmetric with non-binding futility)
+#> HR=0.300 vs HR0=0.700 | alpha=0.025 (sided=2) | power=90.0%
 #> N=9064.0 subjects | D=69.0 events | T=24.2 study duration | accrual=16.0 Accrual duration | minfup=8.2 minimum follow-up | ratio=3 randomization ratio (experimental/control)
 #> 
 #> Spending functions:

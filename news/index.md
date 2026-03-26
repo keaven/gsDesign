@@ -58,6 +58,41 @@
   Freedman, Bernstein-Lagakos) and plotting functions handle both
   directions symmetrically ([@keaven](https://github.com/keaven),
   [\#251](https://github.com/keaven/gsDesign/issues/251)).
+- New
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  function computes power for a group sequential survival design with
+  specified enrollment, dropout, treatment effect, and analysis timing.
+  Unlike
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+  [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
+  which solve for sample size,
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  takes fixed assumptions and computes power. Supports calendar-time and
+  event-driven timing, stratified designs, all test types (1–8 including
+  harm bounds), and flexible analysis timing criteria (`targetEvents`,
+  `plannedCalendarTime`, `maxExtension`, `minTimeFromPreviousAnalysis`,
+  `minN`, `minFollowUp`). When an existing `gsSurv` design is provided
+  via `x`, parameters can be selectively overridden for “what-if”
+  sensitivity analyses. Changing `alpha` preserves original futility
+  bounds (following
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+  convention) while recomputing efficacy bounds
+  ([@keaven](https://github.com/keaven),
+  [\#109](https://github.com/keaven/gsDesign/issues/109)).
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  now supports `informationRates` to cap spending at planned versus
+  realized information fractions and `fullSpendingAtFinal` to force the
+  final spending fraction to 1 when desired. This makes it easier to
+  evaluate delayed event accrual while keeping spending tied to a
+  planned information schedule. It also preserves the original one-sided
+  versus two-sided design convention when inheriting defaults from an
+  existing `gsSurv` object.
+- New vignette “Power Computation for Group Sequential Survival Designs”
+  ([`vignette("gsSurvPower")`](https://keaven.github.io/gsDesign/articles/gsSurvPower.md))
+  with worked examples for sensitivity analysis, alpha reallocation,
+  biomarker subgroup to stratified design, and event-driven timing
+  ([@keaven](https://github.com/keaven),
+  [\#109](https://github.com/keaven/gsDesign/issues/109)).
 
 ### Bug fixes
 
@@ -71,6 +106,11 @@
 
 ### Documentation
 
+- Documented `test.type` restriction in
+  [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md):
+  only `test.type = 1` and `4` are supported; other types (including 7
+  and 8) produce an error ([@keaven](https://github.com/keaven),
+  [\#109](https://github.com/keaven/gsDesign/issues/109)).
 - Consolidated shared roxygen2 `@param` documentation using
   `@inheritParams` so that `test.type`, spending function parameters,
   and other shared arguments are defined once in
@@ -86,6 +126,18 @@
   with worked examples for all supported scenarios
   ([@keaven](https://github.com/keaven),
   [\#255](https://github.com/keaven/gsDesign/issues/255)).
+- Expanded
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  documentation and vignette guidance for `informationRates`, calendar
+  spending, and `fullSpendingAtFinal`, including a corrected worked
+  example of the spending fractions used at the final analysis.
+
+### Testing
+
+- Added focused
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  regression tests for `informationRates`, `fullSpendingAtFinal`, and
+  inherited sidedness behavior from existing time-to-event designs.
 
 ## gsDesign 3.9.0 (February 2026)
 

@@ -8,7 +8,11 @@ for time-to-event outcomes. We do not focus on detailed output options,
 but what numbers summarizing the design are based on. If you are not
 looking for this level of detail and just want to see how to design a
 fixed or group sequential design for a time-to-event endpoint, see the
-vignette *Basic time-to-event group sequential design using gsSurv*.
+vignette *Basic time-to-event group sequential design using gsSurv*. If
+you already have a design and want to evaluate power under alternate
+hazard ratios, enrollment assumptions or analysis timing, see the
+vignette *Power Computation for Group Sequential Survival Designs* for
+[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md).
 
 The following functions support use of the very straightforward
 Schoenfeld (1981) approximation for 2-arm trials:
