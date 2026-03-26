@@ -36,13 +36,13 @@ test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and b
   )
 })
 
-# R 4.6.0 fixes plotmath subscript placement (tall subscripts were previously
+# R 4.5.3 fixes plotmath subscript placement (tall subscripts were previously
 # positioned too high), which changes text rendering and breaks vdiffr
-# snapshots. Keep two expectations, one for R < 4.6.0 and one for R >= 4.6.0.
-test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and base set to TRUE (R < 4.6.0)", {
+# snapshots. Keep two expectations, one for R < 4.5.3 and one for R >= 4.5.3.
+test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and base set to TRUE (R < 4.5.3)", {
   local_edition(3)
   announce_snapshot_file("independent-test-plot.gsProbability/plottype-4-base-true.svg")
-  skip_unless_r("< 4.6.0")
+  skip_unless_r("< 4.5.3")
 
   vdiffr::expect_doppelganger(
     "plottype 4 base TRUE",
@@ -50,10 +50,10 @@ test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and b
   )
 })
 
-test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and base set to TRUE (R >= 4.6.0)", {
+test_that("plot.gsProbability: plots are correctly rendered for plottype 4 and base set to TRUE (R >= 4.5.3)", {
   local_edition(3)
   announce_snapshot_file("independent-test-plot.gsProbability/plottype-4-base-true-r460plus.svg")
-  skip_unless_r("< 4.6.0")
+  skip_unless_r("< 4.5.3")
 
   vdiffr::expect_doppelganger(
     "plottype 4 base TRUE R460plus",
