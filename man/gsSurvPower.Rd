@@ -31,6 +31,7 @@ gsSurvPower(
   etaE = NULL,
   gamma = NULL,
   R = NULL,
+  targetN = NULL,
   S = NULL,
   ratio = NULL,
   minfup = NULL,
@@ -139,6 +140,13 @@ Defaults to \code{x$hr} when \code{x} is provided, otherwise \code{hr}.}
 and strata (columns).}
 
 \item{R}{Scalar or vector of enrollment period durations.}
+
+\item{targetN}{Target total sample size. When specified, \code{R} is
+uniformly rescaled so that \code{sum(gamma * R) == targetN}, preserving
+the relative duration of each enrollment period. This is a convenience
+for "what-if" analyses where the enrollment rate changes but the
+target sample size stays the same (or vice versa). Cannot be used
+together with an explicit \code{R}.}
 
 \item{S}{Scalar or vector of piecewise failure period durations; \code{NULL}
 for exponential failure.}
@@ -363,7 +371,7 @@ gsSurvPower(
 
 }
 \seealso{
-\code{vignette("gssurvpower", package = "gsDesign")} for
+\code{vignette("gsSurvPower", package = "gsDesign")} for
   worked examples including calendar spending, stratified event targets,
   and biomarker subgroup analyses.
 

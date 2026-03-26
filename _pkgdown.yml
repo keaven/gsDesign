@@ -142,7 +142,7 @@ articles:
       - SurvivalOverview
       - toInteger
       - gsSurvBasicExamples
-      - gssurvpower
+      - gsSurvPower
       - HarmBound
       - SelectiveBoundTesting
       - PoissonMixtureModel

@@ -292,9 +292,10 @@ and event targets, we will extend the expected timing of analyses from
 pwr_slow_simple <- gsSurvPower(
   x = design,
   gamma = design$gamma / 2,
-  R = 2 * design$R,
+  targetN = total_N,
   targetEvents = design$n.I
 )
+
 
 pwr_slow_simple |> gsBoundSummary()
 ```

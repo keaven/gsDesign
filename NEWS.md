@@ -48,7 +48,7 @@
   schedule. It also preserves the original one-sided versus two-sided design
   convention when inheriting defaults from an existing `gsSurv` object.
 - New vignette "Power Computation for Group Sequential Survival Designs"
-  (`vignette("gssurvpower")`) with worked examples for sensitivity analysis,
+  (`vignette("gsSurvPower")`) with worked examples for sensitivity analysis,
   alpha reallocation, biomarker subgroup to stratified design, and
   event-driven timing (@keaven, #109).
 

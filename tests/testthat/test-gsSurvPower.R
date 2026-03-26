@@ -1051,3 +1051,67 @@ test_that("sided defaults to x$sided when stored on gsSurvPower output", {
   expect_equal(pwr2$sided, 2)
   expect_equal(pwr2$alpha, pwr1$alpha)
 })
+
+# ---- targetN ----
+
+test_that("targetN rescales R to match target sample size", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  total_N <- sum(as.numeric(design$gamma) * design$R)
+
+  pwr_targetN <- gsSurvPower(
+    x = design,
+    gamma = design$gamma / 2,
+    targetN = total_N,
+    targetEvents = design$n.I
+  )
+  pwr_manual <- gsSurvPower(
+    x = design,
+    gamma = design$gamma / 2,
+    R = 2 * design$R,
+    targetEvents = design$n.I
+  )
+
+  expect_equal(pwr_targetN$R, 2 * design$R, tolerance = 1e-10)
+  expect_equal(pwr_targetN$power, pwr_manual$power, tolerance = 1e-10)
+  expect_equal(pwr_targetN$T, pwr_manual$T, tolerance = 1e-6)
+  expect_equal(pwr_targetN$n.I, pwr_manual$n.I, tolerance = 1e-6)
+})
+
+test_that("targetN errors when R is also specified", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+
+  expect_error(
+    gsSurvPower(x = design, R = 32, targetN = 160, targetEvents = design$n.I),
+    "Cannot specify both R and targetN"
+  )
+})
+
+test_that("targetN works with multi-period enrollment", {
+  design <- gsSurv(
+    k = 2, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = c(5, 10), R = c(4, 12), minfup = 12, T = 28
+  )
+  total_N <- sum(design$gamma * design$R)
+
+  # Triple the enrollment rate, keep sample size
+  pwr <- gsSurvPower(
+    x = design,
+    gamma = design$gamma * 3,
+    targetN = total_N,
+    targetEvents = design$n.I
+  )
+
+  # R should be uniformly scaled by 1/3
+  expect_equal(pwr$R, design$R / 3, tolerance = 1e-10)
+  # Total enrollment should match
+  expect_equal(sum(as.numeric(pwr$gamma) * pwr$R), total_N, tolerance = 1e-6)
+})

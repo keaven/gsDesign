@@ -173,6 +173,12 @@
 #' @param gamma Scalar, vector, or matrix of enrollment rates by period (rows)
 #'   and strata (columns).
 #' @param R Scalar or vector of enrollment period durations.
+#' @param targetN Target total sample size. When specified, \code{R} is
+#'   uniformly rescaled so that \code{sum(gamma * R) == targetN}, preserving
+#'   the relative duration of each enrollment period. This is a convenience
+#'   for "what-if" analyses where the enrollment rate changes but the
+#'   target sample size stays the same (or vice versa). Cannot be used
+#'   together with an explicit \code{R}.
 #' @param S Scalar or vector of piecewise failure period durations; \code{NULL}
 #'   for exponential failure.
 #' @param ratio Randomization ratio (experimental/control). Default 1.
@@ -272,7 +278,7 @@
 #'   plannedCalendarTime = c(24, 36)
 #' )$power
 #'
-#' @seealso \code{vignette("gssurvpower", package = "gsDesign")} for
+#' @seealso \code{vignette("gsSurvPower", package = "gsDesign")} for
 #'   worked examples including calendar spending, stratified event targets,
 #'   and biomarker subgroup analyses.
 #'
@@ -290,7 +296,7 @@ gsSurvPower <- function(
     testUpper = NULL, testLower = NULL, testHarm = NULL,
     lambdaC = NULL, hr = NULL, hr0 = NULL, hr1 = NULL,
     eta = NULL, etaE = NULL,
-    gamma = NULL, R = NULL, S = NULL,
+    gamma = NULL, R = NULL, targetN = NULL, S = NULL,
     ratio = NULL, minfup = NULL,
     method = NULL,
     spending = c("information", "calendar"),
@@ -392,6 +398,16 @@ gsSurvPower <- function(
     method,
     c("LachinFoulkes", "Schoenfeld", "Freedman", "BernsteinLagakos")
   )
+
+  # targetN: rescale R so that sum(gamma * R) == targetN
+  if (!is.null(targetN)) {
+    if (!missing(R) && !is.null(match.call()$R)) {
+      stop("Cannot specify both R and targetN")
+    }
+    gamma_vec <- if (is.matrix(gamma)) rowSums(gamma) else as.numeric(gamma)
+    current_N <- sum(gamma_vec * R)
+    R <- R * targetN / current_N
+  }
 
   timing_inputs <- .gsSurvPower_resolve_timing_inputs(
     default_k = k,
@@ -683,6 +699,19 @@ gsSurvPower <- function(
   }
 }
 
+.gsSurvPower_find_time_for_enrollment <- function(
+    target,
+    expected_counts_at_time,
+    search_upper_bound,
+    tol) {
+  objective <- function(current_time) {
+    expected_counts_at_time(current_time)$total_n - target
+  }
+  if (objective(search_upper_bound) < 0) return(search_upper_bound)
+  if (objective(0.001) >= 0) return(0.001)
+  uniroot(objective, c(0.001, search_upper_bound), tol = tol)$root
+}
+
 .gsSurvPower_solve_analysis_schedule <- function(
     timing_inputs,
     expected_counts_at_time,
@@ -715,15 +744,6 @@ gsSurvPower <- function(
     uniroot(objective, c(0.001, search_upper_bound), tol = tol)$root
   }
 
-  find_time_for_enrollment <- function(target) {
-    objective <- function(current_time) {
-      expected_counts_at_time(current_time)$total_n - target
-    }
-    if (objective(search_upper_bound) < 0) return(search_upper_bound)
-    if (objective(0.001) >= 0) return(0.001)
-    uniroot(objective, c(0.001, search_upper_bound), tol = tol)$root
-  }
-
   analysis_time <- numeric(analysis_count)
 
   for (analysis_index in seq_len(analysis_count)) {
@@ -738,7 +758,12 @@ gsSurvPower <- function(
       )
     }
     if (!is.na(min_enrolled[analysis_index])) {
-      enrollment_time <- find_time_for_enrollment(min_enrolled[analysis_index])
+      enrollment_time <- .gsSurvPower_find_time_for_enrollment(
+        target = min_enrolled[analysis_index],
+        expected_counts_at_time = expected_counts_at_time,
+        search_upper_bound = search_upper_bound,
+        tol = tol
+      )
       follow_up_time <- if (!is.na(min_follow_up[analysis_index])) {
         min_follow_up[analysis_index]
       } else {
@@ -969,7 +994,7 @@ gsSurvPower <- function(
     upper_bounds <- settings$x$upper$bound
     lower_bounds <- settings$x$lower$bound
   } else if (bound_strategy == "update_upper") {
-    design_object <- do.call(gsDesign::gsDesign, list(
+    design_object <- gsDesign::gsDesign(
       k = settings$k,
       test.type = 1,
       alpha = settings$alpha,
@@ -983,7 +1008,7 @@ gsSurvPower <- function(
       delta0 = log(settings$hr0),
       usTime = spending_times$usTime,
       r = settings$r
-    ))
+    )
     upper_bounds <- design_object$upper$bound
     if (!is.null(settings$x$lower$bound)) {
       lower_bounds <- pmin(settings$x$lower$bound, upper_bounds)
@@ -996,7 +1021,7 @@ gsSurvPower <- function(
       design_object$harm <- settings$x$harm
     }
   } else {
-    design_object <- do.call(gsDesign::gsDesign, list(
+    design_object <- gsDesign::gsDesign(
       k = settings$k,
       test.type = settings$test.type,
       alpha = settings$alpha,
@@ -1019,7 +1044,7 @@ gsSurvPower <- function(
       testLower = settings$testLower,
       testHarm = settings$testHarm,
       r = settings$r
-    ))
+    )
     upper_bounds <- design_object$upper$bound
     lower_bounds <- design_object$lower$bound
   }
