@@ -40,8 +40,10 @@ test_that("plot.gsDesign: plots are correctly rendered for plottype 2 and base s
 test_that("plot.gsDesign: plots are correctly rendered for plottype 3 and base set to TRUE (R < 4.6.0)", {
   local_edition(3)
   announce_snapshot_file("independent-test-plot.gsDesign/plottype-3-base-true.svg")
-  skip_on_ci()
-  skip_if_not(getRversion() < "4.6.0")
+  # skip_unless_r() has been available since testthat 3.3.0 released in November 2025.
+  # If you can't use it, do NOT add shims for older testthat versions,
+  # but update your testthat version instead.
+  skip_unless_r("< 4.6.0")
 
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
 
@@ -54,8 +56,7 @@ test_that("plot.gsDesign: plots are correctly rendered for plottype 3 and base s
 test_that("plot.gsDesign: plots are correctly rendered for plottype 3 and base set to TRUE (R >= 4.6.0)", {
   local_edition(3)
   announce_snapshot_file("independent-test-plot.gsDesign/plottype-3-base-true-r460plus.svg")
-  skip_on_ci()
-  skip_if_not(getRversion() >= "4.6.0")
+  skip_unless_r("< 4.6.0")
 
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
 
@@ -77,8 +78,7 @@ test_that("plot.gsDesign: graphs are correctly rendered for plottype 4 and base 
 test_that("plot.gsDesign: plots are correctly rendered for plottype 4 and base set to TRUE (R < 4.6.0)", {
   local_edition(3)
   announce_snapshot_file("independent-test-plot.gsDesign/plottype-4-base-true.svg")
-  skip_on_ci()
-  skip_if_not(getRversion() < "4.6.0")
+  skip_unless_r("< 4.6.0")
 
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
 
@@ -91,8 +91,7 @@ test_that("plot.gsDesign: plots are correctly rendered for plottype 4 and base s
 test_that("plot.gsDesign: plots are correctly rendered for plottype 4 and base set to TRUE (R >= 4.6.0)", {
   local_edition(3)
   announce_snapshot_file("independent-test-plot.gsDesign/plottype-4-base-true-r460plus.svg")
-  skip_on_ci()
-  skip_if_not(getRversion() >= "4.6.0")
+  skip_unless_r("< 4.6.0")
 
   x <- gsDesign(k = 5, test.type = 2, n.fix = 100)
 
