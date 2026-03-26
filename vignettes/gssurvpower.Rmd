@@ -284,6 +284,22 @@ cat("Power:", round(pwr_multi$power * 100, 1), "%\n")
 
 If enrollment proceeds at half the planned rate, it takes
 `r 2 * sum(design$R)` months to reach `r total_N` patients.
+If we simply target the same sample size (double the duration of enrollment) 
+and event targets, we will extend the expected timing of analyses from 
+`r round(design$T, 1)` months but have the same power and bounds.
+
+```{r timing_slow_enrollment_simple}
+pwr_slow_simple <- gsSurvPower(
+  x = design,
+  gamma = design$gamma / 2,
+  R = 2 * design$R,
+  targetEvents = design$n.I
+)
+
+pwr_slow_simple |> gsBoundSummary()
+```
+
+
 With `maxExtension = c(3, 12, 20)`, each analysis can extend
 beyond `plannedCalendarTime` by the specified amount while waiting
 for expected events to reach the target—but never past the cap.
