@@ -218,7 +218,8 @@ des_2a <- gsSurv(
   gamma     = 15,         # input rate; gsSurv will ADJUST this
   R         = 18,
   T         = 25,         # fix study duration → gsSurv varies accrual rate
-  ratio     = 1
+  ratio     = 1, 
+  method = "Schoenfeld" # use Schoenfeld bounds to match SAS
 )
 des_2a
 gsBoundSummary(des_2a)
@@ -226,9 +227,9 @@ gsBoundSummary(des_2a)
 
 **Observations:**
 - Z-boundaries: 4.333, 2.963, 2.359, 2.014 → match SAS exactly
-- Events: ~22.7, 45.4, 68.1, 90.7 → slightly more than SAS (89.1) because Lachin-Foulkes > Schoenfeld
-- Accrual rate adjusted from 15 to ~15.0 (slight increase to achieve power)
-- Total N: ~285 (slightly more than SAS's fixed 270)
+- Events: 23, 45, 67, 90 → matches SAS; gsDesign is just taking the `ceiling()` of the SAS output.  
+- Accrual rate adjusted from 15 to ~14.717 (slight decrease to achieve power)
+- Total N: 280 (slightly more than SAS's fixed 270)
 
 # Approach 2b: Original gsSurv Call for Comparison
 
