@@ -1,4 +1,6 @@
 #define DEBUG 0
+/* TODO(issue-242): keep the finite EXTREMEZ sentinel for now, but split it
+   conceptually from the hardcoded Newton iteration cap in a later change. */
 #define EXTREMEZ 20
 #define MAXR 83
 #include "R.h"

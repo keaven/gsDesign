@@ -126,41 +126,46 @@ summary.gsDesign <- function(object, information = FALSE, timeunit = "months", .
   return(out)
 }
 
+# gsBoundDisplayInactive: identify analyses that should display NA
+gsBoundDisplayInactive <- function(bound_obj, test_flag = NULL, spend_tol = 1e-12) {
+  if (is.null(bound_obj) || is.null(bound_obj$bound)) {
+    return(logical(0))
+  }
+
+  inactive <- rep(FALSE, length(bound_obj$bound))
+  if (!is.null(test_flag)) {
+    inactive <- inactive | !test_flag
+  }
+  if (!is.null(bound_obj$spend)) {
+    inactive <- inactive | abs(bound_obj$spend) <= spend_tol
+  }
+  inactive
+}
+
 # gsApplyNAMask: replace inactive bound columns with NA in print.gsDesign matrix
 gsApplyNAMask <- function(y, x) {
   # For test.type 7/8: columns are Analysis, N, Harm(Z,p,Spend), Futility(Z,p,Spend), Upper(Z,p,Spend)
   # For test.type 3-6: columns are Analysis, N, Lower(Z,p,Spend), Upper(Z,p,Spend)
   # For test.type 1: columns are Analysis, N, Upper(Z,p,Spend)
-  if (is.null(x$testUpper) && is.null(x$testLower) && is.null(x$testHarm)) return(y)
-
   nc <- ncol(y)
-  if (!is.null(x$testUpper)) {
-    inactive <- !x$testUpper
-    if (any(inactive)) {
-      upper_cols <- (nc - 2):nc
-      y[inactive, upper_cols] <- NA
-    }
+  upper_inactive <- gsBoundDisplayInactive(x$upper, x$testUpper)
+  if (length(upper_inactive) > 0 && any(upper_inactive)) {
+    upper_cols <- (nc - 2):nc
+    y[upper_inactive, upper_cols] <- NA
   }
-  if (!is.null(x$testLower) && x$test.type %in% c(7, 8)) {
-    inactive <- !x$testLower
-    if (any(inactive)) {
-      # Futility cols are after harm (3 cols) and after Analysis+N (2 cols) = cols 6:8
-      fut_cols <- 6:8
-      y[inactive, fut_cols] <- NA
-    }
-  } else if (!is.null(x$testLower) && x$test.type > 2) {
-    inactive <- !x$testLower
-    if (any(inactive)) {
-      lower_cols <- 3:5
-      y[inactive, lower_cols] <- NA
-    }
+  lower_inactive <- gsBoundDisplayInactive(x$lower, x$testLower)
+  if (x$test.type %in% c(7, 8) && length(lower_inactive) > 0 && any(lower_inactive)) {
+    # Futility cols are after harm (3 cols) and after Analysis+N (2 cols) = cols 6:8
+    fut_cols <- 6:8
+    y[lower_inactive, fut_cols] <- NA
+  } else if (x$test.type > 2 && length(lower_inactive) > 0 && any(lower_inactive)) {
+    lower_cols <- 3:5
+    y[lower_inactive, lower_cols] <- NA
   }
-  if (!is.null(x$testHarm) && x$test.type %in% c(7, 8)) {
-    inactive <- !x$testHarm
-    if (any(inactive)) {
-      harm_cols <- 3:5
-      y[inactive, harm_cols] <- NA
-    }
+  harm_inactive <- gsBoundDisplayInactive(x$harm, x$testHarm)
+  if (x$test.type %in% c(7, 8) && length(harm_inactive) > 0 && any(harm_inactive)) {
+    harm_cols <- 3:5
+    y[harm_inactive, harm_cols] <- NA
   }
   y
 }
@@ -582,23 +587,17 @@ gsBoundSummary0 <- function(
   if (x$test.type %in% c(7, 8)) rval$Harm <- round(rval$Harm, digits)
 
   # Mask inactive bounds as NA based on testUpper/testLower/testHarm
-  if (!is.null(x$testUpper)) {
-    inactive_upper <- which(!x$testUpper)
-    if (length(inactive_upper) > 0 && "Efficacy" %in% names(rval)) {
-      rval$Efficacy[analysis_i %in% inactive_upper] <- NA
-    }
+  inactive_upper <- which(gsBoundDisplayInactive(x$upper, x$testUpper))
+  if (length(inactive_upper) > 0 && "Efficacy" %in% names(rval)) {
+    rval$Efficacy[analysis_i %in% inactive_upper] <- NA
   }
-  if (!is.null(x$testLower)) {
-    inactive_lower <- which(!x$testLower)
-    if (length(inactive_lower) > 0 && "Futility" %in% names(rval)) {
-      rval$Futility[analysis_i %in% inactive_lower] <- NA
-    }
+  inactive_lower <- which(gsBoundDisplayInactive(x$lower, x$testLower))
+  if (length(inactive_lower) > 0 && "Futility" %in% names(rval)) {
+    rval$Futility[analysis_i %in% inactive_lower] <- NA
   }
-  if (!is.null(x$testHarm)) {
-    inactive_harm <- which(!x$testHarm)
-    if (length(inactive_harm) > 0 && "Harm" %in% names(rval)) {
-      rval$Harm[analysis_i %in% inactive_harm] <- NA
-    }
+  inactive_harm <- which(gsBoundDisplayInactive(x$harm, x$testHarm))
+  if (length(inactive_harm) > 0 && "Harm" %in% names(rval)) {
+    rval$Harm[analysis_i %in% inactive_harm] <- NA
   }
 
   class(rval) <- c("gsBoundSummary", "data.frame")
