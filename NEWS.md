@@ -54,6 +54,11 @@
 
 ## Bug fixes
 
+- `toInteger()` now preserves selective-bound flags (`testUpper`, `testLower`,
+  `testHarm`) and harm-bound spending (`sfharm`, `sfharmparam` for
+  `test.type` 7 or 8) when recomputing the design after integer sample
+  size or event-count rounding. Previously the internal `gsDesign()` call
+  omitted these settings, so inactive looks could incorrectly become active.
 - Fixed sign inconsistency in `hrn2z()` which used `sign(hr0 - hr1)`
   while `zn2hr()` used `sign(hr1 - hr0)`, preventing correct round-trip
   conversion. Both now use `sign(hr1 - hr0)` (@keaven, #251).
@@ -77,6 +82,9 @@
 
 ## Testing
 
+- Added `toInteger()` regression tests for selective-bound preservation on
+  `gsDesign` and `gsSurv` objects, including `test.type` 8 with custom harm
+  spending.
 - Added focused `gsSurvPower()` regression tests for `informationRates`,
   `fullSpendingAtFinal`, and inherited sidedness behavior from existing
   time-to-event designs.
