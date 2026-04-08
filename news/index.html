@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,9 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li>Fixed sign inconsistency in <code><a href="../reference/nSurvival.html">hrn2z()</a></code> which used <code>sign(hr0 - hr1)</code> while <code><a href="../reference/nSurvival.html">zn2hr()</a></code> used <code>sign(hr1 - hr0)</code>, preventing correct round-trip conversion. Both now use <code>sign(hr1 - hr0)</code> (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/251" class="external-link">#251</a>).</li>
+<ul><li>
+<code><a href="../reference/toInteger.html">toInteger()</a></code> now preserves selective-bound flags (<code>testUpper</code>, <code>testLower</code>, <code>testHarm</code>) and harm-bound spending (<code>sfharm</code>, <code>sfharmparam</code> for <code>test.type</code> 7 or 8) when recomputing the design after integer sample size or event-count rounding. Previously the internal <code><a href="../reference/gsDesign.html">gsDesign()</a></code> call omitted these settings, so inactive looks could incorrectly become active.</li>
+<li>Fixed sign inconsistency in <code><a href="../reference/nSurvival.html">hrn2z()</a></code> which used <code>sign(hr0 - hr1)</code> while <code><a href="../reference/nSurvival.html">zn2hr()</a></code> used <code>sign(hr1 - hr0)</code>, preventing correct round-trip conversion. Both now use <code>sign(hr1 - hr0)</code> (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/251" class="external-link">#251</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
@@ -66,7 +68,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="testing-development-version">Testing<a class="anchor" aria-label="anchor" href="#testing-development-version"></a></h3>
-<ul><li>Added focused <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> regression tests for <code>informationRates</code>, <code>fullSpendingAtFinal</code>, and inherited sidedness behavior from existing time-to-event designs.</li>
+<ul><li>Added <code><a href="../reference/toInteger.html">toInteger()</a></code> regression tests for selective-bound preservation on <code>gsDesign</code> and <code>gsSurv</code> objects, including <code>test.type</code> 8 with custom harm spending.</li>
+<li>Added focused <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> regression tests for <code>informationRates</code>, <code>fullSpendingAtFinal</code>, and inherited sidedness behavior from existing time-to-event designs.</li>
 </ul></div>
 </div>
     <div class="section level2">

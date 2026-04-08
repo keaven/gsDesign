@@ -15,7 +15,7 @@ or sample size (other designs)"><meta property="og:image" content="https://keave
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,6 +104,10 @@ to a multiple of 3 + 1 = 4; this could represent a 3:1 or 1:3
 randomization ratio.
 For 3:2 randomization, <code>ratio = 4</code> would ensure rounding sample size
 to a multiple of 5.</p>
+<p>Selective-bound settings (<code>testUpper</code>, <code>testLower</code>, <code>testHarm</code>,
+and harm spending for <code>test.type</code> 7 or 8) are carried from the input
+design into the internal <code><a href="gsDesign.html">gsDesign()</a></code> recomputation so skipped looks stay
+skipped after integer rounding.</p>
     </div>
 
     <div class="section level2">

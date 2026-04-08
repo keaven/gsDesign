@@ -153,10 +153,10 @@ x
 #> 
 #>            Sample
 #>             Size    ----Lower bounds----  ----Upper bounds-----
-#>   Analysis Ratio*    Z   Nominal p Spend+   Z   Nominal p Spend++
-#>          1  0.343 -20.00    0.0000  0.000  2.81    0.0025  0.0025
-#>          2  0.685   0.72    0.7652  0.025 20.00    0.0000  0.0000
-#>          3  1.028   1.99    0.9765  0.075  1.99    0.0235  0.0225
+#>   Analysis Ratio*  Z   Nominal p Spend+  Z   Nominal p Spend++
+#>          1  0.343   NA        NA     NA 2.81    0.0025  0.0025
+#>          2  0.685 0.72    0.7652  0.025   NA        NA      NA
+#>          3  1.028 1.99    0.9765  0.075 1.99    0.0235  0.0225
 #>      Total                        0.1000                 0.0250 
 #> + lower bound beta spending (under H1):
 #>  Piecewise linear spending function with line points = 0.33333, line points = 0.66667, line points = 0, line points = 0.25.

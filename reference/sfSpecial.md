@@ -129,11 +129,11 @@ x <- gsDesign(
 # first upper bound=20 means no testing there
 gsBoundSummary(x)
 #>   Analysis               Value Efficacy Futility
-#>  IA 1: 25%                   Z  20.0000  -0.5316
-#>      N: 31         p (1-sided)   0.0000   0.7025
-#>                ~delta at bound  11.1795  -0.2972
-#>            P(Cross) if delta=0   0.0000   0.2975
-#>            P(Cross) if delta=1   0.0000   0.0102
+#>  IA 1: 25%                   Z       NA  -0.5316
+#>      N: 31         p (1-sided)       NA   0.7025
+#>                ~delta at bound       NA  -0.2972
+#>            P(Cross) if delta=0       NA   0.2975
+#>            P(Cross) if delta=1       NA   0.0102
 #>  IA 2: 50%                   Z   2.1555   0.4956
 #>      N: 61         p (1-sided)   0.0156   0.3101
 #>                ~delta at bound   0.8520   0.1959

@@ -152,10 +152,10 @@ x
 #> 
 #>            Sample
 #>             Size    ----Lower bounds----  ----Upper bounds-----
-#>   Analysis Ratio*    Z   Nominal p Spend+   Z   Nominal p Spend++
-#>          1  0.351 -20.00    0.0000  0.000  2.50    0.0063  0.0063
-#>          2  0.703   0.76    0.7758  0.025 20.00    0.0000  0.0000
-#>          3  1.054   2.04    0.9793  0.075  2.04    0.0207  0.0188
+#>   Analysis Ratio*  Z   Nominal p Spend+  Z   Nominal p Spend++
+#>          1  0.351   NA        NA     NA 2.50    0.0063  0.0063
+#>          2  0.703 0.76    0.7758  0.025   NA        NA      NA
+#>          3  1.054 2.04    0.9793  0.075 2.04    0.0207  0.0188
 #>      Total                        0.1000                 0.0250 
 #> + lower bound beta spending (under H1):
 #>  User-specified spending function with Points = 0, Points = 0.25, Points = 1.

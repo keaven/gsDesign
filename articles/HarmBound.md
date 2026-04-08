@@ -169,11 +169,11 @@ other endpoint data.
 gsBoundSummary(x8)
 #> Method: LachinFoulkes 
 #>     Analysis               Value    Harm Futility Efficacy
-#>    IA 1: 11%                   Z -2.1121  -1.4408   7.4336
-#>       N: 766         p (1-sided)  0.9827   0.9252   0.0000
-#>   Events: 73        ~HR at bound  1.6434   1.4034   0.1740
-#>    Month: 12    P(Cross) if HR=1  0.0173   0.0748   0.0000
-#>              P(Cross) if HR=0.75  0.0004   0.0039   0.0000
+#>    IA 1: 11%                   Z -2.1121  -1.4408       NA
+#>       N: 766         p (1-sided)  0.9827   0.9252       NA
+#>   Events: 73        ~HR at bound  1.6434   1.4034       NA
+#>    Month: 12    P(Cross) if HR=1  0.0173   0.0748       NA
+#>              P(Cross) if HR=0.75  0.0004   0.0039       NA
 #>    IA 2: 38%                   Z -1.7667   0.1212   3.8622
 #>      N: 1148         p (1-sided)  0.9614   0.4518   0.0001
 #>  Events: 253        ~HR at bound  1.2491   0.9849   0.6149
@@ -204,16 +204,16 @@ statistics, including conditional and predictive power at each boundary:
 gsBoundSummary(x8, exclude = c())
 #> Method: LachinFoulkes 
 #>     Analysis               Value    Harm Futility Efficacy
-#>    IA 1: 11%                   Z -2.1121  -1.4408   7.4336
-#>       N: 766         p (1-sided)  0.9827   0.9252   0.0000
-#>   Events: 73        ~HR at bound  1.6434   1.4034   0.1740
-#>    Month: 12            Spending  0.0173   0.0039   0.0000
-#>                          B-value -0.7011  -0.4782   2.4674
-#>                               CP  0.0000   0.0000   1.0000
-#>                            CP H1  0.4619   0.5942   1.0000
-#>                               PP  0.0011   0.0097   1.0000
-#>                 P(Cross) if HR=1  0.0173   0.0748   0.0000
-#>              P(Cross) if HR=0.75  0.0004   0.0039   0.0000
+#>    IA 1: 11%                   Z -2.1121  -1.4408       NA
+#>       N: 766         p (1-sided)  0.9827   0.9252       NA
+#>   Events: 73        ~HR at bound  1.6434   1.4034       NA
+#>    Month: 12            Spending  0.0173   0.0039       NA
+#>                          B-value -0.7011  -0.4782       NA
+#>                               CP  0.0000   0.0000       NA
+#>                            CP H1  0.4619   0.5942       NA
+#>                               PP  0.0011   0.0097       NA
+#>                 P(Cross) if HR=1  0.0173   0.0748       NA
+#>              P(Cross) if HR=0.75  0.0004   0.0039       NA
 #>    IA 2: 38%                   Z -1.7667   0.1212   3.8622
 #>      N: 1148         p (1-sided)  0.9614   0.4518   0.0001
 #>  Events: 253        ~HR at bound  1.2491   0.9849   0.6149
@@ -504,11 +504,11 @@ the trial will stop at the lower bounds.
 gsBoundSummary(x7)
 #> Method: LachinFoulkes 
 #>     Analysis               Value    Harm Futility Efficacy
-#>    IA 1: 11%                   Z -2.1121  -1.4578   7.4336
-#>       N: 746         p (1-sided)  0.9827   0.9275   0.0000
-#>   Events: 71        ~HR at bound  1.6550   1.4158   0.1698
-#>    Month: 12    P(Cross) if HR=1  0.0173   0.0725   0.0000
-#>              P(Cross) if HR=0.75  0.0005   0.0039   0.0000
+#>    IA 1: 11%                   Z -2.1121  -1.4578       NA
+#>       N: 746         p (1-sided)  0.9827   0.9275       NA
+#>   Events: 71        ~HR at bound  1.6550   1.4158       NA
+#>    Month: 12    P(Cross) if HR=1  0.0173   0.0725       NA
+#>              P(Cross) if HR=0.75  0.0005   0.0039       NA
 #>    IA 2: 38%                   Z -1.7667   0.0895   3.8622
 #>      N: 1118         p (1-sided)  0.9614   0.4643   0.0001
 #>  Events: 246        ~HR at bound  1.2531   0.9886   0.6107
@@ -543,11 +543,11 @@ we show the non-binding design (`x8`) with efficacy bounds for both
 ``` r
 gsBoundSummary(x8, alpha = 0.025)
 #>     Analysis               Value α=0.0125 α=0.025 Futility    Harm
-#>    IA 1: 11%                   Z   7.4336  6.6513  -1.4408 -2.1121
-#>       N: 766         p (1-sided)   0.0000  0.0000   0.9252  0.9827
-#>   Events: 73        ~HR at bound   0.1740  0.2092   1.4034  1.6434
-#>    Month: 12    P(Cross) if HR=1   0.0000  0.0000   0.0748  0.0173
-#>              P(Cross) if HR=0.75   0.0000  0.0000   0.0039  0.0004
+#>    IA 1: 11%                   Z       NA  6.6513  -1.4408 -2.1121
+#>       N: 766         p (1-sided)       NA  0.0000   0.9252  0.9827
+#>   Events: 73        ~HR at bound       NA  0.2092   1.4034  1.6434
+#>    Month: 12    P(Cross) if HR=1       NA  0.0000   0.0748  0.0173
+#>              P(Cross) if HR=0.75       NA  0.0000   0.0039  0.0004
 #>    IA 2: 38%                   Z   3.8622  3.4312   0.1212 -1.7667
 #>      N: 1148         p (1-sided)   0.0001  0.0003   0.4518  0.9614
 #>  Events: 253        ~HR at bound   0.6149  0.6492   0.9849  1.2491

@@ -55,6 +55,12 @@ rounding for final sample size is done to a multiple of 3 + 1 = 4; this
 could represent a 3:1 or 1:3 randomization ratio. For 3:2 randomization,
 `ratio = 4` would ensure rounding sample size to a multiple of 5.
 
+Selective-bound settings (`testUpper`, `testLower`, `testHarm`, and harm
+spending for `test.type` 7 or 8) are carried from the input design into
+the internal
+[`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
+recomputation so skipped looks stay skipped after integer rounding.
+
 ## Examples
 
 ``` r
