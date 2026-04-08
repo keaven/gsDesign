@@ -18,8 +18,6 @@ xtable.gsSurv <- function(
   st <- stat
   for (i in 2:k) stat <- c(stat, st)
   an <- rep(" ", 5 * k)
-  tim <- an
-  enrol <- an
   fut <- an
   eff <- an
   an[5 * (0:(k - 1)) + 1] <- c(paste("IA ", as.character(1:(k - 1)), ": ",
@@ -54,6 +52,8 @@ xtable.gsSurv <- function(
     bsp[bsp == "0"] <- "$< 0.0001$"
     fut[5 * (0:(k - 1)) + 5] <- bsp
   }
+  eff <- gsMaskXtableColumn(eff, x$upper, x$testUpper)
+  if (x$test.type != 1) fut <- gsMaskXtableColumn(fut, x$lower, x$testLower)
   neff <- length(eff)
   if (!is.null(footnote)) {
     eff[neff] <-
@@ -72,6 +72,7 @@ xtable.gsSurv <- function(
     hsp <- as.character(round(cumsum(x$harm$prob[, 2]), 4))
     hsp[hsp == "0"] <- "$< 0.0001$"
     harm[5 * (0:(k - 1)) + 5] <- hsp
+    harm <- gsMaskXtableColumn(harm, x$harm, x$testHarm)
     xxtab <- data.frame(an, stat, harm, fut, eff)
     colnames(xxtab) <- c("Analysis", "Value", "Harm", "Futility", "Efficacy")
   } else if (x$test.type != 1) {

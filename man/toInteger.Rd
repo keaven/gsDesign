@@ -53,6 +53,11 @@ to a multiple of 3 + 1 = 4; this could represent a 3:1 or 1:3
 randomization ratio.
 For 3:2 randomization, \code{ratio = 4} would ensure rounding sample size
 to a multiple of 5.
+
+Selective-bound settings (\code{testUpper}, \code{testLower}, \code{testHarm},
+and harm spending for \code{test.type} 7 or 8) are carried from the input
+design into the internal \code{gsDesign()} recomputation so skipped looks stay
+skipped after integer rounding.
 }
 \examples{
 # The following code derives the group sequential design using the method

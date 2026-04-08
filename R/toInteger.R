@@ -40,6 +40,11 @@
 #' For 3:2 randomization, \code{ratio = 4} would ensure rounding sample size
 #' to a multiple of 5.
 #'
+#' Selective-bound settings (\code{testUpper}, \code{testLower}, \code{testHarm},
+#' and harm spending for \code{test.type} 7 or 8) are carried from the input
+#' design into the internal \code{gsDesign()} recomputation so skipped looks stay
+#' skipped after integer rounding.
+#'
 #' @export
 #'
 #' @examples
@@ -93,12 +98,39 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     }
   }
   # update bounds and counts from original design
+  # Preserve selective-bound flags and spending (lower may be NULL for test.type 1)
+  lower_sf <- if (!is.null(x$lower) && is.function(x$lower$sf)) {
+    x$lower$sf
+  } else {
+    sfHSD
+  }
+  lower_par <- if (!is.null(x$lower) && !is.null(x$lower$param)) {
+    x$lower$param
+  } else {
+    -2
+  }
+  sfharm_arg <- if (x$test.type %in% c(7, 8) && !is.null(x$harm) && is.function(x$harm$sf)) {
+    x$harm$sf
+  } else {
+    sfHSD
+  }
+  sfharmparam_arg <- if (x$test.type %in% c(7, 8) && !is.null(x$harm)) {
+    if (!is.null(x$harm$param)) x$harm$param else -2
+  } else {
+    -2
+  }
+  test_upper_arg <- if (!is.null(x$testUpper)) x$testUpper else TRUE
+  test_lower_arg <- if (!is.null(x$testLower)) x$testLower else TRUE
+  test_harm_arg <- if (!is.null(x$testHarm)) x$testHarm else TRUE
+
   xi <- gsDesign(
     k = x$k, test.type = x$test.type, n.I = counts, maxn.IPlan = counts[x$k],
     alpha = x$alpha, beta = x$beta, astar = x$astar,
     delta = x$delta, delta1 = x$delta1, delta0 = x$delta0, endpoint = x$endpoint,
-    sfu = x$upper$sf, sfupar = x$upper$param, sfl = x$lower$sf, sflpar = x$lower$param,
-    lsTime = x$lsTime, usTime = x$usTime
+    sfu = x$upper$sf, sfupar = x$upper$param, sfl = lower_sf, sflpar = lower_par,
+    sfharm = sfharm_arg, sfharmparam = sfharmparam_arg,
+    lsTime = x$lsTime, usTime = x$usTime,
+    testUpper = test_upper_arg, testLower = test_lower_arg, testHarm = test_harm_arg
   )
   if (max(abs(xi$n.I - counts)) > .01) warning("toInteger: check n.I input versus output")
   xi$n.I <- counts # ensure these are integers as they became real in gsDesign call
