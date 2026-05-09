@@ -119,7 +119,6 @@ toBinomialExact <- function(x, observedEvents = NULL) {
     beta_spend <- xx$lower$sf(alpha = xx$beta, t = timing, param = xx$lower$param)$spend
   } else {
     b <- counts + 1 # test.type = 1 means no futility bound
-    nbupperprob <- 0
   }
   for (j in 1:k) {
     # Non-binding bound assumed.
@@ -163,7 +162,7 @@ toBinomialExact <- function(x, observedEvents = NULL) {
       }
     }
     # beta-spending, if needed
-    if (x$test.type == 4)
+    if (x$test.type == 4) {
       # Set range for possible values of b[j]
       bmin <- a[j] + 1 # must be strictly > a[j]
       bmin <- ifelse(j == 1, bmin, max(bmin, b[j - 1])) # must be non-decreasing 
@@ -198,6 +197,7 @@ toBinomialExact <- function(x, observedEvents = NULL) {
           )$upper$prob[1:j])
         }
       }
+    }
   }
   xxxx <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = counts, a = a, b = b)
   xxxx$init_approx <- init_approx

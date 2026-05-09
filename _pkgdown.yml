@@ -61,6 +61,8 @@ reference:
 - title: Vaccine/Prevention Efficacy
   contents:
   - toBinomialExact
+  - repeatedPValueBinomialExact
+  - sequentialPValueBinomialExact
 - title: Spending Functions
   desc: >
     For an overview of spending functions, see
@@ -145,6 +147,7 @@ articles:
       - gsSurvPower
       - HarmBound
       - SelectiveBoundTesting
+      - MultiSeasonRareEvents
       - PoissonMixtureModel
   - title: "Other"
     desc: >

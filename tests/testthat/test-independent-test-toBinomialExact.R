@@ -88,3 +88,14 @@ test_that("observedEvents re-plans design using supplied event counts", {
   expect_true(all(diff(result$upper$bound) >= 0))
   expect_true(all(result$lower$bound < result$upper$bound))
 })
+
+test_that("toBinomialExact works for one-sided designs with observedEvents", {
+  design_one_sided <- surv_design(test.type = 1)
+  observed <- c(20, 55, 80)
+
+  result <- toBinomialExact(design_one_sided, observedEvents = observed)
+
+  expect_equal(result$n.I, observed)
+  expect_true(all(result$upper$bound == observed + 1))
+  expect_true(all(result$lower$bound < result$upper$bound))
+})
