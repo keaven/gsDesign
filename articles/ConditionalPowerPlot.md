@@ -26,6 +26,7 @@ and slightly altered interim timing (117/353 = 0.3314, 235/353 = 0.6657)
 compared to plan (0.3333, 0.6667).
 
 ``` r
+
 design <- gsSurv(hr = 0.7, lambdaC = log(2) / 12, minfup = 24, T = 36) |> toInteger()
 design |> gsBoundSummary()
 #>     Analysis              Value Efficacy Futility
@@ -49,6 +50,7 @@ design |> gsBoundSummary()
 We also provide a textual summary.
 
 ``` r
+
 cat(design |> summary())
 ```
 
@@ -68,6 +70,7 @@ planned 117 endpoints included in the analysis. We update the bounds as
 follows:
 
 ``` r
+
 update <- gsDesign(
   k = design$k,
   test.type = design$test.type,
@@ -118,6 +121,7 @@ close to the first efficacy or futility bound above. However, it is a
 trend in the right direction.
 
 ``` r
+
 # Nominal 1-sided p-value
 p <- 0.04
 ```
@@ -126,6 +130,7 @@ This translates to a first order approximation of the Cox regression
 estimate with the Schoenfeld (1981) approximation:
 
 ``` r
+
 zn2hr(-qnorm(p), n = update$n.I[1])
 #> [1] 0.7234658
 ```
@@ -140,6 +145,7 @@ assumptions about the future treatment effect:
 These are displayed below, translated to the hazard ratio scale:
 
 ``` r
+
 cp <- gsCP(x = update, i = 1, zi = -qnorm(p))
 # 3 treatment effects as outlined above
 # design$ratio is the experimental:control randomization ratio
@@ -164,6 +170,7 @@ endpoints other than the time-to-event example used here (e.g., a binary
 outcome).
 
 ``` r
+
 cp$upper$prob
 #>           [,1]       [,2]      [,3]
 #> [1,] 0.4625266 0.03199697 0.5352688
@@ -175,6 +182,7 @@ assume a wide range of potential underlying hazard ratios for future
 events.
 
 ``` r
+
 hr <- seq(.6, 1.1, .01)
 ```
 
@@ -182,6 +190,7 @@ We compute conditional probabilities based on the observed interim 1
 p-value over this range:
 
 ``` r
+
 # Translate hazard ratio to standardized effect size
 theta <- -log(hr) * sqrt(design$ratio / (1 + design$ratio)^2)
 cp <- gsCP(x = update, i = 1, zi = -qnorm(p), theta = theta)
@@ -201,6 +210,7 @@ crossing an efficacy bound by any given future analysis by different
 underlying treatment effect (HR) assumptions.
 
 ``` r
+
 plot(cp, xval = hr, xlab = "Future HR", ylab = "Conditional Power/Error", 
      main="Conditional probability of crossing future bound", offset = 1)
 ```
@@ -220,6 +230,7 @@ single number to summarize the conditional probability of success given
 the interim result.
 
 ``` r
+
 # set up a flat prior distribution for the treatment effect
 # that is normal with mean .5 of the design standardized effect and
 # a large standard deviation. 
@@ -240,7 +251,7 @@ predictive probability is similar whether `mu0` above is `0` or
 
 Müller, Hans-Helge, and Helmut Schäfer. 2004. “A General Statistical
 Principle for Changing a Design Any Time During the Course of a Trial.”
-*Statistics in Medicine* 23 (16): 2497–2508.
+*Statistics in Medicine* 23 (16): 2497–508.
 
 Schoenfeld, David. 1981. “The Asymptotic Properties of Nonparametric
 Tests for Comparing Survival Distributions.” *Biometrika* 68 (1):

@@ -113,6 +113,7 @@ We specify:
   (spending under \\H_0\\ for detecting harm).
 
 ``` r
+
 x8 <- gsSurvCalendar(
   test.type = 8,
   alpha = 0.0125,
@@ -135,6 +136,7 @@ The [`summary()`](https://rdrr.io/r/base/summary.html) method provides a
 concise description of the design:
 
 ``` r
+
 cat(strwrap(summary(x8), width = 65), sep = "\n")
 #> Asymmetric two-sided group sequential design with non-binding
 #> futility and harm bounds, 5 analyses, time-to-event outcome with
@@ -166,6 +168,7 @@ should be at least paused with a recommendation to review the safety and
 other endpoint data.
 
 ``` r
+
 gsBoundSummary(x8)
 #> Method: LachinFoulkes 
 #>     Analysis               Value    Harm Futility Efficacy
@@ -201,6 +204,7 @@ included in the summary. Below we show the full table with all
 statistics, including conditional and predictive power at each boundary:
 
 ``` r
+
 gsBoundSummary(x8, exclude = c())
 #> Method: LachinFoulkes 
 #>     Analysis               Value    Harm Futility Efficacy
@@ -260,6 +264,7 @@ months. At each analysis, the test statistic (Z-value) is compared
 against three boundaries:
 
 ``` r
+
 bounds <- data.frame(
   Analysis = 1:x8$k,
   Month = x8$T,
@@ -279,7 +284,7 @@ kable(bounds, caption = "Z-value boundaries at each analysis")
 |        4 |    48 |    548 | -1.72 |     1.74 |     2.53 |
 |        5 |    60 |    657 | -1.71 |     2.31 |     2.31 |
 
-Z-value boundaries at each analysis
+Z-value boundaries at each analysis {.table}
 
 **Decision rules at each analysis:**
 
@@ -300,6 +305,7 @@ treatment effect (HR = 1, i.e., under \\H_0\\) and the design
 alternative (HR = 0.75).
 
 ``` r
+
 probs <- data.frame(
   Scenario = c(rep("Under H0 (HR=1)", x8$k), rep("Under H1 (HR=0.75)", x8$k)),
   Analysis = rep(1:x8$k, 2),
@@ -325,7 +331,7 @@ kable(probs, digits = 4, caption = "Cumulative boundary crossing probabilities")
 | Under H1 (HR=0.75) |        4 |    48 |      0.7996 |      0.0675 |  0.0004 |
 | Under H1 (HR=0.75) |        5 |    60 |      0.9000 |      0.1000 |  0.0004 |
 
-Cumulative boundary crossing probabilities
+Cumulative boundary crossing probabilities {.table}
 
 Under \\H_0\\, the cumulative probability of crossing the harm bound
 across all analyses is approximately 0.1, reflecting the spending
@@ -345,6 +351,7 @@ boundaries are displayed: efficacy (upper), futility (lower), and harm
 (below futility).
 
 ``` r
+
 plot(x8)
 ```
 
@@ -366,6 +373,7 @@ probability of crossing the harm bound indicates that the harm bound is
 sensitive and serves its intended purpose
 
 ``` r
+
 plot(x8, plottype = 2)
 ```
 
@@ -381,6 +389,7 @@ effect at each boundary. For survival designs, this is expressed as the
 approximate hazard ratio at the boundary.
 
 ``` r
+
 plot(x8, plottype = 3)
 ```
 
@@ -395,6 +404,7 @@ Conditional power (`plottype = 4`) at each interim analysis is shown for
 all three boundaries. This is generally not a very useful plot.
 
 ``` r
+
 plot(x8, plottype = 4)
 ```
 
@@ -409,6 +419,7 @@ The spending function plot (`plottype = 5`) shows the three spending
 functions: \\\alpha\\ (efficacy), \\\beta\\ (futility), and harm.
 
 ``` r
+
 plot(x8, plottype = 5)
 ```
 
@@ -420,16 +431,17 @@ Spending functions for non-binding harm bound design
 #### B-values at boundaries
 
 B-values (`plottype = 7`) are Z-values scaled by \\\sqrt{t}\\ where
-\\t\\ is the information fraction. As discussed by Proschan, Lan, and
-Wittes (2006), the expected value of B-values increases linearly with
-the information fraction under the assumption of a constant treatment
-effect (proportional hazards). This linear relationship makes B-values
-useful for visual assessment of treatment effect trends across interim
+\\t\\ is the information fraction. As discussed by Proschan et al.
+(2006), the expected value of B-values increases linearly with the
+information fraction under the assumption of a constant treatment effect
+(proportional hazards). This linear relationship makes B-values useful
+for visual assessment of treatment effect trends across interim
 analyses: departures from linearity may suggest non-proportional hazards
 or other changes in treatment effect over time. Three boundary lines are
 shown: efficacy, futility, and harm.
 
 ``` r
+
 plot(x8, plottype = 7)
 ```
 
@@ -450,6 +462,7 @@ We first create a binding design with \\\alpha = 0.0125\\ to compare
 with the non-binding design above:
 
 ``` r
+
 x7 <- gsSurvCalendar(
   test.type = 7,
   alpha = 0.0125,
@@ -469,6 +482,7 @@ x7 <- gsSurvCalendar(
 ### Comparing binding and non-binding
 
 ``` r
+
 comparison <- data.frame(
   Bound = c("Efficacy", "Futility", "Harm"),
   `Binding (type 7)` = c(
@@ -486,13 +500,13 @@ comparison <- data.frame(
 kable(comparison, caption = "Comparison of binding vs. non-binding Z-value boundaries")
 ```
 
-| Bound    | Binding (type 7)                       | Non-binding (type 8)                   |
-|:---------|:---------------------------------------|:---------------------------------------|
-| Efficacy | 7.434, 3.862, 2.934, 2.523, 2.248      | 7.434, 3.862, 2.935, 2.528, 2.307      |
-| Futility | -1.458, 0.09, 1.016, 1.689, 2.248      | -1.441, 0.121, 1.057, 1.736, 2.307     |
-| Harm     | -2.112, -1.767, -1.726, -1.717, -1.715 | -2.112, -1.767, -1.726, -1.717, -1.715 |
+| Bound | Binding (type 7) | Non-binding (type 8) |
+|:---|:---|:---|
+| Efficacy | 7.434, 3.862, 2.934, 2.523, 2.248 | 7.434, 3.862, 2.935, 2.528, 2.307 |
+| Futility | -1.458, 0.09, 1.016, 1.689, 2.248 | -1.441, 0.121, 1.057, 1.736, 2.307 |
+| Harm | -2.112, -1.767, -1.726, -1.717, -1.715 | -2.112, -1.767, -1.726, -1.717, -1.715 |
 
-Comparison of binding vs. non-binding Z-value boundaries
+Comparison of binding vs. non-binding Z-value boundaries {.table}
 
 Note that the efficacy bounds for `test.type = 7` (binding) are slightly
 lower (easier to cross) than for `test.type = 8` (non-binding). The
@@ -501,6 +515,7 @@ smaller than for `test.type = 8` (657), reflecting the assumption that
 the trial will stop at the lower bounds.
 
 ``` r
+
 gsBoundSummary(x7)
 #> Method: LachinFoulkes 
 #>     Analysis               Value    Harm Futility Efficacy
@@ -541,6 +556,7 @@ we show the non-binding design (`x8`) with efficacy bounds for both
 \\\alpha = 0.0125\\ (the design level) and \\\alpha = 0.025\\:
 
 ``` r
+
 gsBoundSummary(x8, alpha = 0.025)
 #>     Analysis               Value α=0.0125 α=0.025 Futility    Harm
 #>    IA 1: 11%                   Z       NA  6.6513  -1.4408 -2.1121
@@ -672,10 +688,10 @@ monitoring, but other approaches may also be considered.
 ## References
 
 Proschan, Michael A., K. K. Gordon Lan, and Janet Turk Wittes. 2006.
-*Statistical Monitoring of Clinical Trials: A Unified Approach*. New
-York, NY: Springer.
+*Statistical Monitoring of Clinical Trials: A Unified Approach*.
+Springer.
 
-U.S. Food and Drug Administration. 2024. “Assessment of Overall Survival
+U.S. Food and Drug Administration. 2024. *Assessment of Overall Survival
 Evidence in Support of Accelerated Approval of Oncology Therapeutics:
-Draft Guidance for Industry.”
-<https://www.fda.gov/media/188274/download>.
+Draft Guidance for Industry*.
+[Https://www.fda.gov/media/188274/download](https://www.fda.gov/media/188274/download).

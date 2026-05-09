@@ -40,6 +40,7 @@ with the same endpoint requires 200 subjects for 90% power at \\\alpha\\
 = 0.025, one-sided:
 
 ``` r
+
 library(gsDesign)
 
 x <- gsDesign(n.fix = 200)
@@ -49,6 +50,7 @@ plot(x)
 ![](gsDesignPackageOverview_files/figure-html/unnamed-chunk-2-1.svg)
 
 ``` r
+
 gsBoundSummary(x)
 #>   Analysis               Value Efficacy Futility
 #>  IA 1: 33%                   Z   3.0107  -0.2387
@@ -71,9 +73,8 @@ gsBoundSummary(x)
 ## References
 
 Jennison, Christopher, and Bruce W. Turnbull. 2000. *Group Sequential
-Methods with Applications to Clinical Trials*. Boca Raton, FL: Chapman;
-Hall/CRC.
+Methods with Applications to Clinical Trials*. Chapman; Hall/CRC.
 
 Proschan, Michael A., K. K. Gordon Lan, and Janet Turk Wittes. 2006.
-*Statistical Monitoring of Clinical Trials: A Unified Approach*. New
-York, NY: Springer.
+*Statistical Monitoring of Clinical Trials: A Unified Approach*.
+Springer.

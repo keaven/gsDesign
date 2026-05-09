@@ -30,11 +30,11 @@ Each of `testUpper`, `testLower`, and `testHarm` accepts either a single
 logical value (recycled to all analyses) or a logical vector of length
 `k` (the number of analyses):
 
-| Parameter   | Description                     | Default | Constraints                                                                                                                                                                  |
-|-------------|---------------------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `testUpper` | Test the upper (efficacy) bound | `TRUE`  | Must be `TRUE` at the final analysis. For `test.type` 1 and 2, overridden to all `TRUE`.                                                                                     |
-| `testLower` | Test the lower (futility) bound | `TRUE`  | Ignored for `test.type = 1` (one-sided). Overridden to all `TRUE` for `test.type = 2` (symmetric). For `test.type >= 3`, at least one analysis must have `testLower = TRUE`. |
-| `testHarm`  | Test the harm bound             | `TRUE`  | Only applies to `test.type = 7` or `8`. At least one analysis must have `testHarm = TRUE`.                                                                                   |
+| Parameter | Description | Default | Constraints |
+|----|----|----|----|
+| `testUpper` | Test the upper (efficacy) bound | `TRUE` | Must be `TRUE` at the final analysis. For `test.type` 1 and 2, overridden to all `TRUE`. |
+| `testLower` | Test the lower (futility) bound | `TRUE` | Ignored for `test.type = 1` (one-sided). Overridden to all `TRUE` for `test.type = 2` (symmetric). For `test.type >= 3`, at least one analysis must have `testLower = TRUE`. |
+| `testHarm` | Test the harm bound | `TRUE` | Only applies to `test.type = 7` or `8`. At least one analysis must have `testHarm = TRUE`. |
 
 **Validation**: At every analysis, at least one of the active bounds
 must be `TRUE`. If all three are `FALSE` at any analysis, an error is
@@ -48,6 +48,7 @@ trial’s data monitoring committee wants an early “go/no-go” decision,
 but not ongoing futility monitoring.
 
 ``` r
+
 # 3-analysis design with non-binding futility (test.type = 4)
 # Futility testing only at IA1
 x1 <- gsDesign(
@@ -67,6 +68,7 @@ The lower bound is active only at IA1. At IA2 and the final analysis,
 the futility bound shows as `NA`:
 
 ``` r
+
 gsBoundSummary(x1)
 #>                Analysis               Value Efficacy Futility
 #>               IA 1: 33%                   Z   3.0107  -0.2387
@@ -95,6 +97,7 @@ We can also see the bounds in the
 [`print()`](https://rdrr.io/r/base/print.html) output:
 
 ``` r
+
 x1
 #> Asymmetric two-sided group sequential design with
 #> 90 % power and 2.5 % Type I Error.
@@ -135,6 +138,7 @@ x1
 The standard plot shows the active bounds, with inactive bounds omitted:
 
 ``` r
+
 plot(x1, plottype = 1)
 ```
 
@@ -150,6 +154,7 @@ testing may be deferred until sufficient data have accrued. Here we skip
 the efficacy bound at the first interim:
 
 ``` r
+
 # 3-analysis design with binding futility (test.type = 3)
 # No efficacy testing at IA1
 x2 <- gsDesign(
@@ -166,6 +171,7 @@ x2 <- gsDesign(
 ```
 
 ``` r
+
 gsBoundSummary(x2)
 #>                Analysis               Value Efficacy Futility
 #>               IA 1: 33%                   Z       NA  -0.2579
@@ -195,6 +201,7 @@ The `testUpper`, `testLower`, and `testHarm` parameters pass through to
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md):
 
 ``` r
+
 # Survival design with futility only at IA1
 xs <- gsSurv(
   k = 3,
@@ -243,6 +250,7 @@ harm monitoring is most critical during early enrollment, before
 longer-term safety data are available.
 
 ``` r
+
 # Harm bound design with harm monitoring only at IA1 and IA2
 xh <- gsDesign(
   k = 3,
@@ -301,6 +309,7 @@ Both `testUpper` and `testLower` can be specified simultaneously. For
 example, a design with futility-only at IA1 and efficacy-only at IA2:
 
 ``` r
+
 # Futility only at IA1, efficacy only at IA2, both at Final
 x5 <- gsDesign(
   k = 3,
@@ -356,6 +365,7 @@ The following rules are enforced:
     analysis.
 
 ``` r
+
 # This fails: testUpper must be TRUE at the final analysis
 try(gsDesign(k = 3, test.type = 3, testUpper = c(TRUE, TRUE, FALSE)))
 #> Error in gsTestBoundsCheck(x$k, x$test.type, testUpper, testLower, testHarm) : 
@@ -363,6 +373,7 @@ try(gsDesign(k = 3, test.type = 3, testUpper = c(TRUE, TRUE, FALSE)))
 ```
 
 ``` r
+
 # This fails: no bound active at analysis 1
 try(gsDesign(k = 3, test.type = 4,
   testUpper = c(FALSE, TRUE, TRUE),
@@ -378,6 +389,7 @@ The `testUpper`, `testLower`, and `testHarm` logical vectors are stored
 on the returned `gsDesign` object:
 
 ``` r
+
 x1$testUpper
 #> [1] TRUE TRUE TRUE
 x1$testLower
@@ -416,6 +428,7 @@ upper bounds are independent of lower bounds, removing futility has no
 effect on the upper (efficacy) bounds or the non-binding alpha:
 
 ``` r
+
 # Baseline non-binding design
 x_nb <- gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1)
 
@@ -439,6 +452,7 @@ adjust to absorb the redistributed spending, still totalling exactly
 \\\alpha = 0.025\\:
 
 ``` r
+
 # Remove efficacy at IA1
 x_nb_eff <- gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1,
   testUpper = c(FALSE, TRUE, TRUE))
@@ -455,6 +469,7 @@ with the modified spending while holding sample size fixed. This ensures
 the cumulative Type I error remains at the nominal level:
 
 ``` r
+
 # Baseline binding design
 x_b <- gsDesign(k = 3, test.type = 3, alpha = 0.025, beta = 0.1)
 cat("Baseline alpha:", sum(x_b$upper$prob[, 1]), "\n")

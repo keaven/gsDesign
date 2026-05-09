@@ -835,6 +835,7 @@ Keaven Anderson <keaven_anderson@merck.com>
 ## Examples
 
 ``` r
+
 # Vary accrual rate gamma to obtain power
 # T, minfup and R all specified, although R will be adjusted on output
 # gamma as input will be multiplied in output to achieve desired power
@@ -908,8 +909,8 @@ print(xtable::xtable(x_gs,
   footnote = "This is a footnote; note that it can be wide.",
   caption = "Caption example for xtable output."
 ))
-#> % latex table generated in R 4.5.3 by xtable 1.8-8 package
-#> % Wed Apr  8 14:37:38 2026
+#> % latex table generated in R 4.6.0 by xtable 1.8-8 package
+#> % Sat May  9 16:14:49 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}

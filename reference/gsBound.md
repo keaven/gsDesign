@@ -165,6 +165,7 @@ Keaven Anderson <keaven_anderson@merck.com>
 ## Examples
 
 ``` r
+
 # set boundaries so that probability is .01 of first crossing
 # each upper boundary and .02 of crossing each lower boundary
 # under the null hypothesis

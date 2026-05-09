@@ -96,6 +96,7 @@ Keaven Anderson
 ## Examples
 
 ``` r
+
 # Derive Group Sequential Design 
 x <- gsSurv(k = 4, alpha = 0.025, beta = 0.1, timing = c(.5,.65,.8), sfu = sfLDOF,
             sfl = sfHSD, sflpar = 2, lambdaC = log(2)/6, hr = 0.6,

@@ -89,6 +89,7 @@ assuming one-sided Type I error \\\alpha=0.025\\ and 90% power
 Checking using the sample size formula above, we have:
 
 ``` r
+
 r <- 2
 sigma <- sqrt((1 + r) * (1.6^2 + 1.25^2 / r))
 theta <- 0.8 / sigma
@@ -102,6 +103,7 @@ Now, assume we let the sample size be 200 and compute power under the
 same scenario.
 
 ``` r
+
 nNormal(delta1 = 0.8, sd = 1.6, sd2 = 1.25, alpha = 0.025, n = 200, ratio = 2)
 #> [1] 0.9466825
 ```
@@ -109,6 +111,7 @@ nNormal(delta1 = 0.8, sd = 1.6, sd2 = 1.25, alpha = 0.025, n = 200, ratio = 2)
 From the power formula above, we duplicate this with:
 
 ``` r
+
 pwr <- pnorm(qnorm(.975) - sqrt(200) * theta, lower.tail = FALSE)
 pwr
 #> [1] 0.9466825
@@ -118,6 +121,7 @@ If we want to plot power for a variety of sample sizes, we can input `n`
 as a vector:
 
 ``` r
+
 n <- 100:200
 pwrn <- nNormal(delta1 = 0.8, sd = 1.6, sd2 = 1.25, alpha = 0.025, n = n, ratio = 2)
 plot(n, pwrn, type = "l")
@@ -129,6 +133,7 @@ Alternatively, you could fix sample size at 200 and plot power under
 different treatment effect assumptions:
 
 ``` r
+
 delta1 <- seq(.5, 1, .025)
 pwrdelta1 <- nNormal(delta1 = delta1, sd = 1.6, sd2 = 1.25, alpha = 0.025, n = 200, ratio = 2)
 plot(delta1, pwrdelta1, type = "l")
@@ -153,6 +158,7 @@ million times with a t-statistic with unequal variances quickly as
 follows under the alternate hypothesis:
 
 ``` r
+
 nsim <- 1000000
 delta <- 0.8
 sd1 <- 1.6
@@ -174,6 +180,7 @@ The standard error for this simulation power calculation is
 approximately
 
 ``` r
+
 sqrt(pwr * (1 - pwr) / nsim)
 #> [1] 0.0002246659
 ```
@@ -189,6 +196,7 @@ will largely use default parameters and show two methods. For the first,
 we plug in the fixed sample size above as follows:
 
 ``` r
+
 d <- gsDesign(
   k = 2,
   n.fix = nNormal(delta1 = 0.8, sd = 1.6, sd2 = 1.25, alpha = 0.025, beta = .1, ratio = 2),
@@ -215,6 +223,7 @@ d |>
 A textual summary of the design is given by:
 
 ``` r
+
 cat(summary(d))
 ```
 
@@ -228,6 +237,7 @@ We can get the same answer by plugging in the standardized effect size
 we computed above:
 
 ``` r
+
 gsDesign(
   k = 2,
   delta = theta,
@@ -256,5 +266,4 @@ using simulation as in the fixed design example.
 ## References
 
 Jennison, Christopher, and Bruce W. Turnbull. 2000. *Group Sequential
-Methods with Applications to Clinical Trials*. Boca Raton, FL: Chapman;
-Hall/CRC.
+Methods with Applications to Clinical Trials*. Chapman; Hall/CRC.

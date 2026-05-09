@@ -13,10 +13,10 @@ are also available in the package as outlined in Miettinen and Nurminen
 
 The basic method for computing the fixed sample size that is the basis
 for group sequential design sizes for superiority was developed by
-Fleiss, Tytun, and Ury (1980), but is applied here without the
-continuity correction as recommended by Gordon and Watson (1996). This
-method was extended to non-inferiority and super-superiority trials by
-Farrington and Manning (1990).
+Fleiss et al. (1980), but is applied here without the continuity
+correction as recommended by Gordon and Watson (1996). This method was
+extended to non-inferiority and super-superiority trials by Farrington
+and Manning (1990).
 
 We will see that while asymptotic formulations are generally good
 approximations, fast simulation methods can provide more accurate
@@ -25,6 +25,7 @@ results both for Type I error and power.
 The R packages we use are:
 
 ``` r
+
 library(gsDesign)
 library(ggplot2)
 library(tidyr)
@@ -45,6 +46,7 @@ respectively. One-sided Type I error is 0.025 and Type II error is 0.15
 are changed and `ratio` is inverted.
 
 ``` r
+
 nBinomial(p1 = 0.2, p2 = 0.1, ratio = 2, alpha = 0.025, beta = 0.15) |> ceiling()
 #> [1] 496
 nBinomial(p1 = 0.1, p2 = 0.2, ratio = 0.5, alpha = 0.025, beta = 0.15) |> ceiling()
@@ -62,6 +64,7 @@ risk-ratio method as the risk-difference method from above (default
 size is larger in this case.
 
 ``` r
+
 scale <- c("Difference", "RR", "OR")
 tibble(scale, "Sample size" = c(
   nBinomial(p1 = 0.2, p2 = 0.1, ratio = 0.5, alpha = 0.025, beta = 0.15, scale = scale[1]) |> ceiling(),
@@ -91,6 +94,7 @@ function computes the Z-value for a binomial test. We see that the scale
 chosen (default is `"Difference"`) does not matter for the Z-value.
 
 ``` r
+
 testBinomial(x1 = 20, n1 = 30, x2 = 10, n2 = 30)
 #> [1] 2.581989
 testBinomial(x1 = 20, n1 = 30, x2 = 10, n2 = 30, scale = "RR")
@@ -107,6 +111,7 @@ the Z-value for a binomial test of the null hypothesis that the
 difference between the two groups is equal to 0.
 
 ``` r
+
 testBinomial(x1 = 10, n1 = 30, x2 = 20, n2 = 30)
 #> [1] -2.581989
 ```
@@ -127,6 +132,7 @@ Since the Chi-square test is often used, we show that it gives a 2-sided
 \\p\\-value that is twice the one-sided \\p\\-value.
 
 ``` r
+
 testBinomial(x1 = 10, n1 = 30, x2 = 20, n2 = 30) |> pnorm(lower.tail = TRUE)
 #> [1] 0.004911637
 testBinomial(x1 = 10, n1 = 30, x2 = 20, n2 = 30, adj = 1) |> pnorm(lower.tail = TRUE)
@@ -141,6 +147,7 @@ We can compute a confidence interval for the rate difference using the
 function.
 
 ``` r
+
 p1 <- 20 / 30
 p2 <- 10 / 30
 rd <- p1 - p2
@@ -163,17 +170,18 @@ rbind(
   fmt_number(columns = c(lower, upper, Effect), n_sigfig = 3)
 ```
 
-| Confidence intervals for a binomial effect size |       |                 |        |
-|-------------------------------------------------|-------|-----------------|--------|
-| x1 = 20, n1 = 30, x2 = 10, n2 = 30              |       |                 |        |
-| lower                                           | upper | scale           | Effect |
-| 0.0812                                          | 0.545 | Risk difference | 0.333  |
-| 1.17                                            | 3.62  | Risk-ratio      | 2.00   |
-| 1.38                                            | 11.6  | Odds-ratio      | 4.00   |
+| Confidence intervals for a binomial effect size |  |  |  |
+|----|----|----|----|
+| x1 = 20, n1 = 30, x2 = 10, n2 = 30 |  |  |  |
+| lower | upper | scale | Effect |
+| 0.0812 | 0.545 | Risk difference | 0.333 |
+| 1.17 | 3.62 | Risk-ratio | 2.00 |
+| 1.38 | 11.6 | Odds-ratio | 4.00 |
 
 Again, how treatment groups are assigned makes a difference.
 
 ``` r
+
 ciBinomial(x1 = 10, n1 = 30, x2 = 20, n2 = 30)
 #>        lower       upper
 #> 1 -0.5454184 -0.08115662
@@ -195,6 +203,7 @@ super-superiority. We see that this has a substantial impact on the
 sample size requirement to achieve desired power.
 
 ``` r
+
 tibble(
   Design = c("Superiority", "Non-inferiority", "Super-superiority"),
   `p1 (pE)` = c(0.2, 0.2, 0.2),
@@ -221,14 +230,14 @@ tibble(
   tab_footnote("Randomization ratio is 2:1 (Experimental:Control) with assumed control failure rate p1 = 0.2 and experimental rate 0.1.")
 ```
 
-| Sample size for binomial two arm trial design                                                                           |                         |                    |                                                   |             |
-|-------------------------------------------------------------------------------------------------------------------------|-------------------------|--------------------|---------------------------------------------------|-------------|
-| alpha = 0.025, beta = 0.15                                                                                              |                         |                    |                                                   |             |
-| Design                                                                                                                  | Experimental group rate | Control group rate | Null hypothesis value of rate difference (delta0) | Sample size |
-| Superiority                                                                                                             | 0.20                    | 0.10               | 0.00                                              | 525         |
-| Non-inferiority                                                                                                         | 0.20                    | 0.10               | -0.02                                             | 375         |
-| Super-superiority                                                                                                       | 0.20                    | 0.10               | 0.02                                              | 796         |
-| Randomization ratio is 2:1 (Experimental:Control) with assumed control failure rate p1 = 0.2 and experimental rate 0.1. |                         |                    |                                                   |             |
+| Sample size for binomial two arm trial design |  |  |  |  |
+|----|----|----|----|----|
+| alpha = 0.025, beta = 0.15 |  |  |  |  |
+| Design | Experimental group rate | Control group rate | Null hypothesis value of rate difference (delta0) | Sample size |
+| Superiority | 0.20 | 0.10 | 0.00 | 525 |
+| Non-inferiority | 0.20 | 0.10 | -0.02 | 375 |
+| Super-superiority | 0.20 | 0.10 | 0.02 | 796 |
+| Randomization ratio is 2:1 (Experimental:Control) with assumed control failure rate p1 = 0.2 and experimental rate 0.1. |  |  |  |  |
 
 Testing for non-inferiority and super-superiority is equivalent to
 whether or not the confidence intervals contain the margin `delta0`.
@@ -239,6 +248,7 @@ Since the confidence interval contains 0.02 but neither 0 nor -0.02, it
 comes to the same conclusion as all 3 of these tests.
 
 ``` r
+
 testBinomial(x1 = 18, n1 = 30, x2 = 10, n2 = 30, delta0 = 0) # superiority
 #> [1] 2.070197
 testBinomial(x1 = 18, n1 = 30, x2 = 10, n2 = 30, delta0 = -0.02) # non-inferiority
@@ -264,6 +274,7 @@ but also includes the number of simulated trials in the argument `nsim`.
 A vector of Z-values is returned.
 
 ``` r
+
 simBinomial(p1 = 0.2, p2 = 0.1, n1 = 30, n2 = 30, nsim = 10)
 #>  [1] -0.6928203  0.8606630  1.3856406  1.5191091  2.2786636  1.3856406
 #>  [7]  0.0000000  1.2909944  2.0784610  2.3354968
@@ -273,6 +284,7 @@ To see if the asymptotic method controls Type I error at the desired
 level, we can compute the Type I error rate from the simulated Z-values.
 
 ``` r
+
 z <- simBinomial(p1 = 0.15, p2 = 0.15, n1 = 30, n2 = 30, nsim = 1000000)
 mean(z > qnorm(0.975)) # Type I error rate
 #> [1] 0.026329
@@ -287,6 +299,7 @@ function is fast, we can use a large number of simulations. In any case,
 this produces a slightly conservative Type I error rate.
 
 ``` r
+
 zcut <- quantile(z, 0.975)
 tibble("Z cutoff" = zcut, "p cutoff" = pnorm(zcut, lower.tail = FALSE)) |>
   gt() |>
@@ -297,16 +310,17 @@ tibble("Z cutoff" = zcut, "p cutoff" = pnorm(zcut, lower.tail = FALSE)) |>
   tab_footnote("The Z cutoff is the quantile of the simulated Z-values at 0.975 using p1 = p2 = 0.15.")
 ```
 
-| Exact cutoff for Type I error rate                                                    |          |
-|---------------------------------------------------------------------------------------|----------|
-| Based on 1 million simulations                                                        |          |
-| Z cutoff                                                                              | p cutoff |
-| 2.01                                                                                  | 0.0222   |
-| The Z cutoff is the quantile of the simulated Z-values at 0.975 using p1 = p2 = 0.15. |          |
+| Exact cutoff for Type I error rate |  |
+|----|----|
+| Based on 1 million simulations |  |
+| Z cutoff | p cutoff |
+| 2.01 | 0.0222 |
+| The Z cutoff is the quantile of the simulated Z-values at 0.975 using p1 = p2 = 0.15. |  |
 
 Now we examine power with the asymptotic and exact cutoffs.
 
 ``` r
+
 z <- simBinomial(p1 = 0.2, p2 = 0.1, n1 = 30, n2 = 30, nsim = 1000000)
 cat("Power with asymptotic cutoff ", mean(z > qnorm(0.975)))
 #> Power with asymptotic cutoff  0.192442
@@ -321,6 +335,7 @@ on the odds-ratio formulation more accurately approximates the targeted
 85% power.
 
 ``` r
+
 ptab <- tibble(
   Scale = c("Risk-difference", "Odds-ratio"),
   n = c(525, 489),
@@ -340,14 +355,14 @@ ptab |>
   tab_footnote("Power based on Z-test for risk-difference with no continuity correction.", location = cells_column_labels("Power"))
 ```
 
-| Simulation power for sample size based on risk-difference and odds-ratio                             |             |        |
-|------------------------------------------------------------------------------------------------------|-------------|--------|
-| pE = 0.2, pC = 0.1, alpha = 0.025, beta = 0.15                                                       |             |        |
-| Scale                                                                                                | Sample size | Power¹ |
-| Risk-difference                                                                                      | 525         | 0.871  |
-| Odds-ratio                                                                                           | 489         | 0.855  |
-| Power based on 100,000 simulated trials and nominal alpha = 0.025 test; 2 x simulation error = 0.002 |             |        |
-| ¹ Power based on Z-test for risk-difference with no continuity correction.                           |             |        |
+| Simulation power for sample size based on risk-difference and odds-ratio |  |  |
+|----|----|----|
+| pE = 0.2, pC = 0.1, alpha = 0.025, beta = 0.15 |  |  |
+| Scale | Sample size | Power¹ |
+| Risk-difference | 525 | 0.871 |
+| Odds-ratio | 489 | 0.855 |
+| Power based on 100,000 simulated trials and nominal alpha = 0.025 test; 2 x simulation error = 0.002 |  |  |
+| ¹ Power based on Z-test for risk-difference with no continuity correction. |  |  |
 
 ## Power table
 
@@ -365,6 +380,7 @@ the underlying control rate, reaching almost 0.03 when the underlying
 failure rate is 0.10.
 
 ``` r
+
 binomialPowerTable(
   pC = seq(0.1, 0.2, 0.02), delta = 0, delta0 = 0, n = 70, failureEndpoint = TRUE,
   ratio = 1, alpha = 0.025, simulation = TRUE, nsim = 1e6, adj = 0
@@ -375,15 +391,15 @@ binomialPowerTable(
   tab_header("Type I error is not controlled with nominal p = 0.025 cutoff")
 ```
 
-| Type I error is not controlled with nominal p = 0.025 cutoff |       |      |              |
-|--------------------------------------------------------------|-------|------|--------------|
-| pC                                                           | delta | pE   | Type I error |
-| 0.10                                                         | 0     | 0.10 | 0.0285       |
-| 0.12                                                         | 0     | 0.12 | 0.0282       |
-| 0.14                                                         | 0     | 0.14 | 0.0269       |
-| 0.16                                                         | 0     | 0.16 | 0.0256       |
-| 0.18                                                         | 0     | 0.18 | 0.0251       |
-| 0.20                                                         | 0     | 0.20 | 0.0245       |
+| Type I error is not controlled with nominal p = 0.025 cutoff |  |  |  |
+|----|----|----|----|
+| pC | delta | pE | Type I error |
+| 0.10 | 0 | 0.10 | 0.0285 |
+| 0.12 | 0 | 0.12 | 0.0282 |
+| 0.14 | 0 | 0.14 | 0.0269 |
+| 0.16 | 0 | 0.16 | 0.0256 |
+| 0.18 | 0 | 0.18 | 0.0251 |
+| 0.20 | 0 | 0.20 | 0.0245 |
 
 Adding the continuity correction (`adj = 1`) helps a small amount at
 better controlling Type I error in this case. However, changing the
@@ -391,6 +407,7 @@ nominal cutoff to `alpha = 0.023` without continuity correction is more
 successful at controlling Type I error consistently.
 
 ``` r
+
 binomialPowerTable(
   pC = seq(0.1, 0.2, 0.02), delta = 0, delta0 = 0, n = 70, failureEndpoint = TRUE,
   ratio = 1, alpha = 0.023, simulation = TRUE, nsim = 1e6, adj = 0
@@ -401,15 +418,15 @@ binomialPowerTable(
   tab_header("Type I error is controlled at 0.025 with nominal p = 0.023 cutoff")
 ```
 
-| Type I error is controlled at 0.025 with nominal p = 0.023 cutoff |       |      |              |
-|-------------------------------------------------------------------|-------|------|--------------|
-| pC                                                                | delta | pE   | Type I error |
-| 0.10                                                              | 0     | 0.10 | 0.0211       |
-| 0.12                                                              | 0     | 0.12 | 0.0218       |
-| 0.14                                                              | 0     | 0.14 | 0.0227       |
-| 0.16                                                              | 0     | 0.16 | 0.0231       |
-| 0.18                                                              | 0     | 0.18 | 0.0237       |
-| 0.20                                                              | 0     | 0.20 | 0.0238       |
+| Type I error is controlled at 0.025 with nominal p = 0.023 cutoff |  |  |  |
+|----|----|----|----|
+| pC | delta | pE | Type I error |
+| 0.10 | 0 | 0.10 | 0.0211 |
+| 0.12 | 0 | 0.12 | 0.0218 |
+| 0.14 | 0 | 0.14 | 0.0227 |
+| 0.16 | 0 | 0.16 | 0.0231 |
+| 0.18 | 0 | 0.18 | 0.0237 |
+| 0.20 | 0 | 0.20 | 0.0238 |
 
 Now we look at power for a range of control rates and treatment effects.
 [`binomialPowerTable()`](https://keaven.github.io/gsDesign/reference/binomialPowerTable.md)
@@ -419,6 +436,7 @@ the simulations above to control Type I error. Initially we base power
 on the asymptotic approximation.
 
 ``` r
+
 power_table_asymptotic <- binomialPowerTable(
   pC = seq(0.1, 0.2, 0.025),
   delta = seq(0.15, 0.25, 0.02),
@@ -431,6 +449,7 @@ power_table_asymptotic <- binomialPowerTable(
 Now we produce the same table based on 1 million simulations.
 
 ``` r
+
 power_table_simulation <- binomialPowerTable(
   pC = seq(0.1, 0.2, 0.025),
   delta = seq(0.15, 0.25, 0.02),
@@ -448,6 +467,7 @@ all the `pC` and `delta` combinations evaluated, power is above 90% for
 all cases.
 
 ``` r
+
 rbind(
   power_table_asymptotic |> mutate(Method = "Asymptotic"),
   power_table_simulation |> mutate(Method = "Simulation")
@@ -475,6 +495,7 @@ Following is a table of the simulation results from above in a wide
 format.
 
 ``` r
+
 # Transform table with values from Power to a wide format with
 # Put "Control group rate" (pC) in rows and Treatment effect (delta) in columns
 # Put a spanner label over columns after first column with label "Treatment effect (delta)"

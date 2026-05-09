@@ -15,6 +15,7 @@ and additions to the gsDesign package have accelerated.
 ## Installation
 
 ``` r
+
 # The easiest way to get gsDesign is to install:
 install.packages("gsDesign")
 

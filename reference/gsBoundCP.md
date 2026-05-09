@@ -81,6 +81,7 @@ Keaven Anderson <keaven_anderson@merck.com>
 ## Examples
 
 ``` r
+
 # set up a group sequential design
 x <- gsDesign(k = 5)
 x

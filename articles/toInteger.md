@@ -27,10 +27,12 @@ details.
 ## Summary of method
 
 ``` r
+
 library(gsDesign)
 ```
 
 ``` r
+
 x <- gsSurv(ratio = 1, hr = .74)
 y <- x |> toInteger()
 # Continuous event counts
@@ -40,6 +42,7 @@ x$n.I
     ## [1] 165.0263 330.0526 495.0789
 
 ``` r
+
 # Rounded event counts at interims, rounded up at final analysis
 y$n.I
 ```
@@ -47,6 +50,7 @@ y$n.I
     ## [1] 165 330 496
 
 ``` r
+
 # Continuous sample size at interim and final analyses
 as.numeric(x$eNE + x$eNC)
 ```
@@ -54,6 +58,7 @@ as.numeric(x$eNE + x$eNC)
     ## [1] 510.9167 730.7015 730.7015
 
 ``` r
+
 # Rounded up to even final sample size given that x$ratio = 1
 # and rounding to multiple of x$ratio + 1
 as.numeric(y$eNE + y$eNC)
@@ -62,6 +67,7 @@ as.numeric(y$eNE + y$eNC)
     ## [1] 511.2601 732.0000 732.0000
 
 ``` r
+
 # With roundUpFinal = FALSE, final sample size rounded to nearest integer
 z <- x |> toInteger(roundUpFinal = FALSE)
 as.numeric(z$eNE + z$eNC)
@@ -90,6 +96,7 @@ experimental:control randomization ratio. Note that the sample size is
 not an integer. We target 80% power (`beta = .2`).
 
 ``` r
+
 n.fix <- nBinomial(p1 = .2, p2 = .1, alpha = .025, beta = .2, ratio = 2)
 n.fix
 ```
@@ -102,6 +109,7 @@ per arm (432 = 144 control + 288 experimental targeted) we get slightly
 larger than the targeted 80% power:
 
 ``` r
+
 nBinomial(p1 = .2, p2 = .1, alpha = .025, n = 432, ratio = 2)
 ```
 
@@ -116,6 +124,7 @@ Lan-DeMets spending function approximating an O’Brien-Fleming efficacy
 bound.
 
 ``` r
+
 # 1-sided design (efficacy bound only; test.type = 1)
 xb <- gsDesign(alpha = .025, beta = .2, n.fix = n.fix, test.type = 1, sfu = sfLDOF, timing = c(.5, .75))
 # Continuous sample size (non-integer) at planned analyses
@@ -131,6 +140,7 @@ integer to 1 + the experimental:control randomization ratio. Thus, the
 final sample size of 441 below is a multiple of 3.
 
 ``` r
+
 # Convert to integer sample size with even multiple of ratio + 1
 # i.e., multiple of 3 in this case at final analysis
 x_integer <- toInteger(xb, ratio = 2)
@@ -143,6 +153,7 @@ Next we examine the efficacy bound of the 2 designs as they are slightly
 different.
 
 ``` r
+
 # Bound for continuous sample size design
 xb$upper$bound
 ```
@@ -150,6 +161,7 @@ xb$upper$bound
     ## [1] 2.962588 2.359018 2.014084
 
 ``` r
+
 # Bound for integer sample size design
 x_integer$upper$bound
 ```
@@ -160,6 +172,7 @@ The differences are associated with slightly different timing of the
 analyses associated with the different sample sizes noted above:
 
 ``` r
+
 # Continuous design sample size fractions at analyses
 xb$timing
 ```
@@ -167,6 +180,7 @@ xb$timing
     ## [1] 0.50 0.75 1.00
 
 ``` r
+
 # Integer design sample size fractions at analyses
 x_integer$timing
 ```
@@ -177,6 +191,7 @@ These differences also make a difference in the cumulative Type I error
 associated with each analysis as shown below.
 
 ``` r
+
 # Continuous sample size design
 cumsum(xb$upper$prob[, 1])
 ```
@@ -184,6 +199,7 @@ cumsum(xb$upper$prob[, 1])
     ## [1] 0.001525323 0.009649325 0.025000000
 
 ``` r
+
 # Specified spending based on the spending function
 xb$upper$sf(alpha = xb$alpha, t = xb$timing, xb$upper$param)$spend
 ```
@@ -191,6 +207,7 @@ xb$upper$sf(alpha = xb$alpha, t = xb$timing, xb$upper$param)$spend
     ## [1] 0.001525323 0.009649325 0.025000000
 
 ``` r
+
 # Integer sample size design
 cumsum(x_integer$upper$prob[, 1])
 ```
@@ -198,6 +215,7 @@ cumsum(x_integer$upper$prob[, 1])
     ## [1] 0.001469404 0.009458454 0.025000000
 
 ``` r
+
 # Specified spending based on the spending function
 # Slightly different from continuous design due to slightly different information fraction
 x$upper$sf(alpha = x_integer$alpha, t = x_integer$timing, x_integer$upper$param)$spend
@@ -213,6 +231,7 @@ slightly lower for the integer-based design since sample size is rounded
 to the nearest integer rather than rounded up as at the final analysis.
 
 ``` r
+
 # Cumulative upper boundary crossing probability under alternate by analysis
 # under alternate hypothesis for continuous sample size
 cumsum(xb$upper$prob[, 2])
@@ -221,6 +240,7 @@ cumsum(xb$upper$prob[, 2])
     ## [1] 0.1679704 0.5399906 0.8000000
 
 ``` r
+
 # Same for integer sample sizes at each analysis
 cumsum(x_integer$upper$prob[, 2])
 ```
@@ -239,6 +259,7 @@ specified in the call to
 above.
 
 ``` r
+
 # 2-sided asymmetric design with non-binding futility bound (test.type = 4)
 xnb <- gsDesign(
   alpha = .025, beta = .2, n.fix = n.fix, test.type = 4,
@@ -255,6 +276,7 @@ As before, we convert to integer sample sizes at each analysis and see
 the slight deviations from the interim timing of 0.5 and 0.75.
 
 ``` r
+
 xnbi <- toInteger(xnb, ratio = 2)
 # Integer design sample size at each analysis
 xnbi$n.I
@@ -263,6 +285,7 @@ xnbi$n.I
     ## [1] 232 348 465
 
 ``` r
+
 # Information fraction based on integer sample sizes
 xnbi$timing
 ```
@@ -273,6 +296,7 @@ These differences also make a difference in the Type I error associated
 with each analysis
 
 ``` r
+
 # Type I error, continuous design
 cumsum(xnb$upper$prob[, 1])
 ```
@@ -280,6 +304,7 @@ cumsum(xnb$upper$prob[, 1])
     ## [1] 0.001525323 0.009630324 0.023013764
 
 ``` r
+
 # Type I error, integer design
 cumsum(xnbi$upper$prob[, 1])
 ```
@@ -292,6 +317,7 @@ futility if an interim futility bound is crossed. The non-binding Type I
 error assuming the trial does not stop for futility is:
 
 ``` r
+
 # Type I error for integer design ignoring futility bound
 cumsum(xnbi$falseposnb)
 ```
@@ -305,6 +331,7 @@ spending is slightly lower than the targeted 0.2 due to rounding up the
 final sample size.
 
 ``` r
+
 # Actual cumulative beta spent at each analysis
 cumsum(xnbi$lower$prob[, 2])
 ```
@@ -312,6 +339,7 @@ cumsum(xnbi$lower$prob[, 2])
     ## [1] 0.05360549 0.10853733 0.19921266
 
 ``` r
+
 # Spending function target is the same at interims, but larger at final
 xnbi$lower$sf(alpha = xnbi$beta, t = xnbi$n.I / max(xnbi$n.I), param = xnbi$lower$param)$spend
 ```
@@ -323,6 +351,7 @@ the final sample size powering the trial to greater than 0.8 as seen
 below.
 
 ``` r
+
 # beta-spending
 sum(xnbi$upper$prob[, 2])
 ```

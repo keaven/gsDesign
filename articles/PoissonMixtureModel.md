@@ -66,6 +66,7 @@ We create the following functions to support examples below.
 Most readers should skip reviewing this code.
 
 ``` r
+
 # Poisson mixture survival
 pPM <- function(x = 0:20, cure_rate = .5, t1 = 10, s1 = .6) {
   theta <- -log(cure_rate)
@@ -88,6 +89,7 @@ differences. The following can be adjusted by the reader and the
 vignette re-run.
 
 ``` r
+
 # Control group assumptions for three Poisson mixture cure models
 cure_rate <- c(.5, .35, .55)
 # Second time point for respective models
@@ -108,6 +110,7 @@ enrollment, allowing different assumed enrollment durations by scenario.
 The following code can be easily changed to study alternate scenarios.
 
 ``` r
+
 # This code should be updated by user for their scenario
 # Enrollment duration by scenario
 enroll_duration <- c(12, 12, 20)
@@ -184,6 +187,7 @@ assumptions. Having the first interim at 14 months rather than 12 was
 selected to get the expected events well above 100.
 
 ``` r
+
 # Calendar time from start of randomization until each analysis time
 calendarTime <- c(14, 24, 36, 48)
 ```
@@ -191,6 +195,7 @@ calendarTime <- c(14, 24, 36, 48)
 Now we move on to other design assumptions.
 
 ``` r
+
 # Get hazard rate info for Scenario 1 control group
 control <- hazard |> filter(Scenario == 1, Treatment == "Control")
 # Failure rates
@@ -239,6 +244,7 @@ overlay of the plot after the first interim: 10%, 20%, 40%, 60%, 80% and
 We now set up a calendar-based design.
 
 ``` r
+
 design_calendar <-
   gsSurvCalendar(
     calendarTime = calendarTime,
@@ -321,8 +327,7 @@ There are a few things to note for the above design:
 ## References
 
 Jennison, Christopher, and Bruce W. Turnbull. 2000. *Group Sequential
-Methods with Applications to Clinical Trials*. Boca Raton, FL: Chapman;
-Hall/CRC.
+Methods with Applications to Clinical Trials*. Chapman; Hall/CRC.
 
 Lan, K. K. G., and David L. DeMets. 1989. “Group Sequential Procedures:
 Calendar Versus Information Time.” *Statistics in Medicine* 8: 1191–98.

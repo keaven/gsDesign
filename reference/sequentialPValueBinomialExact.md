@@ -1,0 +1,77 @@
+# Exact binomial sequential p-value for a group sequential design
+
+Computes the sequential p-value as the minimum repeated p-value over
+completed analyses, using \[repeatedPValueBinomialExact()\].
+
+## Usage
+
+``` r
+sequentialPValueBinomialExact(
+  gsD,
+  n.I = NULL,
+  x = NULL,
+  interval = c(1e-20, 0.9999),
+  tol = 1e-08,
+  maxiter = 100,
+  check = FALSE
+)
+```
+
+## Arguments
+
+- gsD:
+
+  A \`gsSurv\` object with \`test.type\` 1 or 4.
+
+- n.I:
+
+  Increasing integer total event counts at completed analyses. If
+  \`NULL\`, the planned exact binomial event counts from
+  \`toBinomialExact(gsD)\` are used. This must have at most 1 value
+  greater than or equal to planned final events (\`gsD\$maxn.IPlan\` if
+  available, otherwise \`max(gsD\$n.I)\`).
+
+- x:
+
+  Integer experimental-arm event counts at the analyses in \`n.I\`.
+
+- interval:
+
+  Search interval for the p-values. As in \[sequentialPValue()\], values
+  outside this interval are truncated to the nearest endpoint.
+
+- tol:
+
+  Relative tolerance for the monotone bisection search on the alpha
+  scale.
+
+- maxiter:
+
+  Maximum number of bisection iterations for each analysis.
+
+- check:
+
+  Logical. If \`TRUE\`, checks the monotonicity of the alpha-indexed
+  integer efficacy bounds on a coarse grid and warns if it is violated.
+
+## Value
+
+A single numeric one-sided sequential p-value.
+
+## See also
+
+\[repeatedPValueBinomialExact()\], \[sequentialPValue()\]
+
+## Examples
+
+``` r
+x <- gsSurv(
+  k = 3, test.type = 4, alpha = 0.025, beta = 0.1, timing = c(0.45, 0.7),
+  sfu = sfHSD, sfupar = -4, sfl = sfLDOF, sflpar = 0,
+  lambdaC = 0.001, hr = 0.3, hr0 = 0.7, eta = 5e-04,
+  gamma = 10, R = 16, T = 24, minfup = 8, ratio = 3
+)
+counts <- toBinomialExact(x)$n.I
+sequentialPValueBinomialExact(gsD = x, n.I = counts, x = c(12, 23, 38))
+#> [1] 0.008683036
+```

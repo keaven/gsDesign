@@ -1,6 +1,7 @@
 # Vaccine efficacy trial design
 
 ``` r
+
 library(gsDesign)
 library(gt)
 ```
@@ -54,6 +55,7 @@ ratio \\r=3\\. This converts to an alternate hypothesis (approximate)
 probability that any event is in the experimental group of
 
 ``` r
+
 pi1 <- .7
 ratio <- 3
 p1 <- ratio / (ratio + 1 / (1 - pi1))
@@ -65,6 +67,7 @@ p1
 We use the inversion formula to revert this to \\\pi_1 = 0.7\\
 
 ``` r
+
 1 - 1 / (ratio * (1 / p1 - 1))
 ```
 
@@ -75,6 +78,7 @@ exact binomial null hypothesis probability that an event is in the
 experimental group is
 
 ``` r
+
 pi0 <- .3
 p0 <- ratio / (ratio + 1 / (1 - pi0))
 p0
@@ -86,6 +90,7 @@ We also translate several vaccine efficacy values to proportion of
 events in the experimental group:
 
 ``` r
+
 ve <- c(.5, .6, .65, .7, .75, .8)
 prob_experimental <- ratio / (ratio + 1 / (1 - ve))
 tibble::tibble(VE = ve, "P(Experimental)" = prob_experimental) |>
@@ -137,6 +142,7 @@ randomization ratio (experimental/control) was assumed to be 3:1 as in
 the Logunov et al. (2021) trial.
 
 ``` r
+
 alpha <- 0.025 # Type I error
 beta <- 0.1 # Type II error (1 - power)
 k <- 3 # number of analyses in group sequential design
@@ -163,6 +169,7 @@ requirements, adjust parameters above until a satisfactory result is
 obtained.
 
 ``` r
+
 # Derive Group Sequential Design
 # This determines final sample size
 x <- gsSurv(
@@ -196,6 +203,7 @@ spending function could be used to set both the first and second interim
 bounds to desired levels.
 
 ``` r
+
 xx <- toInteger(x)
 gsBoundSummary(xx,
   tdigits = 1, logdelta = TRUE, deltaname = "HR", Nname = "Events",
@@ -235,6 +243,7 @@ gsBoundSummary(xx,
 A textual summary for the design is:
 
 ``` r
+
 cat(summary(xx, timeunit = "months"))
 ```
 
@@ -263,6 +272,7 @@ and alternate (`theta` = 0.4737) hypotheses, respectively; these
 calculations are done under the exact binomial distribution assumptions.
 
 ``` r
+
 xb <- toBinomialExact(x)
 ```
 
@@ -283,6 +293,7 @@ efficacy bounds using the normal approximation that the time-to-event
 design used:
 
 ``` r
+
 efficacyNominalPValue <- pnorm(-xx$upper$bound)
 efficacyNominalPValue
 ```
@@ -293,6 +304,7 @@ Then we took the inverse binomial distribution for these p-values
 assuming the targeted total number of cases to obtain:
 
 ``` r
+
 qbinom(p = efficacyNominalPValue, size = xx$n.I, prob = p0) - 1
 ```
 
@@ -301,6 +313,7 @@ qbinom(p = efficacyNominalPValue, size = xx$n.I, prob = p0) - 1
 This is actually the same as the final bounds computed above:
 
 ``` r
+
 xb$lower$bound
 ```
 
@@ -311,12 +324,14 @@ from
 [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md):
 
 ``` r
+
 xb$init_approx$a
 ```
 
     #> [1] 12 23 37
 
 ``` r
+
 xb$init_approx$b
 ```
 
@@ -326,6 +341,7 @@ For the futility bound, only a slight adjustment was required for the
 final bound:
 
 ``` r
+
 xb$upper$bound
 ```
 
@@ -349,6 +365,7 @@ spending.
 #### \\\alpha\\-spending
 
 ``` r
+
 # Exact design cumulative alpha-spending at efficacy bounds
 # (non-binding)
 nb <- gsBinomialExact(k = xb$k, theta = xb$theta, n.I = xb$n.I, b= xb$n.I + 1, a = xb$lower$bound)
@@ -359,6 +376,7 @@ cumsum(nb$lower$prob[,1])
     #> 0.001619438 0.006447739 0.017397214
 
 ``` r
+
 # Targeted alpha-spending
 xx$upper$sf(alpha, t = xx$timing, xx$upper$param)$spend
 ```
@@ -380,6 +398,7 @@ efficacy spending parameter as \\\gamma=-4\\ instead of \\\gamma=-3\\
 second property would not hold.
 
 ``` r
+
 # Check that increasing any bound goes above cumulative spend
 excess_alpha_spend <- matrix(0, nrow = nb$k, ncol=nb$k)
 for(i in 1:xb$k){
@@ -399,6 +418,7 @@ excess_alpha_spend
 #### \\\beta\\-spending
 
 ``` r
+
 # Cumulative beta-spending for exact design
 cumsum(xb$upper$prob[,2])
 ```
@@ -407,6 +427,7 @@ cumsum(xb$upper$prob[,2])
     #>  0.01033516  0.02225609  0.09941943
 
 ``` r
+
 # Targeted beta-spending
 xx$lower$sf(beta, t = xx$timing, xx$lower$param)$spend
 ```
@@ -423,6 +444,7 @@ O’Brien-Flemining-like spending function the second property did not
 hold.
 
 ``` r
+
 # Check that increasing any bound goes above cumulative spend
 excess_beta_spend <- matrix(0, nrow = nb$k - 1, ncol=nb$k)
 for(i in 1:(xb$k - 1)){
@@ -461,6 +483,7 @@ allowed \\\beta\\-spending for Type II error. Note that for this table,
 the expected sample size and calendar timing are no longer needed.
 
 ``` r
+
 ebUpdate <- toBinomialExact(xx, observedEvents = c(20, 78))
 ```
 
@@ -489,17 +512,14 @@ for Vaccine Efficacy Studies.” *Communications in Statistics-Theory and
 Methods* 27 (6): 1305–22.
 
 Jennison, Christopher, and Bruce W. Turnbull. 2000. *Group Sequential
-Methods with Applications to Clinical Trials*. Boca Raton, FL: Chapman;
-Hall/CRC.
+Methods with Applications to Clinical Trials*. Chapman; Hall/CRC.
 
 Lachin, John M., and Mary A. Foulkes. 1986. “Evaluation of Sample Size
 and Power for Analyses of Survival with Allowance for Nonuniform Patient
 Entry, Losses to Follow-up, Noncompliance, and Stratification.”
 *Biometrics* 42: 507–19.
 
-Logunov, Denis Y, Inna V Dolzhikova, Dmitry V Shcheblyakov, Amir I
-Tukhvatulin, Olga V Zubkova, Alina S Dzharullaeva, Anna V Kovyrshina, et
-al. 2021. “Safety and Efficacy of an rAd26 and rAd5 Vector-Based
-Heterologous Prime-Boost COVID-19 Vaccine: An Interim Analysis of a
-Randomised Controlled Phase 3 Trial in Russia.” *The Lancet* 397
-(10275): 671–81.
+Logunov, Denis Y, Inna V Dolzhikova, Dmitry V Shcheblyakov, et al. 2021.
+“Safety and Efficacy of an rAd26 and rAd5 Vector-Based Heterologous
+Prime-Boost COVID-19 Vaccine: An Interim Analysis of a Randomised
+Controlled Phase 3 Trial in Russia.” *The Lancet* 397 (10275): 671–81.
