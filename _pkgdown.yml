@@ -136,6 +136,15 @@ reference:
   - as_rtf.gsBinomialExactTable
 
 articles:
+  - title: "General information"
+    desc: >
+      Introductory and broad overview materials.
+    contents:
+      - GentleIntroductionToGSD
+      - gsDesignPackageOverview
+      - SpendingFunctionOverview
+      - nNormal
+      - binomialTwoSample
   - title: "Designing for time-to-event endpoints"
     desc: >
       These vignettes provide an introduction to designing group sequential trials with
@@ -147,20 +156,23 @@ articles:
       - gsSurvPower
       - HarmBound
       - SelectiveBoundTesting
-      - MultiSeasonRareEvents
       - PoissonMixtureModel
-  - title: "Other"
+  - title: "Exact binomial designs with spending"
     desc: >
-        Other vignettes.
+      Exact binomial workflows, including spending-function-based designs.
     contents:
-      - GentleIntroductionToGSD
-      - gsDesignPackageOverview
-      - SpendingFunctionOverview
-      - ConditionalPowerPlot
-      - ConditionalErrorSpending
-      - nNormal
+      - VaccineEfficacy
+      - MultiSeasonRareEvents
+      - binomialSPRTExample
+  - title: "Multiple hypothesis testing"
+    desc: >
+      Graphical and related multiple testing workflows.
+    contents:
       - hGraph
       - GraphicalMultiplicity
-      - VaccineEfficacy
-      - binomialTwoSample
-      - binomialSPRTExample
+  - title: "Conditional power and adaptation"
+    desc: >
+      Interim decision support and adaptation-oriented examples.
+    contents:
+      - ConditionalPowerPlot
+      - ConditionalErrorSpending

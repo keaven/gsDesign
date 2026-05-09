@@ -132,6 +132,12 @@ planned_counts[2] <- max(planned_counts[2], planned_counts[1] + 1L)
 planned_counts[3] <- max(planned_counts[3], planned_counts[2] + 1L)
 
 design_exact <- toBinomialExact(design_tte, observedEvents = planned_counts)
+
+planned_enrollment_period <- as.numeric(rowSums(as.matrix(design_tte$gamma))) * enroll_periods
+season_id <- rep(1:3, each = 2)
+planned_enrollment_by_season <- as.integer(round(tapply(planned_enrollment_period, season_id, sum)))
+planned_enrollment_control <- as.integer(round(planned_enrollment_by_season / (1 + ratio)))
+planned_enrollment_experimental <- planned_enrollment_by_season - planned_enrollment_control
 ```
 
 The table below summarizes planned event looks and exact efficacy bounds.
@@ -153,21 +159,59 @@ achieved_alpha_spend <- cumsum(
   )$lower$prob[, 1]
 )
 
+achieved_power_h1 <- cumsum(
+  gsBinomialExact(
+    k = design_exact$k,
+    theta = design_exact$theta[2],
+    n.I = design_exact$n.I,
+    a = design_exact$lower$bound,
+    b = design_exact$n.I + 1
+  )$lower$prob[, 1]
+)
+
 tibble(
   Season = 1:3,
   `Spending time` = timing,
   `Planned total events` = design_exact$n.I,
   `Exact efficacy bound (x <= a)` = design_exact$lower$bound,
   `Target cumulative alpha spend` = target_alpha_spend,
-  `Achieved cumulative alpha spend` = achieved_alpha_spend
+  `Achieved cumulative alpha spend` = achieved_alpha_spend,
+  `Cumulative power under H1` = achieved_power_h1
 ) |>
   gt() |>
   fmt_number(columns = 2, decimals = 3) |>
-  fmt_number(columns = 5:6, decimals = 4) |>
+  fmt_number(columns = 5:7, decimals = 4) |>
   tab_header(
     title = "Planned exact binomial seasonal monitoring",
     subtitle = "Super-superiority example with Pocock-like efficacy spending"
   )
+```
+
+The next table gives planned enrollment/sample size by season and overall.
+
+```{r}
+enrollment_table <- tibble(
+  Season = as.character(1:3),
+  `Control planned enrollment` = planned_enrollment_control,
+  `Experimental planned enrollment` = planned_enrollment_experimental
+) |>
+  dplyr::mutate(
+    `Total planned enrollment` = `Control planned enrollment` + `Experimental planned enrollment`,
+    `Cumulative planned enrollment` = cumsum(`Total planned enrollment`)
+  )
+
+dplyr::bind_rows(
+  enrollment_table,
+  tibble(
+    Season = "Overall",
+    `Control planned enrollment` = sum(enrollment_table$`Control planned enrollment`),
+    `Experimental planned enrollment` = sum(enrollment_table$`Experimental planned enrollment`),
+    `Total planned enrollment` = sum(enrollment_table$`Total planned enrollment`),
+    `Cumulative planned enrollment` = sum(enrollment_table$`Total planned enrollment`)
+  )
+) |>
+  gt() |>
+  tab_header(title = "Planned enrollment by season and overall")
 ```
 
 ## Example repeated and sequential p-values
@@ -267,9 +311,11 @@ simulate_one_trial <- function(
     ve,
     adaptive = FALSE,
     max_multiplier = 2,
+    lambda_c = lambdaC,
+    eta_rate = eta,
     enroll_control = enroll_control_per_season,
     enroll_experimental = enroll_experimental_per_season) {
-  probs <- seasonal_probs(ve = ve, lambda_c = lambdaC, eta = eta)
+  probs <- seasonal_probs(ve = ve, lambda_c = lambda_c, eta = eta_rate)
 
   enroll_c <- rep(enroll_control, 3L)
   enroll_e <- rep(enroll_experimental, 3L)
@@ -311,33 +357,55 @@ simulate_one_trial <- function(
   # planned final events, so only one look has spending time >= 1.
   reached_final <- which(cum_total >= planned_final_events)
   looks <- if (length(reached_final) == 0) 1:3 else seq_len(reached_final[1])
+  informative <- looks[cum_total[looks] > 0]
+  if (length(informative) > 1) {
+    informative <- informative[c(TRUE, diff(cum_total[informative]) > 0)]
+  }
 
-  if (cum_total[looks[1]] < 1) {
+  if (length(informative) == 0) {
     return(list(reject = FALSE, looks = length(looks), total_events = cum_total[3]))
   }
 
   # Internal helper is used only for vignette simulation speed.
   bounds_at_alpha <- gsDesign:::binomialExactLowerBound(
     gsD = design_tte,
-    n.I = cum_total[looks],
+    n.I = cum_total[informative],
     alpha = alpha
   )
-  reject <- any(cum_exp[looks] <= bounds_at_alpha)
+  reject <- any(cum_exp[informative] <= bounds_at_alpha)
+  total_enrolled <- sum(enroll_c + enroll_e)
 
   list(
     reject = reject,
-    looks = length(looks),
-    total_events = cum_total[3]
+    looks = length(informative),
+    total_events = cum_total[3],
+    total_enrolled = total_enrolled
   )
 }
 
-simulate_scenario <- function(ve, adaptive = FALSE, nsim = 600, seed = 1) {
+simulate_scenario <- function(
+    ve,
+    adaptive = FALSE,
+    nsim = 600,
+    seed = 1,
+    lambda_c = lambdaC,
+    eta_rate = eta) {
   set.seed(seed)
-  out <- replicate(nsim, simulate_one_trial(ve = ve, adaptive = adaptive), simplify = FALSE)
+  out <- replicate(
+    nsim,
+    simulate_one_trial(
+      ve = ve,
+      adaptive = adaptive,
+      lambda_c = lambda_c,
+      eta_rate = eta_rate
+    ),
+    simplify = FALSE
+  )
   tibble(
     reject = as.logical(vapply(out, `[[`, logical(1), "reject")),
     looks = as.integer(vapply(out, `[[`, integer(1), "looks")),
-    total_events = as.integer(vapply(out, `[[`, integer(1), "total_events"))
+    total_events = as.integer(vapply(out, `[[`, integer(1), "total_events")),
+    total_enrolled = as.numeric(vapply(out, `[[`, numeric(1), "total_enrolled"))
   )
 }
 ```
@@ -381,12 +449,54 @@ tibble(
   Scenario = c("Fixed", "Adaptive"),
   `Mean final events under VE=30%` = c(mean(sim_fixed_null$total_events), mean(sim_adapt_null$total_events)),
   `Mean final events under VE=80%` = c(mean(sim_fixed_alt$total_events), mean(sim_adapt_alt$total_events)),
+  `Mean total enrolled under VE=30%` = c(mean(sim_fixed_null$total_enrolled), mean(sim_adapt_null$total_enrolled)),
+  `Mean total enrolled under VE=80%` = c(mean(sim_fixed_alt$total_enrolled), mean(sim_adapt_alt$total_enrolled)),
   `Mean looks used under VE=30%` = c(mean(sim_fixed_null$looks), mean(sim_adapt_null$looks)),
   `Mean looks used under VE=80%` = c(mean(sim_fixed_alt$looks), mean(sim_adapt_alt$looks))
 ) |>
   gt() |>
-  fmt_number(columns = 2:5, decimals = 2) |>
+  fmt_number(columns = 2:7, decimals = 2) |>
   tab_header(title = "Monitoring behavior in simulation")
+```
+
+## Example with lower-than-planned event rates
+
+To illustrate adaptation when events are lower than planned, we halve the
+seasonal control event rate from 0.3% to 0.15%. The adaptive design then
+increases subsequent seasonal enrollment based on blinded cumulative event
+counts.
+
+```{r}
+lambdaC_low <- -log(1 - 0.0015) / season_length_years
+
+sim_low_fixed <- simulate_scenario(
+  ve = ve1,
+  adaptive = FALSE,
+  nsim = 300,
+  seed = 505,
+  lambda_c = lambdaC_low
+)
+sim_low_adapt <- simulate_scenario(
+  ve = ve1,
+  adaptive = TRUE,
+  nsim = 300,
+  seed = 606,
+  lambda_c = lambdaC_low
+)
+
+tibble(
+  Scenario = c("Fixed, low event rate", "Adaptive, low event rate"),
+  `Power under H1 (VE=80%)` = c(mean(sim_low_fixed$reject), mean(sim_low_adapt$reject)),
+  `Mean total events` = c(mean(sim_low_fixed$total_events), mean(sim_low_adapt$total_events)),
+  `Mean total enrolled` = c(mean(sim_low_fixed$total_enrolled), mean(sim_low_adapt$total_enrolled)),
+  `Mean looks used` = c(mean(sim_low_fixed$looks), mean(sim_low_adapt$looks))
+) |>
+  gt() |>
+  fmt_number(columns = 2:5, decimals = 3) |>
+  tab_header(
+    title = "Lower-than-planned event rate illustration",
+    subtitle = "Adaptive approach increases enrollment to recover information"
+  )
 ```
 
 ## Larger offline runs (template)
