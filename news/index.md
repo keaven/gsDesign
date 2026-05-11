@@ -93,6 +93,28 @@
   biomarker subgroup to stratified design, and event-driven timing
   ([@keaven](https://github.com/keaven),
   [\#109](https://github.com/keaven/gsDesign/issues/109)).
+- Added
+  [`repeatedPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/repeatedPValueBinomialExact.md)
+  and
+  [`sequentialPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/sequentialPValueBinomialExact.md)
+  to compute repeated and sequential exact-binomial p-values under
+  spending function designs derived from
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  objects.
+- Added
+  [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
+  to run fixed and blinded-adaptive seasonal rare-event simulations with
+  exact-binomial efficacy monitoring summaries.
+- [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
+  now supports explicit spending-time overrides via `usTime` and
+  `lsTime` (for `test.type = 4`) to align with
+  [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
+  and [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  conventions when updating bounds with `observedEvents`.
+- [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
+  now supports `usTime`/`lsTime` inputs and reports futility stopping
+  probabilities (`futility_stop_rate` with `futility_mc_se`) in scenario
+  summaries.
 
 ### Bug fixes
 
@@ -111,6 +133,13 @@
   used `sign(hr1 - hr0)`, preventing correct round-trip conversion. Both
   now use `sign(hr1 - hr0)` ([@keaven](https://github.com/keaven),
   [\#251](https://github.com/keaven/gsDesign/issues/251)).
+- Fixed
+  [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
+  one-sided (`test.type = 1`) updating with `observedEvents` so
+  futility-adjustment code is only executed when `test.type = 4`.
+- [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
+  now respects selective futility testing (`testLower`) when present on
+  a `gsSurv` object by flattening lower spending at inactive looks.
 
 ### Documentation
 
@@ -139,6 +168,19 @@
   documentation and vignette guidance for `informationRates`, calendar
   spending, and `fullSpendingAtFinal`, including a corrected worked
   example of the spending fractions used at the final analysis.
+- Added vignette “Multi-season studies for rare events”
+  ([`vignette("MultiSeasonRareEvents")`](https://keaven.github.io/gsDesign/articles/MultiSeasonRareEvents.md))
+  demonstrating exact-binomial seasonal monitoring, analysis-time bound
+  updates via `toBinomialExact(observedEvents = ...)`, and blinded
+  information-adaptive enrollment scenarios.
+- Expanded the multi-season vignette with: initial
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+  output, IA1-only futility illustration, VE and nominal one-sided
+  p-values at exact-binomial bounds, and clearer simulation tables
+  including efficacy and futility stopping probabilities with
+  non-binding Type I interpretation notes.
+- Reorganized pkgdown article sections to separate general materials,
+  exact binomial workflows, and multiple-hypothesis-testing content.
 
 ### Testing
 
@@ -150,6 +192,18 @@
   [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
   regression tests for `informationRates`, `fullSpendingAtFinal`, and
   inherited sidedness behavior from existing time-to-event designs.
+- Added independent tests for exact-binomial repeated/sequential
+  p-values and for
+  [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
+  input validation, reproducibility, and adaptive enrollment behavior.
+- Added regression test confirming
+  [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
+  one-sided (`test.type = 1`) updates with `observedEvents`.
+- Added regression tests for
+  [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
+  `usTime`/`lsTime` overrides and selective-futility behavior, plus
+  tests for new futility stopping summary outputs from
+  [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md).
 
 ## gsDesign 3.9.0 (February 2026)
 

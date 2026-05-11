@@ -155,26 +155,45 @@ months on and 10 months off each year for 3 years.</p>
 <span><span class="va">enroll_periods</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">10</span>, <span class="fl">2</span>, <span class="fl">10</span>, <span class="fl">2</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_tte</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
-<span>  k <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  test.type <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="va">alpha</span>,</span>
-<span>  beta <span class="op">=</span> <span class="va">beta</span>,</span>
-<span>  timing <span class="op">=</span> <span class="va">timing</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>,</span>
-<span>  sfu <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sfupar <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
-<span>  lambdaC <span class="op">=</span> <span class="va">lambdaC</span>,</span>
-<span>  hr <span class="op">=</span> <span class="va">hr1</span>,</span>
-<span>  hr0 <span class="op">=</span> <span class="va">hr0</span>,</span>
-<span>  eta <span class="op">=</span> <span class="va">eta</span>,</span>
-<span>  gamma <span class="op">=</span> <span class="va">enroll_pattern</span>,</span>
-<span>  R <span class="op">=</span> <span class="va">enroll_periods</span>,</span>
-<span>  T <span class="op">=</span> <span class="fl">42</span>,</span>
-<span>  minfup <span class="op">=</span> <span class="fl">6</span>,</span>
-<span>  ratio <span class="op">=</span> <span class="va">ratio</span></span>
+<span>  k <span class="op">=</span> <span class="fl">3</span>,                  <span class="co"># Number of analyses (3 seasons)</span></span>
+<span>  test.type <span class="op">=</span> <span class="fl">4</span>,          <span class="co"># Non-binding lower bound framework</span></span>
+<span>  alpha <span class="op">=</span> <span class="va">alpha</span>,          <span class="co"># One-sided Type I error</span></span>
+<span>  beta <span class="op">=</span> <span class="va">beta</span>,            <span class="co"># Type II error</span></span>
+<span>  timing <span class="op">=</span> <span class="va">timing</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>,   <span class="co"># Interim information fractions (season 1 and 2)</span></span>
+<span>  sfu <span class="op">=</span> <span class="va">sfHSD</span>,            <span class="co"># Efficacy spending function</span></span>
+<span>  sfupar <span class="op">=</span> <span class="fl">1</span>,             <span class="co"># Pocock-like efficacy spending</span></span>
+<span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>,            <span class="co"># Futility spending function</span></span>
+<span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,            <span class="co"># Futility spending parameter</span></span>
+<span>  lambdaC <span class="op">=</span> <span class="va">lambdaC</span>,      <span class="co"># Control hazard rate during high-risk season</span></span>
+<span>  hr <span class="op">=</span> <span class="va">hr1</span>,               <span class="co"># Alternative hypothesis HR</span></span>
+<span>  hr0 <span class="op">=</span> <span class="va">hr0</span>,              <span class="co"># Null hypothesis HR</span></span>
+<span>  eta <span class="op">=</span> <span class="va">eta</span>,              <span class="co"># Dropout hazard rate</span></span>
+<span>  gamma <span class="op">=</span> <span class="va">enroll_pattern</span>, <span class="co"># Relative enrollment rates by period</span></span>
+<span>  R <span class="op">=</span> <span class="va">enroll_periods</span>,     <span class="co"># Period durations (2 months on, 10 months off)</span></span>
+<span>  T <span class="op">=</span> <span class="fl">42</span>,                 <span class="co"># Trial duration in months</span></span>
+<span>  minfup <span class="op">=</span> <span class="fl">6</span>,             <span class="co"># Minimum follow-up for final enrollees</span></span>
+<span>  ratio <span class="op">=</span> <span class="va">ratio</span>,          <span class="co"># Experimental:control randomization ratio</span></span>
+<span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># Futility only at IA1</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">design_tte</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    Analysis              Value Efficacy Futility</span></span>
+<span><span class="co">#&gt;   IA 1: 33%                  Z   2.2831  -0.1118</span></span>
+<span><span class="co">#&gt;     N: 1716        p (1-sided)   0.0112   0.5445</span></span>
+<span><span class="co">#&gt;  Events: 12       ~HR at bound   0.1528   0.7542</span></span>
+<span><span class="co">#&gt;   Month: 13 P(Cross) if HR=0.7   0.0112   0.4555</span></span>
+<span><span class="co">#&gt;             P(Cross) if HR=0.2   0.4127   0.0148</span></span>
+<span><span class="co">#&gt;   IA 2: 67%                  Z   2.2844       NA</span></span>
+<span><span class="co">#&gt;     N: 2800        p (1-sided)   0.0112       NA</span></span>
+<span><span class="co">#&gt;  Events: 24       ~HR at bound   0.2385       NA</span></span>
+<span><span class="co">#&gt;   Month: 25 P(Cross) if HR=0.7   0.0192       NA</span></span>
+<span><span class="co">#&gt;             P(Cross) if HR=0.2   0.7566       NA</span></span>
+<span><span class="co">#&gt;       Final                  Z   2.3013       NA</span></span>
+<span><span class="co">#&gt;     N: 3232        p (1-sided)   0.0107       NA</span></span>
+<span><span class="co">#&gt;  Events: 36       ~HR at bound   0.2887       NA</span></span>
+<span><span class="co">#&gt;   Month: 46 P(Cross) if HR=0.7   0.0247       NA</span></span>
+<span><span class="co">#&gt;             P(Cross) if HR=0.2   0.9080       NA</span></span>
 <span></span>
 <span><span class="va">planned_final_events</span> <span class="op">&lt;-</span> <span class="va">design_tte</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">design_tte</span><span class="op">$</span><span class="va">k</span><span class="op">]</span></span>
 <span><span class="va">planned_counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">planned_final_events</span> <span class="op">*</span> <span class="va">timing</span><span class="op">)</span><span class="op">)</span></span>
@@ -183,14 +202,19 @@ months on and 10 months off each year for 3 years.</p>
 <span><span class="va">planned_counts</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">planned_counts</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, <span class="va">planned_counts</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1L</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_exact</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toBinomialExact.html">toBinomialExact</a></span><span class="op">(</span><span class="va">design_tte</span>, observedEvents <span class="op">=</span> <span class="va">planned_counts</span><span class="op">)</span></span>
+<span><span class="va">planned_cum_enrollment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">design_tte</span><span class="op">$</span><span class="va">eNC</span> <span class="op">+</span> <span class="va">design_tte</span><span class="op">$</span><span class="va">eNE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">planned_enrollment_period</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">design_tte</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="va">enroll_periods</span></span>
 <span><span class="va">season_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">planned_enrollment_by_season</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tapply.html" class="external-link">tapply</a></span><span class="op">(</span><span class="va">planned_enrollment_period</span>, <span class="va">season_id</span>, <span class="va">sum</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">planned_enrollment_control</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">planned_enrollment_by_season</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">ratio</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">planned_enrollment_experimental</span> <span class="op">&lt;-</span> <span class="va">planned_enrollment_by_season</span> <span class="op">-</span> <span class="va">planned_enrollment_control</span></span></code></pre></div>
-<p>The table below summarizes planned event looks and exact efficacy
-bounds.</p>
+<p>The table above is the initial survival-design approximation and
+includes the approximate futility <code>Z</code>-boundary. The table
+below summarizes planned event looks and exact binomial
+efficacy/futility bounds. In this table, <code>x</code> is the
+cumulative number of observed events in the experimental arm at a given
+analysis.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">target_alpha_spend</span> <span class="op">&lt;-</span> <span class="va">design_tte</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="fu">sf</span><span class="op">(</span></span>
 <span>  alpha <span class="op">=</span> <span class="va">alpha</span>,</span>
@@ -200,39 +224,108 @@ bounds.</p>
 <span></span>
 <span><span class="va">achieved_alpha_spend</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/gsBinomialExact.html">gsBinomialExact</a></span><span class="op">(</span></span>
-<span>    k <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">k</span>,</span>
-<span>    theta <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>    n.I <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span>,</span>
-<span>    a <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>,</span>
-<span>    b <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span>    k <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">k</span>,            <span class="co"># Number of analyses</span></span>
+<span>    theta <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="co"># Null event probability in experimental arm</span></span>
+<span>    n.I <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span>,        <span class="co"># Cumulative events by analysis</span></span>
+<span>    a <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>,  <span class="co"># Efficacy bounds (x &lt;= a crosses)</span></span>
+<span>    b <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span> <span class="op">+</span> <span class="fl">1</span>       <span class="co"># Non-binding upper bound for alpha-spend check</span></span>
 <span>  <span class="op">)</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">achieved_power_h1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="../reference/gsBinomialExact.html">gsBinomialExact</a></span><span class="op">(</span></span>
-<span>    k <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">k</span>,</span>
-<span>    theta <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span>
-<span>    n.I <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span>,</span>
-<span>    a <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>,</span>
-<span>    b <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span> <span class="op">+</span> <span class="fl">1</span></span>
+<span>    k <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">k</span>,            <span class="co"># Number of analyses</span></span>
+<span>    theta <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="co"># Alternative event probability in experimental arm</span></span>
+<span>    n.I <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span>,        <span class="co"># Cumulative events by analysis</span></span>
+<span>    a <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>,  <span class="co"># Efficacy bounds</span></span>
+<span>    b <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span> <span class="op">+</span> <span class="fl">1</span>       <span class="co"># Non-binding upper bound for cumulative efficacy probability</span></span>
 <span>  <span class="op">)</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ve_from_bound</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">n</span>, <span class="va">ratio</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA_real_</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">ok</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">&gt;=</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">x</span> <span class="op">&lt;</span> <span class="va">n</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="va">ok</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">p</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">[</span><span class="va">ok</span><span class="op">]</span> <span class="op">/</span> <span class="va">n</span><span class="op">[</span><span class="va">ok</span><span class="op">]</span></span>
+<span>    <span class="va">hr</span> <span class="op">&lt;-</span> <span class="va">p</span> <span class="op">/</span> <span class="op">(</span><span class="va">ratio</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">p</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">out</span><span class="op">[</span><span class="va">ok</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">hr</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">out</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">futility_active</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">design_tte</span><span class="op">$</span><span class="va">testLower</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">tl</span> <span class="op">&lt;-</span> <span class="va">design_tte</span><span class="op">$</span><span class="va">testLower</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">tl</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="va">tl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">tl</span>, <span class="va">design_exact</span><span class="op">$</span><span class="va">k</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="va">tl</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="va">design_exact</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span> <span class="op">&lt;=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">nominal_p_futility</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA_real_</span>, <span class="va">design_exact</span><span class="op">$</span><span class="va">k</span><span class="op">)</span></span>
+<span><span class="va">nominal_p_futility</span><span class="op">[</span><span class="va">futility_active</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">pbinom</a></span><span class="op">(</span></span>
+<span>  q <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="va">futility_active</span><span class="op">]</span>,</span>
+<span>  size <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">futility_active</span><span class="op">]</span>,</span>
+<span>  prob <span class="op">=</span> <span class="va">p0</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  Season <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
 <span>  `Spending time` <span class="op">=</span> <span class="va">timing</span>,</span>
 <span>  `Planned total events` <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span>,</span>
+<span>  `Approx cumulative enrollment` <span class="op">=</span> <span class="va">planned_cum_enrollment</span>,</span>
 <span>  `Exact efficacy bound (x &lt;= a)` <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>,</span>
+<span>  `VE at bound (efficacy)` <span class="op">=</span> <span class="fu">ve_from_bound</span><span class="op">(</span><span class="va">design_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>, <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span>, <span class="va">ratio</span><span class="op">)</span>,</span>
+<span>  `Nominal 1-sided p at bound (efficacy)` <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">pbinom</a></span><span class="op">(</span><span class="va">design_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>, <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span>, <span class="va">p0</span><span class="op">)</span>,</span>
+<span>  `Exact futility bound (x &gt;= b)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">futility_active</span>, <span class="va">design_exact</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
+<span>  `VE at bound (futility)` <span class="op">=</span> <span class="fu">ve_from_bound</span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">futility_active</span>, <span class="va">design_exact</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="op">-</span><span class="fl">1L</span><span class="op">)</span>,</span>
+<span>    <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span>,</span>
+<span>    <span class="va">ratio</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  `Nominal 1-sided p at bound (futility)` <span class="op">=</span> <span class="va">nominal_p_futility</span>,</span>
 <span>  `Target cumulative alpha spend` <span class="op">=</span> <span class="va">target_alpha_spend</span>,</span>
 <span>  `Achieved cumulative alpha spend` <span class="op">=</span> <span class="va">achieved_alpha_spend</span>,</span>
 <span>  `Cumulative power under H1` <span class="op">=</span> <span class="va">achieved_power_h1</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>, decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">7</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_percent.html" class="external-link">fmt_percent</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">`VE at bound (efficacy)`</span>, <span class="va">`VE at bound (futility)`</span><span class="op">)</span>, decimals <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span></span>
+<span>    columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="va">`Nominal 1-sided p at bound (efficacy)`</span>,</span>
+<span>      <span class="va">`Nominal 1-sided p at bound (futility)`</span>,</span>
+<span>      <span class="va">`Target cumulative alpha spend`</span>,</span>
+<span>      <span class="va">`Achieved cumulative alpha spend`</span>,</span>
+<span>      <span class="va">`Cumulative power under H1`</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    decimals <span class="op">=</span> <span class="fl">4</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_spanner.html" class="external-link">tab_spanner</a></span><span class="op">(</span></span>
+<span>    label <span class="op">=</span> <span class="st">"Efficacy"</span>,</span>
+<span>    columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="va">`Exact efficacy bound (x &lt;= a)`</span>,</span>
+<span>      <span class="va">`VE at bound (efficacy)`</span>,</span>
+<span>      <span class="va">`Nominal 1-sided p at bound (efficacy)`</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_spanner.html" class="external-link">tab_spanner</a></span><span class="op">(</span></span>
+<span>    label <span class="op">=</span> <span class="st">"Futility"</span>,</span>
+<span>    columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="va">`Exact futility bound (x &gt;= b)`</span>,</span>
+<span>      <span class="va">`VE at bound (futility)`</span>,</span>
+<span>      <span class="va">`Nominal 1-sided p at bound (futility)`</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Planned exact binomial seasonal monitoring"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"Super-superiority example with Pocock-like efficacy spending"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span></span>
+<span>    footnote <span class="op">=</span> <span class="st">"x denotes cumulative observed events in the experimental arm; efficacy is established when x is at or below the listed efficacy bound."</span>,</span>
+<span>    locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">`Exact efficacy bound (x &lt;= a)`</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span></span>
+<span>    footnote <span class="op">=</span> <span class="st">"Futility is specified only at IA1; blank futility entries indicate no futility stopping boundary at that analysis."</span>,</span>
+<span>    locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">`Exact futility bound (x &gt;= b)`</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#mwlefoodfi table {
@@ -686,19 +779,35 @@ bounds.</p>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
 <tr class="gt_heading">
-<td colspan="7" class="gt_heading gt_title gt_font_normal" style>Planned exact binomial seasonal monitoring</td>
+<td colspan="13" class="gt_heading gt_title gt_font_normal" style>Planned exact binomial seasonal monitoring</td>
     </tr>
 <tr class="gt_heading">
-<td colspan="7" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Super-superiority example with Pocock-like efficacy spending</td>
+<td colspan="13" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Super-superiority example with Pocock-like efficacy spending</td>
+    </tr>
+<tr class="gt_col_headings gt_spanner_row">
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Season">Season</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Spending-time">Spending time</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Planned-total-events">Planned total events</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Approx-cumulative-enrollment">Approx cumulative enrollment</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3" scope="colgroup" id="Efficacy">
+        <div class="gt_column_spanner">Efficacy</div>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3" scope="colgroup" id="Futility">
+        <div class="gt_column_spanner">Futility</div>
+      </th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Target-cumulative-alpha-spend">Target cumulative alpha spend</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Achieved-cumulative-alpha-spend">Achieved cumulative alpha spend</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Cumulative-power-under-H1">Cumulative power under H1</th>
     </tr>
 <tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Season">Season</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Spending-time">Spending time</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Planned-total-events">Planned total events</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Exact-efficacy-bound-(x-&lt;=-a)">Exact efficacy bound (x &lt;= a)</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Target-cumulative-alpha-spend">Target cumulative alpha spend</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Achieved-cumulative-alpha-spend">Achieved cumulative alpha spend</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Cumulative-power-under-H1">Cumulative power under H1</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Exact-efficacy-bound-(x-&lt;=-a)">Exact efficacy bound (x &lt;= a)<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="VE-at-bound-(efficacy)">VE at bound (efficacy)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Nominal-1-sided-p-at-bound-(efficacy)">Nominal 1-sided p at bound (efficacy)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Exact-futility-bound-(x-&gt;=-b)">Exact futility bound (x &gt;= b)<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="VE-at-bound-(futility)">VE at bound (futility)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Nominal-1-sided-p-at-bound-(futility)">Nominal 1-sided p at bound (futility)</th>
     </tr>
 </thead>
 <tbody class="gt_table_body">
@@ -706,7 +815,13 @@ bounds.</p>
 <td headers="Season" class="gt_row gt_right">1</td>
 <td headers="Spending time" class="gt_row gt_right">0.333</td>
 <td headers="Planned total events" class="gt_row gt_right">12</td>
+<td headers="Approx cumulative enrollment" class="gt_row gt_right">1715</td>
 <td headers="Exact efficacy bound (x &lt;= a)" class="gt_row gt_right">3</td>
+<td headers="VE at bound (efficacy)" class="gt_row gt_right">88.9%</td>
+<td headers="Nominal 1-sided p at bound (efficacy)" class="gt_row gt_right">0.0030</td>
+<td headers="Exact futility bound (x &gt;= b)" class="gt_row gt_right">9</td>
+<td headers="VE at bound (futility)" class="gt_row gt_right">0.0%</td>
+<td headers="Nominal 1-sided p at bound (futility)" class="gt_row gt_right">0.7975</td>
 <td headers="Target cumulative alpha spend" class="gt_row gt_right">0.0112</td>
 <td headers="Achieved cumulative alpha spend" class="gt_row gt_right">0.0030</td>
 <td headers="Cumulative power under H1" class="gt_row gt_right">0.2824</td>
@@ -715,7 +830,13 @@ bounds.</p>
 <td headers="Season" class="gt_row gt_right">2</td>
 <td headers="Spending time" class="gt_row gt_right">0.667</td>
 <td headers="Planned total events" class="gt_row gt_right">24</td>
+<td headers="Approx cumulative enrollment" class="gt_row gt_right">2799</td>
 <td headers="Exact efficacy bound (x &lt;= a)" class="gt_row gt_right">10</td>
+<td headers="VE at bound (efficacy)" class="gt_row gt_right">76.2%</td>
+<td headers="Nominal 1-sided p at bound (efficacy)" class="gt_row gt_right">0.0075</td>
+<td headers="Exact futility bound (x &gt;= b)" class="gt_row gt_right">NA</td>
+<td headers="VE at bound (futility)" class="gt_row gt_right">NA</td>
+<td headers="Nominal 1-sided p at bound (futility)" class="gt_row gt_right">NA</td>
 <td headers="Target cumulative alpha spend" class="gt_row gt_right">0.0192</td>
 <td headers="Achieved cumulative alpha spend" class="gt_row gt_right">0.0094</td>
 <td headers="Cumulative power under H1" class="gt_row gt_right">0.7469</td>
@@ -724,12 +845,28 @@ bounds.</p>
 <td headers="Season" class="gt_row gt_right">3</td>
 <td headers="Spending time" class="gt_row gt_right">1.000</td>
 <td headers="Planned total events" class="gt_row gt_right">36</td>
+<td headers="Approx cumulative enrollment" class="gt_row gt_right">3232</td>
 <td headers="Exact efficacy bound (x &lt;= a)" class="gt_row gt_right">18</td>
+<td headers="VE at bound (efficacy)" class="gt_row gt_right">66.7%</td>
+<td headers="Nominal 1-sided p at bound (efficacy)" class="gt_row gt_right">0.0203</td>
+<td headers="Exact futility bound (x &gt;= b)" class="gt_row gt_right">NA</td>
+<td headers="VE at bound (futility)" class="gt_row gt_right">NA</td>
+<td headers="Nominal 1-sided p at bound (futility)" class="gt_row gt_right">NA</td>
 <td headers="Target cumulative alpha spend" class="gt_row gt_right">0.0250</td>
 <td headers="Achieved cumulative alpha spend" class="gt_row gt_right">0.0244</td>
 <td headers="Cumulative power under H1" class="gt_row gt_right">0.9578</td>
 </tr>
 </tbody>
+<tfoot>
+<tr class="gt_footnotes">
+<td class="gt_footnote" colspan="13">
+<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> x denotes cumulative observed events in the experimental arm; efficacy is established when x is at or below the listed efficacy bound.</td>
+    </tr>
+<tr class="gt_footnotes">
+<td class="gt_footnote" colspan="13">
+<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span> Futility is specified only at IA1; blank futility entries indicate no futility stopping boundary at that analysis.</td>
+    </tr>
+</tfoot>
 </table>
 </div>
 <p>The next table gives planned enrollment/sample size by season and
@@ -1257,9 +1394,13 @@ overall.</p>
 </h2>
 <p>Suppose observed event totals at the three seasonal analyses are
 equal to the planned totals and observed experimental events are as
-below.</p>
+below. Here, <code>x</code> is the observed number of events in the
+experimental arm. The offset sets season 2 to be one event above the
+efficacy bound to demonstrate that the repeated p-value is greater than
+0.025.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">example_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">design_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0L</span>, <span class="fl">1L</span>, <span class="fl">0L</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">x_offset_from_efficacy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0L</span>, <span class="fl">1L</span>, <span class="fl">0L</span><span class="op">)</span></span>
+<span><span class="va">example_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="fl">0L</span>, <span class="va">design_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span> <span class="op">+</span> <span class="va">x_offset_from_efficacy</span><span class="op">)</span></span>
 <span><span class="va">example_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/repeatedPValueBinomialExact.html">repeatedPValueBinomialExact</a></span><span class="op">(</span></span>
 <span>  gsD <span class="op">=</span> <span class="va">design_tte</span>,</span>
 <span>  n.I <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span>,</span>
@@ -1268,11 +1409,11 @@ below.</p>
 <span><span class="va">example_p</span></span>
 <span><span class="co">#&gt;   Analysis n.I  x repeated_p_value</span></span>
 <span><span class="co">#&gt; 1        1  12  3      0.006666324</span></span>
-<span><span class="co">#&gt; 2        2  24  9      0.003251657</span></span>
+<span><span class="co">#&gt; 2        2  24 11      0.040110828</span></span>
 <span><span class="co">#&gt; 3        3  36 18      0.024388104</span></span>
 <span><span class="co">#&gt;   bound_at_repeated_p_value</span></span>
 <span><span class="co">#&gt; 1                         3</span></span>
-<span><span class="co">#&gt; 2                         9</span></span>
+<span><span class="co">#&gt; 2                        11</span></span>
 <span><span class="co">#&gt; 3                        18</span></span></code></pre></div>
 <p>The sequential p-value is the minimum repeated p-value:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -1281,61 +1422,53 @@ below.</p>
 <span>  n.I <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span>,</span>
 <span>  x <span class="op">=</span> <span class="va">example_x</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.003251657</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.006666324</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="seasonal-eventdropout-model-for-simulation">Seasonal event/dropout model for simulation<a class="anchor" aria-label="anchor" href="#seasonal-eventdropout-model-for-simulation"></a>
+<h2 id="update-exact-bounds-at-analysis-time">Update exact bounds at analysis time<a class="anchor" aria-label="anchor" href="#update-exact-bounds-at-analysis-time"></a>
 </h2>
-<p>For each arm and season, we use a competing-risk approximation with
-constant event and dropout hazards over 6 months:</p>
-<ul>
-<li>event before dropout,</li>
-<li>dropout before event,</li>
-<li>neither event nor dropout (carries into next season).</li>
-</ul>
-<p>In the simulation, we add a new enrollment cohort each season to
-represent annual enrollment windows.</p>
+<p>The official package path for updating exact-binomial bounds at
+analysis time is to call <code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> with
+<code>observedEvents</code>.</p>
+<p>The spending denominator remains the original planned final event
+count from the design object, so earlier analyses are not changed when
+observed totals differ from plan. At look <code>j</code>, spending time
+is based on <code>observedEvents[j] / planned_final_events</code>
+(capped at 1). If a look reaches the planned final event count, all
+remaining spending is used at that look.</p>
+<p>If the final look is under-run but you still want to use full alpha
+at the last analysis, set <code>maxSpend = TRUE</code>. This only
+changes the final spending time to 1 and leaves earlier looks
+unchanged.</p>
+<p>For explicit control, you can pass <code>usTime</code> (and for
+<code>test.type = 4</code>, <code>lsTime</code>) directly to
+<code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code>, following the same spending-time
+conventions as <code><a href="../reference/gsDesign.html">gsDesign()</a></code> and <code><a href="../reference/nSurv.html">gsSurv()</a></code>. As
+above, setting <code>x</code> one event above an updated efficacy bound
+at a look gives a repeated p-value above 0.025 for that analysis.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">seasonal_probs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">ve</span>, <span class="va">lambda_c</span>, <span class="va">eta</span>, <span class="va">season_years</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">lambda_e</span> <span class="op">&lt;-</span> <span class="va">lambda_c</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">ve</span><span class="op">)</span></span>
-<span>  <span class="va">arm_probs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">lambda_event</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">total</span> <span class="op">&lt;-</span> <span class="va">lambda_event</span> <span class="op">+</span> <span class="va">eta</span></span>
-<span>    <span class="va">p_event</span> <span class="op">&lt;-</span> <span class="va">lambda_event</span> <span class="op">/</span> <span class="va">total</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">total</span> <span class="op">*</span> <span class="va">season_years</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="va">p_drop</span> <span class="op">&lt;-</span> <span class="va">eta</span> <span class="op">/</span> <span class="va">total</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">total</span> <span class="op">*</span> <span class="va">season_years</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="va">p_stay</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">total</span> <span class="op">*</span> <span class="va">season_years</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>event <span class="op">=</span> <span class="va">p_event</span>, dropout <span class="op">=</span> <span class="va">p_drop</span>, stay <span class="op">=</span> <span class="va">p_stay</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>control <span class="op">=</span> <span class="fu">arm_probs</span><span class="op">(</span><span class="va">lambda_c</span><span class="op">)</span>, experimental <span class="op">=</span> <span class="fu">arm_probs</span><span class="op">(</span><span class="va">lambda_e</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">probs_alt</span> <span class="op">&lt;-</span> <span class="fu">seasonal_probs</span><span class="op">(</span>ve <span class="op">=</span> <span class="va">ve1</span>, lambda_c <span class="op">=</span> <span class="va">lambdaC</span>, eta <span class="op">=</span> <span class="va">eta</span><span class="op">)</span></span>
-<span><span class="va">probs_null</span> <span class="op">&lt;-</span> <span class="fu">seasonal_probs</span><span class="op">(</span>ve <span class="op">=</span> <span class="va">ve0</span>, lambda_c <span class="op">=</span> <span class="va">lambdaC</span>, eta <span class="op">=</span> <span class="va">eta</span><span class="op">)</span></span></code></pre></div>
-<p>To keep the simulation aligned with the planned final information, we
-select a per-season enrollment target so expected total events under the
-alternative are close to the planned final event count.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">expected_events_3_seasons</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">p_event</span>, <span class="va">p_stay</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">p_event</span> <span class="op">*</span> <span class="op">(</span><span class="fl">3</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">p_stay</span> <span class="op">+</span> <span class="va">p_stay</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">f_control</span> <span class="op">&lt;-</span> <span class="fu">expected_events_3_seasons</span><span class="op">(</span></span>
-<span>  p_event <span class="op">=</span> <span class="va">probs_alt</span><span class="op">$</span><span class="va">control</span><span class="op">[</span><span class="st">"event"</span><span class="op">]</span>,</span>
-<span>  p_stay <span class="op">=</span> <span class="va">probs_alt</span><span class="op">$</span><span class="va">control</span><span class="op">[</span><span class="st">"stay"</span><span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="va">observed_counts_update</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="va">planned_counts</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>  <span class="va">planned_counts</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">planned_counts</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1L</span>, <span class="va">planned_counts</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="fl">5L</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">f_experimental</span> <span class="op">&lt;-</span> <span class="fu">expected_events_3_seasons</span><span class="op">(</span></span>
-<span>  p_event <span class="op">=</span> <span class="va">probs_alt</span><span class="op">$</span><span class="va">experimental</span><span class="op">[</span><span class="st">"event"</span><span class="op">]</span>,</span>
-<span>  p_stay <span class="op">=</span> <span class="va">probs_alt</span><span class="op">$</span><span class="va">experimental</span><span class="op">[</span><span class="st">"stay"</span><span class="op">]</span></span>
+<span><span class="va">update_exact</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toBinomialExact.html">toBinomialExact</a></span><span class="op">(</span><span class="va">design_tte</span>, observedEvents <span class="op">=</span> <span class="va">observed_counts_update</span><span class="op">)</span></span>
+<span><span class="va">update_exact_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toBinomialExact.html">toBinomialExact</a></span><span class="op">(</span></span>
+<span>  <span class="va">design_tte</span>,</span>
+<span>  observedEvents <span class="op">=</span> <span class="va">observed_counts_update</span>,</span>
+<span>  maxSpend <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">enroll_control_per_season</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">planned_final_events</span> <span class="op">/</span> <span class="op">(</span><span class="va">f_control</span> <span class="op">+</span> <span class="va">ratio</span> <span class="op">*</span> <span class="va">f_experimental</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">enroll_experimental_per_season</span> <span class="op">&lt;-</span> <span class="va">ratio</span> <span class="op">*</span> <span class="va">enroll_control_per_season</span></span>
 <span></span>
 <span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  Arm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Control"</span>, <span class="st">"Experimental"</span><span class="op">)</span>,</span>
-<span>  `Enrolled each season` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">enroll_control_per_season</span>, <span class="va">enroll_experimental_per_season</span><span class="op">)</span></span>
+<span>  Analysis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">update_exact</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,</span>
+<span>  `Observed total events` <span class="op">=</span> <span class="va">update_exact</span><span class="op">$</span><span class="va">n.I</span>,</span>
+<span>  `Updated efficacy bound (x &lt;= a), default spending` <span class="op">=</span> <span class="va">update_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>,</span>
+<span>  `Updated efficacy bound (x &lt;= a), maxSpend=TRUE` <span class="op">=</span> <span class="va">update_exact_full</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>,</span>
+<span>  `Updated futility bound, default spending` <span class="op">=</span> <span class="va">update_exact</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>,</span>
+<span>  `Updated futility bound, maxSpend=TRUE` <span class="op">=</span> <span class="va">update_exact_full</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Simulation enrollment assumptions"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Updated exact bounds using observedEvents"</span><span class="op">)</span></span></code></pre></div>
 <div id="ulbfdpbcyv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ulbfdpbcyv table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1788,190 +1921,113 @@ alternative are close to the planned final event count.</p>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
 <tr class="gt_heading">
-<td colspan="2" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Simulation enrollment assumptions</td>
+<td colspan="6" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Updated exact bounds using observedEvents</td>
     </tr>
 <tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Arm">Arm</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Enrolled-each-season">Enrolled each season</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Analysis">Analysis</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Observed-total-events">Observed total events</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Updated-efficacy-bound-(x-&lt;=-a),-default-spending">Updated efficacy bound (x &lt;= a), default spending</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Updated-efficacy-bound-(x-&lt;=-a),-maxSpend=TRUE">Updated efficacy bound (x &lt;= a), maxSpend=TRUE</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Updated-futility-bound,-default-spending">Updated futility bound, default spending</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Updated-futility-bound,-maxSpend=TRUE">Updated futility bound, maxSpend=TRUE</th>
     </tr>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Arm" class="gt_row gt_left">Control</td>
-<td headers="Enrolled each season" class="gt_row gt_right">1410</td>
+<td headers="Analysis" class="gt_row gt_right">1</td>
+<td headers="Observed total events" class="gt_row gt_right">12</td>
+<td headers="Updated efficacy bound (x &lt;= a), default spending" class="gt_row gt_right">3</td>
+<td headers="Updated efficacy bound (x &lt;= a), maxSpend=TRUE" class="gt_row gt_right">3</td>
+<td headers="Updated futility bound, default spending" class="gt_row gt_right">9</td>
+<td headers="Updated futility bound, maxSpend=TRUE" class="gt_row gt_right">9</td>
 </tr>
 <tr>
-<td headers="Arm" class="gt_row gt_left">Experimental</td>
-<td headers="Enrolled each season" class="gt_row gt_right">4230</td>
+<td headers="Analysis" class="gt_row gt_right">2</td>
+<td headers="Observed total events" class="gt_row gt_right">24</td>
+<td headers="Updated efficacy bound (x &lt;= a), default spending" class="gt_row gt_right">10</td>
+<td headers="Updated efficacy bound (x &lt;= a), maxSpend=TRUE" class="gt_row gt_right">10</td>
+<td headers="Updated futility bound, default spending" class="gt_row gt_right">16</td>
+<td headers="Updated futility bound, maxSpend=TRUE" class="gt_row gt_right">16</td>
+</tr>
+<tr>
+<td headers="Analysis" class="gt_row gt_right">3</td>
+<td headers="Observed total events" class="gt_row gt_right">31</td>
+<td headers="Updated efficacy bound (x &lt;= a), default spending" class="gt_row gt_right">15</td>
+<td headers="Updated efficacy bound (x &lt;= a), maxSpend=TRUE" class="gt_row gt_right">15</td>
+<td headers="Updated futility bound, default spending" class="gt_row gt_right">20</td>
+<td headers="Updated futility bound, maxSpend=TRUE" class="gt_row gt_right">20</td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-<div class="section level2">
-<h2 id="fixed-and-adaptive-simulation-functions">Fixed and adaptive simulation functions<a class="anchor" aria-label="anchor" href="#fixed-and-adaptive-simulation-functions"></a>
-</h2>
-<p>The adaptive rule is intentionally simple and blinded:</p>
-<ul>
-<li>after season 1, increase season-2 enrollment if total events are
-below planned look-1 events,</li>
-<li>after season 2, optionally increase season-3 enrollment
-similarly,</li>
-<li>spending fractions remain fixed at <code>1/3, 2/3, 1</code>.</li>
-</ul>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">simulate_one_trial</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
-<span>    <span class="va">ve</span>,</span>
-<span>    <span class="va">adaptive</span> <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>    <span class="va">max_multiplier</span> <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>    <span class="va">lambda_c</span> <span class="op">=</span> <span class="va">lambdaC</span>,</span>
-<span>    <span class="va">eta_rate</span> <span class="op">=</span> <span class="va">eta</span>,</span>
-<span>    <span class="va">enroll_control</span> <span class="op">=</span> <span class="va">enroll_control_per_season</span>,</span>
-<span>    <span class="va">enroll_experimental</span> <span class="op">=</span> <span class="va">enroll_experimental_per_season</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu">seasonal_probs</span><span class="op">(</span>ve <span class="op">=</span> <span class="va">ve</span>, lambda_c <span class="op">=</span> <span class="va">lambda_c</span>, eta <span class="op">=</span> <span class="va">eta_rate</span><span class="op">)</span></span>
-<span></span>
-<span>  <span class="va">enroll_c</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">enroll_control</span>, <span class="fl">3L</span><span class="op">)</span></span>
-<span>  <span class="va">enroll_e</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">enroll_experimental</span>, <span class="fl">3L</span><span class="op">)</span></span>
-<span>  <span class="va">at_risk_c</span> <span class="op">&lt;-</span> <span class="fl">0L</span></span>
-<span>  <span class="va">at_risk_e</span> <span class="op">&lt;-</span> <span class="fl">0L</span></span>
-<span></span>
-<span>  <span class="va">cum_total</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">3L</span><span class="op">)</span></span>
-<span>  <span class="va">cum_exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">3L</span><span class="op">)</span></span>
-<span></span>
-<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">season</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">adaptive</span> <span class="op">&amp;&amp;</span> <span class="va">season</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">mult</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">max_multiplier</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">planned_counts</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">cum_total</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>      <span class="va">enroll_c</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">enroll_control</span> <span class="op">*</span> <span class="va">mult</span><span class="op">)</span><span class="op">)</span></span>
-<span>      <span class="va">enroll_e</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">enroll_experimental</span> <span class="op">*</span> <span class="va">mult</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">adaptive</span> <span class="op">&amp;&amp;</span> <span class="va">season</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">mult</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">max_multiplier</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">planned_counts</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">cum_total</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>      <span class="va">enroll_c</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">enroll_control</span> <span class="op">*</span> <span class="va">mult</span><span class="op">)</span><span class="op">)</span></span>
-<span>      <span class="va">enroll_e</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">enroll_experimental</span> <span class="op">*</span> <span class="va">mult</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span></span>
-<span>    <span class="va">at_risk_c</span> <span class="op">&lt;-</span> <span class="va">at_risk_c</span> <span class="op">+</span> <span class="va">enroll_c</span><span class="op">[</span><span class="va">season</span><span class="op">]</span></span>
-<span>    <span class="va">at_risk_e</span> <span class="op">&lt;-</span> <span class="va">at_risk_e</span> <span class="op">+</span> <span class="va">enroll_e</span><span class="op">[</span><span class="va">season</span><span class="op">]</span></span>
-<span></span>
-<span>    <span class="va">out_c</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Multinom.html" class="external-link">rmultinom</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">at_risk_c</span>, <span class="va">probs</span><span class="op">$</span><span class="va">control</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="va">out_e</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Multinom.html" class="external-link">rmultinom</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">at_risk_e</span>, <span class="va">probs</span><span class="op">$</span><span class="va">experimental</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span>    <span class="va">inc_total</span> <span class="op">&lt;-</span> <span class="va">out_c</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">out_e</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span>    <span class="va">inc_exp</span> <span class="op">&lt;-</span> <span class="va">out_e</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span></span>
-<span>    <span class="va">cum_total</span><span class="op">[</span><span class="va">season</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="va">season</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="va">inc_total</span> <span class="kw">else</span> <span class="va">cum_total</span><span class="op">[</span><span class="va">season</span> <span class="op">-</span> <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">inc_total</span></span>
-<span>    <span class="va">cum_exp</span><span class="op">[</span><span class="va">season</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="va">season</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="va">inc_exp</span> <span class="kw">else</span> <span class="va">cum_exp</span><span class="op">[</span><span class="va">season</span> <span class="op">-</span> <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">inc_exp</span></span>
-<span></span>
-<span>    <span class="va">at_risk_c</span> <span class="op">&lt;-</span> <span class="va">out_c</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span>
-<span>    <span class="va">at_risk_e</span> <span class="op">&lt;-</span> <span class="va">out_e</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="co"># Use analyses through the first look where cumulative events reach/exceed</span></span>
-<span>  <span class="co"># planned final events, so only one look has spending time &gt;= 1.</span></span>
-<span>  <span class="va">reached_final</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">cum_total</span> <span class="op">&gt;=</span> <span class="va">planned_final_events</span><span class="op">)</span></span>
-<span>  <span class="va">looks</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">reached_final</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span> <span class="kw">else</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">reached_final</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
-<span>  <span class="va">informative</span> <span class="op">&lt;-</span> <span class="va">looks</span><span class="op">[</span><span class="va">cum_total</span><span class="op">[</span><span class="va">looks</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">informative</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">informative</span> <span class="op">&lt;-</span> <span class="va">informative</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">cum_total</span><span class="op">[</span><span class="va">informative</span><span class="op">]</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">]</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">informative</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>reject <span class="op">=</span> <span class="cn">FALSE</span>, looks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">looks</span><span class="op">)</span>, total_events <span class="op">=</span> <span class="va">cum_total</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="co"># Internal helper is used only for vignette simulation speed.</span></span>
-<span>  <span class="va">bounds_at_alpha</span> <span class="op">&lt;-</span> <span class="fu">gsDesign</span><span class="fu">:::</span><span class="fu">binomialExactLowerBound</span><span class="op">(</span></span>
-<span>    gsD <span class="op">=</span> <span class="va">design_tte</span>,</span>
-<span>    n.I <span class="op">=</span> <span class="va">cum_total</span><span class="op">[</span><span class="va">informative</span><span class="op">]</span>,</span>
-<span>    alpha <span class="op">=</span> <span class="va">alpha</span></span>
-<span>  <span class="op">)</span></span>
-<span>  <span class="va">reject</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="va">cum_exp</span><span class="op">[</span><span class="va">informative</span><span class="op">]</span> <span class="op">&lt;=</span> <span class="va">bounds_at_alpha</span><span class="op">)</span></span>
-<span>  <span class="va">total_enrolled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">enroll_c</span> <span class="op">+</span> <span class="va">enroll_e</span><span class="op">)</span></span>
-<span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    reject <span class="op">=</span> <span class="va">reject</span>,</span>
-<span>    looks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">informative</span><span class="op">)</span>,</span>
-<span>    total_events <span class="op">=</span> <span class="va">cum_total</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
-<span>    total_enrolled <span class="op">=</span> <span class="va">total_enrolled</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">simulate_scenario</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
-<span>    <span class="va">ve</span>,</span>
-<span>    <span class="va">adaptive</span> <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>    <span class="va">nsim</span> <span class="op">=</span> <span class="fl">600</span>,</span>
-<span>    <span class="va">seed</span> <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>    <span class="va">lambda_c</span> <span class="op">=</span> <span class="va">lambdaC</span>,</span>
-<span>    <span class="va">eta_rate</span> <span class="op">=</span> <span class="va">eta</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="va">seed</span><span class="op">)</span></span>
-<span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span></span>
-<span>    <span class="va">nsim</span>,</span>
-<span>    <span class="fu">simulate_one_trial</span><span class="op">(</span></span>
-<span>      ve <span class="op">=</span> <span class="va">ve</span>,</span>
-<span>      adaptive <span class="op">=</span> <span class="va">adaptive</span>,</span>
-<span>      lambda_c <span class="op">=</span> <span class="va">lambda_c</span>,</span>
-<span>      eta_rate <span class="op">=</span> <span class="va">eta_rate</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    simplify <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>    reject <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">out</span>, <span class="va">`[[`</span>, <span class="fu"><a href="https://rdrr.io/r/base/logical.html" class="external-link">logical</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, <span class="st">"reject"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    looks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">out</span>, <span class="va">`[[`</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, <span class="st">"looks"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    total_events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">out</span>, <span class="va">`[[`</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, <span class="st">"total_events"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    total_enrolled <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">out</span>, <span class="va">`[[`</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, <span class="st">"total_enrolled"</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="lightweight-runnable-simulation">Lightweight runnable simulation<a class="anchor" aria-label="anchor" href="#lightweight-runnable-simulation"></a>
 </h2>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sim_fixed_null</span> <span class="op">&lt;-</span> <span class="fu">simulate_scenario</span><span class="op">(</span>ve <span class="op">=</span> <span class="va">ve0</span>, adaptive <span class="op">=</span> <span class="cn">FALSE</span>, nsim <span class="op">=</span> <span class="fl">150</span>, seed <span class="op">=</span> <span class="fl">101</span><span class="op">)</span></span>
-<span><span class="va">sim_fixed_alt</span> <span class="op">&lt;-</span> <span class="fu">simulate_scenario</span><span class="op">(</span>ve <span class="op">=</span> <span class="va">ve1</span>, adaptive <span class="op">=</span> <span class="cn">FALSE</span>, nsim <span class="op">=</span> <span class="fl">150</span>, seed <span class="op">=</span> <span class="fl">202</span><span class="op">)</span></span>
-<span><span class="va">sim_adapt_null</span> <span class="op">&lt;-</span> <span class="fu">simulate_scenario</span><span class="op">(</span>ve <span class="op">=</span> <span class="va">ve0</span>, adaptive <span class="op">=</span> <span class="cn">TRUE</span>, nsim <span class="op">=</span> <span class="fl">150</span>, seed <span class="op">=</span> <span class="fl">303</span><span class="op">)</span></span>
-<span><span class="va">sim_adapt_alt</span> <span class="op">&lt;-</span> <span class="fu">simulate_scenario</span><span class="op">(</span>ve <span class="op">=</span> <span class="va">ve1</span>, adaptive <span class="op">=</span> <span class="cn">TRUE</span>, nsim <span class="op">=</span> <span class="fl">150</span>, seed <span class="op">=</span> <span class="fl">404</span><span class="op">)</span></span>
+<p>We use the package helper <code><a href="../reference/simBinomialSeasonalExact.html">simBinomialSeasonalExact()</a></code> to
+run both fixed and blinded-adaptive seasonal scenarios. In this
+vignette, we set <code>final_full_spending = TRUE</code> to force full
+alpha spending at the final look even when the final observed total
+event count is below plan.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sim_light</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simBinomialSeasonalExact.html">simBinomialSeasonalExact</a></span><span class="op">(</span></span>
+<span>  gsD <span class="op">=</span> <span class="va">design_tte</span>,</span>
+<span>  ve <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`H0 (VE=30%)` <span class="op">=</span> <span class="va">ve0</span>, `H1 (VE=80%)` <span class="op">=</span> <span class="va">ve1</span><span class="op">)</span>,</span>
+<span>  nsim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">150</span>, <span class="fl">150</span><span class="op">)</span>,</span>
+<span>  control_event_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.003</span>, <span class="fl">0.003</span><span class="op">)</span>,</span>
+<span>  season_length <span class="op">=</span> <span class="va">season_length_years</span>,</span>
+<span>  dropout_rate <span class="op">=</span> <span class="va">dropout_6mo</span>,</span>
+<span>  planned_counts <span class="op">=</span> <span class="va">planned_counts</span>,</span>
+<span>  adaptive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  max_multiplier <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  final_full_spending <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">101</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">oc</span> <span class="op">&lt;-</span> <span class="va">sim_light</span><span class="op">$</span><span class="va">summary</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    Scenario <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">adaptive</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Adaptive: "</span>, <span class="va">scenario</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Fixed: "</span>, <span class="va">scenario</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>    <span class="va">Scenario</span>,</span>
+<span>    `Efficacy crossing probability` <span class="op">=</span> <span class="va">rejection_rate</span>,</span>
+<span>    `Futility stopping probability` <span class="op">=</span> <span class="va">futility_stop_rate</span>,</span>
+<span>    `MC SE (efficacy)` <span class="op">=</span> <span class="va">mc_se</span>,</span>
+<span>    `MC SE (futility)` <span class="op">=</span> <span class="va">futility_mc_se</span>,</span>
+<span>    `Mean total events` <span class="op">=</span> <span class="va">mean_total_events</span>,</span>
+<span>    `Mean total enrolled` <span class="op">=</span> <span class="va">mean_total_enrolled</span>,</span>
+<span>    `Mean looks used` <span class="op">=</span> <span class="va">mean_looks</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="va">summarize_oc</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span>  <span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">p</span> <span class="op">*</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">p</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>estimate <span class="op">=</span> <span class="va">p</span>, mc_se <span class="op">=</span> <span class="va">se</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">oc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
-<span>  `Fixed: Type I error (VE = 30%)` <span class="op">=</span> <span class="fu">summarize_oc</span><span class="op">(</span><span class="va">sim_fixed_null</span><span class="op">$</span><span class="va">reject</span><span class="op">)</span>,</span>
-<span>  `Fixed: Power (VE = 80%)` <span class="op">=</span> <span class="fu">summarize_oc</span><span class="op">(</span><span class="va">sim_fixed_alt</span><span class="op">$</span><span class="va">reject</span><span class="op">)</span>,</span>
-<span>  `Adaptive: Type I error (VE = 30%)` <span class="op">=</span> <span class="fu">summarize_oc</span><span class="op">(</span><span class="va">sim_adapt_null</span><span class="op">$</span><span class="va">reject</span><span class="op">)</span>,</span>
-<span>  `Adaptive: Power (VE = 80%)` <span class="op">=</span> <span class="fu">summarize_oc</span><span class="op">(</span><span class="va">sim_adapt_alt</span><span class="op">$</span><span class="va">reject</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  Scenario <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">oc</span><span class="op">)</span>,</span>
-<span>  Estimate <span class="op">=</span> <span class="va">oc</span><span class="op">[</span>, <span class="st">"estimate"</span><span class="op">]</span>,</span>
-<span>  `Monte Carlo SE` <span class="op">=</span> <span class="va">oc</span><span class="op">[</span>, <span class="st">"mc_se"</span><span class="op">]</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">oc</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">3</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">5</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span>, decimals <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Lightweight simulation results"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"Exact-binomial monitoring with seasonal analyses"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span></span>
+<span>    footnote <span class="op">=</span> <span class="st">"For VE=30% scenarios, efficacy crossing probability is Type I error under the non-binding futility convention (futility crossings do not block later efficacy crossings)."</span>,</span>
+<span>    locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">`Efficacy crossing probability`</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div id="szwqrdclll" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#szwqrdclll table {
+<div id="mjlvkadvyf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mjlvkadvyf table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#szwqrdclll thead, #szwqrdclll tbody, #szwqrdclll tfoot, #szwqrdclll tr, #szwqrdclll td, #szwqrdclll th {
+#mjlvkadvyf thead, #mjlvkadvyf tbody, #mjlvkadvyf tfoot, #mjlvkadvyf tr, #mjlvkadvyf td, #mjlvkadvyf th {
   border-style: none;
 }
 
-#szwqrdclll p {
+#mjlvkadvyf p {
   margin: 0;
   padding: 0;
 }
 
-#szwqrdclll .gt_table {
+#mjlvkadvyf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1997,12 +2053,12 @@ similarly,</li>
   border-left-color: #D3D3D3;
 }
 
-#szwqrdclll .gt_caption {
+#mjlvkadvyf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#szwqrdclll .gt_title {
+#mjlvkadvyf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2014,7 +2070,7 @@ similarly,</li>
   border-bottom-width: 0;
 }
 
-#szwqrdclll .gt_subtitle {
+#mjlvkadvyf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2026,7 +2082,7 @@ similarly,</li>
   border-top-width: 0;
 }
 
-#szwqrdclll .gt_heading {
+#mjlvkadvyf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2038,13 +2094,13 @@ similarly,</li>
   border-right-color: #D3D3D3;
 }
 
-#szwqrdclll .gt_bottom_border {
+#mjlvkadvyf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#szwqrdclll .gt_col_headings {
+#mjlvkadvyf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2059,7 +2115,7 @@ similarly,</li>
   border-right-color: #D3D3D3;
 }
 
-#szwqrdclll .gt_col_heading {
+#mjlvkadvyf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2079,7 +2135,7 @@ similarly,</li>
   overflow-x: hidden;
 }
 
-#szwqrdclll .gt_column_spanner_outer {
+#mjlvkadvyf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2091,15 +2147,15 @@ similarly,</li>
   padding-right: 4px;
 }
 
-#szwqrdclll .gt_column_spanner_outer:first-child {
+#mjlvkadvyf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#szwqrdclll .gt_column_spanner_outer:last-child {
+#mjlvkadvyf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#szwqrdclll .gt_column_spanner {
+#mjlvkadvyf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2111,11 +2167,11 @@ similarly,</li>
   width: 100%;
 }
 
-#szwqrdclll .gt_spanner_row {
+#mjlvkadvyf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#szwqrdclll .gt_group_heading {
+#mjlvkadvyf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2141,7 +2197,7 @@ similarly,</li>
   text-align: left;
 }
 
-#szwqrdclll .gt_empty_group_heading {
+#mjlvkadvyf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2156,15 +2212,15 @@ similarly,</li>
   vertical-align: middle;
 }
 
-#szwqrdclll .gt_from_md > :first-child {
+#mjlvkadvyf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#szwqrdclll .gt_from_md > :last-child {
+#mjlvkadvyf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#szwqrdclll .gt_row {
+#mjlvkadvyf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2183,7 +2239,7 @@ similarly,</li>
   overflow-x: hidden;
 }
 
-#szwqrdclll .gt_stub {
+#mjlvkadvyf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2196,507 +2252,7 @@ similarly,</li>
   padding-right: 5px;
 }
 
-#szwqrdclll .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#szwqrdclll .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#szwqrdclll .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#szwqrdclll .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#szwqrdclll .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#szwqrdclll .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#szwqrdclll .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#szwqrdclll .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#szwqrdclll .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#szwqrdclll .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#szwqrdclll .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#szwqrdclll .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#szwqrdclll .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#szwqrdclll .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#szwqrdclll .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#szwqrdclll .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#szwqrdclll .gt_left {
-  text-align: left;
-}
-
-#szwqrdclll .gt_center {
-  text-align: center;
-}
-
-#szwqrdclll .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#szwqrdclll .gt_font_normal {
-  font-weight: normal;
-}
-
-#szwqrdclll .gt_font_bold {
-  font-weight: bold;
-}
-
-#szwqrdclll .gt_font_italic {
-  font-style: italic;
-}
-
-#szwqrdclll .gt_super {
-  font-size: 65%;
-}
-
-#szwqrdclll .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#szwqrdclll .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#szwqrdclll .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#szwqrdclll .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#szwqrdclll .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#szwqrdclll .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#szwqrdclll .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#szwqrdclll .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#szwqrdclll div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading">
-<td colspan="3" class="gt_heading gt_title gt_font_normal" style>Lightweight simulation results</td>
-    </tr>
-<tr class="gt_heading">
-<td colspan="3" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Exact-binomial monitoring with seasonal analyses</td>
-    </tr>
-<tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Scenario">Scenario</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Estimate">Estimate</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Monte-Carlo-SE">Monte Carlo SE</th>
-    </tr>
-</thead>
-<tbody class="gt_table_body">
-<tr>
-<td headers="Scenario" class="gt_row gt_left">Fixed: Type I error (VE = 30%)</td>
-<td headers="Estimate" class="gt_row gt_right">0.0200</td>
-<td headers="Monte Carlo SE" class="gt_row gt_right">0.0114</td>
-</tr>
-<tr>
-<td headers="Scenario" class="gt_row gt_left">Fixed: Power (VE = 80%)</td>
-<td headers="Estimate" class="gt_row gt_right">0.8933</td>
-<td headers="Monte Carlo SE" class="gt_row gt_right">0.0252</td>
-</tr>
-<tr>
-<td headers="Scenario" class="gt_row gt_left">Adaptive: Type I error (VE = 30%)</td>
-<td headers="Estimate" class="gt_row gt_right">0.0267</td>
-<td headers="Monte Carlo SE" class="gt_row gt_right">0.0132</td>
-</tr>
-<tr>
-<td headers="Scenario" class="gt_row gt_left">Adaptive: Power (VE = 80%)</td>
-<td headers="Estimate" class="gt_row gt_right">0.9600</td>
-<td headers="Monte Carlo SE" class="gt_row gt_right">0.0160</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  Scenario <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fixed"</span>, <span class="st">"Adaptive"</span><span class="op">)</span>,</span>
-<span>  `Mean final events under VE=30%` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_fixed_null</span><span class="op">$</span><span class="va">total_events</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_adapt_null</span><span class="op">$</span><span class="va">total_events</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  `Mean final events under VE=80%` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_fixed_alt</span><span class="op">$</span><span class="va">total_events</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_adapt_alt</span><span class="op">$</span><span class="va">total_events</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  `Mean total enrolled under VE=30%` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_fixed_null</span><span class="op">$</span><span class="va">total_enrolled</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_adapt_null</span><span class="op">$</span><span class="va">total_enrolled</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  `Mean total enrolled under VE=80%` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_fixed_alt</span><span class="op">$</span><span class="va">total_enrolled</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_adapt_alt</span><span class="op">$</span><span class="va">total_enrolled</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  `Mean looks used under VE=30%` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_fixed_null</span><span class="op">$</span><span class="va">looks</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_adapt_null</span><span class="op">$</span><span class="va">looks</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  `Mean looks used under VE=80%` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_fixed_alt</span><span class="op">$</span><span class="va">looks</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_adapt_alt</span><span class="op">$</span><span class="va">looks</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">7</span>, decimals <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Monitoring behavior in simulation"</span><span class="op">)</span></span></code></pre></div>
-<div id="waycrsfoun" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#waycrsfoun table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#waycrsfoun thead, #waycrsfoun tbody, #waycrsfoun tfoot, #waycrsfoun tr, #waycrsfoun td, #waycrsfoun th {
-  border-style: none;
-}
-
-#waycrsfoun p {
-  margin: 0;
-  padding: 0;
-}
-
-#waycrsfoun .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#waycrsfoun .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#waycrsfoun .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#waycrsfoun .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#waycrsfoun .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#waycrsfoun .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#waycrsfoun .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#waycrsfoun .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#waycrsfoun .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#waycrsfoun .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#waycrsfoun .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#waycrsfoun .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#waycrsfoun .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#waycrsfoun .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#waycrsfoun .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#waycrsfoun .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#waycrsfoun .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#waycrsfoun .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#waycrsfoun .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#waycrsfoun .gt_stub_row_group {
+#mjlvkadvyf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2710,15 +2266,15 @@ similarly,</li>
   vertical-align: top;
 }
 
-#waycrsfoun .gt_row_group_first td {
+#mjlvkadvyf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#waycrsfoun .gt_row_group_first th {
+#mjlvkadvyf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#waycrsfoun .gt_summary_row {
+#mjlvkadvyf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2728,16 +2284,16 @@ similarly,</li>
   padding-right: 5px;
 }
 
-#waycrsfoun .gt_first_summary_row {
+#mjlvkadvyf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#waycrsfoun .gt_first_summary_row.thick {
+#mjlvkadvyf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#waycrsfoun .gt_last_summary_row {
+#mjlvkadvyf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2747,7 +2303,7 @@ similarly,</li>
   border-bottom-color: #D3D3D3;
 }
 
-#waycrsfoun .gt_grand_summary_row {
+#mjlvkadvyf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2757,7 +2313,7 @@ similarly,</li>
   padding-right: 5px;
 }
 
-#waycrsfoun .gt_first_grand_summary_row {
+#mjlvkadvyf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2767,7 +2323,7 @@ similarly,</li>
   border-top-color: #D3D3D3;
 }
 
-#waycrsfoun .gt_last_grand_summary_row_top {
+#mjlvkadvyf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2777,11 +2333,11 @@ similarly,</li>
   border-bottom-color: #D3D3D3;
 }
 
-#waycrsfoun .gt_striped {
+#mjlvkadvyf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#waycrsfoun .gt_table_body {
+#mjlvkadvyf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2790,7 +2346,7 @@ similarly,</li>
   border-bottom-color: #D3D3D3;
 }
 
-#waycrsfoun .gt_footnotes {
+#mjlvkadvyf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2804,7 +2360,7 @@ similarly,</li>
   border-right-color: #D3D3D3;
 }
 
-#waycrsfoun .gt_footnote {
+#mjlvkadvyf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2813,7 +2369,7 @@ similarly,</li>
   padding-right: 5px;
 }
 
-#waycrsfoun .gt_sourcenotes {
+#mjlvkadvyf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2827,7 +2383,7 @@ similarly,</li>
   border-right-color: #D3D3D3;
 }
 
-#waycrsfoun .gt_sourcenote {
+#mjlvkadvyf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2835,611 +2391,90 @@ similarly,</li>
   padding-right: 5px;
 }
 
-#waycrsfoun .gt_left {
+#mjlvkadvyf .gt_left {
   text-align: left;
 }
 
-#waycrsfoun .gt_center {
+#mjlvkadvyf .gt_center {
   text-align: center;
 }
 
-#waycrsfoun .gt_right {
+#mjlvkadvyf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#waycrsfoun .gt_font_normal {
+#mjlvkadvyf .gt_font_normal {
   font-weight: normal;
 }
 
-#waycrsfoun .gt_font_bold {
+#mjlvkadvyf .gt_font_bold {
   font-weight: bold;
 }
 
-#waycrsfoun .gt_font_italic {
+#mjlvkadvyf .gt_font_italic {
   font-style: italic;
 }
 
-#waycrsfoun .gt_super {
+#mjlvkadvyf .gt_super {
   font-size: 65%;
 }
 
-#waycrsfoun .gt_footnote_marks {
+#mjlvkadvyf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#waycrsfoun .gt_asterisk {
+#mjlvkadvyf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#waycrsfoun .gt_indent_1 {
+#mjlvkadvyf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#waycrsfoun .gt_indent_2 {
+#mjlvkadvyf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#waycrsfoun .gt_indent_3 {
+#mjlvkadvyf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#waycrsfoun .gt_indent_4 {
+#mjlvkadvyf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#waycrsfoun .gt_indent_5 {
+#mjlvkadvyf .gt_indent_5 {
   text-indent: 25px;
 }
 
-#waycrsfoun .katex-display {
+#mjlvkadvyf .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#waycrsfoun div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#mjlvkadvyf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
 <tr class="gt_heading">
-<td colspan="7" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Monitoring behavior in simulation</td>
+<td colspan="8" class="gt_heading gt_title gt_font_normal" style>Lightweight simulation results</td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="8" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Exact-binomial monitoring with seasonal analyses</td>
     </tr>
 <tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Scenario">Scenario</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean-final-events-under-VE=30%">Mean final events under VE=30%</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean-final-events-under-VE=80%">Mean final events under VE=80%</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean-total-enrolled-under-VE=30%">Mean total enrolled under VE=30%</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean-total-enrolled-under-VE=80%">Mean total enrolled under VE=80%</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean-looks-used-under-VE=30%">Mean looks used under VE=30%</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean-looks-used-under-VE=80%">Mean looks used under VE=80%</th>
-    </tr>
-</thead>
-<tbody class="gt_table_body">
-<tr>
-<td headers="Scenario" class="gt_row gt_left">Fixed</td>
-<td headers="Mean final events under VE=30%" class="gt_row gt_right">69.20</td>
-<td headers="Mean final events under VE=80%" class="gt_row gt_right">35.50</td>
-<td headers="Mean total enrolled under VE=30%" class="gt_row gt_right">16,920.00</td>
-<td headers="Mean total enrolled under VE=80%" class="gt_row gt_right">16,920.00</td>
-<td headers="Mean looks used under VE=30%" class="gt_row gt_right">2.49</td>
-<td headers="Mean looks used under VE=80%" class="gt_row gt_right">3.00</td>
-</tr>
-<tr>
-<td headers="Scenario" class="gt_row gt_left">Adaptive</td>
-<td headers="Mean final events under VE=30%" class="gt_row gt_right">74.25</td>
-<td headers="Mean final events under VE=80%" class="gt_row gt_right">46.26</td>
-<td headers="Mean total enrolled under VE=30%" class="gt_row gt_right">17,722.91</td>
-<td headers="Mean total enrolled under VE=80%" class="gt_row gt_right">21,642.89</td>
-<td headers="Mean looks used under VE=30%" class="gt_row gt_right">2.29</td>
-<td headers="Mean looks used under VE=80%" class="gt_row gt_right">3.00</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="section level2">
-<h2 id="example-with-lower-than-planned-event-rates">Example with lower-than-planned event rates<a class="anchor" aria-label="anchor" href="#example-with-lower-than-planned-event-rates"></a>
-</h2>
-<p>To illustrate adaptation when events are lower than planned, we halve
-the seasonal control event rate from 0.3% to 0.15%. The adaptive design
-then increases subsequent seasonal enrollment based on blinded
-cumulative event counts.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lambdaC_low</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fl">0.0015</span><span class="op">)</span> <span class="op">/</span> <span class="va">season_length_years</span></span>
-<span></span>
-<span><span class="va">sim_low_fixed</span> <span class="op">&lt;-</span> <span class="fu">simulate_scenario</span><span class="op">(</span></span>
-<span>  ve <span class="op">=</span> <span class="va">ve1</span>,</span>
-<span>  adaptive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  nsim <span class="op">=</span> <span class="fl">300</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">505</span>,</span>
-<span>  lambda_c <span class="op">=</span> <span class="va">lambdaC_low</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">sim_low_adapt</span> <span class="op">&lt;-</span> <span class="fu">simulate_scenario</span><span class="op">(</span></span>
-<span>  ve <span class="op">=</span> <span class="va">ve1</span>,</span>
-<span>  adaptive <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  nsim <span class="op">=</span> <span class="fl">300</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">606</span>,</span>
-<span>  lambda_c <span class="op">=</span> <span class="va">lambdaC_low</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  Scenario <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fixed, low event rate"</span>, <span class="st">"Adaptive, low event rate"</span><span class="op">)</span>,</span>
-<span>  `Power under H1 (VE=80%)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_low_fixed</span><span class="op">$</span><span class="va">reject</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_low_adapt</span><span class="op">$</span><span class="va">reject</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  `Mean total events` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_low_fixed</span><span class="op">$</span><span class="va">total_events</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_low_adapt</span><span class="op">$</span><span class="va">total_events</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  `Mean total enrolled` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_low_fixed</span><span class="op">$</span><span class="va">total_enrolled</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_low_adapt</span><span class="op">$</span><span class="va">total_enrolled</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  `Mean looks used` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_low_fixed</span><span class="op">$</span><span class="va">looks</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">sim_low_adapt</span><span class="op">$</span><span class="va">looks</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">5</span>, decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="st">"Lower-than-planned event rate illustration"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Adaptive approach increases enrollment to recover information"</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
-<div id="fhjnukznkq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#fhjnukznkq table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#fhjnukznkq thead, #fhjnukznkq tbody, #fhjnukznkq tfoot, #fhjnukznkq tr, #fhjnukznkq td, #fhjnukznkq th {
-  border-style: none;
-}
-
-#fhjnukznkq p {
-  margin: 0;
-  padding: 0;
-}
-
-#fhjnukznkq .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#fhjnukznkq .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#fhjnukznkq .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#fhjnukznkq .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#fhjnukznkq .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#fhjnukznkq .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#fhjnukznkq .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#fhjnukznkq .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#fhjnukznkq .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#fhjnukznkq .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#fhjnukznkq .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#fhjnukznkq .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#fhjnukznkq .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#fhjnukznkq .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#fhjnukznkq .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#fhjnukznkq .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#fhjnukznkq .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#fhjnukznkq .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#fhjnukznkq .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#fhjnukznkq .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#fhjnukznkq .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#fhjnukznkq .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#fhjnukznkq .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#fhjnukznkq .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#fhjnukznkq .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#fhjnukznkq .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#fhjnukznkq .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#fhjnukznkq .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#fhjnukznkq .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#fhjnukznkq .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#fhjnukznkq .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#fhjnukznkq .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#fhjnukznkq .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#fhjnukznkq .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#fhjnukznkq .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#fhjnukznkq .gt_left {
-  text-align: left;
-}
-
-#fhjnukznkq .gt_center {
-  text-align: center;
-}
-
-#fhjnukznkq .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#fhjnukznkq .gt_font_normal {
-  font-weight: normal;
-}
-
-#fhjnukznkq .gt_font_bold {
-  font-weight: bold;
-}
-
-#fhjnukznkq .gt_font_italic {
-  font-style: italic;
-}
-
-#fhjnukznkq .gt_super {
-  font-size: 65%;
-}
-
-#fhjnukznkq .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#fhjnukznkq .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#fhjnukznkq .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#fhjnukznkq .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#fhjnukznkq .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#fhjnukznkq .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#fhjnukznkq .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#fhjnukznkq .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#fhjnukznkq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading">
-<td colspan="5" class="gt_heading gt_title gt_font_normal" style>Lower-than-planned event rate illustration</td>
-    </tr>
-<tr class="gt_heading">
-<td colspan="5" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Adaptive approach increases enrollment to recover information</td>
-    </tr>
-<tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Scenario">Scenario</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Power-under-H1-(VE=80%)">Power under H1 (VE=80%)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Efficacy-crossing-probability">Efficacy crossing probability<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Futility-stopping-probability">Futility stopping probability</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="MC-SE-(efficacy)">MC SE (efficacy)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="MC-SE-(futility)">MC SE (futility)</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean-total-events">Mean total events</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean-total-enrolled">Mean total enrolled</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean-looks-used">Mean looks used</th>
@@ -3447,37 +2482,670 @@ cumulative event counts.</p>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Scenario" class="gt_row gt_left">Fixed, low event rate</td>
-<td headers="Power under H1 (VE=80%)" class="gt_row gt_right">0.597</td>
-<td headers="Mean total events" class="gt_row gt_right">17.477</td>
-<td headers="Mean total enrolled" class="gt_row gt_right">16,920.000</td>
-<td headers="Mean looks used" class="gt_row gt_right">2.953</td>
+<td headers="Scenario" class="gt_row gt_left">Fixed: H0 (VE=30%)</td>
+<td headers="Efficacy crossing probability" class="gt_row gt_right">0.0133</td>
+<td headers="Futility stopping probability" class="gt_row gt_right">0.3733</td>
+<td headers="MC SE (efficacy)" class="gt_row gt_right">0.0094</td>
+<td headers="MC SE (futility)" class="gt_row gt_right">0.0395</td>
+<td headers="Mean total events" class="gt_row gt_right">69.20</td>
+<td headers="Mean total enrolled" class="gt_row gt_right">16,920.00</td>
+<td headers="Mean looks used" class="gt_row gt_right">2.49</td>
 </tr>
 <tr>
-<td headers="Scenario" class="gt_row gt_left">Adaptive, low event rate</td>
-<td headers="Power under H1 (VE=80%)" class="gt_row gt_right">0.813</td>
-<td headers="Mean total events" class="gt_row gt_right">26.503</td>
-<td headers="Mean total enrolled" class="gt_row gt_right">26,996.187</td>
-<td headers="Mean looks used" class="gt_row gt_right">2.943</td>
+<td headers="Scenario" class="gt_row gt_left">Adaptive: H0 (VE=30%)</td>
+<td headers="Efficacy crossing probability" class="gt_row gt_right">0.0067</td>
+<td headers="Futility stopping probability" class="gt_row gt_right">0.4267</td>
+<td headers="MC SE (efficacy)" class="gt_row gt_right">0.0066</td>
+<td headers="MC SE (futility)" class="gt_row gt_right">0.0404</td>
+<td headers="Mean total events" class="gt_row gt_right">72.78</td>
+<td headers="Mean total enrolled" class="gt_row gt_right">17,578.95</td>
+<td headers="Mean looks used" class="gt_row gt_right">2.33</td>
+</tr>
+<tr>
+<td headers="Scenario" class="gt_row gt_left">Fixed: H1 (VE=80%)</td>
+<td headers="Efficacy crossing probability" class="gt_row gt_right">0.8867</td>
+<td headers="Futility stopping probability" class="gt_row gt_right">0.0333</td>
+<td headers="MC SE (efficacy)" class="gt_row gt_right">0.0259</td>
+<td headers="MC SE (futility)" class="gt_row gt_right">0.0147</td>
+<td headers="Mean total events" class="gt_row gt_right">36.65</td>
+<td headers="Mean total enrolled" class="gt_row gt_right">16,920.00</td>
+<td headers="Mean looks used" class="gt_row gt_right">3.00</td>
+</tr>
+<tr>
+<td headers="Scenario" class="gt_row gt_left">Adaptive: H1 (VE=80%)</td>
+<td headers="Efficacy crossing probability" class="gt_row gt_right">0.9867</td>
+<td headers="Futility stopping probability" class="gt_row gt_right">0.0000</td>
+<td headers="MC SE (efficacy)" class="gt_row gt_right">0.0094</td>
+<td headers="MC SE (futility)" class="gt_row gt_right">0.0000</td>
+<td headers="Mean total events" class="gt_row gt_right">45.73</td>
+<td headers="Mean total enrolled" class="gt_row gt_right">21,832.55</td>
+<td headers="Mean looks used" class="gt_row gt_right">2.99</td>
 </tr>
 </tbody>
+<tfoot><tr class="gt_footnotes">
+<td class="gt_footnote" colspan="8">
+<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> For VE=30% scenarios, efficacy crossing probability is Type I error under the non-binding futility convention (futility crossings do not block later efficacy crossings).</td>
+    </tr></tfoot>
 </table>
 </div>
+</div>
+<div class="section level2">
+<h2 id="example-with-lower-than-planned-event-rates">Example with lower-than-planned event rates<a class="anchor" aria-label="anchor" href="#example-with-lower-than-planned-event-rates"></a>
+</h2>
+<p>To illustrate adaptation when events are lower than planned, we halve
+the seasonal control event rate from 0.3% to 0.15% and compare fixed
+versus adaptive monitoring for both <code>VE = 30%</code> and
+<code>VE = 80%</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sim_low</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simBinomialSeasonalExact.html">simBinomialSeasonalExact</a></span><span class="op">(</span></span>
+<span>  gsD <span class="op">=</span> <span class="va">design_tte</span>,</span>
+<span>  ve <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`H0 (VE=30%)` <span class="op">=</span> <span class="va">ve0</span>, `H1 (VE=80%)` <span class="op">=</span> <span class="va">ve1</span><span class="op">)</span>,</span>
+<span>  nsim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>, <span class="fl">300</span><span class="op">)</span>,</span>
+<span>  control_event_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0015</span>, <span class="fl">0.0015</span><span class="op">)</span>,</span>
+<span>  season_length <span class="op">=</span> <span class="va">season_length_years</span>,</span>
+<span>  dropout_rate <span class="op">=</span> <span class="va">dropout_6mo</span>,</span>
+<span>  planned_counts <span class="op">=</span> <span class="va">planned_counts</span>,</span>
+<span>  adaptive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  max_multiplier <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  final_full_spending <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">505</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">low</span> <span class="op">&lt;-</span> <span class="va">sim_low</span><span class="op">$</span><span class="va">summary</span></span>
+<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  Scenario <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Without adaptation: Type I error (VE=30%)"</span>,</span>
+<span>    <span class="st">"With adaptation: Type I error (VE=30%)"</span>,</span>
+<span>    <span class="st">"Without adaptation: Power (VE=80%)"</span>,</span>
+<span>    <span class="st">"With adaptation: Power (VE=80%)"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  `Efficacy crossing probability` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">rejection_rate</span><span class="op">[</span><span class="op">!</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H0 (VE=30%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">rejection_rate</span><span class="op">[</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H0 (VE=30%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">rejection_rate</span><span class="op">[</span><span class="op">!</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H1 (VE=80%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">rejection_rate</span><span class="op">[</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H1 (VE=80%)"</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  `Futility stopping probability` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">futility_stop_rate</span><span class="op">[</span><span class="op">!</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H0 (VE=30%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">futility_stop_rate</span><span class="op">[</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H0 (VE=30%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">futility_stop_rate</span><span class="op">[</span><span class="op">!</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H1 (VE=80%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">futility_stop_rate</span><span class="op">[</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H1 (VE=80%)"</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  `Mean total events` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">mean_total_events</span><span class="op">[</span><span class="op">!</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H0 (VE=30%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">mean_total_events</span><span class="op">[</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H0 (VE=30%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">mean_total_events</span><span class="op">[</span><span class="op">!</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H1 (VE=80%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">mean_total_events</span><span class="op">[</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H1 (VE=80%)"</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  `Mean total enrolled` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">mean_total_enrolled</span><span class="op">[</span><span class="op">!</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H0 (VE=30%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">mean_total_enrolled</span><span class="op">[</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H0 (VE=30%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">mean_total_enrolled</span><span class="op">[</span><span class="op">!</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H1 (VE=80%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">mean_total_enrolled</span><span class="op">[</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H1 (VE=80%)"</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  `Mean looks used` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">mean_looks</span><span class="op">[</span><span class="op">!</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H0 (VE=30%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">mean_looks</span><span class="op">[</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H0 (VE=30%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">mean_looks</span><span class="op">[</span><span class="op">!</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H1 (VE=80%)"</span><span class="op">]</span>,</span>
+<span>    <span class="va">low</span><span class="op">$</span><span class="va">mean_looks</span><span class="op">[</span><span class="va">low</span><span class="op">$</span><span class="va">adaptive</span> <span class="op">&amp;</span> <span class="va">low</span><span class="op">$</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"H1 (VE=80%)"</span><span class="op">]</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">3</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">6</span>, decimals <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Lower-than-planned event rate illustration"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Adaptive approach increases enrollment to recover information"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span></span>
+<span>    footnote <span class="op">=</span> <span class="st">"Type I error rows use non-binding futility for efficacy crossing probability; futility stopping probability is shown separately."</span>,</span>
+<span>    locations <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">`Efficacy crossing probability`</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div id="tbsapeipnd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#tbsapeipnd table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#tbsapeipnd thead, #tbsapeipnd tbody, #tbsapeipnd tfoot, #tbsapeipnd tr, #tbsapeipnd td, #tbsapeipnd th {
+  border-style: none;
+}
+
+#tbsapeipnd p {
+  margin: 0;
+  padding: 0;
+}
+
+#tbsapeipnd .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#tbsapeipnd .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#tbsapeipnd .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#tbsapeipnd .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#tbsapeipnd .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#tbsapeipnd .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tbsapeipnd .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#tbsapeipnd .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#tbsapeipnd .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#tbsapeipnd .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#tbsapeipnd .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#tbsapeipnd .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#tbsapeipnd .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#tbsapeipnd .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#tbsapeipnd .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#tbsapeipnd .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#tbsapeipnd .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#tbsapeipnd .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#tbsapeipnd .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tbsapeipnd .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#tbsapeipnd .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#tbsapeipnd .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#tbsapeipnd .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tbsapeipnd .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#tbsapeipnd .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#tbsapeipnd .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tbsapeipnd .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tbsapeipnd .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#tbsapeipnd .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tbsapeipnd .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#tbsapeipnd .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tbsapeipnd .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#tbsapeipnd .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tbsapeipnd .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#tbsapeipnd .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tbsapeipnd .gt_left {
+  text-align: left;
+}
+
+#tbsapeipnd .gt_center {
+  text-align: center;
+}
+
+#tbsapeipnd .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#tbsapeipnd .gt_font_normal {
+  font-weight: normal;
+}
+
+#tbsapeipnd .gt_font_bold {
+  font-weight: bold;
+}
+
+#tbsapeipnd .gt_font_italic {
+  font-style: italic;
+}
+
+#tbsapeipnd .gt_super {
+  font-size: 65%;
+}
+
+#tbsapeipnd .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#tbsapeipnd .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#tbsapeipnd .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#tbsapeipnd .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#tbsapeipnd .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#tbsapeipnd .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#tbsapeipnd .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#tbsapeipnd .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#tbsapeipnd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading">
+<td colspan="6" class="gt_heading gt_title gt_font_normal" style>Lower-than-planned event rate illustration</td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="6" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Adaptive approach increases enrollment to recover information</td>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Scenario">Scenario</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Efficacy-crossing-probability">Efficacy crossing probability<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Futility-stopping-probability">Futility stopping probability</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean-total-events">Mean total events</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean-total-enrolled">Mean total enrolled</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mean-looks-used">Mean looks used</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="Scenario" class="gt_row gt_left">Without adaptation: Type I error (VE=30%)</td>
+<td headers="Efficacy crossing probability" class="gt_row gt_right">0.0333</td>
+<td headers="Futility stopping probability" class="gt_row gt_right">0.3867</td>
+<td headers="Mean total events" class="gt_row gt_right">68.84</td>
+<td headers="Mean total enrolled" class="gt_row gt_right">33,828.00</td>
+<td headers="Mean looks used" class="gt_row gt_right">2.48</td>
+</tr>
+<tr>
+<td headers="Scenario" class="gt_row gt_left">With adaptation: Type I error (VE=30%)</td>
+<td headers="Efficacy crossing probability" class="gt_row gt_right">0.0233</td>
+<td headers="Futility stopping probability" class="gt_row gt_right">0.3633</td>
+<td headers="Mean total events" class="gt_row gt_right">73.48</td>
+<td headers="Mean total enrolled" class="gt_row gt_right">35,504.37</td>
+<td headers="Mean looks used" class="gt_row gt_right">2.35</td>
+</tr>
+<tr>
+<td headers="Scenario" class="gt_row gt_left">Without adaptation: Power (VE=80%)</td>
+<td headers="Efficacy crossing probability" class="gt_row gt_right">0.9300</td>
+<td headers="Futility stopping probability" class="gt_row gt_right">0.0000</td>
+<td headers="Mean total events" class="gt_row gt_right">35.93</td>
+<td headers="Mean total enrolled" class="gt_row gt_right">33,828.00</td>
+<td headers="Mean looks used" class="gt_row gt_right">3.00</td>
+</tr>
+<tr>
+<td headers="Scenario" class="gt_row gt_left">With adaptation: Power (VE=80%)</td>
+<td headers="Efficacy crossing probability" class="gt_row gt_right">0.9800</td>
+<td headers="Futility stopping probability" class="gt_row gt_right">0.0100</td>
+<td headers="Mean total events" class="gt_row gt_right">45.90</td>
+<td headers="Mean total enrolled" class="gt_row gt_right">43,332.20</td>
+<td headers="Mean looks used" class="gt_row gt_right">2.99</td>
+</tr>
+</tbody>
+<tfoot><tr class="gt_footnotes">
+<td class="gt_footnote" colspan="6">
+<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Type I error rows use non-binding futility for efficacy crossing probability; futility stopping probability is shown separately.</td>
+    </tr></tfoot>
+</table>
+</div>
+<p>This table provides side-by-side comparisons of Type I error, power,
+and futility stopping probability without and with adaptation under the
+lower-than-planned event-rate scenario.</p>
 </div>
 <div class="section level2">
 <h2 id="larger-offline-runs-template">Larger offline runs (template)<a class="anchor" aria-label="anchor" href="#larger-offline-runs-template"></a>
 </h2>
 <p>The chunk below is intentionally not executed in package builds.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Suggested offline settings</span></span>
 <span><span class="va">type1_nsim</span> <span class="op">&lt;-</span> <span class="fl">20000</span></span>
 <span><span class="va">power_nsim</span> <span class="op">&lt;-</span> <span class="fl">3500</span></span>
 <span></span>
-<span><span class="va">sim_fixed_null_big</span> <span class="op">&lt;-</span> <span class="fu">simulate_scenario</span><span class="op">(</span>ve <span class="op">=</span> <span class="va">ve0</span>, adaptive <span class="op">=</span> <span class="cn">FALSE</span>, nsim <span class="op">=</span> <span class="va">type1_nsim</span>, seed <span class="op">=</span> <span class="fl">5001</span><span class="op">)</span></span>
-<span><span class="va">sim_adapt_null_big</span> <span class="op">&lt;-</span> <span class="fu">simulate_scenario</span><span class="op">(</span>ve <span class="op">=</span> <span class="va">ve0</span>, adaptive <span class="op">=</span> <span class="cn">TRUE</span>, nsim <span class="op">=</span> <span class="va">type1_nsim</span>, seed <span class="op">=</span> <span class="fl">5002</span><span class="op">)</span></span>
+<span><span class="va">sim_type1_big</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simBinomialSeasonalExact.html">simBinomialSeasonalExact</a></span><span class="op">(</span></span>
+<span>  gsD <span class="op">=</span> <span class="va">design_tte</span>,</span>
+<span>  ve <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`H0 (VE=30%)` <span class="op">=</span> <span class="va">ve0</span><span class="op">)</span>,</span>
+<span>  nsim <span class="op">=</span> <span class="va">type1_nsim</span>,</span>
+<span>  control_event_rate <span class="op">=</span> <span class="fl">0.003</span>,</span>
+<span>  season_length <span class="op">=</span> <span class="va">season_length_years</span>,</span>
+<span>  dropout_rate <span class="op">=</span> <span class="va">dropout_6mo</span>,</span>
+<span>  planned_counts <span class="op">=</span> <span class="va">planned_counts</span>,</span>
+<span>  adaptive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  final_full_spending <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">5001</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sim_fixed_alt_big</span> <span class="op">&lt;-</span> <span class="fu">simulate_scenario</span><span class="op">(</span>ve <span class="op">=</span> <span class="va">ve1</span>, adaptive <span class="op">=</span> <span class="cn">FALSE</span>, nsim <span class="op">=</span> <span class="va">power_nsim</span>, seed <span class="op">=</span> <span class="fl">6001</span><span class="op">)</span></span>
-<span><span class="va">sim_adapt_alt_big</span> <span class="op">&lt;-</span> <span class="fu">simulate_scenario</span><span class="op">(</span>ve <span class="op">=</span> <span class="va">ve1</span>, adaptive <span class="op">=</span> <span class="cn">TRUE</span>, nsim <span class="op">=</span> <span class="va">power_nsim</span>, seed <span class="op">=</span> <span class="fl">6002</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">sim_power_big</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simBinomialSeasonalExact.html">simBinomialSeasonalExact</a></span><span class="op">(</span></span>
+<span>  gsD <span class="op">=</span> <span class="va">design_tte</span>,</span>
+<span>  ve <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`H1 (VE=80%)` <span class="op">=</span> <span class="va">ve1</span><span class="op">)</span>,</span>
+<span>  nsim <span class="op">=</span> <span class="va">power_nsim</span>,</span>
+<span>  control_event_rate <span class="op">=</span> <span class="fl">0.003</span>,</span>
+<span>  season_length <span class="op">=</span> <span class="va">season_length_years</span>,</span>
+<span>  dropout_rate <span class="op">=</span> <span class="va">dropout_6mo</span>,</span>
+<span>  planned_counts <span class="op">=</span> <span class="va">planned_counts</span>,</span>
+<span>  adaptive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  final_full_spending <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">6001</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="notes-and-extensions">Notes and extensions<a class="anchor" aria-label="anchor" href="#notes-and-extensions"></a>

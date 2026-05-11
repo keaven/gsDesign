@@ -5,7 +5,13 @@ Translate survival design bounds to exact binomial bounds
 ## Usage
 
 ``` r
-toBinomialExact(x, observedEvents = NULL)
+toBinomialExact(
+  x,
+  observedEvents = NULL,
+  usTime = NULL,
+  lsTime = NULL,
+  maxSpend = FALSE
+)
 ```
 
 ## Arguments
@@ -25,6 +31,26 @@ toBinomialExact(x, observedEvents = NULL)
   the case count at each analysis performed. Primarily, this is used for
   updating a design at the time of analysis.
 
+- usTime:
+
+  Optional upper spending-time override (length `k` or `k - 1`, with
+  final value appended as 1 if needed). If `NULL`, this defaults to
+  `observedEvents / x$maxn.IPlan` (capped at 1) when `observedEvents` is
+  supplied, or to the planned design timing otherwise.
+
+- lsTime:
+
+  Optional lower spending-time override for `test.type = 4` (same length
+  and monotonicity requirements as `usTime`). If `NULL`, it defaults to
+  `usTime`.
+
+- maxSpend:
+
+  Logical scalar. If \`TRUE\`, force full alpha spending (and, for
+  \`test.type = 4\`, full beta spending) at the final analysis even when
+  \`observedEvents\[k\] \< x\$maxn.IPlan\`. This keeps earlier analysis
+  spending unchanged and applies the override only at the last look.
+
 ## Value
 
 An object of class `gsBinomialExact`.
@@ -42,6 +68,14 @@ approximations are updated to satisfy the following requirements of
 non-decreasing, and strictly less than n.I `b` (the futility bound) must
 be positive, non-decreasing, strictly greater than a `n.I - b` must be
 non-decreasing and \>= 0
+
+With \`observedEvents\`, spending times are based on
+`observedEvents / x$maxn.IPlan`. If `maxSpend = TRUE`, the final
+spending time is set to 1 so all remaining spending is used at the last
+look. If `x$testLower` is present (for example from
+[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) with
+selective futility looks), futility spending is flattened at analyses
+where `testLower = FALSE`.
 
 ## See also
 
@@ -117,4 +151,48 @@ toBinomialExact(x, observedEvents = c(20,55,80))
 #>    Theta      1      2      3  Total
 #>   0.6774 0.0006 0.0067 0.0127 0.0200
 #>   0.4737 0.0903 0.6571 0.1911 0.9385
+# Explicit spending-time override
+toBinomialExact(x, observedEvents = c(20, 55, 80), usTime = c(.25, .65, 1))
+#>              Bounds
+#>   Analysis   N   a   b
+#>          1  20   6  17
+#>          2  55  27  33
+#>          3  80  45  46
+#> 
+#> Boundary crossing probabilities and expected sample size assume
+#> any cross stops the trial
+#> 
+#> Upper boundary
+#>           Analysis
+#>    Theta      1      2      3  Total E{N}
+#>   0.6774 0.0732 0.8400 0.0684 0.9816 54.5
+#>   0.4737 0.0006 0.0404 0.0216 0.0625 59.4
+#> 
+#> Lower boundary
+#>           Analysis
+#>    Theta      1      2      3  Total
+#>   0.6774 0.0006 0.0030 0.0148 0.0184
+#>   0.4737 0.0903 0.5656 0.2816 0.9375
+# Optionally force full spending at final look when final events are below plan
+toBinomialExact(x, observedEvents = c(20, 55, 75), maxSpend = TRUE)
+#>              Bounds
+#>   Analysis   N   a   b
+#>          1  20   6  17
+#>          2  55  28  33
+#>          3  75  42  43
+#> 
+#> Boundary crossing probabilities and expected sample size assume
+#> any cross stops the trial
+#> 
+#> Upper boundary
+#>           Analysis
+#>    Theta      1      2      3  Total E{N}
+#>   0.6774 0.0732 0.8400 0.0655 0.9787 54.0
+#>   0.4737 0.0006 0.0404 0.0256 0.0666 56.1
+#> 
+#> Lower boundary
+#>           Analysis
+#>    Theta      1      2     3  Total
+#>   0.6774 0.0006 0.0067 0.014 0.0213
+#>   0.4737 0.0903 0.6571 0.186 0.9334
 ```
