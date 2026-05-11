@@ -51,6 +51,17 @@
   (`vignette("gsSurvPower")`) with worked examples for sensitivity analysis,
   alpha reallocation, biomarker subgroup to stratified design, and
   event-driven timing (@keaven, #109).
+- Added `repeatedPValueBinomialExact()` and `sequentialPValueBinomialExact()`
+  to compute repeated and sequential exact-binomial p-values under spending
+  function designs derived from `gsSurv()` objects.
+- Added `simBinomialSeasonalExact()` to run fixed and blinded-adaptive seasonal
+  rare-event simulations with exact-binomial efficacy monitoring summaries.
+- `toBinomialExact()` now supports explicit spending-time overrides via
+  `usTime` and `lsTime` (for `test.type = 4`) to align with `gsDesign()` and
+  `gsSurv()` conventions when updating bounds with `observedEvents`.
+- `simBinomialSeasonalExact()` now supports `usTime`/`lsTime` inputs and
+  reports futility stopping probabilities (`futility_stop_rate` with
+  `futility_mc_se`) in scenario summaries.
 
 ## Bug fixes
 
@@ -62,6 +73,11 @@
 - Fixed sign inconsistency in `hrn2z()` which used `sign(hr0 - hr1)`
   while `zn2hr()` used `sign(hr1 - hr0)`, preventing correct round-trip
   conversion. Both now use `sign(hr1 - hr0)` (@keaven, #251).
+- Fixed `toBinomialExact()` one-sided (`test.type = 1`) updating with
+  `observedEvents` so futility-adjustment code is only executed when
+  `test.type = 4`.
+- `toBinomialExact()` now respects selective futility testing (`testLower`) when
+  present on a `gsSurv` object by flattening lower spending at inactive looks.
 
 ## Documentation
 
@@ -79,6 +95,17 @@
   `informationRates`, calendar spending, and `fullSpendingAtFinal`, including
   a corrected worked example of the spending fractions used at the final
   analysis.
+- Added vignette "Multi-season studies for rare events"
+  (`vignette("MultiSeasonRareEvents")`) demonstrating exact-binomial seasonal
+  monitoring, analysis-time bound updates via
+  `toBinomialExact(observedEvents = ...)`, and blinded information-adaptive
+  enrollment scenarios.
+- Expanded the multi-season vignette with: initial `gsBoundSummary()` output,
+  IA1-only futility illustration, VE and nominal one-sided p-values at
+  exact-binomial bounds, and clearer simulation tables including efficacy and
+  futility stopping probabilities with non-binding Type I interpretation notes.
+- Reorganized pkgdown article sections to separate general materials, exact
+  binomial workflows, and multiple-hypothesis-testing content.
 
 ## Testing
 
@@ -88,6 +115,14 @@
 - Added focused `gsSurvPower()` regression tests for `informationRates`,
   `fullSpendingAtFinal`, and inherited sidedness behavior from existing
   time-to-event designs.
+- Added independent tests for exact-binomial repeated/sequential p-values and
+  for `simBinomialSeasonalExact()` input validation, reproducibility, and
+  adaptive enrollment behavior.
+- Added regression test confirming `toBinomialExact()` one-sided
+  (`test.type = 1`) updates with `observedEvents`.
+- Added regression tests for `toBinomialExact()` `usTime`/`lsTime` overrides and
+  selective-futility behavior, plus tests for new futility stopping summary
+  outputs from `simBinomialSeasonalExact()`.
 
 # gsDesign 3.9.0 (February 2026)
 

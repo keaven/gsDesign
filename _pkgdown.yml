@@ -63,6 +63,7 @@ reference:
   - toBinomialExact
   - repeatedPValueBinomialExact
   - sequentialPValueBinomialExact
+  - simBinomialSeasonalExact
 - title: Spending Functions
   desc: >
     For an overview of spending functions, see

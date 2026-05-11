@@ -48,6 +48,22 @@ test_that("binomialExactLowerBound validates inputs", {
     gsDesign:::binomialExactLowerBound(design, c(10, 20), 1),
     "strictly between 0 and 1"
   )
+  expect_error(
+    gsDesign:::binomialExactLowerBound(design, c(10, 20), 0.025, fullSpendFinal = c(TRUE, FALSE)),
+    "TRUE or FALSE"
+  )
+  expect_error(
+    gsDesign:::binomialExactLowerBound(
+      design, c(10, 20), 0.025, spendingTime = c(0.5)
+    ),
+    "same length as n.I"
+  )
+  expect_error(
+    gsDesign:::binomialExactLowerBound(
+      design, c(10, 20), 0.025, spendingTime = c(0.6, 0.4)
+    ),
+    "strictly increasing and positive"
+  )
   planned_final <- if (!is.null(design$maxn.IPlan)) design$maxn.IPlan else max(design$n.I)
   if (!is.finite(planned_final) || planned_final <= 0) planned_final <- max(design$n.I)
   expect_error(

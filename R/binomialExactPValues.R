@@ -193,11 +193,22 @@ repeatedPValueBinomialExact <- function(
 #' @param n.I Increasing integer total event counts at analyses with at most
 #'   1 value greater than or equal to planned final events.
 #' @param alpha Local one-sided Type I error level.
+#' @param fullSpendFinal Logical scalar. If `TRUE`, force spending time to 1 at
+#'   the final analysis (while keeping earlier timings based on
+#'   `n.I / maxn.IPlan`).
+#' @param spendingTime Optional upper spending-time vector (length equal to
+#'   `length(n.I)`) used directly for alpha spending. If `NULL`, spending time
+#'   is derived from `n.I / maxn.IPlan`.
 #'
 #' @return Integer lower efficacy bounds.
 #' @keywords internal
 #' @noRd
-binomialExactLowerBound <- function(gsD, n.I, alpha) {
+binomialExactLowerBound <- function(
+    gsD,
+    n.I,
+    alpha,
+    fullSpendFinal = FALSE,
+    spendingTime = NULL) {
   if (!inherits(gsD, "gsSurv")) {
     stop("gsD must be an object of class gsSurv", call. = FALSE)
   }
@@ -207,6 +218,13 @@ binomialExactLowerBound <- function(gsD, n.I, alpha) {
   if (!is.numeric(alpha) || length(alpha) != 1 || !is.finite(alpha) ||
       alpha <= 0 || alpha >= 1) {
     stop("alpha must be a scalar strictly between 0 and 1", call. = FALSE)
+  }
+  if (!is.logical(fullSpendFinal) || length(fullSpendFinal) != 1 || is.na(fullSpendFinal)) {
+    stop("fullSpendFinal must be TRUE or FALSE", call. = FALSE)
+  }
+  if (!is.null(spendingTime) &&
+      (!is.numeric(spendingTime) || any(!is.finite(spendingTime)))) {
+    stop("spendingTime must be a numeric vector", call. = FALSE)
   }
   if (!is.numeric(n.I) || any(!is.finite(n.I)) || any(n.I != floor(n.I))) {
     stop("n.I must be a numeric vector of increasing positive integers", call. = FALSE)
@@ -225,7 +243,23 @@ binomialExactLowerBound <- function(gsD, n.I, alpha) {
   if (sum(n.I >= maxn.IPlan) > 1) {
     stop("n.I must have at most 1 value >= planned final events", call. = FALSE)
   }
-  timing <- n.I / maxn.IPlan
+  if (is.null(spendingTime)) {
+    timing <- pmin(n.I / maxn.IPlan, 1)
+  } else {
+    if (length(spendingTime) != k) {
+      stop("spendingTime must have the same length as n.I", call. = FALSE)
+    }
+    timing <- as.numeric(spendingTime)
+    if (any(timing <= 0) || any(diff(timing) <= 0)) {
+      stop("spendingTime must be strictly increasing and positive", call. = FALSE)
+    }
+  }
+  if (isTRUE(fullSpendFinal)) {
+    timing[k] <- 1
+  }
+  if (sum(timing >= 1) > 1) {
+    stop("spendingTime must have at most 1 value >= 1", call. = FALSE)
+  }
   alpha_spend <- gsD$upper$sf(alpha = alpha, t = timing, param = gsD$upper$param)$spend
   alpha_spend <- pmin(pmax(alpha_spend, 0), alpha)
 
