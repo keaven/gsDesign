@@ -143,6 +143,7 @@ articles:
       - HarmBound
       - SelectiveBoundTesting
       - PoissonMixtureModel
+      - gsDesignVsSEQDESIGN
   - title: "Other"
     desc: >
         Other vignettes.
