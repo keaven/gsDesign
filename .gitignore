@@ -12,7 +12,10 @@ TODO
 *.pdf
 *.html
 *.rnw
+Meta/
+doc/
 docs/
+.local-r-lib/
 /*.tar.gz
 /*.Rcheck/
 vignettes/*.html

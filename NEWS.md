@@ -29,15 +29,61 @@
   or reversed HR conventions. All sample size methods (Lachin-Foulkes,
   Schoenfeld, Freedman, Bernstein-Lagakos) and plotting functions handle
   both directions symmetrically (@keaven, #251).
+- New `gsSurvPower()` function computes power for a group sequential survival
+  design with specified enrollment, dropout, treatment effect, and analysis
+  timing. Unlike `gsSurv()` and `gsSurvCalendar()` which solve for sample
+  size, `gsSurvPower()` takes fixed assumptions and computes power. Supports
+  calendar-time and event-driven timing, stratified designs, all test types
+  (1–8 including harm bounds), and flexible analysis timing criteria
+  (`targetEvents`, `plannedCalendarTime`, `maxExtension`,
+  `minTimeFromPreviousAnalysis`, `minN`, `minFollowUp`). When an existing
+  `gsSurv` design is provided via `x`, parameters can be selectively
+  overridden for "what-if" sensitivity analyses. Changing `alpha` preserves
+  original futility bounds (following `gsBoundSummary()` convention) while
+  recomputing efficacy bounds (@keaven, #109).
+- `gsSurvPower()` now supports `informationRates` to cap spending at planned
+  versus realized information fractions and `fullSpendingAtFinal` to force the
+  final spending fraction to 1 when desired. This makes it easier to evaluate
+  delayed event accrual while keeping spending tied to a planned information
+  schedule. It also preserves the original one-sided versus two-sided design
+  convention when inheriting defaults from an existing `gsSurv` object.
+- New vignette "Power Computation for Group Sequential Survival Designs"
+  (`vignette("gsSurvPower")`) with worked examples for sensitivity analysis,
+  alpha reallocation, biomarker subgroup to stratified design, and
+  event-driven timing (@keaven, #109).
+- Added `repeatedPValueBinomialExact()` and `sequentialPValueBinomialExact()`
+  to compute repeated and sequential exact-binomial p-values under spending
+  function designs derived from `gsSurv()` objects.
+- Added `simBinomialSeasonalExact()` to run fixed and blinded-adaptive seasonal
+  rare-event simulations with exact-binomial efficacy monitoring summaries.
+- `toBinomialExact()` now supports explicit spending-time overrides via
+  `usTime` and `lsTime` (for `test.type = 4`) to align with `gsDesign()` and
+  `gsSurv()` conventions when updating bounds with `observedEvents`.
+- `simBinomialSeasonalExact()` now supports `usTime`/`lsTime` inputs and
+  reports futility stopping probabilities (`futility_stop_rate` with
+  `futility_mc_se`) in scenario summaries.
 
 ## Bug fixes
 
+- `toInteger()` now preserves selective-bound flags (`testUpper`, `testLower`,
+  `testHarm`) and harm-bound spending (`sfharm`, `sfharmparam` for
+  `test.type` 7 or 8) when recomputing the design after integer sample
+  size or event-count rounding. Previously the internal `gsDesign()` call
+  omitted these settings, so inactive looks could incorrectly become active.
 - Fixed sign inconsistency in `hrn2z()` which used `sign(hr0 - hr1)`
   while `zn2hr()` used `sign(hr1 - hr0)`, preventing correct round-trip
   conversion. Both now use `sign(hr1 - hr0)` (@keaven, #251).
+- Fixed `toBinomialExact()` one-sided (`test.type = 1`) updating with
+  `observedEvents` so futility-adjustment code is only executed when
+  `test.type = 4`.
+- `toBinomialExact()` now respects selective futility testing (`testLower`) when
+  present on a `gsSurv` object by flattening lower spending at inactive looks.
 
 ## Documentation
 
+- Documented `test.type` restriction in `toBinomialExact()`: only
+  `test.type = 1` and `4` are supported; other types (including 7 and 8)
+  produce an error (@keaven, #109).
 - Consolidated shared roxygen2 `@param` documentation using `@inheritParams`
   so that `test.type`, spending function parameters, and other shared arguments
   are defined once in `gsDesign()` or `nSurv()` and inherited by `gsSurv()`
@@ -45,6 +91,38 @@
 - New vignette "Selective bound testing at interim analyses"
   (`vignette("SelectiveBoundTesting")`) with worked examples
   for all supported scenarios (@keaven, #255).
+- Expanded `gsSurvPower()` documentation and vignette guidance for
+  `informationRates`, calendar spending, and `fullSpendingAtFinal`, including
+  a corrected worked example of the spending fractions used at the final
+  analysis.
+- Added vignette "Multi-season studies for rare events"
+  (`vignette("MultiSeasonRareEvents")`) demonstrating exact-binomial seasonal
+  monitoring, analysis-time bound updates via
+  `toBinomialExact(observedEvents = ...)`, and blinded information-adaptive
+  enrollment scenarios.
+- Expanded the multi-season vignette with: initial `gsBoundSummary()` output,
+  IA1-only futility illustration, VE and nominal one-sided p-values at
+  exact-binomial bounds, and clearer simulation tables including efficacy and
+  futility stopping probabilities with non-binding Type I interpretation notes.
+- Reorganized pkgdown article sections to separate general materials, exact
+  binomial workflows, and multiple-hypothesis-testing content.
+
+## Testing
+
+- Added `toInteger()` regression tests for selective-bound preservation on
+  `gsDesign` and `gsSurv` objects, including `test.type` 8 with custom harm
+  spending.
+- Added focused `gsSurvPower()` regression tests for `informationRates`,
+  `fullSpendingAtFinal`, and inherited sidedness behavior from existing
+  time-to-event designs.
+- Added independent tests for exact-binomial repeated/sequential p-values and
+  for `simBinomialSeasonalExact()` input validation, reproducibility, and
+  adaptive enrollment behavior.
+- Added regression test confirming `toBinomialExact()` one-sided
+  (`test.type = 1`) updates with `observedEvents`.
+- Added regression tests for `toBinomialExact()` `usTime`/`lsTime` overrides and
+  selective-futility behavior, plus tests for new futility stopping summary
+  outputs from `simBinomialSeasonalExact()`.
 
 # gsDesign 3.9.0 (February 2026)
 

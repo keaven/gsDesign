@@ -116,3 +116,81 @@ test_that("toInteger() throws an error when input is not a gsDesign object", {
   invalid_object <- data.frame(a = 1, b = 2) # Not a gsDesign object
   expect_error(toInteger(invalid_object), "must have class gsDesign as input")
 })
+
+EXTREMEZ_TI <- 20
+
+test_that("toInteger() preserves selective testLower and inactive futility looks (gsDesign)", {
+  x <- gsDesign(
+    k = 3, test.type = 4, alpha = 0.025, beta = 0.1, n.fix = 300,
+    testLower = c(TRUE, FALSE, FALSE)
+  )
+  xi <- toInteger(x, ratio = 0)
+  expect_equal(xi$testLower, x$testLower)
+  expect_equal(xi$testUpper, x$testUpper)
+  expect_equal(xi$testHarm, x$testHarm)
+  expect_true(abs(xi$lower$bound[1]) < EXTREMEZ_TI)
+  expect_equal(xi$lower$bound[2], -EXTREMEZ_TI)
+  expect_equal(xi$lower$bound[3], -EXTREMEZ_TI)
+})
+
+test_that("toInteger() preserves selective testUpper and inactive efficacy looks (gsDesign)", {
+  x <- gsDesign(
+    k = 3, test.type = 4, alpha = 0.025, beta = 0.1, n.fix = 300,
+    testUpper = c(FALSE, TRUE, TRUE)
+  )
+  xi <- toInteger(x, ratio = 0)
+  expect_equal(xi$testUpper, x$testUpper)
+  expect_equal(xi$upper$bound[1], EXTREMEZ_TI)
+  expect_true(xi$upper$bound[2] < EXTREMEZ_TI)
+  expect_true(xi$upper$bound[3] < EXTREMEZ_TI)
+})
+
+test_that("toInteger() preserves testHarm pattern and harm spending for test.type 8 (gsDesign)", {
+  x <- gsDesign(
+    k = 3, test.type = 8, alpha = 0.025, beta = 0.1, astar = 0.05, n.fix = 300,
+    testHarm = c(TRUE, TRUE, FALSE), sfharm = sfLDOF, sfharmparam = 0
+  )
+  xi <- toInteger(x, ratio = 0)
+  expect_equal(xi$testHarm, x$testHarm)
+  expect_true(xi$harm$bound[1] > -EXTREMEZ_TI)
+  expect_true(xi$harm$bound[2] > -EXTREMEZ_TI)
+  expect_equal(xi$harm$bound[3], -EXTREMEZ_TI)
+  expect_identical(xi$harm$sf, x$harm$sf)
+  expect_equal(xi$harm$param, x$harm$param)
+})
+
+test_that("toInteger() preserves selective bounds for gsSurv designs", {
+  x <- gsSurv(
+    k = 3,
+    test.type = 4,
+    alpha = 0.025,
+    beta = 0.1,
+    timing = c(0.45, 0.7),
+    sfu = sfHSD,
+    sfupar = -4,
+    sfl = sfLDOF,
+    sflpar = 0,
+    testLower = c(TRUE, FALSE, FALSE),
+    lambdaC = 0.001,
+    hr = 0.3,
+    hr0 = 0.7,
+    eta = 5e-04,
+    gamma = 10,
+    R = 16,
+    T = 24,
+    minfup = 8,
+    ratio = 1
+  )
+  xi <- toInteger(x, ratio = 0)
+  expect_equal(xi$testLower, x$testLower)
+  expect_equal(xi$lower$bound[2], -EXTREMEZ_TI)
+  expect_equal(xi$lower$bound[3], -EXTREMEZ_TI)
+})
+
+test_that("toInteger() works for test.type 1 when x$lower is NULL", {
+  x <- gsDesign(k = 3, test.type = 1, alpha = 0.05, beta = 0.2, n.fix = 150)
+  expect_null(x$lower)
+  xi <- toInteger(x, ratio = 0)
+  expect_null(xi$lower)
+  expect_s3_class(xi, "gsDesign")
+})

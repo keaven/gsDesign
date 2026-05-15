@@ -192,25 +192,43 @@ print.gsSurv <- function(x, digits = 3, show_gsDesign = FALSE, show_strata = TRU
     "2" = "Two-sided symmetric",
     "3" = "Two-sided asymmetric with binding futility",
     "4" = "Two-sided asymmetric with non-binding futility",
-    "5" = "Two-sided asymmetric with binding harm bound",
-    "6" = "Two-sided asymmetric with non-binding harm bound",
+    "5" = "Two-sided asymmetric with binding futility [H0 spending]",
+    "6" = "Two-sided asymmetric with non-binding futility [H0 spending]",
     "7" = "Two-sided asymmetric with binding futility and harm bounds",
     "8" = "Two-sided asymmetric with non-binding futility and harm bounds",
     paste("Test type", x$test.type)
   )
 
+  is_power_calc <- isTRUE(x$variable == "Power") && !is.null(x$hr1)
+
   # Summary header
-  cat(
-    "Group sequential design ",
-    "(method=", x$method, "; k=", x$k, " analyses; ", test_type_desc, ")\n",
-    sep = ""
-  )
-  cat(
-    sprintf(
-      "HR=%.3f vs HR0=%.3f | alpha=%.3f (sided=%d) | power=%.1f%%\n",
-      x$hr, x$hr0, x$alpha, x$sided, (1 - x$beta) * 100
+  x_sided <- if (!is.null(x$sided)) x$sided else if (x$test.type == 1) 1L else 2L
+
+  if (is_power_calc) {
+    cat("Power computation for group sequential design\n")
+    cat(
+      "(method=", x$method, "; k=", x$k, " analyses; ", test_type_desc, ")\n",
+      sep = ""
     )
-  )
+    cat(
+      sprintf(
+        "Assumed HR=%.3f | Design HR=%.3f | HR0=%.3f | alpha=%.4f (sided=%d) | power=%.1f%%\n",
+        x$hr, x$hr1, x$hr0, x$alpha * x_sided, x_sided, (1 - x$beta) * 100
+      )
+    )
+  } else {
+    cat(
+      "Group sequential design ",
+      "(method=", x$method, "; k=", x$k, " analyses; ", test_type_desc, ")\n",
+      sep = ""
+    )
+    cat(
+      sprintf(
+        "HR=%.3f vs HR0=%.3f | alpha=%.3f (sided=%d) | power=%.1f%%\n",
+        x$hr, x$hr0, x$alpha, x_sided, (1 - x$beta) * 100
+      )
+    )
+  }
 
   # Get final analysis values
   final_n <- sum((x$eNC + x$eNE)[x$k, ])
@@ -321,3 +339,4 @@ print.gsSurv <- function(x, digits = 3, show_gsDesign = FALSE, show_strata = TRU
 
   invisible(x)
 }
+

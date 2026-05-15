@@ -7,14 +7,38 @@
 #' Only one value can be greater than or equal to \code{x$maxn.IPlan}. 
 #' This determines the case count at each analysis performed. 
 #' Primarily, this is used for updating a design at the time of analysis.
+#' @param usTime Optional upper spending-time override (length \code{k} or
+#'   \code{k - 1}, with final value appended as 1 if needed). If \code{NULL},
+#'   this defaults to \code{observedEvents / x$maxn.IPlan} (capped at 1) when
+#'   \code{observedEvents} is supplied, or to the planned design timing
+#'   otherwise.
+#' @param lsTime Optional lower spending-time override for \code{test.type = 4}
+#'   (same length and monotonicity requirements as \code{usTime}). If
+#'   \code{NULL}, it defaults to \code{usTime}.
+#' @param maxSpend Logical scalar. If `TRUE`, force full alpha spending (and, for
+#'   `test.type = 4`, full beta spending) at the final analysis even when
+#'   `observedEvents[k] < x$maxn.IPlan`. This keeps earlier analysis spending
+#'   unchanged and applies the override only at the last look.
 #' 
 #' @details
+#' Only \code{test.type} 1 (one-sided) and \code{test.type} 4
+#' (non-binding futility) are supported. Other test types (including
+#' \code{test.type} 7 and 8 with harm bounds) will produce
+#' an error.
+#'
 #' The exact binomial routine \code{gsBinomialExact} has requirements that may not be satisfied
 #' by the initial asymptotic approximation. 
 #' Thus, the approximations are updated to satisfy the following requirements of \code{gsBinomialExact}:
 #' \code{a} (the efficacy bound) must be positive, non-decreasing, and strictly less than n.I
 #' \code{b} (the futility bound) must be positive, non-decreasing, strictly greater than a
 #' \code{n.I - b} must be non-decreasing and >= 0
+#'
+#' With `observedEvents`, spending times are based on
+#' \code{observedEvents / x$maxn.IPlan}. If \code{maxSpend = TRUE}, the final
+#' spending time is set to 1 so all remaining spending is used at the last look.
+#' If \code{x$testLower} is present (for example from \code{gsSurv()} with
+#' selective futility looks), futility spending is flattened at analyses where
+#' \code{testLower = FALSE}.
 #' 
 #' @return An object of class \code{gsBinomialExact}.
 #'
@@ -50,9 +74,19 @@
 #' toBinomialExact(x)
 #' # Update bounds at time of analysis
 #' toBinomialExact(x, observedEvents = c(20,55,80))
-toBinomialExact <- function(x, observedEvents = NULL) {
+#' # Explicit spending-time override
+#' toBinomialExact(x, observedEvents = c(20, 55, 80), usTime = c(.25, .65, 1))
+#' # Optionally force full spending at final look when final events are below plan
+#' toBinomialExact(x, observedEvents = c(20, 55, 75), maxSpend = TRUE)
+toBinomialExact <- function(x, observedEvents = NULL, usTime = NULL, lsTime = NULL, maxSpend = FALSE) {
   if (!inherits(x, "gsSurv")) stop("toBinomialExact must have class gsSurv as input")
   if (x$test.type != 1 && x$test.type != 4) stop("toBinomialExact input test.type must be 1 or 4")
+  if (!is.logical(maxSpend) || length(maxSpend) != 1 || is.na(maxSpend)) {
+    stop("toBinomialExact: maxSpend must be TRUE or FALSE")
+  }
+  if (x$test.type == 1 && !is.null(lsTime)) {
+    stop("toBinomialExact: lsTime can only be specified for test.type = 4")
+  }
   # Round interim sample size (or events for gsSurv object)
   xx <- if (max(round(x$n.I) != x$n.I)) toInteger(x) else x
   if(is.null(observedEvents)){
@@ -98,7 +132,29 @@ toBinomialExact <- function(x, observedEvents = NULL) {
   a <- pmin(a, counts - 1)
 
   atem <- a
-  timing <- counts / xx$maxn.IPlan
+  default_timing <- pmin(counts / xx$maxn.IPlan, 1)
+  timing <- resolveSpendingTime(
+    spendingTime = usTime,
+    defaultTime = default_timing,
+    k = k,
+    label = "usTime"
+  )
+  timingl <- resolveSpendingTime(
+    spendingTime = lsTime,
+    defaultTime = timing,
+    k = k,
+    label = "lsTime"
+  )
+  if (isTRUE(maxSpend)) {
+    timing[k] <- 1
+    timingl[k] <- 1
+  }
+  if (sum(timing >= 1) > 1) {
+    stop("toBinomialExact: usTime must have at most 1 value >= 1")
+  }
+  if (x$test.type == 4 && sum(timingl >= 1) > 1) {
+    stop("toBinomialExact: lsTime must have at most 1 value >= 1")
+  }
   alpha_spend <- x$upper$sf(alpha = x$alpha, t = timing, param = x$upper$param)$spend
   if (x$test.type != 1) {
     # Upper bound probabilities are for futility
@@ -111,10 +167,20 @@ toBinomialExact <- function(x, observedEvents = NULL) {
     b <- pmax(a + 1, b)
     b <- pmin(b, counts - dplyr::lag(counts, def = 0) + dplyr::lag(b, def = 1))
     # Compute target beta-spending
-    beta_spend <- xx$lower$sf(alpha = xx$beta, t = timing, param = xx$lower$param)$spend
+    beta_spend <- xx$lower$sf(alpha = xx$beta, t = timingl, param = xx$lower$param)$spend
+    if (!is.null(x$testLower)) {
+      active_lower <- x$testLower
+      if (length(active_lower) == 1) active_lower <- rep(active_lower, k)
+      if (length(active_lower) == k) {
+        for (i in seq_len(k)) {
+          if (!isTRUE(active_lower[i])) {
+            beta_spend[i] <- if (i == 1) 0 else beta_spend[i - 1]
+          }
+        }
+      }
+    }
   } else {
     b <- counts + 1 # test.type = 1 means no futility bound
-    nbupperprob <- 0
   }
   for (j in 1:k) {
     # Non-binding bound assumed.
@@ -158,7 +224,7 @@ toBinomialExact <- function(x, observedEvents = NULL) {
       }
     }
     # beta-spending, if needed
-    if (x$test.type == 4)
+    if (x$test.type == 4) {
       # Set range for possible values of b[j]
       bmin <- a[j] + 1 # must be strictly > a[j]
       bmin <- ifelse(j == 1, bmin, max(bmin, b[j - 1])) # must be non-decreasing 
@@ -193,8 +259,28 @@ toBinomialExact <- function(x, observedEvents = NULL) {
           )$upper$prob[1:j])
         }
       }
+    }
   }
   xxxx <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = counts, a = a, b = b)
   xxxx$init_approx <- init_approx
   return(xxxx)
+}
+
+resolveSpendingTime <- function(spendingTime, defaultTime, k, label) {
+  if (is.null(spendingTime)) {
+    return(defaultTime)
+  }
+  if (!is.numeric(spendingTime) || any(!is.finite(spendingTime))) {
+    stop("toBinomialExact: ", label, " must be numeric")
+  }
+  if (!(length(spendingTime) %in% c(k - 1, k))) {
+    stop("toBinomialExact: ", label, " must have length k or k-1")
+  }
+  if (length(spendingTime) == k - 1) {
+    spendingTime <- c(spendingTime, 1)
+  }
+  if (any(spendingTime <= 0) || any(diff(spendingTime) <= 0)) {
+    stop("toBinomialExact: ", label, " must be strictly increasing and positive")
+  }
+  spendingTime
 }

@@ -285,6 +285,93 @@ testthat::test_that("print.gsDesign shows NA for inactive lower bounds", {
   testthat::expect_true(grepl("NA", output_text))
 })
 
+testthat::test_that("gsBoundSummary shows NA for zero upper spending from sfGapped", {
+  x <- gsDesign(
+    k = 4, test.type = 4,
+    sfu = sfGapped,
+    sfupar = list(sf = sfHSD, trange = c(0.25, 0.75), param = -4)
+  )
+  r <- gsBoundSummary(x, exclude = NULL)
+
+  z_rows <- which(r$Value == "Z")
+  ia2_rows <- z_rows[2]:(z_rows[3] - 1)
+  final_rows <- z_rows[4]:nrow(r)
+
+  testthat::expect_equal(x$upper$bound[c(2, 4)], c(EXTREMEZ, EXTREMEZ))
+  testthat::expect_equal(x$upper$spend[c(2, 4)], c(0, 0), tolerance = 1e-12)
+  testthat::expect_true(all(is.na(r$Efficacy[ia2_rows])))
+  testthat::expect_true(all(is.na(r$Efficacy[final_rows])))
+})
+
+testthat::test_that("gsBoundSummary shows NA for zero futility spending from sfGapped", {
+  x <- gsDesign(
+    k = 4, test.type = 4,
+    sfl = sfGapped,
+    sflpar = list(sf = sfHSD, trange = c(0.25, 0.75), param = -2)
+  )
+  r <- gsBoundSummary(x, exclude = NULL)
+
+  z_rows <- which(r$Value == "Z")
+  ia2_rows <- z_rows[2]:(z_rows[3] - 1)
+  final_rows <- z_rows[4]:nrow(r)
+
+  testthat::expect_equal(x$lower$spend[c(2, 4)], c(0, 0), tolerance = 1e-12)
+  testthat::expect_true(all(is.finite(x$lower$bound[c(2, 4)])))
+  testthat::expect_true(all(is.na(r$Futility[ia2_rows])))
+  testthat::expect_true(all(is.na(r$Futility[final_rows])))
+})
+
+testthat::test_that("print.gsDesign shows NA for skipped looks from spending functions", {
+  x <- gsDesign(
+    k = 4, test.type = 4,
+    sfu = sfGapped,
+    sfupar = list(sf = sfHSD, trange = c(0.25, 0.75), param = -4)
+  )
+  output <- capture.output(print(x))
+  testthat::expect_true(any(grepl("^\\s*2\\s+0\\.685.*NA", output)))
+  testthat::expect_true(any(grepl("^\\s*4\\s+1\\.370.*NA", output)))
+})
+
+testthat::test_that("xtable.gsDesign shows NA for skipped looks from spending functions", {
+  x <- gsDesign(
+    k = 4, test.type = 4,
+    sfu = sfGapped,
+    sfupar = list(sf = sfHSD, trange = c(0.25, 0.75), param = -4)
+  )
+  xtab <- testthat::expect_warning(
+    xtable(x, caption = "Selective bound xtable", Nname = "N"),
+    "Deprecated"
+  )
+  tab_df <- as.data.frame(xtab)
+  row_groups <- split(seq_len(nrow(tab_df)), rep(seq_len(x$k), each = 5))
+
+  testthat::expect_true(all(is.na(tab_df$Efficacy[row_groups[[2]]])))
+  testthat::expect_true(all(is.na(tab_df$Efficacy[row_groups[[4]]])))
+  testthat::expect_false(all(is.na(tab_df$Efficacy[row_groups[[1]]])))
+  testthat::expect_false(all(is.na(tab_df$Efficacy[row_groups[[3]]])))
+})
+
+testthat::test_that("xtable.gsSurv shows NA for inactive futility looks", {
+  x <- gsSurv(
+    k = 3, test.type = 4,
+    alpha = 0.025, beta = 0.1,
+    hr = 0.7, timing = c(0.5, 0.75),
+    sfu = sfHSD, sfupar = -4,
+    sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12,
+    eta = 0.01, gamma = 10,
+    R = 12, T = 36, minfup = 24,
+    testLower = c(TRUE, FALSE, FALSE)
+  )
+  xtab <- xtable(x)
+  tab_df <- as.data.frame(xtab)
+  row_groups <- split(seq_len(nrow(tab_df)), rep(seq_len(x$k), each = 5))
+
+  testthat::expect_false(all(is.na(tab_df$Futility[row_groups[[1]]])))
+  testthat::expect_true(all(is.na(tab_df$Futility[row_groups[[2]]])))
+  testthat::expect_true(all(is.na(tab_df$Futility[row_groups[[3]]])))
+})
+
 # ---- gsSurv passthrough ----
 
 testthat::test_that("gsSurv passes testLower through to gsDesign", {

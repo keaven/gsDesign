@@ -1,6 +1,8 @@
 #define DEBUG 0
 /* note: EXTREMEZ > 3 + log(r) +  Z(1-alpha) + Z(1-beta)
    per bottom of p 349 in Jennison and Turnbull */
+/* TODO(issue-242): decouple the finite boundary sentinel from the Newton
+   iteration limit in a future numerics-focused change. */
 #define EXTREMEZ 20
 #define MAXR 83
 #include "R.h"

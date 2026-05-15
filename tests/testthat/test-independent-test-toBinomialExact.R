@@ -1,4 +1,4 @@
-surv_design <- function(test.type = 4) {
+surv_design <- function(test.type = 4, testLower = TRUE) {
   gsSurv(
     k = 3,
     test.type = test.type,
@@ -17,7 +17,8 @@ surv_design <- function(test.type = 4) {
     R = 16,
     T = 24,
     minfup = 8,
-    ratio = 3
+    ratio = 3,
+    testLower = testLower
   )
 }
 
@@ -40,6 +41,18 @@ test_that("toBinomialExact validates inputs", {
   expect_error(
     toBinomialExact(design, observedEvents = 50),
     "must have at least 2 values"
+  )
+  expect_error(
+    toBinomialExact(design, maxSpend = c(TRUE, FALSE)),
+    "maxSpend must be TRUE or FALSE"
+  )
+  expect_error(
+    toBinomialExact(design, usTime = c(0.4, 0.3, 1)),
+    "usTime must be strictly increasing and positive"
+  )
+  expect_error(
+    toBinomialExact(design, usTime = 0.3),
+    "usTime must have length k or k-1"
   )
 
   design_int <- toInteger(design)
@@ -87,4 +100,74 @@ test_that("observedEvents re-plans design using supplied event counts", {
   expect_true(all(diff(result$lower$bound) >= 0))
   expect_true(all(diff(result$upper$bound) >= 0))
   expect_true(all(result$lower$bound < result$upper$bound))
+})
+
+test_that("toBinomialExact works for one-sided designs with observedEvents", {
+  design_one_sided <- surv_design(test.type = 1)
+  observed <- c(20, 55, 80)
+
+  result <- toBinomialExact(design_one_sided, observedEvents = observed)
+
+  expect_equal(result$n.I, observed)
+  expect_true(all(result$upper$bound == observed + 1))
+  expect_true(all(result$lower$bound < result$upper$bound))
+  expect_error(
+    toBinomialExact(design_one_sided, observedEvents = observed, lsTime = c(0.2, 0.6, 1)),
+    "lsTime can only be specified for test.type = 4"
+  )
+})
+
+test_that("toBinomialExact can force full spending at final under-run look", {
+  design <- surv_design(test.type = 1)
+  planned <- toInteger(design)$n.I
+  observed <- c(planned[1], planned[2], planned[3] - 3L)
+
+  result_default <- toBinomialExact(design, observedEvents = observed, maxSpend = FALSE)
+  result_full <- toBinomialExact(design, observedEvents = observed, maxSpend = TRUE)
+
+  expect_equal(result_default$n.I, observed)
+  expect_equal(result_full$n.I, observed)
+  expect_gte(result_full$lower$bound[3], result_default$lower$bound[3])
+  expect_gte(
+    sum(result_full$lower$prob[, 1]),
+    sum(result_default$lower$prob[, 1])
+  )
+})
+
+test_that("toBinomialExact supports explicit usTime and lsTime overrides", {
+  design <- surv_design(test.type = 4)
+  observed <- c(20, 55, 75)
+  us_time <- c(0.25, 0.65, 0.95)
+  ls_time <- c(0.2, 0.55, 0.9)
+
+  result_custom <- toBinomialExact(
+    design,
+    observedEvents = observed,
+    usTime = us_time,
+    lsTime = ls_time
+  )
+  result_custom_full <- toBinomialExact(
+    design,
+    observedEvents = observed,
+    usTime = us_time,
+    lsTime = ls_time,
+    maxSpend = TRUE
+  )
+
+  expect_equal(result_custom$n.I, observed)
+  expect_equal(result_custom_full$n.I, observed)
+  expect_gte(result_custom_full$lower$bound[3], result_custom$lower$bound[3])
+})
+
+test_that("toBinomialExact honors selective futility looks from gsSurv", {
+  design_all <- surv_design(test.type = 4, testLower = TRUE)
+  design_sel <- surv_design(test.type = 4, testLower = c(TRUE, FALSE, FALSE))
+  observed <- toInteger(design_sel)$n.I
+
+  result_all <- toBinomialExact(design_all, observedEvents = observed)
+  result_sel <- toBinomialExact(design_sel, observedEvents = observed)
+
+  expect_true(result_sel$upper$bound[1] <= observed[1])
+  expect_gte(result_sel$upper$bound[2], result_all$upper$bound[2])
+  expect_gte(result_sel$upper$bound[3], result_all$upper$bound[3])
 })
