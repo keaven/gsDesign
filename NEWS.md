@@ -117,6 +117,9 @@
   futility stopping probabilities with non-binding Type I interpretation notes.
 - Reorganized pkgdown article sections to separate general materials, exact
   binomial workflows, and multiple-hypothesis-testing content.
+- Added repository-level coding agent instructions for Codex, Claude Code,
+  Gemini, and GitHub Copilot to support consistent gsDesign issue-branch,
+  testing, NEWS/version, pkgdown, commit, and push workflows.
 
 ## Testing
 
