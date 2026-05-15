@@ -30,7 +30,7 @@ Consider the example described in the SAS Documentation: [Computing Sample Size 
 
 The SAS Code is as follows:
 
-``` sas
+```sas
 proc seqdesign;
     ErrorSpend: design nstages=4 method=errfuncobf;
     samplesize model=twosamplesurvival(
@@ -65,7 +65,7 @@ run;
 
 Based on these assumptions, a user naïvely attempting to replicate this in R with `gsDesign` may attempt code like the following:
 
-```{r}
+```{r naive-r-attempt}
 des <- gsSurv(
   k         = 4,
   test.type = 2,
