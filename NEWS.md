@@ -120,6 +120,10 @@
 - Added repository-level coding agent instructions for Codex, Claude Code,
   Gemini, and GitHub Copilot to support consistent gsDesign issue-branch,
   testing, NEWS/version, pkgdown, commit, and push workflows.
+- Added vignette "Using gsDesign AI skills"
+  (`vignette("gsDesignAISkills")`) and package-shipped AI workflow templates
+  under `inst/ai/` so users can copy the agent instructions into their own
+  projects after installing `gsDesign`.
 
 ## Testing
 

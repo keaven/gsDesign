@@ -1,0 +1,108 @@
+---
+title: "Using gsDesign AI skills"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using gsDesign AI skills}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Overview
+
+The `gsDesign` repository includes lightweight AI workflow instructions for
+coding agents. These files are not statistical methods documentation. They are
+promptable development guides that help coding agents use consistent package
+maintenance habits: checking git status, updating `NEWS.md`, bumping development
+versions, running focused and broad tests, rebuilding pkgdown, and pushing
+issue branches.
+
+The repository includes native instruction files for common coding agents:
+
+- `AGENTS.md` for Codex-style agents.
+- `CLAUDE.md` for Claude Code.
+- `GEMINI.md` for Gemini CLI.
+- `.github/copilot-instructions.md` for GitHub Copilot.
+- `.gemini/styleguide.md` for Gemini Code Assist.
+
+The installed R package also ships copies under `inst/ai/`, available with:
+
+```{r, eval=FALSE}
+system.file("ai", package = "gsDesign")
+```
+
+This makes the instructions available to users who install the package without
+cloning the GitHub repository.
+
+## Installing instructions in a project
+
+After installing `gsDesign`, you can copy an instruction file into a local
+project. For example, to add Codex-style instructions:
+
+```{r, eval=FALSE}
+file.copy(
+  from = system.file("ai", "AGENTS.md", package = "gsDesign"),
+  to = "AGENTS.md",
+  overwrite = FALSE
+)
+```
+
+For GitHub Copilot:
+
+```{r, eval=FALSE}
+dir.create(".github", showWarnings = FALSE)
+file.copy(
+  from = system.file("ai", "copilot-instructions.md", package = "gsDesign"),
+  to = file.path(".github", "copilot-instructions.md"),
+  overwrite = FALSE
+)
+```
+
+For Gemini Code Assist:
+
+```{r, eval=FALSE}
+dir.create(".gemini", showWarnings = FALSE)
+file.copy(
+  from = system.file("ai", "gemini-styleguide.md", package = "gsDesign"),
+  to = file.path(".gemini", "styleguide.md"),
+  overwrite = FALSE
+)
+```
+
+## Example prompt and response
+
+An AI skill works best when the user gives a specific development task and lets
+the instruction file supply the package workflow details.
+
+Example prompt:
+
+> Use the gsDesign workflow instructions. Fix issue #264 on the current branch:
+> update `simBinomialSeasonalExact()` so simulated trials stop at efficacy or
+> futility boundary crossings, update `toInteger()` for rare-event equal
+> allocation, add regression tests, update `NEWS.md`, rebuild pkgdown, run the
+> package checks, commit, and push if everything is OK.
+
+Example response:
+
+> I checked the branch and worktree, implemented the simulation stopping and
+> event-rounding updates, added focused regression tests, bumped the package to
+> the next development version, updated `NEWS.md`, rebuilt pkgdown, and ran
+> `R CMD check --no-manual`. The only remaining check warning is a local
+> macOS/R toolchain warning from `R_ext/Boolean.h`, not package code. I committed
+> the changes and pushed the issue branch to `origin`.
+
+The response is useful because it reports the workflow steps the agent took and
+separates package-code results from local toolchain noise.
+
+## What these instructions do not do
+
+AI workflow instructions do not change the statistical behavior of `gsDesign`.
+They also do not replace human review. They help make agent-assisted package
+maintenance more reproducible by placing the expected repository workflow where
+coding agents can find it.
