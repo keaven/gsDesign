@@ -65,11 +65,22 @@
 
 ## Bug fixes
 
+- `simBinomialSeasonalExact()` now stops simulated trials at the first
+  efficacy or futility boundary crossing for reporting stopping time, total
+  events, and total enrollment, while preserving the non-binding futility
+  convention for efficacy crossing probability. The simulation also updates
+  exact-binomial bounds within each trial using the observed total event counts
+  and defaults fixed per-season enrollment to the design's planned seasonal
+  enrollment (#264).
 - `toInteger()` now preserves selective-bound flags (`testUpper`, `testLower`,
   `testHarm`) and harm-bound spending (`sfharm`, `sfharmparam` for
   `test.type` 7 or 8) when recomputing the design after integer sample
   size or event-count rounding. Previously the internal `gsDesign()` call
   omitted these settings, so inactive looks could incorrectly become active.
+- `toInteger()` now rounds survival-design event counts down while still
+  rounding enrollment to the requested allocation multiple. A warning is issued
+  when a rounded-up event count is not achievable under the given enrollment
+  model, avoiding rare-event failures with equal allocation (#264).
 - Fixed sign inconsistency in `hrn2z()` which used `sign(hr0 - hr1)`
   while `zn2hr()` used `sign(hr1 - hr0)`, preventing correct round-trip
   conversion. Both now use `sign(hr1 - hr0)` (@keaven, #251).
@@ -123,6 +134,9 @@
 - Added regression tests for `toBinomialExact()` `usTime`/`lsTime` overrides and
   selective-futility behavior, plus tests for new futility stopping summary
   outputs from `simBinomialSeasonalExact()`.
+- Added regression tests for `simBinomialSeasonalExact()` stopping summaries,
+  design-based fixed enrollment defaults, and the rare-event `toInteger()`
+  equal-allocation path (#264).
 
 # gsDesign 3.9.0 (February 2026)
 

@@ -21,8 +21,8 @@ with the default \code{roundUpFinal = TRUE} if \code{ratio} is a
 non-negative integer.
 If \code{roundUpFinal = FALSE} and \code{ratio} is a non-negative integer,
 sample size is rounded to the nearest multiple of \code{ratio + 1}.
-For event counts, \code{roundUpFinal = TRUE} rounds final event count up;
-otherwise, just rounded if \code{roundUpFinal = FALSE}.
+For survival designs, event counts are rounded down; \code{roundUpFinal}
+applies to the rounded total sample size, not to event counts.
 See details.}
 }
 \value{
@@ -39,7 +39,7 @@ It is useful to explicitly provide the argument \code{ratio} when a
 \code{gsDesign} object is input since \code{gsDesign()} does not have a
 \code{ratio} in return.
 \code{ratio = 0, roundUpFinal = TRUE} will just round up the sample size
-(also event count).
+for non-survival designs.
 Rounding of event count targets is not impacted by \code{ratio}.
 Since \code{x <- gsSurv(ratio = M)} returns a value for \code{ratio},
 \code{toInteger(x)} will round to a multiple of \code{M + 1} if \code{M}
@@ -83,7 +83,6 @@ x <- gsSurv(
   minfup = 8,            # Planned minimum follow-up
   ratio = 3              # Randomization ratio (experimental:control)
 )
-# Convert sample size to multiple of ratio + 1 = 4, round event counts.
-# Default is to round up both event count and sample size for final analysis
+# Convert sample size to multiple of ratio + 1 = 4, round event counts down.
 toInteger(x)
 }

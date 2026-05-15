@@ -49,12 +49,12 @@ cumulative events at analyses. If `NULL`, these are derived from
 used to derive `planned_counts` when `planned_counts = NULL`.}
 
 \item{enroll_control_per_look}{Optional control-arm enrollment by look
-(scalar or length `k` integer vector). If `NULL`, this is calibrated
-from `planned_counts` under the largest value of `ve`.}
+(scalar or length `k` integer vector). If both enrollment vectors are
+`NULL`, defaults are derived from the seasonal accrual pattern in `gsD`.}
 
 \item{enroll_experimental_per_look}{Optional experimental-arm enrollment by
-look (scalar or length `k` integer vector). If `NULL`, this is set using
-`gsD$ratio` from `enroll_control_per_look`.}
+look (scalar or length `k` integer vector). If `NULL` and
+`enroll_control_per_look` is supplied, this is set using `gsD$ratio`.}
 
 \item{adaptive}{Logical vector specifying whether to simulate fixed and/or
 adaptive enrollment scenarios.}
@@ -67,7 +67,7 @@ when adaptation is enabled.}
 
 \item{usTime}{Optional upper spending-time override passed to
 [toBinomialExact()]. If `NULL`, spending time defaults to
-`planned_counts / planned_final_events` (capped at 1).}
+`1 / k, 2 / k, ..., 1`.}
 
 \item{lsTime}{Optional lower spending-time override for `test.type = 4`.
 If `NULL`, this defaults to `usTime`.}

@@ -12,8 +12,8 @@
 #'   non-negative integer.
 #'   If \code{roundUpFinal = FALSE} and \code{ratio} is a non-negative integer,
 #'   sample size is rounded to the nearest multiple of \code{ratio + 1}.
-#'   For event counts, \code{roundUpFinal = TRUE} rounds final event count up;
-#'   otherwise, just rounded if \code{roundUpFinal = FALSE}.
+#'   For survival designs, event counts are rounded down; \code{roundUpFinal}
+#'   applies to the rounded total sample size, not to event counts.
 #'   See details.
 #'
 #' @return Output is an object of the same class as input \code{x}; i.e.,
@@ -25,7 +25,7 @@
 #' \code{gsDesign} object is input since \code{gsDesign()} does not have a
 #' \code{ratio} in return.
 #' \code{ratio = 0, roundUpFinal = TRUE} will just round up the sample size
-#' (also event count).
+#' for non-survival designs.
 #' Rounding of event count targets is not impacted by \code{ratio}.
 #' Since \code{x <- gsSurv(ratio = M)} returns a value for \code{ratio},
 #' \code{toInteger(x)} will round to a multiple of \code{M + 1} if \code{M}
@@ -71,8 +71,7 @@
 #'   minfup = 8,            # Planned minimum follow-up
 #'   ratio = 3              # Randomization ratio (experimental:control)
 #' )
-#' # Convert sample size to multiple of ratio + 1 = 4, round event counts.
-#' # Default is to round up both event count and sample size for final analysis
+#' # Convert sample size to multiple of ratio + 1 = 4, round event counts down.
 #' toInteger(x)
 toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
   if (!inherits(x, "gsDesign")) stop("must have class gsDesign as input")
@@ -80,13 +79,16 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     message("toInteger: rounding done to nearest integer since ratio was not specified as postive integer .")
     ratio <- 0
   }
-  counts <- round(x$n.I) # Round counts (event counts for survival; otherwise sample size)
-  # For time-to-event endpoint, just round final event count up
   if (inherits(x, "gsSurv")) {
-    if (abs(counts[x$k] - x$n.I[x$k]) <= .01){
-      counts[x$k] <- round(x$n.I[x$k])
-    } else if (roundUpFinal) counts[x$k] <- ceiling(x$n.I[x$k])
+    counts <- ifelse(abs(x$n.I - round(x$n.I)) <= .01, round(x$n.I), floor(x$n.I))
+    counts <- pmax(1, counts)
+    if (x$k > 1) {
+      for (i in 2:x$k) {
+        counts[i] <- max(counts[i], counts[i - 1] + 1)
+      }
+    }
   } else {
+    counts <- round(x$n.I) # Round sample size for non-survival designs
     # Check if control size is close to integer multiple of ratio + 1
     if (abs(x$n.I[x$k] - round(x$n.I[x$k] / (ratio + 1)) * (ratio + 1)) <= .01) {
       counts[x$k] <- round(x$n.I[x$k] / (ratio + 1)) * (ratio + 1)
@@ -160,6 +162,23 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
       alpha = x$alpha, beta = NULL, sided = 1, tol = x$tol
     )
     xx$tol <- x$tol
+    rounded_up_events <- ceiling(x$n.I[x$k])
+    if (rounded_up_events > xi$n.I[xi$k]) {
+      rounded_up_check <- tryCatch(
+        {
+          gsnSurv(xx, rounded_up_events)
+          TRUE
+        },
+        error = function(e) e
+      )
+      if (inherits(rounded_up_check, "error")) {
+        warning(
+          "toInteger: rounded-up event count is not achievable with the given enrollment model; ",
+          "event counts were rounded down.",
+          call. = FALSE
+        )
+      }
+    }
     z <- gsnSurv(xx, xi$n.I[xi$k])
     eDC <- NULL
     eDE <- NULL

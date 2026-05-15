@@ -347,7 +347,7 @@ nSurvival(
 ### Group sequential design
 
 Now we produce a group sequential design with a default asymmetric design with a futility bound based on $\beta$-spending.
-We round interim event counts and round up the final event count to ensure the targeted power.
+We round event counts down and round total sample size to an integer allocation.
 
 ```{r}
 k <- 2 # Total number of analyses

@@ -26,11 +26,11 @@
 #' @param timing Optional increasing cumulative spending-time vector ending at 1
 #'   used to derive `planned_counts` when `planned_counts = NULL`.
 #' @param enroll_control_per_look Optional control-arm enrollment by look
-#'   (scalar or length `k` integer vector). If `NULL`, this is calibrated
-#'   from `planned_counts` under the largest value of `ve`.
+#'   (scalar or length `k` integer vector). If both enrollment vectors are
+#'   `NULL`, defaults are derived from the seasonal accrual pattern in `gsD`.
 #' @param enroll_experimental_per_look Optional experimental-arm enrollment by
-#'   look (scalar or length `k` integer vector). If `NULL`, this is set using
-#'   `gsD$ratio` from `enroll_control_per_look`.
+#'   look (scalar or length `k` integer vector). If `NULL` and
+#'   `enroll_control_per_look` is supplied, this is set using `gsD$ratio`.
 #' @param adaptive Logical vector specifying whether to simulate fixed and/or
 #'   adaptive enrollment scenarios.
 #' @param adapt_looks Integer vector of look indices after which adaptation can
@@ -39,7 +39,7 @@
 #'   when adaptation is enabled.
 #' @param usTime Optional upper spending-time override passed to
 #'   [toBinomialExact()]. If `NULL`, spending time defaults to
-#'   `planned_counts / planned_final_events` (capped at 1).
+#'   `1 / k, 2 / k, ..., 1`.
 #' @param lsTime Optional lower spending-time override for `test.type = 4`.
 #'   If `NULL`, this defaults to `usTime`.
 #' @param final_full_spending Logical scalar. If `TRUE`, force full alpha
@@ -193,7 +193,7 @@ simBinomialSeasonalExact <- function(
   adapt_looks <- sort(unique(as.integer(adapt_looks)))
 
   planned_final_events <- max(planned_counts)
-  default_spending <- pmin(planned_counts / planned_final_events, 1)
+  default_spending <- seq_len(k) / k
   usTime_resolved <- normalizeSpendingTimeVector(usTime, default_spending, k, "usTime")
   lsTime_resolved <- normalizeSpendingTimeVector(lsTime, usTime_resolved, k, "lsTime")
   if (isTRUE(final_full_spending)) {
@@ -218,24 +218,36 @@ simBinomialSeasonalExact <- function(
     )
   )
 
-  if (is.null(enroll_control_per_look)) {
-    ve_cal <- max(ve)
-    lambda_c_cal <- -log(1 - control_event_rate[which.max(ve)]) / season_length
-    eta_cal <- if (dropout_rate == 0) 0 else -log(1 - dropout_rate) / season_length
-    probs_cal <- seasonalBinomialProb(ve = ve_cal, lambda_c = lambda_c_cal, eta = eta_cal, season_length = season_length)
-    m <- rev(seq_len(k))
-    sum_c <- sum(expectedEventsPerPerson(probs_cal$control["event"], probs_cal$control["stay"], m))
-    sum_e <- sum(expectedEventsPerPerson(probs_cal$experimental["event"], probs_cal$experimental["stay"], m))
-    n_c <- ceiling(planned_final_events / (sum_c + ratio * sum_e))
-    enroll_control_per_look <- rep(as.integer(n_c), k)
+  missing_control_enrollment <- is.null(enroll_control_per_look)
+  missing_experimental_enrollment <- is.null(enroll_experimental_per_look)
+  if (missing_control_enrollment && missing_experimental_enrollment) {
+    planned_enrollment <- plannedSeasonalEnrollment(gsD_int, k, ratio)
+    if (is.null(planned_enrollment)) {
+      planned_enrollment <- calibratedSeasonalEnrollment(
+        ve = ve,
+        control_event_rate = control_event_rate,
+        season_length = season_length,
+        dropout_rate = dropout_rate,
+        planned_final_events = planned_final_events,
+        ratio = ratio,
+        k = k
+      )
+    }
+    enroll_control_per_look <- planned_enrollment$control
+    enroll_experimental_per_look <- planned_enrollment$experimental
   } else {
-    enroll_control_per_look <- normalizeEnrollmentVector(enroll_control_per_look, k, "enroll_control_per_look")
-  }
-
-  if (is.null(enroll_experimental_per_look)) {
-    enroll_experimental_per_look <- as.integer(ceiling(enroll_control_per_look * ratio))
-  } else {
-    enroll_experimental_per_look <- normalizeEnrollmentVector(enroll_experimental_per_look, k, "enroll_experimental_per_look")
+    if (!missing_control_enrollment) {
+      enroll_control_per_look <- normalizeEnrollmentVector(enroll_control_per_look, k, "enroll_control_per_look")
+    }
+    if (!missing_experimental_enrollment) {
+      enroll_experimental_per_look <- normalizeEnrollmentVector(enroll_experimental_per_look, k, "enroll_experimental_per_look")
+    }
+    if (missing_control_enrollment) {
+      enroll_control_per_look <- as.integer(ceiling(enroll_experimental_per_look / ratio))
+    }
+    if (missing_experimental_enrollment) {
+      enroll_experimental_per_look <- as.integer(ceiling(enroll_control_per_look * ratio))
+    }
   }
 
   all_summary <- list()
@@ -263,6 +275,7 @@ simBinomialSeasonalExact <- function(
           adapt_looks = adapt_looks,
           max_multiplier = max_multiplier,
           usTime = usTime_resolved,
+          lsTime = lsTime_resolved,
           final_full_spending = final_full_spending
         ),
         simplify = FALSE
@@ -346,6 +359,7 @@ simulateSeasonalExactTrial <- function(
     adapt_looks,
     max_multiplier,
     usTime,
+    lsTime,
     final_full_spending) {
   k <- length(planned_counts)
   probs <- seasonalBinomialProb(ve = ve, lambda_c = lambda_c, eta = eta_rate, season_length = season_length)
@@ -356,6 +370,7 @@ simulateSeasonalExactTrial <- function(
   at_risk_e <- 0L
   cum_total <- integer(k)
   cum_exp <- integer(k)
+  cum_enrolled <- integer(k)
 
   for (season in seq_len(k)) {
     if (adaptive && season > 1 && (season - 1) %in% adapt_looks) {
@@ -366,6 +381,7 @@ simulateSeasonalExactTrial <- function(
 
     at_risk_c <- at_risk_c + enroll_c[season]
     at_risk_e <- at_risk_e + enroll_e[season]
+    cum_enrolled[season] <- sum(enroll_c[seq_len(season)] + enroll_e[seq_len(season)])
 
     out_c <- as.integer(stats::rmultinom(1, at_risk_c, probs$control))
     out_e <- as.integer(stats::rmultinom(1, at_risk_e, probs$experimental))
@@ -386,54 +402,81 @@ simulateSeasonalExactTrial <- function(
     informative <- informative[c(TRUE, diff(cum_total[informative]) > 0)]
   }
   if (length(informative) == 0) {
-    return(list(reject = FALSE, looks = 0L, total_events = cum_total[k], total_enrolled = sum(enroll_c + enroll_e)))
+    last_look <- looks[length(looks)]
+    return(list(
+      reject = FALSE,
+      futility_stop = FALSE,
+      looks = 0L,
+      total_events = as.integer(cum_total[last_look]),
+      total_enrolled = as.numeric(cum_enrolled[last_look])
+    ))
   }
 
   look_spending <- usTime[informative]
+  look_lower_spending <- lsTime[informative]
   if (isTRUE(final_full_spending)) {
     look_spending[length(look_spending)] <- 1
+    look_lower_spending[length(look_lower_spending)] <- 1
   }
-  bounds <- binomialExactLowerBound(
-    gsD,
-    cum_total[informative],
-    gsD$alpha,
-    fullSpendFinal = FALSE,
-    spendingTime = look_spending
-  )
-  trial_exact <- tryCatch(do.call(
-    toBinomialExact,
-    list(
-      x = gsD,
-      observedEvents = cum_total[informative],
-      usTime = look_spending,
-      lsTime = if (gsD$test.type == 4) look_spending else NULL,
-      maxSpend = FALSE
-    )
-  ), error = function(e) NULL)
 
-  reject <- any(cum_exp[informative] <= bounds)
-  futility_stop <- FALSE
-  if (gsD$test.type == 4 && !is.null(trial_exact)) {
-    active_lower <- if (!is.null(gsD$testLower)) {
-      tl <- gsD$testLower
-      if (length(tl) == 1) tl <- rep(tl, k)
-      as.logical(tl[informative])
-    } else {
-      rep(TRUE, length(informative))
-    }
-    efficacy_cross <- which(cum_exp[informative] <= bounds)
-    futility_cross <- which(active_lower & (cum_exp[informative] >= trial_exact$upper$bound))
-    first_eff <- if (length(efficacy_cross) > 0) min(efficacy_cross) else Inf
-    first_fut <- if (length(futility_cross) > 0) min(futility_cross) else Inf
-    futility_stop <- is.finite(first_fut) && (first_fut < first_eff)
+  active_lower <- if (gsD$test.type == 4 && !is.null(gsD$testLower)) {
+    tl <- gsD$testLower
+    if (length(tl) == 1) tl <- rep(tl, k)
+    as.logical(tl[informative])
+  } else {
+    rep(gsD$test.type == 4, length(informative))
   }
+
+  trial_exact <- NULL
+  if (length(informative) >= 2) {
+    gsD_trial <- gsD
+    if (gsD$test.type == 4) {
+      gsD_trial$testLower <- active_lower
+    }
+    trial_exact <- tryCatch(do.call(
+      toBinomialExact,
+      list(
+        x = gsD_trial,
+        observedEvents = cum_total[informative],
+        usTime = look_spending,
+        lsTime = if (gsD$test.type == 4) look_lower_spending else NULL,
+        maxSpend = FALSE
+      )
+    ), error = function(e) NULL)
+  }
+  bounds <- if (!is.null(trial_exact)) {
+    trial_exact$lower$bound
+  } else {
+    binomialExactLowerBound(
+      gsD,
+      cum_total[informative],
+      gsD$alpha,
+      fullSpendFinal = FALSE,
+      spendingTime = look_spending
+    )
+  }
+
+  efficacy_cross <- which(cum_exp[informative] <= bounds)
+  reject <- length(efficacy_cross) > 0
+  futility_stop <- FALSE
+  futility_cross <- integer(0)
+  if (gsD$test.type == 4 && !is.null(trial_exact)) {
+    futility_cross <- which(active_lower & (cum_exp[informative] >= trial_exact$upper$bound))
+  }
+  first_eff <- if (length(efficacy_cross) > 0) min(efficacy_cross) else Inf
+  first_fut <- if (length(futility_cross) > 0) min(futility_cross) else Inf
+  first_stop <- min(first_eff, first_fut)
+  stopped_on_bound <- is.finite(first_stop)
+  stop_position <- if (stopped_on_bound) first_stop else length(informative)
+  stop_look <- informative[stop_position]
+  futility_stop <- is.finite(first_fut) && (first_fut < first_eff)
 
   list(
     reject = reject,
     futility_stop = futility_stop,
-    looks = as.integer(length(informative)),
-    total_events = as.integer(cum_total[k]),
-    total_enrolled = as.numeric(sum(enroll_c + enroll_e))
+    looks = as.integer(stop_position),
+    total_events = as.integer(cum_total[stop_look]),
+    total_enrolled = as.numeric(if (stopped_on_bound) cum_enrolled[stop_look] else cum_enrolled[looks[length(looks)]])
   )
 }
 
@@ -463,6 +506,59 @@ expectedEventsPerPerson <- function(p_event, p_stay, m) {
     out[pos] <- p_event * (1 - p_stay^m[pos]) / (1 - p_stay)
   }
   out
+}
+
+plannedSeasonalEnrollment <- function(gsD, k, ratio) {
+  total <- NULL
+  if (!is.null(gsD$gamma) && !is.null(gsD$R)) {
+    gamma <- as.matrix(gsD$gamma)
+    periods <- as.numeric(gsD$R)
+    if (nrow(gamma) == length(periods) && length(periods) >= k && length(periods) %% k == 0) {
+      periods_per_look <- length(periods) / k
+      period_enrollment <- as.numeric(rowSums(gamma)) * periods
+      groups <- rep(seq_len(k), each = periods_per_look)
+      total <- as.numeric(tapply(period_enrollment, groups, sum))
+    }
+  }
+  if (is.null(total) && !is.null(gsD$eNC) && !is.null(gsD$eNE)) {
+    cumulative <- rowSums(as.matrix(gsD$eNC)) + rowSums(as.matrix(gsD$eNE))
+    if (length(cumulative) == k) {
+      total <- c(cumulative[1], diff(cumulative))
+    }
+  }
+  if (is.null(total) || length(total) != k || any(!is.finite(total)) || any(total <= 0)) {
+    return(NULL)
+  }
+  total <- pmax(2L, as.integer(round(total)))
+  control <- as.integer(round(total / (1 + ratio)))
+  control <- pmin(pmax(control, 1L), total - 1L)
+  list(
+    control = control,
+    experimental = as.integer(total - control)
+  )
+}
+
+calibratedSeasonalEnrollment <- function(
+    ve,
+    control_event_rate,
+    season_length,
+    dropout_rate,
+    planned_final_events,
+    ratio,
+    k) {
+  ve_cal <- max(ve)
+  lambda_c_cal <- -log(1 - control_event_rate[which.max(ve)]) / season_length
+  eta_cal <- if (dropout_rate == 0) 0 else -log(1 - dropout_rate) / season_length
+  probs_cal <- seasonalBinomialProb(ve = ve_cal, lambda_c = lambda_c_cal, eta = eta_cal, season_length = season_length)
+  m <- rev(seq_len(k))
+  sum_c <- sum(expectedEventsPerPerson(probs_cal$control["event"], probs_cal$control["stay"], m))
+  sum_e <- sum(expectedEventsPerPerson(probs_cal$experimental["event"], probs_cal$experimental["stay"], m))
+  n_c <- ceiling(planned_final_events / (sum_c + ratio * sum_e))
+  control <- rep(as.integer(n_c), k)
+  list(
+    control = control,
+    experimental = as.integer(ceiling(control * ratio))
+  )
 }
 
 normalizeEnrollmentVector <- function(x, k, varname) {

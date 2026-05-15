@@ -44,6 +44,13 @@ one_sided_design_for_sim <- function() {
     toInteger()
 }
 
+planned_total_enrollment_by_season <- function(design) {
+  period_total <- as.numeric(rowSums(as.matrix(design$gamma))) * as.numeric(design$R)
+  periods_per_look <- length(period_total) / design$k
+  groups <- rep(seq_len(design$k), each = periods_per_look)
+  as.integer(round(tapply(period_total, groups, sum)))
+}
+
 test_that("simBinomialSeasonalExact validates core inputs", {
   design <- seasonal_design_for_sim()
 
@@ -113,6 +120,69 @@ test_that("simBinomialSeasonalExact returns expected structure", {
   expect_true("usTime" %in% names(x$inputs))
   expect_true("lsTime" %in% names(x$inputs))
   expect_null(x$trials)
+})
+
+test_that("simBinomialSeasonalExact defaults to the design seasonal enrollment plan", {
+  design <- seasonal_design_for_sim()
+  x <- simBinomialSeasonalExact(
+    gsD = design,
+    ve = c(`H1 (VE=80%)` = 0.8),
+    nsim = 5,
+    control_event_rate = 0.003,
+    adaptive = FALSE,
+    seed = 123
+  )
+  planned_total <- planned_total_enrollment_by_season(design)
+
+  expect_equal(
+    x$planned$enroll_control_per_look + x$planned$enroll_experimental_per_look,
+    planned_total
+  )
+  expect_lte(x$summary$mean_total_enrolled[1], sum(planned_total))
+})
+
+test_that("simBinomialSeasonalExact reports stopping totals at first crossed bound", {
+  design <- gsSurv(
+    k = 2,
+    test.type = 4,
+    alpha = 0.025,
+    beta = 0.1,
+    timing = 0.5,
+    sfu = sfHSD,
+    sfupar = 1,
+    sfl = sfHSD,
+    sflpar = -2,
+    lambdaC = -log(1 - 0.2) / 0.5,
+    hr = 0.5,
+    hr0 = 0.9,
+    eta = 0,
+    gamma = c(10, 10),
+    R = c(1, 1),
+    T = 3,
+    minfup = 1,
+    ratio = 1
+  ) |>
+    toInteger()
+
+  x <- simBinomialSeasonalExact(
+    gsD = design,
+    ve = 0.01,
+    nsim = 5,
+    control_event_rate = 0.2,
+    season_length = 0.5,
+    dropout_rate = 0,
+    adaptive = FALSE,
+    seed = 2,
+    return_trials = TRUE
+  )
+
+  full_enrollment <- sum(x$planned$enroll_control_per_look + x$planned$enroll_experimental_per_look)
+  first_look_enrollment <- x$planned$enroll_control_per_look[1] + x$planned$enroll_experimental_per_look[1]
+
+  expect_true(any(x$trials$futility_stop))
+  expect_lte(max(x$trials$looks), design$k)
+  expect_lte(max(x$trials$total_enrolled), full_enrollment)
+  expect_true(any(x$trials$total_enrolled == first_look_enrollment))
 })
 
 test_that("simBinomialSeasonalExact is reproducible with seed", {

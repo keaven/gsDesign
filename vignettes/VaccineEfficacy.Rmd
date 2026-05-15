@@ -162,7 +162,7 @@ x <- gsSurv(
 ```
 
 Now we convert this to a design with integer event counts at analyses.
-This is achieved by rounding interim analysis event counts from the above design and rounding up the final analysis event count.
+This is achieved by rounding event counts down and rounding total sample size to an integer allocation.
 This will result in a slight change in event fractions at interim analyses as well as a slight change from the targeted 90% power.
 We now explain the rationale behind the spending function choices.
 Recall that the hazard ratio (HR) is 1 minus the VE.

@@ -37,7 +37,7 @@ x <- gsSurv(ratio = 1, hr = .74)
 y <- x |> toInteger()
 # Continuous event counts
 x$n.I
-# Rounded event counts at interims, rounded up at final analysis
+# Event counts rounded down
 y$n.I
 # Continuous sample size at interim and final analyses
 as.numeric(x$eNE + x$eNC)
