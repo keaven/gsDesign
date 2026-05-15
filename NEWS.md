@@ -124,6 +124,12 @@
   (`vignette("gsDesignAISkills")`) and package-shipped AI workflow templates
   under `inst/ai/` so users can copy the agent instructions into their own
   projects after installing `gsDesign`.
+- Expanded the AI instructions and vignette example with function-selection
+  guidance that maps calendar-timed survival-design prompts, such as a
+  24-month interim after enrollment opens with `ratio = 1`, to
+  `gsSurvCalendar()` while preserving the original design specifications, and
+  clarifies that very low event counts can cue discussion of exact-binomial
+  rare-event methods without automatically changing the design family.
 
 ## Testing
 

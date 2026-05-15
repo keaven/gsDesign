@@ -17,11 +17,16 @@ knitr::opts_chunk$set(
 ## Overview
 
 The `gsDesign` repository includes lightweight AI workflow instructions for
-coding agents. These files are not statistical methods documentation. They are
-promptable development guides that help coding agents use consistent package
+coding agents. These files are not full statistical methods documentation. They
+are promptable development guides that help coding agents use consistent package
 maintenance habits: checking git status, updating `NEWS.md`, bumping development
 versions, running focused and broad tests, rebuilding pkgdown, and pushing
-issue branches.
+issue branches. They also include brief function-selection cues for common
+design requests, such as using `gsSurvCalendar()` when the prompt fixes analyses
+at calendar months after enrollment opens, while preserving the original design
+specifications unless the user asks to change them. Very low planned event
+counts can cue a discussion of exact-binomial rare-event methods, but should not
+by itself override a calendar-timed survival design request.
 
 The repository includes native instruction files for common coding agents:
 
@@ -77,28 +82,74 @@ file.copy(
 
 ## Example prompt and response
 
-An AI skill works best when the user gives a specific development task and lets
-the instruction file supply the package workflow details.
+An AI skill works best when the user gives a specific package-development or
+design-coding task and lets the instruction file supply the package workflow
+and routing details.
 
 Example prompt:
 
-> Use the gsDesign workflow instructions. Fix issue #264 on the current branch:
-> update `simBinomialSeasonalExact()` so simulated trials stop at efficacy or
-> futility boundary crossings, update `toInteger()` for rare-event equal
-> allocation, add regression tests, update `NEWS.md`, rebuild pkgdown, run the
-> package checks, commit, and push if everything is OK.
+> Use the gsDesign AI instructions. I am designing a standard time-to-event
+> group sequential trial, not a seasonal rare-event exact-binomial example.
+> Start with the original design specs: non-binding futility (`test.type = 4`),
+> information-based spending, Hwang-Shih-DeCani efficacy spending with
+> `sfupar = -4`, Hwang-Shih-DeCani futility spending with `sflpar = -2`,
+> one-sided alpha 0.025, beta 0.1, a control median of 12 months, null HR 1,
+> alternative HR 0.7, no dropout, uniform enrollment over 18 months, and
+> minimum follow-up of 18 months. Keep those specs. Use equal randomization and
+> add another interim analysis at 24 months after enrollment opens, so analyses
+> occur at 12, 24, and 36 months. Show the R code and explain which gsDesign
+> function matches this text.
 
 Example response:
 
-> I checked the branch and worktree, implemented the simulation stopping and
-> event-rounding updates, added focused regression tests, bumped the package to
-> the next development version, updated `NEWS.md`, rebuilt pkgdown, and ran
-> `R CMD check --no-manual`. The only remaining check warning is a local
-> macOS/R toolchain warning from `R_ext/Boolean.h`, not package code. I committed
-> the changes and pushed the issue branch to `origin`.
+> The phrase "analyses at 12, 24, and 36 months after enrollment opens" fixes
+> the analysis schedule on the calendar scale, so I would use
+> `gsSurvCalendar(calendarTime = c(12, 24, 36))`. The timing request changes
+> the analysis schedule only; the original test type, spending functions,
+> alpha, beta, hazard assumptions, dropout, accrual, and follow-up inputs are
+> preserved. I would not use `simBinomialSeasonalExact()` because the prompt
+> does not describe a seasonal rare-event exact-binomial monitoring problem.
+> If the resulting planned event counts are very low, such as fewer than 100
+> events, I might mention exact-binomial rare-event methods as a sensitivity or
+> alternative workflow to consider, but I would not switch to them unless the
+> endpoint and monitoring plan are actually binomial rare-event based. Equal
+> randomization is `ratio = 1`.
 
-The response is useful because it reports the workflow steps the agent took and
-separates package-code results from local toolchain noise.
+```r
+library(gsDesign)
+
+design <- gsSurvCalendar(
+  calendarTime = c(12, 24, 36),
+  spending = "information",
+  test.type = 4,
+  alpha = 0.025,
+  beta = 0.10,
+  sfu = sfHSD,
+  sfupar = -4,
+  sfl = sfHSD,
+  sflpar = -2,
+  lambdaC = log(2) / 12,
+  hr = 0.70,
+  hr0 = 1,
+  eta = 0,
+  gamma = 1,
+  R = 18,
+  minfup = 18,
+  ratio = 1
+)
+
+design_integer <- toInteger(design)
+gsBoundSummary(design_integer)
+```
+
+The response is useful because it maps the user's timing language to the
+appropriate `gsDesign` function before writing code. It also distinguishes
+calendar timing from calendar spending: `spending = "information"` keeps
+spending tied to information, while `spending = "calendar"` would tie spending
+to the calendar fractions. The original design specifications are kept in the
+function call rather than being replaced by generic defaults. The low-count
+heuristic is treated as a prompt to discuss alternatives, not as permission to
+change the design family.
 
 ## What these instructions do not do
 
