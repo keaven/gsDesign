@@ -4,6 +4,9 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^\.github$
+^\.gemini$
+^\.cursor$
+^\.local-r-lib$
 ^codecov\.yml$
 ^LICENSE\.md$
 ^cran-comments\.md$
