@@ -21,6 +21,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Keaven Anderson \email{keaven_anderson@merck.com}
 
+Authors:
+\itemize{
+  \item Keaven Anderson \email{keaven_anderson@merck.com}
+}
+
 Other contributors:
 \itemize{
   \item Merck & Co., Inc., Rahway, NJ, USA and its affiliates (\href{https://ror.org/02891sr49}{ROR}) [copyright holder]
