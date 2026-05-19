@@ -1,8 +1,8 @@
 ---
-title: "gsDesignVsSEQDESIGN"
+title: "Reproducing PROC SEQDESIGN survival designs in gsDesign"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{gsDesignVsSEQDESIGN}
+  %\VignetteIndexEntry{Reproducing PROC SEQDESIGN survival designs in gsDesign}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
