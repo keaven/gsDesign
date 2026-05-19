@@ -158,7 +158,7 @@ articles:
       - HarmBound
       - SelectiveBoundTesting
       - PoissonMixtureModel
-      - gsDesignVsSEQDESIGN
+      - SeqDesignSurvival
   - title: "Exact binomial designs with spending"
     desc: >
       Exact binomial workflows, including spending-function-based designs.
