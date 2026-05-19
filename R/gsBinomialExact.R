@@ -401,6 +401,7 @@ plot.gsBinomialExact <- function(x, plottype = 1, ...) {
 
 
 #' @importFrom ggplot2 geom_abline
+#' @export
 #' @rdname gsBinomialExact
 plot.binomialSPRT <- function(x, plottype = 1, ...) {
   p <- plot.gsBinomialExact(x, plottype = plottype, ...)
