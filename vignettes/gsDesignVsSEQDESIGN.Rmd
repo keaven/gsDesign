@@ -5,29 +5,31 @@ vignette: >
   %\VignetteIndexEntry{gsDesignVsSEQDESIGN}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
-```{r, include = FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
 
-```{r setup}
+```{r}
 library(gsDesign)
 ```
 
-# Overview
+## Overview
 
-This document provides a thorough analysis of the differences between **SAS PROC SEQDESIGN** and the **R gsDesign package** for designing group sequential clinical trials with time-to-event endpoints.
+This vignette provides a thorough analysis of the differences between
+the SAS SEQDESIGN procedure and the R package gsDesign for designing
+group sequential clinical trials with time-to-event endpoints.
 
-## Starting point: SAS PROC SEQDESIGN Example 109.14
+### Starting point: SAS PROC SEQDESIGN Example 109.14
 
-Consider the example described in the SAS Documentation: [Computing Sample Size for Survival Data with Uniform Accrual](https://documentation.sas.com/doc/en/statug/15.2/statug_seqdesign_examples14.htm)
-
+Consider the example described in the SAS Documentation:
+[Computing Sample Size for Survival Data with Uniform Accrual](https://documentation.sas.com/doc/en/statug/15.2/statug_seqdesign_examples14.htm).
 The SAS Code is as follows:
 
 ```sas
@@ -45,25 +47,18 @@ run;
 
 **SAS assumptions summary:**
 
--   4-stage group sequential design
+- 4-stage group sequential design
+- Lan-DeMets O'Brien-Fleming error spending function
+- Two-sided symmetric test, total alpha = 0.05
+- 90% power (beta = 0.10)
+- Equally spaced information fractions: 0.25, 0.50, 0.75, 1.00
+- Schoenfeld formula for required number of events
+- Sample size formula: $N = \text{ACCRATE} \times \text{ACCTIME} = 15 \times 18 = 270$ (fixed)
+- Study duration $T$ solved to achieve required events (CEILING=TIME)
+- Hazard ratio $HR = 0.01733 / 0.03466 = 0.5$
 
--   Lan-DeMets O'Brien-Fleming error spending function
-
--   Two-sided symmetric test, total alpha = 0.05
-
--   90% power (beta = 0.10)
-
--   Equally spaced information fractions: 0.25, 0.50, 0.75, 1.00
-
--   Schoenfeld formula for required number of events
-
--   Sample size formula: $N = \text{ACCRATE} \times \text{ACCTIME} = 15 \times 18 = 270$ (fixed)
-
--   Study duration $T$ solved to achieve required events (CEILING=TIME)
-
--   Hazard ratio $HR = 0.01733 / 0.03466 = 0.5$
-
-Based on these assumptions, a user naïvely attempting to replicate this in R with `gsDesign` may attempt code like the following:
+Based on these assumptions, a user naively attempting to replicate this in R
+with gsDesign may attempt code like the following:
 
 ```{r naive-r-attempt}
 des <- gsSurv(
@@ -71,13 +66,13 @@ des <- gsSurv(
   test.type = 2,
   alpha     = 0.05,
   beta      = 0.10,
-  sfu       = sfLDOF, # Lan-DeMets O'Brien–Fleming
-  timing    = c(.25, .50, .75, 1), # equal information fractions
+  sfu       = sfLDOF, # Lan-DeMets O'Brien--Fleming
+  timing    = c(.25, .50, .75, 1), # Equal information fractions
   lambdaC   = 0.03466,
   hr        = 0.5,
-  eta       = 0, # no dropout
-  gamma     = 15, # uniform accrual rate of 15/month
-  R         = 18, # accrual duration (months)
+  eta       = 0, # No dropout
+  gamma     = 15, # Uniform accrual rate of 15/month
+  R         = 18, # Accrual duration (months)
   T         = 25,
   ratio     = 1 # 1:1 randomization
 )
@@ -85,9 +80,14 @@ des <- gsSurv(
 des
 ```
 
-Note that the output differs in multiple ways, including that the `gsDesign` output indicates that fewer events will be required to achieve the desired level of power compared to the SAS output. Such differences do not cast doubt on the fidelity of either software, but rather highlight the underlying differences in assumptions and defaults settings in the design of each software tool.
+Note that the output differs in multiple ways, including that the gsDesign
+output indicates that fewer events will be required to achieve the desired
+level of power compared to the SAS output. Such differences do not cast doubt
+on the fidelity of either software, but rather highlight the underlying
+differences in assumptions and defaults settings in the design of each
+software tool.
 
-## Side-by-Side Comparison Table
+### Side-by-side comparison table
 
 ```{r comparison-table}
 events_sas <- c(22.27, 44.54, 66.81, 89.08)
@@ -110,75 +110,96 @@ knitr::kable(
 )
 ```
 
-The rest of this vignette works to resolve the apparent discrepancies in results, using the above example as a reference case. We identify the key assumptions in each system, explain why naïve parameter translation produces different results, and show how to obtain matching output. Those who would like to know more details about the design of the time-to-event functionality in `gsDesign` should consult the vignette titled "[Overview of survival endpoint design](https://keaven.github.io/gsDesign/articles/SurvivalOverview.html)."
+The rest of this vignette works to resolve the apparent discrepancies in
+results, using the above example as a reference case. We identify the key
+assumptions in each system, explain why naive parameter translation produces
+different results, and show how to obtain matching output.
+Those who would like to know more details about the design of the time-to-event
+functionality in gsDesign should consult `vignette("SurvivalOverview")`.
 
+## Key differences: SAS SEQDESIGN vs. R gsDesign
 
-# Key Differences: SAS SEQDESIGN vs R gsDesign
+There are three fundamental differences that affect the output from the example above.
 
-There are three fundamental differences that affect the output from the example above:
+### 1. Events formula
 
-## 1. Events Formula
+- **SAS:** @Schoenfeld1981. Uses only the null-hypothesis variance.
+- **gsDesign:** @LachinFoulkes by default.
+  Uses both null and alternative hypothesis variances. L-F is slightly more
+  conservative, giving \~1-2% more events than Schoenfeld for the same parameters.
 
--   **SAS:** Schoenfeld (1981). Uses only the null-hypothesis variance.
--   **gsDesign:** Lachin-Foulkes (1986) by default. Uses both null and alternative hypothesis variances. L-F is slightly more conservative, giving \~1-2% more events than Schoenfeld for the same parameters.
+### 2. Alpha handling in `gsSurv()`
 
-## 2. Alpha Handling in `gsSurv()`
+O'Brien-Fleming spending makes things a bit ambiguous due to the one-sided
+versus two-sided spending.
 
-O'Brien-Fleming spending makes things a bit ambiguous due to the one-sided versus two-sided spending. 
+- **SAS:** Uses a symmetric two-sided test with alpha = 0.05.
+  Per-tail, $z_{\alpha/2} = z_{0.025} = 1.96$.
+  Boundaries and event calculations both use 0.025 per tail.
+- **gsSurv():** The `test.type=2` with `alpha=0.05` creates the same
+  symmetric boundaries, but computes a different group sequential design
+  inflation factor because it counts power from both tails.
+  SAS computes the inflation factor using one-sided power only.
 
--   **SAS:** Uses a symmetric two-sided test with alpha = 0.05. Per-tail, $z_{\alpha/2} = z_{0.025} = 1.96$. Boundaries and event calculations both use 0.025 per tail.
--   **gsSurv():** The `test.type=2` with `alpha=0.05` creates the same symmetric boundaries, but computes a different group sequential design inflation factor because it counts power from both tails. SAS computes the inflation factor using one-sided power only. 
+A possible strategy for aligning `gsSurv()` and SAS calculations in this case
+is to use `test.type=1` with `alpha=0.025` to match SAS per-tail logic,
+as we will see momentarily.
 
-A possible strategy for aligning `gsSurv()` and SAS calculations in this case is to use `test.type=1` with `alpha=0.025` to match SAS per-tail logic, as we will see momentarily.
+### 3. What varies to achieve power
 
-## 3. What Varies to Achieve Power
+- **SAS:** Fixes the accrual rate and accrual time, solves for study duration.
+- **gsSurv():** Fixes study duration (`T`) and varies the accrual rate (`gamma`)
+  and accrual time (`R`).
 
--   **SAS:** Fixes the accrual rate and accrual time, solves for study duration.
--   **gsSurv():** Fixes study duration (`T`) and varies the accrual rate (`gamma`) and accrual time (`R`).
+## Aligning the two approaches
 
-# Aligning the two approaches
+### `gsSurv()` with aligned parameters
 
-## gsSurv() with Aligned Parameters
-
-Let's start our work with `gsDesign` by defining parameters to match SAS Example 109.14: 
+Let's start our work with gsDesign by defining parameters to match SAS Example 109.14:
 
 ```{r commonparm, message=FALSE}
-k       <- 4
-alpha   <- 0.05       # two-sided total alpha (SAS convention)
-beta    <- 0.10       # 1 - power = 0.10 → 90% power
-lambdaC <- 0.03466    # control hazard rate
-lambdaE <- 0.01733    # experimental hazard rate
-HR      <- lambdaE / lambdaC  # = 0.5
-timing  <- c(0.25, 0.50, 0.75, 1.00)  # equally spaced information fractions
-accrate <- 15         # uniform accrual rate (subjects per time unit)
-R       <- 18         # accrual duration (time units)
-N       <- accrate * R
+k <- 4
+alpha <- 0.05 # Two-sided total alpha (SAS convention)
+beta <- 0.10 # 1 - power = 0.10 -> 90% power
+lambdaC <- 0.03466 # Control hazard rate
+lambdaE <- 0.01733 # Experimental hazard rate
+HR <- lambdaE / lambdaC # = 0.5
+timing <- c(0.25, 0.50, 0.75, 1.00) # Equally spaced information fractions
+accrate <- 15 # Uniform accrual rate (subjects per time unit)
+R <- 18 # Accrual duration (time units)
+N <- accrate * R
 ```
 
-Instead of starting with a call to `gsDesign::gsDesign()`, we begin with `gsDesign::gsSurv()`. The  `gsSurv()` function combines `nSurv()` with `gsDesign()` (group sequential boundaries) in one call. It is the standard gsDesign function for designing time-to-event trials.
+Instead of starting with a call to `gsDesign::gsDesign()`, we begin with
+`gsDesign::gsSurv()`. The `gsSurv()` function combines `nSurv()` with
+`gsDesign()` (group sequential boundaries) in one call.
+It is the standard gsDesign function for designing time-to-event trials.
 
 Two key differences from SAS remain even with the alpha parameter aligned with SAS:
 
-\- `gsSurv()` defaults to Lachin-Foulkes sample size; Lachin-Foulkes gives slightly more events than Schoenfeld
-
-\- `gsSurv` with $T$ specified VARIES the accrual rate to achieve power, rather than fixing $N$ and solving for $T$ as SAS does. To address this, we set the `T` parameter equal to the study duration time calculated by SAS. 
+- `gsSurv()` defaults to Lachin-Foulkes sample size; Lachin-Foulkes gives
+  slightly more events than Schoenfeld.
+- `gsSurv()` with $T$ specified **varies** the accrual rate to achieve power,
+  rather than fixing $N$ and solving for $T$ as SAS does.
+  To address this, we set the `T` parameter equal to the study duration time
+  calculated by SAS.
 
 ```{r approach2}
 des_2 <- gsSurv(
-  k         = 4,
-  test.type = 1,          # one-sided (matches SAS per-tail)
-  alpha     = 0.025,      # alpha/2 per tail
-  beta      = 0.10,
-  sfu       = sfLDOF,
-  timing    = c(.25, .50, .75, 1),
-  lambdaC   = 0.03466,
-  hr        = 0.5,
-  eta       = 0,          # assume no dropout
-  gamma     = 15,         # input rate; gsSurv will ADJUST this
-  R         = 18,
-  T         = 25.13323, # This is the study duration computed by SAS
-  ratio     = 1, 
-  method = "Schoenfeld" # use Schoenfeld bounds to match SAS
+  k = 4,
+  test.type = 1, # One-sided (matches SAS per-tail)
+  alpha = 0.025, # alpha/2 per tail
+  beta = 0.10,
+  sfu = sfLDOF,
+  timing = c(.25, .50, .75, 1),
+  lambdaC = 0.03466,
+  hr = 0.5,
+  eta = 0, # Assume no dropout
+  gamma = 15, # Input rate; gsSurv will **adjust** this
+  R = 18,
+  T = 25.13323, # This is the study duration computed by SAS
+  ratio = 1,
+  method = "Schoenfeld" # Use Schoenfeld bounds to match SAS
 )
 des_2
 gsBoundSummary(des_2)
@@ -188,16 +209,22 @@ gsBoundSummary(des_2)
 
 Using `gsSurv()` with parameters that align with SAS settings, we notice that
 
-\- Z-boundaries: 4.333, 2.963, 2.359, 2.014 → matches SAS
+- $Z$-boundaries: 4.333, 2.963, 2.359, 2.014 -> matches SAS
+- Events: 23, 45, 67, 90 -> matches SAS; gsDesign is just taking the `ceiling()`
+  of the SAS output.
+- Total N: 280 (slightly more than SAS's fixed 270). This is a result of the
+  fact that `gsSurv()` is varying `R` and `gamma` (corresponding conceptually
+  to the parameters `acctime` and `accrate` in PROC SEQDESIGN) in order to
+  maintain power.
 
-\- Events: 23, 45, 67, 90 → matches SAS; gsDesign is just taking the `ceiling()` of the SAS output.
+### Bringing it full circle with SAS PROC SEQDESIGN
 
-\- Total N: 280 (slightly more than SAS's fixed 270). This is a result of the fact that `gsSurv()` is varying `R` and `gamma` (corresponding conceptually to the parameters `acctime` and `accrate` in PROC SEQDESIGN) in order to maintain power. 
-
-## Bringing it full circle with SAS PROC SEQDESIGN
-
-Observe the final values for `R` and `gamma` calculated by `gsSurv()` in the "Key inputs" table output (see above) by `des_2`: `gamma = 14.568`, and `R = 19.133` (slightly different than our input 15 and 18). If we substitute in these values for the `accrate` and `acctime` parameters in SAS, we will see that the SAS calculations produce a final sample size of `N = 278.7`, aligning with the `gsSurv()` sample size up.
-
+Observe the final values for `R` and `gamma` calculated by `gsSurv()` in the
+"Key inputs" table output (see above) by `des_2`: `gamma = 14.568`, and
+`R = 19.133` (slightly different than our input 15 and 18).
+If we substitute in these values for the `accrate` and `acctime` parameters
+in SAS, we will see that the SAS calculations produce a final sample size of
+`N = 278.7`, aligning with the `gsSurv()` sample size up.
 
 ``` sas
 proc seqdesign;
@@ -211,4 +238,3 @@ proc seqdesign;
         ceiling    = time);
 run;
 ```
-
