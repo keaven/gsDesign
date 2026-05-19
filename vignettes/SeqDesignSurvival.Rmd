@@ -1,6 +1,7 @@
 ---
 title: "Reproducing PROC SEQDESIGN survival designs in gsDesign"
 output: rmarkdown::html_vignette
+bibliography: "gsDesign.bib"
 vignette: >
   %\VignetteIndexEntry{Reproducing PROC SEQDESIGN survival designs in gsDesign}
   %\VignetteEncoding{UTF-8}
@@ -30,7 +31,7 @@ group sequential clinical trials with time-to-event endpoints.
 
 Consider the example described in the SAS Documentation:
 [Computing Sample Size for Survival Data with Uniform Accrual](https://documentation.sas.com/doc/en/statug/15.2/statug_seqdesign_examples14.htm).
-The SAS Code is as follows:
+The SAS code is as follows:
 
 ```sas
 proc seqdesign;
@@ -136,13 +137,13 @@ versus two-sided spending.
 - **SAS:** Uses a symmetric two-sided test with alpha = 0.05.
   Per-tail, $z_{\alpha/2} = z_{0.025} = 1.96$.
   Boundaries and event calculations both use 0.025 per tail.
-- **gsSurv():** The `test.type=2` with `alpha=0.05` creates the same
+- **gsSurv():** The `test.type = 2` with `alpha = 0.05` creates the same
   symmetric boundaries, but computes a different group sequential design
   inflation factor because it counts power from both tails.
   SAS computes the inflation factor using one-sided power only.
 
 A possible strategy for aligning `gsSurv()` and SAS calculations in this case
-is to use `test.type=1` with `alpha=0.025` to match SAS per-tail logic,
+is to use `test.type = 1` with `alpha = 0.025` to match SAS per-tail logic,
 as we will see momentarily.
 
 ### 3. What varies to achieve power
@@ -238,3 +239,5 @@ proc seqdesign;
         ceiling    = time);
 run;
 ```
+
+## References
