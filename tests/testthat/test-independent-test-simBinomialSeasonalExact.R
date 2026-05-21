@@ -54,10 +54,17 @@ test_that("simBinomialSeasonalExact validates core inputs", {
 
   expect_error(
     simBinomialSeasonalExact(gsD = design, ve = c(0.3, 1)),
-    "values in \\[0, 1\\)"
+    "finite values less than 1"
   )
   expect_no_error(
     simBinomialSeasonalExact(gsD = design, ve = c(0, 0.3), nsim = c(1, 1))
+  )
+  expect_no_error(
+    simBinomialSeasonalExact(gsD = design, ve = c(-0.1, 0, 0.3), nsim = c(1, 1, 1))
+  )
+  expect_error(
+    simBinomialSeasonalExact(gsD = design, ve = -10, control_event_rate = 0.5),
+    "experimental event rates outside"
   )
 
   expect_error(

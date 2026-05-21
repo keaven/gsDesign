@@ -13,7 +13,10 @@
 #'
 #' @param gsD A `gsSurv` object with `test.type` 1 or 4.
 #' @param ve Numeric vector of vaccine efficacy (or prevention efficacy)
-#'   scenarios to simulate.
+#'   scenarios to simulate. Each value must be finite and less than 1.
+#'   `ve = 0` corresponds to equal event rates (superiority null); `ve < 0`
+#'   corresponds to experimental-arm event rates above control (non-inferiority
+#'   margin or harmful scenarios).
 #' @param nsim Integer scalar or vector giving the number of simulations per
 #'   element of `ve`.
 #' @param control_event_rate Numeric scalar or vector with control seasonal
@@ -105,8 +108,8 @@ simBinomialSeasonalExact <- function(
   if (!(gsD$test.type %in% c(1, 4))) {
     stop("gsD$test.type must be 1 or 4", call. = FALSE)
   }
-  if (!is.numeric(ve) || length(ve) < 1 || any(!is.finite(ve)) || any(ve < 0) || any(ve >= 1)) {
-    stop("ve must be a numeric vector with values in [0, 1)", call. = FALSE)
+  if (!is.numeric(ve) || length(ve) < 1 || any(!is.finite(ve)) || any(ve >= 1)) {
+    stop("ve must be a numeric vector with finite values less than 1", call. = FALSE)
   }
   if (!is.numeric(season_length) || length(season_length) != 1 || !is.finite(season_length) || season_length <= 0) {
     stop("season_length must be a positive scalar", call. = FALSE)
@@ -145,6 +148,10 @@ simBinomialSeasonalExact <- function(
   if (!is.numeric(control_event_rate) || length(control_event_rate) != n_scen ||
       any(!is.finite(control_event_rate)) || any(control_event_rate <= 0) || any(control_event_rate >= 1)) {
     stop("control_event_rate must be a scalar or vector in (0, 1) with one value per ve scenario", call. = FALSE)
+  }
+  experimental_event_rate <- control_event_rate * (1 - ve)
+  if (any(experimental_event_rate < 0) || any(experimental_event_rate >= 1)) {
+    stop("ve and control_event_rate imply experimental event rates outside [0, 1)", call. = FALSE)
   }
 
   if (!is.logical(adaptive) || length(adaptive) < 1 || any(is.na(adaptive))) {
