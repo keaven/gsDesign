@@ -105,8 +105,8 @@ simBinomialSeasonalExact <- function(
   if (!(gsD$test.type %in% c(1, 4))) {
     stop("gsD$test.type must be 1 or 4", call. = FALSE)
   }
-  if (!is.numeric(ve) || length(ve) < 1 || any(!is.finite(ve)) || any(ve <= 0) || any(ve >= 1)) {
-    stop("ve must be a numeric vector with values strictly between 0 and 1", call. = FALSE)
+  if (!is.numeric(ve) || length(ve) < 1 || any(!is.finite(ve)) || any(ve < 0) || any(ve >= 1)) {
+    stop("ve must be a numeric vector with values in [0, 1)", call. = FALSE)
   }
   if (!is.numeric(season_length) || length(season_length) != 1 || !is.finite(season_length) || season_length <= 0) {
     stop("season_length must be a positive scalar", call. = FALSE)
