@@ -29,7 +29,10 @@ simBinomialSeasonalExact(
 \item{gsD}{A `gsSurv` object with `test.type` 1 or 4.}
 
 \item{ve}{Numeric vector of vaccine efficacy (or prevention efficacy)
-scenarios to simulate.}
+scenarios to simulate. Each value must be finite and less than 1.
+`ve = 0` corresponds to equal event rates (superiority null); `ve < 0`
+corresponds to experimental-arm event rates above control (non-inferiority
+margin or harmful scenarios).}
 
 \item{nsim}{Integer scalar or vector giving the number of simulations per
 element of `ve`.}

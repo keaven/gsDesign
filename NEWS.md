@@ -62,6 +62,11 @@
 - `simBinomialSeasonalExact()` now supports `usTime`/`lsTime` inputs and
   reports futility stopping probabilities (`futility_stop_rate` with
   `futility_mc_se`) in scenario summaries.
+- `simBinomialSeasonalExact()` now accepts `ve = 0` and `ve < 0`, allowing
+  null-hypothesis (`ve = 0`) and non-inferiority margin (`ve < 0`) scenarios.
+  Validation now requires only that `ve` values are finite and less than 1.
+  A feasibility check verifies that the implied experimental-arm event rates
+  (`control_event_rate * (1 - ve)`) remain in `[0, 1)` (#267).
 
 ## Bug fixes
 

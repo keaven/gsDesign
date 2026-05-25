@@ -27,10 +27,10 @@ This vignette provides a thorough analysis of the differences between
 the SAS SEQDESIGN procedure and the R package gsDesign for designing
 group sequential clinical trials with time-to-event endpoints.
 
-### Starting point: SAS PROC SEQDESIGN Example 109.14
+### Starting point: SAS PROC SEQDESIGN survival example
 
 Consider the example described in the SAS Documentation:
-[Computing Sample Size for Survival Data with Uniform Accrual](https://documentation.sas.com/doc/en/statug/15.2/statug_seqdesign_examples14.htm).
+[Computing Sample Size for Survival Data with Uniform Accrual](https://support.sas.com/documentation/cdl/en/statug/68162/HTML/default/statug_seqdesign_examples14.htm).
 The SAS code is as follows:
 
 ```sas
