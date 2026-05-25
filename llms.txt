@@ -339,6 +339,8 @@ trials with time-to-event endpoints using gsDesign.
   analyses](https://keaven.github.io/gsDesign/articles/SelectiveBoundTesting.md):
 - [A cure model calendar-based
   design](https://keaven.github.io/gsDesign/articles/PoissonMixtureModel.md):
+- [Reproducing PROC SEQDESIGN survival designs in
+  gsDesign](https://keaven.github.io/gsDesign/articles/SeqDesignSurvival.md):
 
 ### Exact binomial designs with spending
 
