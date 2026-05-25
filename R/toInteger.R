@@ -7,13 +7,13 @@
 #'   \code{ratio + 1}. See details.
 #'   If input is non integer, rounding is done to the nearest integer or
 #'   nearest larger integer depending on \code{roundUpFinal}.
-#' @param roundUpFinal Sample size is rounded up to a value of \code{ratio + 1}
-#'   with the default \code{roundUpFinal = TRUE} if \code{ratio} is a
-#'   non-negative integer.
+#' @param roundUpFinal For non-survival designs, final sample size is rounded
+#'   up to a multiple of \code{ratio + 1} with the default
+#'   \code{roundUpFinal = TRUE} if \code{ratio} is a non-negative integer.
+#'   For survival designs, the final event count is rounded up with
+#'   \code{roundUpFinal = TRUE}.
 #'   If \code{roundUpFinal = FALSE} and \code{ratio} is a non-negative integer,
 #'   sample size is rounded to the nearest multiple of \code{ratio + 1}.
-#'   For survival designs, event counts are rounded down; \code{roundUpFinal}
-#'   applies to the rounded total sample size, not to event counts.
 #'   See details.
 #'
 #' @return Output is an object of the same class as input \code{x}; i.e.,
@@ -26,13 +26,12 @@
 #' \code{ratio} in return.
 #' \code{ratio = 0, roundUpFinal = TRUE} will just round up the sample size
 #' for non-survival designs.
-#' Rounding of event count targets is not impacted by \code{ratio}.
 #' Since \code{x <- gsSurv(ratio = M)} returns a value for \code{ratio},
 #' \code{toInteger(x)} will round to a multiple of \code{M + 1} if \code{M}
 #' is a non-negative integer; otherwise, just rounding will occur.
-#' The most common example would be if there is 1:1 randomization (2:1) and
-#' the user wishes an even (multiple of 3) sample size, then \code{toInteger()}
-#' will operate as expected.
+#' For 1:1 randomization, \code{ratio = 1} gives an even final sample size.
+#' For 2:1 randomization, \code{ratio = 2} gives a final sample size that is
+#' a multiple of 3.
 #' To just round without concern for randomization ratio, set \code{ratio = 0}.
 #' If \code{toInteger(x, ratio = 3)}, rounding for final sample size is done
 #' to a multiple of 3 + 1 = 4; this could represent a 3:1 or 1:3
@@ -40,10 +39,41 @@
 #' For 3:2 randomization, \code{ratio = 4} would ensure rounding sample size
 #' to a multiple of 5.
 #'
+#' For a \code{gsSurv} object, \code{x$n.I} is an event-count schedule.
+#' \code{toInteger()} first converts each planned event count to an integer.
+#' Interim event counts are rounded to the nearest integer. The final event
+#' count is rounded up when \code{roundUpFinal = TRUE}; otherwise, it is rounded
+#' to the nearest integer. Values within 0.01 of an integer are rounded to that
+#' integer. Counts are constrained to be positive and strictly increasing. The
+#' group sequential boundaries and spending are then recomputed with
+#' \code{gsDesign()} at the integer event counts.
+#'
+#' Total sample size for a survival design is handled separately. The final
+#' expected total enrollment is rounded to a multiple of \code{ratio + 1},
+#' rounded up when \code{roundUpFinal = TRUE} and rounded to the nearest such
+#' multiple otherwise. Enrollment rates are scaled to achieve that rounded total
+#' over the original calendar plan, and final and interim analysis times are
+#' recalculated to match the integer event targets.
+#'
+#' In seasonal or otherwise piecewise survival designs, the independently
+#' rounded final sample size from this usual rule can make the final integer event target
+#' unattainable. If the rounded sample size is too small to ever reach the event
+#' target, \code{toInteger()} increases the sample size by allocation multiples.
+#' If the rounded sample size already implies more expected events than a lower
+#' event target at the earliest feasible final analysis, \code{toInteger()}
+#' reduces the sample size by allocation multiples. Either adjustment issues a
+#' warning. Designs where the initially rounded sample size already supports the
+#' integer event target retain the previous behavior.
+#' For a complete seasonal exact-binomial monitoring workflow, see
+#' \code{vignette("MultiSeasonRareEvents", package = "gsDesign")}.
+#'
 #' Selective-bound settings (\code{testUpper}, \code{testLower}, \code{testHarm},
 #' and harm spending for \code{test.type} 7 or 8) are carried from the input
 #' design into the internal \code{gsDesign()} recomputation so skipped looks stay
 #' skipped after integer rounding.
+#'
+#' @seealso \code{\link{gsSurv}}, \code{\link{toBinomialExact}},
+#'   \code{vignette("MultiSeasonRareEvents", package = "gsDesign")}
 #'
 #' @export
 #'
@@ -71,7 +101,8 @@
 #'   minfup = 8,            # Planned minimum follow-up
 #'   ratio = 3              # Randomization ratio (experimental:control)
 #' )
-#' # Convert sample size to multiple of ratio + 1 = 4, round event counts down.
+#' # Convert sample size to multiple of ratio + 1 = 4,
+#' # with final event count rounded up by default.
 #' toInteger(x)
 toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
   if (!inherits(x, "gsDesign")) stop("must have class gsDesign as input")
@@ -80,7 +111,12 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     ratio <- 0
   }
   if (inherits(x, "gsSurv")) {
-    counts <- ifelse(abs(x$n.I - round(x$n.I)) <= .01, round(x$n.I), floor(x$n.I))
+    counts <- round(x$n.I)
+    if (abs(x$n.I[x$k] - round(x$n.I[x$k])) <= .01) {
+      counts[x$k] <- round(x$n.I[x$k])
+    } else if (roundUpFinal) {
+      counts[x$k] <- ceiling(x$n.I[x$k])
+    }
     counts <- pmax(1, counts)
     if (x$k > 1) {
       for (i in 2:x$k) {
@@ -94,7 +130,7 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
       counts[x$k] <- round(x$n.I[x$k] / (ratio + 1)) * (ratio + 1)
     # For non-survival designs round sample size based on randomization ratio
     }else if (roundUpFinal) {
-      counts[x$k] <- ceiling(x$n.I[x$k] / (ratio + 1)) * (ratio + 1) # Round up for final count
+      counts[x$k] <- ceiling(x$n.I[x$k] / (ratio + 1)) * (ratio + 1) # Round up for final sample size
     } else {
       counts[x$k] <- round(x$n.I[x$k] / (ratio + 1)) * (ratio + 1)
     }
@@ -153,33 +189,63 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     } else {
       N <- round(N, 0) * (ratio + 1)
     }
-    # Update enrollment rates to achieve new sample size in same time
-    inflateN <- N / N_continuous
-    # Following is adapted from gsSurv() to construct gsSurv object
-    xx <- nSurv(
-      lambdaC = x$lambdaC, hr = x$hr, hr0 = x$hr0, eta = x$etaC, etaE = x$etaE,
-      gamma = x$gamma * inflateN, R = x$R, S = x$S, T = max(x$T), minfup = x$minfup, ratio = x$ratio,
-      alpha = x$alpha, beta = NULL, sided = 1, tol = x$tol
-    )
-    xx$tol <- x$tol
-    rounded_up_events <- ceiling(x$n.I[x$k])
-    if (rounded_up_events > xi$n.I[xi$k]) {
-      rounded_up_check <- tryCatch(
-        {
-          gsnSurv(xx, rounded_up_events)
-          TRUE
-        },
-        error = function(e) e
+    build_nsurv <- function(N_target) {
+      # Update enrollment rates to achieve new sample size in same time
+      inflateN <- N_target / N_continuous
+      # Following is adapted from gsSurv() to construct gsSurv object
+      xx <- nSurv(
+        lambdaC = x$lambdaC, hr = x$hr, hr0 = x$hr0, eta = x$etaC, etaE = x$etaE,
+        gamma = x$gamma * inflateN, R = x$R, S = x$S, T = max(x$T), minfup = x$minfup, ratio = x$ratio,
+        alpha = x$alpha, beta = NULL, sided = 1, tol = x$tol
       )
-      if (inherits(rounded_up_check, "error")) {
-        warning(
-          "toInteger: rounded-up event count is not achievable with the given enrollment model; ",
-          "event counts were rounded down.",
-          call. = FALSE
-        )
-      }
+      xx$tol <- x$tol
+      xx
     }
-    z <- gsnSurv(xx, xi$n.I[xi$k])
+    xx <- build_nsurv(N)
+    z <- tryCatch(gsnSurv(xx, xi$n.I[xi$k]), error = function(e) e)
+    if (inherits(z, "error")) {
+      z_error <- z
+      z_message <- conditionMessage(z)
+      N_original <- N
+      N_step <- ratio + 1
+      if (grepl("under-powered for any follow-up duration", z_message, fixed = TRUE)) {
+        N_candidate <- N + N_step
+        adjustment <- "increased"
+        next_N <- function(N_current) N_current + N_step
+        keep_going <- function(N_current) is.finite(N_current)
+      } else if (grepl("over-powered for any follow-up duration", z_message, fixed = TRUE)) {
+        N_candidate <- N - N_step
+        adjustment <- "reduced"
+        next_N <- function(N_current) N_current - N_step
+        keep_going <- function(N_current) N_current >= N_step
+      } else {
+        stop(conditionMessage(z), call. = FALSE)
+      }
+      n_adjustments <- 0
+      while (keep_going(N_candidate) && inherits(z, "error") && n_adjustments < 10000) {
+        xx_candidate <- build_nsurv(N_candidate)
+        z_candidate <- tryCatch(gsnSurv(xx_candidate, xi$n.I[xi$k]), error = function(e) e)
+        if (!inherits(z_candidate, "error")) {
+          N <- N_candidate
+          xx <- xx_candidate
+          z <- z_candidate
+        } else {
+          N_candidate <- next_N(N_candidate)
+          n_adjustments <- n_adjustments + 1
+        }
+      }
+      if (inherits(z, "error")) {
+        stop(conditionMessage(z_error), call. = FALSE)
+      }
+      warning(
+        "toInteger: rounded total sample size was ", adjustment, " from ", N_original,
+        " to ", N, " to make the integer event target achievable with the enrollment model.",
+        call. = FALSE
+      )
+    }
+    if (inherits(z, "error")) {
+      stop(conditionMessage(z), call. = FALSE)
+    }
     eDC <- NULL
     eDE <- NULL
     eDC0 <- NULL

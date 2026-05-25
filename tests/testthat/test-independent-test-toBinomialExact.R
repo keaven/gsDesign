@@ -73,10 +73,10 @@ test_that("toBinomialExact converts survival design to monotone integer bounds",
   expect_equal(result$k, design$k)
   expect_equal(result$n.I, expected_counts)
 
-  expect_equal(result$lower$bound, c(12, 23, 37))
-  expect_equal(result$upper$bound, c(21, 29, 39))
-  expect_equal(result$init_approx$a, c(12, 23, 37))
-  expect_equal(result$init_approx$b, c(20, 28, 38))
+  expect_equal(result$lower$bound, c(12, 23, 38))
+  expect_equal(result$upper$bound, c(22, 30, 39))
+  expect_equal(result$init_approx$a, c(12, 23, 38))
+  expect_equal(result$init_approx$b, c(21, 29, 39))
 
   expect_true(all(diff(result$lower$bound) >= 0))
   expect_true(all(diff(result$upper$bound) >= 0))

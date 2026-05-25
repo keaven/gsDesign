@@ -54,9 +54,22 @@ test_that("toInteger() handles gsSurv object integer conversion correctly", {
 
   # Test if the final sample size is a multiple of ratio + 1
   expect_equal(round(rowSums(result$eNC + result$eNE)[result$k]) %% (2 + 1), 0)
+  expect_equal(
+    rowSums(result$eNC + result$eNE)[result$k],
+    ceiling(rowSums(x$eNC + x$eNE)[x$k] / 3) * 3,
+    tolerance = 1e-5
+  )
 
-  # Ensure event counts are rounded down for survival designs
-  expect_equal(result$n.I[x$k], floor(x$n.I[x$k]))
+  # Ensure final event count is rounded up for survival designs
+  expect_equal(result$n.I[x$k], ceiling(x$n.I[x$k]))
+
+  result_nearest <- toInteger(x, ratio = 2, roundUpFinal = FALSE)
+  expect_equal(result_nearest$n.I[x$k], round(x$n.I[x$k]))
+  expect_equal(
+    rowSums(result_nearest$eNC + result_nearest$eNE)[result_nearest$k],
+    round(rowSums(x$eNC + x$eNE)[x$k] / 3) * 3,
+    tolerance = 1e-5
+  )
 })
 
 test_that("toInteger() handles edge case where no rounding is needed", {
@@ -195,7 +208,7 @@ test_that("toInteger() works for test.type 1 when x$lower is NULL", {
   expect_s3_class(xi, "gsDesign")
 })
 
-test_that("toInteger() rounds rare-event survival counts down when rounded-up events are not achievable", {
+test_that("toInteger() increases enrollment when rounded-up events are not achievable", {
   x <- gsSurv(
     k = 3,
     test.type = 4,
@@ -219,8 +232,51 @@ test_that("toInteger() rounds rare-event survival counts down when rounded-up ev
 
   expect_warning(
     xi <- toInteger(x),
-    "rounded-up event count is not achievable"
+    "rounded total sample size was increased"
   )
-  expect_equal(xi$n.I, floor(x$n.I))
+  expect_equal(xi$n.I, c(round(x$n.I[1:2]), ceiling(x$n.I[x$k])))
   expect_equal(round(rowSums(xi$eNC + xi$eNE)[xi$k]) %% 2, 0)
+  expect_equal(rowSums(xi$eDC + xi$eDE)[xi$k], xi$n.I[xi$k], tolerance = 1e-5)
+})
+
+test_that("toInteger() handles seasonal survival designs with final zero event rate", {
+  x <- gsSurv(
+    k = 3,
+    test.type = 4,
+    alpha = 0.025,
+    beta = 0.1,
+    timing = c(1 / 3, 2 / 3),
+    sfu = sfHSD,
+    sfupar = 1,
+    sfl = sfHSD,
+    sflpar = -2,
+    lambdaC = c(
+      -log(1 - 0.003) / 0.5, 0,
+      -log(1 - 0.003) / 0.5, 0,
+      -log(1 - 0.003) / 0.5, 0
+    ),
+    S = c(6, 6, 6, 6, 6),
+    hr = 0.2,
+    hr0 = 0.7,
+    eta = -log(1 - 0.1) / 0.5,
+    gamma = c(1, 0, 1, 0, 1, 0),
+    R = c(2, 10, 2, 10, 2, 10),
+    T = 42,
+    minfup = 6,
+    ratio = 3,
+    testLower = c(TRUE, FALSE, FALSE)
+  )
+
+  expect_warning(
+    xi <- toInteger(x),
+    NA
+  )
+  expect_equal(xi$n.I, c(round(x$n.I[1:2]), ceiling(x$n.I[x$k])))
+  expect_equal(round(rowSums(xi$eNC + xi$eNE)[xi$k]) %% 4, 0)
+  expect_equal(
+    rowSums(xi$eNC + xi$eNE)[xi$k],
+    ceiling(rowSums(x$eNC + x$eNE)[x$k] / 4) * 4,
+    tolerance = 1e-5
+  )
+  expect_equal(rowSums(xi$eDC + xi$eDE)[xi$k], xi$n.I[xi$k], tolerance = 1e-5)
 })

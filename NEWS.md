@@ -1,4 +1,4 @@
-# gsDesign (development version)
+# gsDesign 3.10.0 (May 2026)
 
 ## New features
 
@@ -77,10 +77,13 @@
   `test.type` 7 or 8) when recomputing the design after integer sample
   size or event-count rounding. Previously the internal `gsDesign()` call
   omitted these settings, so inactive looks could incorrectly become active.
-- `toInteger()` now rounds survival-design event counts down while still
-  rounding enrollment to the requested allocation multiple. A warning is issued
-  when a rounded-up event count is not achievable under the given enrollment
-  model, avoiding rare-event failures with equal allocation (#264).
+- `toInteger()` now preserves the intended survival-design behavior that
+  `roundUpFinal = TRUE` rounds the final event count up. If the independently
+  rounded final sample size, using the usual `ratio + 1` allocation multiple,
+  cannot support the integer event target, `toInteger()` adjusts sample size by
+  allocation multiples, with a warning, until the target is achievable. Designs
+  where the rounded sample size already supports the integer event target retain
+  the previous behavior (#264).
 - Fixed sign inconsistency in `hrn2z()` which used `sign(hr0 - hr1)`
   while `zn2hr()` used `sign(hr1 - hr0)`, preventing correct round-trip
   conversion. Both now use `sign(hr1 - hr0)` (@keaven, #251).
@@ -92,6 +95,14 @@
 
 ## Documentation
 
+- Corrected and generalized the multi-season rare-event vignette so enrollment
+  timing, planned counts, and simulation event-rate inputs are derived from the
+  stated design specifications, with calendar-timed seasonal analyses,
+  piecewise seasonal failure hazards, and cross-references to the exact
+  binomial vaccine-efficacy vignette (#264).
+- Expanded `toInteger()` help and vignette guidance for survival-design final
+  event rounding, final sample-size feasibility adjustment, and seasonal designs
+  with a final zero event-rate period (#264).
 - Documented `test.type` restriction in `toBinomialExact()`: only
   `test.type = 1` and `4` are supported; other types (including 7 and 8)
   produce an error (@keaven, #109).

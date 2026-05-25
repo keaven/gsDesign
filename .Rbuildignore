@@ -7,6 +7,12 @@
 ^\.gemini$
 ^\.cursor$
 ^\.local-r-lib$
+^AGENTS\.md$
+^CLAUDE\.md$
+^GEMINI\.md$
+^doc$
+^docs$
+^Meta$
 ^codecov\.yml$
 ^LICENSE\.md$
 ^cran-comments\.md$
