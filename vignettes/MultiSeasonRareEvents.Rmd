@@ -126,6 +126,8 @@ lambdaC <- c(-log(1 - seasonal_event_rate_control) / season_length_months, 0)
 S <- season_length_months
 eta <- -log(1 - dropout_6mo) / season_length_months
 
+# Integer conversion can slightly adjust total enrollment so the final integer
+# event target is achievable with the seasonal piecewise event-rate model.
 design_calendar <- gsSurvCalendar(
   test.type = 4,                  # Non-binding lower bound framework
   alpha = alpha,                  # One-sided Type I error
@@ -146,25 +148,23 @@ design_calendar <- gsSurvCalendar(
   minfup = season_length_months,  # Minimum follow-up for final enrollees
   ratio = ratio,                  # Experimental:control randomization ratio
   testLower = test_lower          # Futility only at selected analyses
-)
+) |>
+  toInteger() |>
+  suppressWarnings()
 
-# Integer conversion can slightly adjust total enrollment so the final integer
-# event target is achievable with the seasonal piecewise event-rate model.
-design_tte <- suppressWarnings(toInteger(design_calendar))
+gsBoundSummary(design_calendar)
 
-gsBoundSummary(design_tte)
-
-planned_final_events <- design_tte$n.I[design_tte$k]
+planned_final_events <- design_calendar$n.I[design_calendar$k]
 planned_counts <- as.integer(round(planned_final_events * timing))
 planned_counts[n_seasons] <- planned_final_events
 for (j in seq_along(planned_counts)[-1]) {
   planned_counts[j] <- max(planned_counts[j], planned_counts[j - 1] + 1L)
 }
 
-design_exact <- toBinomialExact(design_tte, observedEvents = planned_counts)
+design_exact <- toBinomialExact(design_calendar, observedEvents = planned_counts)
 
-planned_enrollment_period <- as.numeric(rowSums(as.matrix(design_tte$gamma))) *
-  as.numeric(design_tte$R)
+planned_enrollment_period <- as.numeric(rowSums(as.matrix(design_calendar$gamma))) *
+  as.numeric(design_calendar$R)
 season_id <- rep(seq_len(n_seasons), each = 2, length.out = length(planned_enrollment_period))
 planned_enrollment_by_season <- as.integer(round(tapply(planned_enrollment_period, season_id, sum)))
 planned_enrollment_control <- as.integer(round(planned_enrollment_by_season / (1 + ratio)))
@@ -179,10 +179,10 @@ In this table, `x` is the cumulative number of observed events in the
 experimental arm at a given analysis.
 
 ```{r}
-target_alpha_spend <- design_tte$upper$sf(
+target_alpha_spend <- design_calendar$upper$sf(
   alpha = alpha,
   t = timing,
-  param = design_tte$upper$param
+  param = design_calendar$upper$param
 )$spend
 
 achieved_alpha_spend <- cumsum(
@@ -216,8 +216,8 @@ ve_from_bound <- function(x, n, ratio) {
   out
 }
 
-futility_active <- if (!is.null(design_tte$testLower)) {
-  tl <- design_tte$testLower
+futility_active <- if (!is.null(design_calendar$testLower)) {
+  tl <- design_calendar$testLower
   if (length(tl) == 1) tl <- rep(tl, design_exact$k)
   as.logical(tl)
 } else {
@@ -332,7 +332,7 @@ x_offset_from_efficacy <- rep(0L, n_seasons)
 x_offset_from_efficacy[min(2L, n_seasons)] <- 1L
 example_x <- pmax(0L, design_exact$lower$bound + x_offset_from_efficacy)
 example_p <- repeatedPValueBinomialExact(
-  gsD = design_tte,
+  gsD = design_calendar,
   n.I = design_exact$n.I,
   x = example_x
 )
@@ -343,7 +343,7 @@ The sequential p-value is the minimum repeated p-value:
 
 ```{r}
 sequentialPValueBinomialExact(
-  gsD = design_tte,
+  gsD = design_calendar,
   n.I = design_exact$n.I,
   x = example_x
 )
@@ -375,9 +375,9 @@ observed_counts_update <- c(
   planned_counts[-n_seasons],
   max(planned_counts[n_seasons - 1] + 1L, planned_counts[n_seasons] - 5L)
 )
-update_exact <- toBinomialExact(design_tte, observedEvents = observed_counts_update)
+update_exact <- toBinomialExact(design_calendar, observedEvents = observed_counts_update)
 update_exact_full <- toBinomialExact(
-  design_tte,
+  design_calendar,
   observedEvents = observed_counts_update,
   maxSpend = TRUE
 )
@@ -406,7 +406,7 @@ ve_scenarios <- c(`H0 (VE=30%)` = ve0, `H1 (VE=80%)` = ve1)
 planned_control_event_rates <- rep(seasonal_event_rate_control, length(ve_scenarios))
 
 sim_light <- simBinomialSeasonalExact(
-  gsD = design_tte,
+  gsD = design_calendar,
   ve = ve_scenarios,
   nsim = rep(150, length(ve_scenarios)),
   control_event_rate = planned_control_event_rates,
@@ -462,7 +462,7 @@ both `VE = 30%` and `VE = 80%`.
 low_control_event_rates <- planned_control_event_rates / 2
 
 sim_low <- simBinomialSeasonalExact(
-  gsD = design_tte,
+  gsD = design_calendar,
   ve = ve_scenarios,
   nsim = rep(300, length(ve_scenarios)),
   control_event_rate = low_control_event_rates,
@@ -543,7 +543,7 @@ type1_nsim <- 20000
 power_nsim <- 3500
 
 sim_type1_big <- simBinomialSeasonalExact(
-  gsD = design_tte,
+  gsD = design_calendar,
   ve = c(`H0 (VE=30%)` = ve0),
   nsim = type1_nsim,
   control_event_rate = seasonal_event_rate_control,
@@ -558,7 +558,7 @@ sim_type1_big <- simBinomialSeasonalExact(
 )
 
 sim_power_big <- simBinomialSeasonalExact(
-  gsD = design_tte,
+  gsD = design_calendar,
   ve = c(`H1 (VE=80%)` = ve1),
   nsim = power_nsim,
   control_event_rate = seasonal_event_rate_control,
