@@ -72,9 +72,9 @@
 #'
 #' When study duration (\code{T}) and follow-up duration (\code{minfup}) are
 #' fixed, \code{nSurv} applies exactly the Lachin and Foulkes (1986) method of
-#' computing sample size under the proportional hazards assumption when For
-#' this computation, enrollment rates are altered proportionately to those
-#' input in \code{gamma} to achieve the power of interest.
+#' computing sample size under the proportional hazards assumption. For this
+#' computation, enrollment rates are altered proportionately to those input in
+#' \code{gamma} to achieve the power of interest.
 #'
 #' Given the specified enrollment rate(s) input in \code{gamma}, \code{nSurv}
 #' may also be used to derive enrollment duration required for a trial to have
@@ -89,10 +89,20 @@
 #' method will fail if the specified enrollment rates and durations either
 #' over-powers the trial with no additional follow-up or underpowers the trial
 #' with infinite follow-up. This method produces a corresponding error message
-#' in such cases.
+#' in such cases. For methods other than Lachin and Foulkes, these fixed-rate
+#' duration solves use the selected method for the fixed-design event
+#' calculation.
 #'
 #' The input to \code{gsSurv} is a combination of the input to \code{nSurv()}
 #' and \code{gsDesign()}.
+#' When \code{T = NULL} and \code{minfup} is specified, \code{gsSurv()}
+#' preserves the input accrual rate and minimum follow-up, applies the group
+#' sequential design, and solves the accrual duration needed for the final
+#' planned number of events.
+#' When both \code{T} and \code{minfup} are \code{NULL}, \code{gsSurv()}
+#' preserves the input accrual rate and duration, applies the group sequential
+#' design, and solves the follow-up duration needed for the final planned
+#' number of events.
 #'
 #' \code{nEventsIA()} is provided to compute the expected number of events at a
 #' given point in time given enrollment, event and censoring rates. The routine
@@ -505,7 +515,19 @@ nSurv <- function(
   etaC <- matrix(eta, nrow = nlambda, ncol = nstrata)
   etaE <- matrix(etaE, nrow = nlambda, ncol = nstrata)
   if (!is.matrix(gamma)) gamma <- matrix(gamma)
-  if (is.null(minfup) || is.null(T)) {
+  if (is.null(minfup) && method != "LachinFoulkes") {
+    xx <- LFPWESolveFollowupDuration(
+      lambdaC = lambdaC, hr = hr, hr0 = hr0, etaC = etaC, etaE = etaE,
+      gamma = gamma, R = R, S = S, ratio = ratio,
+      alpha = alpha, sided = sided, beta = beta, tol = tol, method = method
+    )
+  } else if (is.null(T) && !is.null(minfup) && method != "LachinFoulkes") {
+    xx <- LFPWESolveAccrualDuration(
+      lambdaC = lambdaC, hr = hr, hr0 = hr0, etaC = etaC, etaE = etaE,
+      gamma = gamma, R = R, S = S, minfup = minfup, ratio = ratio,
+      alpha = alpha, sided = sided, beta = beta, tol = tol, method = method
+    )
+  } else if (is.null(minfup) || is.null(T)) {
     xx <- KT(
       lambdaC = lambdaC, hr = hr, hr0 = hr0, etaC = etaC, etaE = etaE,
       gamma = gamma, R = R, S = S, minfup = minfup, ratio = ratio,
