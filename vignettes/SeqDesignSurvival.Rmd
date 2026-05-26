@@ -71,11 +71,9 @@ size is not calculated from the event formula; it is implied directly by the
 fixed accrual rate and accrual duration:
 `15 subjects/time unit * 18 time units = 270 subjects`.
 
-SAS also reports two sets of analysis quantities:
-
-- the original fractional-time design, where the analysis times are not rounded;
-- the `CEILING=TIME` adjusted design, where analysis times are rounded up to
-  integers.
+SAS reports two sets of analysis quantities. We focus first on the
+fractional-time design, where the analysis times are not rounded, and then
+return to the `CEILING=TIME` adjusted design later.
 
 ```{r sas-reported-values}
 sas_fractional <- data.frame(
@@ -95,14 +93,14 @@ sas_ceiling_time <- data.frame(
 )
 ```
 
-Based on these assumptions, a user naively attempting to replicate this in R
-with gsDesign might pass the two-sided SAS alpha directly to `gsSurv()`:
+gsDesign uses one-sided alpha by default, so we need to convert the two-sided SAS alpha to a one-sided alpha.
+The two-sided alpha is 0.05, so the one-sided alpha is 0.025.
 
-```{r naive-r-attempt}
+```{r aligned-r-attempt}
 des <- gsSurv(
   k         = 4,
   test.type = 2,
-  alpha     = 0.05,
+  alpha     = 0.025,
   beta      = 0.10,
   sfu       = sfLDOF, # Lan-DeMets O'Brien--Fleming
   timing    = c(.25, .50, .75, 1), # Equal information fractions
@@ -117,17 +115,14 @@ des <- gsSurv(
   method    = "Schoenfeld"
 )
 
-des
+des |> gsBoundSummary(tdigits = 2, ddigits = 2) |> gt::gt()
 ```
 
-Note that the output differs in multiple ways, including that the gsDesign
-output indicates that fewer events will be required than in the SAS output.
-This is not a disagreement in the boundary calculation. It is an alpha
-convention issue: `alpha = 0.05` in `gsDesign()` means 0.05 in each tail for a
-symmetric two-sided design, whereas SAS's `alpha = 0.05` is the total two-sided
-Type I error, or 0.025 per tail. In other words, the naive call spends roughly
-twice as much Type I error as intended for the SAS comparison, leading to
-less stringent boundaries and fewer required events.
+This call now matches the SAS fractional-time design. The key inputs are
+`alpha = 0.025`, which represents the one-sided alpha corresponding to SAS's
+two-sided total alpha of 0.05; `method = "Schoenfeld"`, which matches the SAS
+event formula; and `T = NULL, minfup = NULL`, which fixes the accrual duration
+and solves the follow-up time.
 
 ### Side-by-side comparison table
 
@@ -146,14 +141,12 @@ knitr::kable(
     Z_SAS = round(sas_fractional$Upper_Z, 4),
     Z_gsDesign = z_a2
   ),
-  caption = "Naive side-by-side comparison of events and Z-boundaries at each look."
+  caption = "Side-by-side comparison of events and Z-boundaries at each look."
 )
 ```
 
-The rest of this vignette works to resolve the apparent discrepancies in
-results, using the above example as a reference case. We identify the key
-assumptions in each system, explain why naive parameter translation produces
-different results, and show how to obtain matching output.
+The rest of this vignette identifies the key assumptions in each system and
+explains why alternative parameter translations can produce different results.
 Those who would like to know more details about the design of the time-to-event
 functionality in gsDesign should consult `vignette("SurvivalOverview")`.
 

@@ -1,3 +1,11 @@
+# gsDesign (development version)
+
+## Documentation
+
+- Updated the `SeqDesignSurvival` vignette to use the one-sided `gsSurv()`
+  alpha convention when reproducing SAS PROC SEQDESIGN fractional-time
+  survival output (#264).
+
 # gsDesign 3.10.0 (May 2026)
 
 ## New features
