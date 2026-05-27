@@ -542,7 +542,7 @@ We have made the spending function summary output more readable and informative.
 
 # gsDesign 3.1.1 (May 2020)
 
-- Vignettes updated.
+- Vignettes updated
 - Added `hGraph()` to support ggplot2 versions of multiplicity graphs
 - Eliminated unnecessary check from `sequentialPValue`
 - Targeted release to CRAN
@@ -591,7 +591,7 @@ We have made the spending function summary output more readable and informative.
 
 # gsDesign 3.0-0 (December 2015)
 
-- Updated xtable extension to meet R standards for extensions
+- Updated xtable extension to meet R standards for extensions.
 - Fixed `xtable.gsSurv` and `print.gsSurv` to work with 1-sided designs
 - Update to calls to ggplot to replace show_guide (deprecated) with `show.legend` arguments where used in `ggplot2::geom_text` calls; no user impact
 - Minor typo fixed in `sfLogistic` help file
