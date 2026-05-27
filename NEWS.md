@@ -76,7 +76,7 @@
   accrual rate and duration when both `T` and `minfup` are `NULL`, solving
   follow-up duration against the final group-sequential event requirement.
   This allows Schoenfeld survival designs to reproduce SAS PROC SEQDESIGN's
-  fixed-accrual follow-up solve (#265).
+  fixed-accrual follow-up solve (#270).
 - `simBinomialSeasonalExact()` now stops simulated trials at the first
   efficacy or futility boundary crossing for reporting stopping time, total
   events, and total enrollment, while preserving the non-binding futility
@@ -138,7 +138,7 @@
   `test.type = 2`, `alpha = 0.025`, `method = "Schoenfeld"`, and
   `T = minfup = NULL` to match SAS's symmetric two-sided fixed-accrual
   design, and by separating fractional-time output from the SAS ceiling-time
-  adjusted design (#265).
+  adjusted design (#270).
 - Added vignette "Multi-season studies for rare events"
   (`vignette("MultiSeasonRareEvents")`) demonstrating exact-binomial seasonal
   monitoring, analysis-time bound updates via
@@ -173,7 +173,7 @@
   equal-allocation path (#264).
 - Expanded `nSurv()` and `gsSurv()` regression tests across the supported
   `T`/`minfup` timing combinations for Schoenfeld, Freedman, and
-  Bernstein-Lagakos methods (#265).
+  Bernstein-Lagakos methods (#270).
 
 # gsDesign 3.9.0 (February 2026)
 
