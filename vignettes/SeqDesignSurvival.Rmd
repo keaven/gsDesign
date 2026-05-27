@@ -17,15 +17,25 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r, echo=FALSE, results='asis'}
+if (knitr::is_html_output()) {
+  knitr::asis_output(
+    "<style>table > caption { caption-side: top; caption-location: top; }</style>"
+  )
+}
+```
+
 ```{r}
 library(gsDesign)
 ```
 
 ## Overview
 
-This vignette provides a thorough analysis of the differences between
-the SAS SEQDESIGN procedure and the R package gsDesign for designing
-group sequential clinical trials with time-to-event endpoints.
+This vignette emphasizes exact numerical reproduction of SAS PROC
+SEQDESIGN survival outputs in gsDesign when design assumptions are
+matched.
+We first reproduce the SAS fractional-time table to printed precision.
+We then show different options that may lead to confusion in translating SAS PROC SEQDESIGN calls to gsDesign.
 
 ### Starting point: SAS PROC SEQDESIGN survival example
 
@@ -35,17 +45,27 @@ The first PROC SEQDESIGN call in that example does not specify `ACCTIME`; SAS
 therefore derives a range of possible accrual times. The comparison below uses
 the subsequent SAS call with `ACCTIME=18`, which fixes the maximum sample size
 at `15 * 18 = 270` subjects and asks SAS to solve the follow-up time.
+Note that the SAS survival sample size model is specified as uses the Schoenfeld formula for the targeted event counts.
+The computed sample size and event counts at each analysis are continuous values, not rounded to integers.
 
 ```sas
-proc seqdesign;
-    ErrorSpend: design nstages=4 method=errfuncobf
+proc seqdesign; /* Group sequential design procedure */
+    ErrorSpend: design /* Label for this design block */
+                nstages=4 /* Total analyses including final */
+                method=errfuncobf /* Lan-DeMets O'Brien-Fleming spending */
+                alt=twosided /* Two-sided alternative hypothesis */
+                stop=reject /* Early stop only for efficacy */
+                alpha=0.05 /* Total two-sided Type I error */
+                beta=0.10 /* Type II error (90% power) */
                 ;
-    samplesize model(ceiladjdesign=include)=twosamplesurvival(
-        nullhazard = 0.03466
-        hazard     = 0.01733
-        accrual    = uniform
-        accrate    = 15
-        acctime    = 18);
+    samplesize model(ceiladjdesign=include)= /* Survival model */
+        twosamplesurvival( /* Two-sample survival endpoint */
+        nullhazard = 0.03466 /* Control hazard under H0 */
+        hazard     = 0.01733 /* Experimental hazard under H1 */
+        accrual    = uniform /* Uniform enrollment */
+        accrate    = 15 /* Subjects enrolled per time unit */
+        acctime    = 18 /* Accrual duration in time units */
+    );
 run;
 ```
 
@@ -93,45 +113,42 @@ sas_ceiling_time <- data.frame(
 )
 ```
 
-gsDesign uses one-sided alpha by default, so we need to convert the two-sided SAS alpha to a one-sided alpha.
-The two-sided alpha is 0.05, so the one-sided alpha is 0.025.
+To reproduce the SAS fractional-time output exactly while specifying
+analysis timing in calendar units, we use
+`gsDesign::gsSurvCalendar(calendarTime = sas_fractional$Calendar_time)`.
+We keep one-sided `alpha = 0.025`, use `method = "Schoenfeld"`, and keep
+accrual fixed at 15 subjects per time unit for 18 time units by setting
+`R = 18` with `minfup = max(calendarTime) - R`.
 
 ```{r aligned-r-attempt}
-des <- gsSurv(
-  k         = 4,
+des <- gsSurvCalendar(
   test.type = 2,
   alpha     = 0.025,
   beta      = 0.10,
   sfu       = sfLDOF, # Lan-DeMets O'Brien--Fleming
-  timing    = c(.25, .50, .75, 1), # Equal information fractions
+  calendarTime = sas_fractional$Calendar_time,
+  spending  = "information",
   lambdaC   = 0.03466,
   hr        = 0.5,
   eta       = 0, # No dropout
   gamma     = 15, # Uniform accrual rate of 15/month
   R         = 18, # Accrual duration (months)
-  T         = NULL,
-  minfup    = NULL,
+  minfup    = max(sas_fractional$Calendar_time) - 18,
   ratio     = 1, # 1:1 randomization
   method    = "Schoenfeld"
 )
 
-des |> gsBoundSummary(tdigits = 2, ddigits = 2) |> gt::gt()
+# des |> gsBoundSummary(tdigits = 2, ddigits = 2) |> gt::gt()
 ```
 
-This call now matches the SAS fractional-time design. The key inputs are
-`alpha = 0.025`, which represents the one-sided alpha corresponding to SAS's
-two-sided total alpha of 0.05; `method = "Schoenfeld"`, which matches the SAS
-event formula; and `T = NULL, minfup = NULL`, which fixes the accrual duration
-and solves the follow-up time.
 
 ### Side-by-side comparison table
 
 ```{r comparison-table}
-events_a2 <- round(des$n.I, 2)
-
-z_a2 <- round(des$upper$bound, 4)
-
-N2a <- sum(des$eNC[4, ]) + sum(des$eNE[4, ])
+# Get results for comparison from gsDesign object
+events_a2 <- round(des$n.I, 2) # Event counts
+z_a2 <- round(des$upper$bound, 4) # Z-boundaries
+N2a <- sum(des$eNC[4, ]) + sum(des$eNE[4, ]) # Total sample size
 
 knitr::kable(
   data.frame(
@@ -191,6 +208,9 @@ and solves for the additional follow-up time. To match this in `gsSurv()`, set
 both `T = NULL` and `minfup = NULL`. This tells `gsSurv()` to keep the input
 accrual rate and accrual duration fixed, then solve the follow-up duration
 needed for the final group sequential event requirement.
+If analysis times are specified directly in calendar units, the corresponding
+`gsSurvCalendar()` setup is `calendarTime = ...` with
+`minfup = max(calendarTime) - accrual_duration`.
 
 This is a common source of apparent disagreement. For a fixed-duration
 survival design, `T` is the total study duration and `minfup` is the minimum
@@ -222,6 +242,7 @@ knitr::kable(
     Quantity = c(
       "Two-sided Type I error",
       "Symmetric two-sided design",
+      "Analysis timing input",
       "Event formula",
       "Accrual duration",
       "Total study duration",
@@ -230,6 +251,7 @@ knitr::kable(
     SAS = c(
       "alpha = 0.05 total",
       "Early stop to reject either side",
+      "Calendar times reported by PROC output",
       "Schoenfeld log-rank information",
       "ACCTIME = 18",
       "Total Time = 25.13323",
@@ -238,6 +260,7 @@ knitr::kable(
     gsDesign = c(
       "alpha = 0.025 per tail",
       "test.type = 2",
+      "gsSurvCalendar(calendarTime = ...)",
       "method = \"Schoenfeld\"",
       "R = 18",
       "T = NULL",
@@ -246,6 +269,7 @@ knitr::kable(
     Reason = c(
       "gsDesign stores and spends one-sided alpha",
       "Mirrors the upper and lower efficacy boundaries",
+      "Uses direct calendar-time analysis specification",
       "Avoids Lachin-Foulkes default event calculation",
       "Keeps the same fixed accrual duration",
       "Lets gsSurv() solve total time from fixed accrual",
@@ -258,6 +282,10 @@ knitr::kable(
 ```
 
 ## Aligning the two approaches
+
+The exact fractional-time reproduction above uses `gsSurvCalendar()` because
+SAS reports analysis timing in calendar units. An equivalent information-time
+translation using `gsSurv()` is shown next.
 
 ### `gsSurv()` with aligned parameters
 
@@ -404,6 +432,10 @@ The SAS example also reports a `CEILING=TIME` adjusted design. This is not the
 same design as the equal-information fractional-time output above. The analysis
 times are rounded up to 12, 17, 21, and 26, which increases the expected events
 and changes the information fractions.
+For calendar-scheduled analyses in general, this would naturally be specified
+with `gsSurvCalendar(calendarTime = c(12, 17, 21, 26), spending = "information")`.
+To match the SAS `CEILING=TIME` table exactly, we retain fixed accrual and use
+the implied event counts at those rounded calendar times.
 
 We can reproduce the ceiling-time event counts directly from the fixed accrual
 rate, fixed accrual duration, and exponential event rates. With equal
