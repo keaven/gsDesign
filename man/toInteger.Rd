@@ -86,10 +86,6 @@ and harm spending for \code{test.type} 7 or 8) are carried from the input
 design into the internal \code{gsDesign()} recomputation so skipped looks stay
 skipped after integer rounding.
 }
-\seealso{
-\code{\link{gsSurv}}, \code{\link{toBinomialExact}},
-  \code{vignette("MultiSeasonRareEvents", package = "gsDesign")}
-}
 \examples{
 # The following code derives the group sequential design using the method
 # of Lachin and Foulkes
@@ -117,4 +113,8 @@ x <- gsSurv(
 # Convert sample size to multiple of ratio + 1 = 4,
 # with final event count rounded up by default.
 toInteger(x)
+}
+\seealso{
+\code{\link{gsSurv}}, \code{\link{toBinomialExact}},
+  \code{vignette("MultiSeasonRareEvents", package = "gsDesign")}
 }
