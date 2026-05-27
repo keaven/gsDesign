@@ -4,10 +4,10 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^\.github$
-^AGENTS\.md$
 ^codecov\.yml$
 ^LICENSE\.md$
 ^cran-comments\.md$
 ^revdep$
 tests/benchmarks
 ^\.agents$
+^AGENTS\.md$
