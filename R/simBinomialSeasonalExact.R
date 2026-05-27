@@ -164,7 +164,7 @@ simBinomialSeasonalExact <- function(
     stop("gsD$ratio must be a positive scalar for simulation", call. = FALSE)
   }
 
-  gsD_int <- toInteger(gsD)
+  gsD_int <- if (max(round(gsD$n.I) != gsD$n.I)) toInteger(gsD) else gsD
   if (is.null(planned_counts)) {
     if (is.null(timing)) {
       timing <- gsD_int$timing
