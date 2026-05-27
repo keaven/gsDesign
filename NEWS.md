@@ -1,20 +1,12 @@
 # gsDesign (development version)
 
-## Documentation
-
-- Updated the `SeqDesignSurvival` vignette to use the one-sided `gsSurv()`
-  alpha convention when reproducing SAS PROC SEQDESIGN fractional-time
-  survival output (#264).
-
-# gsDesign 3.10.0 (May 2026)
-
 ## New features
 
 - Added `testUpper`, `testLower`, and `testHarm` parameters to `gsDesign()`,
   `gsSurv()`, and `gsSurvCalendar()` for selective bound testing at interim
   analyses. Each accepts a logical scalar or vector of length `k` specifying
   which analyses should include that boundary. Inactive bounds are set to
-  extreme values (±20 on Z-scale) and displayed as `NA` in `print()` and
+  extreme values (&plusmn;20 on Z-scale) and displayed as `NA` in `print()` and
   `gsBoundSummary()` output. This enables designs such as futility-only at
   early interims, deferred efficacy testing, or selective harm monitoring
   (@keaven, #141).
@@ -42,7 +34,7 @@
   timing. Unlike `gsSurv()` and `gsSurvCalendar()` which solve for sample
   size, `gsSurvPower()` takes fixed assumptions and computes power. Supports
   calendar-time and event-driven timing, stratified designs, all test types
-  (1–8 including harm bounds), and flexible analysis timing criteria
+  (1--8 including harm bounds), and flexible analysis timing criteria
   (`targetEvents`, `plannedCalendarTime`, `maxExtension`,
   `minTimeFromPreviousAnalysis`, `minN`, `minFollowUp`). When an existing
   `gsSurv` design is provided via `x`, parameters can be selectively
@@ -117,6 +109,9 @@
 
 ## Documentation
 
+- Updated the `SeqDesignSurvival` vignette to use the one-sided `gsSurv()`
+  alpha convention when reproducing SAS PROC SEQDESIGN fractional-time
+  survival output (#264).
 - Corrected and generalized the multi-season rare-event vignette so enrollment
   timing, planned counts, and simulation event-rate inputs are derived from the
   stated design specifications, with calendar-timed seasonal analyses,
@@ -156,20 +151,6 @@
   (c1065ea8, 2e9260bd).
 - Reorganized pkgdown article sections to separate general materials, exact
   binomial workflows, and multiple-hypothesis-testing content (67146132).
-- Added repository-level coding agent instructions for Codex, Claude Code,
-  Gemini, and GitHub Copilot to support consistent gsDesign issue-branch,
-  testing, NEWS/version, pkgdown, commit, and push workflows (04cc7929).
-- Added vignette "Using gsDesign AI skills"
-  (`vignette("gsDesignAISkills")`) and package-shipped AI workflow templates
-  under `inst/ai/` so users can copy the agent instructions into their own
-  projects after installing `gsDesign` (8dd96c3b).
-- Expanded the AI instructions and vignette example with function-selection
-  guidance that maps calendar-timed survival-design prompts, such as a
-  24-month interim after enrollment opens with `ratio = 1`, to
-  `gsSurvCalendar()` while preserving the original design specifications, and
-  clarifies that very low event counts can cue discussion of exact-binomial
-  rare-event methods without automatically changing the design family
-  (b1eae2f0).
 
 ## Testing
 
@@ -314,7 +295,7 @@
 
 - New function `binomialPowerTable()` generates power tables across control
   rates and treatment effects. Supports both analytical calculations and
-  fast simulation for exact results (c466a616).
+  fast simulation for exact results.
 
 # gsDesign 3.6.8 (May 2025)
 
@@ -506,23 +487,23 @@ We have made the spending function summary output more readable and informative.
 
 # gsDesign 3.5.0 (July 2023)
 
-- `sfPower()` now allows a wider parameter range (0, 15] (5502e4a1).
+- `sfPower()` now allows a wider parameter range (0, 15].
 - `toInteger()` function added to convert `gsDesign` or `gsSurv` classes
-  to integer sample size and event counts (5502e4a1).
+  to integer sample size and event counts.
 - `toBinomialExact()` function added to convert time-to-event bounds to
-  exact binomial for low event rate studies (5502e4a1).
+  exact binomial for low event rate studies.
 - Added "A Gentle Introduction to Group Sequential Design" vignette for
-  an introduction to asymptotics for group sequential design (5502e4a1).
+  an introduction to asymptotics for group sequential design.
 - `as_table()` and `as_gt()` methods for `gsBinomialExact` objects added,
-  as described in the new "Binomial SPRT" vignette (5502e4a1).
+  as described in the new "Binomial SPRT" vignette.
 - In `plot.ssrCP()`, the `hat` syntax in the mathematical expression is revised,
-  resolving labeling issues (5502e4a1).
+  resolving labeling issues.
 - `ggplot2::qplot()` usage replaced due to its deprecation in ggplot2 3.4.0
-  (5502e4a1).
+ .
 - Link update for the gsDesign manual in the documentation,
   now directly pointing to the gsDesign technical manual bookdown project
-  (5502e4a1).
-- Introduced a new hex sticker logo (5502e4a1).
+ .
+- Introduced a new hex sticker logo.
 
 # gsDesign 3.4.0 (October 2022)
 
@@ -536,98 +517,98 @@ We have made the spending function summary output more readable and informative.
 - Addition of vignettes
   - Demonstrate cure model and calendar-based analysis timing for time-to-event endpoint design
   - Vaccine efficacy design using spending bounds and exact binomial boundary crossing probabilities
-  (85f1875f).
-- Minor fix to labeling in print.gsProbability (85f1875f).
-- Fixed error in sfStep (85f1875f).
-- Updates to reduce R CMD check and other minor issues (85f1875f).
+ .
+- Minor fix to labeling in print.gsProbability.
+- Fixed error in sfStep.
+- Updates to reduce R CMD check and other minor issues.
 
 # gsDesign 3.2.2 (January 2022)
 
-- Use `inherits()` instead of `is()` to determine if an object is an instance of a class, when appropriate (cbf9a940).
-- Correctly close graphics device in unit tests to avoid plot output file not found issues (cbf9a940).
-- Minor fixes to hGraph() for multiplicity graphs (cbf9a940).
-- Minor fix to nBinomial() when odds-ratio scale specified to resolve user issue (cbf9a940).
-- Minor changes to vignettes (cbf9a940).
+- Use `inherits()` instead of `is()` to determine if an object is an instance of a class, when appropriate.
+- Correctly close graphics device in unit tests to avoid plot output file not found issues.
+- Minor fixes to hGraph() for multiplicity graphs.
+- Minor fix to nBinomial() when odds-ratio scale specified to resolve user issue.
+- Minor changes to vignettes.
 
 # gsDesign 3.2.1 (July 2021)
 
-- Changed gt package usage in a vignette due to deprecated gt function (eae74e2b).
-- Replied to minor comments from CRAN reviewer (no functionality impact) (eae74e2b).
-- Minor update to DESCRIPTION citing Jennison and Turnbull reference (eae74e2b).
+- Changed gt package usage in a vignette due to deprecated gt function.
+- Replied to minor comments from CRAN reviewer (no functionality impact).
+- Minor update to DESCRIPTION citing Jennison and Turnbull reference.
 
 # gsDesign 3.2.0 (January 2021)
 
-- Substantially updated unit testing to increase code coverage above 80% (96e49fd7).
-- Updated error checking messages to print function where check fails (96e49fd7).
-- Removed dependencies on plyr packages (96e49fd7).
-- Updated github actions (96e49fd7).
+- Substantially updated unit testing to increase code coverage above 80%.
+- Updated error checking messages to print function where check fails.
+- Removed dependencies on plyr packages.
+- Updated github actions.
 
 # gsDesign 3.1.1 (May 2020)
 
-- Vignettes updated (520c23e4).
-- Added `hGraph()` to support ggplot2 versions of multiplicity graphs (520c23e4).
-- Eliminated unnecessary check from `sequentialPValue` (520c23e4).
-- Targeted release to CRAN (520c23e4).
-- Removed dependencies on reshape2, plyr (520c23e4).
-- Updated continuous integration (520c23e4).
-- Updated license (520c23e4).
+- Vignettes updated.
+- Added `hGraph()` to support ggplot2 versions of multiplicity graphs.
+- Eliminated unnecessary check from `sequentialPValue`.
+- Targeted release to CRAN.
+- Removed dependencies on reshape2, plyr.
+- Updated continuous integration.
+- Updated license.
 
 # gsDesign 3.1.0 (April 2019)
 
-- Addition of pkgdown web site (b4001d4d).
-- Updated unit testing to from RUnit to testthat (b4001d4d).
-- Converted to roxygen2 generation of help files (b4001d4d).
-- Converted vignettes to R Markdown (b4001d4d).
-- Added Travis-CI and Appveyor support (b4001d4d).
-- Added `sequentialPValue` function (b4001d4d).
-- Backwards compatible addition of spending time capabilities to `gsDesign` and `gsSurv` (b4001d4d).
+- Addition of pkgdown web site.
+- Updated unit testing to from RUnit to testthat.
+- Converted to roxygen2 generation of help files.
+- Converted vignettes to R Markdown.
+- Added Travis-CI and Appveyor support.
+- Added `sequentialPValue` function.
+- Backwards compatible addition of spending time capabilities to `gsDesign` and `gsSurv`.
 
 # gsDesign 3.0-5 (January 2018)
 
-- Registered C routines (e52467d5).
-- Fixed "gsbound" (e52467d5).
-- Replaced "array" by "rep" calls to avoid `R CMD check` warnings (db229717).
+- Registered C routines.
+- Fixed "gsbound".
+- Replaced "array" by "rep" calls to avoid `R CMD check` warnings.
 
 # gsDesign 3.0-4 (September 2017)
 
-- First Github-based release (e52467d5).
-- Cleaned up documentation for `nBinomial1Sample()` (e52467d5).
-- Updated documentation and code (including one default value for an argument) for `nBinomial1Sample()` to improve error handling and clarity (e52467d5).
-- Updated `sfLDOF()` to generalize with rho parameter; still backwards compatible for Lan-DeMets O'Brien-Fleming (e52467d5).
+- First Github-based release.
+- Cleaned up documentation for `nBinomial1Sample()`.
+- Updated documentation and code (including one default value for an argument) for `nBinomial1Sample()` to improve error handling and clarity.
+- Updated `sfLDOF()` to generalize with rho parameter; still backwards compatible for Lan-DeMets O'Brien-Fleming.
 
 # gsDesign 3.0-3
 
-- Introduced spending time as a separate concept from information time to enable concepts such as calendar-based spending functions. The only user function changed is the `gsDesign()` function and the change is the addition of the parameters `usTime` and `lsTime`; default behavior is backwards compatible (e52467d5).
+- Introduced spending time as a separate concept from information time to enable concepts such as calendar-based spending functions. The only user function changed is the `gsDesign()` function and the change is the addition of the parameters `usTime` and `lsTime`; default behavior is backwards compatible.
 
 # gsDesign 3.0-2 (February 2016)
 
-- Simplified conditional power section of gsDesignManual.pdf in doc directory (e52467d5).
-- Corrected basic calculation in `gsCP()` (e52467d5).
-- Eliminated deprecated ggplot2 function `opts()` (e52467d5).
+- Simplified conditional power section of gsDesignManual.pdf in doc directory.
+- Corrected basic calculation in `gsCP()`.
+- Eliminated deprecated ggplot2 function `opts()`.
 
 # gsDesign 3.0-1 (January 2016)
 
-- More changes to comply with R standards (in NAMESPACE - `importFrom` statements - and DESCRIPTION - adding plyr to imports) ensuring appropriate references (e52467d5).
-- Deleted link in documentation that no longer exists (gsBinomialExact.Rd) (e52467d5).
-- Last planned RForge-based release; moving to Github (e52467d5).
+- More changes to comply with R standards (in NAMESPACE - `importFrom` statements - and DESCRIPTION - adding plyr to imports) ensuring appropriate references.
+- Deleted link in documentation that no longer exists (gsBinomialExact.Rd).
+- Last planned RForge-based release; moving to Github.
 
 # gsDesign 3.0-0 (December 2015)
 
-- Updated xtable extension to meet R standards for extensions (e52467d5).
-- Fixed `xtable.gsSurv` and `print.gsSurv` to work with 1-sided designs (e52467d5).
-- Update to calls to ggplot to replace show_guide (deprecated) with `show.legend` arguments where used in `ggplot2::geom_text` calls; no user impact (e52467d5).
-- Minor typo fixed in `sfLogistic` help file (e52467d5).
-- Cleaned up "imports" and "depends" in an effort to be an R "good citizen" (e52467d5).
-- Registered S3 methods in NAMESPACE (e52467d5).
+- Updated xtable extension to meet R standards for extensions.
+- Fixed `xtable.gsSurv` and `print.gsSurv` to work with 1-sided designs.
+- Update to calls to ggplot to replace show_guide (deprecated) with `show.legend` arguments where used in `ggplot2::geom_text` calls; no user impact.
+- Minor typo fixed in `sfLogistic` help file.
+- Cleaned up "imports" and "depends" in an effort to be an R "good citizen".
+- Registered S3 methods in NAMESPACE.
 
 # gsDesign 2.9-4
 
-- Minor edit to package description to comply with R standards (e52467d5).
+- Minor edit to package description to comply with R standards.
 
 # gsDesign 2.9-3 (November 2014)
 
-- Added `sfTrimmed` as likely preferred spending function approach to skipping early or all interim efficacy analyses; this also can adjust bound when final analysis is performed with less than maximum planned information. Updated `help(sfTrimmed)` to demonstrate these capabilities (e52467d5).
-- Added `sfGapped`, which is primarily intended to eliminate futility analyses later in a study; see `help(sfGapped)` for an example (e52467d5).
-- Added `summary.spendfn()` to provide textual summary of spending functions; this simplified the print function for gsDesign objects (e52467d5).
-- Added `sfStep()` which can be used to set an interim spend when the exact amount of information is unknown; an example of how this can be misused is provided in the help file (e52467d5).
-- Fixed rounding so that `gsBoundSummary`, `xtable.gsSurv` and `summary.gsDesign` are consistent for `gsSurv` objects (e52467d5).
+- Added `sfTrimmed` as likely preferred spending function approach to skipping early or all interim efficacy analyses; this also can adjust bound when final analysis is performed with less than maximum planned information. Updated `help(sfTrimmed)` to demonstrate these capabilities.
+- Added `sfGapped`, which is primarily intended to eliminate futility analyses later in a study; see `help(sfGapped)` for an example.
+- Added `summary.spendfn()` to provide textual summary of spending functions; this simplified the print function for gsDesign objects.
+- Added `sfStep()` which can be used to set an interim spend when the exact amount of information is unknown; an example of how this can be misused is provided in the help file.
+- Fixed rounding so that `gsBoundSummary`, `xtable.gsSurv` and `summary.gsDesign` are consistent for `gsSurv` objects.
