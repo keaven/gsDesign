@@ -97,6 +97,13 @@
   allocation multiples, with a warning, until the target is achievable. Designs
   where the rounded sample size already supports the integer event target retain
   the previous behavior (#264).
+- `toInteger()` survival integerization now keeps the calendar design fixed
+  while deriving interim integer events from timing and final integer event
+  target. Enrollment is inflated minimally by scaling accrual rates and then
+  rounded to allocation multiples, avoiding unnecessary calendar-extension-driven
+  enrollment increases for small final-event rounding changes. A variable-duration
+  fallback is retained with a warning when fixed-calendar inflation is infeasible
+  (#271).
 - Fixed sign inconsistency in `hrn2z()` which used `sign(hr0 - hr1)`
   while `zn2hr()` used `sign(hr1 - hr0)`, preventing correct round-trip
   conversion. Both now use `sign(hr1 - hr0)` (@keaven, #251).

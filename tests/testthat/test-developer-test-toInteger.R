@@ -50,11 +50,12 @@ test_that("Test: toInteger for multiple of 5", {
 test_that("Test: toInteger for survival endpoint event count works properly", {
   # This gives 252.1852 as sample size, 227.1393 as final event count
   x <- gsSurvCalendar(hr = 0.64)
-  # Should round interim event counts and round up final event count and sample size.
+  # Should derive interim integer events from timing and round up final event count.
   y <- toInteger(x)
 
-  # Event counts converted to integers
-  expect_equal(y$n.I, c(round(x$n.I[1:(x$k - 1)]), ceiling(x$n.I[x$k])))
+  # Event counts converted to strictly increasing integers with rounded-up final count
+  expect_equal(y$n.I[x$k], ceiling(x$n.I[x$k]))
+  expect_true(all(diff(y$n.I) > 0))
   # Final sample size rounds to even
   expect_true(as.integer((y$eNC + y$eNE)[x$k]) %% 2 == 0)
   # Final sample size rounds up

@@ -40,30 +40,24 @@
 #' to a multiple of 5.
 #'
 #' For a \code{gsSurv} object, \code{x$n.I} is an event-count schedule.
-#' \code{toInteger()} first converts each planned event count to an integer.
-#' Interim event counts are rounded to the nearest integer. The final event
-#' count is rounded up when \code{roundUpFinal = TRUE}; otherwise, it is rounded
-#' to the nearest integer. Values within 0.01 of an integer are rounded to that
-#' integer. Counts are constrained to be positive and strictly increasing. The
-#' group sequential boundaries and spending are then recomputed with
-#' \code{gsDesign()} at the integer event counts.
+#' \code{toInteger()} rounds the final planned event count (up when
+#' \code{roundUpFinal = TRUE}; otherwise to nearest integer, with a 0.01
+#' tolerance), then derives interim integer event targets from
+#' \code{x$timing * final_events}. Interim counts are constrained to be positive
+#' and strictly increasing. Group sequential boundaries and spending are
+#' recomputed with \code{gsDesign()} at the integer event counts.
 #'
-#' Total sample size for a survival design is handled separately. The final
-#' expected total enrollment is rounded to a multiple of \code{ratio + 1},
-#' rounded up when \code{roundUpFinal = TRUE} and rounded to the nearest such
-#' multiple otherwise. Enrollment rates are scaled to achieve that rounded total
-#' over the original calendar plan, and final and interim analysis times are
-#' recalculated to match the integer event targets.
+#' Total sample size for a survival design is then updated under a fixed
+#' calendar plan (same enrollment periods, study duration, and minimum
+#' follow-up). Enrollment rates are scaled proportionally to the final-event
+#' inflation factor and rounded to the nearest allocation multiple
+#' \code{ratio + 1} (or rounded up when \code{roundUpFinal = TRUE}), with
+#' additional allocation-step adjustment only if needed to make the integer
+#' final event target achievable.
 #'
-#' In seasonal or otherwise piecewise survival designs, the independently
-#' rounded final sample size from this usual rule can make the final integer event target
-#' unattainable. If the rounded sample size is too small to ever reach the event
-#' target, \code{toInteger()} increases the sample size by allocation multiples.
-#' If the rounded sample size already implies more expected events than a lower
-#' event target at the earliest feasible final analysis, \code{toInteger()}
-#' reduces the sample size by allocation multiples. Either adjustment issues a
-#' warning. Designs where the initially rounded sample size already supports the
-#' integer event target retain the previous behavior.
+#' If fixed-calendar enrollment-rate inflation cannot make the integer final
+#' event target feasible, \code{toInteger()} falls back to a variable-duration
+#' solve and issues a warning.
 #' For a complete seasonal exact-binomial monitoring workflow, see
 #' \code{vignette("MultiSeasonRareEvents", package = "gsDesign")}.
 #'
@@ -111,17 +105,21 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     ratio <- 0
   }
   if (inherits(x, "gsSurv")) {
-    counts <- round(x$n.I)
-    if (abs(x$n.I[x$k] - round(x$n.I[x$k])) <= .01) {
-      counts[x$k] <- round(x$n.I[x$k])
-    } else if (roundUpFinal) {
-      counts[x$k] <- ceiling(x$n.I[x$k])
+    final_count <- round(x$n.I[x$k])
+    if (abs(x$n.I[x$k] - final_count) > .01) {
+      final_count <- if (roundUpFinal) ceiling(x$n.I[x$k]) else round(x$n.I[x$k])
     }
-    counts <- pmax(1, counts)
+    counts <- rep(final_count, x$k)
     if (x$k > 1) {
-      for (i in 2:x$k) {
-        counts[i] <- max(counts[i], counts[i - 1] + 1)
+      counts[1:(x$k - 1)] <- round(x$timing[1:(x$k - 1)] * final_count)
+      counts[1:(x$k - 1)] <- pmax(1, pmin(counts[1:(x$k - 1)], final_count - 1))
+      if (x$k > 2) {
+        for (i in 2:(x$k - 1)) {
+          max_allowed <- final_count - (x$k - i)
+          counts[i] <- min(max_allowed, max(counts[i], counts[i - 1] + 1))
+        }
       }
+      counts[x$k] <- max(final_count, counts[x$k - 1] + 1)
     }
   } else {
     counts <- round(x$n.I) # Round sample size for non-survival designs
@@ -180,14 +178,13 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     xi$hr0 <- x$hr0 # H0 hazard ratio
     xi$hr <- x$hr # H1 hazard ratio
 
-    N <- rowSums(x$eNC + x$eNE)[x$k] # get input total sample size
-    N_continuous <- N
-    # Update sample size to integer
-    N <- N / (ratio + 1)
+    N_continuous <- rowSums(x$eNC + x$eNE)[x$k]
+    event_inflate <- xi$n.I[x$k] / x$n.I[x$k]
+    N_raw <- N_continuous * event_inflate
     if (roundUpFinal) {
-      N <- ceiling(N) * (ratio + 1)
+      N <- ceiling(N_raw / (ratio + 1)) * (ratio + 1)
     } else {
-      N <- round(N, 0) * (ratio + 1)
+      N <- round(N_raw / (ratio + 1), 0) * (ratio + 1)
     }
     build_nsurv <- function(N_target) {
       # Update enrollment rates to achieve new sample size in same time
@@ -201,50 +198,83 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
       xx$tol <- x$tol
       xx
     }
+    if (N <= 0) {
+      N <- ratio + 1
+    }
+
+    target_events <- xi$n.I[x$k]
+    N_step <- ratio + 1
     xx <- build_nsurv(N)
-    z <- tryCatch(gsnSurv(xx, xi$n.I[xi$k]), error = function(e) e)
-    if (inherits(z, "error")) {
-      z_error <- z
-      z_message <- conditionMessage(z)
-      N_original <- N
-      N_step <- ratio + 1
-      if (grepl("under-powered for any follow-up duration", z_message, fixed = TRUE)) {
-        N_candidate <- N + N_step
-        adjustment <- "increased"
-        next_N <- function(N_current) N_current + N_step
-        keep_going <- function(N_current) is.finite(N_current)
-      } else if (grepl("over-powered for any follow-up duration", z_message, fixed = TRUE)) {
-        N_candidate <- N - N_step
-        adjustment <- "reduced"
-        next_N <- function(N_current) N_current - N_step
-        keep_going <- function(N_current) N_current >= N_step
-      } else {
-        stop(conditionMessage(z), call. = FALSE)
-      }
-      n_adjustments <- 0
-      while (keep_going(N_candidate) && inherits(z, "error") && n_adjustments < 10000) {
-        xx_candidate <- build_nsurv(N_candidate)
-        z_candidate <- tryCatch(gsnSurv(xx_candidate, xi$n.I[xi$k]), error = function(e) e)
-        if (!inherits(z_candidate, "error")) {
-          N <- N_candidate
-          xx <- xx_candidate
-          z <- z_candidate
-        } else {
-          N_candidate <- next_N(N_candidate)
-          n_adjustments <- n_adjustments + 1
-        }
-      }
-      if (inherits(z, "error")) {
-        stop(conditionMessage(z_error), call. = FALSE)
-      }
+    d_final <- sum(xx$eDC + xx$eDE)
+
+    # Keep enrollment inflation minimal: reduce by allocation steps when possible
+    N_candidate <- N - N_step
+    while (N_candidate >= N_step) {
+      xx_candidate <- build_nsurv(N_candidate)
+      d_candidate <- sum(xx_candidate$eDC + xx_candidate$eDE)
+      if (d_candidate + .01 < target_events) break
+      N <- N_candidate
+      xx <- xx_candidate
+      d_final <- d_candidate
+      N_candidate <- N_candidate - N_step
+    }
+
+    # Increase by allocation steps if needed to make final integer event target feasible
+    n_adjustments <- 0
+    while (d_final + .01 < target_events && n_adjustments < 10000) {
+      N <- N + N_step
+      xx <- build_nsurv(N)
+      d_final <- sum(xx$eDC + xx$eDE)
+      n_adjustments <- n_adjustments + 1
+    }
+
+    z <- xx
+    if (d_final + .01 < target_events) {
       warning(
-        "toInteger: rounded total sample size was ", adjustment, " from ", N_original,
-        " to ", N, " to make the integer event target achievable with the enrollment model.",
+        "toInteger: fixed-calendar enrollment-rate inflation could not achieve the integer final event target; ",
+        "falling back to variable-duration solve.",
         call. = FALSE
       )
-    }
-    if (inherits(z, "error")) {
-      stop(conditionMessage(z), call. = FALSE)
+      z <- tryCatch(gsnSurv(xx, xi$n.I[xi$k]), error = function(e) e)
+      if (inherits(z, "error")) {
+        z_error <- z
+        z_message <- conditionMessage(z)
+        N_original <- N
+        if (grepl("under-powered for any follow-up duration", z_message, fixed = TRUE)) {
+          N_candidate <- N + N_step
+          adjustment <- "increased"
+          next_N <- function(N_current) N_current + N_step
+          keep_going <- function(N_current) is.finite(N_current)
+        } else if (grepl("over-powered for any follow-up duration", z_message, fixed = TRUE)) {
+          N_candidate <- N - N_step
+          adjustment <- "reduced"
+          next_N <- function(N_current) N_current - N_step
+          keep_going <- function(N_current) N_current >= N_step
+        } else {
+          stop(conditionMessage(z), call. = FALSE)
+        }
+        n_adjustments <- 0
+        while (keep_going(N_candidate) && inherits(z, "error") && n_adjustments < 10000) {
+          xx_candidate <- build_nsurv(N_candidate)
+          z_candidate <- tryCatch(gsnSurv(xx_candidate, xi$n.I[xi$k]), error = function(e) e)
+          if (!inherits(z_candidate, "error")) {
+            N <- N_candidate
+            xx <- xx_candidate
+            z <- z_candidate
+          } else {
+            N_candidate <- next_N(N_candidate)
+            n_adjustments <- n_adjustments + 1
+          }
+        }
+        if (inherits(z, "error")) {
+          stop(conditionMessage(z_error), call. = FALSE)
+        }
+        warning(
+          "toInteger: rounded total sample size was ", adjustment, " from ", N_original,
+          " to ", N, " to make the integer event target achievable with the enrollment model.",
+          call. = FALSE
+        )
+      }
     }
     eDC <- NULL
     eDE <- NULL
