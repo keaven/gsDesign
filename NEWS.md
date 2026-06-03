@@ -6,7 +6,7 @@
   `gsSurv()`, and `gsSurvCalendar()` for selective bound testing at interim
   analyses. Each accepts a logical scalar or vector of length `k` specifying
   which analyses should include that boundary. Inactive bounds are set to
-  extreme values (±20 on Z-scale) and displayed as `NA` in `print()` and
+  extreme values (&plusmn;20 on Z-scale) and displayed as `NA` in `print()` and
   `gsBoundSummary()` output. This enables designs such as futility-only at
   early interims, deferred efficacy testing, or selective harm monitoring
   (@keaven, #141).
@@ -34,7 +34,7 @@
   timing. Unlike `gsSurv()` and `gsSurvCalendar()` which solve for sample
   size, `gsSurvPower()` takes fixed assumptions and computes power. Supports
   calendar-time and event-driven timing, stratified designs, all test types
-  (1–8 including harm bounds), and flexible analysis timing criteria
+  (1--8 including harm bounds), and flexible analysis timing criteria
   (`targetEvents`, `plannedCalendarTime`, `maxExtension`,
   `minTimeFromPreviousAnalysis`, `minN`, `minFollowUp`). When an existing
   `gsSurv` design is provided via `x`, parameters can be selectively
@@ -46,41 +46,87 @@
   final spending fraction to 1 when desired. This makes it easier to evaluate
   delayed event accrual while keeping spending tied to a planned information
   schedule. It also preserves the original one-sided versus two-sided design
-  convention when inheriting defaults from an existing `gsSurv` object.
+  convention when inheriting defaults from an existing `gsSurv` object (#258).
 - New vignette "Power Computation for Group Sequential Survival Designs"
   (`vignette("gsSurvPower")`) with worked examples for sensitivity analysis,
   alpha reallocation, biomarker subgroup to stratified design, and
   event-driven timing (@keaven, #109).
 - Added `repeatedPValueBinomialExact()` and `sequentialPValueBinomialExact()`
   to compute repeated and sequential exact-binomial p-values under spending
-  function designs derived from `gsSurv()` objects.
+  function designs derived from `gsSurv()` objects (1922429e).
 - Added `simBinomialSeasonalExact()` to run fixed and blinded-adaptive seasonal
-  rare-event simulations with exact-binomial efficacy monitoring summaries.
+  rare-event simulations with exact-binomial efficacy monitoring summaries
+  (1922429e).
 - `toBinomialExact()` now supports explicit spending-time overrides via
   `usTime` and `lsTime` (for `test.type = 4`) to align with `gsDesign()` and
-  `gsSurv()` conventions when updating bounds with `observedEvents`.
+  `gsSurv()` conventions when updating bounds with `observedEvents` (1922429e).
 - `simBinomialSeasonalExact()` now supports `usTime`/`lsTime` inputs and
   reports futility stopping probabilities (`futility_stop_rate` with
-  `futility_mc_se`) in scenario summaries.
+  `futility_mc_se`) in scenario summaries (1922429e).
+- `simBinomialSeasonalExact()` now accepts `ve = 0` and `ve < 0`, allowing
+  null-hypothesis (`ve = 0`) and non-inferiority margin (`ve < 0`) scenarios.
+  Validation now requires only that `ve` values are finite and less than 1.
+  A feasibility check verifies that the implied experimental-arm event rates
+  (`control_event_rate * (1 - ve)`) remain in `[0, 1)` (#267).
 
 ## Bug fixes
 
+- `nSurv()` and `gsSurv()` now use the requested survival sample size method
+  when either `T` or `minfup` is `NULL`. `gsSurv()` also uses the input
+  accrual rate and duration when both `T` and `minfup` are `NULL`, solving
+  follow-up duration against the final group-sequential event requirement.
+  This allows Schoenfeld survival designs to reproduce SAS PROC SEQDESIGN's
+  fixed-accrual follow-up solve (#270).
+- `simBinomialSeasonalExact()` now stops simulated trials at the first
+  efficacy or futility boundary crossing for reporting stopping time, total
+  events, and total enrollment, while preserving the non-binding futility
+  convention for efficacy crossing probability. The simulation also updates
+  exact-binomial bounds within each trial using the observed total event counts
+  and defaults fixed per-season enrollment to the design's planned seasonal
+  enrollment (#264).
 - `toInteger()` now preserves selective-bound flags (`testUpper`, `testLower`,
   `testHarm`) and harm-bound spending (`sfharm`, `sfharmparam` for
   `test.type` 7 or 8) when recomputing the design after integer sample
   size or event-count rounding. Previously the internal `gsDesign()` call
-  omitted these settings, so inactive looks could incorrectly become active.
+  omitted these settings, so inactive looks could incorrectly become active
+  (#261).
+- `toInteger()` now preserves the intended survival-design behavior that
+  `roundUpFinal = TRUE` rounds the final event count up. If the independently
+  rounded final sample size, using the usual `ratio + 1` allocation multiple,
+  cannot support the integer event target, `toInteger()` adjusts sample size by
+  allocation multiples, with a warning, until the target is achievable. Designs
+  where the rounded sample size already supports the integer event target retain
+  the previous behavior (#264).
+- `toInteger()` survival integerization now keeps the calendar design fixed
+  while deriving interim integer events from timing and final integer event
+  target. Enrollment is inflated minimally by scaling accrual rates and then
+  rounded to allocation multiples, avoiding unnecessary calendar-extension-driven
+  enrollment increases for small final-event rounding changes. A variable-duration
+  fallback is retained with a warning when fixed-calendar inflation is infeasible
+  (#271).
 - Fixed sign inconsistency in `hrn2z()` which used `sign(hr0 - hr1)`
   while `zn2hr()` used `sign(hr1 - hr0)`, preventing correct round-trip
   conversion. Both now use `sign(hr1 - hr0)` (@keaven, #251).
 - Fixed `toBinomialExact()` one-sided (`test.type = 1`) updating with
   `observedEvents` so futility-adjustment code is only executed when
-  `test.type = 4`.
+  `test.type = 4` (1922429e).
 - `toBinomialExact()` now respects selective futility testing (`testLower`) when
-  present on a `gsSurv` object by flattening lower spending at inactive looks.
+  present on a `gsSurv` object by flattening lower spending at inactive looks
+  (1922429e).
 
 ## Documentation
 
+- Updated the `SeqDesignSurvival` vignette to use the one-sided `gsSurv()`
+  alpha convention when reproducing SAS PROC SEQDESIGN fractional-time
+  survival output (#264).
+- Corrected and generalized the multi-season rare-event vignette so enrollment
+  timing, planned counts, and simulation event-rate inputs are derived from the
+  stated design specifications, with calendar-timed seasonal analyses,
+  piecewise seasonal failure hazards, and cross-references to the exact
+  binomial vaccine-efficacy vignette (#264).
+- Expanded `toInteger()` help and vignette guidance for survival-design final
+  event rounding, final sample-size feasibility adjustment, and seasonal designs
+  with a final zero event-rate period (#264).
 - Documented `test.type` restriction in `toBinomialExact()`: only
   `test.type = 1` and `4` are supported; other types (including 7 and 8)
   produce an error (@keaven, #109).
@@ -94,35 +140,47 @@
 - Expanded `gsSurvPower()` documentation and vignette guidance for
   `informationRates`, calendar spending, and `fullSpendingAtFinal`, including
   a corrected worked example of the spending fractions used at the final
-  analysis.
+  analysis (#258).
+- Clarified the PROC SEQDESIGN survival vignette comparison by using
+  `test.type = 2`, `alpha = 0.025`, `method = "Schoenfeld"`, and
+  `T = minfup = NULL` to match SAS's symmetric two-sided fixed-accrual
+  design, and by separating fractional-time output from the SAS ceiling-time
+  adjusted design (#270).
 - Added vignette "Multi-season studies for rare events"
   (`vignette("MultiSeasonRareEvents")`) demonstrating exact-binomial seasonal
   monitoring, analysis-time bound updates via
   `toBinomialExact(observedEvents = ...)`, and blinded information-adaptive
-  enrollment scenarios.
+  enrollment scenarios (1922429e).
 - Expanded the multi-season vignette with: initial `gsBoundSummary()` output,
   IA1-only futility illustration, VE and nominal one-sided p-values at
   exact-binomial bounds, and clearer simulation tables including efficacy and
-  futility stopping probabilities with non-binding Type I interpretation notes.
+  futility stopping probabilities with non-binding Type I interpretation notes
+  (c1065ea8, 2e9260bd).
 - Reorganized pkgdown article sections to separate general materials, exact
-  binomial workflows, and multiple-hypothesis-testing content.
+  binomial workflows, and multiple-hypothesis-testing content (67146132).
 
 ## Testing
 
 - Added `toInteger()` regression tests for selective-bound preservation on
   `gsDesign` and `gsSurv` objects, including `test.type` 8 with custom harm
-  spending.
+  spending (#261).
 - Added focused `gsSurvPower()` regression tests for `informationRates`,
   `fullSpendingAtFinal`, and inherited sidedness behavior from existing
-  time-to-event designs.
+  time-to-event designs (#258).
 - Added independent tests for exact-binomial repeated/sequential p-values and
   for `simBinomialSeasonalExact()` input validation, reproducibility, and
-  adaptive enrollment behavior.
+  adaptive enrollment behavior (1922429e, c1065ea8).
 - Added regression test confirming `toBinomialExact()` one-sided
-  (`test.type = 1`) updates with `observedEvents`.
+  (`test.type = 1`) updates with `observedEvents` (1922429e).
 - Added regression tests for `toBinomialExact()` `usTime`/`lsTime` overrides and
   selective-futility behavior, plus tests for new futility stopping summary
-  outputs from `simBinomialSeasonalExact()`.
+  outputs from `simBinomialSeasonalExact()` (1922429e).
+- Added regression tests for `simBinomialSeasonalExact()` stopping summaries,
+  design-based fixed enrollment defaults, and the rare-event `toInteger()`
+  equal-allocation path (#264).
+- Expanded `nSurv()` and `gsSurv()` regression tests across the supported
+  `T`/`minfup` timing combinations for Schoenfeld, Freedman, and
+  Bernstein-Lagakos methods (#270).
 
 # gsDesign 3.9.0 (February 2026)
 

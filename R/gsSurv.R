@@ -27,9 +27,63 @@ gsSurv <- function(
   if (!is.numeric(ratio) || length(ratio) != 1 || ratio <= 0) {
     stop("ratio must be a single positive scalar")
   }
-  # If both gamma and R are provided (non-NULL) and T is NULL, set T to force solving for accrual rate
-  # This matches gsDesign::gsSurv behavior which keeps R fixed and solves for gamma
-  if (is.null(T) && !is.null(minfup) &&
+  solve_followup <- is.null(T) && is.null(minfup)
+  if (solve_followup) {
+    if (is.null(beta)) {
+      stop("When beta is NULL, T and minfup cannot both be NULL")
+    }
+    if (sum(R) == Inf) {
+      stop("Enrollment duration must be specified as finite")
+    }
+
+    target_n <- accrual_total(gamma, R)
+
+    fixed_accrual_difference <- function(followup) {
+      trial_T <- sum(R) + followup
+      x_candidate <- nSurv(
+        lambdaC = lambdaC, hr = hr, hr0 = hr0, eta = eta, etaE = etaE,
+        gamma = gamma, R = R, S = S, T = trial_T, minfup = followup,
+        ratio = ratio, alpha = alpha, beta = beta, sided = sided,
+        tol = tol, method = method
+      )
+      y_candidate <- gsDesign(
+        k = k, test.type = test.type, alpha = alpha / sided,
+        beta = beta, astar = astar, n.fix = x_candidate$d,
+        timing = timing, sfu = sfu, sfupar = sfupar, sfl = sfl,
+        sflpar = sflpar, sfharm = sfharm, sfharmparam = sfharmparam,
+        tol = tol, delta1 = log(hr), delta0 = log(hr0),
+        usTime = usTime, lsTime = lsTime, testUpper = testUpper,
+        testLower = testLower, testHarm = testHarm
+      )
+      z_candidate <- gsnSurv(x_candidate, y_candidate$n.I[k])
+      z_candidate$n - target_n
+    }
+
+    left <- fixed_accrual_difference(.01)
+    right <- fixed_accrual_difference(10000)
+    if (left < 0) {
+      stop(paste(
+        "With T = NULL and minfup = NULL, trial is over-powered for any",
+        "follow-up duration. Reduce accrual rates (gamma), increase beta,",
+        "or adjust assumptions."
+      ))
+    }
+    if (right > 0) {
+      stop(paste(
+        "With T = NULL and minfup = NULL, trial is under-powered for any",
+        "follow-up duration. Increase accrual rates (gamma), decrease beta,",
+        "or adjust assumptions."
+      ))
+    }
+
+    minfup <- stats::uniroot(
+      fixed_accrual_difference, interval = c(.01, 10000), tol = tol
+    )$root
+    T <- sum(R) + minfup
+  }
+  # Preserve the historical Lachin-Foulkes default: with fixed follow-up and
+  # T = NULL, keep R fixed and vary the accrual rate.
+  if (method == "LachinFoulkes" && is.null(T) && !is.null(minfup) &&
     !is.null(R) && length(R) > 0 &&
     !is.null(gamma) && length(gamma) > 0) {
     T <- sum(R) + minfup
@@ -79,6 +133,7 @@ gsSurv <- function(
   y$etaC <- z$etaC
   y$etaE <- z$etaE
   y$variable <- x$variable
+  if (solve_followup) y$variable <- "Follow-up duration"
   y$tol <- tol
   y$method <- x$method
   y$call <- match.call()
@@ -339,4 +394,3 @@ print.gsSurv <- function(x, digits = 3, show_gsDesign = FALSE, show_strata = TRU
 
   invisible(x)
 }
-

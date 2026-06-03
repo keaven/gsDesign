@@ -16,13 +16,13 @@ If an integer is provided, rounding is done to a multiple of
 If input is non integer, rounding is done to the nearest integer or
 nearest larger integer depending on \code{roundUpFinal}.}
 
-\item{roundUpFinal}{Sample size is rounded up to a value of \code{ratio + 1}
-with the default \code{roundUpFinal = TRUE} if \code{ratio} is a
-non-negative integer.
+\item{roundUpFinal}{For non-survival designs, final sample size is rounded
+up to a multiple of \code{ratio + 1} with the default
+\code{roundUpFinal = TRUE} if \code{ratio} is a non-negative integer.
+For survival designs, the final event count is rounded up with
+\code{roundUpFinal = TRUE}.
 If \code{roundUpFinal = FALSE} and \code{ratio} is a non-negative integer,
 sample size is rounded to the nearest multiple of \code{ratio + 1}.
-For event counts, \code{roundUpFinal = TRUE} rounds final event count up;
-otherwise, just rounded if \code{roundUpFinal = FALSE}.
 See details.}
 }
 \value{
@@ -39,20 +39,47 @@ It is useful to explicitly provide the argument \code{ratio} when a
 \code{gsDesign} object is input since \code{gsDesign()} does not have a
 \code{ratio} in return.
 \code{ratio = 0, roundUpFinal = TRUE} will just round up the sample size
-(also event count).
-Rounding of event count targets is not impacted by \code{ratio}.
+for non-survival designs.
 Since \code{x <- gsSurv(ratio = M)} returns a value for \code{ratio},
 \code{toInteger(x)} will round to a multiple of \code{M + 1} if \code{M}
 is a non-negative integer; otherwise, just rounding will occur.
-The most common example would be if there is 1:1 randomization (2:1) and
-the user wishes an even (multiple of 3) sample size, then \code{toInteger()}
-will operate as expected.
+For 1:1 randomization, \code{ratio = 1} gives an even final sample size.
+For 2:1 randomization, \code{ratio = 2} gives a final sample size that is
+a multiple of 3.
 To just round without concern for randomization ratio, set \code{ratio = 0}.
 If \code{toInteger(x, ratio = 3)}, rounding for final sample size is done
 to a multiple of 3 + 1 = 4; this could represent a 3:1 or 1:3
 randomization ratio.
 For 3:2 randomization, \code{ratio = 4} would ensure rounding sample size
 to a multiple of 5.
+
+For a \code{gsSurv} object, \code{x$n.I} is an event-count schedule.
+\code{toInteger()} first converts each planned event count to an integer.
+Interim event counts are rounded to the nearest integer. The final event
+count is rounded up when \code{roundUpFinal = TRUE}; otherwise, it is rounded
+to the nearest integer. Values within 0.01 of an integer are rounded to that
+integer. Counts are constrained to be positive and strictly increasing. The
+group sequential boundaries and spending are then recomputed with
+\code{gsDesign()} at the integer event counts.
+
+Total sample size for a survival design is handled separately. The final
+expected total enrollment is rounded to a multiple of \code{ratio + 1},
+rounded up when \code{roundUpFinal = TRUE} and rounded to the nearest such
+multiple otherwise. Enrollment rates are scaled to achieve that rounded total
+over the original calendar plan, and final and interim analysis times are
+recalculated to match the integer event targets.
+
+In seasonal or otherwise piecewise survival designs, the independently
+rounded final sample size from this usual rule can make the final integer event target
+unattainable. If the rounded sample size is too small to ever reach the event
+target, \code{toInteger()} increases the sample size by allocation multiples.
+If the rounded sample size already implies more expected events than a lower
+event target at the earliest feasible final analysis, \code{toInteger()}
+reduces the sample size by allocation multiples. Either adjustment issues a
+warning. Designs where the initially rounded sample size already supports the
+integer event target retain the previous behavior.
+For a complete seasonal exact-binomial monitoring workflow, see
+\code{vignette("MultiSeasonRareEvents", package = "gsDesign")}.
 
 Selective-bound settings (\code{testUpper}, \code{testLower}, \code{testHarm},
 and harm spending for \code{test.type} 7 or 8) are carried from the input
@@ -83,7 +110,11 @@ x <- gsSurv(
   minfup = 8,            # Planned minimum follow-up
   ratio = 3              # Randomization ratio (experimental:control)
 )
-# Convert sample size to multiple of ratio + 1 = 4, round event counts.
-# Default is to round up both event count and sample size for final analysis
+# Convert sample size to multiple of ratio + 1 = 4,
+# with final event count rounded up by default.
 toInteger(x)
+}
+\seealso{
+\code{\link{gsSurv}}, \code{\link{toBinomialExact}},
+  \code{vignette("MultiSeasonRareEvents", package = "gsDesign")}
 }

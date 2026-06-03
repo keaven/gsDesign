@@ -10,3 +10,4 @@
 ^revdep$
 tests/benchmarks
 ^\.agents$
+^AGENTS\.md$

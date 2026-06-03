@@ -13,18 +13,15 @@ vignette: >
 
 The **gsDesign** package was originally designed to have continuous sample size planned rather than integer-based sample size.
 Designs with time-to-event outcomes also had non-integer event counts at times of analysis.
-This vignette  documents the capability to convert to integer sample sizes and event counts.
+This vignette documents the capability to convert to integer sample sizes and event counts.
 This has a couple of implications on design characteristics:
 
 - Information fraction on output will not be exactly as input due to rounding.
 - Power on output will not be exactly as input.
 
 This document goes through examples to demonstrate the calculations.
-The new function as of July 2023 is the `toInteger()` which operates on group sequential designs to convert to integer-based total sample size and event counts at analyses.
-As of November 2024, the rounding defaults are changing as documented below.
-We begin with a summary of the method.
-Then we provide an abbreviated example for a time-to-event endpoint design to demonstrate basic concepts.
-We follow with a more extended example for a binary endpoint to explain more details.
+We begin with a summary of the current method, then use binomial endpoint designs to introduce the basic sample-size rounding behavior.
+The final section covers time-to-event designs, where event counts and enrollment are both converted to integer-compatible plans.
 
 ## Summary of method
 
@@ -32,28 +29,16 @@ We follow with a more extended example for a binary endpoint to explain more det
 library(gsDesign)
 ```
 
-```{r}
-x <- gsSurv(ratio = 1, hr = .74)
-y <- x |> toInteger()
-# Continuous event counts
-x$n.I
-# Rounded event counts at interims, rounded up at final analysis
-y$n.I
-# Continuous sample size at interim and final analyses
-as.numeric(x$eNE + x$eNC)
-# Rounded up to even final sample size given that x$ratio = 1
-# and rounding to multiple of x$ratio + 1
-as.numeric(y$eNE + y$eNC)
-# With roundUpFinal = FALSE, final sample size rounded to nearest integer
-z <- x |> toInteger(roundUpFinal = FALSE)
-as.numeric(z$eNE + z$eNC)
-```
-
 - When `ratio` is a positive integer, the final sample size is rounded to a multiple of `ratio + 1`.
   - For 1:1 randomization (experimental:control), set `ratio = 1` to round to an even sample size.
   - For 2:1 randomization, set `ratio = 2` to round to a multiple of 3.
   - For 3:2 randomization, set `ratio = 4` to round to a multiple of 5.
   - Note that for the final analysis the sample size is rounded up to the nearest multiple of `ratio + 1` when `roundUpFinal = TRUE` is specified. If `roundUpFinal = FALSE`, the final sample size is rounded to the nearest multiple of `ratio + 1`.
+- For a `gsSurv` object, `n.I` is an event-count schedule rather than a sample-size schedule.
+  Interim event counts are rounded to the nearest integer, while the final event count is rounded up when `roundUpFinal = TRUE`.
+- Survival-design sample size is rounded separately to an allocation-compatible total sample size.
+  In seasonal or piecewise event-rate designs, `toInteger()` may adjust that rounded sample size by allocation multiples, with a warning, when needed to make the final integer event target achievable.
+  See `vignette("MultiSeasonRareEvents", package = "gsDesign")` for a complete seasonal exact-binomial monitoring workflow.
 
 ## Binomial endpoint designs
 
@@ -65,7 +50,7 @@ We present a simple example based on comparing binomial rates with interim analy
 n.fix <- nBinomial(p1 = .2, p2 = .1, alpha = .025, beta = .2, ratio = 2)
 n.fix
 ```
-If we replace the `beta` argument above with a integer sample size that is a multiple of 3 so that we get the desired 2:1 integer sample sizes per arm (432 = 144 control + 288 experimental targeted) we get slightly larger than the targeted 80% power:
+If we replace the `beta` argument above with an integer sample size that is a multiple of 3 so that we get the desired 2:1 integer sample sizes per arm (432 = 144 control + 288 experimental targeted) we get slightly larger than the targeted 80% power:
 
 ```{r}
 nBinomial(p1 = .2, p2 = .1, alpha = .025, n = 432, ratio = 2)
@@ -73,7 +58,7 @@ nBinomial(p1 = .2, p2 = .1, alpha = .025, n = 432, ratio = 2)
 
 ### 1-sided design
 
-Now we convert the fixed sample size `n.fix` from above to a 1-sided group sequential design  with interims after 50% and 75% of observations. Again, sample size at each analysis is not an integer. We use the Lan-DeMets spending function approximating an O'Brien-Fleming efficacy bound.
+Now we convert the fixed sample size `n.fix` from above to a 1-sided group sequential design with interims after 50% and 75% of observations. Again, sample size at each analysis is not an integer. We use the Lan-DeMets spending function approximating an O'Brien-Fleming efficacy bound.
 
 ```{r}
 # 1-sided design (efficacy bound only; test.type = 1)
@@ -123,7 +108,7 @@ xb$upper$sf(alpha = xb$alpha, t = xb$timing, xb$upper$param)$spend
 cumsum(x_integer$upper$prob[, 1])
 # Specified spending based on the spending function
 # Slightly different from continuous design due to slightly different information fraction
-x$upper$sf(alpha = x_integer$alpha, t = x_integer$timing, x_integer$upper$param)$spend
+x_integer$upper$sf(alpha = x_integer$alpha, t = x_integer$timing, x_integer$upper$param)$spend
 ```
 Finally, we look at cumulative boundary crossing probabilities under the alternate hypothesis for each design.
 Due to rounding up the final sample size, the integer-based design has slightly higher total power than the specified 80% (Type II error `beta = 0.2.`).
@@ -196,6 +181,142 @@ The $\beta$-spending lower than 0.2 in the first row above is due to the final s
 ```{r}
 # beta-spending
 sum(xnbi$upper$prob[, 2])
+```
+
+## Time-to-event endpoint designs
+
+For a `gsSurv` object, `n.I` is the event-count schedule.
+The `toInteger()` algorithm first converts event counts to integers.
+Interim event counts are rounded to the nearest integer.
+The final event count is rounded up when `roundUpFinal = TRUE`; otherwise, it is rounded to the nearest integer.
+Values within 0.01 of an integer are rounded to that integer, and the resulting sequence is forced to be positive and strictly increasing.
+The group sequential design is then recomputed with `gsDesign()` at the integer event counts so the bounds, information fractions, and crossing probabilities reflect the integer schedule.
+
+Total sample size is handled separately.
+The final expected enrollment is rounded to a multiple of `ratio + 1`, rounded up by default or to the nearest multiple if `roundUpFinal = FALSE`.
+Enrollment rates are scaled to achieve that rounded sample size over the original calendar plan.
+If that normally rounded sample size cannot support the final integer event target, `toInteger()` increases or decreases the final sample size by allocation multiples until the event target is achievable, with a warning.
+Finally, the survival quantities are rebuilt: the final analysis time is solved to match the final integer event target, and the interim calendar times are solved to match the integer-design information fractions.
+
+```{r}
+x <- gsSurv(ratio = 1, hr = .74)
+y <- x |> toInteger()
+# Continuous event counts
+x$n.I
+# Event counts converted to integers
+y$n.I
+# Continuous sample size at interim and final analyses
+as.numeric(x$eNE + x$eNC)
+# Rounded up to even final sample size given that x$ratio = 1
+# and rounding to multiple of x$ratio + 1
+as.numeric(y$eNE + y$eNC)
+# With roundUpFinal = FALSE, final sample size rounded to nearest integer
+z <- x |> toInteger(roundUpFinal = FALSE)
+as.numeric(z$eNE + z$eNC)
+```
+
+### Seasonal design with a final zero event-rate period
+
+Seasonal rare-event designs often use piecewise event rates with nonzero rates during seasons and zero rates outside seasons.
+The example below has three 6-month seasons separated by off-season zero event-rate periods; the final piecewise event-rate period is zero.
+This is the setting where it is especially important that `roundUpFinal = TRUE` applies to the final event count.
+For a complete seasonal exact-binomial monitoring workflow, see `vignette("MultiSeasonRareEvents", package = "gsDesign")`.
+
+```{r}
+seasonal_event_rate_control <- 0.003
+season_length <- 0.5
+dropout_6mo <- 0.10
+
+season_rate <- -log(1 - seasonal_event_rate_control) / season_length
+dropout_rate <- -log(1 - dropout_6mo) / season_length
+
+seasonal_design <- gsSurv(
+  k = 3,
+  test.type = 4,
+  alpha = 0.025,
+  beta = 0.1,
+  timing = c(1 / 3, 2 / 3),
+  sfu = sfHSD,
+  sfupar = 1,
+  sfl = sfHSD,
+  sflpar = -2,
+  lambdaC = c(season_rate, 0, season_rate, 0, season_rate, 0),
+  S = c(6, 6, 6, 6, 6),
+  hr = 0.2,
+  hr0 = 0.7,
+  eta = dropout_rate,
+  gamma = c(1, 0, 1, 0, 1, 0),
+  R = c(2, 10, 2, 10, 2, 10),
+  T = 42,
+  minfup = 6,
+  ratio = 3,
+  testLower = c(TRUE, FALSE, FALSE)
+)
+
+# Continuous event targets and expected enrollment before integer conversion
+seasonal_design$n.I
+rowSums(seasonal_design$eNC + seasonal_design$eNE)
+seasonal_design$T
+```
+
+The final continuous event target is just under 36 events, so with the default `roundUpFinal = TRUE` the integer event target is 36.
+The final expected sample size is just over 4099, which rounds up to 4100 for 3:1 randomization.
+For this design, the rounded sample size supports the rounded-up final event target, so no sample-size feasibility warning is needed.
+The final analysis time moves later because the rounded-up event target requires additional follow-up under the late zero event-rate period.
+
+```{r}
+seasonal_integer <- toInteger(seasonal_design)
+
+data.frame(
+  analysis = seq_len(seasonal_design$k),
+  continuous_events = round(seasonal_design$n.I, 3),
+  integer_events = seasonal_integer$n.I,
+  continuous_time = round(seasonal_design$T, 3),
+  integer_time = round(seasonal_integer$T, 3),
+  integer_enrollment = round(rowSums(seasonal_integer$eNC + seasonal_integer$eNE), 3)
+)
+
+# Final integer sample size remains a multiple of ratio + 1.
+rowSums(seasonal_integer$eNC + seasonal_integer$eNE)[seasonal_integer$k]
+```
+
+The important point is that final event-count rounding is not interchangeable with final sample-size rounding.
+Integer event targets define the information schedule; the enrollment plan and analysis times are then adjusted only as much as needed to keep those integer event targets attainable under the piecewise event-rate model.
+
+The feasibility adjustment is easier to see in a rare-event design where the rounded-up event target is too high for the initially rounded sample size.
+In the next example, the final event target rounds up to 43, but the rounded final sample size of 5038 cannot ever produce that many expected events.
+`toInteger()` increases final sample size by allocation multiples and warns.
+
+```{r}
+rare_design <- gsSurv(
+  k = 3,
+  test.type = 4,
+  alpha = 0.025,
+  beta = 0.1,
+  timing = c(1 / 3, 2 / 3),
+  sfu = sfHSD,
+  sfupar = 1,
+  sfl = sfHSD,
+  sflpar = -2,
+  lambdaC = -log(1 - 0.0015) / 0.5,
+  hr = 0.2,
+  hr0 = 0.7,
+  eta = dropout_rate,
+  gamma = c(1, 0, 1, 0, 1, 0),
+  R = c(2, 10, 2, 10, 2, 10),
+  T = 42,
+  minfup = 6,
+  ratio = 1
+)
+
+rare_integer <- toInteger(rare_design)
+
+data.frame(
+  continuous_final_events = rare_design$n.I[rare_design$k],
+  integer_final_events = rare_integer$n.I[rare_integer$k],
+  continuous_final_enrollment = rowSums(rare_design$eNC + rare_design$eNE)[rare_design$k],
+  integer_final_enrollment = rowSums(rare_integer$eNC + rare_integer$eNE)[rare_integer$k]
+)
 ```
 
 ## References

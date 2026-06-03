@@ -35,6 +35,7 @@ This allows use of spending functions to derive boundaries for the exact method.
 The time-to-event design can not only be used to set boundaries for the @ChanBohidar method, but to allow specification of enrollment duration and study duration to determine enrollment rates and sample size required.
 This vignette also illustrates the concept of super-superiority often used in prevention studies.
 Finally, since this procedure is new as of November, 2023 we suggest checks and potential revisions to spending function choices to optimize design boundaries.
+For an extension to annual seasonal monitoring with blinded information-adaptive enrollment, see `vignette("MultiSeasonRareEvents", package = "gsDesign")`.
 
 ## Parameterization
 
@@ -162,7 +163,7 @@ x <- gsSurv(
 ```
 
 Now we convert this to a design with integer event counts at analyses.
-This is achieved by rounding interim analysis event counts from the above design and rounding up the final analysis event count.
+This is achieved by rounding event counts down and rounding total sample size to an integer allocation.
 This will result in a slight change in event fractions at interim analyses as well as a slight change from the targeted 90% power.
 We now explain the rationale behind the spending function choices.
 Recall that the hazard ratio (HR) is 1 minus the VE.

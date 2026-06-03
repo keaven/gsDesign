@@ -267,6 +267,114 @@ LFPWE <- function(
   return(rval)
 }
 
+accrual_gamma <- function(gamma, R) {
+  if (!is.matrix(gamma)) gamma <- matrix(gamma)
+  if (nrow(gamma) == 1 && length(R) > 1) {
+    gamma <- gamma[rep(1, length(R)), , drop = FALSE]
+  }
+  if (nrow(gamma) > length(R)) {
+    gamma <- gamma[seq_along(R), , drop = FALSE]
+  }
+  if (nrow(gamma) != length(R)) {
+    stop("gamma must have one row or the same number of rows as R")
+  }
+  gamma
+}
+
+accrual_total <- function(gamma, R) {
+  gamma <- accrual_gamma(gamma, R)
+  sum(rowSums(gamma) * R)
+}
+
+LFPWESolveAccrualDuration <- function(
+  alpha = .025, sided = 1, beta = .1,
+  lambdaC = log(2) / 6, hr = .5, hr0 = 1, etaC = 0, etaE = 0,
+  gamma = 1, ratio = 1, R = 18, S = NULL, minfup = 6,
+  tol = .Machine$double.eps^0.25,
+  method = c("Schoenfeld", "Freedman", "BernsteinLagakos")
+) {
+  method <- match.arg(method)
+  objective <- function(accrual_duration, simple = TRUE) {
+    R_search <- R
+    R_search[length(R_search)] <- Inf
+    fit <- LFPWE(
+      alpha = alpha, sided = sided, beta = beta,
+      lambdaC = lambdaC, hr = hr, hr0 = hr0, etaC = etaC, etaE = etaE,
+      gamma = gamma, ratio = ratio, R = R_search, S = S,
+      T = accrual_duration + minfup, minfup = minfup, method = method
+    )
+    target_n <- accrual_total(gamma, fit$R)
+    if (simple) return(fit$n - target_n)
+    fit$n <- target_n
+    fit$gamma <- accrual_gamma(gamma, fit$R)
+    fit$variable <- "Accrual duration"
+    fit$tol <- tol
+    fit
+  }
+
+  left <- objective(.01)
+  right <- objective(10000)
+  if (left < 0) {
+    stop(paste(
+      "With T = NULL, trial is over-powered for any accrual duration.",
+      "Reduce accrual rates (gamma), increase beta, or adjust assumptions."
+    ))
+  }
+  if (right > 0) {
+    stop(paste(
+      "With T = NULL, trial is under-powered for any accrual duration.",
+      "Increase accrual rates (gamma), decrease beta, or adjust assumptions."
+    ))
+  }
+  root <- stats::uniroot(objective, interval = c(.01, 10000), tol = tol)$root
+  objective(root, simple = FALSE)
+}
+
+LFPWESolveFollowupDuration <- function(
+  alpha = .025, sided = 1, beta = .1,
+  lambdaC = log(2) / 6, hr = .5, hr0 = 1, etaC = 0, etaE = 0,
+  gamma = 1, ratio = 1, R = 18, S = NULL,
+  tol = .Machine$double.eps^0.25,
+  method = c("Schoenfeld", "Freedman", "BernsteinLagakos")
+) {
+  method <- match.arg(method)
+  if (sum(R) == Inf) {
+    stop("Enrollment duration must be specified as finite")
+  }
+  objective <- function(followup, simple = TRUE) {
+    fit <- LFPWE(
+      alpha = alpha, sided = sided, beta = beta,
+      lambdaC = lambdaC, hr = hr, hr0 = hr0, etaC = etaC, etaE = etaE,
+      gamma = gamma, ratio = ratio, R = R, S = S,
+      T = sum(R) + followup, minfup = followup, method = method
+    )
+    target_n <- accrual_total(gamma, fit$R)
+    if (simple) return(fit$n - target_n)
+    fit$n <- target_n
+    fit$gamma <- accrual_gamma(gamma, fit$R)
+    fit$variable <- "Follow-up duration"
+    fit$tol <- tol
+    fit
+  }
+
+  left <- objective(.01)
+  right <- objective(10000)
+  if (left < 0) {
+    stop(paste(
+      "With minfup = NULL, trial is over-powered for any follow-up duration.",
+      "Reduce accrual rates (gamma), increase beta, or adjust assumptions."
+    ))
+  }
+  if (right > 0) {
+    stop(paste(
+      "With minfup = NULL, trial is under-powered for any follow-up duration.",
+      "Increase accrual rates (gamma), decrease beta, or adjust assumptions."
+    ))
+  }
+  root <- stats::uniroot(objective, interval = c(.01, 10000), tol = tol)$root
+  objective(root, simple = FALSE)
+}
+
 # KTZ function [sinew] ----
 #' @importFrom stats pnorm qnorm
 KTZ <- function(
