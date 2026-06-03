@@ -766,7 +766,7 @@ difference or exponential enrollment rate.
 
 When study duration (`T`) and follow-up duration (`minfup`) are fixed,
 `nSurv` applies exactly the Lachin and Foulkes (1986) method of
-computing sample size under the proportional hazards assumption when For
+computing sample size under the proportional hazards assumption. For
 this computation, enrollment rates are altered proportionately to those
 input in `gamma` to achieve the power of interest.
 
@@ -783,10 +783,19 @@ are computed to derive the desired power. This method will fail if the
 specified enrollment rates and durations either over-powers the trial
 with no additional follow-up or underpowers the trial with infinite
 follow-up. This method produces a corresponding error message in such
-cases.
+cases. For methods other than Lachin and Foulkes, these fixed-rate
+duration solves use the selected method for the fixed-design event
+calculation.
 
 The input to `gsSurv` is a combination of the input to `nSurv()` and
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md).
+When `T = NULL` and `minfup` is specified, `gsSurv()` preserves the
+input accrual rate and minimum follow-up, applies the group sequential
+design, and solves the accrual duration needed for the final planned
+number of events. When both `T` and `minfup` are `NULL`, `gsSurv()`
+preserves the input accrual rate and duration, applies the group
+sequential design, and solves the follow-up duration needed for the
+final planned number of events.
 
 `nEventsIA()` is provided to compute the expected number of events at a
 given point in time given enrollment, event and censoring rates. The
@@ -910,7 +919,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.6.0 by xtable 1.8-8 package
-#> % Mon May 25 18:46:29 2026
+#> % Wed Jun  3 09:15:40 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}
@@ -976,12 +985,12 @@ nSurv(
 )
 #> nSurv fixed-design summary (method=Schoenfeld; target=Accrual duration)
 #> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
-#> N=109.5 subjects | D=86.2 events | T=30.2 study duration | accrual=18.2 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> N=110.9 subjects | D=87.5 events | T=30.5 study duration | accrual=18.5 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
 #> 
 #> Key inputs (names preserved):
 #>                                desc    item  value input
 #>                     Accrual rate(s)   gamma      6     6
-#>            Accrual rate duration(s)       R 18.243    12
+#>            Accrual rate duration(s)       R 18.483    12
 #>              Control hazard rate(s) lambdaC  0.116 0.116
 #>             Control dropout rate(s)     eta  0.001 0.001
 #>        Experimental dropout rate(s)    etaE  0.001  etaE
@@ -1048,7 +1057,7 @@ nSurv(
 )
 #> nSurv fixed-design summary (method=Freedman; target=Follow-up duration)
 #> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
-#> N=150.0 subjects | D=86.8 events | T=25.3 study duration | accrual=25.0 Accrual duration | minfup=0.3 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> N=150.0 subjects | D=94.6 events | T=27.0 study duration | accrual=25.0 Accrual duration | minfup=2.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
 #> 
 #> Key inputs (names preserved):
 #>                                desc    item value input

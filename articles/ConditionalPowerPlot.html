@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,16 +99,16 @@ timing (117/353 = 0.3314, 235/353 = 0.6657) compared to plan (0.3333,
 <code class="sourceCode R"><span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span>hr <span class="op">=</span> <span class="fl">0.7</span>, lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">12</span>, minfup <span class="op">=</span> <span class="fl">24</span>, T <span class="op">=</span> <span class="fl">36</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">design</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;     Analysis              Value Efficacy Futility</span></span>
-<span><span class="co">#&gt;    IA 1: 33%                  Z   3.0139  -0.2451</span></span>
-<span><span class="co">#&gt;       N: 466        p (1-sided)   0.0013   0.5968</span></span>
-<span><span class="co">#&gt;  Events: 117       ~HR at bound   0.5728   1.0464</span></span>
-<span><span class="co">#&gt;    Month: 12   P(Cross) if HR=1   0.0013   0.4032</span></span>
-<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.1398   0.0147</span></span>
-<span><span class="co">#&gt;    IA 2: 67%                  Z   2.5478   0.9413</span></span>
-<span><span class="co">#&gt;       N: 466        p (1-sided)   0.0054   0.1733</span></span>
-<span><span class="co">#&gt;  Events: 235       ~HR at bound   0.7172   0.8844</span></span>
-<span><span class="co">#&gt;    Month: 21   P(Cross) if HR=1   0.0062   0.8347</span></span>
-<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.5814   0.0436</span></span>
+<span><span class="co">#&gt;    IA 1: 33%                  Z   3.0092  -0.2322</span></span>
+<span><span class="co">#&gt;       N: 466        p (1-sided)   0.0013   0.5918</span></span>
+<span><span class="co">#&gt;  Events: 118       ~HR at bound   0.5746   1.0437</span></span>
+<span><span class="co">#&gt;    Month: 12   P(Cross) if HR=1   0.0013   0.4082</span></span>
+<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.1427   0.0149</span></span>
+<span><span class="co">#&gt;    IA 2: 67%                  Z   2.5484   0.9406</span></span>
+<span><span class="co">#&gt;       N: 466        p (1-sided)   0.0054   0.1735</span></span>
+<span><span class="co">#&gt;  Events: 235       ~HR at bound   0.7171   0.8845</span></span>
+<span><span class="co">#&gt;    Month: 21   P(Cross) if HR=1   0.0062   0.8346</span></span>
+<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.5813   0.0436</span></span>
 <span><span class="co">#&gt;        Final                  Z   1.9991   1.9991</span></span>
 <span><span class="co">#&gt;       N: 466        p (1-sided)   0.0228   0.0228</span></span>
 <span><span class="co">#&gt;  Events: 353       ~HR at bound   0.8083   0.8083</span></span>
@@ -121,7 +121,7 @@ timing (117/353 = 0.3314, 235/353 = 0.6657) compared to plan (0.3333,
 futility bound, 3 analyses, time-to-event outcome with sample size 466
 and 353 events required, 90 percent power, 2.5 percent (1-sided) Type I
 error to detect a hazard ratio of 0.7. Enrollment and total study
-durations are assumed to be 12 and 36.1 months, respectively. Efficacy
+durations are assumed to be 12 and 36 months, respectively. Efficacy
 bounds derived using a Hwang-Shih-DeCani spending function with gamma =
 -4. Futility bounds derived using a Hwang-Shih-DeCani spending function
 with gamma = -2.</p>

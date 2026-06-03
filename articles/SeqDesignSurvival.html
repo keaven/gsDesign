@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,29 +70,47 @@
 
     
     
+<style>table > caption { caption-side: top; caption-location: top; }</style>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://keaven.github.io/gsDesign/">gsDesign</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>This vignette provides a thorough analysis of the differences between
-the SAS SEQDESIGN procedure and the R package gsDesign for designing
-group sequential clinical trials with time-to-event endpoints.</p>
+<p>This vignette emphasizes exact numerical reproduction of SAS PROC
+SEQDESIGN survival outputs in gsDesign when design assumptions are
+matched. We first reproduce the SAS fractional-time table to printed
+precision. We then show different options that may lead to confusion in
+translating SAS PROC SEQDESIGN calls to gsDesign.</p>
 <div class="section level3">
-<h3 id="starting-point-sas-proc-seqdesign-example-109-14">Starting point: SAS PROC SEQDESIGN Example 109.14<a class="anchor" aria-label="anchor" href="#starting-point-sas-proc-seqdesign-example-109-14"></a>
+<h3 id="starting-point-sas-proc-seqdesign-survival-example">Starting point: SAS PROC SEQDESIGN survival example<a class="anchor" aria-label="anchor" href="#starting-point-sas-proc-seqdesign-survival-example"></a>
 </h3>
-<p>Consider the example described in the SAS Documentation: <a href="https://documentation.sas.com/doc/en/statug/15.2/statug_seqdesign_examples14.htm" class="external-link">Computing
-Sample Size for Survival Data with Uniform Accrual</a>. The SAS code is
-as follows:</p>
-<pre class="sas"><code>proc seqdesign;
-    ErrorSpend: design nstages=4 method=errfuncobf;
-    samplesize model=twosamplesurvival(
-        nullhazard = 0.03466
-        hazard     = 0.01733
-        accrual    = uniform
-        accrate    = 15
-        acctime    = 18
-        ceiling    = time);
+<p>Consider the example described in the SAS Documentation: <a href="https://support.sas.com/documentation/cdl/en/statug/68162/HTML/default/statug_seqdesign_examples14.htm" class="external-link">Computing
+Sample Size for Survival Data with Uniform Accrual</a>. The first PROC
+SEQDESIGN call in that example does not specify <code>ACCTIME</code>;
+SAS therefore derives a range of possible accrual times. The comparison
+below uses the subsequent SAS call with <code>ACCTIME=18</code>, which
+fixes the maximum sample size at <code>15 * 18 = 270</code> subjects and
+asks SAS to solve the follow-up time. Note that the SAS survival sample
+size model is specified as uses the Schoenfeld formula for the targeted
+event counts. The computed sample size and event counts at each analysis
+are continuous values, not rounded to integers.</p>
+<pre class="sas"><code>proc seqdesign; /* Group sequential design procedure */
+    ErrorSpend: design /* Label for this design block */
+                nstages=4 /* Total analyses including final */
+                method=errfuncobf /* Lan-DeMets O'Brien-Fleming spending */
+                alt=twosided /* Two-sided alternative hypothesis */
+                stop=reject /* Early stop only for efficacy */
+                alpha=0.05 /* Total two-sided Type I error */
+                beta=0.10 /* Type II error (90% power) */
+                ;
+    samplesize model(ceiladjdesign=include)= /* Survival model */
+        twosamplesurvival( /* Two-sample survival endpoint */
+        nullhazard = 0.03466 /* Control hazard under H0 */
+        hazard     = 0.01733 /* Experimental hazard under H1 */
+        accrual    = uniform /* Uniform enrollment */
+        accrate    = 15 /* Subjects enrolled per time unit */
+        acctime    = 18 /* Accrual duration in time units */
+    );
 run;</code></pre>
 <p><strong>SAS assumptions summary:</strong></p>
 <ul>
@@ -102,105 +120,93 @@ run;</code></pre>
 <li>90% power (beta = 0.10)</li>
 <li>Equally spaced information fractions: 0.25, 0.50, 0.75, 1.00</li>
 <li>Schoenfeld formula for required number of events</li>
-<li>Sample size formula: <span class="math inline">\(N = \text{ACCRATE}
-\times \text{ACCTIME} = 15 \times 18 = 270\)</span> (fixed)</li>
+<li>Fixed accrual rate and duration, so the maximum sample size is <span class="math inline">\(N = \text{ACCRATE} \times \text{ACCTIME} = 15
+\times 18 = 270\)</span>
+</li>
 <li>Study duration <span class="math inline">\(T\)</span> solved to
-achieve required events (CEILING=TIME)</li>
+achieve the required events</li>
 <li>Hazard ratio <span class="math inline">\(HR = 0.01733 / 0.03466 =
 0.5\)</span>
 </li>
 </ul>
-<p>Based on these assumptions, a user naively attempting to replicate
-this in R with gsDesign may attempt code like the following:</p>
+<p>SAS does produce a sample size in this example. In the “Sample Size
+Summary” table for the <code>ACCTIME=18</code> case, it reports
+<code>Max Sample Size = 270</code>,
+<code>Expected Sample Size (Null Ref) = 269.9206</code>,
+<code>Expected Sample Size (Alt Ref) = 263.1141</code>,
+<code>Follow-up Time = 7.133226</code>, and
+<code>Total Time = 25.13323</code>. The maximum sample size is not
+calculated from the event formula; it is implied directly by the fixed
+accrual rate and accrual duration:
+<code>15 subjects/time unit * 18 time units = 270 subjects</code>.</p>
+<p>SAS reports two sets of analysis quantities. We focus first on the
+fractional-time design, where the analysis times are not rounded, and
+then return to the <code>CEILING=TIME</code> adjusted design later.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">des</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
-<span>  k         <span class="op">=</span> <span class="fl">4</span>,</span>
+<code class="sourceCode R"><span><span class="va">sas_fractional</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>  Events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">22.26962</span>, <span class="fl">44.53924</span>, <span class="fl">66.80886</span>, <span class="fl">89.07847</span><span class="op">)</span>,</span>
+<span>  Calendar_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11.2631</span>, <span class="fl">16.2875</span>, <span class="fl">20.4926</span>, <span class="fl">25.13323</span><span class="op">)</span>,</span>
+<span>  N <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">168.95</span>, <span class="fl">244.31</span>, <span class="fl">270.00</span>, <span class="fl">270.00</span><span class="op">)</span>,</span>
+<span>  Upper_Z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4.33263</span>, <span class="fl">2.96333</span>, <span class="fl">2.35902</span>, <span class="fl">2.01409</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sas_ceiling_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
+<span>  Events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25.11225</span>, <span class="fl">48.22068</span>, <span class="fl">69.38712</span>, <span class="fl">92.92776</span><span class="op">)</span>,</span>
+<span>  Calendar_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">17</span>, <span class="fl">21</span>, <span class="fl">26</span><span class="op">)</span>,</span>
+<span>  N <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">180</span>, <span class="fl">255</span>, <span class="fl">270</span>, <span class="fl">270</span><span class="op">)</span>,</span>
+<span>  Upper_Z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4.15591</span>, <span class="fl">2.90189</span>, <span class="fl">2.36973</span>, <span class="fl">2.01362</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>To reproduce the SAS fractional-time output exactly while specifying
+analysis timing in calendar units, we use
+<code>gsDesign::gsSurvCalendar(calendarTime = sas_fractional$Calendar_time)</code>.
+We keep one-sided <code>alpha = 0.025</code>, use
+<code>method = "Schoenfeld"</code>, and keep accrual fixed at 15
+subjects per time unit for 18 time units by setting <code>R = 18</code>
+with <code>minfup = max(calendarTime) - R</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">des</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvCalendar.html">gsSurvCalendar</a></span><span class="op">(</span></span>
 <span>  test.type <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  alpha     <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  alpha     <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  beta      <span class="op">=</span> <span class="fl">0.10</span>,</span>
 <span>  sfu       <span class="op">=</span> <span class="va">sfLDOF</span>, <span class="co"># Lan-DeMets O'Brien--Fleming</span></span>
-<span>  timing    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.25</span>, <span class="fl">.50</span>, <span class="fl">.75</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Equal information fractions</span></span>
+<span>  calendarTime <span class="op">=</span> <span class="va">sas_fractional</span><span class="op">$</span><span class="va">Calendar_time</span>,</span>
+<span>  spending  <span class="op">=</span> <span class="st">"information"</span>,</span>
 <span>  lambdaC   <span class="op">=</span> <span class="fl">0.03466</span>,</span>
 <span>  hr        <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  eta       <span class="op">=</span> <span class="fl">0</span>, <span class="co"># No dropout</span></span>
 <span>  gamma     <span class="op">=</span> <span class="fl">15</span>, <span class="co"># Uniform accrual rate of 15/month</span></span>
 <span>  R         <span class="op">=</span> <span class="fl">18</span>, <span class="co"># Accrual duration (months)</span></span>
-<span>  T         <span class="op">=</span> <span class="fl">25</span>,</span>
-<span>  ratio     <span class="op">=</span> <span class="fl">1</span> <span class="co"># 1:1 randomization</span></span>
+<span>  minfup    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">sas_fractional</span><span class="op">$</span><span class="va">Calendar_time</span><span class="op">)</span> <span class="op">-</span> <span class="fl">18</span>,</span>
+<span>  ratio     <span class="op">=</span> <span class="fl">1</span>, <span class="co"># 1:1 randomization</span></span>
+<span>  method    <span class="op">=</span> <span class="st">"Schoenfeld"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">des</span></span>
-<span><span class="co">#&gt; Group sequential design (method=LachinFoulkes; k=4 analyses; Two-sided symmetric)</span></span>
-<span><span class="co">#&gt; HR=0.500 vs HR0=1.000 | alpha=0.050 (sided=2) | power=90.0%</span></span>
-<span><span class="co">#&gt; N=235.2 subjects | D=74.9 events | T=25.0 study duration | accrual=19.0 Accrual duration | minfup=6.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Spending functions:</span></span>
-<span><span class="co">#&gt;   Bounds derived using a  Lan-DeMets O'Brien-Fleming approximation spending function (no parameters).</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Analysis summary:</span></span>
-<span><span class="co">#&gt; Method: LachinFoulkes </span></span>
-<span><span class="co">#&gt;    Analysis              Value Efficacy Futility</span></span>
-<span><span class="co">#&gt;   IA 1: 25%                  Z   3.7496  -3.7496</span></span>
-<span><span class="co">#&gt;      N: 142        p (1-sided)   0.0001   0.0001</span></span>
-<span><span class="co">#&gt;  Events: 19       ~HR at bound   0.1768   5.6562</span></span>
-<span><span class="co">#&gt;   Month: 11   P(Cross) if HR=1   0.0001   0.0001</span></span>
-<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.0117   0.0000</span></span>
-<span><span class="co">#&gt;   IA 2: 50%                  Z   2.5399  -2.5399</span></span>
-<span><span class="co">#&gt;      N: 204        p (1-sided)   0.0055   0.0055</span></span>
-<span><span class="co">#&gt;  Events: 38       ~HR at bound   0.4361   2.2933</span></span>
-<span><span class="co">#&gt;   Month: 16   P(Cross) if HR=1   0.0056   0.0056</span></span>
-<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.3292   0.0000</span></span>
-<span><span class="co">#&gt;   IA 3: 75%                  Z   2.0161  -2.0161</span></span>
-<span><span class="co">#&gt;      N: 236        p (1-sided)   0.0219   0.0219</span></span>
-<span><span class="co">#&gt;  Events: 57       ~HR at bound   0.5840   1.7124</span></span>
-<span><span class="co">#&gt;   Month: 21   P(Cross) if HR=1   0.0236   0.0236</span></span>
-<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.7148   0.0000</span></span>
-<span><span class="co">#&gt;       Final                  Z   1.7202  -1.7202</span></span>
-<span><span class="co">#&gt;      N: 236        p (1-sided)   0.0427   0.0427</span></span>
-<span><span class="co">#&gt;  Events: 75       ~HR at bound   0.6720   1.4881</span></span>
-<span><span class="co">#&gt;   Month: 25   P(Cross) if HR=1   0.0500   0.0500</span></span>
-<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.9000   0.0000</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Key inputs (names preserved):</span></span>
-<span><span class="co">#&gt;                                desc    item  value input</span></span>
-<span><span class="co">#&gt;                     Accrual rate(s)   gamma 12.378    15</span></span>
-<span><span class="co">#&gt;            Accrual rate duration(s)       R     19    18</span></span>
-<span><span class="co">#&gt;              Control hazard rate(s) lambdaC  0.035 0.035</span></span>
-<span><span class="co">#&gt;             Control dropout rate(s)     eta      0     0</span></span>
-<span><span class="co">#&gt;        Experimental dropout rate(s)    etaE      0  etaE</span></span>
-<span><span class="co">#&gt;  Event and dropout rate duration(s)       S   NULL     S</span></span></code></pre></div>
-<p>Note that the output differs in multiple ways, including that the
-gsDesign output indicates that fewer events will be required to achieve
-the desired level of power compared to the SAS output. Such differences
-do not cast doubt on the fidelity of either software, but rather
-highlight the underlying differences in assumptions and defaults
-settings in the design of each software tool.</p>
+<span><span class="co"># des |&gt; gsBoundSummary(tdigits = 2, ddigits = 2) |&gt; gt::gt()</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="side-by-side-comparison-table">Side-by-side comparison table<a class="anchor" aria-label="anchor" href="#side-by-side-comparison-table"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">events_sas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">22.27</span>, <span class="fl">44.54</span>, <span class="fl">66.81</span>, <span class="fl">89.08</span><span class="op">)</span></span>
-<span><span class="va">events_a2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">des</span><span class="op">$</span><span class="va">n.I</span>, <span class="fl">2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">z_sas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4.333</span>, <span class="fl">2.963</span>, <span class="fl">2.359</span>, <span class="fl">2.014</span><span class="op">)</span></span>
-<span><span class="va">z_a2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">des</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">N2a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">des</span><span class="op">$</span><span class="va">eNC</span><span class="op">[</span><span class="fl">4</span>, <span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">des</span><span class="op">$</span><span class="va">eNE</span><span class="op">[</span><span class="fl">4</span>, <span class="op">]</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get results for comparison from gsDesign object</span></span>
+<span><span class="va">events_a2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">des</span><span class="op">$</span><span class="va">n.I</span>, <span class="fl">2</span><span class="op">)</span> <span class="co"># Event counts</span></span>
+<span><span class="va">z_a2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">des</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="fl">4</span><span class="op">)</span> <span class="co"># Z-boundaries</span></span>
+<span><span class="va">N2a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">des</span><span class="op">$</span><span class="va">eNC</span><span class="op">[</span><span class="fl">4</span>, <span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">des</span><span class="op">$</span><span class="va">eNE</span><span class="op">[</span><span class="fl">4</span>, <span class="op">]</span><span class="op">)</span> <span class="co"># Total sample size</span></span>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>    Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
-<span>    Events_SAS <span class="op">=</span> <span class="va">events_sas</span>,</span>
+<span>    Events_SAS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sas_fractional</span><span class="op">$</span><span class="va">Events</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>    Events_gsDesign <span class="op">=</span> <span class="va">events_a2</span>,</span>
-<span>    Z_SAS <span class="op">=</span> <span class="va">z_sas</span>,</span>
+<span>    Z_SAS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sas_fractional</span><span class="op">$</span><span class="va">Upper_Z</span>, <span class="fl">4</span><span class="op">)</span>,</span>
 <span>    Z_gsDesign <span class="op">=</span> <span class="va">z_a2</span></span>
 <span>  <span class="op">)</span>,</span>
-<span>  caption <span class="op">=</span> <span class="st">"Naive side-by-side comparison of events and Z-boundaries at each look."</span></span>
+<span>  caption <span class="op">=</span> <span class="st">"Side-by-side comparison of events and Z-boundaries at each look."</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <table class="table">
-<caption>Naive side-by-side comparison of events and Z-boundaries at
-each look.</caption>
+<caption>Side-by-side comparison of events and Z-boundaries at each
+look.</caption>
 <thead><tr class="header">
 <th align="right">Analysis</th>
 <th align="right">Events_SAS</th>
@@ -212,49 +218,47 @@ each look.</caption>
 <tr class="odd">
 <td align="right">1</td>
 <td align="right">22.27</td>
-<td align="right">18.73</td>
-<td align="right">4.333</td>
-<td align="right">3.7496</td>
+<td align="right">22.27</td>
+<td align="right">4.3326</td>
+<td align="right">4.3326</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
 <td align="right">44.54</td>
-<td align="right">37.46</td>
-<td align="right">2.963</td>
-<td align="right">2.5399</td>
+<td align="right">44.54</td>
+<td align="right">2.9633</td>
+<td align="right">2.9631</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
 <td align="right">66.81</td>
-<td align="right">56.19</td>
-<td align="right">2.359</td>
-<td align="right">2.0161</td>
+<td align="right">66.81</td>
+<td align="right">2.3590</td>
+<td align="right">2.3590</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
 <td align="right">89.08</td>
-<td align="right">74.92</td>
-<td align="right">2.014</td>
-<td align="right">1.7202</td>
+<td align="right">89.08</td>
+<td align="right">2.0141</td>
+<td align="right">2.0141</td>
 </tr>
 </tbody>
 </table>
-<p>The rest of this vignette works to resolve the apparent discrepancies
-in results, using the above example as a reference case. We identify the
-key assumptions in each system, explain why naive parameter translation
-produces different results, and show how to obtain matching output.
-Those who would like to know more details about the design of the
-time-to-event functionality in gsDesign should consult
+<p>The rest of this vignette identifies the key assumptions in each
+system and explains why alternative parameter translations can produce
+different results. Those who would like to know more details about the
+design of the time-to-event functionality in gsDesign should consult
 <code><a href="../articles/SurvivalOverview.html">vignette("SurvivalOverview")</a></code>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="key-differences-sas-seqdesign-vs--r-gsdesign">Key differences: SAS SEQDESIGN vs. R gsDesign<a class="anchor" aria-label="anchor" href="#key-differences-sas-seqdesign-vs--r-gsdesign"></a>
 </h2>
-<p>There are three fundamental differences that affect the output from
-the example above.</p>
+<p>There are four practical translation points that affect the output
+from the example above.</p>
 <div class="section level3">
-<h3 id="events-formula">1. Events formula<a class="anchor" aria-label="anchor" href="#events-formula"></a>
+<h3 id="event-formula">1. Event formula<a class="anchor" aria-label="anchor" href="#event-formula"></a>
 </h3>
 <ul>
 <li>
@@ -264,202 +268,558 @@ the example above.</p>
 <strong>gsDesign:</strong> <span class="citation">Lachin and Foulkes
 (1986)</span> by default. Uses both null and alternative hypothesis
 variances. L-F is slightly more conservative, giving ~1-2% more events
-than Schoenfeld for the same parameters.</li>
+than Schoenfeld for the same parameters. Use
+<code>method = "Schoenfeld"</code> to match the SAS event formula.</li>
 </ul>
 </div>
 <div class="section level3">
-<h3 id="alpha-handling-in-gssurv">2. Alpha handling in <code>gsSurv()</code><a class="anchor" aria-label="anchor" href="#alpha-handling-in-gssurv"></a>
+<h3 id="alpha-handling-in-gsdesign-and-gssurv">2. Alpha handling in <code>gsDesign()</code> and
+<code>gsSurv()</code><a class="anchor" aria-label="anchor" href="#alpha-handling-in-gsdesign-and-gssurv"></a>
 </h3>
-<p>O’Brien-Fleming spending makes things a bit ambiguous due to the
-one-sided versus two-sided spending.</p>
-<ul>
-<li>
-<strong>SAS:</strong> Uses a symmetric two-sided test with alpha =
-0.05. Per-tail, <span class="math inline">\(z_{\alpha/2} = z_{0.025} =
-1.96\)</span>. Boundaries and event calculations both use 0.025 per
-tail.</li>
-<li>
-<strong>gsSurv():</strong> The <code>test.type = 2</code> with
-<code>alpha = 0.05</code> creates the same symmetric boundaries, but
-computes a different group sequential design inflation factor because it
-counts power from both tails. SAS computes the inflation factor using
-one-sided power only.</li>
-</ul>
-<p>A possible strategy for aligning <code><a href="../reference/nSurv.html">gsSurv()</a></code> and SAS
-calculations in this case is to use <code>test.type = 1</code> with
-<code>alpha = 0.025</code> to match SAS per-tail logic, as we will see
-momentarily.</p>
+<p><code><a href="../reference/gsDesign.html">gsDesign()</a></code> stores and spends the
+<strong>one-sided</strong> Type I error. Thus, for a symmetric two-sided
+design (<code>test.type = 2</code>), <code>alpha = 0.025</code> means
+0.025 in each tail, or 0.05 total two-sided Type I error.</p>
+<p>This convention is deliberate: most group sequential computations in
+<code><a href="../reference/gsDesign.html">gsDesign()</a></code> are organized around the upper-bound crossing
+probability. A symmetric two-sided design is represented by mirroring
+that upper-bound spending in the lower tail. Thus the <code>alpha</code>
+argument is still the per-tail crossing probability, even though the
+design has both an upper and lower efficacy boundary.</p>
+<p><code><a href="../reference/nSurv.html">gsSurv()</a></code> follows the same convention internally. If a
+user prefers to enter the total two-sided alpha,
+<code>alpha = 0.05, sided = 2</code> is equivalent to
+<code>alpha = 0.025, sided = 1</code> for this example because
+<code><a href="../reference/nSurv.html">gsSurv()</a></code> passes <code>alpha / sided</code> to
+<code><a href="../reference/gsDesign.html">gsDesign()</a></code>.</p>
+<p>Here we use <code>test.type = 2</code> and <code>alpha = 0.025</code>
+to make the symmetric two-sided <code><a href="../reference/gsDesign.html">gsDesign()</a></code> object match the
+SAS two-sided total alpha of 0.05.</p>
 </div>
 <div class="section level3">
-<h3 id="what-varies-to-achieve-power">3. What varies to achieve power<a class="anchor" aria-label="anchor" href="#what-varies-to-achieve-power"></a>
+<h3 id="accrual-duration-and-follow-up-time">3. Accrual duration and follow-up time<a class="anchor" aria-label="anchor" href="#accrual-duration-and-follow-up-time"></a>
 </h3>
-<ul>
-<li>
-<strong>SAS:</strong> Fixes the accrual rate and accrual time,
-solves for study duration.</li>
-<li>
-<strong>gsSurv():</strong> Fixes study duration (<code>T</code>) and
-varies the accrual rate (<code>gamma</code>) and accrual time
-(<code>R</code>).</li>
-</ul>
+<p>With <code>ACCTIME=18</code>, SAS fixes the accrual duration and
+total maximum sample size and solves for the additional follow-up time.
+To match this in <code><a href="../reference/nSurv.html">gsSurv()</a></code>, set both <code>T = NULL</code>
+and <code>minfup = NULL</code>. This tells <code><a href="../reference/nSurv.html">gsSurv()</a></code> to keep
+the input accrual rate and accrual duration fixed, then solve the
+follow-up duration needed for the final group sequential event
+requirement. If analysis times are specified directly in calendar units,
+the corresponding <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code> setup is
+<code>calendarTime = ...</code> with
+<code>minfup = max(calendarTime) - accrual_duration</code>.</p>
+<p>This is a common source of apparent disagreement. For a
+fixed-duration survival design, <code>T</code> is the total study
+duration and <code>minfup</code> is the minimum follow-up after
+enrollment closes. With scalar accrual, specifying both <code>T</code>
+and <code>minfup</code> makes the implied accrual duration
+<code>T - minfup</code>; specifying only one of them can therefore
+change which quantity <code><a href="../reference/nSurv.html">gsSurv()</a></code> solves for. The SAS
+comparison fixes accrual at 18 time units and lets the total time be
+derived.</p>
+</div>
+<div class="section level3">
+<h3 id="fractional-time-vs--ceiling-time">4. Fractional time vs. ceiling time<a class="anchor" aria-label="anchor" href="#fractional-time-vs--ceiling-time"></a>
+</h3>
+<p>The original SAS fractional-time design has equal information
+fractions and final events 89.07847. The SAS ceiling-time adjusted
+design rounds analysis times to 12, 17, 21, and 26. These rounded
+calendar times imply unequal information fractions and final events
+92.92776. Both are valid SAS outputs; they should not be mixed when
+comparing against gsDesign.</p>
+<p>The distinction matters because SAS’s fractional-time table answers
+“what analysis times give the target information fractions?”, while the
+ceiling-time table answers “what happens after those analysis times are
+rounded up to whole time units?” Once calendar times are rounded up,
+subjects are followed longer, more events are expected, and the
+O’Brien-Fleming spending times are no longer exactly 0.25, 0.50, 0.75,
+and 1.00.</p>
+<p>The translation used below is summarized as follows:</p>
+<table class="table">
+<caption>Translation from the SAS PROC SEQDESIGN example to gsDesign
+inputs.</caption>
+<colgroup>
+<col width="17%">
+<col width="25%">
+<col width="23%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Quantity</th>
+<th align="left">SAS</th>
+<th align="left">gsDesign</th>
+<th align="left">Reason</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Two-sided Type I error</td>
+<td align="left">alpha = 0.05 total</td>
+<td align="left">alpha = 0.025 per tail</td>
+<td align="left">gsDesign stores and spends one-sided alpha</td>
+</tr>
+<tr class="even">
+<td align="left">Symmetric two-sided design</td>
+<td align="left">Early stop to reject either side</td>
+<td align="left">test.type = 2</td>
+<td align="left">Mirrors the upper and lower efficacy boundaries</td>
+</tr>
+<tr class="odd">
+<td align="left">Analysis timing input</td>
+<td align="left">Calendar times reported by PROC output</td>
+<td align="left">gsSurvCalendar(calendarTime = …)</td>
+<td align="left">Uses direct calendar-time analysis specification</td>
+</tr>
+<tr class="even">
+<td align="left">Event formula</td>
+<td align="left">Schoenfeld log-rank information</td>
+<td align="left">method = “Schoenfeld”</td>
+<td align="left">Avoids Lachin-Foulkes default event calculation</td>
+</tr>
+<tr class="odd">
+<td align="left">Accrual duration</td>
+<td align="left">ACCTIME = 18</td>
+<td align="left">R = 18</td>
+<td align="left">Keeps the same fixed accrual duration</td>
+</tr>
+<tr class="even">
+<td align="left">Total study duration</td>
+<td align="left">Total Time = 25.13323</td>
+<td align="left">T = NULL</td>
+<td align="left">Lets gsSurv() solve total time from fixed accrual</td>
+</tr>
+<tr class="odd">
+<td align="left">Follow-up after accrual</td>
+<td align="left">Derived as 7.133226</td>
+<td align="left">minfup = NULL</td>
+<td align="left">Lets gsSurv() solve the follow-up duration</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="section level2">
 <h2 id="aligning-the-two-approaches">Aligning the two approaches<a class="anchor" aria-label="anchor" href="#aligning-the-two-approaches"></a>
 </h2>
+<p>The exact fractional-time reproduction above uses
+<code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code> because SAS reports analysis timing in
+calendar units. An equivalent information-time translation using
+<code><a href="../reference/nSurv.html">gsSurv()</a></code> is shown next.</p>
 <div class="section level3">
 <h3 id="gssurv-with-aligned-parameters">
 <code>gsSurv()</code> with aligned parameters<a class="anchor" aria-label="anchor" href="#gssurv-with-aligned-parameters"></a>
 </h3>
 <p>Let’s start our work with gsDesign by defining parameters to match
-SAS Example 109.14:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+the SAS fractional-time design:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
-<span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.05</span> <span class="co"># Two-sided total alpha (SAS convention)</span></span>
+<span><span class="va">alpha_sas</span> <span class="op">&lt;-</span> <span class="fl">0.05</span> <span class="co"># Two-sided total alpha (SAS convention)</span></span>
+<span><span class="va">alpha_gsdesign</span> <span class="op">&lt;-</span> <span class="va">alpha_sas</span> <span class="op">/</span> <span class="fl">2</span> <span class="co"># gsDesign uses one-sided alpha</span></span>
 <span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">0.10</span> <span class="co"># 1 - power = 0.10 -&gt; 90% power</span></span>
 <span><span class="va">lambdaC</span> <span class="op">&lt;-</span> <span class="fl">0.03466</span> <span class="co"># Control hazard rate</span></span>
 <span><span class="va">lambdaE</span> <span class="op">&lt;-</span> <span class="fl">0.01733</span> <span class="co"># Experimental hazard rate</span></span>
 <span><span class="va">HR</span> <span class="op">&lt;-</span> <span class="va">lambdaE</span> <span class="op">/</span> <span class="va">lambdaC</span> <span class="co"># = 0.5</span></span>
 <span><span class="va">timing</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">1.00</span><span class="op">)</span> <span class="co"># Equally spaced information fractions</span></span>
 <span><span class="va">accrate</span> <span class="op">&lt;-</span> <span class="fl">15</span> <span class="co"># Uniform accrual rate (subjects per time unit)</span></span>
-<span><span class="va">R</span> <span class="op">&lt;-</span> <span class="fl">18</span> <span class="co"># Accrual duration (time units)</span></span>
-<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="va">accrate</span> <span class="op">*</span> <span class="va">R</span></span></code></pre></div>
+<span><span class="va">accrual_duration</span> <span class="op">&lt;-</span> <span class="fl">18</span> <span class="co"># Accrual duration (time units)</span></span>
+<span><span class="va">sas_total_time</span> <span class="op">&lt;-</span> <span class="fl">25.13323</span></span>
+<span><span class="va">sas_followup_time</span> <span class="op">&lt;-</span> <span class="va">sas_total_time</span> <span class="op">-</span> <span class="va">accrual_duration</span></span>
+<span><span class="va">N</span> <span class="op">&lt;-</span> <span class="va">accrate</span> <span class="op">*</span> <span class="va">accrual_duration</span></span></code></pre></div>
 <p>Instead of starting with a call to <code><a href="../reference/gsDesign.html">gsDesign::gsDesign()</a></code>,
 we begin with <code><a href="../reference/nSurv.html">gsDesign::gsSurv()</a></code>. The <code><a href="../reference/nSurv.html">gsSurv()</a></code>
 function combines <code><a href="../reference/nSurv.html">nSurv()</a></code> with <code><a href="../reference/gsDesign.html">gsDesign()</a></code>
 (group sequential boundaries) in one call. It is the standard gsDesign
 function for designing time-to-event trials.</p>
-<p>Two key differences from SAS remain even with the alpha parameter
-aligned with SAS:</p>
+<p>The call below uses the same two-sided symmetric structure as
+SAS:</p>
 <ul>
 <li>
-<code><a href="../reference/nSurv.html">gsSurv()</a></code> defaults to Lachin-Foulkes sample size;
-Lachin-Foulkes gives slightly more events than Schoenfeld.</li>
+<code>test.type = 2</code> for symmetric two-sided boundaries;</li>
 <li>
-<code><a href="../reference/nSurv.html">gsSurv()</a></code> with <span class="math inline">\(T\)</span>
-specified <strong>varies</strong> the accrual rate to achieve power,
-rather than fixing <span class="math inline">\(N\)</span> and solving
-for <span class="math inline">\(T\)</span> as SAS does. To address this,
-we set the <code>T</code> parameter equal to the study duration time
-calculated by SAS.</li>
+<code>alpha = 0.025</code>, the one-sided alpha corresponding to
+SAS’s total two-sided alpha of 0.05;</li>
+<li>
+<code>method = "Schoenfeld"</code> for the SAS event formula;</li>
+<li>
+<code>T = NULL</code> and <code>minfup = NULL</code> so the accrual
+rate and accrual duration remain fixed while <code><a href="../reference/nSurv.html">gsSurv()</a></code>
+solves the follow-up duration.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">des_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  test.type <span class="op">=</span> <span class="fl">1</span>, <span class="co"># One-sided (matches SAS per-tail)</span></span>
-<span>  alpha <span class="op">=</span> <span class="fl">0.025</span>, <span class="co"># alpha/2 per tail</span></span>
+<span>  test.type <span class="op">=</span> <span class="fl">2</span>, <span class="co"># Symmetric two-sided design</span></span>
+<span>  alpha <span class="op">=</span> <span class="va">alpha_gsdesign</span>, <span class="co"># One-sided alpha; SAS total alpha is 2 * this</span></span>
 <span>  beta <span class="op">=</span> <span class="fl">0.10</span>,</span>
 <span>  sfu <span class="op">=</span> <span class="va">sfLDOF</span>,</span>
 <span>  timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.25</span>, <span class="fl">.50</span>, <span class="fl">.75</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  lambdaC <span class="op">=</span> <span class="fl">0.03466</span>,</span>
 <span>  hr <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  eta <span class="op">=</span> <span class="fl">0</span>, <span class="co"># Assume no dropout</span></span>
-<span>  gamma <span class="op">=</span> <span class="fl">15</span>, <span class="co"># Input rate; gsSurv will **adjust** this</span></span>
-<span>  R <span class="op">=</span> <span class="fl">18</span>,</span>
-<span>  T <span class="op">=</span> <span class="fl">25.13323</span>, <span class="co"># This is the study duration computed by SAS</span></span>
+<span>  gamma <span class="op">=</span> <span class="va">accrate</span>,</span>
+<span>  R <span class="op">=</span> <span class="va">accrual_duration</span>,</span>
+<span>  T <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  minfup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ratio <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"Schoenfeld"</span> <span class="co"># Use Schoenfeld bounds to match SAS</span></span>
+<span>  method <span class="op">=</span> <span class="st">"Schoenfeld"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">des_2</span></span>
-<span><span class="co">#&gt; Group sequential design (method=Schoenfeld; k=4 analyses; One-sided (efficacy only))</span></span>
-<span><span class="co">#&gt; HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%</span></span>
-<span><span class="co">#&gt; N=278.7 subjects | D=89.1 events | T=25.1 study duration | accrual=19.1 Accrual duration | minfup=6.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)</span></span>
+<span><span class="co">#&gt; Group sequential design (method=Schoenfeld; k=4 analyses; Two-sided symmetric)</span></span>
+<span><span class="co">#&gt; HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=2) | power=90.0%</span></span>
+<span><span class="co">#&gt; N=270.0 subjects | D=89.1 events | T=25.1 study duration | accrual=18.0 Accrual duration | minfup=7.1 minimum follow-up | ratio=1 randomization ratio (experimental/control)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Spending functions:</span></span>
-<span><span class="co">#&gt;   Efficacy bounds derived using a Lan-DeMets O'Brien-Fleming approximation spending function (no parameters).</span></span>
+<span><span class="co">#&gt;   Bounds derived using a  Lan-DeMets O'Brien-Fleming approximation spending function (no parameters).</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Analysis summary:</span></span>
 <span><span class="co">#&gt; Method: Schoenfeld </span></span>
-<span><span class="co">#&gt;    Analysis              Value Efficacy</span></span>
-<span><span class="co">#&gt;   IA 1: 25%                  Z   4.3326</span></span>
-<span><span class="co">#&gt;      N: 168        p (1-sided)   0.0000</span></span>
-<span><span class="co">#&gt;  Events: 23       ~HR at bound   0.1594</span></span>
-<span><span class="co">#&gt;   Month: 11   P(Cross) if HR=1   0.0000</span></span>
-<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.0035</span></span>
-<span><span class="co">#&gt;   IA 2: 50%                  Z   2.9631</span></span>
-<span><span class="co">#&gt;      N: 242        p (1-sided)   0.0015</span></span>
-<span><span class="co">#&gt;  Events: 45       ~HR at bound   0.4115</span></span>
-<span><span class="co">#&gt;   Month: 17   P(Cross) if HR=1   0.0015</span></span>
-<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.2579</span></span>
-<span><span class="co">#&gt;   IA 3: 75%                  Z   2.3590</span></span>
-<span><span class="co">#&gt;      N: 280        p (1-sided)   0.0092</span></span>
-<span><span class="co">#&gt;  Events: 67       ~HR at bound   0.5615</span></span>
-<span><span class="co">#&gt;   Month: 21   P(Cross) if HR=1   0.0096</span></span>
-<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.6853</span></span>
-<span><span class="co">#&gt;       Final                  Z   2.0141</span></span>
-<span><span class="co">#&gt;      N: 280        p (1-sided)   0.0220</span></span>
-<span><span class="co">#&gt;  Events: 90       ~HR at bound   0.6526</span></span>
-<span><span class="co">#&gt;   Month: 25   P(Cross) if HR=1   0.0250</span></span>
-<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.9000</span></span>
+<span><span class="co">#&gt;    Analysis              Value Efficacy Futility</span></span>
+<span><span class="co">#&gt;   IA 1: 25%                  Z   4.3326  -4.3326</span></span>
+<span><span class="co">#&gt;      N: 170        p (1-sided)   0.0000   0.0000</span></span>
+<span><span class="co">#&gt;  Events: 23       ~HR at bound   0.1594   6.2728</span></span>
+<span><span class="co">#&gt;   Month: 11   P(Cross) if HR=1   0.0000   0.0000</span></span>
+<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.0035   0.0000</span></span>
+<span><span class="co">#&gt;   IA 2: 50%                  Z   2.9631  -2.9631</span></span>
+<span><span class="co">#&gt;      N: 246        p (1-sided)   0.0015   0.0015</span></span>
+<span><span class="co">#&gt;  Events: 45       ~HR at bound   0.4115   2.4302</span></span>
+<span><span class="co">#&gt;   Month: 16   P(Cross) if HR=1   0.0015   0.0015</span></span>
+<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.2579   0.0000</span></span>
+<span><span class="co">#&gt;   IA 3: 75%                  Z   2.3590  -2.3590</span></span>
+<span><span class="co">#&gt;      N: 272        p (1-sided)   0.0092   0.0092</span></span>
+<span><span class="co">#&gt;  Events: 67       ~HR at bound   0.5615   1.7811</span></span>
+<span><span class="co">#&gt;   Month: 20   P(Cross) if HR=1   0.0096   0.0096</span></span>
+<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.6853   0.0000</span></span>
+<span><span class="co">#&gt;       Final                  Z   2.0141  -2.0141</span></span>
+<span><span class="co">#&gt;      N: 272        p (1-sided)   0.0220   0.0220</span></span>
+<span><span class="co">#&gt;  Events: 90       ~HR at bound   0.6526   1.5323</span></span>
+<span><span class="co">#&gt;   Month: 25   P(Cross) if HR=1   0.0250   0.0250</span></span>
+<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.9000   0.0000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Key inputs (names preserved):</span></span>
-<span><span class="co">#&gt;                                desc    item  value input</span></span>
-<span><span class="co">#&gt;                     Accrual rate(s)   gamma 14.568    15</span></span>
-<span><span class="co">#&gt;            Accrual rate duration(s)       R 19.133    18</span></span>
-<span><span class="co">#&gt;              Control hazard rate(s) lambdaC  0.035 0.035</span></span>
-<span><span class="co">#&gt;             Control dropout rate(s)     eta      0     0</span></span>
-<span><span class="co">#&gt;        Experimental dropout rate(s)    etaE      0  etaE</span></span>
-<span><span class="co">#&gt;  Event and dropout rate duration(s)       S   NULL     S</span></span>
-<span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">des_2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Method: Schoenfeld </span></span>
-<span><span class="co">#&gt;    Analysis              Value Efficacy</span></span>
-<span><span class="co">#&gt;   IA 1: 25%                  Z   4.3326</span></span>
-<span><span class="co">#&gt;      N: 168        p (1-sided)   0.0000</span></span>
-<span><span class="co">#&gt;  Events: 23       ~HR at bound   0.1594</span></span>
-<span><span class="co">#&gt;   Month: 11   P(Cross) if HR=1   0.0000</span></span>
-<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.0035</span></span>
-<span><span class="co">#&gt;   IA 2: 50%                  Z   2.9631</span></span>
-<span><span class="co">#&gt;      N: 242        p (1-sided)   0.0015</span></span>
-<span><span class="co">#&gt;  Events: 45       ~HR at bound   0.4115</span></span>
-<span><span class="co">#&gt;   Month: 17   P(Cross) if HR=1   0.0015</span></span>
-<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.2579</span></span>
-<span><span class="co">#&gt;   IA 3: 75%                  Z   2.3590</span></span>
-<span><span class="co">#&gt;      N: 280        p (1-sided)   0.0092</span></span>
-<span><span class="co">#&gt;  Events: 67       ~HR at bound   0.5615</span></span>
-<span><span class="co">#&gt;   Month: 21   P(Cross) if HR=1   0.0096</span></span>
-<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.6853</span></span>
-<span><span class="co">#&gt;       Final                  Z   2.0141</span></span>
-<span><span class="co">#&gt;      N: 280        p (1-sided)   0.0220</span></span>
-<span><span class="co">#&gt;  Events: 90       ~HR at bound   0.6526</span></span>
-<span><span class="co">#&gt;   Month: 25   P(Cross) if HR=1   0.0250</span></span>
-<span><span class="co">#&gt;             P(Cross) if HR=0.5   0.9000</span></span></code></pre></div>
+<span><span class="co">#&gt;                                desc    item value input</span></span>
+<span><span class="co">#&gt;                     Accrual rate(s)   gamma    15    15</span></span>
+<span><span class="co">#&gt;            Accrual rate duration(s)       R    18    18</span></span>
+<span><span class="co">#&gt;              Control hazard rate(s) lambdaC 0.035 0.035</span></span>
+<span><span class="co">#&gt;             Control dropout rate(s)     eta     0     0</span></span>
+<span><span class="co">#&gt;        Experimental dropout rate(s)    etaE     0  etaE</span></span>
+<span><span class="co">#&gt;  Event and dropout rate duration(s)       S  NULL     S</span></span></code></pre></div>
 <p><strong>Observations:</strong></p>
 <p>Using <code><a href="../reference/nSurv.html">gsSurv()</a></code> with parameters that align with SAS
-settings, we notice that</p>
-<ul>
-<li>
-<span class="math inline">\(Z\)</span>-boundaries: 4.333, 2.963,
-2.359, 2.014 -&gt; matches SAS</li>
-<li>Events: 23, 45, 67, 90 -&gt; matches SAS; gsDesign is just taking
-the <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling()</a></code> of the SAS output.</li>
-<li>Total N: 280 (slightly more than SAS’s fixed 270). This is a result
-of the fact that <code><a href="../reference/nSurv.html">gsSurv()</a></code> is varying <code>R</code> and
-<code>gamma</code> (corresponding conceptually to the parameters
-<code>acctime</code> and <code>accrate</code> in PROC SEQDESIGN) in
-order to maintain power.</li>
-</ul>
+settings, the fractional-time output agrees with SAS. The final
+follow-up duration is 7.13321, giving total study duration 25.13321.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gs_fractional</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">k</span>,</span>
+<span>  Events_SAS <span class="op">=</span> <span class="va">sas_fractional</span><span class="op">$</span><span class="va">Events</span>,</span>
+<span>  Events_gsDesign <span class="op">=</span> <span class="va">des_2</span><span class="op">$</span><span class="va">n.I</span>,</span>
+<span>  Time_SAS <span class="op">=</span> <span class="va">sas_fractional</span><span class="op">$</span><span class="va">Calendar_time</span>,</span>
+<span>  Time_gsDesign <span class="op">=</span> <span class="va">des_2</span><span class="op">$</span><span class="cn">T</span>,</span>
+<span>  N_SAS <span class="op">=</span> <span class="va">sas_fractional</span><span class="op">$</span><span class="va">N</span>,</span>
+<span>  N_gsDesign <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">des_2</span><span class="op">$</span><span class="va">eNC</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">des_2</span><span class="op">$</span><span class="va">eNE</span><span class="op">)</span>,</span>
+<span>  Z_SAS <span class="op">=</span> <span class="va">sas_fractional</span><span class="op">$</span><span class="va">Upper_Z</span>,</span>
+<span>  Z_gsDesign <span class="op">=</span> <span class="va">des_2</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">gs_fractional</span>, <span class="fl">5</span><span class="op">)</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Fractional-time SAS output compared with gsSurv()."</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Fractional-time SAS output compared with gsSurv().</caption>
+<colgroup>
+<col width="9%">
+<col width="11%">
+<col width="16%">
+<col width="9%">
+<col width="14%">
+<col width="7%">
+<col width="11%">
+<col width="8%">
+<col width="11%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">Analysis</th>
+<th align="right">Events_SAS</th>
+<th align="right">Events_gsDesign</th>
+<th align="right">Time_SAS</th>
+<th align="right">Time_gsDesign</th>
+<th align="right">N_SAS</th>
+<th align="right">N_gsDesign</th>
+<th align="right">Z_SAS</th>
+<th align="right">Z_gsDesign</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">22.26962</td>
+<td align="right">22.2696</td>
+<td align="right">11.26310</td>
+<td align="right">11.26306</td>
+<td align="right">168.95</td>
+<td align="right">168.9459</td>
+<td align="right">4.33263</td>
+<td align="right">4.33263</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">44.53924</td>
+<td align="right">44.5392</td>
+<td align="right">16.28750</td>
+<td align="right">16.28746</td>
+<td align="right">244.31</td>
+<td align="right">244.3119</td>
+<td align="right">2.96333</td>
+<td align="right">2.96313</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">66.80886</td>
+<td align="right">66.8088</td>
+<td align="right">20.49260</td>
+<td align="right">20.49260</td>
+<td align="right">270.00</td>
+<td align="right">270.0000</td>
+<td align="right">2.35902</td>
+<td align="right">2.35904</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">89.07847</td>
+<td align="right">89.0784</td>
+<td align="right">25.13323</td>
+<td align="right">25.13321</td>
+<td align="right">270.00</td>
+<td align="right">270.0000</td>
+<td align="right">2.01409</td>
+<td align="right">2.01409</td>
+</tr>
+</tbody>
+</table>
+<p>The final event count is 89.07847 in both systems. The
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> methods display
+rounded integer sample sizes and events, but the object retains the
+fractional values shown above.</p>
+<p>If the SAS follow-up time is already known, the equivalent
+fixed-follow-up translation is <code>T = NULL</code> with
+<code>minfup</code> set to the SAS follow-up time. In that case,
+<code><a href="../reference/nSurv.html">gsSurv()</a></code> holds the follow-up duration fixed and solves the
+accrual duration needed for the final group sequential event target:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">des_fixed_followup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  test.type <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="va">alpha_gsdesign</span>,</span>
+<span>  beta <span class="op">=</span> <span class="fl">0.10</span>,</span>
+<span>  sfu <span class="op">=</span> <span class="va">sfLDOF</span>,</span>
+<span>  timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.25</span>, <span class="fl">.50</span>, <span class="fl">.75</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  lambdaC <span class="op">=</span> <span class="fl">0.03466</span>,</span>
+<span>  hr <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  eta <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  gamma <span class="op">=</span> <span class="va">accrate</span>,</span>
+<span>  R <span class="op">=</span> <span class="va">accrual_duration</span>,</span>
+<span>  T <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  minfup <span class="op">=</span> <span class="va">sas_followup_time</span>,</span>
+<span>  ratio <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"Schoenfeld"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fixed_followup_check</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Quantity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Final study duration"</span>,</span>
+<span>    <span class="st">"Accrual duration"</span>,</span>
+<span>    <span class="st">"Final events"</span>,</span>
+<span>    <span class="st">"Final N"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  Solved_followup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="va">des_2</span><span class="op">$</span><span class="cn">T</span><span class="op">[</span><span class="va">k</span><span class="op">]</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">des_2</span><span class="op">$</span><span class="va">R</span><span class="op">)</span>,</span>
+<span>    <span class="va">des_2</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">k</span><span class="op">]</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">des_2</span><span class="op">$</span><span class="va">eNC</span><span class="op">[</span><span class="va">k</span>, <span class="op">]</span> <span class="op">+</span> <span class="va">des_2</span><span class="op">$</span><span class="va">eNE</span><span class="op">[</span><span class="va">k</span>, <span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  Specified_followup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="va">des_fixed_followup</span><span class="op">$</span><span class="cn">T</span><span class="op">[</span><span class="va">k</span><span class="op">]</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">des_fixed_followup</span><span class="op">$</span><span class="va">R</span><span class="op">)</span>,</span>
+<span>    <span class="va">des_fixed_followup</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">k</span><span class="op">]</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">des_fixed_followup</span><span class="op">$</span><span class="va">eNC</span><span class="op">[</span><span class="va">k</span>, <span class="op">]</span> <span class="op">+</span> <span class="va">des_fixed_followup</span><span class="op">$</span><span class="va">eNE</span><span class="op">[</span><span class="va">k</span>, <span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">fixed_followup_check</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">fixed_followup_check</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>, <span class="va">round</span>, digits <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">fixed_followup_check</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Both fixed-accrual translations produce the same final design."</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Both fixed-accrual translations produce the same final
+design.</caption>
+<thead><tr class="header">
+<th align="left">Quantity</th>
+<th align="right">Solved_followup</th>
+<th align="right">Specified_followup</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Final study duration</td>
+<td align="right">25.13321</td>
+<td align="right">25.13322</td>
+</tr>
+<tr class="even">
+<td align="left">Accrual duration</td>
+<td align="right">18.00000</td>
+<td align="right">17.99999</td>
+</tr>
+<tr class="odd">
+<td align="left">Final events</td>
+<td align="right">89.07840</td>
+<td align="right">89.07840</td>
+</tr>
+<tr class="even">
+<td align="left">Final N</td>
+<td align="right">270.00003</td>
+<td align="right">269.99988</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level3">
-<h3 id="bringing-it-full-circle-with-sas-proc-seqdesign">Bringing it full circle with SAS PROC SEQDESIGN<a class="anchor" aria-label="anchor" href="#bringing-it-full-circle-with-sas-proc-seqdesign"></a>
+<h3 id="matching-the-sas-ceiling-time-adjusted-design">Matching the SAS ceiling-time adjusted design<a class="anchor" aria-label="anchor" href="#matching-the-sas-ceiling-time-adjusted-design"></a>
 </h3>
-<p>Observe the final values for <code>R</code> and <code>gamma</code>
-calculated by <code><a href="../reference/nSurv.html">gsSurv()</a></code> in the “Key inputs” table output
-(see above) by <code>des_2</code>: <code>gamma = 14.568</code>, and
-<code>R = 19.133</code> (slightly different than our input 15 and 18).
-If we substitute in these values for the <code>accrate</code> and
-<code>acctime</code> parameters in SAS, we will see that the SAS
-calculations produce a final sample size of <code>N = 278.7</code>,
-aligning with the <code><a href="../reference/nSurv.html">gsSurv()</a></code> sample size up.</p>
-<pre class="sas"><code>proc seqdesign;
-    ErrorSpend: design nstages=4 method=errfuncobf;
-    samplesize model=twosamplesurvival(
-        nullhazard = 0.03466
-        hazard     = 0.01733
-        accrual    = uniform
-        accrate    = 14.568
-        acctime    = 19.133
-        ceiling    = time);
-run;</code></pre>
+<p>The SAS example also reports a <code>CEILING=TIME</code> adjusted
+design. This is not the same design as the equal-information
+fractional-time output above. The analysis times are rounded up to 12,
+17, 21, and 26, which increases the expected events and changes the
+information fractions. For calendar-scheduled analyses in general, this
+would naturally be specified with
+<code>gsSurvCalendar(calendarTime = c(12, 17, 21, 26), spending = "information")</code>.
+To match the SAS <code>CEILING=TIME</code> table exactly, we retain
+fixed accrual and use the implied event counts at those rounded calendar
+times.</p>
+<p>We can reproduce the ceiling-time event counts directly from the
+fixed accrual rate, fixed accrual duration, and exponential event rates.
+With equal randomization, the control and experimental accrual rates are
+each 7.5 per time unit.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">event_count_at_time</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">control_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/eEvents.html">eEvents</a></span><span class="op">(</span></span>
+<span>    lambda <span class="op">=</span> <span class="va">lambdaC</span>,</span>
+<span>    gamma <span class="op">=</span> <span class="va">accrate</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    R <span class="op">=</span> <span class="va">accrual_duration</span>,</span>
+<span>    T <span class="op">=</span> <span class="va">time</span></span>
+<span>  <span class="op">)</span><span class="op">$</span><span class="va">d</span></span>
+<span>  <span class="va">experimental_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/eEvents.html">eEvents</a></span><span class="op">(</span></span>
+<span>    lambda <span class="op">=</span> <span class="va">lambdaE</span>,</span>
+<span>    gamma <span class="op">=</span> <span class="va">accrate</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    R <span class="op">=</span> <span class="va">accrual_duration</span>,</span>
+<span>    T <span class="op">=</span> <span class="va">time</span></span>
+<span>  <span class="op">)</span><span class="op">$</span><span class="va">d</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">control_events</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">experimental_events</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">ceiling_times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">sas_fractional</span><span class="op">$</span><span class="va">Calendar_time</span><span class="op">)</span></span>
+<span><span class="va">ceiling_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">ceiling_times</span>, <span class="va">event_count_at_time</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">des_ceiling</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="va">k</span>,</span>
+<span>  test.type <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="va">alpha_gsdesign</span>,</span>
+<span>  beta <span class="op">=</span> <span class="va">beta</span>,</span>
+<span>  sfu <span class="op">=</span> <span class="va">sfLDOF</span>,</span>
+<span>  n.I <span class="op">=</span> <span class="va">ceiling_events</span>,</span>
+<span>  timing <span class="op">=</span> <span class="va">ceiling_events</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ceiling_events</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">gs_ceiling</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">k</span>,</span>
+<span>  Events_SAS <span class="op">=</span> <span class="va">sas_ceiling_time</span><span class="op">$</span><span class="va">Events</span>,</span>
+<span>  Events_gsDesign <span class="op">=</span> <span class="va">ceiling_events</span>,</span>
+<span>  Time_SAS <span class="op">=</span> <span class="va">sas_ceiling_time</span><span class="op">$</span><span class="va">Calendar_time</span>,</span>
+<span>  Time_gsDesign <span class="op">=</span> <span class="va">ceiling_times</span>,</span>
+<span>  N_SAS <span class="op">=</span> <span class="va">sas_ceiling_time</span><span class="op">$</span><span class="va">N</span>,</span>
+<span>  N_gsDesign <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="va">accrate</span> <span class="op">*</span> <span class="va">ceiling_times</span>, <span class="va">N</span><span class="op">)</span>,</span>
+<span>  Z_SAS <span class="op">=</span> <span class="va">sas_ceiling_time</span><span class="op">$</span><span class="va">Upper_Z</span>,</span>
+<span>  Z_gsDesign <span class="op">=</span> <span class="va">des_ceiling</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">gs_ceiling</span>, <span class="fl">5</span><span class="op">)</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"Ceiling-time SAS output compared with gsDesign()."</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<caption>Ceiling-time SAS output compared with gsDesign().</caption>
+<colgroup>
+<col width="9%">
+<col width="11%">
+<col width="16%">
+<col width="9%">
+<col width="14%">
+<col width="6%">
+<col width="11%">
+<col width="8%">
+<col width="11%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">Analysis</th>
+<th align="right">Events_SAS</th>
+<th align="right">Events_gsDesign</th>
+<th align="right">Time_SAS</th>
+<th align="right">Time_gsDesign</th>
+<th align="right">N_SAS</th>
+<th align="right">N_gsDesign</th>
+<th align="right">Z_SAS</th>
+<th align="right">Z_gsDesign</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">25.11225</td>
+<td align="right">25.11225</td>
+<td align="right">12</td>
+<td align="right">12</td>
+<td align="right">180</td>
+<td align="right">180</td>
+<td align="right">4.15591</td>
+<td align="right">4.15591</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">48.22068</td>
+<td align="right">48.22068</td>
+<td align="right">17</td>
+<td align="right">17</td>
+<td align="right">255</td>
+<td align="right">255</td>
+<td align="right">2.90189</td>
+<td align="right">2.90177</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">69.38712</td>
+<td align="right">69.38712</td>
+<td align="right">21</td>
+<td align="right">21</td>
+<td align="right">270</td>
+<td align="right">270</td>
+<td align="right">2.36973</td>
+<td align="right">2.36975</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">92.92776</td>
+<td align="right">92.92776</td>
+<td align="right">26</td>
+<td align="right">26</td>
+<td align="right">270</td>
+<td align="right">270</td>
+<td align="right">2.01362</td>
+<td align="right">2.01362</td>
+</tr>
+</tbody>
+</table>
+<p>The remaining small differences in the printed Z-values are numerical
+rounding differences. The important conceptual distinction is that the
+SAS fractional-time and ceiling-time tables are different designs: one
+uses equal information fractions, and the other uses rounded calendar
+analysis times.</p>
 </div>
 </div>
 <div class="section level2 unnumbered">

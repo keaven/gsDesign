@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,9 @@ determine enrollment rates and sample size required. This vignette also
 illustrates the concept of super-superiority often used in prevention
 studies. Finally, since this procedure is new as of November, 2023 we
 suggest checks and potential revisions to spending function choices to
-optimize design boundaries.</p>
+optimize design boundaries. For an extension to annual seasonal
+monitoring with blinded information-adaptive enrollment, see
+<code><a href="../articles/MultiSeasonRareEvents.html">vignette("MultiSeasonRareEvents", package = "gsDesign")</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="parameterization">Parameterization<a class="anchor" aria-label="anchor" href="#parameterization"></a>
@@ -708,14 +710,14 @@ result is obtained.</p>
 <span>  minfup <span class="op">=</span> <span class="va">trialDuration</span> <span class="op">-</span> <span class="va">enrollDuration</span>, ratio <span class="op">=</span> <span class="va">ratio</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Now we convert this to a design with integer event counts at
-analyses. This is achieved by rounding interim analysis event counts
-from the above design and rounding up the final analysis event count.
-This will result in a slight change in event fractions at interim
-analyses as well as a slight change from the targeted 90% power. We now
-explain the rationale behind the spending function choices. Recall that
-the hazard ratio (HR) is 1 minus the VE. The <code>~HR at bound</code>
-represents the approximate hazard ratio required to cross a bound. Thus,
-small HR’s at the interim analyses along with small cumulative <span class="math inline">\(\alpha\)</span>-spending suggest crossing an
+analyses. This is achieved by rounding event counts down and rounding
+total sample size to an integer allocation. This will result in a slight
+change in event fractions at interim analyses as well as a slight change
+from the targeted 90% power. We now explain the rationale behind the
+spending function choices. Recall that the hazard ratio (HR) is 1 minus
+the VE. The <code>~HR at bound</code> represents the approximate hazard
+ratio required to cross a bound. Thus, small HR’s at the interim
+analyses along with small cumulative <span class="math inline">\(\alpha\)</span>-spending suggest crossing an
 interim efficacy bound would provide a result strong enough to
 potentially justify the new treatment. The hazard ratio of ~0.69 (VE ~
 0.31) for the interim 1 futility bound mean that the efficacy trend
@@ -1203,100 +1205,100 @@ levels.</p>
 </thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 1: 44%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 1: 46%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.6864</td>
-<td headers="Futility" class="gt_row gt_right">0.0424</td>
+<td headers="Efficacy" class="gt_row gt_right">2.6664</td>
+<td headers="Futility" class="gt_row gt_right">0.1028</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Events: 3604</td>
+<td headers="Analysis" class="gt_row gt_left">Events: 3632</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0036</td>
-<td headers="Futility" class="gt_row gt_right">0.4831</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0038</td>
+<td headers="Futility" class="gt_row gt_right">0.4591</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Events: 30</td>
+<td headers="Analysis" class="gt_row gt_left">Events: 31</td>
 <td headers="Value" class="gt_row gt_left">~HR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.2255</td>
-<td headers="Futility" class="gt_row gt_right">0.6876</td>
+<td headers="Efficacy" class="gt_row gt_right">0.2316</td>
+<td headers="Futility" class="gt_row gt_right">0.6708</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Month: 12.8</td>
+<td headers="Analysis" class="gt_row gt_left">Month: 13</td>
 <td headers="Value" class="gt_row gt_left">Spending</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0036</td>
-<td headers="Futility" class="gt_row gt_right">0.0144</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0038</td>
+<td headers="Futility" class="gt_row gt_right">0.0153</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if HR=0.7</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0036</td>
-<td headers="Futility" class="gt_row gt_right">0.5169</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0038</td>
+<td headers="Futility" class="gt_row gt_right">0.5409</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if HR=0.3</td>
-<td headers="Efficacy" class="gt_row gt_right">0.3231</td>
-<td headers="Futility" class="gt_row gt_right">0.0144</td>
+<td headers="Efficacy" class="gt_row gt_right">0.3438</td>
+<td headers="Futility" class="gt_row gt_right">0.0153</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">IA 2: 69%</td>
+<td headers="Analysis" class="gt_row gt_left">IA 2: 71%</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.4494</td>
-<td headers="Futility" class="gt_row gt_right">0.9143</td>
+<td headers="Efficacy" class="gt_row gt_right">2.4301</td>
+<td headers="Futility" class="gt_row gt_right">0.9679</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Events: 3604</td>
+<td headers="Analysis" class="gt_row gt_left">Events: 3632</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0072</td>
-<td headers="Futility" class="gt_row gt_right">0.1803</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0075</td>
+<td headers="Futility" class="gt_row gt_right">0.1665</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Events: 47</td>
+<td headers="Analysis" class="gt_row gt_left">Events: 48</td>
 <td headers="Value" class="gt_row gt_left">~HR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.3067</td>
-<td headers="Futility" class="gt_row gt_right">0.5144</td>
+<td headers="Efficacy" class="gt_row gt_right">0.3114</td>
+<td headers="Futility" class="gt_row gt_right">0.5070</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Month: 17.9</td>
+<td headers="Analysis" class="gt_row gt_left">Month: 18.1</td>
 <td headers="Value" class="gt_row gt_left">Spending</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0055</td>
-<td headers="Futility" class="gt_row gt_right">0.0220</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0057</td>
+<td headers="Futility" class="gt_row gt_right">0.0230</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if HR=0.7</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0091</td>
-<td headers="Futility" class="gt_row gt_right">0.8287</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0096</td>
+<td headers="Futility" class="gt_row gt_right">0.8419</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if HR=0.3</td>
-<td headers="Efficacy" class="gt_row gt_right">0.6455</td>
-<td headers="Futility" class="gt_row gt_right">0.0364</td>
+<td headers="Efficacy" class="gt_row gt_right">0.6635</td>
+<td headers="Futility" class="gt_row gt_right">0.0383</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Final</td>
 <td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.0296</td>
-<td headers="Futility" class="gt_row gt_right">2.0296</td>
+<td headers="Efficacy" class="gt_row gt_right">2.0322</td>
+<td headers="Futility" class="gt_row gt_right">2.0322</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Events: 3604</td>
+<td headers="Analysis" class="gt_row gt_left">Events: 3632</td>
 <td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0212</td>
-<td headers="Futility" class="gt_row gt_right">0.0212</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0211</td>
+<td headers="Futility" class="gt_row gt_right">0.0211</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left">Events: 68</td>
 <td headers="Value" class="gt_row gt_left">~HR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.3965</td>
-<td headers="Futility" class="gt_row gt_right">0.3965</td>
+<td headers="Efficacy" class="gt_row gt_right">0.3962</td>
+<td headers="Futility" class="gt_row gt_right">0.3962</td>
 </tr>
 <tr>
-<td headers="Analysis" class="gt_row gt_left">Month: 24.2</td>
+<td headers="Analysis" class="gt_row gt_left">Month: 24</td>
 <td headers="Value" class="gt_row gt_left">Spending</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0159</td>
-<td headers="Futility" class="gt_row gt_right">0.0636</td>
+<td headers="Efficacy" class="gt_row gt_right">0.0154</td>
+<td headers="Futility" class="gt_row gt_right">0.0617</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
@@ -1307,8 +1309,8 @@ levels.</p>
 <tr>
 <td headers="Analysis" class="gt_row gt_left"></td>
 <td headers="Value" class="gt_row gt_left">P(Cross) if HR=0.3</td>
-<td headers="Efficacy" class="gt_row gt_right">0.9022</td>
-<td headers="Futility" class="gt_row gt_right">0.0978</td>
+<td headers="Efficacy" class="gt_row gt_right">0.9018</td>
+<td headers="Futility" class="gt_row gt_right">0.0982</td>
 </tr>
 </tbody>
 </table>
@@ -1317,11 +1319,11 @@ levels.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">xx</span>, timeunit <span class="op">=</span> <span class="st">"months"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Asymmetric two-sided group sequential design with non-binding
-futility bound, 3 analyses, time-to-event outcome with sample size 3604
+futility bound, 3 analyses, time-to-event outcome with sample size 3632
 and 68 events required, 90 percent power, 2.5 percent (1-sided) Type I
 error to detect a hazard ratio of 0.3 with a null hypothesis hazard
 ratio of 0.7. Enrollment and total study durations are assumed to be 8
-and 24.2 months, respectively. Efficacy bounds derived using a
+and 24 months, respectively. Efficacy bounds derived using a
 Hwang-Shih-DeCani spending function with gamma = -3. Futility bounds
 derived using a Hwang-Shih-DeCani spending function with gamma = -3.</p>
 </div>
@@ -1850,37 +1852,37 @@ bounds and operating characteristics for the design.</p>
 <td headers="Analysis" class="gt_row gt_right">1</td>
 <td headers="Time" class="gt_row gt_right">12.9</td>
 <td headers="N" class="gt_row gt_right">3602</td>
-<td headers="Cases" class="gt_row gt_right">30</td>
-<td headers="Success" class="gt_row gt_right">12</td>
-<td headers="Futility" class="gt_row gt_right">21</td>
-<td headers="ve_efficacy" class="gt_row gt_right">0.78</td>
-<td headers="ve_futility" class="gt_row gt_right">0.22</td>
-<td headers="alpha" class="gt_row gt_right">0.0016</td>
-<td headers="beta" class="gt_row gt_right">0.0103</td>
-<td headers="50%" class="gt_row gt_right">0.02</td>
-<td headers="60%" class="gt_row gt_right">0.08</td>
-<td headers="65%" class="gt_row gt_right">0.15</td>
-<td headers="70%" class="gt_row gt_right">0.27</td>
-<td headers="75%" class="gt_row gt_right">0.45</td>
-<td headers="80%" class="gt_row gt_right">0.69</td>
+<td headers="Cases" class="gt_row gt_right">31</td>
+<td headers="Success" class="gt_row gt_right">13</td>
+<td headers="Futility" class="gt_row gt_right">22</td>
+<td headers="ve_efficacy" class="gt_row gt_right">0.76</td>
+<td headers="ve_futility" class="gt_row gt_right">0.19</td>
+<td headers="alpha" class="gt_row gt_right">0.0027</td>
+<td headers="beta" class="gt_row gt_right">0.0068</td>
+<td headers="50%" class="gt_row gt_right">0.03</td>
+<td headers="60%" class="gt_row gt_right">0.11</td>
+<td headers="65%" class="gt_row gt_right">0.20</td>
+<td headers="70%" class="gt_row gt_right">0.34</td>
+<td headers="75%" class="gt_row gt_right">0.53</td>
+<td headers="80%" class="gt_row gt_right">0.76</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_right">2</td>
 <td headers="Time" class="gt_row gt_right">17.9</td>
 <td headers="N" class="gt_row gt_right">3602</td>
-<td headers="Cases" class="gt_row gt_right">47</td>
-<td headers="Success" class="gt_row gt_right">23</td>
+<td headers="Cases" class="gt_row gt_right">48</td>
+<td headers="Success" class="gt_row gt_right">24</td>
 <td headers="Futility" class="gt_row gt_right">30</td>
-<td headers="ve_efficacy" class="gt_row gt_right">0.68</td>
-<td headers="ve_futility" class="gt_row gt_right">0.41</td>
-<td headers="alpha" class="gt_row gt_right">0.0064</td>
-<td headers="beta" class="gt_row gt_right">0.0223</td>
-<td headers="50%" class="gt_row gt_right">0.09</td>
-<td headers="60%" class="gt_row gt_right">0.27</td>
-<td headers="65%" class="gt_row gt_right">0.44</td>
-<td headers="70%" class="gt_row gt_right">0.65</td>
-<td headers="75%" class="gt_row gt_right">0.84</td>
-<td headers="80%" class="gt_row gt_right">0.96</td>
+<td headers="ve_efficacy" class="gt_row gt_right">0.67</td>
+<td headers="ve_futility" class="gt_row gt_right">0.44</td>
+<td headers="alpha" class="gt_row gt_right">0.0092</td>
+<td headers="beta" class="gt_row gt_right">0.0274</td>
+<td headers="50%" class="gt_row gt_right">0.11</td>
+<td headers="60%" class="gt_row gt_right">0.32</td>
+<td headers="65%" class="gt_row gt_right">0.50</td>
+<td headers="70%" class="gt_row gt_right">0.70</td>
+<td headers="75%" class="gt_row gt_right">0.88</td>
+<td headers="80%" class="gt_row gt_right">0.97</td>
 </tr>
 <tr>
 <td headers="Analysis" class="gt_row gt_right">3</td>
@@ -1891,11 +1893,11 @@ bounds and operating characteristics for the design.</p>
 <td headers="Futility" class="gt_row gt_right">38</td>
 <td headers="ve_efficacy" class="gt_row gt_right">0.60</td>
 <td headers="ve_futility" class="gt_row gt_right">0.58</td>
-<td headers="alpha" class="gt_row gt_right">0.0174</td>
-<td headers="beta" class="gt_row gt_right">0.0994</td>
-<td headers="50%" class="gt_row gt_right">0.21</td>
-<td headers="60%" class="gt_row gt_right">0.54</td>
-<td headers="65%" class="gt_row gt_right">0.74</td>
+<td headers="alpha" class="gt_row gt_right">0.0190</td>
+<td headers="beta" class="gt_row gt_right">0.0974</td>
+<td headers="50%" class="gt_row gt_right">0.22</td>
+<td headers="60%" class="gt_row gt_right">0.55</td>
+<td headers="65%" class="gt_row gt_right">0.75</td>
 <td headers="70%" class="gt_row gt_right">0.90</td>
 <td headers="75%" class="gt_row gt_right">0.98</td>
 <td headers="80%" class="gt_row gt_right">1.00</td>
@@ -1933,29 +1935,29 @@ design used:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">efficacyNominalPValue</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="op">-</span><span class="va">xx</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">)</span></span>
 <span><span class="va">efficacyNominalPValue</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.003610924 0.007155713 0.021200261</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] 0.003832879 0.007548194 0.021066070</span></span></code></pre>
 <p>Then we took the inverse binomial distribution for these p-values
 assuming the targeted total number of cases to obtain:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">qbinom</a></span><span class="op">(</span>p <span class="op">=</span> <span class="va">efficacyNominalPValue</span>, size <span class="op">=</span> <span class="va">xx</span><span class="op">$</span><span class="va">n.I</span>, prob <span class="op">=</span> <span class="va">p0</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 12 23 37</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] 13 23 37</span></span></code></pre>
 <p>This is actually the same as the final bounds computed above:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">xb</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 12 23 37</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] 13 24 37</span></span></code></pre>
 <p>This and the initial approximation for the futility bound are
 returned from <code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code>:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">xb</span><span class="op">$</span><span class="va">init_approx</span><span class="op">$</span><span class="va">a</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 12 23 37</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] 13 23 37</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">xb</span><span class="op">$</span><span class="va">init_approx</span><span class="op">$</span><span class="va">b</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 20 29 38</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] 21 29 38</span></span></code></pre>
 <p>For the futility bound, only a slight adjustment was required for the
 final bound:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">xb</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 21 30 38</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] 22 30 38</span></span></code></pre>
 <p>The vaccine efficacy at bounds should be checked to see if the
 evidence is convincing enough to be accepted as a clinically relevant
 benefit in addition to statistical benefit (efficacy bounds) or a less
@@ -1981,11 +1983,11 @@ exceeds the targeting spending.</p>
 <span><span class="va">nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsBinomialExact.html">gsBinomialExact</a></span><span class="op">(</span>k <span class="op">=</span> <span class="va">xb</span><span class="op">$</span><span class="va">k</span>, theta <span class="op">=</span> <span class="va">xb</span><span class="op">$</span><span class="va">theta</span>, n.I <span class="op">=</span> <span class="va">xb</span><span class="op">$</span><span class="va">n.I</span>, b<span class="op">=</span> <span class="va">xb</span><span class="op">$</span><span class="va">n.I</span> <span class="op">+</span> <span class="fl">1</span>, a <span class="op">=</span> <span class="va">xb</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">nb</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; Analysis  1 Analysis  2 Analysis  3 </span></span>
-<span><span class="co">#&gt; 0.001619438 0.006447739 0.017397214</span></span></code></pre>
+<span><span class="co">#&gt; 0.002703239 0.009176778 0.018982186</span></span></code></pre>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Targeted alpha-spending</span></span>
 <span><span class="va">xx</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="fu">sf</span><span class="op">(</span><span class="va">alpha</span>, t <span class="op">=</span> <span class="va">xx</span><span class="op">$</span><span class="va">timing</span>, <span class="va">xx</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">param</span><span class="op">)</span><span class="op">$</span><span class="va">spend</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.003610924 0.009107476 0.025000000</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] 0.003832879 0.009577354 0.025000000</span></span></code></pre>
 <p>Above we see the achieved <span class="math inline">\(\alpha\)</span>-spending ignoring the futility
 bound is controlled at the targeted level at each analysis; because of
 the exact bound, control is below the target. For this particular
@@ -2010,9 +2012,9 @@ hold.</p>
 <span><span class="op">}</span></span>
 <span><span class="va">excess_alpha_spend</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt;             [,1]        [,2]       [,3]</span></span>
-<span><span class="co">#&gt; [1,] 0.004979222 0.008826964 0.01933025</span></span>
-<span><span class="co">#&gt; [2,] 0.001619438 0.013174419 0.02171228</span></span>
-<span><span class="co">#&gt; [3,] 0.001619438 0.006447739 0.02856667</span></span></code></pre>
+<span><span class="co">#&gt; [1,] 0.007742914 0.012745616 0.02201467</span></span>
+<span><span class="co">#&gt; [2,] 0.002703239 0.017820794 0.02502423</span></span>
+<span><span class="co">#&gt; [3,] 0.002703239 0.009176778 0.02967058</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="beta-spending">
@@ -2022,11 +2024,11 @@ hold.</p>
 <code class="sourceCode R"><span><span class="co"># Cumulative beta-spending for exact design</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">xb</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; Analysis  1 Analysis  2 Analysis  3 </span></span>
-<span><span class="co">#&gt;  0.01033516  0.02225609  0.09941943</span></span></code></pre>
+<span><span class="co">#&gt; 0.006760093 0.027359634 0.097411064</span></span></code></pre>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Targeted beta-spending</span></span>
 <span><span class="va">xx</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="fu">sf</span><span class="op">(</span><span class="va">beta</span>, t <span class="op">=</span> <span class="va">xx</span><span class="op">$</span><span class="va">timing</span>, <span class="va">xx</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">param</span><span class="op">)</span><span class="op">$</span><span class="va">spend</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; [1] 0.0144437 0.0364299 0.1000000</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] 0.01533151 0.03830942 0.10000000</span></span></code></pre>
 <p>Since the futility bound at the final analysis is only 1 plus the
 efficacy bound, it cannot be lowered in the following. However, we see
 that changing either interim futility bound by 1 would exceed targeted
@@ -2045,9 +2047,9 @@ hold.</p>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="../reference/gsBinomialExact.html">gsBinomialExact</a></span><span class="op">(</span>k <span class="op">=</span> <span class="va">xb</span><span class="op">$</span><span class="va">k</span>, theta <span class="op">=</span> <span class="va">xb</span><span class="op">$</span><span class="va">theta</span>, n.I <span class="op">=</span> <span class="va">xb</span><span class="op">$</span><span class="va">n.I</span>, b <span class="op">=</span> <span class="va">b</span>, a <span class="op">=</span> <span class="va">xb</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span><span class="op">)</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="va">excess_beta_spend</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt;            [,1]       [,2]      [,3]</span></span>
-<span><span class="co">#&gt; [1,] 0.02618462 0.03428681 0.1059802</span></span>
-<span><span class="co">#&gt; [2,] 0.01033516 0.03746257 0.1034467</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;             [,1]       [,2]      [,3]</span></span>
+<span><span class="co">#&gt; [1,] 0.017842801 0.03386750 0.1009881</span></span>
+<span><span class="co">#&gt; [2,] 0.006760093 0.04900921 0.1046241</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="bound-update-at-time-of-analysis-for-example-2">Bound update at time of analysis for example 2<a class="anchor" aria-label="anchor" href="#bound-update-at-time-of-analysis-for-example-2"></a>

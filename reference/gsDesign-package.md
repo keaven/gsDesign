@@ -20,10 +20,6 @@ Useful links:
 
 **Maintainer**: Keaven Anderson <keaven_anderson@merck.com>
 
-Authors:
-
-- Keaven Anderson <keaven_anderson@merck.com>
-
 Other contributors:
 
 - Merck & Co., Inc., Rahway, NJ, USA and its affiliates

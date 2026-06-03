@@ -13,10 +13,13 @@ This vignette demonstrates a practical design workflow for rare seasonal
 events. The motivating use case is a vaccine efficacy trial with annual
 high-risk seasons. The same ideas can be adapted to infectious disease
 studies where simple superiority or non-inferiority may be considered.
+For a general introduction to exact-binomial vaccine efficacy
+monitoring, see
+[`vignette("VaccineEfficacy", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/VaccineEfficacy.md).
 
 We focus on exact binomial monitoring with spending functions:
 
-- analyses after each season with spending times `1/3, 2/3, 1`,
+- analyses after each season with equally spaced spending times,
 - efficacy spending based on `sfHSD` with `gamma = 1` (Pocock-like),
 - exact binomial p-values from
   [`repeatedPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/repeatedPValueBinomialExact.md)
@@ -54,10 +57,24 @@ hr0 <- 1 - ve0
 hr1 <- 1 - ve1
 
 seasonal_event_rate_control <- 0.003
-season_length_years <- 0.5
+season_length_months <- 6
+season_length_years <- season_length_months / 12
 dropout_6mo <- 0.10
 
-timing <- c(1 / 3, 2 / 3, 1)
+n_seasons <- 3
+stopifnot(n_seasons >= 2)
+timing <- seq_len(n_seasons) / n_seasons
+
+enrollment_months <- 2
+off_enrollment_months <- 10
+annual_cycle_months <- enrollment_months + off_enrollment_months
+enroll_pattern <- c(rep(c(1, 0), n_seasons - 1), 1)
+enroll_periods <- c(rep(c(enrollment_months, off_enrollment_months), n_seasons - 1), enrollment_months)
+calendar_time <- enrollment_months + season_length_months +
+  annual_cycle_months * (seq_len(n_seasons) - 1)
+
+test_lower <- rep(FALSE, n_seasons)
+test_lower[1] <- TRUE
 ```
 
 For the exact binomial approximation, the probability that an event is
@@ -65,8 +82,8 @@ in the experimental group is
 
 ``` r
 
-p_event_experimental <- function(ve, ratio = 3) {
-  ratio / (ratio + 1 / (1 - ve))
+p_event_experimental <- function(ve, randomization_ratio) {
+  randomization_ratio / (randomization_ratio + 1 / (1 - ve))
 }
 
 p0 <- p_event_experimental(ve0, ratio)
@@ -79,73 +96,82 @@ c(p0 = p0, p1 = p1)
 ## Initial group sequential setup
 
 To define spending-function monitoring, we first construct a
-time-to-event `gsSurv` object and then convert to integer event looks
-and exact binomial bounds. Here we use three looks with timing fractions
-`1/3, 2/3, 1`. Enrollment is modeled as 2 months on and 10 months off
-each year for 3 years.
+calendar-time `gsSurvCalendar` object and then convert to integer event
+looks and exact binomial bounds. Here we use 3 looks at months 8, 20,
+32, corresponding to the end of each season after that year’s enrollment
+period. Enrollment is modeled as 2 months on and 10 months off each year
+for 3 years. The `gsSurvCalendar` inputs use months as the time unit, so
+seasonal event and dropout probabilities are converted to monthly
+hazards before fitting the design. Since events are seasonal, the
+control event hazard is modeled as piecewise constant: positive for the
+6-month high-risk season and zero afterward.
 
 ``` r
 
-lambdaC <- -log(1 - seasonal_event_rate_control) / season_length_years
-eta <- -log(1 - dropout_6mo) / season_length_years
-enroll_pattern <- c(1, 0, 1, 0, 1, 0)
-enroll_periods <- c(2, 10, 2, 10, 2, 10)
+lambdaC <- c(-log(1 - seasonal_event_rate_control) / season_length_months, 0)
+S <- season_length_months
+eta <- -log(1 - dropout_6mo) / season_length_months
 
-design_tte <- gsSurv(
-  k = 3,                  # Number of analyses (3 seasons)
-  test.type = 4,          # Non-binding lower bound framework
-  alpha = alpha,          # One-sided Type I error
-  beta = beta,            # Type II error
-  timing = timing[1:2],   # Interim information fractions (season 1 and 2)
-  sfu = sfHSD,            # Efficacy spending function
-  sfupar = 1,             # Pocock-like efficacy spending
-  sfl = sfHSD,            # Futility spending function
-  sflpar = -2,            # Futility spending parameter
-  lambdaC = lambdaC,      # Control hazard rate during high-risk season
-  hr = hr1,               # Alternative hypothesis HR
-  hr0 = hr0,              # Null hypothesis HR
-  eta = eta,              # Dropout hazard rate
-  gamma = enroll_pattern, # Relative enrollment rates by period
-  R = enroll_periods,     # Period durations (2 months on, 10 months off)
-  T = 42,                 # Trial duration in months
-  minfup = 6,             # Minimum follow-up for final enrollees
-  ratio = ratio,          # Experimental:control randomization ratio
-  testLower = c(TRUE, FALSE, FALSE) # Futility only at IA1
+# Integer conversion can slightly adjust total enrollment so the final integer
+# event target is achievable with the seasonal piecewise event-rate model.
+design_calendar <- gsSurvCalendar(
+  test.type = 4,                  # Non-binding lower bound framework
+  alpha = alpha,                  # One-sided Type I error
+  beta = beta,                    # Type II error
+  calendarTime = calendar_time,   # Analysis times in months
+  spending = "information",       # Spending by information fraction
+  sfu = sfHSD,                    # Efficacy spending function
+  sfupar = 1,                     # Pocock-like efficacy spending
+  sfl = sfHSD,                    # Futility spending function
+  sflpar = -2,                    # Futility spending parameter
+  lambdaC = lambdaC,              # Control hazard rate per month by period
+  S = S,                          # Event-rate period duration in months
+  hr = hr1,                       # Alternative hypothesis HR
+  hr0 = hr0,                      # Null hypothesis HR
+  eta = eta,                      # Dropout hazard rate per month
+  gamma = enroll_pattern,         # Relative enrollment rates by period
+  R = enroll_periods,             # Enrollment period durations in months
+  minfup = season_length_months,  # Minimum follow-up for final enrollees
+  ratio = ratio,                  # Experimental:control randomization ratio
+  testLower = test_lower          # Futility only at selected analyses
 ) |>
-  toInteger()
+  toInteger() |>
+  suppressWarnings()
 
-gsBoundSummary(design_tte)
+gsBoundSummary(design_calendar)
 #>    Analysis              Value Efficacy Futility
-#>   IA 1: 33%                  Z   2.2831  -0.1118
-#>     N: 1716        p (1-sided)   0.0112   0.5445
-#>  Events: 12       ~HR at bound   0.1528   0.7542
-#>   Month: 13 P(Cross) if HR=0.7   0.0112   0.4555
-#>             P(Cross) if HR=0.2   0.4127   0.0148
+#>   IA 1: 33%                  Z   2.2831  -0.1175
+#>    N: 10530        p (1-sided)   0.0112   0.5468
+#>  Events: 12       ~HR at bound   0.1528   0.7571
+#>   Month: 11 P(Cross) if HR=0.7   0.0112   0.4532
+#>             P(Cross) if HR=0.2   0.4105   0.0148
 #>   IA 2: 67%                  Z   2.2844       NA
-#>     N: 2800        p (1-sided)   0.0112       NA
+#>    N: 21059        p (1-sided)   0.0112       NA
 #>  Events: 24       ~HR at bound   0.2385       NA
-#>   Month: 25 P(Cross) if HR=0.7   0.0192       NA
-#>             P(Cross) if HR=0.2   0.7566       NA
+#>   Month: 21 P(Cross) if HR=0.7   0.0192       NA
+#>             P(Cross) if HR=0.2   0.7541       NA
 #>       Final                  Z   2.3013       NA
-#>     N: 3232        p (1-sided)   0.0107       NA
+#>    N: 31588        p (1-sided)   0.0107       NA
 #>  Events: 36       ~HR at bound   0.2887       NA
-#>   Month: 46 P(Cross) if HR=0.7   0.0247       NA
-#>             P(Cross) if HR=0.2   0.9080       NA
+#>   Month: 32 P(Cross) if HR=0.7   0.0247       NA
+#>             P(Cross) if HR=0.2   0.9065       NA
 
-planned_final_events <- design_tte$n.I[design_tte$k]
+planned_final_events <- design_calendar$n.I[design_calendar$k]
 planned_counts <- as.integer(round(planned_final_events * timing))
-planned_counts[3] <- planned_final_events
-planned_counts[2] <- max(planned_counts[2], planned_counts[1] + 1L)
-planned_counts[3] <- max(planned_counts[3], planned_counts[2] + 1L)
+planned_counts[n_seasons] <- planned_final_events
+for (j in seq_along(planned_counts)[-1]) {
+  planned_counts[j] <- max(planned_counts[j], planned_counts[j - 1] + 1L)
+}
 
-design_exact <- toBinomialExact(design_tte, observedEvents = planned_counts)
-planned_cum_enrollment <- as.integer(round(rowSums(design_tte$eNC + design_tte$eNE)))
+design_exact <- toBinomialExact(design_calendar, observedEvents = planned_counts)
 
-planned_enrollment_period <- as.numeric(rowSums(as.matrix(design_tte$gamma))) * enroll_periods
-season_id <- rep(1:3, each = 2)
+planned_enrollment_period <- as.numeric(rowSums(as.matrix(design_calendar$gamma))) *
+  as.numeric(design_calendar$R)
+season_id <- rep(seq_len(n_seasons), each = 2, length.out = length(planned_enrollment_period))
 planned_enrollment_by_season <- as.integer(round(tapply(planned_enrollment_period, season_id, sum)))
 planned_enrollment_control <- as.integer(round(planned_enrollment_by_season / (1 + ratio)))
 planned_enrollment_experimental <- planned_enrollment_by_season - planned_enrollment_control
+planned_cum_enrollment <- cumsum(planned_enrollment_by_season)
 ```
 
 The table above is the initial survival-design approximation and
@@ -156,10 +182,10 @@ in the experimental arm at a given analysis.
 
 ``` r
 
-target_alpha_spend <- design_tte$upper$sf(
+target_alpha_spend <- design_calendar$upper$sf(
   alpha = alpha,
   t = timing,
-  param = design_tte$upper$param
+  param = design_calendar$upper$param
 )$spend
 
 achieved_alpha_spend <- cumsum(
@@ -193,8 +219,8 @@ ve_from_bound <- function(x, n, ratio) {
   out
 }
 
-futility_active <- if (!is.null(design_tte$testLower)) {
-  tl <- design_tte$testLower
+futility_active <- if (!is.null(design_calendar$testLower)) {
+  tl <- design_calendar$testLower
   if (length(tl) == 1) tl <- rep(tl, design_exact$k)
   as.logical(tl)
 } else {
@@ -208,7 +234,7 @@ nominal_p_futility[futility_active] <- stats::pbinom(
 )
 
 tibble(
-  Season = 1:3,
+  Season = seq_len(n_seasons),
   `Spending time` = timing,
   `Planned total events` = design_exact$n.I,
   `Approx cumulative enrollment` = planned_cum_enrollment,
@@ -264,7 +290,7 @@ tibble(
     locations = cells_column_labels(columns = `Exact efficacy bound (x <= a)`)
   ) |>
   tab_footnote(
-    footnote = "Futility is specified only at IA1; blank futility entries indicate no futility stopping boundary at that analysis.",
+    footnote = "Blank futility entries indicate no futility stopping boundary at that analysis.",
     locations = cells_column_labels(columns = `Exact futility bound (x >= b)`)
   )
 ```
@@ -277,7 +303,7 @@ overall.
 ``` r
 
 enrollment_table <- tibble(
-  Season = as.character(1:3),
+  Season = as.character(seq_len(n_seasons)),
   `Control planned enrollment` = planned_enrollment_control,
   `Experimental planned enrollment` = planned_enrollment_experimental
 ) |>
@@ -303,25 +329,26 @@ dplyr::bind_rows(
 | Planned enrollment by season and overall |  |  |  |  |
 |----|----|----|----|----|
 | Season | Control planned enrollment | Experimental planned enrollment | Total planned enrollment | Cumulative planned enrollment |
-| 1 | 269 | 808 | 1077 | 1077 |
-| 2 | 269 | 808 | 1077 | 2154 |
-| 3 | 269 | 808 | 1077 | 3231 |
-| Overall | 807 | 2424 | 3231 | 3231 |
+| 1 | 2632 | 7897 | 10529 | 10529 |
+| 2 | 2632 | 7897 | 10529 | 21058 |
+| 3 | 2632 | 7897 | 10529 | 31587 |
+| Overall | 7896 | 23691 | 31587 | 31587 |
 
 ## Example repeated and sequential p-values
 
-Suppose observed event totals at the three seasonal analyses are equal
-to the planned totals and observed experimental events are as below.
-Here, `x` is the observed number of events in the experimental arm. The
-offset sets season 2 to be one event above the efficacy bound to
-demonstrate that the repeated p-value is greater than 0.025.
+Suppose observed event totals at the 3 seasonal analyses are equal to
+the planned totals and observed experimental events are as below. Here,
+`x` is the observed number of events in the experimental arm. The offset
+sets season 2 to be one event above the efficacy bound to demonstrate
+that the repeated p-value is greater than 0.025.
 
 ``` r
 
-x_offset_from_efficacy <- c(0L, 1L, 0L)
+x_offset_from_efficacy <- rep(0L, n_seasons)
+x_offset_from_efficacy[min(2L, n_seasons)] <- 1L
 example_x <- pmax(0L, design_exact$lower$bound + x_offset_from_efficacy)
 example_p <- repeatedPValueBinomialExact(
-  gsD = design_tte,
+  gsD = design_calendar,
   n.I = design_exact$n.I,
   x = example_x
 )
@@ -341,7 +368,7 @@ The sequential p-value is the minimum repeated p-value:
 ``` r
 
 sequentialPValueBinomialExact(
-  gsD = design_tte,
+  gsD = design_calendar,
   n.I = design_exact$n.I,
   x = example_x
 )
@@ -370,21 +397,21 @@ For explicit control, you can pass `usTime` (and for `test.type = 4`,
 `lsTime`) directly to
 [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md),
 following the same spending-time conventions as
-[`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
-and [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md).
+[`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md),
+[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md), and
+[`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md).
 As above, setting `x` one event above an updated efficacy bound at a
 look gives a repeated p-value above 0.025 for that analysis.
 
 ``` r
 
 observed_counts_update <- c(
-  planned_counts[1],
-  planned_counts[2],
-  max(planned_counts[2] + 1L, planned_counts[3] - 5L)
+  planned_counts[-n_seasons],
+  max(planned_counts[n_seasons - 1] + 1L, planned_counts[n_seasons] - 5L)
 )
-update_exact <- toBinomialExact(design_tte, observedEvents = observed_counts_update)
+update_exact <- toBinomialExact(design_calendar, observedEvents = observed_counts_update)
 update_exact_full <- toBinomialExact(
-  design_tte,
+  design_calendar,
   observedEvents = observed_counts_update,
   maxSpend = TRUE
 )
@@ -419,14 +446,19 @@ count is below plan.
 
 ``` r
 
+ve_scenarios <- c(`H0 (VE=30%)` = ve0, `H1 (VE=80%)` = ve1)
+planned_control_event_rates <- rep(seasonal_event_rate_control, length(ve_scenarios))
+
 sim_light <- simBinomialSeasonalExact(
-  gsD = design_tte,
-  ve = c(`H0 (VE=30%)` = ve0, `H1 (VE=80%)` = ve1),
-  nsim = c(150, 150),
-  control_event_rate = c(0.003, 0.003),
+  gsD = design_calendar,
+  ve = ve_scenarios,
+  nsim = rep(150, length(ve_scenarios)),
+  control_event_rate = planned_control_event_rates,
   season_length = season_length_years,
   dropout_rate = dropout_6mo,
   planned_counts = planned_counts,
+  enroll_control_per_look = planned_enrollment_control,
+  enroll_experimental_per_look = planned_enrollment_experimental,
   adaptive = c(FALSE, TRUE),
   max_multiplier = 2,
   final_full_spending = TRUE,
@@ -469,28 +501,32 @@ oc |>
 |----|----|----|----|----|----|----|----|
 | Exact-binomial monitoring with seasonal analyses |  |  |  |  |  |  |  |
 | Scenario | Efficacy crossing probability¹ | Futility stopping probability | MC SE (efficacy) | MC SE (futility) | Mean total events | Mean total enrolled | Mean looks used |
-| Fixed: H0 (VE=30%) | 0.0133 | 0.3733 | 0.0094 | 0.0395 | 69.20 | 16,920.00 | 2.49 |
-| Adaptive: H0 (VE=30%) | 0.0067 | 0.4267 | 0.0066 | 0.0404 | 72.78 | 17,578.95 | 2.33 |
-| Fixed: H1 (VE=80%) | 0.8867 | 0.0333 | 0.0259 | 0.0147 | 36.65 | 16,920.00 | 3.00 |
-| Adaptive: H1 (VE=80%) | 0.9867 | 0.0000 | 0.0094 | 0.0000 | 45.73 | 21,832.55 | 2.99 |
+| Fixed: H0 (VE=30%) | 0.0133 | 0.7067 | 0.0094 | 0.0372 | 35.73 | 13,617.51 | 1.29 |
+| Adaptive: H0 (VE=30%) | 0.0200 | 0.7200 | 0.0114 | 0.0367 | 35.41 | 13,406.93 | 1.27 |
+| Fixed: H1 (VE=80%) | 0.9667 | 0.0200 | 0.0147 | 0.0114 | 28.89 | 17,829.11 | 1.69 |
+| Adaptive: H1 (VE=80%) | 0.9667 | 0.0200 | 0.0147 | 0.0114 | 30.01 | 19,729.27 | 1.71 |
 | ¹ For VE=30% scenarios, efficacy crossing probability is Type I error under the non-binding futility convention (futility crossings do not block later efficacy crossings). |  |  |  |  |  |  |  |
 
 ## Example with lower-than-planned event rates
 
 To illustrate adaptation when events are lower than planned, we halve
-the seasonal control event rate from 0.3% to 0.15% and compare fixed
-versus adaptive monitoring for both `VE = 30%` and `VE = 80%`.
+the seasonal control event rate and compare fixed versus adaptive
+monitoring for both `VE = 30%` and `VE = 80%`.
 
 ``` r
 
+low_control_event_rates <- planned_control_event_rates / 2
+
 sim_low <- simBinomialSeasonalExact(
-  gsD = design_tte,
-  ve = c(`H0 (VE=30%)` = ve0, `H1 (VE=80%)` = ve1),
-  nsim = c(300, 300),
-  control_event_rate = c(0.0015, 0.0015),
+  gsD = design_calendar,
+  ve = ve_scenarios,
+  nsim = rep(300, length(ve_scenarios)),
+  control_event_rate = low_control_event_rates,
   season_length = season_length_years,
   dropout_rate = dropout_6mo,
   planned_counts = planned_counts,
+  enroll_control_per_look = planned_enrollment_control,
+  enroll_experimental_per_look = planned_enrollment_experimental,
   adaptive = c(FALSE, TRUE),
   max_multiplier = 2,
   final_full_spending = TRUE,
@@ -553,10 +589,10 @@ tibble(
 |----|----|----|----|----|----|
 | Adaptive approach increases enrollment to recover information |  |  |  |  |  |
 | Scenario | Efficacy crossing probability¹ | Futility stopping probability | Mean total events | Mean total enrolled | Mean looks used |
-| Without adaptation: Type I error (VE=30%) | 0.0333 | 0.3867 | 68.84 | 33,828.00 | 2.48 |
-| With adaptation: Type I error (VE=30%) | 0.0233 | 0.3633 | 73.48 | 35,504.37 | 2.35 |
-| Without adaptation: Power (VE=80%) | 0.9300 | 0.0000 | 35.93 | 33,828.00 | 3.00 |
-| With adaptation: Power (VE=80%) | 0.9800 | 0.0100 | 45.90 | 43,332.20 | 2.99 |
+| Without adaptation: Type I error (VE=30%) | 0.0267 | 0.3367 | 39.59 | 22,146.00 | 2.10 |
+| With adaptation: Type I error (VE=30%) | 0.0300 | 0.3733 | 36.81 | 21,733.09 | 1.90 |
+| Without adaptation: Power (VE=80%) | 0.9200 | 0.0000 | 22.04 | 23,795.54 | 2.26 |
+| With adaptation: Power (VE=80%) | 0.9667 | 0.0000 | 25.93 | 30,396.28 | 2.11 |
 | ¹ Type I error rows use non-binding futility for efficacy crossing probability; futility stopping probability is shown separately. |  |  |  |  |  |
 
 This table provides side-by-side comparisons of Type I error, power, and
@@ -574,26 +610,30 @@ type1_nsim <- 20000
 power_nsim <- 3500
 
 sim_type1_big <- simBinomialSeasonalExact(
-  gsD = design_tte,
+  gsD = design_calendar,
   ve = c(`H0 (VE=30%)` = ve0),
   nsim = type1_nsim,
-  control_event_rate = 0.003,
+  control_event_rate = seasonal_event_rate_control,
   season_length = season_length_years,
   dropout_rate = dropout_6mo,
   planned_counts = planned_counts,
+  enroll_control_per_look = planned_enrollment_control,
+  enroll_experimental_per_look = planned_enrollment_experimental,
   adaptive = c(FALSE, TRUE),
   final_full_spending = TRUE,
   seed = 5001
 )
 
 sim_power_big <- simBinomialSeasonalExact(
-  gsD = design_tte,
+  gsD = design_calendar,
   ve = c(`H1 (VE=80%)` = ve1),
   nsim = power_nsim,
-  control_event_rate = 0.003,
+  control_event_rate = seasonal_event_rate_control,
   season_length = season_length_years,
   dropout_rate = dropout_6mo,
   planned_counts = planned_counts,
+  enroll_control_per_look = planned_enrollment_control,
+  enroll_experimental_per_look = planned_enrollment_experimental,
   adaptive = c(FALSE, TRUE),
   final_full_spending = TRUE,
   seed = 6001
@@ -605,7 +645,8 @@ sim_power_big <- simBinomialSeasonalExact(
 - The adaptive pathway shown here is blinded because it uses total event
   counts only; treatment-group differences are not used to update
   enrollment.
-- Spending fractions are kept fixed at `1/3, 2/3, 1`.
+- Spending fractions are set by `timing`; with the current specification
+  they are 0.333, 0.667, 1.
 - For modified intention-to-treat analyses, additional exclusion/dropout
   mechanisms can be layered into the simulation by reducing at-risk
   counts before each seasonal event/dropout draw.

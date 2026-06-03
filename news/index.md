@@ -86,7 +86,8 @@
   evaluate delayed event accrual while keeping spending tied to a
   planned information schedule. It also preserves the original one-sided
   versus two-sided design convention when inheriting defaults from an
-  existing `gsSurv` object.
+  existing `gsSurv` object
+  ([\#258](https://github.com/keaven/gsDesign/issues/258)).
 - New vignette “Power Computation for Group Sequential Survival Designs”
   ([`vignette("gsSurvPower")`](https://keaven.github.io/gsDesign/articles/gsSurvPower.md))
   with worked examples for sensitivity analysis, alpha reallocation,
@@ -100,24 +101,50 @@
   to compute repeated and sequential exact-binomial p-values under
   spending function designs derived from
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  objects.
+  objects (1922429e).
 - Added
   [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
   to run fixed and blinded-adaptive seasonal rare-event simulations with
-  exact-binomial efficacy monitoring summaries.
+  exact-binomial efficacy monitoring summaries (1922429e).
 - [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
   now supports explicit spending-time overrides via `usTime` and
   `lsTime` (for `test.type = 4`) to align with
   [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
   and [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  conventions when updating bounds with `observedEvents`.
+  conventions when updating bounds with `observedEvents` (1922429e).
 - [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
   now supports `usTime`/`lsTime` inputs and reports futility stopping
   probabilities (`futility_stop_rate` with `futility_mc_se`) in scenario
-  summaries.
+  summaries (1922429e).
+- [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
+  now accepts `ve = 0` and `ve < 0`, allowing null-hypothesis (`ve = 0`)
+  and non-inferiority margin (`ve < 0`) scenarios. Validation now
+  requires only that `ve` values are finite and less than 1. A
+  feasibility check verifies that the implied experimental-arm event
+  rates (`control_event_rate * (1 - ve)`) remain in `[0, 1)`
+  ([\#267](https://github.com/keaven/gsDesign/issues/267)).
 
 ### Bug fixes
 
+- [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) now
+  use the requested survival sample size method when either `T` or
+  `minfup` is `NULL`.
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  also uses the input accrual rate and duration when both `T` and
+  `minfup` are `NULL`, solving follow-up duration against the final
+  group-sequential event requirement. This allows Schoenfeld survival
+  designs to reproduce SAS PROC SEQDESIGN’s fixed-accrual follow-up
+  solve ([\#270](https://github.com/keaven/gsDesign/issues/270)).
+- [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
+  now stops simulated trials at the first efficacy or futility boundary
+  crossing for reporting stopping time, total events, and total
+  enrollment, while preserving the non-binding futility convention for
+  efficacy crossing probability. The simulation also updates
+  exact-binomial bounds within each trial using the observed total event
+  counts and defaults fixed per-season enrollment to the design’s
+  planned seasonal enrollment
+  ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
   now preserves selective-bound flags (`testUpper`, `testLower`,
   `testHarm`) and harm-bound spending (`sfharm`, `sfharmparam` for
@@ -125,7 +152,27 @@
   size or event-count rounding. Previously the internal
   [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
   call omitted these settings, so inactive looks could incorrectly
-  become active.
+  become active
+  ([\#261](https://github.com/keaven/gsDesign/issues/261)).
+- [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+  now preserves the intended survival-design behavior that
+  `roundUpFinal = TRUE` rounds the final event count up. If the
+  independently rounded final sample size, using the usual `ratio + 1`
+  allocation multiple, cannot support the integer event target,
+  [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+  adjusts sample size by allocation multiples, with a warning, until the
+  target is achievable. Designs where the rounded sample size already
+  supports the integer event target retain the previous behavior
+  ([\#264](https://github.com/keaven/gsDesign/issues/264)).
+- [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+  survival integerization now keeps the calendar design fixed while
+  deriving interim integer events from timing and final integer event
+  target. Enrollment is inflated minimally by scaling accrual rates and
+  then rounded to allocation multiples, avoiding unnecessary
+  calendar-extension-driven enrollment increases for small final-event
+  rounding changes. A variable-duration fallback is retained with a
+  warning when fixed-calendar inflation is infeasible
+  ([\#271](https://github.com/keaven/gsDesign/issues/271)).
 - Fixed sign inconsistency in
   [`hrn2z()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
   which used `sign(hr0 - hr1)` while
@@ -136,13 +183,32 @@
 - Fixed
   [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
   one-sided (`test.type = 1`) updating with `observedEvents` so
-  futility-adjustment code is only executed when `test.type = 4`.
+  futility-adjustment code is only executed when `test.type = 4`
+  (1922429e).
 - [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
   now respects selective futility testing (`testLower`) when present on
-  a `gsSurv` object by flattening lower spending at inactive looks.
+  a `gsSurv` object by flattening lower spending at inactive looks
+  (1922429e).
 
 ### Documentation
 
+- Updated the `SeqDesignSurvival` vignette to use the one-sided
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  alpha convention when reproducing SAS PROC SEQDESIGN fractional-time
+  survival output
+  ([\#264](https://github.com/keaven/gsDesign/issues/264)).
+- Corrected and generalized the multi-season rare-event vignette so
+  enrollment timing, planned counts, and simulation event-rate inputs
+  are derived from the stated design specifications, with calendar-timed
+  seasonal analyses, piecewise seasonal failure hazards, and
+  cross-references to the exact binomial vaccine-efficacy vignette
+  ([\#264](https://github.com/keaven/gsDesign/issues/264)).
+- Expanded
+  [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+  help and vignette guidance for survival-design final event rounding,
+  final sample-size feasibility adjustment, and seasonal designs with a
+  final zero event-rate period
+  ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - Documented `test.type` restriction in
   [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md):
   only `test.type = 1` and `4` are supported; other types (including 7
@@ -167,43 +233,68 @@
   [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
   documentation and vignette guidance for `informationRates`, calendar
   spending, and `fullSpendingAtFinal`, including a corrected worked
-  example of the spending fractions used at the final analysis.
+  example of the spending fractions used at the final analysis
+  ([\#258](https://github.com/keaven/gsDesign/issues/258)).
+- Clarified the PROC SEQDESIGN survival vignette comparison by using
+  `test.type = 2`, `alpha = 0.025`, `method = "Schoenfeld"`, and
+  `T = minfup = NULL` to match SAS’s symmetric two-sided fixed-accrual
+  design, and by separating fractional-time output from the SAS
+  ceiling-time adjusted design
+  ([\#270](https://github.com/keaven/gsDesign/issues/270)).
 - Added vignette “Multi-season studies for rare events”
   ([`vignette("MultiSeasonRareEvents")`](https://keaven.github.io/gsDesign/articles/MultiSeasonRareEvents.md))
   demonstrating exact-binomial seasonal monitoring, analysis-time bound
   updates via `toBinomialExact(observedEvents = ...)`, and blinded
-  information-adaptive enrollment scenarios.
+  information-adaptive enrollment scenarios (1922429e).
 - Expanded the multi-season vignette with: initial
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   output, IA1-only futility illustration, VE and nominal one-sided
   p-values at exact-binomial bounds, and clearer simulation tables
   including efficacy and futility stopping probabilities with
-  non-binding Type I interpretation notes.
+  non-binding Type I interpretation notes (c1065ea8, 2e9260bd).
 - Reorganized pkgdown article sections to separate general materials,
-  exact binomial workflows, and multiple-hypothesis-testing content.
+  exact binomial workflows, and multiple-hypothesis-testing content
+  (67146132).
 
 ### Testing
 
 - Added
   [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
   regression tests for selective-bound preservation on `gsDesign` and
-  `gsSurv` objects, including `test.type` 8 with custom harm spending.
+  `gsSurv` objects, including `test.type` 8 with custom harm spending
+  ([\#261](https://github.com/keaven/gsDesign/issues/261)).
 - Added focused
   [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
   regression tests for `informationRates`, `fullSpendingAtFinal`, and
-  inherited sidedness behavior from existing time-to-event designs.
+  inherited sidedness behavior from existing time-to-event designs
+  ([\#258](https://github.com/keaven/gsDesign/issues/258)).
 - Added independent tests for exact-binomial repeated/sequential
   p-values and for
   [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
-  input validation, reproducibility, and adaptive enrollment behavior.
+  input validation, reproducibility, and adaptive enrollment behavior
+  (1922429e, c1065ea8).
 - Added regression test confirming
   [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
-  one-sided (`test.type = 1`) updates with `observedEvents`.
+  one-sided (`test.type = 1`) updates with `observedEvents` (1922429e).
 - Added regression tests for
   [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
   `usTime`/`lsTime` overrides and selective-futility behavior, plus
   tests for new futility stopping summary outputs from
-  [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md).
+  [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
+  (1922429e).
+- Added regression tests for
+  [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
+  stopping summaries, design-based fixed enrollment defaults, and the
+  rare-event
+  [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+  equal-allocation path
+  ([\#264](https://github.com/keaven/gsDesign/issues/264)).
+- Expanded
+  [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  regression tests across the supported `T`/`minfup` timing combinations
+  for Schoenfeld, Freedman, and Bernstein-Lagakos methods
+  ([\#270](https://github.com/keaven/gsDesign/issues/270)).
 
 ## gsDesign 3.9.0 (February 2026)
 

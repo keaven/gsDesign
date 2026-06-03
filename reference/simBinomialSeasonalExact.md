@@ -45,7 +45,10 @@ simBinomialSeasonalExact(
 - ve:
 
   Numeric vector of vaccine efficacy (or prevention efficacy) scenarios
-  to simulate.
+  to simulate. Each value must be finite and less than 1. \`ve = 0\`
+  corresponds to equal event rates (superiority null); \`ve \< 0\`
+  corresponds to experimental-arm event rates above control
+  (non-inferiority margin or harmful scenarios).
 
 - nsim:
 
@@ -79,14 +82,14 @@ simBinomialSeasonalExact(
 - enroll_control_per_look:
 
   Optional control-arm enrollment by look (scalar or length \`k\`
-  integer vector). If \`NULL\`, this is calibrated from
-  \`planned_counts\` under the largest value of \`ve\`.
+  integer vector). If both enrollment vectors are \`NULL\`, defaults are
+  derived from the seasonal accrual pattern in \`gsD\`.
 
 - enroll_experimental_per_look:
 
   Optional experimental-arm enrollment by look (scalar or length \`k\`
-  integer vector). If \`NULL\`, this is set using \`gsD\$ratio\` from
-  \`enroll_control_per_look\`.
+  integer vector). If \`NULL\` and \`enroll_control_per_look\` is
+  supplied, this is set using \`gsD\$ratio\`.
 
 - adaptive:
 
@@ -106,8 +109,7 @@ simBinomialSeasonalExact(
 - usTime:
 
   Optional upper spending-time override passed to \[toBinomialExact()\].
-  If \`NULL\`, spending time defaults to \`planned_counts /
-  planned_final_events\` (capped at 1).
+  If \`NULL\`, spending time defaults to \`1 / k, 2 / k, ..., 1\`.
 
 - lsTime:
 
@@ -176,17 +178,17 @@ simBinomialSeasonalExact(
 )$summary
 #>    scenario  ve control_event_rate adaptive nsim rejection_rate      mc_se
 #> 1 Scenario1 0.3              0.003    FALSE   50           0.02 0.01979899
-#> 2 Scenario1 0.3              0.003     TRUE   50           0.04 0.02771281
-#> 3 Scenario2 0.8              0.003    FALSE   50           0.86 0.04907138
-#> 4 Scenario2 0.8              0.003     TRUE   50           0.98 0.01979899
+#> 2 Scenario1 0.3              0.003     TRUE   50           0.00 0.00000000
+#> 3 Scenario2 0.8              0.003    FALSE   50           0.14 0.04907138
+#> 4 Scenario2 0.8              0.003     TRUE   50           0.34 0.06699254
 #>   futility_stop_rate futility_mc_se mean_total_events mean_total_enrolled
-#> 1               0.98     0.01979899             70.30            16920.00
-#> 2               0.96     0.02771281             72.72            18379.52
-#> 3               0.16     0.05184593             35.66            16920.00
-#> 4               0.02     0.01979899             46.84            21251.22
+#> 1               0.48     0.07065409             12.22             2948.48
+#> 2               0.58     0.06979971             15.92             4621.36
+#> 3               0.00     0.00000000              7.02             3208.64
+#> 4               0.04     0.02771281             10.76             5246.56
 #>   mean_looks
-#> 1       2.52
-#> 2       2.32
-#> 3       3.00
-#> 4       3.00
+#> 1       2.68
+#> 2       2.54
+#> 3       2.64
+#> 4       2.62
 ```

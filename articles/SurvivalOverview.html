@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -589,9 +589,8 @@ this example.</p>
 <h3 id="group-sequential-design-1">Group sequential design<a class="anchor" aria-label="anchor" href="#group-sequential-design-1"></a>
 </h3>
 <p>Now we produce a group sequential design with a default asymmetric
-design with a futility bound based on <span class="math inline">\(\beta\)</span>-spending. We round interim event
-counts and round up the final event count to ensure the targeted
-power.</p>
+design with a futility bound based on <span class="math inline">\(\beta\)</span>-spending. We round event counts
+down and round total sample size to an integer allocation.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co"># Total number of analyses</span></span>
 <span><span class="va">lfgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
@@ -623,7 +622,7 @@ power.</p>
 <td align="right">0.4150</td>
 </tr>
 <tr class="even">
-<td align="left">N: 440</td>
+<td align="left">N: 442</td>
 <td align="left">p (1-sided)</td>
 <td align="right">0.0030</td>
 <td align="right">0.3391</td>
@@ -653,7 +652,7 @@ power.</p>
 <td align="right">1.9811</td>
 </tr>
 <tr class="odd">
-<td align="left">N: 440</td>
+<td align="left">N: 442</td>
 <td align="left">p (1-sided)</td>
 <td align="right">0.0238</td>
 <td align="right">0.0238</td>
@@ -723,13 +722,13 @@ alternate hypothesis with:</p>
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">97.04664</td>
-<td align="right">74.95336</td>
+<td align="right">97.42773</td>
+<td align="right">75.24446</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">184.48403</td>
-<td align="right">159.51599</td>
+<td align="right">185.22348</td>
+<td align="right">160.12090</td>
 </tr>
 </tbody>
 </table>
@@ -763,9 +762,9 @@ that time, you compute using:</p>
 <span>  <span class="st">"\n Expected experimental events:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="va">eDE</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"\n"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  Time:  8.9 </span></span>
-<span><span class="co">#&gt;  Expected enrollment: 325.7 </span></span>
-<span><span class="co">#&gt;  Expected control events: 49.1 </span></span>
-<span><span class="co">#&gt;  Expected experimental events: 36.9</span></span></code></pre></div>
+<span><span class="co">#&gt;  Expected enrollment: 327.1 </span></span>
+<span><span class="co">#&gt;  Expected control events: 49.3 </span></span>
+<span><span class="co">#&gt;  Expected experimental events: 37</span></span></code></pre></div>
 <p>For expected accrual of events without a design returned by
 <code><a href="../reference/nSurv.html">gsDesign::gsSurv()</a></code>, see the help file for
 <code><a href="../reference/eEvents.html">gsDesign::eEvents()</a></code>.</p>

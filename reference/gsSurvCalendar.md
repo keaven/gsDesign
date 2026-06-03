@@ -301,12 +301,12 @@ gsBoundSummary(x)
 #>    Month: 12   P(Cross) if HR=1   0.0010   0.3318
 #>              P(Cross) if HR=0.6   0.1018   0.0122
 #>    IA 2: 79%                  Z   2.3279   1.3991
-#>       N: 196        p (1-sided)   0.0100   0.0809
+#>       N: 198        p (1-sided)   0.0100   0.0809
 #>  Events: 137       ~HR at bound   0.6718   0.7874
 #>    Month: 24   P(Cross) if HR=1   0.0106   0.9213
 #>              P(Cross) if HR=0.6   0.7505   0.0606
 #>        Final                  Z   2.0154   2.0154
-#>       N: 196        p (1-sided)   0.0219   0.0219
+#>       N: 198        p (1-sided)   0.0219   0.0219
 #>  Events: 173       ~HR at bound   0.7361   0.7361
 #>    Month: 36   P(Cross) if HR=1   0.0228   0.9772
 #>              P(Cross) if HR=0.6   0.9001   0.0999
@@ -317,17 +317,17 @@ y <- gsSurvCalendar(spending = "calendar") |> toInteger()
 gsBoundSummary(y)
 #>     Analysis              Value Efficacy Futility
 #>    IA 1: 29%                  Z   3.0107  -0.3784
-#>       N: 126        p (1-sided)   0.0013   0.6474
+#>       N: 128        p (1-sided)   0.0013   0.6474
 #>   Events: 49       ~HR at bound   0.4231   1.1142
 #>    Month: 12   P(Cross) if HR=1   0.0013   0.3526
 #>              P(Cross) if HR=0.6   0.1123   0.0148
 #>    IA 2: 79%                  Z   2.5581   1.1380
-#>       N: 190        p (1-sided)   0.0053   0.1276
+#>       N: 192        p (1-sided)   0.0053   0.1276
 #>  Events: 133       ~HR at bound   0.6417   0.8209
 #>    Month: 24   P(Cross) if HR=1   0.0062   0.8785
 #>              P(Cross) if HR=0.6   0.6593   0.0437
 #>        Final                  Z   1.9854   1.9854
-#>       N: 190        p (1-sided)   0.0235   0.0235
+#>       N: 192        p (1-sided)   0.0235   0.0235
 #>  Events: 168       ~HR at bound   0.7361   0.7361
 #>    Month: 36   P(Cross) if HR=1   0.0237   0.9763
 #>              P(Cross) if HR=0.6   0.9006   0.0994
@@ -340,5 +340,5 @@ y$usTime
 #> [1] 0.3333333 0.6666667 1.0000000
 # Actual calendar fraction from design after toInteger() conversion
 y$T / max(y$T)
-#> [1] 0.3317243 0.6637288 1.0000000
+#> [1] 0.3333729 0.6661892 1.0000000
 ```

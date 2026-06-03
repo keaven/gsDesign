@@ -15,7 +15,7 @@ or sample size (other designs)"><meta property="og:image" content="https://keave
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,13 +68,13 @@ nearest larger integer depending on <code>roundUpFinal</code>.</p></dd>
 
 
 <dt id="arg-roundupfinal">roundUpFinal<a class="anchor" aria-label="anchor" href="#arg-roundupfinal"></a></dt>
-<dd><p>Sample size is rounded up to a value of <code>ratio + 1</code>
-with the default <code>roundUpFinal = TRUE</code> if <code>ratio</code> is a
-non-negative integer.
+<dd><p>For non-survival designs, final sample size is rounded
+up to a multiple of <code>ratio + 1</code> with the default
+<code>roundUpFinal = TRUE</code> if <code>ratio</code> is a non-negative integer.
+For survival designs, the final event count is rounded up with
+<code>roundUpFinal = TRUE</code>.
 If <code>roundUpFinal = FALSE</code> and <code>ratio</code> is a non-negative integer,
 sample size is rounded to the nearest multiple of <code>ratio + 1</code>.
-For event counts, <code>roundUpFinal = TRUE</code> rounds final event count up;
-otherwise, just rounded if <code>roundUpFinal = FALSE</code>.
 See details.</p></dd>
 
 </dl></div>
@@ -90,24 +90,53 @@ See details.</p></dd>
 <code>gsDesign</code> object is input since <code><a href="gsDesign.html">gsDesign()</a></code> does not have a
 <code>ratio</code> in return.
 <code>ratio = 0, roundUpFinal = TRUE</code> will just round up the sample size
-(also event count).
-Rounding of event count targets is not impacted by <code>ratio</code>.
+for non-survival designs.
 Since <code>x &lt;- gsSurv(ratio = M)</code> returns a value for <code>ratio</code>,
 <code>toInteger(x)</code> will round to a multiple of <code>M + 1</code> if <code>M</code>
 is a non-negative integer; otherwise, just rounding will occur.
-The most common example would be if there is 1:1 randomization (2:1) and
-the user wishes an even (multiple of 3) sample size, then <code>toInteger()</code>
-will operate as expected.
+For 1:1 randomization, <code>ratio = 1</code> gives an even final sample size.
+For 2:1 randomization, <code>ratio = 2</code> gives a final sample size that is
+a multiple of 3.
 To just round without concern for randomization ratio, set <code>ratio = 0</code>.
 If <code>toInteger(x, ratio = 3)</code>, rounding for final sample size is done
 to a multiple of 3 + 1 = 4; this could represent a 3:1 or 1:3
 randomization ratio.
 For 3:2 randomization, <code>ratio = 4</code> would ensure rounding sample size
 to a multiple of 5.</p>
+<p>For a <code>gsSurv</code> object, <code>x$n.I</code> is an event-count schedule.
+<code>toInteger()</code> first converts each planned event count to an integer.
+Interim event counts are rounded to the nearest integer. The final event
+count is rounded up when <code>roundUpFinal = TRUE</code>; otherwise, it is rounded
+to the nearest integer. Values within 0.01 of an integer are rounded to that
+integer. Counts are constrained to be positive and strictly increasing. The
+group sequential boundaries and spending are then recomputed with
+<code><a href="gsDesign.html">gsDesign()</a></code> at the integer event counts.</p>
+<p>Total sample size for a survival design is handled separately. The final
+expected total enrollment is rounded to a multiple of <code>ratio + 1</code>,
+rounded up when <code>roundUpFinal = TRUE</code> and rounded to the nearest such
+multiple otherwise. Enrollment rates are scaled to achieve that rounded total
+over the original calendar plan, and final and interim analysis times are
+recalculated to match the integer event targets.</p>
+<p>In seasonal or otherwise piecewise survival designs, the independently
+rounded final sample size from this usual rule can make the final integer event target
+unattainable. If the rounded sample size is too small to ever reach the event
+target, <code>toInteger()</code> increases the sample size by allocation multiples.
+If the rounded sample size already implies more expected events than a lower
+event target at the earliest feasible final analysis, <code>toInteger()</code>
+reduces the sample size by allocation multiples. Either adjustment issues a
+warning. Designs where the initially rounded sample size already supports the
+integer event target retain the previous behavior.
+For a complete seasonal exact-binomial monitoring workflow, see
+<code><a href="../articles/MultiSeasonRareEvents.html">vignette("MultiSeasonRareEvents", package = "gsDesign")</a></code>.</p>
 <p>Selective-bound settings (<code>testUpper</code>, <code>testLower</code>, <code>testHarm</code>,
 and harm spending for <code>test.type</code> 7 or 8) are carried from the input
 design into the internal <code><a href="gsDesign.html">gsDesign()</a></code> recomputation so skipped looks stay
 skipped after integer rounding.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="nSurv.html">gsSurv</a></code>, <code><a href="toBinomialExact.html">toBinomialExact</a></code>,
+  <code><a href="../articles/MultiSeasonRareEvents.html">vignette("MultiSeasonRareEvents", package = "gsDesign")</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -135,12 +164,12 @@ skipped after integer rounding.</p>
 <span class="r-in"><span>  minfup <span class="op">=</span> <span class="fl">8</span>,            <span class="co"># Planned minimum follow-up</span></span></span>
 <span class="r-in"><span>  ratio <span class="op">=</span> <span class="fl">3</span>              <span class="co"># Randomization ratio (experimental:control)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># Convert sample size to multiple of ratio + 1 = 4, round event counts.</span></span></span>
-<span class="r-in"><span><span class="co"># Default is to round up both event count and sample size for final analysis</span></span></span>
+<span class="r-in"><span><span class="co"># Convert sample size to multiple of ratio + 1 = 4,</span></span></span>
+<span class="r-in"><span><span class="co"># with final event count rounded up by default.</span></span></span>
 <span class="r-in"><span><span class="fu">toInteger</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Group sequential design (method=; k=3 analyses; Two-sided asymmetric with non-binding futility)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> HR=0.300 vs HR0=0.700 | alpha=0.025 (sided=2) | power=90.0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> N=9064.0 subjects | D=69.0 events | T=24.2 study duration | accrual=16.0 Accrual duration | minfup=8.2 minimum follow-up | ratio=3 randomization ratio (experimental/control)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N=9172.0 subjects | D=69.0 events | T=24.0 study duration | accrual=16.0 Accrual duration | minfup=8.0 minimum follow-up | ratio=3 randomization ratio (experimental/control)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Spending functions:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.</span>
@@ -149,29 +178,29 @@ skipped after integer rounding.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Analysis summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Analysis              Value Efficacy Futility</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   IA 1: 45%                  Z   2.8273   0.0695</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     N: 8626        p (1-sided)   0.0023   0.4723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     N: 8678        p (1-sided)   0.0023   0.4723</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 31       ~HR at bound   0.2167   0.6801</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Month: 15 P(Cross) if HR=0.7   0.0023   0.5277</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             P(Cross) if HR=0.3   0.2863   0.0141</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   IA 2: 70%                  Z   2.5197   1.1139</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     N: 9064        p (1-sided)   0.0059   0.1327</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     N: 9172        p (1-sided)   0.0059   0.1327</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 48       ~HR at bound   0.3022   0.4829</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Month: 19 P(Cross) if HR=0.7   0.0071   0.8716</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             P(Cross) if HR=0.3   0.6265   0.0486</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       Final                  Z   2.0035   2.0035</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     N: 9064        p (1-sided)   0.0226   0.0226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     N: 9172        p (1-sided)   0.0226   0.0226</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 69       ~HR at bound   0.4010   0.4010</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Month: 24 P(Cross) if HR=0.7   0.0230   0.9770</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             P(Cross) if HR=0.3   0.9027   0.0973</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Key inputs (names preserved):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                desc    item value   input</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     Accrual rate(s)   gamma 566.5   gamma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            Accrual rate duration(s)       R    16       R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              Control hazard rate(s) lambdaC 0.001 lambdaC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Control dropout rate(s)     eta     0     eta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        Experimental dropout rate(s)    etaE     0    etaE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Event and dropout rate duration(s)       S  NULL       S</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                desc    item  value   input</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     Accrual rate(s)   gamma 573.25   gamma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Accrual rate duration(s)       R     16       R</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              Control hazard rate(s) lambdaC  0.001 lambdaC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Control dropout rate(s)     eta      0     eta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Experimental dropout rate(s)    etaE      0    etaE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Event and dropout rate duration(s)       S   NULL       S</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

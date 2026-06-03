@@ -27,7 +27,7 @@ of informative looks."><meta property="og:image" content="https://keaven.github.
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,7 +98,10 @@ of informative looks.</p>
 
 <dt id="arg-ve">ve<a class="anchor" aria-label="anchor" href="#arg-ve"></a></dt>
 <dd><p>Numeric vector of vaccine efficacy (or prevention efficacy)
-scenarios to simulate.</p></dd>
+scenarios to simulate. Each value must be finite and less than 1.
+`ve = 0` corresponds to equal event rates (superiority null); `ve &lt; 0`
+corresponds to experimental-arm event rates above control (non-inferiority
+margin or harmful scenarios).</p></dd>
 
 
 <dt id="arg-nsim">nsim<a class="anchor" aria-label="anchor" href="#arg-nsim"></a></dt>
@@ -132,14 +135,14 @@ used to derive `planned_counts` when `planned_counts = NULL`.</p></dd>
 
 <dt id="arg-enroll-control-per-look">enroll_control_per_look<a class="anchor" aria-label="anchor" href="#arg-enroll-control-per-look"></a></dt>
 <dd><p>Optional control-arm enrollment by look
-(scalar or length `k` integer vector). If `NULL`, this is calibrated
-from `planned_counts` under the largest value of `ve`.</p></dd>
+(scalar or length `k` integer vector). If both enrollment vectors are
+`NULL`, defaults are derived from the seasonal accrual pattern in `gsD`.</p></dd>
 
 
 <dt id="arg-enroll-experimental-per-look">enroll_experimental_per_look<a class="anchor" aria-label="anchor" href="#arg-enroll-experimental-per-look"></a></dt>
 <dd><p>Optional experimental-arm enrollment by
-look (scalar or length `k` integer vector). If `NULL`, this is set using
-`gsD$ratio` from `enroll_control_per_look`.</p></dd>
+look (scalar or length `k` integer vector). If `NULL` and
+`enroll_control_per_look` is supplied, this is set using `gsD$ratio`.</p></dd>
 
 
 <dt id="arg-adaptive">adaptive<a class="anchor" aria-label="anchor" href="#arg-adaptive"></a></dt>
@@ -160,7 +163,7 @@ when adaptation is enabled.</p></dd>
 <dt id="arg-ustime">usTime<a class="anchor" aria-label="anchor" href="#arg-ustime"></a></dt>
 <dd><p>Optional upper spending-time override passed to
 [toBinomialExact()]. If `NULL`, spending time defaults to
-`planned_counts / planned_final_events` (capped at 1).</p></dd>
+`1 / k, 2 / k, ..., 1`.</p></dd>
 
 
 <dt id="arg-lstime">lsTime<a class="anchor" aria-label="anchor" href="#arg-lstime"></a></dt>
@@ -227,19 +230,19 @@ outcomes.</p></dd>
 <span class="r-in"><span><span class="op">)</span><span class="op">$</span><span class="va">summary</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    scenario  ve control_event_rate adaptive nsim rejection_rate      mc_se</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 Scenario1 0.3              0.003    FALSE   50           0.02 0.01979899</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Scenario1 0.3              0.003     TRUE   50           0.04 0.02771281</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Scenario2 0.8              0.003    FALSE   50           0.86 0.04907138</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Scenario2 0.8              0.003     TRUE   50           0.98 0.01979899</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Scenario1 0.3              0.003     TRUE   50           0.00 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Scenario2 0.8              0.003    FALSE   50           0.14 0.04907138</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Scenario2 0.8              0.003     TRUE   50           0.34 0.06699254</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   futility_stop_rate futility_mc_se mean_total_events mean_total_enrolled</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1               0.98     0.01979899             70.30            16920.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2               0.96     0.02771281             72.72            18379.52</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3               0.16     0.05184593             35.66            16920.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4               0.02     0.01979899             46.84            21251.22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1               0.48     0.07065409             12.22             2948.48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2               0.58     0.06979971             15.92             4621.36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3               0.00     0.00000000              7.02             3208.64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4               0.04     0.02771281             10.76             5246.56</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   mean_looks</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       2.52</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       2.32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       3.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       3.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       2.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       2.54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       2.64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       2.62</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

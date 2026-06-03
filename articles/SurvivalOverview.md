@@ -514,9 +514,8 @@ nSurvival(
 ### Group sequential design
 
 Now we produce a group sequential design with a default asymmetric
-design with a futility bound based on \\\beta\\-spending. We round
-interim event counts and round up the final event count to ensure the
-targeted power.
+design with a futility bound based on \\\beta\\-spending. We round event
+counts down and round total sample size to an integer allocation.
 
 ``` r
 
@@ -540,12 +539,12 @@ lfgs |>
 | Analysis    | Value              | Efficacy | Futility |
 |:------------|:-------------------|---------:|---------:|
 | IA 1: 50%   | Z                  |   2.7500 |   0.4150 |
-| N: 440      | p (1-sided)        |   0.0030 |   0.3391 |
+| N: 442      | p (1-sided)        |   0.0030 |   0.3391 |
 | Events: 172 | ~HR at bound       |   0.6575 |   0.9387 |
 | Month: 13   | P(Cross) if HR=1   |   0.0030 |   0.6609 |
 |             | P(Cross) if HR=0.7 |   0.3422 |   0.0269 |
 | Final       | Z                  |   1.9811 |   1.9811 |
-| N: 440      | p (1-sided)        |   0.0238 |   0.0238 |
+| N: 442      | p (1-sided)        |   0.0238 |   0.0238 |
 | Events: 344 | ~HR at bound       |   0.8076 |   0.8076 |
 | Month: 28   | P(Cross) if HR=1   |   0.0239 |   0.9761 |
 |             | P(Cross) if HR=0.7 |   0.9006 |   0.0994 |
@@ -595,8 +594,8 @@ tibble::tibble(
 
 | Analysis | Control events | Experimental events |
 |---------:|---------------:|--------------------:|
-|        1 |       97.04664 |            74.95336 |
-|        2 |      184.48403 |           159.51599 |
+|        1 |       97.42773 |            75.24446 |
+|        2 |      185.22348 |           160.12090 |
 
 It is worth noting that if events accrue at the same rate in both the
 null and alternate hypothesis, then the expected duration of time to
@@ -636,9 +635,9 @@ cat(paste(
   "\n Expected experimental events:", round(b$eDE, 1), "\n"
 ))
 #>  Time:  8.9 
-#>  Expected enrollment: 325.7 
-#>  Expected control events: 49.1 
-#>  Expected experimental events: 36.9
+#>  Expected enrollment: 327.1 
+#>  Expected control events: 49.3 
+#>  Expected experimental events: 37
 ```
 
 For expected accrual of events without a design returned by
