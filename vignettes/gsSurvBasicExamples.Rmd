@@ -33,6 +33,8 @@ We only use the simplest options here with a single stratum and exponential fail
 We apply the @LachinFoulkes sample size method and extend it to group sequential design.
 This method fixes the duration of a study and varies enrollment rates to power a trial.
 We also use the @LachinFoulkes basic power calculation to compute sample size along the lines of @KimTsiatis where enrollment rates are fixed and enrollment duration is allowed to vary to enroll a sufficient sample size to power a study.
+For post-design power sensitivity calculations, see the vignette *Power Computation for Group Sequential Survival Designs* for `gsSurvPower()`.
+For a SAS PROC SEQDESIGN translation example, see the vignette *Reproducing SAS PROC SEQDESIGN survival designs in gsDesign*.
 
 ## Fixed design derivation
 

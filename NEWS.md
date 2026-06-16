@@ -116,6 +116,9 @@
 
 ## Documentation
 
+- Clarified the `SeqDesignSurvival` vignette scope as a SAS PROC SEQDESIGN
+  sample size translation, with upfront guidance on `gsSurv()` enrollment and
+  follow-up workflows versus `gsSurvPower()` power calculations (#271).
 - Updated the `SeqDesignSurvival` vignette to use the one-sided `gsSurv()`
   alpha convention when reproducing SAS PROC SEQDESIGN fractional-time
   survival output (#264).

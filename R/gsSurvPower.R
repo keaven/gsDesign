@@ -282,6 +282,10 @@
 #'   worked examples including calendar spending, stratified event targets,
 #'   and biomarker subgroup analyses.
 #'
+#'   \code{vignette("gsSurvBasicExamples", package = "gsDesign")} for deriving
+#'   survival sample size designs and \code{vignette("SeqDesignSurvival",
+#'   package = "gsDesign")} for reproducing SAS PROC SEQDESIGN survival output.
+#'
 #'   \code{\link{gsSurv}}, \code{\link{gsSurvCalendar}},
 #'   \code{\link[gsDesign]{gsDesign}}, \code{\link[gsDesign]{gsProbability}}
 #'
