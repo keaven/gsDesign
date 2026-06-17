@@ -244,7 +244,7 @@ Trials Using the Logrank Test. \emph{Statistics in Medicine}, 1, 121-129.
 }
 \seealso{
 \code{vignette("SeqDesignSurvival", package = "gsDesign")} for a
-  SAS PROC SEQDESIGN calendar-time translation example and
+  SAS PROC SEQDESIGN sample size translation example and
   \code{vignette("gsSurvPower", package = "gsDesign")} for power
   calculations with fixed calendar analysis assumptions.
 
