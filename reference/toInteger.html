@@ -104,28 +104,22 @@ randomization ratio.
 For 3:2 randomization, <code>ratio = 4</code> would ensure rounding sample size
 to a multiple of 5.</p>
 <p>For a <code>gsSurv</code> object, <code>x$n.I</code> is an event-count schedule.
-<code>toInteger()</code> first converts each planned event count to an integer.
-Interim event counts are rounded to the nearest integer. The final event
-count is rounded up when <code>roundUpFinal = TRUE</code>; otherwise, it is rounded
-to the nearest integer. Values within 0.01 of an integer are rounded to that
-integer. Counts are constrained to be positive and strictly increasing. The
-group sequential boundaries and spending are then recomputed with
-<code><a href="gsDesign.html">gsDesign()</a></code> at the integer event counts.</p>
-<p>Total sample size for a survival design is handled separately. The final
-expected total enrollment is rounded to a multiple of <code>ratio + 1</code>,
-rounded up when <code>roundUpFinal = TRUE</code> and rounded to the nearest such
-multiple otherwise. Enrollment rates are scaled to achieve that rounded total
-over the original calendar plan, and final and interim analysis times are
-recalculated to match the integer event targets.</p>
-<p>In seasonal or otherwise piecewise survival designs, the independently
-rounded final sample size from this usual rule can make the final integer event target
-unattainable. If the rounded sample size is too small to ever reach the event
-target, <code>toInteger()</code> increases the sample size by allocation multiples.
-If the rounded sample size already implies more expected events than a lower
-event target at the earliest feasible final analysis, <code>toInteger()</code>
-reduces the sample size by allocation multiples. Either adjustment issues a
-warning. Designs where the initially rounded sample size already supports the
-integer event target retain the previous behavior.
+<code>toInteger()</code> rounds the final planned event count (up when
+<code>roundUpFinal = TRUE</code>; otherwise to nearest integer, with a 0.01
+tolerance), then derives interim integer event targets from
+<code>x$timing * final_events</code>. Interim counts are constrained to be positive
+and strictly increasing. Group sequential boundaries and spending are
+recomputed with <code><a href="gsDesign.html">gsDesign()</a></code> at the integer event counts.</p>
+<p>Total sample size for a survival design is then updated under a fixed
+calendar plan (same enrollment periods, study duration, and minimum
+follow-up). Enrollment rates are scaled proportionally to the final-event
+inflation factor and rounded to the nearest allocation multiple
+<code>ratio + 1</code> (or rounded up when <code>roundUpFinal = TRUE</code>), with
+additional allocation-step adjustment only if needed to make the integer
+final event target achievable.</p>
+<p>If fixed-calendar enrollment-rate inflation cannot make the integer final
+event target feasible, <code>toInteger()</code> falls back to a variable-duration
+solve and issues a warning.
 For a complete seasonal exact-binomial monitoring workflow, see
 <code><a href="../articles/MultiSeasonRareEvents.html">vignette("MultiSeasonRareEvents", package = "gsDesign")</a></code>.</p>
 <p>Selective-bound settings (<code>testUpper</code>, <code>testLower</code>, <code>testHarm</code>,
