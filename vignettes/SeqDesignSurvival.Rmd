@@ -341,7 +341,6 @@ des_2 <- gsSurv(
   method = "Schoenfeld"
 )
 des_2
-gsBoundSummary(des_2)
 ```
 
 **Observations:**
