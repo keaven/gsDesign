@@ -825,9 +825,17 @@ Clinical Trials Using the Logrank Test. *Statistics in Medicine*, 1,
 
 [`uniroot`](https://rdrr.io/r/stats/uniroot.html)
 
+[`vignette("gsSurvBasicExamples", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/gsSurvBasicExamples.md)
+for basic survival sample size examples,
+[`vignette("SurvivalOverview", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/SurvivalOverview.md)
+for method background, and
+[`vignette("SeqDesignSurvival", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/SeqDesignSurvival.md)
+for a SAS PROC SEQDESIGN translation example.
+
 [`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
 [`xprint`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
 [`gsSurvCalendar`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md),
+[`gsSurvPower`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md),
 [gsDesign-package](https://keaven.github.io/gsDesign/reference/gsDesign-package.md),
 [plot.gsDesign](https://keaven.github.io/gsDesign/reference/plot.gsDesign.md),
 [`gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md),
@@ -919,7 +927,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.6.0 by xtable 1.8-8 package
-#> % Tue Jun 23 09:14:45 2026
+#> % Tue Jun 23 09:19:41 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}

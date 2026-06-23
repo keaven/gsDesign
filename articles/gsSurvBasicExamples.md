@@ -23,7 +23,12 @@ and varies enrollment rates to power a trial. We also use the Lachin and
 Foulkes (1986) basic power calculation to compute sample size along the
 lines of Kim and Tsiatis (1990) where enrollment rates are fixed and
 enrollment duration is allowed to vary to enroll a sufficient sample
-size to power a study.
+size to power a study. For post-design power sensitivity calculations,
+see the vignette *Power Computation for Group Sequential Survival
+Designs* for
+[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md).
+For a SAS PROC SEQDESIGN translation example, see the vignette
+*Reproducing SAS PROC SEQDESIGN survival designs in gsDesign*.
 
 ## Fixed design derivation
 

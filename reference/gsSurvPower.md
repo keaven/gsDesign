@@ -473,6 +473,11 @@ the original design:
 for worked examples including calendar spending, stratified event
 targets, and biomarker subgroup analyses.
 
+[`vignette("gsSurvBasicExamples", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/gsSurvBasicExamples.md)
+for deriving survival sample size designs and
+[`vignette("SeqDesignSurvival", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/SeqDesignSurvival.md)
+for reproducing SAS PROC SEQDESIGN survival output.
+
 [`gsSurv`](https://keaven.github.io/gsDesign/reference/nSurv.md),
 [`gsSurvCalendar`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md),
 [`gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md),

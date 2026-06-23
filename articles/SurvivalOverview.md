@@ -13,6 +13,9 @@ you already have a design and want to evaluate power under alternate
 hazard ratios, enrollment assumptions or analysis timing, see the
 vignette *Power Computation for Group Sequential Survival Designs* for
 [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md).
+If you are translating SAS PROC SEQDESIGN survival output to gsDesign,
+see the vignette *Reproducing SAS PROC SEQDESIGN survival designs in
+gsDesign*.
 
 The following functions support use of the very straightforward
 Schoenfeld (1981) approximation for 2-arm trials:

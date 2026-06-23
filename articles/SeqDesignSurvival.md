@@ -1,4 +1,4 @@
-# Reproducing PROC SEQDESIGN survival designs in gsDesign
+# Reproducing SAS PROC SEQDESIGN survival designs in gsDesign
 
 ``` r
 
@@ -7,11 +7,34 @@ library(gsDesign)
 
 ## Overview
 
-This vignette emphasizes exact numerical reproduction of SAS PROC
-SEQDESIGN survival outputs in gsDesign when design assumptions are
-matched. We first reproduce the SAS fractional-time table to printed
-precision. We then show different options that may lead to confusion in
-translating SAS PROC SEQDESIGN calls to gsDesign.
+This vignette emphasizes numerical reproduction of SAS PROC SEQDESIGN
+survival sample size outputs in gsDesign when design assumptions are
+matched. It is primarily about translating a SAS design specification to
+[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md), not
+about post-design power sensitivity calculations. For an introductory
+survival sample size workflow that is not tied to SAS output, see
+[`vignette("gsSurvBasicExamples")`](https://keaven.github.io/gsDesign/articles/gsSurvBasicExamples.md).
+For the reverse question, where enrollment, dropout, analysis timing,
+and hazard ratio assumptions are fixed and the goal is to compute
+achieved power, see
+[`vignette("gsSurvPower")`](https://keaven.github.io/gsDesign/articles/gsSurvPower.md).
+
+We first reproduce the SAS fractional-time table to printed precision.
+We then show options that may lead to confusion when translating SAS
+PROC SEQDESIGN calls to gsDesign, including the event formula, alpha
+convention, and accrual and follow-up assumptions. The examples below
+touch three common survival design questions:
+
+- Fix the enrollment pattern and duration, specify information
+  fractions, and reproduce the sample size and event targets implied by
+  the design.
+- Fix enrollment rates over time and minimum follow-up, then solve the
+  enrollment duration needed to power the trial.
+- Fix enrollment rates and enrollment duration, then vary minimum
+  follow-up to evaluate power. This is often a sensitivity question
+  rather than a reliable sample size solver, since plausible follow-up
+  durations may leave the trial consistently overpowered or
+  underpowered.
 
 ### Starting point: SAS PROC SEQDESIGN survival example
 
@@ -22,10 +45,10 @@ The first PROC SEQDESIGN call in that example does not specify
 `ACCTIME`; SAS therefore derives a range of possible accrual times. The
 comparison below uses the subsequent SAS call with `ACCTIME=18`, which
 fixes the maximum sample size at `15 * 18 = 270` subjects and asks SAS
-to solve the follow-up time. Note that the SAS survival sample size
-model is specified as uses the Schoenfeld formula for the targeted event
-counts. The computed sample size and event counts at each analysis are
-continuous values, not rounded to integers.
+to solve the follow-up time needed for the target power. The SAS
+survival sample size model uses the Schoenfeld formula for the targeted
+event counts. The computed sample size and event counts at each analysis
+are continuous values, not rounded to integers.
 
 ``` sas
 proc seqdesign; /* Group sequential design procedure */
@@ -37,7 +60,7 @@ proc seqdesign; /* Group sequential design procedure */
                 alpha=0.05 /* Total two-sided Type I error */
                 beta=0.10 /* Type II error (90% power) */
                 ;
-    samplesize model(ceiladjdesign=include)= /* Survival model */
+    samplesize model= /* Survival model */
         twosamplesurvival( /* Two-sample survival endpoint */
         nullhazard = 0.03466 /* Control hazard under H0 */
         hazard     = 0.01733 /* Experimental hazard under H1 */
@@ -63,16 +86,15 @@ run;
 
 SAS does produce a sample size in this example. In the “Sample Size
 Summary” table for the `ACCTIME=18` case, it reports
-`Max Sample Size = 270`, `Expected Sample Size (Null Ref) = 269.9206`,
-`Expected Sample Size (Alt Ref) = 263.1141`,
-`Follow-up Time = 7.133226`, and `Total Time = 25.13323`. The maximum
-sample size is not calculated from the event formula; it is implied
-directly by the fixed accrual rate and accrual duration:
+`Max Sample Size = 270`, `Follow-up Time = 7.133226`, and
+`Total Time = 25.13323`. The maximum sample size is not calculated from
+the event formula; it is implied directly by the fixed accrual rate and
+accrual duration:
 `15 subjects/time unit * 18 time units = 270 subjects`.
 
-SAS reports two sets of analysis quantities. We focus first on the
-fractional-time design, where the analysis times are not rounded, and
-then return to the `CEILING=TIME` adjusted design later.
+The fractional-time design reports analyses at information fractions
+0.25, 0.50, 0.75, and 1.00. We focus on that design, where the analysis
+times are not rounded.
 
 ``` r
 
@@ -83,94 +105,27 @@ sas_fractional <- data.frame(
   N = c(168.95, 244.31, 270.00, 270.00),
   Upper_Z = c(4.33263, 2.96333, 2.35902, 2.01409)
 )
-
-sas_ceiling_time <- data.frame(
-  Analysis = 1:4,
-  Events = c(25.11225, 48.22068, 69.38712, 92.92776),
-  Calendar_time = c(12, 17, 21, 26),
-  N = c(180, 255, 270, 270),
-  Upper_Z = c(4.15591, 2.90189, 2.36973, 2.01362)
-)
 ```
-
-To reproduce the SAS fractional-time output exactly while specifying
-analysis timing in calendar units, we use
-`gsDesign::gsSurvCalendar(calendarTime = sas_fractional$Calendar_time)`.
-We keep one-sided `alpha = 0.025`, use `method = "Schoenfeld"`, and keep
-accrual fixed at 15 subjects per time unit for 18 time units by setting
-`R = 18` with `minfup = max(calendarTime) - R`.
-
-``` r
-
-des <- gsSurvCalendar(
-  test.type = 2,
-  alpha     = 0.025,
-  beta      = 0.10,
-  sfu       = sfLDOF, # Lan-DeMets O'Brien--Fleming
-  calendarTime = sas_fractional$Calendar_time,
-  spending  = "information",
-  lambdaC   = 0.03466,
-  hr        = 0.5,
-  eta       = 0, # No dropout
-  gamma     = 15, # Uniform accrual rate of 15/month
-  R         = 18, # Accrual duration (months)
-  minfup    = max(sas_fractional$Calendar_time) - 18,
-  ratio     = 1, # 1:1 randomization
-  method    = "Schoenfeld"
-)
-
-# des |> gsBoundSummary(tdigits = 2, ddigits = 2) |> gt::gt()
-```
-
-### Side-by-side comparison table
-
-``` r
-
-# Get results for comparison from gsDesign object
-events_a2 <- round(des$n.I, 2) # Event counts
-z_a2 <- round(des$upper$bound, 4) # Z-boundaries
-N2a <- sum(des$eNC[4, ]) + sum(des$eNE[4, ]) # Total sample size
-
-knitr::kable(
-  data.frame(
-    Analysis = 1:4,
-    Events_SAS = round(sas_fractional$Events, 2),
-    Events_gsDesign = events_a2,
-    Z_SAS = round(sas_fractional$Upper_Z, 4),
-    Z_gsDesign = z_a2
-  ),
-  caption = "Side-by-side comparison of events and Z-boundaries at each look."
-)
-```
-
-| Analysis | Events_SAS | Events_gsDesign |  Z_SAS | Z_gsDesign |
-|---------:|-----------:|----------------:|-------:|-----------:|
-|        1 |      22.27 |           22.27 | 4.3326 |     4.3326 |
-|        2 |      44.54 |           44.54 | 2.9633 |     2.9631 |
-|        3 |      66.81 |           66.81 | 2.3590 |     2.3590 |
-|        4 |      89.08 |           89.08 | 2.0141 |     2.0141 |
-
-Side-by-side comparison of events and Z-boundaries at each look.
-{.table}
 
 The rest of this vignette identifies the key assumptions in each system
 and explains why alternative parameter translations can produce
-different results. Those who would like to know more details about the
-design of the time-to-event functionality in gsDesign should consult
+different results. For additional background on the time-to-event
+methods in gsDesign, including the default Lachin-Foulkes calculations,
+see
 [`vignette("SurvivalOverview")`](https://keaven.github.io/gsDesign/articles/SurvivalOverview.md).
 
 ## Key differences: SAS SEQDESIGN vs. R gsDesign
 
-There are four practical translation points that affect the output from
+There are three practical translation points that affect the output from
 the example above.
 
 ### 1. Event formula
 
 - **SAS:** Schoenfeld (1981). Uses only the null-hypothesis variance.
-- **gsDesign:** Lachin and Foulkes (1986) by default. Uses both null and
-  alternative hypothesis variances. L-F is slightly more conservative,
-  giving ~1-2% more events than Schoenfeld for the same parameters. Use
-  `method = "Schoenfeld"` to match the SAS event formula.
+- **gsDesign:** Lachin and Foulkes (1986) by default. Use
+  `method = "Schoenfeld"` to match the SAS event formula. The default
+  Lachin-Foulkes method is slightly more conservative for this example,
+  so matching the event formula matters for numerical reproduction.
 
 ### 2. Alpha handling in `gsDesign()` and `gsSurv()`
 
@@ -178,14 +133,6 @@ the example above.
 stores and spends the **one-sided** Type I error. Thus, for a symmetric
 two-sided design (`test.type = 2`), `alpha = 0.025` means 0.025 in each
 tail, or 0.05 total two-sided Type I error.
-
-This convention is deliberate: most group sequential computations in
-[`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
-are organized around the upper-bound crossing probability. A symmetric
-two-sided design is represented by mirroring that upper-bound spending
-in the lower tail. Thus the `alpha` argument is still the per-tail
-crossing probability, even though the design has both an upper and lower
-efficacy boundary.
 
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
 follows the same convention internally. If a user prefers to enter the
@@ -209,37 +156,15 @@ set both `T = NULL` and `minfup = NULL`. This tells
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) to
 keep the input accrual rate and accrual duration fixed, then solve the
 follow-up duration needed for the final group sequential event
-requirement. If analysis times are specified directly in calendar units,
-the corresponding
-[`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
-setup is `calendarTime = ...` with
-`minfup = max(calendarTime) - accrual_duration`.
+requirement.
 
 This is a common source of apparent disagreement. For a fixed-duration
 survival design, `T` is the total study duration and `minfup` is the
-minimum follow-up after enrollment closes. With scalar accrual,
-specifying both `T` and `minfup` makes the implied accrual duration
-`T - minfup`; specifying only one of them can therefore change which
-quantity
+minimum follow-up after enrollment closes. Specifying both can therefore
+change which quantity
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
 solves for. The SAS comparison fixes accrual at 18 time units and lets
 the total time be derived.
-
-### 4. Fractional time vs. ceiling time
-
-The original SAS fractional-time design has equal information fractions
-and final events 89.07847. The SAS ceiling-time adjusted design rounds
-analysis times to 12, 17, 21, and 26. These rounded calendar times imply
-unequal information fractions and final events 92.92776. Both are valid
-SAS outputs; they should not be mixed when comparing against gsDesign.
-
-The distinction matters because SAS’s fractional-time table answers
-“what analysis times give the target information fractions?”, while the
-ceiling-time table answers “what happens after those analysis times are
-rounded up to whole time units?” Once calendar times are rounded up,
-subjects are followed longer, more events are expected, and the
-O’Brien-Fleming spending times are no longer exactly 0.25, 0.50, 0.75,
-and 1.00.
 
 The translation used below is summarized as follows:
 
@@ -247,7 +172,7 @@ The translation used below is summarized as follows:
 |:---|:---|:---|:---|
 | Two-sided Type I error | alpha = 0.05 total | alpha = 0.025 per tail | gsDesign stores and spends one-sided alpha |
 | Symmetric two-sided design | Early stop to reject either side | test.type = 2 | Mirrors the upper and lower efficacy boundaries |
-| Analysis timing input | Calendar times reported by PROC output | gsSurvCalendar(calendarTime = …) | Uses direct calendar-time analysis specification |
+| Analysis timing input | Information fractions 0.25, 0.50, 0.75, 1.00 | gsSurv(timing = c(.25, .50, .75, 1)) | Uses the SAS fractional information schedule |
 | Event formula | Schoenfeld log-rank information | method = “Schoenfeld” | Avoids Lachin-Foulkes default event calculation |
 | Accrual duration | ACCTIME = 18 | R = 18 | Keeps the same fixed accrual duration |
 | Total study duration | Total Time = 25.13323 | T = NULL | Lets gsSurv() solve total time from fixed accrual |
@@ -256,14 +181,7 @@ The translation used below is summarized as follows:
 Translation from the SAS PROC SEQDESIGN example to gsDesign inputs.
 {.table}
 
-## Aligning the two approaches
-
-The exact fractional-time reproduction above uses
-[`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
-because SAS reports analysis timing in calendar units. An equivalent
-information-time translation using
-[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) is
-shown next.
+## Reproducing the fractional-time design with `gsSurv()`
 
 ### `gsSurv()` with aligned parameters
 
@@ -373,9 +291,12 @@ des_2
 **Observations:**
 
 Using [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-with parameters that align with SAS settings, the fractional-time output
-agrees with SAS. The final follow-up duration is 7.13321, giving total
-study duration 25.13321.
+with parameters that align with SAS settings, the event counts, sample
+size, and analysis times reproduce the SAS fractional-time output to the
+printed precision available. The final follow-up duration is 7.13321,
+giving total study duration 25.13321. Small fifth-decimal differences in
+Z-boundary comparisons may reflect limited SAS printed precision unless
+the SAS output is rerun with more digits.
 
 ``` r
 
@@ -412,12 +333,14 @@ The final event count is 89.07847 in both systems. The
 methods display rounded integer sample sizes and events, but the object
 retains the fractional values shown above.
 
-If the SAS follow-up time is already known, the equivalent
-fixed-follow-up translation is `T = NULL` with `minfup` set to the SAS
-follow-up time. In that case,
-[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) holds
-the follow-up duration fixed and solves the accrual duration needed for
-the final group sequential event target:
+If the follow-up time is fixed instead,
+[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) can
+answer a different sample size question: keeping enrollment rates and
+minimum follow-up fixed, how long must enrollment continue to power the
+trial? The translation is `T = NULL` with `minfup` set to the fixed
+follow-up time. In this SAS example, the solution returns the same
+accrual duration because the fixed follow-up time is the one SAS solved
+from the fixed-accrual design:
 
 ``` r
 
@@ -476,86 +399,13 @@ knitr::kable(
 
 Both fixed-accrual translations produce the same final design. {.table}
 
-### Matching the SAS ceiling-time adjusted design
-
-The SAS example also reports a `CEILING=TIME` adjusted design. This is
-not the same design as the equal-information fractional-time output
-above. The analysis times are rounded up to 12, 17, 21, and 26, which
-increases the expected events and changes the information fractions. For
-calendar-scheduled analyses in general, this would naturally be
-specified with
-`gsSurvCalendar(calendarTime = c(12, 17, 21, 26), spending = "information")`.
-To match the SAS `CEILING=TIME` table exactly, we retain fixed accrual
-and use the implied event counts at those rounded calendar times.
-
-We can reproduce the ceiling-time event counts directly from the fixed
-accrual rate, fixed accrual duration, and exponential event rates. With
-equal randomization, the control and experimental accrual rates are each
-7.5 per time unit.
-
-``` r
-
-event_count_at_time <- function(time) {
-  control_events <- eEvents(
-    lambda = lambdaC,
-    gamma = accrate / (1 + 1),
-    R = accrual_duration,
-    T = time
-  )$d
-  experimental_events <- eEvents(
-    lambda = lambdaE,
-    gamma = accrate / (1 + 1),
-    R = accrual_duration,
-    T = time
-  )$d
-  sum(control_events) + sum(experimental_events)
-}
-
-ceiling_times <- ceiling(sas_fractional$Calendar_time)
-ceiling_events <- vapply(ceiling_times, event_count_at_time, numeric(1))
-
-des_ceiling <- gsDesign(
-  k = k,
-  test.type = 2,
-  alpha = alpha_gsdesign,
-  beta = beta,
-  sfu = sfLDOF,
-  n.I = ceiling_events,
-  timing = ceiling_events / max(ceiling_events)
-)
-
-gs_ceiling <- data.frame(
-  Analysis = 1:k,
-  Events_SAS = sas_ceiling_time$Events,
-  Events_gsDesign = ceiling_events,
-  Time_SAS = sas_ceiling_time$Calendar_time,
-  Time_gsDesign = ceiling_times,
-  N_SAS = sas_ceiling_time$N,
-  N_gsDesign = pmin(accrate * ceiling_times, N),
-  Z_SAS = sas_ceiling_time$Upper_Z,
-  Z_gsDesign = des_ceiling$upper$bound
-)
-
-knitr::kable(
-  round(gs_ceiling, 5),
-  caption = "Ceiling-time SAS output compared with gsDesign()."
-)
-```
-
-| Analysis | Events_SAS | Events_gsDesign | Time_SAS | Time_gsDesign | N_SAS | N_gsDesign | Z_SAS | Z_gsDesign |
-|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | 25.11225 | 25.11225 | 12 | 12 | 180 | 180 | 4.15591 | 4.15591 |
-| 2 | 48.22068 | 48.22068 | 17 | 17 | 255 | 255 | 2.90189 | 2.90177 |
-| 3 | 69.38712 | 69.38712 | 21 | 21 | 270 | 270 | 2.36973 | 2.36975 |
-| 4 | 92.92776 | 92.92776 | 26 | 26 | 270 | 270 | 2.01362 | 2.01362 |
-
-Ceiling-time SAS output compared with gsDesign(). {.table}
-
-The remaining small differences in the printed Z-values are numerical
-rounding differences. The important conceptual distinction is that the
-SAS fractional-time and ceiling-time tables are different designs: one
-uses equal information fractions, and the other uses rounded calendar
-analysis times.
+A third use case is to keep both the enrollment rates and enrollment
+duration fixed, then vary minimum follow-up and evaluate power. That is
+useful for sensitivity analysis, but it is not always a stable sample
+size workflow: for some assumptions the trial remains overpowered or
+underpowered for all plausible follow-up durations. Use
+[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+when the design quantities are fixed and the question is achieved power.
 
 ## References
 

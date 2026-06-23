@@ -284,7 +284,13 @@ Clinical Trials Using the Logrank Test. *Statistics in Medicine*, 1,
 
 ## See also
 
+[`vignette("SeqDesignSurvival", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/SeqDesignSurvival.md)
+for a SAS PROC SEQDESIGN sample size translation example and
+[`vignette("gsSurvPower", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/gsSurvPower.md)
+for power calculations with fixed calendar analysis assumptions.
+
 [`gsSurv`](https://keaven.github.io/gsDesign/reference/nSurv.md),
+[`gsSurvPower`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md),
 [`gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md),
 [`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
 

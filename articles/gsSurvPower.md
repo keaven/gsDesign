@@ -21,7 +21,11 @@ Common scenarios include:
 
 [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
 addresses these questions by computing power for a group sequential
-survival design under user-specified assumptions.
+survival design under user-specified assumptions. For deriving the
+initial survival sample size design, see
+[`vignette("gsSurvBasicExamples")`](https://keaven.github.io/gsDesign/articles/gsSurvBasicExamples.md).
+For reproducing SAS PROC SEQDESIGN survival sample size output, see
+[`vignette("SeqDesignSurvival")`](https://keaven.github.io/gsDesign/articles/SeqDesignSurvival.md).
 
 ## Quick start
 

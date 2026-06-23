@@ -192,6 +192,13 @@
 
 ### Documentation
 
+- Clarified the `SeqDesignSurvival` vignette scope as a SAS PROC
+  SEQDESIGN sample size translation, with upfront guidance on
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  enrollment and follow-up workflows versus
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  power calculations
+  ([\#271](https://github.com/keaven/gsDesign/issues/271)).
 - Updated the `SeqDesignSurvival` vignette to use the one-sided
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   alpha convention when reproducing SAS PROC SEQDESIGN fractional-time
@@ -238,8 +245,7 @@
 - Clarified the PROC SEQDESIGN survival vignette comparison by using
   `test.type = 2`, `alpha = 0.025`, `method = "Schoenfeld"`, and
   `T = minfup = NULL` to match SAS’s symmetric two-sided fixed-accrual
-  design, and by separating fractional-time output from the SAS
-  ceiling-time adjusted design
+  design, with guidance on fractional-time information schedules
   ([\#270](https://github.com/keaven/gsDesign/issues/270)).
 - Added vignette “Multi-season studies for rare events”
   ([`vignette("MultiSeasonRareEvents")`](https://keaven.github.io/gsDesign/articles/MultiSeasonRareEvents.md))
