@@ -316,10 +316,16 @@
 #'
 #' @author Keaven Anderson \email{keaven_anderson@@merck.com}
 #'
-#' @seealso \code{\link{gsBoundSummary}}, \code{\link{xprint}},
-#'   \code{\link{gsSurvCalendar}}, \link{gsDesign-package},
-#'   \link{plot.gsDesign}, \code{\link{gsDesign}}, \code{\link{gsHR}},
-#'   \code{\link{nSurvival}}
+#' @seealso \code{vignette("gsSurvBasicExamples", package = "gsDesign")} for
+#'   basic survival sample size examples, \code{vignette("SurvivalOverview",
+#'   package = "gsDesign")} for method background, and
+#'   \code{vignette("SeqDesignSurvival", package = "gsDesign")} for a SAS PROC
+#'   SEQDESIGN translation example.
+#'
+#'   \code{\link{gsBoundSummary}}, \code{\link{xprint}},
+#'   \code{\link{gsSurvCalendar}}, \code{\link{gsSurvPower}},
+#'   \link{gsDesign-package}, \link{plot.gsDesign}, \code{\link{gsDesign}},
+#'   \code{\link{gsHR}}, \code{\link{nSurvival}}
 #'
 #' @references
 #' Kim KM and Tsiatis AA (1990), Study duration for clinical trials

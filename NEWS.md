@@ -116,6 +116,9 @@
 
 ## Documentation
 
+- Clarified the `SeqDesignSurvival` vignette scope as a SAS PROC SEQDESIGN
+  sample size translation, with upfront guidance on `gsSurv()` enrollment and
+  follow-up workflows versus `gsSurvPower()` power calculations (#271).
 - Updated the `SeqDesignSurvival` vignette to use the one-sided `gsSurv()`
   alpha convention when reproducing SAS PROC SEQDESIGN fractional-time
   survival output (#264).
@@ -144,8 +147,7 @@
 - Clarified the PROC SEQDESIGN survival vignette comparison by using
   `test.type = 2`, `alpha = 0.025`, `method = "Schoenfeld"`, and
   `T = minfup = NULL` to match SAS's symmetric two-sided fixed-accrual
-  design, and by separating fractional-time output from the SAS ceiling-time
-  adjusted design (#270).
+  design, with guidance on fractional-time information schedules (#270).
 - Added vignette "Multi-season studies for rare events"
   (`vignette("MultiSeasonRareEvents")`) demonstrating exact-binomial seasonal
   monitoring, analysis-time bound updates via

@@ -243,5 +243,11 @@ Freedman LS (1982), Tables of the Number of Patients Required in Clinical
 Trials Using the Logrank Test. \emph{Statistics in Medicine}, 1, 121-129.
 }
 \seealso{
-\code{\link{gsSurv}}, \code{\link{gsDesign}}, \code{\link{gsBoundSummary}}
+\code{vignette("SeqDesignSurvival", package = "gsDesign")} for a
+  SAS PROC SEQDESIGN sample size translation example and
+  \code{vignette("gsSurvPower", package = "gsDesign")} for power
+  calculations with fixed calendar analysis assumptions.
+
+  \code{\link{gsSurv}}, \code{\link{gsSurvPower}}, \code{\link{gsDesign}},
+  \code{\link{gsBoundSummary}}
 }

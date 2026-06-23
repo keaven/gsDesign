@@ -30,6 +30,9 @@ Common scenarios include:
 
 `gsSurvPower()` addresses these questions by computing power for a group
 sequential survival design under user-specified assumptions.
+For deriving the initial survival sample size design, see
+`vignette("gsSurvBasicExamples")`. For reproducing SAS PROC SEQDESIGN survival
+sample size output, see `vignette("SeqDesignSurvival")`.
 
 ## Quick start
 

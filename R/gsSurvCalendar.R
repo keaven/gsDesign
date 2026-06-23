@@ -29,7 +29,13 @@
 #'
 #' @rdname gsSurvCalendar
 #'
-#' @seealso \code{\link{gsSurv}}, \code{\link{gsDesign}}, \code{\link{gsBoundSummary}}
+#' @seealso \code{vignette("SeqDesignSurvival", package = "gsDesign")} for a
+#'   SAS PROC SEQDESIGN sample size translation example and
+#'   \code{vignette("gsSurvPower", package = "gsDesign")} for power
+#'   calculations with fixed calendar analysis assumptions.
+#'
+#'   \code{\link{gsSurv}}, \code{\link{gsSurvPower}}, \code{\link{gsDesign}},
+#'   \code{\link{gsBoundSummary}}
 #'
 #' @references
 #' Lan KKG and DeMets DL (1983), Discrete Sequential Boundaries for Clinical
