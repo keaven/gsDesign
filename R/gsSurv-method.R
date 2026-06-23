@@ -31,7 +31,7 @@ LFPWE <- function(
       if (is.vector(gamma)) {
         gamma <- gamma[1:length(R)]
       } else {
-        gamma <- gamma[1:length(R), ]
+        gamma <- gamma[1:length(R), , drop = FALSE]
       }
     }
   }

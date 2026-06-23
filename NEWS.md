@@ -71,6 +71,10 @@
 
 ## Bug fixes
 
+- `nSurv()` and `gsSurv()` now validate fixed survival timing inputs before
+  enrollment periods are adjusted, giving a clear error when `R`/`gamma`
+  imply accrual beyond `T - minfup` instead of failing later while assigning
+  row names (#274).
 - `nSurv()` and `gsSurv()` now use the requested survival sample size method
   when either `T` or `minfup` is `NULL`. `gsSurv()` also uses the input
   accrual rate and duration when both `T` and `minfup` are `NULL`, solving

@@ -640,7 +640,7 @@ gsSurv(
 nSurv(
   lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
   eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
-  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12,
+  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), T = 27, minfup = 12,
   alpha = .025, beta = .1, method = "BernsteinLagakos"
 )
 # Same assumptions for group sequential design
@@ -648,7 +648,7 @@ gsSurv(
   k = 4, sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfPower, sflpar = .5,
   lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
   eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
-  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12,
+  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), T = 27, minfup = 12,
   alpha = .025, beta = .1, method = "BernsteinLagakos"
 ) |>
   print()

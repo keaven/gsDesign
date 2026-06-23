@@ -455,7 +455,7 @@
 #' nSurv(
 #'   lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
 #'   eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
-#'   gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12,
+#'   gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), T = 27, minfup = 12,
 #'   alpha = .025, beta = .1, method = "BernsteinLagakos"
 #' )
 #' # Same assumptions for group sequential design
@@ -463,7 +463,7 @@
 #'   k = 4, sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfPower, sflpar = .5,
 #'   lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
 #'   eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
-#'   gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12,
+#'   gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), T = 27, minfup = 12,
 #'   alpha = .025, beta = .1, method = "BernsteinLagakos"
 #' ) |>
 #'   print()
@@ -503,9 +503,7 @@ nSurv <- function(
       stop("S must be a numeric vector of positive values")
     }
   }
-  if (is.null(R)) {
-    stop("R must be specified and cannot be NULL")
-  }
+  validate_survival_timing_inputs(R = R, T = T, minfup = minfup, call = "nSurv")
   if (is.null(beta) && (is.null(T) || is.null(minfup))) {
     stop("When beta is NULL, R, T, and minfup must all be specified")
   }
