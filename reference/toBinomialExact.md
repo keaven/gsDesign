@@ -8,6 +8,7 @@ Translate survival design bounds to exact binomial bounds
 toBinomialExact(
   x,
   observedEvents = NULL,
+  alpha = NULL,
   usTime = NULL,
   lsTime = NULL,
   maxSpend = FALSE
@@ -30,6 +31,11 @@ toBinomialExact(
   value can be greater than or equal to `x$maxn.IPlan`. This determines
   the case count at each analysis performed. Primarily, this is used for
   updating a design at the time of analysis.
+
+- alpha:
+
+  Optional alpha level for deriving updated exact efficacy bounds. If
+  `NULL`, the alpha level from `x` is used.
 
 - usTime:
 
@@ -151,6 +157,28 @@ toBinomialExact(x, observedEvents = c(20,55,80))
 #>    Theta      1      2      3  Total
 #>   0.6774 0.0006 0.0067 0.0127 0.0200
 #>   0.4737 0.0903 0.6571 0.1911 0.9385
+# Update exact efficacy bounds using a different alpha level
+toBinomialExact(x, observedEvents = c(20,55,80), alpha = 0.01)
+#>              Bounds
+#>   Analysis   N   a   b
+#>          1  20   5  17
+#>          2  55  27  33
+#>          3  80  43  45
+#> 
+#> Boundary crossing probabilities and expected sample size assume
+#> any cross stops the trial
+#> 
+#> Upper boundary
+#>           Analysis
+#>    Theta      1      2      3  Total E{N}
+#>   0.6774 0.0732 0.8401 0.0752 0.9884 54.5
+#>   0.4737 0.0006 0.0404 0.0401 0.0811 61.4
+#> 
+#> Lower boundary
+#>           Analysis
+#>    Theta      1      2      3  Total
+#>   0.6774 0.0001 0.0031 0.0043 0.0075
+#>   0.4737 0.0355 0.6177 0.2386 0.8919
 # Explicit spending-time override
 toBinomialExact(x, observedEvents = c(20, 55, 80), usTime = c(.25, .65, 1))
 #>              Bounds

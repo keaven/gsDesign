@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">toBinomialExact</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  observedEvents <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  usTime <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lsTime <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  maxSpend <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -69,6 +70,11 @@ Otherwise, this should be vector of increasing positive integers with at most 1 
 Only one value can be greater than or equal to <code>x$maxn.IPlan</code>.
 This determines the case count at each analysis performed.
 Primarily, this is used for updating a design at the time of analysis.</p></dd>
+
+
+<dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
+<dd><p>Optional alpha level for deriving updated exact efficacy bounds.
+If <code>NULL</code>, the alpha level from <code>x</code> is used.</p></dd>
 
 
 <dt id="arg-ustime">usTime<a class="anchor" aria-label="anchor" href="#arg-ustime"></a></dt>
@@ -189,6 +195,28 @@ selective futility looks), futility spending is flattened at analyses where
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Theta      1      2      3  Total</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.6774 0.0006 0.0067 0.0127 0.0200</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.4737 0.0903 0.6571 0.1911 0.9385</span>
+<span class="r-in"><span><span class="co"># Update exact efficacy bounds using a different alpha level</span></span></span>
+<span class="r-in"><span><span class="fu">toBinomialExact</span><span class="op">(</span><span class="va">x</span>, observedEvents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>,<span class="fl">55</span>,<span class="fl">80</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              Bounds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Analysis   N   a   b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          1  20   5  17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          2  55  27  33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          3  80  43  45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Boundary crossing probabilities and expected sample size assume</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> any cross stops the trial</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Upper boundary</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Theta      1      2      3  Total E{N}</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.6774 0.0732 0.8401 0.0752 0.9884 54.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.4737 0.0006 0.0404 0.0401 0.0811 61.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lower boundary</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Theta      1      2      3  Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.6774 0.0001 0.0031 0.0043 0.0075</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.4737 0.0355 0.6177 0.2386 0.8919</span>
 <span class="r-in"><span><span class="co"># Explicit spending-time override</span></span></span>
 <span class="r-in"><span><span class="fu">toBinomialExact</span><span class="op">(</span><span class="va">x</span>, observedEvents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">55</span>, <span class="fl">80</span><span class="op">)</span>, usTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.25</span>, <span class="fl">.65</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              Bounds</span>

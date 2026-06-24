@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,8 @@
 <li>Added <code><a href="../reference/simBinomialSeasonalExact.html">simBinomialSeasonalExact()</a></code> to run fixed and blinded-adaptive seasonal rare-event simulations with exact-binomial efficacy monitoring summaries (1922429e).</li>
 <li>
 <code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> now supports explicit spending-time overrides via <code>usTime</code> and <code>lsTime</code> (for <code>test.type = 4</code>) to align with <code><a href="../reference/gsDesign.html">gsDesign()</a></code> and <code><a href="../reference/nSurv.html">gsSurv()</a></code> conventions when updating bounds with <code>observedEvents</code> (1922429e).</li>
+<li>
+<code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> now accepts an <code>alpha</code> override for deriving updated exact efficacy bounds (<a href="https://github.com/keaven/gsDesign/issues/167" class="external-link">#167</a>).</li>
 <li>
 <code><a href="../reference/simBinomialSeasonalExact.html">simBinomialSeasonalExact()</a></code> now supports <code>usTime</code>/<code>lsTime</code> inputs and reports futility stopping probabilities (<code>futility_stop_rate</code> with <code>futility_mc_se</code>) in scenario summaries (1922429e).</li>
 <li>

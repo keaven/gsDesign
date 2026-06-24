@@ -112,6 +112,9 @@
   [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
   and [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   conventions when updating bounds with `observedEvents` (1922429e).
+- [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
+  now accepts an `alpha` override for deriving updated exact efficacy
+  bounds ([\#167](https://github.com/keaven/gsDesign/issues/167)).
 - [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
   now supports `usTime`/`lsTime` inputs and reports futility stopping
   probabilities (`futility_stop_rate` with `futility_mc_se`) in scenario
