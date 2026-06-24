@@ -11,3 +11,4 @@
 tests/benchmarks
 ^\.agents$
 ^AGENTS\.md$
+^\.local-r-lib$

@@ -60,6 +60,8 @@
 - `toBinomialExact()` now supports explicit spending-time overrides via
   `usTime` and `lsTime` (for `test.type = 4`) to align with `gsDesign()` and
   `gsSurv()` conventions when updating bounds with `observedEvents` (1922429e).
+- `toBinomialExact()` now accepts an `alpha` override for deriving updated
+  exact efficacy bounds (#167).
 - `simBinomialSeasonalExact()` now supports `usTime`/`lsTime` inputs and
   reports futility stopping probabilities (`futility_stop_rate` with
   `futility_mc_se`) in scenario summaries (1922429e).

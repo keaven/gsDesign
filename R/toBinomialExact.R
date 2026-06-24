@@ -7,6 +7,8 @@
 #' Only one value can be greater than or equal to \code{x$maxn.IPlan}. 
 #' This determines the case count at each analysis performed. 
 #' Primarily, this is used for updating a design at the time of analysis.
+#' @param alpha Optional alpha level for deriving updated exact efficacy bounds.
+#'   If \code{NULL}, the alpha level from \code{x} is used.
 #' @param usTime Optional upper spending-time override (length \code{k} or
 #'   \code{k - 1}, with final value appended as 1 if needed). If \code{NULL},
 #'   this defaults to \code{observedEvents / x$maxn.IPlan} (capped at 1) when
@@ -74,13 +76,20 @@
 #' toBinomialExact(x)
 #' # Update bounds at time of analysis
 #' toBinomialExact(x, observedEvents = c(20,55,80))
+#' # Update exact efficacy bounds using a different alpha level
+#' toBinomialExact(x, observedEvents = c(20,55,80), alpha = 0.01)
 #' # Explicit spending-time override
 #' toBinomialExact(x, observedEvents = c(20, 55, 80), usTime = c(.25, .65, 1))
 #' # Optionally force full spending at final look when final events are below plan
 #' toBinomialExact(x, observedEvents = c(20, 55, 75), maxSpend = TRUE)
-toBinomialExact <- function(x, observedEvents = NULL, usTime = NULL, lsTime = NULL, maxSpend = FALSE) {
+toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NULL, lsTime = NULL, maxSpend = FALSE) {
   if (!inherits(x, "gsSurv")) stop("toBinomialExact must have class gsSurv as input")
   if (x$test.type != 1 && x$test.type != 4) stop("toBinomialExact input test.type must be 1 or 4")
+  if (is.null(alpha)) {
+    alpha <- x$alpha
+  } else if (!is.numeric(alpha) || length(alpha) != 1 || !is.finite(alpha) || alpha <= 0 || alpha >= 1) {
+    stop("toBinomialExact: alpha must be a finite numeric scalar in (0, 1)")
+  }
   if (!is.logical(maxSpend) || length(maxSpend) != 1 || is.na(maxSpend)) {
     stop("toBinomialExact: maxSpend must be TRUE or FALSE")
   }
@@ -89,6 +98,7 @@ toBinomialExact <- function(x, observedEvents = NULL, usTime = NULL, lsTime = NU
   }
   # Round interim sample size (or events for gsSurv object)
   xx <- if (max(round(x$n.I) != x$n.I)) toInteger(x) else x
+  planned_final_events <- xx$n.I[x$k]
   if(is.null(observedEvents)){
     counts <- xx$n.I
     k <- xx$k
@@ -100,18 +110,20 @@ toBinomialExact <- function(x, observedEvents = NULL, usTime = NULL, lsTime = NU
     if (sum(observedEvents >= xx$maxn.IPlan) > 1) stop("toBinomialExact: at most 1 value in observedEvents can be >= maximum planned (x$maxn.IPlan)")
     k <- length(observedEvents)
     if (k < 2) stop("toBinomialExact: must have at least 2 values in observedEvents")
+  }
+  if (!is.null(observedEvents) || !isTRUE(all.equal(alpha, x$alpha))) {
     xx <- gsDesign(
       k = k,
       test.type = x$test.type,
-      alpha = x$alpha,
+      alpha = alpha,
       beta = x$beta,
       astar = x$astar,
       sfu = x$upper$sf,
       sfupar = x$upper$param,
       sfl = x$lower$sf,
       sflpar = x$lower$param,
-      n.I = observedEvents,
-      maxn.IPlan = xx$n.I[x$k],
+      n.I = counts,
+      maxn.IPlan = planned_final_events,
       delta = x$delta,
       delta1 = x$delta1,
       delta0 = x$delta0
@@ -155,7 +167,7 @@ toBinomialExact <- function(x, observedEvents = NULL, usTime = NULL, lsTime = NU
   if (x$test.type == 4 && sum(timingl >= 1) > 1) {
     stop("toBinomialExact: lsTime must have at most 1 value >= 1")
   }
-  alpha_spend <- x$upper$sf(alpha = x$alpha, t = timing, param = x$upper$param)$spend
+  alpha_spend <- xx$upper$sf(alpha = alpha, t = timing, param = xx$upper$param)$spend
   if (x$test.type != 1) {
     # Upper bound probabilities are for futility
     # Compute nominal p-values under H0 for futility and corresponding inverse binomial under H1

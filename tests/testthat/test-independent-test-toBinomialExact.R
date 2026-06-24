@@ -31,6 +31,14 @@ test_that("toBinomialExact validates inputs", {
   expect_error(toBinomialExact(design_bad), "test.type must be 1 or 4")
 
   expect_error(
+    toBinomialExact(design, alpha = c(0.01, 0.02)),
+    "alpha must be a finite numeric scalar"
+  )
+  expect_error(
+    toBinomialExact(design, alpha = 1),
+    "alpha must be a finite numeric scalar"
+  )
+  expect_error(
     toBinomialExact(design, observedEvents = c(20.5, 30)),
     "vector of increasing positive integers"
   )
@@ -100,6 +108,26 @@ test_that("observedEvents re-plans design using supplied event counts", {
   expect_true(all(diff(result$lower$bound) >= 0))
   expect_true(all(diff(result$upper$bound) >= 0))
   expect_true(all(result$lower$bound < result$upper$bound))
+})
+
+test_that("toBinomialExact supports alpha override", {
+  design <- surv_design()
+  observed <- c(20, 55, 80)
+
+  result_default <- toBinomialExact(design)
+  result_alpha <- toBinomialExact(design, alpha = 0.01)
+  result_observed_default <- toBinomialExact(design, observedEvents = observed)
+  result_observed_alpha <- toBinomialExact(design, observedEvents = observed, alpha = 0.01)
+
+  expect_equal(result_alpha$n.I, result_default$n.I)
+  expect_equal(result_observed_alpha$n.I, observed)
+  expect_lt(sum(result_alpha$lower$prob[, 1]), sum(result_default$lower$prob[, 1]))
+  expect_lt(
+    sum(result_observed_alpha$lower$prob[, 1]),
+    sum(result_observed_default$lower$prob[, 1])
+  )
+  expect_lte(sum(result_alpha$lower$prob[, 1]), 0.01)
+  expect_lte(sum(result_observed_alpha$lower$prob[, 1]), 0.01)
 })
 
 test_that("toBinomialExact works for one-sided designs with observedEvents", {
