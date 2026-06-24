@@ -927,7 +927,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.6.0 by xtable 1.8-8 package
-#> % Wed Jun 24 10:45:35 2026
+#> % Wed Jun 24 11:20:53 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}
@@ -1221,22 +1221,22 @@ gsSurv(
 nSurv(
   lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
   eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
-  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12,
+  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), T = 27, minfup = 12,
   alpha = .025, beta = .1, method = "BernsteinLagakos"
 )
 #> nSurv fixed-design summary (method=BernsteinLagakos; target=Accrual rate)
 #> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
-#> N=226.8 subjects | D=78.7 events | T=18.0 study duration | accrual=6.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> N=196.0 subjects | D=79.0 events | T=27.0 study duration | accrual=15.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
 #> 
 #> Expected events by stratum (H1):
 #>   control experimental  total
-#> 1  26.517       16.431 42.949
-#> 2  22.980       12.761 35.741
+#> 1  27.731       17.827 45.558
+#> 2  21.299       12.137 33.435
 #> 
 #> Key inputs (names preserved):
 #>                                desc    item                           value
-#>                     Accrual rate(s)   gamma  12.84, 25.68, 21.4 ... (len=4)
-#>            Accrual rate duration(s)       R                            5, 1
+#>                     Accrual rate(s)   gamma 3.458, 6.916, 5.763 ... (len=4)
+#>            Accrual rate duration(s)       R                           5, 10
 #>              Control hazard rate(s) lambdaC 0.116, 0.058, 0.039 ... (len=4)
 #>             Control dropout rate(s)     eta 0.017, 0.014, 0.015 ... (len=4)
 #>        Experimental dropout rate(s)    etaE 0.017, 0.014, 0.015 ... (len=4)
@@ -1253,13 +1253,13 @@ gsSurv(
   k = 4, sfu = gsDesign::sfHSD, sfupar = -4, sfl = gsDesign::sfPower, sflpar = .5,
   lambdaC = matrix(log(2) / c(6, 12, 18, 24), ncol = 2), hr = .5,
   eta = matrix(log(2) / c(40, 50, 45, 55), ncol = 2), S = 3,
-  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), minfup = 12,
+  gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), T = 27, minfup = 12,
   alpha = .025, beta = .1, method = "BernsteinLagakos"
 ) |>
   print()
 #> Group sequential design (method=BernsteinLagakos; k=4 analyses; Two-sided asymmetric with non-binding futility)
 #> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=2) | power=90.0%
-#> N=302.4 subjects | D=104.9 events | T=18.0 study duration | accrual=6.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+#> N=261.2 subjects | D=105.3 events | T=27.0 study duration | accrual=15.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
 #> 
 #> Spending functions:
 #>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
@@ -1269,34 +1269,34 @@ gsSurv(
 #> Method: BernsteinLagakos 
 #>     Analysis              Value Efficacy Futility
 #>    IA 1: 25%                  Z   3.1554   0.2264
-#>       N: 250        p (1-sided)   0.0008   0.4105
-#>   Events: 27       ~HR at bound   0.2916   0.9154
-#>     Month: 5   P(Cross) if HR=1   0.0008   0.5895
+#>       N: 166        p (1-sided)   0.0008   0.4105
+#>   Events: 27       ~HR at bound   0.2923   0.9155
+#>    Month: 10   P(Cross) if HR=1   0.0008   0.5895
 #>              P(Cross) if HR=0.5   0.0995   0.0500
 #>    IA 2: 50%                  Z   2.8183   0.8619
-#>       N: 304        p (1-sided)   0.0024   0.1944
-#>   Events: 53       ~HR at bound   0.4592   0.7882
-#>     Month: 8   P(Cross) if HR=1   0.0030   0.8366
+#>       N: 256        p (1-sided)   0.0024   0.1944
+#>   Events: 53       ~HR at bound   0.4598   0.7885
+#>    Month: 15   P(Cross) if HR=1   0.0030   0.8366
 #>              P(Cross) if HR=0.5   0.4388   0.0707
 #>    IA 3: 75%                  Z   2.4390   1.4589
-#>       N: 304        p (1-sided)   0.0074   0.0723
-#>   Events: 79       ~HR at bound   0.5770   0.7197
-#>    Month: 12   P(Cross) if HR=1   0.0085   0.9445
+#>       N: 262        p (1-sided)   0.0074   0.0723
+#>   Events: 79       ~HR at bound   0.5776   0.7201
+#>    Month: 20   P(Cross) if HR=1   0.0085   0.9445
 #>              P(Cross) if HR=0.5   0.7776   0.0866
 #>        Final                  Z   2.0136   2.0136
-#>       N: 304        p (1-sided)   0.0220   0.0220
-#>  Events: 105       ~HR at bound   0.6749   0.6749
-#>    Month: 18   P(Cross) if HR=1   0.0187   0.9813
+#>       N: 262        p (1-sided)   0.0220   0.0220
+#>  Events: 106       ~HR at bound   0.6754   0.6754
+#>    Month: 27   P(Cross) if HR=1   0.0187   0.9813
 #>              P(Cross) if HR=0.5   0.9000   0.1000
 #> 
 #> Key inputs (names preserved):
-#>                                desc    item                             value
-#>                     Accrual rate(s)   gamma 17.115, 28.525, 34.23 ... (len=4)
-#>            Accrual rate duration(s)       R                              5, 1
-#>              Control hazard rate(s) lambdaC   0.116, 0.039, 0.058 ... (len=4)
-#>             Control dropout rate(s)     eta   0.017, 0.015, 0.014 ... (len=4)
-#>        Experimental dropout rate(s)    etaE   0.017, 0.015, 0.014 ... (len=4)
-#>  Event and dropout rate duration(s)       S                                 3
+#>                                desc    item                           value
+#>                     Accrual rate(s)   gamma 4.609, 7.682, 9.218 ... (len=4)
+#>            Accrual rate duration(s)       R                           5, 10
+#>              Control hazard rate(s) lambdaC 0.116, 0.039, 0.058 ... (len=4)
+#>             Control dropout rate(s)     eta 0.017, 0.015, 0.014 ... (len=4)
+#>        Experimental dropout rate(s)    etaE 0.017, 0.015, 0.014 ... (len=4)
+#>  Event and dropout rate duration(s)       S                               3
 #>                            input
 #>              3, 5, 6 ... (len=4)
 #>                            5, 10
@@ -1307,8 +1307,8 @@ gsSurv(
 #> 
 #> Expected events by stratum (H1) at final analysis:
 #>    stratum control experimental  total
-#>  Stratum 1  35.346       21.902 57.248
-#>  Stratum 2  30.631       17.010 47.641
+#>  Stratum 1  36.963       23.762 60.725
+#>  Stratum 2  28.390       16.177 44.567
 
 # Example to compute power for a fixed design.
 # Trial duration T, minimum follow-up minfup and accrual duration R are all

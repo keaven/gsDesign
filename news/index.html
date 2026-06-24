@@ -66,6 +66,8 @@
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>
+<code><a href="../reference/nSurv.html">nSurv()</a></code> and <code><a href="../reference/nSurv.html">gsSurv()</a></code> now validate fixed survival timing inputs before enrollment periods are adjusted, giving a clear error when <code>R</code>/<code>gamma</code> imply accrual beyond <code>T - minfup</code> instead of failing later while assigning row names (<a href="https://github.com/keaven/gsDesign/issues/274" class="external-link">#274</a>).</li>
+<li>
 <code><a href="../reference/ssrCP.html">Power.ssrCP()</a></code> now uses the interim efficacy bound when integrating the no-sample-size-re-estimation region and when falling back to the upper conditional-power changepoint (<a href="https://github.com/keaven/gsDesign/issues/213" class="external-link">#213</a>).</li>
 <li>
 <code><a href="../reference/nSurv.html">nSurv()</a></code> and <code><a href="../reference/nSurv.html">gsSurv()</a></code> now use the requested survival sample size method when either <code>T</code> or <code>minfup</code> is <code>NULL</code>. <code><a href="../reference/nSurv.html">gsSurv()</a></code> also uses the input accrual rate and duration when both <code>T</code> and <code>minfup</code> are <code>NULL</code>, solving follow-up duration against the final group-sequential event requirement. This allows Schoenfeld survival designs to reproduce SAS PROC SEQDESIGN’s fixed-accrual follow-up solve (<a href="https://github.com/keaven/gsDesign/issues/270" class="external-link">#270</a>).</li>

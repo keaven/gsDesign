@@ -129,6 +129,12 @@
 
 ### Bug fixes
 
+- [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) now
+  validate fixed survival timing inputs before enrollment periods are
+  adjusted, giving a clear error when `R`/`gamma` imply accrual beyond
+  `T - minfup` instead of failing later while assigning row names
+  ([\#274](https://github.com/keaven/gsDesign/issues/274)).
 - [`Power.ssrCP()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
   now uses the interim efficacy bound when integrating the
   no-sample-size-re-estimation region and when falling back to the upper
