@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,8 @@
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>
+<code><a href="../reference/ssrCP.html">Power.ssrCP()</a></code> now uses the interim efficacy bound when integrating the no-sample-size-re-estimation region and when falling back to the upper conditional-power changepoint (<a href="https://github.com/keaven/gsDesign/issues/213" class="external-link">#213</a>).</li>
+<li>
 <code><a href="../reference/nSurv.html">nSurv()</a></code> and <code><a href="../reference/nSurv.html">gsSurv()</a></code> now use the requested survival sample size method when either <code>T</code> or <code>minfup</code> is <code>NULL</code>. <code><a href="../reference/nSurv.html">gsSurv()</a></code> also uses the input accrual rate and duration when both <code>T</code> and <code>minfup</code> are <code>NULL</code>, solving follow-up duration against the final group-sequential event requirement. This allows Schoenfeld survival designs to reproduce SAS PROC SEQDESIGN’s fixed-accrual follow-up solve (<a href="https://github.com/keaven/gsDesign/issues/270" class="external-link">#270</a>).</li>
 <li>
 <code><a href="../reference/simBinomialSeasonalExact.html">simBinomialSeasonalExact()</a></code> now stops simulated trials at the first efficacy or futility boundary crossing for reporting stopping time, total events, and total enrollment, while preserving the non-binding futility convention for efficacy crossing probability. The simulation also updates exact-binomial bounds within each trial using the observed total event counts and defaults fixed per-season enrollment to the design’s planned seasonal enrollment (<a href="https://github.com/keaven/gsDesign/issues/264" class="external-link">#264</a>).</li>

@@ -126,6 +126,11 @@
 
 ### Bug fixes
 
+- [`Power.ssrCP()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
+  now uses the interim efficacy bound when integrating the
+  no-sample-size-re-estimation region and when falling back to the upper
+  conditional-power changepoint
+  ([\#213](https://github.com/keaven/gsDesign/issues/213)).
 - [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) now
   use the requested survival sample size method when either `T` or
