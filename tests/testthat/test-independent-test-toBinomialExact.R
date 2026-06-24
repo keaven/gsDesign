@@ -32,11 +32,11 @@ test_that("toBinomialExact validates inputs", {
 
   expect_error(
     toBinomialExact(design, alpha = c(0.01, 0.02)),
-    "alpha must be a finite numeric scalar in \\(0, 1\\)"
+    "toBinomialExact: alpha must be a finite numeric scalar in \\(0, 1\\)"
   )
   expect_error(
     toBinomialExact(design, alpha = 1),
-    "alpha must be a finite numeric scalar in \\(0, 1\\)"
+    "toBinomialExact: alpha must be a finite numeric scalar in \\(0, 1\\)"
   )
   expect_error(
     toBinomialExact(design, observedEvents = c(20.5, 30)),
