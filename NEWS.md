@@ -60,6 +60,8 @@
 - `toBinomialExact()` now supports explicit spending-time overrides via
   `usTime` and `lsTime` (for `test.type = 4`) to align with `gsDesign()` and
   `gsSurv()` conventions when updating bounds with `observedEvents` (1922429e).
+- `toBinomialExact()` now accepts an `alpha` override for deriving updated
+  exact efficacy bounds (#167).
 - `simBinomialSeasonalExact()` now supports `usTime`/`lsTime` inputs and
   reports futility stopping probabilities (`futility_stop_rate` with
   `futility_mc_se`) in scenario summaries (1922429e).
@@ -75,6 +77,9 @@
   enrollment periods are adjusted, giving a clear error when `R`/`gamma`
   imply accrual beyond `T - minfup` instead of failing later while assigning
   row names (#274).
+- `Power.ssrCP()` now uses the interim efficacy bound when integrating the
+  no-sample-size-re-estimation region and when falling back to the upper
+  conditional-power changepoint (#213).
 - `nSurv()` and `gsSurv()` now use the requested survival sample size method
   when either `T` or `minfup` is `NULL`. `gsSurv()` also uses the input
   accrual rate and duration when both `T` and `minfup` are `NULL`, solving

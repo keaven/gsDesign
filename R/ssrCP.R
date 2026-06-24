@@ -544,7 +544,7 @@ Power.ssrCP <- function(x, theta = NULL, delta = NULL, r = 18) {
     en <- en + x$x$n.I[2] * (stats::pnorm(x$x$upper$bound[1] - mu) -
       stats::pnorm(x$x$lower$bound[1] - mu))
     a <- x$x$lower$bound[1]
-    b <- x$x$upper$bound[2]
+    b <- x$x$upper$bound[1]
     n2 <- x$x$n.I[2] - x$x$n.I[1]
     grid <- normalGrid(mu = (a + b) / 2, bounds = c(a, b), r = r)
     for (i in 1:length(theta)) Power[i] <- Power[i] +
@@ -604,7 +604,7 @@ Power.ssrCP <- function(x, theta = NULL, delta = NULL, r = 18) {
             lower.tail = FALSE
           ))
   } else {
-    changepoint2 <- x$upper$bound[1]
+    changepoint2 <- x$x$upper$bound[1]
   }
   # next look if max sample size based on CP is greater than
   # allowed if it is, compute en for interval at max sample size
