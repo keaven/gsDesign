@@ -7,6 +7,7 @@
 toBinomialExact(
   x,
   observedEvents = NULL,
+  alpha = NULL,
   usTime = NULL,
   lsTime = NULL,
   maxSpend = FALSE
@@ -21,6 +22,9 @@ Otherwise, this should be vector of increasing positive integers with at most 1 
 Only one value can be greater than or equal to \code{x$maxn.IPlan}. 
 This determines the case count at each analysis performed. 
 Primarily, this is used for updating a design at the time of analysis.}
+
+\item{alpha}{Optional alpha level for deriving updated exact efficacy bounds.
+If \code{NULL}, the alpha level from \code{x} is used.}
 
 \item{usTime}{Optional upper spending-time override (length \code{k} or
 \code{k - 1}, with final value appended as 1 if needed). If \code{NULL},
@@ -91,6 +95,8 @@ x <- gsSurv(
 toBinomialExact(x)
 # Update bounds at time of analysis
 toBinomialExact(x, observedEvents = c(20,55,80))
+# Update exact efficacy bounds using a different alpha level
+toBinomialExact(x, observedEvents = c(20,55,80), alpha = 0.01)
 # Explicit spending-time override
 toBinomialExact(x, observedEvents = c(20, 55, 80), usTime = c(.25, .65, 1))
 # Optionally force full spending at final look when final events are below plan
