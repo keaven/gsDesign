@@ -27,6 +27,7 @@ gsSurv <- function(
   if (!is.numeric(ratio) || length(ratio) != 1 || ratio <= 0) {
     stop("ratio must be a single positive scalar")
   }
+  validate_survival_timing_inputs(R = R, T = T, minfup = minfup, call = "gsSurv")
   solve_followup <- is.null(T) && is.null(minfup)
   if (solve_followup) {
     if (is.null(beta)) {

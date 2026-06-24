@@ -37,6 +37,46 @@ testthat::test_that("Checking consistency nEvents power vs sample size", {
   testthat::expect_equal(pwr$Power, .9, info = "Checking power calculation")
 })
 
+testthat::test_that("nSurv and gsSurv validate fixed survival timing inputs", {
+  testthat::expect_error(
+    nSurv(lambdaC = .2, hr = .7, eta = .1, T = "a", minfup = 1.5),
+    "nSurv: T must be NULL or a single positive finite numeric value"
+  )
+  testthat::expect_error(
+    gsSurv(lambdaC = .2, hr = .7, eta = .1, T = "a", minfup = 1.5),
+    "gsSurv: T must be NULL or a single positive finite numeric value"
+  )
+  testthat::expect_error(
+    nSurv(lambdaC = .2, hr = .7, eta = .1, T = 2, R = "a", minfup = 1.5),
+    "nSurv: R must be a numeric vector of positive finite values"
+  )
+  testthat::expect_error(
+    gsSurv(lambdaC = .2, hr = .7, eta = .1, T = 2, R = 0, minfup = 1.5),
+    "gsSurv: R must be a numeric vector of positive finite values"
+  )
+  testthat::expect_error(
+    nSurv(
+      lambdaC = log(2) / 20, hr = 0.65, hr0 = 1,
+      eta = -log(1 - 0.02) / 18,
+      gamma = c(1, 6, 10, 20, 30), R = rep(1, 5),
+      T = 12, minfup = 8, ratio = 1
+    ),
+    "nSurv: enrollment duration from R \\(5\\) exceeds T - minfup \\(4\\)"
+  )
+  testthat::expect_error(
+    gsSurv(
+      k = 2, test.type = 4, alpha = 0.025, beta = 0.1,
+      astar = 0, timing = 0.75, sfu = sfLDOF, sfupar = 0,
+      sfl = sfHSD, sflpar = 0,
+      lambdaC = log(2) / 20, hr = 0.65, hr0 = 1,
+      eta = -log(1 - 0.02) / 18,
+      gamma = c(1, 6, 10, 20, 30), R = rep(1, 5),
+      S = NULL, T = 12, minfup = 8, ratio = 1
+    ),
+    "gsSurv: enrollment duration from R \\(5\\) exceeds T - minfup \\(4\\)"
+  )
+})
+
 testthat::test_that("nSurv matches rpact for Schoenfeld and Freedman", {
   getDesignGroupSequential <- tryCatch(
     utils::getFromNamespace("getDesignGroupSequential", "rpact"),

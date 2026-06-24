@@ -73,6 +73,10 @@
 
 ## Bug fixes
 
+- `nSurv()` and `gsSurv()` now validate fixed survival timing inputs before
+  enrollment periods are adjusted, giving a clear error when `R`/`gamma`
+  imply accrual beyond `T - minfup` instead of failing later while assigning
+  row names (#274).
 - `Power.ssrCP()` now uses the interim efficacy bound when integrating the
   no-sample-size-re-estimation region and when falling back to the upper
   conditional-power changepoint (#213).
