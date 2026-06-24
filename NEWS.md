@@ -73,6 +73,8 @@
 
 ## Bug fixes
 
+- `gsBoundSummary()` now warns before defaulting missing `hr0` to 1 for
+  hazard-ratio boundary summaries (#42).
 - `nSurv()` and `gsSurv()` now validate fixed survival timing inputs before
   enrollment periods are adjusted, giving a clear error when `R`/`gamma`
   imply accrual beyond `T - minfup` instead of failing later while assigning

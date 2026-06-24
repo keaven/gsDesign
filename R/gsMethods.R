@@ -389,6 +389,14 @@ print.nSurvival <- function(x, ...) {
 
 # Old version of gsBoundSummary is now gsBoundSummary0()
 # This is not exported, but is called by the new version of gsBoundSummary() below
+gsBoundSummaryUsesHR <- function(x, deltaname) {
+  if (is.null(deltaname)) {
+    deltaname <- if ("gsSurv" %in% class(x) || isTRUE(x$nFixSurv > 0)) "HR" else "delta"
+  }
+
+  isTRUE(x$nFixSurv > 0) || "gsSurv" %in% class(x) || isTRUE(toupper(deltaname) == "HR")
+}
+
 gsBoundSummary0 <- function(
     x, deltaname = NULL, logdelta = FALSE, Nname = NULL, digits = 4, ddigits = 2, tdigits = 0, timename = "Month",
     prior = normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix)),
@@ -408,6 +416,7 @@ gsBoundSummary0 <- function(
       deltaname <- "delta"
     }
   }
+  hr_summary <- gsBoundSummaryUsesHR(x, deltaname)
   # delta values corresponding to x$theta
   delta <- x$delta0 + (x$delta1 - x$delta0) * x$theta / x$delta
   if (logdelta || "gsSurv" %in% class(x)) delta <- exp(delta)
@@ -418,7 +427,7 @@ gsBoundSummary0 <- function(
   # delta values at bounds
   # note that RR and HR are treated specially
   if (x$test.type > 1) {
-    if (x$nFixSurv > 0 || "gsSurv" %in% class(x) || toupper(deltaname) == "HR") {
+    if (hr_summary) {
       deltafutility <- gsHR(x = x, i = 1:x$k, z = x$lower$bound[1:x$k], ratio = ratio)
     } else if (tolower(deltaname) == "rr") {
       deltafutility <- gsRR(x = x, i = 1:x$k, z = x$lower$bound[1:x$k], ratio = ratio)
@@ -429,7 +438,7 @@ gsBoundSummary0 <- function(
   }
   # delta values at harm bounds for test.type 7/8
   if (x$test.type %in% c(7, 8)) {
-    if (x$nFixSurv > 0 || "gsSurv" %in% class(x) || toupper(deltaname) == "HR") {
+    if (hr_summary) {
       deltaharm <- gsHR(x = x, i = 1:x$k, z = x$harm$bound[1:x$k], ratio = ratio)
     } else if (tolower(deltaname) == "rr") {
       deltaharm <- gsRR(x = x, i = 1:x$k, z = x$harm$bound[1:x$k], ratio = ratio)
@@ -438,7 +447,7 @@ gsBoundSummary0 <- function(
       if (logdelta == TRUE) deltaharm <- exp(deltaharm)
     }
   }
-  if (x$nFixSurv > 0 || "gsSurv" %in% class(x) || toupper(deltaname) == "HR") {
+  if (hr_summary) {
     deltaefficacy <- gsHR(x = x, i = 1:x$k, z = x$upper$bound[1:x$k], ratio = ratio)
   } else if (tolower(deltaname) == "rr") {
     deltaefficacy <- gsRR(x = x, i = 1:x$k, z = x$upper$bound[1:x$k], ratio = ratio)
@@ -887,6 +896,10 @@ gsBoundSummary <- function(
     r = 18,
     alpha = NULL,
     ...) {
+  if (gsBoundSummaryUsesHR(x, deltaname) && is.null(x$hr0)) {
+    warning("gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.", call. = FALSE)
+  }
+
   # Get initial table
   out <- gsBoundSummary0(
     x, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
