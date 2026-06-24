@@ -71,6 +71,9 @@
 
 ## Bug fixes
 
+- `Power.ssrCP()` now uses the interim efficacy bound when integrating the
+  no-sample-size-re-estimation region and when falling back to the upper
+  conditional-power changepoint (#213).
 - `nSurv()` and `gsSurv()` now use the requested survival sample size method
   when either `T` or `minfup` is `NULL`. `gsSurv()` also uses the input
   accrual rate and duration when both `T` and `minfup` are `NULL`, solving

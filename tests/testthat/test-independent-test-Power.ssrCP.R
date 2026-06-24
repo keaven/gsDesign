@@ -92,3 +92,35 @@ testthat::test_that(
     
     expect_equal(res3$Power, 0.901, 1e-2) 
 })
+
+
+testthat::test_that(
+  desc = "Test : no sample size re-estimation integrates over stage 1 bounds",
+  code = {
+    x <- gsDesign(k = 2, test.type = 2, n.fix = 3200, timing = c(0.5, 1),
+                  delta1 = 0.1146049, delta0 = 0)
+    ssr <- ssrCP(z1 = 1.2, delta = 0.1146049, maxinc = 2, overrun = 0,
+                 beta = 0.2, cpadj = c(0.999, 0.9999), x = x, z2 = z2Z)
+
+    res <- Power.ssrCP(x = ssr, theta = 0.057302441, r = 18)
+
+    expect_equal(res$Power, 0.9, tolerance = 1e-7)
+  }
+)
+
+
+testthat::test_that(
+  desc = "Test : upper conditional power fallback uses underlying design bound",
+  code = {
+    x <- gsDesign(k = 2, test.type = 2, n.fix = 3200, timing = c(0.5, 1),
+                  delta1 = 0.1146049, delta0 = 0)
+    ssr <- ssrCP(z1 = 1.2, delta = 0.1146049, maxinc = 2, overrun = 0,
+                 beta = 0.2, cpadj = c(0.99, 0.999), x = x, z2 = z2Z)
+
+    res <- Power.ssrCP(x = ssr, theta = 0.057302441, r = 18)
+
+    expect_true(is.data.frame(res))
+    expect_true(is.finite(res$Power))
+    expect_true(is.finite(res$en))
+  }
+)
