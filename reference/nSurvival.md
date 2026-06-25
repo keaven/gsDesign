@@ -407,6 +407,7 @@ cat(summary(x))
 #> Symmetric two-sided group sequential design with 5 analyses, time-to-event outcome with sample size 440 and 93 events required, 90 percent power, 2.5 percent (1-sided) Type I error. Bounds derived using a  Hwang-Shih-DeCani spending function with gamma = -4.
 # tabular summary of bounds
 gsBoundSummary(x, deltaname = "HR", Nname = "Events", logdelta = TRUE)
+#> Warning: gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.
 #>    Analysis              Value Efficacy Futility
 #>   IA 1: 20%                  Z   3.2527  -3.2527
 #>  Events: 19        p (1-sided)   0.0006   0.0006

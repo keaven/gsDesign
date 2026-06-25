@@ -33,7 +33,7 @@ such as the Lan-DeMets spending function approximating an O'Brien-Fleming bound 
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -159,6 +159,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span>                    delta<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">delta</span>,delta1<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">delta1</span>,k<span class="op">=</span><span class="fl">4</span>,alpha<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">alpha</span>,test.type<span class="op">=</span><span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                    sfu<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">sf</span>,sfupar<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">param</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xupdate</span>,logdelta<span class="op">=</span><span class="cn">TRUE</span>,Nname<span class="op">=</span><span class="st">"Events"</span>,deltaname<span class="op">=</span><span class="st">"HR"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Analysis              Value Efficacy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    IA 1: 46%                  Z   2.9626</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 100        p (1-sided)   0.0015</span>
@@ -186,6 +187,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span>                    sfu<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">sf</span>,sfupar<span class="op">=</span><span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">param</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Check that we are at bound for 1 (or more) analysis and did not exceed bound for others</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xupdate</span>,logdelta<span class="op">=</span><span class="cn">TRUE</span>,Nname<span class="op">=</span><span class="st">"Events"</span>,deltaname<span class="op">=</span><span class="st">"HR"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Analysis              Value Efficacy</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    IA 1: 46%                  Z   4.3533</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 100        p (1-sided)   0.0000</span>

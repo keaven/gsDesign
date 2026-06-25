@@ -99,6 +99,8 @@ gsBoundSummary(
     paste0("P(Cross) if HR=", round(c(design$hr0, design$hr), digits = 2))
   )
 )
+#> Warning: gsBoundSummary: hr0 is not present; using hr0 =
+#> 1 for HR at bound calculations.
 #>     Analysis        Value Efficacy Futility
 #>    IA 1: 33%            Z   3.0139  -0.2451
 #>  Events: 117  p (1-sided)   0.0013   0.5968

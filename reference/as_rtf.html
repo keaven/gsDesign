@@ -17,7 +17,7 @@ gsBinomialExact."><meta property="og:image" content="https://keaven.github.io/gs
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -222,12 +222,14 @@ across a range of effect sizes.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">xs</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span>nFixSurv <span class="op">=</span> <span class="va">ss</span><span class="op">$</span><span class="va">n</span>, n.fix <span class="op">=</span> <span class="va">ss</span><span class="op">$</span><span class="va">nEvents</span>, delta1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">ss</span><span class="op">$</span><span class="va">lambda2</span> <span class="op">/</span> <span class="va">ss</span><span class="op">$</span><span class="va">lambda1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xs</span>, logdelta <span class="op">=</span> <span class="cn">TRUE</span>, ratio <span class="op">=</span> <span class="va">ss</span><span class="op">$</span><span class="va">ratio</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">as_rtf</span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".rtf"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">xs</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span>nFixSurv <span class="op">=</span> <span class="va">ss</span><span class="op">$</span><span class="va">n</span>, n.fix <span class="op">=</span> <span class="va">ss</span><span class="op">$</span><span class="va">nEvents</span>, delta1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">ss</span><span class="op">$</span><span class="va">lambda2</span> <span class="op">/</span> <span class="va">ss</span><span class="op">$</span><span class="va">lambda1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xs</span>, logdelta <span class="op">=</span> <span class="cn">TRUE</span>, ratio <span class="op">=</span> <span class="va">ss</span><span class="op">$</span><span class="va">ratio</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">as_rtf</span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".rtf"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  footnote_specify <span class="op">=</span> <span class="st">"Z"</span>,</span></span>
 <span class="r-in"><span>  footnote_text <span class="op">=</span> <span class="st">"Z-Score"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

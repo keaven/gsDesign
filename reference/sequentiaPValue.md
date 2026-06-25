@@ -116,6 +116,7 @@ xupdate <- gsDesign(maxn.IPlan=max(x$n.I),n.I=c(100,160,190,230),usTime=x$timing
                     delta=x$delta,delta1=x$delta1,k=4,alpha=x$alpha,test.type=1,
                     sfu=x$upper$sf,sfupar=x$upper$param)
 gsBoundSummary(xupdate,logdelta=TRUE,Nname="Events",deltaname="HR")
+#> Warning: gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.
 #>     Analysis              Value Efficacy
 #>    IA 1: 46%                  Z   2.9626
 #>  Events: 100        p (1-sided)   0.0015
@@ -143,6 +144,7 @@ xupdate <- gsDesign(maxn.IPlan=max(x$n.I),n.I=c(100,160,190,230),usTime=x$timing
                     sfu=x$upper$sf,sfupar=x$upper$param)
 # Check that we are at bound for 1 (or more) analysis and did not exceed bound for others
 gsBoundSummary(xupdate,logdelta=TRUE,Nname="Events",deltaname="HR")
+#> Warning: gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.
 #>     Analysis              Value Efficacy
 #>    IA 1: 46%                  Z   4.3533
 #>  Events: 100        p (1-sided)   0.0000

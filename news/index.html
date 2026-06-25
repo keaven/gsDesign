@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9009</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,6 +66,8 @@
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>
+<code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> now warns before defaulting missing <code>hr0</code> to 1 for hazard-ratio boundary summaries (<a href="https://github.com/keaven/gsDesign/issues/42" class="external-link">#42</a>).</li>
+<li>
 <code><a href="../reference/nSurv.html">nSurv()</a></code> and <code><a href="../reference/nSurv.html">gsSurv()</a></code> now validate fixed survival timing inputs before enrollment periods are adjusted, giving a clear error when <code>R</code>/<code>gamma</code> imply accrual beyond <code>T - minfup</code> instead of failing later while assigning row names (<a href="https://github.com/keaven/gsDesign/issues/274" class="external-link">#274</a>).</li>
 <li>
 <code><a href="../reference/ssrCP.html">Power.ssrCP()</a></code> now uses the interim efficacy bound when integrating the no-sample-size-re-estimation region and when falling back to the upper conditional-power changepoint (<a href="https://github.com/keaven/gsDesign/issues/213" class="external-link">#213</a>).</li>

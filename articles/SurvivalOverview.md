@@ -200,6 +200,8 @@ Schoenfeld <- gsDesign(
 Schoenfeld |>
   gsBoundSummary(deltaname = "HR", logdelta = TRUE, Nname = "Events") |>
   kable(row.names = FALSE)
+#> Warning: gsBoundSummary: hr0 is not present; using hr0 =
+#> 1 for HR at bound calculations.
 ```
 
 | Analysis    | Value              | Efficacy | Futility |

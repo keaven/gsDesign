@@ -469,6 +469,8 @@ gsBoundSummary(
     "HR bounds are approximations; decisions on crossing are based solely on p-values.",
     locations = cells_body(column = 2, rows = c(3, 6, 9))
   )
+#> Warning: gsBoundSummary: hr0 is not present; using hr0 =
+#> 1 for HR at bound calculations.
 ```
 
 | Time-to-event group sequential bound guidance |  |  |  |

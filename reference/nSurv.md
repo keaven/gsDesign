@@ -926,8 +926,8 @@ print(xtable::xtable(x_gs,
   footnote = "This is a footnote; note that it can be wide.",
   caption = "Caption example for xtable output."
 ))
-#> % latex table generated in R 4.6.0 by xtable 1.8-8 package
-#> % Wed Jun 24 11:20:53 2026
+#> % latex table generated in R 4.6.1 by xtable 1.8-8 package
+#> % Thu Jun 25 09:46:31 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}

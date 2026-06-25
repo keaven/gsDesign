@@ -129,6 +129,10 @@
 
 ### Bug fixes
 
+- [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+  now warns before defaulting missing `hr0` to 1 for hazard-ratio
+  boundary summaries
+  ([\#42](https://github.com/keaven/gsDesign/issues/42)).
 - [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) now
   validate fixed survival timing inputs before enrollment periods are

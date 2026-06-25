@@ -176,10 +176,12 @@ ss <- nSurvival(
 )
 xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
 gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) |> as_rtf(file = tempfile(fileext = ".rtf"))
+#> Warning: gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.
 
 xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
 gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio) |>
   as_rtf(file = tempfile(fileext = ".rtf"),
   footnote_specify = "Z",
   footnote_text = "Z-Score")
+#> Warning: gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.
 ```
