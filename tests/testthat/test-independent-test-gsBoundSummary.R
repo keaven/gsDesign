@@ -53,8 +53,8 @@ testthat::test_that(desc = "Test gsBoundSummary warns when hr0 is missing for HR
   )
 
   expect_null(xu$hr0)
-  missing_hr0 <- expect_warning(
-    gsBoundSummary(xu, deltaname = "HR", logdelta = TRUE, Nname = "Events"),
+  expect_warning(
+    missing_hr0 <- gsBoundSummary(xu, deltaname = "HR", logdelta = TRUE, Nname = "Events"),
     "hr0 is not present",
     fixed = TRUE
   )
@@ -74,8 +74,8 @@ testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object, test.type >
   x <- gsDesign(nFixSurv = 3, k = 5, test.type = 4, n.fix = 1)
 
   local_edition(3) # use 3rd edition of testthat for this testcase
-  out <- expect_warning(
-    gsBoundSummary(x, Nname = NULL),
+  expect_warning(
+    out <- gsBoundSummary(x, Nname = NULL),
     "hr0 is not present",
     fixed = TRUE
   )
@@ -87,8 +87,8 @@ testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object, when nFixSu
   x <- gsDesign(nFixSurv = 0.8, k = 5, test.type = 4, n.fix = 1)
 
   local_edition(3) # use 3rd edition of testthat for this testcase
-  out <- expect_warning(
-    gsBoundSummary(x, deltaname = "RR", ratio = .3),
+  expect_warning(
+    out <- gsBoundSummary(x, deltaname = "RR", ratio = .3),
     "hr0 is not present",
     fixed = TRUE
   )
