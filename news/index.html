@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.9.0.9009</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,9 +39,9 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="gsdesign-development-version">gsDesign (development version)<a class="anchor" aria-label="anchor" href="#gsdesign-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="3.10.0" id="gsdesign-3100">gsDesign 3.10.0<a class="anchor" aria-label="anchor" href="#gsdesign-3100"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-features-3-10-0">New features<a class="anchor" aria-label="anchor" href="#new-features-3-10-0"></a></h3>
 <ul><li>Added <code>testUpper</code>, <code>testLower</code>, and <code>testHarm</code> parameters to <code><a href="../reference/gsDesign.html">gsDesign()</a></code>, <code><a href="../reference/nSurv.html">gsSurv()</a></code>, and <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code> for selective bound testing at interim analyses. Each accepts a logical scalar or vector of length <code>k</code> specifying which analyses should include that boundary. Inactive bounds are set to extreme values (±20 on Z-scale) and displayed as <code>NA</code> in <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> output. This enables designs such as futility-only at early interims, deferred efficacy testing, or selective harm monitoring (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/141" class="external-link">#141</a>).</li>
 <li>Added <code>test.type = 7</code> (binding futility and binding harm bounds) and <code>test.type = 8</code> (non-binding futility and non-binding harm bounds) to <code><a href="../reference/gsDesign.html">gsDesign()</a></code>, <code><a href="../reference/nSurv.html">gsSurv()</a></code>, and <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>. These three-boundary designs support monitoring for efficacy, futility, and potential harm simultaneously, motivated by FDA guidance on overall survival monitoring in oncology trials (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/237" class="external-link">#237</a>).</li>
 <li>New <code>sfharm</code> and <code>sfharmparam</code> parameters control the spending function for the harm bound independently from efficacy and futility spending (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/237" class="external-link">#237</a>).</li>
@@ -64,7 +64,7 @@
 <code><a href="../reference/simBinomialSeasonalExact.html">simBinomialSeasonalExact()</a></code> now accepts <code>ve = 0</code> and <code>ve &lt; 0</code>, allowing null-hypothesis (<code>ve = 0</code>) and non-inferiority margin (<code>ve &lt; 0</code>) scenarios. Validation now requires only that <code>ve</code> values are finite and less than 1. A feasibility check verifies that the implied experimental-arm event rates (<code>control_event_rate * (1 - ve)</code>) remain in <code>[0, 1)</code> (<a href="https://github.com/keaven/gsDesign/issues/267" class="external-link">#267</a>).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-3-10-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-10-0"></a></h3>
 <ul><li>
 <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> now warns before defaulting missing <code>hr0</code> to 1 for hazard-ratio boundary summaries (<a href="https://github.com/keaven/gsDesign/issues/42" class="external-link">#42</a>).</li>
 <li>
@@ -87,7 +87,7 @@
 <code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> now respects selective futility testing (<code>testLower</code>) when present on a <code>gsSurv</code> object by flattening lower spending at inactive looks (1922429e).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<h3 id="documentation-3-10-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-3-10-0"></a></h3>
 <ul><li>Clarified the <code>SeqDesignSurvival</code> vignette scope as a SAS PROC SEQDESIGN sample size translation, with upfront guidance on <code><a href="../reference/nSurv.html">gsSurv()</a></code> enrollment and follow-up workflows versus <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> power calculations (<a href="https://github.com/keaven/gsDesign/issues/271" class="external-link">#271</a>).</li>
 <li>Updated the <code>SeqDesignSurvival</code> vignette to use the one-sided <code><a href="../reference/nSurv.html">gsSurv()</a></code> alpha convention when reproducing SAS PROC SEQDESIGN fractional-time survival output (<a href="https://github.com/keaven/gsDesign/issues/264" class="external-link">#264</a>).</li>
 <li>Corrected and generalized the multi-season rare-event vignette so enrollment timing, planned counts, and simulation event-rate inputs are derived from the stated design specifications, with calendar-timed seasonal analyses, piecewise seasonal failure hazards, and cross-references to the exact binomial vaccine-efficacy vignette (<a href="https://github.com/keaven/gsDesign/issues/264" class="external-link">#264</a>).</li>
@@ -102,7 +102,7 @@
 <li>Reorganized pkgdown article sections to separate general materials, exact binomial workflows, and multiple-hypothesis-testing content (67146132).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="testing-development-version">Testing<a class="anchor" aria-label="anchor" href="#testing-development-version"></a></h3>
+<h3 id="testing-3-10-0">Testing<a class="anchor" aria-label="anchor" href="#testing-3-10-0"></a></h3>
 <ul><li>Added <code><a href="../reference/toInteger.html">toInteger()</a></code> regression tests for selective-bound preservation on <code>gsDesign</code> and <code>gsSurv</code> objects, including <code>test.type</code> 8 with custom harm spending (<a href="https://github.com/keaven/gsDesign/issues/261" class="external-link">#261</a>).</li>
 <li>Added focused <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> regression tests for <code>informationRates</code>, <code>fullSpendingAtFinal</code>, and inherited sidedness behavior from existing time-to-event designs (<a href="https://github.com/keaven/gsDesign/issues/258" class="external-link">#258</a>).</li>
 <li>Added independent tests for exact-binomial repeated/sequential p-values and for <code><a href="../reference/simBinomialSeasonalExact.html">simBinomialSeasonalExact()</a></code> input validation, reproducibility, and adaptive enrollment behavior (1922429e, c1065ea8).</li>
