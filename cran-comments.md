@@ -1,27 +1,27 @@
-# Version 3.2.1 July, 2021
+# Version 3.10.0 June, 2026
 
-- Have the issues why your package was archived been fixed?
-  + Yes, the issue was due to deprecated `gt` package function; this has been fixed.
-  + Removed docs folder per automated review
-  + The other NOTE seems to be about the archived status and/or spell check of reference requested by CRAN reviewer in DESCRIPTION file; note that Jennison and Turnbull where checked as possibly incorrect, but they are correct.
-
-  
-- Also following up on additional comments from CRAN reviewer
-    - Updated DESCRIPTION file to add references describing the methods.
-    - Updated `plot.binomialSPRT.Rd` file to remove `dontrun` and `if(interactive())`. 
-    - Added `\value` for all exported methods. Including `checkScalar.Rd` and `xtable.Rd`. 
-    - Removed commented line in `gsBinomialExact.Rd`, `gsProbability.Rd` examples 
-    - Used `on.exit()` to avoid changing user's options following suggestions including `gsqplot.R`, `ssrCP.R`, `gsUtilities.R`.
+This is a feature and maintenance release.
 
 # Test environments
 
-All are on github.com/keaven/gsDesign actions:
+All are on GitHub Actions at github.com/keaven/gsDesign:
 
 - Windows (latest)
-- MacOS (latest)
-- MacOS latest (devel)
-- Ubuntu-16.04 (release)
+- macOS (latest)
+- Ubuntu (latest), R release
+- Ubuntu (latest), R devel
+- Ubuntu (latest), R oldrel-1
 
 # R CMD check results
 
-0 errors | 0 warnings | 0 notes
+Local `R CMD check --as-cran` on macOS Tahoe 26.5.1 with R 4.5.2:
+
+0 errors | 1 warning | 2 notes
+
+The warning is from R's `R_ext/Boolean.h` header with Apple clang 21:
+`unknown warning group '-Wfixed-enum-extension'`.
+
+The notes are local environment issues:
+
+- unable to verify current time
+- HTML manual validation skipped because local HTML Tidy is not recent enough
