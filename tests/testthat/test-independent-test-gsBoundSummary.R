@@ -23,12 +23,63 @@ testthat::test_that(desc = "Test gsBoundSummary for gsSurv Object", code = {
   expect_snapshot_output(x = gsBoundSummary(xgs))
 })
 
+testthat::test_that(desc = "Test gsBoundSummary warns when hr0 is missing for HR summary", code = {
+  x <- gsSurv(
+    k = 2,
+    test.type = 4,
+    hr = 0.8,
+    hr0 = 1.2,
+    lambdaC = log(2) / 12,
+    gamma = 1,
+    R = 12,
+    T = 36,
+    minfup = 12
+  )
+
+  xu <- gsDesign(
+    k = x$k,
+    test.type = x$test.type,
+    alpha = x$alpha,
+    beta = x$beta,
+    astar = x$astar,
+    sfu = x$upper$sf,
+    sfupar = x$upper$param,
+    sfl = x$lower$sf,
+    sflpar = x$lower$param,
+    n.I = x$n.I,
+    delta = x$delta,
+    delta1 = x$delta1,
+    delta0 = x$delta0
+  )
+
+  expect_null(xu$hr0)
+  expect_warning(
+    missing_hr0 <- gsBoundSummary(xu, deltaname = "HR", logdelta = TRUE, Nname = "Events"),
+    "hr0 is not present",
+    fixed = TRUE
+  )
+
+  xu$hr0 <- x$hr0
+  with_hr0 <- expect_no_warning(
+    gsBoundSummary(xu, deltaname = "HR", logdelta = TRUE, Nname = "Events")
+  )
+
+  missing_bound <- missing_hr0[missing_hr0$Value == "~HR at bound", "Efficacy"]
+  supplied_bound <- with_hr0[with_hr0$Value == "~HR at bound", "Efficacy"]
+  expect_false(isTRUE(all.equal(missing_bound, supplied_bound)))
+})
+
 testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object, test.type > 1", 
                     code = {
   x <- gsDesign(nFixSurv = 3, k = 5, test.type = 4, n.fix = 1)
 
   local_edition(3) # use 3rd edition of testthat for this testcase
-  expect_snapshot_output(x = gsBoundSummary(x, Nname = NULL))
+  expect_warning(
+    out <- gsBoundSummary(x, Nname = NULL),
+    "hr0 is not present",
+    fixed = TRUE
+  )
+  expect_snapshot_output(x = out)
 })
 
 testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object, when nFixSurv is set", 
@@ -36,7 +87,12 @@ testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object, when nFixSu
   x <- gsDesign(nFixSurv = 0.8, k = 5, test.type = 4, n.fix = 1)
 
   local_edition(3) # use 3rd edition of testthat for this testcase
-  expect_snapshot_output(x = gsBoundSummary(x, deltaname = "RR", ratio = .3))
+  expect_warning(
+    out <- gsBoundSummary(x, deltaname = "RR", ratio = .3),
+    "hr0 is not present",
+    fixed = TRUE
+  )
+  expect_snapshot_output(x = out)
 })
 
 testthat::test_that(desc = "Test with Probability Of Success(POS) set to TRUE", 
@@ -232,19 +288,23 @@ testthat::test_that(desc = "Test gsBoundSummary for correct use of spending time
     lsTime = lsTime
   )
 
-  xu2 <- gsBoundSummary(
-    xu,
-    deltaname = "HR",
-    logdelta = TRUE,
-    Nname = "Events",
-    digits = 4,
-    ddigits = 2,
-    tdigits = 1,
-    exclude = c(
-      "B-value", "CP", "CP H1", "PP",
-      paste0("P(Cross) if HR=", round(c(x$hr0, x$hr), digits = 2))
+  xu2 <- expect_warning(
+    gsBoundSummary(
+      xu,
+      deltaname = "HR",
+      logdelta = TRUE,
+      Nname = "Events",
+      digits = 4,
+      ddigits = 2,
+      tdigits = 1,
+      exclude = c(
+        "B-value", "CP", "CP H1", "PP",
+        paste0("P(Cross) if HR=", round(c(x$hr0, x$hr), digits = 2))
+      ),
+      alpha = c(0.02, 0.025)
     ),
-    alpha = c(0.02, 0.025)
+    "hr0 is not present",
+    fixed = TRUE
   )
 
   alpha_vec <- c(0.01, 0.02, 0.025)

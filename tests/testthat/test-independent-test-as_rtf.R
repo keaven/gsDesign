@@ -17,7 +17,11 @@ test_that("Snapshot test for gsDesign gsBoundSummary as_rtf", {
 
   ss <- nSurvival(lambda1 = 0.2, lambda2 = 0.1, eta = 0.1, Ts = 2, Tr = 0.5, sided = 1, alpha = 0.025, ratio = 2)
   xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
-  tbl <- gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio)
+  expect_warning(
+    tbl <- gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio),
+    "hr0 is not present",
+    fixed = TRUE
+  )
   as_rtf(tbl, file = path)
 
   local_edition(3)
@@ -30,7 +34,11 @@ test_that("Snapshot test for gsDesign gsBoundSummary as_rtf with custom footnote
   path <- tempfile(fileext = ".rtf")
   ss <- nSurvival(lambda1 = 0.2, lambda2 = 0.1, eta = 0.1, Ts = 2, Tr = 0.5, sided = 1, alpha = 0.025, ratio = 2)
   xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
-  tbl <- gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio)
+  expect_warning(
+    tbl <- gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio),
+    "hr0 is not present",
+    fixed = TRUE
+  )
   as_rtf(tbl, file = path, footnote_specify = "Z", footnote_text = "Z-Score")
 
   local_edition(3)
