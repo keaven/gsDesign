@@ -60,7 +60,9 @@ x <- gsSurv(
   gamma = 10, R = 16, T = 24, minfup = 8, ratio = 3
 )
 counts <- toBinomialExact(x)$n.I
+\donttest{
 repeatedPValueBinomialExact(gsD = x, n.I = counts, x = c(12, 23, 38))
+}
 }
 \seealso{
 [sequentialPValueBinomialExact()], [sequentialPValue()],

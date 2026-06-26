@@ -1,5 +1,5 @@
 Package: gsDesign
-Version: 3.10.0
+Version: 3.10.0.9000
 Title: Group Sequential Design
 Authors@R: c(
     person("Keaven", "Anderson", email = "keaven_anderson@merck.com", role = c("aut", "cre")),
@@ -47,4 +47,3 @@ Suggests:
 VignetteBuilder:
     knitr
 Config/roxygen2/version: 8.0.0
-RoxygenNote: 7.3.3
