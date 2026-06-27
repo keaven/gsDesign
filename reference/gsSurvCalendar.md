@@ -267,6 +267,13 @@ gsSurvCalendar(
   only support superiority testing (`hr0 = 1`). `"Freedman"` does not
   support stratified populations.
 
+## Value
+
+An object of class `c("gsSurv", "gsDesign")` with group sequential
+boundaries and expected counts at each calendar analysis time. See
+[`gsSurv`](https://keaven.github.io/gsDesign/reference/nSurv.md) for
+full component details.
+
 ## References
 
 Lan KKG and DeMets DL (1983), Discrete Sequential Boundaries for
