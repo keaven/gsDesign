@@ -204,6 +204,11 @@ Note: \code{"Schoenfeld"} and \code{"Freedman"} methods only support
 superiority testing (\code{hr0 = 1}). \code{"Freedman"} does not support
 stratified populations.}
 }
+\value{
+An object of class \code{c("gsSurv", "gsDesign")} with
+  group sequential boundaries and expected counts at each calendar
+  analysis time. See \code{\link{gsSurv}} for full component details.
+}
 \description{
 This is like \code{gsSurv()}, but the timing of analyses is specified in
 calendar time units.

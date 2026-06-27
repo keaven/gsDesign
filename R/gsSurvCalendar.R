@@ -25,6 +25,10 @@
 #'   and \code{minfup}.
 #' @param tol Tolerance for error passed to the \code{\link{gsDesign}} function.
 #'
+#' @return An object of class \code{c("gsSurv", "gsDesign")} with
+#'   group sequential boundaries and expected counts at each calendar
+#'   analysis time. See \code{\link{gsSurv}} for full component details.
+#'
 #' @export
 #'
 #' @rdname gsSurvCalendar

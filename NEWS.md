@@ -6,7 +6,7 @@
   `gsSurv()`, and `gsSurvCalendar()` for selective bound testing at interim
   analyses. Each accepts a logical scalar or vector of length `k` specifying
   which analyses should include that boundary. Inactive bounds are set to
-  extreme values (&plusmn;20 on Z-scale) and displayed as `NA` in `print()` and
+  extreme values (±20 on Z-scale) and displayed as `NA` in `print()` and
   `gsBoundSummary()` output. This enables designs such as futility-only at
   early interims, deferred efficacy testing, or selective harm monitoring
   (@keaven, #141).
@@ -53,18 +53,18 @@
   event-driven timing (@keaven, #109).
 - Added `repeatedPValueBinomialExact()` and `sequentialPValueBinomialExact()`
   to compute repeated and sequential exact-binomial p-values under spending
-  function designs derived from `gsSurv()` objects (1922429e).
+  function designs derived from `gsSurv()` objects (#264).
 - Added `simBinomialSeasonalExact()` to run fixed and blinded-adaptive seasonal
   rare-event simulations with exact-binomial efficacy monitoring summaries
-  (1922429e).
+  (#264).
 - `toBinomialExact()` now supports explicit spending-time overrides via
   `usTime` and `lsTime` (for `test.type = 4`) to align with `gsDesign()` and
-  `gsSurv()` conventions when updating bounds with `observedEvents` (1922429e).
+  `gsSurv()` conventions when updating bounds with `observedEvents` (#264).
 - `toBinomialExact()` now accepts an `alpha` override for deriving updated
   exact efficacy bounds (#167).
 - `simBinomialSeasonalExact()` now supports `usTime`/`lsTime` inputs and
   reports futility stopping probabilities (`futility_stop_rate` with
-  `futility_mc_se`) in scenario summaries (1922429e).
+  `futility_mc_se`) in scenario summaries (#264).
 - `simBinomialSeasonalExact()` now accepts `ve = 0` and `ve < 0`, allowing
   null-hypothesis (`ve = 0`) and non-inferiority margin (`ve < 0`) scenarios.
   Validation now requires only that `ve` values are finite and less than 1.
@@ -120,10 +120,10 @@
   conversion. Both now use `sign(hr1 - hr0)` (@keaven, #251).
 - Fixed `toBinomialExact()` one-sided (`test.type = 1`) updating with
   `observedEvents` so futility-adjustment code is only executed when
-  `test.type = 4` (1922429e).
+  `test.type = 4` (#264).
 - `toBinomialExact()` now respects selective futility testing (`testLower`) when
   present on a `gsSurv` object by flattening lower spending at inactive looks
-  (1922429e).
+  (#264).
 
 ## Documentation
 
@@ -163,14 +163,14 @@
   (`vignette("MultiSeasonRareEvents")`) demonstrating exact-binomial seasonal
   monitoring, analysis-time bound updates via
   `toBinomialExact(observedEvents = ...)`, and blinded information-adaptive
-  enrollment scenarios (1922429e).
+  enrollment scenarios (#264).
 - Expanded the multi-season vignette with: initial `gsBoundSummary()` output,
   IA1-only futility illustration, VE and nominal one-sided p-values at
   exact-binomial bounds, and clearer simulation tables including efficacy and
   futility stopping probabilities with non-binding Type I interpretation notes
-  (c1065ea8, 2e9260bd).
+  (#264).
 - Reorganized pkgdown article sections to separate general materials, exact
-  binomial workflows, and multiple-hypothesis-testing content (67146132).
+  binomial workflows, and multiple-hypothesis-testing content (#264).
 
 ## Testing
 
@@ -182,12 +182,12 @@
   time-to-event designs (#258).
 - Added independent tests for exact-binomial repeated/sequential p-values and
   for `simBinomialSeasonalExact()` input validation, reproducibility, and
-  adaptive enrollment behavior (1922429e, c1065ea8).
+  adaptive enrollment behavior (#264).
 - Added regression test confirming `toBinomialExact()` one-sided
-  (`test.type = 1`) updates with `observedEvents` (1922429e).
+  (`test.type = 1`) updates with `observedEvents` (#264).
 - Added regression tests for `toBinomialExact()` `usTime`/`lsTime` overrides and
   selective-futility behavior, plus tests for new futility stopping summary
-  outputs from `simBinomialSeasonalExact()` (1922429e).
+  outputs from `simBinomialSeasonalExact()` (#264).
 - Added regression tests for `simBinomialSeasonalExact()` stopping summaries,
   design-based fixed enrollment defaults, and the rare-event `toInteger()`
   equal-allocation path (#264).
