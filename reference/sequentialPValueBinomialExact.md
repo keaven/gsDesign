@@ -72,6 +72,8 @@ x <- gsSurv(
   gamma = 10, R = 16, T = 24, minfup = 8, ratio = 3
 )
 counts <- toBinomialExact(x)$n.I
+# \donttest{
 sequentialPValueBinomialExact(gsD = x, n.I = counts, x = c(12, 23, 38))
 #> [1] 0.008683036
+# }
 ```

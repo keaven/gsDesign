@@ -97,9 +97,11 @@ x <- gsSurv(
   gamma = 10, R = 16, T = 24, minfup = 8, ratio = 3
 )
 counts <- toBinomialExact(x)$n.I
+# \donttest{
 repeatedPValueBinomialExact(gsD = x, n.I = counts, x = c(12, 23, 38))
 #>   Analysis n.I  x repeated_p_value bound_at_repeated_p_value
 #> 1        1  31 12      0.008683036                        12
 #> 2        2  48 23      0.013085131                        23
 #> 3        3  69 38      0.019672838                        38
+# }
 ```
