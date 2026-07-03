@@ -1,7 +1,5 @@
 # Changelog
 
-## gsDesign (development version)
-
 ## gsDesign 3.10.0
 
 CRAN release: 2026-07-03
