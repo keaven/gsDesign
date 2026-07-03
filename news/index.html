@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,10 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="3.10.0" id="gsdesign-3100">gsDesign 3.10.0<a class="anchor" aria-label="anchor" href="#gsdesign-3100"></a></h2>
+<h2 class="pkg-version" data-toc-text="development version" id="gsdesign-development-version">gsDesign (development version)<a class="anchor" aria-label="anchor" href="#gsdesign-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.10.0" id="gsdesign-3100">gsDesign 3.10.0<a class="anchor" aria-label="anchor" href="#gsdesign-3100"></a></h2><p class="text-muted">CRAN release: 2026-07-03</p>
 <div class="section level3">
 <h3 id="new-features-3-10-0">New features<a class="anchor" aria-label="anchor" href="#new-features-3-10-0"></a></h3>
 <ul><li>Added <code>testUpper</code>, <code>testLower</code>, and <code>testHarm</code> parameters to <code><a href="../reference/gsDesign.html">gsDesign()</a></code>, <code><a href="../reference/nSurv.html">gsSurv()</a></code>, and <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code> for selective bound testing at interim analyses. Each accepts a logical scalar or vector of length <code>k</code> specifying which analyses should include that boundary. Inactive bounds are set to extreme values (±20 on Z-scale) and displayed as <code>NA</code> in <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> output. This enables designs such as futility-only at early interims, deferred efficacy testing, or selective harm monitoring (<a href="https://github.com/keaven" class="external-link">@keaven</a>, <a href="https://github.com/keaven/gsDesign/issues/141" class="external-link">#141</a>).</li>
