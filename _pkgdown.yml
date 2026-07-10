@@ -131,8 +131,8 @@ reference:
   contents:
   - as_table
   - as_table.gsBinomialExact
+  - lt-methods
   - as_gt
-  - as_gt.gsBinomialExactTable
   - as_rtf
   - as_rtf.gsBinomialExactTable
 

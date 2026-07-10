@@ -1,6 +1,8 @@
 ---
 title: "Basic time-to-event group sequential design using gsSurv"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    css: vignette.css
 bibliography: gsDesign.bib
 vignette: >
   %\VignetteIndexEntry{Basic time-to-event group sequential design using gsSurv}
@@ -204,15 +206,15 @@ An important addition not provided above is that the median time-to-event is ass
 Following are the enrollment rates required to power the trial.
 
 ```{r, warning=FALSE}
-library(gt)
+library(lt)
 library(tibble)
 
 tibble(
   Period = paste("Month", rownames(x$gamma)),
   Rate = as.numeric(x$gamma)
 ) |>
-  gt() |>
-  tab_header(title = "Enrollment rate requirements")
+  lt() |>
+  lt_header(title = "Enrollment rate requirements")
 ```
 
 Next we provide a tabular summary of bounds for the design.
@@ -246,15 +248,15 @@ caption <- paste(
 
 ```{r, echo=TRUE, message=FALSE}
 gsBoundSummary(x) |>
-  gt() |>
-  tab_header(title = "Time-to-event group sequential design") |>
-  cols_align("left") |>
-  tab_footnote(footnoteUS, locations = cells_column_labels(columns = 3)) |>
-  tab_footnote(footnoteLS, locations = cells_column_labels(columns = 4)) |>
-  tab_footnote(footnoteHR, locations = cells_body(columns = 2, rows = c(3, 8, 13))) |>
-  tab_footnote(footnoteM, locations = cells_body(columns = 1, rows = c(4, 9, 14))) |>
-  tab_footnote(footnote1, locations = cells_body(columns = 2, rows = c(4, 5, 9, 10, 14, 15))) |>
-  tab_footnote(footnote2, locations = cells_body(columns = 2, rows = c(4, 9, 14)))
+  lt() |>
+  lt_header(title = "Time-to-event group sequential design") |>
+  lt_align(columns = c("Analysis", "Value", "Efficacy", "Futility"), align = "left") |>
+  lt_footnote(footnoteUS, where = "column", columns = "Efficacy") |>
+  lt_footnote(footnoteLS, where = "column", columns = "Futility") |>
+  lt_footnote(footnoteHR, where = "body", columns = "Value", rows = c(3, 8, 13)) |>
+  lt_footnote(footnoteM, where = "body", columns = "Analysis", rows = c(4, 9, 14)) |>
+  lt_footnote(footnote1, where = "body", columns = "Value", rows = c(4, 5, 9, 10, 14, 15)) |>
+  lt_footnote(footnote2, where = "body", columns = "Value", rows = c(4, 9, 14))
 ```
 
 ### Summary plots
@@ -317,23 +319,23 @@ gsBoundSummary(
     "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.75"
   )
 ) |>
-  gt() |>
-  cols_align("left") |>
-  tab_header(
+  lt() |>
+  lt_align(columns = c("Analysis", "Value", "Efficacy", "Futility"), align = "left") |>
+  lt_header(
     title = "Time-to-event group sequential bound guidance",
     subtitle = "Bounds updated based on event counts through IA2"
   ) |>
-  tab_footnote(
+  lt_footnote(
     "Nominal p-value required to establish statistical significance.",
-    locations = cells_body(columns = 3, rows = c(2, 5, 8))
+    where = "body", columns = "Efficacy", rows = c(2, 5, 8)
   ) |>
-  tab_footnote(
+  lt_footnote(
     "Interim futility guidance based on observed HR is non-binding.",
-    locations = cells_body(columns = 4, rows = c(3, 6))
+    where = "body", columns = "Futility", rows = c(3, 6)
   ) |>
-  tab_footnote(
+  lt_footnote(
     "HR bounds are approximations; decisions on crossing are based solely on p-values.",
-    locations = cells_body(column = 2, rows = c(3, 6, 9))
+    where = "body", columns = "Value", rows = c(3, 6, 9)
   )
 ```
 

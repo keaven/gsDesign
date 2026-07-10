@@ -1,6 +1,8 @@
 ---
 title: "Multi-season studies for rare events"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    css: vignette.css
 bibliography: gsDesign.bib
 vignette: >
   %\VignetteIndexEntry{Multi-season studies for rare events}
@@ -25,7 +27,7 @@ options(width = 58)
 
 ```{r, message=FALSE, warning=FALSE}
 library(gsDesign)
-library(gt)
+library(lt)
 library(tibble)
 ```
 
@@ -249,46 +251,46 @@ tibble(
   `Achieved cumulative alpha spend` = achieved_alpha_spend,
   `Cumulative power under H1` = achieved_power_h1
 ) |>
-  gt() |>
-  fmt_number(columns = 2, decimals = 3) |>
-  fmt_percent(columns = c(`VE at bound (efficacy)`, `VE at bound (futility)`), decimals = 1) |>
-  fmt_number(
+  lt() |>
+  lt_format(columns = 2, decimals = 3) |>
+  lt_format(columns = c("VE at bound (efficacy)", "VE at bound (futility)"), decimals = 1, percent = TRUE) |>
+  lt_format(
     columns = c(
-      `Nominal 1-sided p at bound (efficacy)`,
-      `Nominal 1-sided p at bound (futility)`,
-      `Target cumulative alpha spend`,
-      `Achieved cumulative alpha spend`,
-      `Cumulative power under H1`
+      "Nominal 1-sided p at bound (efficacy)",
+      "Nominal 1-sided p at bound (futility)",
+      "Target cumulative alpha spend",
+      "Achieved cumulative alpha spend",
+      "Cumulative power under H1"
     ),
     decimals = 4
   ) |>
-  tab_spanner(
+  lt_spanner(
     label = "Efficacy",
     columns = c(
-      `Exact efficacy bound (x <= a)`,
-      `VE at bound (efficacy)`,
-      `Nominal 1-sided p at bound (efficacy)`
+      "Exact efficacy bound (x <= a)",
+      "VE at bound (efficacy)",
+      "Nominal 1-sided p at bound (efficacy)"
     )
   ) |>
-  tab_spanner(
+  lt_spanner(
     label = "Futility",
     columns = c(
-      `Exact futility bound (x >= b)`,
-      `VE at bound (futility)`,
-      `Nominal 1-sided p at bound (futility)`
+      "Exact futility bound (x >= b)",
+      "VE at bound (futility)",
+      "Nominal 1-sided p at bound (futility)"
     )
   ) |>
-  tab_header(
+  lt_header(
     title = "Planned exact binomial seasonal monitoring",
     subtitle = "Super-superiority example with Pocock-like efficacy spending"
   ) |>
-  tab_footnote(
-    footnote = "x denotes cumulative observed events in the experimental arm; efficacy is established when x is at or below the listed efficacy bound.",
-    locations = cells_column_labels(columns = `Exact efficacy bound (x <= a)`)
+  lt_footnote(
+    "x denotes cumulative observed events in the experimental arm; efficacy is established when x is at or below the listed efficacy bound.",
+    where = "column", columns = "Exact efficacy bound (x <= a)"
   ) |>
-  tab_footnote(
-    footnote = "Blank futility entries indicate no futility stopping boundary at that analysis.",
-    locations = cells_column_labels(columns = `Exact futility bound (x >= b)`)
+  lt_footnote(
+    "Blank futility entries indicate no futility stopping boundary at that analysis.",
+    where = "column", columns = "Exact futility bound (x >= b)"
   )
 ```
 
@@ -315,8 +317,8 @@ dplyr::bind_rows(
     `Cumulative planned enrollment` = sum(enrollment_table$`Total planned enrollment`)
   )
 ) |>
-  gt() |>
-  tab_header(title = "Planned enrollment by season and overall")
+  lt() |>
+  lt_header(title = "Planned enrollment by season and overall")
 ```
 
 ## Example repeated and sequential p-values
@@ -390,8 +392,8 @@ tibble(
   `Updated futility bound, default spending` = update_exact$upper$bound,
   `Updated futility bound, maxSpend=TRUE` = update_exact_full$upper$bound
 ) |>
-  gt() |>
-  tab_header(title = "Updated exact bounds using observedEvents")
+  lt() |>
+  lt_header(title = "Updated exact bounds using observedEvents")
 ```
 
 ## Lightweight runnable simulation
@@ -439,16 +441,16 @@ oc <- sim_light$summary |>
   )
 
 oc |>
-  gt() |>
-  fmt_number(columns = 2:5, decimals = 4) |>
-  fmt_number(columns = 6:8, decimals = 2) |>
-  tab_header(
+  lt() |>
+  lt_format(columns = 2:5, decimals = 4) |>
+  lt_format(columns = 6:8, decimals = 2) |>
+  lt_header(
     title = "Lightweight simulation results",
     subtitle = "Exact-binomial monitoring with seasonal analyses"
   ) |>
-  tab_footnote(
-    footnote = "For VE=30% scenarios, efficacy crossing probability is Type I error under the non-binding futility convention (futility crossings do not block later efficacy crossings).",
-    locations = cells_column_labels(columns = `Efficacy crossing probability`)
+  lt_footnote(
+    "For VE=30% scenarios, efficacy crossing probability is Type I error under the non-binding futility convention (futility crossings do not block later efficacy crossings).",
+    where = "column", columns = "Efficacy crossing probability"
   )
 ```
 
@@ -516,16 +518,16 @@ tibble(
     low$mean_looks[low$adaptive & low$scenario == "H1 (VE=80%)"]
   )
 ) |>
-  gt() |>
-  fmt_number(columns = 2:3, decimals = 4) |>
-  fmt_number(columns = 4:6, decimals = 2) |>
-  tab_header(
+  lt() |>
+  lt_format(columns = 2:3, decimals = 4) |>
+  lt_format(columns = 4:6, decimals = 2) |>
+  lt_header(
     title = "Lower-than-planned event rate illustration",
     subtitle = "Adaptive approach increases enrollment to recover information"
   ) |>
-  tab_footnote(
-    footnote = "Type I error rows use non-binding futility for efficacy crossing probability; futility stopping probability is shown separately.",
-    locations = cells_column_labels(columns = `Efficacy crossing probability`)
+  lt_footnote(
+    "Type I error rows use non-binding futility for efficacy crossing probability; futility stopping probability is shown separately.",
+    where = "column", columns = "Efficacy crossing probability"
   )
 ```
 
