@@ -66,31 +66,31 @@
 <text x='595.41' y='555.55' text-anchor='middle' style='font-size: 8.80px; fill: #4D4D4D; font-family: sans;' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>0.5</text>
 <text x='326.03' y='568.10' style='font-size: 11.00px; font-family: sans;' textLength='5.26px' lengthAdjust='spacingAndGlyphs'>θ</text>
 <text transform='translate(13.05,283.67) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='206.07px' lengthAdjust='spacingAndGlyphs'>Cumulative Boundary Crossing Probability</text>
-<rect x='633.05' y='202.38' width='81.47' height='49.89' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<text x='633.05' y='211.09' style='font-size: 11.00px; font-family: sans;' textLength='51.36px' lengthAdjust='spacingAndGlyphs'>Probability</text>
+<rect x='633.05' y='202.38' width='40.97' height='101.73' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<text x='633.05' y='211.09' style='font-size: 11.00px; font-family: sans;' textLength='40.97px' lengthAdjust='spacingAndGlyphs'>Analysis</text>
 <rect x='633.05' y='217.71' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<line x1='634.78' y1='226.35' x2='648.60' y2='226.35' style='stroke-width: 2.13; stroke: #DF536B; stroke-linecap: butt;' />
+<line x1='634.78' y1='226.35' x2='648.60' y2='226.35' style='stroke-width: 2.13; stroke-dasharray: 19.92,8.54; stroke-linecap: butt;' />
 <rect x='633.05' y='234.99' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<line x1='634.78' y1='243.63' x2='648.60' y2='243.63' style='stroke-width: 2.13; stroke-linecap: butt;' />
-<text x='655.81' y='229.38' style='font-size: 8.80px; font-family: sans;' textLength='58.71px' lengthAdjust='spacingAndGlyphs'>1-Lower bound</text>
-<text x='655.81' y='246.66' style='font-size: 8.80px; font-family: sans;' textLength='50.89px' lengthAdjust='spacingAndGlyphs'>Upper bound</text>
-<rect x='633.05' y='263.23' width='40.97' height='101.73' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<text x='633.05' y='271.94' style='font-size: 11.00px; font-family: sans;' textLength='40.97px' lengthAdjust='spacingAndGlyphs'>Analysis</text>
-<rect x='633.05' y='278.56' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<line x1='634.78' y1='287.20' x2='648.60' y2='287.20' style='stroke-width: 2.13; stroke-dasharray: 19.92,8.54; stroke-linecap: butt;' />
-<rect x='633.05' y='295.84' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<line x1='634.78' y1='304.48' x2='648.60' y2='304.48' style='stroke-width: 2.13; stroke-dasharray: 2.85,8.54,11.38,8.54; stroke-linecap: butt;' />
-<rect x='633.05' y='313.12' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<line x1='634.78' y1='321.76' x2='648.60' y2='321.76' style='stroke-width: 2.13; stroke-dasharray: 2.85,8.54; stroke-linecap: butt;' />
+<line x1='634.78' y1='243.63' x2='648.60' y2='243.63' style='stroke-width: 2.13; stroke-dasharray: 2.85,8.54,11.38,8.54; stroke-linecap: butt;' />
+<rect x='633.05' y='252.27' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<line x1='634.78' y1='260.91' x2='648.60' y2='260.91' style='stroke-width: 2.13; stroke-dasharray: 2.85,8.54; stroke-linecap: butt;' />
+<rect x='633.05' y='269.55' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<line x1='634.78' y1='278.19' x2='648.60' y2='278.19' style='stroke-width: 2.13; stroke-dasharray: 11.38,11.38; stroke-linecap: butt;' />
+<rect x='633.05' y='286.83' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<line x1='634.78' y1='295.47' x2='648.60' y2='295.47' style='stroke-width: 2.13; stroke-linecap: butt;' />
+<text x='655.81' y='229.38' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>1</text>
+<text x='655.81' y='246.66' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text x='655.81' y='263.94' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>3</text>
+<text x='655.81' y='281.22' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text x='655.81' y='298.50' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>5</text>
+<rect x='633.05' y='315.07' width='81.47' height='49.89' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
+<text x='633.05' y='323.78' style='font-size: 11.00px; font-family: sans;' textLength='51.36px' lengthAdjust='spacingAndGlyphs'>Probability</text>
 <rect x='633.05' y='330.40' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<line x1='634.78' y1='339.04' x2='648.60' y2='339.04' style='stroke-width: 2.13; stroke-dasharray: 11.38,11.38; stroke-linecap: butt;' />
+<line x1='634.78' y1='339.04' x2='648.60' y2='339.04' style='stroke-width: 2.13; stroke: #DF536B; stroke-linecap: butt;' />
 <rect x='633.05' y='347.68' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
 <line x1='634.78' y1='356.32' x2='648.60' y2='356.32' style='stroke-width: 2.13; stroke-linecap: butt;' />
-<text x='655.81' y='290.23' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>1</text>
-<text x='655.81' y='307.51' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>2</text>
-<text x='655.81' y='324.79' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>3</text>
-<text x='655.81' y='342.07' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>4</text>
-<text x='655.81' y='359.35' style='font-size: 8.80px; font-family: sans;' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>5</text>
+<text x='655.81' y='342.07' style='font-size: 8.80px; font-family: sans;' textLength='58.71px' lengthAdjust='spacingAndGlyphs'>1-Lower bound</text>
+<text x='655.81' y='359.35' style='font-size: 8.80px; font-family: sans;' textLength='50.89px' lengthAdjust='spacingAndGlyphs'>Upper bound</text>
 <text x='35.24' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='264.18px' lengthAdjust='spacingAndGlyphs'>Boundary crossing probabilities by effect size</text>
 </g>
 </svg>
