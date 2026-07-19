@@ -183,6 +183,21 @@ testthat::test_that("testHarm = c(TRUE, FALSE, FALSE) with test.type 7", {
   testthat::expect_equal(x$harm$bound[3], -EXTREMEZ)
 })
 
+testthat::test_that("futility and harm bounds can be skipped independently", {
+  for (test_type in 7:8) {
+    x <- gsDesign(
+      k = 3, test.type = test_type, alpha = 0.025, beta = 0.1, astar = 0.05,
+      testLower = c(TRUE, FALSE, TRUE),
+      testHarm = c(TRUE, TRUE, FALSE)
+    )
+
+    testthat::expect_equal(x$lower$bound[2], -EXTREMEZ)
+    testthat::expect_gt(x$harm$bound[2], -EXTREMEZ)
+    testthat::expect_gt(x$lower$bound[3], -EXTREMEZ)
+    testthat::expect_equal(x$harm$bound[3], -EXTREMEZ)
+  }
+})
+
 # ---- Combining testUpper and testLower ----
 
 testthat::test_that("Combined: futility only at IA1, efficacy only at IA2 and final", {

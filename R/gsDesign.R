@@ -1437,8 +1437,11 @@ gsDType7 <- function(x) {
   xx <- gsBound1(theta = 0, I = x$n.I, a = -x$upper$bound, probhi = harm_spend, tol = x$tol, r = x$r)
   x$harm$bound <- -xx$b
 
-  # Cap harm bound: if harm > futility, set to futility
+  # Cap harm bound only where both lower bounds are active
   cap_idx <- x$harm$bound > x$lower$bound
+  if (!is.null(x$testLower) && !is.null(x$testHarm)) {
+    cap_idx <- cap_idx & x$testLower & x$testHarm
+  }
   if (any(cap_idx)) {
     x$harm$bound[cap_idx] <- x$lower$bound[cap_idx]
   }
@@ -1470,8 +1473,11 @@ gsDType8 <- function(x) {
   xx <- gsBound1(theta = 0, I = x$n.I, a = -x$upper$bound, probhi = harm_spend, tol = x$tol, r = x$r)
   x$harm$bound <- -xx$b
 
-  # Cap harm bound: if harm > futility, set to futility
+  # Cap harm bound only where both lower bounds are active
   cap_idx <- x$harm$bound > x$lower$bound
+  if (!is.null(x$testLower) && !is.null(x$testHarm)) {
+    cap_idx <- cap_idx & x$testLower & x$testHarm
+  }
   if (any(cap_idx)) {
     x$harm$bound[cap_idx] <- x$lower$bound[cap_idx]
   }
