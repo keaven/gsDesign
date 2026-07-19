@@ -2,6 +2,12 @@
 
 ## gsDesign (development version)
 
+### Bug fixes
+
+- Futility and harm bounds can now be skipped independently at an
+  analysis; skipping futility no longer also removes an active harm
+  bound ([\#284](https://github.com/keaven/gsDesign/issues/284)).
+
 ## gsDesign 3.10.0
 
 CRAN release: 2026-07-03
