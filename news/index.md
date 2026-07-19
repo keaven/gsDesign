@@ -1,6 +1,6 @@
 # Changelog
 
-## gsDesign (development version)
+## gsDesign 3.10.1
 
 ### Bug fixes
 
