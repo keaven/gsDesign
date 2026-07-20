@@ -5,6 +5,15 @@
 - Futility and harm bounds can now be skipped independently at an analysis;
   skipping futility no longer also removes an active harm bound (#284).
 
+## Major changes
+
+- The (heavy) **gt** dependency has been replaced with the lightweight **lt**
+  package. The `as_gt()` function is deprecated in favor of `lt::lt()`. An S3
+  method for `lt()` is provided for `gsBinomialExactTable` objects, and all
+  vignettes now use lt functions (`lt()`, `lt_header()`, `lt_spanner()`,
+  `lt_format()`, `lt_footnote()`, `lt_note()`, `lt_label()`, `lt_align()`,
+  `lt_group()`). There are no significant visual changes in the HTML tables.
+
 # gsDesign 3.10.0
 
 ## New features
