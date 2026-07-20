@@ -360,17 +360,11 @@ This ensures the ordering: harm bound $\leq$ futility bound $\leq$ efficacy boun
 
 In most regulatory settings, `test.type = 8` is the safer and more common choice.
 
-### Why a separate "binding harm / non-binding futility" option is unnecessary
+### Binding and non-binding harm monitoring
 
-One might consider a design where the futility bound is non-binding but the harm bound is binding.
-In practice, such a distinction has no computational effect.
-The harm bound is computed *after* the efficacy and futility bounds are set and does not feed back into those computations.
-When the futility bound is non-binding (as in `test.type = 8`), the efficacy bound is computed ignoring all lower-bound stopping.
-Since the harm bound lies below the futility bound, making the harm bound "binding" while the futility bound remains non-binding would not change the efficacy boundary, the required number of events, the final Z-values, or the p-values --- the results are identical.
+When futility and harm are both tested at an analysis, the harm boundary lies below the futility boundary and therefore does not add another stopping region. Crossing probabilities are nevertheless partitioned into mutually exclusive harm, futility, and efficacy outcomes.
 
-The only difference would be in *interpretation*: whether crossing the harm bound is treated as a firm commitment to stop or as advisory information for the DMC.
-This interpretive distinction does not require a separate `test.type`; it can be addressed in the protocol language and the DMC charter.
-The `test.type = 8` framework already provides full flexibility for the DMC to treat the harm bound as either advisory or mandatory.
+When harm is tested at an analysis where futility is skipped, the harm boundary is the active lower stopping boundary. This stopping probability is included in sample-size derivation and, for `test.type = 7`, in the binding efficacy-bound calculation. For `test.type = 8`, efficacy bounds continue to use the non-binding Type I error convention, while power and expected information account for actual harm and futility stopping.
 
 ### Adjusting the boundaries
 

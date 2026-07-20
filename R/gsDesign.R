@@ -384,7 +384,9 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' Only used for \code{test.type} 7 or 8; at least one analysis must be
 #' \code{TRUE} for those types.
 #' Where \code{testHarm} is \code{FALSE}, the harm bound is set to
-#' \code{-20} (effectively \code{-Inf}) and displayed as \code{NA} in output.
+#' \code{-20} (effectively \code{-Inf}) and the bound is displayed as
+#' \code{NA} in output. Cumulative harm crossing probability from earlier
+#' analyses is still displayed.
 #' @return An object of the class \code{gsDesign}. This class has the following
 #' elements and upon return from \code{gsDesign()} contains: \item{k}{As
 #' input.} \item{test.type}{As input.} \item{alpha}{As input.} \item{beta}{As
@@ -427,7 +429,12 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' hypothesis (beta spending) for \code{test.type=3} or \code{4}.  For
 #' \code{test.type=2}, \code{5} or \code{6}, lower spending is under the null
 #' hypothesis. For \code{test.type=1}, output value is \code{NULL}. See
-#' \code{vignette("SpendingFunctionOverview")} and manual.} \item{theta}{Standarized
+#' \code{vignette("SpendingFunctionOverview")} and manual. For
+#' \code{test.type=7} or \code{8}, crossing probabilities exclude harm
+#' crossings.} \item{harm}{Harm bound spending function, boundary, and crossing
+#' probabilities at each analysis for \code{test.type=7} or \code{8}. Harm,
+#' lower, and upper crossing probabilities are mutually exclusive.}
+#' \item{theta}{Standarized
 #' effect size under null (0) and alternate hypothesis. If \code{delta} is
 #' input, \code{theta[1]=delta}. If \code{n.fix} is input, \code{theta[1]} is
 #' computed using a standard sample size formula (pseudocode):
@@ -517,6 +524,9 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
 
   # --- Validate and expand testUpper, testLower, testHarm ---
   testBounds <- gsTestBoundsCheck(x$k, x$test.type, testUpper, testLower, testHarm)
+  x$testUpper <- testBounds$testUpper
+  x$testLower <- testBounds$testLower
+  x$testHarm <- testBounds$testHarm
   # if usTime (upper spending time) is specified, check it
   if (!is.null(usTime)){
     checkVector(usTime[1:(x$k-1)],"numeric",c(0,1),c(FALSE,FALSE)) # interim fractions in (0,1)
@@ -609,8 +619,6 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
     gsDType7(x),
     gsDType8(x)
   )
-  if (x$nFixSurv > 0) x$nSurv <- ceiling(x$nFixSurv * x$n.I[x$k] / n.fix / 2) * 2
-
   # --- Apply testUpper/testLower/testHarm: recompute bounds at active analyses ---
   x_all_bounds <- x
   x <- gsApplyTestBounds(x_all_bounds, testBounds)
@@ -626,6 +634,7 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
     power_diff <- function(scale, return_design = FALSE) {
       candidate <- x_all_bounds
       candidate$n.I <- x_all_bounds$n.I * scale
+      candidate$preserve.k <- TRUE
       if (candidate$maxn.IPlan > 0) {
         candidate$maxn.IPlan <- candidate$n.I[candidate$k]
       }
@@ -633,9 +642,21 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
       if (return_design) return(candidate)
       sum(candidate$upper$prob[, 2]) - target_power
     }
-    scale <- stats::uniroot(power_diff, interval = c(0.2, 2), tol = x$tol)$root
+    upper_scale <- 1.05
+    upper_diff <- power_diff(upper_scale)
+    while (upper_diff < 0 && upper_scale < 10) {
+      upper_scale <- min(1.25 * upper_scale, 10)
+      upper_diff <- power_diff(upper_scale)
+    }
+    if (upper_diff < 0) {
+      stop("Unable to derive sample size with selective lower bounds")
+    }
+    scale <- stats::uniroot(power_diff, interval = c(0.2, upper_scale), tol = x$tol)$root
     x <- power_diff(scale, return_design = TRUE)
+    x$preserve.k <- NULL
   }
+
+  if (x$nFixSurv > 0) x$nSurv <- ceiling(x$nFixSurv * x$n.I[x$k] / n.fix / 2) * 2
 
   x
 }
@@ -1180,6 +1201,9 @@ gsDType3a <- function(x) {
 
   # try to match spending
   x <- gsDType3b(x)
+  if (isTRUE(x$preserve.k)) {
+    return(x)
+  }
   if (x$test.type == 4) {
     return(x)
   }
@@ -1447,10 +1471,15 @@ gsDType7 <- function(x) {
   # Step 1: Compute design as test.type 3 (binding beta-spending futility bound)
   saved_test_type <- x$test.type
   saved_harm <- x$harm
+  saved_preserve_k <- x$preserve.k
+  if (length(x$n.I) == x$k && any(x$testHarm & !x$testLower)) {
+    x$preserve.k <- TRUE
+  }
   x$test.type <- 3L
   x <- gsDType3(x)
   x$test.type <- saved_test_type
   x$harm <- saved_harm
+  x$preserve.k <- saved_preserve_k
 
   # Step 2: Compute harm bound under H0
   harm_spend <- x$harm$spend
@@ -1602,7 +1631,11 @@ gsprob <- function(theta, I, a, b, r = 18, overrun = 0) {
   phi <- matrix(xx[[8]], nanal, ntheta)
   powr <- rep(1, nanal) %*% phi
   futile <- rep(1, nanal) %*% plo
-  IOver <- c(I[1:(nanal - 1)] + overrun, I[nanal])
+  if (nanal == 1) {
+    IOver <- I
+  } else {
+    IOver <- c(I[1:(nanal - 1)] + overrun, I[nanal])
+  }
   IOver[IOver > I[nanal]] <- I[nanal]
   en <- as.vector(IOver %*% (plo + phi) + I[nanal] * (t(rep(1, ntheta)) - powr - futile))
   list(
@@ -1611,8 +1644,187 @@ gsprob <- function(theta, I, a, b, r = 18, overrun = 0) {
   )
 }
 
+# gsHarmProbability: mutually exclusive efficacy, futility, and harm probabilities ----
+gsHarmProbability <- function(theta, d) {
+  k <- d$k
+  test_lower <- if (is.null(d$testLower)) rep(TRUE, k) else d$testLower
+  test_harm <- if (is.null(d$testHarm)) rep(TRUE, k) else d$testHarm
+
+  # A trial stops at the less extreme active lower boundary. When both lower
+  # boundaries are active, harm is the subset at or below the harm boundary.
+  stop_bound <- rep(-20, k)
+  stop_bound[test_harm] <- d$harm$bound[test_harm]
+  stop_bound[test_lower] <- pmax(
+    stop_bound[test_lower],
+    d$lower$bound[test_lower]
+  )
+
+  total <- gsprob(
+    theta = theta, I = d$n.I, a = stop_bound, b = d$upper$bound,
+    r = d$r, overrun = d$overrun
+  )
+  harm_prob <- matrix(0, nrow = k, ncol = length(theta))
+  for (j in which(test_harm)) {
+    harm_bound <- if (j == 1) {
+      d$harm$bound[j]
+    } else {
+      c(stop_bound[seq_len(j - 1)], d$harm$bound[j])
+    }
+    harm_at_j <- gsprob(
+      theta = theta, I = d$n.I[seq_len(j)], a = harm_bound,
+      b = d$upper$bound[seq_len(j)], r = d$r
+    )
+    harm_prob[j, ] <- harm_at_j$problo[j, ]
+  }
+
+  futility_prob <- total$problo - harm_prob
+  futility_prob[abs(futility_prob) < d$tol] <- 0
+
+  list(
+    upper = total$probhi,
+    lower = futility_prob,
+    harm = harm_prob,
+    en = total$en,
+    stop_bound = stop_bound
+  )
+}
+
+# gsHarmBoundUpdate: derive exclusive harm spending under H0 ----
+gsHarmBoundUpdate <- function(x) {
+  target <- cumsum(x$harm$spend)
+  previous_stop <- numeric(0)
+  cumulative_harm <- 0
+
+  for (j in seq_len(x$k)) {
+    if (x$testHarm[j]) {
+      desired <- max(target[j] - cumulative_harm, 0)
+      upper_limit <- x$upper$bound[j]
+      if (x$testLower[j]) {
+        upper_limit <- min(upper_limit, x$lower$bound[j])
+      }
+      crossing <- function(bound) {
+        lower <- c(previous_stop, bound)
+        probability <- gsprob(
+          theta = 0, I = x$n.I[seq_len(j)], a = lower,
+          b = x$upper$bound[seq_len(j)], r = x$r
+        )
+        probability$problo[j, 1]
+      }
+      low_probability <- crossing(-20)
+      high_probability <- crossing(upper_limit)
+      if (desired <= low_probability + x$tol) {
+        bound <- -20
+      } else if (desired >= high_probability - x$tol) {
+        bound <- upper_limit
+      } else {
+        bound <- stats::uniroot(
+          function(z) crossing(z) - desired,
+          interval = c(-20, upper_limit), tol = x$tol
+        )$root
+      }
+      x$harm$bound[j] <- bound
+      cumulative_harm <- cumulative_harm + crossing(bound)
+    } else {
+      x$harm$bound[j] <- -20
+    }
+
+    stop_at_j <- -20
+    if (x$testHarm[j]) stop_at_j <- x$harm$bound[j]
+    if (x$testLower[j]) stop_at_j <- max(stop_at_j, x$lower$bound[j])
+    previous_stop <- c(previous_stop, stop_at_j)
+  }
+
+  x
+}
+
+# gsFutilityBoundUpdate: include prior harm stopping in beta spending ----
+gsFutilityBoundUpdate <- function(x) {
+  target <- cumsum(x$lower$spend)
+  previous_stop <- numeric(0)
+  cumulative_lower <- 0
+
+  for (j in seq_len(x$k)) {
+    lower_limit <- if (x$testHarm[j]) x$harm$bound[j] else -20
+    crossing <- function(bound) {
+      lower <- c(previous_stop, bound)
+      probability <- gsprob(
+        theta = x$delta, I = x$n.I[seq_len(j)], a = lower,
+        b = x$upper$bound[seq_len(j)], r = x$r
+      )
+      probability$problo[j, 1]
+    }
+
+    if (x$testLower[j] && j == x$k) {
+      bound <- x$upper$bound[j]
+      x$lower$bound[j] <- bound
+    } else if (x$testLower[j]) {
+      desired <- max(target[j] - cumulative_lower, 0)
+      upper_limit <- x$upper$bound[j]
+      low_probability <- crossing(lower_limit)
+      high_probability <- crossing(upper_limit)
+      if (desired <= low_probability + x$tol) {
+        bound <- lower_limit
+      } else if (desired >= high_probability - x$tol) {
+        bound <- upper_limit
+      } else {
+        bound <- stats::uniroot(
+          function(z) crossing(z) - desired,
+          interval = c(lower_limit, upper_limit), tol = x$tol
+        )$root
+      }
+      x$lower$bound[j] <- bound
+    } else {
+      x$lower$bound[j] <- -20
+      bound <- lower_limit
+    }
+
+    current_probability <- crossing(bound)
+    cumulative_lower <- cumulative_lower + current_probability
+    previous_stop <- c(previous_stop, bound)
+  }
+
+  x
+}
+
+# gsJointHarmBounds: jointly derive selective futility, harm, and efficacy bounds ----
+gsJointHarmBounds <- function(x) {
+  if (!any(x$testHarm & !x$testLower)) return(x)
+
+  x$lower$bound <- pmin(x$lower$bound, x$upper$bound)
+  for (iteration in seq_len(100)) {
+    old_bound <- c(x$upper$bound, x$lower$bound, x$harm$bound)
+    x <- gsHarmBoundUpdate(x)
+    x <- gsFutilityBoundUpdate(x)
+
+    if (x$test.type == 7) {
+      probability <- gsHarmProbability(theta = x$theta, d = x)
+      upper <- gsBound1(
+        theta = 0, I = x$n.I, a = probability$stop_bound,
+        probhi = x$upper$spend, tol = x$tol, r = x$r
+      )
+      x$upper$bound <- upper$b
+      x$upper$bound[!x$testUpper] <- 20
+    }
+
+    change <- max(abs(c(x$upper$bound, x$lower$bound, x$harm$bound) - old_bound))
+    if (change <= x$tol) break
+  }
+
+  x
+}
+
 # gsDProb function [sinew] ----
 gsDProb <- function(theta, d) {
+  if (d$test.type %in% c(7, 8)) {
+    probability <- gsHarmProbability(theta = theta, d = d)
+    d$en <- probability$en
+    d$theta <- theta
+    d$upper$prob <- probability$upper
+    d$lower$prob <- probability$lower
+    d$harm$prob <- probability$harm
+    return(d)
+  }
+
   k <- d$k
   n.I <- d$n.I
 
@@ -1803,23 +2015,25 @@ gsApplyTestBounds <- function(x, testBounds) {
     }
   }
 
-  # Recompute crossing probabilities with the final bounds
-  if (x$test.type == 1) {
-    a <- rep(-20, x$k)
-  } else {
-    a <- x$lower$bound
-  }
-  y <- gsprob(x$theta, x$n.I, a, x$upper$bound, r = x$r, overrun = x$overrun)
-  x$upper$prob <- y$probhi
-  x$en <- as.vector(y$en)
-  if (x$test.type > 1) {
-    x$lower$prob <- y$problo
-  }
+  x <- gsJointHarmBounds(x)
 
-  # Recompute harm crossing probabilities
+  # Recompute crossing probabilities with the final bounds
   if (x$test.type %in% c(7, 8)) {
-    y2 <- gsprob(x$theta, x$n.I, x$harm$bound, x$upper$bound, r = x$r)
-    x$harm$prob <- y2$problo
+    probability <- gsHarmProbability(theta = x$theta, d = x)
+    x$upper$prob <- probability$upper
+    x$lower$prob <- probability$lower
+    x$harm$prob <- probability$harm
+    x$en <- probability$en
+  } else if (x$test.type == 1) {
+    a <- rep(-20, x$k)
+    y <- gsprob(x$theta, x$n.I, a, x$upper$bound, r = x$r, overrun = x$overrun)
+    x$upper$prob <- y$probhi
+    x$en <- as.vector(y$en)
+  } else {
+    y <- gsprob(x$theta, x$n.I, x$lower$bound, x$upper$bound, r = x$r, overrun = x$overrun)
+    x$upper$prob <- y$probhi
+    x$lower$prob <- y$problo
+    x$en <- as.vector(y$en)
   }
 
   x

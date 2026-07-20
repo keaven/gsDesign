@@ -596,17 +596,21 @@ gsBoundSummary0 <- function(
   if (x$test.type %in% c(7, 8)) rval$Harm <- round(rval$Harm, digits)
 
   # Mask inactive bounds as NA based on testUpper/testLower/testHarm
+  probability_row <- grepl("^P\\(Cross\\)", rval$Value)
   inactive_upper <- which(gsBoundDisplayInactive(x$upper, x$testUpper))
   if (length(inactive_upper) > 0 && "Efficacy" %in% names(rval)) {
-    rval$Efficacy[analysis_i %in% inactive_upper] <- NA
+    mask <- analysis_i %in% inactive_upper & (!probability_row | x$testUpper[analysis_i])
+    rval$Efficacy[mask] <- NA
   }
   inactive_lower <- which(gsBoundDisplayInactive(x$lower, x$testLower))
   if (length(inactive_lower) > 0 && "Futility" %in% names(rval)) {
-    rval$Futility[analysis_i %in% inactive_lower] <- NA
+    mask <- analysis_i %in% inactive_lower & (!probability_row | x$testLower[analysis_i])
+    rval$Futility[mask] <- NA
   }
   inactive_harm <- which(gsBoundDisplayInactive(x$harm, x$testHarm))
   if (length(inactive_harm) > 0 && "Harm" %in% names(rval)) {
-    rval$Harm[analysis_i %in% inactive_harm] <- NA
+    mask <- analysis_i %in% inactive_harm & (!probability_row | x$testHarm[analysis_i])
+    rval$Harm[mask] <- NA
   }
 
   class(rval) <- c("gsBoundSummary", "data.frame")

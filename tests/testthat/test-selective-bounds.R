@@ -154,6 +154,43 @@ testthat::test_that("testLower selective: sample size targets requested power", 
   }
 })
 
+testthat::test_that("selective futility and harm sizing preserves all analyses", {
+  for (test_type in 7:8) {
+    testthat::expect_no_warning(
+      x <- gsSurv(
+        test.type = test_type,
+        testHarm = c(TRUE, FALSE, FALSE),
+        testLower = c(FALSE, TRUE, TRUE),
+        method = "Schoenfeld",
+        sfharm = sfHSD,
+        sfharmparam = 10
+      )
+    )
+
+    testthat::expect_equal(x$k, 3)
+    testthat::expect_equal(x$testHarm, c(TRUE, FALSE, FALSE))
+    testthat::expect_equal(x$testLower, c(FALSE, TRUE, TRUE))
+    testthat::expect_equal(sum(x$upper$prob[, 2]), 1 - x$beta, tolerance = 2 * x$tol)
+    if (test_type == 7) {
+      testthat::expect_equal(sum(x$upper$prob[, 1]), x$alpha, tolerance = 2 * x$tol)
+    } else {
+      testthat::expect_equal(sum(x$falseposnb), x$alpha, tolerance = 2 * x$tol)
+    }
+    testthat::expect_equal(
+      colSums(x$upper$prob + x$lower$prob + x$harm$prob),
+      c(1, 1), tolerance = 5e-5
+    )
+
+    summary <- gsBoundSummary(toInteger(x), digits = 8)
+    final_crossing <- tail(which(grepl("^P\\(Cross\\)", summary$Value)), 2)
+    testthat::expect_false(anyNA(summary$Harm[final_crossing]))
+    testthat::expect_equal(
+      unname(rowSums(summary[final_crossing, c("Harm", "Futility", "Efficacy")])),
+      c(1, 1), tolerance = 1e-5
+    )
+  }
+})
+
 testthat::test_that("testLower = c(FALSE, TRUE, FALSE) with test.type 3", {
   x <- gsDesign(k = 3, test.type = 3, testLower = c(FALSE, TRUE, FALSE))
   testthat::expect_equal(x$lower$bound[1], -EXTREMEZ)

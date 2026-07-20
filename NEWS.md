@@ -2,8 +2,10 @@
 
 ## Bug fixes
 
-- Sample-size derivation now accounts for analyses where futility testing is
-  skipped, avoiding power above the requested target (#287).
+- Sample-size derivation now accounts for analyses where futility or harm
+  testing is skipped, avoiding power above the requested target. Harm,
+  futility, and efficacy crossing probabilities are reported as mutually
+  exclusive outcomes (#287).
 
 # gsDesign 3.10.1
 
