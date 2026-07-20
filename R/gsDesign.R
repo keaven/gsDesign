@@ -513,6 +513,7 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
 
   # check parameters other than spending functions
   x <- gsDErrorCheck(x)
+  size_design <- max(x$n.I) == 0
 
   # --- Validate and expand testUpper, testLower, testHarm ---
   testBounds <- gsTestBoundsCheck(x$k, x$test.type, testUpper, testLower, testHarm)
@@ -611,7 +612,30 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
   if (x$nFixSurv > 0) x$nSurv <- ceiling(x$nFixSurv * x$n.I[x$k] / n.fix / 2) * 2
 
   # --- Apply testUpper/testLower/testHarm: recompute bounds at active analyses ---
-  x <- gsApplyTestBounds(x, testBounds)
+  x_all_bounds <- x
+  x <- gsApplyTestBounds(x_all_bounds, testBounds)
+
+  # When analyses are skipped, solve information using the bounds that will
+  # actually be tested. The usual beta-spending sizing assumes all planned
+  # lower bounds are present, so applying selective bounds only afterward can
+  # leave power above its requested target.
+  selective <- x$test.type %in% c(3, 4, 7, 8) &&
+    !all(testBounds$testLower)
+  if (size_design && selective) {
+    target_power <- 1 - x$beta
+    power_diff <- function(scale, return_design = FALSE) {
+      candidate <- x_all_bounds
+      candidate$n.I <- x_all_bounds$n.I * scale
+      if (candidate$maxn.IPlan > 0) {
+        candidate$maxn.IPlan <- candidate$n.I[candidate$k]
+      }
+      candidate <- gsApplyTestBounds(candidate, testBounds)
+      if (return_design) return(candidate)
+      sum(candidate$upper$prob[, 2]) - target_power
+    }
+    scale <- stats::uniroot(power_diff, interval = c(0.2, 2), tol = x$tol)$root
+    x <- power_diff(scale, return_design = TRUE)
+  }
 
   x
 }

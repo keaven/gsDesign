@@ -139,6 +139,21 @@ testthat::test_that("testLower selective: cumulative futility prob does not incr
   testthat::expect_equal(cum_fut_h1[1], cum_fut_h1[3], tolerance = 1e-8)
 })
 
+testthat::test_that("testLower selective: sample size targets requested power", {
+  for (test_type in c(3, 4, 7, 8)) {
+    x <- gsDesign(
+      k = 3, test.type = test_type, alpha = 0.025, beta = 0.1,
+      testLower = c(TRUE, FALSE, FALSE)
+    )
+
+    testthat::expect_equal(
+      sum(x$upper$prob[, 2]), 1 - x$beta,
+      tolerance = x$tol * 2,
+      info = paste("test.type", test_type)
+    )
+  }
+})
+
 testthat::test_that("testLower = c(FALSE, TRUE, FALSE) with test.type 3", {
   x <- gsDesign(k = 3, test.type = 3, testLower = c(FALSE, TRUE, FALSE))
   testthat::expect_equal(x$lower$bound[1], -EXTREMEZ)
@@ -509,8 +524,8 @@ testthat::test_that("Binding test.type 3: alpha preserved when skipping lower bo
   d_sel <- gsDesign(k = 3, test.type = 3, alpha = 0.025, beta = 0.1,
                     sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
                     testLower = c(TRUE, FALSE, FALSE))
-  # Sample size must be identical
-  testthat::expect_equal(d_sel$n.I, d_base$n.I)
+  testthat::expect_lt(max(d_sel$n.I), max(d_base$n.I))
+  testthat::expect_equal(sum(d_sel$upper$prob[, 2]), 0.9, tolerance = 2e-6)
   # Alpha must be exactly 0.025 for binding design
   alpha_sel <- sum(d_sel$upper$prob[, 1])
   testthat::expect_equal(alpha_sel, 0.025, tolerance = 1e-6)
@@ -534,7 +549,8 @@ testthat::test_that("Binding test.type 3: alpha preserved with mixed skips", {
                     sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
                     testUpper = c(FALSE, TRUE, TRUE),
                     testLower = c(TRUE, FALSE, TRUE))
-  testthat::expect_equal(d_sel$n.I, d_base$n.I)
+  testthat::expect_lt(max(d_sel$n.I), max(d_base$n.I))
+  testthat::expect_equal(sum(d_sel$upper$prob[, 2]), 0.9, tolerance = 2e-6)
   alpha_sel <- sum(d_sel$upper$prob[, 1])
   testthat::expect_equal(alpha_sel, 0.025, tolerance = 1e-6)
 })
@@ -545,7 +561,8 @@ testthat::test_that("Non-binding test.type 4: non-binding alpha preserved when s
   d_sel <- gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1,
                     sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
                     testLower = c(TRUE, FALSE, FALSE))
-  testthat::expect_equal(d_sel$n.I, d_base$n.I)
+  testthat::expect_lt(max(d_sel$n.I), max(d_base$n.I))
+  testthat::expect_equal(sum(d_sel$upper$prob[, 2]), 0.9, tolerance = 2e-6)
   # Non-binding alpha (computed with lower = -20) must equal 0.025
   nb_alpha <- sum(gsprob(0, d_sel$n.I, rep(-20, 3), d_sel$upper$bound, r = d_sel$r)$probhi)
   testthat::expect_equal(nb_alpha, 0.025, tolerance = 1e-6)

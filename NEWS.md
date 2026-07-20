@@ -1,3 +1,10 @@
+# gsDesign (development version)
+
+## Bug fixes
+
+- Sample-size derivation now accounts for analyses where futility testing is
+  skipped, avoiding power above the requested target (#287).
+
 # gsDesign 3.10.1
 
 ## Bug fixes
