@@ -7,7 +7,7 @@ test_that("toBinomialExact validates inputs", {
     lambdaC = 0.1, hr = 0.7, hr0 = 1, eta = 0.01,
     gamma = 5, R = 6, T = 12, minfup = 6
   )
-  expect_error(toBinomialExact(x_bad), "test.type must be 1 or 4")
+  expect_error(toBinomialExact(x_bad), "test.type must be 1, 4, or 6")
 
   x <- gsSurv(
     k = 2, test.type = 4, alpha = 0.025, beta = 0.1,

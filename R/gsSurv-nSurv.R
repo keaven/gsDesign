@@ -95,6 +95,11 @@
 #'
 #' The input to \code{gsSurv} is a combination of the input to \code{nSurv()}
 #' and \code{gsDesign()}.
+#' The original call is stored in \code{call}. The \code{inputs} component
+#' retains evaluated survival-model inputs used for printing and the applicable
+#' \code{testUpper}, \code{testLower}, and \code{testHarm} arguments. The
+#' normalized testing schedules used by the design are stored directly in the
+#' corresponding top-level components.
 #' When \code{T = NULL} and \code{minfup} is specified, \code{gsSurv()}
 #' preserves the input accrual rate and minimum follow-up, applies the group
 #' sequential design, and solves the accrual duration needed for the final

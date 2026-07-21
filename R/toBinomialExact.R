@@ -15,34 +15,49 @@
 #'   \code{observedEvents} is supplied, or to the planned design timing
 #'   otherwise.
 #' @param lsTime Optional lower spending-time override for \code{test.type = 4}
+#'   or \code{6}
 #'   (same length and monotonicity requirements as \code{usTime}). If
 #'   \code{NULL}, it defaults to \code{usTime}.
 #' @param maxSpend Logical scalar. If `TRUE`, force full alpha spending (and, for
-#'   `test.type = 4`, full beta spending) at the final analysis even when
+#'   `test.type = 4`, full beta spending; for `test.type = 6`, full lower-bound
+#'   spending under the null) at the final analysis even when
 #'   `observedEvents[k] < x$maxn.IPlan`. This keeps earlier analysis spending
 #'   unchanged and applies the override only at the last look.
 #' 
 #' @details
-#' Only \code{test.type} 1 (one-sided) and \code{test.type} 4
-#' (non-binding futility) are supported. Other test types (including
-#' \code{test.type} 7 and 8 with harm bounds) will produce
-#' an error.
+#' Test types 1 (one-sided), 4 (non-binding beta-spending futility), and 6
+#' (non-binding lower-bound spending under the null) are supported for full
+#' conversion.
+#' The current \code{gsBinomialExact} object contains one lower efficacy bound
+#' and one upper stopping bound. Consequently, it cannot represent the
+#' separate futility and harm bounds required by test types 7 and 8. Binding
+#' designs (types 2, 3, 5, and 7) are outside the non-binding exact-efficacy
+#' framework. Exact repeated and sequential efficacy
+#' p-values can nevertheless be computed for non-binding types 1, 4, 6, and 8
+#' with \code{repeatedPValueBinomialExact()} and
+#' \code{sequentialPValueBinomialExact()}, which intentionally ignore
+#' non-binding lower and harm bounds.
 #'
 #' The exact binomial routine \code{gsBinomialExact} has requirements that may not be satisfied
 #' by the initial asymptotic approximation. 
 #' Thus, the approximations are updated to satisfy the following requirements of \code{gsBinomialExact}:
 #' \code{a} (the efficacy bound) must be positive, non-decreasing, and strictly less than n.I
-#' \code{b} (the futility bound) must be positive, non-decreasing, strictly greater than a
+#' \code{b} (the upper event-count stopping bound for futility or the Type 6
+#' lower bound) must be positive, non-decreasing, and strictly greater than a
 #' \code{n.I - b} must be non-decreasing and >= 0
 #'
 #' With `observedEvents`, spending times are based on
 #' \code{observedEvents / x$maxn.IPlan}. If \code{maxSpend = TRUE}, the final
 #' spending time is set to 1 so all remaining spending is used at the last look.
 #' If \code{x$testLower} is present (for example from \code{gsSurv()} with
-#' selective futility looks), futility spending is flattened at analyses where
-#' \code{testLower = FALSE}.
+#' selective lower-bound looks), lower-bound spending is flattened at analyses
+#' where \code{testLower = FALSE}.
 #' 
-#' @return An object of class \code{gsBinomialExact}.
+#' @return An object of class \code{gsBinomialExact}. The returned object also
+#'   records `test.type`, `alpha`, applicable `astar`, and `testLower`. For
+#'   `test.type = 6`, the exact object's upper event-count bound represents the
+#'   non-binding lower stopping bound, with its first probability column
+#'   calibrated under the null hypothesis.
 #'
 #' @seealso \code{\link{gsBinomialExact}}
 #'
@@ -84,7 +99,22 @@
 #' toBinomialExact(x, observedEvents = c(20, 55, 75), maxSpend = TRUE)
 toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NULL, lsTime = NULL, maxSpend = FALSE) {
   if (!inherits(x, "gsSurv")) stop("toBinomialExact must have class gsSurv as input")
-  if (x$test.type != 1 && x$test.type != 4) stop("toBinomialExact input test.type must be 1 or 4")
+  if (!(x$test.type %in% c(1, 4, 6))) {
+    reason <- switch(
+      as.character(x$test.type),
+      `2` = "symmetric two-sided boundaries are not represented by the exact lower-tail efficacy conversion",
+      `3` = "binding futility bounds are outside the non-binding exact-efficacy framework",
+      `5` = "binding lower bounds are outside the non-binding exact-efficacy framework",
+      `7` = "binding futility and harm bounds are outside the non-binding exact-efficacy framework",
+      `8` = "gsBinomialExact has only two boundaries and cannot separately represent futility and harm",
+      "this test type is not supported"
+    )
+    stop(
+      "toBinomialExact input test.type must be 1, 4, or 6; test.type = ",
+      x$test.type, " is unsupported because ", reason,
+      call. = FALSE
+    )
+  }
   if (is.null(alpha)) {
     alpha <- x$alpha
   } else if (!is.numeric(alpha) || length(alpha) != 1 || !is.finite(alpha) || alpha <= 0 || alpha >= 1) {
@@ -93,8 +123,17 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
   if (!is.logical(maxSpend) || length(maxSpend) != 1 || is.na(maxSpend)) {
     stop("toBinomialExact: maxSpend must be TRUE or FALSE")
   }
+  astar_tracks_complement <- x$test.type == 6 &&
+    isTRUE(all.equal(x$astar, 1 - x$alpha, tolerance = 1e-7))
+  effective_astar <- if (astar_tracks_complement) 1 - alpha else x$astar
+  if (x$test.type == 6 && effective_astar > 1 - alpha) {
+    stop(
+      "toBinomialExact: alpha override requires astar <= 1 - alpha for test.type = 6",
+      call. = FALSE
+    )
+  }
   if (x$test.type == 1 && !is.null(lsTime)) {
-    stop("toBinomialExact: lsTime can only be specified for test.type = 4")
+    stop("toBinomialExact: lsTime can only be specified for test.type = 4 or 6")
   }
   # Round interim sample size (or events for gsSurv object)
   xx <- if (max(round(x$n.I) != x$n.I)) toInteger(x) else x
@@ -117,7 +156,7 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
       test.type = x$test.type,
       alpha = alpha,
       beta = x$beta,
-      astar = x$astar,
+      astar = effective_astar,
       sfu = x$upper$sf,
       sfupar = x$upper$param,
       sfl = x$lower$sf,
@@ -164,29 +203,36 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
   if (sum(timing >= 1) > 1) {
     stop("toBinomialExact: usTime must have at most 1 value >= 1")
   }
-  if (x$test.type == 4 && sum(timingl >= 1) > 1) {
+  if (x$test.type %in% c(4, 6) && sum(timingl >= 1) > 1) {
     stop("toBinomialExact: lsTime must have at most 1 value >= 1")
   }
   alpha_spend <- xx$upper$sf(alpha = alpha, t = timing, param = xx$upper$param)$spend
   if (x$test.type != 1) {
-    # Upper bound probabilities are for futility
-    # Compute nominal p-values under H0 for futility and corresponding inverse binomial under H1
+    # Upper event-count probabilities represent the non-binding lower stopping
+    # bound (beta-spending futility for Type 4; H0 spending for Type 6).
     b <- qbinom(p = pnorm(-xx$lower$bound), size = counts, prob = p0)
-    init_approx$b <- b # save initial futility bound approximation
+    init_approx$b <- b # save initial upper event-count bound approximation
 
     # check that b is non-decreasing, > a, and n.I - b is non-decreasing
     b <- pmin(b, counts + 1)
     b <- pmax(a + 1, b)
     b <- pmin(b, counts - dplyr::lag(counts, def = 0) + dplyr::lag(b, def = 1))
-    # Compute target beta-spending
-    beta_spend <- xx$lower$sf(alpha = xx$beta, t = timingl, param = xx$lower$param)$spend
+    # Type 4 targets beta spending under H1. Type 6 targets lower-bound
+    # spending under H0.
+    lower_spend_total <- if (x$test.type == 4) xx$beta else xx$astar
+    lower_spend <- xx$lower$sf(
+      alpha = lower_spend_total,
+      t = timingl,
+      param = xx$lower$param
+    )$spend
+    active_lower <- rep(TRUE, k)
     if (!is.null(x$testLower)) {
       active_lower <- x$testLower
       if (length(active_lower) == 1) active_lower <- rep(active_lower, k)
       if (length(active_lower) == k) {
         for (i in seq_len(k)) {
           if (!isTRUE(active_lower[i])) {
-            beta_spend[i] <- if (i == 1) 0 else beta_spend[i - 1]
+            lower_spend[i] <- if (i == 1) 0 else lower_spend[i - 1]
           }
         }
       }
@@ -250,8 +296,8 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
         k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)],
         a = a[1:max(j, 2)], b = b[1:max(j, 2)]
       )$upper$prob[1:j])
-      if (upperprob < beta_spend[j]) {
-        while (upperprob < beta_spend[j]) {
+      if (upperprob < lower_spend[j]) {
+        while (upperprob < lower_spend[j]) {
           b[j] <- btem[j]
           if (btem[j] == bmin) break # only lower if range allows
           btem[j] <- btem[j] - 1
@@ -261,8 +307,8 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
           )$upper$prob[1:j])
         }
         
-      } else if (upperprob > beta_spend[j]) {
-        while (upperprob > beta_spend[j] && 
+      } else if (upperprob > lower_spend[j]) {
+        while (upperprob > lower_spend[j] &&
                b[j] < bmax) {
           b[j] <- b[j] + 1
           upperprob <- sum(gsBinomialExact(
@@ -271,10 +317,68 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
           )$upper$prob[1:j])
         }
       }
+    } else if (x$test.type == 6) {
+      # Type 6 uses the same exact two-bound recursion, but chooses the upper
+      # event-count boundary to spend under H0 rather than under H1.
+      bmin <- a[j] + 1
+      bmin <- ifelse(j == 1, bmin, max(bmin, b[j - 1]))
+      bmax <- counts[j] + 1
+      bmax <- ifelse(
+        j == 1,
+        bmax,
+        min(bmax, counts[j] - counts[j - 1] + b[j - 1])
+      )
+      if (bmin > bmax) {
+        stop(paste("bmin > bmax: bmin =", bmin, "bmax =", bmax, "j =", j))
+      }
+
+      # No boundary crossing is allowed at an inactive lower look.
+      if (!isTRUE(active_lower[j])) {
+        b[j] <- bmax
+      } else if (j == k && astar_tracks_complement && timingl[j] >= 1) {
+        # With default astar = 1 - alpha and full spending, use the smallest
+        # allowable upper bound so the final decision regions are exhaustive
+        # to the extent permitted by monotone integer boundaries.
+        b[j] <- bmin
+      } else {
+        candidates <- seq.int(bmin, bmax)
+        upper_probability <- vapply(candidates, function(candidate) {
+          if (j == 1) {
+            return(stats::pbinom(
+              q = candidate - 1,
+              size = counts[j],
+              prob = p0,
+              lower.tail = FALSE
+            ))
+          }
+          b_candidate <- b[seq_len(j)]
+          b_candidate[j] <- candidate
+          sum(gsBinomialExact(
+            k = j,
+            theta = p0,
+            n.I = counts[seq_len(j)],
+            a = a[seq_len(j)],
+            b = b_candidate
+          )$upper$prob[, 1])
+        }, numeric(1))
+        allowed <- which(
+          upper_probability <= lower_spend[j] * (1 + 1e-10) +
+            .Machine$double.xmin
+        )
+        b[j] <- if (length(allowed) > 0) {
+          candidates[allowed[which.max(upper_probability[allowed])]]
+        } else {
+          bmax
+        }
+      }
     }
   }
   xxxx <- gsBinomialExact(k = k, theta = c(p0, p1), n.I = counts, a = a, b = b)
   xxxx$init_approx <- init_approx
+  xxxx$test.type <- x$test.type
+  xxxx$alpha <- alpha
+  xxxx$astar <- if (x$test.type == 6) xx$astar else NULL
+  xxxx$testLower <- if (x$test.type == 1) NULL else active_lower
   return(xxxx)
 }
 

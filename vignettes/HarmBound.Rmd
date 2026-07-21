@@ -178,14 +178,15 @@ bounds <- data.frame(
 kable(bounds, caption = "Z-value boundaries at each analysis")
 ```
 
-**Decision rules at each analysis:**
+**Decision rules at an analysis where all three bounds are active:**
 
 - If $Z >$ efficacy bound: Stop for efficacy (reject $H_0$).
 - If futility bound $< Z \leq$ efficacy bound: Continue the trial.
 - If harm bound $< Z \leq$ futility bound: Stop for futility.
 - If $Z \leq$ harm bound: Stop for harm.
 
-Note that the harm bound is always at or below the futility bound.
+When both lower bounds are active, the harm bound is always at or below the futility bound.
+If futility is skipped but harm is tested, the harm bound is the sole active lower stopping boundary.
 At early analyses, the harm and futility bounds may coincide when the harm spending function has not yet allocated sufficient spending to differentiate them.
 
 ### Boundary crossing probabilities
@@ -225,7 +226,7 @@ plot(x8)
 
 The power plot (`plottype = 2`) shows cumulative boundary crossing probabilities as a function of the treatment effect.
 Three sets of lines appear: upper bound (cumulative efficacy crossing probability), 1-Futility bound, and 1-Harm bound.
-The harm lines are above the futility lines because the probability of crossing the harm bound is less than or equal to the probability of crossing the futility bound.
+Harm and futility are displayed as mutually exclusive stopping outcomes; neither curve should be interpreted as containing the other.
 We note that when the underlying treatment effect favors control, the high probability of crossing the harm bound indicates that the harm bound is sensitive and serves its intended purpose
 
 ```{r, fig.cap = "Boundary crossing probabilities for non-binding harm bound design"}
@@ -323,11 +324,17 @@ gsBoundSummary(x7)
 ### Efficacy bounds at alternate $\alpha$ levels
 
 The `gsBoundSummary()` function accepts an `alpha` argument to display efficacy bounds at one or more alternate $\alpha$ levels alongside the original design.
+Each alternate-alpha column retains the `testUpper` schedule from the design, so an efficacy analysis that was skipped remains inactive and every efficacy characteristic at that analysis, including cumulative crossing probability, is `NA`.
 Here we show the non-binding design (`x8`) with efficacy bounds for both $\alpha = 0.0125$ (the design level) and $\alpha = 0.025$:
 
 ```{r}
 gsBoundSummary(x8, alpha = 0.025)
 ```
+
+Alternate-alpha summaries are supported for `test.type = 8`, where both
+futility and harm bounds are non-binding. They are not supported for
+`test.type = 7`: a binding harm or futility bound is outside the non-binding
+sequential-p-value framework used for Maurer--Bretz graphical multiple testing.
 
 ## Practical considerations
 
@@ -350,8 +357,8 @@ This controls the probability of a false harm signal.
 
 ### Harm bound capping
 
-In the implementation, the harm bound is automatically **capped** so it never exceeds the futility bound.
-This ensures the ordering: harm bound $\leq$ futility bound $\leq$ efficacy bound at every analysis.
+In the implementation, the harm bound is automatically **capped** so it never exceeds the futility bound when both are active.
+This ensures the ordering harm bound $\leq$ futility bound $\leq$ efficacy bound at analyses where all three are tested, while allowing harm to be the active lower boundary when futility is skipped.
 
 ### When to use `test.type = 7` vs. `test.type = 8`
 

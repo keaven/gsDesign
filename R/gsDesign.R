@@ -624,11 +624,12 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
   x <- gsApplyTestBounds(x_all_bounds, testBounds)
 
   # When analyses are skipped, solve information using the bounds that will
-  # actually be tested. The usual beta-spending sizing assumes all planned
-  # lower bounds are present, so applying selective bounds only afterward can
-  # leave power above its requested target.
-  selective <- x$test.type %in% c(3, 4, 7, 8) &&
+  # actually be tested. Applying selective efficacy or lower bounds only after
+  # the usual sizing calculation can leave power above its requested target.
+  selective_upper <- !all(testBounds$testUpper)
+  selective_lower <- x$test.type %in% c(3, 4, 7, 8) &&
     !all(testBounds$testLower)
+  selective <- selective_upper || selective_lower
   if (size_design && selective) {
     target_power <- 1 - x$beta
     power_diff <- function(scale, return_design = FALSE) {
@@ -649,7 +650,7 @@ gsDesign <- function(k = 3, test.type = 4, alpha = 0.025, beta = 0.1, astar = 0,
       upper_diff <- power_diff(upper_scale)
     }
     if (upper_diff < 0) {
-      stop("Unable to derive sample size with selective lower bounds")
+      stop("Unable to derive sample size with selective bounds")
     }
     scale <- stats::uniroot(power_diff, interval = c(0.2, upper_scale), tol = x$tol)$root
     x <- power_diff(scale, return_design = TRUE)

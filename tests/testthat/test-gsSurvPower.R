@@ -1035,6 +1035,32 @@ test_that("gsSurvPower matches gsBoundSummary for alternate alpha", {
   expect_equal(pwr_a05$upper$bound, gs_check$upper$bound, tolerance = 1e-3)
 })
 
+test_that("alternate alpha preserves a selective efficacy schedule", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    lambdaC = log(2) / 6, hr = 0.6, eta = 0.01,
+    gamma = 10, R = 12, minfup = 18, T = 30,
+    testUpper = c(FALSE, TRUE, TRUE)
+  )
+  pwr_a05 <- gsSurvPower(
+    x = design, alpha = 0.05,
+    targetEvents = design$n.I
+  )
+
+  summary_a05 <- gsBoundSummary(design, alpha = 0.05, digits = 8)
+  z_rows <- which(summary_a05$Value == "Z")
+
+  expect_equal(pwr_a05$testUpper, c(FALSE, TRUE, TRUE))
+  expect_equal(pwr_a05$upper$bound[1], 20)
+  expect_lt(max(pwr_a05$upper$prob[1, ]), 1e-20)
+  expect_true(is.na(summary_a05[["\u03b1=0.05"]][z_rows[1]]))
+  expect_equal(
+    pwr_a05$upper$bound[2:3],
+    summary_a05[["\u03b1=0.05"]][z_rows[2:3]],
+    tolerance = 1e-3
+  )
+})
+
 test_that("sided defaults to x$sided when stored on gsSurvPower output", {
   pwr1 <- gsSurvPower(
     k = 2, test.type = 4, alpha = 0.05, sided = 2,

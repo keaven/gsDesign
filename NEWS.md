@@ -1,11 +1,29 @@
 # gsDesign (development version)
 
+## New features
+
+- Sequential p-values, including exact-binomial repeated and sequential
+  efficacy p-values, now support `test.type = 8` by ignoring its non-binding
+  futility and harm bounds. Exact-binomial efficacy p-values also support
+  non-binding `test.type = 6`. `toBinomialExact()` now provides full two-bound
+  conversion for test types 1, 4, and 6; for type 6, the upper event-count
+  boundary targets lower-bound spending under the null hypothesis. It also
+  explains why the remaining test types are not supported (#287).
+
 ## Bug fixes
 
-- Sample-size derivation now accounts for analyses where futility or harm
-  testing is skipped, avoiding power above the requested target. Harm,
+- Sample-size derivation now accounts for analyses where efficacy, futility,
+  or harm testing is skipped, avoiding power above the requested target. Harm,
   futility, and efficacy crossing probabilities are reported as mutually
-  exclusive outcomes (#287).
+  exclusive outcomes. Alternate-alpha summaries and power calculations retain
+  the planned efficacy testing schedule, and survival-design inputs retain the
+  applicable testing flags. `gsBoundSummary()` reports every characteristic,
+  including cumulative crossing probability, as `NA` when its bound is not
+  tested at an analysis (#287).
+- Alternate-alpha summaries are now limited to one-sided and non-binding test
+  types 1, 4, 6, and 8. Binding test type 7 is no longer presented as
+  compatible with the Maurer--Bretz graphical multiple-testing framework
+  (#287).
 
 # gsDesign 3.10.1
 

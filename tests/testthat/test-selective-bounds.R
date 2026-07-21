@@ -154,6 +154,47 @@ testthat::test_that("testLower selective: sample size targets requested power", 
   }
 })
 
+testthat::test_that("testUpper selective: sample size targets requested power", {
+  for (test_type in 3:8) {
+    x <- gsDesign(
+      k = 3, test.type = test_type, alpha = 0.025, beta = 0.1,
+      testUpper = c(FALSE, TRUE, TRUE)
+    )
+
+    testthat::expect_equal(
+      sum(x$upper$prob[, 2]), 1 - x$beta,
+      tolerance = 2 * x$tol,
+      info = paste("test.type", test_type)
+    )
+  }
+})
+
+testthat::test_that("testUpper selective: survival sizing targets requested power", {
+  for (test_type in 7:8) {
+    x <- gsSurv(
+      test.type = test_type,
+      testUpper = c(FALSE, TRUE, TRUE),
+      method = "Schoenfeld",
+      sfharm = sfHSD,
+      sfharmparam = 10,
+      sfupar = 10
+    )
+
+    testthat::expect_equal(x$k, 3)
+    testthat::expect_equal(x$testUpper, c(FALSE, TRUE, TRUE))
+    testthat::expect_equal(
+      sum(x$upper$prob[, 2]), 1 - x$beta,
+      tolerance = 2 * x$tol,
+      info = paste("test.type", test_type)
+    )
+    if (test_type == 7) {
+      testthat::expect_equal(sum(x$upper$prob[, 1]), x$alpha, tolerance = 2 * x$tol)
+    } else {
+      testthat::expect_equal(sum(x$falseposnb), x$alpha, tolerance = 2 * x$tol)
+    }
+  }
+})
+
 testthat::test_that("selective futility and harm sizing preserves all analyses", {
   for (test_type in 7:8) {
     testthat::expect_no_warning(
@@ -181,12 +222,17 @@ testthat::test_that("selective futility and harm sizing preserves all analyses",
       c(1, 1), tolerance = 5e-5
     )
 
-    summary <- gsBoundSummary(toInteger(x), digits = 8)
+    xi <- toInteger(x)
+    summary <- gsBoundSummary(xi, digits = 8)
     final_crossing <- tail(which(grepl("^P\\(Cross\\)", summary$Value)), 2)
-    testthat::expect_false(anyNA(summary$Harm[final_crossing]))
+    testthat::expect_true(all(is.na(summary$Harm[final_crossing])))
     testthat::expect_equal(
-      unname(rowSums(summary[final_crossing, c("Harm", "Futility", "Efficacy")])),
-      c(1, 1), tolerance = 1e-5
+      unname(summary$Futility[final_crossing]),
+      unname(apply(xi$lower$prob, 2, cumsum)[xi$k, ]), tolerance = 1e-5
+    )
+    testthat::expect_equal(
+      unname(summary$Efficacy[final_crossing]),
+      unname(apply(xi$upper$prob, 2, cumsum)[xi$k, ]), tolerance = 1e-5
     )
   }
 })
@@ -291,31 +337,85 @@ testthat::test_that("testHarm flags stored for test.type 7", {
   testthat::expect_equal(x$testHarm, c(TRUE, TRUE, FALSE))
 })
 
-# ---- gsBoundSummary NA masking ----
+testthat::test_that("gsSurv inputs retain applicable testing schedules", {
+  x4 <- gsSurv(
+    test.type = 4, method = "Schoenfeld",
+    testLower = c(FALSE, TRUE, TRUE),
+    testHarm = c(TRUE, FALSE, TRUE)
+  )
+  testthat::expect_equal(x4$inputs$testUpper, TRUE)
+  testthat::expect_equal(x4$inputs$testLower, c(FALSE, TRUE, TRUE))
+  testthat::expect_false("testHarm" %in% names(x4$inputs))
+  testthat::expect_equal(x4$testHarm, rep(FALSE, 3))
 
-testthat::test_that("gsBoundSummary shows NA for inactive futility bounds", {
-  x <- gsDesign(k = 3, test.type = 4, testLower = c(TRUE, FALSE, FALSE))
-  r <- gsBoundSummary(x)
-  # Use Z-value rows to identify each analysis
-  z_rows <- which(r$Value == "Z")
-  fut_vals <- r$Futility
-  # IA1 futility should not be NA (active)
-  testthat::expect_false(is.na(fut_vals[z_rows[1]]))
-  # IA2 and Final futility should be NA (inactive)
-  testthat::expect_true(is.na(fut_vals[z_rows[2]]))
-  testthat::expect_true(is.na(fut_vals[z_rows[3]]))
+  x7 <- gsSurv(
+    test.type = 7, method = "Schoenfeld",
+    testUpper = c(FALSE, TRUE, TRUE),
+    testLower = c(FALSE, TRUE, TRUE),
+    testHarm = c(TRUE, FALSE, FALSE)
+  )
+  testthat::expect_equal(x7$inputs$testUpper, c(FALSE, TRUE, TRUE))
+  testthat::expect_equal(x7$inputs$testLower, c(FALSE, TRUE, TRUE))
+  testthat::expect_equal(x7$inputs$testHarm, c(TRUE, FALSE, FALSE))
 })
 
-testthat::test_that("gsBoundSummary shows NA for inactive efficacy bounds", {
+# ---- gsBoundSummary NA masking ----
+
+.summary_analysis_rows <- function(summary, analysis) {
+  starts <- which(summary$Value == "Z")
+  stopifnot(analysis >= 1, analysis <= length(starts))
+  end <- if (analysis < length(starts)) starts[analysis + 1] - 1 else nrow(summary)
+  seq.int(starts[analysis], end)
+}
+
+testthat::test_that("gsBoundSummary shows all characteristics as NA for inactive futility bounds", {
+  x <- gsDesign(k = 3, test.type = 4, testLower = c(TRUE, FALSE, FALSE))
+  r <- gsBoundSummary(x)
+  testthat::expect_false(is.na(r$Futility[.summary_analysis_rows(r, 1)[1]]))
+  testthat::expect_true(all(is.na(r$Futility[.summary_analysis_rows(r, 2)])))
+  testthat::expect_true(all(is.na(r$Futility[.summary_analysis_rows(r, 3)])))
+})
+
+testthat::test_that("gsBoundSummary shows all characteristics as NA for inactive efficacy bounds", {
   x <- gsDesign(k = 3, test.type = 4, testUpper = c(FALSE, TRUE, TRUE))
   r <- gsBoundSummary(x)
-  z_rows <- which(r$Value == "Z")
-  eff_vals <- r$Efficacy
-  # IA1 efficacy should be NA (inactive)
-  testthat::expect_true(is.na(eff_vals[z_rows[1]]))
-  # IA2 and Final efficacy should NOT be NA
-  testthat::expect_false(is.na(eff_vals[z_rows[2]]))
-  testthat::expect_false(is.na(eff_vals[z_rows[3]]))
+  testthat::expect_true(all(is.na(r$Efficacy[.summary_analysis_rows(r, 1)])))
+  testthat::expect_false(is.na(r$Efficacy[.summary_analysis_rows(r, 2)[1]]))
+  testthat::expect_false(is.na(r$Efficacy[.summary_analysis_rows(r, 3)[1]]))
+})
+
+testthat::test_that("alternate alpha preserves inactive efficacy analyses", {
+  for (test_type in c(4, 6, 8)) {
+    x <- gsDesign(
+      k = 3, test.type = test_type,
+      testUpper = c(FALSE, TRUE, TRUE)
+    )
+    summary <- gsBoundSummary(x, alpha = 0.05, digits = 8)
+    alternate_alpha <- setdiff(
+      grep("^\u03b1=", names(summary), value = TRUE),
+      paste0("\u03b1=", x$alpha)
+    )
+    ia1_rows <- .summary_analysis_rows(summary, 1)
+    alpha_cols <- grep("^\u03b1=", names(summary), value = TRUE)
+
+    testthat::expect_length(alternate_alpha, 1)
+    testthat::expect_true(
+      all(is.na(as.matrix(summary[ia1_rows, alpha_cols, drop = FALSE]))),
+      info = paste("test.type", test_type)
+    )
+    testthat::expect_true(all(x$upper$prob[1, ] < 1e-10))
+  }
+})
+
+testthat::test_that("alternate alpha is not offered for binding test.type 7", {
+  x <- gsDesign(k = 3, test.type = 7)
+  baseline <- gsBoundSummary(x)
+
+  testthat::expect_message(
+    alternate <- gsBoundSummary(x, alpha = 0.05),
+    "non-binding test.type 1, 4, 6, and 8"
+  )
+  testthat::expect_identical(alternate, baseline)
 })
 
 testthat::test_that("gsBoundSummary works with exclude = NULL", {
@@ -327,19 +427,32 @@ testthat::test_that("gsBoundSummary works with exclude = NULL", {
   testthat::expect_true(nrow(r) > nrow(r_default))
 })
 
-testthat::test_that("gsBoundSummary shows NA for inactive harm bounds", {
+testthat::test_that("gsBoundSummary shows all characteristics as NA for inactive harm bounds", {
   x <- gsDesign(k = 3, test.type = 8, alpha = 0.025, beta = 0.1, astar = 0.05,
     testHarm = c(TRUE, TRUE, FALSE)
   )
   r <- gsBoundSummary(x)
   testthat::expect_true("Harm" %in% names(r))
-  z_rows <- which(r$Value == "Z")
-  harm_vals <- r$Harm
-  # IA1 and IA2 harm should not be NA (active)
-  testthat::expect_false(is.na(harm_vals[z_rows[1]]))
-  testthat::expect_false(is.na(harm_vals[z_rows[2]]))
-  # Final harm should be NA (inactive)
-  testthat::expect_true(is.na(harm_vals[z_rows[3]]))
+  testthat::expect_false(is.na(r$Harm[.summary_analysis_rows(r, 1)[1]]))
+  testthat::expect_false(is.na(r$Harm[.summary_analysis_rows(r, 2)[1]]))
+  testthat::expect_true(all(is.na(r$Harm[.summary_analysis_rows(r, 3)])))
+})
+
+testthat::test_that("gsBoundSummary fully masks skipped survival bounds", {
+  x <- gsSurv(
+    test.type = 7,
+    testHarm = c(TRUE, FALSE, FALSE),
+    testLower = c(FALSE, TRUE, TRUE),
+    method = "Schoenfeld",
+    sfharm = sfHSD,
+    sfharmparam = 10
+  )
+  r <- gsBoundSummary(toInteger(x), digits = 8)
+
+  testthat::expect_true(all(is.na(r$Futility[.summary_analysis_rows(r, 1)])))
+  testthat::expect_true(all(is.na(r$Harm[.summary_analysis_rows(r, 2)])))
+  testthat::expect_true(all(is.na(r$Harm[.summary_analysis_rows(r, 3)])))
+  testthat::expect_gt(sum(x$harm$prob[, 2]), 0)
 })
 
 # ---- print.gsDesign NA masking ----
@@ -568,13 +681,11 @@ testthat::test_that("Binding test.type 3: alpha preserved when skipping lower bo
   testthat::expect_equal(alpha_sel, 0.025, tolerance = 1e-6)
 })
 
-testthat::test_that("Binding test.type 3: alpha preserved when skipping upper bounds", {
-  d_base <- gsDesign(k = 3, test.type = 3, alpha = 0.025, beta = 0.1,
-                     sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2)
+testthat::test_that("Binding test.type 3: power and alpha targeted when skipping upper bounds", {
   d_sel <- gsDesign(k = 3, test.type = 3, alpha = 0.025, beta = 0.1,
                     sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
                     testUpper = c(FALSE, TRUE, TRUE))
-  testthat::expect_equal(d_sel$n.I, d_base$n.I)
+  testthat::expect_equal(sum(d_sel$upper$prob[, 2]), 0.9, tolerance = 2e-6)
   alpha_sel <- sum(d_sel$upper$prob[, 1])
   testthat::expect_equal(alpha_sel, 0.025, tolerance = 1e-6)
 })
@@ -607,13 +718,11 @@ testthat::test_that("Non-binding test.type 4: non-binding alpha preserved when s
   testthat::expect_equal(d_sel$upper$bound, d_base$upper$bound)
 })
 
-testthat::test_that("Non-binding test.type 4: non-binding alpha preserved when skipping upper", {
-  d_base <- gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1,
-                     sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2)
+testthat::test_that("Non-binding test.type 4: power and alpha targeted when skipping upper", {
   d_sel <- gsDesign(k = 3, test.type = 4, alpha = 0.025, beta = 0.1,
                     sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
                     testUpper = c(FALSE, TRUE, TRUE))
-  testthat::expect_equal(d_sel$n.I, d_base$n.I)
+  testthat::expect_equal(sum(d_sel$upper$prob[, 2]), 0.9, tolerance = 2e-6)
   nb_alpha <- sum(gsprob(0, d_sel$n.I, rep(-20, 3), d_sel$upper$bound, r = d_sel$r)$probhi)
   testthat::expect_equal(nb_alpha, 0.025, tolerance = 1e-6)
 })

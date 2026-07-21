@@ -138,6 +138,9 @@ gsSurv <- function(
   y$tol <- tol
   y$method <- x$method
   y$call <- match.call()
+  input_vals$testUpper <- testUpper
+  if (test.type > 2) input_vals$testLower <- testLower
+  if (test.type > 6) input_vals$testHarm <- testHarm
   y$inputs <- input_vals
   class(y) <- c("gsSurv", "gsDesign")
 
