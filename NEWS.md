@@ -4,11 +4,12 @@
 
 - Sequential p-values, including exact-binomial repeated and sequential
   efficacy p-values, now support `test.type = 8` by ignoring its non-binding
-  futility and harm bounds. Exact-binomial efficacy p-values also support
-  non-binding `test.type = 6`. `toBinomialExact()` now provides full two-bound
-  conversion for test types 1, 4, and 6; for type 6, the upper event-count
-  boundary targets lower-bound spending under the null hypothesis. It also
-  explains why the remaining test types are not supported (#287).
+  futility and harm bounds. `toBinomialExact()` now provides full exact
+  conversion for non-binding test types 1, 4, 6, and 8. For type 6, the upper
+  event-count boundary targets lower-bound spending under the null hypothesis.
+  For type 8, exact upper event-count stops are partitioned into mutually
+  exclusive futility and harm regions, targeting beta spending under the
+  alternative and harm spending under the null, respectively (#287).
 
 ## Bug fixes
 
