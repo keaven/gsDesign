@@ -1,0 +1,374 @@
+# gsDesign
+
+The gsDesign package supports group sequential clinical trial design,
+largely as presented in the book Group Sequential Methods with
+Applications to Clinical Trials by Christopher Jennison and Bruce
+Turnbull (Chapman and Hall/CRC, 2000). An easy-to-use [web
+interface](https://rinpharma.shinyapps.io/gsdesign/) to both enable
+usage without coding and to generate code to be able to reproduce the
+design; this is being enhanced to support more features on an ongoing
+basis. See the [talk](https://www.youtube.com/watch?v=8uZRuvzma9M)
+presented at the R/Pharma Conference to get started with the web
+interface. With improving large language models since late 2025, updates
+and additions to the gsDesign package have accelerated.
+
+## Installation
+
+``` r
+
+# The easiest way to get gsDesign is to install:
+install.packages("gsDesign")
+
+# Alternatively, install development version from GitHub:
+# install.packages("remotes")
+remotes::install_github("keaven/gsDesign")
+```
+
+## Description
+
+While there is a strong focus on designs using **α** and **β** spending
+functions, Wang-Tsiatis designs, including O’Brien-Fleming and Pocock
+designs, are also available. The ability to design with non-binding
+futility rules allows control of Type I error in a manner acceptable to
+regulatory authorities when futility bounds are employed. Particular
+effort has gone into designs with time-to-event endpoints.
+
+Most routines are designed to provide simple access to commonly used
+designs using default arguments. Standard, published spending functions
+are supported as well as the ability to write custom spending functions.
+A plot function provides a wide variety of plots summarizing designs:
+boundaries, power, estimated treatment effect at boundaries, conditional
+power at boundaries, spending function plots, expected sample size plot,
+and B-values at boundaries.
+
+While the main design functions,
+[`gsDesign()`](https://keaven.github.io/gsDesign/devel/reference/gsDesign.md)
+and
+[`gsSurv()`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md)
+have a complex output, the function
+[`gsBoundSummary()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+provides a simple summary of a design in a data frame that can be useful
+for printing in a document.
+
+Thus, the intent of the gsDesign package is to easily create, fully
+characterize and even optimize routine group sequential trial designs as
+well as provide a tool to evaluate innovative designs.
+
+## A little history
+
+In 2026 we have updated survival sample size and power methods
+([`nSurv()`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md)
+and
+[`gsSurv()`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md))
+to allow methods by 1) Schoenfeld, 2) Freedman, and 3) Bernstein and
+Lagakos. While we still recommend the default Lachin and Foulkes method,
+these additions allow replication of results from other software.
+Updates in late 2018 and early 2019 largely enabled by Metrum Research
+Group (Devin Pastoor, Harsh Baid, Jonathan Sidi). These include, but are
+not limited to, converting unit testing to use testthat package as well
+as developing the github web pages and implementing covrpage to document
+unit testing. Yilong Zhang implemented 3.1.1 continuous integration at
+github. 2020 collaborations with Cytel, Inc. increased unit testing
+coverage to \> 80% in version 3.2.0 from essential unit testing done
+long ago. Much earlier development, testing and documentation help were
+lead largely by Bill Constantine and Rich Calaway while they were with
+Revolution Computing. Thanks to John Lueders for his excellent and
+extensive collaboration building the Shiny app; more recent Shiny
+development done by Nan Xiao adds significant features such as saving
+and reloading designs and creating default Rmarkdown reports.
+
+# Package index
+
+## Group Sequential Computation
+
+For an overview of the gsDesign package, see
+[`vignette("gsDesignPackageOverview")`](https://keaven.github.io/gsDesign/devel/articles/gsDesignPackageOverview.md).
+
+- [`gsDesign()`](https://keaven.github.io/gsDesign/devel/reference/gsDesign.md)
+  [`xtable(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsDesign.md)
+  : Design Derivation
+- [`plot(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/devel/reference/plot.gsDesign.md)
+  [`plot(`*`<gsProbability>`*`)`](https://keaven.github.io/gsDesign/devel/reference/plot.gsDesign.md)
+  : Plots for group sequential designs
+- [`gsProbability()`](https://keaven.github.io/gsDesign/devel/reference/gsProbability.md)
+  [`print(`*`<gsProbability>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsProbability.md)
+  : Boundary Crossing Probabilities
+- [`gsBound()`](https://keaven.github.io/gsDesign/devel/reference/gsBound.md)
+  [`gsBound1()`](https://keaven.github.io/gsDesign/devel/reference/gsBound.md)
+  : Boundary derivation - low level
+- [`sequentialPValue()`](https://keaven.github.io/gsDesign/devel/reference/sequentiaPValue.md)
+  : Sequential p-value computation
+
+## Design Characterization
+
+- [`summary(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`print(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`xprint()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`print(`*`<gsBoundSummary>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsBValue()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsDelta()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsRR()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsHR()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsCPz()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  : Bound Summary and Z-transformations
+- [`xtable`](https://keaven.github.io/gsDesign/devel/reference/xtable.md)
+  : xtable
+
+## Normal Endpoint Design
+
+- [`nNormal()`](https://keaven.github.io/gsDesign/devel/reference/nNormal.md)
+  : Normal distribution sample size (2-sample)
+
+## Binomial Endpoint Design
+
+- [`ciBinomial()`](https://keaven.github.io/gsDesign/devel/reference/varBinomial.md)
+  [`nBinomial()`](https://keaven.github.io/gsDesign/devel/reference/varBinomial.md)
+  [`simBinomial()`](https://keaven.github.io/gsDesign/devel/reference/varBinomial.md)
+  [`testBinomial()`](https://keaven.github.io/gsDesign/devel/reference/varBinomial.md)
+  [`varBinomial()`](https://keaven.github.io/gsDesign/devel/reference/varBinomial.md)
+  : Testing, Confidence Intervals, Sample Size and Power for Comparing
+  Two Binomial Rates
+- [`summary(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`print(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`xprint()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`print(`*`<gsBoundSummary>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsBValue()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsDelta()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsRR()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsHR()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsCPz()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  : Bound Summary and Z-transformations
+- [`binomialPowerTable()`](https://keaven.github.io/gsDesign/devel/reference/binomialPowerTable.md)
+  : Power Table for Binomial Tests
+
+## Time-to-Event Endpoint Design
+
+Early, independent and more limited implementation of Lachin and Foulkes
+methods are in
+[`nSurvival()`](https://keaven.github.io/gsDesign/devel/reference/nSurvival.md)
+and
+[`print.nSurvival()`](https://keaven.github.io/gsDesign/devel/reference/nSurvival.md).
+
+- [`tEventsIA()`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md)
+  [`nEventsIA()`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md)
+  [`nSurv()`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md)
+  [`print(`*`<nSurv>`*`)`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md)
+  [`xtable(`*`<gsSurv>`*`)`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md)
+  [`gsSurv()`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md)
+  [`print(`*`<gsSurv>`*`)`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md)
+  : Advanced time-to-event sample size calculation
+- [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvCalendar.md)
+  : Group sequential design with calendar-based timing of analyses
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
+  : Compute power for a group sequential survival design
+- [`print(`*`<nSurvival>`*`)`](https://keaven.github.io/gsDesign/devel/reference/nSurvival.md)
+  [`nSurvival()`](https://keaven.github.io/gsDesign/devel/reference/nSurvival.md)
+  [`nEvents()`](https://keaven.github.io/gsDesign/devel/reference/nSurvival.md)
+  [`zn2hr()`](https://keaven.github.io/gsDesign/devel/reference/nSurvival.md)
+  [`hrn2z()`](https://keaven.github.io/gsDesign/devel/reference/nSurvival.md)
+  [`hrz2n()`](https://keaven.github.io/gsDesign/devel/reference/nSurvival.md)
+  : Time-to-event sample size calculation (Lachin-Foulkes)
+- [`summary(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`print(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`xprint()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`print(`*`<gsBoundSummary>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsBValue()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsDelta()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsRR()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsHR()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsCPz()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  : Bound Summary and Z-transformations
+- [`eEvents()`](https://keaven.github.io/gsDesign/devel/reference/eEvents.md)
+  [`print(`*`<eEvents>`*`)`](https://keaven.github.io/gsDesign/devel/reference/eEvents.md)
+  : Expected number of events for a time-to-event study
+- [`toInteger()`](https://keaven.github.io/gsDesign/devel/reference/toInteger.md)
+  : Translate group sequential design to integer events (survival
+  designs) or sample size (other designs)
+
+## Vaccine/Prevention Efficacy
+
+- [`toBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/toBinomialExact.md)
+  : Translate survival design bounds to exact binomial bounds
+- [`repeatedPValueBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/repeatedPValueBinomialExact.md)
+  : Exact binomial repeated p-values for a group sequential design
+- [`sequentialPValueBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/sequentialPValueBinomialExact.md)
+  : Exact binomial sequential p-value for a group sequential design
+- [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/devel/reference/simBinomialSeasonalExact.md)
+  : Simulate exact-binomial seasonal monitoring scenarios
+
+## Spending Functions
+
+For an overview of spending functions, see
+[`vignette("SpendingFunctionOverview")`](https://keaven.github.io/gsDesign/devel/articles/SpendingFunctionOverview.md).
+
+- [`summary(`*`<spendfn>`*`)`](https://keaven.github.io/gsDesign/devel/reference/spendingFunction.md)
+  [`spendingFunction()`](https://keaven.github.io/gsDesign/devel/reference/spendingFunction.md)
+  : Spending Function
+- [`sfLDOF()`](https://keaven.github.io/gsDesign/devel/reference/sfLDOF.md)
+  [`sfLDPocock()`](https://keaven.github.io/gsDesign/devel/reference/sfLDOF.md)
+  : Lan-DeMets Spending function overview
+- [`sfHSD()`](https://keaven.github.io/gsDesign/devel/reference/sfHSD.md)
+  : Hwang-Shih-DeCani Spending Function
+- [`sfPower()`](https://keaven.github.io/gsDesign/devel/reference/sfPower.md)
+  : Kim-DeMets (power) Spending Function
+- [`sfExponential()`](https://keaven.github.io/gsDesign/devel/reference/sfExponential.md)
+  : Exponential Spending Function
+- [`sfLogistic()`](https://keaven.github.io/gsDesign/devel/reference/sfDistribution.md)
+  [`sfBetaDist()`](https://keaven.github.io/gsDesign/devel/reference/sfDistribution.md)
+  [`sfCauchy()`](https://keaven.github.io/gsDesign/devel/reference/sfDistribution.md)
+  [`sfExtremeValue()`](https://keaven.github.io/gsDesign/devel/reference/sfDistribution.md)
+  [`sfExtremeValue2()`](https://keaven.github.io/gsDesign/devel/reference/sfDistribution.md)
+  [`sfNormal()`](https://keaven.github.io/gsDesign/devel/reference/sfDistribution.md)
+  : Two-parameter Spending Function Families
+- [`sfTDist()`](https://keaven.github.io/gsDesign/devel/reference/sfTDist.md)
+  : t-distribution Spending Function
+- [`sfLinear()`](https://keaven.github.io/gsDesign/devel/reference/sfLinear.md)
+  [`sfStep()`](https://keaven.github.io/gsDesign/devel/reference/sfLinear.md)
+  : Piecewise Linear and Step Function Spending Functions
+- [`sfPoints()`](https://keaven.github.io/gsDesign/devel/reference/sfPoints.md)
+  : Pointwise Spending Function
+- [`sfTruncated()`](https://keaven.github.io/gsDesign/devel/reference/sfSpecial.md)
+  [`sfTrimmed()`](https://keaven.github.io/gsDesign/devel/reference/sfSpecial.md)
+  [`sfGapped()`](https://keaven.github.io/gsDesign/devel/reference/sfSpecial.md)
+  : Truncated, trimmed and gapped spending functions
+- [`sfXG1()`](https://keaven.github.io/gsDesign/devel/reference/sfXG.md)
+  [`sfXG2()`](https://keaven.github.io/gsDesign/devel/reference/sfXG.md)
+  [`sfXG3()`](https://keaven.github.io/gsDesign/devel/reference/sfXG.md)
+  : Xi and Gallo conditional error spending functions
+
+## Conditional and Predictive Power
+
+- [`gsCP()`](https://keaven.github.io/gsDesign/devel/reference/gsCP.md)
+  [`gsPP()`](https://keaven.github.io/gsDesign/devel/reference/gsCP.md)
+  [`gsPI()`](https://keaven.github.io/gsDesign/devel/reference/gsCP.md)
+  [`gsPosterior()`](https://keaven.github.io/gsDesign/devel/reference/gsCP.md)
+  [`gsPOS()`](https://keaven.github.io/gsDesign/devel/reference/gsCP.md)
+  [`gsCPOS()`](https://keaven.github.io/gsDesign/devel/reference/gsCP.md)
+  : Conditional and Predictive Power, Overall and Conditional
+  Probability of Success
+- [`summary(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`print(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`xprint()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`print(`*`<gsBoundSummary>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsBValue()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsDelta()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsRR()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsHR()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  [`gsCPz()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  : Bound Summary and Z-transformations
+- [`gsBoundCP()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundCP.md)
+  : Conditional Power at Interim Boundaries
+- [`normalGrid()`](https://keaven.github.io/gsDesign/devel/reference/normalGrid.md)
+  : Normal Density Grid
+- [`gsDensity()`](https://keaven.github.io/gsDesign/devel/reference/gsDensity.md)
+  : Group sequential design interim density function
+
+## Sample Size Adaptation
+
+- [`condPower()`](https://keaven.github.io/gsDesign/devel/reference/ssrCP.md)
+  [`ssrCP()`](https://keaven.github.io/gsDesign/devel/reference/ssrCP.md)
+  [`plot(`*`<ssrCP>`*`)`](https://keaven.github.io/gsDesign/devel/reference/ssrCP.md)
+  [`z2NC()`](https://keaven.github.io/gsDesign/devel/reference/ssrCP.md)
+  [`z2Z()`](https://keaven.github.io/gsDesign/devel/reference/ssrCP.md)
+  [`z2Fisher()`](https://keaven.github.io/gsDesign/devel/reference/ssrCP.md)
+  [`Power.ssrCP()`](https://keaven.github.io/gsDesign/devel/reference/ssrCP.md)
+  : Sample size re-estimation based on conditional power
+
+## Single Arm Binomial Design
+
+- [`gsBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/gsBinomialExact.md)
+  [`binomialSPRT()`](https://keaven.github.io/gsDesign/devel/reference/gsBinomialExact.md)
+  [`plot(`*`<gsBinomialExact>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBinomialExact.md)
+  [`plot(`*`<binomialSPRT>`*`)`](https://keaven.github.io/gsDesign/devel/reference/gsBinomialExact.md)
+  [`nBinomial1Sample()`](https://keaven.github.io/gsDesign/devel/reference/gsBinomialExact.md)
+  : One-Sample Binomial Routines
+
+## Input Checking
+
+- [`checkLengths()`](https://keaven.github.io/gsDesign/devel/reference/checkScalar.md)
+  [`checkRange()`](https://keaven.github.io/gsDesign/devel/reference/checkScalar.md)
+  [`checkScalar()`](https://keaven.github.io/gsDesign/devel/reference/checkScalar.md)
+  [`checkVector()`](https://keaven.github.io/gsDesign/devel/reference/checkScalar.md)
+  [`isInteger()`](https://keaven.github.io/gsDesign/devel/reference/checkScalar.md)
+  : Utility functions to verify variable properties
+
+## Summary tables
+
+- [`as_table()`](https://keaven.github.io/gsDesign/devel/reference/as_table.md)
+  : Create a summary table
+- [`as_gt()`](https://keaven.github.io/gsDesign/devel/reference/as_gt.md)
+  : Convert a summary table object to a gt object
+- [`as_rtf()`](https://keaven.github.io/gsDesign/devel/reference/as_rtf.md)
+  : Save a summary table object as an RTF file
+
+# Articles
+
+### General information
+
+Introductory and broad overview materials.
+
+- [A gentle introduction to group sequential
+  design](https://keaven.github.io/gsDesign/devel/articles/GentleIntroductionToGSD.md):
+- [gsDesign package
+  overview](https://keaven.github.io/gsDesign/devel/articles/gsDesignPackageOverview.md):
+- [Spending function
+  overview](https://keaven.github.io/gsDesign/devel/articles/SpendingFunctionOverview.md):
+- [Two-sample normal sample
+  size](https://keaven.github.io/gsDesign/devel/articles/nNormal.md):
+- [Binomial two arm trial design and
+  analysis](https://keaven.github.io/gsDesign/devel/articles/binomialTwoSample.md):
+
+### Designing for time-to-event endpoints
+
+These vignettes provide an introduction to designing group sequential
+trials with time-to-event endpoints using gsDesign.
+
+- [Overview of survival endpoint
+  design](https://keaven.github.io/gsDesign/devel/articles/SurvivalOverview.md):
+- [Basic time-to-event group sequential design using
+  gsSurv](https://keaven.github.io/gsDesign/devel/articles/gsSurvBasicExamples.md):
+- [Power Computation for Group Sequential Survival
+  Designs](https://keaven.github.io/gsDesign/devel/articles/gsSurvPower.md):
+- [Reproducing SAS PROC SEQDESIGN survival designs in
+  gsDesign](https://keaven.github.io/gsDesign/devel/articles/SeqDesignSurvival.md):
+- [Integer sample size and event
+  counts](https://keaven.github.io/gsDesign/devel/articles/toInteger.md):
+- [Futility and harm bounds for overall survival
+  monitoring](https://keaven.github.io/gsDesign/devel/articles/HarmBound.md):
+- [Selective bound testing at interim
+  analyses](https://keaven.github.io/gsDesign/devel/articles/SelectiveBoundTesting.md):
+- [A cure model calendar-based
+  design](https://keaven.github.io/gsDesign/devel/articles/PoissonMixtureModel.md):
+
+### Exact binomial designs with spending
+
+Exact binomial workflows, including spending-function-based designs.
+
+- [Vaccine efficacy trial
+  design](https://keaven.github.io/gsDesign/devel/articles/VaccineEfficacy.md):
+- [Multi-season studies for rare
+  events](https://keaven.github.io/gsDesign/devel/articles/MultiSeasonRareEvents.md):
+- [Binomial
+  SPRT](https://keaven.github.io/gsDesign/devel/articles/binomialSPRTExample.md):
+
+### Multiple hypothesis testing
+
+Graphical and related multiple testing workflows.
+
+- [Multiplicity
+  graphs](https://keaven.github.io/gsDesign/devel/articles/hGraph.md):
+- [Graphical testing for group sequential
+  design](https://keaven.github.io/gsDesign/devel/articles/GraphicalMultiplicity.md):
+
+### Conditional power and adaptation
+
+Interim decision support and adaptation-oriented examples.
+
+- [Conditional power and conditional
+  error](https://keaven.github.io/gsDesign/devel/articles/ConditionalPowerPlot.md):
+- [Conditional error spending
+  functions](https://keaven.github.io/gsDesign/devel/articles/ConditionalErrorSpending.md):
