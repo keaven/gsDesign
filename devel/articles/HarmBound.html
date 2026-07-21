@@ -443,35 +443,44 @@ differentiate them.</p>
 </h3>
 <p>We examine the operating characteristics under two scenarios: no
 treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) and the design alternative (HR =
-0.75).</p>
+0.75). When harm and futility are both active,
+<code>x8$lower$prob</code> and <code>x8$harm$prob</code> are reported as
+mutually exclusive stopping outcomes. Thus, the probability of crossing
+the futility threshold is the sum of the two lower-tail components.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Scenario <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Under H0 (HR=1)"</span>, <span class="va">x8</span><span class="op">$</span><span class="va">k</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Under H1 (HR=0.75)"</span>, <span class="va">x8</span><span class="op">$</span><span class="va">k</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  Analysis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">x8</span><span class="op">$</span><span class="va">k</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  Month <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="cn">T</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  `P(Efficacy)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  `P(Futility)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  `P(Futility only)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  `P(Harm)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  `P(Futility or Harm)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
 <span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu">kable</span><span class="op">(</span><span class="va">probs</span>, digits <span class="op">=</span> <span class="fl">4</span>, caption <span class="op">=</span> <span class="st">"Cumulative boundary crossing probabilities"</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <caption>Cumulative boundary crossing probabilities</caption>
 <colgroup>
-<col width="28%">
-<col width="13%">
+<col width="20%">
 <col width="9%">
+<col width="6%">
+<col width="13%">
 <col width="18%">
-<col width="18%">
-<col width="12%">
+<col width="8%">
+<col width="21%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Scenario</th>
 <th align="right">Analysis</th>
 <th align="right">Month</th>
 <th align="right">P(Efficacy)</th>
-<th align="right">P(Futility)</th>
+<th align="right">P(Futility only)</th>
 <th align="right">P(Harm)</th>
+<th align="right">P(Futility or Harm)</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -481,6 +490,7 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <td align="right">0.0000</td>
 <td align="right">0.0575</td>
 <td align="right">0.0173</td>
+<td align="right">0.0748</td>
 </tr>
 <tr class="even">
 <td align="left">Under H0 (HR=1)</td>
@@ -489,6 +499,7 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <td align="right">0.0001</td>
 <td align="right">0.5138</td>
 <td align="right">0.0416</td>
+<td align="right">0.5554</td>
 </tr>
 <tr class="odd">
 <td align="left">Under H0 (HR=1)</td>
@@ -497,6 +508,7 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <td align="right">0.0017</td>
 <td align="right">0.8224</td>
 <td align="right">0.0417</td>
+<td align="right">0.8641</td>
 </tr>
 <tr class="even">
 <td align="left">Under H0 (HR=1)</td>
@@ -505,6 +517,7 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <td align="right">0.0062</td>
 <td align="right">0.9214</td>
 <td align="right">0.0417</td>
+<td align="right">0.9631</td>
 </tr>
 <tr class="odd">
 <td align="left">Under H0 (HR=1)</td>
@@ -513,6 +526,7 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <td align="right">0.0112</td>
 <td align="right">0.9471</td>
 <td align="right">0.0417</td>
+<td align="right">0.9888</td>
 </tr>
 <tr class="even">
 <td align="left">Under H1 (HR=0.75)</td>
@@ -521,6 +535,7 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <td align="right">0.0000</td>
 <td align="right">0.0034</td>
 <td align="right">0.0004</td>
+<td align="right">0.0039</td>
 </tr>
 <tr class="odd">
 <td align="left">Under H1 (HR=0.75)</td>
@@ -529,6 +544,7 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <td align="right">0.0574</td>
 <td align="right">0.0177</td>
 <td align="right">0.0004</td>
+<td align="right">0.0181</td>
 </tr>
 <tr class="even">
 <td align="left">Under H1 (HR=0.75)</td>
@@ -537,6 +553,7 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <td align="right">0.4990</td>
 <td align="right">0.0394</td>
 <td align="right">0.0004</td>
+<td align="right">0.0398</td>
 </tr>
 <tr class="odd">
 <td align="left">Under H1 (HR=0.75)</td>
@@ -545,6 +562,7 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <td align="right">0.7996</td>
 <td align="right">0.0670</td>
 <td align="right">0.0004</td>
+<td align="right">0.0675</td>
 </tr>
 <tr class="even">
 <td align="left">Under H1 (HR=0.75)</td>
@@ -553,15 +571,16 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 <td align="right">0.9000</td>
 <td align="right">0.0996</td>
 <td align="right">0.0004</td>
+<td align="right">0.1000</td>
 </tr>
 </tbody>
 </table>
 <p>Under <span class="math inline">\(H_0\)</span>, the cumulative
 probability of crossing the harm bound across all analyses is
 approximately 0.0417, reflecting the spending allocated to the harm
-boundary. Under <span class="math inline">\(H_1\)</span> (HR = 0.75),
-crossing the harm bound is very unlikely (4^{-4}), since the treatment
-is beneficial.</p>
+boundary. The cumulative probability of crossing the futility threshold,
+inclusive of harm, is approximately 0.9888. Under <span class="math inline">\(H_1\)</span> (HR = 0.75), crossing the harm bound
+is very unlikely (4^{-4}), since the treatment is beneficial.</p>
 </div>
 <div class="section level3">
 <h3 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a>
@@ -590,11 +609,11 @@ Z-value boundaries for non-binding harm bound design
 crossing probabilities as a function of the treatment effect. Three sets
 of lines appear: upper bound (cumulative efficacy crossing probability),
 1-Futility bound, and 1-Harm bound. Harm and futility are displayed as
-mutually exclusive stopping outcomes; neither curve should be
-interpreted as containing the other. We note that when the underlying
-treatment effect favors control, the high probability of crossing the
-harm bound indicates that the harm bound is sensitive and serves its
-intended purpose</p>
+mutually exclusive stopping outcomes; the futility curve excludes harm
+crossings, so it should not be interpreted as containing the harm curve.
+We note that when the underlying treatment effect favors control, the
+high probability of crossing the harm bound indicates that the harm
+bound is sensitive and serves its intended purpose</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x8</span>, plottype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">

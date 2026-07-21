@@ -303,7 +303,10 @@ has not yet allocated sufficient spending to differentiate them.
 
 We examine the operating characteristics under two scenarios: no
 treatment effect (HR = 1, i.e., under \\H_0\\) and the design
-alternative (HR = 0.75).
+alternative (HR = 0.75). When harm and futility are both active,
+`x8$lower$prob` and `x8$harm$prob` are reported as mutually exclusive
+stopping outcomes. Thus, the probability of crossing the futility
+threshold is the sum of the two lower-tail components.
 
 ``` r
 
@@ -312,32 +315,38 @@ probs <- data.frame(
   Analysis = rep(1:x8$k, 2),
   Month = rep(x8$T, 2),
   `P(Efficacy)` = c(cumsum(x8$upper$prob[, 1]), cumsum(x8$upper$prob[, 2])),
-  `P(Futility)` = c(cumsum(x8$lower$prob[, 1]), cumsum(x8$lower$prob[, 2])),
+  `P(Futility only)` = c(cumsum(x8$lower$prob[, 1]), cumsum(x8$lower$prob[, 2])),
   `P(Harm)` = c(cumsum(x8$harm$prob[, 1]), cumsum(x8$harm$prob[, 2])),
+  `P(Futility or Harm)` = c(
+    cumsum(x8$lower$prob[, 1] + x8$harm$prob[, 1]),
+    cumsum(x8$lower$prob[, 2] + x8$harm$prob[, 2])
+  ),
   check.names = FALSE
 )
 kable(probs, digits = 4, caption = "Cumulative boundary crossing probabilities")
 ```
 
-| Scenario           | Analysis | Month | P(Efficacy) | P(Futility) | P(Harm) |
-|:-------------------|---------:|------:|------------:|------------:|--------:|
-| Under H0 (HR=1)    |        1 |    12 |      0.0000 |      0.0575 |  0.0173 |
-| Under H0 (HR=1)    |        2 |    24 |      0.0001 |      0.5138 |  0.0416 |
-| Under H0 (HR=1)    |        3 |    36 |      0.0017 |      0.8224 |  0.0417 |
-| Under H0 (HR=1)    |        4 |    48 |      0.0062 |      0.9214 |  0.0417 |
-| Under H0 (HR=1)    |        5 |    60 |      0.0112 |      0.9471 |  0.0417 |
-| Under H1 (HR=0.75) |        1 |    12 |      0.0000 |      0.0034 |  0.0004 |
-| Under H1 (HR=0.75) |        2 |    24 |      0.0574 |      0.0177 |  0.0004 |
-| Under H1 (HR=0.75) |        3 |    36 |      0.4990 |      0.0394 |  0.0004 |
-| Under H1 (HR=0.75) |        4 |    48 |      0.7996 |      0.0670 |  0.0004 |
-| Under H1 (HR=0.75) |        5 |    60 |      0.9000 |      0.0996 |  0.0004 |
+| Scenario | Analysis | Month | P(Efficacy) | P(Futility only) | P(Harm) | P(Futility or Harm) |
+|:---|---:|---:|---:|---:|---:|---:|
+| Under H0 (HR=1) | 1 | 12 | 0.0000 | 0.0575 | 0.0173 | 0.0748 |
+| Under H0 (HR=1) | 2 | 24 | 0.0001 | 0.5138 | 0.0416 | 0.5554 |
+| Under H0 (HR=1) | 3 | 36 | 0.0017 | 0.8224 | 0.0417 | 0.8641 |
+| Under H0 (HR=1) | 4 | 48 | 0.0062 | 0.9214 | 0.0417 | 0.9631 |
+| Under H0 (HR=1) | 5 | 60 | 0.0112 | 0.9471 | 0.0417 | 0.9888 |
+| Under H1 (HR=0.75) | 1 | 12 | 0.0000 | 0.0034 | 0.0004 | 0.0039 |
+| Under H1 (HR=0.75) | 2 | 24 | 0.0574 | 0.0177 | 0.0004 | 0.0181 |
+| Under H1 (HR=0.75) | 3 | 36 | 0.4990 | 0.0394 | 0.0004 | 0.0398 |
+| Under H1 (HR=0.75) | 4 | 48 | 0.7996 | 0.0670 | 0.0004 | 0.0675 |
+| Under H1 (HR=0.75) | 5 | 60 | 0.9000 | 0.0996 | 0.0004 | 0.1000 |
 
 Cumulative boundary crossing probabilities {.table}
 
 Under \\H_0\\, the cumulative probability of crossing the harm bound
 across all analyses is approximately 0.0417, reflecting the spending
-allocated to the harm boundary. Under \\H_1\\ (HR = 0.75), crossing the
-harm bound is very unlikely (4^{-4}), since the treatment is beneficial.
+allocated to the harm boundary. The cumulative probability of crossing
+the futility threshold, inclusive of harm, is approximately 0.9888.
+Under \\H_1\\ (HR = 0.75), crossing the harm bound is very unlikely
+(4^{-4}), since the treatment is beneficial.
 
 ### Visualization
 
@@ -367,11 +376,11 @@ The power plot (`plottype = 2`) shows cumulative boundary crossing
 probabilities as a function of the treatment effect. Three sets of lines
 appear: upper bound (cumulative efficacy crossing probability),
 1-Futility bound, and 1-Harm bound. Harm and futility are displayed as
-mutually exclusive stopping outcomes; neither curve should be
-interpreted as containing the other. We note that when the underlying
-treatment effect favors control, the high probability of crossing the
-harm bound indicates that the harm bound is sensitive and serves its
-intended purpose
+mutually exclusive stopping outcomes; the futility curve excludes harm
+crossings, so it should not be interpreted as containing the harm curve.
+We note that when the underlying treatment effect favors control, the
+high probability of crossing the harm bound indicates that the harm
+bound is sensitive and serves its intended purpose
 
 ``` r
 
