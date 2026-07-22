@@ -20,6 +20,12 @@ ylab, lty, col, lwd, type, pch, cex have been tested and work for most
 values of plottype; one exception is that type="l" cannot be
 overridden when plottype=2. Default values for labels depend on
 plottype and the class of x.
+For test types 7 and 8, harm and futility probabilities stored on the
+design are mutually exclusive stopping outcomes. In a type 2 plot, the
+futility-threshold curve is inclusive: it uses the sum of futility-only and
+harm crossing probabilities. The separate harm curve continues to show
+harm crossings only. This plotting convention does not modify the
+probabilities stored on x.
 Note that there is some special behavior for values plotted and returned for
 power and expected sample size (ASN) plots for a gsDesign object. A
 call to x&amp;lt;-gsDesign() produces power and expected sample size for
@@ -69,6 +75,12 @@ ylab, lty, col, lwd, type, pch, cex have been tested and work for most
 values of plottype; one exception is that type="l" cannot be
 overridden when plottype=2. Default values for labels depend on
 plottype and the class of x.
+For test types 7 and 8, harm and futility probabilities stored on the
+design are mutually exclusive stopping outcomes. In a type 2 plot, the
+futility-threshold curve is inclusive: it uses the sum of futility-only and
+harm crossing probabilities. The separate harm curve continues to show
+harm crossings only. This plotting convention does not modify the
+probabilities stored on x.
 Note that there is some special behavior for values plotted and returned for
 power and expected sample size (ASN) plots for a gsDesign object. A
 call to x&amp;lt;-gsDesign() produces power and expected sample size for
@@ -153,6 +165,12 @@ ylab, lty, col, lwd, type, pch, cex</code> have been tested and work for most
 values of <code>plottype</code>; one exception is that <code>type="l"</code> cannot be
 overridden when <code>plottype=2</code>. Default values for labels depend on
 <code>plottype</code> and the class of <code>x</code>.</p>
+<p>For test types 7 and 8, harm and futility probabilities stored on the
+design are mutually exclusive stopping outcomes. In a type 2 plot, the
+futility-threshold curve is inclusive: it uses the sum of futility-only and
+harm crossing probabilities. The separate harm curve continues to show
+harm crossings only. This plotting convention does not modify the
+probabilities stored on <code>x</code>.</p>
 <p>Note that there is some special behavior for values plotted and returned for
 power and expected sample size (ASN) plots for a <code>gsDesign</code> object. A
 call to <code>x&lt;-gsDesign()</code> produces power and expected sample size for

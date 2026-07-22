@@ -375,12 +375,17 @@ Z-value boundaries for non-binding harm bound design
 The power plot (`plottype = 2`) shows cumulative boundary crossing
 probabilities as a function of the treatment effect. Three sets of lines
 appear: upper bound (cumulative efficacy crossing probability),
-1-Futility bound, and 1-Harm bound. Harm and futility are displayed as
-mutually exclusive stopping outcomes; the futility curve excludes harm
-crossings, so it should not be interpreted as containing the harm curve.
-We note that when the underlying treatment effect favors control, the
-high probability of crossing the harm bound indicates that the harm
-bound is sensitive and serves its intended purpose
+`1-(Futility or harm)`, and `1-Harm`. Because the harm boundary is
+nested below the futility boundary when both are active, crossing the
+futility threshold includes both futility-only and harm stops. The
+`1-(Futility or harm)` curve therefore subtracts
+`x8$lower$prob + x8$harm$prob`, while the `1-Harm` curve subtracts harm
+crossings only. This aggregation is performed only for plotting: the
+probability arrays stored in `x8` remain mutually exclusive so that
+efficacy, futility-only, and harm outcomes add without double counting.
+When the underlying treatment effect favors control, the high
+probability of crossing the harm bound indicates that the harm bound is
+sensitive and serves its intended purpose.
 
 ``` r
 

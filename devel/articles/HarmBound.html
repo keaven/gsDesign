@@ -608,12 +608,18 @@ Z-value boundaries for non-binding harm bound design
 <p>The power plot (<code>plottype = 2</code>) shows cumulative boundary
 crossing probabilities as a function of the treatment effect. Three sets
 of lines appear: upper bound (cumulative efficacy crossing probability),
-1-Futility bound, and 1-Harm bound. Harm and futility are displayed as
-mutually exclusive stopping outcomes; the futility curve excludes harm
-crossings, so it should not be interpreted as containing the harm curve.
-We note that when the underlying treatment effect favors control, the
-high probability of crossing the harm bound indicates that the harm
-bound is sensitive and serves its intended purpose</p>
+<code>1-(Futility or harm)</code>, and <code>1-Harm</code>. Because the
+harm boundary is nested below the futility boundary when both are
+active, crossing the futility threshold includes both futility-only and
+harm stops. The <code>1-(Futility or harm)</code> curve therefore
+subtracts <code>x8$lower$prob + x8$harm$prob</code>, while the
+<code>1-Harm</code> curve subtracts harm crossings only. This
+aggregation is performed only for plotting: the probability arrays
+stored in <code>x8</code> remain mutually exclusive so that efficacy,
+futility-only, and harm outcomes add without double counting. When the
+underlying treatment effect favors control, the high probability of
+crossing the harm bound indicates that the harm bound is sensitive and
+serves its intended purpose.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x8</span>, plottype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
