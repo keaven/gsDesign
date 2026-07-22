@@ -99,6 +99,42 @@ test_that("plotgsPower: plots are correctly rendered, test.type = 2", {
   )
 })
 
+test_that("plotgsPower includes harm in the futility-threshold curve", {
+  for (test_type in c(7, 8)) {
+    x <- gsDesign(
+      k = 3, test.type = test_type, alpha = 0.025, beta = 0.1,
+      astar = 0.1, delta = 0.3, sfu = sfLDOF,
+      sfl = sfHSD, sflpar = -2, sfharm = sfLDPocock
+    )
+    theta <- c(0, x$delta)
+    probability <- gsProbability(d = x, theta = theta)
+    lower_before_plot <- x$lower$prob
+    harm_before_plot <- x$harm$prob
+
+    plotobj <- plotgsPower(x, theta = theta, xval = theta)
+    inclusive <- subset(
+      plotobj$data,
+      Bound == "1-(Futility or harm)"
+    )$Probability
+    harm_only <- subset(plotobj$data, Bound == "1-Harm")$Probability
+    expected_inclusive <- apply(
+      probability$lower$prob + probability$harm$prob,
+      2,
+      function(z) 1 - cumsum(z)
+    )
+    expected_harm <- apply(
+      probability$harm$prob,
+      2,
+      function(z) 1 - cumsum(z)
+    )
+
+    expect_equal(inclusive, as.vector(expected_inclusive))
+    expect_equal(harm_only, as.vector(expected_harm))
+    expect_equal(x$lower$prob, lower_before_plot)
+    expect_equal(x$harm$prob, harm_before_plot)
+  }
+})
+
 test_that(desc = 'Test: plotgsPower graphs can use offset arg for Future Analysis legend',
           code = {
   x <- gsDesign(k = 3, test.type = 1, alpha = 0.025, beta = 0.1,

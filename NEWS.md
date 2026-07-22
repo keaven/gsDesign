@@ -13,6 +13,10 @@
 
 ## Bug fixes
 
+- Power plots for test types 7 and 8 now treat crossing the futility threshold
+  as the union of futility-only and harm stops. The separate harm curve remains
+  harm-only, and the mutually exclusive probabilities stored on the design are
+  unchanged (#287).
 - Sample-size derivation now accounts for analyses where efficacy, futility,
   or harm testing is skipped, avoiding power above the requested target. Harm,
   futility, and efficacy crossing probabilities are reported as mutually
