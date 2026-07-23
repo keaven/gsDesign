@@ -78,6 +78,13 @@ values of \code{plottype}; one exception is that \code{type="l"} cannot be
 overridden when \code{plottype=2}. Default values for labels depend on
 \code{plottype} and the class of \code{x}.
 
+For test types 7 and 8, harm and futility probabilities stored on the
+design are mutually exclusive stopping outcomes. In a type 2 plot, the
+futility-threshold curve is inclusive: it uses the sum of futility-only and
+harm crossing probabilities. The separate harm curve continues to show
+harm crossings only. This plotting convention does not modify the
+probabilities stored on \code{x}.
+
 Note that there is some special behavior for values plotted and returned for
 power and expected sample size (ASN) plots for a \code{gsDesign} object. A
 call to \code{x<-gsDesign()} produces power and expected sample size for

@@ -32,40 +32,58 @@ this defaults to \code{observedEvents / x$maxn.IPlan} (capped at 1) when
 \code{observedEvents} is supplied, or to the planned design timing
 otherwise.}
 
-\item{lsTime}{Optional lower spending-time override for \code{test.type = 4}
+\item{lsTime}{Optional lower spending-time override for \code{test.type = 4},
+\code{6}, or \code{8}
 (same length and monotonicity requirements as \code{usTime}). If
 \code{NULL}, it defaults to \code{usTime}.}
 
 \item{maxSpend}{Logical scalar. If `TRUE`, force full alpha spending (and, for
-`test.type = 4`, full beta spending) at the final analysis even when
+`test.type = 4` or `8`, full beta spending; for `test.type = 6`, full
+lower-bound spending under the null; and, for `test.type = 8`, full harm
+spending under the null) at the final analysis even when
 `observedEvents[k] < x$maxn.IPlan`. This keeps earlier analysis spending
 unchanged and applies the override only at the last look.}
 }
 \value{
-An object of class \code{gsBinomialExact}.
+An object of class \code{gsBinomialExact}. The returned object also
+  records `test.type`, `alpha`, applicable `astar`, `testLower`, and
+  applicable `testHarm`. For
+  `test.type = 6`, the exact object's upper event-count bound represents the
+  non-binding lower stopping bound, with its first probability column
+  calibrated under the null hypothesis. For `test.type = 8`, `upper`
+  represents all upper event-count stops, while `futility` and `harm`
+  partition those stops into mutually exclusive components.
 }
 \description{
 Translate survival design bounds to exact binomial bounds
 }
 \details{
-Only \code{test.type} 1 (one-sided) and \code{test.type} 4
-(non-binding futility) are supported. Other test types (including
-\code{test.type} 7 and 8 with harm bounds) will produce
-an error.
+Test types 1 (one-sided), 4 (non-binding beta-spending futility), 6
+(non-binding lower-bound spending under the null), and 8 (non-binding
+futility and harm) are supported for full conversion. For Type 8, the exact
+upper event-count stopping probability is partitioned into mutually
+exclusive futility and harm components. Binding
+designs (types 2, 3, 5, and 7) are outside the non-binding exact-efficacy
+framework. Exact repeated and sequential efficacy
+p-values can nevertheless be computed for non-binding types 1, 4, 6, and 8
+with \code{repeatedPValueBinomialExact()} and
+\code{sequentialPValueBinomialExact()}, which intentionally ignore
+non-binding lower and harm bounds.
 
 The exact binomial routine \code{gsBinomialExact} has requirements that may not be satisfied
 by the initial asymptotic approximation. 
 Thus, the approximations are updated to satisfy the following requirements of \code{gsBinomialExact}:
 \code{a} (the efficacy bound) must be positive, non-decreasing, and strictly less than n.I
-\code{b} (the futility bound) must be positive, non-decreasing, strictly greater than a
+\code{b} (the upper event-count stopping bound for futility, harm, or the
+Type 6 lower bound) must be positive, non-decreasing, and strictly greater than a
 \code{n.I - b} must be non-decreasing and >= 0
 
 With `observedEvents`, spending times are based on
 \code{observedEvents / x$maxn.IPlan}. If \code{maxSpend = TRUE}, the final
 spending time is set to 1 so all remaining spending is used at the last look.
 If \code{x$testLower} is present (for example from \code{gsSurv()} with
-selective futility looks), futility spending is flattened at analyses where
-\code{testLower = FALSE}.
+selective lower-bound looks), lower-bound spending is flattened at analyses
+where \code{testLower = FALSE}.
 }
 \examples{
 # The following code derives the group sequential design using the method

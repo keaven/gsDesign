@@ -178,19 +178,23 @@ bounds <- data.frame(
 kable(bounds, caption = "Z-value boundaries at each analysis")
 ```
 
-**Decision rules at each analysis:**
+**Decision rules at an analysis where all three bounds are active:**
 
 - If $Z >$ efficacy bound: Stop for efficacy (reject $H_0$).
 - If futility bound $< Z \leq$ efficacy bound: Continue the trial.
 - If harm bound $< Z \leq$ futility bound: Stop for futility.
 - If $Z \leq$ harm bound: Stop for harm.
 
-Note that the harm bound is always at or below the futility bound.
+When both lower bounds are active, the harm bound is always at or below the futility bound.
+If futility is skipped but harm is tested, the harm bound is the sole active lower stopping boundary.
 At early analyses, the harm and futility bounds may coincide when the harm spending function has not yet allocated sufficient spending to differentiate them.
 
 ### Boundary crossing probabilities
 
 We examine the operating characteristics under two scenarios: no treatment effect (HR = 1, i.e., under $H_0$) and the design alternative (HR = 0.75).
+When harm and futility are both active, `x8$lower$prob` and `x8$harm$prob` are
+reported as mutually exclusive stopping outcomes. Thus, the probability of
+crossing the futility threshold is the sum of the two lower-tail components.
 
 ```{r}
 probs <- data.frame(
@@ -198,14 +202,19 @@ probs <- data.frame(
   Analysis = rep(1:x8$k, 2),
   Month = rep(x8$T, 2),
   `P(Efficacy)` = c(cumsum(x8$upper$prob[, 1]), cumsum(x8$upper$prob[, 2])),
-  `P(Futility)` = c(cumsum(x8$lower$prob[, 1]), cumsum(x8$lower$prob[, 2])),
+  `P(Futility only)` = c(cumsum(x8$lower$prob[, 1]), cumsum(x8$lower$prob[, 2])),
   `P(Harm)` = c(cumsum(x8$harm$prob[, 1]), cumsum(x8$harm$prob[, 2])),
+  `P(Futility or Harm)` = c(
+    cumsum(x8$lower$prob[, 1] + x8$harm$prob[, 1]),
+    cumsum(x8$lower$prob[, 2] + x8$harm$prob[, 2])
+  ),
   check.names = FALSE
 )
 kable(probs, digits = 4, caption = "Cumulative boundary crossing probabilities")
 ```
 
 Under $H_0$, the cumulative probability of crossing the harm bound across all analyses is approximately `r round(sum(x8$harm$prob[, 1]), 4)`, reflecting the spending allocated to the harm boundary.
+The cumulative probability of crossing the futility threshold, inclusive of harm, is approximately `r round(sum(x8$lower$prob[, 1] + x8$harm$prob[, 1]), 4)`.
 Under $H_1$ (HR = 0.75), crossing the harm bound is very unlikely (`r round(sum(x8$harm$prob[, 2]), 4)`), since the treatment is beneficial.
 
 ### Visualization
@@ -224,9 +233,11 @@ plot(x8)
 #### Boundary crossing probabilities
 
 The power plot (`plottype = 2`) shows cumulative boundary crossing probabilities as a function of the treatment effect.
-Three sets of lines appear: upper bound (cumulative efficacy crossing probability), 1-Futility bound, and 1-Harm bound.
-The harm lines are above the futility lines because the probability of crossing the harm bound is less than or equal to the probability of crossing the futility bound.
-We note that when the underlying treatment effect favors control, the high probability of crossing the harm bound indicates that the harm bound is sensitive and serves its intended purpose
+Three sets of lines appear: upper bound (cumulative efficacy crossing probability), `1-(Futility or harm)`, and `1-Harm`.
+Because the harm boundary is nested below the futility boundary when both are active, crossing the futility threshold includes both futility-only and harm stops.
+The `1-(Futility or harm)` curve therefore subtracts `x8$lower$prob + x8$harm$prob`, while the `1-Harm` curve subtracts harm crossings only.
+This aggregation is performed only for plotting: the probability arrays stored in `x8` remain mutually exclusive so that efficacy, futility-only, and harm outcomes add without double counting.
+When the underlying treatment effect favors control, the high probability of crossing the harm bound indicates that the harm bound is sensitive and serves its intended purpose.
 
 ```{r, fig.cap = "Boundary crossing probabilities for non-binding harm bound design"}
 plot(x8, plottype = 2)
@@ -323,11 +334,17 @@ gsBoundSummary(x7)
 ### Efficacy bounds at alternate $\alpha$ levels
 
 The `gsBoundSummary()` function accepts an `alpha` argument to display efficacy bounds at one or more alternate $\alpha$ levels alongside the original design.
+Each alternate-alpha column retains the `testUpper` schedule from the design, so an efficacy analysis that was skipped remains inactive and every efficacy characteristic at that analysis, including cumulative crossing probability, is `NA`.
 Here we show the non-binding design (`x8`) with efficacy bounds for both $\alpha = 0.0125$ (the design level) and $\alpha = 0.025$:
 
 ```{r}
 gsBoundSummary(x8, alpha = 0.025)
 ```
+
+Alternate-alpha summaries are supported for `test.type = 8`, where both
+futility and harm bounds are non-binding. They are not supported for
+`test.type = 7`: a binding harm or futility bound is outside the non-binding
+sequential-p-value framework used for Maurer--Bretz graphical multiple testing.
 
 ## Practical considerations
 
@@ -350,8 +367,8 @@ This controls the probability of a false harm signal.
 
 ### Harm bound capping
 
-In the implementation, the harm bound is automatically **capped** so it never exceeds the futility bound.
-This ensures the ordering: harm bound $\leq$ futility bound $\leq$ efficacy bound at every analysis.
+In the implementation, the harm bound is automatically **capped** so it never exceeds the futility bound when both are active.
+This ensures the ordering harm bound $\leq$ futility bound $\leq$ efficacy bound at analyses where all three are tested, while allowing harm to be the active lower boundary when futility is skipped.
 
 ### When to use `test.type = 7` vs. `test.type = 8`
 
@@ -360,17 +377,11 @@ This ensures the ordering: harm bound $\leq$ futility bound $\leq$ efficacy boun
 
 In most regulatory settings, `test.type = 8` is the safer and more common choice.
 
-### Why a separate "binding harm / non-binding futility" option is unnecessary
+### Binding and non-binding harm monitoring
 
-One might consider a design where the futility bound is non-binding but the harm bound is binding.
-In practice, such a distinction has no computational effect.
-The harm bound is computed *after* the efficacy and futility bounds are set and does not feed back into those computations.
-When the futility bound is non-binding (as in `test.type = 8`), the efficacy bound is computed ignoring all lower-bound stopping.
-Since the harm bound lies below the futility bound, making the harm bound "binding" while the futility bound remains non-binding would not change the efficacy boundary, the required number of events, the final Z-values, or the p-values --- the results are identical.
+When futility and harm are both tested at an analysis, the harm boundary lies below the futility boundary and therefore does not add another stopping region. Crossing probabilities are nevertheless partitioned into mutually exclusive harm, futility, and efficacy outcomes.
 
-The only difference would be in *interpretation*: whether crossing the harm bound is treated as a firm commitment to stop or as advisory information for the DMC.
-This interpretive distinction does not require a separate `test.type`; it can be addressed in the protocol language and the DMC charter.
-The `test.type = 8` framework already provides full flexibility for the DMC to treat the harm bound as either advisory or mandatory.
+When harm is tested at an analysis where futility is skipped, the harm boundary is the active lower stopping boundary. This stopping probability is included in sample-size derivation and, for `test.type = 7`, in the binding efficacy-bound calculation. For `test.type = 8`, efficacy bounds continue to use the non-binding Type I error convention, while power and expected information account for actual harm and futility stopping.
 
 ### Adjusting the boundaries
 

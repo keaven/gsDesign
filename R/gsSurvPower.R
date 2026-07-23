@@ -96,12 +96,18 @@
 #'     exactly.
 #'   \item \strong{Upper-bound parameters changed} (\code{alpha}, \code{sfu},
 #'     or \code{sfupar}) but timing matches: new efficacy bounds are computed
-#'     via \code{gsDesign(test.type = 1)} at the new alpha, while the
-#'     original futility bounds from \code{x} are preserved. Any futility
-#'     bound that exceeds the new efficacy bound is clipped. This follows
-#'     the same convention as \code{gsBoundSummary()}. Lower-bound spending
-#'     settings from \code{x} are intentionally kept in this branch, which
-#'     avoids complications with \code{astar} validation for binding types.
+#'     using the non-binding efficacy convention at the new alpha while
+#'     preserving the original \code{testUpper} schedule and futility bounds
+#'     from \code{x}. Any futility bound that exceeds the new efficacy bound
+#'     is clipped. This follows the same convention as
+#'     \code{gsBoundSummary()}. Lower-bound spending settings from \code{x}
+#'     are intentionally kept in this branch, which avoids complications with
+#'     \code{astar} validation for binding types.
+#'     For non-binding test types 1, 4, 6, and 8, this calculation can be used
+#'     to evaluate alpha propagated by a graphical multiple-testing procedure.
+#'     For binding test types 2, 3, 5, and 7, it is a planning sensitivity
+#'     calculation only; it is not a Maurer--Bretz sequential-p-value or
+#'     graphical alpha-recycling procedure.
 #'   \item \strong{Timing changed} (different target events or calendar
 #'     times): both bounds are recomputed from scratch using the full
 #'     \code{test.type} and all spending parameters.
@@ -998,20 +1004,13 @@ gsSurvPower <- function(
     upper_bounds <- settings$x$upper$bound
     lower_bounds <- settings$x$lower$bound
   } else if (bound_strategy == "update_upper") {
-    design_object <- gsDesign::gsDesign(
-      k = settings$k,
-      test.type = 1,
+    design_object <- gsAlternateAlphaDesign(
+      x = settings$x,
       alpha = settings$alpha,
-      beta = settings$beta_design,
-      n.fix = n_fix,
-      timing = current_timing,
+      r = settings$r,
       sfu = settings$sfu,
       sfupar = settings$sfupar,
-      tol = settings$tol,
-      delta1 = log(settings$hr1),
-      delta0 = log(settings$hr0),
-      usTime = spending_times$usTime,
-      r = settings$r
+      usTime = settings$x$upper$sTime
     )
     upper_bounds <- design_object$upper$bound
     if (!is.null(settings$x$lower$bound)) {
@@ -1060,13 +1059,30 @@ gsSurvPower <- function(
     settings$hr1,
     settings
   )
-  probabilities <- gsDesign::gsProbability(
-    k = settings$k,
+  probability_design <- design_object
+  probability_design$test.type <- settings$test.type
+  probability_design$n.I <- total_events
+  probability_design$upper$bound <- upper_bounds
+  probability_design$lower$bound <- lower_bounds
+  probability_design$testUpper <- .gsSurvPower_format_test_flag(
+    settings$testUpper, settings$k
+  )
+  probability_design$testLower <- .gsSurvPower_format_test_flag(
+    settings$testLower, settings$k
+  )
+  if (settings$test.type %in% c(7, 8)) {
+    probability_design$testHarm <- .gsSurvPower_format_test_flag(
+      settings$testHarm, settings$k
+    )
+    both_active <- probability_design$testLower & probability_design$testHarm
+    probability_design$harm$bound[both_active] <- pmin(
+      probability_design$harm$bound[both_active],
+      probability_design$lower$bound[both_active]
+    )
+  }
+  probabilities <- gsDProb(
     theta = c(0, theta_assumed),
-    n.I = total_events,
-    a = lower_bounds,
-    b = upper_bounds,
-    r = settings$r
+    d = probability_design
   )
 
   list(
@@ -1148,6 +1164,9 @@ gsSurvPower <- function(
   result$upper$bound <- bound_result$upper_bounds
   result$lower$prob <- bound_result$probabilities$lower$prob
   result$lower$bound <- bound_result$lower_bounds
+  if (settings$test.type %in% c(7, 8)) {
+    result$harm$prob <- bound_result$probabilities$harm$prob
+  }
   result$en <- bound_result$probabilities$en
   result$theta <- bound_result$probabilities$theta
   result$power <- sum(bound_result$probabilities$upper$prob[, 2])

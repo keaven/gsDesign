@@ -312,7 +312,9 @@ Otherwise, a logical vector of length \code{k}.
 Only used for \code{test.type} 7 or 8; at least one analysis must be
 \code{TRUE} for those types.
 Where \code{testHarm} is \code{FALSE}, the harm bound is set to
-\code{-20} (effectively \code{-Inf}) and displayed as \code{NA} in output.}
+\code{-20} (effectively \code{-Inf}) and the bound is displayed as
+\code{NA} in output. Cumulative harm crossing probability from earlier
+analyses is still displayed.}
 
 \item{show_gsDesign}{Logical; for \code{print.gsSurv()}, include gsDesign details.}
 }
@@ -524,6 +526,11 @@ calculation.
 
 The input to \code{gsSurv} is a combination of the input to \code{nSurv()}
 and \code{gsDesign()}.
+The original call is stored in \code{call}. The \code{inputs} component
+retains evaluated survival-model inputs used for printing and the applicable
+\code{testUpper}, \code{testLower}, and \code{testHarm} arguments. The
+normalized testing schedules used by the design are stored directly in the
+corresponding top-level components.
 When \code{T = NULL} and \code{minfup} is specified, \code{gsSurv()}
 preserves the input accrual rate and minimum follow-up, applies the group
 sequential design, and solves the accrual duration needed for the final

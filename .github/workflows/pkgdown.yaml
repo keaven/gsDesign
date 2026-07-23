@@ -7,6 +7,19 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      deploy_target:
+        description: "Deployment target"
+        required: true
+        default: devel
+        type: choice
+        options:
+          - devel
+          - stable
+      source_branch:
+        description: "Branch to build for manual deployment; leave blank to use the selected workflow branch"
+        required: false
+        type: string
 
 name: pkgdown.yaml
 
@@ -23,7 +36,38 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Set deployment parameters
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            deploy_target="${{ github.event.inputs.deploy_target }}"
+            source_branch="${{ github.event.inputs.source_branch }}"
+            if [[ -z "$source_branch" ]]; then
+              source_branch="${{ github.ref_name }}"
+            fi
+          else
+            deploy_target="stable"
+            source_branch="${{ github.ref }}"
+          fi
+
+          if [[ "$deploy_target" == "devel" ]]; then
+            site_url="https://keaven.github.io/gsDesign/devel/"
+            target_folder="devel"
+            deploy_message="Deploy development pkgdown for ${source_branch}"
+          else
+            site_url="https://keaven.github.io/gsDesign/"
+            target_folder=""
+            deploy_message="Deploy stable pkgdown for ${source_branch}"
+          fi
+
+          echo "SOURCE_BRANCH=$source_branch" >> "$GITHUB_ENV"
+          echo "SITE_URL=$site_url" >> "$GITHUB_ENV"
+          echo "TARGET_FOLDER=$target_folder" >> "$GITHUB_ENV"
+          echo "DEPLOY_MESSAGE=$deploy_message" >> "$GITHUB_ENV"
+        shell: bash
+
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ env.SOURCE_BRANCH }}
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -35,7 +79,7 @@ jobs:
           needs: website
 
       - name: Build site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, override = list(url = Sys.getenv("SITE_URL")))
         shell: Rscript {0}
 
       - name: Deploy to GitHub pages 🚀
@@ -44,4 +88,6 @@ jobs:
         with:
           clean: false
           branch: gh-pages
+          target-folder: ${{ env.TARGET_FOLDER }}
+          commit-message: ${{ env.DEPLOY_MESSAGE }}
           folder: docs

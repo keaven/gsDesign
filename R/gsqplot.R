@@ -19,6 +19,13 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' overridden when \code{plottype=2}. Default values for labels depend on
 #' \code{plottype} and the class of \code{x}.
 #'
+#' For test types 7 and 8, harm and futility probabilities stored on the
+#' design are mutually exclusive stopping outcomes. In a type 2 plot, the
+#' futility-threshold curve is inclusive: it uses the sum of futility-only and
+#' harm crossing probabilities. The separate harm curve continues to show
+#' harm crossings only. This plotting convention does not modify the
+#' probabilities stored on \code{x}.
+#'
 #' Note that there is some special behavior for values plotted and returned for
 #' power and expected sample size (ASN) plots for a \code{gsDesign} object. A
 #' call to \code{x<-gsDesign()} produces power and expected sample size for
@@ -978,6 +985,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
   }
   test.type <- ifelse(inherits(x, "gsProbability"), 3, x$test.type)
   has_harm <- test.type %in% c(7, 8) && !is.null(x$harm)
+  lower_prob <- if (has_harm) x$lower$prob + x$harm$prob else x$lower$prob
   theta <- xval
   if (!base && outtype == 1) {
     if (is.null(lty)) lty <- x$k:1
@@ -985,9 +993,9 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     y <- cbind(stats::reshape(xu, varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = "Upper bound")
     if (is.null(col)) col <- 1
     if (is.null(x$test.type) || x$test.type > 1) {
-      lower_label <- if (has_harm) "1-Futility bound" else "1-Lower bound"
+      lower_label <- if (has_harm) "1-(Futility or harm)" else "1-Lower bound"
       y <- rbind(
-        cbind(stats::reshape(data.frame(x$lower$prob), varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = lower_label),
+        cbind(stats::reshape(data.frame(lower_prob), varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = lower_label),
         y
       )
       if (length(col) == 1) col <- c(2, 1)
@@ -995,7 +1003,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     # Add harm bound for test.type 7/8
     if (has_harm) {
       y <- rbind(
-        cbind(stats::reshape(data.frame(x$harm$prob), varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = "1-Harm bound"),
+        cbind(stats::reshape(data.frame(x$harm$prob), varying = names(xu), v.names = "Probability", timevar = "thetaidx", direction = "long"), Bound = "1-Harm"),
         y
       )
       if (length(col) == 2) col <- c(4, col)
@@ -1007,10 +1015,10 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
              dplyr::group_by(Bound, thetaidx) |>
              dplyr::reframe(Probability = cumsum(Probability))
     
-    lower_label <- if (has_harm) "1-Futility bound" else "1-Lower bound"
+    lower_label <- if (has_harm) "1-(Futility or harm)" else "1-Lower bound"
     y2$Probability[y2$Bound == lower_label] <- 1 - y2$Probability[y2$Bound == lower_label]
     if (has_harm) {
-      y2$Probability[y2$Bound == "1-Harm bound"] <- 1 - y2$Probability[y2$Bound == "1-Harm bound"]
+      y2$Probability[y2$Bound == "1-Harm"] <- 1 - y2$Probability[y2$Bound == "1-Harm"]
     }
     
     y2$Analysis <- factor(y$id + offset)
@@ -1094,7 +1102,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     {
       theta <- c(theta, xval)
       interim <- c(interim, rep(j, length(xval)))
-      boundprob <- boundprob - x$lower$prob[j, ]
+      boundprob <- boundprob - lower_prob[j, ]
       prob <- c(prob, boundprob)
       ymid <- mean(range(boundprob))
       yval <- c(yval, min(boundprob[boundprob >= ymid]))
@@ -1160,12 +1168,12 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     }
 
     if ((inherits(x, "gsDesign") && test.type > 2) || !inherits(x, "gsDesign")) {
-      graphics::lines(xval, 1 - x$lower$prob[1, ], lty = lty2, col = col2, lwd = lwd2)
-      plo <- x$lower$prob[1, ]
+      graphics::lines(xval, 1 - lower_prob[1, ], lty = lty2, col = col2, lwd = lwd2)
+      plo <- lower_prob[1, ]
 
       for (i in 2:x$k)
       {
-        plo <- plo + x$lower$prob[i, ]
+        plo <- plo + lower_prob[i, ]
         graphics::lines(xval, 1 - plo, lty = lty2, col = col2, lwd = lwd2)
       }
 
@@ -1183,7 +1191,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       }
 
       if (has_harm) {
-        leg_labels <- c("Upper", "Futility", "Harm")
+        leg_labels <- c("Upper", "Futility or harm", "Harm")
         leg_col <- col[1:3]
         leg_lwd <- lwd[1:3]
         leg_lty <- lty[1:3]
@@ -1251,11 +1259,11 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       p <- p + 
         ggplot2::scale_colour_manual(
         name = "Probability", values = getColor(col[1:3]), breaks = 1:3,
-        labels = c("Upper bound", "1-Futility bound", "1-Harm bound")
+        labels = c("Upper bound", "1-(Futility or harm)", "1-Harm")
       ) +
         ggplot2::scale_linetype_manual(
           name = "Probability", values = lty[1:3], breaks = 1:3,
-          labels = c("Upper bound", "1-Futility bound", "1-Harm bound")
+          labels = c("Upper bound", "1-(Futility or harm)", "1-Harm")
         )
     } else {
       p <- p + 

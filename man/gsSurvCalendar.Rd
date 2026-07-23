@@ -196,7 +196,9 @@ Otherwise, a logical vector of length \code{k}.
 Only used for \code{test.type} 7 or 8; at least one analysis must be
 \code{TRUE} for those types.
 Where \code{testHarm} is \code{FALSE}, the harm bound is set to
-\code{-20} (effectively \code{-Inf}) and displayed as \code{NA} in output.}
+\code{-20} (effectively \code{-Inf}) and the bound is displayed as
+\code{NA} in output. Cumulative harm crossing probability from earlier
+analyses is still displayed.}
 
 \item{method}{One of \code{"LachinFoulkes"} (default), \code{"Schoenfeld"},
 \code{"Freedman"}, or \code{"BernsteinLagakos"}.
