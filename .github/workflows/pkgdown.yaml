@@ -46,7 +46,7 @@ jobs:
             fi
           else
             deploy_target="stable"
-            source_branch="${{ github.ref_name }}"
+            source_branch="${{ github.ref }}"
           fi
 
           if [[ "$deploy_target" == "devel" ]]; then
