@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,40 +86,58 @@ otherwise.</p></dd>
 
 
 <dt id="arg-lstime">lsTime<a class="anchor" aria-label="anchor" href="#arg-lstime"></a></dt>
-<dd><p>Optional lower spending-time override for <code>test.type = 4</code>
+<dd><p>Optional lower spending-time override for <code>test.type = 4</code>,
+<code>6</code>, or <code>8</code>
 (same length and monotonicity requirements as <code>usTime</code>). If
 <code>NULL</code>, it defaults to <code>usTime</code>.</p></dd>
 
 
 <dt id="arg-maxspend">maxSpend<a class="anchor" aria-label="anchor" href="#arg-maxspend"></a></dt>
 <dd><p>Logical scalar. If `TRUE`, force full alpha spending (and, for
-`test.type = 4`, full beta spending) at the final analysis even when
+`test.type = 4` or `8`, full beta spending; for `test.type = 6`, full
+lower-bound spending under the null; and, for `test.type = 8`, full harm
+spending under the null) at the final analysis even when
 `observedEvents[k] &lt; x$maxn.IPlan`. This keeps earlier analysis spending
 unchanged and applies the override only at the last look.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>gsBinomialExact</code>.</p>
+    <p>An object of class <code>gsBinomialExact</code>. The returned object also
+  records `test.type`, `alpha`, applicable `astar`, `testLower`, and
+  applicable `testHarm`. For
+  `test.type = 6`, the exact object's upper event-count bound represents the
+  non-binding lower stopping bound, with its first probability column
+  calibrated under the null hypothesis. For `test.type = 8`, `upper`
+  represents all upper event-count stops, while `futility` and `harm`
+  partition those stops into mutually exclusive components.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Only <code>test.type</code> 1 (one-sided) and <code>test.type</code> 4
-(non-binding futility) are supported. Other test types (including
-<code>test.type</code> 7 and 8 with harm bounds) will produce
-an error.</p>
+    <p>Test types 1 (one-sided), 4 (non-binding beta-spending futility), 6
+(non-binding lower-bound spending under the null), and 8 (non-binding
+futility and harm) are supported for full conversion. For Type 8, the exact
+upper event-count stopping probability is partitioned into mutually
+exclusive futility and harm components. Binding
+designs (types 2, 3, 5, and 7) are outside the non-binding exact-efficacy
+framework. Exact repeated and sequential efficacy
+p-values can nevertheless be computed for non-binding types 1, 4, 6, and 8
+with <code><a href="repeatedPValueBinomialExact.html">repeatedPValueBinomialExact()</a></code> and
+<code><a href="sequentialPValueBinomialExact.html">sequentialPValueBinomialExact()</a></code>, which intentionally ignore
+non-binding lower and harm bounds.</p>
 <p>The exact binomial routine <code>gsBinomialExact</code> has requirements that may not be satisfied
 by the initial asymptotic approximation.
 Thus, the approximations are updated to satisfy the following requirements of <code>gsBinomialExact</code>:
 <code>a</code> (the efficacy bound) must be positive, non-decreasing, and strictly less than n.I
-<code>b</code> (the futility bound) must be positive, non-decreasing, strictly greater than a
+<code>b</code> (the upper event-count stopping bound for futility, harm, or the
+Type 6 lower bound) must be positive, non-decreasing, and strictly greater than a
 <code>n.I - b</code> must be non-decreasing and &gt;= 0</p>
 <p>With `observedEvents`, spending times are based on
 <code>observedEvents / x$maxn.IPlan</code>. If <code>maxSpend = TRUE</code>, the final
 spending time is set to 1 so all remaining spending is used at the last look.
 If <code>x$testLower</code> is present (for example from <code><a href="nSurv.html">gsSurv()</a></code> with
-selective futility looks), futility spending is flattened at analyses where
-<code>testLower = FALSE</code>.</p>
+selective lower-bound looks), lower-bound spending is flattened at analyses
+where <code>testLower = FALSE</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

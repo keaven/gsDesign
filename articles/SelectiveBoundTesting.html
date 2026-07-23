@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,7 +97,10 @@ may be needed only at certain analyses.</li>
 fine-grained control over which bounds are active at each analysis. When
 a bound is inactive at a given analysis, it is set to an extreme value
 (<span class="math inline">\(\pm 20\)</span> on the Z-scale) so that it
-cannot be crossed, and is displayed as <code>NA</code> in summaries.</p>
+cannot be crossed. Every characteristic for that bound, including
+cumulative crossing probability, is displayed as <code>NA</code> at the
+inactive analysis. The underlying probability arrays retain the
+cumulative crossing information.</p>
 </div>
 <div class="section level2">
 <h2 id="parameters">Parameters<a class="anchor" aria-label="anchor" href="#parameters"></a>
@@ -176,25 +179,27 @@ the futility bound shows as <code>NA</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x1</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                Analysis               Value Efficacy Futility</span></span>
-<span><span class="co">#&gt;               IA 1: 33%                   Z   3.0107  -0.2387</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 0.36         p (1-sided)   0.0013   0.5943</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   1.5553  -0.1233</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0013   0.4057</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.1412   0.0148</span></span>
+<span><span class="co">#&gt;               IA 1: 33%                   Z   3.0107  -0.2674</span></span>
+<span><span class="co">#&gt;  N/Fixed design N: 0.35         p (1-sided)   0.0013   0.6054</span></span>
+<span><span class="co">#&gt;                             ~delta at bound   1.5787  -0.1402</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0013   0.3946</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=1   0.1349   0.0148</span></span>
 <span><span class="co">#&gt;               IA 2: 67%                   Z   2.5465       NA</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 0.71         p (1-sided)   0.0054       NA</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   0.9302       NA</span></span>
+<span><span class="co">#&gt;  N/Fixed design N: 0.69         p (1-sided)   0.0054       NA</span></span>
+<span><span class="co">#&gt;                             ~delta at bound   0.9442       NA</span></span>
 <span><span class="co">#&gt;                         P(Cross) if delta=0   0.0062       NA</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.5815       NA</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=1   0.5657       NA</span></span>
 <span><span class="co">#&gt;                   Final                   Z   1.9992       NA</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 1.07         p (1-sided)   0.0228       NA</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   0.5963       NA</span></span>
+<span><span class="co">#&gt;  N/Fixed design N: 1.04         p (1-sided)   0.0228       NA</span></span>
+<span><span class="co">#&gt;                             ~delta at bound   0.6052       NA</span></span>
 <span><span class="co">#&gt;                         P(Cross) if delta=0   0.0244       NA</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.9077       NA</span></span></code></pre></div>
+<span><span class="co">#&gt;                         P(Cross) if delta=1   0.9000       NA</span></span></code></pre></div>
 <p>The probabilities under the null and alternative are recomputed
-accounting for the inactive bounds. Notice the cumulative futility
+accounting for the inactive bounds. The underlying cumulative futility
 crossing probability does not increase after IA1 since no further
-futility testing occurs.</p>
+futility testing occurs; the later inactive futility rows in
+<code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> are displayed entirely as
+<code>NA</code>.</p>
 <p>We can also see the bounds in the <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> output:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x1</span></span>
@@ -206,9 +211,9 @@ futility testing occurs.</p>
 <span><span class="co">#&gt;            Sample</span></span>
 <span><span class="co">#&gt;             Size    ----Lower bounds----  ----Upper bounds-----</span></span>
 <span><span class="co">#&gt;   Analysis Ratio*   Z   Nominal p Spend+  Z   Nominal p Spend++</span></span>
-<span><span class="co">#&gt;          1  0.357 -0.24    0.4057 0.0148 3.01    0.0013  0.0013</span></span>
-<span><span class="co">#&gt;          2  0.713    NA        NA     NA 2.55    0.0054  0.0049</span></span>
-<span><span class="co">#&gt;          3  1.070    NA        NA     NA 2.00    0.0228  0.0188</span></span>
+<span><span class="co">#&gt;          1  0.346 -0.27    0.3946 0.0148 3.01    0.0013  0.0013</span></span>
+<span><span class="co">#&gt;          2  0.692    NA        NA     NA 2.55    0.0054  0.0049</span></span>
+<span><span class="co">#&gt;          3  1.038    NA        NA     NA 2.00    0.0228  0.0188</span></span>
 <span><span class="co">#&gt;      Total                        0.0148                 0.0250 </span></span>
 <span><span class="co">#&gt; + lower bound beta spending (under H1):</span></span>
 <span><span class="co">#&gt;  Hwang-Shih-DeCani spending function with gamma = -2.</span></span>
@@ -222,13 +227,13 @@ futility testing occurs.</p>
 <span><span class="co">#&gt; Upper boundary (power or Type I Error)</span></span>
 <span><span class="co">#&gt;           Analysis</span></span>
 <span><span class="co">#&gt;    Theta      1      2      3  Total   E{N}</span></span>
-<span><span class="co">#&gt;   0.0000 0.0013 0.0049 0.0181 0.0244 0.7779</span></span>
-<span><span class="co">#&gt;   3.2415 0.1412 0.4403 0.3262 0.9077 0.8016</span></span>
+<span><span class="co">#&gt;   0.0000 0.0013 0.0049 0.0182 0.0244 0.7626</span></span>
+<span><span class="co">#&gt;   3.2415 0.1349 0.4308 0.3343 0.9000 0.7856</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Lower boundary (futility or Type II Error)</span></span>
 <span><span class="co">#&gt;           Analysis</span></span>
 <span><span class="co">#&gt;    Theta      1 2 3  Total</span></span>
-<span><span class="co">#&gt;   0.0000 0.4057 0 0 0.4057</span></span>
+<span><span class="co">#&gt;   0.0000 0.3946 0 0 0.3946</span></span>
 <span><span class="co">#&gt;   3.2415 0.0148 0 0 0.0148</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
@@ -267,21 +272,21 @@ Here we skip the efficacy bound at the first interim:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                Analysis               Value Efficacy Futility</span></span>
-<span><span class="co">#&gt;               IA 1: 33%                   Z       NA  -0.2579</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 0.35         p (1-sided)       NA   0.6018</span></span>
-<span><span class="co">#&gt;                             ~delta at bound       NA  -0.1346</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0       NA   0.3982</span></span>
+<span><span class="co">#&gt;               IA 1: 33%                   Z       NA  -0.2605</span></span>
+<span><span class="co">#&gt;  N/Fixed design N: 0.35         p (1-sided)       NA   0.6028</span></span>
+<span><span class="co">#&gt;                             ~delta at bound       NA  -0.1361</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0       NA   0.3972</span></span>
 <span><span class="co">#&gt;                         P(Cross) if delta=1       NA   0.0148</span></span>
-<span><span class="co">#&gt;               IA 2: 67%                   Z   2.4976   0.9138</span></span>
-<span><span class="co">#&gt;   N/Fixed design N: 0.7         p (1-sided)   0.0063   0.1804</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   0.9215   0.3371</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0062   0.8279</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.5841   0.0437</span></span>
-<span><span class="co">#&gt;                   Final                   Z   1.9593   1.9593</span></span>
+<span><span class="co">#&gt;               IA 2: 67%                   Z   2.4976   0.9102</span></span>
+<span><span class="co">#&gt;   N/Fixed design N: 0.7         p (1-sided)   0.0063   0.1814</span></span>
+<span><span class="co">#&gt;                             ~delta at bound   0.9227   0.3363</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0062   0.8270</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=1   0.5826   0.0437</span></span>
+<span><span class="co">#&gt;                   Final                   Z   1.9597   1.9597</span></span>
 <span><span class="co">#&gt;  N/Fixed design N: 1.05         p (1-sided)   0.0250   0.0250</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   0.5902   0.5902</span></span>
+<span><span class="co">#&gt;                             ~delta at bound   0.5911   0.5911</span></span>
 <span><span class="co">#&gt;                         P(Cross) if delta=0   0.0250   0.9750</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.9006   0.0994</span></span></code></pre></div>
+<span><span class="co">#&gt;                         P(Cross) if delta=1   0.9000   0.1000</span></span></code></pre></div>
 <p>At IA1, only the futility bound is active. The efficacy bound appears
 as <code>NA</code> for that analysis.</p>
 </div>
@@ -315,21 +320,21 @@ and <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>
 <span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xs</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Method: LachinFoulkes </span></span>
 <span><span class="co">#&gt;     Analysis              Value Efficacy Futility</span></span>
-<span><span class="co">#&gt;    IA 1: 50%                  Z   2.7500   0.4555</span></span>
-<span><span class="co">#&gt;       N: 524        p (1-sided)   0.0030   0.3244</span></span>
-<span><span class="co">#&gt;  Events: 179       ~HR at bound   0.6623   0.9340</span></span>
-<span><span class="co">#&gt;    Month: 15   P(Cross) if HR=1   0.0030   0.6756</span></span>
-<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.3572   0.0269</span></span>
+<span><span class="co">#&gt;    IA 1: 50%                  Z   2.7500   0.4225</span></span>
+<span><span class="co">#&gt;       N: 510        p (1-sided)   0.0030   0.3363</span></span>
+<span><span class="co">#&gt;  Events: 174       ~HR at bound   0.6585   0.9378</span></span>
+<span><span class="co">#&gt;    Month: 15   P(Cross) if HR=1   0.0030   0.6637</span></span>
+<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.3450   0.0269</span></span>
 <span><span class="co">#&gt;    IA 2: 75%                  Z   2.4318       NA</span></span>
-<span><span class="co">#&gt;       N: 524        p (1-sided)   0.0075       NA</span></span>
-<span><span class="co">#&gt;  Events: 268       ~HR at bound   0.7427       NA</span></span>
+<span><span class="co">#&gt;       N: 510        p (1-sided)   0.0075       NA</span></span>
+<span><span class="co">#&gt;  Events: 260       ~HR at bound   0.7396       NA</span></span>
 <span><span class="co">#&gt;    Month: 23   P(Cross) if HR=1   0.0089       NA</span></span>
-<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.6959       NA</span></span>
+<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.6817       NA</span></span>
 <span><span class="co">#&gt;        Final                  Z   2.0116       NA</span></span>
-<span><span class="co">#&gt;       N: 524        p (1-sided)   0.0221       NA</span></span>
-<span><span class="co">#&gt;  Events: 357       ~HR at bound   0.8081       NA</span></span>
-<span><span class="co">#&gt;    Month: 36   P(Cross) if HR=1   0.0239       NA</span></span>
-<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.9067       NA</span></span></code></pre></div>
+<span><span class="co">#&gt;       N: 510        p (1-sided)   0.0221       NA</span></span>
+<span><span class="co">#&gt;  Events: 347       ~HR at bound   0.8056       NA</span></span>
+<span><span class="co">#&gt;    Month: 36   P(Cross) if HR=1   0.0240       NA</span></span>
+<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.9000       NA</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example-4-selective-harm-monitoring-test-type-78">Example 4: Selective harm monitoring (test.type 7/8)<a class="anchor" aria-label="anchor" href="#example-4-selective-harm-monitoring-test-type-78"></a>
@@ -359,17 +364,17 @@ before longer-term safety data are available.</p>
 <span><span class="co">#&gt;               IA 1: 33%                   Z -2.0061  -0.2387</span></span>
 <span><span class="co">#&gt;  N/Fixed design N: 0.36         p (1-sided)  0.9776   0.5943</span></span>
 <span><span class="co">#&gt;                             ~delta at bound -1.0363  -0.1233</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0  0.0224   0.4057</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0  0.0224   0.3832</span></span>
 <span><span class="co">#&gt;                         P(Cross) if delta=1  0.0000   0.0148</span></span>
 <span><span class="co">#&gt;               IA 2: 67%                   Z -1.9827   0.9411</span></span>
 <span><span class="co">#&gt;  N/Fixed design N: 0.71         p (1-sided)  0.9763   0.1733</span></span>
 <span><span class="co">#&gt;                             ~delta at bound -0.7242   0.3438</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0  0.0385   0.8347</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0  0.0231   0.8116</span></span>
 <span><span class="co">#&gt;                         P(Cross) if delta=1  0.0000   0.0437</span></span>
 <span><span class="co">#&gt;                   Final                   Z      NA   1.9992</span></span>
 <span><span class="co">#&gt;  N/Fixed design N: 1.07         p (1-sided)      NA   0.0228</span></span>
 <span><span class="co">#&gt;                             ~delta at bound      NA   0.5963</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0      NA   0.9767</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0      NA   0.9536</span></span>
 <span><span class="co">#&gt;                         P(Cross) if delta=1      NA   0.1000</span></span>
 <span><span class="co">#&gt;  Efficacy</span></span>
 <span><span class="co">#&gt;    3.0107</span></span>
@@ -411,21 +416,21 @@ IA1 and efficacy-only at IA2:</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                Analysis               Value Efficacy Futility</span></span>
-<span><span class="co">#&gt;               IA 1: 33%                   Z       NA  -0.2387</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 0.36         p (1-sided)       NA   0.5943</span></span>
-<span><span class="co">#&gt;                             ~delta at bound       NA  -0.1233</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0       NA   0.4057</span></span>
+<span><span class="co">#&gt;               IA 1: 33%                   Z       NA  -0.2700</span></span>
+<span><span class="co">#&gt;  N/Fixed design N: 0.35         p (1-sided)       NA   0.6064</span></span>
+<span><span class="co">#&gt;                             ~delta at bound       NA  -0.1418</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0       NA   0.3936</span></span>
 <span><span class="co">#&gt;                         P(Cross) if delta=1       NA   0.0148</span></span>
 <span><span class="co">#&gt;               IA 2: 67%                   Z   2.4979       NA</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 0.71         p (1-sided)   0.0062       NA</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   0.9124       NA</span></span>
+<span><span class="co">#&gt;  N/Fixed design N: 0.69         p (1-sided)   0.0062       NA</span></span>
+<span><span class="co">#&gt;                             ~delta at bound   0.9274       NA</span></span>
 <span><span class="co">#&gt;                         P(Cross) if delta=0   0.0062       NA</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.5945       NA</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=1   0.5773       NA</span></span>
 <span><span class="co">#&gt;                   Final                   Z   1.9947       NA</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 1.07         p (1-sided)   0.0230       NA</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   0.5949       NA</span></span>
+<span><span class="co">#&gt;  N/Fixed design N: 1.04         p (1-sided)   0.0230       NA</span></span>
+<span><span class="co">#&gt;                             ~delta at bound   0.6047       NA</span></span>
 <span><span class="co">#&gt;                         P(Cross) if delta=0   0.0244       NA</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.9083       NA</span></span></code></pre></div>
+<span><span class="co">#&gt;                         P(Cross) if delta=1   0.9000       NA</span></span></code></pre></div>
 <p>Note the <code>NA</code> values: efficacy is <code>NA</code> at IA1,
 and futility is <code>NA</code> at IA2 and the final analysis.</p>
 </div>
@@ -487,7 +492,12 @@ analysis.</li>
 <span><span class="va">x1</span><span class="op">$</span><span class="va">testHarm</span></span>
 <span><span class="co">#&gt; [1] FALSE FALSE FALSE</span></span></code></pre></div>
 <p>These can be inspected programmatically for downstream analyses or
-reporting.</p>
+reporting. For <code><a href="../reference/nSurv.html">gsSurv()</a></code> and <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>
+objects, <code>x$call</code> records the original call and
+<code>x$inputs</code> retains evaluated survival-model inputs plus the
+applicable testing-schedule arguments. The normalized logical vectors
+above remain the authoritative schedule used in calculations and
+summaries.</p>
 </div>
 <div class="section level2">
 <h2 id="type-i-error-preservation">Type I Error Preservation<a class="anchor" aria-label="anchor" href="#type-i-error-preservation"></a>
@@ -505,8 +515,10 @@ planned value. At inactive analyses, the cumulative spending is frozen
 analysis, the incremental spend absorbs the budget from any prior
 skipped analyses, so the cumulative spend catches up to the planned
 level. The efficacy bounds at active analyses are then recomputed using
-the modified spending with the sample size held fixed, ensuring the
-total alpha spent equals the nominal level.</p>
+the modified spending, ensuring the total alpha spent equals the nominal
+level. If information was not fixed on input, the maximum information is
+subsequently solved again using the boundaries that will actually be
+tested so that power remains at its target.</p>
 </div>
 <div class="section level3">
 <h3 id="non-binding-futility-test-type-4-or-6">Non-binding futility (test.type 4 or 6)<a class="anchor" aria-label="anchor" href="#non-binding-futility-test-type-4-or-6"></a>
@@ -550,9 +562,11 @@ exactly <span class="math inline">\(\alpha = 0.025\)</span>:</p>
 </h3>
 <p>For binding designs, the efficacy bounds depend on the futility
 bounds. When futility bounds are selectively removed, the bounds are
-recomputed with the modified spending while holding sample size fixed.
-This ensures the cumulative Type I error remains at the nominal
-level:</p>
+recomputed with the modified spending. For a newly derived design,
+information is then adjusted to retain target power; when
+<code>n.I</code> is supplied, information remains fixed. This preserves
+cumulative Type I error at the nominal level while respecting the
+requested power calculation:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Baseline binding design</span></span>
 <span><span class="va">x_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
@@ -564,16 +578,28 @@ level:</p>
 <span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Selective alpha:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x_b_sel</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Selective alpha: 0.025</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Selective power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x_b_sel</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Selective power: 0.9</span></span>
 <span></span>
 <span><span class="co"># Remove efficacy at IA1</span></span>
 <span><span class="va">x_b_eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Skip IA1 efficacy alpha:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x_b_eff</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Skip IA1 efficacy alpha: 0.025</span></span></code></pre></div>
+<span><span class="co">#&gt; Skip IA1 efficacy alpha: 0.025</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Skip IA1 efficacy power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x_b_eff</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Skip IA1 efficacy power: 0.9</span></span></code></pre></div>
 <p>In all cases, the actual Type I error is exactly <span class="math inline">\(\alpha = 0.025\)</span> (within numerical
-tolerance). The sample size remains unchanged from the baseline design,
-and the bounds at active analyses adjust to properly allocate the
-spending budget.</p>
+tolerance). The bounds at active analyses adjust to allocate the
+spending budget, and derived information is recalibrated so that skipped
+efficacy or lower analyses do not leave the design over-powered.</p>
+<p>When <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> is used with alternate alpha
+levels, every efficacy column retains the original
+<code>testUpper</code> schedule. An efficacy look that was not planned
+is not reintroduced merely because another alpha level is displayed.
+Alternate-alpha summaries are available for the one-sided or non-binding
+test types 1, 4, 6, and 8. They are intentionally not offered for
+binding types 2, 3, 5, or 7, which are outside the Maurer–Bretz
+non-binding multiple-testing framework.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

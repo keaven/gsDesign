@@ -10,13 +10,14 @@ for multiple hypotheses can be used as nominal p-values to plug into a
 multiplicity graph. A sequential p-value is described as the minimum
 alpha level at which a one-sided group sequential bound would be
 rejected given interim and final observed results. It is meaningful for
-both one-sided designs and designs with non-binding futility bounds
-(`test.type` 1, 4, 6), but not for 2-sided designs with binding futility
-bounds (`test.type` 2, 3 or 5). Mild restrictions are required on
-spending functions used, but these are satisfied for commonly used
-spending functions such as the Lan-DeMets spending function
-approximating an O'Brien-Fleming bound or a Hwang-Shih-DeCani spending
-function; see Maurer and Bretz (2013).
+both one-sided designs and designs with non-binding futility or harm
+bounds (`test.type` 1, 4, 6, or 8), but not for 2-sided designs with
+binding futility or harm bounds (`test.type` 2, 3, 5, or 7). For test
+type 8, both non-binding lower bounds are ignored in the Type I error
+calculation. Mild restrictions are required on spending functions used,
+but these are satisfied for commonly used spending functions such as the
+Lan-DeMets spending function approximating an O'Brien-Fleming bound or a
+Hwang-Shih-DeCani spending function; see Maurer and Bretz (2013).
 
 ## Usage
 

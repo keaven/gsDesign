@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1331,20 +1331,32 @@ derived using a Hwang-Shih-DeCani spending function with gamma = -3.</p>
 <div class="section level2">
 <h2 id="converting-to-an-exact-binomial-design">Converting to an exact binomial design<a class="anchor" aria-label="anchor" href="#converting-to-an-exact-binomial-design"></a>
 </h2>
-<p>We now convert this to an exact binomial design. The bound counts are
-described in this initial table displayed. <code>N</code> is the total
-event count, <code>a</code> the maximum number of events in the
-experimental group to cross the efficacy bound. For example, if 12 or
-fewer of 30 events at interim 1 are in the experimental group the
-efficacy bound has been crossed. The futility bound is in
-<code>b</code>; at the first interim, if 21 or more of 30 total events
-are in the experimental group then the futility bound would be crossed
-and the alternate hypothesis could be rejected. The second and third
-tables below give probabilities of crossing the upper (futility) and
-lower (efficacy) bounds under the null (<code>theta</code> = 0.6774) and
-alternate (<code>theta</code> = 0.4737) hypotheses, respectively; these
-calculations are done under the exact binomial distribution
-assumptions.</p>
+<p>We now convert this to an exact binomial design. Full conversion with
+<code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> is available for non-binding
+<code>test.type = 1</code>, <code>4</code>, <code>6</code>, and
+<code>8</code>. For type 4, the upper event-count stopping boundary
+targets beta spending under the alternative; for type 6 it targets
+lower-bound spending under the null using <code>astar</code>. For type
+8, <code>upper</code> contains all upper event-count stops and the
+additional <code>futility</code> and <code>harm</code> components
+partition those stops into mutually exclusive regions. The exact
+futility boundary targets beta spending under the alternative, while the
+harm boundary targets <code>astar</code> spending under the null. Exact
+efficacy repeated and sequential p-values remain available for all four
+non-binding test types and intentionally ignore their non-binding lower
+and harm bounds. The bound counts are described in this initial table
+displayed. <code>N</code> is the total event count, <code>a</code> the
+maximum number of events in the experimental group to cross the efficacy
+bound. For example, if 12 or fewer of 30 events at interim 1 are in the
+experimental group the efficacy bound has been crossed. The futility
+bound is in <code>b</code>; at the first interim, if 21 or more of 30
+total events are in the experimental group then the futility bound would
+be crossed and the alternate hypothesis could be rejected. The second
+and third tables below give probabilities of crossing the upper
+(futility) and lower (efficacy) bounds under the null
+(<code>theta</code> = 0.6774) and alternate (<code>theta</code> =
+0.4737) hypotheses, respectively; these calculations are done under the
+exact binomial distribution assumptions.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">xb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toBinomialExact.html">toBinomialExact</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">

@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -395,10 +395,10 @@ complete seasonal exact-binomial monitoring workflow, see
 <span></span>
 <span><span class="co"># Continuous event targets and expected enrollment before integer conversion</span></span>
 <span><span class="va">seasonal_design</span><span class="op">$</span><span class="va">n.I</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 11.94976 23.89951 35.84927</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 11.67361 23.34721 35.02082</span></span></code></pre>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">seasonal_design</span><span class="op">$</span><span class="va">eNC</span> <span class="op">+</span> <span class="va">seasonal_design</span><span class="op">$</span><span class="va">eNE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 2071.587 3442.289 4099.222</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 2023.714 3362.740 4004.492</span></span></code></pre>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seasonal_design</span><span class="op">$</span><span class="cn">T</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 13.03217 25.03845 42.00000</span></span></code></pre>
@@ -422,9 +422,9 @@ the late zero event-rate period.</p>
 <span>  integer_enrollment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">seasonal_integer</span><span class="op">$</span><span class="va">eNC</span> <span class="op">+</span> <span class="va">seasonal_integer</span><span class="op">$</span><span class="va">eNE</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   analysis continuous_events integer_events continuous_time integer_time</span></span>
-<span><span class="co">## 1        1            11.950             12          13.032       13.032</span></span>
-<span><span class="co">## 2        2            23.900             24          25.038       25.038</span></span>
-<span><span class="co">## 3        3            35.849             36          42.000       42.000</span></span>
+<span><span class="co">## 1        1            11.674             12          13.032       13.032</span></span>
+<span><span class="co">## 2        2            23.347             24          25.038       25.038</span></span>
+<span><span class="co">## 3        3            35.021             36          42.000       42.000</span></span>
 <span><span class="co">##   integer_enrollment</span></span>
 <span><span class="co">## 1           2080.066</span></span>
 <span><span class="co">## 2           3456.378</span></span>

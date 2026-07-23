@@ -21,8 +21,11 @@ The `testUpper`, `testLower`, and `testHarm` parameters in
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
 allow fine-grained control over which bounds are active at each
 analysis. When a bound is inactive at a given analysis, it is set to an
-extreme value (\\\pm 20\\ on the Z-scale) so that it cannot be crossed,
-and is displayed as `NA` in summaries.
+extreme value (\\\pm 20\\ on the Z-scale) so that it cannot be crossed.
+Every characteristic for that bound, including cumulative crossing
+probability, is displayed as `NA` at the inactive analysis. The
+underlying probability arrays retain the cumulative crossing
+information.
 
 ## Parameters
 
@@ -71,27 +74,29 @@ the futility bound shows as `NA`:
 
 gsBoundSummary(x1)
 #>                Analysis               Value Efficacy Futility
-#>               IA 1: 33%                   Z   3.0107  -0.2387
-#>  N/Fixed design N: 0.36         p (1-sided)   0.0013   0.5943
-#>                             ~delta at bound   1.5553  -0.1233
-#>                         P(Cross) if delta=0   0.0013   0.4057
-#>                         P(Cross) if delta=1   0.1412   0.0148
+#>               IA 1: 33%                   Z   3.0107  -0.2674
+#>  N/Fixed design N: 0.35         p (1-sided)   0.0013   0.6054
+#>                             ~delta at bound   1.5787  -0.1402
+#>                         P(Cross) if delta=0   0.0013   0.3946
+#>                         P(Cross) if delta=1   0.1349   0.0148
 #>               IA 2: 67%                   Z   2.5465       NA
-#>  N/Fixed design N: 0.71         p (1-sided)   0.0054       NA
-#>                             ~delta at bound   0.9302       NA
+#>  N/Fixed design N: 0.69         p (1-sided)   0.0054       NA
+#>                             ~delta at bound   0.9442       NA
 #>                         P(Cross) if delta=0   0.0062       NA
-#>                         P(Cross) if delta=1   0.5815       NA
+#>                         P(Cross) if delta=1   0.5657       NA
 #>                   Final                   Z   1.9992       NA
-#>  N/Fixed design N: 1.07         p (1-sided)   0.0228       NA
-#>                             ~delta at bound   0.5963       NA
+#>  N/Fixed design N: 1.04         p (1-sided)   0.0228       NA
+#>                             ~delta at bound   0.6052       NA
 #>                         P(Cross) if delta=0   0.0244       NA
-#>                         P(Cross) if delta=1   0.9077       NA
+#>                         P(Cross) if delta=1   0.9000       NA
 ```
 
 The probabilities under the null and alternative are recomputed
-accounting for the inactive bounds. Notice the cumulative futility
+accounting for the inactive bounds. The underlying cumulative futility
 crossing probability does not increase after IA1 since no further
-futility testing occurs.
+futility testing occurs; the later inactive futility rows in
+[`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+are displayed entirely as `NA`.
 
 We can also see the bounds in the
 [`print()`](https://rdrr.io/r/base/print.html) output:
@@ -107,9 +112,9 @@ x1
 #>            Sample
 #>             Size    ----Lower bounds----  ----Upper bounds-----
 #>   Analysis Ratio*   Z   Nominal p Spend+  Z   Nominal p Spend++
-#>          1  0.357 -0.24    0.4057 0.0148 3.01    0.0013  0.0013
-#>          2  0.713    NA        NA     NA 2.55    0.0054  0.0049
-#>          3  1.070    NA        NA     NA 2.00    0.0228  0.0188
+#>          1  0.346 -0.27    0.3946 0.0148 3.01    0.0013  0.0013
+#>          2  0.692    NA        NA     NA 2.55    0.0054  0.0049
+#>          3  1.038    NA        NA     NA 2.00    0.0228  0.0188
 #>      Total                        0.0148                 0.0250 
 #> + lower bound beta spending (under H1):
 #>  Hwang-Shih-DeCani spending function with gamma = -2.
@@ -123,13 +128,13 @@ x1
 #> Upper boundary (power or Type I Error)
 #>           Analysis
 #>    Theta      1      2      3  Total   E{N}
-#>   0.0000 0.0013 0.0049 0.0181 0.0244 0.7779
-#>   3.2415 0.1412 0.4403 0.3262 0.9077 0.8016
+#>   0.0000 0.0013 0.0049 0.0182 0.0244 0.7626
+#>   3.2415 0.1349 0.4308 0.3343 0.9000 0.7856
 #> 
 #> Lower boundary (futility or Type II Error)
 #>           Analysis
 #>    Theta      1 2 3  Total
-#>   0.0000 0.4057 0 0 0.4057
+#>   0.0000 0.3946 0 0 0.3946
 #>   3.2415 0.0148 0 0 0.0148
 ```
 
@@ -174,21 +179,21 @@ x2 <- gsDesign(
 
 gsBoundSummary(x2)
 #>                Analysis               Value Efficacy Futility
-#>               IA 1: 33%                   Z       NA  -0.2579
-#>  N/Fixed design N: 0.35         p (1-sided)       NA   0.6018
-#>                             ~delta at bound       NA  -0.1346
-#>                         P(Cross) if delta=0       NA   0.3982
+#>               IA 1: 33%                   Z       NA  -0.2605
+#>  N/Fixed design N: 0.35         p (1-sided)       NA   0.6028
+#>                             ~delta at bound       NA  -0.1361
+#>                         P(Cross) if delta=0       NA   0.3972
 #>                         P(Cross) if delta=1       NA   0.0148
-#>               IA 2: 67%                   Z   2.4976   0.9138
-#>   N/Fixed design N: 0.7         p (1-sided)   0.0063   0.1804
-#>                             ~delta at bound   0.9215   0.3371
-#>                         P(Cross) if delta=0   0.0062   0.8279
-#>                         P(Cross) if delta=1   0.5841   0.0437
-#>                   Final                   Z   1.9593   1.9593
+#>               IA 2: 67%                   Z   2.4976   0.9102
+#>   N/Fixed design N: 0.7         p (1-sided)   0.0063   0.1814
+#>                             ~delta at bound   0.9227   0.3363
+#>                         P(Cross) if delta=0   0.0062   0.8270
+#>                         P(Cross) if delta=1   0.5826   0.0437
+#>                   Final                   Z   1.9597   1.9597
 #>  N/Fixed design N: 1.05         p (1-sided)   0.0250   0.0250
-#>                             ~delta at bound   0.5902   0.5902
+#>                             ~delta at bound   0.5911   0.5911
 #>                         P(Cross) if delta=0   0.0250   0.9750
-#>                         P(Cross) if delta=1   0.9006   0.0994
+#>                         P(Cross) if delta=1   0.9000   0.1000
 ```
 
 At IA1, only the futility bound is active. The efficacy bound appears as
@@ -225,21 +230,21 @@ xs <- gsSurv(
 gsBoundSummary(xs)
 #> Method: LachinFoulkes 
 #>     Analysis              Value Efficacy Futility
-#>    IA 1: 50%                  Z   2.7500   0.4555
-#>       N: 524        p (1-sided)   0.0030   0.3244
-#>  Events: 179       ~HR at bound   0.6623   0.9340
-#>    Month: 15   P(Cross) if HR=1   0.0030   0.6756
-#>              P(Cross) if HR=0.7   0.3572   0.0269
+#>    IA 1: 50%                  Z   2.7500   0.4225
+#>       N: 510        p (1-sided)   0.0030   0.3363
+#>  Events: 174       ~HR at bound   0.6585   0.9378
+#>    Month: 15   P(Cross) if HR=1   0.0030   0.6637
+#>              P(Cross) if HR=0.7   0.3450   0.0269
 #>    IA 2: 75%                  Z   2.4318       NA
-#>       N: 524        p (1-sided)   0.0075       NA
-#>  Events: 268       ~HR at bound   0.7427       NA
+#>       N: 510        p (1-sided)   0.0075       NA
+#>  Events: 260       ~HR at bound   0.7396       NA
 #>    Month: 23   P(Cross) if HR=1   0.0089       NA
-#>              P(Cross) if HR=0.7   0.6959       NA
+#>              P(Cross) if HR=0.7   0.6817       NA
 #>        Final                  Z   2.0116       NA
-#>       N: 524        p (1-sided)   0.0221       NA
-#>  Events: 357       ~HR at bound   0.8081       NA
-#>    Month: 36   P(Cross) if HR=1   0.0239       NA
-#>              P(Cross) if HR=0.7   0.9067       NA
+#>       N: 510        p (1-sided)   0.0221       NA
+#>  Events: 347       ~HR at bound   0.8056       NA
+#>    Month: 36   P(Cross) if HR=1   0.0240       NA
+#>              P(Cross) if HR=0.7   0.9000       NA
 ```
 
 ## Example 4: Selective harm monitoring (test.type 7/8)
@@ -271,17 +276,17 @@ gsBoundSummary(xh)
 #>               IA 1: 33%                   Z -2.0061  -0.2387
 #>  N/Fixed design N: 0.36         p (1-sided)  0.9776   0.5943
 #>                             ~delta at bound -1.0363  -0.1233
-#>                         P(Cross) if delta=0  0.0224   0.4057
+#>                         P(Cross) if delta=0  0.0224   0.3832
 #>                         P(Cross) if delta=1  0.0000   0.0148
 #>               IA 2: 67%                   Z -1.9827   0.9411
 #>  N/Fixed design N: 0.71         p (1-sided)  0.9763   0.1733
 #>                             ~delta at bound -0.7242   0.3438
-#>                         P(Cross) if delta=0  0.0385   0.8347
+#>                         P(Cross) if delta=0  0.0231   0.8116
 #>                         P(Cross) if delta=1  0.0000   0.0437
 #>                   Final                   Z      NA   1.9992
 #>  N/Fixed design N: 1.07         p (1-sided)      NA   0.0228
 #>                             ~delta at bound      NA   0.5963
-#>                         P(Cross) if delta=0      NA   0.9767
+#>                         P(Cross) if delta=0      NA   0.9536
 #>                         P(Cross) if delta=1      NA   0.1000
 #>  Efficacy
 #>    3.0107
@@ -325,21 +330,21 @@ x5 <- gsDesign(
 )
 gsBoundSummary(x5)
 #>                Analysis               Value Efficacy Futility
-#>               IA 1: 33%                   Z       NA  -0.2387
-#>  N/Fixed design N: 0.36         p (1-sided)       NA   0.5943
-#>                             ~delta at bound       NA  -0.1233
-#>                         P(Cross) if delta=0       NA   0.4057
+#>               IA 1: 33%                   Z       NA  -0.2700
+#>  N/Fixed design N: 0.35         p (1-sided)       NA   0.6064
+#>                             ~delta at bound       NA  -0.1418
+#>                         P(Cross) if delta=0       NA   0.3936
 #>                         P(Cross) if delta=1       NA   0.0148
 #>               IA 2: 67%                   Z   2.4979       NA
-#>  N/Fixed design N: 0.71         p (1-sided)   0.0062       NA
-#>                             ~delta at bound   0.9124       NA
+#>  N/Fixed design N: 0.69         p (1-sided)   0.0062       NA
+#>                             ~delta at bound   0.9274       NA
 #>                         P(Cross) if delta=0   0.0062       NA
-#>                         P(Cross) if delta=1   0.5945       NA
+#>                         P(Cross) if delta=1   0.5773       NA
 #>                   Final                   Z   1.9947       NA
-#>  N/Fixed design N: 1.07         p (1-sided)   0.0230       NA
-#>                             ~delta at bound   0.5949       NA
+#>  N/Fixed design N: 1.04         p (1-sided)   0.0230       NA
+#>                             ~delta at bound   0.6047       NA
 #>                         P(Cross) if delta=0   0.0244       NA
-#>                         P(Cross) if delta=1   0.9083       NA
+#>                         P(Cross) if delta=1   0.9000       NA
 ```
 
 Note the `NA` values: efficacy is `NA` at IA1, and futility is `NA` at
@@ -399,7 +404,13 @@ x1$testHarm
 ```
 
 These can be inspected programmatically for downstream analyses or
-reporting.
+reporting. For
+[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+[`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
+objects, `x$call` records the original call and `x$inputs` retains
+evaluated survival-model inputs plus the applicable testing-schedule
+arguments. The normalized logical vectors above remain the authoritative
+schedule used in calculations and summaries.
 
 ## Type I Error Preservation
 
@@ -416,8 +427,10 @@ spend), causing the C code to produce \\\pm\\EXTREMEZ bounds. At the
 next active analysis, the incremental spend absorbs the budget from any
 prior skipped analyses, so the cumulative spend catches up to the
 planned level. The efficacy bounds at active analyses are then
-recomputed using the modified spending with the sample size held fixed,
-ensuring the total alpha spent equals the nominal level.
+recomputed using the modified spending, ensuring the total alpha spent
+equals the nominal level. If information was not fixed on input, the
+maximum information is subsequently solved again using the boundaries
+that will actually be tested so that power remains at its target.
 
 ### Non-binding futility (test.type 4 or 6)
 
@@ -465,8 +478,10 @@ cat("Non-binding alpha (skip IA1 efficacy):", nb_alpha_eff, "\n")
 
 For binding designs, the efficacy bounds depend on the futility bounds.
 When futility bounds are selectively removed, the bounds are recomputed
-with the modified spending while holding sample size fixed. This ensures
-the cumulative Type I error remains at the nominal level:
+with the modified spending. For a newly derived design, information is
+then adjusted to retain target power; when `n.I` is supplied,
+information remains fixed. This preserves cumulative Type I error at the
+nominal level while respecting the requested power calculation:
 
 ``` r
 
@@ -480,15 +495,30 @@ x_b_sel <- gsDesign(k = 3, test.type = 3, alpha = 0.025, beta = 0.1,
   testLower = c(TRUE, FALSE, FALSE))
 cat("Selective alpha:", sum(x_b_sel$upper$prob[, 1]), "\n")
 #> Selective alpha: 0.025
+cat("Selective power:", sum(x_b_sel$upper$prob[, 2]), "\n")
+#> Selective power: 0.9
 
 # Remove efficacy at IA1
 x_b_eff <- gsDesign(k = 3, test.type = 3, alpha = 0.025, beta = 0.1,
   testUpper = c(FALSE, TRUE, TRUE))
 cat("Skip IA1 efficacy alpha:", sum(x_b_eff$upper$prob[, 1]), "\n")
 #> Skip IA1 efficacy alpha: 0.025
+cat("Skip IA1 efficacy power:", sum(x_b_eff$upper$prob[, 2]), "\n")
+#> Skip IA1 efficacy power: 0.9
 ```
 
 In all cases, the actual Type I error is exactly \\\alpha = 0.025\\
-(within numerical tolerance). The sample size remains unchanged from the
-baseline design, and the bounds at active analyses adjust to properly
-allocate the spending budget.
+(within numerical tolerance). The bounds at active analyses adjust to
+allocate the spending budget, and derived information is recalibrated so
+that skipped efficacy or lower analyses do not leave the design
+over-powered.
+
+When
+[`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+is used with alternate alpha levels, every efficacy column retains the
+original `testUpper` schedule. An efficacy look that was not planned is
+not reintroduced merely because another alpha level is displayed.
+Alternate-alpha summaries are available for the one-sided or non-binding
+test types 1, 4, 6, and 8. They are intentionally not offered for
+binding types 2, 3, 5, or 7, which are outside the Maurer–Bretz
+non-binding multiple-testing framework.

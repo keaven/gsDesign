@@ -97,7 +97,7 @@ hypothesis."><meta property="og:image" content="https://keaven.github.io/gsDesig
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -432,7 +432,9 @@ Otherwise, a logical vector of length <code>k</code>.
 Only used for <code>test.type</code> 7 or 8; at least one analysis must be
 <code>TRUE</code> for those types.
 Where <code>testHarm</code> is <code>FALSE</code>, the harm bound is set to
-<code>-20</code> (effectively <code>-Inf</code>) and displayed as <code>NA</code> in output.</p></dd>
+<code>-20</code> (effectively <code>-Inf</code>) and the bound is displayed as
+<code>NA</code> in output. Cumulative harm crossing probability from earlier
+analyses is still displayed.</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
@@ -601,8 +603,15 @@ crossing probabilities at each analysis. Lower spending is under alternative
 hypothesis (beta spending) for <code>test.type=3</code> or <code>4</code>.  For
 <code>test.type=2</code>, <code>5</code> or <code>6</code>, lower spending is under the null
 hypothesis. For <code>test.type=1</code>, output value is <code>NULL</code>. See
-<code><a href="../articles/SpendingFunctionOverview.html">vignette("SpendingFunctionOverview")</a></code> and manual.</p></dd>
- <dt>theta</dt>
+<code><a href="../articles/SpendingFunctionOverview.html">vignette("SpendingFunctionOverview")</a></code> and manual. For
+<code>test.type=7</code> or <code>8</code>, crossing probabilities exclude harm
+crossings.</p></dd>
+ <dt>harm</dt>
+<dd><p>Harm bound spending function, boundary, and crossing
+probabilities at each analysis for <code>test.type=7</code> or <code>8</code>. Harm,
+lower, and upper crossing probabilities are mutually exclusive.</p></dd>
+
+<dt>theta</dt>
 <dd><p>Standarized
 effect size under null (0) and alternate hypothesis. If <code>delta</code> is
 input, <code>theta[1]=delta</code>. If <code>n.fix</code> is input, <code>theta[1]</code> is

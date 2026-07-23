@@ -684,11 +684,18 @@ we can test at \\\alpha = 0.025\\?
 When `x` is provided and the information fractions (timing) match the
 original design,
 [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
-recalculates **efficacy bounds** at the new alpha using
-`gsDesign(test.type = 1)` (efficacy-only) while **preserving the
-original futility bounds** from `x`. This follows the same convention as
+recalculates **efficacy bounds** at the new alpha using the non-binding
+efficacy convention while **preserving the original efficacy testing
+schedule and futility bounds** from `x`. This follows the same
+convention as
 [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
 Any futility bound that would exceed the new efficacy bound is clipped.
+
+For test types 1, 4, 6, and 8 this non-binding calculation is
+appropriate for evaluating alpha propagated by a Maurer–Bretz graphical
+multiple-testing procedure. For binding test types 2, 3, 5, and 7, the
+calculation below is a planning sensitivity analysis only and should not
+be interpreted as graphical alpha recycling or as a sequential p-value.
 
 When timing changes (e.g., different `targetEvents`), both bounds are
 recomputed from scratch using the full `test.type` and spending
@@ -753,12 +760,12 @@ cat("Futility bounds:", round(pwr_a025$lower$bound, 4), "\n")
 cat("Power:          ", round(pwr_a025$power * 100, 1), "%\n\n")
 ```
 
-    ## Power:           88.6 %
+    ## Power:           93 %
 
 ``` r
 
 # Cross-check: gsBoundSummary at the same alternate alpha
-# (only test.type 1, 4, 6, 7, 8 are supported)
+# (only non-binding test.type 1, 4, 6, and 8 are supported)
 cat("=== gsBoundSummary (alpha = 0.025) ===\n")
 ```
 
@@ -788,15 +795,16 @@ print(gsBoundSummary(design_a0125, alpha = 0.025))
 
 Note that
 [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-adds an \\\alpha = 0.025\\ column for `test.type` 1, 4, 6, 7, and 8. For
-binding types (3, 5),
-[`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-does not support alternate alpha, but
+adds an \\\alpha = 0.025\\ column for non-binding `test.type` 1, 4, 6,
+and 8. It does not support alternate alpha for binding types 2, 3, 5, or
+7.
 [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
-handles them using the same approach: recompute efficacy with
-`test.type = 1` at the new alpha and keep original futility bounds.
+can still recompute efficacy with the non-binding convention for a
+binding input design, retain the original `testUpper` schedule, and keep
+the original futility bounds, but that result is a planning sensitivity
+analysis rather than a Maurer–Bretz multiplicity calculation.
 
-### Binding type example (test.type = 3)
+### Binding type planning sensitivity example (test.type = 3)
 
 ``` r
 
@@ -848,7 +856,7 @@ cat("New futility:     ", round(pwr3_a025$lower$bound, 4), "\n")
 cat("Power:            ", round(pwr3_a025$power * 100, 1), "%\n")
 ```
 
-    ## Power:             88.2 %
+    ## Power:             92.7 %
 
 The futility bounds are preserved from the original design. At the final
 analysis where the original futility bound equals the original efficacy

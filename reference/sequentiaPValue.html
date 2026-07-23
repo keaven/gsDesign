@@ -12,8 +12,11 @@ This is particularly useful for multiplicity methods such as the graphical metho
 where sequential p-values for multiple hypotheses can be used as nominal p-values to plug into a multiplicity graph.
 A sequential p-value is described as the minimum alpha level at which a one-sided group sequential bound would
 be rejected given interim and final observed results.
-It is meaningful for both one-sided designs and designs with non-binding futility bounds (test.type 1, 4, 6),
-but not for 2-sided designs with binding futility bounds (test.type 2, 3 or 5).
+It is meaningful for both one-sided designs and designs with non-binding
+futility or harm bounds (test.type 1, 4, 6, or 8), but not for
+2-sided designs with binding futility or harm bounds (test.type 2,
+3, 5, or 7). For test type 8, both non-binding lower bounds are ignored in
+the Type I error calculation.
 Mild restrictions are required on spending functions used, but these are satisfied for commonly used spending functions
 such as the Lan-DeMets spending function approximating an O'Brien-Fleming bound or a Hwang-Shih-DeCani spending function; see Maurer and Bretz (2013)."><meta property="og:description" content="sequentialPValue computes a sequential p-value for a group sequential design using a spending function as described in
 Maurer and Bretz (2013) and previously defined by Liu and Anderson (2008).
@@ -22,8 +25,11 @@ This is particularly useful for multiplicity methods such as the graphical metho
 where sequential p-values for multiple hypotheses can be used as nominal p-values to plug into a multiplicity graph.
 A sequential p-value is described as the minimum alpha level at which a one-sided group sequential bound would
 be rejected given interim and final observed results.
-It is meaningful for both one-sided designs and designs with non-binding futility bounds (test.type 1, 4, 6),
-but not for 2-sided designs with binding futility bounds (test.type 2, 3 or 5).
+It is meaningful for both one-sided designs and designs with non-binding
+futility or harm bounds (test.type 1, 4, 6, or 8), but not for
+2-sided designs with binding futility or harm bounds (test.type 2,
+3, 5, or 7). For test type 8, both non-binding lower bounds are ignored in
+the Type I error calculation.
 Mild restrictions are required on spending functions used, but these are satisfied for commonly used spending functions
 such as the Lan-DeMets spending function approximating an O'Brien-Fleming bound or a Hwang-Shih-DeCani spending function; see Maurer and Bretz (2013)."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,7 +39,7 @@ such as the Lan-DeMets spending function approximating an O'Brien-Fleming bound 
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,8 +73,11 @@ This is particularly useful for multiplicity methods such as the graphical metho
 where sequential p-values for multiple hypotheses can be used as nominal p-values to plug into a multiplicity graph.
 A sequential p-value is described as the minimum alpha level at which a one-sided group sequential bound would
 be rejected given interim and final observed results.
-It is meaningful for both one-sided designs and designs with non-binding futility bounds (<code>test.type</code> 1, 4, 6),
-but not for 2-sided designs with binding futility bounds (<code>test.type</code> 2, 3 or 5).
+It is meaningful for both one-sided designs and designs with non-binding
+futility or harm bounds (<code>test.type</code> 1, 4, 6, or 8), but not for
+2-sided designs with binding futility or harm bounds (<code>test.type</code> 2,
+3, 5, or 7). For test type 8, both non-binding lower bounds are ignored in
+the Type I error calculation.
 Mild restrictions are required on spending functions used, but these are satisfied for commonly used spending functions
 such as the Lan-DeMets spending function approximating an O'Brien-Fleming bound or a Hwang-Shih-DeCani spending function; see Maurer and Bretz (2013).</p>
     </div>

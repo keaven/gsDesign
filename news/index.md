@@ -1,6 +1,46 @@
 # Changelog
 
+## gsDesign (development version)
+
+### New features
+
+- Sequential p-values, including exact-binomial repeated and sequential
+  efficacy p-values, now support `test.type = 8` by ignoring its
+  non-binding futility and harm bounds.
+  [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
+  now provides full exact conversion for non-binding test types 1, 4, 6,
+  and 8. For type 6, the upper event-count boundary targets lower-bound
+  spending under the null hypothesis. For type 8, exact upper
+  event-count stops are partitioned into mutually exclusive futility and
+  harm regions, targeting beta spending under the alternative and harm
+  spending under the null, respectively
+  ([\#287](https://github.com/keaven/gsDesign/issues/287)).
+
+### Bug fixes
+
+- Power plots for test types 7 and 8 now treat crossing the futility
+  threshold as the union of futility-only and harm stops. The separate
+  harm curve remains harm-only, and the mutually exclusive probabilities
+  stored on the design are unchanged
+  ([\#287](https://github.com/keaven/gsDesign/issues/287)).
+- Sample-size derivation now accounts for analyses where efficacy,
+  futility, or harm testing is skipped, avoiding power above the
+  requested target. Harm, futility, and efficacy crossing probabilities
+  are reported as mutually exclusive outcomes. Alternate-alpha summaries
+  and power calculations retain the planned efficacy testing schedule,
+  and survival-design inputs retain the applicable testing flags.
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+  reports every characteristic, including cumulative crossing
+  probability, as `NA` when its bound is not tested at an analysis
+  ([\#287](https://github.com/keaven/gsDesign/issues/287)).
+- Alternate-alpha summaries are now limited to one-sided and non-binding
+  test types 1, 4, 6, and 8. Binding test type 7 is no longer presented
+  as compatible with the Maurer–Bretz graphical multiple-testing
+  framework ([\#287](https://github.com/keaven/gsDesign/issues/287)).
+
 ## gsDesign 3.10.1
+
+CRAN release: 2026-07-20
 
 ### Bug fixes
 

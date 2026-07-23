@@ -72,7 +72,11 @@ value. P{Cross if delta=xx}: For each of the parameter values in
 x, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
-interest."><meta property="og:description" content="A tabular summary of a group sequential design's bounds and their properties
+interest. For test types 7 and 8, harm, futility, and efficacy crossing
+probabilities are mutually exclusive. Every characteristic for a bound,
+including its cumulative crossing probability, is shown as NA at an
+analysis where that bound is inactive. The underlying probability arrays on
+x retain the cumulative crossing information."><meta property="og:description" content="A tabular summary of a group sequential design's bounds and their properties
 are often useful. The 'vintage' print.gsDesign() function provides a
 complete but minimally formatted summary of a group sequential design
 derived by gsDesign(). A brief description of the overall design can
@@ -139,7 +143,11 @@ value. P{Cross if delta=xx}: For each of the parameter values in
 x, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
-interest."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
+interest. For test types 7 and 8, harm, futility, and efficacy crossing
+probabilities are mutually exclusive. Every characteristic for a bound,
+including its cumulative crossing probability, is shown as NA at an
+analysis where that bound is inactive. The underlying probability arrays on
+x retain the cumulative crossing information."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -147,7 +155,7 @@ interest."><meta property="og:image" content="https://keaven.github.io/gsDesign/
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -241,7 +249,11 @@ value. <code>P{Cross if delta=xx}: </code>For each of the parameter values in
 <code>x</code>, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
-interest.</p>
+interest. For test types 7 and 8, harm, futility, and efficacy crossing
+probabilities are mutually exclusive. Every characteristic for a bound,
+including its cumulative crossing probability, is shown as <code>NA</code> at an
+analysis where that bound is inactive. The underlying probability arrays on
+<code>x</code> retain the cumulative crossing information.</p>
     </div>
 
     <div class="section level2">
@@ -408,9 +420,14 @@ be changed.</p></dd>
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
 <dd><p>If used, a vector of alternate alpha-levels to print boundaries
-for. Only works with test.type 1, 4, 6, 7, and 8. If specified, efficacy bound
+for. Only works with non-binding test types 1, 4, 6, and 8. If specified,
+efficacy bound
 columns are headed by individual alpha levels. The alpha level of the input
-design is always included as the first column.</p></dd>
+design is always included as the first column. Alternate alpha levels retain
+the efficacy testing schedule in <code>x$testUpper</code>. Binding lower-bound
+designs, including test type 7, are not supported for alternate-alpha
+summaries because they do not satisfy the non-binding framework used for
+Maurer–Bretz graphical multiple testing.</p></dd>
 
 
 <dt id="arg-include-rownames">include.rownames<a class="anchor" aria-label="anchor" href="#arg-include-rownames"></a></dt>
@@ -707,7 +724,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Table caption."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.6.1 by xtable 1.8-8 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Sun Jul 19 10:57:20 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Thu Jul 23 19:47:50 2026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{llrr}</span>

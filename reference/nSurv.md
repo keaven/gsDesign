@@ -418,7 +418,9 @@ print(x, digits = 3, show_gsDesign = FALSE, show_strata = TRUE, ...)
   `FALSE` indicates none. Otherwise, a logical vector of length `k`.
   Only used for `test.type` 7 or 8; at least one analysis must be `TRUE`
   for those types. Where `testHarm` is `FALSE`, the harm bound is set to
-  `-20` (effectively `-Inf`) and displayed as `NA` in output.
+  `-20` (effectively `-Inf`) and the bound is displayed as `NA` in
+  output. Cumulative harm crossing probability from earlier analyses is
+  still displayed.
 
 - show_gsDesign:
 
@@ -789,13 +791,17 @@ calculation.
 
 The input to `gsSurv` is a combination of the input to `nSurv()` and
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md).
-When `T = NULL` and `minfup` is specified, `gsSurv()` preserves the
-input accrual rate and minimum follow-up, applies the group sequential
-design, and solves the accrual duration needed for the final planned
-number of events. When both `T` and `minfup` are `NULL`, `gsSurv()`
-preserves the input accrual rate and duration, applies the group
-sequential design, and solves the follow-up duration needed for the
-final planned number of events.
+The original call is stored in `call`. The `inputs` component retains
+evaluated survival-model inputs used for printing and the applicable
+`testUpper`, `testLower`, and `testHarm` arguments. The normalized
+testing schedules used by the design are stored directly in the
+corresponding top-level components. When `T = NULL` and `minfup` is
+specified, `gsSurv()` preserves the input accrual rate and minimum
+follow-up, applies the group sequential design, and solves the accrual
+duration needed for the final planned number of events. When both `T`
+and `minfup` are `NULL`, `gsSurv()` preserves the input accrual rate and
+duration, applies the group sequential design, and solves the follow-up
+duration needed for the final planned number of events.
 
 `nEventsIA()` is provided to compute the expected number of events at a
 given point in time given enrollment, event and censoring rates. The
@@ -927,7 +933,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Sun Jul 19 10:57:26 2026
+#> % Thu Jul 23 19:47:55 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}

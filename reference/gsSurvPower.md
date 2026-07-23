@@ -453,15 +453,19 @@ the original design:
   timing matches: both bounds are reused from `x` exactly.
 
 - **Upper-bound parameters changed** (`alpha`, `sfu`, or `sfupar`) but
-  timing matches: new efficacy bounds are computed via
-  `gsDesign(test.type = 1)` at the new alpha, while the original
-  futility bounds from `x` are preserved. Any futility bound that
-  exceeds the new efficacy bound is clipped. This follows the same
+  timing matches: new efficacy bounds are computed using the non-binding
+  efficacy convention at the new alpha while preserving the original
+  `testUpper` schedule and futility bounds from `x`. Any futility bound
+  that exceeds the new efficacy bound is clipped. This follows the same
   convention as
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
   Lower-bound spending settings from `x` are intentionally kept in this
   branch, which avoids complications with `astar` validation for binding
-  types.
+  types. For non-binding test types 1, 4, 6, and 8, this calculation can
+  be used to evaluate alpha propagated by a graphical multiple-testing
+  procedure. For binding test types 2, 3, 5, and 7, it is a planning
+  sensitivity calculation only; it is not a Maurer–Bretz
+  sequential-p-value or graphical alpha-recycling procedure.
 
 - **Timing changed** (different target events or calendar times): both
   bounds are recomputed from scratch using the full `test.type` and all

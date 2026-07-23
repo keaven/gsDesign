@@ -9,11 +9,11 @@
 [gsSurv()] object. The p-value at analysis `j` is the smallest local
 one-sided alpha level for which the observed experimental-arm event count
 crosses the exact lower efficacy bound at that analysis. Non-binding
-futility bounds are ignored for the Type I error calculation."><meta property="og:description" content="Computes repeated p-values for the exact binomial design implied by a
+futility and harm bounds are ignored for the Type I error calculation."><meta property="og:description" content="Computes repeated p-values for the exact binomial design implied by a
 [gsSurv()] object. The p-value at analysis `j` is the smallest local
 one-sided alpha level for which the observed experimental-arm event count
 crosses the exact lower efficacy bound at that analysis. Non-binding
-futility bounds are ignored for the Type I error calculation."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
+futility and harm bounds are ignored for the Type I error calculation."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -21,7 +21,7 @@ futility bounds are ignored for the Type I error calculation."><meta property="o
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@ futility bounds are ignored for the Type I error calculation."><meta property="o
 [gsSurv()] object. The p-value at analysis `j` is the smallest local
 one-sided alpha level for which the observed experimental-arm event count
 crosses the exact lower efficacy bound at that analysis. Non-binding
-futility bounds are ignored for the Type I error calculation.</p>
+futility and harm bounds are ignored for the Type I error calculation.</p>
     </div>
 
     <div class="section level2">
@@ -73,13 +73,13 @@ futility bounds are ignored for the Type I error calculation.</p>
 
 
 <dl><dt id="arg-gsd">gsD<a class="anchor" aria-label="anchor" href="#arg-gsd"></a></dt>
-<dd><p>A `gsSurv` object with `test.type` 1 or 4.</p></dd>
+<dd><p>A `gsSurv` object with non-binding `test.type` 1, 4, 6, or 8.</p></dd>
 
 
 <dt id="arg-n-i">n.I<a class="anchor" aria-label="anchor" href="#arg-n-i"></a></dt>
 <dd><p>Increasing integer total event counts at completed analyses. If
-`NULL`, the planned exact binomial event counts from `toBinomialExact(gsD)`
-are used. This must have at most 1 value greater than or equal to planned
+`NULL`, the planned integer event counts from `toInteger(gsD)` are used.
+This must have at most 1 value greater than or equal to planned
 final events (`gsD$maxn.IPlan` if available, otherwise `max(gsD$n.I)`).</p></dd>
 
 

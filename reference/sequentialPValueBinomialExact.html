@@ -15,7 +15,7 @@ completed analyses, using [repeatedPValueBinomialExact()]."><meta property="og:i
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,13 +64,13 @@ completed analyses, using [repeatedPValueBinomialExact()].</p>
 
 
 <dl><dt id="arg-gsd">gsD<a class="anchor" aria-label="anchor" href="#arg-gsd"></a></dt>
-<dd><p>A `gsSurv` object with `test.type` 1 or 4.</p></dd>
+<dd><p>A `gsSurv` object with non-binding `test.type` 1, 4, 6, or 8.</p></dd>
 
 
 <dt id="arg-n-i">n.I<a class="anchor" aria-label="anchor" href="#arg-n-i"></a></dt>
 <dd><p>Increasing integer total event counts at completed analyses. If
-`NULL`, the planned exact binomial event counts from `toBinomialExact(gsD)`
-are used. This must have at most 1 value greater than or equal to planned
+`NULL`, the planned integer event counts from `toInteger(gsD)` are used.
+This must have at most 1 value greater than or equal to planned
 final events (`gsD$maxn.IPlan` if available, otherwise `max(gsD$n.I)`).</p></dd>
 
 

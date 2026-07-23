@@ -29,7 +29,7 @@ group sequential design for a study with a time-to-event endpoint."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -468,7 +468,9 @@ Otherwise, a logical vector of length <code>k</code>.
 Only used for <code>test.type</code> 7 or 8; at least one analysis must be
 <code>TRUE</code> for those types.
 Where <code>testHarm</code> is <code>FALSE</code>, the harm bound is set to
-<code>-20</code> (effectively <code>-Inf</code>) and displayed as <code>NA</code> in output.</p></dd>
+<code>-20</code> (effectively <code>-Inf</code>) and the bound is displayed as
+<code>NA</code> in output. Cumulative harm crossing probability from earlier
+analyses is still displayed.</p></dd>
 
 
 <dt id="arg-show-gsdesign">show_gsDesign<a class="anchor" aria-label="anchor" href="#arg-show-gsdesign"></a></dt>
@@ -775,6 +777,11 @@ duration solves use the selected method for the fixed-design event
 calculation.</p>
 <p>The input to <code>gsSurv</code> is a combination of the input to <code>nSurv()</code>
 and <code><a href="gsDesign.html">gsDesign()</a></code>.
+The original call is stored in <code>call</code>. The <code>inputs</code> component
+retains evaluated survival-model inputs used for printing and the applicable
+<code>testUpper</code>, <code>testLower</code>, and <code>testHarm</code> arguments. The
+normalized testing schedules used by the design are stored directly in the
+corresponding top-level components.
 When <code>T = NULL</code> and <code>minfup</code> is specified, <code>gsSurv()</code>
 preserves the input accrual rate and minimum follow-up, applies the group
 sequential design, and solves the accrual duration needed for the final
@@ -900,7 +907,7 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Caption example for xtable output."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.6.1 by xtable 1.8-8 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Sun Jul 19 10:57:26 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Thu Jul 23 19:47:55 2026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{rllll}</span>

@@ -260,18 +260,30 @@ Hwang-Shih-DeCani spending function with gamma = -3.
 
 ## Converting to an exact binomial design
 
-We now convert this to an exact binomial design. The bound counts are
-described in this initial table displayed. `N` is the total event count,
-`a` the maximum number of events in the experimental group to cross the
-efficacy bound. For example, if 12 or fewer of 30 events at interim 1
-are in the experimental group the efficacy bound has been crossed. The
-futility bound is in `b`; at the first interim, if 21 or more of 30
-total events are in the experimental group then the futility bound would
-be crossed and the alternate hypothesis could be rejected. The second
-and third tables below give probabilities of crossing the upper
-(futility) and lower (efficacy) bounds under the null (`theta` = 0.6774)
-and alternate (`theta` = 0.4737) hypotheses, respectively; these
-calculations are done under the exact binomial distribution assumptions.
+We now convert this to an exact binomial design. Full conversion with
+[`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
+is available for non-binding `test.type = 1`, `4`, `6`, and `8`. For
+type 4, the upper event-count stopping boundary targets beta spending
+under the alternative; for type 6 it targets lower-bound spending under
+the null using `astar`. For type 8, `upper` contains all upper
+event-count stops and the additional `futility` and `harm` components
+partition those stops into mutually exclusive regions. The exact
+futility boundary targets beta spending under the alternative, while the
+harm boundary targets `astar` spending under the null. Exact efficacy
+repeated and sequential p-values remain available for all four
+non-binding test types and intentionally ignore their non-binding lower
+and harm bounds. The bound counts are described in this initial table
+displayed. `N` is the total event count, `a` the maximum number of
+events in the experimental group to cross the efficacy bound. For
+example, if 12 or fewer of 30 events at interim 1 are in the
+experimental group the efficacy bound has been crossed. The futility
+bound is in `b`; at the first interim, if 21 or more of 30 total events
+are in the experimental group then the futility bound would be crossed
+and the alternate hypothesis could be rejected. The second and third
+tables below give probabilities of crossing the upper (futility) and
+lower (efficacy) bounds under the null (`theta` = 0.6774) and alternate
+(`theta` = 0.4737) hypotheses, respectively; these calculations are done
+under the exact binomial distribution assumptions.
 
 ``` r
 

@@ -25,7 +25,7 @@ with separate calls."><meta property="og:image" content="https://keaven.github.i
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -488,12 +488,18 @@ parameters change relative to the original design:</p><ul><li><p><strong>No boun
     exactly.</p></li>
 <li><p><strong>Upper-bound parameters changed</strong> (<code>alpha</code>, <code>sfu</code>,
     or <code>sfupar</code>) but timing matches: new efficacy bounds are computed
-    via <code>gsDesign(test.type = 1)</code> at the new alpha, while the
-    original futility bounds from <code>x</code> are preserved. Any futility
-    bound that exceeds the new efficacy bound is clipped. This follows
-    the same convention as <code><a href="gsBoundSummary.html">gsBoundSummary()</a></code>. Lower-bound spending
-    settings from <code>x</code> are intentionally kept in this branch, which
-    avoids complications with <code>astar</code> validation for binding types.</p></li>
+    using the non-binding efficacy convention at the new alpha while
+    preserving the original <code>testUpper</code> schedule and futility bounds
+    from <code>x</code>. Any futility bound that exceeds the new efficacy bound
+    is clipped. This follows the same convention as
+    <code><a href="gsBoundSummary.html">gsBoundSummary()</a></code>. Lower-bound spending settings from <code>x</code>
+    are intentionally kept in this branch, which avoids complications with
+    <code>astar</code> validation for binding types.
+    For non-binding test types 1, 4, 6, and 8, this calculation can be used
+    to evaluate alpha propagated by a graphical multiple-testing procedure.
+    For binding test types 2, 3, 5, and 7, it is a planning sensitivity
+    calculation only; it is not a Maurer–Bretz sequential-p-value or
+    graphical alpha-recycling procedure.</p></li>
 <li><p><strong>Timing changed</strong> (different target events or calendar
     times): both bounds are recomputed from scratch using the full
     <code>test.type</code> and all spending parameters.</p></li>
