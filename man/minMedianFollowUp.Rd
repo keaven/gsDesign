@@ -7,7 +7,12 @@
 \usage{
 minMedianFollowUp(x, calendarTime = x$T)
 
-plotMinMedianFollowUp(x, calendarTime = NULL, showAnalysisTimes = TRUE)
+plotMinMedianFollowUp(
+  x,
+  calendarTime = NULL,
+  showAnalysisTimes = TRUE,
+  timename = "Months"
+)
 }
 \arguments{
 \item{x}{An \code{nSurv} or \code{gsSurv} object.}
@@ -21,6 +26,11 @@ analysis time.}
 \item{showAnalysisTimes}{Logical scalar indicating whether analysis times
 should be marked with points. For an \code{nSurv} object, this marks the
 final study time.}
+
+\item{timename}{Nonempty character string indicating the time unit. Month
+and year labels (singular or plural, case-insensitive) use x-axis breaks
+every 6 months and 0.5 years, respectively. Other units use the default
+\code{ggplot2} breaks.}
 }
 \value{
 \code{minMedianFollowUp()} returns a numeric vector with one value
@@ -41,6 +51,14 @@ Thus, at each requested calendar time, the median enrollment time is the
 first time at which expected cumulative enrollment reached one-half of the
 enrollment accumulated by then. Before any enrollment has occurred, the
 result is \code{NA_real_}.
+
+The computation represents potential follow-up for all subjects randomized
+by the requested calendar time. Conceptually, each subject contributes the
+time from enrollment to that calendar time, regardless of whether the
+subject would have experienced the event of interest, discontinued, or
+dropped out. Event and dropout assumptions such as \code{x$lambdaC},
+\code{x$etaC}, and \code{x$etaE} therefore do not enter the calculation.
+This is not observed follow-up among subjects who remain under observation.
 
 This definition is continuous at the time enrollment completes when the
 enrollment rate immediately before completion is positive. The value may

@@ -88,6 +88,39 @@ test_that("plotMinMedianFollowUp plots the trajectory and analysis times", {
   expect_equal(max(p_line$data$calendarTime), 18)
 })
 
+test_that("plotMinMedianFollowUp uses unit-specific x-axis breaks", {
+  x_months <- nSurv(gamma = 10, R = 12, T = 30, minfup = 18)
+  p_months <- plotMinMedianFollowUp(x_months)
+
+  expect_equal(
+    p_months$scales$get_scales("x")$breaks,
+    seq(0, 30, by = 6)
+  )
+  expect_equal(p_months$labels$x, "Calendar time (Months)")
+  expect_equal(p_months$labels$y, "Minimum median follow-up (Months)")
+
+  x_years <- nSurv(gamma = 120, R = 1, T = 2.5, minfup = 1.5)
+  p_years <- plotMinMedianFollowUp(x_years, timename = "Years")
+
+  expect_equal(
+    p_years$scales$get_scales("x")$breaks,
+    seq(0, 2.5, by = 0.5)
+  )
+  expect_equal(p_years$labels$x, "Calendar time (Years)")
+  expect_equal(p_years$labels$y, "Minimum median follow-up (Years)")
+
+  p_month <- plotMinMedianFollowUp(x_months, timename = "Month")
+  expect_equal(
+    p_month$scales$get_scales("x")$breaks,
+    seq(0, 30, by = 6)
+  )
+
+  p_weeks <- plotMinMedianFollowUp(x_months, timename = "Weeks")
+  expect_null(p_weeks$scales$get_scales("x"))
+  expect_equal(p_weeks$labels$x, "Calendar time (Weeks)")
+  expect_equal(p_weeks$labels$y, "Minimum median follow-up (Weeks)")
+})
+
 test_that("plotMinMedianFollowUp validates inputs", {
   x <- gsSurv(k = 2, gamma = 10, R = 12, T = 30, minfup = 18)
 
@@ -99,5 +132,17 @@ test_that("plotMinMedianFollowUp validates inputs", {
   expect_error(
     plotMinMedianFollowUp(x, calendarTime = -1),
     "finite, nonnegative"
+  )
+  expect_error(
+    plotMinMedianFollowUp(x, timename = ""),
+    "nonempty character scalar"
+  )
+  expect_error(
+    plotMinMedianFollowUp(x, timename = c("Months", "Years")),
+    "nonempty character scalar"
+  )
+  expect_error(
+    plotMinMedianFollowUp(x, timename = 1),
+    "nonempty character scalar"
   )
 })

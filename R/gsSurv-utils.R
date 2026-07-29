@@ -66,3 +66,124 @@ validate_survival_timing_inputs <- function(R, T, minfup, call = "nSurv") {
   }
   invisible(TRUE)
 }
+
+# Construct the gsDesign portion of a single-analysis survival design without
+# calling gsDesign(), whose group-sequential validation requires k >= 2.
+gsSurvFixedDesignObject <- function(
+    alpha,
+    design_beta,
+    n_fix,
+    event_count,
+    delta0,
+    delta1,
+    theta_alt,
+    power,
+    sfu = sfHSD,
+    sfupar = -4,
+    sided = 1,
+    tol = .Machine$double.eps^0.25,
+    r = 18) {
+  z_alpha <- stats::qnorm(1 - alpha)
+
+  if (is.character(sfu)) {
+    upper <- list(
+      sf = sfu, name = sfu, parname = "Delta", param = sfupar, sTime = 1
+    )
+    if (sfu %in% c("OF", "Pocock")) upper$param <- NULL
+    class(upper) <- "spendfn"
+  } else if (is.function(sfu)) {
+    upper <- sfu(alpha, 1, sfupar)
+    upper$sTime <- 1
+  } else {
+    stop("Upper spending function mis-specified")
+  }
+  upper$spend <- alpha
+  upper$bound <- z_alpha
+  upper$prob <- matrix(c(alpha, power), nrow = 1)
+
+  delta <- (z_alpha + stats::qnorm(1 - design_beta)) / sqrt(n_fix)
+  result <- list(
+    k = 1L,
+    test.type = 1L,
+    alpha = alpha,
+    sided = sided,
+    beta = 1 - power,
+    astar = 0,
+    delta = delta,
+    n.fix = n_fix,
+    timing = 1,
+    tol = tol,
+    r = r,
+    n.I = event_count,
+    maxn.IPlan = event_count,
+    nFixSurv = 0,
+    nSurv = 0,
+    endpoint = NULL,
+    delta1 = delta1,
+    delta0 = delta0,
+    overrun = 0,
+    usTime = NULL,
+    lsTime = NULL,
+    testUpper = TRUE,
+    testLower = FALSE,
+    testHarm = FALSE,
+    upper = upper,
+    lower = NULL,
+    theta = c(0, theta_alt),
+    en = rep(event_count, 2)
+  )
+  class(result) <- "gsDesign"
+  result
+}
+
+asGsSurvFixedDesign <- function(
+    x,
+    sfu = sfHSD,
+    sfupar = -4,
+    r = 18,
+    tol = .Machine$double.eps^0.25,
+    call = NULL,
+    inputs = NULL) {
+  design <- gsSurvFixedDesignObject(
+    alpha = x$alpha / x$sided,
+    design_beta = x$beta,
+    n_fix = x$d,
+    event_count = x$d,
+    delta0 = log(x$hr0),
+    delta1 = log(x$hr),
+    theta_alt = (stats::qnorm(1 - x$alpha / x$sided) +
+      stats::qnorm(x$power)) / sqrt(x$d),
+    power = x$power,
+    sfu = sfu,
+    sfupar = sfupar,
+    sided = x$sided,
+    tol = tol,
+    r = r
+  )
+
+  design$T <- x$T
+  design$eDC <- matrix(x$eDC, nrow = 1)
+  design$eDE <- matrix(x$eDE, nrow = 1)
+  design$eDC0 <- matrix(x$eDC0, nrow = 1)
+  design$eDE0 <- matrix(x$eDE0, nrow = 1)
+  design$eNC <- matrix(x$eNC, nrow = 1)
+  design$eNE <- matrix(x$eNE, nrow = 1)
+  design$hr <- x$hr
+  design$hr0 <- x$hr0
+  design$R <- x$R
+  design$S <- x$S
+  design$minfup <- x$minfup
+  design$gamma <- x$gamma
+  design$ratio <- x$ratio
+  design$lambdaC <- x$lambdaC
+  design$etaC <- x$etaC
+  design$etaE <- x$etaE
+  design$variable <- x$variable
+  design$method <- x$method
+  design$power <- x$power
+  design$call <- call
+  design$inputs <- inputs
+  class(design) <- c("gsSurv", "gsDesign")
+
+  design
+}

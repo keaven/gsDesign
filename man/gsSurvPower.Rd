@@ -244,6 +244,10 @@ size to achieve target power, \code{gsSurvPower()} takes fixed design
 assumptions and computes the resulting power. It is meant to compute for
 a single set of assumptions at a time; different scenarios are evaluated
 with separate calls.
+For \code{k = 1}, power is computed through the fixed-design
+\code{nSurv(beta = NULL)} path. The returned object is normalized as a
+single-analysis \code{gsSurv} object so it can be passed to
+\code{\link{toInteger}} and \code{\link{gsBoundSummary}}.
 }
 \details{
 \strong{Accepting a gsSurv object:}

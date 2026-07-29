@@ -4,7 +4,10 @@
 
 - Added `minMedianFollowUp()` and `plotMinMedianFollowUp()` to compute and plot
   minimum median follow-up at any calendar time from the piecewise enrollment
-  assumptions in an `nSurv` or `gsSurv` design (#281).
+  assumptions in an `nSurv` or `gsSurv` design. The plot accepts arbitrary
+  time-unit labels through `timename`; month and year labels default to x-axis
+  breaks every 6 months and 0.5 years, respectively, while other units use
+  automatic breaks (#281).
 - Sequential p-values, including exact-binomial repeated and sequential
   efficacy p-values, now support `test.type = 8` by ignoring its non-binding
   futility and harm bounds. `toBinomialExact()` now provides full exact
@@ -16,6 +19,10 @@
 
 ## Bug fixes
 
+- Single-analysis survival designs now use a fixed-design `nSurv()` path in
+  `gsSurv(k = 1)` and `gsSurvPower(k = 1)`. The resulting objects work with
+  `toInteger()` and `gsBoundSummary()`, including alternate-alpha summaries
+  (#289).
 - Power plots for test types 7 and 8 now treat crossing the futility threshold
   as the union of futility-only and harm stops. The separate harm curve remains
   harm-only, and the mutually exclusive probabilities stored on the design are

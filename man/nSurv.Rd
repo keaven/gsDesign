@@ -441,6 +441,10 @@ Schoenfeld (1981), Freedman (1982), and Bernstein and Lagakos (1989) methods
 are also supported; see Details.
 \code{gsSurv()} combines \code{nSurv()} with \code{gsDesign()} to derive a
 group sequential design for a study with a time-to-event endpoint.
+When \code{k = 1}, \code{gsSurv()} uses the fixed-design calculations from
+\code{nSurv()} directly and returns a normalized single-analysis
+\code{gsSurv} object for use with functions such as
+\code{\link{toInteger}} and \code{\link{gsBoundSummary}}.
 }
 \details{
 The Lachin and Foulkes method uses both null and alternate hypothesis

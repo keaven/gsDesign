@@ -208,6 +208,8 @@ R Markdown output or output to a variety of file types. \code{xprint()} is
 provided for LaTeX output by setting default options for
 \code{\link[xtable]{print.xtable}} when producing tables summarizing design
 bounds.
+Single-analysis fixed designs are supported; interim-only characteristics
+such as conditional and predictive power are omitted when \code{k = 1}.
 
 Individual transformation of z-value test statistics for interim and final
 analyses are obtained from \code{gsBValue()}, \code{gsDelta()},

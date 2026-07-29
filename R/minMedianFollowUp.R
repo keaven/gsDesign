@@ -14,6 +14,14 @@
 #' enrollment accumulated by then. Before any enrollment has occurred, the
 #' result is \code{NA_real_}.
 #'
+#' The computation represents potential follow-up for all subjects randomized
+#' by the requested calendar time. Conceptually, each subject contributes the
+#' time from enrollment to that calendar time, regardless of whether the
+#' subject would have experienced the event of interest, discontinued, or
+#' dropped out. Event and dropout assumptions such as \code{x$lambdaC},
+#' \code{x$etaC}, and \code{x$etaE} therefore do not enter the calculation.
+#' This is not observed follow-up among subjects who remain under observation.
+#'
 #' This definition is continuous at the time enrollment completes when the
 #' enrollment rate immediately before completion is positive. The value may
 #' have kinks when an enrollment rate changes. A zero-enrollment period can
@@ -29,6 +37,10 @@
 #' @param showAnalysisTimes Logical scalar indicating whether analysis times
 #'   should be marked with points. For an \code{nSurv} object, this marks the
 #'   final study time.
+#' @param timename Nonempty character string indicating the time unit. Month
+#'   and year labels (singular or plural, case-insensitive) use x-axis breaks
+#'   every 6 months and 0.5 years, respectively. Other units use the default
+#'   \code{ggplot2} breaks.
 #'
 #' @return \code{minMedianFollowUp()} returns a numeric vector with one value
 #'   for each value of \code{calendarTime}.
@@ -103,11 +115,17 @@ minMedianFollowUp <- function(x, calendarTime = x$T) {
 plotMinMedianFollowUp <- function(
   x,
   calendarTime = NULL,
-  showAnalysisTimes = TRUE
+  showAnalysisTimes = TRUE,
+  timename = "Months"
 ) {
   if (!inherits(x, c("nSurv", "gsSurv"))) {
     stop("x must be an nSurv or gsSurv object")
   }
+  if (!is.character(timename) || length(timename) != 1L ||
+    is.na(timename) || !nzchar(trimws(timename))) {
+    stop("timename must be a nonempty character scalar")
+  }
+  timename <- trimws(timename)
   if (!is.logical(showAnalysisTimes) || length(showAnalysisTimes) != 1L ||
     is.na(showAnalysisTimes)) {
     stop("showAnalysisTimes must be TRUE or FALSE")
@@ -128,6 +146,14 @@ plotMinMedianFollowUp <- function(
     minimumMedianFollowUp = minMedianFollowUp(x, calendarTime)
   )
   plot_data <- plot_data[!is.na(plot_data$minimumMedianFollowUp), , drop = FALSE]
+  break_interval <- switch(
+    tolower(timename),
+    month = 6,
+    months = 6,
+    year = 0.5,
+    years = 0.5,
+    NULL
+  )
 
   p <- ggplot2::ggplot(
     plot_data,
@@ -138,10 +164,16 @@ plotMinMedianFollowUp <- function(
   ) +
     ggplot2::geom_line(linewidth = 0.8) +
     ggplot2::labs(
-      x = "Calendar time",
-      y = "Minimum median follow-up"
+      x = paste0("Calendar time (", timename, ")"),
+      y = paste0("Minimum median follow-up (", timename, ")")
     ) +
     ggplot2::theme_bw()
+
+  if (!is.null(break_interval)) {
+    p <- p + ggplot2::scale_x_continuous(
+      breaks = seq(0, max(calendarTime), by = break_interval)
+    )
+  }
 
   if (showAnalysisTimes) {
     analysis_time <- x$T[

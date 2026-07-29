@@ -69,7 +69,11 @@ print.gsProbability <- function(x, ...) {
 summary.gsDesign <- function(object, information = FALSE, timeunit = "months", ...) {
   out <- NULL
   if (object$test.type == 1) {
-    out <- paste(out, "One-sided group sequential design with ", sep = "")
+    out <- paste(
+      out,
+      if (object$k == 1) "One-sided fixed design with " else "One-sided group sequential design with ",
+      sep = ""
+    )
   } else if (object$test.type == 2) {
     out <- paste(out, "Symmetric two-sided group sequential design with ", sep = "")
   } else if (object$test.type %in% c(7, 8)) {
@@ -87,7 +91,12 @@ summary.gsDesign <- function(object, information = FALSE, timeunit = "months", .
       out <- paste(out, "non-binding futility bound, ", sep = "")
     }
   }
-  out <- paste(out, object$k, " analyses, ", sep = "")
+  out <- paste(
+    out,
+    object$k,
+    if (object$k == 1) " analysis, " else " analyses, ",
+    sep = ""
+  )
   if (object$nFixSurv > 0) {
     out <- paste(out, "time-to-event outcome with sample size ", ceiling(object$nSurv),
       " and ", ceiling(object$n.I[object$k]), " events required, ",
@@ -469,23 +478,28 @@ gsBoundSummary0 <- function(
     for (i in 1:length(x$theta)) pframe3 <- rbind(pframe3, data.frame("Harm" = cumsum(x$harm$prob[, i])))
     pframe <- data.frame(pframe, pframe3)
   }
-  # conditional power at bound, theta=hat(theta)
-  cp <- data.frame(gsBoundCP(x, r = r))
-  # conditional power at bound, theta=theta[1]
-  cp1 <- data.frame(gsBoundCP(x, theta = x$delta, r = r))
-  if (x$test.type %in% c(7, 8)) {
-    colnames(cp) <- c("Futility", "Efficacy", "Harm")
-    colnames(cp1) <- c("Futility", "Efficacy", "Harm")
-  } else if (x$test.type > 1) {
-    colnames(cp) <- c("Futility", "Efficacy")
-    colnames(cp1) <- c("Futility", "Efficacy")
+  if (x$k > 1) {
+    # conditional power at bound, theta=hat(theta)
+    cp <- data.frame(gsBoundCP(x, r = r))
+    # conditional power at bound, theta=theta[1]
+    cp1 <- data.frame(gsBoundCP(x, theta = x$delta, r = r))
+    if (x$test.type %in% c(7, 8)) {
+      colnames(cp) <- c("Futility", "Efficacy", "Harm")
+      colnames(cp1) <- c("Futility", "Efficacy", "Harm")
+    } else if (x$test.type > 1) {
+      colnames(cp) <- c("Futility", "Efficacy")
+      colnames(cp1) <- c("Futility", "Efficacy")
+    } else {
+      colnames(cp) <- "Efficacy"
+      colnames(cp1) <- "Efficacy"
+    }
+    cp <- data.frame(cp, "Value" = "CP", i = seq_len(x$k - 1))
+    cp1 <- data.frame(cp1, "Value" = "CP H1", i = seq_len(x$k - 1))
   } else {
-    colnames(cp) <- "Efficacy"
-    colnames(cp1) <- "Efficacy"
+    cp <- NULL
+    cp1 <- NULL
   }
-  cp <- data.frame(cp, "Value" = "CP", i = 1:(x$k - 1))
-  cp1 <- data.frame(cp1, "Value" = "CP H1", i = 1:(x$k - 1))
-  if ("PP" %in% exclude) {
+  if ("PP" %in% exclude || x$k == 1) {
     pp <- NULL
   } else {
     # predictive probability
@@ -568,11 +582,38 @@ gsBoundSummary0 <- function(
   statframe[statframe$Value == statframe$Value[2], ]$Analysis <- paste(Nname, ": ", N, sep = "")
   # add POS and predictive POS, if requested
   if (POS) {
-    ppos <- rep("", x$k)
-    for (i in 1:(x$k - 1)) ppos[i] <- paste("Post IA POS: ", as.character(round(100 * gsCPOS(i = i, x = x, theta = prior$z, wgts = prior$wgts), 1)), "%", sep = "")
-    statframe[statframe$Value == statframe$Value[nstat + 1], ]$Analysis <- ppos
-    statframe[nstat + 2, ]$Analysis <- ppos[1]
-    statframe[nstat + 1, ]$Analysis <- paste("Trial POS: ", as.character(round(100 * gsPOS(x = x, theta = prior$z, wgts = prior$wgts), 1)), "%", sep = "")
+    if (x$k == 1) {
+      trial_pos <- sum(
+        prior$wgts * stats::pnorm(
+          prior$z * sqrt(x$n.I[1]) - x$upper$bound[1]
+        )
+      )
+      statframe$Analysis[nrow(statframe)] <- paste0(
+        "Trial POS: ", round(100 * trial_pos, 1), "%"
+      )
+    } else {
+      ppos <- rep("", x$k)
+      for (i in seq_len(x$k - 1)) {
+        ppos[i] <- paste(
+          "Post IA POS: ",
+          as.character(round(100 * gsCPOS(
+            i = i, x = x, theta = prior$z, wgts = prior$wgts
+          ), 1)),
+          "%",
+          sep = ""
+        )
+      }
+      statframe[statframe$Value == statframe$Value[nstat + 1], ]$Analysis <- ppos
+      statframe[nstat + 2, ]$Analysis <- ppos[1]
+      statframe[nstat + 1, ]$Analysis <- paste(
+        "Trial POS: ",
+        as.character(round(100 * gsPOS(
+          x = x, theta = prior$z, wgts = prior$wgts
+        ), 1)),
+        "%",
+        sep = ""
+      )
+    }
   }
   # add futility and harm columns to data frame
   if (x$test.type %in% c(7, 8)) {
@@ -636,6 +677,8 @@ gsBoundSummary0 <- function(
 #' provided for LaTeX output by setting default options for
 #' \code{\link[xtable]{print.xtable}} when producing tables summarizing design
 #' bounds.
+#' Single-analysis fixed designs are supported; interim-only characteristics
+#' such as conditional and predictive power are omitted when \code{k = 1}.
 #'
 #' Individual transformation of z-value test statistics for interim and final
 #' analyses are obtained from \code{gsBValue()}, \code{gsDelta()},
@@ -1060,6 +1103,21 @@ gsAlternateAlphaDesign <- function(
     sfu = x$upper$sf,
     sfupar = x$upper$param,
     usTime = x$upper$sTime) {
+  if (x$k == 1) {
+    y <- x
+    y$alpha <- alpha
+    y$upper$spend <- alpha
+    y$upper$bound <- stats::qnorm(1 - alpha)
+    y$upper$prob <- matrix(
+      stats::pnorm(
+        outer(sqrt(y$n.I), y$theta) - y$upper$bound
+      ),
+      nrow = 1
+    )
+    y$beta <- 1 - y$upper$prob[1, length(y$theta)]
+    return(y)
+  }
+
   test_upper <- if (is.null(x$testUpper)) rep(TRUE, x$k) else x$testUpper
   lower_sf <- if (is.null(x$lower) || is.null(x$lower$sf)) sfHSD else x$lower$sf
   lower_param <- if (is.null(x$lower) || is.null(x$lower$param)) -2 else x$lower$param

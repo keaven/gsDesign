@@ -46,6 +46,9 @@
 #' \code{x$timing * final_events}. Interim counts are constrained to be positive
 #' and strictly increasing. Group sequential boundaries and spending are
 #' recomputed with \code{gsDesign()} at the integer event counts.
+#' For a single-analysis survival design, the fixed efficacy boundary is
+#' retained and its power is recomputed at the integer final event count
+#' without invoking multi-look group-sequential calculations.
 #'
 #' Total sample size for a survival design is then updated under a fixed
 #' calendar plan (same enrollment periods, study duration, and minimum
@@ -159,15 +162,43 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
   test_lower_arg <- if (!is.null(x$testLower)) x$testLower else TRUE
   test_harm_arg <- if (!is.null(x$testHarm)) x$testHarm else TRUE
 
-  xi <- gsDesign(
-    k = x$k, test.type = x$test.type, n.I = counts, maxn.IPlan = counts[x$k],
-    alpha = x$alpha, beta = x$beta, astar = x$astar,
-    delta = x$delta, delta1 = x$delta1, delta0 = x$delta0, endpoint = x$endpoint,
-    sfu = x$upper$sf, sfupar = x$upper$param, sfl = lower_sf, sflpar = lower_par,
-    sfharm = sfharm_arg, sfharmparam = sfharmparam_arg,
-    lsTime = x$lsTime, usTime = x$usTime,
-    testUpper = test_upper_arg, testLower = test_lower_arg, testHarm = test_harm_arg
-  )
+  if (x$k == 1) {
+    design_beta <- 1 - stats::pnorm(
+      x$delta * sqrt(x$n.fix) - stats::qnorm(1 - x$alpha)
+    )
+    fixed_power <- stats::pnorm(
+      x$theta[length(x$theta)] * sqrt(counts[1]) -
+        stats::qnorm(1 - x$alpha)
+    )
+    fixed <- gsSurvFixedDesignObject(
+      alpha = x$alpha,
+      design_beta = design_beta,
+      n_fix = x$n.fix,
+      event_count = counts[1],
+      delta0 = x$delta0,
+      delta1 = x$delta1,
+      theta_alt = x$theta[length(x$theta)],
+      power = fixed_power,
+      sfu = x$upper$sf,
+      sfupar = x$upper$param,
+      sided = if (!is.null(x$sided)) x$sided else 1,
+      tol = x$tol,
+      r = x$r
+    )
+    xi <- x
+    for (nm in names(fixed)) xi[[nm]] <- fixed[[nm]]
+    class(xi) <- class(x)
+  } else {
+    xi <- gsDesign(
+      k = x$k, test.type = x$test.type, n.I = counts, maxn.IPlan = counts[x$k],
+      alpha = x$alpha, beta = x$beta, astar = x$astar,
+      delta = x$delta, delta1 = x$delta1, delta0 = x$delta0, endpoint = x$endpoint,
+      sfu = x$upper$sf, sfupar = x$upper$param, sfl = lower_sf, sflpar = lower_par,
+      sfharm = sfharm_arg, sfharmparam = sfharmparam_arg,
+      lsTime = x$lsTime, usTime = x$usTime,
+      testUpper = test_upper_arg, testLower = test_lower_arg, testHarm = test_harm_arg
+    )
+  }
   if (max(abs(xi$n.I - counts)) > .01) warning("toInteger: check n.I input versus output")
   xi$n.I <- counts # ensure these are integers as they became real in gsDesign call
   # Non-binding futility designs have x$test.type either 4 or 6
@@ -189,10 +220,12 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     build_nsurv <- function(N_target) {
       # Update enrollment rates to achieve new sample size in same time
       inflateN <- N_target / N_continuous
+      calendar_minfup <- max(0, max(x$T) - sum(x$R))
       # Following is adapted from gsSurv() to construct gsSurv object
       xx <- nSurv(
         lambdaC = x$lambdaC, hr = x$hr, hr0 = x$hr0, eta = x$etaC, etaE = x$etaE,
-        gamma = x$gamma * inflateN, R = x$R, S = x$S, T = max(x$T), minfup = x$minfup, ratio = x$ratio,
+        gamma = x$gamma * inflateN, R = x$R, S = x$S, T = max(x$T),
+        minfup = calendar_minfup, ratio = x$ratio,
         alpha = x$alpha, beta = NULL, sided = 1, tol = x$tol
       )
       xx$tol <- x$tol
@@ -283,7 +316,7 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     eNC <- NULL
     eNE <- NULL
     T <- NULL
-    for (i in 1:(x$k - 1)) {
+    for (i in seq_len(x$k - 1)) {
       xx <- tEventsIA(z, xi$timing[i], tol = x$tol)
       T <- c(T, xx$T)
       eDC <- rbind(eDC, xx$eDC)
@@ -312,6 +345,7 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     xi$etaE <- z$etaE
     xi$variable <- x$variable
     xi$tol <- x$tol
+    if (!is.null(x$power)) xi$power <- 1 - xi$beta
     class(xi) <- c("gsSurv", "gsDesign")
     nameR <- nameperiod(cumsum(xi$R))
     stratnames <- paste("Stratum", seq_len(ncol(xi$lambdaC)))

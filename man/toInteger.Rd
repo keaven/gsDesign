@@ -60,6 +60,9 @@ tolerance), then derives interim integer event targets from
 \code{x$timing * final_events}. Interim counts are constrained to be positive
 and strictly increasing. Group sequential boundaries and spending are
 recomputed with \code{gsDesign()} at the integer event counts.
+For a single-analysis survival design, the fixed efficacy boundary is
+retained and its power is recomputed at the integer final event count
+without invoking multi-look group-sequential calculations.
 
 Total sample size for a survival design is then updated under a fixed
 calendar plan (same enrollment periods, study duration, and minimum
