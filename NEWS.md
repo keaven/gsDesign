@@ -2,6 +2,9 @@
 
 ## New features
 
+- Added `minMedianFollowUp()` and `plotMinMedianFollowUp()` to compute and plot
+  minimum median follow-up at any calendar time from the piecewise enrollment
+  assumptions in an `nSurv` or `gsSurv` design (#281).
 - Sequential p-values, including exact-binomial repeated and sequential
   efficacy p-values, now support `test.type = 8` by ignoring its non-binding
   futility and harm bounds. `toBinomialExact()` now provides full exact
