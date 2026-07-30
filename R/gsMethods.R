@@ -103,11 +103,14 @@ summary.gsDesign <- function(object, information = FALSE, timeunit = "months", .
       sep = ""
     )
   } else if ("gsSurv" %in% class(object)) {
+    experimental_n <- gsRoundNearInteger(rowSums(object$eNE))
+    control_n <- gsRoundNearInteger(rowSums(object$eNC))
     out <- paste(out, "time-to-event outcome with sample size ",
-      ifelse(object$ratio == 1, 2 * ceiling(rowSums(object$eNE))[object$k],
-        (ceiling(rowSums(object$eNE)) + ceiling(rowSums(object$eNC)))[object$k]
+      ifelse(object$ratio == 1, 2 * ceiling(experimental_n)[object$k],
+        (ceiling(experimental_n) + ceiling(control_n))[object$k]
       ),
-      " and ", ceiling(object$n.I[object$k]), " events required, ",
+      " and ", ceiling(gsRoundNearInteger(object$n.I[object$k])),
+      " events required, ",
       sep = ""
     )
   } else if (information) {
@@ -578,8 +581,11 @@ gsBoundSummary0 <- function(
     }
   } else {
     nstat <- 4
-    statframe[statframe$Value == statframe$Value[3], ]$Analysis <- paste("Events:", ceiling(x$n.I))
-    if (x$ratio == 1) N <- 2 * ceiling(rowSums(x$eNE)) else N <- ceiling(rowSums(x$eNE)) + ceiling(rowSums(x$eNC))
+    event_counts <- gsRoundNearInteger(x$n.I)
+    statframe[statframe$Value == statframe$Value[3], ]$Analysis <- paste("Events:", ceiling(event_counts))
+    experimental_n <- gsRoundNearInteger(rowSums(x$eNE))
+    control_n <- gsRoundNearInteger(rowSums(x$eNC))
+    if (x$ratio == 1) N <- 2 * ceiling(experimental_n) else N <- ceiling(experimental_n) + ceiling(control_n)
     Time <- round(x$T, tdigits)
     statframe[statframe$Value == statframe$Value[4], ]$Analysis <- paste(timename, ": ", as.character(Time), sep = "")
   }

@@ -19,6 +19,12 @@
 
 ## Bug fixes
 
+- `gsSurvPower()` now retains exact event totals when `targetEvents` determines
+  an analysis, rather than exposing small root-finding residuals that could
+  make `gsBoundSummary()` round an integer event target up by one (#294).
+- Survival sample-size outputs now normalize machine-precision representations
+  of integers before applying display rounding, so `gsSurvPower()` and
+  `gsBoundSummary()` preserve exact arm and total sample sizes (#290).
 - Single-analysis survival designs now use a fixed-design `nSurv()` path in
   `gsSurv(k = 1)` and `gsSurvPower(k = 1)`. The resulting objects work with
   `toInteger()` and `gsBoundSummary()`, including alternate-alpha summaries

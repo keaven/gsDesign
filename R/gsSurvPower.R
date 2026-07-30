@@ -773,13 +773,21 @@ gsSurvPower <- function(
     }
     if (objective(search_upper_bound) < 0) {
       warning("Target ", round(target), " events may not be achievable")
-      return(search_upper_bound)
+      return(list(time = search_upper_bound, achievable = FALSE))
     }
-    if (objective(0.001) >= 0) return(0.001)
-    uniroot(objective, c(0.001, search_upper_bound), tol = tol)$root
+    if (objective(0.001) >= 0) {
+      return(list(time = 0.001, achievable = TRUE))
+    }
+    list(
+      time = uniroot(
+        objective, c(0.001, search_upper_bound), tol = tol
+      )$root,
+      achievable = TRUE
+    )
   }
 
   analysis_time <- numeric(analysis_count)
+  target_determines_analysis <- rep(FALSE, analysis_count)
 
   for (analysis_index in seq_len(analysis_count)) {
     floor_times <- numeric(0)
@@ -809,7 +817,10 @@ gsSurvPower <- function(
     floor_time <- if (length(floor_times) > 0) max(floor_times) else 0.001
 
     if (!is.na(total_event_targets[analysis_index])) {
-      event_time <- find_time_for_events(total_event_targets[analysis_index])
+      event_solution <- find_time_for_events(
+        total_event_targets[analysis_index]
+      )
+      event_time <- event_solution$time
       if (event_time <= floor_time) {
         analysis_time[analysis_index] <- floor_time
       } else if (!is.na(max_extension[analysis_index])) {
@@ -821,6 +832,7 @@ gsSurvPower <- function(
         analysis_time[analysis_index] <- event_time
       }
     } else {
+      event_solution <- NULL
       analysis_time[analysis_index] <- floor_time
     }
 
@@ -837,6 +849,10 @@ gsSurvPower <- function(
         analysis_time[analysis_index - 1] + max_extension[analysis_index]
       )
     }
+    target_determines_analysis[analysis_index] <-
+      !is.null(event_solution) &&
+      event_solution$achievable &&
+      analysis_time[analysis_index] == event_solution$time
   }
 
   control_events <- experimental_events <- NULL
@@ -850,7 +866,24 @@ gsSurvPower <- function(
     experimental_enrollment <- rbind(experimental_enrollment, expected_counts$eNE)
   }
 
+  # Retain exact event targets instead of exposing small root-solver residuals.
+  # Adjust one component so component counts remain consistent with the total.
+  target_rows <- which(target_determines_analysis)
+  if (length(target_rows) > 0) {
+    last_stratum <- ncol(experimental_events)
+    for (analysis_index in target_rows) {
+      residual <- total_event_targets[analysis_index] -
+        sum(control_events[analysis_index, ]) -
+        sum(experimental_events[analysis_index, ])
+      experimental_events[analysis_index, last_stratum] <-
+        experimental_events[analysis_index, last_stratum] + residual
+    }
+  }
+
+  control_enrollment <- gsRoundNearInteger(control_enrollment)
+  experimental_enrollment <- gsRoundNearInteger(experimental_enrollment)
   total_events <- rowSums(control_events) + rowSums(experimental_events)
+  total_events[target_rows] <- total_event_targets[target_rows]
 
   list(
     analysis_time = analysis_time,
