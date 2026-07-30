@@ -8,7 +8,7 @@ or sample size (other designs)}
 toInteger(x, ratio = x$ratio, roundUpFinal = TRUE)
 }
 \arguments{
-\item{x}{An object of class \code{gsDesign} or \code{gsSurv}.}
+\item{x}{An object of class \code{gsDesign}, \code{gsSurv}, or \code{nSurv}.}
 
 \item{ratio}{Usually corresponds to experimental:control sample size ratio.
 If an integer is provided, rounding is done to a multiple of
@@ -27,8 +27,10 @@ See details.}
 }
 \value{
 Output is an object of the same class as input \code{x}; i.e.,
-  \code{gsDesign} with integer vector for \code{n.I} or \code{gsSurv}
-  with integer vector \code{n.I} and integer total sample size. See details.
+  \code{gsDesign} with integer vector for \code{n.I}, \code{gsSurv}
+  with integer vector \code{n.I} and integer total sample size, or
+  \code{nSurv} with integer \code{d} and integer total sample size \code{n}.
+  See details.
 }
 \description{
 Translate group sequential design to integer events (survival designs)
@@ -52,6 +54,12 @@ to a multiple of 3 + 1 = 4; this could represent a 3:1 or 1:3
 randomization ratio.
 For 3:2 randomization, \code{ratio = 4} would ensure rounding sample size
 to a multiple of 5.
+
+An \code{nSurv} object is converted through the corresponding
+single-analysis \code{gsSurv} representation and returned as an
+\code{nSurv} object. Its required event count \code{d} is rounded in the
+same way as the final event count for a \code{gsSurv} object, and its total
+sample size \code{n} is rounded according to \code{ratio}.
 
 For a \code{gsSurv} object, \code{x$n.I} is an event-count schedule.
 \code{toInteger()} rounds the final planned event count (up when

@@ -1,7 +1,7 @@
 #' Translate group sequential design to integer events (survival designs)
 #' or sample size (other designs)
 #'
-#' @param x An object of class \code{gsDesign} or \code{gsSurv}.
+#' @param x An object of class \code{gsDesign}, \code{gsSurv}, or \code{nSurv}.
 #' @param ratio Usually corresponds to experimental:control sample size ratio.
 #'   If an integer is provided, rounding is done to a multiple of
 #'   \code{ratio + 1}. See details.
@@ -17,8 +17,10 @@
 #'   See details.
 #'
 #' @return Output is an object of the same class as input \code{x}; i.e.,
-#'   \code{gsDesign} with integer vector for \code{n.I} or \code{gsSurv}
-#'   with integer vector \code{n.I} and integer total sample size. See details.
+#'   \code{gsDesign} with integer vector for \code{n.I}, \code{gsSurv}
+#'   with integer vector \code{n.I} and integer total sample size, or
+#'   \code{nSurv} with integer \code{d} and integer total sample size \code{n}.
+#'   See details.
 #'
 #' @details
 #' It is useful to explicitly provide the argument \code{ratio} when a
@@ -38,6 +40,12 @@
 #' randomization ratio.
 #' For 3:2 randomization, \code{ratio = 4} would ensure rounding sample size
 #' to a multiple of 5.
+#'
+#' An \code{nSurv} object is converted through the corresponding
+#' single-analysis \code{gsSurv} representation and returned as an
+#' \code{nSurv} object. Its required event count \code{d} is rounded in the
+#' same way as the final event count for a \code{gsSurv} object, and its total
+#' sample size \code{n} is rounded according to \code{ratio}.
 #'
 #' For a \code{gsSurv} object, \code{x$n.I} is an event-count schedule.
 #' \code{toInteger()} rounds the final planned event count (up when
@@ -102,7 +110,38 @@
 #' # with final event count rounded up by default.
 #' toInteger(x)
 toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
-  if (!inherits(x, "gsDesign")) stop("must have class gsDesign as input")
+  is_nsurv <- inherits(x, "nSurv") && !inherits(x, "gsDesign")
+  if (!inherits(x, "gsDesign") && !is_nsurv) {
+    stop("must have class gsDesign or nSurv as input")
+  }
+  if (is_nsurv) {
+    original <- x
+    x <- asGsSurvFixedDesign(
+      x,
+      tol = .Machine$double.eps^0.25,
+      call = x$call,
+      inputs = x$inputs
+    )
+    integer_design <- toInteger(
+      x,
+      ratio = ratio,
+      roundUpFinal = roundUpFinal
+    )
+    result <- original
+    event_fields <- c("eDC", "eDE", "eDC0", "eDE0", "eNC", "eNE")
+    for (nm in event_fields) result[[nm]] <- as.vector(integer_design[[nm]])
+    plan_fields <- c(
+      "lambdaC", "etaC", "etaE", "gamma", "R", "S", "T", "minfup",
+      "variable", "method"
+    )
+    for (nm in plan_fields) result[[nm]] <- integer_design[[nm]]
+    result$d <- integer_design$n.I[1]
+    result$n <- sum(result$eNC + result$eNE)
+    result$beta <- integer_design$beta
+    result$power <- 1 - result$beta
+    class(result) <- class(original)
+    return(result)
+  }
   if (!(isInteger(ratio) && ratio >= 0)){
     message("toInteger: rounding done to nearest integer since ratio was not specified as postive integer .")
     ratio <- 0

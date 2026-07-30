@@ -13,7 +13,7 @@ test_that("gsSurv k=1 uses fixed nSurv sizing", {
   )
 
   fixed <- do.call(nSurv, args)
-  design <- do.call(gsSurv, c(list(k = 1), args))
+  design <- do.call(gsSurv, c(list(k = 1, sfu = sfPower, sfupar = 3), args))
 
   expect_s3_class(design, "gsSurv")
   expect_s3_class(design, "gsDesign")
@@ -22,10 +22,12 @@ test_that("gsSurv k=1 uses fixed nSurv sizing", {
   expect_equal(design$n.I, fixed$d)
   expect_equal(design$n.fix, fixed$d)
   expect_equal(design$beta, fixed$beta)
+  expect_equal(design$upper$spend, args$alpha)
   expect_equal(design$upper$prob[1, ], c(0.025, fixed$power))
   expect_null(design$lower)
   expect_equal(dim(design$eDC), c(1, ncol(fixed$lambdaC)))
   expect_match(summary(design), "fixed design with 1 analysis")
+  expect_false(grepl("spending function", summary(design), fixed = TRUE))
 })
 
 test_that("gsSurv k=1 supports fixed power calculations", {

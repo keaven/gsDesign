@@ -22,7 +22,10 @@
 - Single-analysis survival designs now use a fixed-design `nSurv()` path in
   `gsSurv(k = 1)` and `gsSurvPower(k = 1)`. The resulting objects work with
   `toInteger()` and `gsBoundSummary()`, including alternate-alpha summaries
-  (#289).
+  and use all alpha at the sole analysis without displaying an irrelevant
+  spending function in `summary()`. An `nSurv()` object can now also be passed
+  directly to `toInteger()` and is returned as an `nSurv` object with integer
+  event and sample-size targets (#289).
 - Power plots for test types 7 and 8 now treat crossing the futility threshold
   as the union of futility-only and harm stops. The separate harm curve remains
   harm-only, and the mutually exclusive probabilities stored on the design are

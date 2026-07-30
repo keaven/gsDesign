@@ -124,14 +124,18 @@ summary.gsDesign <- function(object, information = FALSE, timeunit = "months", .
       sep = ""
     )
   }
-  if (object$test.type == 2) {
-    out <- paste(out, ". Bounds derived using a ", sep = "")
+  if ("gsSurv" %in% class(object) && object$k == 1) {
+    out <- paste0(out, ".")
   } else {
-    out <- paste(out, ". Efficacy bounds derived using a", sep = "")
+    if (object$test.type == 2) {
+      out <- paste(out, ". Bounds derived using a ", sep = "")
+    } else {
+      out <- paste(out, ". Efficacy bounds derived using a", sep = "")
+    }
+    out <- paste(out, " ", summary(object$upper), ".", sep = "")
+    if (object$test.type > 2) out <- paste(out, " Futility bounds derived using a ", summary(object$lower), ".", sep = "")
+    if (object$test.type %in% c(7, 8)) out <- paste(out, " Harm bounds derived using a ", summary(object$harm), ".", sep = "")
   }
-  out <- paste(out, " ", summary(object$upper), ".", sep = "")
-  if (object$test.type > 2) out <- paste(out, " Futility bounds derived using a ", summary(object$lower), ".", sep = "")
-  if (object$test.type %in% c(7, 8)) out <- paste(out, " Harm bounds derived using a ", summary(object$harm), ".", sep = "")
   return(out)
 }
 
