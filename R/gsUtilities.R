@@ -231,6 +231,16 @@ checkVector <- function(x, isType = "numeric", ..., length = NULL) {
 # isInteger function [sinew] ----
 isInteger <- function(x) all(is.numeric(x)) && all(round(x, 0) == x)
 
+# Replace floating-point representations of integers with the exact integer
+# value while leaving genuinely fractional values unchanged.
+gsRoundNearInteger <- function(x, tol = sqrt(.Machine$double.eps)) {
+  rounded <- round(x)
+  close <- is.finite(x) &
+    abs(x - rounded) <= tol * pmax(1, abs(x))
+  x[close] <- rounded[close]
+  x
+}
+
 checkMD5 <- function(package = "gsDesign", dir) {
   if (missing(dir)) {
     dir <- find.package(package, quiet = TRUE)

@@ -70,6 +70,33 @@ test_that("toInteger() handles gsSurv object integer conversion correctly", {
   expect_gte(result_nearest_n + 1e-5, result_nearest$n.I[result_nearest$k])
 })
 
+test_that("toInteger() handles nSurv objects", {
+  x <- nSurv(
+    lambdaC = log(2) / 8,
+    hr = 0.7,
+    eta = 0.01,
+    gamma = 12,
+    R = 10,
+    T = 22,
+    minfup = 12,
+    ratio = 1,
+    alpha = 0.025,
+    beta = 0.1
+  )
+
+  result <- toInteger(x)
+  result_nearest <- toInteger(x, roundUpFinal = FALSE)
+
+  expect_s3_class(result, "nSurv")
+  expect_false(inherits(result, "gsDesign"))
+  expect_equal(result$d, ceiling(x$d))
+  expect_equal(result_nearest$d, round(x$d))
+  expect_equal(result$n %% 2, 0)
+  expect_equal(result$n, sum(result$eNC + result$eNE))
+  expect_equal(result$power, 1 - result$beta)
+  expect_identical(result$call, x$call)
+})
+
 test_that("toInteger() handles edge case where no rounding is needed", {
   x <- gsDesign(k = 3, test.type = 1, alpha = 0.05, beta = 0.2, n.fix = 150)
 
@@ -125,7 +152,7 @@ test_that("toInteger() prints a message for invalid ratio values", {
 
 test_that("toInteger() throws an error when input is not a gsDesign object", {
   invalid_object <- data.frame(a = 1, b = 2) # Not a gsDesign object
-  expect_error(toInteger(invalid_object), "must have class gsDesign as input")
+  expect_error(toInteger(invalid_object), "must have class gsDesign or nSurv as input")
 })
 
 EXTREMEZ_TI <- 20

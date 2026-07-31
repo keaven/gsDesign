@@ -53,6 +53,48 @@ test_that("gsSurvPower works with targetEvents", {
   expect_equal(pwr$n.I, events)
 })
 
+test_that("gsSurvPower preserves integer sample size and event targets", {
+  target_events <- c(150, 200, 350)
+  pwr <- gsSurvPower(
+    k = 3,
+    test.type = 1,
+    alpha = 0.025,
+    sided = 1,
+    sfu = sfLDOF,
+    sfupar = NULL,
+    spending = "information",
+    lambdaC = log(2) / 15,
+    hr = 0.7,
+    hr0 = 1,
+    eta = 0.001,
+    gamma = c(1, 2, 3, 4) * 500 /
+      sum(c(1, 2, 3, 4) * c(2, 2, 2, 6)),
+    R = c(2, 2, 2, 6),
+    targetEvents = target_events,
+    minfup = 18,
+    ratio = 1.5,
+    testUpper = TRUE,
+    testLower = FALSE,
+    testHarm = FALSE,
+    method = "LachinFoulkes"
+  )
+
+  expect_identical(pwr$n.I, target_events)
+  expect_equal(rowSums(pwr$eDC) + rowSums(pwr$eDE), target_events)
+  expect_identical(as.vector(pwr$eNC), rep(200, 3))
+  expect_identical(as.vector(pwr$eNE), rep(300, 3))
+
+  summary_analysis <- gsBoundSummary(pwr)$Analysis
+  expect_identical(
+    summary_analysis[grepl("^N:", summary_analysis)],
+    rep("N: 500", 3)
+  )
+  expect_identical(
+    summary_analysis[grepl("^Events:", summary_analysis)],
+    paste("Events:", target_events)
+  )
+})
+
 test_that("gsSurvPower works without x (all parameters specified)", {
   pwr <- gsSurvPower(
     k = 2, test.type = 1, alpha = 0.025, sided = 1,

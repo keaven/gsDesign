@@ -1,7 +1,7 @@
 #' Translate group sequential design to integer events (survival designs)
 #' or sample size (other designs)
 #'
-#' @param x An object of class \code{gsDesign} or \code{gsSurv}.
+#' @param x An object of class \code{gsDesign}, \code{gsSurv}, or \code{nSurv}.
 #' @param ratio Usually corresponds to experimental:control sample size ratio.
 #'   If an integer is provided, rounding is done to a multiple of
 #'   \code{ratio + 1}. See details.
@@ -17,8 +17,10 @@
 #'   See details.
 #'
 #' @return Output is an object of the same class as input \code{x}; i.e.,
-#'   \code{gsDesign} with integer vector for \code{n.I} or \code{gsSurv}
-#'   with integer vector \code{n.I} and integer total sample size. See details.
+#'   \code{gsDesign} with integer vector for \code{n.I}, \code{gsSurv}
+#'   with integer vector \code{n.I} and integer total sample size, or
+#'   \code{nSurv} with integer \code{d} and integer total sample size \code{n}.
+#'   See details.
 #'
 #' @details
 #' It is useful to explicitly provide the argument \code{ratio} when a
@@ -39,6 +41,12 @@
 #' For 3:2 randomization, \code{ratio = 4} would ensure rounding sample size
 #' to a multiple of 5.
 #'
+#' An \code{nSurv} object is converted through the corresponding
+#' single-analysis \code{gsSurv} representation and returned as an
+#' \code{nSurv} object. Its required event count \code{d} is rounded in the
+#' same way as the final event count for a \code{gsSurv} object, and its total
+#' sample size \code{n} is rounded according to \code{ratio}.
+#'
 #' For a \code{gsSurv} object, \code{x$n.I} is an event-count schedule.
 #' \code{toInteger()} rounds the final planned event count (up when
 #' \code{roundUpFinal = TRUE}; otherwise to nearest integer, with a 0.01
@@ -46,6 +54,9 @@
 #' \code{x$timing * final_events}. Interim counts are constrained to be positive
 #' and strictly increasing. Group sequential boundaries and spending are
 #' recomputed with \code{gsDesign()} at the integer event counts.
+#' For a single-analysis survival design, the fixed efficacy boundary is
+#' retained and its power is recomputed at the integer final event count
+#' without invoking multi-look group-sequential calculations.
 #'
 #' Total sample size for a survival design is then updated under a fixed
 #' calendar plan (same enrollment periods, study duration, and minimum
@@ -99,7 +110,38 @@
 #' # with final event count rounded up by default.
 #' toInteger(x)
 toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
-  if (!inherits(x, "gsDesign")) stop("must have class gsDesign as input")
+  is_nsurv <- inherits(x, "nSurv") && !inherits(x, "gsDesign")
+  if (!inherits(x, "gsDesign") && !is_nsurv) {
+    stop("must have class gsDesign or nSurv as input")
+  }
+  if (is_nsurv) {
+    original <- x
+    x <- asGsSurvFixedDesign(
+      x,
+      tol = .Machine$double.eps^0.25,
+      call = x$call,
+      inputs = x$inputs
+    )
+    integer_design <- toInteger(
+      x,
+      ratio = ratio,
+      roundUpFinal = roundUpFinal
+    )
+    result <- original
+    event_fields <- c("eDC", "eDE", "eDC0", "eDE0", "eNC", "eNE")
+    for (nm in event_fields) result[[nm]] <- as.vector(integer_design[[nm]])
+    plan_fields <- c(
+      "lambdaC", "etaC", "etaE", "gamma", "R", "S", "T", "minfup",
+      "variable", "method"
+    )
+    for (nm in plan_fields) result[[nm]] <- integer_design[[nm]]
+    result$d <- integer_design$n.I[1]
+    result$n <- sum(result$eNC + result$eNE)
+    result$beta <- integer_design$beta
+    result$power <- 1 - result$beta
+    class(result) <- class(original)
+    return(result)
+  }
   if (!(isInteger(ratio) && ratio >= 0)){
     message("toInteger: rounding done to nearest integer since ratio was not specified as postive integer .")
     ratio <- 0
@@ -159,15 +201,43 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
   test_lower_arg <- if (!is.null(x$testLower)) x$testLower else TRUE
   test_harm_arg <- if (!is.null(x$testHarm)) x$testHarm else TRUE
 
-  xi <- gsDesign(
-    k = x$k, test.type = x$test.type, n.I = counts, maxn.IPlan = counts[x$k],
-    alpha = x$alpha, beta = x$beta, astar = x$astar,
-    delta = x$delta, delta1 = x$delta1, delta0 = x$delta0, endpoint = x$endpoint,
-    sfu = x$upper$sf, sfupar = x$upper$param, sfl = lower_sf, sflpar = lower_par,
-    sfharm = sfharm_arg, sfharmparam = sfharmparam_arg,
-    lsTime = x$lsTime, usTime = x$usTime,
-    testUpper = test_upper_arg, testLower = test_lower_arg, testHarm = test_harm_arg
-  )
+  if (x$k == 1) {
+    design_beta <- 1 - stats::pnorm(
+      x$delta * sqrt(x$n.fix) - stats::qnorm(1 - x$alpha)
+    )
+    fixed_power <- stats::pnorm(
+      x$theta[length(x$theta)] * sqrt(counts[1]) -
+        stats::qnorm(1 - x$alpha)
+    )
+    fixed <- gsSurvFixedDesignObject(
+      alpha = x$alpha,
+      design_beta = design_beta,
+      n_fix = x$n.fix,
+      event_count = counts[1],
+      delta0 = x$delta0,
+      delta1 = x$delta1,
+      theta_alt = x$theta[length(x$theta)],
+      power = fixed_power,
+      sfu = x$upper$sf,
+      sfupar = x$upper$param,
+      sided = if (!is.null(x$sided)) x$sided else 1,
+      tol = x$tol,
+      r = x$r
+    )
+    xi <- x
+    for (nm in names(fixed)) xi[[nm]] <- fixed[[nm]]
+    class(xi) <- class(x)
+  } else {
+    xi <- gsDesign(
+      k = x$k, test.type = x$test.type, n.I = counts, maxn.IPlan = counts[x$k],
+      alpha = x$alpha, beta = x$beta, astar = x$astar,
+      delta = x$delta, delta1 = x$delta1, delta0 = x$delta0, endpoint = x$endpoint,
+      sfu = x$upper$sf, sfupar = x$upper$param, sfl = lower_sf, sflpar = lower_par,
+      sfharm = sfharm_arg, sfharmparam = sfharmparam_arg,
+      lsTime = x$lsTime, usTime = x$usTime,
+      testUpper = test_upper_arg, testLower = test_lower_arg, testHarm = test_harm_arg
+    )
+  }
   if (max(abs(xi$n.I - counts)) > .01) warning("toInteger: check n.I input versus output")
   xi$n.I <- counts # ensure these are integers as they became real in gsDesign call
   # Non-binding futility designs have x$test.type either 4 or 6
@@ -189,10 +259,12 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     build_nsurv <- function(N_target) {
       # Update enrollment rates to achieve new sample size in same time
       inflateN <- N_target / N_continuous
+      calendar_minfup <- max(0, max(x$T) - sum(x$R))
       # Following is adapted from gsSurv() to construct gsSurv object
       xx <- nSurv(
         lambdaC = x$lambdaC, hr = x$hr, hr0 = x$hr0, eta = x$etaC, etaE = x$etaE,
-        gamma = x$gamma * inflateN, R = x$R, S = x$S, T = max(x$T), minfup = x$minfup, ratio = x$ratio,
+        gamma = x$gamma * inflateN, R = x$R, S = x$S, T = max(x$T),
+        minfup = calendar_minfup, ratio = x$ratio,
         alpha = x$alpha, beta = NULL, sided = 1, tol = x$tol
       )
       xx$tol <- x$tol
@@ -283,7 +355,7 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     eNC <- NULL
     eNE <- NULL
     T <- NULL
-    for (i in 1:(x$k - 1)) {
+    for (i in seq_len(x$k - 1)) {
       xx <- tEventsIA(z, xi$timing[i], tol = x$tol)
       T <- c(T, xx$T)
       eDC <- rbind(eDC, xx$eDC)
@@ -312,6 +384,7 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     xi$etaE <- z$etaE
     xi$variable <- x$variable
     xi$tol <- x$tol
+    if (!is.null(x$power)) xi$power <- 1 - xi$beta
     class(xi) <- c("gsSurv", "gsDesign")
     nameR <- nameperiod(cumsum(xi$R))
     stratnames <- paste("Stratum", seq_len(ncol(xi$lambdaC)))
