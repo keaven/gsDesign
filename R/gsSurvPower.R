@@ -247,6 +247,7 @@
 #' \item{T}{Calendar times of analyses.}
 #' \item{eDC, eDE}{Expected events by stratum (control, experimental).}
 #' \item{eNC, eNE}{Expected sample sizes by stratum (control, experimental).}
+#' \item{N}{Cumulative total expected enrollment at each analysis.}
 #' \item{upper, lower}{Bounds and crossing probabilities.}
 #' \item{harm}{Harm-bound information when \code{test.type} is 7 or 8.}
 #' \item{en, theta}{Expected sample size summary and drift values returned by
@@ -1236,5 +1237,5 @@ gsSurvPower <- function(
   result$beta <- 1 - result$power
 
   class(result) <- c("gsSurv", "gsDesign")
-  .gsSurvPower_label_output_matrices(result)
+  gsSurvAddN(.gsSurvPower_label_output_matrices(result))
 }

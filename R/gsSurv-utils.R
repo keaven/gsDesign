@@ -67,6 +67,12 @@ validate_survival_timing_inputs <- function(R, T, minfup, call = "nSurv") {
   invisible(TRUE)
 }
 
+# Add cumulative total enrollment at each analysis to a gsSurv object.
+gsSurvAddN <- function(x) {
+  x$N <- rowSums(as.matrix(x$eNC)) + rowSums(as.matrix(x$eNE))
+  x
+}
+
 # Construct the gsDesign portion of a single-analysis survival design without
 # calling gsDesign(), whose group-sequential validation requires k >= 2.
 gsSurvFixedDesignObject <- function(
@@ -185,5 +191,5 @@ asGsSurvFixedDesign <- function(
   design$inputs <- inputs
   class(design) <- c("gsSurv", "gsDesign")
 
-  design
+  gsSurvAddN(design)
 }
