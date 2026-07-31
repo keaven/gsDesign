@@ -293,6 +293,8 @@ Clinical Trials Using the Logrank Test. *Statistics in Medicine*, 1,
 
 ## See also
 
+[`vignette("SurvivalEnrollmentPlanning", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/SurvivalEnrollmentPlanning.md)
+for enrollment ramp-up and duration planning,
 [`vignette("SeqDesignSurvival", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/SeqDesignSurvival.md)
 for a SAS PROC SEQDESIGN sample size translation example and
 [`vignette("gsSurvPower", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/gsSurvPower.md)
@@ -356,4 +358,10 @@ y$usTime
 # Actual calendar fraction from design after toInteger() conversion
 y$T / max(y$T)
 #> [1] 0.3333729 0.6661892 1.0000000
+
+# Four-period enrollment ramp-up with fixed study duration and follow-up.
+ramp_calendar <- gsSurvCalendar(
+  calendarTime = c(12, 18, 26), minfup = 12,
+  gamma = 1:4, R = rep(1, 4)
+)
 ```

@@ -329,6 +329,10 @@ An object of class `c("gsSurv", "gsDesign")` containing:
 
   Expected sample sizes by stratum (control, experimental).
 
+- N:
+
+  Cumulative total expected enrollment at each analysis.
+
 - upper, lower:
 
   Bounds and crossing probabilities.

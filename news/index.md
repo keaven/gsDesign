@@ -4,6 +4,16 @@
 
 ### New features
 
+- All `gsSurv` objects now include `N`, the cumulative total expected
+  enrollment at each analysis. `nSurv` objects retain scalar `n` and
+  also return identical scalar `N` as a non-breaking alias
+  ([\#299](https://github.com/keaven/gsDesign/issues/299)).
+- Added survival enrollment-planning documentation for four-period
+  ramp-up, the three combinations of fixed or solved enrollment and
+  follow-up duration, calendar-time analyses, power sensitivity, integer
+  conversion, and stratified designs. `gsSurv(T = NULL, minfup = ...)`
+  now consistently keeps enrollment rates fixed and solves enrollment
+  duration ([\#300](https://github.com/keaven/gsDesign/issues/300)).
 - Added
   [`minMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/minMedianFollowUp.md)
   and

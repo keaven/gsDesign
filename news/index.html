@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,9 @@
 <h2 class="pkg-version" data-toc-text="development version" id="gsdesign-development-version">gsDesign (development version)<a class="anchor" aria-label="anchor" href="#gsdesign-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li>Added <code><a href="../reference/minMedianFollowUp.html">minMedianFollowUp()</a></code> and <code><a href="../reference/minMedianFollowUp.html">plotMinMedianFollowUp()</a></code> to compute and plot minimum median follow-up at any calendar time from the piecewise enrollment assumptions in an <code>nSurv</code> or <code>gsSurv</code> design. The plot accepts arbitrary time-unit labels through <code>timename</code>; month and year labels default to x-axis breaks every 6 months and 0.5 years, respectively, while other units use automatic breaks (<a href="https://github.com/keaven/gsDesign/issues/281" class="external-link">#281</a>).</li>
+<ul><li>All <code>gsSurv</code> objects now include <code>N</code>, the cumulative total expected enrollment at each analysis. <code>nSurv</code> objects retain scalar <code>n</code> and also return identical scalar <code>N</code> as a non-breaking alias (<a href="https://github.com/keaven/gsDesign/issues/299" class="external-link">#299</a>).</li>
+<li>Added survival enrollment-planning documentation for four-period ramp-up, the three combinations of fixed or solved enrollment and follow-up duration, calendar-time analyses, power sensitivity, integer conversion, and stratified designs. <code>gsSurv(T = NULL, minfup = ...)</code> now consistently keeps enrollment rates fixed and solves enrollment duration (<a href="https://github.com/keaven/gsDesign/issues/300" class="external-link">#300</a>).</li>
+<li>Added <code><a href="../reference/minMedianFollowUp.html">minMedianFollowUp()</a></code> and <code><a href="../reference/minMedianFollowUp.html">plotMinMedianFollowUp()</a></code> to compute and plot minimum median follow-up at any calendar time from the piecewise enrollment assumptions in an <code>nSurv</code> or <code>gsSurv</code> design. The plot accepts arbitrary time-unit labels through <code>timename</code>; month and year labels default to x-axis breaks every 6 months and 0.5 years, respectively, while other units use automatic breaks (<a href="https://github.com/keaven/gsDesign/issues/281" class="external-link">#281</a>).</li>
 <li>Sequential p-values, including exact-binomial repeated and sequential efficacy p-values, now support <code>test.type = 8</code> by ignoring its non-binding futility and harm bounds. <code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> now provides full exact conversion for non-binding test types 1, 4, 6, and 8. For type 6, the upper event-count boundary targets lower-bound spending under the null hypothesis. For type 8, exact upper event-count stops are partitioned into mutually exclusive futility and harm regions, targeting beta spending under the alternative and harm spending under the null, respectively (<a href="https://github.com/keaven/gsDesign/issues/287" class="external-link">#287</a>).</li>
 </ul></div>
 <div class="section level3">
