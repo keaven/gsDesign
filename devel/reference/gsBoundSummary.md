@@ -21,7 +21,9 @@ RTF package, `addTable.RTF()` (from the rtf package) to produce console
 or R Markdown output or output to a variety of file types. `xprint()` is
 provided for LaTeX output by setting default options for
 [`print.xtable`](https://rdrr.io/pkg/xtable/man/print.xtable.html) when
-producing tables summarizing design bounds.
+producing tables summarizing design bounds. Single-analysis fixed
+designs are supported; interim-only characteristics such as conditional
+and predictive power are omitted when `k = 1`.
 
 Individual transformation of z-value test statistics for interim and
 final analyses are obtained from `gsBValue()`, `gsDelta()`, `gsHR()` and
@@ -567,7 +569,7 @@ xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE),
   caption = "Table caption."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Wed Jul 22 11:00:52 2026
+#> % Fri Jul 31 14:03:02 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{llrr}

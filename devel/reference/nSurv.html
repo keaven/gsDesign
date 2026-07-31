@@ -13,7 +13,11 @@ nSurv() implements the Lachin and Foulkes (1986) method as default.
 Schoenfeld (1981), Freedman (1982), and Bernstein and Lagakos (1989) methods
 are also supported; see Details.
 gsSurv() combines nSurv() with gsDesign() to derive a
-group sequential design for a study with a time-to-event endpoint."><meta property="og:description" content="nSurv() is used to calculate the sample size for a two-arm clinical trial
+group sequential design for a study with a time-to-event endpoint.
+When k = 1, gsSurv() uses the fixed-design calculations from
+nSurv() directly and returns a normalized single-analysis
+gsSurv object for use with functions such as
+toInteger and gsBoundSummary."><meta property="og:description" content="nSurv() is used to calculate the sample size for a two-arm clinical trial
 with a time-to-event endpoint under the assumption of proportional hazards.
 The default method assumes a fixed enrollment duration and fixed trial duration;
 in this case the required sample size is achieved by increasing enrollment rates.
@@ -21,7 +25,11 @@ nSurv() implements the Lachin and Foulkes (1986) method as default.
 Schoenfeld (1981), Freedman (1982), and Bernstein and Lagakos (1989) methods
 are also supported; see Details.
 gsSurv() combines nSurv() with gsDesign() to derive a
-group sequential design for a study with a time-to-event endpoint."><meta property="og:image" content="https://keaven.github.io/gsDesign/devel/logo.png"></head><body>
+group sequential design for a study with a time-to-event endpoint.
+When k = 1, gsSurv() uses the fixed-design calculations from
+nSurv() directly and returns a normalized single-analysis
+gsSurv object for use with functions such as
+toInteger and gsBoundSummary."><meta property="og:image" content="https://keaven.github.io/gsDesign/devel/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -29,7 +37,7 @@ group sequential design for a study with a time-to-event endpoint."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +59,7 @@ group sequential design for a study with a time-to-event endpoint."><meta proper
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Advanced time-to-event sample size calculation</h1>
-      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/GitHub/287-fix-skipped-futility-sizing/R/gsSurv-interim.R" class="external-link"><code>R/gsSurv-interim.R</code></a>, <a href="https://github.com/keaven/gsDesign/blob/GitHub/287-fix-skipped-futility-sizing/R/gsSurv-nSurv.R" class="external-link"><code>R/gsSurv-nSurv.R</code></a>, <a href="https://github.com/keaven/gsDesign/blob/GitHub/287-fix-skipped-futility-sizing/R/gsSurv-xtable.R" class="external-link"><code>R/gsSurv-xtable.R</code></a>, and 1 more</small>
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/HEAD/R/gsSurv-interim.R" class="external-link"><code>R/gsSurv-interim.R</code></a>, <a href="https://github.com/keaven/gsDesign/blob/HEAD/R/gsSurv-nSurv.R" class="external-link"><code>R/gsSurv-nSurv.R</code></a>, <a href="https://github.com/keaven/gsDesign/blob/HEAD/R/gsSurv-xtable.R" class="external-link"><code>R/gsSurv-xtable.R</code></a>, and 1 more</small>
       <div class="d-none name"><code>nSurv.Rd</code></div>
     </div>
 
@@ -64,7 +72,11 @@ in this case the required sample size is achieved by increasing enrollment rates
 Schoenfeld (1981), Freedman (1982), and Bernstein and Lagakos (1989) methods
 are also supported; see Details.
 <code>gsSurv()</code> combines <code>nSurv()</code> with <code><a href="gsDesign.html">gsDesign()</a></code> to derive a
-group sequential design for a study with a time-to-event endpoint.</p>
+group sequential design for a study with a time-to-event endpoint.
+When <code>k = 1</code>, <code>gsSurv()</code> uses the fixed-design calculations from
+<code>nSurv()</code> directly and returns a normalized single-analysis
+<code>gsSurv</code> object for use with functions such as
+<code><a href="toInteger.html">toInteger</a></code> and <code><a href="gsBoundSummary.html">gsBoundSummary</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -534,6 +546,10 @@ analyses is still displayed.</p></dd>
 <dd><p>Total expected sample size corresponding to output accrual rates
   and durations.</p></dd>
 
+  <dt>N</dt>
+<dd><p>Identical to <code>n</code>; provided as a non-breaking alias for total
+  expected sample size.</p></dd>
+
   <dt>d</dt>
 <dd><p>Total expected number of events under the alternate
   hypothesis.</p></dd>
@@ -620,6 +636,10 @@ analyses is still displayed.</p></dd>
 
   <dt>hr0</dt>
 <dd><p>As input.</p></dd>
+
+  <dt>N</dt>
+<dd><p>A vector containing cumulative total expected enrollment at each
+  analysis.</p></dd>
 
   <dt>eNC</dt>
 <dd><p>Total expected sample size corresponding to output accrual rates
@@ -813,8 +833,10 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="https://rdrr.io/r/stats/uniroot.html" class="external-link">uniroot</a></code></p>
-<p><code><a href="../articles/gsSurvBasicExamples.html">vignette("gsSurvBasicExamples", package = "gsDesign")</a></code> for
-  basic survival sample size examples, <code><a href="../articles/SurvivalOverview.html">vignette("SurvivalOverview",
+<p><code><a href="../articles/SurvivalEnrollmentPlanning.html">vignette("SurvivalEnrollmentPlanning", package = "gsDesign")</a></code>
+  for enrollment ramp-up and duration planning,
+  <code><a href="../articles/gsSurvBasicExamples.html">vignette("gsSurvBasicExamples", package = "gsDesign")</a></code> for basic
+  survival sample size examples, <code><a href="../articles/SurvivalOverview.html">vignette("SurvivalOverview",
   package = "gsDesign")</a></code> for method background, and
   <code><a href="../articles/SeqDesignSurvival.html">vignette("SeqDesignSurvival", package = "gsDesign")</a></code> for a SAS PROC
   SEQDESIGN translation example.</p>
@@ -907,7 +929,7 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Caption example for xtable output."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.6.1 by xtable 1.8-8 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Wed Jul 22 11:00:57 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Fri Jul 31 14:03:05 2026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{rllll}</span>
@@ -1030,6 +1052,21 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Control dropout rate(s)     eta 0.001 0.001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        Experimental dropout rate(s)    etaE 0.001  etaE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Event and dropout rate duration(s)       S  NULL     S</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Common four-period enrollment ramp-up. With T and minfup fixed, the</span></span></span>
+<span class="r-in"><span><span class="co"># relative gamma pattern is scaled to power the trial, and the final R</span></span></span>
+<span class="r-in"><span><span class="co"># period is extended so enrollment lasts T - minfup.</span></span></span>
+<span class="r-in"><span><span class="va">ramp_rate</span> <span class="op">&lt;-</span> <span class="fu">gsSurv</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  T <span class="op">=</span> <span class="fl">26</span>, minfup <span class="op">=</span> <span class="fl">12</span>,</span></span>
+<span class="r-in"><span>  gamma <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># With T = NULL and minfup fixed, gamma stays fixed and the final</span></span></span>
+<span class="r-in"><span><span class="co"># enrollment period is extended to obtain the required sample size.</span></span></span>
+<span class="r-in"><span><span class="va">ramp_duration</span> <span class="op">&lt;-</span> <span class="fu">gsSurv</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  T <span class="op">=</span> <span class="cn">NULL</span>, minfup <span class="op">=</span> <span class="fl">12</span>,</span></span>
+<span class="r-in"><span>  gamma <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Vary minimum follow-up duration minfup to obtain power</span></span></span>
 <span class="r-in"><span><span class="co"># Accrual duration R rate gamma are fixed and will not change on output.</span></span></span>
@@ -1323,7 +1360,7 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

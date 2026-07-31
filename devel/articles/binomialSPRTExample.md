@@ -34,12 +34,10 @@ initially set a one-sided Type I error of \\\alpha=0.08\\ and power of
 80% (\\1-\beta = 0.2\\):
 
 ``` r
-
 library(gsDesign)
 ```
 
 ``` r
-
 b <- binomialSPRT(p0 = .1, p1 = .35, alpha = .08, beta = .2, minn = 10, maxn = 25)
 plot(b)
 ```
@@ -67,12 +65,10 @@ Functions are available to summarize design properties. For example, we
 can make a power plot:
 
 ``` r
-
 library(ggplot2)
 ```
 
 ``` r
-
 p <- plot(b, plottype = 2)
 p + scale_y_continuous(breaks = seq(0, 90, 10))
 ```
@@ -97,7 +93,6 @@ can ignore reviewing the code, but may copy if wishing to produce a
 similar table.
 
 ``` r
-
 # Compute boundary crossing probabilities for selected response rates
 b_power <- gsBinomialExact(
   k = length(b$n.I), theta = seq(.1, .45, .05), n.I = b$n.I,
@@ -106,7 +101,6 @@ b_power <- gsBinomialExact(
 ```
 
 ``` r
-
 b_power |>
   as_table() |>
   as_gt()
@@ -128,7 +122,6 @@ is 75 per arm and that we will not stop the trial for serious rash
 before 4 patients have been studied in the experimental group.
 
 ``` r
-
 safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75)
 plot(safety_design)
 ```
@@ -146,7 +139,6 @@ The design operating characteristics are now summarized both in a plot
 and a table.
 
 ``` r
-
 plot(safety_design, plottype = 2)
 ```
 
@@ -165,7 +157,6 @@ number of adverse experience cases cannot go down when the missing cases
 filled in.
 
 ``` r
-
 safety_power <- gsBinomialExact(
   k = length(safety_design$n.I),
   theta = seq(.02, .16, .02),

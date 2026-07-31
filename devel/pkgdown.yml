@@ -1,5 +1,5 @@
-pandoc: 3.8.3
-pkgdown: 2.2.1
+pandoc: 3.6.4
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   binomialSPRTExample: binomialSPRTExample.html
@@ -19,10 +19,11 @@ articles:
   SelectiveBoundTesting: SelectiveBoundTesting.html
   SeqDesignSurvival: SeqDesignSurvival.html
   SpendingFunctionOverview: SpendingFunctionOverview.html
+  SurvivalEnrollmentPlanning: SurvivalEnrollmentPlanning.html
   SurvivalOverview: SurvivalOverview.html
   toInteger: toInteger.html
   VaccineEfficacy: VaccineEfficacy.html
-last_built: 2026-07-22T11:00Z
+last_built: 2026-07-31T18:02Z
 urls:
   reference: https://keaven.github.io/gsDesign/devel//reference
   article: https://keaven.github.io/gsDesign/devel//articles

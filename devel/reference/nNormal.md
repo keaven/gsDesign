@@ -169,7 +169,6 @@ Keaven Anderson <keaven_anderson@merck.com>
 ## Examples
 
 ``` r
-
 # EXAMPLES
 # equal variances
 n=nNormal(delta1=.5,sd=1.1,alpha=.025,beta=.2)

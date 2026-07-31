@@ -113,7 +113,6 @@ return value, called for side effects
 ## Examples
 
 ``` r
-
 # check whether input is an integer
 isInteger(1)
 #> [1] TRUE

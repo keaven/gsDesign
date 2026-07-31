@@ -10,7 +10,12 @@ Freedman (1982), and Bernstein and Lagakos (1989) methods are also
 supported; see Details. `gsSurv()` combines `nSurv()` with
 [`gsDesign()`](https://keaven.github.io/gsDesign/devel/reference/gsDesign.md)
 to derive a group sequential design for a study with a time-to-event
-endpoint.
+endpoint. When `k = 1`, `gsSurv()` uses the fixed-design calculations
+from `nSurv()` directly and returns a normalized single-analysis
+`gsSurv` object for use with functions such as
+[`toInteger`](https://keaven.github.io/gsDesign/devel/reference/toInteger.md)
+and
+[`gsBoundSummary`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md).
 
 ## Usage
 
@@ -499,6 +504,11 @@ components:
   Total expected sample size corresponding to output accrual rates and
   durations.
 
+- N:
+
+  Identical to `n`; provided as a non-breaking alias for total expected
+  sample size.
+
 - d:
 
   Total expected number of events under the alternate hypothesis.
@@ -604,6 +614,11 @@ adequately power the trial. Other items returned by `gsSurv()` are:
 - hr0:
 
   As input.
+
+- N:
+
+  A vector containing cumulative total expected enrollment at each
+  analysis.
 
 - eNC:
 
@@ -831,6 +846,8 @@ Clinical Trials Using the Logrank Test. *Statistics in Medicine*, 1,
 
 [`uniroot`](https://rdrr.io/r/stats/uniroot.html)
 
+[`vignette("SurvivalEnrollmentPlanning", package = "gsDesign")`](https://keaven.github.io/gsDesign/devel/articles/SurvivalEnrollmentPlanning.md)
+for enrollment ramp-up and duration planning,
 [`vignette("gsSurvBasicExamples", package = "gsDesign")`](https://keaven.github.io/gsDesign/devel/articles/gsSurvBasicExamples.md)
 for basic survival sample size examples,
 [`vignette("SurvivalOverview", package = "gsDesign")`](https://keaven.github.io/gsDesign/devel/articles/SurvivalOverview.md)
@@ -858,7 +875,6 @@ Keaven Anderson <keaven_anderson@merck.com>
 ## Examples
 
 ``` r
-
 # Vary accrual rate gamma to obtain power
 # T, minfup and R all specified, although R will be adjusted on output
 # gamma as input will be multiplied in output to achieve desired power
@@ -933,7 +949,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Wed Jul 22 11:00:57 2026
+#> % Fri Jul 31 14:03:05 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}
@@ -1056,6 +1072,21 @@ gsSurv(
 #>             Control dropout rate(s)     eta 0.001 0.001
 #>        Experimental dropout rate(s)    etaE 0.001  etaE
 #>  Event and dropout rate duration(s)       S  NULL     S
+
+# Common four-period enrollment ramp-up. With T and minfup fixed, the
+# relative gamma pattern is scaled to power the trial, and the final R
+# period is extended so enrollment lasts T - minfup.
+ramp_rate <- gsSurv(
+  T = 26, minfup = 12,
+  gamma = 1:4, R = rep(1, 4)
+)
+
+# With T = NULL and minfup fixed, gamma stays fixed and the final
+# enrollment period is extended to obtain the required sample size.
+ramp_duration <- gsSurv(
+  T = NULL, minfup = 12,
+  gamma = 1:4, R = rep(1, 4)
+)
 
 # Vary minimum follow-up duration minfup to obtain power
 # Accrual duration R rate gamma are fixed and will not change on output.

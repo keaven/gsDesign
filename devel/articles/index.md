@@ -24,6 +24,8 @@ trials with time-to-event endpoints using gsDesign.
   design](https://keaven.github.io/gsDesign/devel/articles/SurvivalOverview.md):
 - [Basic time-to-event group sequential design using
   gsSurv](https://keaven.github.io/gsDesign/devel/articles/gsSurvBasicExamples.md):
+- [Planning enrollment and follow-up for survival
+  designs](https://keaven.github.io/gsDesign/devel/articles/SurvivalEnrollmentPlanning.md):
 - [Power Computation for Group Sequential Survival
   Designs](https://keaven.github.io/gsDesign/devel/articles/gsSurvPower.md):
 - [Reproducing SAS PROC SEQDESIGN survival designs in

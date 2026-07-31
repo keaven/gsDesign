@@ -4,6 +4,26 @@
 
 ### New features
 
+- All `gsSurv` objects now include `N`, the cumulative total expected
+  enrollment at each analysis. `nSurv` objects retain scalar `n` and
+  also return identical scalar `N` as a non-breaking alias
+  ([\#299](https://github.com/keaven/gsDesign/issues/299)).
+- Added survival enrollment-planning documentation for four-period
+  ramp-up, the three combinations of fixed or solved enrollment and
+  follow-up duration, calendar-time analyses, power sensitivity, integer
+  conversion, and stratified designs. `gsSurv(T = NULL, minfup = ...)`
+  now consistently keeps enrollment rates fixed and solves enrollment
+  duration ([\#300](https://github.com/keaven/gsDesign/issues/300)).
+- Added
+  [`minMedianFollowUp()`](https://keaven.github.io/gsDesign/devel/reference/minMedianFollowUp.md)
+  and
+  [`plotMinMedianFollowUp()`](https://keaven.github.io/gsDesign/devel/reference/minMedianFollowUp.md)
+  to compute and plot minimum median follow-up at any calendar time from
+  the piecewise enrollment assumptions in an `nSurv` or `gsSurv` design.
+  The plot accepts arbitrary time-unit labels through `timename`; month
+  and year labels default to x-axis breaks every 6 months and 0.5 years,
+  respectively, while other units use automatic breaks
+  ([\#281](https://github.com/keaven/gsDesign/issues/281)).
 - Sequential p-values, including exact-binomial repeated and sequential
   efficacy p-values, now support `test.type = 8` by ignoring its
   non-binding futility and harm bounds.
@@ -18,6 +38,36 @@
 
 ### Bug fixes
 
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
+  now retains exact event totals when `targetEvents` determines an
+  analysis, rather than exposing small root-finding residuals that could
+  make
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  round an integer event target up by one
+  ([\#294](https://github.com/keaven/gsDesign/issues/294)).
+- Survival sample-size outputs now normalize machine-precision
+  representations of integers before applying display rounding, so
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
+  and
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md)
+  preserve exact arm and total sample sizes
+  ([\#290](https://github.com/keaven/gsDesign/issues/290)).
+- Single-analysis survival designs now use a fixed-design
+  [`nSurv()`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md)
+  path in `gsSurv(k = 1)` and `gsSurvPower(k = 1)`. The resulting
+  objects work with
+  [`toInteger()`](https://keaven.github.io/gsDesign/devel/reference/toInteger.md)
+  and
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/devel/reference/gsBoundSummary.md),
+  including alternate-alpha summaries and use all alpha at the sole
+  analysis without displaying an irrelevant spending function in
+  [`summary()`](https://rdrr.io/r/base/summary.html). An
+  [`nSurv()`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md)
+  object can now also be passed directly to
+  [`toInteger()`](https://keaven.github.io/gsDesign/devel/reference/toInteger.md)
+  and is returned as an `nSurv` object with integer event and
+  sample-size targets
+  ([\#289](https://github.com/keaven/gsDesign/issues/289)).
 - Power plots for test types 7 and 8 now treat crossing the futility
   threshold as the union of futility-only and harm stops. The separate
   harm curve remains harm-only, and the mutually exclusive probabilities
@@ -548,7 +598,8 @@ CRAN release: 2025-08-25
   ([@nanxstats](https://github.com/nanxstats),
   [\#215](https://github.com/keaven/gsDesign/issues/215)). It was
   soft-deprecated in gsDesign 3.4.0 and moved to gMCPLite. Use
-  `gMCPLite::hGraph()` instead.
+  [`gMCPLite::hGraph()`](https://merck.github.io/gMCPLite/reference/hGraph.html)
+  instead.
 
   This change also preemptively fixes an `R CMD check` issue with
   ggplot2 (\>= 4.0.0) that would otherwise require declaring MASS as an
@@ -836,7 +887,9 @@ CRAN release: 2024-02-13
   [\#115](https://github.com/keaven/gsDesign/issues/115)). **Note**:
   this function has been deprecated and moved to gMCPLite since gsDesign
   3.4.0. It will be removed from gsDesign in a future version. Please
-  use `gMCPLite::hGraph()` instead.
+  use
+  [`gMCPLite::hGraph()`](https://merck.github.io/gMCPLite/reference/hGraph.html)
+  instead.
 
 ### Documentation
 
@@ -935,8 +988,8 @@ CRAN release: 2022-10-12
 - Removed gMCP dependency. Updated vignettes and linked to vignettes in
   gMCPLite ([\#69](https://github.com/keaven/gsDesign/issues/69)).
 - Added deprecation warning to `hGraph()` and suggested using
-  `gMCPLite::hGraph()` instead
-  ([\#70](https://github.com/keaven/gsDesign/issues/70)).
+  [`gMCPLite::hGraph()`](https://merck.github.io/gMCPLite/reference/hGraph.html)
+  instead ([\#70](https://github.com/keaven/gsDesign/issues/70)).
 - Moved ggplot2 from `Depends` to `Imports`
   ([\#56](https://github.com/keaven/gsDesign/issues/56)).
 

@@ -100,7 +100,6 @@ Thus, assuming \\n=100\\ events and \\\delta = \log\nu=-\log(.7)\\, and
 when \\\alpha=0.025\\ as
 
 ``` r
-
 n <- 100
 hr <- .7
 delta <- log(hr)
@@ -115,7 +114,6 @@ We can compute this with
 as:
 
 ``` r
-
 nEvents(n = n, alpha = alpha, hr = hr, r = r)
 #> [1] 0.4299155
 ```
@@ -133,7 +131,6 @@ of events required to power for HR=0.7 with \\\alpha=0.025\\ one-sided
 and power \\1-\beta=0.9\\ is
 
 ``` r
-
 beta <- 0.1
 (1 + r)^2 / r / log(hr)^2 * ((qnorm(1 - alpha) + qnorm(1 - beta)))^2
 #> [1] 330.3779
@@ -142,7 +139,6 @@ beta <- 0.1
 which, rounding up, matches (with tabular output):
 
 ``` r
-
 nEvents(hr = hr, alpha = alpha, beta = beta, r = 1, tbl = TRUE) |>
   kable()
 ```
@@ -155,7 +151,6 @@ The notation `delta` in the above table changes the sign for the
 standardized treatment effect \\\theta\\ in the above:
 
 ``` r
-
 theta <- delta * sqrt(r) / (1 + r)
 theta
 #> [1] -0.1783375
@@ -165,7 +160,6 @@ The `se` in the table is the estimated standard error for the log hazard
 ratio \\\delta=\log\hat\nu\\
 
 ``` r
-
 (1 + r) / sqrt(331 * r)
 #> [1] 0.1099299
 ```
@@ -191,7 +185,6 @@ group sequential design. By rounding to integer event counts with the
 function we increase the power slightly over the targeted 90%.
 
 ``` r
-
 Schoenfeld <- gsDesign(
   k = 2,
   n.fix = nEvents(hr = hr, alpha = alpha, beta = beta, r = 1),
@@ -225,7 +218,6 @@ standardized effect size `theta` from above to the parameter `delta` in
 [`gsDesign()`](https://keaven.github.io/gsDesign/devel/reference/gsDesign.md).
 
 ``` r
-
 Schoenfeld <- gsDesign(k = 2, delta = -theta, delta1 = log(hr)) |> toInteger()
 ```
 
@@ -234,7 +226,6 @@ We noted above that the asymptotic variance for \\\hat\theta\\ is
 for the parameter \\\theta\\. Thus, the value
 
 ``` r
-
 Schoenfeld$n.I
 #> [1] 172 345
 ```
@@ -246,7 +237,6 @@ at the desired level. Note that if you plug in the natural parameter
 information for the log hazard ratio.
 
 ``` r
-
 gsDesign(k = 2, delta = -log(hr))$n.I
 #> [1] 43.06893 86.13786
 ```
@@ -287,7 +277,6 @@ we can solve for the corresponding number of events required: \\ n =
 We continue with the `Schoenfeld` example event counts:
 
 ``` r
-
 Schoenfeld$n.I
 #> [1] 172 345
 ```
@@ -296,7 +285,6 @@ We reproduce the approximate hazard ratios required to cross efficacy
 bounds using the Schoenfeld approximations above:
 
 ``` r
-
 gsHR(
   z = Schoenfeld$upper$bound, # Z-values at bound
   i = 1:2, # Analysis number
@@ -309,7 +297,6 @@ gsHR(
 For the following examples, we assume \\r=1\\.
 
 ``` r
-
 r <- 1
 ```
 
@@ -318,7 +305,6 @@ r <- 1
     We use the first equation above:
 
 ``` r
-
 hr <- .73 # Observed hr
 events <- 125 # Events in analysis
 
@@ -330,7 +316,6 @@ c(z, pnorm(z)) # Z- and p-value
 We replicate the Z-value with
 
 ``` r
-
 hrn2z(hr = hr, n = events, ratio = r)
 #> [1] 1.759287
 ```
@@ -340,7 +325,6 @@ hrn2z(hr = hr, n = events, ratio = r)
     second equation above:
 
 ``` r
-
 z <- qnorm(.025)
 events <- 120
 exp(z * (1 + r) / sqrt(r * events))
@@ -353,7 +337,6 @@ by switching the sign of `z` above; note that the default is `ratio = 1`
 for all of these functions and often is not specified:
 
 ``` r
-
 zn2hr(z = -z, n = events, ratio = r)
 #> [1] 0.6991858
 ```
@@ -364,7 +347,6 @@ zn2hr(z = -z, n = events, ratio = r)
     randomization? We use the third equation above:
 
 ``` r
-
 r <- 2
 hr <- .8
 z <- qnorm(.025)
@@ -376,7 +358,6 @@ events
 This is replicated with
 
 ``` r
-
 hrz2n(hr = hr, z = z, ratio = r)
 #> [1] 347.1683
 ```
@@ -451,7 +432,6 @@ we assume a randomization ratio \\r=1\\, one-sided Type I error
 \\\beta=0.1\\.
 
 ``` r
-
 r <- 1 # Experimental/control randomization ratio
 alpha <- 0.025 # 1-sided Type I error
 beta <- 0.1 # Type II error (1 - power)
@@ -486,7 +466,6 @@ routine since only a single enrollment, failure and dropout rate is
 proposed for this example.
 
 ``` r
-
 lambda1 <- log(2) / controlMedian
 nSurvival(
   lambda1 = lambda1,
@@ -524,7 +503,6 @@ design with a futility bound based on \\\beta\\-spending. We round event
 counts down and round total sample size to an integer allocation.
 
 ``` r
-
 k <- 2 # Total number of analyses
 lfgs <- gsSurv(
   k = 2,
@@ -559,7 +537,6 @@ Although we did not use the Schoenfeld (1981) for sample size, it is
 still used for the approximate HR at bound calculation above:
 
 ``` r
-
 events <- lfgs$n.I
 z <- lfgs$upper$bound
 zn2hr(z = z, n = events) # Schoenfeld approximation to HR
@@ -573,7 +550,6 @@ required to cross bounds again use the Schoenfeld (1981) approximation.
 For a **ggplot2** version of this plot, use the default `base = FALSE`.
 
 ``` r
-
 plot(lfgs, pl = "hr", dgt = 2, base = TRUE)
 ```
 
@@ -589,7 +565,6 @@ You can see the expected events accrued at each analysis under the
 alternate hypothesis with:
 
 ``` r
-
 tibble::tibble(
   Analysis = 1:2,
   `Control events` = lfgs$eDC,
@@ -613,7 +588,6 @@ The expected event accrual of events over time for a design can be
 computed as follows:
 
 ``` r
-
 Month <- seq(0.025, enrollDuration + minfup, .025)
 plot(
   c(0, Month),
@@ -632,7 +606,6 @@ of the final events and what the expected enrollment accrual is at that
 time, you compute using:
 
 ``` r
-
 b <- tEventsIA(x = lfgs, timing = 0.25)
 cat(paste(
   " Time: ", round(b$T, 1),
@@ -654,7 +627,8 @@ see the help file for
 ## References
 
 Jennison, Christopher, and Bruce W. Turnbull. 2000. *Group Sequential
-Methods with Applications to Clinical Trials*. Chapman; Hall/CRC.
+Methods with Applications to Clinical Trials*. Boca Raton, FL: Chapman;
+Hall/CRC.
 
 Kim, Kyungmann, and Anastasios A. Tsiatis. 1990. “Study Duration for
 Clinical Trials with Survival Response and Early Stopping Rule.”

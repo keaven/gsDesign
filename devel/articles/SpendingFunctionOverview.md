@@ -38,4 +38,5 @@ chapter in the gsDesign technical manual.
 ## References
 
 Jennison, Christopher, and Bruce W. Turnbull. 2000. *Group Sequential
-Methods with Applications to Clinical Trials*. Chapman; Hall/CRC.
+Methods with Applications to Clinical Trials*. Boca Raton, FL: Chapman;
+Hall/CRC.

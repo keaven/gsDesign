@@ -108,6 +108,9 @@ and
 - [`toInteger()`](https://keaven.github.io/gsDesign/devel/reference/toInteger.md)
   : Translate group sequential design to integer events (survival
   designs) or sample size (other designs)
+- [`minMedianFollowUp()`](https://keaven.github.io/gsDesign/devel/reference/minMedianFollowUp.md)
+  [`plotMinMedianFollowUp()`](https://keaven.github.io/gsDesign/devel/reference/minMedianFollowUp.md)
+  : Minimum median follow-up for a survival design
 
 ## Vaccine/Prevention Efficacy
 

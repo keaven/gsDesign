@@ -35,7 +35,6 @@ reuse its defaults and override only the assumptions you want to
 stress-test.
 
 ``` r
-
 design <- gsSurv(
   k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
   sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
@@ -196,14 +195,12 @@ correctly for other hazard ratios, matching
 to within 0.5% across methods.
 
 ``` r
-
 cat("Design power:", round((1 - design$beta) * 100, 1), "%\n")
 ```
 
     ## Design power: 90 %
 
 ``` r
-
 cat("gsSurvPower:  ", round(pwr_design$power * 100, 1), "%\n")
 ```
 
@@ -215,7 +212,6 @@ Suppose the true treatment effect is HR = 0.8 instead of the design
 assumption of 0.7:
 
 ``` r
-
 pwr_worse <- gsSurvPower(x = design, hr = 0.8, plannedCalendarTime = design$T)
 cat("Power at HR = 0.8:", round(pwr_worse$power * 100, 1), "%\n")
 ```
@@ -228,7 +224,6 @@ is evaluated under the assumed HR (0.8).
 ### Power over a range of hazard ratios
 
 ``` r
-
 hr_grid <- seq(0.55, 0.90, by = 0.05)
 power_vals <- sapply(hr_grid, function(h) {
   p <- gsSurvPower(x = design, hr = h, plannedCalendarTime = design$T)
@@ -286,7 +281,6 @@ floor, the analysis can be extended until the time that expected events
 reach the target, up to `plannedCalendarTime + maxExtension`.
 
 ``` r
-
 total_N <- floor(sum(design$gamma * design$R))
 ```
 
@@ -301,7 +295,6 @@ counts match the targets, the `maxExtension` is not needed and the
 result matches the design power.
 
 ``` r
-
 pwr_multi <- gsSurvPower(
   x = design,
   targetEvents = design$n.I,
@@ -326,7 +319,6 @@ data.frame(
     ## 3        3         28.0        28.0         353.2         353.2
 
 ``` r
-
 cat("Power:", round(pwr_multi$power * 100, 1), "%\n")
 ```
 
@@ -341,7 +333,6 @@ timing of analyses from 12.4, 18.9, 28 months but have the same power
 and bounds.
 
 ``` r
-
 pwr_slow_simple <- gsSurvPower(
   x = design,
   gamma = design$gamma / 2,
@@ -381,7 +372,6 @@ from the floor, so it acts as a hard deadline on how long the sponsor is
 willing to wait.
 
 ``` r
-
 pwr_slow <- gsSurvPower(
   x = design,
   gamma = design$gamma / 2,
@@ -397,7 +387,6 @@ pwr_slow <- gsSurvPower(
     ## 353 events may not be achievable
 
 ``` r
-
 data.frame(
   Analysis = 1:design$k,
   Planned_Time = round(design$T, 1),
@@ -413,7 +402,6 @@ data.frame(
     ## 3        3         28.0        48.0         353.2         233.6
 
 ``` r
-
 cat("Power:", round(pwr_slow$power * 100, 1), "%\n")
 ```
 
@@ -432,7 +420,6 @@ analysis schedule. The trial over-runs its event targets substantially,
 yielding higher-than-planned power.
 
 ``` r
-
 pwr_fast <- gsSurvPower(
   x = design,
   lambdaC = log(2) / 8,
@@ -458,7 +445,6 @@ data.frame(
     ## 3        3         28.0        28.0         353.2         437.7
 
 ``` r
-
 cat("Power:", round(pwr_fast$power * 100, 1), "%\n")
 ```
 
@@ -487,7 +473,6 @@ the effect explicitly. Without `fullSpendingAtFinal`, the final spending
 fraction would remain 0.95 rather than 1.
 
 ``` r
-
 # Scenario 1 with informationRates and fullSpendingAtFinal
 planned_info_rates <- c(design$timing[-design$k], 0.95)
 
@@ -508,7 +493,6 @@ pwr_slow_ir <- gsSurvPower(
     ## 353 events may not be achievable
 
 ``` r
-
 spending_frac_used <- pmin(planned_info_rates, pwr_slow_ir$timing)
 spending_frac_used[design$k] <- 1
 
@@ -527,14 +511,12 @@ data.frame(
     ## 3        3         233.6           1.000            0.950         1.000
 
 ``` r
-
 cat("Power (default spending):       ", round(pwr_slow$power * 100, 1), "%\n")
 ```
 
     ## Power (default spending):        74.3 %
 
 ``` r
-
 cat("Power (capped + full final):    ", round(pwr_slow_ir$power * 100, 1), "%\n")
 ```
 
@@ -566,7 +548,6 @@ below compares three approaches across a range of hazard ratios:
   constant; events change with the assumed HR.
 
 ``` r
-
 design_events <- design$n.I
 hr_grid <- seq(0.55, 0.95, by = 0.05)
 
@@ -628,7 +609,6 @@ and are reused directly from the input design `x` when the timing
 matches:
 
 ``` r
-
 design_events <- design$n.I
 cat("Design bounds (Z-scale):\n")
 ```
@@ -636,21 +616,18 @@ cat("Design bounds (Z-scale):\n")
     ## Design bounds (Z-scale):
 
 ``` r
-
 cat("  Efficacy:", round(design$upper$bound, 4), "\n")
 ```
 
     ##   Efficacy: 3.0107 2.5465 1.9992
 
 ``` r
-
 cat("  Futility:", round(design$lower$bound, 4), "\n\n")
 ```
 
     ##   Futility: -0.2388 0.941 1.9992
 
 ``` r
-
 for (h in c(0.5, 0.7, 0.8, 1.0)) {
   pwr <- gsSurvPower(x = design, hr = h, targetEvents = design_events)
   cat(sprintf("HR=%.1f  Efficacy: %s  Futility: %s  (identical: %s)\n",
@@ -704,7 +681,6 @@ recomputed from scratch using the full `test.type` and spending
 functions.
 
 ``` r
-
 # Design at one-sided alpha = 0.0125
 design_a0125 <- gsSurv(
   k = 3, test.type = 4, alpha = 0.0125, sided = 1, beta = 0.1,
@@ -719,21 +695,18 @@ cat("=== Original design (alpha = 0.0125) ===\n")
     ## === Original design (alpha = 0.0125) ===
 
 ``` r
-
 cat("Efficacy bounds:", round(design_a0125$upper$bound, 4), "\n")
 ```
 
     ## Efficacy bounds: 3.2153 2.7838 2.2837
 
 ``` r
-
 cat("Futility bounds:", round(design_a0125$lower$bound, 4), "\n\n")
 ```
 
     ## Futility bounds: -0.0741 1.1739 2.2837
 
 ``` r
-
 # Power at alpha = 0.025 with same event counts (timing preserved)
 events_a0125 <- design_a0125$n.I
 pwr_a025 <- gsSurvPower(x = design_a0125, alpha = 0.025, targetEvents = events_a0125)
@@ -744,28 +717,24 @@ cat("=== gsSurvPower at alpha = 0.025 ===\n")
     ## === gsSurvPower at alpha = 0.025 ===
 
 ``` r
-
 cat("Efficacy bounds:", round(pwr_a025$upper$bound, 4), "\n")
 ```
 
     ## Efficacy bounds: 3.0107 2.5465 1.9992
 
 ``` r
-
 cat("Futility bounds:", round(pwr_a025$lower$bound, 4), "\n")
 ```
 
     ## Futility bounds: -0.0741 1.1739 1.9992
 
 ``` r
-
 cat("Power:          ", round(pwr_a025$power * 100, 1), "%\n\n")
 ```
 
     ## Power:           93 %
 
 ``` r
-
 # Cross-check: gsBoundSummary at the same alternate alpha
 # (only non-binding test.type 1, 4, 6, and 8 are supported)
 cat("=== gsBoundSummary (alpha = 0.025) ===\n")
@@ -774,7 +743,6 @@ cat("=== gsBoundSummary (alpha = 0.025) ===\n")
     ## === gsBoundSummary (alpha = 0.025) ===
 
 ``` r
-
 print(gsBoundSummary(design_a0125, alpha = 0.025))
 ```
 
@@ -809,7 +777,6 @@ analysis rather than a Maurer–Bretz multiplicity calculation.
 ### Binding type planning sensitivity example (test.type = 3)
 
 ``` r
-
 design3 <- gsSurv(
   k = 3, test.type = 3, alpha = 0.0125, sided = 1, beta = 0.1,
   sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
@@ -826,35 +793,30 @@ cat("=== Binding futility (test.type=3) at alpha = 0.025 ===\n")
     ## === Binding futility (test.type=3) at alpha = 0.025 ===
 
 ``` r
-
 cat("Original efficacy:", round(design3$upper$bound, 4), "\n")
 ```
 
     ## Original efficacy: 3.2153 2.7835 2.2484
 
 ``` r
-
 cat("New efficacy:     ", round(pwr3_a025$upper$bound, 4), "\n")
 ```
 
     ## New efficacy:      3.0107 2.5465 1.9992
 
 ``` r
-
 cat("Original futility:", round(design3$lower$bound, 4), "\n")
 ```
 
     ## Original futility: -0.0936 1.1463 2.2484
 
 ``` r
-
 cat("New futility:     ", round(pwr3_a025$lower$bound, 4), "\n")
 ```
 
     ## New futility:      -0.0936 1.1463 1.9992
 
 ``` r
-
 cat("Power:            ", round(pwr3_a025$power * 100, 1), "%\n")
 ```
 
@@ -867,14 +829,12 @@ bound, the new efficacy bound (which is lower) becomes the clip point.
 The output retains the original `test.type` and records the new `alpha`:
 
 ``` r
-
 cat("test.type:", pwr3_a025$test.type, "(same as input design)\n")
 ```
 
     ## test.type: 3 (same as input design)
 
 ``` r
-
 cat("alpha:    ", pwr3_a025$alpha, "(updated to new value)\n")
 ```
 
@@ -886,7 +846,6 @@ Instead of calendar times, analyses can be triggered by target event
 counts:
 
 ``` r
-
 pwr_events <- gsSurvPower(
   x = design,
   targetEvents = c(75, 150, 225)
@@ -897,7 +856,6 @@ cat("Analysis times:", round(pwr_events$T, 1), "\n")
     ## Analysis times: 9.7 14.2 18.2
 
 ``` r
-
 cat("Events at each analysis:",
     round(pwr_events$n.I, 1), "\n")
 ```
@@ -905,7 +863,6 @@ cat("Events at each analysis:",
     ## Events at each analysis: 75 150 225
 
 ``` r
-
 cat("Power:", round(pwr_events$power * 100, 1), "%\n")
 ```
 
@@ -919,7 +876,6 @@ expected number of events available at each look and therefore reduces
 power.
 
 ``` r
-
 pwr_slow_enroll <- gsSurvPower(
   x = design,
   gamma = design$gamma / 2,
@@ -932,21 +888,18 @@ cat("Original final expected events:", round(pwr_design$n.I[design$k], 1), "\n")
     ## Original final expected events: 353.2
 
 ``` r
-
 cat("Slower-enrollment final events:", round(pwr_slow_enroll$n.I[design$k], 1), "\n")
 ```
 
     ## Slower-enrollment final events: 176.6
 
 ``` r
-
 cat("Original power:", round(pwr_design$power * 100, 1), "%\n")
 ```
 
     ## Original power: 90 %
 
 ``` r
-
 cat("Slower-enrollment power:", round(pwr_slow_enroll$power * 100, 1), "%\n")
 ```
 
@@ -972,7 +925,6 @@ overrides are **ignored**; the realized analysis times determine
 spending fractions automatically.
 
 ``` r
-
 # Information-based spending (default)
 pwr_info <- gsSurvPower(
   x = design,
@@ -1017,7 +969,6 @@ Note that passing `usTime` or `lsTime` with `spending = "calendar"` has
 no effect—the calendar fractions override them:
 
 ``` r
-
 pwr_cal_override <- gsSurvPower(
   x = design,
   plannedCalendarTime = design$T,
@@ -1045,7 +996,6 @@ months and stratum 2 has 12 months. We target 30 events (20 + 10) at the
 interim and 60 events (40 + 20) at the final analysis:
 
 ``` r
-
 # Per-stratum event targets: rows = analyses, columns = strata
 event_matrix <- matrix(
   c(20, 10,   # interim: 20 from stratum 1, 10 from stratum 2
@@ -1081,7 +1031,6 @@ data.frame(
     ## 2          17.1
 
 ``` r
-
 cat("Power:", round(pwr_strat$power * 100, 1), "%\n")
 ```
 
@@ -1110,7 +1059,6 @@ ratio is 0.65, and we target 90% power at one-sided \\\alpha = 0.0125\\
 (e.g., from a graphical multiplicity allocation):
 
 ``` r
-
 prevalence <- 0.6
 median_bm_pos <- 12    # control median in biomarker+ (months)
 median_bm_neg <- 10    # control median in biomarker- (shorter prognosis)
@@ -1129,7 +1077,6 @@ summary(bm_design)
     ## [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 450 and 286 events required, 90 percent power, 1.25 percent (1-sided) Type I error to detect a hazard ratio of 0.65. Enrollment and total study durations are assumed to be 18 and 36 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."
 
 ``` r
-
 gsBoundSummary(bm_design)
 ```
 
@@ -1167,7 +1114,6 @@ overall hazard ratio assumed is 0.75 (attenuated because the
 biomarker-negative subgroup has a weaker treatment effect).
 
 ``` r
-
 # Control hazard rates by stratum
 lambdaC_pos <- log(2) / median_bm_pos
 lambdaC_neg <- log(2) / median_bm_neg
@@ -1191,10 +1137,9 @@ pwr_overall <- gsSurvPower(
 summary(pwr_overall)
 ```
 
-    ## [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 748 and 511 events required, 81.6536623365655 percent power, 1.25 percent (1-sided) Type I error to detect a hazard ratio of 0.75. Enrollment and total study durations are assumed to be 18 and 36 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."
+    ## [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 748 and 511 events required, 81.6536623365654 percent power, 1.25 percent (1-sided) Type I error to detect a hazard ratio of 0.75. Enrollment and total study durations are assumed to be 18 and 36 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."
 
 ``` r
-
 gsBoundSummary(pwr_overall)
 ```
 
