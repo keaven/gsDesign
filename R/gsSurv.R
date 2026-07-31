@@ -99,13 +99,6 @@ gsSurv <- function(
     )$root
     T <- sum(R) + minfup
   }
-  # Preserve the historical Lachin-Foulkes default: with fixed follow-up and
-  # T = NULL, keep R fixed and vary the accrual rate.
-  if (method == "LachinFoulkes" && is.null(T) && !is.null(minfup) &&
-    !is.null(R) && length(R) > 0 &&
-    !is.null(gamma) && length(gamma) > 0) {
-    T <- sum(R) + minfup
-  }
   x <- nSurv(
     lambdaC = lambdaC, hr = hr, hr0 = hr0, eta = eta, etaE = etaE,
     gamma = gamma, R = R, S = S, T = T, minfup = minfup, ratio = ratio,
@@ -176,7 +169,7 @@ gsSurv <- function(
   colnames(y$etaE) <- stratnames
   rownames(y$gamma) <- nameR
   colnames(y$gamma) <- stratnames
-  return(y)
+  return(gsSurvAddN(y))
 }
 
 # gsnSurv function [sinew] ----

@@ -137,6 +137,7 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     for (nm in plan_fields) result[[nm]] <- integer_design[[nm]]
     result$d <- integer_design$n.I[1]
     result$n <- sum(result$eNC + result$eNE)
+    result$N <- result$n
     result$beta <- integer_design$beta
     result$power <- 1 - result$beta
     class(result) <- class(original)
@@ -402,6 +403,7 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
     rownames(xi$gamma) <- nameR
     colnames(xi$gamma) <- stratnames
   }
+  if (inherits(xi, "gsSurv")) xi <- gsSurvAddN(xi)
   return(xi)
 }
 

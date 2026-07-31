@@ -33,8 +33,10 @@
 #'
 #' @rdname gsSurvCalendar
 #'
-#' @seealso \code{vignette("SeqDesignSurvival", package = "gsDesign")} for a
-#'   SAS PROC SEQDESIGN sample size translation example and
+#' @seealso \code{vignette("SurvivalEnrollmentPlanning", package = "gsDesign")}
+#'   for enrollment ramp-up and duration planning,
+#'   \code{vignette("SeqDesignSurvival", package = "gsDesign")} for a SAS
+#'   PROC SEQDESIGN sample size translation example and
 #'   \code{vignette("gsSurvPower", package = "gsDesign")} for power
 #'   calculations with fixed calendar analysis assumptions.
 #'
@@ -71,6 +73,12 @@
 #' y$usTime
 #' # Actual calendar fraction from design after toInteger() conversion
 #' y$T / max(y$T)
+#'
+#' # Four-period enrollment ramp-up with fixed study duration and follow-up.
+#' ramp_calendar <- gsSurvCalendar(
+#'   calendarTime = c(12, 18, 26), minfup = 12,
+#'   gamma = 1:4, R = rep(1, 4)
+#' )
 gsSurvCalendar <- function(
   test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
   sfu = gsDesign::sfHSD, sfupar = -4,
@@ -184,5 +192,5 @@ gsSurvCalendar <- function(
   colnames(y$etaE) <- stratnames
   rownames(y$gamma) <- nameR
   colnames(y$gamma) <- stratnames
-  return(y)
+  return(gsSurvAddN(y))
 }

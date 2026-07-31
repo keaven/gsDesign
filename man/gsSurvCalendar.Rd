@@ -235,6 +235,12 @@ gsBoundSummary(y)
 y$usTime
 # Actual calendar fraction from design after toInteger() conversion
 y$T / max(y$T)
+
+# Four-period enrollment ramp-up with fixed study duration and follow-up.
+ramp_calendar <- gsSurvCalendar(
+  calendarTime = c(12, 18, 26), minfup = 12,
+  gamma = 1:4, R = rep(1, 4)
+)
 }
 \references{
 Lan KKG and DeMets DL (1983), Discrete Sequential Boundaries for Clinical
@@ -250,8 +256,10 @@ Freedman LS (1982), Tables of the Number of Patients Required in Clinical
 Trials Using the Logrank Test. \emph{Statistics in Medicine}, 1, 121-129.
 }
 \seealso{
-\code{vignette("SeqDesignSurvival", package = "gsDesign")} for a
-  SAS PROC SEQDESIGN sample size translation example and
+\code{vignette("SurvivalEnrollmentPlanning", package = "gsDesign")}
+  for enrollment ramp-up and duration planning,
+  \code{vignette("SeqDesignSurvival", package = "gsDesign")} for a SAS
+  PROC SEQDESIGN sample size translation example and
   \code{vignette("gsSurvPower", package = "gsDesign")} for power
   calculations with fixed calendar analysis assumptions.
 

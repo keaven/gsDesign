@@ -342,6 +342,8 @@ analyses is still displayed.}
   \item{hr0}{As input.}
   \item{n}{Total expected sample size corresponding to output accrual rates
   and durations.}
+  \item{N}{Identical to \code{n}; provided as a non-breaking alias for total
+  expected sample size.}
   \item{d}{Total expected number of events under the alternate
   hypothesis.}
   \item{tol}{As input, except when not used in computations in
@@ -387,6 +389,8 @@ analyses is still displayed.}
   \item{minfup}{As input.}
   \item{hr}{As input.}
   \item{hr0}{As input.}
+  \item{N}{A vector containing cumulative total expected enrollment at each
+  analysis.}
   \item{eNC}{Total expected sample size corresponding to output accrual rates
   and durations.}
   \item{eNE}{Total expected sample size corresponding to output accrual rates
@@ -599,6 +603,21 @@ gsSurv(
 ) |>
   print()
 
+# Common four-period enrollment ramp-up. With T and minfup fixed, the
+# relative gamma pattern is scaled to power the trial, and the final R
+# period is extended so enrollment lasts T - minfup.
+ramp_rate <- gsSurv(
+  T = 26, minfup = 12,
+  gamma = 1:4, R = rep(1, 4)
+)
+
+# With T = NULL and minfup fixed, gamma stays fixed and the final
+# enrollment period is extended to obtain the required sample size.
+ramp_duration <- gsSurv(
+  T = NULL, minfup = 12,
+  gamma = 1:4, R = rep(1, 4)
+)
+
 # Vary minimum follow-up duration minfup to obtain power
 # Accrual duration R rate gamma are fixed and will not change on output.
 # Trial duration T and minimum follow-up minfup are input as NULL
@@ -693,8 +712,10 @@ Trials Using the Logrank Test. \emph{Statistics in Medicine}, 1, 121-129.
 \seealso{
 \code{\link[stats]{uniroot}}
 
-\code{vignette("gsSurvBasicExamples", package = "gsDesign")} for
-  basic survival sample size examples, \code{vignette("SurvivalOverview",
+\code{vignette("SurvivalEnrollmentPlanning", package = "gsDesign")}
+  for enrollment ramp-up and duration planning,
+  \code{vignette("gsSurvBasicExamples", package = "gsDesign")} for basic
+  survival sample size examples, \code{vignette("SurvivalOverview",
   package = "gsDesign")} for method background, and
   \code{vignette("SeqDesignSurvival", package = "gsDesign")} for a SAS PROC
   SEQDESIGN translation example.
