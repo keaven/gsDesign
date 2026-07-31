@@ -13,7 +13,11 @@ nSurv() implements the Lachin and Foulkes (1986) method as default.
 Schoenfeld (1981), Freedman (1982), and Bernstein and Lagakos (1989) methods
 are also supported; see Details.
 gsSurv() combines nSurv() with gsDesign() to derive a
-group sequential design for a study with a time-to-event endpoint."><meta property="og:description" content="nSurv() is used to calculate the sample size for a two-arm clinical trial
+group sequential design for a study with a time-to-event endpoint.
+When k = 1, gsSurv() uses the fixed-design calculations from
+nSurv() directly and returns a normalized single-analysis
+gsSurv object for use with functions such as
+toInteger and gsBoundSummary."><meta property="og:description" content="nSurv() is used to calculate the sample size for a two-arm clinical trial
 with a time-to-event endpoint under the assumption of proportional hazards.
 The default method assumes a fixed enrollment duration and fixed trial duration;
 in this case the required sample size is achieved by increasing enrollment rates.
@@ -21,7 +25,11 @@ nSurv() implements the Lachin and Foulkes (1986) method as default.
 Schoenfeld (1981), Freedman (1982), and Bernstein and Lagakos (1989) methods
 are also supported; see Details.
 gsSurv() combines nSurv() with gsDesign() to derive a
-group sequential design for a study with a time-to-event endpoint."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
+group sequential design for a study with a time-to-event endpoint.
+When k = 1, gsSurv() uses the fixed-design calculations from
+nSurv() directly and returns a normalized single-analysis
+gsSurv object for use with functions such as
+toInteger and gsBoundSummary."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -29,7 +37,7 @@ group sequential design for a study with a time-to-event endpoint."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +72,11 @@ in this case the required sample size is achieved by increasing enrollment rates
 Schoenfeld (1981), Freedman (1982), and Bernstein and Lagakos (1989) methods
 are also supported; see Details.
 <code>gsSurv()</code> combines <code>nSurv()</code> with <code><a href="gsDesign.html">gsDesign()</a></code> to derive a
-group sequential design for a study with a time-to-event endpoint.</p>
+group sequential design for a study with a time-to-event endpoint.
+When <code>k = 1</code>, <code>gsSurv()</code> uses the fixed-design calculations from
+<code>nSurv()</code> directly and returns a normalized single-analysis
+<code>gsSurv</code> object for use with functions such as
+<code><a href="toInteger.html">toInteger</a></code> and <code><a href="gsBoundSummary.html">gsBoundSummary</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -907,7 +919,7 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Caption example for xtable output."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.6.1 by xtable 1.8-8 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Thu Jul 23 19:47:55 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Fri Jul 31 17:56:34 2026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{rllll}</span>

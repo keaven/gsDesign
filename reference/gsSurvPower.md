@@ -8,7 +8,13 @@ timing. Unlike
 which solve for sample size to achieve target power, `gsSurvPower()`
 takes fixed design assumptions and computes the resulting power. It is
 meant to compute for a single set of assumptions at a time; different
-scenarios are evaluated with separate calls.
+scenarios are evaluated with separate calls. For `k = 1`, power is
+computed through the fixed-design `nSurv(beta = NULL)` path. The
+returned object is normalized as a single-analysis `gsSurv` object so it
+can be passed to
+[`toInteger`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+and
+[`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
 
 ## Usage
 
@@ -507,7 +513,7 @@ gsSurvPower(x = design, hr = 0.8, plannedCalendarTime = design$T)$power
 # Event-driven timing (matches gsDesign power plot)
 design_events <- design$n.I
 gsSurvPower(x = design, hr = 0.8, targetEvents = design_events)$power
-#> [1] 0.5253124
+#> [1] 0.5253127
 
 # Without a reference design
 gsSurvPower(

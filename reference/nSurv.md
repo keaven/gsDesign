@@ -10,7 +10,12 @@ Freedman (1982), and Bernstein and Lagakos (1989) methods are also
 supported; see Details. `gsSurv()` combines `nSurv()` with
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
 to derive a group sequential design for a study with a time-to-event
-endpoint.
+endpoint. When `k = 1`, `gsSurv()` uses the fixed-design calculations
+from `nSurv()` directly and returns a normalized single-analysis
+`gsSurv` object for use with functions such as
+[`toInteger`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+and
+[`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
 
 ## Usage
 
@@ -933,7 +938,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Thu Jul 23 19:47:55 2026
+#> % Fri Jul 31 17:56:34 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}

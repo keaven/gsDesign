@@ -11,13 +11,21 @@ Unlike gsSurv() and gsSurvCalendar() which solve for sample
 size to achieve target power, gsSurvPower() takes fixed design
 assumptions and computes the resulting power. It is meant to compute for
 a single set of assumptions at a time; different scenarios are evaluated
-with separate calls."><meta property="og:description" content="gsSurvPower() computes power for a group sequential survival design
+with separate calls.
+For k = 1, power is computed through the fixed-design
+nSurv(beta = NULL) path. The returned object is normalized as a
+single-analysis gsSurv object so it can be passed to
+toInteger and gsBoundSummary."><meta property="og:description" content="gsSurvPower() computes power for a group sequential survival design
 with specified enrollment, dropout, treatment effect, and analysis timing.
 Unlike gsSurv() and gsSurvCalendar() which solve for sample
 size to achieve target power, gsSurvPower() takes fixed design
 assumptions and computes the resulting power. It is meant to compute for
 a single set of assumptions at a time; different scenarios are evaluated
-with separate calls."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
+with separate calls.
+For k = 1, power is computed through the fixed-design
+nSurv(beta = NULL) path. The returned object is normalized as a
+single-analysis gsSurv object so it can be passed to
+toInteger and gsBoundSummary."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -25,7 +33,7 @@ with separate calls."><meta property="og:image" content="https://keaven.github.i
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +66,11 @@ Unlike <code><a href="nSurv.html">gsSurv()</a></code> and <code><a href="gsSurvC
 size to achieve target power, <code>gsSurvPower()</code> takes fixed design
 assumptions and computes the resulting power. It is meant to compute for
 a single set of assumptions at a time; different scenarios are evaluated
-with separate calls.</p>
+with separate calls.
+For <code>k = 1</code>, power is computed through the fixed-design
+<code>nSurv(beta = NULL)</code> path. The returned object is normalized as a
+single-analysis <code>gsSurv</code> object so it can be passed to
+<code><a href="toInteger.html">toInteger</a></code> and <code><a href="gsBoundSummary.html">gsBoundSummary</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -535,7 +547,7 @@ parameters change relative to the original design:</p><ul><li><p><strong>No boun
 <span class="r-in"><span><span class="co"># Event-driven timing (matches gsDesign power plot)</span></span></span>
 <span class="r-in"><span><span class="va">design_events</span> <span class="op">&lt;-</span> <span class="va">design</span><span class="op">$</span><span class="va">n.I</span></span></span>
 <span class="r-in"><span><span class="fu">gsSurvPower</span><span class="op">(</span>x <span class="op">=</span> <span class="va">design</span>, hr <span class="op">=</span> <span class="fl">0.8</span>, targetEvents <span class="op">=</span> <span class="va">design_events</span><span class="op">)</span><span class="op">$</span><span class="va">power</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5253124</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5253127</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Without a reference design</span></span></span>
 <span class="r-in"><span><span class="fu">gsSurvPower</span><span class="op">(</span></span></span>
