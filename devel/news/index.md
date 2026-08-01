@@ -36,8 +36,41 @@
   spending under the null, respectively
   ([\#287](https://github.com/keaven/gsDesign/issues/287)).
 
+### Documentation
+
+- Expanded the
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
+  vignette with common timing pitfalls for explicit `minfup`, `targetN`,
+  `maxExtension`, and `minN + minFollowUp` workflows
+  ([\#291](https://github.com/keaven/gsDesign/issues/291),
+  [\#293](https://github.com/keaven/gsDesign/issues/293),
+  [\#295](https://github.com/keaven/gsDesign/issues/295),
+  [\#296](https://github.com/keaven/gsDesign/issues/296)).
+
 ### Bug fixes
 
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
+  now respects an explicitly supplied `minfup` as a final analysis
+  timing floor for event-driven designs, so the final analysis is not
+  scheduled before the end of enrollment plus minimum follow-up
+  ([\#291](https://github.com/keaven/gsDesign/issues/291)).
+- `gsSurvPower(targetN = ...)` now works when `R` is omitted by
+  expanding and rescaling enrollment-period durations to match the
+  supplied `gamma` periods. Documentation now clarifies that `targetN`
+  changes enrollment duration; for fixed-duration enrollment, specify
+  `R` and scale `gamma` directly
+  ([\#293](https://github.com/keaven/gsDesign/issues/293)).
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
+  now gives an informative error when `maxExtension` is used without a
+  floor timing criterion such as `plannedCalendarTime`, `minN`, or
+  `minTimeFromPreviousAnalysis`
+  ([\#295](https://github.com/keaven/gsDesign/issues/295)).
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
+  can now use `minN` plus `minFollowUp` as the primary timing criterion,
+  solves for the earliest time at which enrollment reaches `minN`, and
+  reports a clear error if the criteria do not produce strictly
+  increasing analyses
+  ([\#296](https://github.com/keaven/gsDesign/issues/296)).
 - [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
   now retains exact event totals when `targetEvents` determines an
   analysis, rather than exposing small root-finding residuals that could
@@ -598,8 +631,7 @@ CRAN release: 2025-08-25
   ([@nanxstats](https://github.com/nanxstats),
   [\#215](https://github.com/keaven/gsDesign/issues/215)). It was
   soft-deprecated in gsDesign 3.4.0 and moved to gMCPLite. Use
-  [`gMCPLite::hGraph()`](https://merck.github.io/gMCPLite/reference/hGraph.html)
-  instead.
+  `gMCPLite::hGraph()` instead.
 
   This change also preemptively fixes an `R CMD check` issue with
   ggplot2 (\>= 4.0.0) that would otherwise require declaring MASS as an
@@ -887,9 +919,7 @@ CRAN release: 2024-02-13
   [\#115](https://github.com/keaven/gsDesign/issues/115)). **Note**:
   this function has been deprecated and moved to gMCPLite since gsDesign
   3.4.0. It will be removed from gsDesign in a future version. Please
-  use
-  [`gMCPLite::hGraph()`](https://merck.github.io/gMCPLite/reference/hGraph.html)
-  instead.
+  use `gMCPLite::hGraph()` instead.
 
 ### Documentation
 
@@ -988,8 +1018,8 @@ CRAN release: 2022-10-12
 - Removed gMCP dependency. Updated vignettes and linked to vignettes in
   gMCPLite ([\#69](https://github.com/keaven/gsDesign/issues/69)).
 - Added deprecation warning to `hGraph()` and suggested using
-  [`gMCPLite::hGraph()`](https://merck.github.io/gMCPLite/reference/hGraph.html)
-  instead ([\#70](https://github.com/keaven/gsDesign/issues/70)).
+  `gMCPLite::hGraph()` instead
+  ([\#70](https://github.com/keaven/gsDesign/issues/70)).
 - Moved ggplot2 from `Depends` to `Imports`
   ([\#56](https://github.com/keaven/gsDesign/issues/56)).
 

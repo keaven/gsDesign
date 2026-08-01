@@ -1,6 +1,7 @@
 # Reproducing SAS PROC SEQDESIGN survival designs in gsDesign
 
 ``` r
+
 library(gsDesign)
 ```
 
@@ -97,6 +98,7 @@ The fractional-time design reports analyses at information fractions
 times are not rounded.
 
 ``` r
+
 sas_fractional <- data.frame(
   Analysis = 1:4,
   Events = c(22.26962, 44.53924, 66.80886, 89.07847),
@@ -179,6 +181,7 @@ The translation used below is summarized as follows:
 | Follow-up after accrual | Derived as 7.133226 | minfup = NULL | Lets gsSurv() solve the follow-up duration |
 
 Translation from the SAS PROC SEQDESIGN example to gsDesign inputs.
+{.table}
 
 ## Reproducing the fractional-time design with `gsSurv()`
 
@@ -188,6 +191,7 @@ Let’s start our work with gsDesign by defining parameters to match the
 SAS fractional-time design:
 
 ``` r
+
 k <- 4
 alpha_sas <- 0.05 # Two-sided total alpha (SAS convention)
 alpha_gsdesign <- alpha_sas / 2 # gsDesign uses one-sided alpha
@@ -228,6 +232,7 @@ The call below uses the same two-sided symmetric structure as SAS:
   solves the follow-up duration.
 
 ``` r
+
 des_2 <- gsSurv(
   k = 4,
   test.type = 2, # Symmetric two-sided design
@@ -299,6 +304,7 @@ Z-boundary comparisons may reflect limited SAS printed precision unless
 the SAS output is rerun with more digits.
 
 ``` r
+
 gs_fractional <- data.frame(
   Analysis = 1:k,
   Events_SAS = sas_fractional$Events,
@@ -324,7 +330,7 @@ knitr::kable(
 | 3 | 66.80886 | 66.8088 | 20.49260 | 20.49260 | 270.00 | 270.0000 | 2.35902 | 2.35904 |
 | 4 | 89.07847 | 89.0784 | 25.13323 | 25.13321 | 270.00 | 270.0000 | 2.01409 | 2.01409 |
 
-Fractional-time SAS output compared with gsSurv().
+Fractional-time SAS output compared with gsSurv(). {.table}
 
 The final event count is 89.07847 in both systems. The
 [`print()`](https://rdrr.io/r/base/print.html) and
@@ -342,6 +348,7 @@ accrual duration because the fixed follow-up time is the one SAS solved
 from the fixed-accrual design:
 
 ``` r
+
 des_fixed_followup <- gsSurv(
   k = 4,
   test.type = 2,
@@ -395,7 +402,7 @@ knitr::kable(
 | Final events         |        89.07840 |           89.07840 |
 | Final N              |       270.00003 |          269.99988 |
 
-Both fixed-accrual translations produce the same final design.
+Both fixed-accrual translations produce the same final design. {.table}
 
 A third use case is to keep both the enrollment rates and enrollment
 duration fixed, then vary minimum follow-up and evaluate power. That is

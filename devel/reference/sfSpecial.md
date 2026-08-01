@@ -101,6 +101,7 @@ Keaven Anderson <keaven_anderson@merck.com>
 
 ``` r
 
+
 # Eliminate efficacy spending forany interim at or before 20 percent of information.
 # Complete spending at first interim at or after 80 percent of information.
 tx <- (0:100) / 100

@@ -189,10 +189,12 @@ single interim analysis half way through the trial with
 ^{-1}(\beta/2)}{\sqrt{t}}\right) \right).\\
 
 ``` r
+
 library(gsDesign)
 ```
 
 ``` r
+
 delta1 <- 3 # Treatment effect, alternate hypothesis
 delta0 <- 0 # Treatment effect, null hypothesis
 ratio <- 1 # Randomization ratio (experimental / control)
@@ -211,6 +213,7 @@ endpoint <- "normal"
 ```
 
 ``` r
+
 # Derive normal fixed design sample size
 n <- nNormal(
   delta1 = delta1,
@@ -223,6 +226,7 @@ n <- nNormal(
 ```
 
 ``` r
+
 # Derive group sequential design based on parameters above
 x <- gsDesign(
   k = k,
@@ -278,6 +282,7 @@ at the interim analysis and the final analysis. The value of the
 non-binding Type I error is still \\\alpha^+(0) = 0.10\\.
 
 ``` r
+
 # Updated alpha is unchanged
 alphau <- 0.1
 # Updated sample size at each analysis
@@ -290,6 +295,7 @@ lsTime <- usTime
 ```
 
 ``` r
+
 # Update design based on actual interim sample size and planned final sample size
 xu <- gsDesign(
   k = ku,
@@ -313,6 +319,7 @@ xu <- gsDesign(
 ```
 
 ``` r
+
 # Summarize bounds
 gsBoundSummary(xu, Nname = "N", digits = 4, ddigits = 2, tdigits = 1)
 ```
@@ -337,14 +344,12 @@ Trial of CP-316,311 (a Selective \\{CRH}\_{1}\\ Antagonist) in the
 Treatment of Major Depression.” *American Journal of Psychiatry* 165
 (5): 617–20.
 
-Gandhi, Leena, Delvys Rodrı́guez-Abreu, Shirish Gadgeel, Emilio Esteban,
-Enriqueta Felip, Flávia De Angelis, Manuel Domine, et al. 2018.
+Gandhi, Leena, Delvys Rodrı́guez-Abreu, Shirish Gadgeel, et al. 2018.
 “Pembrolizumab Plus Chemotherapy in Metastatic Non–Small-Cell Lung
 Cancer.” *New England Journal of Medicine* 378 (22): 2078–92.
 
 Jennison, Christopher, and Bruce W. Turnbull. 2000. *Group Sequential
-Methods with Applications to Clinical Trials*. Boca Raton, FL: Chapman;
-Hall/CRC.
+Methods with Applications to Clinical Trials*. Chapman; Hall/CRC.
 
 Lan, K. K. G., and David L. DeMets. 1983. “Discrete Sequential
 Boundaries for Clinical Trials.” *Biometrika* 70: 659–63.

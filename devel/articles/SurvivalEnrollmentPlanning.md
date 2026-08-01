@@ -27,6 +27,7 @@ converts continuous expected events and enrollment to an
 integer-compatible plan.
 
 ``` r
+
 library(gsDesign)
 
 lambdaC <- log(2) / 12
@@ -43,6 +44,7 @@ vector of cumulative total expected enrollment at each analysis. It is
 the row total of the control and experimental enrollment components:
 
 ``` r
+
 x$N == rowSums(x$eNC) + rowSums(x$eNE)
 ```
 
@@ -57,6 +59,7 @@ scales all rates proportionally to power the trial. When the supplied
 extended.
 
 ``` r
+
 fixed_duration <- gsSurv(
   k = 3,
   lambdaC = lambdaC,
@@ -93,6 +96,7 @@ remain open. The final `R` period is extended to obtain the required
 sample size; the earlier ramp-up periods are unchanged.
 
 ``` r
+
 fixed_rates <- gsSurv(
   k = 3,
   lambdaC = lambdaC,
@@ -119,7 +123,7 @@ c(
   minimum_follow_up = fixed_rates$minfup,
   total_duration = max(fixed_rates$T)
 )
-#> enrollment_duration   minimum_follow_up      total_duration
+#> enrollment_duration   minimum_follow_up      total_duration 
 #>            101.3422             12.0000            113.3422
 ```
 
@@ -137,6 +141,7 @@ fail when the fixed enrollment plan is over-powered even with almost no
 follow-up, or under-powered regardless of follow-up.
 
 ``` r
+
 fixed_enrollment <- gsSurv(
   k = 3,
   lambdaC = lambdaC,
@@ -152,7 +157,7 @@ c(
   minimum_follow_up = fixed_enrollment$minfup,
   total_duration = max(fixed_enrollment$T)
 )
-#> enrollment_duration   minimum_follow_up      total_duration
+#> enrollment_duration   minimum_follow_up      total_duration 
 #>             4.00000            23.87818            27.87818
 ```
 
@@ -169,6 +174,7 @@ enrollment. The final calendar time and `minfup` imply the enrollment
 duration, while the four-period ramp-up is scaled to power the trial.
 
 ``` r
+
 calendar_design <- gsSurvCalendar(
   calendarTime = c(12, 18, 26),
   lambdaC = lambdaC,
@@ -203,6 +209,7 @@ For example, the following sensitivity analysis evaluates 80% of the
 planned enrollment rates at the original calendar analysis times.
 
 ``` r
+
 slower_enrollment <- gsSurvPower(
   x = fixed_duration,
   gamma = 0.8 * fixed_duration$gamma,
@@ -213,7 +220,7 @@ c(
   planned_power = 1 - fixed_duration$beta,
   slower_enrollment_power = slower_enrollment$power
 )
-#>           planned_power slower_enrollment_power
+#>           planned_power slower_enrollment_power 
 #>               0.9000000               0.8265161
 ```
 
@@ -230,6 +237,7 @@ after deriving the design to obtain integer event targets and a final
 total enrollment compatible with the randomization allocation.
 
 ``` r
+
 integer_design <- toInteger(fixed_duration)
 
 data.frame(
@@ -255,6 +263,7 @@ example below uses two strata with different control medians and
 enrollment contributions.
 
 ``` r
+
 lambda_strata <- matrix(log(2) / c(10, 16), nrow = 1)
 gamma_strata <- cbind(
   0.6 * gamma_ramp,

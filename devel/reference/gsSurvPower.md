@@ -213,9 +213,10 @@ gsSurvPower(
 
   Target total sample size. When specified, `R` is uniformly rescaled so
   that `sum(gamma * R) == targetN`, preserving the relative duration of
-  each enrollment period. This is a convenience for "what-if" analyses
-  where the enrollment rate changes but the target sample size stays the
-  same (or vice versa). Cannot be used together with an explicit `R`.
+  each enrollment period. This changes enrollment duration rather than
+  the enrollment rates. Cannot be used together with an explicit
+  non-`NULL` `R`; to keep a fixed enrollment duration, specify `R` and
+  scale `gamma` directly.
 
 - S:
 
@@ -228,7 +229,9 @@ gsSurvPower(
 
 - minfup:
 
-  Minimum follow-up time.
+  Minimum follow-up time. When explicitly supplied, event-driven
+  analyses cannot place the final analysis before the end of enrollment
+  plus `minfup`.
 
 - method:
 
@@ -261,7 +264,9 @@ gsSurvPower(
 - maxExtension:
 
   Maximum time extension beyond the floor time to wait for
-  `targetEvents`. Scalar or vector of length `k`.
+  `targetEvents`. Scalar or vector of length `k`. Requires a floor
+  timing criterion for the affected analysis, most commonly
+  `plannedCalendarTime`.
 
 - minTimeFromPreviousAnalysis:
 
@@ -271,12 +276,14 @@ gsSurvPower(
 - minN:
 
   Minimum total sample size enrolled before analysis can proceed. Scalar
-  or vector of length `k`.
+  or vector of length `k`. Can be used with `minFollowUp` as the primary
+  timing criterion; the resulting analysis times and expected event
+  totals must be strictly increasing.
 
 - minFollowUp:
 
   Minimum follow-up time after `minN` is reached. Scalar or vector of
-  length `k`. Must be \>= 0.
+  length `k`. Must be \>= 0 and requires `minN`.
 
 - informationRates:
 
@@ -423,7 +430,9 @@ analysis time `T[i]` is determined as:
 
 1.  Compute floor times from applicable criteria:
     `plannedCalendarTime[i]`, `T[i-1] + minTimeFromPreviousAnalysis[i]`,
-    and time when `minN[i]` enrolled + `minFollowUp[i]`.
+    and time when `minN[i]` enrolled + `minFollowUp[i]`. When `minfup`
+    is explicitly supplied, the final analysis also has a floor at the
+    end of enrollment plus `minfup`.
 
 2.  `floor_time = max(all applicable floor times)`.
 
@@ -439,7 +448,10 @@ analysis time `T[i]` is determined as:
     beyond `plannedCalendarTime[i] + maxExtension[i]` (or
     `T[i-1] + maxExtension[i]` when no calendar time is specified), even
     if other criteria such as `minTimeFromPreviousAnalysis` or
-    `minN + minFollowUp` would require a later time.
+    `minN + minFollowUp` would require a later time. Each analysis using
+    `maxExtension` must have a floor timing criterion such as
+    `plannedCalendarTime`, `minTimeFromPreviousAnalysis`, `minN`, or
+    explicit final-analysis `minfup`.
 
 **Normalization and consistency:** When `x` is provided, `x$n.fix` is
 used for the
@@ -531,4 +543,15 @@ gsSurvPower(
   plannedCalendarTime = c(24, 36)
 )$power
 #> [1] 0.625026
+
+# Use targetN without R to solve enrollment duration from relative rates
+pwr_target_n <- gsSurvPower(
+  k = 2, test.type = 1, alpha = 0.025, sided = 1,
+  lambdaC = log(2) / 15, hr = 0.7, eta = 0.001,
+  gamma = c(10, 20, 30, 40), targetN = 500,
+  ratio = 1.5, plannedCalendarTime = c(24, 36),
+  testLower = FALSE
+)
+sum(rowSums(pwr_target_n$gamma) * pwr_target_n$R)
+#> [1] 500
 ```

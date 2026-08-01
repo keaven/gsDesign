@@ -331,6 +331,7 @@ Keaven Anderson <keaven_anderson@merck.com>
 ## Examples
 
 ``` r
+
 # Compute z-test test statistic comparing 39/500 to 13/500
 # use continuity correction in variance
 x <- testBinomial(x1 = 39, x2 = 13, n1 = 500, n2 = 500, adj = 1)

@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Power Computation for Group Sequential Survival Designs</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/HEAD/vignettes/gsSurvPower.Rmd" class="external-link"><code>vignettes/gsSurvPower.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/GitHub/291-293-295-296-gssurvpower-issues/vignettes/gsSurvPower.Rmd" class="external-link"><code>vignettes/gsSurvPower.Rmd</code></a></small>
       <div class="d-none name"><code>gsSurvPower.Rmd</code></div>
     </div>
 
@@ -244,6 +244,129 @@ even if other criteria such as <code>minTimeFromPreviousAnalysis</code>
 or <code>minN + minFollowUp</code> would push it later.</p>
 </div>
 <div class="section level3">
+<h3 id="common-timing-pitfalls">Common timing pitfalls<a class="anchor" aria-label="anchor" href="#common-timing-pitfalls"></a>
+</h3>
+<p>The timing arguments in <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> describe a fixed
+operational plan. They do not solve the study design to achieve power
+the way <code><a href="../reference/nSurv.html">gsSurv()</a></code> does. Several inputs are therefore easy to
+misread.</p>
+<p><strong><code>minfup</code> is a final-analysis floor, not a target
+event rule.</strong> If <code>minfup</code> is explicitly supplied, the
+final analysis cannot occur before enrollment has ended and the last
+enrolled subject has at least that much follow-up. For an event-driven
+design with enrollment durations <code>R</code>, the final analysis time
+is at least <code>sum(R) + minfup</code>. If the requested final
+<code>targetEvents</code> is expected earlier, the final analysis
+remains delayed to satisfy minimum follow-up, and the expected final
+event count may exceed the event target.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pwr_minfup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, sided <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  sfu <span class="op">=</span> <span class="va">sfLDOF</span>, sfupar <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">15</span>, hr <span class="op">=</span> <span class="fl">0.7</span>, hr0 <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  eta <span class="op">=</span> <span class="fl">0.001</span>,</span>
+<span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">*</span> <span class="fl">500</span> <span class="op">/</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">6</span><span class="op">)</span>,</span>
+<span>  targetEvents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span><span class="op">)</span>,</span>
+<span>  minfup <span class="op">=</span> <span class="fl">25</span>,</span>
+<span>  ratio <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="cn">TRUE</span>, testLower <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
+<span>  Time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_minfup</span><span class="op">$</span><span class="cn">T</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  Events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_minfup</span><span class="op">$</span><span class="va">n.I</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   Analysis Time Events</span></span>
+<span><span class="co">## 1        1 13.3  100.0</span></span>
+<span><span class="co">## 2        2 21.1  200.0</span></span>
+<span><span class="co">## 3        3 37.0  329.9</span></span></code></pre>
+<p><strong><code>targetN</code> changes enrollment duration, not
+enrollment rates.</strong> Use <code>targetN</code> when
+<code>gamma</code> gives relative or absolute enrollment rates and you
+want <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> to rescale <code>R</code> so that
+<code>sum(gamma * R) == targetN</code>. Do not also specify a
+non-<code>NULL</code> <code>R</code>. If the protocol fixes enrollment
+duration, specify <code>R</code> and scale <code>gamma</code>
+yourself.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pwr_target_n</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="fl">2</span>, test.type <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, sided <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">15</span>, hr <span class="op">=</span> <span class="fl">0.7</span>, hr0 <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  eta <span class="op">=</span> <span class="fl">0.001</span>,</span>
+<span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span><span class="op">)</span>,</span>
+<span>  targetN <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>  plannedCalendarTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">24</span>, <span class="fl">36</span><span class="op">)</span>,</span>
+<span>  ratio <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="cn">TRUE</span>, testLower <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pwr_target_n</span><span class="op">$</span><span class="va">R</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 5 5 5 5</span></span></code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">pwr_target_n</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span> <span class="op">*</span> <span class="va">pwr_target_n</span><span class="op">$</span><span class="va">R</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 500</span></span></code></pre>
+<p><strong><code>maxExtension</code> needs a floor time.</strong>
+<code>maxExtension</code> is the amount of time the analysis may wait
+beyond a floor criterion while waiting for <code>targetEvents</code>. A
+floor can come from <code>plannedCalendarTime</code>,
+<code>minTimeFromPreviousAnalysis</code>, <code>minN</code>, or an
+explicitly supplied final <code>minfup</code>. Without a floor,
+<code>maxExtension</code> is not meaningful.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pwr_extension</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, sided <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">15</span>, hr <span class="op">=</span> <span class="fl">0.7</span>, hr0 <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  eta <span class="op">=</span> <span class="fl">0.001</span>,</span>
+<span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">*</span> <span class="fl">500</span> <span class="op">/</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">6</span><span class="op">)</span>,</span>
+<span>  plannedCalendarTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">24</span>, <span class="fl">30</span>, <span class="fl">36</span><span class="op">)</span>,</span>
+<span>  targetEvents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">400</span><span class="op">)</span>,</span>
+<span>  maxExtension <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span>, <span class="fl">6</span><span class="op">)</span>,</span>
+<span>  ratio <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="cn">TRUE</span>, testLower <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_extension</span><span class="op">$</span><span class="cn">T</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 24.0 32.4 42.0</span></span></code></pre>
+<p><strong><code>minN + minFollowUp</code> can define analysis timing,
+but analyses must remain strictly increasing.</strong> This pair says:
+wait until at least <code>minN</code> subjects are enrolled, then wait
+<code>minFollowUp</code> additional time. It can be used as the primary
+timing rule, but the resulting analysis times and expected event totals
+must increase across analyses. If two analyses use the same enrollment
+threshold and follow-up rule, add <code>plannedCalendarTime</code>,
+<code>targetEvents</code>, or <code>minTimeFromPreviousAnalysis</code>
+to separate them.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pwr_min_n</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, sided <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">15</span>, hr <span class="op">=</span> <span class="fl">0.7</span>, hr0 <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  eta <span class="op">=</span> <span class="fl">0.001</span>,</span>
+<span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">*</span> <span class="fl">500</span> <span class="op">/</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">6</span><span class="op">)</span>,</span>
+<span>  minN <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">300</span>, <span class="fl">500</span><span class="op">)</span>,</span>
+<span>  minFollowUp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">6</span>, <span class="fl">6</span><span class="op">)</span>,</span>
+<span>  ratio <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="cn">TRUE</span>, testLower <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
+<span>  Time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_min_n</span><span class="op">$</span><span class="cn">T</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  N <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_min_n</span><span class="op">$</span><span class="va">N</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  Events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_min_n</span><span class="op">$</span><span class="va">n.I</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   Analysis Time     N Events</span></span>
+<span><span class="co">## 1        1 10.4 411.1   56.3</span></span>
+<span><span class="co">## 2        2 14.4 500.0  115.7</span></span>
+<span><span class="co">## 3        3 18.0 500.0  163.7</span></span></code></pre>
+</div>
+<div class="section level3">
 <h3 id="spending-and-method">Spending and method<a class="anchor" aria-label="anchor" href="#spending-and-method"></a>
 </h3>
 <ul>
@@ -313,10 +436,10 @@ by method-specific scaling:</p>
 scales correctly for other hazard ratios, matching
 <code><a href="https://docs.rpact.org/reference/getPowerSurvival.html" class="external-link">rpact::getPowerSurvival()</a></code> to within 0.5% across
 methods.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Design power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">design</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Design power: 90 %</span></span></code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"gsSurvPower:  "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_design</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## gsSurvPower:   90 %</span></span></code></pre>
 <div class="section level3">
@@ -324,7 +447,7 @@ methods.</p>
 </h3>
 <p>Suppose the true treatment effect is HR = 0.8 instead of the design
 assumption of 0.7:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pwr_worse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">design</span>, hr <span class="op">=</span> <span class="fl">0.8</span>, plannedCalendarTime <span class="op">=</span> <span class="va">design</span><span class="op">$</span><span class="cn">T</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Power at HR = 0.8:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_worse</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Power at HR = 0.8: 54.1 %</span></span></code></pre>
@@ -334,7 +457,7 @@ power is evaluated under the assumed HR (0.8).</p>
 <div class="section level3">
 <h3 id="power-over-a-range-of-hazard-ratios">Power over a range of hazard ratios<a class="anchor" aria-label="anchor" href="#power-over-a-range-of-hazard-ratios"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hr_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.55</span>, <span class="fl">0.90</span>, by <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="va">power_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">hr_grid</span>, <span class="kw">function</span><span class="op">(</span><span class="va">h</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">design</span>, hr <span class="op">=</span> <span class="va">h</span>, plannedCalendarTime <span class="op">=</span> <span class="va">design</span><span class="op">$</span><span class="cn">T</span><span class="op">)</span></span>
@@ -421,7 +544,7 @@ previous-analysis constraints. If expected events have not reached the
 target at the floor, the analysis can be extended until the time that
 expected events reach the target, up to
 <code>plannedCalendarTime + maxExtension</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">total_N</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">design</span><span class="op">$</span><span class="va">gamma</span> <span class="op">*</span> <span class="va">design</span><span class="op">$</span><span class="va">R</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -435,7 +558,7 @@ planned calendar time drives IA2. The FA floor from
 the planned time. Since the design’s expected event counts match the
 targets, the <code>maxExtension</code> is not needed and the result
 matches the design power.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pwr_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">design</span>,</span>
 <span>  targetEvents <span class="op">=</span> <span class="va">design</span><span class="op">$</span><span class="va">n.I</span>,</span>
@@ -456,7 +579,7 @@ matches the design power.</p>
 <span><span class="co">## 1        1         12.4        12.4         117.7         117.7</span></span>
 <span><span class="co">## 2        2         18.9        18.9         235.5         235.5</span></span>
 <span><span class="co">## 3        3         28.0        28.0         353.2         353.2</span></span></code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_multi</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Power: 90 %</span></span></code></pre>
 </div>
@@ -468,7 +591,7 @@ to reach 629 patients. If we simply target the same sample size (double
 the duration of enrollment) and event targets, we will extend the
 expected timing of analyses from 12.4, 18.9, 28 months but have the same
 power and bounds.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pwr_slow_simple</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">design</span>,</span>
 <span>  gamma <span class="op">=</span> <span class="va">design</span><span class="op">$</span><span class="va">gamma</span> <span class="op">/</span> <span class="fl">2</span>,</span>
@@ -504,7 +627,7 @@ months, far beyond
 overrides. Note that <code>maxExtension</code> is always measured from
 <code>plannedCalendarTime</code>, not from the floor, so it acts as a
 hard deadline on how long the sponsor is willing to wait.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pwr_slow</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">design</span>,</span>
 <span>  gamma <span class="op">=</span> <span class="va">design</span><span class="op">$</span><span class="va">gamma</span> <span class="op">/</span> <span class="fl">2</span>,</span>
@@ -516,7 +639,7 @@ hard deadline on how long the sponsor is willing to wait.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in find_time_for_events(total_event_targets[analysis_index]): Target</span></span>
 <span><span class="co">## 353 events may not be achievable</span></span></code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">design</span><span class="op">$</span><span class="va">k</span>,</span>
 <span>  Planned_Time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">design</span><span class="op">$</span><span class="cn">T</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -528,7 +651,7 @@ hard deadline on how long the sponsor is willing to wait.</p>
 <span><span class="co">## 1        1         12.4        15.4         117.7          86.1</span></span>
 <span><span class="co">## 2        2         18.9        30.9         235.5         189.3</span></span>
 <span><span class="co">## 3        3         28.0        48.0         353.2         233.6</span></span></code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_slow</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Power: 74.3 %</span></span></code></pre>
 <p>Each analysis is capped by
@@ -544,7 +667,7 @@ faster. Expected events reach the target well before the planned
 calendar times, so the <code>plannedCalendarTime</code> floor determines
 the analysis schedule. The trial over-runs its event targets
 substantially, yielding higher-than-planned power.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pwr_fast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">design</span>,</span>
 <span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">8</span>,</span>
@@ -566,7 +689,7 @@ substantially, yielding higher-than-planned power.</p>
 <span><span class="co">## 1        1         12.4        12.4         117.7         161.5</span></span>
 <span><span class="co">## 2        2         18.9        18.9         235.5         310.8</span></span>
 <span><span class="co">## 3        3         28.0        28.0         353.2         437.7</span></span></code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_fast</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Power: 94.9 %</span></span></code></pre>
 <p>The final analysis collects 438 events vs. the target of 353, and
@@ -592,7 +715,7 @@ are computed. The example below uses a final planned spending fraction
 of 0.95 to show the effect explicitly. Without
 <code>fullSpendingAtFinal</code>, the final spending fraction would
 remain 0.95 rather than 1.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scenario 1 with informationRates and fullSpendingAtFinal</span></span>
 <span><span class="va">planned_info_rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">design</span><span class="op">$</span><span class="va">timing</span><span class="op">[</span><span class="op">-</span><span class="va">design</span><span class="op">$</span><span class="va">k</span><span class="op">]</span>, <span class="fl">0.95</span><span class="op">)</span></span>
 <span></span>
@@ -609,7 +732,7 @@ remain 0.95 rather than 1.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in find_time_for_events(total_event_targets[analysis_index]): Target</span></span>
 <span><span class="co">## 353 events may not be achievable</span></span></code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">spending_frac_used</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="va">planned_info_rates</span>, <span class="va">pwr_slow_ir</span><span class="op">$</span><span class="va">timing</span><span class="op">)</span></span>
 <span><span class="va">spending_frac_used</span><span class="op">[</span><span class="va">design</span><span class="op">$</span><span class="va">k</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span></span>
@@ -624,10 +747,10 @@ remain 0.95 rather than 1.</p>
 <span><span class="co">## 1        1          86.1           0.369            0.333         0.333</span></span>
 <span><span class="co">## 2        2         189.3           0.811            0.667         0.667</span></span>
 <span><span class="co">## 3        3         233.6           1.000            0.950         1.000</span></span></code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Power (default spending):       "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_slow</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Power (default spending):        74.3 %</span></span></code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Power (capped + full final):    "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_slow_ir</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Power (capped + full final):     76.2 %</span></span></code></pre>
 <p>With <code>fullSpendingAtFinal = TRUE</code>, the final spending
@@ -660,7 +783,7 @@ calendar times adjust.</li>
 <code>plannedCalendarTime = design$T</code>. Calendar times are held
 constant; events change with the assumed HR.</li>
 </ul>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design_events</span> <span class="op">&lt;-</span> <span class="va">design</span><span class="op">$</span><span class="va">n.I</span></span>
 <span><span class="va">hr_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.55</span>, <span class="fl">0.95</span>, by <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span></span>
@@ -717,17 +840,17 @@ bounds do not change with the assumed HR. The bounds are determined
 entirely by the design parameters (alpha/beta spending, information
 fractions, <code>n.fix</code>) and are reused directly from the input
 design <code>x</code> when the timing matches:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design_events</span> <span class="op">&lt;-</span> <span class="va">design</span><span class="op">$</span><span class="va">n.I</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Design bounds (Z-scale):\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Design bounds (Z-scale):</span></span></code></pre>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  Efficacy:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">design</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   Efficacy: 3.0107 2.5465 1.9992</span></span></code></pre>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"  Futility:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">design</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   Futility: -0.2388 0.941 1.9992</span></span></code></pre>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">h</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.8</span>, <span class="fl">1.0</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">pwr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">design</span>, hr <span class="op">=</span> <span class="va">h</span>, targetEvents <span class="op">=</span> <span class="va">design_events</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"HR=%.1f  Efficacy: %s  Futility: %s  (identical: %s)\n"</span>,</span>
@@ -775,7 +898,7 @@ p-value.</p>
 <p>When timing changes (e.g., different <code>targetEvents</code>), both
 bounds are recomputed from scratch using the full <code>test.type</code>
 and spending functions.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Design at one-sided alpha = 0.0125</span></span>
 <span><span class="va">design_a0125</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>, alpha <span class="op">=</span> <span class="fl">0.0125</span>, sided <span class="op">=</span> <span class="fl">1</span>, beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
@@ -786,34 +909,34 @@ and spending functions.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"=== Original design (alpha = 0.0125) ===\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## === Original design (alpha = 0.0125) ===</span></span></code></pre>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Efficacy bounds:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">design_a0125</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Efficacy bounds: 3.2153 2.7838 2.2837</span></span></code></pre>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Futility bounds:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">design_a0125</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Futility bounds: -0.0741 1.1739 2.2837</span></span></code></pre>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Power at alpha = 0.025 with same event counts (timing preserved)</span></span>
 <span><span class="va">events_a0125</span> <span class="op">&lt;-</span> <span class="va">design_a0125</span><span class="op">$</span><span class="va">n.I</span></span>
 <span><span class="va">pwr_a025</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">design_a0125</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, targetEvents <span class="op">=</span> <span class="va">events_a0125</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"=== gsSurvPower at alpha = 0.025 ===\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## === gsSurvPower at alpha = 0.025 ===</span></span></code></pre>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Efficacy bounds:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_a025</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Efficacy bounds: 3.0107 2.5465 1.9992</span></span></code></pre>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Futility bounds:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_a025</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Futility bounds: -0.0741 1.1739 1.9992</span></span></code></pre>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Power:          "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_a025</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Power:           93 %</span></span></code></pre>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cross-check: gsBoundSummary at the same alternate alpha</span></span>
 <span><span class="co"># (only non-binding test.type 1, 4, 6, and 8 are supported)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"=== gsBoundSummary (alpha = 0.025) ===\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## === gsBoundSummary (alpha = 0.025) ===</span></span></code></pre>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">design_a0125</span>, alpha <span class="op">=</span> <span class="fl">0.025</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     Analysis              Value α=0.0125 α=0.025 Futility</span></span>
 <span><span class="co">##    IA 1: 33%                  Z   3.2153  3.0107  -0.0741</span></span>
@@ -842,7 +965,7 @@ calculation.</p>
 <div class="section level3">
 <h3 id="binding-type-planning-sensitivity-example-test-type-3">Binding type planning sensitivity example (test.type = 3)<a class="anchor" aria-label="anchor" href="#binding-type-planning-sensitivity-example-test-type-3"></a>
 </h3>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.0125</span>, sided <span class="op">=</span> <span class="fl">1</span>, beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  sfu <span class="op">=</span> <span class="va">sfHSD</span>, sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">4</span>, sfl <span class="op">=</span> <span class="va">sfHSD</span>, sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
@@ -855,19 +978,19 @@ calculation.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"=== Binding futility (test.type=3) at alpha = 0.025 ===\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## === Binding futility (test.type=3) at alpha = 0.025 ===</span></span></code></pre>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Original efficacy:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">design3</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Original efficacy: 3.2153 2.7835 2.2484</span></span></code></pre>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"New efficacy:     "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr3_a025</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## New efficacy:      3.0107 2.5465 1.9992</span></span></code></pre>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Original futility:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">design3</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Original futility: -0.0936 1.1463 2.2484</span></span></code></pre>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"New futility:     "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr3_a025</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## New futility:      -0.0936 1.1463 1.9992</span></span></code></pre>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Power:            "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr3_a025</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Power:             92.7 %</span></span></code></pre>
 <p>The futility bounds are preserved from the original design. At the
@@ -876,10 +999,10 @@ efficacy bound, the new efficacy bound (which is lower) becomes the clip
 point.</p>
 <p>The output retains the original <code>test.type</code> and records
 the new <code>alpha</code>:</p>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"test.type:"</span>, <span class="va">pwr3_a025</span><span class="op">$</span><span class="va">test.type</span>, <span class="st">"(same as input design)\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## test.type: 3 (same as input design)</span></span></code></pre>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"alpha:    "</span>, <span class="va">pwr3_a025</span><span class="op">$</span><span class="va">alpha</span>, <span class="st">"(updated to new value)\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## alpha:     0.025 (updated to new value)</span></span></code></pre>
 </div>
@@ -889,18 +1012,18 @@ the new <code>alpha</code>:</p>
 </h2>
 <p>Instead of calendar times, analyses can be triggered by target event
 counts:</p>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pwr_events</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">design</span>,</span>
 <span>  targetEvents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">75</span>, <span class="fl">150</span>, <span class="fl">225</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Analysis times:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_events</span><span class="op">$</span><span class="cn">T</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Analysis times: 9.7 14.2 18.2</span></span></code></pre>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Events at each analysis:"</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_events</span><span class="op">$</span><span class="va">n.I</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Events at each analysis: 75 150 225</span></span></code></pre>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_events</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Power: 73.5 %</span></span></code></pre>
 </div>
@@ -911,7 +1034,7 @@ counts:</p>
 enrollment. When calendar analysis times are fixed, slower enrollment
 reduces the expected number of events available at each look and
 therefore reduces power.</p>
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pwr_slow_enroll</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">design</span>,</span>
 <span>  gamma <span class="op">=</span> <span class="va">design</span><span class="op">$</span><span class="va">gamma</span> <span class="op">/</span> <span class="fl">2</span>,</span>
@@ -920,13 +1043,13 @@ therefore reduces power.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Original final expected events:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_design</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">design</span><span class="op">$</span><span class="va">k</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Original final expected events: 353.2</span></span></code></pre>
-<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Slower-enrollment final events:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_slow_enroll</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">design</span><span class="op">$</span><span class="va">k</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Slower-enrollment final events: 176.6</span></span></code></pre>
-<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Original power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_design</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Original power: 90 %</span></span></code></pre>
-<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Slower-enrollment power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_slow_enroll</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Slower-enrollment power: 62.9 %</span></span></code></pre>
 </div>
@@ -949,7 +1072,7 @@ efficacy bound and a slightly more conservative final bound.</p>
 <code>usTime</code> and <code>lsTime</code> overrides are
 <strong>ignored</strong>; the realized analysis times determine spending
 fractions automatically.</p>
-<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Information-based spending (default)</span></span>
 <span><span class="va">pwr_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">design</span>,</span>
@@ -990,7 +1113,7 @@ equal 1.</p>
 <p>Note that passing <code>usTime</code> or <code>lsTime</code> with
 <code>spending = "calendar"</code> has no effect—the calendar fractions
 override them:</p>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pwr_cal_override</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">design</span>,</span>
 <span>  plannedCalendarTime <span class="op">=</span> <span class="va">design</span><span class="op">$</span><span class="cn">T</span>,</span>
@@ -1015,7 +1138,7 @@ time.</p>
 <p>Consider a two-stratum design where stratum 1 has median survival of
 6 months and stratum 2 has 12 months. We target 30 events (20 + 10) at
 the interim and 60 events (40 + 20) at the final analysis:</p>
-<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Per-stratum event targets: rows = analyses, columns = strata</span></span>
 <span><span class="va">event_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">10</span>,   <span class="co"># interim: 20 from stratum 1, 10 from stratum 2</span></span>
@@ -1047,7 +1170,7 @@ the interim and 60 events (40 + 20) at the final analysis:</p>
 <span><span class="co">##   Calendar_Time</span></span>
 <span><span class="co">## 1          10.5</span></span>
 <span><span class="co">## 2          17.1</span></span></code></pre>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_strat</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Power: 27.8 %</span></span></code></pre>
 <p>The matrix format is also used in the biomarker example below, where
@@ -1071,7 +1194,7 @@ simpler approach using <code><a href="../reference/gsSurvPower.html">gsSurvPower
 0.6), the control median survival in this subgroup is 12 months, the
 hazard ratio is 0.65, and we target 90% power at one-sided <span class="math inline">\(\alpha = 0.0125\)</span> (e.g., from a graphical
 multiplicity allocation):</p>
-<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prevalence</span> <span class="op">&lt;-</span> <span class="fl">0.6</span></span>
 <span><span class="va">median_bm_pos</span> <span class="op">&lt;-</span> <span class="fl">12</span>    <span class="co"># control median in biomarker+ (months)</span></span>
 <span><span class="va">median_bm_neg</span> <span class="op">&lt;-</span> <span class="fl">10</span>    <span class="co"># control median in biomarker- (shorter prognosis)</span></span>
@@ -1086,7 +1209,7 @@ multiplicity allocation):</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">bm_design</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 450 and 286 events required, 90 percent power, 1.25 percent (1-sided) Type I error to detect a hazard ratio of 0.65. Enrollment and total study durations are assumed to be 18 and 36 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</span></span></code></pre>
-<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">bm_design</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Method: LachinFoulkes </span></span>
 <span><span class="co">##     Analysis               Value Efficacy Futility</span></span>
@@ -1122,7 +1245,7 @@ per stratum), allowing different control hazard rates and enrollment
 rates in each biomarker subgroup. The overall hazard ratio assumed is
 0.75 (attenuated because the biomarker-negative subgroup has a weaker
 treatment effect).</p>
-<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Control hazard rates by stratum</span></span>
 <span><span class="va">lambdaC_pos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="va">median_bm_pos</span></span>
 <span><span class="va">lambdaC_neg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="va">median_bm_neg</span></span>
@@ -1144,8 +1267,8 @@ treatment effect).</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pwr_overall</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 748 and 511 events required, 81.6536623365654 percent power, 1.25 percent (1-sided) Type I error to detect a hazard ratio of 0.75. Enrollment and total study durations are assumed to be 18 and 36 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</span></span></code></pre>
-<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">## [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 748 and 511 events required, 81.6536623365655 percent power, 1.25 percent (1-sided) Type I error to detect a hazard ratio of 0.75. Enrollment and total study durations are assumed to be 18 and 36 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</span></span></code></pre>
+<div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">pwr_overall</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Method: LachinFoulkes </span></span>
 <span><span class="co">##     Analysis               Value Efficacy Futility</span></span>
@@ -1181,7 +1304,7 @@ assumes a weaker overall treatment effect (HR = 0.75 vs. 0.65).</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

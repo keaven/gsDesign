@@ -32,6 +32,7 @@ results to other commonly used spending functions.
 ## Implementation in gsDesign
 
 ``` r
+
 library(gsDesign)
 library(tibble)
 library(dplyr)
@@ -49,11 +50,13 @@ Recalling the range \\\gamma \in \[0.5, 1)\\, we plot this spending
 function for \\\gamma = 0.5, 0.6, 0.75, 0.9\\.
 
 ``` r
+
 pts <- seq(0, 1.2, 0.01)
 pal <- palette()
 ```
 
 ``` r
+
 plot(
   pts,
   sfXG1(0.025, pts, 0.5)$spend,
@@ -85,6 +88,7 @@ For \\\alpha=0.025\\, we restrict \\\gamma\\ to \[0.131, 1) and plot the
 spending function for \\\gamma = 0.14, 0.25, 0.5, 0.75, 0.9\\.
 
 ``` r
+
 plot(
   pts,
   sfXG2(0.025, pts, 0.14)$spend,
@@ -117,6 +121,7 @@ the spending function for \\\gamma = 0.013, 0.02, 0.05, 0.1, 0.25, 0.5,
 0.75, 0.9\\.
 
 ``` r
+
 plot(
   pts,
   sfXG3(0.025, pts, 0.013)$spend,
@@ -151,6 +156,7 @@ functions. Transposing a tibble and a custom function to compute
 conditional error.
 
 ``` r
+
 # Custom function to transpose while preserving names
 # From https://stackoverflow.com/questions/42790219/how-do-i-transpose-a-tibble-in-r
 transpose_df <- function(df) {
@@ -162,6 +168,7 @@ transpose_df <- function(df) {
 ```
 
 ``` r
+
 ce <- function(x) {
   k <- x$k
   ce <- c(gsCPz(z = x$upper$bound[1:(k - 1)], i = 1:(k - 1), x = x, theta = 0), NA)
@@ -216,6 +223,7 @@ a smaller \\\gamma\\ than the targeted conditional error provides a
 better match.
 
 ``` r
+
 xOF <- gsDesign(k = 4, test.type = 1, sfu = "OF")
 xLDOF <- gsDesign(k = 4, test.type = 1, sfu = sfLDOF)
 xExp <- gsDesign(k = 4, test.type = 1, sfu = sfExponential, sfupar = 0.76)
@@ -260,6 +268,7 @@ conditional error at bounds. Again, choice of \\\gamma\\ to get the
 targeted conditional error may be worth some evaluation.
 
 ``` r
+
 x1.8 <- gsDesign(k = 4, test.type = 1, sfu = sfXG2, sfupar = 0.8)
 x1.7 <- gsDesign(k = 4, test.type = 1, sfu = sfXG2, sfupar = 0.7)
 x1.6 <- gsDesign(k = 4, test.type = 1, sfu = sfXG2, sfupar = 0.6)
@@ -301,8 +310,7 @@ xx |>
 
 Method 3 spending functions are designed to approximate Pocock bounds
 with equal bounds on the Z-scale. Two common approximations used for
-this is the Hwang, Shih, and De Cani (1990) spending function with
-\\\gamma = 1\\
+this is the Hwang et al. (1990) spending function with \\\gamma = 1\\
 
 \\ \alpha\_{HSD}(t, \gamma) = \alpha\frac{1-e^{-\gamma t}}{1 -
 e^{-\gamma}}. \\
@@ -328,6 +336,7 @@ trials. The method used in Xi and Gallo (2019) is a more general method
 approximating multivariate normal probabilities.
 
 ``` r
+
 xPocock <- gsDesign(k = 4, test.type = 1, sfu = "Pocock")
 xLDPocock <- gsDesign(k = 4, test.type = 1, sfu = sfLDPocock)
 xHSD1 <- gsDesign(k = 4, test.type = 1, sfu = sfHSD, sfupar = 1)
@@ -392,8 +401,7 @@ Sequential Designs Using a Family of Type i Error Probability Spending
 Functions.” *Statistics in Medicine* 9 (12): 1439–45.
 
 Jennison, Christopher, and Bruce W. Turnbull. 2000. *Group Sequential
-Methods with Applications to Clinical Trials*. Boca Raton, FL: Chapman;
-Hall/CRC.
+Methods with Applications to Clinical Trials*. Chapman; Hall/CRC.
 
 Lan, K. K. G., and David L. DeMets. 1983. “Discrete Sequential
 Boundaries for Clinical Trials.” *Biometrika* 70: 659–63.

@@ -33,7 +33,7 @@ toInteger and gsBoundSummary."><meta property="og:image" content="https://keaven
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,7 @@ toInteger and gsBoundSummary."><meta property="og:image" content="https://keaven
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Compute power for a group sequential survival design</h1>
-      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/HEAD/R/gsSurvPower.R" class="external-link"><code>R/gsSurvPower.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/GitHub/291-293-295-296-gssurvpower-issues/R/gsSurvPower.R" class="external-link"><code>R/gsSurvPower.R</code></a></small>
       <div class="d-none name"><code>gsSurvPower.Rd</code></div>
     </div>
 
@@ -271,10 +271,10 @@ and strata (columns).</p></dd>
 <dt id="arg-targetn">targetN<a class="anchor" aria-label="anchor" href="#arg-targetn"></a></dt>
 <dd><p>Target total sample size. When specified, <code>R</code> is
 uniformly rescaled so that <code>sum(gamma * R) == targetN</code>, preserving
-the relative duration of each enrollment period. This is a convenience
-for "what-if" analyses where the enrollment rate changes but the
-target sample size stays the same (or vice versa). Cannot be used
-together with an explicit <code>R</code>.</p></dd>
+the relative duration of each enrollment period. This changes enrollment
+duration rather than the enrollment rates. Cannot be used together with
+an explicit non-<code>NULL</code> <code>R</code>; to keep a fixed enrollment duration,
+specify <code>R</code> and scale <code>gamma</code> directly.</p></dd>
 
 
 <dt id="arg-s">S<a class="anchor" aria-label="anchor" href="#arg-s"></a></dt>
@@ -287,7 +287,9 @@ for exponential failure.</p></dd>
 
 
 <dt id="arg-minfup">minfup<a class="anchor" aria-label="anchor" href="#arg-minfup"></a></dt>
-<dd><p>Minimum follow-up time.</p></dd>
+<dd><p>Minimum follow-up time. When explicitly supplied,
+event-driven analyses cannot place the final analysis before the end of
+enrollment plus <code>minfup</code>.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -322,7 +324,9 @@ analysis time.</p></dd>
 
 <dt id="arg-maxextension">maxExtension<a class="anchor" aria-label="anchor" href="#arg-maxextension"></a></dt>
 <dd><p>Maximum time extension beyond the floor time to wait
-for <code>targetEvents</code>. Scalar or vector of length <code>k</code>.</p></dd>
+for <code>targetEvents</code>. Scalar or vector of length <code>k</code>. Requires a
+floor timing criterion for the affected analysis, most commonly
+<code>plannedCalendarTime</code>.</p></dd>
 
 
 <dt id="arg-mintimefrompreviousanalysis">minTimeFromPreviousAnalysis<a class="anchor" aria-label="anchor" href="#arg-mintimefrompreviousanalysis"></a></dt>
@@ -333,12 +337,15 @@ analysis.</p></dd>
 
 <dt id="arg-minn">minN<a class="anchor" aria-label="anchor" href="#arg-minn"></a></dt>
 <dd><p>Minimum total sample size enrolled before analysis can proceed.
-Scalar or vector of length <code>k</code>.</p></dd>
+Scalar or vector of length <code>k</code>. Can be used with
+<code>minFollowUp</code> as the primary timing criterion; the resulting
+analysis times and expected event totals must be strictly increasing.</p></dd>
 
 
 <dt id="arg-minfollowup">minFollowUp<a class="anchor" aria-label="anchor" href="#arg-minfollowup"></a></dt>
 <dd><p>Minimum follow-up time after <code>minN</code> is reached.
-Scalar or vector of length <code>k</code>. Must be &gt;= 0.</p></dd>
+Scalar or vector of length <code>k</code>. Must be &gt;= 0 and requires
+<code>minN</code>.</p></dd>
 
 
 <dt id="arg-informationrates">informationRates<a class="anchor" aria-label="anchor" href="#arg-informationrates"></a></dt>
@@ -466,7 +473,9 @@ important consequence for sensitivity analyses:</p><ul><li><p><code>plannedCalen
 For analysis <code>i</code>, the analysis time <code>T[i]</code> is determined as:</p><ol><li><p>Compute floor times from applicable criteria:
     <code>plannedCalendarTime[i]</code>,
     <code>T[i-1] + minTimeFromPreviousAnalysis[i]</code>, and
-    time when <code>minN[i]</code> enrolled + <code>minFollowUp[i]</code>.</p></li>
+    time when <code>minN[i]</code> enrolled + <code>minFollowUp[i]</code>. When
+    <code>minfup</code> is explicitly supplied, the final analysis also has a
+    floor at the end of enrollment plus <code>minfup</code>.</p></li>
 <li><p><code>floor_time = max(all applicable floor times)</code>.</p></li>
 <li><p>If <code>targetEvents[i]</code> is specified: find <code>t_events</code> when
     expected events reach target. If <code>t_events &lt;= floor_time</code>, analysis
@@ -479,7 +488,10 @@ For analysis <code>i</code>, the analysis time <code>T[i]</code> is determined a
     beyond <code>plannedCalendarTime[i] + maxExtension[i]</code> (or
     <code>T[i-1] + maxExtension[i]</code> when no calendar time is specified),
     even if other criteria such as <code>minTimeFromPreviousAnalysis</code>
-    or <code>minN + minFollowUp</code> would require a later time.</p></li>
+    or <code>minN + minFollowUp</code> would require a later time. Each analysis
+    using <code>maxExtension</code> must have a floor timing criterion such as
+    <code>plannedCalendarTime</code>, <code>minTimeFromPreviousAnalysis</code>,
+    <code>minN</code>, or explicit final-analysis <code>minfup</code>.</p></li>
 </ol><p><strong>Normalization and consistency:</strong>
 When <code>x</code> is provided, <code>x$n.fix</code> is used for the
 <code><a href="gsDesign.html">gsDesign::gsDesign()</a></code> call to ensure the internal drift parameter
@@ -561,6 +573,17 @@ parameters change relative to the original design:</p><ul><li><p><strong>No boun
 <span class="r-in"><span><span class="op">)</span><span class="op">$</span><span class="va">power</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.625026</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Use targetN without R to solve enrollment duration from relative rates</span></span></span>
+<span class="r-in"><span><span class="va">pwr_target_n</span> <span class="op">&lt;-</span> <span class="fu">gsSurvPower</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  k <span class="op">=</span> <span class="fl">2</span>, test.type <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, sided <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">15</span>, hr <span class="op">=</span> <span class="fl">0.7</span>, eta <span class="op">=</span> <span class="fl">0.001</span>,</span></span>
+<span class="r-in"><span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span><span class="op">)</span>, targetN <span class="op">=</span> <span class="fl">500</span>,</span></span>
+<span class="r-in"><span>  ratio <span class="op">=</span> <span class="fl">1.5</span>, plannedCalendarTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">24</span>, <span class="fl">36</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  testLower <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">pwr_target_n</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span> <span class="op">*</span> <span class="va">pwr_target_n</span><span class="op">$</span><span class="va">R</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 500</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -572,7 +595,7 @@ parameters change relative to the original design:</p><ul><li><p><strong>No boun
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

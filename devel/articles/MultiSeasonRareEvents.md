@@ -1,6 +1,7 @@
 # Multi-season studies for rare events
 
 ``` r
+
 library(gsDesign)
 library(gt)
 library(tibble)
@@ -45,6 +46,7 @@ We use a super-superiority example:
   season.
 
 ``` r
+
 alpha <- 0.025
 beta <- 0.1
 ratio <- 3
@@ -79,6 +81,7 @@ For the exact binomial approximation, the probability that an event is
 in the experimental group is
 
 ``` r
+
 p_event_experimental <- function(ve, randomization_ratio) {
   randomization_ratio / (randomization_ratio + 1 / (1 - ve))
 }
@@ -104,6 +107,7 @@ control event hazard is modeled as piecewise constant: positive for the
 6-month high-risk season and zero afterward.
 
 ``` r
+
 lambdaC <- c(-log(1 - seasonal_event_rate_control) / season_length_months, 0)
 S <- season_length_months
 eta <- -log(1 - dropout_6mo) / season_length_months
@@ -139,12 +143,12 @@ gsBoundSummary(design_calendar)
 #>   IA 1: 33%                  Z   2.2831  -0.1175
 #>    N: 10530        p (1-sided)   0.0112   0.5468
 #>  Events: 12       ~HR at bound   0.1528   0.7571
-#>    Month: 8 P(Cross) if HR=0.7   0.0112   0.4532
+#>   Month: 11 P(Cross) if HR=0.7   0.0112   0.4532
 #>             P(Cross) if HR=0.2   0.4105   0.0148
 #>   IA 2: 67%                  Z   2.2844       NA
 #>    N: 21059        p (1-sided)   0.0112       NA
 #>  Events: 24       ~HR at bound   0.2385       NA
-#>   Month: 20 P(Cross) if HR=0.7   0.0192       NA
+#>   Month: 21 P(Cross) if HR=0.7   0.0192       NA
 #>             P(Cross) if HR=0.2   0.7541       NA
 #>       Final                  Z   2.3013       NA
 #>    N: 31588        p (1-sided)   0.0107       NA
@@ -177,6 +181,7 @@ bounds. In this table, `x` is the cumulative number of observed events
 in the experimental arm at a given analysis.
 
 ``` r
+
 target_alpha_spend <- design_calendar$upper$sf(
   alpha = alpha,
   t = timing,
@@ -296,6 +301,7 @@ The next table gives planned enrollment/sample size by season and
 overall.
 
 ``` r
+
 enrollment_table <- tibble(
   Season = as.character(seq_len(n_seasons)),
   `Control planned enrollment` = planned_enrollment_control,
@@ -337,6 +343,7 @@ sets season 2 to be one event above the efficacy bound to demonstrate
 that the repeated p-value is greater than 0.025.
 
 ``` r
+
 x_offset_from_efficacy <- rep(0L, n_seasons)
 x_offset_from_efficacy[min(2L, n_seasons)] <- 1L
 example_x <- pmax(0L, design_exact$lower$bound + x_offset_from_efficacy)
@@ -359,6 +366,7 @@ example_p
 The sequential p-value is the minimum repeated p-value:
 
 ``` r
+
 sequentialPValueBinomialExact(
   gsD = design_calendar,
   n.I = design_exact$n.I,
@@ -397,6 +405,7 @@ As above, setting `x` one event above an updated efficacy bound at a
 look gives a repeated p-value above 0.025 for that analysis.
 
 ``` r
+
 observed_counts_update <- c(
   planned_counts[-n_seasons],
   max(planned_counts[n_seasons - 1] + 1L, planned_counts[n_seasons] - 5L)
@@ -437,6 +446,7 @@ spending at the final look even when the final observed total event
 count is below plan.
 
 ``` r
+
 ve_scenarios <- c(`H0 (VE=30%)` = ve0, `H1 (VE=80%)` = ve1)
 planned_control_event_rates <- rep(seasonal_event_rate_control, length(ve_scenarios))
 
@@ -458,6 +468,7 @@ sim_light <- simBinomialSeasonalExact(
 ```
 
 ``` r
+
 oc <- sim_light$summary |>
   dplyr::mutate(
     Scenario = ifelse(adaptive, paste0("Adaptive: ", scenario), paste0("Fixed: ", scenario))
@@ -504,6 +515,7 @@ the seasonal control event rate and compare fixed versus adaptive
 monitoring for both `VE = 30%` and `VE = 80%`.
 
 ``` r
+
 low_control_event_rates <- planned_control_event_rates / 2
 
 sim_low <- simBinomialSeasonalExact(
@@ -593,6 +605,7 @@ lower-than-planned event-rate scenario.
 The chunk below is intentionally not executed in package builds.
 
 ``` r
+
 # Suggested offline settings
 type1_nsim <- 20000
 power_nsim <- 3500

@@ -45,6 +45,7 @@ hypotheses for experimental therapy compared to control, and the desired
 Type I and II error rates.
 
 ``` r
+
 # Median control time-to-event
 median <- 12
 # Exponential dropout rate per unit of time
@@ -72,6 +73,7 @@ duration, varying the total trial duration to power the design; this
 will also be demonstrated below.
 
 ``` r
+
 # Study duration
 T <- 36
 # Follow-up duration of last patient enrolled
@@ -93,6 +95,7 @@ we transform the median time-to-event (\\m\\) to an exponential event
 rate (\\\lambda\\) with the formula \\\lambda=\log(2)/m.\\
 
 ``` r
+
 library(gsDesign)
 
 x <- nSurv(
@@ -114,6 +117,7 @@ sequential design shown later, much more complete formatted output will
 be shown.
 
 ``` r
+
 x
 #> nSurv fixed-design summary (method=LachinFoulkes; target=Accrual rate)
 #> HR=0.750 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
@@ -151,6 +155,7 @@ power. For the low enrollment rates specified in `gamma` above, this
 would have resulted in a long trial.
 
 ``` r
+
 # THIS CODE IS EXAMPLE ONLY; NOT EXECUTED HERE
 nSurv(
   R = R,
@@ -194,6 +199,7 @@ considered the following:
     early stopping
 
 ``` r
+
 # Number of analyses (interim + final)
 k <- 3
 # Timing of interim analyses (k-1 increasing numbers >0 and <1).
@@ -215,6 +221,7 @@ design so that more meaningful futility analyses can be performed during
 the course of the trial.
 
 ``` r
+
 # Type II error = 1 - Power
 beta <- .15
 ```
@@ -224,6 +231,7 @@ beta <- .15
 Now we are prepared to generate the design.
 
 ``` r
+
 # Generate design
 x <- gsSurv(
   k = k, timing = timing, R = R, gamma = gamma, eta = eta,
@@ -238,6 +246,7 @@ x <- gsSurv(
 The design summary is:
 
 ``` r
+
 cat(summary(x))
 ```
 
@@ -258,6 +267,7 @@ time-to-event is assumed to be 12 months in the control group.
 Following are the enrollment rates required to power the trial.
 
 ``` r
+
 library(gt)
 #> 
 #> Attaching package: 'gt'
@@ -297,6 +307,7 @@ predictive power; see the help file for details or just provide
 to see all options.
 
 ``` r
+
 # Footnote text for table
 footnote1 <- "P{Cross} is the probability of crossing the given bound (efficacy or futility) at or before the given analysis under the assumed hazard ratio (HR)."
 footnote2 <- " Design assumes futility bound is discretionary (non-binding); upper boundary crossing probabilities shown here assume trial stops at first boundary crossed and thus total less than the design Type I error."
@@ -321,6 +332,7 @@ caption <- paste(
 ```
 
 ``` r
+
 gsBoundSummary(x) |>
   gt() |>
   tab_header(title = "Time-to-event group sequential design") |>
@@ -375,6 +387,7 @@ percentage scale. The red dashed line is 1 minus the cumulative
 probability of crossing the futility bound by interim 2.
 
 ``` r
+
 library(ggplot2)
 library(scales)
 
@@ -399,6 +412,7 @@ First, we update the actual number of events for interims 1 and 2 and
 assume the final analysis event count is still as originally planned:
 
 ``` r
+
 # Number of events (final is still planned number)
 n.I <- c(115, 364, ceiling(x$n.I[x$k]))
 ```
@@ -409,6 +423,7 @@ but does not include the number of events or treatment effect in the
 output:
 
 ``` r
+
 xu <- gsDesign(
   alpha = x$alpha, beta = x$beta, test.type = x$test.type,
   maxn.IPlan = x$n.I[x$k], n.I = n.I,
@@ -426,6 +441,7 @@ bounds are guidance rather than having strict inferential
 interpretation.
 
 ``` r
+
 gsBoundSummary(
   xu,
   deltaname = "HR",
@@ -495,6 +511,7 @@ used above along with interim Z-values of 0.25 and 2 at interim 1 and
 interim 2, respectively.
 
 ``` r
+
 Z <- c(0.25, 2)
 ```
 
@@ -503,6 +520,7 @@ trend, under the null hypothesis (HR=1), and under the alternate
 hypothesis (HR=0.75 in this case) as follows:
 
 ``` r
+
 gsCP(
   x = xu, # Updated design
   i = 2, # Interim analysis 2
@@ -527,6 +545,7 @@ analysis; the following shows that the standard deviation for the prior
 is well over twice the mean, so the prior is relatively weak.
 
 ``` r
+
 prior <- normalGrid(
   mu = x$delta / 2,
   sigma = sqrt(20 / max(x$n.I))
@@ -543,6 +562,7 @@ Now based on the interim 2 result, we compute the predictive power of a
 positive final analysis.
 
 ``` r
+
 gsPP(
   x = xu, # Updated design
   i = 2, # Interim analysis 2
@@ -553,24 +573,25 @@ gsPP(
 #> [1] 0.6407376
 ```
 
-A B-value (Proschan, Lan, and Wittes (2006)) is a Z-value multiplied by
-the square root of the information fraction (interim information divided
-by final planned information. In the plot below on the B-value scale, we
-present the efficacy bounds at each analysis in black, futility guidance
-in red, the observed interim tests in blue connected by solid lines, and
-a dashed blue line to project the final result. Under a constant
-treatment effect (proportional hazards for a time-to-event outcome
-tested with a logrank test) the blue line behaves like observations from
-a Brownian motion with a linear trend (“constant drift”). While a
-comparable Z-value plot would have the effect increasing with the square
-root of the number of events, the B-value plot trend is linear in the
-event count. The trend is proportional to the logarithm of the
-underlying hazard ratio. The projected final test is based on the dashed
-line which represents a linear trend based on the most recent B-value
-computed; this projection is what was used in the conditional power
-calculation under the current trend that was computed above.
+A B-value (Proschan et al. (2006)) is a Z-value multiplied by the square
+root of the information fraction (interim information divided by final
+planned information. In the plot below on the B-value scale, we present
+the efficacy bounds at each analysis in black, futility guidance in red,
+the observed interim tests in blue connected by solid lines, and a
+dashed blue line to project the final result. Under a constant treatment
+effect (proportional hazards for a time-to-event outcome tested with a
+logrank test) the blue line behaves like observations from a Brownian
+motion with a linear trend (“constant drift”). While a comparable
+Z-value plot would have the effect increasing with the square root of
+the number of events, the B-value plot trend is linear in the event
+count. The trend is proportional to the logarithm of the underlying
+hazard ratio. The projected final test is based on the dashed line which
+represents a linear trend based on the most recent B-value computed;
+this projection is what was used in the conditional power calculation
+under the current trend that was computed above.
 
 ``` r
+
 maxx <- 450 # Max for x-axis specified by user
 ylim <- c(-1, 3) # User-specified y-axis limits
 analysis <- 2 # Current analysis specified by user
@@ -611,5 +632,5 @@ Lan, K. K. G., and David L. DeMets. 1983. “Discrete Sequential
 Boundaries for Clinical Trials.” *Biometrika* 70: 659–63.
 
 Proschan, Michael A., K. K. Gordon Lan, and Janet Turk Wittes. 2006.
-*Statistical Monitoring of Clinical Trials: A Unified Approach*. New
-York, NY: Springer.
+*Statistical Monitoring of Clinical Trials: A Unified Approach*.
+Springer.

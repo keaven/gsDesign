@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/keaven/gsDesign/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/keaven/gsDesign/blob/GitHub/291-293-295-296-gssurvpower-issues/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
@@ -48,8 +48,20 @@
 <li>Sequential p-values, including exact-binomial repeated and sequential efficacy p-values, now support <code>test.type = 8</code> by ignoring its non-binding futility and harm bounds. <code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> now provides full exact conversion for non-binding test types 1, 4, 6, and 8. For type 6, the upper event-count boundary targets lower-bound spending under the null hypothesis. For type 8, exact upper event-count stops are partitioned into mutually exclusive futility and harm regions, targeting beta spending under the alternative and harm spending under the null, respectively (<a href="https://github.com/keaven/gsDesign/issues/287" class="external-link">#287</a>).</li>
 </ul></div>
 <div class="section level3">
+<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<ul><li>Expanded the <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> vignette with common timing pitfalls for explicit <code>minfup</code>, <code>targetN</code>, <code>maxExtension</code>, and <code>minN + minFollowUp</code> workflows (<a href="https://github.com/keaven/gsDesign/issues/291" class="external-link">#291</a>, <a href="https://github.com/keaven/gsDesign/issues/293" class="external-link">#293</a>, <a href="https://github.com/keaven/gsDesign/issues/295" class="external-link">#295</a>, <a href="https://github.com/keaven/gsDesign/issues/296" class="external-link">#296</a>).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>
+<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> now respects an explicitly supplied <code>minfup</code> as a final analysis timing floor for event-driven designs, so the final analysis is not scheduled before the end of enrollment plus minimum follow-up (<a href="https://github.com/keaven/gsDesign/issues/291" class="external-link">#291</a>).</li>
+<li>
+<code>gsSurvPower(targetN = ...)</code> now works when <code>R</code> is omitted by expanding and rescaling enrollment-period durations to match the supplied <code>gamma</code> periods. Documentation now clarifies that <code>targetN</code> changes enrollment duration; for fixed-duration enrollment, specify <code>R</code> and scale <code>gamma</code> directly (<a href="https://github.com/keaven/gsDesign/issues/293" class="external-link">#293</a>).</li>
+<li>
+<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> now gives an informative error when <code>maxExtension</code> is used without a floor timing criterion such as <code>plannedCalendarTime</code>, <code>minN</code>, or <code>minTimeFromPreviousAnalysis</code> (<a href="https://github.com/keaven/gsDesign/issues/295" class="external-link">#295</a>).</li>
+<li>
+<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> can now use <code>minN</code> plus <code>minFollowUp</code> as the primary timing criterion, solves for the earliest time at which enrollment reaches <code>minN</code>, and reports a clear error if the criteria do not produce strictly increasing analyses (<a href="https://github.com/keaven/gsDesign/issues/296" class="external-link">#296</a>).</li>
+<li>
 <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> now retains exact event totals when <code>targetEvents</code> determines an analysis, rather than exposing small root-finding residuals that could make <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> round an integer event target up by one (<a href="https://github.com/keaven/gsDesign/issues/294" class="external-link">#294</a>).</li>
 <li>Survival sample-size outputs now normalize machine-precision representations of integers before applying display rounding, so <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> and <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> preserve exact arm and total sample sizes (<a href="https://github.com/keaven/gsDesign/issues/290" class="external-link">#290</a>).</li>
 <li>Single-analysis survival designs now use a fixed-design <code><a href="../reference/nSurv.html">nSurv()</a></code> path in <code>gsSurv(k = 1)</code> and <code>gsSurvPower(k = 1)</code>. The resulting objects work with <code><a href="../reference/toInteger.html">toInteger()</a></code> and <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code>, including alternate-alpha summaries and use all alpha at the sole analysis without displaying an irrelevant spending function in <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>. An <code><a href="../reference/nSurv.html">nSurv()</a></code> object can now also be passed directly to <code><a href="../reference/toInteger.html">toInteger()</a></code> and is returned as an <code>nSurv</code> object with integer event and sample-size targets (<a href="https://github.com/keaven/gsDesign/issues/289" class="external-link">#289</a>).</li>
@@ -212,7 +224,7 @@
 <div class="section level3">
 <h3 id="breaking-changes-3-7-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-3-7-0"></a></h3>
 <ul><li>
-<p><code>hGraph()</code> has been formally removed from gsDesign (<a href="https://github.com/nanxstats" class="external-link">@nanxstats</a>, <a href="https://github.com/keaven/gsDesign/issues/215" class="external-link">#215</a>). It was soft-deprecated in gsDesign 3.4.0 and moved to gMCPLite. Use <code><a href="https://merck.github.io/gMCPLite/reference/hGraph.html" class="external-link">gMCPLite::hGraph()</a></code> instead.</p>
+<p><code>hGraph()</code> has been formally removed from gsDesign (<a href="https://github.com/nanxstats" class="external-link">@nanxstats</a>, <a href="https://github.com/keaven/gsDesign/issues/215" class="external-link">#215</a>). It was soft-deprecated in gsDesign 3.4.0 and moved to gMCPLite. Use <code>gMCPLite::hGraph()</code> instead.</p>
 <p>This change also preemptively fixes an <code>R CMD check</code> issue with ggplot2 (&gt;= 4.0.0) that would otherwise require declaring MASS as an explicit dependency (tidyverse/ggplot2#6578).</p>
 </li>
 </ul></div>
@@ -354,7 +366,7 @@
 <ul><li>The plotting functions now use <code><a href="https://dplyr.tidyverse.org/reference/reframe.html" class="external-link">dplyr::reframe()</a></code> to replace <code><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">dplyr::summarize()</a></code> when performing grouped <code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum()</a></code> (<a href="https://github.com/jdblischak" class="external-link">@jdblischak</a>, <a href="https://github.com/keaven/gsDesign/issues/114" class="external-link">#114</a>).</li>
 <li>The plotting functions are updated to use the <code>.data</code> pronoun from rlang with <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">ggplot2::aes()</a></code>. This simplifies the code and follows the recommended practice when using ggplot2 in packages (<a href="https://github.com/jdblischak" class="external-link">@jdblischak</a>, <a href="https://github.com/keaven/gsDesign/issues/124" class="external-link">#124</a>).</li>
 <li>
-<code>hGraph()</code> now uses named <code>guide</code> argument in the <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual()</a></code> call to be compatible with ggplot2 3.5.0 (<a href="https://github.com/teunbrand" class="external-link">@teunbrand</a>, <a href="https://github.com/keaven/gsDesign/issues/115" class="external-link">#115</a>). <strong>Note</strong>: this function has been deprecated and moved to gMCPLite since gsDesign 3.4.0. It will be removed from gsDesign in a future version. Please use <code><a href="https://merck.github.io/gMCPLite/reference/hGraph.html" class="external-link">gMCPLite::hGraph()</a></code> instead.</li>
+<code>hGraph()</code> now uses named <code>guide</code> argument in the <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual()</a></code> call to be compatible with ggplot2 3.5.0 (<a href="https://github.com/teunbrand" class="external-link">@teunbrand</a>, <a href="https://github.com/keaven/gsDesign/issues/115" class="external-link">#115</a>). <strong>Note</strong>: this function has been deprecated and moved to gMCPLite since gsDesign 3.4.0. It will be removed from gsDesign in a future version. Please use <code>gMCPLite::hGraph()</code> instead.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-3-6-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-3-6-1"></a></h3>
@@ -410,7 +422,7 @@
 <h2 class="pkg-version" data-toc-text="3.4.0" id="gsdesign-340-october-2022">gsDesign 3.4.0 (October 2022)<a class="anchor" aria-label="anchor" href="#gsdesign-340-october-2022"></a></h2><p class="text-muted">CRAN release: 2022-10-12</p>
 <ul><li>Removed restriction on <code><a href="../reference/gsCP.html">gsCP()</a></code> interim test statistic zi (<a href="https://github.com/keaven/gsDesign/issues/63" class="external-link">#63</a>).</li>
 <li>Removed gMCP dependency. Updated vignettes and linked to vignettes in gMCPLite (<a href="https://github.com/keaven/gsDesign/issues/69" class="external-link">#69</a>).</li>
-<li>Added deprecation warning to <code>hGraph()</code> and suggested using <code><a href="https://merck.github.io/gMCPLite/reference/hGraph.html" class="external-link">gMCPLite::hGraph()</a></code> instead (<a href="https://github.com/keaven/gsDesign/issues/70" class="external-link">#70</a>).</li>
+<li>Added deprecation warning to <code>hGraph()</code> and suggested using <code>gMCPLite::hGraph()</code> instead (<a href="https://github.com/keaven/gsDesign/issues/70" class="external-link">#70</a>).</li>
 <li>Moved ggplot2 from <code>Depends</code> to <code>Imports</code> (<a href="https://github.com/keaven/gsDesign/issues/56" class="external-link">#56</a>).</li>
 </ul></div>
     <div class="section level2">
@@ -528,7 +540,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

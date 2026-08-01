@@ -34,6 +34,7 @@ Use these instructions when working in the `keaven/gsDesign` R package.
 - Before release-style commits, run:
 
 ``` r
+
 pkgload::load_all(".")
 testthat::test_dir("tests/testthat")
 ```
@@ -45,6 +46,7 @@ testthat::test_dir("tests/testthat")
 - When changing `DESCRIPTION`, verify:
 
 ``` r
+
 pkgload::load_all(".")
 as.character(utils::packageVersion("gsDesign"))
 ```
@@ -54,6 +56,7 @@ as.character(utils::packageVersion("gsDesign"))
 - Rebuild local pkgdown with:
 
 ``` r
+
 pkgdown::build_site()
 ```
 
@@ -63,10 +66,8 @@ pkgdown::build_site()
 
 ## Commit and push
 
-- Run
-  [`devtools::document()`](https://devtools.r-lib.org/reference/document.html)
-  before staging or committing changes to update documentation and
-  NAMESPACE.
+- Run `devtools::document()` before staging or committing changes to
+  update documentation and NAMESPACE.
 - Stage only intentional source, documentation, tests, NEWS, and version
   changes.
 - Use concise issue-focused commit messages.
