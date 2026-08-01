@@ -128,6 +128,118 @@ exceeds `plannedCalendarTime + maxExtension` (or `T[i-1] + maxExtension`
 when no calendar time is specified), even if other criteria such as
 `minTimeFromPreviousAnalysis` or `minN + minFollowUp` would push it later.
 
+### Common timing pitfalls
+
+The timing arguments in `gsSurvPower()` describe a fixed operational plan.
+They do not solve the study design to achieve power the way `gsSurv()` does.
+Several inputs are therefore easy to misread.
+
+**`minfup` is a final-analysis floor, not a target event rule.** If `minfup`
+is explicitly supplied, the final analysis cannot occur before enrollment has
+ended and the last enrolled subject has at least that much follow-up. For an
+event-driven design with enrollment durations `R`, the final analysis time is
+at least `sum(R) + minfup`. If the requested final `targetEvents` is expected
+earlier, the final analysis remains delayed to satisfy minimum follow-up, and
+the expected final event count may exceed the event target.
+
+```{r timing_pitfall_minfup}
+pwr_minfup <- gsSurvPower(
+  k = 3, test.type = 1, alpha = 0.025, sided = 1,
+  sfu = sfLDOF, sfupar = NULL,
+  lambdaC = log(2) / 15, hr = 0.7, hr0 = 1,
+  eta = 0.001,
+  gamma = c(1, 2, 3, 4) * 500 /
+    sum(c(1, 2, 3, 4) * c(2, 2, 2, 6)),
+  R = c(2, 2, 2, 6),
+  targetEvents = c(100, 200, 300),
+  minfup = 25,
+  ratio = 1.5,
+  testUpper = TRUE, testLower = FALSE
+)
+
+data.frame(
+  Analysis = 1:3,
+  Time = round(pwr_minfup$T, 1),
+  Events = round(pwr_minfup$n.I, 1)
+)
+```
+
+**`targetN` changes enrollment duration, not enrollment rates.** Use
+`targetN` when `gamma` gives relative or absolute enrollment rates and you
+want `gsSurvPower()` to rescale `R` so that `sum(gamma * R) == targetN`.
+Do not also specify a non-`NULL` `R`. If the protocol fixes enrollment
+duration, specify `R` and scale `gamma` yourself.
+
+```{r timing_pitfall_targetn}
+pwr_target_n <- gsSurvPower(
+  k = 2, test.type = 1, alpha = 0.025, sided = 1,
+  lambdaC = log(2) / 15, hr = 0.7, hr0 = 1,
+  eta = 0.001,
+  gamma = c(10, 20, 30, 40),
+  targetN = 500,
+  plannedCalendarTime = c(24, 36),
+  ratio = 1.5,
+  testUpper = TRUE, testLower = FALSE
+)
+
+pwr_target_n$R
+sum(rowSums(pwr_target_n$gamma) * pwr_target_n$R)
+```
+
+**`maxExtension` needs a floor time.** `maxExtension` is the amount of time
+the analysis may wait beyond a floor criterion while waiting for
+`targetEvents`. A floor can come from `plannedCalendarTime`,
+`minTimeFromPreviousAnalysis`, `minN`, or an explicitly supplied final
+`minfup`. Without a floor, `maxExtension` is not meaningful.
+
+```{r timing_pitfall_maxextension}
+pwr_extension <- gsSurvPower(
+  k = 3, test.type = 1, alpha = 0.025, sided = 1,
+  lambdaC = log(2) / 15, hr = 0.7, hr0 = 1,
+  eta = 0.001,
+  gamma = c(1, 2, 3, 4) * 500 /
+    sum(c(1, 2, 3, 4) * c(2, 2, 2, 6)),
+  R = c(2, 2, 2, 6),
+  plannedCalendarTime = c(24, 30, 36),
+  targetEvents = c(200, 300, 400),
+  maxExtension = c(0, 6, 6),
+  ratio = 1.5,
+  testUpper = TRUE, testLower = FALSE
+)
+
+round(pwr_extension$T, 1)
+```
+
+**`minN + minFollowUp` can define analysis timing, but analyses must remain
+strictly increasing.** This pair says: wait until at least `minN` subjects
+are enrolled, then wait `minFollowUp` additional time. It can be used as the
+primary timing rule, but the resulting analysis times and expected event
+totals must increase across analyses. If two analyses use the same enrollment
+threshold and follow-up rule, add `plannedCalendarTime`, `targetEvents`, or
+`minTimeFromPreviousAnalysis` to separate them.
+
+```{r timing_pitfall_minn}
+pwr_min_n <- gsSurvPower(
+  k = 3, test.type = 1, alpha = 0.025, sided = 1,
+  lambdaC = log(2) / 15, hr = 0.7, hr0 = 1,
+  eta = 0.001,
+  gamma = c(1, 2, 3, 4) * 500 /
+    sum(c(1, 2, 3, 4) * c(2, 2, 2, 6)),
+  R = c(2, 2, 2, 6),
+  minN = c(100, 300, 500),
+  minFollowUp = c(6, 6, 6),
+  ratio = 1.5,
+  testUpper = TRUE, testLower = FALSE
+)
+
+data.frame(
+  Analysis = 1:3,
+  Time = round(pwr_min_n$T, 1),
+  N = round(pwr_min_n$N, 1),
+  Events = round(pwr_min_n$n.I, 1)
+)
+```
+
 ### Spending and method
 
 - **`spending`**: One of `"information"` (default) or `"calendar"`.
