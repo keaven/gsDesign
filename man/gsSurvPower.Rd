@@ -143,17 +143,19 @@ and strata (columns).}
 
 \item{targetN}{Target total sample size. When specified, \code{R} is
 uniformly rescaled so that \code{sum(gamma * R) == targetN}, preserving
-the relative duration of each enrollment period. This is a convenience
-for "what-if" analyses where the enrollment rate changes but the
-target sample size stays the same (or vice versa). Cannot be used
-together with an explicit \code{R}.}
+the relative duration of each enrollment period. This changes enrollment
+duration rather than the enrollment rates. Cannot be used together with
+an explicit non-\code{NULL} \code{R}; to keep a fixed enrollment duration,
+specify \code{R} and scale \code{gamma} directly.}
 
 \item{S}{Scalar or vector of piecewise failure period durations; \code{NULL}
 for exponential failure.}
 
 \item{ratio}{Randomization ratio (experimental/control). Default 1.}
 
-\item{minfup}{Minimum follow-up time.}
+\item{minfup}{Minimum follow-up time. When explicitly supplied,
+event-driven analyses cannot place the final analysis before the end of
+enrollment plus \code{minfup}.}
 
 \item{method}{Sample-size variance formulation. One of
 \code{"LachinFoulkes"} (default), \code{"Schoenfeld"},
@@ -178,17 +180,22 @@ supplied, row sums give the total event target used to solve each
 analysis time.}
 
 \item{maxExtension}{Maximum time extension beyond the floor time to wait
-for \code{targetEvents}. Scalar or vector of length \code{k}.}
+for \code{targetEvents}. Scalar or vector of length \code{k}. Requires a
+floor timing criterion for the affected analysis, most commonly
+\code{plannedCalendarTime}.}
 
 \item{minTimeFromPreviousAnalysis}{Minimum elapsed time since the previous
 analysis. Scalar or vector of length \code{k}. Ignored for the first
 analysis.}
 
 \item{minN}{Minimum total sample size enrolled before analysis can proceed.
-Scalar or vector of length \code{k}.}
+Scalar or vector of length \code{k}. Can be used with
+\code{minFollowUp} as the primary timing criterion; the resulting
+analysis times and expected event totals must be strictly increasing.}
 
 \item{minFollowUp}{Minimum follow-up time after \code{minN} is reached.
-Scalar or vector of length \code{k}. Must be >= 0.}
+Scalar or vector of length \code{k}. Must be >= 0 and requires
+\code{minN}.}
 
 \item{informationRates}{Numeric vector of length \code{k} specifying
 planned information fractions. When provided, spending fractions are
@@ -295,7 +302,9 @@ For analysis \code{i}, the analysis time \code{T[i]} is determined as:
   \item Compute floor times from applicable criteria:
     \code{plannedCalendarTime[i]},
     \code{T[i-1] + minTimeFromPreviousAnalysis[i]}, and
-    time when \code{minN[i]} enrolled + \code{minFollowUp[i]}.
+    time when \code{minN[i]} enrolled + \code{minFollowUp[i]}. When
+    \code{minfup} is explicitly supplied, the final analysis also has a
+    floor at the end of enrollment plus \code{minfup}.
   \item \code{floor_time = max(all applicable floor times)}.
   \item If \code{targetEvents[i]} is specified: find \code{t_events} when
     expected events reach target. If \code{t_events <= floor_time}, analysis
@@ -308,7 +317,10 @@ For analysis \code{i}, the analysis time \code{T[i]} is determined as:
     beyond \code{plannedCalendarTime[i] + maxExtension[i]} (or
     \code{T[i-1] + maxExtension[i]} when no calendar time is specified),
     even if other criteria such as \code{minTimeFromPreviousAnalysis}
-    or \code{minN + minFollowUp} would require a later time.
+    or \code{minN + minFollowUp} would require a later time. Each analysis
+    using \code{maxExtension} must have a floor timing criterion such as
+    \code{plannedCalendarTime}, \code{minTimeFromPreviousAnalysis},
+    \code{minN}, or explicit final-analysis \code{minfup}.
 }
 
 \strong{Normalization and consistency:}
@@ -379,6 +391,16 @@ gsSurvPower(
   gamma = 8, R = 18, ratio = 1,
   plannedCalendarTime = c(24, 36)
 )$power
+
+# Use targetN without R to solve enrollment duration from relative rates
+pwr_target_n <- gsSurvPower(
+  k = 2, test.type = 1, alpha = 0.025, sided = 1,
+  lambdaC = log(2) / 15, hr = 0.7, eta = 0.001,
+  gamma = c(10, 20, 30, 40), targetN = 500,
+  ratio = 1.5, plannedCalendarTime = c(24, 36),
+  testLower = FALSE
+)
+sum(rowSums(pwr_target_n$gamma) * pwr_target_n$R)
 
 }
 \seealso{
