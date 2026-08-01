@@ -25,6 +25,12 @@
   exclusive futility and harm regions, targeting beta spending under the
   alternative and harm spending under the null, respectively (#287).
 
+## Documentation
+
+- Expanded the `gsSurvPower()` vignette with common timing pitfalls for
+  explicit `minfup`, `targetN`, `maxExtension`, and `minN + minFollowUp`
+  workflows (#291, #293, #295, #296).
+
 ## Bug fixes
 
 - `gsSurvPower()` now respects an explicitly supplied `minfup` as a final
