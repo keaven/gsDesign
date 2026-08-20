@@ -1,14 +1,21 @@
-surv_design <- function(test.type = 4, testLower = TRUE) {
+surv_design <- function(
+    test.type = 4,
+    testLower = TRUE,
+    astar = 0,
+    testHarm = TRUE) {
   gsSurv(
     k = 3,
     test.type = test.type,
     alpha = 0.025,
     beta = 0.1,
+    astar = astar,
     timing = c(0.45, 0.7),
     sfu = sfHSD,
     sfupar = -4,
     sfl = sfLDOF,
     sflpar = 0,
+    sfharm = sfHSD,
+    sfharmparam = 2,
     lambdaC = 0.001,
     hr = 0.3,
     hr0 = 0.7,
@@ -18,7 +25,8 @@ surv_design <- function(test.type = 4, testLower = TRUE) {
     T = 24,
     minfup = 8,
     ratio = 3,
-    testLower = testLower
+    testLower = testLower,
+    testHarm = testHarm
   )
 }
 
@@ -28,7 +36,7 @@ test_that("toBinomialExact validates inputs", {
   design <- surv_design()
   design_bad <- design
   design_bad$test.type <- 2
-  expect_error(toBinomialExact(design_bad), "test.type must be 1 or 4")
+  expect_error(toBinomialExact(design_bad), "test.type must be 1, 4, 6, or 8")
 
   expect_error(
     toBinomialExact(design, alpha = c(0.01, 0.02)),
@@ -68,6 +76,192 @@ test_that("toBinomialExact validates inputs", {
   expect_error(
     toBinomialExact(design, observedEvents = too_many_final),
     "at most 1 value in observedEvents"
+  )
+})
+
+test_that("toBinomialExact documents its test.type support matrix", {
+  expect_s3_class(toBinomialExact(surv_design(test.type = 1)), "gsBinomialExact")
+  expect_s3_class(toBinomialExact(surv_design(test.type = 4)), "gsBinomialExact")
+  expect_s3_class(toBinomialExact(surv_design(test.type = 6)), "gsBinomialExact")
+  expect_s3_class(toBinomialExact(surv_design(test.type = 8)), "gsBinomialExact")
+
+  expected_reason <- c(
+    `2` = "symmetric two-sided boundaries",
+    `3` = "binding futility bounds",
+    `5` = "binding lower bounds",
+    `7` = "binding futility and harm bounds"
+  )
+  for (test_type in as.integer(names(expected_reason))) {
+    expect_error(
+      toBinomialExact(surv_design(test.type = test_type)),
+      expected_reason[[as.character(test_type)]],
+      label = paste("test.type", test_type)
+    )
+  }
+})
+
+test_that("toBinomialExact partitions test.type 8 futility and harm stops", {
+  design <- surv_design(test.type = 8, astar = 0.2)
+  design_integer <- toInteger(design)
+  result <- toBinomialExact(design)
+  spending_time <- pmin(result$n.I / design_integer$maxn.IPlan, 1)
+  harm_target <- design$harm$sf(
+    alpha = design$astar,
+    t = spending_time,
+    param = design$harm$param
+  )$spend
+  total_lower_target <- design$lower$sf(
+    alpha = design$beta,
+    t = spending_time,
+    param = design$lower$param
+  )$spend
+
+  expect_equal(result$test.type, 8)
+  expect_equal(result$astar, design$astar)
+  expect_equal(result$testLower, rep(TRUE, design$k))
+  expect_equal(result$testHarm, rep(TRUE, design$k))
+  expect_equal(result$upper$prob, result$futility$prob + result$harm$prob)
+  expect_equal(
+    result$upper$bound,
+    pmin(result$futility$bound, result$harm$bound)
+  )
+  expect_true(all(cumsum(result$harm$prob[, 1]) <= harm_target + 1e-10))
+  expect_true(all(cumsum(result$upper$prob[, 2]) <= total_lower_target + 1e-10))
+
+  nonbinding_efficacy <- gsBinomialExact(
+    k = result$k,
+    theta = result$theta[1],
+    n.I = result$n.I,
+    a = result$lower$bound,
+    b = result$n.I + 1L
+  )
+  expect_lte(sum(nonbinding_efficacy$lower$prob), design$alpha)
+})
+
+test_that("test.type 8 honors selective futility and harm looks", {
+  design <- surv_design(
+    test.type = 8,
+    astar = 0.2,
+    testLower = c(FALSE, TRUE, TRUE),
+    testHarm = c(TRUE, FALSE, TRUE)
+  )
+  result <- toBinomialExact(design)
+
+  expect_identical(result$testLower, c(FALSE, TRUE, TRUE))
+  expect_identical(result$testHarm, c(TRUE, FALSE, TRUE))
+  expect_equal(unname(result$futility$prob[1, ]), c(0, 0), tolerance = 1e-12)
+  expect_equal(unname(result$harm$prob[2, ]), c(0, 0), tolerance = 1e-12)
+  expect_equal(result$upper$prob, result$futility$prob + result$harm$prob)
+})
+
+test_that("test.type 8 supports analysis-time overrides", {
+  design <- surv_design(test.type = 8)
+  observed <- c(20L, 55L, 75L)
+  result <- toBinomialExact(
+    design,
+    observedEvents = observed,
+    alpha = 0.01,
+    usTime = c(0.25, 0.65, 0.95),
+    lsTime = c(0.2, 0.55, 0.9),
+    maxSpend = TRUE
+  )
+
+  expect_equal(result$n.I, observed)
+  expect_equal(result$alpha, 0.01)
+  expect_equal(result$astar, 0.99)
+  expect_equal(result$upper$prob, result$futility$prob + result$harm$prob)
+})
+
+test_that("three-region exact recursion reduces to gsBinomialExact", {
+  theta <- c(0.3, 0.5)
+  n.I <- c(20L, 40L, 60L)
+  a <- c(3L, 8L, 15L)
+  b <- c(12L, 23L, 34L)
+  expected <- gsBinomialExact(k = 3, theta = theta, n.I = n.I, a = a, b = b)
+  result <- gsBinomialExactHarm(
+    theta = theta,
+    n.I = n.I,
+    a = a,
+    futility = b,
+    harm = n.I + 1L,
+    testLower = rep(TRUE, 3),
+    testHarm = rep(FALSE, 3)
+  )
+
+  expect_equal(result$lower$prob, expected$lower$prob, tolerance = 1e-12)
+  expect_equal(result$upper$prob, expected$upper$prob, tolerance = 1e-12)
+  expect_equal(result$en, expected$en, tolerance = 1e-12)
+  expect_equal(result$futility$prob, expected$upper$prob, tolerance = 1e-12)
+  expect_equal(result$harm$prob, expected$upper$prob * 0, tolerance = 1e-12)
+})
+
+test_that("toBinomialExact converts test.type 6 lower spending under H0", {
+  design <- surv_design(test.type = 6, astar = 0.2)
+  design_integer <- toInteger(design)
+  result <- toBinomialExact(design)
+  spending_time <- pmin(result$n.I / design_integer$maxn.IPlan, 1)
+  target <- design$lower$sf(
+    alpha = design$astar,
+    t = spending_time,
+    param = design$lower$param
+  )$spend
+  realized <- cumsum(result$upper$prob[, 1])
+
+  expect_equal(result$test.type, 6)
+  expect_equal(result$astar, design$astar)
+  expect_equal(result$testLower, rep(TRUE, design$k))
+  expect_true(all(diff(result$lower$bound) >= 0))
+  expect_true(all(diff(result$upper$bound) >= 0))
+  expect_true(all(result$lower$bound < result$upper$bound))
+  expect_true(all(realized <= target + 1e-10))
+})
+
+test_that("default test.type 6 has exhaustive final exact decision regions", {
+  design <- surv_design(test.type = 6)
+  result <- toBinomialExact(design)
+
+  expect_equal(result$astar, 1 - result$alpha)
+  expect_equal(result$upper$bound[design$k], result$lower$bound[design$k] + 1L)
+  expect_equal(
+    sum(result$lower$prob[, 1]) + sum(result$upper$prob[, 1]),
+    1,
+    tolerance = 1e-10
+  )
+})
+
+test_that("test.type 6 honors selective lower looks", {
+  design <- surv_design(
+    test.type = 6,
+    astar = 0.2,
+    testLower = c(TRUE, FALSE, TRUE)
+  )
+  result <- toBinomialExact(design)
+
+  expect_identical(result$testLower, c(TRUE, FALSE, TRUE))
+  expect_equal(unname(result$upper$prob[2, ]), c(0, 0), tolerance = 1e-12)
+})
+
+test_that("test.type 6 supports alpha and spending-time overrides", {
+  design_default <- surv_design(test.type = 6)
+  observed <- c(20L, 55L, 75L)
+  updated <- toBinomialExact(
+    design_default,
+    observedEvents = observed,
+    alpha = 0.01,
+    usTime = c(0.25, 0.65, 0.95),
+    lsTime = c(0.2, 0.55, 0.9),
+    maxSpend = TRUE
+  )
+
+  expect_equal(updated$n.I, observed)
+  expect_equal(updated$alpha, 0.01)
+  expect_equal(updated$astar, 0.99)
+  expect_equal(updated$upper$bound[3], updated$lower$bound[3] + 1L)
+
+  design_custom <- surv_design(test.type = 6, astar = 0.97)
+  expect_error(
+    toBinomialExact(design_custom, alpha = 0.05),
+    "alpha override requires astar <= 1 - alpha"
   )
 })
 
@@ -141,7 +335,7 @@ test_that("toBinomialExact works for one-sided designs with observedEvents", {
   expect_true(all(result$lower$bound < result$upper$bound))
   expect_error(
     toBinomialExact(design_one_sided, observedEvents = observed, lsTime = c(0.2, 0.6, 1)),
-    "lsTime can only be specified for test.type = 4"
+    "lsTime can only be specified for test.type = 4, 6, or 8"
   )
 })
 

@@ -6,8 +6,11 @@
 #' where sequential p-values for multiple hypotheses can be used as nominal p-values to plug into a multiplicity graph. 
 #' A sequential p-value is described as the minimum alpha level at which a one-sided group sequential bound would 
 #' be rejected given interim and final observed results.
-#' It is meaningful for both one-sided designs and designs with non-binding futility bounds (\code{test.type} 1, 4, 6), 
-#' but not for 2-sided designs with binding futility bounds (\code{test.type} 2, 3 or 5).
+#' It is meaningful for both one-sided designs and designs with non-binding
+#' futility or harm bounds (\code{test.type} 1, 4, 6, or 8), but not for
+#' 2-sided designs with binding futility or harm bounds (\code{test.type} 2,
+#' 3, 5, or 7). For test type 8, both non-binding lower bounds are ignored in
+#' the Type I error calculation.
 #' Mild restrictions are required on spending functions used, but these are satisfied for commonly used spending functions
 #' such as the Lan-DeMets spending function approximating an O'Brien-Fleming bound or a Hwang-Shih-DeCani spending function; see Maurer and Bretz (2013).
 #' 
@@ -69,8 +72,10 @@ sequentialPValue <- function(gsD = gsDesign(),
                              interval=c(.00001,.9999)){
   # check that gsD has class "gsDesign" (note: this includes "gsSurv" type)
   if (!inherits(gsD, "gsDesign")) stop("d should be an object of class gsDesign or gsSurv")
-  # check that gsD$test.type is 1,4 or 6
-  if(max(gsD$test.type == c(1,4,6)) != 1) stop("gsD$test.type must be 1, 4, or 6 (no binding lower bound allowed)")
+  # Check that lower and harm bounds, if present, are non-binding.
+  if (!(gsD$test.type %in% c(1, 4, 6, 8))) {
+    stop("gsD$test.type must be 1, 4, 6, or 8 (no binding lower or harm bound allowed)")
+  }
   # if n.I not specified, assume planned values used
   if (is.null(n.I)) n.I <- gsD$n.I
   # check that n.I, Z and, if non-NULL, usTime are real vectors of the same length

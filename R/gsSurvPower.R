@@ -7,6 +7,10 @@
 #' assumptions and computes the resulting power. It is meant to compute for
 #' a single set of assumptions at a time; different scenarios are evaluated
 #' with separate calls.
+#' For \code{k = 1}, power is computed through the fixed-design
+#' \code{nSurv(beta = NULL)} path. The returned object is normalized as a
+#' single-analysis \code{gsSurv} object so it can be passed to
+#' \code{\link{toInteger}} and \code{\link{gsBoundSummary}}.
 #'
 #' @details
 #' \strong{Accepting a gsSurv object:}
@@ -96,12 +100,18 @@
 #'     exactly.
 #'   \item \strong{Upper-bound parameters changed} (\code{alpha}, \code{sfu},
 #'     or \code{sfupar}) but timing matches: new efficacy bounds are computed
-#'     via \code{gsDesign(test.type = 1)} at the new alpha, while the
-#'     original futility bounds from \code{x} are preserved. Any futility
-#'     bound that exceeds the new efficacy bound is clipped. This follows
-#'     the same convention as \code{gsBoundSummary()}. Lower-bound spending
-#'     settings from \code{x} are intentionally kept in this branch, which
-#'     avoids complications with \code{astar} validation for binding types.
+#'     using the non-binding efficacy convention at the new alpha while
+#'     preserving the original \code{testUpper} schedule and futility bounds
+#'     from \code{x}. Any futility bound that exceeds the new efficacy bound
+#'     is clipped. This follows the same convention as
+#'     \code{gsBoundSummary()}. Lower-bound spending settings from \code{x}
+#'     are intentionally kept in this branch, which avoids complications with
+#'     \code{astar} validation for binding types.
+#'     For non-binding test types 1, 4, 6, and 8, this calculation can be used
+#'     to evaluate alpha propagated by a graphical multiple-testing procedure.
+#'     For binding test types 2, 3, 5, and 7, it is a planning sensitivity
+#'     calculation only; it is not a Maurer--Bretz sequential-p-value or
+#'     graphical alpha-recycling procedure.
 #'   \item \strong{Timing changed} (different target events or calendar
 #'     times): both bounds are recomputed from scratch using the full
 #'     \code{test.type} and all spending parameters.
@@ -237,6 +247,7 @@
 #' \item{T}{Calendar times of analyses.}
 #' \item{eDC, eDE}{Expected events by stratum (control, experimental).}
 #' \item{eNC, eNE}{Expected sample sizes by stratum (control, experimental).}
+#' \item{N}{Cumulative total expected enrollment at each analysis.}
 #' \item{upper, lower}{Bounds and crossing probabilities.}
 #' \item{harm}{Harm-bound information when \code{test.type} is 7 or 8.}
 #' \item{en, theta}{Expected sample size summary and drift values returned by
@@ -383,6 +394,7 @@ gsSurvPower <- function(
     if (is.null(hr0)) hr0 <- 1
     if (is.null(hr1)) hr1 <- hr
     if (is.null(eta)) eta <- 0
+    if (is.null(gamma)) gamma <- 1
     if (is.null(ratio)) ratio <- 1
     if (is.null(R)) R <- 12
     if (is.null(minfup)) minfup <- 18
@@ -507,10 +519,30 @@ gsSurvPower <- function(
   )
 
   if (k == 1) {
+    fixed_power_fit <- nSurv(
+      lambdaC = rate_inputs$lambdaC,
+      hr = settings$hr,
+      hr0 = settings$hr0,
+      eta = rate_inputs$eta,
+      etaE = rate_inputs$etaE,
+      gamma = rate_inputs$gamma,
+      R = settings$R,
+      S = settings$S,
+      T = analysis_schedule$analysis_time[1],
+      minfup = max(0, analysis_schedule$analysis_time[1] - sum(settings$R)),
+      ratio = settings$ratio,
+      alpha = settings$alpha,
+      beta = NULL,
+      sided = 1,
+      tol = settings$tol,
+      method = settings$method
+    )
+    settings$minfup <- fixed_power_fit$minfup
     bound_result <- .gsSurvPower_build_fixed_design_result(
       total_events = analysis_schedule$total_events,
       n_fix = fixed_design_events,
-      settings = settings
+      settings = settings,
+      power = fixed_power_fit$power
     )
   } else {
     bound_result <- .gsSurvPower_compute_group_sequential_result(
@@ -742,13 +774,21 @@ gsSurvPower <- function(
     }
     if (objective(search_upper_bound) < 0) {
       warning("Target ", round(target), " events may not be achievable")
-      return(search_upper_bound)
+      return(list(time = search_upper_bound, achievable = FALSE))
     }
-    if (objective(0.001) >= 0) return(0.001)
-    uniroot(objective, c(0.001, search_upper_bound), tol = tol)$root
+    if (objective(0.001) >= 0) {
+      return(list(time = 0.001, achievable = TRUE))
+    }
+    list(
+      time = uniroot(
+        objective, c(0.001, search_upper_bound), tol = tol
+      )$root,
+      achievable = TRUE
+    )
   }
 
   analysis_time <- numeric(analysis_count)
+  target_determines_analysis <- rep(FALSE, analysis_count)
 
   for (analysis_index in seq_len(analysis_count)) {
     floor_times <- numeric(0)
@@ -778,7 +818,10 @@ gsSurvPower <- function(
     floor_time <- if (length(floor_times) > 0) max(floor_times) else 0.001
 
     if (!is.na(total_event_targets[analysis_index])) {
-      event_time <- find_time_for_events(total_event_targets[analysis_index])
+      event_solution <- find_time_for_events(
+        total_event_targets[analysis_index]
+      )
+      event_time <- event_solution$time
       if (event_time <= floor_time) {
         analysis_time[analysis_index] <- floor_time
       } else if (!is.na(max_extension[analysis_index])) {
@@ -790,6 +833,7 @@ gsSurvPower <- function(
         analysis_time[analysis_index] <- event_time
       }
     } else {
+      event_solution <- NULL
       analysis_time[analysis_index] <- floor_time
     }
 
@@ -806,6 +850,10 @@ gsSurvPower <- function(
         analysis_time[analysis_index - 1] + max_extension[analysis_index]
       )
     }
+    target_determines_analysis[analysis_index] <-
+      !is.null(event_solution) &&
+      event_solution$achievable &&
+      analysis_time[analysis_index] == event_solution$time
   }
 
   control_events <- experimental_events <- NULL
@@ -819,7 +867,24 @@ gsSurvPower <- function(
     experimental_enrollment <- rbind(experimental_enrollment, expected_counts$eNE)
   }
 
+  # Retain exact event targets instead of exposing small root-solver residuals.
+  # Adjust one component so component counts remain consistent with the total.
+  target_rows <- which(target_determines_analysis)
+  if (length(target_rows) > 0) {
+    last_stratum <- ncol(experimental_events)
+    for (analysis_index in target_rows) {
+      residual <- total_event_targets[analysis_index] -
+        sum(control_events[analysis_index, ]) -
+        sum(experimental_events[analysis_index, ])
+      experimental_events[analysis_index, last_stratum] <-
+        experimental_events[analysis_index, last_stratum] + residual
+    }
+  }
+
+  control_enrollment <- gsRoundNearInteger(control_enrollment)
+  experimental_enrollment <- gsRoundNearInteger(experimental_enrollment)
   total_events <- rowSums(control_events) + rowSums(experimental_events)
+  total_events[target_rows] <- total_event_targets[target_rows]
 
   list(
     analysis_time = analysis_time,
@@ -906,52 +971,46 @@ gsSurvPower <- function(
 .gsSurvPower_build_fixed_design_result <- function(
     total_events,
     n_fix,
-    settings) {
+    settings,
+    power = NULL) {
   z_alpha <- qnorm(1 - settings$alpha)
   theta_design <- (z_alpha + qnorm(1 - settings$beta_design)) / sqrt(n_fix)
-  theta_assumed <- theta_design * .gsSurvPower_compute_delta_ratio(
-    settings$hr,
-    settings$hr1,
-    settings
-  )
-  drift <- theta_assumed * sqrt(total_events[1])
-  power_value <- pnorm(drift - z_alpha)
+  if (is.null(power)) {
+    theta_assumed <- theta_design * .gsSurvPower_compute_delta_ratio(
+      settings$hr,
+      settings$hr1,
+      settings
+    )
+    drift <- theta_assumed * sqrt(total_events[1])
+    power_value <- pnorm(drift - z_alpha)
+  } else {
+    power_value <- power
+    theta_assumed <- (z_alpha + qnorm(power_value)) / sqrt(total_events[1])
+  }
 
-  design_object <- list(
-    k = 1,
-    test.type = settings$test.type,
+  design_object <- gsSurvFixedDesignObject(
     alpha = settings$alpha,
-    sided = settings$sided,
-    n.I = total_events[1],
-    n.fix = n_fix,
-    timing = 1,
-    tol = settings$tol,
-    r = settings$r,
-    upper = list(
-      bound = z_alpha,
-      prob = matrix(c(settings$alpha, power_value), nrow = 1)
-    ),
-    lower = list(
-      bound = -20,
-      prob = matrix(c(1 - settings$alpha, 1 - power_value), nrow = 1)
-    ),
-    theta = c(0, theta_assumed),
-    en = list(en = total_events[1]),
-    delta = theta_design,
+    design_beta = settings$beta_design,
+    n_fix = n_fix,
+    event_count = total_events[1],
     delta0 = log(settings$hr0),
     delta1 = log(settings$hr1),
-    astar = settings$astar,
-    beta = 1 - power_value
+    theta_alt = theta_assumed,
+    power = power_value,
+    sfu = settings$sfu,
+    sfupar = settings$sfupar,
+    sided = settings$sided,
+    tol = settings$tol,
+    r = settings$r
   )
-  class(design_object) <- "gsDesign"
 
   list(
     design_object = design_object,
     upper_bounds = design_object$upper$bound,
-    lower_bounds = design_object$lower$bound,
+    lower_bounds = numeric(0),
     probabilities = list(
       upper = list(prob = design_object$upper$prob),
-      lower = list(prob = design_object$lower$prob),
+      lower = NULL,
       en = design_object$en,
       theta = design_object$theta
     )
@@ -998,20 +1057,13 @@ gsSurvPower <- function(
     upper_bounds <- settings$x$upper$bound
     lower_bounds <- settings$x$lower$bound
   } else if (bound_strategy == "update_upper") {
-    design_object <- gsDesign::gsDesign(
-      k = settings$k,
-      test.type = 1,
+    design_object <- gsAlternateAlphaDesign(
+      x = settings$x,
       alpha = settings$alpha,
-      beta = settings$beta_design,
-      n.fix = n_fix,
-      timing = current_timing,
+      r = settings$r,
       sfu = settings$sfu,
       sfupar = settings$sfupar,
-      tol = settings$tol,
-      delta1 = log(settings$hr1),
-      delta0 = log(settings$hr0),
-      usTime = spending_times$usTime,
-      r = settings$r
+      usTime = settings$x$upper$sTime
     )
     upper_bounds <- design_object$upper$bound
     if (!is.null(settings$x$lower$bound)) {
@@ -1060,13 +1112,30 @@ gsSurvPower <- function(
     settings$hr1,
     settings
   )
-  probabilities <- gsDesign::gsProbability(
-    k = settings$k,
+  probability_design <- design_object
+  probability_design$test.type <- settings$test.type
+  probability_design$n.I <- total_events
+  probability_design$upper$bound <- upper_bounds
+  probability_design$lower$bound <- lower_bounds
+  probability_design$testUpper <- .gsSurvPower_format_test_flag(
+    settings$testUpper, settings$k
+  )
+  probability_design$testLower <- .gsSurvPower_format_test_flag(
+    settings$testLower, settings$k
+  )
+  if (settings$test.type %in% c(7, 8)) {
+    probability_design$testHarm <- .gsSurvPower_format_test_flag(
+      settings$testHarm, settings$k
+    )
+    both_active <- probability_design$testLower & probability_design$testHarm
+    probability_design$harm$bound[both_active] <- pmin(
+      probability_design$harm$bound[both_active],
+      probability_design$lower$bound[both_active]
+    )
+  }
+  probabilities <- gsDProb(
     theta = c(0, theta_assumed),
-    n.I = total_events,
-    a = lower_bounds,
-    b = upper_bounds,
-    r = settings$r
+    d = probability_design
   )
 
   list(
@@ -1128,7 +1197,7 @@ gsSurvPower <- function(
   result$etaC <- normalized_rates$etaC
   result$etaE <- normalized_rates$etaE
   result$variable <- "Power"
-  result$test.type <- settings$test.type
+  result$test.type <- if (settings$k == 1) 1L else settings$test.type
   result$alpha <- settings$alpha
   result$sided <- settings$sided
   result$tol <- settings$tol
@@ -1139,20 +1208,34 @@ gsSurvPower <- function(
   result$call <- call_object
   result$timing <- analysis_schedule$timing
   result$testUpper <- .gsSurvPower_format_test_flag(settings$testUpper, settings$k)
-  result$testLower <- .gsSurvPower_format_test_flag(settings$testLower, settings$k)
-  if (settings$test.type %in% c(7, 8)) {
+  result$testLower <- if (settings$k == 1) {
+    FALSE
+  } else {
+    .gsSurvPower_format_test_flag(settings$testLower, settings$k)
+  }
+  if (result$test.type %in% c(7, 8)) {
     result$testHarm <- .gsSurvPower_format_test_flag(settings$testHarm, settings$k)
+  } else {
+    result$testHarm <- FALSE
+    result$harm <- NULL
   }
 
   result$upper$prob <- bound_result$probabilities$upper$prob
   result$upper$bound <- bound_result$upper_bounds
-  result$lower$prob <- bound_result$probabilities$lower$prob
-  result$lower$bound <- bound_result$lower_bounds
+  if (result$test.type > 1) {
+    result$lower$prob <- bound_result$probabilities$lower$prob
+    result$lower$bound <- bound_result$lower_bounds
+  } else {
+    result$lower <- NULL
+  }
+  if (result$test.type %in% c(7, 8)) {
+    result$harm$prob <- bound_result$probabilities$harm$prob
+  }
   result$en <- bound_result$probabilities$en
   result$theta <- bound_result$probabilities$theta
   result$power <- sum(bound_result$probabilities$upper$prob[, 2])
   result$beta <- 1 - result$power
 
   class(result) <- c("gsSurv", "gsDesign")
-  .gsSurvPower_label_output_matrices(result)
+  gsSurvAddN(.gsSurvPower_label_output_matrices(result))
 }

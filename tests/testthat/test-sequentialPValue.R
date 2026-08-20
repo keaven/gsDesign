@@ -31,3 +31,30 @@ testthat::test_that("default n.I not used",{
   seqp <- sequentialPValue(gsD=x,Z=c(.1,.1,1.5),interval=c(.001,.999))
   expect_equal(seqp,seqp1)
 })
+
+testthat::test_that("sequential p-value supports non-binding harm bounds", {
+  x8 <- gsDesign(k = 3, test.type = 8, alpha = 0.025, beta = 0.1, n.fix = 300)
+  x1 <- gsDesign(
+    k = x8$k,
+    test.type = 1,
+    alpha = x8$alpha,
+    beta = x8$beta,
+    n.I = x8$n.I,
+    maxn.IPlan = max(x8$n.I),
+    sfu = x8$upper$sf,
+    sfupar = x8$upper$param
+  )
+  Z <- c(0.1, 1, 2.2)
+
+  expect_equal(x8$upper$bound, x1$upper$bound)
+  expect_equal(
+    sequentialPValue(gsD = x8, n.I = x8$n.I, Z = Z),
+    sequentialPValue(gsD = x1, n.I = x1$n.I, Z = Z)
+  )
+
+  x7 <- gsDesign(k = 3, test.type = 7, alpha = 0.025, beta = 0.1, n.fix = 300)
+  expect_error(
+    sequentialPValue(gsD = x7, n.I = x7$n.I, Z = Z),
+    "no binding lower or harm bound allowed"
+  )
+})

@@ -28,6 +28,23 @@ gsSurv <- function(
     stop("ratio must be a single positive scalar")
   }
   validate_survival_timing_inputs(R = R, T = T, minfup = minfup, call = "gsSurv")
+  if (identical(as.integer(k), 1L)) {
+    fixed <- nSurv(
+      lambdaC = lambdaC, hr = hr, hr0 = hr0, eta = eta, etaE = etaE,
+      gamma = gamma, R = R, S = S, T = T, minfup = minfup, ratio = ratio,
+      alpha = alpha, beta = beta, sided = sided, tol = tol, method = method
+    )
+    input_vals$testUpper <- testUpper
+    return(asGsSurvFixedDesign(
+      fixed,
+      sfu = sfu,
+      sfupar = sfupar,
+      r = r,
+      tol = tol,
+      call = match.call(),
+      inputs = input_vals
+    ))
+  }
   solve_followup <- is.null(T) && is.null(minfup)
   if (solve_followup) {
     if (is.null(beta)) {
@@ -82,13 +99,6 @@ gsSurv <- function(
     )$root
     T <- sum(R) + minfup
   }
-  # Preserve the historical Lachin-Foulkes default: with fixed follow-up and
-  # T = NULL, keep R fixed and vary the accrual rate.
-  if (method == "LachinFoulkes" && is.null(T) && !is.null(minfup) &&
-    !is.null(R) && length(R) > 0 &&
-    !is.null(gamma) && length(gamma) > 0) {
-    T <- sum(R) + minfup
-  }
   x <- nSurv(
     lambdaC = lambdaC, hr = hr, hr0 = hr0, eta = eta, etaE = etaE,
     gamma = gamma, R = R, S = S, T = T, minfup = minfup, ratio = ratio,
@@ -138,6 +148,9 @@ gsSurv <- function(
   y$tol <- tol
   y$method <- x$method
   y$call <- match.call()
+  input_vals$testUpper <- testUpper
+  if (test.type > 2) input_vals$testLower <- testLower
+  if (test.type > 6) input_vals$testHarm <- testHarm
   y$inputs <- input_vals
   class(y) <- c("gsSurv", "gsDesign")
 
@@ -156,7 +169,7 @@ gsSurv <- function(
   colnames(y$etaE) <- stratnames
   rownames(y$gamma) <- nameR
   colnames(y$gamma) <- stratnames
-  return(y)
+  return(gsSurvAddN(y))
 }
 
 # gsnSurv function [sinew] ----
@@ -261,7 +274,11 @@ print.gsSurv <- function(x, digits = 3, show_gsDesign = FALSE, show_strata = TRU
   x_sided <- if (!is.null(x$sided)) x$sided else if (x$test.type == 1) 1L else 2L
 
   if (is_power_calc) {
-    cat("Power computation for group sequential design\n")
+    cat(if (x$k == 1) {
+      "Power computation for fixed survival design\n"
+    } else {
+      "Power computation for group sequential design\n"
+    })
     cat(
       "(method=", x$method, "; k=", x$k, " analyses; ", test_type_desc, ")\n",
       sep = ""
@@ -274,7 +291,7 @@ print.gsSurv <- function(x, digits = 3, show_gsDesign = FALSE, show_strata = TRU
     )
   } else {
     cat(
-      "Group sequential design ",
+      if (x$k == 1) "Fixed survival design " else "Group sequential design ",
       "(method=", x$method, "; k=", x$k, " analyses; ", test_type_desc, ")\n",
       sep = ""
     )

@@ -208,7 +208,9 @@ Otherwise, a logical vector of length \code{k}.
 Only used for \code{test.type} 7 or 8; at least one analysis must be
 \code{TRUE} for those types.
 Where \code{testHarm} is \code{FALSE}, the harm bound is set to
-\code{-20} (effectively \code{-Inf}) and displayed as \code{NA} in output.}
+\code{-20} (effectively \code{-Inf}) and the bound is displayed as
+\code{NA} in output. Cumulative harm crossing probability from earlier
+analyses is still displayed.}
 
 \item{x}{An \R object of class found among \code{methods(xtable)}.  See
     below on how to write additional method functions for \code{xtable}.}
@@ -313,7 +315,12 @@ crossing probabilities at each analysis. Lower spending is under alternative
 hypothesis (beta spending) for \code{test.type=3} or \code{4}.  For
 \code{test.type=2}, \code{5} or \code{6}, lower spending is under the null
 hypothesis. For \code{test.type=1}, output value is \code{NULL}. See
-\code{vignette("SpendingFunctionOverview")} and manual.} \item{theta}{Standarized
+\code{vignette("SpendingFunctionOverview")} and manual. For
+\code{test.type=7} or \code{8}, crossing probabilities exclude harm
+crossings.} \item{harm}{Harm bound spending function, boundary, and crossing
+probabilities at each analysis for \code{test.type=7} or \code{8}. Harm,
+lower, and upper crossing probabilities are mutually exclusive.}
+\item{theta}{Standarized
 effect size under null (0) and alternate hypothesis. If \code{delta} is
 input, \code{theta[1]=delta}. If \code{n.fix} is input, \code{theta[1]} is
 computed using a standard sample size formula (pseudocode):

@@ -31,7 +31,7 @@
  */
 void gsdensity(double *den, int *xnanal, int *ntheta, double *xtheta, double *I,
                double *a, double *b, double *xz, int *zlen, int *xr) {
-  int r, i, j, k, m1, m2, nanal, nz;
+  int r, i, j, k, m1, m2, nanal, nz, wklen;
   double z, mu, theta;
   double *zwk, *wwk, *hwk, *zwk2, *wwk2, *hwk2;
   double *z1, *z2, *w1, *w2, *h, *h2, *tem;
@@ -42,6 +42,9 @@ void gsdensity(double *den, int *xnanal, int *ntheta, double *xtheta, double *I,
   r = xr[0];
   nanal = xnanal[0];
   nz = zlen[0];
+  wklen = r * 12 - 3;
+  if (wklen < nz)
+    wklen = nz;
   /* if density is at 1st analysis, just return normal density */
   if (nanal < 1)
     return;
@@ -57,12 +60,12 @@ void gsdensity(double *den, int *xnanal, int *ntheta, double *xtheta, double *I,
     return;
   }
   /* otherwise, compute density like in probrej */
-  zwk = (double *)R_alloc(r * 12 - 3, sizeof(double));
-  wwk = (double *)R_alloc(r * 12 - 3, sizeof(double));
-  hwk = (double *)R_alloc(r * 12 - 3, sizeof(double));
-  zwk2 = (double *)R_alloc(r * 12 - 3, sizeof(double));
-  wwk2 = (double *)R_alloc(r * 12 - 3, sizeof(double));
-  hwk2 = (double *)R_alloc(r * 12 - 3, sizeof(double));
+  zwk = (double *)R_alloc(wklen, sizeof(double));
+  wwk = (double *)R_alloc(wklen, sizeof(double));
+  hwk = (double *)R_alloc(wklen, sizeof(double));
+  zwk2 = (double *)R_alloc(wklen, sizeof(double));
+  wwk2 = (double *)R_alloc(wklen, sizeof(double));
+  hwk2 = (double *)R_alloc(wklen, sizeof(double));
   for (k = 0; k < ntheta[0]; k++) {
     theta = xtheta[k];
     mu = theta * sqrt(I[0]);

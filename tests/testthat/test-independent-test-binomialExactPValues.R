@@ -33,7 +33,7 @@ test_that("binomialExactLowerBound validates inputs", {
   bad_design$test.type <- 2
   expect_error(
     gsDesign:::binomialExactLowerBound(bad_design, c(10, 20), 0.025),
-    "test.type must be 1 or 4"
+    "test.type must be 1, 4, 6, or 8"
   )
 
   expect_error(
@@ -85,7 +85,7 @@ test_that("repeatedPValueBinomialExact validates inputs", {
   bad_design$test.type <- 2
   expect_error(
     repeatedPValueBinomialExact(gsD = bad_design, n.I = counts, x = c(1, 2, 3)),
-    "test.type must be 1 or 4"
+    "test.type must be 1, 4, 6, or 8"
   )
 
   expect_error(
@@ -165,4 +165,37 @@ test_that("repeated and sequential exact p-values are coherent", {
 
   seq_p <- sequentialPValueBinomialExact(gsD = design, n.I = counts, x = harder_counts)
   expect_equal(seq_p, min(repeated_harder$repeated_p_value))
+})
+
+test_that("exact efficacy p-values support every non-binding test type", {
+  for (test_type in c(1, 4, 6, 8)) {
+    design <- surv_design_exact_p(test.type = test_type)
+    counts <- toInteger(design)$n.I
+    efficacy_bound <- gsDesign:::binomialExactLowerBound(
+      gsD = design,
+      n.I = counts,
+      alpha = design$alpha
+    )
+    observed <- pmax(efficacy_bound, 0L)
+    repeated <- repeatedPValueBinomialExact(
+      gsD = design,
+      n.I = counts,
+      x = observed
+    )
+
+    expect_equal(repeated$n.I, counts, label = paste("test.type", test_type))
+    expect_equal(
+      sequentialPValueBinomialExact(gsD = design, n.I = counts, x = observed),
+      min(repeated$repeated_p_value),
+      label = paste("test.type", test_type)
+    )
+  }
+
+  design8 <- surv_design_exact_p(test.type = 8)
+  counts8 <- toInteger(design8)$n.I
+  default_result <- repeatedPValueBinomialExact(
+    gsD = design8,
+    x = rep(0L, design8$k)
+  )
+  expect_equal(default_result$n.I, counts8)
 })

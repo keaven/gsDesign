@@ -40,7 +40,7 @@ For example:
 - **Selective harm monitoring**: For designs with harm bounds (`test.type = 7` or `8`), harm monitoring may be needed only at certain analyses.
 
 The `testUpper`, `testLower`, and `testHarm` parameters in `gsDesign()`, `gsSurv()`, and `gsSurvCalendar()` allow fine-grained control over which bounds are active at each analysis.
-When a bound is inactive at a given analysis, it is set to an extreme value ($\pm 20$ on the Z-scale) so that it cannot be crossed, and is displayed as `NA` in summaries.
+When a bound is inactive at a given analysis, it is set to an extreme value ($\pm 20$ on the Z-scale) so that it cannot be crossed. Every characteristic for that bound, including cumulative crossing probability, is displayed as `NA` at the inactive analysis. The underlying probability arrays retain the cumulative crossing information.
 
 ## Parameters
 
@@ -84,7 +84,7 @@ gsBoundSummary(x1)
 ```
 
 The probabilities under the null and alternative are recomputed accounting for the inactive bounds.
-Notice the cumulative futility crossing probability does not increase after IA1 since no further futility testing occurs.
+The underlying cumulative futility crossing probability does not increase after IA1 since no further futility testing occurs; the later inactive futility rows in `gsBoundSummary()` are displayed entirely as `NA`.
 
 We can also see the bounds in the `print()` output:
 
@@ -242,6 +242,7 @@ x1$testHarm
 ```
 
 These can be inspected programmatically for downstream analyses or reporting.
+For `gsSurv()` and `gsSurvCalendar()` objects, `x$call` records the original call and `x$inputs` retains evaluated survival-model inputs plus the applicable testing-schedule arguments. The normalized logical vectors above remain the authoritative schedule used in calculations and summaries.
 
 ## Type I Error Preservation
 
@@ -252,7 +253,7 @@ A key property of the selective bounds implementation is that **Type I error is 
 When bounds are selectively deactivated, the cumulative spending at each *performed* analysis remains at the spending function's planned value.
 At inactive analyses, the cumulative spending is frozen (no incremental spend), causing the C code to produce $\pm$EXTREMEZ bounds.
 At the next active analysis, the incremental spend absorbs the budget from any prior skipped analyses, so the cumulative spend catches up to the planned level.
-The efficacy bounds at active analyses are then recomputed using the modified spending with the sample size held fixed, ensuring the total alpha spent equals the nominal level.
+The efficacy bounds at active analyses are then recomputed using the modified spending, ensuring the total alpha spent equals the nominal level. If information was not fixed on input, the maximum information is subsequently solved again using the boundaries that will actually be tested so that power remains at its target.
 
 ### Non-binding futility (test.type 4 or 6)
 
@@ -288,8 +289,9 @@ cat("Non-binding alpha (skip IA1 efficacy):", nb_alpha_eff, "\n")
 ### Binding futility (test.type 3 or 5)
 
 For binding designs, the efficacy bounds depend on the futility bounds.
-When futility bounds are selectively removed, the bounds are recomputed with the modified spending while holding sample size fixed.
-This ensures the cumulative Type I error remains at the nominal level:
+When futility bounds are selectively removed, the bounds are recomputed with the modified spending.
+For a newly derived design, information is then adjusted to retain target power; when `n.I` is supplied, information remains fixed.
+This preserves cumulative Type I error at the nominal level while respecting the requested power calculation:
 
 ```{r}
 # Baseline binding design
@@ -300,13 +302,16 @@ cat("Baseline alpha:", sum(x_b$upper$prob[, 1]), "\n")
 x_b_sel <- gsDesign(k = 3, test.type = 3, alpha = 0.025, beta = 0.1,
   testLower = c(TRUE, FALSE, FALSE))
 cat("Selective alpha:", sum(x_b_sel$upper$prob[, 1]), "\n")
+cat("Selective power:", sum(x_b_sel$upper$prob[, 2]), "\n")
 
 # Remove efficacy at IA1
 x_b_eff <- gsDesign(k = 3, test.type = 3, alpha = 0.025, beta = 0.1,
   testUpper = c(FALSE, TRUE, TRUE))
 cat("Skip IA1 efficacy alpha:", sum(x_b_eff$upper$prob[, 1]), "\n")
+cat("Skip IA1 efficacy power:", sum(x_b_eff$upper$prob[, 2]), "\n")
 ```
 
 In all cases, the actual Type I error is exactly $\alpha = 0.025$ (within numerical tolerance).
-The sample size remains unchanged from the baseline design, and the bounds at active analyses adjust to properly allocate the spending budget.
+The bounds at active analyses adjust to allocate the spending budget, and derived information is recalibrated so that skipped efficacy or lower analyses do not leave the design over-powered.
 
+When `gsBoundSummary()` is used with alternate alpha levels, every efficacy column retains the original `testUpper` schedule. An efficacy look that was not planned is not reintroduced merely because another alpha level is displayed. Alternate-alpha summaries are available for the one-sided or non-binding test types 1, 4, 6, and 8. They are intentionally not offered for binding types 2, 3, 5, or 7, which are outside the Maurer--Bretz non-binding multiple-testing framework.

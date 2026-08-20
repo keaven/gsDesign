@@ -8,7 +8,7 @@ or sample size (other designs)}
 toInteger(x, ratio = x$ratio, roundUpFinal = TRUE)
 }
 \arguments{
-\item{x}{An object of class \code{gsDesign} or \code{gsSurv}.}
+\item{x}{An object of class \code{gsDesign}, \code{gsSurv}, or \code{nSurv}.}
 
 \item{ratio}{Usually corresponds to experimental:control sample size ratio.
 If an integer is provided, rounding is done to a multiple of
@@ -27,8 +27,10 @@ See details.}
 }
 \value{
 Output is an object of the same class as input \code{x}; i.e.,
-  \code{gsDesign} with integer vector for \code{n.I} or \code{gsSurv}
-  with integer vector \code{n.I} and integer total sample size. See details.
+  \code{gsDesign} with integer vector for \code{n.I}, \code{gsSurv}
+  with integer vector \code{n.I} and integer total sample size, or
+  \code{nSurv} with integer \code{d} and integer total sample size \code{n}.
+  See details.
 }
 \description{
 Translate group sequential design to integer events (survival designs)
@@ -53,6 +55,12 @@ randomization ratio.
 For 3:2 randomization, \code{ratio = 4} would ensure rounding sample size
 to a multiple of 5.
 
+An \code{nSurv} object is converted through the corresponding
+single-analysis \code{gsSurv} representation and returned as an
+\code{nSurv} object. Its required event count \code{d} is rounded in the
+same way as the final event count for a \code{gsSurv} object, and its total
+sample size \code{n} is rounded according to \code{ratio}.
+
 For a \code{gsSurv} object, \code{x$n.I} is an event-count schedule.
 \code{toInteger()} rounds the final planned event count (up when
 \code{roundUpFinal = TRUE}; otherwise to nearest integer, with a 0.01
@@ -60,6 +68,9 @@ tolerance), then derives interim integer event targets from
 \code{x$timing * final_events}. Interim counts are constrained to be positive
 and strictly increasing. Group sequential boundaries and spending are
 recomputed with \code{gsDesign()} at the integer event counts.
+For a single-analysis survival design, the fixed efficacy boundary is
+retained and its power is recomputed at the integer final event count
+without invoking multi-look group-sequential calculations.
 
 Total sample size for a survival design is then updated under a fixed
 calendar plan (same enrollment periods, study duration, and minimum

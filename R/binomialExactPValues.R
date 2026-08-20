@@ -4,12 +4,12 @@
 #' [gsSurv()] object. The p-value at analysis `j` is the smallest local
 #' one-sided alpha level for which the observed experimental-arm event count
 #' crosses the exact lower efficacy bound at that analysis. Non-binding
-#' futility bounds are ignored for the Type I error calculation.
+#' futility and harm bounds are ignored for the Type I error calculation.
 #'
-#' @param gsD A `gsSurv` object with `test.type` 1 or 4.
+#' @param gsD A `gsSurv` object with non-binding `test.type` 1, 4, 6, or 8.
 #' @param n.I Increasing integer total event counts at completed analyses. If
-#'   `NULL`, the planned exact binomial event counts from `toBinomialExact(gsD)`
-#'   are used. This must have at most 1 value greater than or equal to planned
+#'   `NULL`, the planned integer event counts from `toInteger(gsD)` are used.
+#'   This must have at most 1 value greater than or equal to planned
 #'   final events (`gsD$maxn.IPlan` if available, otherwise `max(gsD$n.I)`).
 #' @param x Integer experimental-arm event counts at the analyses in `n.I`.
 #' @param interval Search interval for the p-values. As in [sequentialPValue()],
@@ -55,8 +55,8 @@ repeatedPValueBinomialExact <- function(
   if (!inherits(gsD, "gsSurv")) {
     stop("gsD must be an object of class gsSurv", call. = FALSE)
   }
-  if (!(gsD$test.type %in% c(1, 4))) {
-    stop("gsD$test.type must be 1 or 4", call. = FALSE)
+  if (!(gsD$test.type %in% c(1, 4, 6, 8))) {
+    stop("gsD$test.type must be 1, 4, 6, or 8", call. = FALSE)
   }
   if (is.null(x)) {
     stop("x must contain observed experimental-arm event counts", call. = FALSE)
@@ -73,7 +73,7 @@ repeatedPValueBinomialExact <- function(
   }
 
   if (is.null(n.I)) {
-    n.I <- toBinomialExact(gsD)$n.I
+    n.I <- toInteger(gsD)$n.I
   }
   if (!is.numeric(n.I) || any(!is.finite(n.I)) || any(n.I != floor(n.I))) {
     stop("n.I must be a numeric vector of increasing positive integers", call. = FALSE)
@@ -187,11 +187,11 @@ repeatedPValueBinomialExact <- function(
 #'
 #' Computes the alpha-indexed exact lower-tail event-count efficacy bounds used
 #' by [repeatedPValueBinomialExact()]. This helper intentionally ignores
-#' non-binding futility bounds and avoids the normal-theory design checks in
+#' non-binding futility and harm bounds and avoids the normal-theory design checks in
 #' [gsDesign()], since very small alpha values may be needed while searching
 #' for exact p-values.
 #'
-#' @param gsD A `gsSurv` object with `test.type` 1 or 4.
+#' @param gsD A `gsSurv` object with non-binding `test.type` 1, 4, 6, or 8.
 #' @param n.I Increasing integer total event counts at analyses with at most
 #'   1 value greater than or equal to planned final events.
 #' @param alpha Local one-sided Type I error level.
@@ -214,8 +214,8 @@ binomialExactLowerBound <- function(
   if (!inherits(gsD, "gsSurv")) {
     stop("gsD must be an object of class gsSurv", call. = FALSE)
   }
-  if (!(gsD$test.type %in% c(1, 4))) {
-    stop("gsD$test.type must be 1 or 4", call. = FALSE)
+  if (!(gsD$test.type %in% c(1, 4, 6, 8))) {
+    stop("gsD$test.type must be 1, 4, 6, or 8", call. = FALSE)
   }
   if (!is.numeric(alpha) || length(alpha) != 1 || !is.finite(alpha) ||
       alpha <= 0 || alpha >= 1) {

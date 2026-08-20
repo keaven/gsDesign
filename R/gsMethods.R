@@ -69,7 +69,11 @@ print.gsProbability <- function(x, ...) {
 summary.gsDesign <- function(object, information = FALSE, timeunit = "months", ...) {
   out <- NULL
   if (object$test.type == 1) {
-    out <- paste(out, "One-sided group sequential design with ", sep = "")
+    out <- paste(
+      out,
+      if (object$k == 1) "One-sided fixed design with " else "One-sided group sequential design with ",
+      sep = ""
+    )
   } else if (object$test.type == 2) {
     out <- paste(out, "Symmetric two-sided group sequential design with ", sep = "")
   } else if (object$test.type %in% c(7, 8)) {
@@ -87,18 +91,26 @@ summary.gsDesign <- function(object, information = FALSE, timeunit = "months", .
       out <- paste(out, "non-binding futility bound, ", sep = "")
     }
   }
-  out <- paste(out, object$k, " analyses, ", sep = "")
+  out <- paste(
+    out,
+    object$k,
+    if (object$k == 1) " analysis, " else " analyses, ",
+    sep = ""
+  )
   if (object$nFixSurv > 0) {
     out <- paste(out, "time-to-event outcome with sample size ", ceiling(object$nSurv),
       " and ", ceiling(object$n.I[object$k]), " events required, ",
       sep = ""
     )
   } else if ("gsSurv" %in% class(object)) {
+    experimental_n <- gsRoundNearInteger(rowSums(object$eNE))
+    control_n <- gsRoundNearInteger(rowSums(object$eNC))
     out <- paste(out, "time-to-event outcome with sample size ",
-      ifelse(object$ratio == 1, 2 * ceiling(rowSums(object$eNE))[object$k],
-        (ceiling(rowSums(object$eNE)) + ceiling(rowSums(object$eNC)))[object$k]
+      ifelse(object$ratio == 1, 2 * ceiling(experimental_n)[object$k],
+        (ceiling(experimental_n) + ceiling(control_n))[object$k]
       ),
-      " and ", ceiling(object$n.I[object$k]), " events required, ",
+      " and ", ceiling(gsRoundNearInteger(object$n.I[object$k])),
+      " events required, ",
       sep = ""
     )
   } else if (information) {
@@ -115,14 +127,18 @@ summary.gsDesign <- function(object, information = FALSE, timeunit = "months", .
       sep = ""
     )
   }
-  if (object$test.type == 2) {
-    out <- paste(out, ". Bounds derived using a ", sep = "")
+  if ("gsSurv" %in% class(object) && object$k == 1) {
+    out <- paste0(out, ".")
   } else {
-    out <- paste(out, ". Efficacy bounds derived using a", sep = "")
+    if (object$test.type == 2) {
+      out <- paste(out, ". Bounds derived using a ", sep = "")
+    } else {
+      out <- paste(out, ". Efficacy bounds derived using a", sep = "")
+    }
+    out <- paste(out, " ", summary(object$upper), ".", sep = "")
+    if (object$test.type > 2) out <- paste(out, " Futility bounds derived using a ", summary(object$lower), ".", sep = "")
+    if (object$test.type %in% c(7, 8)) out <- paste(out, " Harm bounds derived using a ", summary(object$harm), ".", sep = "")
   }
-  out <- paste(out, " ", summary(object$upper), ".", sep = "")
-  if (object$test.type > 2) out <- paste(out, " Futility bounds derived using a ", summary(object$lower), ".", sep = "")
-  if (object$test.type %in% c(7, 8)) out <- paste(out, " Harm bounds derived using a ", summary(object$harm), ".", sep = "")
   return(out)
 }
 
@@ -469,23 +485,28 @@ gsBoundSummary0 <- function(
     for (i in 1:length(x$theta)) pframe3 <- rbind(pframe3, data.frame("Harm" = cumsum(x$harm$prob[, i])))
     pframe <- data.frame(pframe, pframe3)
   }
-  # conditional power at bound, theta=hat(theta)
-  cp <- data.frame(gsBoundCP(x, r = r))
-  # conditional power at bound, theta=theta[1]
-  cp1 <- data.frame(gsBoundCP(x, theta = x$delta, r = r))
-  if (x$test.type %in% c(7, 8)) {
-    colnames(cp) <- c("Futility", "Efficacy", "Harm")
-    colnames(cp1) <- c("Futility", "Efficacy", "Harm")
-  } else if (x$test.type > 1) {
-    colnames(cp) <- c("Futility", "Efficacy")
-    colnames(cp1) <- c("Futility", "Efficacy")
+  if (x$k > 1) {
+    # conditional power at bound, theta=hat(theta)
+    cp <- data.frame(gsBoundCP(x, r = r))
+    # conditional power at bound, theta=theta[1]
+    cp1 <- data.frame(gsBoundCP(x, theta = x$delta, r = r))
+    if (x$test.type %in% c(7, 8)) {
+      colnames(cp) <- c("Futility", "Efficacy", "Harm")
+      colnames(cp1) <- c("Futility", "Efficacy", "Harm")
+    } else if (x$test.type > 1) {
+      colnames(cp) <- c("Futility", "Efficacy")
+      colnames(cp1) <- c("Futility", "Efficacy")
+    } else {
+      colnames(cp) <- "Efficacy"
+      colnames(cp1) <- "Efficacy"
+    }
+    cp <- data.frame(cp, "Value" = "CP", i = seq_len(x$k - 1))
+    cp1 <- data.frame(cp1, "Value" = "CP H1", i = seq_len(x$k - 1))
   } else {
-    colnames(cp) <- "Efficacy"
-    colnames(cp1) <- "Efficacy"
+    cp <- NULL
+    cp1 <- NULL
   }
-  cp <- data.frame(cp, "Value" = "CP", i = 1:(x$k - 1))
-  cp1 <- data.frame(cp1, "Value" = "CP H1", i = 1:(x$k - 1))
-  if ("PP" %in% exclude) {
+  if ("PP" %in% exclude || x$k == 1) {
     pp <- NULL
   } else {
     # predictive probability
@@ -560,19 +581,49 @@ gsBoundSummary0 <- function(
     }
   } else {
     nstat <- 4
-    statframe[statframe$Value == statframe$Value[3], ]$Analysis <- paste("Events:", ceiling(x$n.I))
-    if (x$ratio == 1) N <- 2 * ceiling(rowSums(x$eNE)) else N <- ceiling(rowSums(x$eNE)) + ceiling(rowSums(x$eNC))
+    event_counts <- gsRoundNearInteger(x$n.I)
+    statframe[statframe$Value == statframe$Value[3], ]$Analysis <- paste("Events:", ceiling(event_counts))
+    experimental_n <- gsRoundNearInteger(rowSums(x$eNE))
+    control_n <- gsRoundNearInteger(rowSums(x$eNC))
+    if (x$ratio == 1) N <- 2 * ceiling(experimental_n) else N <- ceiling(experimental_n) + ceiling(control_n)
     Time <- round(x$T, tdigits)
     statframe[statframe$Value == statframe$Value[4], ]$Analysis <- paste(timename, ": ", as.character(Time), sep = "")
   }
   statframe[statframe$Value == statframe$Value[2], ]$Analysis <- paste(Nname, ": ", N, sep = "")
   # add POS and predictive POS, if requested
   if (POS) {
-    ppos <- rep("", x$k)
-    for (i in 1:(x$k - 1)) ppos[i] <- paste("Post IA POS: ", as.character(round(100 * gsCPOS(i = i, x = x, theta = prior$z, wgts = prior$wgts), 1)), "%", sep = "")
-    statframe[statframe$Value == statframe$Value[nstat + 1], ]$Analysis <- ppos
-    statframe[nstat + 2, ]$Analysis <- ppos[1]
-    statframe[nstat + 1, ]$Analysis <- paste("Trial POS: ", as.character(round(100 * gsPOS(x = x, theta = prior$z, wgts = prior$wgts), 1)), "%", sep = "")
+    if (x$k == 1) {
+      trial_pos <- sum(
+        prior$wgts * stats::pnorm(
+          prior$z * sqrt(x$n.I[1]) - x$upper$bound[1]
+        )
+      )
+      statframe$Analysis[nrow(statframe)] <- paste0(
+        "Trial POS: ", round(100 * trial_pos, 1), "%"
+      )
+    } else {
+      ppos <- rep("", x$k)
+      for (i in seq_len(x$k - 1)) {
+        ppos[i] <- paste(
+          "Post IA POS: ",
+          as.character(round(100 * gsCPOS(
+            i = i, x = x, theta = prior$z, wgts = prior$wgts
+          ), 1)),
+          "%",
+          sep = ""
+        )
+      }
+      statframe[statframe$Value == statframe$Value[nstat + 1], ]$Analysis <- ppos
+      statframe[nstat + 2, ]$Analysis <- ppos[1]
+      statframe[nstat + 1, ]$Analysis <- paste(
+        "Trial POS: ",
+        as.character(round(100 * gsPOS(
+          x = x, theta = prior$z, wgts = prior$wgts
+        ), 1)),
+        "%",
+        sep = ""
+      )
+    }
   }
   # add futility and harm columns to data frame
   if (x$test.type %in% c(7, 8)) {
@@ -595,7 +646,8 @@ gsBoundSummary0 <- function(
   if (x$test.type > 1) rval$Futility <- round(rval$Futility, digits)
   if (x$test.type %in% c(7, 8)) rval$Harm <- round(rval$Harm, digits)
 
-  # Mask inactive bounds as NA based on testUpper/testLower/testHarm
+  # Mask every characteristic for inactive bounds as NA based on
+  # testUpper/testLower/testHarm, including cumulative P(Cross) rows.
   inactive_upper <- which(gsBoundDisplayInactive(x$upper, x$testUpper))
   if (length(inactive_upper) > 0 && "Efficacy" %in% names(rval)) {
     rval$Efficacy[analysis_i %in% inactive_upper] <- NA
@@ -610,6 +662,7 @@ gsBoundSummary0 <- function(
   }
 
   class(rval) <- c("gsBoundSummary", "data.frame")
+  attr(rval, "analysis_i") <- analysis_i
   if ("gsSurv" %in% class(x) && !is.null(x$method)) {
     attr(rval, "method") <- x$method
   }
@@ -634,6 +687,8 @@ gsBoundSummary0 <- function(
 #' provided for LaTeX output by setting default options for
 #' \code{\link[xtable]{print.xtable}} when producing tables summarizing design
 #' bounds.
+#' Single-analysis fixed designs are supported; interim-only characteristics
+#' such as conditional and predictive power are omitted when \code{k = 1}.
 #'
 #' Individual transformation of z-value test statistics for interim and final
 #' analyses are obtained from \code{gsBValue()}, \code{gsDelta()},
@@ -694,7 +749,11 @@ gsBoundSummary0 <- function(
 #' \code{x}, the probability of crossing either bound given that treatment
 #' effect is computed. This value is cumulative for each bound. For example,
 #' the probability of crossing the efficacy bound at or before the analysis of
-#' interest.
+#' interest. For test types 7 and 8, harm, futility, and efficacy crossing
+#' probabilities are mutually exclusive. Every characteristic for a bound,
+#' including its cumulative crossing probability, is shown as \code{NA} at an
+#' analysis where that bound is inactive. The underlying probability arrays on
+#' \code{x} retain the cumulative crossing information.
 #'
 #' @param x An item of class \code{gsDesign} or \code{gsSurv}, except for
 #' \code{print.gsBoundSummary()} where \code{x} is an object created by
@@ -754,9 +813,14 @@ gsBoundSummary0 <- function(
 #' degree of accuracy of group sequential calculations which will normally not
 #' be changed.
 #' @param alpha If used, a vector of alternate alpha-levels to print boundaries
-#' for. Only works with test.type 1, 4, 6, 7, and 8. If specified, efficacy bound
+#' for. Only works with non-binding test types 1, 4, 6, and 8. If specified,
+#' efficacy bound
 #' columns are headed by individual alpha levels. The alpha level of the input
-#' design is always included as the first column.
+#' design is always included as the first column. Alternate alpha levels retain
+#' the efficacy testing schedule in \code{x$testUpper}. Binding lower-bound
+#' designs, including test type 7, are not supported for alternate-alpha
+#' summaries because they do not satisfy the non-binding framework used for
+#' Maurer--Bretz graphical multiple testing.
 #' @param row.names indicator of whether or not to print row names
 #' @param include.rownames indicator of whether or not to include row names in
 #' output.
@@ -905,12 +969,14 @@ gsBoundSummary <- function(
     x, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
     exclude = exclude, POS = POS, ratio = ratio, r = r, prior = prior
   )
+  analysis_i <- attr(out, "analysis_i")
+  attr(out, "analysis_i") <- NULL
   # Return unchanged if alpha is NULL or if test.type is not supported
   if (is.null(alpha)) {
     return(out)
   }
-  if (!(x$test.type %in% c(1, 4, 6, 7, 8))) {
-    message("Alternate alpha levels only available for test.type 1, 4, 6, 7, and 8. Ignoring alpha levels.")
+  if (!(x$test.type %in% c(1, 4, 6, 8))) {
+    message("Alternate alpha levels only available for non-binding test.type 1, 4, 6, and 8. Ignoring alpha levels.")
     return(out)
   }
 
@@ -927,12 +993,12 @@ gsBoundSummary <- function(
     stop("alpha must be NULL or a numeric vector with values strictly between 0 and 1 - x$beta")
   }
 
-  # For test.type 4, 6, 7, or 8, save Futility (and Harm) columns
+  # For test.type 4, 6, or 8, save Futility (and Harm) columns
   if (x$test.type %in% c(4, 6)) {
     # save futility column for later
     fut_col <- out$Futility
     out <- out[, 1:3]
-  } else if (x$test.type %in% c(7, 8)) {
+  } else if (x$test.type == 8) {
     # save harm and futility columns for later
     harm_col <- out$Harm
     fut_col <- out$Futility
@@ -972,27 +1038,8 @@ gsBoundSummary <- function(
     if (isTRUE(all.equal(a, x$alpha, tolerance = 1e-7))) next # Skip if it's the original alpha
     n_alpha <- n_alpha + 1 # increment # of alpha columns
 
-    # Create design with new alpha
-    y <- gsDesign(
-      k = x$k,
-      n.I = x$n.I,
-      maxn.IPlan = max(x$n.I),
-      test.type = 1, # Use test.type = 1 for all new alpha levels
-      alpha = a,
-      beta = x$beta,
-      timing = x$timing,
-      sfu = x$upper$sf,
-      sfupar = x$upper$param,
-      sfl = x$lower$sf,
-      sflpar = x$lower$param,
-      endpoint = x$endpoint,
-      delta = x$delta,
-      delta1 = x$delta1,
-      delta0 = x$delta0,
-      r = r,
-      usTime = x$upper$sTime,
-      lsTime = x$lower$sTime
-    )
+    # Create design with new alpha and the original efficacy testing schedule
+    y <- gsAlternateAlphaDesign(x = x, alpha = a, r = r)
 
     # Get summary for design with new alpha
     yout <- gsBoundSummary0(
@@ -1006,10 +1053,17 @@ gsBoundSummary <- function(
     # now if test.type is not 1, we need to add futility bounds
     # from original and recompute conditional power, and boundary crossing probabilities
     if (x$test.type > 1) {
-      y2 <- gsProbability(
-        k = x$k, theta = x$theta, a = x$lower$bound, b = y$upper$bound, r = r,
-        n.I = x$n.I
-      )
+      y2 <- x
+      y2$upper$bound <- y$upper$bound
+      y2$lower$bound <- pmin(x$lower$bound, y$upper$bound)
+      if (x$test.type == 8 && !is.null(y2$harm)) {
+        both_active <- y2$testLower & y2$testHarm
+        y2$harm$bound[both_active] <- pmin(
+          y2$harm$bound[both_active],
+          y2$lower$bound[both_active]
+        )
+      }
+      y2 <- gsDProb(theta = x$theta, d = y2)
 
       # We only need to fix rows for CP, CP H1, PP, and P(Cross), if test.type is not 1;
       # This uses futility bound from original alpha level
@@ -1033,17 +1087,76 @@ gsBoundSummary <- function(
     }
   }
 
+  # Reapply the original efficacy schedule after alternate-alpha probability
+  # rows are recomputed so no characteristic is reintroduced at a skipped look.
+  inactive_upper <- which(gsBoundDisplayInactive(x$upper, x$testUpper))
+  if (length(inactive_upper) > 0) {
+    out[analysis_i %in% inactive_upper, 3:ncol(out)] <- NA
+  }
+
   # Add futility (and harm) columns back
   if (x$test.type %in% c(4, 6)) {
     out <- cbind(out, fut_col)
     names(out)[ncol(out)] <- "Futility"
-  } else if (x$test.type %in% c(7, 8)) {
+  } else if (x$test.type == 8) {
     out <- cbind(out, fut_col, harm_col)
     names(out)[(ncol(out) - 1):ncol(out)] <- c("Futility", "Harm")
   }
 
   class(out) <- c("gsBoundSummary", "data.frame")
   return(out)
+}
+
+# gsAlternateAlphaDesign: non-binding efficacy bounds at alternate alpha ----
+gsAlternateAlphaDesign <- function(
+    x, alpha, r,
+    sfu = x$upper$sf,
+    sfupar = x$upper$param,
+    usTime = x$upper$sTime) {
+  if (x$k == 1) {
+    y <- x
+    y$alpha <- alpha
+    y$upper$spend <- alpha
+    y$upper$bound <- stats::qnorm(1 - alpha)
+    y$upper$prob <- matrix(
+      stats::pnorm(
+        outer(sqrt(y$n.I), y$theta) - y$upper$bound
+      ),
+      nrow = 1
+    )
+    y$beta <- 1 - y$upper$prob[1, length(y$theta)]
+    return(y)
+  }
+
+  test_upper <- if (is.null(x$testUpper)) rep(TRUE, x$k) else x$testUpper
+  lower_sf <- if (is.null(x$lower) || is.null(x$lower$sf)) sfHSD else x$lower$sf
+  lower_param <- if (is.null(x$lower) || is.null(x$lower$param)) -2 else x$lower$param
+  lower_time <- if (is.null(x$lower)) NULL else x$lower$sTime
+
+  # A type 4 helper gives the same non-binding efficacy calculation as type 1
+  # while allowing the original selective efficacy schedule to be retained.
+  gsDesign(
+    k = x$k,
+    n.I = x$n.I,
+    maxn.IPlan = max(x$n.I),
+    test.type = 4,
+    alpha = alpha,
+    beta = x$beta,
+    timing = x$timing,
+    sfu = sfu,
+    sfupar = sfupar,
+    sfl = lower_sf,
+    sflpar = lower_param,
+    endpoint = x$endpoint,
+    delta = x$delta,
+    delta1 = x$delta1,
+    delta0 = x$delta0,
+    r = r,
+    usTime = usTime,
+    lsTime = lower_time,
+    testUpper = test_upper,
+    testLower = TRUE
+  )
 }
 
 # xprint roxy [sinew] ----

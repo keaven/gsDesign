@@ -312,7 +312,9 @@ Otherwise, a logical vector of length \code{k}.
 Only used for \code{test.type} 7 or 8; at least one analysis must be
 \code{TRUE} for those types.
 Where \code{testHarm} is \code{FALSE}, the harm bound is set to
-\code{-20} (effectively \code{-Inf}) and displayed as \code{NA} in output.}
+\code{-20} (effectively \code{-Inf}) and the bound is displayed as
+\code{NA} in output. Cumulative harm crossing probability from earlier
+analyses is still displayed.}
 
 \item{show_gsDesign}{Logical; for \code{print.gsSurv()}, include gsDesign details.}
 }
@@ -340,6 +342,8 @@ Where \code{testHarm} is \code{FALSE}, the harm bound is set to
   \item{hr0}{As input.}
   \item{n}{Total expected sample size corresponding to output accrual rates
   and durations.}
+  \item{N}{Identical to \code{n}; provided as a non-breaking alias for total
+  expected sample size.}
   \item{d}{Total expected number of events under the alternate
   hypothesis.}
   \item{tol}{As input, except when not used in computations in
@@ -385,6 +389,8 @@ Where \code{testHarm} is \code{FALSE}, the harm bound is set to
   \item{minfup}{As input.}
   \item{hr}{As input.}
   \item{hr0}{As input.}
+  \item{N}{A vector containing cumulative total expected enrollment at each
+  analysis.}
   \item{eNC}{Total expected sample size corresponding to output accrual rates
   and durations.}
   \item{eNE}{Total expected sample size corresponding to output accrual rates
@@ -439,6 +445,10 @@ Schoenfeld (1981), Freedman (1982), and Bernstein and Lagakos (1989) methods
 are also supported; see Details.
 \code{gsSurv()} combines \code{nSurv()} with \code{gsDesign()} to derive a
 group sequential design for a study with a time-to-event endpoint.
+When \code{k = 1}, \code{gsSurv()} uses the fixed-design calculations from
+\code{nSurv()} directly and returns a normalized single-analysis
+\code{gsSurv} object for use with functions such as
+\code{\link{toInteger}} and \code{\link{gsBoundSummary}}.
 }
 \details{
 The Lachin and Foulkes method uses both null and alternate hypothesis
@@ -524,6 +534,11 @@ calculation.
 
 The input to \code{gsSurv} is a combination of the input to \code{nSurv()}
 and \code{gsDesign()}.
+The original call is stored in \code{call}. The \code{inputs} component
+retains evaluated survival-model inputs used for printing and the applicable
+\code{testUpper}, \code{testLower}, and \code{testHarm} arguments. The
+normalized testing schedules used by the design are stored directly in the
+corresponding top-level components.
 When \code{T = NULL} and \code{minfup} is specified, \code{gsSurv()}
 preserves the input accrual rate and minimum follow-up, applies the group
 sequential design, and solves the accrual duration needed for the final
@@ -587,6 +602,21 @@ gsSurv(
   T = 36, minfup = 12, method = "Schoenfeld"
 ) |>
   print()
+
+# Common four-period enrollment ramp-up. With T and minfup fixed, the
+# relative gamma pattern is scaled to power the trial, and the final R
+# period is extended so enrollment lasts T - minfup.
+ramp_rate <- gsSurv(
+  T = 26, minfup = 12,
+  gamma = 1:4, R = rep(1, 4)
+)
+
+# With T = NULL and minfup fixed, gamma stays fixed and the final
+# enrollment period is extended to obtain the required sample size.
+ramp_duration <- gsSurv(
+  T = NULL, minfup = 12,
+  gamma = 1:4, R = rep(1, 4)
+)
 
 # Vary minimum follow-up duration minfup to obtain power
 # Accrual duration R rate gamma are fixed and will not change on output.
@@ -682,8 +712,10 @@ Trials Using the Logrank Test. \emph{Statistics in Medicine}, 1, 121-129.
 \seealso{
 \code{\link[stats]{uniroot}}
 
-\code{vignette("gsSurvBasicExamples", package = "gsDesign")} for
-  basic survival sample size examples, \code{vignette("SurvivalOverview",
+\code{vignette("SurvivalEnrollmentPlanning", package = "gsDesign")}
+  for enrollment ramp-up and duration planning,
+  \code{vignette("gsSurvBasicExamples", package = "gsDesign")} for basic
+  survival sample size examples, \code{vignette("SurvivalOverview",
   package = "gsDesign")} for method background, and
   \code{vignette("SeqDesignSurvival", package = "gsDesign")} for a SAS PROC
   SEQDESIGN translation example.

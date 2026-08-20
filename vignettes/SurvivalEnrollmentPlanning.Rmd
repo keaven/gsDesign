@@ -1,0 +1,257 @@
+---
+title: "Planning enrollment and follow-up for survival designs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Planning enrollment and follow-up for survival designs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4.5
+)
+options(width = 70)
+```
+
+## Overview
+
+Survival trial planning connects three time quantities:
+
+- enrollment duration;
+- minimum follow-up after the last participant enrolls; and
+- total study duration.
+
+The identity is
+
+```text
+total study duration = enrollment duration + minimum follow-up.
+```
+
+`gsSurv()` can solve one component of this plan while deriving a powered group
+sequential design. `gsSurvCalendar()` uses the same enrollment model but fixes
+analysis times on the calendar. `gsSurvPower()` answers the reverse question:
+given a fixed operational plan, what power will it achieve? Finally,
+`toInteger()` converts continuous expected events and enrollment to an
+integer-compatible plan.
+
+```{r setup}
+library(gsDesign)
+
+lambdaC <- log(2) / 12
+hr <- 0.7
+
+# Four enrollment periods with equal relative rate increments.
+gamma_ramp <- 1:4
+R_ramp <- rep(1, 4)
+```
+
+Every `nSurv` object contains identical scalar values `n` and `N` for total
+expected enrollment. Every `gsSurv` object contains `N` as a vector of
+cumulative total expected enrollment at each analysis. It is the row total of
+the control and experimental enrollment components:
+
+```r
+x$N == rowSums(x$eNC) + rowSums(x$eNE)
+```
+
+## Pattern 1: fix study duration and minimum follow-up
+
+This is the most common planning pattern. Specifying `T` and `minfup` fixes the
+enrollment duration at `T - minfup`. The values in `gamma` describe the
+relative ramp-up shape; `gsSurv()` scales all rates proportionally to power the
+trial. When the supplied `R` periods do not fill the enrollment duration, the
+last period is extended.
+
+```{r fixed-duration}
+fixed_duration <- gsSurv(
+  k = 3,
+  lambdaC = lambdaC,
+  hr = hr,
+  T = 26,
+  minfup = 12,
+  gamma = gamma_ramp,
+  R = R_ramp
+)
+
+data.frame(
+  period = seq_along(fixed_duration$R),
+  duration = fixed_duration$R,
+  rate = as.vector(fixed_duration$gamma)
+)
+
+fixed_duration$N
+```
+
+Here enrollment lasts 14 months. The first three ramp-up periods last one
+month each and the fourth rate continues through the remaining 11 months.
+
+## Pattern 2: fix rates and minimum follow-up
+
+Set `T = NULL` to keep `gamma` fixed and solve how long enrollment must remain
+open. The final `R` period is extended to obtain the required sample size; the
+earlier ramp-up periods are unchanged.
+
+```{r fixed-rates}
+fixed_rates <- gsSurv(
+  k = 3,
+  lambdaC = lambdaC,
+  hr = hr,
+  T = NULL,
+  minfup = 12,
+  gamma = gamma_ramp,
+  R = R_ramp
+)
+
+data.frame(
+  period = seq_along(fixed_rates$R),
+  duration = fixed_rates$R,
+  rate = as.vector(fixed_rates$gamma)
+)
+
+c(
+  enrollment_duration = sum(fixed_rates$R),
+  minimum_follow_up = fixed_rates$minfup,
+  total_duration = max(fixed_rates$T)
+)
+```
+
+Absolute rates of 1, 2, 3, and 4 participants per month are deliberately low,
+so this example produces a long enrollment duration. In practice, multiply
+the ramp by realistic site-level or program-level rates.
+
+## Pattern 3: fix enrollment and solve follow-up
+
+With both `T = NULL` and `minfup = NULL`, enrollment rates and their durations
+are fixed. `gsSurv()` solves the follow-up duration needed to power the trial.
+This option can fail when the fixed enrollment plan is over-powered even with
+almost no follow-up, or under-powered regardless of follow-up.
+
+```{r fixed-enrollment}
+fixed_enrollment <- gsSurv(
+  k = 3,
+  lambdaC = lambdaC,
+  hr = hr,
+  T = NULL,
+  minfup = NULL,
+  gamma = 50 * gamma_ramp,
+  R = R_ramp
+)
+
+c(
+  enrollment_duration = sum(fixed_enrollment$R),
+  minimum_follow_up = fixed_enrollment$minfup,
+  total_duration = max(fixed_enrollment$T)
+)
+```
+
+When this solve is infeasible, revise the fixed enrollment plan, target power,
+or event assumptions rather than interpreting the error as a numerical failure.
+
+## Calendar-time analyses
+
+Use `gsSurvCalendar()` when interim analyses are specified as months from the
+start of enrollment. The final calendar time and `minfup` imply the enrollment
+duration, while the four-period ramp-up is scaled to power the trial.
+
+```{r calendar-design}
+calendar_design <- gsSurvCalendar(
+  calendarTime = c(12, 18, 26),
+  lambdaC = lambdaC,
+  hr = hr,
+  minfup = 12,
+  gamma = gamma_ramp,
+  R = R_ramp
+)
+
+data.frame(
+  analysis_month = calendar_design$T,
+  expected_events = calendar_design$n.I,
+  expected_enrollment = calendar_design$N
+)
+```
+
+Use `gsSurv()` instead when analyses are defined by event or information
+fractions rather than calendar dates.
+
+## Power for a fixed operational plan
+
+`gsSurvPower()` does not resize enrollment to hit target power. It evaluates
+power for the supplied rates, durations, treatment effect, and analysis timing.
+For example, the following sensitivity analysis evaluates 80% of the planned
+enrollment rates at the original calendar analysis times.
+
+```{r power-sensitivity}
+slower_enrollment <- gsSurvPower(
+  x = fixed_duration,
+  gamma = 0.8 * fixed_duration$gamma,
+  plannedCalendarTime = fixed_duration$T
+)
+
+c(
+  planned_power = 1 - fixed_duration$beta,
+  slower_enrollment_power = slower_enrollment$power
+)
+```
+
+Use `targetEvents = fixed_duration$n.I` instead of `plannedCalendarTime` when
+event counts, rather than dates, remain fixed and the analysis dates may move.
+
+## Integer event and enrollment plans
+
+Design calculations use expected counts and can therefore be non-integer.
+Apply `toInteger()` after deriving the design to obtain integer event targets
+and a final total enrollment compatible with the randomization allocation.
+
+```{r integer-plan}
+integer_design <- toInteger(fixed_duration)
+
+data.frame(
+  analysis = seq_len(integer_design$k),
+  events = integer_design$n.I,
+  enrollment = integer_design$N
+)
+```
+
+The input `ratio` is experimental-to-control randomization. For example,
+`ratio = 1` produces allocation-compatible even totals; `ratio = 2` produces
+totals compatible with 2:1 randomization.
+
+## Stratified enrollment
+
+For a stratified design, matrix columns identify strata. Align the columns of
+the control hazards, dropout rates, and enrollment rates. The example below
+uses two strata with different control medians and enrollment contributions.
+
+```{r stratified}
+lambda_strata <- matrix(log(2) / c(10, 16), nrow = 1)
+gamma_strata <- cbind(
+  0.6 * gamma_ramp,
+  0.4 * gamma_ramp
+)
+
+stratified_design <- gsSurv(
+  k = 3,
+  lambdaC = lambda_strata,
+  hr = hr,
+  eta = matrix(c(0.001, 0.001), nrow = 1),
+  T = 26,
+  minfup = 12,
+  gamma = gamma_strata,
+  R = R_ramp
+)
+
+data.frame(
+  analysis = seq_len(stratified_design$k),
+  control = rowSums(stratified_design$eNC),
+  experimental = rowSums(stratified_design$eNE),
+  total = stratified_design$N
+)
+```
+
+The same matrix conventions apply to `gsSurvCalendar()` and
+`gsSurvPower()`. For final operational planning, inspect both `N` and the
+stratum-specific `eNC` and `eNE` matrices before applying `toInteger()`.

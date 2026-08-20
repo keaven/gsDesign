@@ -9,6 +9,70 @@
   `lt_format()`, `lt_footnote()`, `lt_note()`, `lt_label()`, `lt_align()`,
   `lt_group()`). There are no significant visual changes in the HTML tables.
 
+## New features
+
+- All `gsSurv` objects now include `N`, the cumulative total expected
+  enrollment at each analysis. `nSurv` objects retain scalar `n` and also
+  return identical scalar `N` as a non-breaking alias (#299).
+- Added survival enrollment-planning documentation for four-period ramp-up,
+  the three combinations of fixed or solved enrollment and follow-up duration,
+  calendar-time analyses, power sensitivity, integer conversion, and
+  stratified designs. `gsSurv(T = NULL, minfup = ...)` now consistently keeps
+  enrollment rates fixed and solves enrollment duration (#300).
+- Added `minMedianFollowUp()` and `plotMinMedianFollowUp()` to compute and plot
+  minimum median follow-up at any calendar time from the piecewise enrollment
+  assumptions in an `nSurv` or `gsSurv` design. The plot accepts arbitrary
+  time-unit labels through `timename`; month and year labels default to x-axis
+  breaks every 6 months and 0.5 years, respectively, while other units use
+  automatic breaks (#281).
+- Sequential p-values, including exact-binomial repeated and sequential
+  efficacy p-values, now support `test.type = 8` by ignoring its non-binding
+  futility and harm bounds. `toBinomialExact()` now provides full exact
+  conversion for non-binding test types 1, 4, 6, and 8. For type 6, the upper
+  event-count boundary targets lower-bound spending under the null hypothesis.
+  For type 8, exact upper event-count stops are partitioned into mutually
+  exclusive futility and harm regions, targeting beta spending under the
+  alternative and harm spending under the null, respectively (#287).
+
+## Bug fixes
+
+- `gsSurvPower()` now retains exact event totals when `targetEvents` determines
+  an analysis, rather than exposing small root-finding residuals that could
+  make `gsBoundSummary()` round an integer event target up by one (#294).
+- Survival sample-size outputs now normalize machine-precision representations
+  of integers before applying display rounding, so `gsSurvPower()` and
+  `gsBoundSummary()` preserve exact arm and total sample sizes (#290).
+- Single-analysis survival designs now use a fixed-design `nSurv()` path in
+  `gsSurv(k = 1)` and `gsSurvPower(k = 1)`. The resulting objects work with
+  `toInteger()` and `gsBoundSummary()`, including alternate-alpha summaries
+  and use all alpha at the sole analysis without displaying an irrelevant
+  spending function in `summary()`. An `nSurv()` object can now also be passed
+  directly to `toInteger()` and is returned as an `nSurv` object with integer
+  event and sample-size targets (#289).
+- Power plots for test types 7 and 8 now treat crossing the futility threshold
+  as the union of futility-only and harm stops. The separate harm curve remains
+  harm-only, and the mutually exclusive probabilities stored on the design are
+  unchanged (#287).
+- Sample-size derivation now accounts for analyses where efficacy, futility,
+  or harm testing is skipped, avoiding power above the requested target. Harm,
+  futility, and efficacy crossing probabilities are reported as mutually
+  exclusive outcomes. Alternate-alpha summaries and power calculations retain
+  the planned efficacy testing schedule, and survival-design inputs retain the
+  applicable testing flags. `gsBoundSummary()` reports every characteristic,
+  including cumulative crossing probability, as `NA` when its bound is not
+  tested at an analysis (#287).
+- Alternate-alpha summaries are now limited to one-sided and non-binding test
+  types 1, 4, 6, and 8. Binding test type 7 is no longer presented as
+  compatible with the Maurer--Bretz graphical multiple-testing framework
+  (#287).
+
+# gsDesign 3.10.1
+
+## Bug fixes
+
+- Futility and harm bounds can now be skipped independently at an analysis;
+  skipping futility no longer also removes an active harm bound (#284).
+
 # gsDesign 3.10.0
 
 ## New features

@@ -2,7 +2,7 @@
 
     Group sequential design (method=LachinFoulkes; k=3 analyses; Two-sided asymmetric with non-binding futility)
     HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=2) | power=90.0%
-    N=187.2 subjects | D=93.5 events | T=18.5 study duration | accrual=18.0 Accrual duration | minfup=0.5 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+    N=105.2 subjects | D=92.8 events | T=105.7 study duration | accrual=105.2 Accrual duration | minfup=0.5 minimum follow-up | ratio=1 randomization ratio (experimental/control)
     
     Spending functions:
       Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
@@ -12,35 +12,35 @@
     Method: LachinFoulkes 
        Analysis              Value Efficacy Futility
       IA 1: 33%                  Z   3.0107  -0.2388
-         N: 100        p (1-sided)   0.0013   0.5944
-     Events: 32       ~HR at bound   0.3401   1.0893
-      Month: 10   P(Cross) if HR=1   0.0013   0.4056
+          N: 44        p (1-sided)   0.0013   0.5944
+     Events: 31       ~HR at bound   0.3386   1.0897
+      Month: 43   P(Cross) if HR=1   0.0013   0.4056
                 P(Cross) if HR=0.5   0.1412   0.0148
       IA 2: 67%                  Z   2.5465   0.9410
-         N: 150        p (1-sided)   0.0054   0.1733
-     Events: 63       ~HR at bound   0.5246   0.7879
-      Month: 14   P(Cross) if HR=1   0.0062   0.8347
+          N: 76        p (1-sided)   0.0054   0.1733
+     Events: 62       ~HR at bound   0.5233   0.7872
+      Month: 75   P(Cross) if HR=1   0.0062   0.8347
                 P(Cross) if HR=0.5   0.5815   0.0437
           Final                  Z   1.9992   1.9992
-         N: 188        p (1-sided)   0.0228   0.0228
-     Events: 94       ~HR at bound   0.6613   0.6613
-      Month: 18   P(Cross) if HR=1   0.0233   0.9767
+         N: 106        p (1-sided)   0.0228   0.0228
+     Events: 93       ~HR at bound   0.6603   0.6603
+     Month: 106   P(Cross) if HR=1   0.0233   0.9767
                 P(Cross) if HR=0.5   0.9000   0.1000
     
     Key inputs (names preserved):
-                                   desc    item  value input
-                        Accrual rate(s)   gamma 10.401     1
-               Accrual rate duration(s)       R     18    18
-                 Control hazard rate(s) lambdaC  0.116 0.116
-                Control dropout rate(s)     eta      0     0
-           Experimental dropout rate(s)    etaE      0  etaE
-     Event and dropout rate duration(s)       S   NULL     S
+                                   desc    item   value input
+                        Accrual rate(s)   gamma       1     1
+               Accrual rate duration(s)       R 105.244    18
+                 Control hazard rate(s) lambdaC   0.116 0.116
+                Control dropout rate(s)     eta       0     0
+           Experimental dropout rate(s)    etaE       0  etaE
+     Event and dropout rate duration(s)       S    NULL     S
 
 # Test: checking hazard ratio hr0 != 1
 
     Group sequential design (method=LachinFoulkes; k=3 analyses; Two-sided asymmetric with non-binding futility)
     HR=0.500 vs HR0=1.500 | alpha=0.025 (sided=2) | power=90.0%
-    N=75.7 subjects | D=37.8 events | T=18.5 study duration | accrual=18.0 Accrual duration | minfup=0.5 minimum follow-up | ratio=1 randomization ratio (experimental/control)
+    N=49.1 subjects | D=37.1 events | T=49.6 study duration | accrual=49.1 Accrual duration | minfup=0.5 minimum follow-up | ratio=1 randomization ratio (experimental/control)
     
     Spending functions:
       Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
@@ -50,29 +50,29 @@
     Method: LachinFoulkes 
        Analysis              Value Efficacy Futility
       IA 1: 33%                  Z   3.0107  -0.2388
-          N: 42        p (1-sided)   0.0013   0.5944
-     Events: 13       ~HR at bound   0.2750   1.7160
-      Month: 10 P(Cross) if HR=1.5   0.0013   0.4056
+          N: 24        p (1-sided)   0.0013   0.5944
+     Events: 13       ~HR at bound   0.2705   1.7182
+      Month: 23 P(Cross) if HR=1.5   0.0013   0.4056
                 P(Cross) if HR=0.5   0.1412   0.0148
       IA 2: 67%                  Z   2.5465   0.9410
-          N: 62        p (1-sided)   0.0054   0.1733
-     Events: 26       ~HR at bound   0.5438   1.0310
-      Month: 14 P(Cross) if HR=1.5   0.0062   0.8347
+          N: 38        p (1-sided)   0.0054   0.1733
+     Events: 25       ~HR at bound   0.5385   1.0273
+      Month: 37 P(Cross) if HR=1.5   0.0062   0.8347
                 P(Cross) if HR=0.5   0.5815   0.0437
           Final                  Z   1.9992   1.9992
-          N: 76        p (1-sided)   0.0228   0.0228
-     Events: 38       ~HR at bound   0.7827   0.7827
-      Month: 18 P(Cross) if HR=1.5   0.0233   0.9767
+          N: 50        p (1-sided)   0.0228   0.0228
+     Events: 38       ~HR at bound   0.7779   0.7779
+      Month: 50 P(Cross) if HR=1.5   0.0233   0.9767
                 P(Cross) if HR=0.5   0.9000   0.1000
     
     Key inputs (names preserved):
-                                   desc    item value input
-                        Accrual rate(s)   gamma 4.204     1
-               Accrual rate duration(s)       R    18    18
-                 Control hazard rate(s) lambdaC 0.116 0.116
-                Control dropout rate(s)     eta     0     0
-           Experimental dropout rate(s)    etaE     0  etaE
-     Event and dropout rate duration(s)       S  NULL     S
+                                   desc    item  value input
+                        Accrual rate(s)   gamma      1     1
+               Accrual rate duration(s)       R 49.063    18
+                 Control hazard rate(s) lambdaC  0.116 0.116
+                Control dropout rate(s)     eta      0     0
+           Experimental dropout rate(s)    etaE      0  etaE
+     Event and dropout rate duration(s)       S   NULL     S
 
 # Test: checking test.type > 1
 

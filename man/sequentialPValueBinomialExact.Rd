@@ -15,11 +15,11 @@ sequentialPValueBinomialExact(
 )
 }
 \arguments{
-\item{gsD}{A `gsSurv` object with `test.type` 1 or 4.}
+\item{gsD}{A `gsSurv` object with non-binding `test.type` 1, 4, 6, or 8.}
 
 \item{n.I}{Increasing integer total event counts at completed analyses. If
-`NULL`, the planned exact binomial event counts from `toBinomialExact(gsD)`
-are used. This must have at most 1 value greater than or equal to planned
+`NULL`, the planned integer event counts from `toInteger(gsD)` are used.
+This must have at most 1 value greater than or equal to planned
 final events (`gsD$maxn.IPlan` if available, otherwise `max(gsD$n.I)`).}
 
 \item{x}{Integer experimental-arm event counts at the analyses in `n.I`.}
