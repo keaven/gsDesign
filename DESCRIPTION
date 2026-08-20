@@ -22,7 +22,7 @@ Imports:
     dplyr (>= 1.1.0),
     ggplot2 (>= 3.1.1),
     graphics,
-    lt,
+    lt (>= 0.3),
     methods,
     r2rtf,
     rlang,
@@ -44,8 +44,6 @@ Suggests:
     testthat,
     utils,
     vdiffr
-Remotes:
-    yihui/lt
 VignetteBuilder:
     knitr
 Config/roxygen2/version: 8.0.0
