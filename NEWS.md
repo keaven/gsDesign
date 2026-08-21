@@ -27,6 +27,10 @@
 
 ## Documentation
 
+- Clarified the two intended uses of `gsSurvPower()`, expanded guidance for
+  scenario and combined timing-rule analyses, added survival workflow routing,
+  and documented that expected-value calculations do not replace simulation
+  of stochastic trial execution (#303).
 - Expanded the `gsSurvPower()` vignette with common timing pitfalls for
   explicit `minfup`, `targetN`, `maxExtension`, and `minN + minFollowUp`
   workflows (#291, #293, #295, #296).
