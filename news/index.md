@@ -36,8 +36,47 @@
   spending under the null, respectively
   ([\#287](https://github.com/keaven/gsDesign/issues/287)).
 
+### Documentation
+
+- Clarified the two intended uses of
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md),
+  expanded guidance for scenario and combined timing-rule analyses,
+  added survival workflow routing, and documented that expected-value
+  calculations do not replace simulation of stochastic trial execution
+  ([\#303](https://github.com/keaven/gsDesign/issues/303)).
+- Expanded the
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  vignette with common timing pitfalls for explicit `minfup`, `targetN`,
+  `maxExtension`, and `minN + minFollowUp` workflows
+  ([\#291](https://github.com/keaven/gsDesign/issues/291),
+  [\#293](https://github.com/keaven/gsDesign/issues/293),
+  [\#295](https://github.com/keaven/gsDesign/issues/295),
+  [\#296](https://github.com/keaven/gsDesign/issues/296)).
+
 ### Bug fixes
 
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  now respects an explicitly supplied `minfup` as a final analysis
+  timing floor for event-driven designs, so the final analysis is not
+  scheduled before the end of enrollment plus minimum follow-up
+  ([\#291](https://github.com/keaven/gsDesign/issues/291)).
+- `gsSurvPower(targetN = ...)` now works when `R` is omitted by
+  expanding and rescaling enrollment-period durations to match the
+  supplied `gamma` periods. Documentation now clarifies that `targetN`
+  changes enrollment duration; for fixed-duration enrollment, specify
+  `R` and scale `gamma` directly
+  ([\#293](https://github.com/keaven/gsDesign/issues/293)).
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  now gives an informative error when `maxExtension` is used without a
+  floor timing criterion such as `plannedCalendarTime`, `minN`, or
+  `minTimeFromPreviousAnalysis`
+  ([\#295](https://github.com/keaven/gsDesign/issues/295)).
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  can now use `minN` plus `minFollowUp` as the primary timing criterion,
+  solves for the earliest time at which enrollment reaches `minN`, and
+  reports a clear error if the criteria do not produce strictly
+  increasing analyses
+  ([\#296](https://github.com/keaven/gsDesign/issues/296)).
 - [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
   now retains exact event totals when `targetEvents` determines an
   analysis, rather than exposing small root-finding residuals that could

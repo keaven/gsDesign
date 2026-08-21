@@ -26,6 +26,33 @@ will it achieve? Finally,
 converts continuous expected events and enrollment to an
 integer-compatible plan.
 
+## Choose the workflow by the question
+
+The appropriate function depends first on whether the objective is to
+derive a powered design, evaluate a fixed plan, or quantify variation
+during trial execution.
+
+| Question | Workflow | What is fixed or solved |
+|----|----|----|
+| What event-driven design achieves target power? | [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) | Solves the required sample size, enrollment, or follow-up component |
+| What design achieves target power at specified calendar looks? | [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md) | Fixes calendar analysis times and solves the powered design |
+| What power does a specified plan achieve under a scenario? | [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md) | Keeps supplied enrollment, failure, treatment-effect, and timing assumptions fixed |
+| How variable are analysis dates and operating characteristics in execution? | Simulation, such as [**simtrial**](https://merck.github.io/simtrial/) | Generates trial realizations under stochastic enrollment, failure, dropout, and timing |
+
+[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+is the bridge between initial design and simulation. It is well-suited
+to rapid deterministic scenario grids: vary enrollment rates, failure
+rates, dropout, hazard ratios, or operational timing rules and compare
+the resulting expected analysis times, events, and power. Its
+calculations use expected enrollment and event accumulation, however, so
+event- or enrollment-triggered analysis times are expected times. Use
+simulation when the distribution of those times—or the chance that
+competing operational rules determine an analysis—is important.
+
+For detailed combinations of calendar floors, event targets, minimum
+spacing, enrollment plus follow-up, and extension deadlines, see
+[`vignette("gsSurvPower")`](https://keaven.github.io/gsDesign/articles/gsSurvPower.md).
+
 ``` r
 
 library(gsDesign)

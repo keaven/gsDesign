@@ -6,12 +6,14 @@ timing. Unlike
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
 which solve for sample size to achieve target power, `gsSurvPower()`
-takes fixed design assumptions and computes the resulting power. It is
-meant to compute for a single set of assumptions at a time; different
-scenarios are evaluated with separate calls. For `k = 1`, power is
-computed through the fixed-design `nSurv(beta = NULL)` path. The
-returned object is normalized as a single-analysis `gsSurv` object so it
-can be passed to
+takes fixed design assumptions and computes the resulting power. Its two
+primary uses are computing achieved power when sample size is not being
+derived and evaluating alternative enrollment, failure,
+treatment-effect, and analysis timing scenarios. It computes one set of
+assumptions at a time; scenario grids are evaluated with separate calls.
+For `k = 1`, power is computed through the fixed-design
+`nSurv(beta = NULL)` path. The returned object is normalized as a
+single-analysis `gsSurv` object so it can be passed to
 [`toInteger`](https://keaven.github.io/gsDesign/reference/toInteger.md)
 and
 [`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
@@ -210,9 +212,10 @@ gsSurvPower(
 
   Target total sample size. When specified, `R` is uniformly rescaled so
   that `sum(gamma * R) == targetN`, preserving the relative duration of
-  each enrollment period. This is a convenience for "what-if" analyses
-  where the enrollment rate changes but the target sample size stays the
-  same (or vice versa). Cannot be used together with an explicit `R`.
+  each enrollment period. This changes enrollment duration rather than
+  the enrollment rates. Cannot be used together with an explicit
+  non-`NULL` `R`; to keep a fixed enrollment duration, specify `R` and
+  scale `gamma` directly.
 
 - S:
 
@@ -225,7 +228,9 @@ gsSurvPower(
 
 - minfup:
 
-  Minimum follow-up time.
+  Minimum follow-up time. When explicitly supplied, event-driven
+  analyses cannot place the final analysis before the end of enrollment
+  plus `minfup`.
 
 - method:
 
@@ -258,7 +263,9 @@ gsSurvPower(
 - maxExtension:
 
   Maximum time extension beyond the floor time to wait for
-  `targetEvents`. Scalar or vector of length `k`.
+  `targetEvents`. Scalar or vector of length `k`. Requires a floor
+  timing criterion for the affected analysis, most commonly
+  `plannedCalendarTime`.
 
 - minTimeFromPreviousAnalysis:
 
@@ -268,12 +275,14 @@ gsSurvPower(
 - minN:
 
   Minimum total sample size enrolled before analysis can proceed. Scalar
-  or vector of length `k`.
+  or vector of length `k`. Can be used with `minFollowUp` as the primary
+  timing criterion; the resulting analysis times and expected event
+  totals must be strictly increasing.
 
 - minFollowUp:
 
   Minimum follow-up time after `minN` is reached. Scalar or vector of
-  length `k`. Must be \>= 0.
+  length `k`. Must be \>= 0 and requires `minN`.
 
 - informationRates:
 
@@ -387,6 +396,17 @@ analyses: e.g., `gsSurvPower(x = design, hr = 0.8)` evaluates power
 under HR = 0.8 using all other parameters from the design. When `x` is
 not provided, all design parameters must be specified directly.
 
+**Interpretation and limitations:** Enrollment, dropout, event
+accumulation, and analysis timing are represented by their expected
+values under the supplied assumptions. Consequently, event- and
+enrollment-triggered analysis times are expected analysis times, not
+simulated realizations. The calculation does not represent
+trial-to-trial variation in enrollment, failure, dropout, or operational
+timing. Use simulation when that variation may materially affect
+operating characteristics or the probability that combined timing rules
+are met; see, for example, the [simtrial
+package](https://merck.github.io/simtrial/).
+
 **Hazard ratio roles:** Two distinct hazard ratios serve different
 purposes. `hr` is the assumed treatment effect under which power is
 evaluated. `hr1` is the design alternative used to calibrate futility
@@ -404,7 +424,8 @@ the criterion does not apply to analysis `i`.
 The choice between `plannedCalendarTime` and `targetEvents` has an
 important consequence for sensitivity analyses:
 
-- `plannedCalendarTime` fixes calendar times; expected events are
+- Used alone, `plannedCalendarTime` fixes calendar times; when combined
+  with other criteria, it supplies a timing floor. Expected events are
   recomputed under the assumed HR. A worse HR produces more events at
   the same calendar time (the experimental arm fails faster). This gives
   an "unconditional" power.
@@ -419,7 +440,9 @@ analysis time `T[i]` is determined as:
 
 1.  Compute floor times from applicable criteria:
     `plannedCalendarTime[i]`, `T[i-1] + minTimeFromPreviousAnalysis[i]`,
-    and time when `minN[i]` enrolled + `minFollowUp[i]`.
+    and time when `minN[i]` enrolled + `minFollowUp[i]`. When `minfup`
+    is explicitly supplied, the final analysis also has a floor at the
+    end of enrollment plus `minfup`.
 
 2.  `floor_time = max(all applicable floor times)`.
 
@@ -431,11 +454,14 @@ analysis time `T[i]` is determined as:
 
 4.  If no `targetEvents`: analysis at `floor_time`.
 
-5.  `maxExtension` is a hard cap: the analysis time is never pushed
-    beyond `plannedCalendarTime[i] + maxExtension[i]` (or
+5.  `maxExtension` defines a hard deadline: the analysis time is never
+    pushed beyond `plannedCalendarTime[i] + maxExtension[i]` (or
     `T[i-1] + maxExtension[i]` when no calendar time is specified), even
     if other criteria such as `minTimeFromPreviousAnalysis` or
-    `minN + minFollowUp` would require a later time.
+    `minN + minFollowUp` would require a later time. Each analysis using
+    `maxExtension` must have a floor timing criterion such as
+    `plannedCalendarTime`, `minTimeFromPreviousAnalysis`, `minN`, or
+    explicit final-analysis `minfup`.
 
 **Normalization and consistency:** When `x` is provided, `x$n.fix` is
 used for the
@@ -527,4 +553,15 @@ gsSurvPower(
   plannedCalendarTime = c(24, 36)
 )$power
 #> [1] 0.625026
+
+# Use targetN without R to solve enrollment duration from relative rates
+pwr_target_n <- gsSurvPower(
+  k = 2, test.type = 1, alpha = 0.025, sided = 1,
+  lambdaC = log(2) / 15, hr = 0.7, eta = 0.001,
+  gamma = c(10, 20, 30, 40), targetN = 500,
+  ratio = 1.5, plannedCalendarTime = c(24, 36),
+  testLower = FALSE
+)
+sum(rowSums(pwr_target_n$gamma) * pwr_target_n$R)
+#> [1] 500
 ```

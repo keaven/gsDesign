@@ -2,12 +2,20 @@
 
 ## Motivation
 
+[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+has two primary uses:
+
+1.  **Compute achieved power without deriving sample size.** Given
+    enrollment, failure, dropout, treatment-effect, and analysis-timing
+    assumptions, what power does the design achieve?
+2.  **Evaluate scenarios for an existing design.** What happens when
+    enrollment, failure rates, the hazard ratio, or operational timing
+    rules differ from plan?
+
+This reverses the usual role of
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
-[`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
-derive sample sizes and enrollment rates to achieve a target power for a
-given hazard ratio. In practice, we often want to answer the reverse
-question: *given a specified hazard ratio, fixed enrollment, dropout,
-and analysis timing assumptions, what power does the design achieve?*
+[`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md),
+which derive sample sizes or enrollment rates to achieve target power.
 
 Common scenarios include:
 
@@ -16,6 +24,8 @@ Common scenarios include:
 - **Changing alpha**: What if the multiplicity scheme initially
   allocates \\\alpha = 0.0125\\ and later allows \\\alpha = 0.025\\?
 - **Modified enrollment**: What if enrollment is slower than planned?
+- **Modified failure or dropout rates**: What if events accumulate
+  faster or slower than planned?
 - **Different analysis times**: What if interim analyses occur at
   calendar times that differ from the original design?
 
@@ -60,6 +70,22 @@ are:
 - `pwr_design$upper$bound` and `pwr_design$lower$bound` for the bounds
   being applied.
 
+### What this calculation does—and does not do
+
+[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+applies asymptotic group sequential calculations to expected enrollment,
+dropout, event accumulation, and analysis timing under one set of
+assumptions. Thus, an event- or enrollment-triggered analysis time is
+the *expected* time at which its rule is met.
+
+It does not simulate trial-to-trial variation in enrollment, failure,
+dropout, or operational analysis timing. Use simulation when that
+variability may materially affect operating characteristics, such as the
+probability of meeting competing timing rules, the distribution of
+analysis dates, or power under realistic trial execution. Packages such
+as [**simtrial**](https://merck.github.io/simtrial/) can support that
+more comprehensive evaluation.
+
 ## How gsSurvPower uses your inputs
 
 [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
@@ -89,10 +115,11 @@ Analysis times can be specified by calendar time, by target event
 counts, or by a combination of criteria. The choice has an important
 consequence for sensitivity analyses:
 
-- **`plannedCalendarTime`** fixes the calendar time of each analysis.
-  Expected events are then recomputed under the assumed HR. A worse HR
-  (closer to 1) produces *more* expected events at the same calendar
-  time because the experimental arm fails faster. This gives an
+- **`plannedCalendarTime`** fixes the calendar time when used alone.
+  When combined with other timing rules, it supplies an earliest time or
+  floor. Expected events are then recomputed under the assumed HR. A
+  worse HR (closer to 1) produces *more* expected events at the same
+  calendar time because the experimental arm fails faster. This gives an
   “unconditional” power that reflects how the assumed treatment effect
   influences event accrual.
 
@@ -109,10 +136,25 @@ when the protocol specifies event targets.
 
 ### Quick decision guide
 
-| If the protocol fixes… | Use… | What changes in a sensitivity analysis |
+| Operational rule | Argument | Interpretation |
 |----|----|----|
-| Analysis dates | `plannedCalendarTime` | Expected events and information fractions |
-| Event targets | `targetEvents` | Time until expected events reach those targets |
+| Analyze at a calendar time | `plannedCalendarTime` | Exact time alone; earliest time when combined |
+| Analyze after an event target | `targetEvents` | Expected time the target is reached |
+| Require spacing between looks | `minTimeFromPreviousAnalysis` | Earliest time relative to the previous analysis |
+| Require enrollment plus follow-up | `minN`, `minFollowUp` | Earliest time satisfying both criteria |
+| Require final minimum follow-up | explicit `minfup` | Final-analysis floor after enrollment ends |
+| Stop waiting after a deadline | `maxExtension` | Hard cap on extension beyond its timing anchor |
+
+For scenario analyses, override only the assumptions that change:
+
+| Scenario                           | Arguments commonly changed          |
+|------------------------------------|-------------------------------------|
+| Treatment effect                   | `hr`                                |
+| Control failure rates              | `lambdaC`, `S`                      |
+| Dropout                            | `eta`, `etaE`                       |
+| Enrollment rate or shape           | `gamma`                             |
+| Enrollment duration or target size | `R`, or `targetN`                   |
+| Operational analysis rules         | Timing arguments in the table above |
 
 Additional criteria can be combined per-analysis, each specified as a
 scalar (recycled to all `k` analyses) or a vector of length `k` with
@@ -127,11 +169,154 @@ scalar (recycled to all `k` analyses) or a vector of length `k` with
 
 When multiple criteria apply to a single analysis, the analysis time is
 the maximum of all floor criteria, with `targetEvents` potentially
-extending beyond the floor. `maxExtension` acts as a hard cap: the
+extending beyond the floor. `maxExtension` defines a hard deadline: the
 analysis time never exceeds `plannedCalendarTime + maxExtension` (or
 `T[i-1] + maxExtension` when no calendar time is specified), even if
 other criteria such as `minTimeFromPreviousAnalysis` or
 `minN + minFollowUp` would push it later.
+
+### Common timing pitfalls
+
+The timing arguments in
+[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+describe a fixed operational plan. They do not solve the study design to
+achieve power the way
+[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) does.
+Several inputs are therefore easy to misread.
+
+**`minfup` is a final-analysis floor, not a target event rule.** If
+`minfup` is explicitly supplied, the final analysis cannot occur before
+enrollment has ended and the last enrolled subject has at least that
+much follow-up. For an event-driven design with enrollment durations
+`R`, the final analysis time is at least `sum(R) + minfup`. If the
+requested final `targetEvents` is expected earlier, the final analysis
+remains delayed to satisfy minimum follow-up, and the expected final
+event count may exceed the event target.
+
+``` r
+
+pwr_minfup <- gsSurvPower(
+  k = 3, test.type = 1, alpha = 0.025, sided = 1,
+  sfu = sfLDOF, sfupar = NULL,
+  lambdaC = log(2) / 15, hr = 0.7, hr0 = 1,
+  eta = 0.001,
+  gamma = c(1, 2, 3, 4) * 500 /
+    sum(c(1, 2, 3, 4) * c(2, 2, 2, 6)),
+  R = c(2, 2, 2, 6),
+  targetEvents = c(100, 200, 300),
+  minfup = 25,
+  ratio = 1.5,
+  testUpper = TRUE, testLower = FALSE
+)
+
+data.frame(
+  Analysis = 1:3,
+  Time = round(pwr_minfup$T, 1),
+  Events = round(pwr_minfup$n.I, 1)
+)
+```
+
+    ##   Analysis Time Events
+    ## 1        1 13.3  100.0
+    ## 2        2 21.1  200.0
+    ## 3        3 37.0  329.9
+
+**`targetN` changes enrollment duration, not enrollment rates.** Use
+`targetN` when `gamma` gives relative or absolute enrollment rates and
+you want
+[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+to rescale `R` so that `sum(gamma * R) == targetN`. Do not also specify
+a non-`NULL` `R`. If the protocol fixes enrollment duration, specify `R`
+and scale `gamma` yourself.
+
+``` r
+
+pwr_target_n <- gsSurvPower(
+  k = 2, test.type = 1, alpha = 0.025, sided = 1,
+  lambdaC = log(2) / 15, hr = 0.7, hr0 = 1,
+  eta = 0.001,
+  gamma = c(10, 20, 30, 40),
+  targetN = 500,
+  plannedCalendarTime = c(24, 36),
+  ratio = 1.5,
+  testUpper = TRUE, testLower = FALSE
+)
+
+pwr_target_n$R
+```
+
+    ## [1] 5 5 5 5
+
+``` r
+
+sum(rowSums(pwr_target_n$gamma) * pwr_target_n$R)
+```
+
+    ## [1] 500
+
+**`maxExtension` needs a floor time.** `maxExtension` is the amount of
+time the analysis may wait beyond a floor criterion while waiting for
+`targetEvents`. A floor can come from `plannedCalendarTime`,
+`minTimeFromPreviousAnalysis`, `minN`, or an explicitly supplied final
+`minfup`. Without a floor, `maxExtension` is not meaningful.
+
+``` r
+
+pwr_extension <- gsSurvPower(
+  k = 3, test.type = 1, alpha = 0.025, sided = 1,
+  lambdaC = log(2) / 15, hr = 0.7, hr0 = 1,
+  eta = 0.001,
+  gamma = c(1, 2, 3, 4) * 500 /
+    sum(c(1, 2, 3, 4) * c(2, 2, 2, 6)),
+  R = c(2, 2, 2, 6),
+  plannedCalendarTime = c(24, 30, 36),
+  targetEvents = c(200, 300, 400),
+  maxExtension = c(0, 6, 6),
+  ratio = 1.5,
+  testUpper = TRUE, testLower = FALSE
+)
+
+round(pwr_extension$T, 1)
+```
+
+    ## [1] 24.0 32.4 42.0
+
+**`minN + minFollowUp` can define analysis timing, but analyses must
+remain strictly increasing.** This pair says: wait until at least `minN`
+subjects are enrolled, then wait `minFollowUp` additional time. It can
+be used as the primary timing rule, but the resulting analysis times and
+expected event totals must increase across analyses. If two analyses use
+the same enrollment threshold and follow-up rule, add
+`plannedCalendarTime`, `targetEvents`, or `minTimeFromPreviousAnalysis`
+to separate them.
+
+``` r
+
+pwr_min_n <- gsSurvPower(
+  k = 3, test.type = 1, alpha = 0.025, sided = 1,
+  lambdaC = log(2) / 15, hr = 0.7, hr0 = 1,
+  eta = 0.001,
+  gamma = c(1, 2, 3, 4) * 500 /
+    sum(c(1, 2, 3, 4) * c(2, 2, 2, 6)),
+  R = c(2, 2, 2, 6),
+  minN = c(100, 300, 500),
+  minFollowUp = c(6, 6, 6),
+  ratio = 1.5,
+  testUpper = TRUE, testLower = FALSE
+)
+
+data.frame(
+  Analysis = 1:3,
+  Time = round(pwr_min_n$T, 1),
+  N = round(pwr_min_n$N, 1),
+  Events = round(pwr_min_n$n.I, 1)
+)
+```
+
+    ##   Analysis Time     N Events
+    ## 1        1 10.4 411.1   56.3
+    ## 2        2 14.4 500.0  115.7
+    ## 3        3 18.0 500.0  163.7
 
 ### Spending and method
 
@@ -253,13 +438,9 @@ practice, a protocol may specify target event counts, planned calendar
 times, minimum follow-up after enrollment completes, and caps on how
 long analyses can be delayed.
 [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
-lets you combine all of these in a single call. Approximations are based
-on expected event accumulation under the assumed HR. Thus, computations
-do not take into account the stochastic variability in event accrual.
-While
-[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
-should be adequate for most purposes, verification for key scenarios
-should consider simulation using the **simtrial** R package.
+lets you combine all of these in a single call. As noted above, these
+are expected-value calculations; simulation is needed to characterize
+variability in when the rules are met.
 
 ### Setup
 
@@ -543,7 +724,14 @@ though the capped planned-vs-actual fraction would otherwise be 0.95.
 This produces slightly different final bounds compared to the same
 `informationRates` specification with `fullSpendingAtFinal = FALSE`.
 
-## Comparison with gsDesign power plots
+## Additional and advanced examples
+
+The remaining sections cover validation against standard power plots and
+more specialized changes to spending, alpha, and stratified assumptions.
+They are useful when the basic scenario-and-timing workflow above is not
+sufficient.
+
+### Comparison with gsDesign power plots
 
 The `gsDesign` package provides power plots via
 `plot(design, plottype = 2)`. These hold event counts fixed at the
@@ -617,7 +805,7 @@ comparison
   producing an “unconditional” power that accounts for the interplay
   between treatment effect and event accrual.
 
-### Bounds stability
+#### Bounds stability
 
 When using `targetEvents`, the efficacy and futility bounds do not
 change with the assumed HR. The bounds are determined entirely by the
@@ -670,7 +858,7 @@ expected event counts and therefore different information fractions, so
 the bounds are appropriately recomputed via
 [`gsDesign::gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md).
 
-## Changing alpha
+### Changing alpha
 
 A common use case is evaluating power at a different one-sided alpha
 level — for example, when a graphical multiplicity procedure initially
@@ -804,7 +992,7 @@ binding input design, retain the original `testUpper` schedule, and keep
 the original futility bounds, but that result is a planning sensitivity
 analysis rather than a Maurer–Bretz multiplicity calculation.
 
-### Binding type planning sensitivity example (test.type = 3)
+#### Binding type planning sensitivity example (test.type = 3)
 
 ``` r
 
@@ -878,7 +1066,7 @@ cat("alpha:    ", pwr3_a025$alpha, "(updated to new value)\n")
 
     ## alpha:     0.025 (updated to new value)
 
-## Example: event-based timing
+### Event-based timing
 
 Instead of calendar times, analyses can be triggered by target event
 counts:
@@ -909,7 +1097,7 @@ cat("Power:", round(pwr_events$power * 100, 1), "%\n")
 
     ## Power: 73.5 %
 
-## Example: slower enrollment at fixed analysis times
+### Slower enrollment at fixed analysis times
 
 Another common sensitivity analysis is slower-than-planned enrollment.
 When calendar analysis times are fixed, slower enrollment reduces the
@@ -950,7 +1138,7 @@ cat("Slower-enrollment power:", round(pwr_slow_enroll$power * 100, 1), "%\n")
 
     ## Slower-enrollment power: 62.9 %
 
-## Example: calendar-based spending
+### Calendar-based spending
 
 By default, alpha and beta spending track statistical **information
 fractions** (`n.I / max(n.I)`). Setting `spending = "calendar"` instead
@@ -1030,7 +1218,7 @@ identical(pwr_cal$upper$bound, pwr_cal_override$upper$bound)
 
     ## [1] TRUE
 
-## Example: stratified event targets
+### Stratified event targets
 
 When a trial enrolls patients from multiple strata with different event
 rates, you may want to specify per-stratum event targets rather than a
@@ -1089,7 +1277,7 @@ The matrix format is also used in the biomarker example below, where
 `lambdaC` and `gamma` vary by stratum but `plannedCalendarTime` drives
 the timing.
 
-## Example: biomarker subgroup to stratified design
+### Biomarker subgroup to stratified design
 
 A common scenario is designing a trial for a biomarker-defined subgroup,
 then assessing what power the same enrollment provides for the overall
@@ -1100,7 +1288,7 @@ populations simultaneously; here we illustrate the simpler approach
 using
 [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md).
 
-### Step 1: Design for the biomarker-positive subgroup
+#### Step 1: Design for the biomarker-positive subgroup
 
 Suppose 60% of the population is biomarker-positive (prevalence = 0.6),
 the control median survival in this subgroup is 12 months, the hazard
@@ -1149,7 +1337,7 @@ gsBoundSummary(bm_design)
     ##    Month: 36    P(Cross) if HR=1   0.0115   0.9885
     ##              P(Cross) if HR=0.65   0.9000   0.1000
 
-### Step 2: Power for the overall (stratified) population
+#### Step 2: Power for the overall (stratified) population
 
 Now consider enrolling the entire population using the same enrollment
 duration and analysis calendar times. The biomarker-positive enrollment

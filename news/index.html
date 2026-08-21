@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,8 +48,21 @@
 <li>Sequential p-values, including exact-binomial repeated and sequential efficacy p-values, now support <code>test.type = 8</code> by ignoring its non-binding futility and harm bounds. <code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> now provides full exact conversion for non-binding test types 1, 4, 6, and 8. For type 6, the upper event-count boundary targets lower-bound spending under the null hypothesis. For type 8, exact upper event-count stops are partitioned into mutually exclusive futility and harm regions, targeting beta spending under the alternative and harm spending under the null, respectively (<a href="https://github.com/keaven/gsDesign/issues/287" class="external-link">#287</a>).</li>
 </ul></div>
 <div class="section level3">
+<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<ul><li>Clarified the two intended uses of <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code>, expanded guidance for scenario and combined timing-rule analyses, added survival workflow routing, and documented that expected-value calculations do not replace simulation of stochastic trial execution (<a href="https://github.com/keaven/gsDesign/issues/303" class="external-link">#303</a>).</li>
+<li>Expanded the <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> vignette with common timing pitfalls for explicit <code>minfup</code>, <code>targetN</code>, <code>maxExtension</code>, and <code>minN + minFollowUp</code> workflows (<a href="https://github.com/keaven/gsDesign/issues/291" class="external-link">#291</a>, <a href="https://github.com/keaven/gsDesign/issues/293" class="external-link">#293</a>, <a href="https://github.com/keaven/gsDesign/issues/295" class="external-link">#295</a>, <a href="https://github.com/keaven/gsDesign/issues/296" class="external-link">#296</a>).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>
+<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> now respects an explicitly supplied <code>minfup</code> as a final analysis timing floor for event-driven designs, so the final analysis is not scheduled before the end of enrollment plus minimum follow-up (<a href="https://github.com/keaven/gsDesign/issues/291" class="external-link">#291</a>).</li>
+<li>
+<code>gsSurvPower(targetN = ...)</code> now works when <code>R</code> is omitted by expanding and rescaling enrollment-period durations to match the supplied <code>gamma</code> periods. Documentation now clarifies that <code>targetN</code> changes enrollment duration; for fixed-duration enrollment, specify <code>R</code> and scale <code>gamma</code> directly (<a href="https://github.com/keaven/gsDesign/issues/293" class="external-link">#293</a>).</li>
+<li>
+<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> now gives an informative error when <code>maxExtension</code> is used without a floor timing criterion such as <code>plannedCalendarTime</code>, <code>minN</code>, or <code>minTimeFromPreviousAnalysis</code> (<a href="https://github.com/keaven/gsDesign/issues/295" class="external-link">#295</a>).</li>
+<li>
+<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> can now use <code>minN</code> plus <code>minFollowUp</code> as the primary timing criterion, solves for the earliest time at which enrollment reaches <code>minN</code>, and reports a clear error if the criteria do not produce strictly increasing analyses (<a href="https://github.com/keaven/gsDesign/issues/296" class="external-link">#296</a>).</li>
+<li>
 <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> now retains exact event totals when <code>targetEvents</code> determines an analysis, rather than exposing small root-finding residuals that could make <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> round an integer event target up by one (<a href="https://github.com/keaven/gsDesign/issues/294" class="external-link">#294</a>).</li>
 <li>Survival sample-size outputs now normalize machine-precision representations of integers before applying display rounding, so <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> and <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> preserve exact arm and total sample sizes (<a href="https://github.com/keaven/gsDesign/issues/290" class="external-link">#290</a>).</li>
 <li>Single-analysis survival designs now use a fixed-design <code><a href="../reference/nSurv.html">nSurv()</a></code> path in <code>gsSurv(k = 1)</code> and <code>gsSurvPower(k = 1)</code>. The resulting objects work with <code><a href="../reference/toInteger.html">toInteger()</a></code> and <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code>, including alternate-alpha summaries and use all alpha at the sole analysis without displaying an irrelevant spending function in <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>. An <code><a href="../reference/nSurv.html">nSurv()</a></code> object can now also be passed directly to <code><a href="../reference/toInteger.html">toInteger()</a></code> and is returned as an <code>nSurv</code> object with integer event and sample-size targets (<a href="https://github.com/keaven/gsDesign/issues/289" class="external-link">#289</a>).</li>
