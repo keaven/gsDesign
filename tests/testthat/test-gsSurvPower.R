@@ -95,6 +95,87 @@ test_that("gsSurvPower preserves integer sample size and event targets", {
   )
 })
 
+test_that("gsSurvPower applies explicit minfup as final analysis floor", {
+  target_events <- c(100, 200, 300)
+  pwr <- gsSurvPower(
+    k = 3,
+    test.type = 1,
+    alpha = 0.025,
+    sided = 1,
+    astar = 0,
+    sfu = sfLDOF,
+    sfupar = NULL,
+    spending = "information",
+    lambdaC = log(2) / 15,
+    hr = 0.7,
+    hr0 = 1,
+    eta = 0.001,
+    gamma = c(1, 2, 3, 4) * 500 /
+      sum(c(1, 2, 3, 4) * c(2, 2, 2, 6)),
+    R = c(2, 2, 2, 6),
+    targetEvents = target_events,
+    minfup = 25,
+    ratio = 1.5,
+    testUpper = TRUE,
+    testLower = FALSE,
+    testHarm = FALSE,
+    method = "LachinFoulkes"
+  )
+
+  expect_equal(tail(pwr$T, 1), sum(c(2, 2, 2, 6)) + 25, tolerance = 1e-6)
+  expect_equal(pwr$n.I[1:2], target_events[1:2], tolerance = 1e-6)
+  expect_true(pwr$n.I[3] > target_events[3])
+})
+
+test_that("gsSurvPower only applies minfup floor when supplied directly", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  target_events <- 0.8 * design$n.I
+
+  inherited <- gsSurvPower(x = design, targetEvents = target_events)
+  explicit <- gsSurvPower(
+    x = design,
+    targetEvents = target_events,
+    minfup = design$minfup
+  )
+
+  expect_lt(tail(inherited$T, 1), sum(design$R) + design$minfup)
+  expect_equal(
+    tail(explicit$T, 1),
+    sum(design$R) + design$minfup,
+    tolerance = 1e-6
+  )
+})
+
+test_that("gsSurvPower targetN works without explicit R", {
+  pwr <- gsSurvPower(
+    k = 2,
+    test.type = 1,
+    alpha = 0.025,
+    sided = 1,
+    lambdaC = log(2) / 15,
+    hr = 0.7,
+    hr0 = 1,
+    eta = 0.001,
+    gamma = c(10, 20, 30, 40),
+    targetN = 500,
+    plannedCalendarTime = c(24, 36),
+    ratio = 1.5,
+    testUpper = TRUE,
+    testLower = FALSE,
+    testHarm = FALSE,
+    method = "LachinFoulkes"
+  )
+
+  expect_length(pwr$R, 4)
+  expect_equal(sum(rowSums(pwr$gamma) * pwr$R), 500, tolerance = 1e-8)
+  expect_equal(pwr$R, rep(5, 4), tolerance = 1e-8)
+  expect_equal(pwr$T, c(24, 36))
+})
+
 test_that("gsSurvPower works without x (all parameters specified)", {
   pwr <- gsSurvPower(
     k = 2, test.type = 1, alpha = 0.025, sided = 1,
@@ -127,6 +208,19 @@ test_that("gsSurvPower respects maxExtension", {
     plannedCalendarTime = c(18)
   )
   expect_true(pwr_capped$T[1] <= pwr_uncapped$T[1])
+})
+
+test_that("gsSurvPower requires a floor criterion when maxExtension is supplied", {
+  expect_error(
+    gsSurvPower(
+      k = 2, test.type = 1, alpha = 0.025, sided = 1,
+      lambdaC = log(2) / 12, hr = 0.7, hr0 = 1,
+      gamma = 5, R = 12, ratio = 1,
+      targetEvents = c(20, 40),
+      maxExtension = c(0, 6)
+    ),
+    "maxExtension requires a floor timing criterion"
+  )
 })
 
 test_that("maxExtension is a hard cap even when other criteria push later", {
@@ -355,6 +449,56 @@ test_that("gsSurvPower minTimeFromPreviousAnalysis works", {
     minTimeFromPreviousAnalysis = c(NA, 6)
   )
   expect_true(pwr$T[2] - pwr$T[1] >= 6 - 1e-6)
+})
+
+test_that("gsSurvPower supports minN and minFollowUp timing", {
+  pwr <- gsSurvPower(
+    k = 3,
+    test.type = 1,
+    alpha = 0.025,
+    sided = 1,
+    lambdaC = log(2) / 15,
+    hr = 0.7,
+    hr0 = 1,
+    eta = 0.001,
+    gamma = c(1, 2, 3, 4) * 500 /
+      sum(c(1, 2, 3, 4) * c(2, 2, 2, 6)),
+    R = c(2, 2, 2, 6),
+    minN = c(100, 300, 500),
+    minFollowUp = c(6, 6, 6),
+    ratio = 1.5,
+    testUpper = TRUE,
+    testLower = FALSE,
+    testHarm = FALSE,
+    method = "LachinFoulkes"
+  )
+
+  expect_true(all(diff(pwr$T) > 0))
+  expect_true(all(pwr$N >= c(100, 300, 500)))
+
+  expect_error(
+    gsSurvPower(
+      k = 3,
+      test.type = 1,
+      alpha = 0.025,
+      sided = 1,
+      lambdaC = log(2) / 15,
+      hr = 0.7,
+      hr0 = 1,
+      eta = 0.001,
+      gamma = c(1, 2, 3, 4) * 500 /
+        sum(c(1, 2, 3, 4) * c(2, 2, 2, 6)),
+      R = c(2, 2, 2, 6),
+      minN = c(300, 500, 500),
+      minFollowUp = c(6, 6, 6),
+      ratio = 1.5,
+      testUpper = TRUE,
+      testLower = FALSE,
+      testHarm = FALSE,
+      method = "LachinFoulkes"
+    ),
+    "Analysis times must be strictly increasing"
+  )
 })
 
 test_that("gsSurvPower print method works for power output", {

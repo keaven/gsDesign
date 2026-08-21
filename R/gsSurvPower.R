@@ -4,9 +4,11 @@
 #' with specified enrollment, dropout, treatment effect, and analysis timing.
 #' Unlike \code{gsSurv()} and \code{gsSurvCalendar()} which solve for sample
 #' size to achieve target power, \code{gsSurvPower()} takes fixed design
-#' assumptions and computes the resulting power. It is meant to compute for
-#' a single set of assumptions at a time; different scenarios are evaluated
-#' with separate calls.
+#' assumptions and computes the resulting power. Its two primary uses are
+#' computing achieved power when sample size is not being derived and
+#' evaluating alternative enrollment, failure, treatment-effect, and analysis
+#' timing scenarios. It computes one set of assumptions at a time; scenario
+#' grids are evaluated with separate calls.
 #' For \code{k = 1}, power is computed through the fixed-design
 #' \code{nSurv(beta = NULL)} path. The returned object is normalized as a
 #' single-analysis \code{gsSurv} object so it can be passed to
@@ -21,6 +23,16 @@
 #' evaluates power under HR = 0.8 using all other parameters from the design.
 #' When \code{x} is not provided, all design parameters must be specified
 #' directly.
+#'
+#' \strong{Interpretation and limitations:}
+#' Enrollment, dropout, event accumulation, and analysis timing are represented
+#' by their expected values under the supplied assumptions. Consequently,
+#' event- and enrollment-triggered analysis times are expected analysis times,
+#' not simulated realizations. The calculation does not represent
+#' trial-to-trial variation in enrollment, failure, dropout, or operational
+#' timing. Use simulation when that variation may materially affect operating
+#' characteristics or the probability that combined timing rules are met; see,
+#' for example, the \href{https://merck.github.io/simtrial/}{simtrial package}.
 #'
 #' \strong{Hazard ratio roles:}
 #' Two distinct hazard ratios serve different purposes. \code{hr} is the
@@ -41,10 +53,11 @@
 #' The choice between \code{plannedCalendarTime} and \code{targetEvents} has an
 #' important consequence for sensitivity analyses:
 #' \itemize{
-#'   \item \code{plannedCalendarTime} fixes calendar times; expected events are
-#'     recomputed under the assumed HR. A worse HR produces more events at the
-#'     same calendar time (the experimental arm fails faster). This gives an
-#'     "unconditional" power.
+#'   \item Used alone, \code{plannedCalendarTime} fixes calendar times;
+#'     when combined with other criteria, it supplies a timing floor. Expected
+#'     events are recomputed under the assumed HR. A worse HR produces more
+#'     events at the same calendar time (the experimental arm fails faster).
+#'     This gives an "unconditional" power.
 #'   \item \code{targetEvents} fixes event counts; calendar times adjust. Since
 #'     events are held constant, information fractions do not change with HR, and
 #'     results match the \code{gsDesign} power plot
@@ -57,7 +70,9 @@
 #'   \item Compute floor times from applicable criteria:
 #'     \code{plannedCalendarTime[i]},
 #'     \code{T[i-1] + minTimeFromPreviousAnalysis[i]}, and
-#'     time when \code{minN[i]} enrolled + \code{minFollowUp[i]}.
+#'     time when \code{minN[i]} enrolled + \code{minFollowUp[i]}. When
+#'     \code{minfup} is explicitly supplied, the final analysis also has a
+#'     floor at the end of enrollment plus \code{minfup}.
 #'   \item \code{floor_time = max(all applicable floor times)}.
 #'   \item If \code{targetEvents[i]} is specified: find \code{t_events} when
 #'     expected events reach target. If \code{t_events <= floor_time}, analysis
@@ -66,11 +81,15 @@
 #'     \code{min(t_events, floor_time + maxExtension[i])}. Otherwise, analysis
 #'     at \code{t_events}.
 #'   \item If no \code{targetEvents}: analysis at \code{floor_time}.
-#'   \item \code{maxExtension} is a hard cap: the analysis time is never pushed
+#'   \item \code{maxExtension} defines a hard deadline: the analysis time
+#'     is never pushed
 #'     beyond \code{plannedCalendarTime[i] + maxExtension[i]} (or
 #'     \code{T[i-1] + maxExtension[i]} when no calendar time is specified),
 #'     even if other criteria such as \code{minTimeFromPreviousAnalysis}
-#'     or \code{minN + minFollowUp} would require a later time.
+#'     or \code{minN + minFollowUp} would require a later time. Each analysis
+#'     using \code{maxExtension} must have a floor timing criterion such as
+#'     \code{plannedCalendarTime}, \code{minTimeFromPreviousAnalysis},
+#'     \code{minN}, or explicit final-analysis \code{minfup}.
 #' }
 #'
 #' \strong{Normalization and consistency:}
@@ -185,14 +204,16 @@
 #' @param R Scalar or vector of enrollment period durations.
 #' @param targetN Target total sample size. When specified, \code{R} is
 #'   uniformly rescaled so that \code{sum(gamma * R) == targetN}, preserving
-#'   the relative duration of each enrollment period. This is a convenience
-#'   for "what-if" analyses where the enrollment rate changes but the
-#'   target sample size stays the same (or vice versa). Cannot be used
-#'   together with an explicit \code{R}.
+#'   the relative duration of each enrollment period. This changes enrollment
+#'   duration rather than the enrollment rates. Cannot be used together with
+#'   an explicit non-\code{NULL} \code{R}; to keep a fixed enrollment duration,
+#'   specify \code{R} and scale \code{gamma} directly.
 #' @param S Scalar or vector of piecewise failure period durations; \code{NULL}
 #'   for exponential failure.
 #' @param ratio Randomization ratio (experimental/control). Default 1.
-#' @param minfup Minimum follow-up time.
+#' @param minfup Minimum follow-up time. When explicitly supplied,
+#'   event-driven analyses cannot place the final analysis before the end of
+#'   enrollment plus \code{minfup}.
 #' @param method Sample-size variance formulation. One of
 #'   \code{"LachinFoulkes"} (default), \code{"Schoenfeld"},
 #'   \code{"Freedman"}, or \code{"BernsteinLagakos"}. Affects \code{n.fix}
@@ -212,14 +233,19 @@
 #'   supplied, row sums give the total event target used to solve each
 #'   analysis time.
 #' @param maxExtension Maximum time extension beyond the floor time to wait
-#'   for \code{targetEvents}. Scalar or vector of length \code{k}.
+#'   for \code{targetEvents}. Scalar or vector of length \code{k}. Requires a
+#'   floor timing criterion for the affected analysis, most commonly
+#'   \code{plannedCalendarTime}.
 #' @param minTimeFromPreviousAnalysis Minimum elapsed time since the previous
 #'   analysis. Scalar or vector of length \code{k}. Ignored for the first
 #'   analysis.
 #' @param minN Minimum total sample size enrolled before analysis can proceed.
-#'   Scalar or vector of length \code{k}.
+#'   Scalar or vector of length \code{k}. Can be used with
+#'   \code{minFollowUp} as the primary timing criterion; the resulting
+#'   analysis times and expected event totals must be strictly increasing.
 #' @param minFollowUp Minimum follow-up time after \code{minN} is reached.
-#'   Scalar or vector of length \code{k}. Must be >= 0.
+#'   Scalar or vector of length \code{k}. Must be >= 0 and requires
+#'   \code{minN}.
 #' @param informationRates Numeric vector of length \code{k} specifying
 #'   planned information fractions. When provided, spending fractions are
 #'   \code{pmin(informationRates, actual_timing)} at each analysis, where
@@ -289,6 +315,16 @@
 #'   plannedCalendarTime = c(24, 36)
 #' )$power
 #'
+#' # Use targetN without R to solve enrollment duration from relative rates
+#' pwr_target_n <- gsSurvPower(
+#'   k = 2, test.type = 1, alpha = 0.025, sided = 1,
+#'   lambdaC = log(2) / 15, hr = 0.7, eta = 0.001,
+#'   gamma = c(10, 20, 30, 40), targetN = 500,
+#'   ratio = 1.5, plannedCalendarTime = c(24, 36),
+#'   testLower = FALSE
+#' )
+#' sum(rowSums(pwr_target_n$gamma) * pwr_target_n$R)
+#'
 #' @seealso \code{vignette("gsSurvPower", package = "gsDesign")} for
 #'   worked examples including calendar spending, stratified event targets,
 #'   and biomarker subgroup analyses.
@@ -325,10 +361,13 @@ gsSurvPower <- function(
     fullSpendingAtFinal = FALSE,
     tol = .Machine$double.eps^0.25) {
   spending <- match.arg(spending)
+  call_object <- match.call()
+  call_args <- as.list(call_object)
 
   # Track whether user explicitly provided alpha; used below to decide
   # whether the gsSurv alpha/sided convention applies.
   alpha_provided_by_user <- !is.null(alpha)
+  minfup_provided_by_user <- !is.null(minfup)
   if (!is.null(x)) {
     if (!inherits(x, "gsSurv")) stop("x must be a gsSurv object")
 
@@ -417,11 +456,24 @@ gsSurvPower <- function(
 
   # targetN: rescale R so that sum(gamma * R) == targetN
   if (!is.null(targetN)) {
-    if (!missing(R) && !is.null(match.call()$R)) {
+    if (length(targetN) != 1 || !is.numeric(targetN) ||
+        !is.finite(targetN) || targetN <= 0) {
+      stop("targetN must be a single positive finite numeric value")
+    }
+    if ("R" %in% names(call_args) && !is.null(call_args$R)) {
       stop("Cannot specify both R and targetN")
     }
     gamma_vec <- if (is.matrix(gamma)) rowSums(gamma) else as.numeric(gamma)
+    if (is.null(x) && length(R) == 1 && length(gamma_vec) > 1) {
+      R <- rep(R, length(gamma_vec))
+    }
+    if (length(R) != length(gamma_vec)) {
+      stop("R must have length 1 or match the number of enrollment periods in gamma")
+    }
     current_N <- sum(gamma_vec * R)
+    if (!is.finite(current_N) || current_N <= 0) {
+      stop("gamma and R must imply a positive total enrollment before targetN rescaling")
+    }
     R <- R * targetN / current_N
   }
 
@@ -433,6 +485,7 @@ gsSurvPower <- function(
     minTimeFromPreviousAnalysis = minTimeFromPreviousAnalysis,
     minFollowUp = minFollowUp,
     minN = minN,
+    finalMinFollowUp = if (minfup_provided_by_user) minfup else NULL,
     x = x
   )
   k <- timing_inputs$k
@@ -560,7 +613,7 @@ gsSurvPower <- function(
     bound_result = bound_result,
     normalized_rates = normalized_rates,
     settings = settings,
-    call_object = match.call()
+    call_object = call_object
   )
 }
 
@@ -628,15 +681,21 @@ gsSurvPower <- function(
     minTimeFromPreviousAnalysis,
     minFollowUp,
     minN,
+    finalMinFollowUp,
     x) {
   planned_time_input <- plannedCalendarTime
   target_event_input <- targetEvents
 
-  if (is.null(planned_time_input) && is.null(target_event_input)) {
+  if (!is.null(minFollowUp) && is.null(minN)) {
+    stop("minFollowUp requires minN")
+  }
+
+  if (is.null(planned_time_input) && is.null(target_event_input) &&
+      is.null(minN)) {
     if (!is.null(x)) {
       planned_time_input <- x$T
     } else {
-      stop("At least one of plannedCalendarTime or targetEvents must be specified")
+      stop("At least one of plannedCalendarTime, targetEvents, or minN must be specified")
     }
   }
 
@@ -648,6 +707,8 @@ gsSurvPower <- function(
       analysis_count <- nrow(target_event_input)
     } else if (!is.null(target_event_input)) {
       analysis_count <- length(target_event_input)
+    } else if (!is.null(minN)) {
+      analysis_count <- length(minN)
     }
   }
   if (is.null(analysis_count) || analysis_count < 1) {
@@ -669,6 +730,15 @@ gsSurvPower <- function(
     minFollowUp, "minFollowUp", analysis_count
   )
   min_enrolled <- .gsSurvPower_recycle_to_k(minN, "minN", analysis_count)
+  final_min_follow_up <- if (is.null(finalMinFollowUp)) {
+    NA_real_
+  } else {
+    if (length(finalMinFollowUp) != 1 || !is.numeric(finalMinFollowUp) ||
+        !is.finite(finalMinFollowUp) || finalMinFollowUp < 0) {
+      stop("minfup must be a single non-negative finite numeric value")
+    }
+    finalMinFollowUp
+  }
 
   if (is.null(target_event_input)) {
     total_event_targets <- rep(NA_real_, analysis_count)
@@ -683,6 +753,19 @@ gsSurvPower <- function(
     )
   }
 
+  for (analysis_index in seq_len(analysis_count)) {
+    has_floor_criterion <- !is.na(planned_time[analysis_index]) ||
+      (analysis_index > 1 && !is.na(min_time_from_previous[analysis_index])) ||
+      !is.na(min_enrolled[analysis_index]) ||
+      (analysis_index == analysis_count && !is.na(final_min_follow_up))
+    if (!is.na(max_extension[analysis_index]) && !has_floor_criterion) {
+      stop(
+        "maxExtension requires a floor timing criterion such as ",
+        "plannedCalendarTime, minTimeFromPreviousAnalysis, minN, or minfup"
+      )
+    }
+  }
+
   list(
     k = analysis_count,
     planned_time = planned_time,
@@ -690,6 +773,7 @@ gsSurvPower <- function(
     min_time_from_previous = min_time_from_previous,
     min_follow_up = min_follow_up,
     min_enrolled = min_enrolled,
+    final_min_follow_up = final_min_follow_up,
     total_event_targets = total_event_targets
   )
 }
@@ -743,9 +827,21 @@ gsSurvPower <- function(
   objective <- function(current_time) {
     expected_counts_at_time(current_time)$total_n - target
   }
-  if (objective(search_upper_bound) < 0) return(search_upper_bound)
-  if (objective(0.001) >= 0) return(0.001)
-  uniroot(objective, c(0.001, search_upper_bound), tol = tol)$root
+  lower <- 0.001
+  upper <- search_upper_bound
+  if (objective(upper) < 0) return(upper)
+  if (objective(lower) >= 0) return(lower)
+
+  for (iteration in seq_len(100)) {
+    midpoint <- (lower + upper) / 2
+    if (objective(midpoint) >= 0) {
+      upper <- midpoint
+    } else {
+      lower <- midpoint
+    }
+    if (upper - lower <= tol) break
+  }
+  upper
 }
 
 .gsSurvPower_solve_analysis_schedule <- function(
@@ -758,6 +854,7 @@ gsSurvPower <- function(
   min_time_from_previous <- timing_inputs$min_time_from_previous
   min_follow_up <- timing_inputs$min_follow_up
   min_enrolled <- timing_inputs$min_enrolled
+  final_min_follow_up <- timing_inputs$final_min_follow_up
   total_event_targets <- timing_inputs$total_event_targets
   analysis_count <- timing_inputs$k
 
@@ -814,6 +911,9 @@ gsSurvPower <- function(
         0
       }
       floor_times <- c(floor_times, enrollment_time + follow_up_time)
+    }
+    if (analysis_index == analysis_count && !is.na(final_min_follow_up)) {
+      floor_times <- c(floor_times, sum(R) + final_min_follow_up)
     }
     floor_time <- if (length(floor_times) > 0) max(floor_times) else 0.001
 
@@ -885,6 +985,21 @@ gsSurvPower <- function(
   experimental_enrollment <- gsRoundNearInteger(experimental_enrollment)
   total_events <- rowSums(control_events) + rowSums(experimental_events)
   total_events[target_rows] <- total_event_targets[target_rows]
+
+  if (analysis_count > 1) {
+    if (any(diff(analysis_time) <= tol)) {
+      stop(
+        "Analysis times must be strictly increasing; add targetEvents, ",
+        "plannedCalendarTime, minTimeFromPreviousAnalysis, or later ",
+        "minN/minFollowUp criteria"
+      )
+    }
+    if (any(diff(total_events) <= tol)) {
+      stop(
+        "Expected event totals must be strictly increasing across analyses"
+      )
+    }
+  }
 
   list(
     analysis_time = analysis_time,
