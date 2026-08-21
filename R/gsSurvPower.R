@@ -353,8 +353,7 @@ gsSurvPower <- function(
   # Track whether user explicitly provided alpha; used below to decide
   # whether the gsSurv alpha/sided convention applies.
   alpha_provided_by_user <- !is.null(alpha)
-  minfup_provided_by_user <- "minfup" %in% names(call_args) &&
-    !is.null(call_args$minfup)
+  minfup_provided_by_user <- !is.null(minfup)
   if (!is.null(x)) {
     if (!inherits(x, "gsSurv")) stop("x must be a gsSurv object")
 

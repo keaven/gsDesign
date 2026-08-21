@@ -127,6 +127,29 @@ test_that("gsSurvPower applies explicit minfup as final analysis floor", {
   expect_true(pwr$n.I[3] > target_events[3])
 })
 
+test_that("gsSurvPower only applies minfup floor when supplied directly", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  target_events <- 0.8 * design$n.I
+
+  inherited <- gsSurvPower(x = design, targetEvents = target_events)
+  explicit <- gsSurvPower(
+    x = design,
+    targetEvents = target_events,
+    minfup = design$minfup
+  )
+
+  expect_lt(tail(inherited$T, 1), sum(design$R) + design$minfup)
+  expect_equal(
+    tail(explicit$T, 1),
+    sum(design$R) + design$minfup,
+    tolerance = 1e-6
+  )
+})
+
 test_that("gsSurvPower targetN works without explicit R", {
   pwr <- gsSurvPower(
     k = 2,
