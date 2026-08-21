@@ -383,7 +383,11 @@ the maximum sample size through an iterative process for all options. Since
 options 3 and 4 must compute boundary crossing probabilities under both the
 null and alternative hypotheses, deriving these designs can take longer than
 other options. Options 5 and 6 compute lower bound spending under the null
-hypothesis.
+hypothesis. Options 7 and 8 add a harm bound to beta-spending futility:
+option 7 treats both futility and harm bounds as binding for Type I error,
+while option 8 treats both as non-binding. Futility and harm are mutually
+exclusive lower-tail stopping outcomes with separately specified spending
+functions.
 }
 \note{
 The gsDesign technical manual is available at

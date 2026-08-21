@@ -1,4 +1,4 @@
-# gsDesign (development version)
+# gsDesign 3.11.0 (August 2026)
 
 ## New features
 
@@ -27,6 +27,9 @@
 
 ## Documentation
 
+- Expanded the main `gsDesign()` help discussion to describe binding and
+  non-binding futility plus harm monitoring for `test.type = 7` and `8`
+  (#308).
 - Clarified the two intended uses of `gsSurvPower()`, expanded guidance for
   scenario and combined timing-rule analyses, added survival workflow routing,
   and documented that expected-value calculations do not replace simulation
