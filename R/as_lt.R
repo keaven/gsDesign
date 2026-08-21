@@ -1,3 +1,12 @@
+# Re-export the lt() generic so users can call lt() on a summary table object
+# after only loading gsDesign (without also attaching lt or qualifying with
+# lt::). This also makes S3 dispatch robust regardless of package load order.
+# See https://github.com/yihui/lt/issues/4.
+
+#' @importFrom lt lt
+#' @export
+lt::lt
+
 #' Convert a summary table object to an lt table
 #'
 #' Convert a summary table object created with \code{\link{as_table}}

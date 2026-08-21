@@ -2,21 +2,56 @@
 % Please edit documentation in R/as_gt.R
 \name{as_gt}
 \alias{as_gt}
-\title{Deprecated: use lt() instead}
+\alias{as_gt.gsBinomialExactTable}
+\title{Convert a summary table object to a gt object}
 \usage{
 as_gt(x, ...)
+
+\method{as_gt}{gsBinomialExactTable}(
+  x,
+  ...,
+  title = "Operating Characteristics for the Truncated SPRT Design",
+  subtitle = "Assumes trial evaluated sequentially after each response",
+  theta_label = gt::html("Underlying<br>response rate"),
+  bound_label = c("Futility bound", "Efficacy bound"),
+  prob_decimals = 2,
+  en_decimals = 1,
+  rr_decimals = 0
+)
 }
 \arguments{
 \item{x}{Object to be converted.}
 
-\item{...}{Additional arguments passed to \code{\link[lt]{lt}()}.}
+\item{...}{Other parameters that may be specific to the object.}
+
+\item{title}{Table title.}
+
+\item{subtitle}{Table subtitle.}
+
+\item{theta_label}{Label for theta.}
+
+\item{bound_label}{Label for bounds.}
+
+\item{prob_decimals}{Number of decimal places for probability of crossing.}
+
+\item{en_decimals}{Number of decimal places for expected number of
+observations when bound is crossed or when trial ends without crossing.}
+
+\item{rr_decimals}{Number of decimal places for response rates.}
 }
 \value{
-An \code{lt_tbl} object.
+A \code{gt_tbl} object that may be extended by overloaded versions of
+\code{as_gt()}.
 }
 \description{
-\code{as_gt()} is deprecated; use \code{\link[lt]{lt}()} instead.
+\code{as_gt()} is deprecated in favor of \code{\link[lt]{lt}()}, which
+produces a lightweight HTML table without the heavy \pkg{gt} dependency.
+\code{as_gt()} is kept for one release so existing code that customizes the
+output with \pkg{gt} functions keeps working; it still returns a
+\code{gt_tbl} object and requires \pkg{gt} to be installed. New code should
+use \code{\link[lt]{lt}()}; see \code{\link{lt-methods}} for the available
+arguments, which mirror those of \code{as_gt()}.
 }
 \seealso{
-\code{\link{lt-methods}}
+\code{\link[lt]{lt}()}, \code{\link{lt-methods}}
 }

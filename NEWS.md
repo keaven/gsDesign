@@ -3,11 +3,16 @@
 ## Major changes
 
 - The (heavy) **gt** dependency has been replaced with the lightweight **lt**
-  package. The `as_gt()` function is deprecated in favor of `lt::lt()`. An S3
-  method for `lt()` is provided for `gsBinomialExactTable` objects, and all
-  vignettes now use lt functions (`lt()`, `lt_header()`, `lt_spanner()`,
-  `lt_format()`, `lt_footnote()`, `lt_note()`, `lt_label()`, `lt_align()`,
-  `lt_group()`). There are no significant visual changes in the HTML tables.
+  package, and `lt::lt()` is now the recommended way to render summary tables.
+  An S3 method for `lt()` is provided for `gsBinomialExactTable` objects, the
+  `lt()` generic is re-exported so it can be used after loading only gsDesign,
+  and all vignettes now use lt functions (`lt()`, `lt_header()`,
+  `lt_spanner()`, `lt_format()`, `lt_footnote()`, `lt_note()`, `lt_label()`,
+  `lt_align()`, `lt_group()`). There are no significant visual changes in the
+  HTML tables. `as_gt()` is deprecated but kept for one release: it still
+  returns a `gt_tbl` object (so existing code that customizes the output with
+  **gt** functions keeps working) and now requires the suggested **gt**
+  package to be installed.
 
 ## New features
 
