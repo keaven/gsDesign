@@ -105,6 +105,78 @@ Two distinct hazard ratios play different roles:
   originally designed for). Futility bounds remain calibrated to the design
   assumption even when power is evaluated under a different `hr`.
 
+### Beta spending in scenario analyses
+
+Beta spending is a design rule for constructing futility bounds, not a promise
+that every scenario evaluated will have the design's Type II error. It helps to
+separate two quantities:
+
+- **Design beta** (`x$beta`) is allocated across analyses by `sfl`, `sflpar`,
+  and the lower spending-time vector. For beta-spending designs, the futility
+  bounds are calibrated under `hr1`, the design alternative.
+- **Achieved beta** (`1 - power`, returned as `beta`) is the probability of not
+  rejecting the null under the scenario's `hr`, enrollment, failure, dropout,
+  and analysis timing. It can be much larger or smaller than design beta.
+
+For `test.type = 4`, the non-binding designation means that the futility bound
+is ignored when controlling Type I error. It remains an operational stopping
+bound and therefore affects achieved power. The same distinction between
+design beta and achieved beta applies to the beta-spending futility bounds in
+`test.type` 3, 7, and 8. Test types 5 and 6 instead spend lower-bound
+probability under the null, and harm spending for test types 7 and 8 is a
+separate null-based calculation.
+
+When a reference design `x` is supplied, futility-bound handling follows these
+rules:
+
+| Scenario change | Futility-bound handling |
+| --- | --- |
+| Information fractions and spending inputs unchanged | Reuse the bounds from `x` |
+| Only alpha or the upper spending function changes, with timing unchanged | Preserve the bounds from `x`, clipping only if a lower bound exceeds the new efficacy bound |
+| Information fractions or spending times change | Recompute the bounds on the new schedule using design beta, `hr1`, `sfl`, and `sflpar` |
+| `informationRates`, calendar spending, or `lsTime` is supplied | Derive the selected lower effective spending-time vector and recompute the bounds |
+
+Thus, changing `hr` with fixed event targets generally preserves the original
+information fractions and futility bounds. Changing `hr` at fixed calendar
+times can change expected event fractions, causing the bounds to be
+recalibrated on the new information schedule while retaining the original
+design-beta calibration.
+
+For instance, the following comparison evaluates the design assumptions and
+then HR = 0.8 with either fixed event targets or fixed calendar times. The
+target beta spending remains 0.10, but achieved beta is much higher under the
+weaker treatment effect. Fixed events preserve the original bounds; fixed
+calendar times slightly change expected information fractions and therefore
+the recalibrated bounds.
+
+```{r beta_spending_scenarios}
+beta_cases <- list(
+  `Design assumptions` = pwr_design,
+  `HR 0.8, fixed events` = gsSurvPower(
+    x = design, hr = 0.8, targetEvents = design$n.I
+  ),
+  `HR 0.8, fixed calendar` = gsSurvPower(
+    x = design, hr = 0.8, plannedCalendarTime = design$T
+  )
+)
+
+collapse_values <- function(x) paste(round(x, 3), collapse = ", ")
+
+data.frame(
+  Scenario = names(beta_cases),
+  Information_Fractions = vapply(
+    beta_cases, function(x) collapse_values(x$timing), character(1)
+  ),
+  Futility_Bounds = vapply(
+    beta_cases, function(x) collapse_values(x$lower$bound), character(1)
+  ),
+  Target_Beta_Spending = vapply(
+    beta_cases, function(x) sum(x$lower$spend), numeric(1)
+  ),
+  Achieved_Beta = vapply(beta_cases, function(x) x$beta, numeric(1))
+)
+```
+
 ### Analysis timing: calendar time vs. event-driven
 
 Analysis times can be specified by calendar time, by target event counts, or
@@ -129,6 +201,17 @@ sensitivity analyses:
 Both modes are useful. Calendar-time analyses are natural when the protocol
 specifies analysis dates; event-driven analyses are natural when the protocol
 specifies event targets.
+
+When both `plannedCalendarTime` and `targetEvents` are specified,
+`plannedCalendarTime` is a floor rather than an exact analysis time. If the
+expected event target is reached before that time, the analysis remains at the
+planned calendar time and may include more events than targeted. If the target
+has not been reached, the analysis is delayed until it is reached. Supplying
+`maxExtension` caps that delay at
+`plannedCalendarTime + maxExtension`; when the cap is reached first, the
+analysis proceeds with fewer expected events than targeted. Other applicable
+floor criteria can require an even later analysis, subject to the same hard
+extension cap.
 
 ### Quick decision guide
 
@@ -288,19 +371,19 @@ data.frame(
   Custom spending times can also be passed via `usTime` and `lsTime`, but they
   are ignored when `spending = "calendar"`.
 
-- **`informationRates`**: Planned information fractions (vector of
-  length `k`). When provided, spending fractions are
-  `pmin(informationRates, actual_timing)` at each analysis,
-  preventing over-spending when events arrive faster than planned
-  and under-spending when behind. This planned-vs-actual
-  information scale takes precedence over `spending`, `usTime`,
-  and `lsTime`; upper and lower spending both use the same capped vector.
+- **`informationRates`**: Planned information-fraction caps (vector of
+  length `k`). At each analysis, the effective spending time is
+  `pmin(informationRates, actual_timing)`. Thus, spending cannot run ahead of
+  either the planned information schedule or the information actually
+  accumulated. `informationRates` takes precedence over `spending`, `usTime`,
+  and `lsTime`; upper and lower spending both use the same effective
+  spending-time vector.
 
 - **`fullSpendingAtFinal`**: When `TRUE`, the final element of the
-  spending-time vector is forced to 1 after applying
+  upper and lower spending-time vectors is forced to 1 after applying
   `informationRates`, calendar spending, or user-supplied `usTime` /
-  `lsTime`. This is useful when the selected spending-time vector would
-  otherwise end below 1.
+  `lsTime`. This is useful when a selected spending-time vector would
+  otherwise leave either upper- or lower-bound spending incomplete.
 
 - **`method`**: One of `"LachinFoulkes"` (default), `"Schoenfeld"`,
   `"Freedman"`, or `"BernsteinLagakos"`. Controls how fixed-design events
@@ -354,6 +437,10 @@ is evaluated under the assumed HR (0.8).
 
 ### Power over a range of hazard ratios
 
+For instance, the following example shows how departures from the planned
+hazard ratio affect power when the planned calendar analysis times are held
+fixed.
+
 ```{r gssurvpower_sensitivity}
 hr_grid <- seq(0.55, 0.90, by = 0.05)
 power_vals <- sapply(hr_grid, function(h) {
@@ -372,6 +459,9 @@ minimum follow-up after enrollment completes, and caps on how long
 analyses can be delayed. `gsSurvPower()` lets you combine all of these
 in a single call. As noted above, these are expected-value calculations;
 simulation is needed to characterize variability in when the rules are met.
+For instance, the following examples show the impact of slower enrollment and
+faster control failures when timing floors and extension caps are applied
+together.
 
 ### Setup
 
@@ -523,24 +613,24 @@ The final analysis collects `r round(pwr_fast$n.I[design$k], 0)` events
 vs. the target of `r round(design$n.I[design$k], 0)`, and power rises to
 `r round(pwr_fast$power * 100, 1)`%.
 
-### Controlling spending with informationRates
+### Controlling effective spending time with informationRates
 
 When events fall short of the target (as in Scenario 1), the actual
 information fraction at each analysis may be lower than planned.
 By default, bounds are computed at the actual information fractions.
-The `informationRates` parameter lets you cap spending at
-`pmin(informationRates, actual_timing)` — preventing over-spending
-if events arrive faster than planned, and under-spending if they
-arrive slower. This is useful when the protocol pre-specifies
-spending based on planned information fractions. If `informationRates`
-is supplied, this information-based cap takes precedence over
+The `informationRates` parameter supplies planned information-fraction caps.
+The effective spending time is
+`pmin(informationRates, actual_timing)` at each analysis. This prevents
+spending ahead of the planned information schedule when events arrive faster
+than planned and ahead of the information actually accumulated when events
+arrive slower. If `informationRates` is supplied, it takes precedence over
 `spending = "calendar"` and over manual `usTime` / `lsTime` overrides.
 
-Setting `fullSpendingAtFinal = TRUE` forces the spending fraction
-at the final analysis to 1 after the capped spending fractions are
-computed. The example below uses a final planned spending fraction of
+Setting `fullSpendingAtFinal = TRUE` forces both the upper and lower effective
+spending times at the final analysis to 1 after the caps are applied. The
+example below uses a final planned information-fraction cap of
 0.95 to show the effect explicitly. Without `fullSpendingAtFinal`,
-the final spending fraction would remain 0.95 rather than 1.
+the final effective spending time would remain 0.95 rather than 1.
 
 ```{r informationRates_demo}
 # Scenario 1 with informationRates and fullSpendingAtFinal
@@ -558,30 +648,36 @@ pwr_slow_ir <- gsSurvPower(
   fullSpendingAtFinal = TRUE
 )
 
-spending_frac_used <- pmin(planned_info_rates, pwr_slow_ir$timing)
-spending_frac_used[design$k] <- 1
+effective_spending_time <- pmin(planned_info_rates, pwr_slow_ir$timing)
+effective_spending_time[design$k] <- 1
 
 data.frame(
   Analysis = 1:design$k,
   Actual_Events = round(pwr_slow_ir$n.I, 1),
   Actual_InfoFrac = round(pwr_slow_ir$timing, 3),
   Planned_InfoFrac = round(planned_info_rates, 3),
-  Spending_Frac = round(spending_frac_used, 3)
+  Effective_Spending_Time = round(effective_spending_time, 3),
+  Futility_Bound = round(pwr_slow_ir$lower$bound, 3),
+  Incremental_Beta_Spend = round(pwr_slow_ir$lower$spend, 4)
 )
 cat("Power (default spending):       ", round(pwr_slow$power * 100, 1), "%\n")
 cat("Power (capped + full final):    ", round(pwr_slow_ir$power * 100, 1), "%\n")
 ```
 
-With `fullSpendingAtFinal = TRUE`, the final spending fraction is 1
-even though the capped planned-vs-actual fraction would otherwise be
-0.95. This produces slightly different final bounds compared to the
-same `informationRates` specification with `fullSpendingAtFinal = FALSE`.
+With `fullSpendingAtFinal = TRUE`, the final upper and lower effective spending
+times are 1 even though the planned-vs-actual cap would otherwise be
+0.95. The displayed incremental beta spending shows how design beta is
+allocated across the recalibrated futility bounds. This produces slightly
+different final bounds compared to the same `informationRates` specification
+with `fullSpendingAtFinal = FALSE`.
 
 ## Additional and advanced examples
 
 The remaining sections cover validation against standard power plots and more
 specialized changes to spending, alpha, and stratified assumptions. They are
 useful when the basic scenario-and-timing workflow above is not sufficient.
+For instance, in the following example the impact of fixing event counts
+rather than calendar times is shown across a range of hazard ratios.
 
 ### Comparison with gsDesign power plots
 
@@ -764,7 +860,9 @@ cat("alpha:    ", pwr3_a025$alpha, "(updated to new value)\n")
 
 ### Event-based timing
 
-Instead of calendar times, analyses can be triggered by target event counts:
+Instead of calendar times, analyses can be triggered by target event counts.
+For instance, the following example fixes the information at each analysis
+through event targets while allowing the expected calendar times to adjust.
 
 ```{r gssurvpower_events}
 pwr_events <- gsSurvPower(
@@ -807,9 +905,9 @@ so by the time one-third of the statistical information has accumulated
 the trial is already well past one-third of its calendar duration.
 The first analysis in this design occurs about 12.4 months into a
 28-month trial—an information fraction of 0.333 but a calendar fraction
-of 0.444. Calendar spending therefore spends more alpha early,
-producing a less conservative interim efficacy bound and a slightly
-more conservative final bound.
+of 0.444. Calendar spending therefore spends more alpha and beta early,
+producing less conservative interim efficacy and futility bounds and slightly
+more conservative final bounds.
 
 When `spending = "calendar"`, any user-supplied `usTime` and `lsTime`
 overrides are **ignored**; the realized analysis times determine spending
@@ -836,8 +934,12 @@ data.frame(
   Calendar_Time = round(pwr_info$T, 1),
   InfoFraction = round(pwr_info$timing, 3),
   CalendarFraction = round(pwr_cal$T / max(pwr_cal$T), 3),
-  Bound_Info = round(pwr_info$upper$bound, 4),
-  Bound_Calendar = round(pwr_cal$upper$bound, 4)
+  Efficacy_Info = round(pwr_info$upper$bound, 4),
+  Efficacy_Calendar = round(pwr_cal$upper$bound, 4),
+  Futility_Info = round(pwr_info$lower$bound, 4),
+  Futility_Calendar = round(pwr_cal$lower$bound, 4),
+  Beta_Spend_Info = round(pwr_info$lower$spend, 4),
+  Beta_Spend_Calendar = round(pwr_cal$lower$spend, 4)
 )
 ```
 
@@ -846,6 +948,8 @@ exceeds the information fraction (0.333). Calendar spending allocates
 more alpha to this look, so the efficacy bound drops from 3.01 to 2.84—
 a meaningful difference for interim decision-making. By the final
 analysis the bounds nearly converge because both fractions equal 1.
+The same change allocates more design beta to the first look and raises the
+futility bound from -0.24 to -0.06, making early futility stopping easier.
 
 Note that passing `usTime` or `lsTime` with `spending = "calendar"`
 has no effect—the calendar fractions override them:

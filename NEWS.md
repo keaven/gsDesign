@@ -34,6 +34,9 @@
   scenario and combined timing-rule analyses, added survival workflow routing,
   and documented that expected-value calculations do not replace simulation
   of stochastic trial execution (#303).
+- Clarified beta spending in `gsSurvPower()` scenario analyses, distinguishing
+  design beta from achieved beta and defining `informationRates` as planned
+  information-fraction caps used to derive effective spending time (#303).
 - Expanded the `gsSurvPower()` vignette with common timing pitfalls for
   explicit `minfup`, `targetN`, `maxExtension`, and `minN + minFollowUp`
   workflows (#291, #293, #295, #296).

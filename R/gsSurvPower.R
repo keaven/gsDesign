@@ -44,6 +44,26 @@
 #' to \code{x$hr}, so futility bounds remain calibrated to the original design
 #' even when power is evaluated under a different \code{hr}.
 #'
+#' \strong{Beta spending in scenario analyses:}
+#' For beta-spending test types 3, 4, 7, and 8, \code{x$beta} is the design
+#' beta used with \code{hr1}, \code{sfl}, and \code{sflpar} to calibrate
+#' futility bounds. The \code{beta} returned by \code{gsSurvPower()} instead
+#' equals \code{1 - power} under the scenario assumptions and can differ
+#' substantially from the design beta.
+#' \itemize{
+#'   \item When information fractions and spending inputs are unchanged,
+#'     futility bounds are reused from \code{x}.
+#'   \item When information fractions or spending times change, futility
+#'     bounds are recomputed on the new schedule using the design beta and
+#'     \code{hr1}; achieved beta is then evaluated under \code{hr}.
+#'   \item When only alpha or upper-bound spending changes with timing fixed,
+#'     futility bounds from \code{x} are preserved, apart from clipping a
+#'     lower bound that exceeds the new efficacy bound.
+#' }
+#' Test types 5 and 6 spend lower-bound probability under the null rather than
+#' beta under the alternative. Harm spending for test types 7 and 8 is also a
+#' separate null-based calculation.
+#'
 #' \strong{Analysis timing:}
 #' Analysis times are determined by per-analysis criteria. Each timing parameter
 #' can be a scalar (recycled to all \code{k} analyses), a vector of length
@@ -247,21 +267,24 @@
 #'   Scalar or vector of length \code{k}. Must be >= 0 and requires
 #'   \code{minN}.
 #' @param informationRates Numeric vector of length \code{k} specifying
-#'   planned information fractions. When provided, spending fractions are
-#'   \code{pmin(informationRates, actual_timing)} at each analysis, where
+#'   planned information-fraction caps. At each analysis, the effective upper
+#'   and lower spending time is
+#'   \code{pmin(informationRates, actual_timing)}, where
 #'   \code{actual_timing} is expected events divided by maximum expected
-#'   events. This prevents over-spending when events are ahead of schedule
-#'   and under-spends when behind. When supplied, these planned-vs-actual
-#'   information fractions take precedence over \code{spending},
-#'   \code{usTime}, and \code{lsTime}; both upper and lower spending times
-#'   use the same capped vector. Default \code{NULL} uses actual
+#'   events. This prevents spending ahead of either the planned information
+#'   schedule or the information actually accumulated. When supplied,
+#'   \code{informationRates} takes precedence over \code{spending},
+#'   \code{usTime}, and \code{lsTime}; upper and lower spending use the same
+#'   effective spending-time vector. Default \code{NULL} uses actual
 #'   information fractions (or calendar fractions when
 #'   \code{spending = "calendar"}).
-#' @param fullSpendingAtFinal Logical. When \code{TRUE}, the spending
-#'   fraction at the final analysis is forced to 1 after applying
+#' @param fullSpendingAtFinal Logical. When \code{TRUE}, the final element of
+#'   the effective upper and lower spending-time vectors is forced to 1 after
+#'   applying
 #'   \code{informationRates}, calendar spending, or user-supplied
-#'   \code{usTime}/\code{lsTime}. This ensures full alpha spending whenever
-#'   the selected spending-time vector would otherwise end below 1.
+#'   \code{usTime}/\code{lsTime}. This ensures full upper- and lower-bound
+#'   spending whenever a selected spending-time vector would otherwise end
+#'   below 1.
 #'   Default \code{FALSE}.
 #' @param tol Tolerance for \code{\link[stats]{uniroot}} when solving for
 #'   analysis times.
@@ -285,6 +308,8 @@
 #' \item{variable}{Always \code{"Power"}.}
 #' \item{test.type, alpha, sided, method, spending, call}{Design settings used
 #'   for the power calculation.}
+#' \item{informationRates, fullSpendingAtFinal}{Planned information-fraction
+#'   caps and final effective-spending-time setting used for bound spending.}
 #' \item{testUpper, testLower, testHarm}{Logical indicators of which analyses
 #'   include each bound type, when relevant.}
 #' \item{lambdaC, etaC, etaE, gamma, R, S, ratio, minfup}{Rate and timing inputs
@@ -1058,11 +1083,14 @@ gsSurvPower <- function(
     actual_timing,
     settings) {
   if (!is.null(settings$informationRates)) {
-    capped <- pmin(settings$informationRates, actual_timing)
+    effective_spending_time <- pmin(settings$informationRates, actual_timing)
     if (isTRUE(settings$fullSpendingAtFinal)) {
-      capped[length(capped)] <- 1
+      effective_spending_time[length(effective_spending_time)] <- 1
     }
-    return(list(usTime = capped, lsTime = capped))
+    return(list(
+      usTime = effective_spending_time,
+      lsTime = effective_spending_time
+    ))
   }
 
   if (settings$spending == "calendar") {
