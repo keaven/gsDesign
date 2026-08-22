@@ -136,7 +136,7 @@ The lower bound is active only at IA1.
 At IA2 and the final analysis, the futility bound shows as `NA`:
 
 ```{r}
-gsBoundSummary(x1, exclude = NULL) |> gt()
+gsBoundSummary(x1, exclude = NULL) |> gt::gt()
 ```
 
 The probabilities under the null and alternative are recomputed accounting for the inactive bounds.
@@ -172,7 +172,7 @@ xs <- do.call(gsSurv, c(survival_args, list(
   testLower = c(TRUE, TRUE, FALSE)
 )))
 gsBoundSummary(xs, exclude = NULL) |>
-  gt()
+  gt::gt()
 ```
 
 ## Example 3: Selective harm monitoring (test.type 7/8)
@@ -199,7 +199,7 @@ xh <- do.call(gsSurv, c(survival_args, list(
   testUpper = c(FALSE, TRUE, TRUE),
   testHarm = c(TRUE, TRUE, FALSE)
 )))
-gsBoundSummary(xh, exclude = NULL) |> gt()
+gsBoundSummary(xh, exclude = NULL) |> gt::gt()
 ```
 
 The harm bound is `NA` at the final analysis.
@@ -295,7 +295,7 @@ x5 <- do.call(gsSurv, c(survival_args, list(
   testUpper = c(FALSE, TRUE, TRUE),
   testLower = c(TRUE, FALSE, FALSE)
 )))
-gsBoundSummary(x5, exclude = NULL) |> gt()
+gsBoundSummary(x5, exclude = NULL) |> gt::gt()
 ```
 
 Note the `NA` values: efficacy is `NA` at IA1, and futility is `NA` at IA2 and the final analysis.
