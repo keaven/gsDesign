@@ -2,6 +2,12 @@
 
 ## New features
 
+- `gsSurvPower()` now aligns its expected analysis-cut grammar with
+  `simtrial::get_analysis_date()`: overall and per-stratum event and enrollment
+  requirements can be combined, `maxCalendarTime` provides an absolute cap,
+  and `spending = "min_planned_actual"` supports reference-design
+  planned-versus-actual spending. Existing unstratified `targetEvents`, `minN`,
+  and relative `maxExtension` behavior is retained (#303).
 - All `gsSurv` objects now include `N`, the cumulative total expected
   enrollment at each analysis. `nSurv` objects retain scalar `n` and also
   return identical scalar `N` as a non-breaking alias (#299).
@@ -47,6 +53,10 @@
 
 ## Bug fixes
 
+- A matrix supplied to `gsSurvPower(targetEvents = ...)` is now treated as a
+  deprecated alias for `targetEventsPerStratum` and its entries are enforced
+  as per-stratum requirements. Previously, the rows were reduced to overall
+  sums, which did not enforce the documented stratified cut (#303).
 - `gsSurvPower()` now respects an explicitly supplied `minfup` as a final
   analysis timing floor for event-driven designs, so the final analysis is not
   scheduled before the end of enrollment plus minimum follow-up (#291).

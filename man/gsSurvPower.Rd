@@ -36,7 +36,7 @@ gsSurvPower(
   ratio = NULL,
   minfup = NULL,
   method = NULL,
-  spending = c("information", "calendar"),
+  spending = c("information", "calendar", "min_planned_actual"),
   plannedCalendarTime = NULL,
   targetEvents = NULL,
   maxExtension = NULL,
@@ -45,7 +45,10 @@ gsSurvPower(
   minFollowUp = NULL,
   informationRates = NULL,
   fullSpendingAtFinal = FALSE,
-  tol = .Machine$double.eps^0.25
+  tol = .Machine$double.eps^0.25,
+  targetEventsPerStratum = NULL,
+  maxCalendarTime = NULL,
+  minNPerStratum = NULL
 )
 }
 \arguments{
@@ -162,22 +165,23 @@ enrollment plus \code{minfup}.}
 \code{"Freedman"}, or \code{"BernsteinLagakos"}. Affects \code{n.fix}
 computation when \code{x} is not provided.}
 
-\item{spending}{One of \code{"information"} (default) or \code{"calendar"}.
-Controls whether alpha/beta spending tracks information fractions or
-calendar time fractions (\code{T / max(T)}). With calendar spending,
-\code{usTime} and \code{lsTime} are derived from the realized analysis
-times and any user-supplied overrides are ignored.}
+\item{spending}{One of \code{"information"} (default), \code{"calendar"},
+or \code{"min_planned_actual"}. Information spending tracks expected
+event fractions within the scenario. Calendar spending uses
+\code{T / max(T)}. With a reference design \code{x},
+\code{"min_planned_actual"} uses
+\code{pmin(x$n.I, actual events) / x$n.I[k]}, matching the planned-versus-
+actual spending convention in \pkg{simtrial}. The latter two modes derive
+\code{usTime} and \code{lsTime} and ignore user-supplied overrides.}
 
 \item{plannedCalendarTime}{Calendar times for analyses (time 0 = start of
 randomization). Scalar (recycled) or vector of length \code{k}. Use
 \code{NA} for analyses not determined by calendar time.}
 
-\item{targetEvents}{Target number of events at each analysis. Scalar
-(recycled), vector of length \code{k} (overall targets), or matrix
-with \code{k} rows and \code{nstrata} columns (per-stratum targets).
-Use \code{NA} for analyses not determined by events. When a matrix is
-supplied, row sums give the total event target used to solve each
-analysis time.}
+\item{targetEvents}{Overall target number of events at each analysis.
+Scalar (recycled) or vector of length \code{k}. Use \code{NA} for
+analyses without an overall event requirement. A matrix is accepted as a
+deprecated alias for \code{targetEventsPerStratum}.}
 
 \item{maxExtension}{Maximum time extension beyond the floor time to wait
 for \code{targetEvents}. Scalar or vector of length \code{k}. Requires a
@@ -193,9 +197,10 @@ Scalar or vector of length \code{k}. Can be used with
 \code{minFollowUp} as the primary timing criterion; the resulting
 analysis times and expected event totals must be strictly increasing.}
 
-\item{minFollowUp}{Minimum follow-up time after \code{minN} is reached.
-Scalar or vector of length \code{k}. Must be >= 0 and requires
-\code{minN}.}
+\item{minFollowUp}{Minimum follow-up time after all active \code{minN} and
+\code{minNPerStratum} requirements are reached. Scalar or vector of
+length \code{k}. Must be >= 0 and requires at least one enrollment
+requirement.}
 
 \item{informationRates}{Numeric vector of length \code{k} specifying
 planned information-fraction caps. At each analysis, the effective upper
@@ -213,14 +218,29 @@ information fractions (or calendar fractions when
 \item{fullSpendingAtFinal}{Logical. When \code{TRUE}, the final element of
 the effective upper and lower spending-time vectors is forced to 1 after
 applying
-\code{informationRates}, calendar spending, or user-supplied
-\code{usTime}/\code{lsTime}. This ensures full upper- and lower-bound
+\code{informationRates}, calendar or planned-versus-actual spending, or
+user-supplied \code{usTime}/\code{lsTime}. This ensures full upper- and
+lower-bound
 spending whenever a selected spending-time vector would otherwise end
 below 1.
 Default \code{FALSE}.}
 
 \item{tol}{Tolerance for \code{\link[stats]{uniroot}} when solving for
 analysis times.}
+
+\item{targetEventsPerStratum}{Per-stratum event requirements. Numeric matrix
+with \code{k} rows and one column per stratum; \code{NA} omits a stratum
+requirement at an analysis. The analysis waits until every active stratum
+requirement and any overall \code{targetEvents} requirement are met.}
+
+\item{maxCalendarTime}{Absolute calendar-time cap for each analysis. Scalar
+or vector of length \code{k}. When supplied with \code{maxExtension}, the
+earlier cap applies. This corresponds to
+\code{max_extension_for_target_event} in \pkg{simtrial}.}
+
+\item{minNPerStratum}{Per-stratum minimum enrollment requirements. Numeric
+matrix with \code{k} rows and one column per stratum; \code{NA} omits a
+stratum requirement at an analysis.}
 }
 \value{
 An object of class \code{c("gsSurv", "gsDesign")} containing:
@@ -320,17 +340,17 @@ can be a scalar (recycled to all \code{k} analyses), a vector of length
 \code{k}, or \code{NA} at position \code{i} to indicate the criterion does
 not apply to analysis \code{i}.
 
-The choice between \code{plannedCalendarTime} and \code{targetEvents} has an
-important consequence for sensitivity analyses:
+The choice between \code{plannedCalendarTime} and overall
+\code{targetEvents} has an important consequence for sensitivity analyses:
 \itemize{
   \item Used alone, \code{plannedCalendarTime} fixes calendar times;
     when combined with other criteria, it supplies a timing floor. Expected
     events are recomputed under the assumed HR. A worse HR produces more
     events at the same calendar time (the experimental arm fails faster).
     This gives an "unconditional" power.
-  \item \code{targetEvents} fixes event counts; calendar times adjust. Since
-    events are held constant, information fractions do not change with HR, and
-    results match the \code{gsDesign} power plot
+  \item \code{targetEvents} fixes overall event counts; calendar times
+    adjust. Since events are held constant, information fractions do not
+    change with HR, and results match the \code{gsDesign} power plot
     (\code{plot(x, plottype = 2)}) to numerical precision.
 }
 
@@ -340,17 +360,21 @@ For analysis \code{i}, the analysis time \code{T[i]} is determined as:
   \item Compute floor times from applicable criteria:
     \code{plannedCalendarTime[i]},
     \code{T[i-1] + minTimeFromPreviousAnalysis[i]}, and
-    time when \code{minN[i]} enrolled + \code{minFollowUp[i]}. When
-    \code{minfup} is explicitly supplied, the final analysis also has a
-    floor at the end of enrollment plus \code{minfup}.
+    time when \code{minN[i]} enrolled + \code{minFollowUp[i]}, and the
+    corresponding time for every active column of
+    \code{minNPerStratum[i, ]}. When \code{minfup} is explicitly supplied,
+    the final analysis also has a floor at the end of enrollment plus
+    \code{minfup}.
   \item \code{floor_time = max(all applicable floor times)}.
-  \item If \code{targetEvents[i]} is specified: find \code{t_events} when
-    expected events reach target. If \code{t_events <= floor_time}, analysis
-    at \code{floor_time}. If \code{t_events > floor_time} and
+  \item Find the expected time for the overall \code{targetEvents[i]} and
+    for every active column of \code{targetEventsPerStratum[i, ]}. Their
+    maximum is \code{t_events}, so all active requirements use AND logic.
+    If \code{t_events <= floor_time}, analysis at \code{floor_time}. If
+    \code{t_events > floor_time} and
     \code{maxExtension[i]} is set, analysis at
     \code{min(t_events, floor_time + maxExtension[i])}. Otherwise, analysis
     at \code{t_events}.
-  \item If no \code{targetEvents}: analysis at \code{floor_time}.
+  \item If no event requirement is active: analysis at \code{floor_time}.
   \item \code{maxExtension} defines a hard deadline: the analysis time
     is never pushed
     beyond \code{plannedCalendarTime[i] + maxExtension[i]} (or
@@ -359,7 +383,13 @@ For analysis \code{i}, the analysis time \code{T[i]} is determined as:
     or \code{minN + minFollowUp} would require a later time. Each analysis
     using \code{maxExtension} must have a floor timing criterion such as
     \code{plannedCalendarTime}, \code{minTimeFromPreviousAnalysis},
-    \code{minN}, or explicit final-analysis \code{minfup}.
+    \code{minN}, \code{minNPerStratum}, or explicit final-analysis
+    \code{minfup}.
+  \item Finally, \code{maxCalendarTime[i]} applies an absolute calendar-time
+    cap. If both cap types are supplied, the earlier cap applies. This
+    mirrors the realized-cut grammar in \pkg{simtrial}, where the argument
+    named \code{max_extension_for_target_event} is applied as an absolute
+    analysis date.
 }
 
 \strong{Normalization and consistency:}
@@ -373,12 +403,16 @@ Power is computed via \code{gsDesign::gsProbability()} with actual expected
 events as \code{n.I}. At the design HR, this reproduces the design power
 exactly.
 
-\strong{Stratified targetEvents:}
-\code{targetEvents} accepts a scalar (recycled), a vector of length \code{k}
-(overall targets per analysis), or a matrix with \code{k} rows and
-\code{nstrata} columns (per-stratum targets). A vector of length \code{k}
-is always interpreted as overall targets; use a matrix for per-stratum
-specification.
+\strong{Stratified timing requirements:}
+\code{targetEvents} accepts a scalar (recycled) or a vector of length
+\code{k} for overall event targets. Use \code{targetEventsPerStratum} for a
+\code{k}-by-\code{nstrata} matrix of per-stratum event requirements and
+\code{minNPerStratum} for per-stratum enrollment requirements. Overall and
+per-stratum requirements may be combined and all active requirements must
+be met unless a cap intervenes. \code{NA} omits a requirement. A matrix
+passed through \code{targetEvents} is a deprecated alias for
+\code{targetEventsPerStratum}; unlike the earlier row-sum interpretation,
+its entries are enforced by stratum.
 
 \strong{Bound recalculation when parameters change:}
 When \code{x} is provided, the handling of bounds depends on which
@@ -440,6 +474,18 @@ pwr_target_n <- gsSurvPower(
   testLower = FALSE
 )
 sum(rowSums(pwr_target_n$gamma) * pwr_target_n$R)
+
+# Require event counts within each stratum
+pwr_stratified <- gsSurvPower(
+  k = 2, test.type = 1, alpha = 0.025, sided = 1,
+  lambdaC = matrix(log(2) / c(6, 12), ncol = 2),
+  hr = 0.7, eta = 0.01,
+  gamma = matrix(c(5, 5), ncol = 2), R = 12, ratio = 1,
+  targetEventsPerStratum = matrix(
+    c(20, 10, 40, 20), nrow = 2, byrow = TRUE
+  )
+)
+pwr_stratified$eDC + pwr_stratified$eDE
 
 }
 \seealso{

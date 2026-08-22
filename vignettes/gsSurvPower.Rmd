@@ -134,7 +134,7 @@ rules:
 | Information fractions and spending inputs unchanged | Reuse the bounds from `x` |
 | Only alpha or the upper spending function changes, with timing unchanged | Preserve the bounds from `x`, clipping only if a lower bound exceeds the new efficacy bound |
 | Information fractions or spending times change | Recompute the bounds on the new schedule using design beta, `hr1`, `sfl`, and `sflpar` |
-| `informationRates`, calendar spending, or `lsTime` is supplied | Derive the selected lower effective spending-time vector and recompute the bounds |
+| `informationRates`, calendar or planned-versus-actual spending, or `lsTime` is supplied | Derive the selected lower effective spending-time vector and recompute the bounds |
 
 Thus, changing `hr` with fixed event targets generally preserves the original
 information fractions and futility bounds. Changing `hr` at fixed calendar
@@ -191,8 +191,8 @@ sensitivity analyses:
   This gives an "unconditional" power that reflects how the assumed
   treatment effect influences event accrual.
 
-- **`targetEvents`** fixes the event count at each analysis. The calendar
-  time is the time until expected events reach the target under the
+- **`targetEvents`** fixes the overall event count at each analysis. The
+  calendar time is the time until expected events reach the target under the
   assumed HR. Since the event counts are held
   constant, the information fractions do not change with HR, and the
   resulting power matches the `gsDesign` power plot (`plot(x, plottype = 2)`)
@@ -213,16 +213,27 @@ analysis proceeds with fewer expected events than targeted. Other applicable
 floor criteria can require an even later analysis, subject to the same hard
 extension cap.
 
+`maxCalendarTime` supplies a different kind of deadline: it is an absolute
+calendar-time cap rather than an extension measured from a timing anchor.
+After combining all floor and event requirements, the expected analysis time
+is capped at `maxCalendarTime`. If both `maxExtension` and `maxCalendarTime`
+are supplied, the earlier deadline applies. This distinction preserves the
+existing meaning of `maxExtension` while matching the absolute-cap behavior of
+simtrial's `max_extension_for_target_event`.
+
 ### Quick decision guide
 
 | Operational rule | Argument | Interpretation |
 | --- | --- | --- |
 | Analyze at a calendar time | `plannedCalendarTime` | Exact time alone; earliest time when combined |
-| Analyze after an event target | `targetEvents` | Expected time the target is reached |
+| Analyze after an overall event target | `targetEvents` | Expected time the overall target is reached |
+| Require event targets by stratum | `targetEventsPerStratum` | Earliest time every active stratum target is reached |
 | Require spacing between looks | `minTimeFromPreviousAnalysis` | Earliest time relative to the previous analysis |
 | Require enrollment plus follow-up | `minN`, `minFollowUp` | Earliest time satisfying both criteria |
+| Require enrollment by stratum plus follow-up | `minNPerStratum`, `minFollowUp` | Earliest time every active stratum requirement plus follow-up is met |
 | Require final minimum follow-up | explicit `minfup` | Final-analysis floor after enrollment ends |
-| Stop waiting after a deadline | `maxExtension` | Hard cap on extension beyond its timing anchor |
+| Cap delay relative to a timing anchor | `maxExtension` | Relative hard cap preserving the existing gsDesign convention |
+| Stop at an absolute calendar deadline | `maxCalendarTime` | Absolute hard cap, corresponding to simtrial cut behavior |
 
 For scenario analyses, override only the assumptions that change:
 
@@ -240,16 +251,49 @@ Additional criteria can be combined per-analysis, each specified as a scalar
 "not applicable":
 
 - `maxExtension`: Maximum time beyond the floor to wait for target events.
+- `maxCalendarTime`: Absolute calendar-time deadline for an analysis.
 - `minTimeFromPreviousAnalysis`: Minimum elapsed time since the previous analysis.
 - `minN`: Minimum sample size enrolled before analysis.
+- `minNPerStratum`: Matrix of minimum enrollment by analysis and stratum.
 - `minFollowUp`: Minimum follow-up after `minN` is reached.
+- `targetEventsPerStratum`: Matrix of event requirements by analysis and
+  stratum.
 
 When multiple criteria apply to a single analysis, the analysis time is the
-maximum of all floor criteria, with `targetEvents` potentially extending
-beyond the floor. `maxExtension` defines a hard deadline: the analysis time never
+maximum of all floor criteria and all overall or per-stratum event-target
+times. Thus, active requirements use AND logic. `maxExtension` defines a hard
+deadline: the analysis time never
 exceeds `plannedCalendarTime + maxExtension` (or `T[i-1] + maxExtension`
 when no calendar time is specified), even if other criteria such as
-`minTimeFromPreviousAnalysis` or `minN + minFollowUp` would push it later.
+`minTimeFromPreviousAnalysis` or enrollment plus follow-up would push it
+later. `maxCalendarTime` is then applied as an absolute cap.
+
+### Relationship to simtrial analysis cuts
+
+The timing grammar intentionally parallels
+[`simtrial::get_analysis_date()`](https://merck.github.io/simtrial/reference/get_analysis_date.html),
+with camel-case names and one value per planned analysis. The main distinction
+is conceptual: `gsSurvPower()` applies the rules to expected event and
+enrollment counts, whereas simtrial applies them to a realized simulated data
+set. Consequently, matching rules do not imply identical analysis dates in any
+one simulated trial.
+
+| simtrial cut argument | `gsSurvPower()` argument | Relationship |
+| --- | --- | --- |
+| `planned_calendar_time` | `plannedCalendarTime` | Calendar-time floor when combined |
+| `target_event_overall` | `targetEvents` | Overall event requirement |
+| `target_event_per_stratum` | `targetEventsPerStratum` | Per-stratum requirement; rows index analyses and columns index strata |
+| `min_time_after_previous_analysis` | `minTimeFromPreviousAnalysis` | Minimum gap from the preceding analysis |
+| `min_n_overall` | `minN` | Overall enrollment requirement |
+| `min_n_per_stratum` | `minNPerStratum` | Per-stratum enrollment requirement; rows index analyses and columns index strata |
+| `min_followup` | `minFollowUp` | Follow-up after all active enrollment requirements |
+| `max_extension_for_target_event` | `maxCalendarTime` | Absolute calendar cap, despite the simtrial argument's name |
+
+simtrial specifies one cut at a time and therefore uses a named vector for its
+per-stratum requirements. `gsSurvPower()` specifies all `k` analyses in one
+call and uses a `k`-by-`nstrata` matrix; use `NA` for an inactive stratum at a
+look. `maxExtension` remains available for the older gsDesign relative-cap
+convention and has no exact simtrial counterpart.
 
 ### Common timing pitfalls
 
@@ -333,6 +377,15 @@ pwr_extension <- gsSurvPower(
 round(pwr_extension$T, 1)
 ```
 
+**`maxCalendarTime` is an absolute date, not a duration.** Use it when the
+operational rule is "analyze no later than month 30," including when there is
+an event requirement but no natural floor from which to measure an extension.
+If a target or floor is not reached by that date, the analysis proceeds at the
+cap under the expected-value calculation. This matches how simtrial applies
+`max_extension_for_target_event`, despite the latter argument's name. When a
+relative extension and an absolute deadline are both part of the plan, supply
+both cap arguments; the earlier one controls.
+
 **`minN + minFollowUp` can define analysis timing, but analyses must remain
 strictly increasing.** This pair says: wait until at least `minN` subjects
 are enrolled, then wait `minFollowUp` additional time. It can be used as the
@@ -340,6 +393,10 @@ primary timing rule, but the resulting analysis times and expected event
 totals must increase across analyses. If two analyses use the same enrollment
 threshold and follow-up rule, add `plannedCalendarTime`, `targetEvents`, or
 `minTimeFromPreviousAnalysis` to separate them.
+
+For a stratified plan, replace or supplement `minN` with a
+`minNPerStratum` matrix. The follow-up clock starts after the last active
+overall or per-stratum enrollment threshold is reached.
 
 ```{r timing_pitfall_minn}
 pwr_min_n <- gsSurvPower(
@@ -365,11 +422,16 @@ data.frame(
 
 ### Spending and method
 
-- **`spending`**: One of `"information"` (default) or `"calendar"`.
+- **`spending`**: One of `"information"` (default), `"calendar"`, or
+  `"min_planned_actual"`.
   Information-based spending tracks the fraction of statistical information
   accumulated; calendar-based spending sets `usTime = lsTime = T / max(T)`.
+  With a reference design `x`, planned-versus-actual spending sets both
+  spending-time vectors to
+  `pmin(x$n.I, actual events) / x$n.I[k]`, matching simtrial's
+  `ia_alpha_spending = "min_planned_actual"` convention.
   Custom spending times can also be passed via `usTime` and `lsTime`, but they
-  are ignored when `spending = "calendar"`.
+  are ignored for the latter two modes.
 
 - **`informationRates`**: Planned information-fraction caps (vector of
   length `k`). At each analysis, the effective spending time is
@@ -391,13 +453,21 @@ data.frame(
   When `x` is provided, `x$n.fix` and, implicitly, $\theta$ are used directly for
   exact consistency with the design.
 
-### Stratified targetEvents
+### Stratified timing arguments
 
 `targetEvents` accepts a scalar (recycled), a vector of length `k`
-(one overall target per analysis), or a matrix with `k` rows and
-`nstrata` columns (per-stratum targets). A vector of length `k` is
-always interpreted as overall targets; to specify per-stratum targets
-for a single analysis, use a 1-row matrix.
+(one overall target per analysis). Use `targetEventsPerStratum` for a matrix
+with `k` rows and `nstrata` columns. A vector of length `k` is always
+interpreted as overall targets; to specify per-stratum targets for a single
+analysis, use a 1-row matrix. Overall and per-stratum event requirements can
+be supplied together, and the analysis waits for all active requirements
+unless a cap intervenes. A matrix passed to `targetEvents` remains accepted as
+a deprecated alias, but its entries are now enforced per stratum rather than
+being reduced to row sums.
+
+`minNPerStratum` uses the same matrix layout for enrollment requirements. When
+it is supplied with `minFollowUp`, the follow-up interval begins only after
+every active overall and per-stratum enrollment requirement has been reached.
 
 ## Power under alternative assumptions
 
@@ -613,12 +683,50 @@ The final analysis collects `r round(pwr_fast$n.I[design$k], 0)` events
 vs. the target of `r round(design$n.I[design$k], 0)`, and power rises to
 `r round(pwr_fast$power * 100, 1)`%.
 
-### Controlling effective spending time with informationRates
+### Controlling effective spending time
 
 When events fall short of the target (as in Scenario 1), the actual
-information fraction at each analysis may be lower than planned.
-By default, bounds are computed at the actual information fractions.
-The `informationRates` parameter supplies planned information-fraction caps.
+event count at each analysis may be lower than planned. By default, bounds are
+computed at the scenario's information fractions, `n.I / max(n.I)`, which
+always end at 1. With a reference design `x`,
+`spending = "min_planned_actual"` instead uses
+`pmin(x$n.I, scenario n.I) / x$n.I[k]`. This is the expected-value analogue of
+simtrial's planned-versus-actual spending option: spending cannot run ahead of
+the planned event count at a look or the events expected under the scenario.
+
+```{r min_planned_actual_spending}
+pwr_slow_min_spending <- gsSurvPower(
+  x = design,
+  gamma = design$gamma / 2,
+  targetEvents = design$n.I,
+  plannedCalendarTime = design$T,
+  minN = c(NA, total_N, total_N),
+  minFollowUp = c(NA, 2, 12),
+  maxExtension = c(3, 12, 20),
+  spending = "min_planned_actual"
+)
+
+data.frame(
+  Analysis = 1:design$k,
+  Planned_Events = round(design$n.I, 1),
+  Scenario_Events = round(pwr_slow_min_spending$n.I, 1),
+  Effective_Spending_Time = round(
+    pmin(design$n.I, pwr_slow_min_spending$n.I) / design$n.I[design$k],
+    3
+  )
+)
+```
+
+The same effective spending-time vector is used for the upper and lower
+bounds. Set `fullSpendingAtFinal = TRUE` to spend fully at the final analysis,
+corresponding to simtrial's `fa_alpha_spending = "full_alpha"`; leave it
+`FALSE` for information-fraction final spending.
+
+#### User-specified spending-time caps with `informationRates`
+
+For a spending schedule specified directly rather than through the reference
+design's planned event counts, `informationRates` supplies planned
+information-fraction caps.
 The effective spending time is
 `pmin(informationRates, actual_timing)` at each analysis. This prevents
 spending ahead of the planned information schedule when events arrive faster
@@ -971,13 +1079,15 @@ identical(pwr_cal$upper$bound, pwr_cal_override$upper$bound)
 
 When a trial enrolls patients from multiple strata with different event
 rates, you may want to specify per-stratum event targets rather than a
-single overall number. `targetEvents` accepts a matrix with `k` rows
-(analyses) and `nstrata` columns (strata). Row sums give the overall
-target used to solve each analysis time.
+single overall number. `targetEventsPerStratum` accepts a matrix with `k` rows
+(analyses) and `nstrata` columns (strata). The analysis waits until each
+non-`NA` entry in its row is reached. Because event rates can differ across
+strata, events in one stratum can exceed its requirement while the other
+stratum catches up; the overall count therefore need not equal the row sum.
 
 Consider a two-stratum design where stratum 1 has median survival of
-6 months and stratum 2 has 12 months. We target 30 events (20 + 10) at
-the interim and 60 events (40 + 20) at the final analysis:
+6 months and stratum 2 has 12 months. We require at least 20 and 10 events by
+stratum at the interim, and 40 and 20 events by stratum at the final analysis:
 
 ```{r stratified_events}
 # Per-stratum event targets: rows = analyses, columns = strata
@@ -992,26 +1102,27 @@ pwr_strat <- gsSurvPower(
   lambdaC = matrix(log(2) / c(6, 12), ncol = 2),
   hr = 0.7, eta = 0.01,
   gamma = matrix(c(5, 5), ncol = 2), R = 12, ratio = 1,
-  targetEvents = event_matrix
+  targetEventsPerStratum = event_matrix
 )
 
-# The analysis times are solved so that total expected events
-# match the row sums of the target matrix
+# Every stratum requirement is met; one can be exceeded while another catches up.
+actual_events_by_stratum <- pwr_strat$eDC + pwr_strat$eDE
 data.frame(
   Analysis = 1:2,
   Target_Stratum1 = event_matrix[, 1],
+  Expected_Stratum1 = round(actual_events_by_stratum[, 1], 1),
   Target_Stratum2 = event_matrix[, 2],
-  Target_Total = rowSums(event_matrix),
-  Expected_Events = round(pwr_strat$n.I, 1),
+  Expected_Stratum2 = round(actual_events_by_stratum[, 2], 1),
+  Expected_Total = round(pwr_strat$n.I, 1),
   Calendar_Time = round(pwr_strat$T, 1)
 )
 
 cat("Power:", round(pwr_strat$power * 100, 1), "%\n")
 ```
 
-The matrix format is also used in the biomarker example below,
-where `lambdaC` and `gamma` vary by stratum but `plannedCalendarTime`
-drives the timing.
+The biomarker example below also uses matrix-valued `lambdaC` and `gamma` to
+represent strata, but its timing is driven by `plannedCalendarTime` rather
+than per-stratum targets.
 
 ### Biomarker subgroup to stratified design
 
