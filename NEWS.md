@@ -37,6 +37,10 @@
 - Expanded the `gsSurvPower()` vignette with common timing pitfalls for
   explicit `minfup`, `targetN`, `maxExtension`, and `minN + minFollowUp`
   workflows (#291, #293, #295, #296).
+- Explained why skipping futility while retaining harm monitoring can
+  recalibrate earlier harm bounds, and documented recommended final-analysis
+  testing schedules using common event-driven survival-design assumptions for
+  all selective-bound examples (#306).
 
 ## Bug fixes
 
