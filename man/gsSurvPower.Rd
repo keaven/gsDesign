@@ -102,25 +102,30 @@ bound spending function \code{sfharm}.}
 \item{r}{Integer grid parameter for numerical integration (default 18).}
 
 \item{usTime}{Upper spending time override; vector of length \code{k}
-or \code{NULL} (default) to use information fractions. Ignored when
+without missing values, or \code{NULL} (default) to use information
+fractions. Ignored when
 \code{spending = "calendar"}, because realized analysis times determine
 the spending fractions.}
 
 \item{lsTime}{Lower spending time override; vector of length \code{k}
-or \code{NULL} (default) to use information fractions. Ignored when
-\code{spending = "calendar"}.}
+without missing values, or \code{NULL} (default) to use information
+fractions. Ignored when \code{spending = "calendar"}.}
 
 \item{testUpper}{Indicator of which analyses include an efficacy test.
 \code{TRUE} (default) for all analyses. A logical vector of length
-\code{k} may be specified.}
+\code{k} may be specified. Missing values are not allowed; use
+\code{FALSE} to omit the test at an analysis.}
 
 \item{testLower}{Indicator of which analyses include a futility test.
 \code{TRUE} (default) for all analyses. A logical vector of length
-\code{k} may be specified.}
+\code{k} may be specified. Missing values are not allowed; use
+\code{FALSE} to omit the test at an analysis.}
 
 \item{testHarm}{Indicator of which analyses include a harm bound.
 \code{TRUE} (default) for all analyses. A logical vector of length
-\code{k} may be specified. Only used for \code{test.type} 7 or 8.}
+\code{k} may be specified. Missing values are not allowed; use
+\code{FALSE} to omit the test at an analysis. Only used for
+\code{test.type} 7 or 8.}
 
 \item{lambdaC}{Scalar, vector, or matrix of control event hazard rates.
 Rows = time periods, columns = strata.}
@@ -186,25 +191,28 @@ deprecated alias for \code{targetEventsPerStratum}.}
 \item{maxExtension}{Maximum time extension beyond the floor time to wait
 for \code{targetEvents}. Scalar or vector of length \code{k}. Requires a
 floor timing criterion for the affected analysis, most commonly
-\code{plannedCalendarTime}.}
+\code{plannedCalendarTime}. Use \code{NA} for analyses without a relative
+extension cap.}
 
 \item{minTimeFromPreviousAnalysis}{Minimum elapsed time since the previous
 analysis. Scalar or vector of length \code{k}. Ignored for the first
-analysis.}
+analysis. Use \code{NA} for later analyses without a spacing requirement.}
 
 \item{minN}{Minimum total sample size enrolled before analysis can proceed.
 Scalar or vector of length \code{k}. Can be used with
 \code{minFollowUp} as the primary timing criterion; the resulting
-analysis times and expected event totals must be strictly increasing.}
+analysis times and expected event totals must be strictly increasing. Use
+\code{NA} for analyses without an overall enrollment requirement.}
 
 \item{minFollowUp}{Minimum follow-up time after all active \code{minN} and
 \code{minNPerStratum} requirements are reached. Scalar or vector of
-length \code{k}. Must be >= 0 and requires at least one enrollment
-requirement.}
+length \code{k}. Must be >= 0. Use \code{NA} for no additional follow-up
+at an analysis. Each non-missing value requires an active \code{minN} or
+\code{minNPerStratum} requirement at the same analysis.}
 
 \item{informationRates}{Numeric vector of length \code{k} specifying
-planned information-fraction caps. At each analysis, the effective upper
-and lower spending time is
+planned information-fraction caps, with no missing values. At each
+analysis, the effective upper and lower spending time is
 \code{pmin(informationRates, actual_timing)}, where
 \code{actual_timing} is expected events divided by maximum expected
 events. This prevents spending ahead of either the planned information
@@ -236,7 +244,8 @@ requirement and any overall \code{targetEvents} requirement are met.}
 \item{maxCalendarTime}{Absolute calendar-time cap for each analysis. Scalar
 or vector of length \code{k}. When supplied with \code{maxExtension}, the
 earlier cap applies. This corresponds to
-\code{max_extension_for_target_event} in \pkg{simtrial}.}
+\code{max_extension_for_target_event} in \pkg{simtrial}. Use \code{NA}
+for analyses without an absolute calendar-time cap.}
 
 \item{minNPerStratum}{Per-stratum minimum enrollment requirements. Numeric
 matrix with \code{k} rows and one column per stratum; \code{NA} omits a
@@ -335,10 +344,12 @@ beta under the alternative. Harm spending for test types 7 and 8 is also a
 separate null-based calculation.
 
 \strong{Analysis timing:}
-Analysis times are determined by per-analysis criteria. Each timing parameter
-can be a scalar (recycled to all \code{k} analyses), a vector of length
-\code{k}, or \code{NA} at position \code{i} to indicate the criterion does
-not apply to analysis \code{i}.
+Analysis times are determined by per-analysis criteria. Except for the
+final-analysis-only scalar \code{minfup}, each timing-rule parameter can be
+a scalar (recycled to all \code{k} analyses), a vector of length \code{k},
+or \code{NA} at position \code{i} to indicate that the rule does not apply
+to analysis \code{i}. For the per-stratum matrix arguments, \code{NA}
+deactivates only that analysis-by-stratum requirement.
 
 The choice between \code{plannedCalendarTime} and overall
 \code{targetEvents} has an important consequence for sensitivity analyses:

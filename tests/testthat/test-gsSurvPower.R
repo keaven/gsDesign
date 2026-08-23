@@ -653,6 +653,34 @@ test_that("gsSurvPower supports per-stratum enrollment and follow-up gates", {
   expect_true(all(pwr$eNC + pwr$eNE >= enrollment_targets))
 })
 
+test_that("gsSurvPower supports mixed NA across analysis timing rules", {
+  pwr <- gsSurvPower(
+    k = 3,
+    test.type = 1,
+    alpha = 0.025,
+    sided = 1,
+    lambdaC = log(2) / 6,
+    hr = 0.7,
+    hr0 = 1,
+    gamma = 10,
+    R = 12,
+    ratio = 1,
+    plannedCalendarTime = c(12, NA, 36),
+    targetEvents = c(NA, 80, NA),
+    targetEventsPerStratum = matrix(c(NA, 50, NA), ncol = 1),
+    maxExtension = c(NA, 6, NA),
+    maxCalendarTime = c(NA, 24, NA),
+    minTimeFromPreviousAnalysis = c(NA, 6, NA),
+    minN = c(100, NA, NA),
+    minNPerStratum = matrix(c(40, NA, NA), ncol = 1),
+    minFollowUp = c(2, NA, NA)
+  )
+
+  expect_equal(pwr$T, c(12, 18, 36), tolerance = 1e-3)
+  expect_true(pwr$N[1] >= 100)
+  expect_true(all(diff(pwr$n.I) > 0))
+})
+
 test_that("gsSurvPower print method works for power output", {
   design <- gsSurv(
     k = 2, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
@@ -695,6 +723,59 @@ test_that("gsSurvPower validates inputs", {
       plannedCalendarTime = c(12, 24, 36)
     ),
     "must have length 1 or"
+  )
+
+  expect_error(
+    gsSurvPower(
+      k = 3, lambdaC = log(2) / 6, gamma = 10, R = 12,
+      plannedCalendarTime = c(12, 24, 36),
+      minN = c(100, NA, NA),
+      minFollowUp = c(2, 5, NA)
+    ),
+    "minFollowUp at analysis 2 requires minN or minNPerStratum"
+  )
+
+  expect_error(
+    gsSurvPower(
+      k = 3, lambdaC = log(2) / 6, gamma = 10, R = 12,
+      plannedCalendarTime = c(12, 24, 36),
+      informationRates = c(0.3, NA, 1)
+    ),
+    "informationRates.*without NA"
+  )
+
+  expect_error(
+    gsSurvPower(
+      k = 3, lambdaC = log(2) / 6, gamma = 10, R = 12,
+      plannedCalendarTime = c(12, 24, 36),
+      testUpper = c(FALSE, NA, TRUE)
+    ),
+    "testUpper.*without NA"
+  )
+
+  expect_error(
+    gsSurvPower(
+      k = 3, lambdaC = log(2) / 6, gamma = 10, R = 12,
+      plannedCalendarTime = c(12, 24, 36),
+      usTime = c(0.3, NA, 1)
+    ),
+    "usTime.*without NA"
+  )
+
+  expect_error(
+    gsSurvPower(
+      k = 2, lambdaC = log(2) / 6, gamma = 10, R = 12,
+      plannedCalendarTime = c(12, Inf)
+    ),
+    "plannedCalendarTime values must be non-negative finite numbers or NA"
+  )
+
+  expect_error(
+    gsSurvPower(
+      k = 3, lambdaC = log(2) / 6, gamma = 10, R = 12,
+      plannedCalendarTime = c(12, NA, 36)
+    ),
+    "Analysis 2 has no active timing criterion"
   )
 })
 

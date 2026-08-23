@@ -37,9 +37,10 @@
   non-binding futility plus harm monitoring for `test.type = 7` and `8`
   (#308).
 - Clarified the two intended uses of `gsSurvPower()`, expanded guidance for
-  scenario and combined timing-rule analyses, added survival workflow routing,
-  and documented that expected-value calculations do not replace simulation
-  of stochastic trial execution (#303).
+  scenario and combined timing-rule analyses, including mixed-`NA` rules by
+  analysis, added survival workflow routing, and documented that expected-value
+  calculations do not replace simulation of stochastic trial execution
+  (#303).
 - Clarified beta spending in `gsSurvPower()` scenario analyses, distinguishing
   design beta from achieved beta and defining `informationRates` as planned
   information-fraction caps used to derive effective spending time (#303).
@@ -53,6 +54,10 @@
 
 ## Bug fixes
 
+- `gsSurvPower()` now validates mixed-`NA` timing inputs consistently, rejects
+  missing testing indicators and spending times with informative messages,
+  and detects analyses without an active timing rule or follow-up values
+  without a corresponding enrollment requirement (#303).
 - A matrix supplied to `gsSurvPower(targetEvents = ...)` is now treated as a
   deprecated alias for `targetEventsPerStratum` and its entries are enforced
   as per-stratum requirements. Previously, the rows were reduced to overall

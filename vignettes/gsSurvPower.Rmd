@@ -246,18 +246,30 @@ For scenario analyses, override only the assumptions that change:
 | Enrollment duration or target size | `R`, or `targetN` |
 | Operational analysis rules | Timing arguments in the table above |
 
-Additional criteria can be combined per-analysis, each specified as a scalar
+Per-analysis timing rules can be combined, each specified as a scalar
 (recycled to all `k` analyses) or a vector of length `k` with `NA` for
 "not applicable":
 
+- `plannedCalendarTime`: Calendar-time floor for the analysis.
+- `targetEvents`: Overall event requirement for the analysis.
 - `maxExtension`: Maximum time beyond the floor to wait for target events.
 - `maxCalendarTime`: Absolute calendar-time deadline for an analysis.
 - `minTimeFromPreviousAnalysis`: Minimum elapsed time since the previous analysis.
 - `minN`: Minimum sample size enrolled before analysis.
-- `minNPerStratum`: Matrix of minimum enrollment by analysis and stratum.
-- `minFollowUp`: Minimum follow-up after `minN` is reached.
+- `minNPerStratum`: Matrix of minimum enrollment by analysis and stratum;
+  `NA` deactivates only the corresponding stratum requirement.
+- `minFollowUp`: Additional follow-up after active `minN` or
+  `minNPerStratum` requirements are reached. `NA` means no additional
+  follow-up, while a non-missing value requires an enrollment threshold at
+  the same analysis.
 - `targetEventsPerStratum`: Matrix of event requirements by analysis and
-  stratum.
+  stratum; `NA` deactivates only the corresponding stratum requirement.
+
+Each analysis must retain at least one active floor or event requirement.
+The mixed-`NA` convention is specific to timing rules. For selective bounds,
+use `FALSE` rather than `NA` in `testUpper`, `testLower`, or `testHarm`.
+Spending-time inputs (`informationRates`, `usTime`, and `lsTime`) describe a
+complete spending schedule and therefore must not contain `NA`.
 
 When multiple criteria apply to a single analysis, the analysis time is the
 maximum of all floor criteria and all overall or per-stratum event-target
@@ -433,8 +445,9 @@ data.frame(
   Custom spending times can also be passed via `usTime` and `lsTime`, but they
   are ignored for the latter two modes.
 
-- **`informationRates`**: Planned information-fraction caps (vector of
-  length `k`). At each analysis, the effective spending time is
+- **`informationRates`**: Planned information-fraction caps (complete vector
+  of length `k`, without missing values). At each analysis, the effective
+  spending time is
   `pmin(informationRates, actual_timing)`. Thus, spending cannot run ahead of
   either the planned information schedule or the information actually
   accumulated. `informationRates` takes precedence over `spending`, `usTime`,
