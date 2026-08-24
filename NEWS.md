@@ -2,6 +2,10 @@
 
 ## New features
 
+- `gsSurvPower()` results now have primary class `"gsSurvPower"` while
+  retaining inheritance from `"gsSurv"` and `"gsDesign"`. They also retain
+  evaluated, replayable arguments in `inputs`, enabling downstream packages to
+  identify and reproduce power calculations.
 - `gsSurvPower()` now aligns its expected analysis-cut grammar with
   `simtrial::get_analysis_date()`: overall and per-stratum event and enrollment
   requirements can be combined, `maxCalendarTime` provides an absolute cap,

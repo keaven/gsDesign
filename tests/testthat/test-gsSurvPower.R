@@ -8,6 +8,7 @@ test_that("gsSurvPower works with plannedCalendarTime from gsSurv design", {
   )
 
   pwr <- gsSurvPower(x = design, plannedCalendarTime = design$T)
+  expect_s3_class(pwr, "gsSurvPower")
   expect_s3_class(pwr, "gsSurv")
   expect_s3_class(pwr, "gsDesign")
   expect_equal(pwr$k, 3)
@@ -18,6 +19,67 @@ test_that("gsSurvPower works with plannedCalendarTime from gsSurv design", {
   expect_equal(pwr$hr, design$hr)
   expect_equal(pwr$hr1, design$hr)
   expect_equal(pwr$variable, "Power")
+})
+
+test_that("gsSurvPower retains evaluated inputs for direct reconstruction", {
+  pwr <- gsSurvPower(
+    k = 3,
+    test.type = 1,
+    lambdaC = matrix(log(2) / c(6, 12), ncol = 2),
+    hr = 0.7,
+    gamma = matrix(c(4, 6), ncol = 2),
+    R = 12,
+    plannedCalendarTime = c(12, NA, 36),
+    targetEvents = c(NA, 80, NA),
+    targetEventsPerStratum = matrix(
+      c(NA, NA, 20, 30, NA, NA), nrow = 3, byrow = TRUE
+    ),
+    maxExtension = c(NA, 6, NA),
+    maxCalendarTime = c(NA, 24, NA),
+    minTimeFromPreviousAnalysis = c(NA, 6, NA),
+    minN = c(100, NA, NA),
+    minNPerStratum = matrix(
+      c(40, 60, NA, NA, NA, NA), nrow = 3, byrow = TRUE
+    ),
+    minFollowUp = c(2, NA, NA)
+  )
+  saved_inputs <- unserialize(serialize(pwr$inputs, NULL))
+  rebuilt <- do.call(gsSurvPower, saved_inputs)
+
+  expect_s3_class(rebuilt, "gsSurvPower")
+  expect_identical(pwr$inputs$plannedCalendarTime, c(12, NA, 36))
+  expect_identical(
+    pwr$inputs$targetEventsPerStratum,
+    matrix(c(NA, NA, 20, 30, NA, NA), nrow = 3, byrow = TRUE)
+  )
+  expect_equal(rebuilt$T, pwr$T)
+  expect_equal(rebuilt$n.I, pwr$n.I)
+  expect_equal(rebuilt$upper$bound, pwr$upper$bound)
+  expect_equal(rebuilt$power, pwr$power)
+})
+
+test_that("gsSurvPower reconstruction retains its reference design", {
+  design <- gsSurv(
+    k = 3, test.type = 4, beta = 0.15,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  pwr <- gsSurvPower(
+    x = design,
+    hr = 0.8,
+    targetEvents = 0.9 * design$n.I,
+    spending = "min_planned_actual"
+  )
+  saved_inputs <- unserialize(serialize(pwr$inputs, NULL))
+  rebuilt <- do.call(gsSurvPower, saved_inputs)
+
+  expect_identical(pwr$inputs$x, design)
+  expect_identical(pwr$inputs$targetEvents, 0.9 * design$n.I)
+  expect_equal(rebuilt$T, pwr$T)
+  expect_equal(rebuilt$n.I, pwr$n.I)
+  expect_equal(rebuilt$upper$bound, pwr$upper$bound)
+  expect_equal(rebuilt$lower$bound, pwr$lower$bound)
+  expect_equal(rebuilt$power, pwr$power)
 })
 
 test_that("gsSurvPower power decreases with worse HR", {
