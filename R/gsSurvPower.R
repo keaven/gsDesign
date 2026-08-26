@@ -65,22 +65,24 @@
 #' separate null-based calculation.
 #'
 #' \strong{Analysis timing:}
-#' Analysis times are determined by per-analysis criteria. Each timing parameter
-#' can be a scalar (recycled to all \code{k} analyses), a vector of length
-#' \code{k}, or \code{NA} at position \code{i} to indicate the criterion does
-#' not apply to analysis \code{i}.
+#' Analysis times are determined by per-analysis criteria. Except for the
+#' final-analysis-only scalar \code{minfup}, each timing-rule parameter can be
+#' a scalar (recycled to all \code{k} analyses), a vector of length \code{k},
+#' or \code{NA} at position \code{i} to indicate that the rule does not apply
+#' to analysis \code{i}. For the per-stratum matrix arguments, \code{NA}
+#' deactivates only that analysis-by-stratum requirement.
 #'
-#' The choice between \code{plannedCalendarTime} and \code{targetEvents} has an
-#' important consequence for sensitivity analyses:
+#' The choice between \code{plannedCalendarTime} and overall
+#' \code{targetEvents} has an important consequence for sensitivity analyses:
 #' \itemize{
 #'   \item Used alone, \code{plannedCalendarTime} fixes calendar times;
 #'     when combined with other criteria, it supplies a timing floor. Expected
 #'     events are recomputed under the assumed HR. A worse HR produces more
 #'     events at the same calendar time (the experimental arm fails faster).
 #'     This gives an "unconditional" power.
-#'   \item \code{targetEvents} fixes event counts; calendar times adjust. Since
-#'     events are held constant, information fractions do not change with HR, and
-#'     results match the \code{gsDesign} power plot
+#'   \item \code{targetEvents} fixes overall event counts; calendar times
+#'     adjust. Since events are held constant, information fractions do not
+#'     change with HR, and results match the \code{gsDesign} power plot
 #'     (\code{plot(x, plottype = 2)}) to numerical precision.
 #' }
 #'
@@ -90,17 +92,21 @@
 #'   \item Compute floor times from applicable criteria:
 #'     \code{plannedCalendarTime[i]},
 #'     \code{T[i-1] + minTimeFromPreviousAnalysis[i]}, and
-#'     time when \code{minN[i]} enrolled + \code{minFollowUp[i]}. When
-#'     \code{minfup} is explicitly supplied, the final analysis also has a
-#'     floor at the end of enrollment plus \code{minfup}.
+#'     time when \code{minN[i]} enrolled + \code{minFollowUp[i]}, and the
+#'     corresponding time for every active column of
+#'     \code{minNPerStratum[i, ]}. When \code{minfup} is explicitly supplied,
+#'     the final analysis also has a floor at the end of enrollment plus
+#'     \code{minfup}.
 #'   \item \code{floor_time = max(all applicable floor times)}.
-#'   \item If \code{targetEvents[i]} is specified: find \code{t_events} when
-#'     expected events reach target. If \code{t_events <= floor_time}, analysis
-#'     at \code{floor_time}. If \code{t_events > floor_time} and
+#'   \item Find the expected time for the overall \code{targetEvents[i]} and
+#'     for every active column of \code{targetEventsPerStratum[i, ]}. Their
+#'     maximum is \code{t_events}, so all active requirements use AND logic.
+#'     If \code{t_events <= floor_time}, analysis at \code{floor_time}. If
+#'     \code{t_events > floor_time} and
 #'     \code{maxExtension[i]} is set, analysis at
 #'     \code{min(t_events, floor_time + maxExtension[i])}. Otherwise, analysis
 #'     at \code{t_events}.
-#'   \item If no \code{targetEvents}: analysis at \code{floor_time}.
+#'   \item If no event requirement is active: analysis at \code{floor_time}.
 #'   \item \code{maxExtension} defines a hard deadline: the analysis time
 #'     is never pushed
 #'     beyond \code{plannedCalendarTime[i] + maxExtension[i]} (or
@@ -109,7 +115,13 @@
 #'     or \code{minN + minFollowUp} would require a later time. Each analysis
 #'     using \code{maxExtension} must have a floor timing criterion such as
 #'     \code{plannedCalendarTime}, \code{minTimeFromPreviousAnalysis},
-#'     \code{minN}, or explicit final-analysis \code{minfup}.
+#'     \code{minN}, \code{minNPerStratum}, or explicit final-analysis
+#'     \code{minfup}.
+#'   \item Finally, \code{maxCalendarTime[i]} applies an absolute calendar-time
+#'     cap. If both cap types are supplied, the earlier cap applies. This
+#'     mirrors the realized-cut grammar in \pkg{simtrial}, where the argument
+#'     named \code{max_extension_for_target_event} is applied as an absolute
+#'     analysis date.
 #' }
 #'
 #' \strong{Normalization and consistency:}
@@ -123,12 +135,16 @@
 #' events as \code{n.I}. At the design HR, this reproduces the design power
 #' exactly.
 #'
-#' \strong{Stratified targetEvents:}
-#' \code{targetEvents} accepts a scalar (recycled), a vector of length \code{k}
-#' (overall targets per analysis), or a matrix with \code{k} rows and
-#' \code{nstrata} columns (per-stratum targets). A vector of length \code{k}
-#' is always interpreted as overall targets; use a matrix for per-stratum
-#' specification.
+#' \strong{Stratified timing requirements:}
+#' \code{targetEvents} accepts a scalar (recycled) or a vector of length
+#' \code{k} for overall event targets. Use \code{targetEventsPerStratum} for a
+#' \code{k}-by-\code{nstrata} matrix of per-stratum event requirements and
+#' \code{minNPerStratum} for per-stratum enrollment requirements. Overall and
+#' per-stratum requirements may be combined and all active requirements must
+#' be met unless a cap intervenes. \code{NA} omits a requirement. A matrix
+#' passed through \code{targetEvents} is a deprecated alias for
+#' \code{targetEventsPerStratum}; unlike the earlier row-sum interpretation,
+#' its entries are enforced by stratum.
 #'
 #' \strong{Bound recalculation when parameters change:}
 #' When \code{x} is provided, the handling of bounds depends on which
@@ -193,21 +209,26 @@
 #'   bound spending function \code{sfharm}.
 #' @param testUpper Indicator of which analyses include an efficacy test.
 #'   \code{TRUE} (default) for all analyses. A logical vector of length
-#'   \code{k} may be specified.
+#'   \code{k} may be specified. Missing values are not allowed; use
+#'   \code{FALSE} to omit the test at an analysis.
 #' @param testLower Indicator of which analyses include a futility test.
 #'   \code{TRUE} (default) for all analyses. A logical vector of length
-#'   \code{k} may be specified.
+#'   \code{k} may be specified. Missing values are not allowed; use
+#'   \code{FALSE} to omit the test at an analysis.
 #' @param testHarm Indicator of which analyses include a harm bound.
 #'   \code{TRUE} (default) for all analyses. A logical vector of length
-#'   \code{k} may be specified. Only used for \code{test.type} 7 or 8.
+#'   \code{k} may be specified. Missing values are not allowed; use
+#'   \code{FALSE} to omit the test at an analysis. Only used for
+#'   \code{test.type} 7 or 8.
 #' @param r Integer grid parameter for numerical integration (default 18).
 #' @param usTime Upper spending time override; vector of length \code{k}
-#'   or \code{NULL} (default) to use information fractions. Ignored when
+#'   without missing values, or \code{NULL} (default) to use information
+#'   fractions. Ignored when
 #'   \code{spending = "calendar"}, because realized analysis times determine
 #'   the spending fractions.
 #' @param lsTime Lower spending time override; vector of length \code{k}
-#'   or \code{NULL} (default) to use information fractions. Ignored when
-#'   \code{spending = "calendar"}.
+#'   without missing values, or \code{NULL} (default) to use information
+#'   fractions. Ignored when \code{spending = "calendar"}.
 #' @param lambdaC Scalar, vector, or matrix of control event hazard rates.
 #'   Rows = time periods, columns = strata.
 #' @param hr Assumed hazard ratio (experimental/control) for power computation.
@@ -238,37 +259,54 @@
 #'   \code{"LachinFoulkes"} (default), \code{"Schoenfeld"},
 #'   \code{"Freedman"}, or \code{"BernsteinLagakos"}. Affects \code{n.fix}
 #'   computation when \code{x} is not provided.
-#' @param spending One of \code{"information"} (default) or \code{"calendar"}.
-#'   Controls whether alpha/beta spending tracks information fractions or
-#'   calendar time fractions (\code{T / max(T)}). With calendar spending,
-#'   \code{usTime} and \code{lsTime} are derived from the realized analysis
-#'   times and any user-supplied overrides are ignored.
+#' @param spending One of \code{"information"} (default), \code{"calendar"},
+#'   or \code{"min_planned_actual"}. Information spending tracks expected
+#'   event fractions within the scenario. Calendar spending uses
+#'   \code{T / max(T)}. With a reference design \code{x},
+#'   \code{"min_planned_actual"} uses
+#'   \code{pmin(x$n.I, actual events) / x$n.I[k]}, matching the planned-versus-
+#'   actual spending convention in \pkg{simtrial}. The latter two modes derive
+#'   \code{usTime} and \code{lsTime} and ignore user-supplied overrides.
 #' @param plannedCalendarTime Calendar times for analyses (time 0 = start of
 #'   randomization). Scalar (recycled) or vector of length \code{k}. Use
 #'   \code{NA} for analyses not determined by calendar time.
-#' @param targetEvents Target number of events at each analysis. Scalar
-#'   (recycled), vector of length \code{k} (overall targets), or matrix
-#'   with \code{k} rows and \code{nstrata} columns (per-stratum targets).
-#'   Use \code{NA} for analyses not determined by events. When a matrix is
-#'   supplied, row sums give the total event target used to solve each
-#'   analysis time.
+#' @param targetEvents Overall target number of events at each analysis.
+#'   Scalar (recycled) or vector of length \code{k}. Use \code{NA} for
+#'   analyses without an overall event requirement. A matrix is accepted as a
+#'   deprecated alias for \code{targetEventsPerStratum}.
+#' @param targetEventsPerStratum Per-stratum event requirements. Numeric matrix
+#'   with \code{k} rows and one column per stratum; \code{NA} omits a stratum
+#'   requirement at an analysis. The analysis waits until every active stratum
+#'   requirement and any overall \code{targetEvents} requirement are met.
 #' @param maxExtension Maximum time extension beyond the floor time to wait
 #'   for \code{targetEvents}. Scalar or vector of length \code{k}. Requires a
 #'   floor timing criterion for the affected analysis, most commonly
-#'   \code{plannedCalendarTime}.
+#'   \code{plannedCalendarTime}. Use \code{NA} for analyses without a relative
+#'   extension cap.
+#' @param maxCalendarTime Absolute calendar-time cap for each analysis. Scalar
+#'   or vector of length \code{k}. When supplied with \code{maxExtension}, the
+#'   earlier cap applies. This corresponds to
+#'   \code{max_extension_for_target_event} in \pkg{simtrial}. Use \code{NA}
+#'   for analyses without an absolute calendar-time cap.
 #' @param minTimeFromPreviousAnalysis Minimum elapsed time since the previous
 #'   analysis. Scalar or vector of length \code{k}. Ignored for the first
-#'   analysis.
+#'   analysis. Use \code{NA} for later analyses without a spacing requirement.
 #' @param minN Minimum total sample size enrolled before analysis can proceed.
 #'   Scalar or vector of length \code{k}. Can be used with
 #'   \code{minFollowUp} as the primary timing criterion; the resulting
-#'   analysis times and expected event totals must be strictly increasing.
-#' @param minFollowUp Minimum follow-up time after \code{minN} is reached.
-#'   Scalar or vector of length \code{k}. Must be >= 0 and requires
-#'   \code{minN}.
+#'   analysis times and expected event totals must be strictly increasing. Use
+#'   \code{NA} for analyses without an overall enrollment requirement.
+#' @param minNPerStratum Per-stratum minimum enrollment requirements. Numeric
+#'   matrix with \code{k} rows and one column per stratum; \code{NA} omits a
+#'   stratum requirement at an analysis.
+#' @param minFollowUp Minimum follow-up time after all active \code{minN} and
+#'   \code{minNPerStratum} requirements are reached. Scalar or vector of
+#'   length \code{k}. Must be >= 0. Use \code{NA} for no additional follow-up
+#'   at an analysis. Each non-missing value requires an active \code{minN} or
+#'   \code{minNPerStratum} requirement at the same analysis.
 #' @param informationRates Numeric vector of length \code{k} specifying
-#'   planned information-fraction caps. At each analysis, the effective upper
-#'   and lower spending time is
+#'   planned information-fraction caps, with no missing values. At each
+#'   analysis, the effective upper and lower spending time is
 #'   \code{pmin(informationRates, actual_timing)}, where
 #'   \code{actual_timing} is expected events divided by maximum expected
 #'   events. This prevents spending ahead of either the planned information
@@ -281,15 +319,17 @@
 #' @param fullSpendingAtFinal Logical. When \code{TRUE}, the final element of
 #'   the effective upper and lower spending-time vectors is forced to 1 after
 #'   applying
-#'   \code{informationRates}, calendar spending, or user-supplied
-#'   \code{usTime}/\code{lsTime}. This ensures full upper- and lower-bound
+#'   \code{informationRates}, calendar or planned-versus-actual spending, or
+#'   user-supplied \code{usTime}/\code{lsTime}. This ensures full upper- and
+#'   lower-bound
 #'   spending whenever a selected spending-time vector would otherwise end
 #'   below 1.
 #'   Default \code{FALSE}.
 #' @param tol Tolerance for \code{\link[stats]{uniroot}} when solving for
 #'   analysis times.
 #'
-#' @return An object of class \code{c("gsSurv", "gsDesign")} containing:
+#' @return An object of class
+#'   \code{c("gsSurvPower", "gsSurv", "gsDesign")} containing:
 #' \item{k}{Number of analyses.}
 #' \item{n.I}{Total expected events at each analysis.}
 #' \item{timing}{Information fractions at each analysis.}
@@ -306,8 +346,13 @@
 #'   under the assumed HR).}
 #' \item{beta}{Type II error (\code{1 - power}).}
 #' \item{variable}{Always \code{"Power"}.}
-#' \item{test.type, alpha, sided, method, spending, call}{Design settings used
-#'   for the power calculation.}
+#' \item{test.type, alpha, sided, method, spending, call}{Design settings and
+#'   the original call used for the power calculation.}
+#' \item{inputs}{Evaluated arguments supplied to \code{gsSurvPower()}. The
+#'   calculation can be reproduced under the same package version with
+#'   \code{do.call(gsSurvPower, inputs)}. When \code{x} is supplied, the
+#'   evaluated reference design is retained so that inherited design settings
+#'   and planned-versus-actual spending can be reproduced.}
 #' \item{informationRates, fullSpendingAtFinal}{Planned information-fraction
 #'   caps and final effective-spending-time setting used for bound spending.}
 #' \item{testUpper, testLower, testHarm}{Logical indicators of which analyses
@@ -350,6 +395,18 @@
 #' )
 #' sum(rowSums(pwr_target_n$gamma) * pwr_target_n$R)
 #'
+#' # Require event counts within each stratum
+#' pwr_stratified <- gsSurvPower(
+#'   k = 2, test.type = 1, alpha = 0.025, sided = 1,
+#'   lambdaC = matrix(log(2) / c(6, 12), ncol = 2),
+#'   hr = 0.7, eta = 0.01,
+#'   gamma = matrix(c(5, 5), ncol = 2), R = 12, ratio = 1,
+#'   targetEventsPerStratum = matrix(
+#'     c(20, 10, 40, 20), nrow = 2, byrow = TRUE
+#'   )
+#' )
+#' pwr_stratified$eDC + pwr_stratified$eDE
+#'
 #' @seealso \code{vignette("gsSurvPower", package = "gsDesign")} for
 #'   worked examples including calendar spending, stratified event targets,
 #'   and biomarker subgroup analyses.
@@ -375,7 +432,7 @@ gsSurvPower <- function(
     gamma = NULL, R = NULL, targetN = NULL, S = NULL,
     ratio = NULL, minfup = NULL,
     method = NULL,
-    spending = c("information", "calendar"),
+    spending = c("information", "calendar", "min_planned_actual"),
     plannedCalendarTime = NULL,
     targetEvents = NULL,
     maxExtension = NULL,
@@ -384,10 +441,18 @@ gsSurvPower <- function(
     minFollowUp = NULL,
     informationRates = NULL,
     fullSpendingAtFinal = FALSE,
-    tol = .Machine$double.eps^0.25) {
+    tol = .Machine$double.eps^0.25,
+    targetEventsPerStratum = NULL,
+    maxCalendarTime = NULL,
+    minNPerStratum = NULL) {
   spending <- match.arg(spending)
   call_object <- match.call()
   call_args <- as.list(call_object)
+  input_arguments <- mget(
+    names(call_object)[-1],
+    envir = environment(),
+    inherits = FALSE
+  )
 
   # Track whether user explicitly provided alpha; used below to decide
   # whether the gsSurv alpha/sided convention applies.
@@ -502,29 +567,6 @@ gsSurvPower <- function(
     R <- R * targetN / current_N
   }
 
-  timing_inputs <- .gsSurvPower_resolve_timing_inputs(
-    default_k = k,
-    plannedCalendarTime = plannedCalendarTime,
-    targetEvents = targetEvents,
-    maxExtension = maxExtension,
-    minTimeFromPreviousAnalysis = minTimeFromPreviousAnalysis,
-    minFollowUp = minFollowUp,
-    minN = minN,
-    finalMinFollowUp = if (minfup_provided_by_user) minfup else NULL,
-    x = x
-  )
-  k <- timing_inputs$k
-
-  # Validate informationRates
-  if (!is.null(informationRates)) {
-    if (length(informationRates) != k) {
-      stop("informationRates must have length k (", k, ")")
-    }
-    if (any(informationRates <= 0 | informationRates > 1)) {
-      stop("informationRates values must be in (0, 1]")
-    }
-  }
-
   normalized_rates <- .gsSurvPower_normalize_rate_inputs(
     control_hazard = lambdaC,
     control_dropout = eta,
@@ -532,6 +574,47 @@ gsSurvPower <- function(
     enrollment_rate = gamma,
     allocation_ratio = ratio
   )
+
+  timing_inputs <- .gsSurvPower_resolve_timing_inputs(
+    default_k = k,
+    plannedCalendarTime = plannedCalendarTime,
+    targetEvents = targetEvents,
+    targetEventsPerStratum = targetEventsPerStratum,
+    maxExtension = maxExtension,
+    maxCalendarTime = maxCalendarTime,
+    minTimeFromPreviousAnalysis = minTimeFromPreviousAnalysis,
+    minFollowUp = minFollowUp,
+    minN = minN,
+    minNPerStratum = minNPerStratum,
+    finalMinFollowUp = if (minfup_provided_by_user) minfup else NULL,
+    nStrata = ncol(normalized_rates$lambdaC),
+    x = x
+  )
+  k <- timing_inputs$k
+
+  .gsSurvPower_validate_test_flag(testUpper, "testUpper", k)
+  .gsSurvPower_validate_test_flag(testLower, "testLower", k)
+  .gsSurvPower_validate_test_flag(testHarm, "testHarm", k)
+
+  if (spending == "min_planned_actual" && is.null(informationRates)) {
+    if (is.null(x)) {
+      stop("spending = 'min_planned_actual' requires a reference design x")
+    }
+    if (length(x$n.I) != k || any(!is.finite(x$n.I)) || any(x$n.I <= 0)) {
+      stop("x must provide k positive finite planned event totals in n.I")
+    }
+  }
+
+  # Validate informationRates
+  if (!is.null(informationRates)) {
+    .gsSurvPower_validate_spending_time(
+      informationRates, "informationRates", k
+    )
+  } else if (spending == "information") {
+    .gsSurvPower_validate_spending_time(usTime, "usTime", k)
+    .gsSurvPower_validate_spending_time(lsTime, "lsTime", k)
+  }
+
   expected_counts_at_time <- .gsSurvPower_build_expected_counts_at_time(
     control_hazard = normalized_rates$lambdaC,
     control_dropout = normalized_rates$etaC,
@@ -593,6 +676,7 @@ gsSurvPower <- function(
   spending_times <- .gsSurvPower_resolve_spending_times(
     analysis_time = analysis_schedule$analysis_time,
     actual_timing = analysis_schedule$timing,
+    actual_events = analysis_schedule$total_events,
     settings = settings
   )
 
@@ -638,7 +722,8 @@ gsSurvPower <- function(
     bound_result = bound_result,
     normalized_rates = normalized_rates,
     settings = settings,
-    call_object = call_object
+    call_object = call_object,
+    input_arguments = input_arguments
   )
 }
 
@@ -656,6 +741,64 @@ gsSurvPower <- function(
   if (length(value) == 1) return(rep(value, analysis_count))
   if (length(value) == analysis_count) return(value)
   stop(paste(name, "must have length 1 or", analysis_count))
+}
+
+.gsSurvPower_validate_timing_vector <- function(value, name) {
+  active <- !is.na(value)
+  if ((any(active) && !is.numeric(value)) ||
+      any(!is.finite(value[active])) || any(value[active] < 0)) {
+    stop(name, " values must be non-negative finite numbers or NA")
+  }
+  as.numeric(value)
+}
+
+.gsSurvPower_validate_test_flag <- function(value, name, analysis_count) {
+  if (!is.logical(value) || !(length(value) %in% c(1, analysis_count)) ||
+      anyNA(value)) {
+    stop(
+      name, " must be TRUE or FALSE, or a logical vector of length ",
+      analysis_count, " without NA"
+    )
+  }
+  invisible(value)
+}
+
+.gsSurvPower_validate_spending_time <- function(value, name, analysis_count) {
+  if (is.null(value)) return(invisible(value))
+  if (!is.numeric(value) || length(value) != analysis_count || anyNA(value) ||
+      any(!is.finite(value)) || any(value <= 0 | value > 1)) {
+    stop(
+      name, " must be a numeric vector of length ", analysis_count,
+      " with values in (0, 1] and without NA"
+    )
+  }
+  invisible(value)
+}
+
+.gsSurvPower_normalize_stratum_timing_matrix <- function(
+    value,
+    name,
+    analysis_count,
+    n_strata) {
+  if (is.null(value)) {
+    return(matrix(NA_real_, nrow = analysis_count, ncol = n_strata))
+  }
+  all_missing_logical <- is.logical(value) && all(is.na(value))
+  if (!is.matrix(value) || (!is.numeric(value) && !all_missing_logical)) {
+    stop(name, " must be a numeric matrix")
+  }
+  if (all_missing_logical) storage.mode(value) <- "double"
+  if (nrow(value) != analysis_count || ncol(value) != n_strata) {
+    stop(
+      name, " must have k rows (", analysis_count,
+      ") and one column per stratum (", n_strata, ")"
+    )
+  }
+  active <- !is.na(value)
+  if (any(!is.finite(value[active])) || any(value[active] < 0)) {
+    stop(name, " values must be non-negative finite numbers or NA")
+  }
+  value
 }
 
 .gsSurvPower_normalize_rate_inputs <- function(
@@ -702,25 +845,47 @@ gsSurvPower <- function(
     default_k,
     plannedCalendarTime,
     targetEvents,
+    targetEventsPerStratum,
     maxExtension,
+    maxCalendarTime,
     minTimeFromPreviousAnalysis,
     minFollowUp,
     minN,
+    minNPerStratum,
     finalMinFollowUp,
+    nStrata,
     x) {
   planned_time_input <- plannedCalendarTime
   target_event_input <- targetEvents
 
-  if (!is.null(minFollowUp) && is.null(minN)) {
-    stop("minFollowUp requires minN")
+  if (is.matrix(target_event_input)) {
+    if (!is.null(targetEventsPerStratum)) {
+      stop(
+        "Supply per-stratum event requirements through only one of ",
+        "targetEvents or targetEventsPerStratum"
+      )
+    }
+    if (nStrata > 1) {
+      warning(
+        "A matrix targetEvents is deprecated; use targetEventsPerStratum. ",
+        "Matrix values are now enforced as per-stratum requirements."
+      )
+    }
+    targetEventsPerStratum <- target_event_input
+    target_event_input <- NULL
   }
 
   if (is.null(planned_time_input) && is.null(target_event_input) &&
-      is.null(minN)) {
+      is.null(targetEventsPerStratum) && is.null(minN) &&
+      is.null(minNPerStratum)) {
     if (!is.null(x)) {
       planned_time_input <- x$T
     } else {
-      stop("At least one of plannedCalendarTime, targetEvents, or minN must be specified")
+      stop(
+        "At least one timing criterion must be specified: ",
+        "plannedCalendarTime, targetEvents, targetEventsPerStratum, ",
+        "minN, or minNPerStratum"
+      )
     }
   }
 
@@ -728,33 +893,68 @@ gsSurvPower <- function(
   if (is.null(analysis_count)) {
     if (!is.null(planned_time_input)) {
       analysis_count <- length(planned_time_input)
-    } else if (is.matrix(target_event_input)) {
-      analysis_count <- nrow(target_event_input)
     } else if (!is.null(target_event_input)) {
       analysis_count <- length(target_event_input)
+    } else if (!is.null(targetEventsPerStratum)) {
+      analysis_count <- nrow(targetEventsPerStratum)
     } else if (!is.null(minN)) {
       analysis_count <- length(minN)
+    } else if (!is.null(minNPerStratum)) {
+      analysis_count <- nrow(minNPerStratum)
     }
   }
   if (is.null(analysis_count) || analysis_count < 1) {
     stop("Could not determine number of analyses (k)")
   }
 
-  planned_time <- .gsSurvPower_recycle_to_k(
-    planned_time_input, "plannedCalendarTime", analysis_count
+  planned_time <- .gsSurvPower_validate_timing_vector(
+    .gsSurvPower_recycle_to_k(
+      planned_time_input, "plannedCalendarTime", analysis_count
+    ),
+    "plannedCalendarTime"
   )
-  max_extension <- .gsSurvPower_recycle_to_k(
-    maxExtension, "maxExtension", analysis_count
+  max_extension <- .gsSurvPower_validate_timing_vector(
+    .gsSurvPower_recycle_to_k(
+      maxExtension, "maxExtension", analysis_count
+    ),
+    "maxExtension"
   )
-  min_time_from_previous <- .gsSurvPower_recycle_to_k(
-    minTimeFromPreviousAnalysis,
-    "minTimeFromPreviousAnalysis",
-    analysis_count
+  max_calendar_time <- .gsSurvPower_validate_timing_vector(
+    .gsSurvPower_recycle_to_k(
+      maxCalendarTime, "maxCalendarTime", analysis_count
+    ),
+    "maxCalendarTime"
   )
-  min_follow_up <- .gsSurvPower_recycle_to_k(
-    minFollowUp, "minFollowUp", analysis_count
+  min_time_from_previous <- .gsSurvPower_validate_timing_vector(
+    .gsSurvPower_recycle_to_k(
+      minTimeFromPreviousAnalysis,
+      "minTimeFromPreviousAnalysis",
+      analysis_count
+    ),
+    "minTimeFromPreviousAnalysis"
   )
-  min_enrolled <- .gsSurvPower_recycle_to_k(minN, "minN", analysis_count)
+  min_follow_up <- .gsSurvPower_validate_timing_vector(
+    .gsSurvPower_recycle_to_k(
+      minFollowUp, "minFollowUp", analysis_count
+    ),
+    "minFollowUp"
+  )
+  min_enrolled <- .gsSurvPower_validate_timing_vector(
+    .gsSurvPower_recycle_to_k(minN, "minN", analysis_count),
+    "minN"
+  )
+  target_events_per_stratum <- .gsSurvPower_normalize_stratum_timing_matrix(
+    targetEventsPerStratum,
+    "targetEventsPerStratum",
+    analysis_count,
+    nStrata
+  )
+  min_enrolled_per_stratum <- .gsSurvPower_normalize_stratum_timing_matrix(
+    minNPerStratum,
+    "minNPerStratum",
+    analysis_count,
+    nStrata
+  )
   final_min_follow_up <- if (is.null(finalMinFollowUp)) {
     NA_real_
   } else {
@@ -767,26 +967,46 @@ gsSurvPower <- function(
 
   if (is.null(target_event_input)) {
     total_event_targets <- rep(NA_real_, analysis_count)
-  } else if (is.matrix(target_event_input)) {
-    if (nrow(target_event_input) != analysis_count) {
-      stop("targetEvents matrix must have k rows")
-    }
-    total_event_targets <- rowSums(target_event_input)
   } else {
-    total_event_targets <- .gsSurvPower_recycle_to_k(
-      target_event_input, "targetEvents", analysis_count
+    total_event_targets <- .gsSurvPower_validate_timing_vector(
+      .gsSurvPower_recycle_to_k(
+        target_event_input, "targetEvents", analysis_count
+      ),
+      "targetEvents"
     )
   }
 
   for (analysis_index in seq_len(analysis_count)) {
+    has_enrollment_criterion <- !is.na(min_enrolled[analysis_index]) ||
+      any(!is.na(min_enrolled_per_stratum[analysis_index, ]))
+    if (!is.na(min_follow_up[analysis_index]) &&
+        !has_enrollment_criterion) {
+      stop(
+        "minFollowUp at analysis ", analysis_index,
+        " requires minN or minNPerStratum at the same analysis"
+      )
+    }
+
     has_floor_criterion <- !is.na(planned_time[analysis_index]) ||
       (analysis_index > 1 && !is.na(min_time_from_previous[analysis_index])) ||
-      !is.na(min_enrolled[analysis_index]) ||
+      has_enrollment_criterion ||
       (analysis_index == analysis_count && !is.na(final_min_follow_up))
     if (!is.na(max_extension[analysis_index]) && !has_floor_criterion) {
       stop(
         "maxExtension requires a floor timing criterion such as ",
-        "plannedCalendarTime, minTimeFromPreviousAnalysis, minN, or minfup"
+        "plannedCalendarTime, minTimeFromPreviousAnalysis, minN, ",
+        "minNPerStratum, or minfup"
+      )
+    }
+
+    has_event_criterion <- !is.na(total_event_targets[analysis_index]) ||
+      any(!is.na(target_events_per_stratum[analysis_index, ]))
+    if (!has_floor_criterion && !has_event_criterion) {
+      stop(
+        "Analysis ", analysis_index,
+        " has no active timing criterion; supply plannedCalendarTime, ",
+        "targetEvents, targetEventsPerStratum, minTimeFromPreviousAnalysis, ",
+        "minN, minNPerStratum, or final-analysis minfup"
       )
     }
   }
@@ -795,11 +1015,14 @@ gsSurvPower <- function(
     k = analysis_count,
     planned_time = planned_time,
     max_extension = max_extension,
+    max_calendar_time = max_calendar_time,
     min_time_from_previous = min_time_from_previous,
     min_follow_up = min_follow_up,
     min_enrolled = min_enrolled,
+    min_enrolled_per_stratum = min_enrolled_per_stratum,
     final_min_follow_up = final_min_follow_up,
-    total_event_targets = total_event_targets
+    total_event_targets = total_event_targets,
+    target_events_per_stratum = target_events_per_stratum
   )
 }
 
@@ -848,9 +1071,16 @@ gsSurvPower <- function(
     target,
     expected_counts_at_time,
     search_upper_bound,
-    tol) {
+    tol,
+    stratum_index = NULL) {
   objective <- function(current_time) {
-    expected_counts_at_time(current_time)$total_n - target
+    counts <- expected_counts_at_time(current_time)
+    enrolled <- if (is.null(stratum_index)) {
+      counts$total_n
+    } else {
+      counts$eNC[stratum_index] + counts$eNE[stratum_index]
+    }
+    enrolled - target
   }
   lower <- 0.001
   upper <- search_upper_bound
@@ -876,11 +1106,14 @@ gsSurvPower <- function(
     tol) {
   planned_time <- timing_inputs$planned_time
   max_extension <- timing_inputs$max_extension
+  max_calendar_time <- timing_inputs$max_calendar_time
   min_time_from_previous <- timing_inputs$min_time_from_previous
   min_follow_up <- timing_inputs$min_follow_up
   min_enrolled <- timing_inputs$min_enrolled
+  min_enrolled_per_stratum <- timing_inputs$min_enrolled_per_stratum
   final_min_follow_up <- timing_inputs$final_min_follow_up
   total_event_targets <- timing_inputs$total_event_targets
+  target_events_per_stratum <- timing_inputs$target_events_per_stratum
   analysis_count <- timing_inputs$k
 
   planned_time_max <- if (any(!is.na(planned_time))) {
@@ -890,12 +1123,23 @@ gsSurvPower <- function(
   }
   search_upper_bound <- max(sum(R) * 5, planned_time_max * 2, 200)
 
-  find_time_for_events <- function(target) {
+  find_time_for_events <- function(target, stratum_index = NULL) {
     objective <- function(current_time) {
-      expected_counts_at_time(current_time)$total_d - target
+      counts <- expected_counts_at_time(current_time)
+      events <- if (is.null(stratum_index)) {
+        counts$total_d
+      } else {
+        counts$eDC[stratum_index] + counts$eDE[stratum_index]
+      }
+      events - target
     }
     if (objective(search_upper_bound) < 0) {
-      warning("Target ", round(target), " events may not be achievable")
+      target_label <- if (is.null(stratum_index)) {
+        " events"
+      } else {
+        paste0(" events in stratum ", stratum_index)
+      }
+      warning("Target ", round(target), target_label, " may not be achievable")
       return(list(time = search_upper_bound, achievable = FALSE))
     }
     if (objective(0.001) >= 0) {
@@ -923,6 +1167,11 @@ gsSurvPower <- function(
         analysis_time[analysis_index - 1] + min_time_from_previous[analysis_index]
       )
     }
+    follow_up_time <- if (!is.na(min_follow_up[analysis_index])) {
+      min_follow_up[analysis_index]
+    } else {
+      0
+    }
     if (!is.na(min_enrolled[analysis_index])) {
       enrollment_time <- .gsSurvPower_find_time_for_enrollment(
         target = min_enrolled[analysis_index],
@@ -930,11 +1179,19 @@ gsSurvPower <- function(
         search_upper_bound = search_upper_bound,
         tol = tol
       )
-      follow_up_time <- if (!is.na(min_follow_up[analysis_index])) {
-        min_follow_up[analysis_index]
-      } else {
-        0
-      }
+      floor_times <- c(floor_times, enrollment_time + follow_up_time)
+    }
+    active_enrollment_strata <- which(
+      !is.na(min_enrolled_per_stratum[analysis_index, ])
+    )
+    for (stratum_index in active_enrollment_strata) {
+      enrollment_time <- .gsSurvPower_find_time_for_enrollment(
+        target = min_enrolled_per_stratum[analysis_index, stratum_index],
+        expected_counts_at_time = expected_counts_at_time,
+        search_upper_bound = search_upper_bound,
+        tol = tol,
+        stratum_index = stratum_index
+      )
       floor_times <- c(floor_times, enrollment_time + follow_up_time)
     }
     if (analysis_index == analysis_count && !is.na(final_min_follow_up)) {
@@ -942,11 +1199,27 @@ gsSurvPower <- function(
     }
     floor_time <- if (length(floor_times) > 0) max(floor_times) else 0.001
 
+    overall_event_solution <- NULL
+    event_times <- numeric(0)
     if (!is.na(total_event_targets[analysis_index])) {
-      event_solution <- find_time_for_events(
+      overall_event_solution <- find_time_for_events(
         total_event_targets[analysis_index]
       )
-      event_time <- event_solution$time
+      event_times <- c(event_times, overall_event_solution$time)
+    }
+    active_event_strata <- which(
+      !is.na(target_events_per_stratum[analysis_index, ])
+    )
+    for (stratum_index in active_event_strata) {
+      stratum_solution <- find_time_for_events(
+        target_events_per_stratum[analysis_index, stratum_index],
+        stratum_index = stratum_index
+      )
+      event_times <- c(event_times, stratum_solution$time)
+    }
+
+    if (length(event_times) > 0) {
+      event_time <- max(event_times)
       if (event_time <= floor_time) {
         analysis_time[analysis_index] <- floor_time
       } else if (!is.na(max_extension[analysis_index])) {
@@ -958,7 +1231,7 @@ gsSurvPower <- function(
         analysis_time[analysis_index] <- event_time
       }
     } else {
-      event_solution <- NULL
+      event_time <- NA_real_
       analysis_time[analysis_index] <- floor_time
     }
 
@@ -975,10 +1248,16 @@ gsSurvPower <- function(
         analysis_time[analysis_index - 1] + max_extension[analysis_index]
       )
     }
+    if (!is.na(max_calendar_time[analysis_index])) {
+      analysis_time[analysis_index] <- min(
+        analysis_time[analysis_index],
+        max_calendar_time[analysis_index]
+      )
+    }
     target_determines_analysis[analysis_index] <-
-      !is.null(event_solution) &&
-      event_solution$achievable &&
-      analysis_time[analysis_index] == event_solution$time
+      !is.null(overall_event_solution) &&
+      overall_event_solution$achievable &&
+      abs(analysis_time[analysis_index] - overall_event_solution$time) <= tol
   }
 
   control_events <- experimental_events <- NULL
@@ -1014,9 +1293,9 @@ gsSurvPower <- function(
   if (analysis_count > 1) {
     if (any(diff(analysis_time) <= tol)) {
       stop(
-        "Analysis times must be strictly increasing; add targetEvents, ",
-        "plannedCalendarTime, minTimeFromPreviousAnalysis, or later ",
-        "minN/minFollowUp criteria"
+        "Analysis times must be strictly increasing; add later overall or ",
+        "per-stratum event targets, plannedCalendarTime, ",
+        "minTimeFromPreviousAnalysis, or later enrollment/follow-up criteria"
       )
     }
     if (any(diff(total_events) <= tol)) {
@@ -1081,6 +1360,7 @@ gsSurvPower <- function(
 .gsSurvPower_resolve_spending_times <- function(
     analysis_time,
     actual_timing,
+    actual_events,
     settings) {
   if (!is.null(settings$informationRates)) {
     effective_spending_time <- pmin(settings$informationRates, actual_timing)
@@ -1093,7 +1373,17 @@ gsSurvPower <- function(
     ))
   }
 
-  if (settings$spending == "calendar") {
+  if (settings$spending == "min_planned_actual") {
+    effective_spending_time <- pmin(settings$x$n.I, actual_events) /
+      settings$x$n.I[settings$k]
+    if (isTRUE(settings$fullSpendingAtFinal)) {
+      effective_spending_time[length(effective_spending_time)] <- 1
+    }
+    return(list(
+      usTime = effective_spending_time,
+      lsTime = effective_spending_time
+    ))
+  } else if (settings$spending == "calendar") {
     upper_spending_time <- analysis_time / max(analysis_time)
     lower_spending_time <- upper_spending_time
   } else {
@@ -1320,7 +1610,8 @@ gsSurvPower <- function(
     bound_result,
     normalized_rates,
     settings,
-    call_object) {
+    call_object,
+    input_arguments) {
   result <- design_result
   result$n.I <- analysis_schedule$total_events
   result$T <- analysis_schedule$analysis_time
@@ -1349,6 +1640,7 @@ gsSurvPower <- function(
   result$informationRates <- settings$informationRates
   result$fullSpendingAtFinal <- settings$fullSpendingAtFinal
   result$call <- call_object
+  result$inputs <- input_arguments
   result$timing <- analysis_schedule$timing
   result$testUpper <- .gsSurvPower_format_test_flag(settings$testUpper, settings$k)
   result$testLower <- if (settings$k == 1) {
@@ -1379,6 +1671,6 @@ gsSurvPower <- function(
   result$power <- sum(bound_result$probabilities$upper$prob[, 2])
   result$beta <- 1 - result$power
 
-  class(result) <- c("gsSurv", "gsDesign")
+  class(result) <- c("gsSurvPower", "gsSurv", "gsDesign")
   gsSurvAddN(.gsSurvPower_label_output_matrices(result))
 }
