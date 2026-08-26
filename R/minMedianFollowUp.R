@@ -83,7 +83,7 @@ minMedianFollowUp <- function(x, calendarTime = x$T) {
   }
 
   cumulative_enrollment <- cumsum(enrollment_by_period)
-  period_start <- c(0, head(cumsum(x$R), -1L))
+  period_start <- c(0, utils::head(cumsum(x$R), -1L))
 
   vapply(calendarTime, function(current_time) {
     accrued_duration <- pmax(

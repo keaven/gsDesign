@@ -8,6 +8,7 @@ test_that("gsSurvPower works with plannedCalendarTime from gsSurv design", {
   )
 
   pwr <- gsSurvPower(x = design, plannedCalendarTime = design$T)
+  expect_s3_class(pwr, "gsSurvPower")
   expect_s3_class(pwr, "gsSurv")
   expect_s3_class(pwr, "gsDesign")
   expect_equal(pwr$k, 3)
@@ -18,6 +19,67 @@ test_that("gsSurvPower works with plannedCalendarTime from gsSurv design", {
   expect_equal(pwr$hr, design$hr)
   expect_equal(pwr$hr1, design$hr)
   expect_equal(pwr$variable, "Power")
+})
+
+test_that("gsSurvPower retains evaluated inputs for direct reconstruction", {
+  pwr <- gsSurvPower(
+    k = 3,
+    test.type = 1,
+    lambdaC = matrix(log(2) / c(6, 12), ncol = 2),
+    hr = 0.7,
+    gamma = matrix(c(4, 6), ncol = 2),
+    R = 12,
+    plannedCalendarTime = c(12, NA, 36),
+    targetEvents = c(NA, 80, NA),
+    targetEventsPerStratum = matrix(
+      c(NA, NA, 20, 30, NA, NA), nrow = 3, byrow = TRUE
+    ),
+    maxExtension = c(NA, 6, NA),
+    maxCalendarTime = c(NA, 24, NA),
+    minTimeFromPreviousAnalysis = c(NA, 6, NA),
+    minN = c(100, NA, NA),
+    minNPerStratum = matrix(
+      c(40, 60, NA, NA, NA, NA), nrow = 3, byrow = TRUE
+    ),
+    minFollowUp = c(2, NA, NA)
+  )
+  saved_inputs <- unserialize(serialize(pwr$inputs, NULL))
+  rebuilt <- do.call(gsSurvPower, saved_inputs)
+
+  expect_s3_class(rebuilt, "gsSurvPower")
+  expect_identical(pwr$inputs$plannedCalendarTime, c(12, NA, 36))
+  expect_identical(
+    pwr$inputs$targetEventsPerStratum,
+    matrix(c(NA, NA, 20, 30, NA, NA), nrow = 3, byrow = TRUE)
+  )
+  expect_equal(rebuilt$T, pwr$T)
+  expect_equal(rebuilt$n.I, pwr$n.I)
+  expect_equal(rebuilt$upper$bound, pwr$upper$bound)
+  expect_equal(rebuilt$power, pwr$power)
+})
+
+test_that("gsSurvPower reconstruction retains its reference design", {
+  design <- gsSurv(
+    k = 3, test.type = 4, beta = 0.15,
+    lambdaC = log(2) / 12, hr = 0.7, eta = 0.01,
+    gamma = 10, R = 16, minfup = 12, T = 28
+  )
+  pwr <- gsSurvPower(
+    x = design,
+    hr = 0.8,
+    targetEvents = 0.9 * design$n.I,
+    spending = "min_planned_actual"
+  )
+  saved_inputs <- unserialize(serialize(pwr$inputs, NULL))
+  rebuilt <- do.call(gsSurvPower, saved_inputs)
+
+  expect_identical(pwr$inputs$x, design)
+  expect_identical(pwr$inputs$targetEvents, 0.9 * design$n.I)
+  expect_equal(rebuilt$T, pwr$T)
+  expect_equal(rebuilt$n.I, pwr$n.I)
+  expect_equal(rebuilt$upper$bound, pwr$upper$bound)
+  expect_equal(rebuilt$lower$bound, pwr$lower$bound)
+  expect_equal(rebuilt$power, pwr$power)
 })
 
 test_that("gsSurvPower power decreases with worse HR", {
@@ -51,6 +113,13 @@ test_that("gsSurvPower works with targetEvents", {
   events <- rowSums(pwr$eDC) + rowSums(pwr$eDE)
   expect_equal(events, c(50, 100), tolerance = 1e-6)
   expect_equal(pwr$n.I, events)
+
+  pwr_matrix <- expect_no_warning(gsSurvPower(
+    x = design,
+    targetEvents = matrix(c(50, 100), ncol = 1)
+  ))
+  expect_equal(pwr_matrix$T, pwr$T, tolerance = 1e-6)
+  expect_equal(pwr_matrix$n.I, pwr$n.I, tolerance = 1e-6)
 })
 
 test_that("gsSurvPower preserves integer sample size and event targets", {
@@ -210,6 +279,37 @@ test_that("gsSurvPower respects maxExtension", {
   expect_true(pwr_capped$T[1] <= pwr_uncapped$T[1])
 })
 
+test_that("maxCalendarTime is an absolute analysis-time cap", {
+  base_args <- list(
+    k = 1, test.type = 1, alpha = 0.025, sided = 1,
+    lambdaC = log(2) / 6, hr = 0.7, hr0 = 1,
+    gamma = 10, R = 12, ratio = 1,
+    targetEvents = 100
+  )
+
+  pwr_capped <- do.call(gsSurvPower, c(base_args, list(
+    maxCalendarTime = 18
+  )))
+  pwr_uncapped <- do.call(gsSurvPower, base_args)
+
+  expect_equal(pwr_capped$T, 18, tolerance = 1e-6)
+  expect_lt(pwr_capped$n.I, 100)
+  expect_gt(pwr_uncapped$T, pwr_capped$T)
+
+  pwr_relative_first <- do.call(gsSurvPower, c(base_args, list(
+    plannedCalendarTime = 18,
+    maxExtension = 2,
+    maxCalendarTime = 22
+  )))
+  pwr_absolute_first <- do.call(gsSurvPower, c(base_args, list(
+    plannedCalendarTime = 18,
+    maxExtension = 10,
+    maxCalendarTime = 22
+  )))
+  expect_equal(pwr_relative_first$T, 20, tolerance = 1e-6)
+  expect_equal(pwr_absolute_first$T, 22, tolerance = 1e-6)
+})
+
 test_that("gsSurvPower requires a floor criterion when maxExtension is supplied", {
   expect_error(
     gsSurvPower(
@@ -317,9 +417,17 @@ test_that("gsSurvPower informationRates take precedence over calendar spending",
     usTime = c(0.3, 0.7, 1),
     lsTime = c(0.4, 0.8, 1)
   )
+  pwr_min_planned_actual <- gsSurvPower(
+    x = design,
+    plannedCalendarTime = design$T,
+    informationRates = info_rates,
+    spending = "min_planned_actual"
+  )
 
   expect_equal(pwr_info$upper$bound, pwr_calendar$upper$bound)
   expect_equal(pwr_info$lower$bound, pwr_calendar$lower$bound)
+  expect_equal(pwr_info$upper$bound, pwr_min_planned_actual$upper$bound)
+  expect_equal(pwr_info$lower$bound, pwr_min_planned_actual$lower$bound)
   expect_equal(pwr_info$informationRates, info_rates)
 })
 
@@ -373,7 +481,49 @@ test_that("gsSurvPower fullSpendingAtFinal forces final spending fraction to one
   expect_true(isTRUE(pwr_full$fullSpendingAtFinal))
 })
 
-test_that("gsSurvPower uses row sums of matrix targetEvents for timing", {
+test_that("gsSurvPower supports planned-versus-actual spending", {
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
+    sfu = sfHSD, sfupar = -4, sfl = sfHSD, sflpar = -2,
+    lambdaC = log(2) / 12, hr = 0.7, hr0 = 1,
+    eta = 0.01, gamma = 10, R = 16, minfup = 12, T = 28
+  )
+
+  pwr <- gsSurvPower(
+    x = design,
+    lambdaC = log(2) / 24,
+    plannedCalendarTime = design$T,
+    spending = "min_planned_actual"
+  )
+  expected_spending_time <- pmin(design$n.I, pwr$n.I) /
+    design$n.I[design$k]
+
+  expect_equal(pwr$upper$sTime, expected_spending_time, tolerance = 1e-8)
+  expect_equal(pwr$lower$sTime, expected_spending_time, tolerance = 1e-8)
+  expect_lt(tail(expected_spending_time, 1), 1)
+
+  pwr_full <- gsSurvPower(
+    x = design,
+    lambdaC = log(2) / 24,
+    plannedCalendarTime = design$T,
+    spending = "min_planned_actual",
+    fullSpendingAtFinal = TRUE
+  )
+  expect_equal(tail(pwr_full$upper$sTime, 1), 1)
+
+  expect_error(
+    gsSurvPower(
+      k = 2, test.type = 1, alpha = 0.025, sided = 1,
+      lambdaC = log(2) / 6, hr = 0.7, hr0 = 1,
+      gamma = 10, R = 12, ratio = 1,
+      plannedCalendarTime = c(18, 24),
+      spending = "min_planned_actual"
+    ),
+    "requires a reference design x"
+  )
+})
+
+test_that("gsSurvPower enforces per-stratum event requirements", {
   target_matrix <- matrix(c(20, 10, 40, 20), nrow = 2, byrow = TRUE)
   base_args <- list(
     k = 2, test.type = 1, alpha = 0.025, sided = 1,
@@ -384,13 +534,51 @@ test_that("gsSurvPower uses row sums of matrix targetEvents for timing", {
     R = 12, ratio = 1
   )
 
-  pwr_matrix <- do.call(gsSurvPower, c(base_args, list(targetEvents = target_matrix)))
-  pwr_vector <- do.call(gsSurvPower, c(base_args, list(
-    targetEvents = rowSums(target_matrix)
+  pwr_per_stratum <- do.call(gsSurvPower, c(base_args, list(
+    targetEventsPerStratum = target_matrix
+  )))
+  events_per_stratum <- pwr_per_stratum$eDC + pwr_per_stratum$eDE
+
+  expect_true(all(events_per_stratum >= target_matrix - 1e-4))
+  expect_true(all(apply(
+    abs(events_per_stratum - target_matrix) < 1e-4,
+    1,
+    any
+  )))
+  expect_false(isTRUE(all.equal(
+    pwr_per_stratum$n.I,
+    rowSums(target_matrix),
+    tolerance = 1e-4
   )))
 
-  expect_equal(pwr_matrix$T, pwr_vector$T, tolerance = 1e-6)
-  expect_equal(pwr_matrix$n.I, pwr_vector$n.I, tolerance = 1e-6)
+  expect_warning(
+    pwr_alias <- do.call(gsSurvPower, c(base_args, list(
+      targetEvents = target_matrix
+    ))),
+    "matrix targetEvents is deprecated"
+  )
+  expect_equal(pwr_alias$T, pwr_per_stratum$T, tolerance = 1e-6)
+  expect_equal(pwr_alias$n.I, pwr_per_stratum$n.I, tolerance = 1e-6)
+})
+
+test_that("gsSurvPower combines overall and per-stratum event requirements", {
+  target_matrix <- matrix(c(20, 10, 40, 20), nrow = 2, byrow = TRUE)
+  overall_targets <- c(35, 70)
+
+  pwr <- gsSurvPower(
+    k = 2, test.type = 1, alpha = 0.025, sided = 1,
+    lambdaC = matrix(log(2) / c(6, 12), ncol = 2),
+    hr = 0.7, hr0 = 1,
+    eta = matrix(c(0.01, 0.02), ncol = 2),
+    gamma = matrix(c(5, 5), ncol = 2),
+    R = 12, ratio = 1,
+    targetEvents = overall_targets,
+    targetEventsPerStratum = target_matrix
+  )
+
+  events_per_stratum <- pwr$eDC + pwr$eDE
+  expect_true(all(events_per_stratum >= target_matrix - 1e-4))
+  expect_equal(pwr$n.I, overall_targets, tolerance = 1e-4)
 })
 
 test_that("gsSurvPower uses etaE separately from eta", {
@@ -501,6 +689,60 @@ test_that("gsSurvPower supports minN and minFollowUp timing", {
   )
 })
 
+test_that("gsSurvPower supports per-stratum enrollment and follow-up gates", {
+  enrollment_targets <- matrix(
+    c(20, 30, 40, 60),
+    nrow = 2,
+    byrow = TRUE
+  )
+  pwr <- gsSurvPower(
+    k = 2,
+    test.type = 1,
+    alpha = 0.025,
+    sided = 1,
+    lambdaC = matrix(log(2) / c(6, 12), ncol = 2),
+    hr = 0.7,
+    hr0 = 1,
+    eta = 0,
+    gamma = matrix(c(4, 6), ncol = 2),
+    R = 12,
+    minNPerStratum = enrollment_targets,
+    minFollowUp = c(2, 2),
+    ratio = 1
+  )
+
+  expect_equal(pwr$T, c(7, 12), tolerance = 1e-3)
+  expect_true(all(pwr$eNC + pwr$eNE >= enrollment_targets))
+})
+
+test_that("gsSurvPower supports mixed NA across analysis timing rules", {
+  pwr <- gsSurvPower(
+    k = 3,
+    test.type = 1,
+    alpha = 0.025,
+    sided = 1,
+    lambdaC = log(2) / 6,
+    hr = 0.7,
+    hr0 = 1,
+    gamma = 10,
+    R = 12,
+    ratio = 1,
+    plannedCalendarTime = c(12, NA, 36),
+    targetEvents = c(NA, 80, NA),
+    targetEventsPerStratum = matrix(c(NA, 50, NA), ncol = 1),
+    maxExtension = c(NA, 6, NA),
+    maxCalendarTime = c(NA, 24, NA),
+    minTimeFromPreviousAnalysis = c(NA, 6, NA),
+    minN = c(100, NA, NA),
+    minNPerStratum = matrix(c(40, NA, NA), ncol = 1),
+    minFollowUp = c(2, NA, NA)
+  )
+
+  expect_equal(pwr$T, c(12, 18, 36), tolerance = 1e-3)
+  expect_true(pwr$N[1] >= 100)
+  expect_true(all(diff(pwr$n.I) > 0))
+})
+
 test_that("gsSurvPower print method works for power output", {
   design <- gsSurv(
     k = 2, test.type = 4, alpha = 0.025, sided = 1, beta = 0.1,
@@ -543,6 +785,77 @@ test_that("gsSurvPower validates inputs", {
       plannedCalendarTime = c(12, 24, 36)
     ),
     "must have length 1 or"
+  )
+
+  expect_error(
+    gsSurvPower(
+      k = 3, lambdaC = log(2) / 6, gamma = 10, R = 12,
+      plannedCalendarTime = c(12, 24, 36),
+      minN = c(100, NA, NA),
+      minFollowUp = c(2, 5, NA)
+    ),
+    "minFollowUp at analysis 2 requires minN or minNPerStratum"
+  )
+
+  expect_error(
+    gsSurvPower(
+      k = 3, lambdaC = log(2) / 6, gamma = 10, R = 12,
+      plannedCalendarTime = c(12, 24, 36),
+      informationRates = c(0.3, NA, 1)
+    ),
+    "informationRates.*without NA"
+  )
+
+  expect_error(
+    gsSurvPower(
+      k = 3, lambdaC = log(2) / 6, gamma = 10, R = 12,
+      plannedCalendarTime = c(12, 24, 36),
+      testUpper = c(FALSE, NA, TRUE)
+    ),
+    "testUpper.*without NA"
+  )
+
+  expect_error(
+    gsSurvPower(
+      k = 3, lambdaC = log(2) / 6, gamma = 10, R = 12,
+      plannedCalendarTime = c(12, 24, 36),
+      usTime = c(0.3, NA, 1)
+    ),
+    "usTime.*without NA"
+  )
+
+  expect_error(
+    gsSurvPower(
+      k = 2, lambdaC = log(2) / 6, gamma = 10, R = 12,
+      plannedCalendarTime = c(12, Inf)
+    ),
+    "plannedCalendarTime values must be non-negative finite numbers or NA"
+  )
+
+  expect_error(
+    gsSurvPower(
+      k = 3, lambdaC = log(2) / 6, gamma = 10, R = 12,
+      plannedCalendarTime = c(12, NA, 36)
+    ),
+    "Analysis 2 has no active timing criterion"
+  )
+})
+
+test_that("gsSurvPower preserves the legacy positional argument order", {
+  legacy_formals <- c(
+    "x", "k", "test.type", "alpha", "sided", "astar",
+    "sfu", "sfupar", "sfl", "sflpar", "sfharm", "sfharmparam",
+    "r", "usTime", "lsTime", "testUpper", "testLower", "testHarm",
+    "lambdaC", "hr", "hr0", "hr1", "eta", "etaE", "gamma", "R",
+    "targetN", "S", "ratio", "minfup", "method", "spending",
+    "plannedCalendarTime", "targetEvents", "maxExtension",
+    "minTimeFromPreviousAnalysis", "minN", "minFollowUp",
+    "informationRates", "fullSpendingAtFinal", "tol"
+  )
+
+  expect_identical(
+    names(formals(gsSurvPower))[seq_along(legacy_formals)],
+    legacy_formals
   )
 })
 
