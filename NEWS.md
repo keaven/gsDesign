@@ -3,7 +3,7 @@
 ## Major changes
 
 - The (heavy) **gt** dependency has been replaced with the lightweight **lt**
-  package, and `lt::lt()` is now the recommended way to render summary tables.
+  package, and `lt()` is now the recommended way to render summary tables.
   An S3 method for `lt()` is provided for `gsBinomialExactTable` objects, the
   `lt()` generic is re-exported so it can be used after loading only gsDesign,
   and all vignettes now use lt functions (`lt()`, `lt_header()`,

@@ -30,7 +30,7 @@
 #' )
 #' b_power |>
 #'   as_table() |>
-#'   lt::lt()
+#'   lt()
 as_table <- function(x, ...) UseMethod("as_table")
 
 #' @rdname as_table

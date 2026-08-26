@@ -18,10 +18,10 @@
 #'
 #' @export
 as_gt <- function(x, ...) {
-  .Deprecated("lt::lt", package = "gsDesign",
+  .Deprecated("lt", package = "gsDesign",
     msg = paste(
       "as_gt() is deprecated and will be removed in a future release;",
-      "please use lt::lt() instead."
+      "please use lt() instead."
     ))
   UseMethod("as_gt")
 }
@@ -31,7 +31,7 @@ as_gt <- function(x, ...) {
 assert_gt_installed <- function() {
   if (!requireNamespace("gt", quietly = TRUE)) stop(
     "The 'gt' package is required by the deprecated as_gt(); ",
-    "install it with install.packages('gt'), or use lt::lt() instead.",
+    "install it with install.packages('gt'), or use lt() instead.",
     call. = FALSE
   )
 }
