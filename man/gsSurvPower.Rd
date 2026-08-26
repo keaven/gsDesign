@@ -252,7 +252,8 @@ matrix with \code{k} rows and one column per stratum; \code{NA} omits a
 stratum requirement at an analysis.}
 }
 \value{
-An object of class \code{c("gsSurv", "gsDesign")} containing:
+An object of class
+  \code{c("gsSurvPower", "gsSurv", "gsDesign")} containing:
 \item{k}{Number of analyses.}
 \item{n.I}{Total expected events at each analysis.}
 \item{timing}{Information fractions at each analysis.}
@@ -269,8 +270,13 @@ An object of class \code{c("gsSurv", "gsDesign")} containing:
   under the assumed HR).}
 \item{beta}{Type II error (\code{1 - power}).}
 \item{variable}{Always \code{"Power"}.}
-\item{test.type, alpha, sided, method, spending, call}{Design settings used
-  for the power calculation.}
+\item{test.type, alpha, sided, method, spending, call}{Design settings and
+  the original call used for the power calculation.}
+\item{inputs}{Evaluated arguments supplied to \code{gsSurvPower()}. The
+  calculation can be reproduced under the same package version with
+  \code{do.call(gsSurvPower, inputs)}. When \code{x} is supplied, the
+  evaluated reference design is retained so that inherited design settings
+  and planned-versus-actual spending can be reproduced.}
 \item{informationRates, fullSpendingAtFinal}{Planned information-fraction
   caps and final effective-spending-time setting used for bound spending.}
 \item{testUpper, testLower, testHarm}{Logical indicators of which analyses

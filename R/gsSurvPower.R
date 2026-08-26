@@ -328,7 +328,8 @@
 #' @param tol Tolerance for \code{\link[stats]{uniroot}} when solving for
 #'   analysis times.
 #'
-#' @return An object of class \code{c("gsSurv", "gsDesign")} containing:
+#' @return An object of class
+#'   \code{c("gsSurvPower", "gsSurv", "gsDesign")} containing:
 #' \item{k}{Number of analyses.}
 #' \item{n.I}{Total expected events at each analysis.}
 #' \item{timing}{Information fractions at each analysis.}
@@ -345,8 +346,13 @@
 #'   under the assumed HR).}
 #' \item{beta}{Type II error (\code{1 - power}).}
 #' \item{variable}{Always \code{"Power"}.}
-#' \item{test.type, alpha, sided, method, spending, call}{Design settings used
-#'   for the power calculation.}
+#' \item{test.type, alpha, sided, method, spending, call}{Design settings and
+#'   the original call used for the power calculation.}
+#' \item{inputs}{Evaluated arguments supplied to \code{gsSurvPower()}. The
+#'   calculation can be reproduced under the same package version with
+#'   \code{do.call(gsSurvPower, inputs)}. When \code{x} is supplied, the
+#'   evaluated reference design is retained so that inherited design settings
+#'   and planned-versus-actual spending can be reproduced.}
 #' \item{informationRates, fullSpendingAtFinal}{Planned information-fraction
 #'   caps and final effective-spending-time setting used for bound spending.}
 #' \item{testUpper, testLower, testHarm}{Logical indicators of which analyses
@@ -442,6 +448,11 @@ gsSurvPower <- function(
   spending <- match.arg(spending)
   call_object <- match.call()
   call_args <- as.list(call_object)
+  input_arguments <- mget(
+    names(call_object)[-1],
+    envir = environment(),
+    inherits = FALSE
+  )
 
   # Track whether user explicitly provided alpha; used below to decide
   # whether the gsSurv alpha/sided convention applies.
@@ -711,7 +722,8 @@ gsSurvPower <- function(
     bound_result = bound_result,
     normalized_rates = normalized_rates,
     settings = settings,
-    call_object = call_object
+    call_object = call_object,
+    input_arguments = input_arguments
   )
 }
 
@@ -1598,7 +1610,8 @@ gsSurvPower <- function(
     bound_result,
     normalized_rates,
     settings,
-    call_object) {
+    call_object,
+    input_arguments) {
   result <- design_result
   result$n.I <- analysis_schedule$total_events
   result$T <- analysis_schedule$analysis_time
@@ -1627,6 +1640,7 @@ gsSurvPower <- function(
   result$informationRates <- settings$informationRates
   result$fullSpendingAtFinal <- settings$fullSpendingAtFinal
   result$call <- call_object
+  result$inputs <- input_arguments
   result$timing <- analysis_schedule$timing
   result$testUpper <- .gsSurvPower_format_test_flag(settings$testUpper, settings$k)
   result$testLower <- if (settings$k == 1) {
@@ -1657,6 +1671,6 @@ gsSurvPower <- function(
   result$power <- sum(bound_result$probabilities$upper$prob[, 2])
   result$beta <- 1 - result$power
 
-  class(result) <- c("gsSurv", "gsDesign")
+  class(result) <- c("gsSurvPower", "gsSurv", "gsDesign")
   gsSurvAddN(.gsSurvPower_label_output_matrices(result))
 }
