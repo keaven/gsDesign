@@ -41,7 +41,7 @@ observations when bound is crossed or when trial ends without crossing.}
 }
 \value{
 A \code{gt_tbl} object that may be extended by overloaded versions of
-\code{as_gt()}.
+  \code{as_gt()}.
 }
 \description{
 \code{as_gt()} is deprecated in favor of \code{\link[lt]{lt}()}, which

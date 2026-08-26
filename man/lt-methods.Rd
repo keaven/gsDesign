@@ -64,7 +64,7 @@ safety_power <- gsBinomialExact(
 )
 safety_power |>
   as_table() |>
-  lt::lt(
+  lt(
     theta_label = I("Underlying<br>AE rate"),
     prob_decimals = 3,
     bound_label = c("low rate", "high rate")

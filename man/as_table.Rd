@@ -35,7 +35,7 @@ b_power <- gsBinomialExact(
 )
 b_power |>
   as_table() |>
-  lt::lt()
+  lt()
 }
 \seealso{
 \code{vignette("binomialSPRTExample")}
