@@ -17,3 +17,4 @@ tests/benchmarks
 ^docs$
 ^Rplots\.pdf$
 ^CRAN-SUBMISSION$
+^presentations$
