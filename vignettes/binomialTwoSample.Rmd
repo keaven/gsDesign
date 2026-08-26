@@ -369,13 +369,13 @@ power_table_simulation |>
     values_from = Power
   ) |>
   dplyr::rename(`Control group rate` = pC) |>
-  lt::lt() |>
-  lt::lt_spanner(
+  lt() |>
+  lt_spanner(
     label = "Treatment effect (delta)",
     columns = 2:7
   ) |>
-  lt::lt_format(columns = 1:7, decimals = 1, percent = TRUE) |>
-  lt::lt_header("Power by Control Group Rate and Treatment Effect")
+  lt_format(columns = 1:7, decimals = 1, percent = TRUE) |>
+  lt_header("Power by Control Group Rate and Treatment Effect")
 ```
 
 ## Summary
