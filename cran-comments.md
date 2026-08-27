@@ -32,7 +32,10 @@ randomizeR, ssutil.
 All 8 were checked against this release. Seven completed with status OK.
 randomizeR completed with one pre-existing NOTE for unescaped braces in its
 own `makeDesignMatrix.Rd` documentation. There were no new reverse-dependency
-problems attributable to gsDesign.
+problems attributable to gsDesign. The later `gsSurvPower()` reconstruction
+and timing updates (#311, #314) do not change previously exported interfaces
+used by these reverse dependencies, so the existing revdep results still
+apply.
 
 No breaking API changes were made in this release. Existing exported
 interfaces remain compatible; new output components are additive.

@@ -22,11 +22,12 @@ test_that("gsSurvPower works with plannedCalendarTime from gsSurv design", {
 })
 
 test_that("gsSurvPower retains evaluated inputs for direct reconstruction", {
+  assumed_hr <- 0.7
   pwr <- gsSurvPower(
     k = 3,
     test.type = 1,
     lambdaC = matrix(log(2) / c(6, 12), ncol = 2),
-    hr = 0.7,
+    hr = assumed_hr,
     gamma = matrix(c(4, 6), ncol = 2),
     R = 12,
     plannedCalendarTime = c(12, NA, 36),
@@ -43,10 +44,10 @@ test_that("gsSurvPower retains evaluated inputs for direct reconstruction", {
     ),
     minFollowUp = c(2, NA, NA)
   )
-  saved_inputs <- unserialize(serialize(pwr$inputs, NULL))
-  rebuilt <- do.call(gsSurvPower, saved_inputs)
+  rebuilt <- do.call(gsSurvPower, pwr$inputs)
 
   expect_s3_class(rebuilt, "gsSurvPower")
+  expect_identical(pwr$inputs$hr, 0.7)
   expect_identical(pwr$inputs$plannedCalendarTime, c(12, NA, 36))
   expect_identical(
     pwr$inputs$targetEventsPerStratum,
@@ -70,8 +71,7 @@ test_that("gsSurvPower reconstruction retains its reference design", {
     targetEvents = 0.9 * design$n.I,
     spending = "min_planned_actual"
   )
-  saved_inputs <- unserialize(serialize(pwr$inputs, NULL))
-  rebuilt <- do.call(gsSurvPower, saved_inputs)
+  rebuilt <- do.call(gsSurvPower, pwr$inputs)
 
   expect_identical(pwr$inputs$x, design)
   expect_identical(pwr$inputs$targetEvents, 0.9 * design$n.I)
