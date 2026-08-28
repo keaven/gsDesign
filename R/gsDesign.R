@@ -248,7 +248,11 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' options 3 and 4 must compute boundary crossing probabilities under both the
 #' null and alternative hypotheses, deriving these designs can take longer than
 #' other options. Options 5 and 6 compute lower bound spending under the null
-#' hypothesis.
+#' hypothesis. Options 7 and 8 add a harm bound to beta-spending futility:
+#' option 7 treats both futility and harm bounds as binding for Type I error,
+#' while option 8 treats both as non-binding. Futility and harm are mutually
+#' exclusive lower-tail stopping outcomes with separately specified spending
+#' functions.
 #'
 #' @param k Number of analyses planned, including interim and final.
 #' @param test.type \code{1=}one-sided \cr \code{2=}two-sided symmetric \cr

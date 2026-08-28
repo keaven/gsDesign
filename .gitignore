@@ -18,5 +18,6 @@ docs/
 .local-r-lib/
 /*.tar.gz
 /*.Rcheck/
+output/
 vignettes/*.html
 vignettes/*.R

@@ -1,7 +1,17 @@
-# gsDesign (development version)
+# gsDesign 3.11.0 (August 2026)
 
 ## New features
 
+- `gsSurvPower()` results now have primary class "gsSurvPower" while
+  retaining inheritance from "gsSurv" and "gsDesign". They also retain
+  evaluated, replayable arguments in `inputs`, enabling downstream packages to
+  identify and reproduce power calculations (#313).
+- `gsSurvPower()` now aligns its expected analysis-cut grammar with
+  `simtrial::get_analysis_date()`: overall and per-stratum event and enrollment
+  requirements can be combined, `maxCalendarTime` provides an absolute cap,
+  and `spending = "min_planned_actual"` supports reference-design
+  planned-versus-actual spending. Existing unstratified `targetEvents`, `minN`,
+  and relative `maxExtension` behavior is retained (#303).
 - All `gsSurv` objects now include `N`, the cumulative total expected
   enrollment at each analysis. `nSurv` objects retain scalar `n` and also
   return identical scalar `N` as a non-breaking alias (#299).
@@ -27,16 +37,42 @@
 
 ## Documentation
 
+- Expanded the main `gsDesign()` help discussion to describe binding and
+  non-binding futility plus harm monitoring for `test.type = 7` and `8`
+  (#308).
 - Clarified the two intended uses of `gsSurvPower()`, expanded guidance for
-  scenario and combined timing-rule analyses, added survival workflow routing,
-  and documented that expected-value calculations do not replace simulation
-  of stochastic trial execution (#303).
+  scenario and combined timing-rule analyses, including mixed-`NA` rules by
+  analysis, added survival workflow routing, and documented that expected-value
+  calculations do not replace simulation of stochastic trial execution
+  (#303).
+- Clarified beta spending in `gsSurvPower()` scenario analyses, distinguishing
+  design beta from achieved beta and defining `informationRates` as planned
+  information-fraction caps used to derive effective spending time (#303).
 - Expanded the `gsSurvPower()` vignette with common timing pitfalls for
   explicit `minfup`, `targetN`, `maxExtension`, and `minN + minFollowUp`
   workflows (#291, #293, #295, #296).
+- Explained why skipping futility while retaining harm monitoring can
+  recalibrate earlier harm bounds, and documented recommended final-analysis
+  testing schedules using common event-driven survival-design assumptions for
+  all selective-bound examples (#306).
+
+## Testing
+
+- Added `gsSurvPower()` tests for combined overall and per-stratum timing
+  rules, absolute and relative caps on stratified event waits, and
+  planned-versus-actual spending with mixed cuts and delayed information
+  (#303).
 
 ## Bug fixes
 
+- `gsSurvPower()` now validates mixed-`NA` timing inputs consistently, rejects
+  missing testing indicators and spending times with informative messages,
+  and detects analyses without an active timing rule or follow-up values
+  without a corresponding enrollment requirement (#303).
+- A matrix supplied to `gsSurvPower(targetEvents = ...)` is now treated as a
+  deprecated alias for `targetEventsPerStratum` and its entries are enforced
+  as per-stratum requirements. Previously, the rows were reduced to overall
+  sums, which did not enforce the documented stratified cut (#303).
 - `gsSurvPower()` now respects an explicitly supplied `minfup` as a final
   analysis timing floor for event-driven designs, so the final analysis is not
   scheduled before the end of enrollment plus minimum follow-up (#291).
