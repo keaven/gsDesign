@@ -37,7 +37,7 @@ toInteger and gsBoundSummary."><meta property="og:image" content="https://keaven
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -113,7 +113,7 @@ single-analysis <code>gsSurv</code> object so it can be passed to
 <span>  ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  minfup <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  method <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  spending <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"information"</span>, <span class="st">"calendar"</span><span class="op">)</span>,</span>
+<span>  spending <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"information"</span>, <span class="st">"calendar"</span>, <span class="st">"min_planned_actual"</span><span class="op">)</span>,</span>
 <span>  plannedCalendarTime <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  targetEvents <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  maxExtension <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -122,7 +122,10 @@ single-analysis <code>gsSurv</code> object so it can be passed to
 <span>  minFollowUp <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  informationRates <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fullSpendingAtFinal <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  tol <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.25</span></span>
+<span>  tol <span class="op">=</span> <span class="va">.Machine</span><span class="op">$</span><span class="va">double.eps</span><span class="op">^</span><span class="fl">0.25</span>,</span>
+<span>  targetEventsPerStratum <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  maxCalendarTime <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  minNPerStratum <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -207,33 +210,38 @@ bound spending function <code>sfharm</code>.</p></dd>
 
 <dt id="arg-ustime">usTime<a class="anchor" aria-label="anchor" href="#arg-ustime"></a></dt>
 <dd><p>Upper spending time override; vector of length <code>k</code>
-or <code>NULL</code> (default) to use information fractions. Ignored when
+without missing values, or <code>NULL</code> (default) to use information
+fractions. Ignored when
 <code>spending = "calendar"</code>, because realized analysis times determine
 the spending fractions.</p></dd>
 
 
 <dt id="arg-lstime">lsTime<a class="anchor" aria-label="anchor" href="#arg-lstime"></a></dt>
 <dd><p>Lower spending time override; vector of length <code>k</code>
-or <code>NULL</code> (default) to use information fractions. Ignored when
-<code>spending = "calendar"</code>.</p></dd>
+without missing values, or <code>NULL</code> (default) to use information
+fractions. Ignored when <code>spending = "calendar"</code>.</p></dd>
 
 
 <dt id="arg-testupper">testUpper<a class="anchor" aria-label="anchor" href="#arg-testupper"></a></dt>
 <dd><p>Indicator of which analyses include an efficacy test.
 <code>TRUE</code> (default) for all analyses. A logical vector of length
-<code>k</code> may be specified.</p></dd>
+<code>k</code> may be specified. Missing values are not allowed; use
+<code>FALSE</code> to omit the test at an analysis.</p></dd>
 
 
 <dt id="arg-testlower">testLower<a class="anchor" aria-label="anchor" href="#arg-testlower"></a></dt>
 <dd><p>Indicator of which analyses include a futility test.
 <code>TRUE</code> (default) for all analyses. A logical vector of length
-<code>k</code> may be specified.</p></dd>
+<code>k</code> may be specified. Missing values are not allowed; use
+<code>FALSE</code> to omit the test at an analysis.</p></dd>
 
 
 <dt id="arg-testharm">testHarm<a class="anchor" aria-label="anchor" href="#arg-testharm"></a></dt>
 <dd><p>Indicator of which analyses include a harm bound.
 <code>TRUE</code> (default) for all analyses. A logical vector of length
-<code>k</code> may be specified. Only used for <code>test.type</code> 7 or 8.</p></dd>
+<code>k</code> may be specified. Missing values are not allowed; use
+<code>FALSE</code> to omit the test at an analysis. Only used for
+<code>test.type</code> 7 or 8.</p></dd>
 
 
 <dt id="arg-lambdac">lambdaC<a class="anchor" aria-label="anchor" href="#arg-lambdac"></a></dt>
@@ -306,11 +314,14 @@ computation when <code>x</code> is not provided.</p></dd>
 
 
 <dt id="arg-spending">spending<a class="anchor" aria-label="anchor" href="#arg-spending"></a></dt>
-<dd><p>One of <code>"information"</code> (default) or <code>"calendar"</code>.
-Controls whether alpha/beta spending tracks information fractions or
-calendar time fractions (<code>T / max(T)</code>). With calendar spending,
-<code>usTime</code> and <code>lsTime</code> are derived from the realized analysis
-times and any user-supplied overrides are ignored.</p></dd>
+<dd><p>One of <code>"information"</code> (default), <code>"calendar"</code>,
+or <code>"min_planned_actual"</code>. Information spending tracks expected
+event fractions within the scenario. Calendar spending uses
+<code>T / max(T)</code>. With a reference design <code>x</code>,
+<code>"min_planned_actual"</code> uses
+<code>pmin(x$n.I, actual events) / x$n.I[k]</code>, matching the planned-versus-
+actual spending convention in <span class="pkg">simtrial</span>. The latter two modes derive
+<code>usTime</code> and <code>lsTime</code> and ignore user-supplied overrides.</p></dd>
 
 
 <dt id="arg-plannedcalendartime">plannedCalendarTime<a class="anchor" aria-label="anchor" href="#arg-plannedcalendartime"></a></dt>
@@ -320,60 +331,66 @@ randomization). Scalar (recycled) or vector of length <code>k</code>. Use
 
 
 <dt id="arg-targetevents">targetEvents<a class="anchor" aria-label="anchor" href="#arg-targetevents"></a></dt>
-<dd><p>Target number of events at each analysis. Scalar
-(recycled), vector of length <code>k</code> (overall targets), or matrix
-with <code>k</code> rows and <code>nstrata</code> columns (per-stratum targets).
-Use <code>NA</code> for analyses not determined by events. When a matrix is
-supplied, row sums give the total event target used to solve each
-analysis time.</p></dd>
+<dd><p>Overall target number of events at each analysis.
+Scalar (recycled) or vector of length <code>k</code>. Use <code>NA</code> for
+analyses without an overall event requirement. A matrix is accepted as a
+deprecated alias for <code>targetEventsPerStratum</code>.</p></dd>
 
 
 <dt id="arg-maxextension">maxExtension<a class="anchor" aria-label="anchor" href="#arg-maxextension"></a></dt>
 <dd><p>Maximum time extension beyond the floor time to wait
 for <code>targetEvents</code>. Scalar or vector of length <code>k</code>. Requires a
 floor timing criterion for the affected analysis, most commonly
-<code>plannedCalendarTime</code>.</p></dd>
+<code>plannedCalendarTime</code>. Use <code>NA</code> for analyses without a relative
+extension cap.</p></dd>
 
 
 <dt id="arg-mintimefrompreviousanalysis">minTimeFromPreviousAnalysis<a class="anchor" aria-label="anchor" href="#arg-mintimefrompreviousanalysis"></a></dt>
 <dd><p>Minimum elapsed time since the previous
 analysis. Scalar or vector of length <code>k</code>. Ignored for the first
-analysis.</p></dd>
+analysis. Use <code>NA</code> for later analyses without a spacing requirement.</p></dd>
 
 
 <dt id="arg-minn">minN<a class="anchor" aria-label="anchor" href="#arg-minn"></a></dt>
 <dd><p>Minimum total sample size enrolled before analysis can proceed.
 Scalar or vector of length <code>k</code>. Can be used with
 <code>minFollowUp</code> as the primary timing criterion; the resulting
-analysis times and expected event totals must be strictly increasing.</p></dd>
+analysis times and expected event totals must be strictly increasing. Use
+<code>NA</code> for analyses without an overall enrollment requirement.</p></dd>
 
 
 <dt id="arg-minfollowup">minFollowUp<a class="anchor" aria-label="anchor" href="#arg-minfollowup"></a></dt>
-<dd><p>Minimum follow-up time after <code>minN</code> is reached.
-Scalar or vector of length <code>k</code>. Must be &gt;= 0 and requires
-<code>minN</code>.</p></dd>
+<dd><p>Minimum follow-up time after all active <code>minN</code> and
+<code>minNPerStratum</code> requirements are reached. Scalar or vector of
+length <code>k</code>. Must be &gt;= 0. Use <code>NA</code> for no additional follow-up
+at an analysis. Each non-missing value requires an active <code>minN</code> or
+<code>minNPerStratum</code> requirement at the same analysis.</p></dd>
 
 
 <dt id="arg-informationrates">informationRates<a class="anchor" aria-label="anchor" href="#arg-informationrates"></a></dt>
 <dd><p>Numeric vector of length <code>k</code> specifying
-planned information fractions. When provided, spending fractions are
-<code>pmin(informationRates, actual_timing)</code> at each analysis, where
+planned information-fraction caps, with no missing values. At each
+analysis, the effective upper and lower spending time is
+<code>pmin(informationRates, actual_timing)</code>, where
 <code>actual_timing</code> is expected events divided by maximum expected
-events. This prevents over-spending when events are ahead of schedule
-and under-spends when behind. When supplied, these planned-vs-actual
-information fractions take precedence over <code>spending</code>,
-<code>usTime</code>, and <code>lsTime</code>; both upper and lower spending times
-use the same capped vector. Default <code>NULL</code> uses actual
+events. This prevents spending ahead of either the planned information
+schedule or the information actually accumulated. When supplied,
+<code>informationRates</code> takes precedence over <code>spending</code>,
+<code>usTime</code>, and <code>lsTime</code>; upper and lower spending use the same
+effective spending-time vector. Default <code>NULL</code> uses actual
 information fractions (or calendar fractions when
 <code>spending = "calendar"</code>).</p></dd>
 
 
 <dt id="arg-fullspendingatfinal">fullSpendingAtFinal<a class="anchor" aria-label="anchor" href="#arg-fullspendingatfinal"></a></dt>
-<dd><p>Logical. When <code>TRUE</code>, the spending
-fraction at the final analysis is forced to 1 after applying
-<code>informationRates</code>, calendar spending, or user-supplied
-<code>usTime</code>/<code>lsTime</code>. This ensures full alpha spending whenever
-the selected spending-time vector would otherwise end below 1.
+<dd><p>Logical. When <code>TRUE</code>, the final element of
+the effective upper and lower spending-time vectors is forced to 1 after
+applying
+<code>informationRates</code>, calendar or planned-versus-actual spending, or
+user-supplied <code>usTime</code>/<code>lsTime</code>. This ensures full upper- and
+lower-bound
+spending whenever a selected spending-time vector would otherwise end
+below 1.
 Default <code>FALSE</code>.</p></dd>
 
 
@@ -381,10 +398,32 @@ Default <code>FALSE</code>.</p></dd>
 <dd><p>Tolerance for <code><a href="https://rdrr.io/r/stats/uniroot.html" class="external-link">uniroot</a></code> when solving for
 analysis times.</p></dd>
 
+
+<dt id="arg-targeteventsperstratum">targetEventsPerStratum<a class="anchor" aria-label="anchor" href="#arg-targeteventsperstratum"></a></dt>
+<dd><p>Per-stratum event requirements. Numeric matrix
+with <code>k</code> rows and one column per stratum; <code>NA</code> omits a stratum
+requirement at an analysis. The analysis waits until every active stratum
+requirement and any overall <code>targetEvents</code> requirement are met.</p></dd>
+
+
+<dt id="arg-maxcalendartime">maxCalendarTime<a class="anchor" aria-label="anchor" href="#arg-maxcalendartime"></a></dt>
+<dd><p>Absolute calendar-time cap for each analysis. Scalar
+or vector of length <code>k</code>. When supplied with <code>maxExtension</code>, the
+earlier cap applies. This corresponds to
+<code>max_extension_for_target_event</code> in <span class="pkg">simtrial</span>. Use <code>NA</code>
+for analyses without an absolute calendar-time cap.</p></dd>
+
+
+<dt id="arg-minnperstratum">minNPerStratum<a class="anchor" aria-label="anchor" href="#arg-minnperstratum"></a></dt>
+<dd><p>Per-stratum minimum enrollment requirements. Numeric
+matrix with <code>k</code> rows and one column per stratum; <code>NA</code> omits a
+stratum requirement at an analysis.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>c("gsSurv", "gsDesign")</code> containing:</p>
+    <p>An object of class
+  <code>c("gsSurvPower", "gsSurv", "gsDesign")</code> containing:</p>
 <dl><dt>k</dt>
 <dd><p>Number of analyses.</p></dd>
 
@@ -430,8 +469,19 @@ analysis times.</p></dd>
 <dd><p>Always <code>"Power"</code>.</p></dd>
 
 <dt>test.type, alpha, sided, method, spending, call</dt>
-<dd><p>Design settings used
-  for the power calculation.</p></dd>
+<dd><p>Design settings and
+  the original call used for the power calculation.</p></dd>
+
+<dt>inputs</dt>
+<dd><p>Evaluated arguments supplied to <code>gsSurvPower()</code>. The
+  calculation can be reproduced under the same package version with
+  <code>do.call(gsSurvPower, inputs)</code>. When <code>x</code> is supplied, the
+  evaluated reference design is retained so that inherited design settings
+  and planned-versus-actual spending can be reproduced.</p></dd>
+
+<dt>informationRates, fullSpendingAtFinal</dt>
+<dd><p>Planned information-fraction
+  caps and final effective-spending-time setting used for bound spending.</p></dd>
 
 <dt>testUpper, testLower, testHarm</dt>
 <dd><p>Logical indicators of which analyses
@@ -470,36 +520,58 @@ assumed treatment effect under which power is evaluated.
 When <code>x</code> is provided, <code>hr1</code> defaults
 to <code>x$hr</code>, so futility bounds remain calibrated to the original design
 even when power is evaluated under a different <code>hr</code>.</p>
+<p><strong>Beta spending in scenario analyses:</strong>
+For beta-spending test types 3, 4, 7, and 8, <code>x$beta</code> is the design
+beta used with <code>hr1</code>, <code>sfl</code>, and <code>sflpar</code> to calibrate
+futility bounds. The <code>beta</code> returned by <code>gsSurvPower()</code> instead
+equals <code>1 - power</code> under the scenario assumptions and can differ
+substantially from the design beta.</p><ul><li><p>When information fractions and spending inputs are unchanged,
+    futility bounds are reused from <code>x</code>.</p></li>
+<li><p>When information fractions or spending times change, futility
+    bounds are recomputed on the new schedule using the design beta and
+    <code>hr1</code>; achieved beta is then evaluated under <code>hr</code>.</p></li>
+<li><p>When only alpha or upper-bound spending changes with timing fixed,
+    futility bounds from <code>x</code> are preserved, apart from clipping a
+    lower bound that exceeds the new efficacy bound.</p></li>
+</ul><p>Test types 5 and 6 spend lower-bound probability under the null rather than
+beta under the alternative. Harm spending for test types 7 and 8 is also a
+separate null-based calculation.</p>
 <p><strong>Analysis timing:</strong>
-Analysis times are determined by per-analysis criteria. Each timing parameter
-can be a scalar (recycled to all <code>k</code> analyses), a vector of length
-<code>k</code>, or <code>NA</code> at position <code>i</code> to indicate the criterion does
-not apply to analysis <code>i</code>.</p>
-<p>The choice between <code>plannedCalendarTime</code> and <code>targetEvents</code> has an
-important consequence for sensitivity analyses:</p><ul><li><p>Used alone, <code>plannedCalendarTime</code> fixes calendar times;
+Analysis times are determined by per-analysis criteria. Except for the
+final-analysis-only scalar <code>minfup</code>, each timing-rule parameter can be
+a scalar (recycled to all <code>k</code> analyses), a vector of length <code>k</code>,
+or <code>NA</code> at position <code>i</code> to indicate that the rule does not apply
+to analysis <code>i</code>. For the per-stratum matrix arguments, <code>NA</code>
+deactivates only that analysis-by-stratum requirement.</p>
+<p>The choice between <code>plannedCalendarTime</code> and overall
+<code>targetEvents</code> has an important consequence for sensitivity analyses:</p><ul><li><p>Used alone, <code>plannedCalendarTime</code> fixes calendar times;
     when combined with other criteria, it supplies a timing floor. Expected
     events are recomputed under the assumed HR. A worse HR produces more
     events at the same calendar time (the experimental arm fails faster).
     This gives an "unconditional" power.</p></li>
-<li><p><code>targetEvents</code> fixes event counts; calendar times adjust. Since
-    events are held constant, information fractions do not change with HR, and
-    results match the <code>gsDesign</code> power plot
+<li><p><code>targetEvents</code> fixes overall event counts; calendar times
+    adjust. Since events are held constant, information fractions do not
+    change with HR, and results match the <code>gsDesign</code> power plot
     (<code>plot(x, plottype = 2)</code>) to numerical precision.</p></li>
 </ul><p><strong>How criteria combine within a single analysis:</strong>
 For analysis <code>i</code>, the analysis time <code>T[i]</code> is determined as:</p><ol><li><p>Compute floor times from applicable criteria:
     <code>plannedCalendarTime[i]</code>,
     <code>T[i-1] + minTimeFromPreviousAnalysis[i]</code>, and
-    time when <code>minN[i]</code> enrolled + <code>minFollowUp[i]</code>. When
-    <code>minfup</code> is explicitly supplied, the final analysis also has a
-    floor at the end of enrollment plus <code>minfup</code>.</p></li>
+    time when <code>minN[i]</code> enrolled + <code>minFollowUp[i]</code>, and the
+    corresponding time for every active column of
+    <code>minNPerStratum[i, ]</code>. When <code>minfup</code> is explicitly supplied,
+    the final analysis also has a floor at the end of enrollment plus
+    <code>minfup</code>.</p></li>
 <li><p><code>floor_time = max(all applicable floor times)</code>.</p></li>
-<li><p>If <code>targetEvents[i]</code> is specified: find <code>t_events</code> when
-    expected events reach target. If <code>t_events &lt;= floor_time</code>, analysis
-    at <code>floor_time</code>. If <code>t_events &gt; floor_time</code> and
+<li><p>Find the expected time for the overall <code>targetEvents[i]</code> and
+    for every active column of <code>targetEventsPerStratum[i, ]</code>. Their
+    maximum is <code>t_events</code>, so all active requirements use AND logic.
+    If <code>t_events &lt;= floor_time</code>, analysis at <code>floor_time</code>. If
+    <code>t_events &gt; floor_time</code> and
     <code>maxExtension[i]</code> is set, analysis at
     <code>min(t_events, floor_time + maxExtension[i])</code>. Otherwise, analysis
     at <code>t_events</code>.</p></li>
-<li><p>If no <code>targetEvents</code>: analysis at <code>floor_time</code>.</p></li>
+<li><p>If no event requirement is active: analysis at <code>floor_time</code>.</p></li>
 <li><p><code>maxExtension</code> defines a hard deadline: the analysis time
     is never pushed
     beyond <code>plannedCalendarTime[i] + maxExtension[i]</code> (or
@@ -508,7 +580,13 @@ For analysis <code>i</code>, the analysis time <code>T[i]</code> is determined a
     or <code>minN + minFollowUp</code> would require a later time. Each analysis
     using <code>maxExtension</code> must have a floor timing criterion such as
     <code>plannedCalendarTime</code>, <code>minTimeFromPreviousAnalysis</code>,
-    <code>minN</code>, or explicit final-analysis <code>minfup</code>.</p></li>
+    <code>minN</code>, <code>minNPerStratum</code>, or explicit final-analysis
+    <code>minfup</code>.</p></li>
+<li><p>Finally, <code>maxCalendarTime[i]</code> applies an absolute calendar-time
+    cap. If both cap types are supplied, the earlier cap applies. This
+    mirrors the realized-cut grammar in <span class="pkg">simtrial</span>, where the argument
+    named <code>max_extension_for_target_event</code> is applied as an absolute
+    analysis date.</p></li>
 </ol><p><strong>Normalization and consistency:</strong>
 When <code>x</code> is provided, <code>x$n.fix</code> is used for the
 <code><a href="gsDesign.html">gsDesign::gsDesign()</a></code> call to ensure the internal drift parameter
@@ -519,12 +597,16 @@ The assumed HR's drift is obtained by scaling:
 Power is computed via <code><a href="gsProbability.html">gsDesign::gsProbability()</a></code> with actual expected
 events as <code>n.I</code>. At the design HR, this reproduces the design power
 exactly.</p>
-<p><strong>Stratified targetEvents:</strong>
-<code>targetEvents</code> accepts a scalar (recycled), a vector of length <code>k</code>
-(overall targets per analysis), or a matrix with <code>k</code> rows and
-<code>nstrata</code> columns (per-stratum targets). A vector of length <code>k</code>
-is always interpreted as overall targets; use a matrix for per-stratum
-specification.</p>
+<p><strong>Stratified timing requirements:</strong>
+<code>targetEvents</code> accepts a scalar (recycled) or a vector of length
+<code>k</code> for overall event targets. Use <code>targetEventsPerStratum</code> for a
+<code>k</code>-by-<code>nstrata</code> matrix of per-stratum event requirements and
+<code>minNPerStratum</code> for per-stratum enrollment requirements. Overall and
+per-stratum requirements may be combined and all active requirements must
+be met unless a cap intervenes. <code>NA</code> omits a requirement. A matrix
+passed through <code>targetEvents</code> is a deprecated alias for
+<code>targetEventsPerStratum</code>; unlike the earlier row-sum interpretation,
+its entries are enforced by stratum.</p>
 <p><strong>Bound recalculation when parameters change:</strong>
 When <code>x</code> is provided, the handling of bounds depends on which
 parameters change relative to the original design:</p><ul><li><p><strong>No bound parameters changed</strong> (same <code>alpha</code>, <code>sfu</code>,
@@ -600,6 +682,21 @@ parameters change relative to the original design:</p><ul><li><p><strong>No boun
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">pwr_target_n</span><span class="op">$</span><span class="va">gamma</span><span class="op">)</span> <span class="op">*</span> <span class="va">pwr_target_n</span><span class="op">$</span><span class="va">R</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 500</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Require event counts within each stratum</span></span></span>
+<span class="r-in"><span><span class="va">pwr_stratified</span> <span class="op">&lt;-</span> <span class="fu">gsSurvPower</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  k <span class="op">=</span> <span class="fl">2</span>, test.type <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, sided <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">12</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  hr <span class="op">=</span> <span class="fl">0.7</span>, eta <span class="op">=</span> <span class="fl">0.01</span>,</span></span>
+<span class="r-in"><span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, R <span class="op">=</span> <span class="fl">12</span>, ratio <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  targetEventsPerStratum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">40</span>, <span class="fl">20</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pwr_stratified</span><span class="op">$</span><span class="va">eDC</span> <span class="op">+</span> <span class="va">pwr_stratified</span><span class="op">$</span><span class="va">eDE</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1]     [,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   20 11.67240</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   40 26.25659</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
