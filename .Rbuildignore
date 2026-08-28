@@ -18,3 +18,4 @@ tests/benchmarks
 ^Rplots\.pdf$
 ^CRAN-SUBMISSION$
 ^presentations$
+^output$

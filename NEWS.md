@@ -56,6 +56,13 @@
   testing schedules using common event-driven survival-design assumptions for
   all selective-bound examples (#306).
 
+## Testing
+
+- Added `gsSurvPower()` tests for combined overall and per-stratum timing
+  rules, absolute and relative caps on stratified event waits, and
+  planned-versus-actual spending with mixed cuts and delayed information
+  (#303).
+
 ## Bug fixes
 
 - `gsSurvPower()` now validates mixed-`NA` timing inputs consistently, rejects
