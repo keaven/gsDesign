@@ -1,43 +1,48 @@
 testthat::context("binomial stress")
 
+run_full_stress_tests <- identical(tolower(Sys.getenv("GSDESIGN_RUN_STRESS_TESTS")), "true")
+sim_binomial_nsim <- if (run_full_stress_tests) 1e5 else 2000L
+sim_binomial_tolerance <- if (run_full_stress_tests) 0.01 else 0.06
+
 testthat::test_that("test.simBinomial.misc", {
+  set.seed(123)
   testthat::expect_equal(sum(-stats::qnorm(0.05) < gsDesign::simBinomial(
     p1 = 0.4, p2 = 0.05,
-    delta0 = 0.2, n1 = 80, n2 = 80, nsim = 1e+05
-  )) / 1e+05,
+    delta0 = 0.2, n1 = 80, n2 = 80, nsim = sim_binomial_nsim
+  )) / sim_binomial_nsim,
   0.813,
-  info = "simBinomial check #1 failed (F&M bottom p 1451)", tolerance = 0.01
+  info = "simBinomial check #1 failed (F&M bottom p 1451)", tolerance = sim_binomial_tolerance
   )
   testthat::expect_equal(sum(-stats::qnorm(0.05) < gsDesign::simBinomial(
     p1 = 0.1, p2 = 0.1,
-    delta0 = -0.2, n1 = 63, n2 = 42, nsim = 1e+05
-  )) / 1e+05,
+    delta0 = -0.2, n1 = 63, n2 = 42, nsim = sim_binomial_nsim
+  )) / sim_binomial_nsim,
   0.916,
-  info = "simBinomial check #2 failed (F&M Table 1)", tolerance = 0.01
+  info = "simBinomial check #2 failed (F&M Table 1)", tolerance = sim_binomial_tolerance
   )
   testthat::expect_equal(sum(-stats::qnorm(0.05) < gsDesign::simBinomial(
     p1 = 0.25, p2 = 0.05,
-    delta0 = 0.1, n1 = 173, n2 = 260, nsim = 1e+05
-  )) / 1e+05,
+    delta0 = 0.1, n1 = 173, n2 = 260, nsim = sim_binomial_nsim
+  )) / sim_binomial_nsim,
   0.906,
-  info = "simBinomial check #3 failed (F&M Table 1)", tolerance = 0.01
+  info = "simBinomial check #3 failed (F&M Table 1)", tolerance = sim_binomial_tolerance
   )
   testthat::expect_equal(sum(-stats::qnorm(0.025) < gsDesign::simBinomial(
     p1 = 0.15, p2 = 0.1,
     delta0 = log(1.1), n1 = 901, n2 = 1351, scale = "lnor",
-    nsim = 1e+05
-  )) / 1e+05, 0.79875, info = "simBinomial check #4 failed", tolerance = 0.01)
+    nsim = sim_binomial_nsim
+  )) / sim_binomial_nsim, 0.79875, info = "simBinomial check #4 failed", tolerance = sim_binomial_tolerance)
   testthat::expect_equal(sum(-stats::qnorm(0.025) < gsDesign::simBinomial(
     p1 = 0.15, p2 = 0.1,
     delta0 = log(1.1), n1 = 901, n2 = 1351, scale = "or",
-    nsim = 1e+05
-  )) / 1e+05, 0.8056, info = "simBinomial check #5 failed", tolerance = 0.01)
+    nsim = sim_binomial_nsim
+  )) / sim_binomial_nsim, 0.8056, info = "simBinomial check #5 failed", tolerance = sim_binomial_tolerance)
   testthat::expect_equal(sum(-stats::qnorm(0.05) < gsDesign::simBinomial(
     p1 = 0.25, p2 = 0.05,
-    delta0 = log(2), n1 = 134, n2 = 201, scale = "rr", nsim = 1e+05
-  )) / 1e+05,
+    delta0 = log(2), n1 = 134, n2 = 201, scale = "rr", nsim = sim_binomial_nsim
+  )) / sim_binomial_nsim,
   0.9078,
-  info = "simBinomial check #6 failed (F&M Table 1)", tolerance = 0.01
+  info = "simBinomial check #6 failed (F&M Table 1)", tolerance = sim_binomial_tolerance
   )
 })
 

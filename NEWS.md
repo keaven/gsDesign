@@ -1,3 +1,11 @@
+# gsDesign 3.11.1 (August 2026)
+
+## Testing
+
+- Reduced default test-suite runtime by using smaller stress-test grids,
+  fewer Monte Carlo iterations, and toy exact-binomial p-value event counts.
+  Set `GSDESIGN_RUN_STRESS_TESTS=true` to run the larger stress-test settings.
+
 # gsDesign 3.11.0 (August 2026)
 
 ## New features
