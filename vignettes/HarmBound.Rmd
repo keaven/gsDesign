@@ -154,14 +154,14 @@ but rather a signal that the trial may be unlikely to succeed if it continues.
 Crossing the harm bound is a stronger indication that the treatment may be harmful, and the trial should be at least paused with a recommendation to review the safety and other endpoint data.
 
 ```{r}
-gsBoundSummary(x8)
+gsBoundSummary(x8) |> lt()
 ```
 
 Conditional power (CP, CP H1) and predictive power (PP) can also be included in the summary.
 Below we show the full table with all statistics, including conditional and predictive power at each boundary:
 
 ```{r}
-gsBoundSummary(x8, exclude = c())
+gsBoundSummary(x8, exclude = c()) |> lt()
 ```
 
 ### Interpreting the boundaries
@@ -338,7 +338,7 @@ Note that the efficacy bounds for `test.type = 7` (binding) are slightly lower (
 The maximum number of events for `test.type = 7` (`r ceiling(max(x7$n.I))`) is also slightly smaller than for `test.type = 8` (`r ceiling(max(x8$n.I))`), reflecting the assumption that the trial will stop at the lower bounds.
 
 ```{r}
-gsBoundSummary(x7)
+gsBoundSummary(x7) |> lt()
 ```
 
 ### Efficacy bounds at alternate $\alpha$ levels
@@ -348,7 +348,7 @@ Each alternate-alpha column retains the `testUpper` schedule from the design, so
 Here we show the non-binding design (`x8`) with efficacy bounds for both $\alpha = 0.0125$ (the design level) and $\alpha = 0.025$:
 
 ```{r}
-gsBoundSummary(x8, alpha = 0.025)
+gsBoundSummary(x8, alpha = 0.025) |> lt()
 ```
 
 Alternate-alpha summaries are supported for `test.type = 8`, where both

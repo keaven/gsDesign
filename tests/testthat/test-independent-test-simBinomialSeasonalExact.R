@@ -115,7 +115,7 @@ test_that("simBinomialSeasonalExact returns expected structure", {
   x <- simBinomialSeasonalExact(
     gsD = design,
     ve = c(`H0 (VE=30%)` = 0.3, `H1 (VE=80%)` = 0.8),
-    nsim = c(20, 20),
+    nsim = c(5, 5),
     control_event_rate = c(0.003, 0.003),
     adaptive = c(FALSE, TRUE),
     seed = 123
@@ -205,13 +205,13 @@ test_that("simBinomialSeasonalExact is reproducible with seed", {
   x1 <- simBinomialSeasonalExact(
     gsD = design,
     ve = c(0.3, 0.8),
-    nsim = c(20, 20),
+    nsim = c(5, 5),
     seed = 999
   )
   x2 <- simBinomialSeasonalExact(
     gsD = design,
     ve = c(0.3, 0.8),
-    nsim = c(20, 20),
+    nsim = c(5, 5),
     seed = 999
   )
   expect_equal(x1$summary, x2$summary)
@@ -222,7 +222,7 @@ test_that("adaptive simulation can increase enrollment in low-event scenarios", 
   x <- simBinomialSeasonalExact(
     gsD = design,
     ve = c(`H1 (VE=80%)` = 0.8),
-    nsim = 80,
+    nsim = 20,
     control_event_rate = 0.0015,
     adaptive = c(FALSE, TRUE),
     seed = 321
@@ -242,7 +242,7 @@ test_that("final_full_spending can increase rejection in final under-run setting
   no_full <- simBinomialSeasonalExact(
     gsD = design,
     ve = c(`H1 (VE=80%)` = 0.8),
-    nsim = 80,
+    nsim = 20,
     control_event_rate = 0.003,
     planned_counts = under_run,
     adaptive = FALSE,
@@ -252,7 +252,7 @@ test_that("final_full_spending can increase rejection in final under-run setting
   with_full <- simBinomialSeasonalExact(
     gsD = design,
     ve = c(`H1 (VE=80%)` = 0.8),
-    nsim = 80,
+    nsim = 20,
     control_event_rate = 0.003,
     planned_counts = under_run,
     adaptive = FALSE,

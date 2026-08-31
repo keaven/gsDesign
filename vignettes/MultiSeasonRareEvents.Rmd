@@ -154,7 +154,7 @@ design_calendar <- gsSurvCalendar(
   toInteger() |>
   suppressWarnings()
 
-gsBoundSummary(design_calendar)
+gsBoundSummary(design_calendar) |> lt()
 
 planned_final_events <- design_calendar$n.I[design_calendar$k]
 planned_counts <- as.integer(round(planned_final_events * timing))

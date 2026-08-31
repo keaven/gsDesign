@@ -1,6 +1,8 @@
 ---
 title: "Power Computation for Group Sequential Survival Designs"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    css: vignette.css
 vignette: >
   %\VignetteIndexEntry{Power Computation for Group Sequential Survival Designs}
   %\VignetteEngine{knitr::rmarkdown}
@@ -9,6 +11,7 @@ vignette: >
 
 ```{r, include=FALSE}
 library(gsDesign)
+library(lt)
 ```
 
 ## Motivation
@@ -622,7 +625,7 @@ pwr_slow_simple <- gsSurvPower(
 )
 
 
-pwr_slow_simple |> gsBoundSummary()
+pwr_slow_simple |> gsBoundSummary() |> lt()
 ```
 
 
@@ -936,7 +939,7 @@ cat("Power:          ", round(pwr_a025$power * 100, 1), "%\n\n")
 # Cross-check: gsBoundSummary at the same alternate alpha
 # (only non-binding test.type 1, 4, 6, and 8 are supported)
 cat("=== gsBoundSummary (alpha = 0.025) ===\n")
-print(gsBoundSummary(design_a0125, alpha = 0.025))
+gsBoundSummary(design_a0125, alpha = 0.025) |> lt()
 ```
 
 Note that `gsBoundSummary()` adds an $\alpha = 0.025$ column for
@@ -1167,7 +1170,7 @@ bm_design <- gsSurvCalendar(
 )
 
 summary(bm_design)
-gsBoundSummary(bm_design)
+gsBoundSummary(bm_design) |> lt()
 ```
 
 #### Step 2: Power for the overall (stratified) population
@@ -1207,7 +1210,7 @@ pwr_overall <- gsSurvPower(
 )
 
 summary(pwr_overall)
-gsBoundSummary(pwr_overall)
+gsBoundSummary(pwr_overall) |> lt()
 ```
 
 The overall design enrolls more patients (the full population rather than

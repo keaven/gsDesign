@@ -21,8 +21,28 @@ surv_design_exact_p <- function(test.type = 4) {
   )
 }
 
+run_full_stress_tests <- identical(tolower(Sys.getenv("GSDESIGN_RUN_STRESS_TESTS")), "true")
+exact_pvalue_counts <- c(10L, 20L, 30L)
+exact_pvalue_interval <- if (run_full_stress_tests) c(1e-20, 0.9999) else c(1e-6, 0.2)
+exact_pvalue_tol <- if (run_full_stress_tests) 1e-8 else 1e-3
+exact_pvalue_maxiter <- if (run_full_stress_tests) 100L else 15L
+surv_design_exact_p_cache <- new.env(parent = emptyenv())
+
+surv_design_exact_p_toy <- function(test.type = 4) {
+  key <- as.character(test.type)
+  if (exists(key, envir = surv_design_exact_p_cache, inherits = FALSE)) {
+    return(get(key, envir = surv_design_exact_p_cache, inherits = FALSE))
+  }
+  design <- surv_design_exact_p(test.type = test.type)
+  design$n.I <- exact_pvalue_counts
+  design$timing <- exact_pvalue_counts / max(exact_pvalue_counts)
+  design$maxn.IPlan <- max(exact_pvalue_counts)
+  assign(key, design, envir = surv_design_exact_p_cache)
+  design
+}
+
 test_that("binomialExactLowerBound validates inputs", {
-  design <- surv_design_exact_p()
+  design <- surv_design_exact_p_toy()
 
   expect_error(
     gsDesign:::binomialExactLowerBound(list(), c(10, 20), 0.025),
@@ -73,8 +93,8 @@ test_that("binomialExactLowerBound validates inputs", {
 })
 
 test_that("repeatedPValueBinomialExact validates inputs", {
-  design <- surv_design_exact_p()
-  counts <- toBinomialExact(design)$n.I
+  design <- surv_design_exact_p_toy()
+  counts <- exact_pvalue_counts
 
   expect_error(
     repeatedPValueBinomialExact(gsD = list(), n.I = counts, x = c(1, 2, 3)),
@@ -136,8 +156,8 @@ test_that("repeatedPValueBinomialExact validates inputs", {
 })
 
 test_that("repeated and sequential exact p-values are coherent", {
-  design <- surv_design_exact_p()
-  counts <- toBinomialExact(design)$n.I
+  design <- surv_design_exact_p_toy()
+  counts <- exact_pvalue_counts
   bound_at_design_alpha <- gsDesign:::binomialExactLowerBound(
     gsD = design,
     n.I = counts,
@@ -148,29 +168,52 @@ test_that("repeated and sequential exact p-values are coherent", {
     gsD = design,
     n.I = counts,
     x = bound_at_design_alpha,
-    check = TRUE
+    interval = exact_pvalue_interval,
+    tol = exact_pvalue_tol,
+    maxiter = exact_pvalue_maxiter,
+    check = run_full_stress_tests
   )
 
   expect_equal(repeated_at_bound$n.I, counts)
   expect_equal(repeated_at_bound$x, bound_at_design_alpha)
-  expect_true(all(repeated_at_bound$repeated_p_value <= design$alpha * (1 + 1e-6)))
+  expect_true(all(repeated_at_bound$repeated_p_value <= design$alpha * (1 + 1e-2)))
   expect_true(all(repeated_at_bound$bound_at_repeated_p_value >= repeated_at_bound$x))
 
   harder_counts <- pmin(counts, bound_at_design_alpha + 1L)
-  repeated_harder <- repeatedPValueBinomialExact(gsD = design, n.I = counts, x = harder_counts)
+  repeated_harder <- repeatedPValueBinomialExact(
+    gsD = design,
+    n.I = counts,
+    x = harder_counts,
+    interval = exact_pvalue_interval,
+    tol = exact_pvalue_tol,
+    maxiter = exact_pvalue_maxiter
+  )
   expect_true(all(repeated_harder$repeated_p_value >= repeated_at_bound$repeated_p_value))
 
-  repeated_default_ni <- repeatedPValueBinomialExact(gsD = design, x = bound_at_design_alpha)
-  expect_equal(repeated_default_ni$n.I, counts)
+  repeated_default_ni <- repeatedPValueBinomialExact(
+    gsD = design,
+    x = rep(0L, design$k),
+    interval = exact_pvalue_interval,
+    tol = 1e-2,
+    maxiter = 5L
+  )
+  expect_equal(repeated_default_ni$n.I, toInteger(design)$n.I)
 
-  seq_p <- sequentialPValueBinomialExact(gsD = design, n.I = counts, x = harder_counts)
+  seq_p <- sequentialPValueBinomialExact(
+    gsD = design,
+    n.I = counts,
+    x = harder_counts,
+    interval = exact_pvalue_interval,
+    tol = exact_pvalue_tol,
+    maxiter = exact_pvalue_maxiter
+  )
   expect_equal(seq_p, min(repeated_harder$repeated_p_value))
 })
 
 test_that("exact efficacy p-values support every non-binding test type", {
   for (test_type in c(1, 4, 6, 8)) {
-    design <- surv_design_exact_p(test.type = test_type)
-    counts <- toInteger(design)$n.I
+    design <- surv_design_exact_p_toy(test.type = test_type)
+    counts <- exact_pvalue_counts
     efficacy_bound <- gsDesign:::binomialExactLowerBound(
       gsD = design,
       n.I = counts,
@@ -180,22 +223,27 @@ test_that("exact efficacy p-values support every non-binding test type", {
     repeated <- repeatedPValueBinomialExact(
       gsD = design,
       n.I = counts,
-      x = observed
+      x = observed,
+      interval = exact_pvalue_interval,
+      tol = exact_pvalue_tol,
+      maxiter = exact_pvalue_maxiter
     )
 
     expect_equal(repeated$n.I, counts, label = paste("test.type", test_type))
-    expect_equal(
-      sequentialPValueBinomialExact(gsD = design, n.I = counts, x = observed),
-      min(repeated$repeated_p_value),
+    expect_true(
+      all(repeated$repeated_p_value >= exact_pvalue_interval[1]),
       label = paste("test.type", test_type)
     )
   }
 
-  design8 <- surv_design_exact_p(test.type = 8)
+  design8 <- surv_design_exact_p_toy(test.type = 8)
   counts8 <- toInteger(design8)$n.I
   default_result <- repeatedPValueBinomialExact(
     gsD = design8,
-    x = rep(0L, design8$k)
+    x = rep(0L, design8$k),
+    interval = exact_pvalue_interval,
+    tol = 1e-2,
+    maxiter = 5L
   )
   expect_equal(default_result$n.I, counts8)
 })

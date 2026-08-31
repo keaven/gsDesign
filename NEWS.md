@@ -15,6 +15,14 @@
   and matrix output, with compact row spacing for long tables and no significant
   changes to the rendered HTML tables.
 
+# gsDesign 3.11.1 (August 2026)
+
+## Testing
+
+- Reduced default test-suite runtime by using smaller stress-test grids,
+  fewer Monte Carlo iterations, and toy exact-binomial p-value event counts.
+  Set `GSDESIGN_RUN_STRESS_TESTS=true` to run the larger stress-test settings.
+
 # gsDesign 3.11.0 (August 2026)
 
 ## New features
@@ -72,6 +80,13 @@
   recalibrate earlier harm bounds, and documented recommended final-analysis
   testing schedules using common event-driven survival-design assumptions for
   all selective-bound examples (#306).
+
+## Testing
+
+- Added `gsSurvPower()` tests for combined overall and per-stratum timing
+  rules, absolute and relative caps on stratified event waits, and
+  planned-versus-actual spending with mixed cuts and delayed information
+  (#303).
 
 ## Bug fixes
 

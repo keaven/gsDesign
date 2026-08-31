@@ -1,6 +1,8 @@
 ---
 title: "A gentle introduction to group sequential design"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    css: vignette.css
 bibliography: gsDesign.bib
 vignette: >
   %\VignetteIndexEntry{A gentle introduction to group sequential design}
@@ -163,6 +165,7 @@ $$g(t; \beta) = 2\left(  1-\Phi\left(  \frac{\Phi
 
 ```{r, message=FALSE, warning=FALSE}
 library(gsDesign)
+library(lt)
 ```
 
 ```{r}
@@ -274,7 +277,8 @@ xu <- gsDesign(
 
 ```{r}
 # Summarize bounds
-gsBoundSummary(xu, Nname = "N", digits = 4, ddigits = 2, tdigits = 1)
+gsBoundSummary(xu, Nname = "N", digits = 4, ddigits = 2, tdigits = 1) |>
+  lt()
 ```
 
 ## References
