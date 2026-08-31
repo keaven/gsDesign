@@ -1,6 +1,8 @@
 ---
 title: "Reproducing SAS PROC SEQDESIGN survival designs in gsDesign"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    css: vignette.css
 bibliography: "gsDesign.bib"
 vignette: >
   %\VignetteIndexEntry{Reproducing SAS PROC SEQDESIGN survival designs in gsDesign}
@@ -27,6 +29,7 @@ if (knitr::is_html_output()) {
 
 ```{r}
 library(gsDesign)
+library(lt)
 ```
 
 ## Overview
@@ -171,8 +174,7 @@ units and lets the total time be derived.
 The translation used below is summarized as follows:
 
 ```{r translation-table, echo=FALSE}
-knitr::kable(
-  data.frame(
+data.frame(
     Quantity = c(
       "Two-sided Type I error",
       "Symmetric two-sided design",
@@ -210,9 +212,9 @@ knitr::kable(
       "Lets gsSurv() solve the follow-up duration"
     ),
     check.names = FALSE
-  ),
-  caption = "Translation from the SAS PROC SEQDESIGN example to gsDesign inputs."
-)
+  ) |>
+  lt() |>
+  lt_header("Translation from the SAS PROC SEQDESIGN example to gsDesign inputs.")
 ```
 
 ## Reproducing the fractional-time design with `gsSurv()`
@@ -296,10 +298,9 @@ gs_fractional <- data.frame(
   Z_gsDesign = des_2$upper$bound
 )
 
-knitr::kable(
-  round(gs_fractional, 5),
-  caption = "Fractional-time SAS output compared with gsSurv()."
-)
+round(gs_fractional, 5) |>
+  lt() |>
+  lt_header("Fractional-time SAS output compared with gsSurv().")
 ```
 
 The final event count is 89.07847 in both systems. The `print()` and
@@ -354,10 +355,9 @@ fixed_followup_check <- data.frame(
 )
 fixed_followup_check[-1] <- lapply(fixed_followup_check[-1], round, digits = 5)
 
-knitr::kable(
-  fixed_followup_check,
-  caption = "Both fixed-accrual translations produce the same final design."
-)
+fixed_followup_check |>
+  lt() |>
+  lt_header("Both fixed-accrual translations produce the same final design.")
 ```
 
 A third use case is to keep both the enrollment rates and enrollment duration

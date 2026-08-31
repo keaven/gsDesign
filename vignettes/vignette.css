@@ -18,3 +18,10 @@ pre {
 .lt-table {
   min-width: 70%;
 }
+/* Keep long vignette tables compact while preserving readable headers. */
+.lt-table tbody td,
+.lt-table tbody th {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  line-height: 1.15;
+}
