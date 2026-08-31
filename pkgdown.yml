@@ -19,10 +19,11 @@ articles:
   SelectiveBoundTesting: SelectiveBoundTesting.html
   SeqDesignSurvival: SeqDesignSurvival.html
   SpendingFunctionOverview: SpendingFunctionOverview.html
+  SurvivalEnrollmentPlanning: SurvivalEnrollmentPlanning.html
   SurvivalOverview: SurvivalOverview.html
   toInteger: toInteger.html
   VaccineEfficacy: VaccineEfficacy.html
-last_built: 2026-08-31T15:25Z
+last_built: 2026-08-31T15:30Z
 urls:
-  reference: https://keaven.github.io/gsDesign/reference
-  article: https://keaven.github.io/gsDesign/articles
+  reference: https://keaven.github.io/gsDesign//reference
+  article: https://keaven.github.io/gsDesign//articles

@@ -258,7 +258,9 @@ gsSurvCalendar(
   `FALSE` indicates none. Otherwise, a logical vector of length `k`.
   Only used for `test.type` 7 or 8; at least one analysis must be `TRUE`
   for those types. Where `testHarm` is `FALSE`, the harm bound is set to
-  `-20` (effectively `-Inf`) and displayed as `NA` in output.
+  `-20` (effectively `-Inf`) and the bound is displayed as `NA` in
+  output. Cumulative harm crossing probability from earlier analyses is
+  still displayed.
 
 - method:
 
@@ -291,6 +293,8 @@ Clinical Trials Using the Logrank Test. *Statistics in Medicine*, 1,
 
 ## See also
 
+[`vignette("SurvivalEnrollmentPlanning", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/SurvivalEnrollmentPlanning.md)
+for enrollment ramp-up and duration planning,
 [`vignette("SeqDesignSurvival", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/SeqDesignSurvival.md)
 for a SAS PROC SEQDESIGN sample size translation example and
 [`vignette("gsSurvPower", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/gsSurvPower.md)
@@ -314,12 +318,12 @@ gsBoundSummary(x)
 #>    Month: 12   P(Cross) if HR=1   0.0010   0.3318
 #>              P(Cross) if HR=0.6   0.1018   0.0122
 #>    IA 2: 79%                  Z   2.3279   1.3991
-#>       N: 198        p (1-sided)   0.0100   0.0809
+#>       N: 196        p (1-sided)   0.0100   0.0809
 #>  Events: 137       ~HR at bound   0.6718   0.7874
 #>    Month: 24   P(Cross) if HR=1   0.0106   0.9213
 #>              P(Cross) if HR=0.6   0.7505   0.0606
 #>        Final                  Z   2.0154   2.0154
-#>       N: 198        p (1-sided)   0.0219   0.0219
+#>       N: 196        p (1-sided)   0.0219   0.0219
 #>  Events: 173       ~HR at bound   0.7361   0.7361
 #>    Month: 36   P(Cross) if HR=1   0.0228   0.9772
 #>              P(Cross) if HR=0.6   0.9001   0.0999
@@ -335,12 +339,12 @@ gsBoundSummary(y)
 #>    Month: 12   P(Cross) if HR=1   0.0013   0.3526
 #>              P(Cross) if HR=0.6   0.1123   0.0148
 #>    IA 2: 79%                  Z   2.5581   1.1380
-#>       N: 192        p (1-sided)   0.0053   0.1276
+#>       N: 190        p (1-sided)   0.0053   0.1276
 #>  Events: 133       ~HR at bound   0.6417   0.8209
 #>    Month: 24   P(Cross) if HR=1   0.0062   0.8785
 #>              P(Cross) if HR=0.6   0.6593   0.0437
 #>        Final                  Z   1.9854   1.9854
-#>       N: 192        p (1-sided)   0.0235   0.0235
+#>       N: 190        p (1-sided)   0.0235   0.0235
 #>  Events: 168       ~HR at bound   0.7361   0.7361
 #>    Month: 36   P(Cross) if HR=1   0.0237   0.9763
 #>              P(Cross) if HR=0.6   0.9006   0.0994
@@ -354,4 +358,10 @@ y$usTime
 # Actual calendar fraction from design after toInteger() conversion
 y$T / max(y$T)
 #> [1] 0.3333729 0.6661892 1.0000000
+
+# Four-period enrollment ramp-up with fixed study duration and follow-up.
+ramp_calendar <- gsSurvCalendar(
+  calendarTime = c(12, 18, 26), minfup = 12,
+  gamma = 1:4, R = rep(1, 4)
+)
 ```

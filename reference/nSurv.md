@@ -10,7 +10,12 @@ Freedman (1982), and Bernstein and Lagakos (1989) methods are also
 supported; see Details. `gsSurv()` combines `nSurv()` with
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
 to derive a group sequential design for a study with a time-to-event
-endpoint.
+endpoint. When `k = 1`, `gsSurv()` uses the fixed-design calculations
+from `nSurv()` directly and returns a normalized single-analysis
+`gsSurv` object for use with functions such as
+[`toInteger`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+and
+[`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
 
 ## Usage
 
@@ -418,7 +423,9 @@ print(x, digits = 3, show_gsDesign = FALSE, show_strata = TRUE, ...)
   `FALSE` indicates none. Otherwise, a logical vector of length `k`.
   Only used for `test.type` 7 or 8; at least one analysis must be `TRUE`
   for those types. Where `testHarm` is `FALSE`, the harm bound is set to
-  `-20` (effectively `-Inf`) and displayed as `NA` in output.
+  `-20` (effectively `-Inf`) and the bound is displayed as `NA` in
+  output. Cumulative harm crossing probability from earlier analyses is
+  still displayed.
 
 - show_gsDesign:
 
@@ -496,6 +503,11 @@ components:
 
   Total expected sample size corresponding to output accrual rates and
   durations.
+
+- N:
+
+  Identical to `n`; provided as a non-breaking alias for total expected
+  sample size.
 
 - d:
 
@@ -602,6 +614,11 @@ adequately power the trial. Other items returned by `gsSurv()` are:
 - hr0:
 
   As input.
+
+- N:
+
+  A vector containing cumulative total expected enrollment at each
+  analysis.
 
 - eNC:
 
@@ -789,13 +806,17 @@ calculation.
 
 The input to `gsSurv` is a combination of the input to `nSurv()` and
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md).
-When `T = NULL` and `minfup` is specified, `gsSurv()` preserves the
-input accrual rate and minimum follow-up, applies the group sequential
-design, and solves the accrual duration needed for the final planned
-number of events. When both `T` and `minfup` are `NULL`, `gsSurv()`
-preserves the input accrual rate and duration, applies the group
-sequential design, and solves the follow-up duration needed for the
-final planned number of events.
+The original call is stored in `call`. The `inputs` component retains
+evaluated survival-model inputs used for printing and the applicable
+`testUpper`, `testLower`, and `testHarm` arguments. The normalized
+testing schedules used by the design are stored directly in the
+corresponding top-level components. When `T = NULL` and `minfup` is
+specified, `gsSurv()` preserves the input accrual rate and minimum
+follow-up, applies the group sequential design, and solves the accrual
+duration needed for the final planned number of events. When both `T`
+and `minfup` are `NULL`, `gsSurv()` preserves the input accrual rate and
+duration, applies the group sequential design, and solves the follow-up
+duration needed for the final planned number of events.
 
 `nEventsIA()` is provided to compute the expected number of events at a
 given point in time given enrollment, event and censoring rates. The
@@ -825,6 +846,8 @@ Clinical Trials Using the Logrank Test. *Statistics in Medicine*, 1,
 
 [`uniroot`](https://rdrr.io/r/stats/uniroot.html)
 
+[`vignette("SurvivalEnrollmentPlanning", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/SurvivalEnrollmentPlanning.md)
+for enrollment ramp-up and duration planning,
 [`vignette("gsSurvBasicExamples", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/gsSurvBasicExamples.md)
 for basic survival sample size examples,
 [`vignette("SurvivalOverview", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/SurvivalOverview.md)
@@ -927,7 +950,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Mon Aug 31 15:25:34 2026
+#> % Mon Aug 31 15:31:00 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}
@@ -1050,6 +1073,21 @@ gsSurv(
 #>             Control dropout rate(s)     eta 0.001 0.001
 #>        Experimental dropout rate(s)    etaE 0.001  etaE
 #>  Event and dropout rate duration(s)       S  NULL     S
+
+# Common four-period enrollment ramp-up. With T and minfup fixed, the
+# relative gamma pattern is scaled to power the trial, and the final R
+# period is extended so enrollment lasts T - minfup.
+ramp_rate <- gsSurv(
+  T = 26, minfup = 12,
+  gamma = 1:4, R = rep(1, 4)
+)
+
+# With T = NULL and minfup fixed, gamma stays fixed and the final
+# enrollment period is extended to obtain the required sample size.
+ramp_duration <- gsSurv(
+  T = NULL, minfup = 12,
+  gamma = 1:4, R = rep(1, 4)
+)
 
 # Vary minimum follow-up duration minfup to obtain power
 # Accrual duration R rate gamma are fixed and will not change on output.

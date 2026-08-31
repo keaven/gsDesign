@@ -4,7 +4,7 @@ Computes repeated p-values for the exact binomial design implied by a
 \[gsSurv()\] object. The p-value at analysis \`j\` is the smallest local
 one-sided alpha level for which the observed experimental-arm event
 count crosses the exact lower efficacy bound at that analysis.
-Non-binding futility bounds are ignored for the Type I error
+Non-binding futility and harm bounds are ignored for the Type I error
 calculation.
 
 ## Usage
@@ -25,15 +25,15 @@ repeatedPValueBinomialExact(
 
 - gsD:
 
-  A \`gsSurv\` object with \`test.type\` 1 or 4.
+  A \`gsSurv\` object with non-binding \`test.type\` 1, 4, 6, or 8.
 
 - n.I:
 
   Increasing integer total event counts at completed analyses. If
-  \`NULL\`, the planned exact binomial event counts from
-  \`toBinomialExact(gsD)\` are used. This must have at most 1 value
-  greater than or equal to planned final events (\`gsD\$maxn.IPlan\` if
-  available, otherwise \`max(gsD\$n.I)\`).
+  \`NULL\`, the planned integer event counts from \`toInteger(gsD)\` are
+  used. This must have at most 1 value greater than or equal to planned
+  final events (\`gsD\$maxn.IPlan\` if available, otherwise
+  \`max(gsD\$n.I)\`).
 
 - x:
 

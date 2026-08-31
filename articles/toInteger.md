@@ -440,14 +440,14 @@ seasonal_design <- gsSurv(
 seasonal_design$n.I
 ```
 
-    ## [1] 11.94976 23.89951 35.84927
+    ## [1] 11.67361 23.34721 35.02082
 
 ``` r
 
 rowSums(seasonal_design$eNC + seasonal_design$eNE)
 ```
 
-    ## [1] 2071.587 3442.289 4099.222
+    ## [1] 2023.714 3362.740 4004.492
 
 ``` r
 
@@ -480,9 +480,9 @@ data.frame(
 ```
 
     ##   analysis continuous_events integer_events continuous_time integer_time
-    ## 1        1            11.950             12          13.032       13.032
-    ## 2        2            23.900             24          25.038       25.038
-    ## 3        3            35.849             36          42.000       42.000
+    ## 1        1            11.674             12          13.032       13.032
+    ## 2        2            23.347             24          25.038       25.038
+    ## 3        3            35.021             36          42.000       42.000
     ##   integer_enrollment
     ## 1           2080.066
     ## 2           3456.378

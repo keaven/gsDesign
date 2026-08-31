@@ -175,28 +175,28 @@ gsBoundSummary(x8)
 #>    IA 1: 11%                   Z -2.1121  -1.4408       NA
 #>       N: 766         p (1-sided)  0.9827   0.9252       NA
 #>   Events: 73        ~HR at bound  1.6434   1.4034       NA
-#>    Month: 12    P(Cross) if HR=1  0.0173   0.0748       NA
-#>              P(Cross) if HR=0.75  0.0004   0.0039       NA
+#>    Month: 12    P(Cross) if HR=1  0.0173   0.0575       NA
+#>              P(Cross) if HR=0.75  0.0004   0.0034       NA
 #>    IA 2: 38%                   Z -1.7667   0.1212   3.8622
 #>      N: 1148         p (1-sided)  0.9614   0.4518   0.0001
 #>  Events: 253        ~HR at bound  1.2491   0.9849   0.6149
-#>    Month: 24    P(Cross) if HR=1  0.0507   0.5554   0.0001
-#>              P(Cross) if HR=0.75  0.0004   0.0181   0.0574
+#>    Month: 24    P(Cross) if HR=1  0.0416   0.5138   0.0001
+#>              P(Cross) if HR=0.75  0.0004   0.0177   0.0574
 #>    IA 3: 63%                   Z -1.7256   1.0566   2.9347
 #>      N: 1148         p (1-sided)  0.9578   0.1454   0.0017
 #>  Events: 416        ~HR at bound  1.1846   0.9015   0.7497
-#>    Month: 36    P(Cross) if HR=1  0.0736   0.8641   0.0017
-#>              P(Cross) if HR=0.75  0.0004   0.0398   0.4990
+#>    Month: 36    P(Cross) if HR=1  0.0417   0.8224   0.0017
+#>              P(Cross) if HR=0.75  0.0004   0.0394   0.4990
 #>    IA 4: 83%                   Z -1.7170   1.7357   2.5278
 #>      N: 1148         p (1-sided)  0.9570   0.0413   0.0057
 #>  Events: 548        ~HR at bound  1.1580   0.8622   0.8057
-#>    Month: 48    P(Cross) if HR=1  0.0890   0.9631   0.0062
-#>              P(Cross) if HR=0.75  0.0004   0.0675   0.7996
+#>    Month: 48    P(Cross) if HR=1  0.0417   0.9214   0.0062
+#>              P(Cross) if HR=0.75  0.0004   0.0670   0.7996
 #>        Final                   Z -1.7149   2.3072   2.3072
 #>      N: 1148         p (1-sided)  0.9568   0.0105   0.0105
 #>  Events: 657        ~HR at bound  1.1433   0.8352   0.8352
-#>    Month: 60    P(Cross) if HR=1  0.1000   0.9888   0.0112
-#>              P(Cross) if HR=0.75  0.0004   0.1000   0.9000
+#>    Month: 60    P(Cross) if HR=1  0.0417   0.9471   0.0112
+#>              P(Cross) if HR=0.75  0.0004   0.0996   0.9000
 ```
 
 Conditional power (CP, CP H1) and predictive power (PP) can also be
@@ -216,8 +216,8 @@ gsBoundSummary(x8, exclude = c())
 #>                               CP  0.0000   0.0000       NA
 #>                            CP H1  0.4619   0.5942       NA
 #>                               PP  0.0011   0.0097       NA
-#>                 P(Cross) if HR=1  0.0173   0.0748       NA
-#>              P(Cross) if HR=0.75  0.0004   0.0039       NA
+#>                 P(Cross) if HR=1  0.0173   0.0575       NA
+#>              P(Cross) if HR=0.75  0.0004   0.0034       NA
 #>    IA 2: 38%                   Z -1.7667   0.1212   3.8622
 #>      N: 1148         p (1-sided)  0.9614   0.4518   0.0001
 #>  Events: 253        ~HR at bound  1.2491   0.9849   0.6149
@@ -226,8 +226,8 @@ gsBoundSummary(x8, exclude = c())
 #>                               CP  0.0000   0.0024   1.0000
 #>                            CP H1  0.0097   0.4033   0.9994
 #>                               PP  0.0000   0.0358   0.9994
-#>                 P(Cross) if HR=1  0.0507   0.5554   0.0001
-#>              P(Cross) if HR=0.75  0.0004   0.0181   0.0574
+#>                 P(Cross) if HR=1  0.0416   0.5138   0.0001
+#>              P(Cross) if HR=0.75  0.0004   0.0177   0.0574
 #>    IA 3: 63%                   Z -1.7256   1.0566   2.9347
 #>      N: 1148         p (1-sided)  0.9578   0.1454   0.0017
 #>  Events: 416        ~HR at bound  1.1846   0.9015   0.7497
@@ -236,8 +236,8 @@ gsBoundSummary(x8, exclude = c())
 #>                               CP  0.0000   0.0396   0.9928
 #>                            CP H1  0.0000   0.3449   0.9928
 #>                               PP  0.0000   0.0776   0.9759
-#>                 P(Cross) if HR=1  0.0736   0.8641   0.0017
-#>              P(Cross) if HR=0.75  0.0004   0.0398   0.4990
+#>                 P(Cross) if HR=1  0.0417   0.8224   0.0017
+#>              P(Cross) if HR=0.75  0.0004   0.0394   0.4990
 #>    IA 4: 83%                   Z -1.7170   1.7357   2.5278
 #>      N: 1148         p (1-sided)  0.9570   0.0413   0.0057
 #>  Events: 548        ~HR at bound  1.1580   0.8622   0.8057
@@ -246,15 +246,15 @@ gsBoundSummary(x8, exclude = c())
 #>                               CP  0.0000   0.1578   0.8708
 #>                            CP H1  0.0000   0.3906   0.9337
 #>                               PP  0.0000   0.1793   0.8485
-#>                 P(Cross) if HR=1  0.0890   0.9631   0.0062
-#>              P(Cross) if HR=0.75  0.0004   0.0675   0.7996
+#>                 P(Cross) if HR=1  0.0417   0.9214   0.0062
+#>              P(Cross) if HR=0.75  0.0004   0.0670   0.7996
 #>        Final                   Z -1.7149   2.3072   2.3072
 #>      N: 1148         p (1-sided)  0.9568   0.0105   0.0105
 #>  Events: 657        ~HR at bound  1.1433   0.8352   0.8352
 #>    Month: 60            Spending  0.0110   0.0325   0.0062
 #>                          B-value -1.7149   2.3072   2.3072
-#>                 P(Cross) if HR=1  0.1000   0.9888   0.0112
-#>              P(Cross) if HR=0.75  0.0004   0.1000   0.9000
+#>                 P(Cross) if HR=1  0.0417   0.9471   0.0112
+#>              P(Cross) if HR=0.75  0.0004   0.0996   0.9000
 ```
 
 ### Interpreting the boundaries
@@ -286,23 +286,27 @@ kable(bounds, caption = "Z-value boundaries at each analysis")
 
 Z-value boundaries at each analysis {.table}
 
-**Decision rules at each analysis:**
+**Decision rules at an analysis where all three bounds are active:**
 
 - If \\Z \>\\ efficacy bound: Stop for efficacy (reject \\H_0\\).
 - If futility bound \\\< Z \leq\\ efficacy bound: Continue the trial.
 - If harm bound \\\< Z \leq\\ futility bound: Stop for futility.
 - If \\Z \leq\\ harm bound: Stop for harm.
 
-Note that the harm bound is always at or below the futility bound. At
-early analyses, the harm and futility bounds may coincide when the harm
-spending function has not yet allocated sufficient spending to
-differentiate them.
+When both lower bounds are active, the harm bound is always at or below
+the futility bound. If futility is skipped but harm is tested, the harm
+bound is the sole active lower stopping boundary. At early analyses, the
+harm and futility bounds may coincide when the harm spending function
+has not yet allocated sufficient spending to differentiate them.
 
 ### Boundary crossing probabilities
 
 We examine the operating characteristics under two scenarios: no
 treatment effect (HR = 1, i.e., under \\H_0\\) and the design
-alternative (HR = 0.75).
+alternative (HR = 0.75). When harm and futility are both active,
+`x8$lower$prob` and `x8$harm$prob` are reported as mutually exclusive
+stopping outcomes. Thus, the probability of crossing the futility
+threshold is the sum of the two lower-tail components.
 
 ``` r
 
@@ -311,32 +315,38 @@ probs <- data.frame(
   Analysis = rep(1:x8$k, 2),
   Month = rep(x8$T, 2),
   `P(Efficacy)` = c(cumsum(x8$upper$prob[, 1]), cumsum(x8$upper$prob[, 2])),
-  `P(Futility)` = c(cumsum(x8$lower$prob[, 1]), cumsum(x8$lower$prob[, 2])),
+  `P(Futility only)` = c(cumsum(x8$lower$prob[, 1]), cumsum(x8$lower$prob[, 2])),
   `P(Harm)` = c(cumsum(x8$harm$prob[, 1]), cumsum(x8$harm$prob[, 2])),
+  `P(Futility or Harm)` = c(
+    cumsum(x8$lower$prob[, 1] + x8$harm$prob[, 1]),
+    cumsum(x8$lower$prob[, 2] + x8$harm$prob[, 2])
+  ),
   check.names = FALSE
 )
 kable(probs, digits = 4, caption = "Cumulative boundary crossing probabilities")
 ```
 
-| Scenario           | Analysis | Month | P(Efficacy) | P(Futility) | P(Harm) |
-|:-------------------|---------:|------:|------------:|------------:|--------:|
-| Under H0 (HR=1)    |        1 |    12 |      0.0000 |      0.0748 |  0.0173 |
-| Under H0 (HR=1)    |        2 |    24 |      0.0001 |      0.5554 |  0.0507 |
-| Under H0 (HR=1)    |        3 |    36 |      0.0017 |      0.8641 |  0.0736 |
-| Under H0 (HR=1)    |        4 |    48 |      0.0062 |      0.9631 |  0.0890 |
-| Under H0 (HR=1)    |        5 |    60 |      0.0112 |      0.9888 |  0.1000 |
-| Under H1 (HR=0.75) |        1 |    12 |      0.0000 |      0.0039 |  0.0004 |
-| Under H1 (HR=0.75) |        2 |    24 |      0.0574 |      0.0181 |  0.0004 |
-| Under H1 (HR=0.75) |        3 |    36 |      0.4990 |      0.0398 |  0.0004 |
-| Under H1 (HR=0.75) |        4 |    48 |      0.7996 |      0.0675 |  0.0004 |
-| Under H1 (HR=0.75) |        5 |    60 |      0.9000 |      0.1000 |  0.0004 |
+| Scenario | Analysis | Month | P(Efficacy) | P(Futility only) | P(Harm) | P(Futility or Harm) |
+|:---|---:|---:|---:|---:|---:|---:|
+| Under H0 (HR=1) | 1 | 12 | 0.0000 | 0.0575 | 0.0173 | 0.0748 |
+| Under H0 (HR=1) | 2 | 24 | 0.0001 | 0.5138 | 0.0416 | 0.5554 |
+| Under H0 (HR=1) | 3 | 36 | 0.0017 | 0.8224 | 0.0417 | 0.8641 |
+| Under H0 (HR=1) | 4 | 48 | 0.0062 | 0.9214 | 0.0417 | 0.9631 |
+| Under H0 (HR=1) | 5 | 60 | 0.0112 | 0.9471 | 0.0417 | 0.9888 |
+| Under H1 (HR=0.75) | 1 | 12 | 0.0000 | 0.0034 | 0.0004 | 0.0039 |
+| Under H1 (HR=0.75) | 2 | 24 | 0.0574 | 0.0177 | 0.0004 | 0.0181 |
+| Under H1 (HR=0.75) | 3 | 36 | 0.4990 | 0.0394 | 0.0004 | 0.0398 |
+| Under H1 (HR=0.75) | 4 | 48 | 0.7996 | 0.0670 | 0.0004 | 0.0675 |
+| Under H1 (HR=0.75) | 5 | 60 | 0.9000 | 0.0996 | 0.0004 | 0.1000 |
 
 Cumulative boundary crossing probabilities {.table}
 
 Under \\H_0\\, the cumulative probability of crossing the harm bound
-across all analyses is approximately 0.1, reflecting the spending
-allocated to the harm boundary. Under \\H_1\\ (HR = 0.75), crossing the
-harm bound is very unlikely (4^{-4}), since the treatment is beneficial.
+across all analyses is approximately 0.0417, reflecting the spending
+allocated to the harm boundary. The cumulative probability of crossing
+the futility threshold, inclusive of harm, is approximately 0.9888.
+Under \\H_1\\ (HR = 0.75), crossing the harm bound is very unlikely
+(4^{-4}), since the treatment is beneficial.
 
 ### Visualization
 
@@ -365,12 +375,17 @@ Z-value boundaries for non-binding harm bound design
 The power plot (`plottype = 2`) shows cumulative boundary crossing
 probabilities as a function of the treatment effect. Three sets of lines
 appear: upper bound (cumulative efficacy crossing probability),
-1-Futility bound, and 1-Harm bound. The harm lines are above the
-futility lines because the probability of crossing the harm bound is
-less than or equal to the probability of crossing the futility bound. We
-note that when the underlying treatment effect favors control, the high
+`1-(Futility or harm)`, and `1-Harm`. Because the harm boundary is
+nested below the futility boundary when both are active, crossing the
+futility threshold includes both futility-only and harm stops. The
+`1-(Futility or harm)` curve therefore subtracts
+`x8$lower$prob + x8$harm$prob`, while the `1-Harm` curve subtracts harm
+crossings only. This aggregation is performed only for plotting: the
+probability arrays stored in `x8` remain mutually exclusive so that
+efficacy, futility-only, and harm outcomes add without double counting.
+When the underlying treatment effect favors control, the high
 probability of crossing the harm bound indicates that the harm bound is
-sensitive and serves its intended purpose
+sensitive and serves its intended purpose.
 
 ``` r
 
@@ -522,28 +537,28 @@ gsBoundSummary(x7)
 #>    IA 1: 11%                   Z -2.1121  -1.4578       NA
 #>       N: 746         p (1-sided)  0.9827   0.9275       NA
 #>   Events: 71        ~HR at bound  1.6550   1.4158       NA
-#>    Month: 12    P(Cross) if HR=1  0.0173   0.0725       NA
-#>              P(Cross) if HR=0.75  0.0005   0.0039       NA
+#>    Month: 12    P(Cross) if HR=1  0.0173   0.0551       NA
+#>              P(Cross) if HR=0.75  0.0005   0.0034       NA
 #>    IA 2: 38%                   Z -1.7667   0.0895   3.8622
 #>      N: 1118         p (1-sided)  0.9614   0.4643   0.0001
 #>  Events: 246        ~HR at bound  1.2531   0.9886   0.6107
-#>    Month: 24    P(Cross) if HR=1  0.0507   0.5430   0.0001
-#>              P(Cross) if HR=0.75  0.0005   0.0181   0.0539
+#>    Month: 24    P(Cross) if HR=1  0.0419   0.5011   0.0001
+#>              P(Cross) if HR=0.75  0.0005   0.0176   0.0539
 #>    IA 3: 63%                   Z -1.7256   1.0159   2.9344
 #>      N: 1118         p (1-sided)  0.9578   0.1548   0.0017
 #>  Events: 404        ~HR at bound  1.1874   0.9038   0.7467
-#>    Month: 36    P(Cross) if HR=1  0.0736   0.8551   0.0017
-#>              P(Cross) if HR=0.75  0.0005   0.0398   0.4829
+#>    Month: 36    P(Cross) if HR=1  0.0421   0.8131   0.0017
+#>              P(Cross) if HR=0.75  0.0005   0.0393   0.4829
 #>    IA 4: 83%                   Z -1.7170   1.6890   2.5229
 #>      N: 1118         p (1-sided)  0.9570   0.0456   0.0058
 #>  Events: 533        ~HR at bound  1.1604   0.8639   0.8037
-#>    Month: 48    P(Cross) if HR=1  0.0890   0.9592   0.0063
-#>              P(Cross) if HR=0.75  0.0005   0.0675   0.7881
+#>    Month: 48    P(Cross) if HR=1  0.0421   0.9172   0.0063
+#>              P(Cross) if HR=0.75  0.0005   0.0670   0.7881
 #>        Final                   Z -1.7149   2.2480   2.2480
 #>      N: 1118         p (1-sided)  0.9568   0.0123   0.0123
 #>  Events: 639        ~HR at bound  1.1454   0.8370   0.8370
-#>    Month: 60    P(Cross) if HR=1  0.1000   0.9875   0.0125
-#>              P(Cross) if HR=0.75  0.0005   0.1000   0.9000
+#>    Month: 60    P(Cross) if HR=1  0.0421   0.9455   0.0125
+#>              P(Cross) if HR=0.75  0.0005   0.0995   0.9000
 ```
 
 ### Efficacy bounds at alternate \\\alpha\\ levels
@@ -551,40 +566,50 @@ gsBoundSummary(x7)
 The
 [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
 function accepts an `alpha` argument to display efficacy bounds at one
-or more alternate \\\alpha\\ levels alongside the original design. Here
-we show the non-binding design (`x8`) with efficacy bounds for both
-\\\alpha = 0.0125\\ (the design level) and \\\alpha = 0.025\\:
+or more alternate \\\alpha\\ levels alongside the original design. Each
+alternate-alpha column retains the `testUpper` schedule from the design,
+so an efficacy analysis that was skipped remains inactive and every
+efficacy characteristic at that analysis, including cumulative crossing
+probability, is `NA`. Here we show the non-binding design (`x8`) with
+efficacy bounds for both \\\alpha = 0.0125\\ (the design level) and
+\\\alpha = 0.025\\:
 
 ``` r
 
 gsBoundSummary(x8, alpha = 0.025)
 #>     Analysis               Value α=0.0125 α=0.025 Futility    Harm
-#>    IA 1: 11%                   Z       NA  6.6513  -1.4408 -2.1121
-#>       N: 766         p (1-sided)       NA  0.0000   0.9252  0.9827
-#>   Events: 73        ~HR at bound       NA  0.2092   1.4034  1.6434
-#>    Month: 12    P(Cross) if HR=1       NA  0.0000   0.0748  0.0173
-#>              P(Cross) if HR=0.75       NA  0.0000   0.0039  0.0004
+#>    IA 1: 11%                   Z       NA      NA  -1.4408 -2.1121
+#>       N: 766         p (1-sided)       NA      NA   0.9252  0.9827
+#>   Events: 73        ~HR at bound       NA      NA   1.4034  1.6434
+#>    Month: 12    P(Cross) if HR=1       NA      NA   0.0575  0.0173
+#>              P(Cross) if HR=0.75       NA      NA   0.0034  0.0004
 #>    IA 2: 38%                   Z   3.8622  3.4312   0.1212 -1.7667
 #>      N: 1148         p (1-sided)   0.0001  0.0003   0.4518  0.9614
 #>  Events: 253        ~HR at bound   0.6149  0.6492   0.9849  1.2491
-#>    Month: 24    P(Cross) if HR=1   0.0001  0.0003   0.5554  0.0507
-#>              P(Cross) if HR=0.75   0.0574  0.1259   0.0181  0.0004
+#>    Month: 24    P(Cross) if HR=1   0.0001  0.0003   0.5138  0.0416
+#>              P(Cross) if HR=0.75   0.0574  0.1259   0.0177  0.0004
 #>    IA 3: 63%                   Z   2.9347  2.5948   1.0566 -1.7256
 #>      N: 1148         p (1-sided)   0.0017  0.0047   0.1454  0.9578
 #>  Events: 416        ~HR at bound   0.7497  0.7751   0.9015  1.1846
-#>    Month: 36    P(Cross) if HR=1   0.0017  0.0048   0.8641  0.0736
-#>              P(Cross) if HR=0.75   0.4990  0.6323   0.0398  0.0004
+#>    Month: 36    P(Cross) if HR=1   0.0017  0.0048   0.8224  0.0417
+#>              P(Cross) if HR=0.75   0.4990  0.6323   0.0394  0.0004
 #>    IA 4: 83%                   Z   2.5278  2.2359   1.7357 -1.7170
 #>      N: 1148         p (1-sided)   0.0057  0.0127   0.0413  0.9570
 #>  Events: 548        ~HR at bound   0.8057  0.8261   0.8622  1.1580
-#>    Month: 48    P(Cross) if HR=1   0.0062  0.0138   0.9631  0.0890
-#>              P(Cross) if HR=0.75   0.7996  0.8684   0.0675  0.0004
+#>    Month: 48    P(Cross) if HR=1   0.0062  0.0138   0.9214  0.0417
+#>              P(Cross) if HR=0.75   0.7996  0.8684   0.0670  0.0004
 #>        Final                   Z   2.3072  2.0432   2.3072 -1.7149
 #>      N: 1148         p (1-sided)   0.0105  0.0205   0.0105  0.9568
 #>  Events: 657        ~HR at bound   0.8352  0.8526   0.8352  1.1433
-#>    Month: 60    P(Cross) if HR=1   0.0112  0.0201   0.9888  0.1000
-#>              P(Cross) if HR=0.75   0.9000  0.9218   0.1000  0.0004
+#>    Month: 60    P(Cross) if HR=1   0.0112  0.0201   0.9471  0.0417
+#>              P(Cross) if HR=0.75   0.9000  0.9218   0.0996  0.0004
 ```
+
+Alternate-alpha summaries are supported for `test.type = 8`, where both
+futility and harm bounds are non-binding. They are not supported for
+`test.type = 7`: a binding harm or futility bound is outside the
+non-binding sequential-p-value framework used for Maurer–Bretz graphical
+multiple testing.
 
 ## Practical considerations
 
@@ -623,8 +648,10 @@ probability of a false harm signal.
 ### Harm bound capping
 
 In the implementation, the harm bound is automatically **capped** so it
-never exceeds the futility bound. This ensures the ordering: harm bound
-\\\leq\\ futility bound \\\leq\\ efficacy bound at every analysis.
+never exceeds the futility bound when both are active. This ensures the
+ordering harm bound \\\leq\\ futility bound \\\leq\\ efficacy bound at
+analyses where all three are tested, while allowing harm to be the
+active lower boundary when futility is skipped.
 
 ### When to use `test.type = 7` vs. `test.type = 8`
 
@@ -646,27 +673,20 @@ never exceeds the futility bound. This ensures the ordering: harm bound
 In most regulatory settings, `test.type = 8` is the safer and more
 common choice.
 
-### Why a separate “binding harm / non-binding futility” option is unnecessary
+### Binding and non-binding harm monitoring
 
-One might consider a design where the futility bound is non-binding but
-the harm bound is binding. In practice, such a distinction has no
-computational effect. The harm bound is computed *after* the efficacy
-and futility bounds are set and does not feed back into those
-computations. When the futility bound is non-binding (as in
-`test.type = 8`), the efficacy bound is computed ignoring all
-lower-bound stopping. Since the harm bound lies below the futility
-bound, making the harm bound “binding” while the futility bound remains
-non-binding would not change the efficacy boundary, the required number
-of events, the final Z-values, or the p-values — the results are
-identical.
+When futility and harm are both tested at an analysis, the harm boundary
+lies below the futility boundary and therefore does not add another
+stopping region. Crossing probabilities are nevertheless partitioned
+into mutually exclusive harm, futility, and efficacy outcomes.
 
-The only difference would be in *interpretation*: whether crossing the
-harm bound is treated as a firm commitment to stop or as advisory
-information for the DMC. This interpretive distinction does not require
-a separate `test.type`; it can be addressed in the protocol language and
-the DMC charter. The `test.type = 8` framework already provides full
-flexibility for the DMC to treat the harm bound as either advisory or
-mandatory.
+When harm is tested at an analysis where futility is skipped, the harm
+boundary is the active lower stopping boundary. This stopping
+probability is included in sample-size derivation and, for
+`test.type = 7`, in the binding efficacy-bound calculation. For
+`test.type = 8`, efficacy bounds continue to use the non-binding Type I
+error convention, while power and expected information account for
+actual harm and futility stopping.
 
 ### Adjusting the boundaries
 
