@@ -261,10 +261,10 @@ veTable(xb, x, ve) |>
   lt_format(columns = 2, decimals = 1) |>
   lt_format(columns = c(7:8, 11:16), decimals = 2) |>
   lt_format(columns = 9:10, decimals = 4) |>
-  lt_spanner(label = "Experimental Cases at Bound", columns = c("Success", "Futility")) |>
-  lt_spanner(label = "Power by Vaccine Efficacy", columns = paste0(ve * 100, "%")) |>
-  lt_spanner(label = "Error Spending", columns = c("alpha", "beta")) |>
-  lt_spanner(label = "Vaccine Efficacy at Bound", columns = c("ve_efficacy", "ve_futility")) |>
+  lt_spanner(label = "Experimental Cases at Bound", columns = 5:6) |>
+  lt_spanner(label = "Power by Vaccine Efficacy", columns = 11:16) |>
+  lt_spanner(label = "Error Spending", columns = 9:10) |>
+  lt_spanner(label = "Vaccine Efficacy at Bound", columns = 7:8) |>
   lt_label(
     ve_efficacy = "Efficacy",
     ve_futility = "Futility"
@@ -436,10 +436,10 @@ We hide the code to produce the table; this is available in package vignette cod
   out_tab |> lt() |>
   lt_format(columns = c(5:6, 9:11), decimals = 2) |>
   lt_format(columns = 7:8, decimals = 4) |>
-  lt_spanner(label = "Cases at Bound", columns = c("Success", "Futility")) |>
-  lt_spanner(label = "Power by VE", columns = paste0(ve * 100, "%")) |>
-  lt_spanner(label = "Error Spending", columns = c("alpha", "beta")) |>
-  lt_spanner(label = "VE at Bound", columns = c("ve_efficacy", "ve_futility")) |>
+  lt_spanner(label = "Cases at Bound", columns = 3:4) |>
+  lt_spanner(label = "Power by VE", columns = 9:11) |>
+  lt_spanner(label = "Error Spending", columns = 7:8) |>
+  lt_spanner(label = "VE at Bound", columns = 5:6) |>
   lt_label(
     ve_efficacy = "Efficacy",
     ve_futility = "Futility"

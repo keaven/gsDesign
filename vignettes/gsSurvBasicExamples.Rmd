@@ -251,12 +251,12 @@ gsBoundSummary(x) |>
   lt() |>
   lt_header(title = "Time-to-event group sequential design") |>
   lt_align(columns = c("Analysis", "Value", "Efficacy", "Futility"), align = "left") |>
-  lt_footnote(footnoteUS, where = "column", columns = "Efficacy") |>
-  lt_footnote(footnoteLS, where = "column", columns = "Futility") |>
-  lt_footnote(footnoteHR, where = "body", columns = "Value", rows = c(3, 8, 13)) |>
-  lt_footnote(footnoteM, where = "body", columns = "Analysis", rows = c(4, 9, 14)) |>
-  lt_footnote(footnote1, where = "body", columns = "Value", rows = c(4, 5, 9, 10, 14, 15)) |>
-  lt_footnote(footnote2, where = "body", columns = "Value", rows = c(4, 9, 14))
+  lt_footnote(footnoteUS, where = "column", columns = 3) |>
+  lt_footnote(footnoteLS, where = "column", columns = 4) |>
+  lt_footnote(footnoteHR, where = "body", columns = 2, rows = c(3, 8, 13)) |>
+  lt_footnote(footnoteM, where = "body", columns = 1, rows = c(4, 9, 14)) |>
+  lt_footnote(footnote1, where = "body", columns = 2, rows = c(4, 5, 9, 10, 14, 15)) |>
+  lt_footnote(footnote2, where = "body", columns = 2, rows = c(4, 9, 14))
 ```
 
 ### Summary plots
@@ -327,15 +327,15 @@ gsBoundSummary(
   ) |>
   lt_footnote(
     "Nominal p-value required to establish statistical significance.",
-    where = "body", columns = "Efficacy", rows = c(2, 5, 8)
+    where = "body", columns = 3, rows = c(2, 5, 8)
   ) |>
   lt_footnote(
     "Interim futility guidance based on observed HR is non-binding.",
-    where = "body", columns = "Futility", rows = c(3, 6)
+    where = "body", columns = 4, rows = c(3, 6)
   ) |>
   lt_footnote(
     "HR bounds are approximations; decisions on crossing are based solely on p-values.",
-    where = "body", columns = "Value", rows = c(3, 6, 9)
+    where = "body", columns = 2, rows = c(3, 6, 9)
   )
 ```
 
