@@ -15,8 +15,6 @@
   and matrix output, with compact row spacing for long tables and no significant
   changes to the rendered HTML tables.
 
-# gsDesign 3.11.1 (August 2026)
-
 ## Testing
 
 - Reduced default test-suite runtime by using smaller stress-test grids,
