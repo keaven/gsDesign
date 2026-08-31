@@ -22,8 +22,6 @@ R Markdown output or output to a variety of file types. xprint() is
 provided for LaTeX output by setting default options for
 print.xtable when producing tables summarizing design
 bounds.
-Single-analysis fixed designs are supported; interim-only characteristics
-such as conditional and predictive power are omitted when k = 1.
 Individual transformation of z-value test statistics for interim and final
 analyses are obtained from gsBValue(), gsDelta(),
 gsHR() and gsCPz() for B-values, approximate treatment effect
@@ -74,11 +72,7 @@ value. P{Cross if delta=xx}: For each of the parameter values in
 x, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
-interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive. Every characteristic for a bound,
-including its cumulative crossing probability, is shown as NA at an
-analysis where that bound is inactive. The underlying probability arrays on
-x retain the cumulative crossing information."><meta property="og:description" content="A tabular summary of a group sequential design's bounds and their properties
+interest."><meta property="og:description" content="A tabular summary of a group sequential design's bounds and their properties
 are often useful. The 'vintage' print.gsDesign() function provides a
 complete but minimally formatted summary of a group sequential design
 derived by gsDesign(). A brief description of the overall design can
@@ -95,8 +89,6 @@ R Markdown output or output to a variety of file types. xprint() is
 provided for LaTeX output by setting default options for
 print.xtable when producing tables summarizing design
 bounds.
-Single-analysis fixed designs are supported; interim-only characteristics
-such as conditional and predictive power are omitted when k = 1.
 Individual transformation of z-value test statistics for interim and final
 analyses are obtained from gsBValue(), gsDelta(),
 gsHR() and gsCPz() for B-values, approximate treatment effect
@@ -147,11 +139,7 @@ value. P{Cross if delta=xx}: For each of the parameter values in
 x, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
-interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive. Every characteristic for a bound,
-including its cumulative crossing probability, is shown as NA at an
-analysis where that bound is inactive. The underlying probability arrays on
-x retain the cumulative crossing information."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
+interest."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -159,7 +147,7 @@ x retain the cumulative crossing information."><meta property="og:image" content
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -181,7 +169,7 @@ x retain the cumulative crossing information."><meta property="og:image" content
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Bound Summary and Z-transformations</h1>
-      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/master/R/gsMethods.R" class="external-link"><code>R/gsMethods.R</code></a>, <a href="https://github.com/keaven/gsDesign/blob/master/R/gsqplot.R" class="external-link"><code>R/gsqplot.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/v3.10.1/R/gsMethods.R" class="external-link"><code>R/gsMethods.R</code></a>, <a href="https://github.com/keaven/gsDesign/blob/v3.10.1/R/gsqplot.R" class="external-link"><code>R/gsqplot.R</code></a></small>
       <div class="d-none name"><code>gsBoundSummary.Rd</code></div>
     </div>
 
@@ -202,9 +190,7 @@ package, <code>addTable.RTF()</code> (from the rtf package) to produce console o
 R Markdown output or output to a variety of file types. <code>xprint()</code> is
 provided for LaTeX output by setting default options for
 <code><a href="https://rdrr.io/pkg/xtable/man/print.xtable.html" class="external-link">print.xtable</a></code> when producing tables summarizing design
-bounds.
-Single-analysis fixed designs are supported; interim-only characteristics
-such as conditional and predictive power are omitted when <code>k = 1</code>.</p>
+bounds.</p>
 <p>Individual transformation of z-value test statistics for interim and final
 analyses are obtained from <code>gsBValue()</code>, <code>gsDelta()</code>,
 <code>gsHR()</code> and <code>gsCPz()</code> for B-values, approximate treatment effect
@@ -255,11 +241,7 @@ value. <code>P{Cross if delta=xx}: </code>For each of the parameter values in
 <code>x</code>, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
-interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive. Every characteristic for a bound,
-including its cumulative crossing probability, is shown as <code>NA</code> at an
-analysis where that bound is inactive. The underlying probability arrays on
-<code>x</code> retain the cumulative crossing information.</p>
+interest.</p>
     </div>
 
     <div class="section level2">
@@ -426,14 +408,9 @@ be changed.</p></dd>
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
 <dd><p>If used, a vector of alternate alpha-levels to print boundaries
-for. Only works with non-binding test types 1, 4, 6, and 8. If specified,
-efficacy bound
+for. Only works with test.type 1, 4, 6, 7, and 8. If specified, efficacy bound
 columns are headed by individual alpha levels. The alpha level of the input
-design is always included as the first column. Alternate alpha levels retain
-the efficacy testing schedule in <code>x$testUpper</code>. Binding lower-bound
-designs, including test type 7, are not supported for alternate-alpha
-summaries because they do not satisfy the non-binding framework used for
-Maurer–Bretz graphical multiple testing.</p></dd>
+design is always included as the first column.</p></dd>
 
 
 <dt id="arg-include-rownames">include.rownames<a class="anchor" aria-label="anchor" href="#arg-include-rownames"></a></dt>
@@ -730,7 +707,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Table caption."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.6.1 by xtable 1.8-8 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Mon Aug 31 01:10:25 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Mon Aug 31 15:25:28 2026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{llrr}</span>

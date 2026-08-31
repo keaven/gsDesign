@@ -13,7 +13,7 @@ toInteger(x, ratio = x$ratio, roundUpFinal = TRUE)
 
 - x:
 
-  An object of class `gsDesign`, `gsSurv`, or `nSurv`.
+  An object of class `gsDesign` or `gsSurv`.
 
 - ratio:
 
@@ -34,9 +34,8 @@ toInteger(x, ratio = x$ratio, roundUpFinal = TRUE)
 ## Value
 
 Output is an object of the same class as input `x`; i.e., `gsDesign`
-with integer vector for `n.I`, `gsSurv` with integer vector `n.I` and
-integer total sample size, or `nSurv` with integer `d` and integer total
-sample size `n`. See details.
+with integer vector for `n.I` or `gsSurv` with integer vector `n.I` and
+integer total sample size. See details.
 
 ## Details
 
@@ -56,12 +55,6 @@ multiple of 3 + 1 = 4; this could represent a 3:1 or 1:3 randomization
 ratio. For 3:2 randomization, `ratio = 4` would ensure rounding sample
 size to a multiple of 5.
 
-An `nSurv` object is converted through the corresponding single-analysis
-`gsSurv` representation and returned as an `nSurv` object. Its required
-event count `d` is rounded in the same way as the final event count for
-a `gsSurv` object, and its total sample size `n` is rounded according to
-`ratio`.
-
 For a `gsSurv` object, `x$n.I` is an event-count schedule. `toInteger()`
 rounds the final planned event count (up when `roundUpFinal = TRUE`;
 otherwise to nearest integer, with a 0.01 tolerance), then derives
@@ -69,10 +62,7 @@ interim integer event targets from `x$timing * final_events`. Interim
 counts are constrained to be positive and strictly increasing. Group
 sequential boundaries and spending are recomputed with
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
-at the integer event counts. For a single-analysis survival design, the
-fixed efficacy boundary is retained and its power is recomputed at the
-integer final event count without invoking multi-look group-sequential
-calculations.
+at the integer event counts.
 
 Total sample size for a survival design is then updated under a fixed
 calendar plan (same enrollment periods, study duration, and minimum

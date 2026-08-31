@@ -48,11 +48,7 @@ through an iterative process for all options. Since options 3 and 4 must
 compute boundary crossing probabilities under both the null and
 alternative hypotheses, deriving these designs can take longer than
 other options. Options 5 and 6 compute lower bound spending under the
-null hypothesis. Options 7 and 8 add a harm bound to beta-spending
-futility: option 7 treats both futility and harm bounds as binding for
-Type I error, while option 8 treats both as non-binding. Futility and
-harm are mutually exclusive lower-tail stopping outcomes with separately
-specified spending functions.
+null hypothesis.
 
 ## Usage
 
@@ -319,9 +315,7 @@ xtable(
   `FALSE` indicates none. Otherwise, a logical vector of length `k`.
   Only used for `test.type` 7 or 8; at least one analysis must be `TRUE`
   for those types. Where `testHarm` is `FALSE`, the harm bound is set to
-  `-20` (effectively `-Inf`) and the bound is displayed as `NA` in
-  output. Cumulative harm crossing probability from earlier analyses is
-  still displayed.
+  `-20` (effectively `-Inf`) and displayed as `NA` in output.
 
 - x:
 
@@ -520,14 +514,7 @@ and upon return from `gsDesign()` contains:
   `test.type=2`, `5` or `6`, lower spending is under the null
   hypothesis. For `test.type=1`, output value is `NULL`. See
   [`vignette("SpendingFunctionOverview")`](https://keaven.github.io/gsDesign/articles/SpendingFunctionOverview.md)
-  and manual. For `test.type=7` or `8`, crossing probabilities exclude
-  harm crossings.
-
-- harm:
-
-  Harm bound spending function, boundary, and crossing probabilities at
-  each analysis for `test.type=7` or `8`. Harm, lower, and upper
-  crossing probabilities are mutually exclusive.
+  and manual.
 
 - theta:
 

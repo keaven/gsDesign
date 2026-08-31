@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,63 +35,9 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/keaven/gsDesign/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/keaven/gsDesign/blob/v3.10.1/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="3.11.1" id="gsdesign-3111-august-2026">gsDesign 3.11.1 (August 2026)<a class="anchor" aria-label="anchor" href="#gsdesign-3111-august-2026"></a></h2>
-<div class="section level3">
-<h3 id="testing-3-11-1">Testing<a class="anchor" aria-label="anchor" href="#testing-3-11-1"></a></h3>
-<ul><li>Reduced default test-suite runtime by using smaller stress-test grids, fewer Monte Carlo iterations, and toy exact-binomial p-value event counts. Set <code>GSDESIGN_RUN_STRESS_TESTS=true</code> to run the larger stress-test settings.</li>
-</ul></div>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="3.11.0" id="gsdesign-3110-august-2026">gsDesign 3.11.0 (August 2026)<a class="anchor" aria-label="anchor" href="#gsdesign-3110-august-2026"></a></h2><p class="text-muted">CRAN release: 2026-08-29</p>
-<div class="section level3">
-<h3 id="new-features-3-11-0">New features<a class="anchor" aria-label="anchor" href="#new-features-3-11-0"></a></h3>
-<ul><li>
-<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> results now have primary class “gsSurvPower” while retaining inheritance from “gsSurv” and “gsDesign”. They also retain evaluated, replayable arguments in <code>inputs</code>, enabling downstream packages to identify and reproduce power calculations (<a href="https://github.com/keaven/gsDesign/issues/313" class="external-link">#313</a>).</li>
-<li>
-<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> now aligns its expected analysis-cut grammar with <code>simtrial::get_analysis_date()</code>: overall and per-stratum event and enrollment requirements can be combined, <code>maxCalendarTime</code> provides an absolute cap, and <code>spending = "min_planned_actual"</code> supports reference-design planned-versus-actual spending. Existing unstratified <code>targetEvents</code>, <code>minN</code>, and relative <code>maxExtension</code> behavior is retained (<a href="https://github.com/keaven/gsDesign/issues/303" class="external-link">#303</a>).</li>
-<li>All <code>gsSurv</code> objects now include <code>N</code>, the cumulative total expected enrollment at each analysis. <code>nSurv</code> objects retain scalar <code>n</code> and also return identical scalar <code>N</code> as a non-breaking alias (<a href="https://github.com/keaven/gsDesign/issues/299" class="external-link">#299</a>).</li>
-<li>Added survival enrollment-planning documentation for four-period ramp-up, the three combinations of fixed or solved enrollment and follow-up duration, calendar-time analyses, power sensitivity, integer conversion, and stratified designs. <code>gsSurv(T = NULL, minfup = ...)</code> now consistently keeps enrollment rates fixed and solves enrollment duration (<a href="https://github.com/keaven/gsDesign/issues/300" class="external-link">#300</a>).</li>
-<li>Added <code><a href="../reference/minMedianFollowUp.html">minMedianFollowUp()</a></code> and <code><a href="../reference/minMedianFollowUp.html">plotMinMedianFollowUp()</a></code> to compute and plot minimum median follow-up at any calendar time from the piecewise enrollment assumptions in an <code>nSurv</code> or <code>gsSurv</code> design. The plot accepts arbitrary time-unit labels through <code>timename</code>; month and year labels default to x-axis breaks every 6 months and 0.5 years, respectively, while other units use automatic breaks (<a href="https://github.com/keaven/gsDesign/issues/281" class="external-link">#281</a>).</li>
-<li>Sequential p-values, including exact-binomial repeated and sequential efficacy p-values, now support <code>test.type = 8</code> by ignoring its non-binding futility and harm bounds. <code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> now provides full exact conversion for non-binding test types 1, 4, 6, and 8. For type 6, the upper event-count boundary targets lower-bound spending under the null hypothesis. For type 8, exact upper event-count stops are partitioned into mutually exclusive futility and harm regions, targeting beta spending under the alternative and harm spending under the null, respectively (<a href="https://github.com/keaven/gsDesign/issues/287" class="external-link">#287</a>).</li>
-</ul></div>
-<div class="section level3">
-<h3 id="documentation-3-11-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-3-11-0"></a></h3>
-<ul><li>Expanded the main <code><a href="../reference/gsDesign.html">gsDesign()</a></code> help discussion to describe binding and non-binding futility plus harm monitoring for <code>test.type = 7</code> and <code>8</code> (<a href="https://github.com/keaven/gsDesign/issues/308" class="external-link">#308</a>).</li>
-<li>Clarified the two intended uses of <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code>, expanded guidance for scenario and combined timing-rule analyses, including mixed-<code>NA</code> rules by analysis, added survival workflow routing, and documented that expected-value calculations do not replace simulation of stochastic trial execution (<a href="https://github.com/keaven/gsDesign/issues/303" class="external-link">#303</a>).</li>
-<li>Clarified beta spending in <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> scenario analyses, distinguishing design beta from achieved beta and defining <code>informationRates</code> as planned information-fraction caps used to derive effective spending time (<a href="https://github.com/keaven/gsDesign/issues/303" class="external-link">#303</a>).</li>
-<li>Expanded the <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> vignette with common timing pitfalls for explicit <code>minfup</code>, <code>targetN</code>, <code>maxExtension</code>, and <code>minN + minFollowUp</code> workflows (<a href="https://github.com/keaven/gsDesign/issues/291" class="external-link">#291</a>, <a href="https://github.com/keaven/gsDesign/issues/293" class="external-link">#293</a>, <a href="https://github.com/keaven/gsDesign/issues/295" class="external-link">#295</a>, <a href="https://github.com/keaven/gsDesign/issues/296" class="external-link">#296</a>).</li>
-<li>Explained why skipping futility while retaining harm monitoring can recalibrate earlier harm bounds, and documented recommended final-analysis testing schedules using common event-driven survival-design assumptions for all selective-bound examples (<a href="https://github.com/keaven/gsDesign/issues/306" class="external-link">#306</a>).</li>
-</ul></div>
-<div class="section level3">
-<h3 id="testing-3-11-0">Testing<a class="anchor" aria-label="anchor" href="#testing-3-11-0"></a></h3>
-<ul><li>Added <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> tests for combined overall and per-stratum timing rules, absolute and relative caps on stratified event waits, and planned-versus-actual spending with mixed cuts and delayed information (<a href="https://github.com/keaven/gsDesign/issues/303" class="external-link">#303</a>).</li>
-</ul></div>
-<div class="section level3">
-<h3 id="bug-fixes-3-11-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-11-0"></a></h3>
-<ul><li>
-<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> now validates mixed-<code>NA</code> timing inputs consistently, rejects missing testing indicators and spending times with informative messages, and detects analyses without an active timing rule or follow-up values without a corresponding enrollment requirement (<a href="https://github.com/keaven/gsDesign/issues/303" class="external-link">#303</a>).</li>
-<li>A matrix supplied to <code>gsSurvPower(targetEvents = ...)</code> is now treated as a deprecated alias for <code>targetEventsPerStratum</code> and its entries are enforced as per-stratum requirements. Previously, the rows were reduced to overall sums, which did not enforce the documented stratified cut (<a href="https://github.com/keaven/gsDesign/issues/303" class="external-link">#303</a>).</li>
-<li>
-<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> now respects an explicitly supplied <code>minfup</code> as a final analysis timing floor for event-driven designs, so the final analysis is not scheduled before the end of enrollment plus minimum follow-up (<a href="https://github.com/keaven/gsDesign/issues/291" class="external-link">#291</a>).</li>
-<li>
-<code>gsSurvPower(targetN = ...)</code> now works when <code>R</code> is omitted by expanding and rescaling enrollment-period durations to match the supplied <code>gamma</code> periods. Documentation now clarifies that <code>targetN</code> changes enrollment duration; for fixed-duration enrollment, specify <code>R</code> and scale <code>gamma</code> directly (<a href="https://github.com/keaven/gsDesign/issues/293" class="external-link">#293</a>).</li>
-<li>
-<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> now gives an informative error when <code>maxExtension</code> is used without a floor timing criterion such as <code>plannedCalendarTime</code>, <code>minN</code>, or <code>minTimeFromPreviousAnalysis</code> (<a href="https://github.com/keaven/gsDesign/issues/295" class="external-link">#295</a>).</li>
-<li>
-<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> can now use <code>minN</code> plus <code>minFollowUp</code> as the primary timing criterion, solves for the earliest time at which enrollment reaches <code>minN</code>, and reports a clear error if the criteria do not produce strictly increasing analyses (<a href="https://github.com/keaven/gsDesign/issues/296" class="external-link">#296</a>).</li>
-<li>
-<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> now retains exact event totals when <code>targetEvents</code> determines an analysis, rather than exposing small root-finding residuals that could make <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> round an integer event target up by one (<a href="https://github.com/keaven/gsDesign/issues/294" class="external-link">#294</a>).</li>
-<li>Survival sample-size outputs now normalize machine-precision representations of integers before applying display rounding, so <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> and <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> preserve exact arm and total sample sizes (<a href="https://github.com/keaven/gsDesign/issues/290" class="external-link">#290</a>).</li>
-<li>Single-analysis survival designs now use a fixed-design <code><a href="../reference/nSurv.html">nSurv()</a></code> path in <code>gsSurv(k = 1)</code> and <code>gsSurvPower(k = 1)</code>. The resulting objects work with <code><a href="../reference/toInteger.html">toInteger()</a></code> and <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code>, including alternate-alpha summaries and use all alpha at the sole analysis without displaying an irrelevant spending function in <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>. An <code><a href="../reference/nSurv.html">nSurv()</a></code> object can now also be passed directly to <code><a href="../reference/toInteger.html">toInteger()</a></code> and is returned as an <code>nSurv</code> object with integer event and sample-size targets (<a href="https://github.com/keaven/gsDesign/issues/289" class="external-link">#289</a>).</li>
-<li>Power plots for test types 7 and 8 now treat crossing the futility threshold as the union of futility-only and harm stops. The separate harm curve remains harm-only, and the mutually exclusive probabilities stored on the design are unchanged (<a href="https://github.com/keaven/gsDesign/issues/287" class="external-link">#287</a>).</li>
-<li>Sample-size derivation now accounts for analyses where efficacy, futility, or harm testing is skipped, avoiding power above the requested target. Harm, futility, and efficacy crossing probabilities are reported as mutually exclusive outcomes. Alternate-alpha summaries and power calculations retain the planned efficacy testing schedule, and survival-design inputs retain the applicable testing flags. <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> reports every characteristic, including cumulative crossing probability, as <code>NA</code> when its bound is not tested at an analysis (<a href="https://github.com/keaven/gsDesign/issues/287" class="external-link">#287</a>).</li>
-<li>Alternate-alpha summaries are now limited to one-sided and non-binding test types 1, 4, 6, and 8. Binding test type 7 is no longer presented as compatible with the Maurer–Bretz graphical multiple-testing framework (<a href="https://github.com/keaven/gsDesign/issues/287" class="external-link">#287</a>).</li>
-</ul></div>
-</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.10.1" id="gsdesign-3101">gsDesign 3.10.1<a class="anchor" aria-label="anchor" href="#gsdesign-3101"></a></h2><p class="text-muted">CRAN release: 2026-07-20</p>
 <div class="section level3">

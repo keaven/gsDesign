@@ -21,9 +21,7 @@ RTF package, `addTable.RTF()` (from the rtf package) to produce console
 or R Markdown output or output to a variety of file types. `xprint()` is
 provided for LaTeX output by setting default options for
 [`print.xtable`](https://rdrr.io/pkg/xtable/man/print.xtable.html) when
-producing tables summarizing design bounds. Single-analysis fixed
-designs are supported; interim-only characteristics such as conditional
-and predictive power are omitted when `k = 1`.
+producing tables summarizing design bounds.
 
 Individual transformation of z-value test statistics for interim and
 final analyses are obtained from `gsBValue()`, `gsDelta()`, `gsHR()` and
@@ -84,11 +82,7 @@ value. `P{Cross if delta=xx}: `For each of the parameter values in `x`,
 the probability of crossing either bound given that treatment effect is
 computed. This value is cumulative for each bound. For example, the
 probability of crossing the efficacy bound at or before the analysis of
-interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive. Every characteristic for a bound,
-including its cumulative crossing probability, is shown as `NA` at an
-analysis where that bound is inactive. The underlying probability arrays
-on `x` retain the cumulative crossing information.
+interest.
 
 ## Usage
 
@@ -260,14 +254,9 @@ gsCPz(z, i, x, theta = NULL, ylab = NULL, ...)
 - alpha:
 
   If used, a vector of alternate alpha-levels to print boundaries for.
-  Only works with non-binding test types 1, 4, 6, and 8. If specified,
-  efficacy bound columns are headed by individual alpha levels. The
-  alpha level of the input design is always included as the first
-  column. Alternate alpha levels retain the efficacy testing schedule in
-  `x$testUpper`. Binding lower-bound designs, including test type 7, are
-  not supported for alternate-alpha summaries because they do not
-  satisfy the non-binding framework used for Maurer–Bretz graphical
-  multiple testing.
+  Only works with test.type 1, 4, 6, 7, and 8. If specified, efficacy
+  bound columns are headed by individual alpha levels. The alpha level
+  of the input design is always included as the first column.
 
 - include.rownames:
 
@@ -569,7 +558,7 @@ xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE),
   caption = "Table caption."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Mon Aug 31 01:10:25 2026
+#> % Mon Aug 31 15:25:28 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{llrr}

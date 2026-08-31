@@ -15,7 +15,7 @@ completed analyses, using [repeatedPValueBinomialExact()]."><meta property="og:i
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.10.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,7 @@ completed analyses, using [repeatedPValueBinomialExact()]."><meta property="og:i
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Exact binomial sequential p-value for a group sequential design</h1>
-      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/master/R/binomialExactPValues.R" class="external-link"><code>R/binomialExactPValues.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/v3.10.1/R/binomialExactPValues.R" class="external-link"><code>R/binomialExactPValues.R</code></a></small>
       <div class="d-none name"><code>sequentialPValueBinomialExact.Rd</code></div>
     </div>
 
@@ -64,13 +64,13 @@ completed analyses, using [repeatedPValueBinomialExact()].</p>
 
 
 <dl><dt id="arg-gsd">gsD<a class="anchor" aria-label="anchor" href="#arg-gsd"></a></dt>
-<dd><p>A `gsSurv` object with non-binding `test.type` 1, 4, 6, or 8.</p></dd>
+<dd><p>A `gsSurv` object with `test.type` 1 or 4.</p></dd>
 
 
 <dt id="arg-n-i">n.I<a class="anchor" aria-label="anchor" href="#arg-n-i"></a></dt>
 <dd><p>Increasing integer total event counts at completed analyses. If
-`NULL`, the planned integer event counts from `toInteger(gsD)` are used.
-This must have at most 1 value greater than or equal to planned
+`NULL`, the planned exact binomial event counts from `toBinomialExact(gsD)`
+are used. This must have at most 1 value greater than or equal to planned
 final events (`gsD$maxn.IPlan` if available, otherwise `max(gsD$n.I)`).</p></dd>
 
 
