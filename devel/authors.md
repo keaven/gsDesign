@@ -11,15 +11,15 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/keaven/gsDesign/blob/GitHub/291-293-295-296-gssurvpower-issues/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/keaven/gsDesign/blob/master/DESCRIPTION)
 
 Anderson K (2026). *gsDesign: Group Sequential Design*. R package
-version 3.11.0.9005, <https://keaven.github.io/gsDesign/>.
+version 3.11.1.9000, <https://keaven.github.io/gsDesign/>.
 
     @Manual{,
       title = {gsDesign: Group Sequential Design},
       author = {Keaven Anderson},
       year = {2026},
-      note = {R package version 3.11.0.9005},
+      note = {R package version 3.11.1.9000},
       url = {https://keaven.github.io/gsDesign/},
     }

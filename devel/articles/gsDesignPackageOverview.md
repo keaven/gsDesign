@@ -42,6 +42,7 @@ with the same endpoint requires 200 subjects for 90% power at \\\alpha\\
 ``` r
 
 library(gsDesign)
+library(lt)
 
 x <- gsDesign(n.fix = 200)
 plot(x)
@@ -51,23 +52,7 @@ plot(x)
 
 ``` r
 
-gsBoundSummary(x)
-#>   Analysis               Value Efficacy Futility
-#>  IA 1: 33%                   Z   3.0107  -0.2387
-#>      N: 72         p (1-sided)   0.0013   0.5943
-#>                ~delta at bound   1.5553  -0.1233
-#>            P(Cross) if delta=0   0.0013   0.4057
-#>            P(Cross) if delta=1   0.1412   0.0148
-#>  IA 2: 67%                   Z   2.5465   0.9411
-#>     N: 143         p (1-sided)   0.0054   0.1733
-#>                ~delta at bound   0.9302   0.3438
-#>            P(Cross) if delta=0   0.0062   0.8347
-#>            P(Cross) if delta=1   0.5815   0.0437
-#>      Final                   Z   1.9992   1.9992
-#>     N: 214         p (1-sided)   0.0228   0.0228
-#>                ~delta at bound   0.5963   0.5963
-#>            P(Cross) if delta=0   0.0233   0.9767
-#>            P(Cross) if delta=1   0.9000   0.1000
+gsBoundSummary(x) |> lt()
 ```
 
 ## References

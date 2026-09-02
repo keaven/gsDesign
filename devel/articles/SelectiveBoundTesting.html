@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,7 @@
 Anderson</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/GitHub/291-293-295-296-gssurvpower-issues/vignettes/SelectiveBoundTesting.Rmd" class="external-link"><code>vignettes/SelectiveBoundTesting.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/master/vignettes/SelectiveBoundTesting.Rmd" class="external-link"><code>vignettes/SelectiveBoundTesting.Rmd</code></a></small>
       <div class="d-none name"><code>SelectiveBoundTesting.Rmd</code></div>
     </div>
 
@@ -75,6 +75,58 @@ Anderson</h4>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
+<p>All examples use a common time-to-event design. Enrollment lasts 16
+months, with the relative enrollment rate increasing over the first 6
+months and then remaining constant. The trial lasts 36 months.
+Control-group survival is 50%, 40%, and 35% at 1, 2, and 3 years,
+respectively. We convert each interval’s change in log survival to a
+piecewise exponential failure rate. Dropout is exponential at an annual
+rate of 0.02, and the hazard ratio under the alternative is 0.7.
+Analyses occur after 40%, 70%, and 100% of planned events.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">survival_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">12</span>, <span class="fl">24</span>, <span class="fl">36</span><span class="op">)</span></span>
+<span><span class="va">control_survival</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">.50</span>, <span class="fl">.40</span>, <span class="fl">.35</span><span class="op">)</span></span>
+<span><span class="va">control_failure_rate</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">control_survival</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">survival_time</span><span class="op">)</span></span>
+<span><span class="va">enrollment_duration</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fl">11</span><span class="op">)</span></span>
+<span><span class="va">relative_enrollment_rate</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span></span>
+<span></span>
+<span><span class="va">survival_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">.025</span>,</span>
+<span>  beta <span class="op">=</span> <span class="fl">.1</span>,</span>
+<span>  hr <span class="op">=</span> <span class="fl">.7</span>,</span>
+<span>  timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">.7</span><span class="op">)</span>,</span>
+<span>  sfu <span class="op">=</span> <span class="va">sfLDOF</span>,</span>
+<span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>,</span>
+<span>  sflpar <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  lambdaC <span class="op">=</span> <span class="va">control_failure_rate</span>,</span>
+<span>  S <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">24</span><span class="op">)</span>,</span>
+<span>  eta <span class="op">=</span> <span class="fl">.02</span> <span class="op">/</span> <span class="fl">12</span>,</span>
+<span>  gamma <span class="op">=</span> <span class="va">relative_enrollment_rate</span>,</span>
+<span>  R <span class="op">=</span> <span class="va">enrollment_duration</span>,</span>
+<span>  T <span class="op">=</span> <span class="fl">36</span>,</span>
+<span>  minfup <span class="op">=</span> <span class="fl">20</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Equivalently,
+<code>gsDesign2::s2pwe(times = c(12, 24, 36), survival = c(.50, .40, .35))$rate</code>
+performs this survival-to-rate conversion.</p>
+<p>Every example below inherits <code>timing = c(.4, .7)</code> and
+these survival and enrollment assumptions from
+<code>survival_args</code>. The <code>gamma</code> input changes from 1
+to 6 over the first 6 months; its sixth value then applies through month
+16. Because total duration and minimum follow-up are fixed,
+<code><a href="../reference/nSurv.html">gsSurv()</a></code> scales this relative enrollment-rate pattern to
+attain 90% power. Designs with different stopping rules can therefore
+show different fitted enrollment rates while retaining the same timing,
+survival, dropout, and enrollment-ramp assumptions.</p>
+<p>The Lan–DeMets O’Brien–Fleming spending function,
+<code>sfLDOF</code>, sets a high bar for early efficacy stopping that is
+generally acceptable to regulators. The first interim is delayed until
+40% of planned events to balance useful early futility stopping against
+power loss. We initially use <code>sfHSD</code> with
+<code>sflpar = 1</code>; this is a relatively aggressive starting point
+that should be examined in sensitivity analyses before adopting the
+design.</p>
 <p>In many clinical trial designs, it is desirable to test only certain
 boundaries at specific interim analyses. For example:</p>
 <ul>
@@ -157,281 +209,921 @@ active bounds must be <code>TRUE</code>. If all three are
 <h2 id="example-1-futility-testing-only-at-the-first-interim">Example 1: Futility testing only at the first interim<a class="anchor" aria-label="anchor" href="#example-1-futility-testing-only-at-the-first-interim"></a>
 </h2>
 <p>A common scenario is to test for futility only at the first interim
-analysis, with efficacy testing at all analyses. This is useful when the
-trial’s data monitoring committee wants an early “go/no-go” decision,
-but not ongoing futility monitoring.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 3-analysis design with non-binding futility (test.type = 4)</span></span>
-<span><span class="co"># Futility testing only at IA1</span></span>
-<span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
-<span>  k <span class="op">=</span> <span class="fl">3</span>,</span>
+analysis. This is useful when the trial’s data monitoring committee
+wants an early “go/no-go” decision, but not ongoing futility monitoring.
+For this non-binding <code>test.type = 4</code> design, efficacy testing
+also begins at IA2 rather than IA1.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Non-binding futility only at IA1; efficacy starts at IA2</span></span>
+<span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">survival_args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  test.type <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
-<span>  beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  sfu <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">4</span>,</span>
-<span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>The active futility bound depends on the beta spending function as
+well as the testing schedule. Here, <code>sfl = sfHSD</code> and
+<code>sflpar = 1</code> specify the spending pattern. Changing
+<code>sfl</code> or <code>sflpar</code> changes how beta is allocated
+and therefore changes the futility bound at IA1. With
+<code>sflpar = 1</code>, the futility rule is relatively aggressive: the
+IA1 bound is approximately HR 0.912, and the probability of stopping
+there under the design alternative, HR 0.7, is 5.2%. Its impact on
+power, planned events, and expected trial duration should be compared
+with less aggressive choices.</p>
 <p>The lower bound is active only at IA1. At IA2 and the final analysis,
 the futility bound shows as <code>NA</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x1</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                Analysis               Value Efficacy Futility</span></span>
-<span><span class="co">#&gt;               IA 1: 33%                   Z   3.0107  -0.2674</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 0.35         p (1-sided)   0.0013   0.6054</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   1.5787  -0.1402</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0013   0.3946</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.1349   0.0148</span></span>
-<span><span class="co">#&gt;               IA 2: 67%                   Z   2.5465       NA</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 0.69         p (1-sided)   0.0054       NA</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   0.9442       NA</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0062       NA</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.5657       NA</span></span>
-<span><span class="co">#&gt;                   Final                   Z   1.9992       NA</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 1.04         p (1-sided)   0.0228       NA</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   0.6052       NA</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0244       NA</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.9000       NA</span></span></code></pre></div>
-<p>The probabilities under the null and alternative are recomputed
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x1</span>, exclude <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<style>
+th, td{ padding: 5px; }
+.lt-wrap { overflow-x: auto; }
+.lt-table {
+  --bg: 4px solid transparent;
+  --bd: 1.5px solid #888;
+
+  border-collapse: separate;
+  caption-side: top;
+  margin: 1em auto;
+  border-spacing: 0;
+  border-top: var(--bd);
+  border-bottom: var(--bd);
+
+  caption {
+    padding: .5em; text-align: center; border-top: var(--bd);
+    .lt-title    { font-size: 1.2em; }
+    .lt-subtitle { font-size: 0.9em; }
+  }
+
+  th { font-weight: normal; }
+  tbody {
+    :not(:last-child) :is(td, th) { border-bottom: 1px   solid #ddd; }
+    .lt-row-group :is(td, th)     { border-bottom: 1.5px solid #ddd; }
+    .lt-row-group {
+      text-align: left;
+      &.lt-row-open { border-bottom-color: transparent; }
+    }
+  }
+  thead th {
+    border-bottom: 1px solid #888;
+    &:not(:first-child) { border-left: var(--bg); }
+    &:not(:last-child) { border-right: var(--bg); }
+  }
+  .lt-indent { padding-left: 1em; }
+  .lt-spanner-row {
+    .lt-spanner       { border-bottom: 1px solid #bbb; text-align: center; }
+    .lt-spanner-empty { border-bottom: none; }
+  }
+
+  .lt-footer {
+    font-size: 0.85em;
+    .lt-footnote:first-child td { border-top: 1px solid #aaa; }
+    .lt-source-note:first-child td { border-top: 1px dashed #aaa; }
+    .lt-source-note td { font-style: italic; }
+  }
+
+  .al-r { text-align: right; }
+  .al-c { text-align: center; }
+
+  .lt-fnref {
+    color: #06c;
+    &::before { content: "\00a0["; }
+    &::after  { content: "]"; }
+  }
+}
+.lt-raw [title]::after {
+  content: " (" attr(title) ")";
+  background: lightyellow;
+  font-size: 0.85em;
+}
+</style>
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Analysis": ["IA 1: 40%", "N: 616", "Events: 151", "Month: 15", "", "", "", "", "", "", "IA 2: 70%", "N: 690", "Events: 265", "Month: 20", "", "", "", "", "", "", "Final", "N: 690", "Events: 378", "Month: 36", "", "", ""],
+    "Value": ["Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.7", "Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.7", "Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "P(Cross) if HR=1", "P(Cross) if HR=0.7"],
+    "Efficacy": [null, null, null, null, null, null, null, null, null, null, 2.438, 0.0074, 0.7408, 0.0074, 2.0398, 0.9524, 0.9756, 0.9181, 0.0073, 0.6738, 1.9999, 0.0228, 0.8139, 0.0176, 1.9999, 0.0222, 0.9],
+    "Futility": [0.5659, 0.2857, 0.912, 0.0522, 0.3579, 0.0778, 0.7144, 0.1851, 0.7143, 0.0522, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+  }
+}
+})</script><script>
+/* lt.js — build a semantic <table> from a JSON spec.
+ * Call LT.build(spec) from an inline <script> to render a table in place.
+ * One runtime per page renders any number of tables.
+ */
+(root => {
+  "use strict";
+  if (root.LT?.buildHtml) return;  // duplicate inclusion is a no-op
+
+  // `[<]` (not `<`) avoids `</…` so this file is safe to inline in <script>.
+  const esc = s => String(s)
+    .replace(/&/g, "&amp;").replace(/[<]/g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  // Text fields (title, labels, footnotes, ...) arrive as a plain string
+  // (escape it) or, when the R side wrapped them in I(), a one-element array
+  // (emit verbatim as raw HTML). `txt` renders either form.
+  const txt = v => Array.isArray(v) ? String(v[0] ?? "") : esc(v);
+  // Raw (verbatim) if `raw`, else escaped — for values already stringified
+  // (e.g. body cells whose column is flagged raw via spec.html_cols).
+  const escIf = (raw, s) => raw ? String(s ?? "") : esc(s);
+  // Is column `c` flagged raw HTML? `hc` is spec.html_cols: true (all columns)
+  // or an array of column names.
+  const rawCol = (hc, c) => hc === true || (Array.isArray(hc) && hc.includes(c));
+  const sup = i => `<sup class="lt-fnref">${i}</sup>`;
+  // Stringify, mapping null/undefined to "" (0 and false stringify normally).
+  // ±Infinity render as ∞/-∞ (ASCII minus, as raw values); formatted columns get
+  // the typographic minus via fmtNumber.
+  const str = v => v === Infinity ? "∞" : v === -Infinity ? "-∞" : String(v ?? "");
+
+  // --- Number formatting ---
+  const isNum = v => typeof v === "number" && isFinite(v);
+  // Like isNum but also accepts ±Infinity (which fmtNumber renders as ∞/−∞).
+  const isNumInf = v => isNum(v) || Math.abs(v) === Infinity;
+  // A column is "numeric" if its first non-null value is a number.
+  const numCol = col => col?.length && typeof col.find(v => v != null) === "number";
+
+  // Column order. Prefer the explicit `spec.columns` sent by R: a JSON object
+  // reorders integer-like keys (e.g. "1", "2") ahead of string keys, so
+  // Object.keys(data) alone would scramble columns whose names are numbers.
+  const colOrder = spec => (spec.columns || Object.keys(spec.data || {}))
+    .filter(c => c in (spec.data || {}));
+
+  // Display label for a column: the last "label" op that names it, else `c`.
+  const colLabel = (ops, c) => {
+    let lbl = c;
+    for (const op of ops) if (op.type === "label" && op.labels?.[c] != null) lbl = op.labels[c];
+    return lbl;
+  };
+
+  // Expand JS exponential notation (e.g. "4.2e+3") to plain decimal,
+  // preserving the significant digits produced by toPrecision.
+  function expandExp(s) {
+    if (!/e/i.test(s)) return s;
+    const [, sign, int, frac = "", expStr] =
+      s.match(/^(-?)(\d+)(?:\.(\d+))?e([+-]?\d+)$/i);
+    const exp = +expStr, digits = int + frac, point = int.length + exp;
+    let out;
+    if (point <= 0) out = "0." + "0".repeat(-point) + digits;
+    else if (point >= digits.length) out = digits + "0".repeat(point - digits.length);
+    else out = digits.slice(0, point) + "." + digits.slice(point);
+    return sign + out;
+  }
+
+  function fmtNumber(v, decimals, bigMark, sigDigits) {
+    if (v === Infinity) return "∞";
+    if (v === -Infinity) return "−∞";
+    if (!isNum(v)) return null;
+    let s = sigDigits != null ? expandExp(v.toPrecision(sigDigits)) :
+            decimals != null ? v.toFixed(decimals) : String(v);
+    if (/^-0(\.0+)?$/.test(s)) s = s.slice(1);
+    if (bigMark) {
+      const parts = s.split(".");
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, bigMark);
+      s = parts.join(".");
+    }
+    if (s[0] === "-") s = "−" + s.slice(1);
+    return decimals != null || bigMark || sigDigits != null ? s : null;
+  }
+
+  // --- Pattern merge ---
+  function mergeVals(vals, pattern) {
+    if (!pattern) return vals.filter(v => v !== "").join(" ");
+    let remaining = pattern, result = "";
+    while (remaining) {
+      const m = remaining.match(/<<(.*?)>>/);
+      if (!m) { result += subRefs(remaining, vals); break; }
+      if (m.index > 0) result += subRefs(remaining.slice(0, m.index), vals);
+      const block = m[1],
+            refs = [...block.matchAll(/\{(\d+)\}/g)].map(x => +x[1]);
+      if (!refs.length || refs.every(i => vals[i - 1] !== ""))
+        result += subRefs(block, vals);
+      remaining = remaining.slice(m.index + m[0].length);
+    }
+    return result;
+  }
+  function subRefs(s, vals) {
+    for (let i = 0; i < vals.length; i++)
+      s = s.split("{" + (i + 1) + "}").join(vals[i]);
+    return s;
+  }
+
+  // --- Auto-format numeric columns ---
+  function autoFmt(spec, display, nRow) {
+    if (spec.auto_format === false) return;
+    const data = spec.data || {}, ops = spec.ops || [],
+          colNames = colOrder(spec);
+
+    const fmtCols = new Set();
+    for (const op of ops) {
+      if (op.type === "fmt_number") for (const c of (op.columns || colNames)) fmtCols.add(c);
+    }
+
+    for (const c of colNames) {
+      if (fmtCols.has(c)) continue;
+      const col = data[c];
+      if (!numCol(col)) continue;
+
+      const lbl = colLabel(ops, c),
+            pct = /%|[ _](pct|percent)$/i.test(lbl);
+
+      if (/year/i.test(lbl) && col.every(v => v == null || /^\d{4}$/.test(String(v)))) continue;
+
+      // Determine decimal places: find max significant decimals across column,
+      // then cap dynamically based on the largest integer-part width (targeting
+      // ~4 total significant digits): e.g., values <1 get up to 4 decimals,
+      // 10-99 get 2, >=1000 get 0.
+      let maxInt = 0, n = 0;
+      for (const v of col) {
+        if (!isNum(v)) continue;
+        // Number of digits before the decimal point
+        const a = Math.abs(pct ? v * 100 : v),
+              intW = a < 1 ? 0 : Math.floor(Math.log10(a)) + 1;
+        if (intW > maxInt) maxInt = intW;
+        // Significant decimals (strip trailing zeros; adjust for pct *100)
+        const m = String(v).match(/\.(\d+)/);
+        if (!m) continue;
+        const d = m[1].replace(/0+$/, "").length - (pct ? 2 : 0);
+        if (d > n) n = d;
+      }
+      // Cap: 4 decimals max, minus integer width (so large numbers get fewer).
+      // n is already >= 0, so only the upper cap is needed.
+      n = Math.min(n, Math.max(4 - maxInt, 0));
+
+      for (let i = 0; i < nRow; i++) {
+        const v = col[i];
+        if (!isNumInf(v)) continue;
+        const s = fmtNumber(pct ? v * 100 : v, n, " ");
+        if (s != null) display[c][i] = s + (pct ? "%" : "");
+      }
+    }
+  }
+
+  // --- Apply ops to data columns, return display strings per column ---
+  function applyOps(spec) {
+    const data = spec.data || {},
+          ops = spec.ops || [],
+          colNames = colOrder(spec),
+          nRow = colNames.length ? data[colNames[0]].length : 0;
+
+    // Working copy: display[col][row] = string
+    const display = {};
+    for (const c of colNames) {
+      display[c] = data[c].map(str);
+    }
+
+    autoFmt(spec, display, nRow);
+
+    // Run fn(col, row, rawValue) over each existing cell of the given columns.
+    const eachCell = (cols, fn) => {
+      for (const c of cols) {
+        if (!data[c]) continue;
+        for (let i = 0; i < nRow; i++) fn(c, i, data[c][i]);
+      }
+    };
+
+    for (const op of ops) {
+      const cols = op.columns || colNames;
+      switch (op.type) {
+        case "fmt_number":
+          eachCell(cols, (c, i, raw) => {
+            if (!isNumInf(raw)) return;
+            const v = op.percent === true ? raw * 100 : raw,
+                  psfx = op.percent ? "%" : "",
+                  f = fmtNumber(v, op.decimals, op.big_mark ?? "", op.sig_digits),
+                  pfx = op.prefix || "", sfx = (op.suffix || "") + psfx;
+            if (f != null) display[c][i] = pfx + f + sfx;
+            else if (pfx || sfx) display[c][i] = pfx + String(v) + sfx;
+          });
+          break;
+        case "fmt_date":
+          eachCell(cols, (c, i, raw) => {
+            if (raw == null) return;
+            const d = raw instanceof Date ? raw : new Date(raw);
+            if (isNaN(d)) return;
+            display[c][i] = op.method ? d[op.method]() :
+              op.options ? d.toLocaleDateString(op.locale, op.options) :
+              d.toLocaleDateString(op.locale);
+          });
+          break;
+        case "sub":
+          eachCell(cols, (c, i, raw) => {
+            if (op.small != null && isNum(raw) && raw !== 0 &&
+                Math.abs(raw) < op.small) {
+              display[c][i] = op.small_text ?? ("<" + op.small);
+            } else if (op.zero != null && raw === 0) {
+              display[c][i] = op.zero;
+            } else if (op.missing != null && raw == null) {
+              display[c][i] = op.missing;
+            }
+          });
+          break;
+        case "merge": {
+          const mCols = op.columns;
+          if (!mCols || mCols.length < 2) break;
+          const target = mCols[0];
+          for (let i = 0; i < nRow; i++) {
+            const vals = mCols.map(c => display[c]?.[i] ?? "");
+            display[target][i] = mergeVals(vals, op.pattern);
+          }
+          break;
+        }
+      }
+    }
+
+    // Default display for missing (null/NA) cells: an em dash unless spec.missing
+    // overrides it (set to "" to keep them blank). A per-column lt_sub(missing=)
+    // has already filled its cells above, so only still-empty null cells get the
+    // default; empty strings in the data stay empty.
+    const miss = spec.missing === undefined ? "—" : spec.missing;
+    if (miss) {
+      for (const c of colNames)
+        for (let i = 0; i < nRow; i++)
+          if (data[c][i] == null && display[c][i] === "") display[c][i] = miss;
+    }
+
+    return { display, nRow };
+  }
+
+  // --- Resolve structural spec fields from ops + data ---
+  function resolveSpec(spec) {
+    const data = spec.data || {},
+          ops = spec.ops || [],
+          colNames = colOrder(spec),
+          nRow = colNames.length ? data[colNames[0]].length : 0,
+          // Run fn on each op of the given type, in document order.
+          onOp = (t, fn) => { for (const op of ops) if (op.type === t) fn(op); };
+
+    // row_group: array → rowspan mode; string → separator-row mode
+    let rowGroupSep = typeof spec.row_group === "string";
+    const rowGroupCols = Array.isArray(spec.row_group) ? spec.row_group
+          : (spec.row_group ? [spec.row_group] : []);
+    if (!rowGroupSep && rowGroupCols.length === 1 && spec.auto_sep !== false &&
+        !numCol(data[rowGroupCols[0]]) &&
+        data[rowGroupCols[0]]?.some(v => (v + "").length > 20)) rowGroupSep = true;
+
+    // Hidden columns: row_group, merge sources
+    const hidden = new Set();
+    for (const g of rowGroupCols) hidden.add(g);
+    onOp("merge", op => {
+      if (op.hide !== false && op.columns)
+        op.columns.slice(1).forEach(c => hidden.add(c));
+    });
+
+    // Visible columns after hiding
+    let visible = colNames.filter(c => !hidden.has(c));
+
+    // Apply move
+    onOp("move", op => {
+      const toMove = (op.columns || []).filter(c => visible.includes(c));
+      if (!toMove.length) return;
+      const rest = visible.filter(c => !toMove.includes(c));
+      if (op.after == null) {
+        visible = [...toMove, ...rest];
+      } else {
+        const pos = rest.indexOf(op.after);
+        if (pos >= 0) visible = [...rest.slice(0, pos + 1), ...toMove, ...rest.slice(pos + 1)];
+      }
+    });
+
+    // Set arr[i] = val where i is the position of column c in `visible`.
+    const setByCol = (arr, c, val) => { const i = visible.indexOf(c); if (i >= 0) arr[i] = val; };
+
+    // Alignment: default from data type (number→right, else left), then overrides
+    const align = visible.map(c => numCol(data[c]) ? "right" : "left");
+    onOp("align", op => { for (const c of (op.columns || [])) setByCol(align, c, op.align); });
+
+    // Column labels
+    const autoLbl = s => spec.auto_label === false ? s : s.replace(/[._]/g, " ");
+    const colLabels = visible.map(autoLbl);
+    onOp("label", op => {
+      for (const [c, lbl] of Object.entries(op.labels || {})) setByCol(colLabels, c, lbl);
+    });
+
+    // Column widths + whole-table width
+    let colWidths, tableWidth;
+    onOp("width", op => {
+      if (op.table) tableWidth = op.table;
+      if (!op.widths) return;
+      if (!colWidths) colWidths = visible.map(() => "");
+      for (const [c, w] of Object.entries(op.widths)) setByCol(colWidths, c, w);
+    });
+
+    // Indent
+    const indent = new Array(nRow).fill(0);
+    onOp("indent", op => {
+      if (op.rows) for (const r of op.rows) indent[r - 1] = op.level ?? 1;
+    });
+
+    // Runs of equal consecutive values in col → [{ label, rows (1-based) }].
+    // Used for both separator-row groups and rowspan span sizes.
+    const runs = col => {
+      const out = [];
+      for (let i = 0; i < nRow;) {
+        const label = str(col[i]), rows = [i + 1];
+        while (++i < nRow && str(col[i]) === label) rows.push(i + 1);
+        out.push({ label, rows });
+      }
+      return out;
+    };
+
+    // Row groups from data column (separator-row mode only). A group label is
+    // raw HTML when its source column is flagged raw via html_cols.
+    let groups = [];
+    if (rowGroupSep && rowGroupCols.length && data[rowGroupCols[0]]) {
+      const raw = rawCol(spec.html_cols, rowGroupCols[0]);
+      groups.push(...runs(data[rowGroupCols[0]]).map(g => ({ ...g, raw })));
+    }
+    // Manual groups (labels always escaped; the label comes from an R argument
+    // name, which cannot carry an I() raw-HTML marker)
+    onOp("row_group", op => groups.push({ label: op.label, rows: op.rows }));
+    // Group ordering
+    onOp("group_order", op => {
+      if (!groups.length) return;
+      const ordered = [], rest = [];
+      for (const lbl of (op.order || [])) {
+        const g = groups.find(x => x.label === lbl);
+        if (g) ordered.push(g);
+      }
+      for (const g of groups) if (!ordered.includes(g)) rest.push(g);
+      groups = [...ordered, ...rest];
+    });
+
+    // Rowspan groups: compute span sizes for each group column
+    const rowSpans = [];
+    if (!rowGroupSep && rowGroupCols.length) {
+      for (const gc of rowGroupCols) {
+        const spans = new Array(nRow).fill(0);
+        for (const r of runs(data[gc] || [])) spans[r.rows[0] - 1] = r.rows.length;
+        rowSpans.push({ col: gc, label: colLabel(ops, gc), spans });
+      }
+    }
+
+    // Styles: the style ops are consumed directly (css/class/columns/rows/test).
+    const styles = ops.filter(op => op.type === "style");
+
+    // Auto-spanners: split column names on separator, group contiguous prefixes
+    let spanners = spec.spanners || [];
+    if (spec.auto_span) {
+      const sep = typeof spec.auto_span === "string" ? new RegExp(spec.auto_span) : /[._]/;
+      spanners = [...spanners];
+      for (let i = 0; i < visible.length;) {
+        const m = visible[i].match(sep);
+        if (!m) { i++; continue; }
+        const prefix = visible[i].slice(0, m.index);
+        let j = i + 1;
+        while (j < visible.length) {
+          const m2 = visible[j].match(sep);
+          if (!m2 || visible[j].slice(0, m2.index) !== prefix) break;
+          j++;
+        }
+        if (j - i >= 2) {
+          spanners.push({ label: prefix, columns: visible.slice(i, j) });
+          for (let k = i; k < j; k++) {
+            const mk = visible[k].match(sep);
+            if (mk) colLabels[k] = autoLbl(visible[k].slice(mk.index + mk[0].length));
+          }
+        }
+        i = j;
+      }
+    }
+
+    return {
+      visible, align, colLabels, colWidths, tableWidth, indent,
+      groups, rowSpans, styles, spanners,
+      footnotes: spec.footnotes || [],
+      notes: spec.notes || [],
+      header: spec.header || {},
+      nRow
+    };
+  }
+
+  // Footnotes: dedup by text, assign 1..N in first-seen order.
+  function indexFootnotes(fns) {
+    const order = [], idx = {};
+    fns.forEach(f => {
+      if (idx[f.text] == null) { idx[f.text] = order.length + 1; order.push(f.text); }
+    });
+    return { order, idx };
+  }
+
+  // Find the footnote index for a (type, value) location; 0 if none.
+  // `val` is a scalar: the title group, a single column, a spanner label,
+  // or a row-group label, depending on `type`.
+  const matcher = (fns, idx) => (type, val) => {
+    for (const f of fns) {
+      const loc = f.location;
+      if (loc.type !== type) continue;
+      const hit = idx[f.text];
+      if (type === "title" && loc.group === val) return hit;
+      if (type === "column_labels" && loc.columns.includes(val)) return hit;
+      if (type === "column_spanners" && loc.spanners.includes(val)) return hit;
+      if (type === "row_groups") {
+        if (loc.match === "all") return hit;
+        if (loc.match === "exact" && loc.values.includes(val)) return hit;
+        if (loc.match === "starts_with" && val.startsWith(loc.value)) return hit;
+      }
+    }
+    return 0;
+  };
+
+  function sortByGroups(spec) {
+    if (spec.sort === false || !spec.row_group) return;
+    const data = spec.data || {},
+          cols = [].concat(spec.row_group),
+          colNames = colOrder(spec),
+          nRow = colNames.length ? data[colNames[0]].length : 0;
+    if (!nRow) return;
+    const idx = Array.from({length: nRow}, (_, i) => i);
+    idx.sort((a, b) => {
+      for (const c of cols) {
+        const va = data[c]?.[a], vb = data[c]?.[b];
+        if (va == vb) continue;
+        if (va == null) return 1;
+        if (vb == null) return -1;
+        if (va < vb) return -1;
+        if (va > vb) return 1;
+      }
+      return 0;
+    });
+    for (const c of colNames) data[c] = idx.map(i => data[c][i]);
+    // Remap 1-based row indices in ops to reflect the new order
+    const newPos = new Array(nRow);
+    for (let i = 0; i < nRow; i++) newPos[idx[i]] = i + 1;
+    for (const op of (spec.ops || [])) {
+      if (op.rows) op.rows = op.rows.map(r => newPos[r - 1]);
+    }
+  }
+
+  function buildHtml(spec) {
+    sortByGroups(spec);
+    const data = spec.data || {},
+          { display, nRow } = applyOps(spec),
+          { visible: cols, align, colLabels, colWidths, tableWidth, indent,
+            groups, rowSpans, styles, spanners, footnotes: fns, notes, header: hdr } = resolveSpec(spec),
+          reg = indexFootnotes(fns),
+          fIdx = matcher(fns, reg.idx),
+          nGrp = rowSpans.length,
+          nCol = cols.length + nGrp,
+          // Whether column `c`'s body cells are raw HTML (see lt_html() on the
+          // R side); spec.html_cols is true (all columns) or a name array.
+          isRaw = c => rawCol(spec.html_cols, c),
+          out = [`<table class="lt-table"${tableWidth ? ` style="width:${tableWidth}"` : ""}>`];
+    const mark = (type, val) => { const i = fIdx(type, val); return i ? sup(i) : ""; };
+    const cell = (c, r) => display[c]?.[r - 1] ?? "";
+    // ` name="val"` for a truthy val, else "" — for optional HTML attributes.
+    const attr = (n, v) => v ? ` ${n}="${v}"` : "";
+    // Plain class names per column (alignment + leading-indent), "" if none.
+    const colCls = cols.map((_, i) => (
+      (i === 0 && groups.length ? "lt-indent " : "") +
+      ({right: "al-r", center: "al-c"}[align[i]] || "")
+    ).trimEnd());
+
+    // Visit each cell at (rows × cols) that exists in the table, calling
+    // fn(key, c, r). rows null = all rows; cols falls back to all columns.
+    const eachLoc = (rows, locCols, fn) => {
+      for (let r = 1; r <= nRow; r++) {
+        if (rows && !rows.includes(r)) continue;
+        for (const c of (locCols || cols)) {
+          const ci = cols.indexOf(c);
+          if (ci >= 0) fn(`${r},${ci}`, c, r);
+        }
+      }
+    };
+
+    // Style map: accumulate css (";") and class (" ") per cell.
+    const styleMap = {}, classMap = {};
+    const addTo = (map, key, val, sep) => { map[key] = map[key] ? map[key] + sep + val : val; };
+    for (const s of styles)
+      eachLoc(s.rows, s.columns ? [].concat(s.columns) : null, (key, c, r) => {
+        if (s.test && !s.test(data[c][r - 1])) return;
+        if (s.css) addTo(styleMap, key, s.css, ";");
+        if (s.class) addTo(classMap, key, s.class, " ");
+      });
+
+    // <colgroup>: leading empty <col>s for rowspan group columns, so widths
+    // align with the body columns (which are offset by nGrp on the left).
+    if (colWidths && colWidths.some(w => w)) {
+      out.push(`<colgroup>`);
+      for (let i = 0; i < nGrp; i++) out.push(`<col>`);
+      for (let i = 0; i < cols.length; i++)
+        out.push(`<col${attr("style", colWidths[i] ? "width:" + colWidths[i] : "")}>`);
+      out.push(`</colgroup>`);
+    }
+
+    // <caption>: title + subtitle, each a <div> rendered only when non-empty.
+    const caption = [["title", "lt-title"], ["subtitle", "lt-subtitle"]]
+      .filter(([g]) => hdr[g] != null && hdr[g] !== "")
+      .map(([g, cls]) => `<div class="${cls}">${txt(hdr[g])}${mark("title", g)}</div>`);
+    if (caption.length)
+      out.push(`<caption class="lt-caption">`, ...caption, `</caption>`);
+
+    // <thead>
+    out.push(`<thead>`);
+    if (spanners.length) {
+      const emptyTh = `<th class="lt-spanner-empty"></th>`;
+      out.push(`<tr class="lt-spanner-row">`);
+      out.push(emptyTh.repeat(nGrp));
+      for (let k = 0; k < cols.length;) {
+        const sp = spanners.find(s => s.columns[0] === cols[k]);
+        if (sp) {
+          out.push(`<th colspan="${sp.columns.length}" scope="colgroup" class="lt-spanner">${txt(sp.label)}${mark("column_spanners", sp.label)}</th>`);
+          k += sp.columns.length;
+        } else {
+          out.push(emptyTh);
+          k++;
+        }
+      }
+      out.push(`</tr>`);
+    }
+    out.push(`<tr>`);
+    for (const rs of rowSpans) out.push(`<th scope="col">${txt(rs.label)}</th>`);
+    for (let i = 0; i < cols.length; i++)
+      out.push(`<th scope="col"${attr("class", colCls[i])}>${txt(colLabels[i])}${mark("column_labels", cols[i])}</th>`);
+    out.push(`</tr></thead>`);
+
+    // Body footnote markers
+    const bodyMarks = {};
+    for (const f of fns) {
+      if (f.location.type !== "body") continue;
+      const fi = reg.idx[f.text];
+      eachLoc(f.location.rows, f.location.columns || [], key => { bodyMarks[key] = fi; });
+    }
+
+    // Row rendering
+    const pushRow = r => {
+      out.push(`<tr>`);
+      // Row-group cells. For a group spanning n > 1 rows, the label goes in a
+      // non-spanning cell on the first row — so vertical-align centers it
+      // within that row's height (matching the body cells) instead of across
+      // the whole span — followed by an empty filler cell spanning the
+      // remaining n - 1 rows. A single-row group is just the label cell.
+      for (const rs of rowSpans) {
+        const span = rs.spans[r - 1], fill = (rs.spans[r - 2] || 0) - 1;
+        if (span > 0)
+          out.push(`<th scope="row" class="lt-row-group${span > 1 ? " lt-row-open" : ""}">${escIf(isRaw(rs.col), cell(rs.col, r))}${mark("row_groups", str(data[rs.col][r - 1]))}</th>`);
+        else if (fill > 0)
+          out.push(`<th class="lt-row-group"${attr("rowspan", fill > 1 ? fill : 0)}></th>`);
+      }
+      const ind = indent[r - 1] || 0;
+      for (let ci = 0; ci < cols.length; ci++) {
+        const k = `${r},${ci}`, c = cols[ci],
+              m = bodyMarks[k], cc = classMap[k],
+              cls = [colCls[ci], cc].filter(Boolean).join(" ");
+        let s = styleMap[k] || "";
+        if (ci === 0 && ind) s = (s ? s + ";" : "") + `padding-left:${ind + 1}em`;
+        const raw = str(data[c][r - 1]), disp = display[c][r - 1],
+              tip = raw !== disp ? ` title="${esc(raw)}"` : "";
+        out.push(`<td${attr("class", cls)}${attr("style", s)}${tip}>${escIf(isRaw(c), disp)}${m ? sup(m) : ""}</td>`);
+      }
+      out.push(`</tr>`);
+    };
+
+    // <tbody>
+    out.push(`<tbody>`);
+    if (groups.length) {
+      const seen = {};
+      for (const g of groups) {
+        out.push(`<tr class="lt-row-group"><th colspan="${nCol}" scope="colgroup">${escIf(g.raw, g.label)}${mark("row_groups", g.label)}</th></tr>`);
+        for (const r of g.rows) { seen[r] = 1; pushRow(r); }
+      }
+      for (let r = 1; r <= nRow; r++) if (!seen[r]) pushRow(r);
+    } else {
+      for (let r = 1; r <= nRow; r++) pushRow(r);
+    }
+    out.push(`</tbody>`);
+
+    // <tfoot>: footnotes then source notes, each a full-width row.
+    if (reg.order.length || notes.length) {
+      const footRow = (cls, html) => `<tr class="${cls}"><td colspan="${nCol}">${html}</td></tr>`;
+      out.push(`<tfoot class="lt-footer">`);
+      reg.order.forEach((t, i) => out.push(footRow("lt-footnote", `${sup(i + 1)} ${txt(t)}`)));
+      for (const n of notes) out.push(footRow("lt-source-note", txt(n)));
+      out.push(`</tfoot>`);
+    }
+
+    out.push(`</table>`);
+    // Wrap in a div so a wide table can scroll horizontally (`overflow-x`)
+    // instead of overflowing the page.
+    return `<div class="lt-wrap">${out.join("")}</div>`;
+  }
+
+  const mount = (s, spec) => {
+    s.insertAdjacentHTML("afterend", buildHtml(spec));
+    const tbl = s.nextElementSibling.querySelector("table"),
+          raw = (e, el) => e.altKey && el.classList.toggle("lt-raw");
+    tbl.onclick = e => e.detail === 1 && raw(e, tbl);
+    tbl.ondblclick = e => raw(e, tbl.ownerDocument.documentElement);
+  };
+  // q.push renders immediately; replay any entries queued before we loaded.
+  const q = { push: e => mount(e.s, e.d) };
+  (root.LT?.q || []).forEach(q.push);
+  root.LT = { build: spec => mount(document.currentScript, spec), buildHtml, q };
+})(window);
+</script><p>The probabilities under the null and alternative are recomputed
 accounting for the inactive bounds. The underlying cumulative futility
 crossing probability does not increase after IA1 since no further
 futility testing occurs; the later inactive futility rows in
 <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> are displayed entirely as
 <code>NA</code>.</p>
-<p>We can also see the bounds in the <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> output:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x1</span></span>
-<span><span class="co">#&gt; Asymmetric two-sided group sequential design with</span></span>
-<span><span class="co">#&gt; 90 % power and 2.5 % Type I Error.</span></span>
-<span><span class="co">#&gt; Upper bound spending computations assume</span></span>
-<span><span class="co">#&gt; trial continues if lower bound is crossed.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;            Sample</span></span>
-<span><span class="co">#&gt;             Size    ----Lower bounds----  ----Upper bounds-----</span></span>
-<span><span class="co">#&gt;   Analysis Ratio*   Z   Nominal p Spend+  Z   Nominal p Spend++</span></span>
-<span><span class="co">#&gt;          1  0.346 -0.27    0.3946 0.0148 3.01    0.0013  0.0013</span></span>
-<span><span class="co">#&gt;          2  0.692    NA        NA     NA 2.55    0.0054  0.0049</span></span>
-<span><span class="co">#&gt;          3  1.038    NA        NA     NA 2.00    0.0228  0.0188</span></span>
-<span><span class="co">#&gt;      Total                        0.0148                 0.0250 </span></span>
-<span><span class="co">#&gt; + lower bound beta spending (under H1):</span></span>
-<span><span class="co">#&gt;  Hwang-Shih-DeCani spending function with gamma = -2.</span></span>
-<span><span class="co">#&gt; ++ alpha spending:</span></span>
-<span><span class="co">#&gt;  Hwang-Shih-DeCani spending function with gamma = -4.</span></span>
-<span><span class="co">#&gt; * Sample size ratio compared to fixed design with no interim</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Boundary crossing probabilities and expected sample size</span></span>
-<span><span class="co">#&gt; assume any cross stops the trial</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Upper boundary (power or Type I Error)</span></span>
-<span><span class="co">#&gt;           Analysis</span></span>
-<span><span class="co">#&gt;    Theta      1      2      3  Total   E{N}</span></span>
-<span><span class="co">#&gt;   0.0000 0.0013 0.0049 0.0182 0.0244 0.7626</span></span>
-<span><span class="co">#&gt;   3.2415 0.1349 0.4308 0.3343 0.9000 0.7856</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Lower boundary (futility or Type II Error)</span></span>
-<span><span class="co">#&gt;           Analysis</span></span>
-<span><span class="co">#&gt;    Theta      1 2 3  Total</span></span>
-<span><span class="co">#&gt;   0.0000 0.3946 0 0 0.3946</span></span>
-<span><span class="co">#&gt;   3.2415 0.0148 0 0 0.0148</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
-</h3>
-<p>The standard plot shows the active bounds, with inactive bounds
-omitted:</p>
+<p>Using <code>exclude = NULL</code> includes conditional power at the
+current trend (<code>CP</code>), conditional power under the design
+alternative (<code>CP H1</code>), and predictive power
+(<code>PP</code>). Predictive power averages conditional power over the
+posterior formed from the interim result and the <code>prior</code>
+argument; it is sometimes referred to as average conditional power. By
+default, <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> uses a normal prior centered
+halfway between the null and alternative, with standard deviation
+<code>10 / sqrt(x$n.fix)</code>. Its variance is equivalent to observing
+1% of the fixed-design information, so it is intended to be relatively
+weak. This means that the posterior used to determine predictive power
+is dominated by the interim data and primarily reflects variability in
+the interim observed treatment effect.</p>
+</div>
+<div class="section level2">
+<h2 id="example-2-asymmetric-lower-testing">Example 2: Asymmetric lower testing<a class="anchor" aria-label="anchor" href="#example-2-asymmetric-lower-testing"></a>
+</h2>
+<p>For <code>test.type = 6</code>, <code>astar</code> controls Type I
+error allocated to the lower bound. To be somewhat aggressive, we set
+<code>astar = 0.15</code>. As with the other non-binding designs
+considered here, we skip efficacy testing at IA1:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x1</span>, plottype <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<div class="figure" style="text-align: center">
-<img src="SelectiveBoundTesting_files/figure-html/unnamed-chunk-6-1.svg" class="r-plt" alt="Power plot with futility only at IA1" width="80%"><p class="caption">
-Power plot with futility only at IA1
-</p>
-</div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="example-2-no-efficacy-testing-at-the-first-interim">Example 2: No efficacy testing at the first interim<a class="anchor" aria-label="anchor" href="#example-2-no-efficacy-testing-at-the-first-interim"></a>
-</h2>
-<p>In some settings, particularly early-phase or adaptive designs,
-efficacy testing may be deferred until sufficient data have accrued.
-Here we skip the efficacy bound at the first interim:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 3-analysis design with binding futility (test.type = 3)</span></span>
-<span><span class="co"># No efficacy testing at IA1</span></span>
-<span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
-<span>  k <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  test.type <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
-<span>  beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  sfu <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">4</span>,</span>
-<span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
-<span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                Analysis               Value Efficacy Futility</span></span>
-<span><span class="co">#&gt;               IA 1: 33%                   Z       NA  -0.2605</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 0.35         p (1-sided)       NA   0.6028</span></span>
-<span><span class="co">#&gt;                             ~delta at bound       NA  -0.1361</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0       NA   0.3972</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1       NA   0.0148</span></span>
-<span><span class="co">#&gt;               IA 2: 67%                   Z   2.4976   0.9102</span></span>
-<span><span class="co">#&gt;   N/Fixed design N: 0.7         p (1-sided)   0.0063   0.1814</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   0.9227   0.3363</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0062   0.8270</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.5826   0.0437</span></span>
-<span><span class="co">#&gt;                   Final                   Z   1.9597   1.9597</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 1.05         p (1-sided)   0.0250   0.0250</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   0.5911   0.5911</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0250   0.9750</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.9000   0.1000</span></span></code></pre></div>
-<p>At IA1, only the futility bound is active. The efficacy bound appears
-as <code>NA</code> for that analysis.</p>
+<code class="sourceCode R"><span><span class="va">xs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">survival_args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  test.type <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  astar <span class="op">=</span> <span class="fl">.15</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xs</span>, exclude <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Analysis": ["IA 1: 40%", "N: 548", "Events: 135", "Month: 15", "", "", "", "", "", "", "IA 2: 70%", "N: 612", "Events: 235", "Month: 20", "", "", "", "", "", "", "Final", "N: 612", "Events: 336", "Month: 36", "", "", ""],
+    "Value": ["Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.7", "Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.7", "Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "P(Cross) if HR=1", "P(Cross) if HR=0.7"],
+    "Efficacy": [null, null, null, null, null, null, null, null, null, null, 2.438, 0.0074, 0.7273, 0.0074, 2.0398, 0.9524, 0.9686, 0.9179, 0.0074, 0.6152, 1.9999, 0.0228, 0.8037, 0.0176, 1.9999, 0.025, 0.9],
+    "Futility": [-1.4171, 0.9218, 1.2774, 0.0782, -0.8962, 0, 0.113, 3e-04, 0.0782, 2e-04, -1.4036, 0.9198, 1.2012, 0.0412, -1.1743, 0, 0, 0, 0.1195, 3e-04, null, null, null, null, null, null, null]
+  }
+}
+})</script>
 </div>
 <div class="section level2">
-<h2 id="example-3-survival-design-with-selective-bounds-via-gssurv">Example 3: Survival design with selective bounds via gsSurv<a class="anchor" aria-label="anchor" href="#example-3-survival-design-with-selective-bounds-via-gssurv"></a>
-</h2>
-<p>The <code>testUpper</code>, <code>testLower</code>, and
-<code>testHarm</code> parameters pass through to <code><a href="../reference/nSurv.html">gsSurv()</a></code>
-and <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Survival design with futility only at IA1</span></span>
-<span><span class="va">xs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
-<span>  k <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  test.type <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
-<span>  beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  hr <span class="op">=</span> <span class="fl">0.7</span>,</span>
-<span>  timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>,</span>
-<span>  sfu <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">4</span>,</span>
-<span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
-<span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">12</span>,</span>
-<span>  eta <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>  gamma <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  R <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  T <span class="op">=</span> <span class="fl">36</span>,</span>
-<span>  minfup <span class="op">=</span> <span class="fl">24</span>,</span>
-<span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xs</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Method: LachinFoulkes </span></span>
-<span><span class="co">#&gt;     Analysis              Value Efficacy Futility</span></span>
-<span><span class="co">#&gt;    IA 1: 50%                  Z   2.7500   0.4225</span></span>
-<span><span class="co">#&gt;       N: 510        p (1-sided)   0.0030   0.3363</span></span>
-<span><span class="co">#&gt;  Events: 174       ~HR at bound   0.6585   0.9378</span></span>
-<span><span class="co">#&gt;    Month: 15   P(Cross) if HR=1   0.0030   0.6637</span></span>
-<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.3450   0.0269</span></span>
-<span><span class="co">#&gt;    IA 2: 75%                  Z   2.4318       NA</span></span>
-<span><span class="co">#&gt;       N: 510        p (1-sided)   0.0075       NA</span></span>
-<span><span class="co">#&gt;  Events: 260       ~HR at bound   0.7396       NA</span></span>
-<span><span class="co">#&gt;    Month: 23   P(Cross) if HR=1   0.0089       NA</span></span>
-<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.6817       NA</span></span>
-<span><span class="co">#&gt;        Final                  Z   2.0116       NA</span></span>
-<span><span class="co">#&gt;       N: 510        p (1-sided)   0.0221       NA</span></span>
-<span><span class="co">#&gt;  Events: 347       ~HR at bound   0.8056       NA</span></span>
-<span><span class="co">#&gt;    Month: 36   P(Cross) if HR=1   0.0240       NA</span></span>
-<span><span class="co">#&gt;              P(Cross) if HR=0.7   0.9000       NA</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="example-4-selective-harm-monitoring-test-type-78">Example 4: Selective harm monitoring (test.type 7/8)<a class="anchor" aria-label="anchor" href="#example-4-selective-harm-monitoring-test-type-78"></a>
+<h2 id="example-3-selective-harm-monitoring-test-type-78">Example 3: Selective harm monitoring (test.type 7/8)<a class="anchor" aria-label="anchor" href="#example-3-selective-harm-monitoring-test-type-78"></a>
 </h2>
 <p>For designs with a separate harm bound, the <code>testHarm</code>
-parameter controls which analyses include harm monitoring. This can be
-useful when harm monitoring is most critical during early enrollment,
-before longer-term safety data are available.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+parameter controls which analyses include harm monitoring. This is the
+same concept as <code>testLower</code> for <code>test.type = 5</code> or
+<code>6</code>, in that the harm bound tests whether experimental
+treatment is worse than control. For <code>test.type = 7</code> or
+<code>8</code>, the futility bound instead examines differences from the
+hypothesized effect <code>hr</code>. This can be useful when harm
+monitoring is most critical during early enrollment, before longer-term
+safety data are available. Continuing with the common survival
+assumptions, we change the design type and add a harm spending function
+and testing schedule. We use the same Hwang–Shih–DeCani parameter, 1,
+for harm spending and skip efficacy testing at IA1:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Harm bound design with harm monitoring only at IA1 and IA2</span></span>
-<span><span class="va">xh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
-<span>  k <span class="op">=</span> <span class="fl">3</span>,</span>
+<span><span class="va">xh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">survival_args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  test.type <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
-<span>  beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  astar <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  sfu <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">4</span>,</span>
-<span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
+<span>  astar <span class="op">=</span> <span class="fl">.15</span>,</span>
 <span>  sfharm <span class="op">=</span> <span class="va">sfHSD</span>,</span>
 <span>  sfharmparam <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  testHarm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xh</span>, exclude <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Analysis": ["IA 1: 40%", "N: 668", "Events: 164", "Month: 15", "", "", "", "", "", "", "IA 2: 70%", "N: 746", "Events: 286", "Month: 20", "", "", "", "", "", "", "Final", "N: 746", "Events: 409", "Month: 36", "", "", ""],
+    "Value": ["Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.7", "Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.7", "Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "P(Cross) if HR=1", "P(Cross) if HR=0.7"],
+    "Harm": [-1.4171, 0.9218, 1.2483, 0.0782, -0.8962, 0, 0.0305, 0, 0.0782, 1e-04, -1.4036, 0.9198, 1.1807, 0.0412, -1.1743, 0, 1e-04, 0, 0.0784, 1e-04, null, null, null, null, null, null, null],
+    "Futility": [0.654, 0.2566, 0.9027, 0.0522, 0.4136, 0.0776, 0.656, 0.1737, 0.6652, 0.052, 1.374, 0.0847, 0.8499, 0.0275, 1.1496, 0.2569, 0.6629, 0.2924, 0.85, 0.0795, 1.9999, 0.0228, 0.8204, 0.0204, 1.9999, 0.9021, 0.0999],
+    "Efficacy": [null, null, null, null, null, null, null, null, null, null, 2.438, 0.0074, 0.7494, 0.0074, 2.0398, 0.9524, 0.9796, 0.9182, 0.0073, 0.7132, 1.9999, 0.0228, 0.8204, 0.0176, 1.9999, 0.0195, 0.9]
+  }
+}
+})</script><p>The harm bound is <code>NA</code> at the final analysis.</p>
+<div class="section level3">
+<h3 id="why-skipping-final-futility-can-change-an-earlier-harm-bound">Why skipping final futility can change an earlier harm bound<a class="anchor" aria-label="anchor" href="#why-skipping-final-futility-can-change-an-earlier-harm-bound"></a>
+</h3>
+<p>For <code>test.type = 7</code> and <code>8</code>, harm and futility
+are mutually exclusive lower-tail stopping outcomes. When both bounds
+are active, observations at or below the harm bound are classified as
+harm stops, while observations between the harm and futility bounds are
+classified as futility-only stops. If futility is inactive but harm
+remains active, harm becomes the only active lower stopping boundary at
+that analysis.</p>
+<p>This distinction applies even to <code>test.type = 8</code>.
+Non-binding means that futility and harm stopping are ignored when Type
+I error is protected; it does not mean that the reported harm and
+futility boundaries are derived independently. The boundaries are
+jointly calibrated to their spending targets and active testing
+schedules.</p>
+<p>The following three designs skip efficacy testing at IA1. They differ
+only in whether futility and harm are tested at the final analysis:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">common_harm_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">survival_args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  test.type <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  astar <span class="op">=</span> <span class="fl">.15</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  sfharm <span class="op">=</span> <span class="va">sfHSD</span>,</span>
+<span>  sfharmparam <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x_all_lower</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="va">common_harm_args</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    testHarm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x_final_harm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="va">common_harm_args</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>    testHarm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x_matched_lower</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="va">common_harm_args</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>    testHarm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">harm_comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Analysis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">x_all_lower</span><span class="op">$</span><span class="va">k</span><span class="op">)</span>,</span>
+<span>  `All lower bounds active` <span class="op">=</span> <span class="va">x_all_lower</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">bound</span>,</span>
+<span>  `Final harm only` <span class="op">=</span> <span class="va">x_final_harm</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">bound</span>,</span>
+<span>  `Both final lower bounds skipped` <span class="op">=</span> <span class="va">x_matched_lower</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">bound</span>,</span>
+<span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">xh</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                Analysis               Value    Harm Futility</span></span>
-<span><span class="co">#&gt;               IA 1: 33%                   Z -2.0061  -0.2387</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 0.36         p (1-sided)  0.9776   0.5943</span></span>
-<span><span class="co">#&gt;                             ~delta at bound -1.0363  -0.1233</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0  0.0224   0.3832</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1  0.0000   0.0148</span></span>
-<span><span class="co">#&gt;               IA 2: 67%                   Z -1.9827   0.9411</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 0.71         p (1-sided)  0.9763   0.1733</span></span>
-<span><span class="co">#&gt;                             ~delta at bound -0.7242   0.3438</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0  0.0231   0.8116</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1  0.0000   0.0437</span></span>
-<span><span class="co">#&gt;                   Final                   Z      NA   1.9992</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 1.07         p (1-sided)      NA   0.0228</span></span>
-<span><span class="co">#&gt;                             ~delta at bound      NA   0.5963</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0      NA   0.9536</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1      NA   0.1000</span></span>
-<span><span class="co">#&gt;  Efficacy</span></span>
-<span><span class="co">#&gt;    3.0107</span></span>
-<span><span class="co">#&gt;    0.0013</span></span>
-<span><span class="co">#&gt;    1.5553</span></span>
-<span><span class="co">#&gt;    0.0013</span></span>
-<span><span class="co">#&gt;    0.1412</span></span>
-<span><span class="co">#&gt;    2.5465</span></span>
-<span><span class="co">#&gt;    0.0054</span></span>
-<span><span class="co">#&gt;    0.9302</span></span>
-<span><span class="co">#&gt;    0.0062</span></span>
-<span><span class="co">#&gt;    0.5815</span></span>
-<span><span class="co">#&gt;    1.9992</span></span>
-<span><span class="co">#&gt;    0.0228</span></span>
-<span><span class="co">#&gt;    0.5963</span></span>
-<span><span class="co">#&gt;    0.0233</span></span>
-<span><span class="co">#&gt;    0.9000</span></span></code></pre></div>
-<p>The harm bound is <code>NA</code> at the final analysis.</p>
+<span><span class="va">harm_comparison</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Harm bounds by final-analysis testing schedule"</span><span class="op">)</span></span></code></pre></div>
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Analysis": [1, 2, 3],
+    "All lower bounds active": [-1.41706541712503, -1.40357973088107, -1.37487485081551],
+    "Final harm only": [-1.41708105040892, 0.206089918632331, 1.43488233629249],
+    "Both final lower bounds skipped": [-1.41706541712503, -1.40357973088107, -20]
+  },
+  "ops": [
+    {
+      "type": "fmt_number",
+      "columns": ["All lower bounds active", "Final harm only", "Both final lower bounds skipped"],
+      "decimals": 3
+    }
+  ],
+  "header": {
+    "title": "Harm bounds by final-analysis testing schedule"
+  }
+}
+})</script><p>When final futility is skipped but final harm remains active, the
+lower-tail stopping partition changes. The joint calibration can
+therefore change an earlier harm bound even though <code>testHarm</code>
+itself was not changed. This is expected when harm monitoring is
+genuinely intended at the final analysis.</p>
+<p>If neither futility nor harm will be assessed at the final analysis,
+specify both schedules explicitly:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">testLower</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">testHarm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p>Matching these schedules leaves the earlier harm bounds unchanged
+relative to the design with all lower bounds active. Conversely, retain
+<code>testHarm = c(TRUE, TRUE, TRUE)</code> when a final harm assessment
+is intended and interpret the recalibrated harm bounds as part of that
+testing strategy.</p>
+</div>
 </div>
 <div class="section level2">
-<h2 id="example-5-combining-selective-efficacy-and-futility">Example 5: Combining selective efficacy and futility<a class="anchor" aria-label="anchor" href="#example-5-combining-selective-efficacy-and-futility"></a>
+<h2 id="example-4-combining-selective-efficacy-and-futility">Example 4: Combining selective efficacy and futility<a class="anchor" aria-label="anchor" href="#example-4-combining-selective-efficacy-and-futility"></a>
 </h2>
 <p>Both <code>testUpper</code> and <code>testLower</code> can be
 specified simultaneously. For example, a design with futility-only at
 IA1 and efficacy-only at IA2:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Futility only at IA1, efficacy only at IA2, both at Final</span></span>
-<span><span class="va">x5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
-<span>  k <span class="op">=</span> <span class="fl">3</span>,</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Futility only at IA1; efficacy at IA2 and Final</span></span>
+<span><span class="va">x5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">survival_args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  test.type <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
-<span>  beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  sfu <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">4</span>,</span>
-<span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
 <span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x5</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                Analysis               Value Efficacy Futility</span></span>
-<span><span class="co">#&gt;               IA 1: 33%                   Z       NA  -0.2700</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 0.35         p (1-sided)       NA   0.6064</span></span>
-<span><span class="co">#&gt;                             ~delta at bound       NA  -0.1418</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0       NA   0.3936</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1       NA   0.0148</span></span>
-<span><span class="co">#&gt;               IA 2: 67%                   Z   2.4979       NA</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 0.69         p (1-sided)   0.0062       NA</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   0.9274       NA</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0062       NA</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.5773       NA</span></span>
-<span><span class="co">#&gt;                   Final                   Z   1.9947       NA</span></span>
-<span><span class="co">#&gt;  N/Fixed design N: 1.04         p (1-sided)   0.0230       NA</span></span>
-<span><span class="co">#&gt;                             ~delta at bound   0.6047       NA</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=0   0.0244       NA</span></span>
-<span><span class="co">#&gt;                         P(Cross) if delta=1   0.9000       NA</span></span></code></pre></div>
-<p>Note the <code>NA</code> values: efficacy is <code>NA</code> at IA1,
+<span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x5</span>, exclude <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Analysis": ["IA 1: 40%", "N: 616", "Events: 151", "Month: 15", "", "", "", "", "", "", "IA 2: 70%", "N: 690", "Events: 265", "Month: 20", "", "", "", "", "", "", "Final", "N: 690", "Events: 378", "Month: 36", "", "", ""],
+    "Value": ["Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.7", "Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.7", "Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "P(Cross) if HR=1", "P(Cross) if HR=0.7"],
+    "Efficacy": [null, null, null, null, null, null, null, null, null, null, 2.438, 0.0074, 0.7408, 0.0074, 2.0398, 0.9524, 0.9756, 0.9181, 0.0073, 0.6738, 1.9999, 0.0228, 0.8139, 0.0176, 1.9999, 0.0222, 0.9],
+    "Futility": [0.5659, 0.2857, 0.912, 0.0522, 0.3579, 0.0778, 0.7144, 0.1851, 0.7143, 0.0522, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+  }
+}
+})</script><p>Note the <code>NA</code> values: efficacy is <code>NA</code> at IA1,
 and futility is <code>NA</code> at IA2 and the final analysis.</p>
 </div>
 <div class="section level2">
@@ -464,17 +1156,21 @@ must be <code>TRUE</code> for at least one analysis.</li>
 <code>testHarm</code> must be <code>TRUE</code> for at least one
 analysis.</li>
 </ol>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This fails: testUpper must be TRUE at the final analysis</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">3</span>, testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">survival_args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  test.type <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in gsTestBoundsCheck(x$k, x$test.type, testUpper, testLower, testHarm) : </span></span>
 <span><span class="co">#&gt;   testUpper must be TRUE at the final analysis</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This fails: no bound active at analysis 1</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>,</span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">survival_args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  test.type <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in gsTestBoundsCheck(x$k, x$test.type, testUpper, testLower, testHarm) : </span></span>
 <span><span class="co">#&gt;   At analysis 1 at least one of testUpper, testLower, or testHarm must be TRUE</span></span></code></pre></div>
 </div>
@@ -484,9 +1180,9 @@ analysis.</li>
 <p>The <code>testUpper</code>, <code>testLower</code>, and
 <code>testHarm</code> logical vectors are stored on the returned
 <code>gsDesign</code> object:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x1</span><span class="op">$</span><span class="va">testUpper</span></span>
-<span><span class="co">#&gt; [1] TRUE TRUE TRUE</span></span>
+<span><span class="co">#&gt; [1] FALSE  TRUE  TRUE</span></span>
 <span><span class="va">x1</span><span class="op">$</span><span class="va">testLower</span></span>
 <span><span class="co">#&gt; [1]  TRUE FALSE FALSE</span></span>
 <span><span class="va">x1</span><span class="op">$</span><span class="va">testHarm</span></span>
@@ -529,31 +1225,35 @@ assumption that the trial <em>may continue past the futility bound</em>
 Since upper bounds are independent of lower bounds, removing futility
 has no effect on the upper (efficacy) bounds or the non-binding
 alpha:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Baseline non-binding design</span></span>
-<span><span class="va">x_nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Baseline non-binding design; efficacy starts at IA2</span></span>
+<span><span class="va">x_nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">survival_args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  test.type <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Remove futility at IA2 and final</span></span>
-<span><span class="va">x_nb_sel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span><span class="va">x_nb_sel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">survival_args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  test.type <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Non-binding alpha (computed ignoring lower bounds)</span></span>
 <span><span class="va">nb_alpha_base</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu">gsDesign</span><span class="fu">:::</span><span class="fu">gsprob</span><span class="op">(</span><span class="fl">0</span>, <span class="va">x_nb</span><span class="op">$</span><span class="va">n.I</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">3</span><span class="op">)</span>, <span class="va">x_nb</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, r <span class="op">=</span> <span class="va">x_nb</span><span class="op">$</span><span class="va">r</span><span class="op">)</span><span class="op">$</span><span class="va">probhi</span><span class="op">)</span></span>
 <span><span class="va">nb_alpha_sel</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu">gsDesign</span><span class="fu">:::</span><span class="fu">gsprob</span><span class="op">(</span><span class="fl">0</span>, <span class="va">x_nb_sel</span><span class="op">$</span><span class="va">n.I</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">3</span><span class="op">)</span>, <span class="va">x_nb_sel</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, r <span class="op">=</span> <span class="va">x_nb_sel</span><span class="op">$</span><span class="va">r</span><span class="op">)</span><span class="op">$</span><span class="va">probhi</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Baseline non-binding alpha: "</span>, <span class="va">nb_alpha_base</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Baseline non-binding alpha:  0.025</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Selective non-binding alpha:"</span>, <span class="va">nb_alpha_sel</span> , <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Selective non-binding alpha:"</span>, <span class="va">nb_alpha_sel</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Selective non-binding alpha: 0.025</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Upper bounds identical:     "</span>, <span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">x_nb</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="va">x_nb_sel</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Upper bounds identical:      TRUE</span></span></code></pre></div>
-<p>When removing early efficacy bounds, the upper bounds at active
-analyses adjust to absorb the redistributed spending, still totalling
-exactly <span class="math inline">\(\alpha = 0.025\)</span>:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Remove efficacy at IA1</span></span>
-<span><span class="va">x_nb_eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">nb_alpha_eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu">gsDesign</span><span class="fu">:::</span><span class="fu">gsprob</span><span class="op">(</span><span class="fl">0</span>, <span class="va">x_nb_eff</span><span class="op">$</span><span class="va">n.I</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">3</span><span class="op">)</span>, <span class="va">x_nb_eff</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, r <span class="op">=</span> <span class="va">x_nb_eff</span><span class="op">$</span><span class="va">r</span><span class="op">)</span><span class="op">$</span><span class="va">probhi</span><span class="op">)</span></span>
+<p>For the planned design, omitting efficacy at IA1 redistributes its
+alpha to the active analyses while still totalling exactly <span class="math inline">\(\alpha = 0.025\)</span>:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nb_alpha_eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu">gsDesign</span><span class="fu">:::</span><span class="fu">gsprob</span><span class="op">(</span></span>
+<span>  <span class="fl">0</span>, <span class="va">x_nb</span><span class="op">$</span><span class="va">n.I</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">3</span><span class="op">)</span>, <span class="va">x_nb</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, r <span class="op">=</span> <span class="va">x_nb</span><span class="op">$</span><span class="va">r</span></span>
+<span><span class="op">)</span><span class="op">$</span><span class="va">probhi</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Non-binding alpha (skip IA1 efficacy):"</span>, <span class="va">nb_alpha_eff</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Non-binding alpha (skip IA1 efficacy): 0.025</span></span></code></pre></div>
 </div>
@@ -567,27 +1267,31 @@ information is then adjusted to retain target power; when
 <code>n.I</code> is supplied, information remains fixed. This preserves
 cumulative Type I error at the nominal level while respecting the
 requested power calculation:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Baseline binding design</span></span>
-<span><span class="va">x_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="va">x_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">survival_args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>test.type <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Baseline alpha:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x_b</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Baseline alpha: 0.02500087</span></span>
+<span><span class="co">#&gt; Baseline alpha: 0.02496047</span></span>
 <span></span>
 <span><span class="co"># Remove futility at IA2 and final</span></span>
-<span><span class="va">x_b_sel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span><span class="va">x_b_sel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">survival_args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  test.type <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Selective alpha:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x_b_sel</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Selective alpha: 0.025</span></span>
+<span><span class="co">#&gt; Selective alpha: 0.02500004</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Selective power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x_b_sel</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Selective power: 0.9</span></span>
+<span><span class="co">#&gt; Selective power: 0.9000007</span></span>
 <span></span>
 <span><span class="co"># Remove efficacy at IA1</span></span>
-<span><span class="va">x_b_eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, beta <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span><span class="va">x_b_eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurv</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">survival_args</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  test.type <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Skip IA1 efficacy alpha:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x_b_eff</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Skip IA1 efficacy alpha: 0.025</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Skip IA1 efficacy power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">x_b_eff</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Skip IA1 efficacy power: 0.9</span></span></code></pre></div>
+<span><span class="co">#&gt; Skip IA1 efficacy power: 0.8999983</span></span></code></pre></div>
 <p>In all cases, the actual Type I error is exactly <span class="math inline">\(\alpha = 0.025\)</span> (within numerical
 tolerance). The bounds at active analyses adjust to allocate the
 spending budget, and derived information is recalibrated so that skipped

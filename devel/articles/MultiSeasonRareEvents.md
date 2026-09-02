@@ -3,7 +3,7 @@
 ``` r
 
 library(gsDesign)
-library(gt)
+library(lt)
 library(tibble)
 ```
 
@@ -138,23 +138,11 @@ design_calendar <- gsSurvCalendar(
   toInteger() |>
   suppressWarnings()
 
-gsBoundSummary(design_calendar)
-#>    Analysis              Value Efficacy Futility
-#>   IA 1: 33%                  Z   2.2831  -0.1175
-#>    N: 10530        p (1-sided)   0.0112   0.5468
-#>  Events: 12       ~HR at bound   0.1528   0.7571
-#>   Month: 11 P(Cross) if HR=0.7   0.0112   0.4532
-#>             P(Cross) if HR=0.2   0.4105   0.0148
-#>   IA 2: 67%                  Z   2.2844       NA
-#>    N: 21059        p (1-sided)   0.0112       NA
-#>  Events: 24       ~HR at bound   0.2385       NA
-#>   Month: 21 P(Cross) if HR=0.7   0.0192       NA
-#>             P(Cross) if HR=0.2   0.7541       NA
-#>       Final                  Z   2.3013       NA
-#>    N: 31588        p (1-sided)   0.0107       NA
-#>  Events: 36       ~HR at bound   0.2887       NA
-#>   Month: 32 P(Cross) if HR=0.7   0.0247       NA
-#>             P(Cross) if HR=0.2   0.9065       NA
+gsBoundSummary(design_calendar) |> lt()
+```
+
+``` r
+
 
 planned_final_events <- design_calendar$n.I[design_calendar$k]
 planned_counts <- as.integer(round(planned_final_events * timing))
@@ -252,50 +240,48 @@ tibble(
   `Achieved cumulative alpha spend` = achieved_alpha_spend,
   `Cumulative power under H1` = achieved_power_h1
 ) |>
-  gt() |>
-  fmt_number(columns = 2, decimals = 3) |>
-  fmt_percent(columns = c(`VE at bound (efficacy)`, `VE at bound (futility)`), decimals = 1) |>
-  fmt_number(
+  lt() |>
+  lt_format(columns = 2, decimals = 3) |>
+  lt_format(columns = c("VE at bound (efficacy)", "VE at bound (futility)"), decimals = 1, percent = TRUE) |>
+  lt_format(
     columns = c(
-      `Nominal 1-sided p at bound (efficacy)`,
-      `Nominal 1-sided p at bound (futility)`,
-      `Target cumulative alpha spend`,
-      `Achieved cumulative alpha spend`,
-      `Cumulative power under H1`
+      "Nominal 1-sided p at bound (efficacy)",
+      "Nominal 1-sided p at bound (futility)",
+      "Target cumulative alpha spend",
+      "Achieved cumulative alpha spend",
+      "Cumulative power under H1"
     ),
     decimals = 4
   ) |>
-  tab_spanner(
+  lt_spanner(
     label = "Efficacy",
     columns = c(
-      `Exact efficacy bound (x <= a)`,
-      `VE at bound (efficacy)`,
-      `Nominal 1-sided p at bound (efficacy)`
+      "Exact efficacy bound (x <= a)",
+      "VE at bound (efficacy)",
+      "Nominal 1-sided p at bound (efficacy)"
     )
   ) |>
-  tab_spanner(
+  lt_spanner(
     label = "Futility",
     columns = c(
-      `Exact futility bound (x >= b)`,
-      `VE at bound (futility)`,
-      `Nominal 1-sided p at bound (futility)`
+      "Exact futility bound (x >= b)",
+      "VE at bound (futility)",
+      "Nominal 1-sided p at bound (futility)"
     )
   ) |>
-  tab_header(
+  lt_header(
     title = "Planned exact binomial seasonal monitoring",
     subtitle = "Super-superiority example with Pocock-like efficacy spending"
   ) |>
-  tab_footnote(
-    footnote = "x denotes cumulative observed events in the experimental arm; efficacy is established when x is at or below the listed efficacy bound.",
-    locations = cells_column_labels(columns = `Exact efficacy bound (x <= a)`)
+  lt_footnote(
+    "x denotes cumulative observed events in the experimental arm; efficacy is established when x is at or below the listed efficacy bound.",
+    where = "column", columns = "Exact efficacy bound (x <= a)"
   ) |>
-  tab_footnote(
-    footnote = "Blank futility entries indicate no futility stopping boundary at that analysis.",
-    locations = cells_column_labels(columns = `Exact futility bound (x >= b)`)
+  lt_footnote(
+    "Blank futility entries indicate no futility stopping boundary at that analysis.",
+    where = "column", columns = "Exact futility bound (x >= b)"
   )
 ```
-
-[TABLE]
 
 The next table gives planned enrollment/sample size by season and
 overall.
@@ -322,17 +308,9 @@ dplyr::bind_rows(
     `Cumulative planned enrollment` = sum(enrollment_table$`Total planned enrollment`)
   )
 ) |>
-  gt() |>
-  tab_header(title = "Planned enrollment by season and overall")
+  lt() |>
+  lt_header(title = "Planned enrollment by season and overall")
 ```
-
-| Planned enrollment by season and overall |  |  |  |  |
-|----|----|----|----|----|
-| Season | Control planned enrollment | Experimental planned enrollment | Total planned enrollment | Cumulative planned enrollment |
-| 1 | 2632 | 7897 | 10529 | 10529 |
-| 2 | 2632 | 7897 | 10529 | 21058 |
-| 3 | 2632 | 7897 | 10529 | 31587 |
-| Overall | 7896 | 23691 | 31587 | 31587 |
 
 ## Example repeated and sequential p-values
 
@@ -425,16 +403,9 @@ tibble(
   `Updated futility bound, default spending` = update_exact$upper$bound,
   `Updated futility bound, maxSpend=TRUE` = update_exact_full$upper$bound
 ) |>
-  gt() |>
-  tab_header(title = "Updated exact bounds using observedEvents")
+  lt() |>
+  lt_header(title = "Updated exact bounds using observedEvents")
 ```
-
-| Updated exact bounds using observedEvents |  |  |  |  |  |
-|----|----|----|----|----|----|
-| Analysis | Observed total events | Updated efficacy bound (x \<= a), default spending | Updated efficacy bound (x \<= a), maxSpend=TRUE | Updated futility bound, default spending | Updated futility bound, maxSpend=TRUE |
-| 1 | 12 | 3 | 3 | 9 | 9 |
-| 2 | 24 | 10 | 10 | 16 | 16 |
-| 3 | 31 | 15 | 15 | 20 | 20 |
 
 ## Lightweight runnable simulation
 
@@ -485,28 +456,18 @@ oc <- sim_light$summary |>
   )
 
 oc |>
-  gt() |>
-  fmt_number(columns = 2:5, decimals = 4) |>
-  fmt_number(columns = 6:8, decimals = 2) |>
-  tab_header(
+  lt() |>
+  lt_format(columns = 2:5, decimals = 4) |>
+  lt_format(columns = 6:8, decimals = 2) |>
+  lt_header(
     title = "Lightweight simulation results",
     subtitle = "Exact-binomial monitoring with seasonal analyses"
   ) |>
-  tab_footnote(
-    footnote = "For VE=30% scenarios, efficacy crossing probability is Type I error under the non-binding futility convention (futility crossings do not block later efficacy crossings).",
-    locations = cells_column_labels(columns = `Efficacy crossing probability`)
+  lt_footnote(
+    "For VE=30% scenarios, efficacy crossing probability is Type I error under the non-binding futility convention (futility crossings do not block later efficacy crossings).",
+    where = "column", columns = "Efficacy crossing probability"
   )
 ```
-
-| Lightweight simulation results |  |  |  |  |  |  |  |
-|----|----|----|----|----|----|----|----|
-| Exact-binomial monitoring with seasonal analyses |  |  |  |  |  |  |  |
-| Scenario | Efficacy crossing probability¹ | Futility stopping probability | MC SE (efficacy) | MC SE (futility) | Mean total events | Mean total enrolled | Mean looks used |
-| Fixed: H0 (VE=30%) | 0.0133 | 0.7067 | 0.0094 | 0.0372 | 35.73 | 13,617.51 | 1.29 |
-| Adaptive: H0 (VE=30%) | 0.0200 | 0.7200 | 0.0114 | 0.0367 | 35.41 | 13,406.93 | 1.27 |
-| Fixed: H1 (VE=80%) | 0.9667 | 0.0200 | 0.0147 | 0.0114 | 28.89 | 17,829.11 | 1.69 |
-| Adaptive: H1 (VE=80%) | 0.9667 | 0.0200 | 0.0147 | 0.0114 | 30.01 | 19,729.27 | 1.71 |
-| ¹ For VE=30% scenarios, efficacy crossing probability is Type I error under the non-binding futility convention (futility crossings do not block later efficacy crossings). |  |  |  |  |  |  |  |
 
 ## Example with lower-than-planned event rates
 
@@ -573,28 +534,18 @@ tibble(
     low$mean_looks[low$adaptive & low$scenario == "H1 (VE=80%)"]
   )
 ) |>
-  gt() |>
-  fmt_number(columns = 2:3, decimals = 4) |>
-  fmt_number(columns = 4:6, decimals = 2) |>
-  tab_header(
+  lt() |>
+  lt_format(columns = 2:3, decimals = 4) |>
+  lt_format(columns = 4:6, decimals = 2) |>
+  lt_header(
     title = "Lower-than-planned event rate illustration",
     subtitle = "Adaptive approach increases enrollment to recover information"
   ) |>
-  tab_footnote(
-    footnote = "Type I error rows use non-binding futility for efficacy crossing probability; futility stopping probability is shown separately.",
-    locations = cells_column_labels(columns = `Efficacy crossing probability`)
+  lt_footnote(
+    "Type I error rows use non-binding futility for efficacy crossing probability; futility stopping probability is shown separately.",
+    where = "column", columns = "Efficacy crossing probability"
   )
 ```
-
-| Lower-than-planned event rate illustration |  |  |  |  |  |
-|----|----|----|----|----|----|
-| Adaptive approach increases enrollment to recover information |  |  |  |  |  |
-| Scenario | Efficacy crossing probability¹ | Futility stopping probability | Mean total events | Mean total enrolled | Mean looks used |
-| Without adaptation: Type I error (VE=30%) | 0.0267 | 0.3367 | 39.59 | 22,146.00 | 2.10 |
-| With adaptation: Type I error (VE=30%) | 0.0300 | 0.3733 | 36.81 | 21,733.09 | 1.90 |
-| Without adaptation: Power (VE=80%) | 0.9200 | 0.0000 | 22.04 | 23,795.54 | 2.26 |
-| With adaptation: Power (VE=80%) | 0.9667 | 0.0000 | 25.93 | 30,396.28 | 2.11 |
-| ¹ Type I error rows use non-binding futility for efficacy crossing probability; futility stopping probability is shown separately. |  |  |  |  |  |
 
 This table provides side-by-side comparisons of Type I error, power, and
 futility stopping probability without and with adaptation under the

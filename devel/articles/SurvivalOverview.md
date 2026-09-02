@@ -144,12 +144,8 @@ which, rounding up, matches (with tabular output):
 ``` r
 
 nEvents(hr = hr, alpha = alpha, beta = beta, r = 1, tbl = TRUE) |>
-  kable()
+  lt()
 ```
-
-|  hr |   n | alpha | sided | beta | Power |     delta | ratio | hr0 |        se |
-|----:|----:|------:|------:|-----:|------:|----------:|------:|----:|----------:|
-| 0.7 | 331 | 0.025 |     1 |  0.1 |   0.9 | 0.1783375 |     1 |   1 | 0.1099299 |
 
 The notation `delta` in the above table changes the sign for the
 standardized treatment effect \\\theta\\ in the above:
@@ -200,23 +196,10 @@ Schoenfeld <- gsDesign(
 #> toInteger: rounding done to nearest integer since ratio was not specified as postive integer .
 Schoenfeld |>
   gsBoundSummary(deltaname = "HR", logdelta = TRUE, Nname = "Events") |>
-  kable(row.names = FALSE)
+  lt()
 #> Warning: gsBoundSummary: hr0 is not present; using hr0 =
 #> 1 for HR at bound calculations.
 ```
-
-| Analysis    | Value              | Efficacy | Futility |
-|:------------|:-------------------|---------:|---------:|
-| IA 1: 50%   | Z                  |   2.7522 |   0.4084 |
-| Events: 172 | p (1-sided)        |   0.0030 |   0.3415 |
-|             | ~HR at bound       |   0.6572 |   0.9396 |
-|             | P(Cross) if HR=1   |   0.0030 |   0.6585 |
-|             | P(Cross) if HR=0.7 |   0.3397 |   0.0268 |
-| Final       | Z                  |   1.9810 |   1.9810 |
-| Events: 345 | p (1-sided)        |   0.0238 |   0.0238 |
-|             | ~HR at bound       |   0.8079 |   0.8079 |
-|             | P(Cross) if HR=1   |   0.0239 |   0.9761 |
-|             | P(Cross) if HR=0.7 |   0.9004 |   0.0996 |
 
 ### Information based design
 
@@ -539,21 +522,8 @@ lfgs <- gsSurv(
 ) |> toInteger()
 lfgs |>
   gsBoundSummary() |>
-  kable(row.names = FALSE)
+  lt()
 ```
-
-| Analysis    | Value              | Efficacy | Futility |
-|:------------|:-------------------|---------:|---------:|
-| IA 1: 50%   | Z                  |   2.7500 |   0.4150 |
-| N: 442      | p (1-sided)        |   0.0030 |   0.3391 |
-| Events: 172 | ~HR at bound       |   0.6575 |   0.9387 |
-| Month: 13   | P(Cross) if HR=1   |   0.0030 |   0.6609 |
-|             | P(Cross) if HR=0.7 |   0.3422 |   0.0269 |
-| Final       | Z                  |   1.9811 |   1.9811 |
-| N: 442      | p (1-sided)        |   0.0238 |   0.0238 |
-| Events: 344 | ~HR at bound       |   0.8076 |   0.8076 |
-| Month: 28   | P(Cross) if HR=1   |   0.0239 |   0.9761 |
-|             | P(Cross) if HR=0.7 |   0.9006 |   0.0994 |
 
 Although we did not use the Schoenfeld (1981) for sample size, it is
 still used for the approximate HR at bound calculation above:
@@ -595,13 +565,8 @@ tibble::tibble(
   `Control events` = lfgs$eDC,
   `Experimental events` = lfgs$eDE
 ) |>
-  kable()
+  lt()
 ```
-
-| Analysis | Control events | Experimental events |
-|---------:|---------------:|--------------------:|
-|        1 |       97.42773 |            75.24446 |
-|        2 |      185.22348 |           160.12090 |
 
 It is worth noting that if events accrue at the same rate in both the
 null and alternate hypothesis, then the expected duration of time to

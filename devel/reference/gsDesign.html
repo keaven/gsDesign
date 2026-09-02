@@ -47,7 +47,11 @@ the maximum sample size through an iterative process for all options. Since
 options 3 and 4 must compute boundary crossing probabilities under both the
 null and alternative hypotheses, deriving these designs can take longer than
 other options. Options 5 and 6 compute lower bound spending under the null
-hypothesis."><meta property="og:description" content="gsDesign() is used to find boundaries and trial size required for a
+hypothesis. Options 7 and 8 add a harm bound to beta-spending futility:
+option 7 treats both futility and harm bounds as binding for Type I error,
+while option 8 treats both as non-binding. Futility and harm are mutually
+exclusive lower-tail stopping outcomes with separately specified spending
+functions."><meta property="og:description" content="gsDesign() is used to find boundaries and trial size required for a
 group sequential design.
 Many parameters normally take on default values and thus do not require
 explicit specification. One- and two-sided designs are supported. Two-sided
@@ -89,7 +93,11 @@ the maximum sample size through an iterative process for all options. Since
 options 3 and 4 must compute boundary crossing probabilities under both the
 null and alternative hypotheses, deriving these designs can take longer than
 other options. Options 5 and 6 compute lower bound spending under the null
-hypothesis."><meta property="og:image" content="https://keaven.github.io/gsDesign/devel/logo.png"></head><body>
+hypothesis. Options 7 and 8 add a harm bound to beta-spending futility:
+option 7 treats both futility and harm bounds as binding for Type I error,
+while option 8 treats both as non-binding. Futility and harm are mutually
+exclusive lower-tail stopping outcomes with separately specified spending
+functions."><meta property="og:image" content="https://keaven.github.io/gsDesign/devel/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -97,7 +105,7 @@ hypothesis."><meta property="og:image" content="https://keaven.github.io/gsDesig
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -119,7 +127,7 @@ hypothesis."><meta property="og:image" content="https://keaven.github.io/gsDesig
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Design Derivation</h1>
-      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/GitHub/291-293-295-296-gssurvpower-issues/R/gsDesign.R" class="external-link"><code>R/gsDesign.R</code></a>, <a href="https://github.com/keaven/gsDesign/blob/GitHub/291-293-295-296-gssurvpower-issues/R/xtable.R" class="external-link"><code>R/xtable.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/master/R/gsDesign.R" class="external-link"><code>R/gsDesign.R</code></a>, <a href="https://github.com/keaven/gsDesign/blob/master/R/xtable.R" class="external-link"><code>R/xtable.R</code></a></small>
       <div class="d-none name"><code>gsDesign.Rd</code></div>
     </div>
 
@@ -166,7 +174,11 @@ the maximum sample size through an iterative process for all options. Since
 options 3 and 4 must compute boundary crossing probabilities under both the
 null and alternative hypotheses, deriving these designs can take longer than
 other options. Options 5 and 6 compute lower bound spending under the null
-hypothesis.</p>
+hypothesis. Options 7 and 8 add a harm bound to beta-spending futility:
+option 7 treats both futility and harm bounds as binding for Type I error,
+while option 8 treats both as non-binding. Futility and harm are mutually
+exclusive lower-tail stopping outcomes with separately specified spending
+functions.</p>
     </div>
 
     <div class="section level2">

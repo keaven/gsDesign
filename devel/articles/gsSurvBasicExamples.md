@@ -268,29 +268,16 @@ Following are the enrollment rates required to power the trial.
 
 ``` r
 
-library(gt)
-#> 
-#> Attaching package: 'gt'
-#> The following object is masked from 'package:gsDesign':
-#> 
-#>     as_rtf
+library(lt)
 library(tibble)
 
 tibble(
   Period = paste("Month", rownames(x$gamma)),
   Rate = as.numeric(x$gamma)
 ) |>
-  gt() |>
-  tab_header(title = "Enrollment rate requirements")
+  lt() |>
+  lt_header(title = "Enrollment rate requirements")
 ```
-
-| Enrollment rate requirements |           |
-|------------------------------|-----------|
-| Period                       | Rate      |
-| Month 0-1                    | 8.090968  |
-| Month 1-3                    | 12.136452 |
-| Month 3-6                    | 20.227421 |
-| Month 6-24                   | 32.363873 |
 
 Next we provide a tabular summary of bounds for the design. We have
 added extensive footnoting to the table, which may or may not be
@@ -334,41 +321,16 @@ caption <- paste(
 ``` r
 
 gsBoundSummary(x) |>
-  gt() |>
-  tab_header(title = "Time-to-event group sequential design") |>
-  cols_align("left") |>
-  tab_footnote(footnoteUS, locations = cells_column_labels(columns = 3)) |>
-  tab_footnote(footnoteLS, locations = cells_column_labels(columns = 4)) |>
-  tab_footnote(footnoteHR, locations = cells_body(columns = 2, rows = c(3, 8, 13))) |>
-  tab_footnote(footnoteM, locations = cells_body(columns = 1, rows = c(4, 9, 14))) |>
-  tab_footnote(footnote1, locations = cells_body(columns = 2, rows = c(4, 5, 9, 10, 14, 15))) |>
-  tab_footnote(footnote2, locations = cells_body(columns = 2, rows = c(4, 9, 14)))
+  lt() |>
+  lt_header(title = "Time-to-event group sequential design") |>
+  lt_align(columns = c("Analysis", "Value", "Efficacy", "Futility"), align = "left") |>
+  lt_footnote(footnoteUS, where = "column", columns = "Efficacy") |>
+  lt_footnote(footnoteLS, where = "column", columns = "Futility") |>
+  lt_footnote(footnoteHR, where = "body", columns = "Value", rows = c(3, 8, 13)) |>
+  lt_footnote(footnoteM, where = "body", columns = "Analysis", rows = c(4, 9, 14)) |>
+  lt_footnote(footnote1, where = "body", columns = "Value", rows = c(4, 5, 9, 10, 14, 15)) |>
+  lt_footnote(footnote2, where = "body", columns = "Value", rows = c(4, 9, 14))
 ```
-
-| Time-to-event group sequential design |  |  |  |
-|----|----|----|----|
-| Analysis | Value | Efficacy¹ | Futility² |
-| IA 1: 25% | Z | 4.3326 | -1.7019 |
-| N: 414 | p (1-sided) | 0.0000 | 0.9556 |
-| Events: 111 | ~HR at bound³ | 0.4386 | 1.3823 |
-| Month: 16⁴ | P(Cross) if HR=1^(5,6) | 0.0000 | 0.0444 |
-|  | P(Cross) if HR=0.75⁵ | 0.0024 | 0.0007 |
-| IA 2: 75% | Z | 2.3398 | 0.6728 |
-| N: 676 | p (1-sided) | 0.0096 | 0.2505 |
-| Events: 332 | ~HR at bound³ | 0.7734 | 0.9288 |
-| Month: 28⁴ | P(Cross) if HR=1^(5,6) | 0.0096 | 0.7500 |
-|  | P(Cross) if HR=0.75⁵ | 0.6110 | 0.0260 |
-| Final | Z | 2.0118 | 2.0118 |
-| N: 676 | p (1-sided) | 0.0221 | 0.0221 |
-| Events: 443 | ~HR at bound³ | 0.8258 | 0.8258 |
-| Month: 36⁴ | P(Cross) if HR=1^(5,6) | 0.0249 | 0.9751 |
-|  | P(Cross) if HR=0.75⁵ | 0.8500 | 0.1500 |
-| ¹ Efficacy bound set using Lan-DeMets spending function approximating an O'Brien-Fleming bound. |  |  |  |
-| ² Futility bound set using Hwang-Shih-DeCani beta-spending function with gamma=-7. |  |  |  |
-| ³ HR presented is not a requirement, but an estimate of approximately what HR would be required to cross each bound. |  |  |  |
-| ⁴ Month is approximated given enrollment and event rate assumptions under alternate hypothesis. |  |  |  |
-| ⁵ P{Cross} is the probability of crossing the given bound (efficacy or futility) at or before the given analysis under the assumed hazard ratio (HR). |  |  |  |
-| ⁶ Design assumes futility bound is discretionary (non-binding); upper boundary crossing probabilities shown here assume trial stops at first boundary crossed and thus total less than the design Type I error. |  |  |  |
 
 ### Summary plots
 
@@ -452,44 +414,27 @@ gsBoundSummary(
     "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.75"
   )
 ) |>
-  gt() |>
-  cols_align("left") |>
-  tab_header(
+  lt() |>
+  lt_align(columns = c("Analysis", "Value", "Efficacy", "Futility"), align = "left") |>
+  lt_header(
     title = "Time-to-event group sequential bound guidance",
     subtitle = "Bounds updated based on event counts through IA2"
   ) |>
-  tab_footnote(
+  lt_footnote(
     "Nominal p-value required to establish statistical significance.",
-    locations = cells_body(columns = 3, rows = c(2, 5, 8))
+    where = "body", columns = "Efficacy", rows = c(2, 5, 8)
   ) |>
-  tab_footnote(
+  lt_footnote(
     "Interim futility guidance based on observed HR is non-binding.",
-    locations = cells_body(columns = 4, rows = c(3, 6))
+    where = "body", columns = "Futility", rows = c(3, 6)
   ) |>
-  tab_footnote(
+  lt_footnote(
     "HR bounds are approximations; decisions on crossing are based solely on p-values.",
-    locations = cells_body(column = 2, rows = c(3, 6, 9))
+    where = "body", columns = "Value", rows = c(3, 6, 9)
   )
 #> Warning: gsBoundSummary: hr0 is not present; using hr0 =
 #> 1 for HR at bound calculations.
 ```
-
-| Time-to-event group sequential bound guidance |  |  |  |
-|----|----|----|----|
-| Bounds updated based on event counts through IA2 |  |  |  |
-| Analysis | Value | Efficacy | Futility |
-| IA 1: 26% | Z | 4.2416 | -1.6470 |
-| Events: 115 | p (1-sided) | 0.0000¹ | 0.9502 |
-|  | ~HR at bound² | 0.4534 | 1.3596³ |
-| IA 2: 82% | Z | 2.2115 | 1.0322 |
-| Events: 364 | p (1-sided) | 0.0135¹ | 0.1510 |
-|  | ~HR at bound² | 0.7931 | 0.8974³ |
-| Final | Z | 2.0323 | 2.0261 |
-| Events: 443 | p (1-sided) | 0.0211¹ | 0.0214 |
-|  | ~HR at bound² | 0.8244 | 0.8249 |
-| ¹ Nominal p-value required to establish statistical significance. |  |  |  |
-| ² HR bounds are approximations; decisions on crossing are based solely on p-values. |  |  |  |
-| ³ Interim futility guidance based on observed HR is non-binding. |  |  |  |
 
 ### Evaluating interim results
 

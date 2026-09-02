@@ -3,24 +3,28 @@
 ``` r
 
 library(gsDesign)
-library(gt)
+library(lt)
 ```
 
 ## Introduction
 
 This article explores a method of approximating a design using the exact
 binomial method of Chan and Bohidar (1998) by a time-to-event design
-using the method of Lachin and Foulkes (1986). This allows use of
-spending functions to derive boundaries for the exact method. The
-time-to-event design can not only be used to set boundaries for the Chan
-and Bohidar (1998) method, but to allow specification of enrollment
-duration and study duration to determine enrollment rates and sample
-size required. This vignette also illustrates the concept of
-super-superiority often used in prevention studies. Finally, since this
-procedure is new as of November, 2023 we suggest checks and potential
-revisions to spending function choices to optimize design boundaries.
-For an extension to annual seasonal monitoring with blinded
-information-adaptive enrollment, see
+using the method of Lachin and Foulkes (1986). Vaccine efficacy (VE) is
+also termed prevention efficacy (PE) when the intervention is a
+preventive compound rather than a vaccine. The estimand and methods
+presented here are the same in either setting. We use VE throughout
+because the motivating example is a vaccine trial, but VE can be read as
+PE for other preventive interventions. This allows use of spending
+functions to derive boundaries for the exact method. The time-to-event
+design can not only be used to set boundaries for the Chan and Bohidar
+(1998) method, but to allow specification of enrollment duration and
+study duration to determine enrollment rates and sample size required.
+This vignette also illustrates the concept of super-superiority often
+used in prevention studies. We recommend checking the resulting
+boundaries and, when appropriate, revising the spending function choices
+to improve them. For an extension to annual seasonal monitoring with
+blinded information-adaptive enrollment, see
 [`vignette("MultiSeasonRareEvents", package = "gsDesign")`](https://keaven.github.io/gsDesign/devel/articles/MultiSeasonRareEvents.md).
 
 ## Parameterization
@@ -35,14 +39,15 @@ of events expected.
 Paralleling the notation of Chan and Bohidar (1998), we assume \\N_C,
 P_C\\ to be binomial sample size and probability of an event for each
 participant assigned to control; for the experimental treatment group,
-these are labeled \\N_E, P_E\\. Vaccine efficacy is defined as
+these are labeled \\N_E, P_E\\. Vaccine efficacy, or prevention efficacy
+for a non-vaccine intervention, is defined as
 
 \\\pi = 1 - P_E/P_C.\\
 
-The parameter \\\pi\\ is often labeled as VE for vaccine efficacy.
-Taking into account the randomization ratio \\r\\ (experimental /
-control) the approximate probability that any given event is in the
-experimental group is
+The parameter \\\pi\\ is often labeled VE for vaccine efficacy or PE for
+prevention efficacy. Taking into account the randomization ratio \\r\\
+(experimental / control) the approximate probability that any given
+event is in the experimental group is
 
 \\ \begin{aligned} p &= rP_E/(rP_E+ P_C)\\ &= r/(r + P_C/P_E)\\ &=
 r/(r + (1-\pi)^{-1}). \end{aligned} \\
@@ -97,19 +102,9 @@ events in the experimental group:
 ve <- c(.5, .6, .65, .7, .75, .8)
 prob_experimental <- ratio / (ratio + 1 / (1 - ve))
 tibble::tibble(VE = ve, "P(Experimental)" = prob_experimental) |>
-  gt() |>
-  tab_options(data_row.padding = px(1)) |>
-  fmt_number(columns = 2, decimals = 3)
+  lt() |>
+  lt_format(columns = 2, decimals = 3)
 ```
-
-| VE   | P(Experimental) |
-|------|-----------------|
-| 0.50 | 0.600           |
-| 0.60 | 0.545           |
-| 0.65 | 0.512           |
-| 0.70 | 0.474           |
-| 0.75 | 0.429           |
-| 0.80 | 0.375           |
 
 Chapter 12 of Jennison and Turnbull (2000) walks through how to design
 and analyze such a study using a fixed or group sequential design. The
@@ -186,6 +181,14 @@ x <- gsSurv(
 )
 ```
 
+The
+[`gsSurv()`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md)
+design need not be converted to an exact binomial design. If the planned
+analysis uses a log-rank test or Poisson regression, the group
+sequential boundaries from the asymptotic design can be used directly.
+The remainder of this vignette performs the conversion for a design
+whose planned analysis uses the exact conditional binomial method.
+
 Now we convert this to a design with integer event counts at analyses.
 This is achieved by rounding event counts down and rounding total sample
 size to an integer allocation. This will result in a slight change in
@@ -211,36 +214,12 @@ gsBoundSummary(xx,
   tdigits = 1, logdelta = TRUE, deltaname = "HR", Nname = "Events",
   exclude = c("B-value", "CP", "CP H1", "PP")
 ) |>
-  gt() |>
-  tab_header(
+  lt() |>
+  lt_header(
     title = "Initial group sequential approximation",
     subtitle = "Integer event counts at analyses"
-  ) |>
-  tab_options(data_row.padding = px(1))
+  )
 ```
-
-| Initial group sequential approximation |                    |          |          |
-|----------------------------------------|--------------------|----------|----------|
-| Integer event counts at analyses       |                    |          |          |
-| Analysis                               | Value              | Efficacy | Futility |
-| IA 1: 46%                              | Z                  | 2.6664   | 0.1028   |
-| Events: 3632                           | p (1-sided)        | 0.0038   | 0.4591   |
-| Events: 31                             | ~HR at bound       | 0.2316   | 0.6708   |
-| Month: 13                              | Spending           | 0.0038   | 0.0153   |
-|                                        | P(Cross) if HR=0.7 | 0.0038   | 0.5409   |
-|                                        | P(Cross) if HR=0.3 | 0.3438   | 0.0153   |
-| IA 2: 71%                              | Z                  | 2.4301   | 0.9679   |
-| Events: 3632                           | p (1-sided)        | 0.0075   | 0.1665   |
-| Events: 48                             | ~HR at bound       | 0.3114   | 0.5070   |
-| Month: 18.1                            | Spending           | 0.0057   | 0.0230   |
-|                                        | P(Cross) if HR=0.7 | 0.0096   | 0.8419   |
-|                                        | P(Cross) if HR=0.3 | 0.6635   | 0.0383   |
-| Final                                  | Z                  | 2.0322   | 2.0322   |
-| Events: 3632                           | p (1-sided)        | 0.0211   | 0.0211   |
-| Events: 68                             | ~HR at bound       | 0.3962   | 0.3962   |
-| Month: 24                              | Spending           | 0.0154   | 0.0617   |
-|                                        | P(Cross) if HR=0.7 | 0.0239   | 0.9761   |
-|                                        | P(Cross) if HR=0.3 | 0.9018   | 0.0982   |
 
 A textual summary for the design is:
 
@@ -292,13 +271,55 @@ xb <- toBinomialExact(x)
 
 ### Combined summary table
 
-We produce a summary table. Code for this is provided in the R markdown
-for this vignette provided with the package. This combines information
-from the time-to-event design for calendar timing of analyses (Time) and
-expected sample size at each analysis (N) along with bounds and
-operating characteristics for the design.
+We produce a summary table with
+[`VEtable()`](https://keaven.github.io/gsDesign/devel/reference/VEtable.md).
+This combines information from the time-to-event design for calendar
+timing of analyses (Time) and expected sample size at each analysis (N)
+along with bounds and operating characteristics for the design. Although
+the function and its `ve` argument use vaccine efficacy terminology, the
+supplied values can represent prevention efficacy for a non-vaccine
+preventive intervention.
 
-[TABLE]
+``` r
+
+VEtable(xb, ve, tteDesign = x) |>
+  lt() |>
+  lt_format(columns = 2, decimals = 1) |>
+  lt_format(columns = c(7:8, 11:16), decimals = 2) |>
+  lt_format(columns = 9:10, decimals = 4) |>
+  lt_spanner(label = "Experimental Cases at Bound", columns = c("Success", "Futility")) |>
+  lt_spanner(label = "Power by Vaccine Efficacy", columns = paste0(ve * 100, "%")) |>
+  lt_spanner(label = "Error Spending", columns = c("alpha", "beta")) |>
+  lt_spanner(label = "Vaccine Efficacy at Bound", columns = c("ve_efficacy", "ve_futility")) |>
+  lt_label(
+    ve_efficacy = "Efficacy",
+    ve_futility = "Futility"
+  ) |>
+  lt_footnote(
+    "Cumulative spending at each analysis",
+    where = "spanner", columns = "Error Spending"
+  ) |>
+  lt_footnote(
+    "Experimental case counts to cross between success and futility counts do not stop trial",
+    where = "spanner", columns = "Experimental Cases at Bound"
+  ) |>
+  lt_footnote(
+    "Exact vaccine efficacy required to cross bound",
+    where = "spanner", columns = "Vaccine Efficacy at Bound"
+  ) |>
+  lt_footnote(
+    "Cumulative power at each analysis by underlying vaccine efficacy",
+    where = "spanner", columns = "Power by Vaccine Efficacy"
+  ) |>
+  lt_footnote(
+    paste0(
+      "Cumulative alpha-spending for efficacy ignores non-binding futility bound; ",
+      "final value < ", xb$alpha, " due to discreteness"
+    ),
+    where = "column", columns = "alpha"
+  ) |>
+  lt_header("Design Bounds and Operating Characteristics")
+```
 
 The initial approximation of bounds for the exact binomial design was
 generated from the time-to-event design as follows. First, we computed
@@ -501,10 +522,216 @@ the expected sample size and calendar timing are no longer needed.
 ebUpdate <- toBinomialExact(xx, observedEvents = c(20, 78))
 ```
 
-We hide the code to produce the table; this is available in package
-vignette code.
+The updated exact design retains the randomization ratio from `xx`, so
+no time-to-event design is needed for this table.
 
-[TABLE]
+``` r
+
+ve_update <- c(.65, .75, .85)
+VEtable(ebUpdate, ve_update) |>
+  lt() |>
+  lt_format(columns = c(5:6, 9:11), decimals = 2) |>
+  lt_format(columns = 7:8, decimals = 4) |>
+  lt_spanner(label = "Cases at Bound", columns = c("Success", "Futility")) |>
+  lt_spanner(label = "Power by VE", columns = paste0(ve_update * 100, "%")) |>
+  lt_spanner(label = "Error Spending", columns = c("alpha", "beta")) |>
+  lt_spanner(label = "VE at Bound", columns = c("ve_efficacy", "ve_futility")) |>
+  lt_label(
+    ve_efficacy = "Efficacy",
+    ve_futility = "Futility"
+  ) |>
+  lt_footnote(
+    "Cumulative spending at each analysis",
+    where = "spanner", columns = "Error Spending"
+  ) |>
+  lt_footnote(
+    "Experimental case counts; counts between success and futility bounds do not stop trial",
+    where = "spanner", columns = "Cases at Bound"
+  ) |>
+  lt_footnote(
+    "Exact vaccine efficacy required to cross bound",
+    where = "spanner", columns = "VE at Bound"
+  ) |>
+  lt_footnote(
+    "Cumulative power at each analysis by underlying vaccine efficacy",
+    where = "spanner", columns = "Power by VE"
+  ) |>
+  lt_footnote(
+    paste0(
+      "Cumulative alpha-spending for efficacy ignores non-binding futility bound; ",
+      "final value < ", ebUpdate$alpha, " due to discreteness"
+    ),
+    where = "column", columns = "alpha"
+  ) |>
+  lt_header(title = "Updated Bounds for Actual Analyses from SPUTNIK trial")
+```
+
+## Analysis of an exact binomial trial
+
+### Exact conditional power
+
+Like
+[`gsCP()`](https://keaven.github.io/gsDesign/devel/reference/gsCP.md)
+for asymptotic group sequential designs,
+[`gsCPBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/gsCPBinomialExact.md)
+conditions on the interim statistic and calculates the probability of
+crossing each future boundary. Here the sufficient interim statistic is
+the cumulative number of experimental-group events among the total
+events. Conditional on that count, future experimental-group event
+increments follow an exact binomial distribution.
+
+For a single interim analysis, suppose that 9 of the first 20 events
+were in the experimental group. This count is within the continuation
+region of 7 to 15 events for the updated design. We calculate
+conditional power under the null VE of 0.3, an intermediate VE of 0.5,
+and the design alternative VE of 0.7:
+
+``` r
+
+exact_cp <- gsCPBinomialExact(
+  ebUpdate,
+  i = 1,
+  x.i = 9,
+  ve = c(.3, .5, .7)
+)
+
+tibble::tibble(
+  VE = exact_cp$efficacy,
+  `Conditional power` = exact_cp$conditional_power,
+  `Conditional futility` = exact_cp$conditional_futility
+) |>
+  lt() |>
+  lt_format(columns = 1:3, decimals = 3) |>
+  lt_header("Exact Conditional Power after 9 of 20 Experimental-Group Events")
+```
+
+The default `binding = TRUE` treats future futility or harm boundaries
+as stopping rules. For a design with non-binding futility,
+`binding = FALSE` instead reports conditional efficacy power when those
+boundaries will not be enforced. The calculation accepts `theta`
+directly for conditional experimental-group event probabilities or `ve`
+for VE or PE assumptions.
+
+Conditional power can also be examined across a range of assumptions
+about future VE or PE. We compare three hypothetical interim outcomes:
+16 experimental-group events, exactly at the futility bound, and 12 and
+9 events, both between the efficacy and futility bounds. Since the first
+outcome reaches the non-binding futility bound, all three curves assume
+that the trial continues by setting `binding = FALSE`.
+
+``` r
+
+future_ve <- seq(0, .9, by = .02)
+interim_outcomes <- c(
+  "Futility bound: 16 of 20" = 16,
+  "Between bounds: 12 of 20" = 12,
+  "Between bounds: 9 of 20" = 9
+)
+
+conditional_power_plot_data <- do.call(
+  rbind,
+  lapply(names(interim_outcomes), function(outcome) {
+    cp <- gsCPBinomialExact(
+      ebUpdate,
+      i = 1,
+      x.i = interim_outcomes[[outcome]],
+      ve = future_ve,
+      binding = FALSE
+    )
+    data.frame(
+      VE = cp$efficacy,
+      conditional_power = cp$conditional_power,
+      outcome = outcome
+    )
+  })
+)
+conditional_power_plot_data$outcome <- factor(
+  conditional_power_plot_data$outcome,
+  levels = names(interim_outcomes)
+)
+
+ggplot2::ggplot(
+  conditional_power_plot_data,
+  ggplot2::aes(x = VE, y = conditional_power, color = outcome)
+) +
+  ggplot2::geom_line(linewidth = 1) +
+  ggplot2::scale_x_continuous(
+    breaks = seq(0, .9, by = .1),
+    limits = c(0, .9)
+  ) +
+  ggplot2::scale_y_continuous(
+    breaks = seq(0, 1, by = .1),
+    limits = c(0, 1),
+    labels = function(z) paste0(round(100 * z), "%")
+  ) +
+  ggplot2::labs(
+    x = "Assumed future VE / PE",
+    y = "Exact conditional power",
+    color = "Interim outcome",
+    title = "Conditional Power by Future VE / PE",
+    caption = "The trial is assumed to continue across the non-binding futility bound."
+  ) +
+  ggplot2::theme_bw() +
+  ggplot2::theme(legend.position = "bottom")
+```
+
+![](VaccineEfficacy_files/figure-html/unnamed-chunk-26-1.svg)
+
+### Exact confidence intervals
+
+At a fixed analysis,
+[`ciBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/ciBinomialExact.md)
+computes a Clopper–Pearson interval (Clopper and Pearson 1934) for the
+conditional probability that an event is in the experimental group and
+transforms it to the VE or PE scale. The transformation is decreasing,
+so the two probability endpoints are reversed. For the 16
+experimental-group events among 78 total events reported above, the
+fixed-look interval is:
+
+``` r
+
+ciBinomialExact(x = 16, n = 78, ratio = ratio) |>
+  lt() |>
+  lt_format(columns = c("estimate", "conf.low", "conf.high"), decimals = 3)
+```
+
+Repeated intervals are obtained by inverting the exact group sequential
+test at each analysis (Jennison and Turnbull 1984; Coe and Tamhane
+1993). As in the corresponding asymptotic construction, a two-sided
+\\1-\alpha\\ interval uses \\\alpha/2\\ in each direction with the same
+spending function, spending times, and count-path ordering. The upper
+direction mirrors experimental and control event counts; it does not use
+the futility boundary. The resulting intervals can be conservative
+because event counts are discrete.
+
+The complete experimental-group event-count path is required. Since the
+first experimental-group count is not reported in this example, the
+following uses 9 events at the first look only to illustrate the
+calculation:
+
+``` r
+
+illustrative_x <- c(9, 16)
+repeated_ci <- repeatedCIBinomialExact(
+  xx, n.I = c(20, 78), x = illustrative_x
+)
+sequential_ci <- sequentialCIBinomialExact(
+  xx, n.I = c(20, 78), x = illustrative_x
+)
+
+rbind(
+  transform(repeated_ci, Interval = "Repeated"),
+  transform(sequential_ci, Interval = "Sequential")
+) |>
+  dplyr::select(Interval, dplyr::everything()) |>
+  lt() |>
+  lt_format(columns = c("estimate", "conf.low", "conf.high"), decimals = 3)
+```
+
+The sequential interval at analysis \\j\\ is the intersection of
+repeated intervals through analysis \\j\\, equivalently the inversion of
+the minimum repeated p-value through that analysis. Thus sequential
+intervals can only narrow as analyses accumulate.
 
 ## Summary
 
@@ -524,6 +751,19 @@ failure rates dropout rates, and trial duration.
 Chan, Ivan SF, and Norman R Bohidar. 1998. “Exact Power and Sample Size
 for Vaccine Efficacy Studies.” *Communications in Statistics-Theory and
 Methods* 27 (6): 1305–22.
+
+Clopper, C. J., and E. S. Pearson. 1934. “The Use of Confidence or
+Fiducial Limits Illustrated in the Case of the Binomial.” *Biometrika*
+26 (4): 404–13. <https://doi.org/10.1093/biomet/26.4.404>.
+
+Coe, Paul R., and Ajit C. Tamhane. 1993. “Small Sample Confidence
+Intervals for the Difference, Ratio and Odds Ratio of Two Success
+Probabilities.” *Controlled Clinical Trials* 14 (4): 270–90.
+<https://doi.org/10.1016/0197-2456(93)90047-H>.
+
+Jennison, Christopher, and Bruce W. Turnbull. 1984. “Repeated Confidence
+Intervals for Group Sequential Clinical Trials.” *Controlled Clinical
+Trials* 5 (1): 33–45. <https://doi.org/10.1016/0197-2456(84)90148-X>.
 
 Jennison, Christopher, and Bruce W. Turnbull. 2000. *Group Sequential
 Methods with Applications to Clinical Trials*. Chapman; Hall/CRC.

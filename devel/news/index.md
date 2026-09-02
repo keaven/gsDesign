@@ -4,6 +4,60 @@
 
 ### New features
 
+- Added exact conditional power, fixed-look Clopper–Pearson, repeated,
+  and sequential confidence intervals for vaccine or prevention
+  efficacy, plus
+  [`VEtable()`](https://keaven.github.io/gsDesign/devel/reference/VEtable.md)
+  summaries for exact binomial spending designs
+  ([\#316](https://github.com/keaven/gsDesign/issues/316)).
+
+### Major changes
+
+- Replaced **gt** with the lightweight **lt** package (\>= 0.3) as the
+  default table-rendering framework throughout gsDesign. The package now
+  re-exports [`lt()`](https://rdrr.io/pkg/lt/man/lt.html), and its
+  table-output workflows use **lt** functions. Package-specific support
+  includes an [`lt()`](https://rdrr.io/pkg/lt/man/lt.html) method for
+  `gsBinomialExactTable` objects.
+  [`as_gt()`](https://keaven.github.io/gsDesign/devel/reference/as_gt.md)
+  remains available for compatibility but is deprecated and requires the
+  suggested **gt** package.
+
+### Documentation
+
+- Updated package vignettes to use **lt** consistently for formatted
+  data-frame and matrix output, with compact row spacing for long tables
+  and no significant changes to the rendered HTML tables.
+
+## gsDesign 3.11.1 (August 2026)
+
+### Testing
+
+- Reduced default test-suite runtime by using smaller stress-test grids,
+  fewer Monte Carlo iterations, and toy exact-binomial p-value event
+  counts. Set `GSDESIGN_RUN_STRESS_TESTS=true` to run the larger
+  stress-test settings.
+
+## gsDesign 3.11.0 (August 2026)
+
+CRAN release: 2026-08-29
+
+### New features
+
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
+  results now have primary class “gsSurvPower” while retaining
+  inheritance from “gsSurv” and “gsDesign”. They also retain evaluated,
+  replayable arguments in `inputs`, enabling downstream packages to
+  identify and reproduce power calculations
+  ([\#313](https://github.com/keaven/gsDesign/issues/313)).
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
+  now aligns its expected analysis-cut grammar with
+  `simtrial::get_analysis_date()`: overall and per-stratum event and
+  enrollment requirements can be combined, `maxCalendarTime` provides an
+  absolute cap, and `spending = "min_planned_actual"` supports
+  reference-design planned-versus-actual spending. Existing unstratified
+  `targetEvents`, `minN`, and relative `maxExtension` behavior is
+  retained ([\#303](https://github.com/keaven/gsDesign/issues/303)).
 - All `gsSurv` objects now include `N`, the cumulative total expected
   enrollment at each analysis. `nSurv` objects retain scalar `n` and
   also return identical scalar `N` as a non-breaking alias
@@ -38,6 +92,24 @@
 
 ### Documentation
 
+- Expanded the main
+  [`gsDesign()`](https://keaven.github.io/gsDesign/devel/reference/gsDesign.md)
+  help discussion to describe binding and non-binding futility plus harm
+  monitoring for `test.type = 7` and `8`
+  ([\#308](https://github.com/keaven/gsDesign/issues/308)).
+- Clarified the two intended uses of
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md),
+  expanded guidance for scenario and combined timing-rule analyses,
+  including mixed-`NA` rules by analysis, added survival workflow
+  routing, and documented that expected-value calculations do not
+  replace simulation of stochastic trial execution
+  ([\#303](https://github.com/keaven/gsDesign/issues/303)).
+- Clarified beta spending in
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
+  scenario analyses, distinguishing design beta from achieved beta and
+  defining `informationRates` as planned information-fraction caps used
+  to derive effective spending time
+  ([\#303](https://github.com/keaven/gsDesign/issues/303)).
 - Expanded the
   [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
   vignette with common timing pitfalls for explicit `minfup`, `targetN`,
@@ -46,9 +118,35 @@
   [\#293](https://github.com/keaven/gsDesign/issues/293),
   [\#295](https://github.com/keaven/gsDesign/issues/295),
   [\#296](https://github.com/keaven/gsDesign/issues/296)).
+- Explained why skipping futility while retaining harm monitoring can
+  recalibrate earlier harm bounds, and documented recommended
+  final-analysis testing schedules using common event-driven
+  survival-design assumptions for all selective-bound examples
+  ([\#306](https://github.com/keaven/gsDesign/issues/306)).
+
+### Testing
+
+- Added
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
+  tests for combined overall and per-stratum timing rules, absolute and
+  relative caps on stratified event waits, and planned-versus-actual
+  spending with mixed cuts and delayed information
+  ([\#303](https://github.com/keaven/gsDesign/issues/303)).
 
 ### Bug fixes
 
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
+  now validates mixed-`NA` timing inputs consistently, rejects missing
+  testing indicators and spending times with informative messages, and
+  detects analyses without an active timing rule or follow-up values
+  without a corresponding enrollment requirement
+  ([\#303](https://github.com/keaven/gsDesign/issues/303)).
+- A matrix supplied to `gsSurvPower(targetEvents = ...)` is now treated
+  as a deprecated alias for `targetEventsPerStratum` and its entries are
+  enforced as per-stratum requirements. Previously, the rows were
+  reduced to overall sums, which did not enforce the documented
+  stratified cut
+  ([\#303](https://github.com/keaven/gsDesign/issues/303)).
 - [`gsSurvPower()`](https://keaven.github.io/gsDesign/devel/reference/gsSurvPower.md)
   now respects an explicitly supplied `minfup` as a final analysis
   timing floor for event-driven designs, so the final analysis is not

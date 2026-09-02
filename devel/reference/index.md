@@ -116,6 +116,18 @@ and
 
 - [`toBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/toBinomialExact.md)
   : Translate survival design bounds to exact binomial bounds
+- [`VEtable()`](https://keaven.github.io/gsDesign/devel/reference/VEtable.md)
+  : Summarize an exact binomial vaccine or prevention efficacy design
+- [`ciBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/ciBinomialExact.md)
+  : Exact confidence intervals for vaccine or prevention efficacy
+- [`repeatedCIBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/repeatedCIBinomialExact.md)
+  : Exact repeated confidence intervals for vaccine or prevention
+  efficacy
+- [`sequentialCIBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/sequentialCIBinomialExact.md)
+  : Exact sequential confidence intervals for vaccine or prevention
+  efficacy
+- [`gsCPBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/gsCPBinomialExact.md)
+  : Exact conditional power for a group sequential binomial design
 - [`repeatedPValueBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/repeatedPValueBinomialExact.md)
   : Exact binomial repeated p-values for a group sequential design
 - [`sequentialPValueBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/sequentialPValueBinomialExact.md)
@@ -224,6 +236,8 @@ For an overview of spending functions, see
 
 - [`as_table()`](https://keaven.github.io/gsDesign/devel/reference/as_table.md)
   : Create a summary table
+- [`lt(`*`<gsBinomialExactTable>`*`)`](https://keaven.github.io/gsDesign/devel/reference/lt-methods.md)
+  : Convert a summary table object to an lt table
 - [`as_gt()`](https://keaven.github.io/gsDesign/devel/reference/as_gt.md)
   : Convert a summary table object to a gt object
 - [`as_rtf()`](https://keaven.github.io/gsDesign/devel/reference/as_rtf.md)

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Translate survival design bounds to exact binomial bounds</h1>
-      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/GitHub/291-293-295-296-gssurvpower-issues/R/toBinomialExact.R" class="external-link"><code>R/toBinomialExact.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/master/R/toBinomialExact.R" class="external-link"><code>R/toBinomialExact.R</code></a></small>
       <div class="d-none name"><code>toBinomialExact.Rd</code></div>
     </div>
 
@@ -103,9 +103,13 @@ unchanged and applies the override only at the last look.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>gsBinomialExact</code>. The returned object also
-  records `test.type`, `alpha`, applicable `astar`, `testLower`, and
-  applicable `testHarm`. For
+    <p>An object with primary class <code>gsBinomialExactSpending</code>,
+  inheriting from <code>gsBinomialExact</code> and <code>gsProbability</code>. In
+  addition to the exact bounds and crossing probabilities, the returned
+  object records `test.type`, `alpha`, `beta`, `ratio`, applicable `astar`,
+  analysis-specific testing indicators, spending times, planned final event
+  count, `maxSpend`, and the evaluated conversion call. The retained
+  randomization ratio can be used by <code><a href="VEtable.html">VEtable</a></code>. For
   `test.type = 6`, the exact object's upper event-count bound represents the
   non-binding lower stopping bound, with its first probability column
   calibrated under the null hypothesis. For `test.type = 8`, `upper`
@@ -141,7 +145,7 @@ where <code>testLower = FALSE</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="gsBinomialExact.html">gsBinomialExact</a></code></p></div>
+    <div class="dont-index"><p><code><a href="gsBinomialExact.html">gsBinomialExact</a></code>, <code><a href="VEtable.html">VEtable</a></code></p></div>
     </div>
 
     <div class="section level2">

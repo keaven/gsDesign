@@ -61,14 +61,20 @@ toBinomialExact(
 
 ## Value
 
-An object of class `gsBinomialExact`. The returned object also records
-\`test.type\`, \`alpha\`, applicable \`astar\`, \`testLower\`, and
-applicable \`testHarm\`. For \`test.type = 6\`, the exact object's upper
-event-count bound represents the non-binding lower stopping bound, with
-its first probability column calibrated under the null hypothesis. For
-\`test.type = 8\`, \`upper\` represents all upper event-count stops,
-while \`futility\` and \`harm\` partition those stops into mutually
-exclusive components.
+An object with primary class `gsBinomialExactSpending`, inheriting from
+`gsBinomialExact` and `gsProbability`. In addition to the exact bounds
+and crossing probabilities, the returned object records \`test.type\`,
+\`alpha\`, \`beta\`, \`ratio\`, applicable \`astar\`, analysis-specific
+testing indicators, spending times, planned final event count,
+\`maxSpend\`, and the evaluated conversion call. The retained
+randomization ratio can be used by
+[`VEtable`](https://keaven.github.io/gsDesign/devel/reference/VEtable.md).
+For \`test.type = 6\`, the exact object's upper event-count bound
+represents the non-binding lower stopping bound, with its first
+probability column calibrated under the null hypothesis. For \`test.type
+= 8\`, \`upper\` represents all upper event-count stops, while
+\`futility\` and \`harm\` partition those stops into mutually exclusive
+components.
 
 ## Details
 
@@ -104,7 +110,8 @@ analyses where `testLower = FALSE`.
 
 ## See also
 
-[`gsBinomialExact`](https://keaven.github.io/gsDesign/devel/reference/gsBinomialExact.md)
+[`gsBinomialExact`](https://keaven.github.io/gsDesign/devel/reference/gsBinomialExact.md),
+[`VEtable`](https://keaven.github.io/gsDesign/devel/reference/VEtable.md)
 
 ## Examples
 

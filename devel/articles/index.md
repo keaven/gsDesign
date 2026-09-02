@@ -26,18 +26,18 @@ trials with time-to-event endpoints using gsDesign.
   gsSurv](https://keaven.github.io/gsDesign/devel/articles/gsSurvBasicExamples.md):
 - [Planning enrollment and follow-up for survival
   designs](https://keaven.github.io/gsDesign/devel/articles/SurvivalEnrollmentPlanning.md):
-- [Power Computation for Group Sequential Survival
-  Designs](https://keaven.github.io/gsDesign/devel/articles/gsSurvPower.md):
-- [Reproducing SAS PROC SEQDESIGN survival designs in
-  gsDesign](https://keaven.github.io/gsDesign/devel/articles/SeqDesignSurvival.md):
-- [Integer sample size and event
-  counts](https://keaven.github.io/gsDesign/devel/articles/toInteger.md):
-- [Futility and harm bounds for overall survival
-  monitoring](https://keaven.github.io/gsDesign/devel/articles/HarmBound.md):
 - [Selective bound testing at interim
   analyses](https://keaven.github.io/gsDesign/devel/articles/SelectiveBoundTesting.md):
+- [Integer sample size and event
+  counts](https://keaven.github.io/gsDesign/devel/articles/toInteger.md):
+- [Power Computation for Group Sequential Survival
+  Designs](https://keaven.github.io/gsDesign/devel/articles/gsSurvPower.md):
+- [Futility and harm bounds for overall survival
+  monitoring](https://keaven.github.io/gsDesign/devel/articles/HarmBound.md):
 - [A cure model calendar-based
   design](https://keaven.github.io/gsDesign/devel/articles/PoissonMixtureModel.md):
+- [Reproducing SAS PROC SEQDESIGN survival designs in
+  gsDesign](https://keaven.github.io/gsDesign/devel/articles/SeqDesignSurvival.md):
 
 ### Exact binomial designs with spending
 

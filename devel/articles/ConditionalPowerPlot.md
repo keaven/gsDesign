@@ -28,23 +28,7 @@ compared to plan (0.3333, 0.6667).
 ``` r
 
 design <- gsSurv(hr = 0.7, lambdaC = log(2) / 12, minfup = 24, T = 36) |> toInteger()
-design |> gsBoundSummary()
-#>     Analysis              Value Efficacy Futility
-#>    IA 1: 33%                  Z   3.0092  -0.2322
-#>       N: 466        p (1-sided)   0.0013   0.5918
-#>  Events: 118       ~HR at bound   0.5746   1.0437
-#>    Month: 12   P(Cross) if HR=1   0.0013   0.4082
-#>              P(Cross) if HR=0.7   0.1427   0.0149
-#>    IA 2: 67%                  Z   2.5484   0.9406
-#>       N: 466        p (1-sided)   0.0054   0.1735
-#>  Events: 235       ~HR at bound   0.7171   0.8845
-#>    Month: 21   P(Cross) if HR=1   0.0062   0.8346
-#>              P(Cross) if HR=0.7   0.5813   0.0436
-#>        Final                  Z   1.9991   1.9991
-#>       N: 466        p (1-sided)   0.0228   0.0228
-#>  Events: 353       ~HR at bound   0.8083   0.8083
-#>    Month: 36   P(Cross) if HR=1   0.0233   0.9767
-#>              P(Cross) if HR=0.7   0.9005   0.0995
+design |> gsBoundSummary() |> lt()
 ```
 
 We also provide a textual summary.
@@ -98,22 +82,10 @@ gsBoundSummary(
     "B-value", "CP", "CP H1", "PP",
     paste0("P(Cross) if HR=", round(c(design$hr0, design$hr), digits = 2))
   )
-)
+) |>
+  lt()
 #> Warning: gsBoundSummary: hr0 is not present; using hr0 =
 #> 1 for HR at bound calculations.
-#>     Analysis        Value Efficacy Futility
-#>    IA 1: 33%            Z   3.0139  -0.2451
-#>  Events: 117  p (1-sided)   0.0013   0.5968
-#>              ~HR at bound   0.5728   1.0464
-#>                  Spending   0.0013   0.0147
-#>    IA 2: 67%            Z   2.5478   0.9413
-#>  Events: 235  p (1-sided)   0.0054   0.1733
-#>              ~HR at bound   0.7172   0.8844
-#>                  Spending   0.0049   0.0289
-#>        Final            Z   1.9991   1.9991
-#>  Events: 353  p (1-sided)   0.0228   0.0228
-#>              ~HR at bound   0.8083   0.8083
-#>                  Spending   0.0188   0.0564
 ```
 
 ## Testing and conditional power

@@ -195,6 +195,18 @@ and
 
 - [`toBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/toBinomialExact.md)
   : Translate survival design bounds to exact binomial bounds
+- [`VEtable()`](https://keaven.github.io/gsDesign/devel/reference/VEtable.md)
+  : Summarize an exact binomial vaccine or prevention efficacy design
+- [`ciBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/ciBinomialExact.md)
+  : Exact confidence intervals for vaccine or prevention efficacy
+- [`repeatedCIBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/repeatedCIBinomialExact.md)
+  : Exact repeated confidence intervals for vaccine or prevention
+  efficacy
+- [`sequentialCIBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/sequentialCIBinomialExact.md)
+  : Exact sequential confidence intervals for vaccine or prevention
+  efficacy
+- [`gsCPBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/gsCPBinomialExact.md)
+  : Exact conditional power for a group sequential binomial design
 - [`repeatedPValueBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/repeatedPValueBinomialExact.md)
   : Exact binomial repeated p-values for a group sequential design
 - [`sequentialPValueBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/sequentialPValueBinomialExact.md)
@@ -303,6 +315,8 @@ For an overview of spending functions, see
 
 - [`as_table()`](https://keaven.github.io/gsDesign/devel/reference/as_table.md)
   : Create a summary table
+- [`lt(`*`<gsBinomialExactTable>`*`)`](https://keaven.github.io/gsDesign/devel/reference/lt-methods.md)
+  : Convert a summary table object to an lt table
 - [`as_gt()`](https://keaven.github.io/gsDesign/devel/reference/as_gt.md)
   : Convert a summary table object to a gt object
 - [`as_rtf()`](https://keaven.github.io/gsDesign/devel/reference/as_rtf.md)
@@ -336,18 +350,18 @@ trials with time-to-event endpoints using gsDesign.
   gsSurv](https://keaven.github.io/gsDesign/devel/articles/gsSurvBasicExamples.md):
 - [Planning enrollment and follow-up for survival
   designs](https://keaven.github.io/gsDesign/devel/articles/SurvivalEnrollmentPlanning.md):
-- [Power Computation for Group Sequential Survival
-  Designs](https://keaven.github.io/gsDesign/devel/articles/gsSurvPower.md):
-- [Reproducing SAS PROC SEQDESIGN survival designs in
-  gsDesign](https://keaven.github.io/gsDesign/devel/articles/SeqDesignSurvival.md):
-- [Integer sample size and event
-  counts](https://keaven.github.io/gsDesign/devel/articles/toInteger.md):
-- [Futility and harm bounds for overall survival
-  monitoring](https://keaven.github.io/gsDesign/devel/articles/HarmBound.md):
 - [Selective bound testing at interim
   analyses](https://keaven.github.io/gsDesign/devel/articles/SelectiveBoundTesting.md):
+- [Integer sample size and event
+  counts](https://keaven.github.io/gsDesign/devel/articles/toInteger.md):
+- [Power Computation for Group Sequential Survival
+  Designs](https://keaven.github.io/gsDesign/devel/articles/gsSurvPower.md):
+- [Futility and harm bounds for overall survival
+  monitoring](https://keaven.github.io/gsDesign/devel/articles/HarmBound.md):
 - [A cure model calendar-based
   design](https://keaven.github.io/gsDesign/devel/articles/PoissonMixtureModel.md):
+- [Reproducing SAS PROC SEQDESIGN survival designs in
+  gsDesign](https://keaven.github.io/gsDesign/devel/articles/SeqDesignSurvival.md):
 
 ### Exact binomial designs with spending
 

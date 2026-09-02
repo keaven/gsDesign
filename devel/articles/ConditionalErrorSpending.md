@@ -36,7 +36,7 @@ results to other commonly used spending functions.
 library(gsDesign)
 library(tibble)
 library(dplyr)
-library(gt)
+library(lt)
 ```
 
 ### Method 1
@@ -241,25 +241,24 @@ xx <- rbind(
   transpose_df(ce(x1.8)) |> mutate(gamma = "gamma = 0.8")
 )
 xx |>
-  gt(groupname_col = "gamma") |>
-  tab_spanner(label = "Analysis", columns = 2:5) |>
-  fmt_number(columns = 2:5, decimals = 3) |>
-  tab_options(data_row.padding = px(1)) |>
-  tab_header(
+  lt() |>
+  lt_group(~ gamma, sep = TRUE, sort = FALSE) |>
+  lt_spanner(label = "Analysis", columns = 2:5) |>
+  lt_format(columns = 2:5, decimals = 3) |>
+  lt_label(rowname = "") |>
+  lt_header(
     title = "Xi-Gallo, Method 1 Spending Function",
     subtitle = "Conditional Error Spending Functions"
   ) |>
-  tab_footnote(
-    footnote = "Conditional Error not accounting for future interim bounds.",
-    locations = cells_stub(rows = seq(2, 20, 3))
+  lt_footnote(
+    "Conditional Error not accounting for future interim bounds.",
+    where = "body", columns = "rowname", rows = seq(2, 20, 3)
   ) |>
-  tab_footnote(
-    footnote = "CE = Conditional Error accounting for all analyses.",
-    locations = cells_stub(rows = seq(3, 21, 3))
+  lt_footnote(
+    "CE = Conditional Error accounting for all analyses.",
+    where = "body", columns = "rowname", rows = seq(3, 21, 3)
   )
 ```
-
-[TABLE]
 
 ### Method 2
 
@@ -286,25 +285,24 @@ xx <- rbind(
   transpose_df(ce(x1.8)) |> mutate(gamma = "gamma = 0.8")
 )
 xx |>
-  gt(groupname_col = "gamma") |>
-  tab_spanner(label = "Analysis", columns = 2:5) |>
-  fmt_number(columns = 2:5, decimals = 3) |>
-  tab_options(data_row.padding = px(1)) |>
-  tab_footnote(
-    footnote = "Conditional Error not accounting for future interim bounds.",
-    locations = cells_stub(rows = seq(2, 20, 3))
+  lt() |>
+  lt_group(~ gamma, sep = TRUE, sort = FALSE) |>
+  lt_spanner(label = "Analysis", columns = 2:5) |>
+  lt_format(columns = 2:5, decimals = 3) |>
+  lt_label(rowname = "") |>
+  lt_footnote(
+    "Conditional Error not accounting for future interim bounds.",
+    where = "body", columns = "rowname", rows = seq(2, 20, 3)
   ) |>
-  tab_footnote(
-    footnote = "CE = Conditional Error accounting for all analyses.",
-    locations = cells_stub(rows = seq(3, 21, 3))
+  lt_footnote(
+    "CE = Conditional Error accounting for all analyses.",
+    where = "body", columns = "rowname", rows = seq(3, 21, 3)
   ) |>
-  tab_header(
+  lt_header(
     title = "Xi-Gallo, Method 2 Spending Function",
     subtitle = "Conditional Error Spending Functions"
   )
 ```
-
-[TABLE]
 
 ### Method 3
 
@@ -350,25 +348,24 @@ xx <- rbind(
   transpose_df(ce(x3.05)) |> mutate(gamma = "gamma = 0.05 ")
 )
 xx |>
-  gt(groupname_col = "gamma") |>
-  tab_spanner(label = "Analysis", columns = 2:5) |>
-  fmt_number(columns = 2:5, decimals = 3) |>
-  tab_options(data_row.padding = px(1)) |>
-  tab_footnote(
-    footnote = "Conditional Error not accounting for future interim bounds.",
-    locations = cells_stub(rows = seq(2, 11, 3))
+  lt() |>
+  lt_group(~ gamma, sep = TRUE, sort = FALSE) |>
+  lt_spanner(label = "Analysis", columns = 2:5) |>
+  lt_format(columns = 2:5, decimals = 3) |>
+  lt_label(rowname = "") |>
+  lt_footnote(
+    "Conditional Error not accounting for future interim bounds.",
+    where = "body", columns = "rowname", rows = seq(2, 11, 3)
   ) |>
-  tab_footnote(
-    footnote = "CE = Conditional Error accounting for all analyses.",
-    locations = cells_stub(rows = seq(3, 12, 3))
+  lt_footnote(
+    "CE = Conditional Error accounting for all analyses.",
+    where = "body", columns = "rowname", rows = seq(3, 12, 3)
   ) |>
-  tab_header(
+  lt_header(
     title = "Xi-Gallo, Method 3 Spending Function",
     subtitle = "Conditional Error Spending Functions"
   )
 ```
-
-[TABLE]
 
 ## Summary
 
