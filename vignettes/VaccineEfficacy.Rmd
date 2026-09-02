@@ -33,10 +33,16 @@ library(lt)
 ## Introduction
 
 This article explores a method of approximating a design using the exact binomial method of @ChanBohidar by a time-to-event design using the method of @LachinFoulkes.
+Vaccine efficacy (VE) is also termed prevention efficacy (PE) when the
+intervention is a preventive compound rather than a vaccine. The estimand and
+methods presented here are the same in either setting. We use VE throughout
+because the motivating example is a vaccine trial, but VE can be read as PE
+for other preventive interventions.
 This allows use of spending functions to derive boundaries for the exact method.
 The time-to-event design can not only be used to set boundaries for the @ChanBohidar method, but to allow specification of enrollment duration and study duration to determine enrollment rates and sample size required.
 This vignette also illustrates the concept of super-superiority often used in prevention studies.
-Finally, since this procedure is new as of November, 2023 we suggest checks and potential revisions to spending function choices to optimize design boundaries.
+We recommend checking the resulting boundaries and, when appropriate,
+revising the spending function choices to improve them.
 For an extension to annual seasonal monitoring with blinded information-adaptive enrollment, see `vignette("MultiSeasonRareEvents", package = "gsDesign")`.
 
 ## Parameterization
@@ -47,11 +53,13 @@ This could apply to a vaccine study or other prevention study with a relatively 
 ### Exact binomial approach
 
 Paralleling the notation of @ChanBohidar, we assume $N_C, P_C$ to be binomial sample size and probability of an event for each participant assigned to control; for the experimental treatment group, these are labeled $N_E, P_E$.
-Vaccine efficacy is defined as
+Vaccine efficacy, or prevention efficacy for a non-vaccine intervention, is
+defined as
 
 $$\pi = 1 - P_E/P_C.$$
 
-The parameter $\pi$ is often labeled as VE for vaccine efficacy.
+The parameter $\pi$ is often labeled VE for vaccine efficacy or PE for
+prevention efficacy.
 Taking into account the randomization ratio $r$ (experimental / control) the approximate probability that any given event is in the experimental group is
 
 $$
@@ -163,6 +171,12 @@ x <- gsSurv(
 )
 ```
 
+The `gsSurv()` design need not be converted to an exact binomial design. If
+the planned analysis uses a log-rank test or Poisson regression, the group
+sequential boundaries from the asymptotic design can be used directly. The
+remainder of this vignette performs the conversion for a design whose planned
+analysis uses the exact conditional binomial method.
+
 Now we convert this to a design with integer event counts at analyses.
 This is achieved by rounding event counts down and rounding total sample size to an integer allocation.
 This will result in a slight change in event fractions at interim analyses as well as a slight change from the targeted 90% power.
@@ -217,46 +231,14 @@ xb <- toBinomialExact(x)
 
 ### Combined summary table
 
-We produce a summary table. Code for this is provided in the R markdown for this vignette provided with the package.
+We produce a summary table with `VEtable()`.
 This combines information from the time-to-event design for calendar timing of analyses (Time) and expected sample size at each analysis (N) along with bounds and operating characteristics for the design.
+Although the function and its `ve` argument use vaccine efficacy terminology,
+the supplied values can represent prevention efficacy for a non-vaccine
+preventive intervention.
 
-```{r, echo = FALSE}
-# Function to print summary table for VE design
-veTable <- function(xbDesign, tteDesign, ve) {
-  # Analysis, N, Time, Total Cases, Success(Cases, VE, VE lower CI, Spend), Futility (Cases, VE, Spend), Type I Error, Power table
-  ratio <- tteDesign$ratio
-  prob_experimental <- ratio / (ratio + 1 / (1 - ve))
-  power_table <- gsBinomialExact(
-    k = xbDesign$k, theta = prob_experimental,
-    n.I = xbDesign$n.I, a = xbDesign$lower$bound,
-    b = xbDesign$upper$bound
-  )$lower$prob
-  # Cumulative sum within rows
-  power_table <- apply(power_table, 2, cumsum)
-  colnames(power_table) <- paste(ve * 100, "%", sep = "")
-  out_tab <- tibble::tibble(
-    Analysis = 1:tteDesign$k,
-    Time = tteDesign$T,
-    N = as.vector(round(tteDesign$eNC + tteDesign$eNE)),
-    Cases = xbDesign$n.I,
-    Success = xb$lower$bound,
-    Futility = xb$upper$bound,
-    ve_efficacy = 1 - 1 / (ratio * (xbDesign$n.I / xbDesign$lower$bound - 1)), # Efficacy bound
-    ve_futility = 1 - 1 / (ratio * (xbDesign$n.I / xbDesign$upper$bound - 1)), # Futility bound
-    alpha = as.vector(cumsum(
-      gsBinomialExact(
-        k = k, theta = xbDesign$theta[1], n.I = xbDesign$n.I,
-        a = xbDesign$lower$bound, b = xbDesign$n.I + 1
-      )$lower$prob
-    )),
-    beta = as.vector(cumsum(xbDesign$upper$prob[, 2]))
-  )
-  out_tab <- cbind(out_tab, power_table)
-}
-```
-
-```{r, echo=FALSE}
-veTable(xb, x, ve) |>
+```{r}
+VEtable(xb, ve, tteDesign = x) |>
   lt() |>
   lt_format(columns = 2, decimals = 1) |>
   lt_format(columns = c(7:8, 11:16), decimals = 2) |>
@@ -286,7 +268,10 @@ veTable(xb, x, ve) |>
     where = "spanner", columns = "Power by Vaccine Efficacy"
   ) |>
   lt_footnote(
-    "alpha-spending for efficacy ignores non-binding futility bound",
+    paste0(
+      "Cumulative alpha-spending for efficacy ignores non-binding futility bound; ",
+      "final value < ", xb$alpha, " due to discreteness"
+    ),
     where = "column", columns = "alpha"
   ) |>
   lt_header("Design Bounds and Operating Characteristics")
@@ -402,42 +387,17 @@ Note that for this table, the expected sample size and calendar timing are no lo
 ebUpdate <- toBinomialExact(xx, observedEvents = c(20, 78))
 ```
 
-We hide the code to produce the table; this is available in package vignette code.
+The updated exact design retains the randomization ratio from `xx`, so no
+time-to-event design is needed for this table.
 
-```{r, echo = FALSE}
-  ve <- c(.65, .75, .85)
-  # Analysis, Total Cases, Success(Cases, VE, VE lower CI, Spend), Futility (Cases, VE, Spend), Type I Error, Power table
-  ratio <- xx$ratio
-  prob_experimental <- ratio / (ratio + 1 / (1 - ve))
-  power_table <- gsBinomialExact(
-    k = ebUpdate$k, theta = prob_experimental,
-    n.I = ebUpdate$n.I, a = ebUpdate$lower$bound,
-    b = ebUpdate$upper$bound
-  )$lower$prob
-  # Cumulative sum within rows
-  power_table <- apply(power_table, 2, cumsum)
-  colnames(power_table) <- paste(ve * 100, "%", sep = "")
-  out_tab <- tibble::tibble(
-    Analysis = 1:ebUpdate$k,
-    Cases = ebUpdate$n.I,
-    Success = ebUpdate$lower$bound,
-    Futility = ebUpdate$upper$bound,
-    ve_efficacy = 1 - 1 / (ratio * (ebUpdate$n.I / ebUpdate$lower$bound - 1)), # Efficacy bound
-    ve_futility = 1 - 1 / (ratio * (ebUpdate$n.I / ebUpdate$upper$bound - 1)), # Futility bound
-    alpha = as.vector(cumsum(
-      gsBinomialExact(
-        k = ebUpdate$k, theta = ebUpdate$theta[1], n.I = ebUpdate$n.I,
-        a = ebUpdate$lower$bound, b = ebUpdate$n.I + 1
-      )$lower$prob
-    )),
-    beta = as.vector(cumsum(ebUpdate$upper$prob[, 2]))
-  )
-  out_tab <- cbind(out_tab, power_table)
-  out_tab |> lt() |>
+```{r}
+ve_update <- c(.65, .75, .85)
+VEtable(ebUpdate, ve_update) |>
+  lt() |>
   lt_format(columns = c(5:6, 9:11), decimals = 2) |>
   lt_format(columns = 7:8, decimals = 4) |>
   lt_spanner(label = "Cases at Bound", columns = c("Success", "Futility")) |>
-  lt_spanner(label = "Power by VE", columns = paste0(ve * 100, "%")) |>
+  lt_spanner(label = "Power by VE", columns = paste0(ve_update * 100, "%")) |>
   lt_spanner(label = "Error Spending", columns = c("alpha", "beta")) |>
   lt_spanner(label = "VE at Bound", columns = c("ve_efficacy", "ve_futility")) |>
   lt_label(
@@ -461,11 +421,168 @@ We hide the code to produce the table; this is available in package vignette cod
     where = "spanner", columns = "Power by VE"
   ) |>
   lt_footnote(
-    "Efficacy spending ignores non-binding futility bound",
+    paste0(
+      "Cumulative alpha-spending for efficacy ignores non-binding futility bound; ",
+      "final value < ", ebUpdate$alpha, " due to discreteness"
+    ),
     where = "column", columns = "alpha"
   ) |>
   lt_header(title = "Updated Bounds for Actual Analyses from SPUTNIK trial")
 ```
+
+## Analysis of an exact binomial trial
+
+### Exact conditional power
+
+Like `gsCP()` for asymptotic group sequential designs,
+`gsCPBinomialExact()` conditions on the interim statistic and calculates the
+probability of crossing each future boundary. Here the sufficient interim
+statistic is the cumulative number of experimental-group events among the
+total events. Conditional on that count, future experimental-group event
+increments follow an exact binomial distribution.
+
+For a single interim analysis, suppose that 9 of the first 20 events were in
+the experimental group. This count is within the continuation region of 7 to
+15 events for the updated design. We calculate conditional power under the
+null VE of 0.3, an intermediate VE of 0.5, and the design alternative VE of
+0.7:
+
+```{r}
+exact_cp <- gsCPBinomialExact(
+  ebUpdate,
+  i = 1,
+  x.i = 9,
+  ve = c(.3, .5, .7)
+)
+
+tibble::tibble(
+  VE = exact_cp$efficacy,
+  `Conditional power` = exact_cp$conditional_power,
+  `Conditional futility` = exact_cp$conditional_futility
+) |>
+  lt() |>
+  lt_format(columns = 1:3, decimals = 3) |>
+  lt_header("Exact Conditional Power after 9 of 20 Experimental-Group Events")
+```
+
+The default `binding = TRUE` treats future futility or harm boundaries as
+stopping rules. For a design with non-binding futility,
+`binding = FALSE` instead reports conditional efficacy power when those
+boundaries will not be enforced. The calculation accepts `theta` directly for
+conditional experimental-group event probabilities or `ve` for VE or PE
+assumptions.
+
+Conditional power can also be examined across a range of assumptions about
+future VE or PE. We compare three hypothetical interim outcomes: 16
+experimental-group events, exactly at the futility bound, and 12 and 9 events,
+both between the efficacy and futility bounds. Since the first outcome reaches
+the non-binding futility bound, all three curves assume that the trial
+continues by setting `binding = FALSE`.
+
+```{r}
+future_ve <- seq(0, .9, by = .02)
+interim_outcomes <- c(
+  "Futility bound: 16 of 20" = 16,
+  "Between bounds: 12 of 20" = 12,
+  "Between bounds: 9 of 20" = 9
+)
+
+conditional_power_plot_data <- do.call(
+  rbind,
+  lapply(names(interim_outcomes), function(outcome) {
+    cp <- gsCPBinomialExact(
+      ebUpdate,
+      i = 1,
+      x.i = interim_outcomes[[outcome]],
+      ve = future_ve,
+      binding = FALSE
+    )
+    data.frame(
+      VE = cp$efficacy,
+      conditional_power = cp$conditional_power,
+      outcome = outcome
+    )
+  })
+)
+conditional_power_plot_data$outcome <- factor(
+  conditional_power_plot_data$outcome,
+  levels = names(interim_outcomes)
+)
+
+ggplot2::ggplot(
+  conditional_power_plot_data,
+  ggplot2::aes(x = VE, y = conditional_power, color = outcome)
+) +
+  ggplot2::geom_line(linewidth = 1) +
+  ggplot2::scale_x_continuous(
+    breaks = seq(0, .9, by = .1),
+    limits = c(0, .9)
+  ) +
+  ggplot2::scale_y_continuous(
+    breaks = seq(0, 1, by = .1),
+    limits = c(0, 1),
+    labels = function(z) paste0(round(100 * z), "%")
+  ) +
+  ggplot2::labs(
+    x = "Assumed future VE / PE",
+    y = "Exact conditional power",
+    color = "Interim outcome",
+    title = "Conditional Power by Future VE / PE",
+    caption = "The trial is assumed to continue across the non-binding futility bound."
+  ) +
+  ggplot2::theme_bw() +
+  ggplot2::theme(legend.position = "bottom")
+```
+
+### Exact confidence intervals
+
+At a fixed analysis, `ciBinomialExact()` computes a Clopper--Pearson interval
+[@ClopperPearson1934]
+for the conditional probability that an event is in the experimental group
+and transforms it to the VE or PE scale. The transformation is decreasing, so
+the two probability endpoints are reversed. For the 16 experimental-group
+events among 78 total events reported above, the fixed-look interval is:
+
+```{r}
+ciBinomialExact(x = 16, n = 78, ratio = ratio) |>
+  lt() |>
+  lt_format(columns = c("estimate", "conf.low", "conf.high"), decimals = 3)
+```
+
+Repeated intervals are obtained by inverting the exact group sequential test
+at each analysis [@JennisonTurnbull1984; @CoeTamhane1993]. As in the
+corresponding asymptotic construction, a two-sided $1-\alpha$ interval uses
+$\alpha/2$ in each direction with the same spending function, spending times,
+and count-path ordering. The upper direction mirrors experimental and control
+event counts; it does not use the futility boundary. The resulting intervals
+can be conservative because event counts are discrete.
+
+The complete experimental-group event-count path is required. Since the first
+experimental-group count is not reported in this example, the following uses
+9 events at the first look only to illustrate the calculation:
+
+```{r}
+illustrative_x <- c(9, 16)
+repeated_ci <- repeatedCIBinomialExact(
+  xx, n.I = c(20, 78), x = illustrative_x
+)
+sequential_ci <- sequentialCIBinomialExact(
+  xx, n.I = c(20, 78), x = illustrative_x
+)
+
+rbind(
+  transform(repeated_ci, Interval = "Repeated"),
+  transform(sequential_ci, Interval = "Sequential")
+) |>
+  dplyr::select(Interval, dplyr::everything()) |>
+  lt() |>
+  lt_format(columns = c("estimate", "conf.low", "conf.high"), decimals = 3)
+```
+
+The sequential interval at analysis $j$ is the intersection of repeated
+intervals through analysis $j$, equivalently the inversion of the minimum
+repeated p-value through that analysis. Thus sequential intervals can only
+narrow as analyses accumulate.
 
 ## Summary
 

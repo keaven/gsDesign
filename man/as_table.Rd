@@ -33,9 +33,11 @@ b_power <- gsBinomialExact(
   k = length(b$n.I), theta = seq(.1, .45, .05), n.I = b$n.I,
   a = b$lower$bound, b = b$upper$bound
 )
-b_power |>
-  as_table() |>
-  lt()
+if (interactive()) {
+  b_power |>
+    as_table() |>
+    lt()
+}
 }
 \seealso{
 \code{vignette("binomialSPRTExample")}

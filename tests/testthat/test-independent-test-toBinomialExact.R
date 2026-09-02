@@ -80,10 +80,10 @@ test_that("toBinomialExact validates inputs", {
 })
 
 test_that("toBinomialExact documents its test.type support matrix", {
-  expect_s3_class(toBinomialExact(surv_design(test.type = 1)), "gsBinomialExact")
-  expect_s3_class(toBinomialExact(surv_design(test.type = 4)), "gsBinomialExact")
-  expect_s3_class(toBinomialExact(surv_design(test.type = 6)), "gsBinomialExact")
-  expect_s3_class(toBinomialExact(surv_design(test.type = 8)), "gsBinomialExact")
+  expect_s3_class(toBinomialExact(surv_design(test.type = 1)), "gsBinomialExactSpending")
+  expect_s3_class(toBinomialExact(surv_design(test.type = 4)), "gsBinomialExactSpending")
+  expect_s3_class(toBinomialExact(surv_design(test.type = 6)), "gsBinomialExactSpending")
+  expect_s3_class(toBinomialExact(surv_design(test.type = 8)), "gsBinomialExactSpending")
 
   expected_reason <- c(
     `2` = "symmetric two-sided boundaries",
@@ -98,6 +98,34 @@ test_that("toBinomialExact documents its test.type support matrix", {
       label = paste("test.type", test_type)
     )
   }
+})
+
+test_that("toBinomialExact retains spending design metadata", {
+  design <- surv_design(test.type = 4)
+  result <- toBinomialExact(
+    design,
+    observedEvents = c(20, 55, 75),
+    usTime = c(.25, .65, 1),
+    lsTime = c(.2, .6, 1),
+    maxSpend = TRUE
+  )
+
+  expect_s3_class(result, "gsBinomialExactSpending")
+  expect_s3_class(result, "gsBinomialExact")
+  expect_identical(
+    class(result),
+    c("gsBinomialExactSpending", "gsBinomialExact", "gsProbability")
+  )
+  expect_equal(result$alpha, design$alpha)
+  expect_equal(result$beta, design$beta)
+  expect_equal(result$ratio, design$ratio)
+  expect_equal(result$testUpper, design$testUpper)
+  expect_equal(result$testLower, design$testLower)
+  expect_equal(result$usTime, c(.25, .65, 1))
+  expect_equal(result$lsTime, c(.2, .6, 1))
+  expect_equal(result$maxn.IPlan, design$maxn.IPlan)
+  expect_true(result$maxSpend)
+  expect_identical(result$call[[1]], quote(toBinomialExact))
 })
 
 test_that("toBinomialExact partitions test.type 8 futility and harm stops", {
