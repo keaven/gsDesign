@@ -1,6 +1,8 @@
 ---
 title: "A cure model calendar-based design"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    css: vignette.css
 bibliography: gsDesign.bib
 vignette: >
   %\VignetteIndexEntry{A cure model calendar-based design}
@@ -26,7 +28,7 @@ library(gsDesign)
 library(dplyr)
 library(tibble)
 library(ggplot2)
-library(gt)
+library(lt)
 ```
 
 ## Introduction
@@ -335,8 +337,8 @@ design_calendar <-
   )
 design_calendar |>
   gsBoundSummary(exclude = c("B-value", "CP", "CP H1", "PP")) |>
-  gt() |>
-  tab_header(
+  lt() |>
+  lt_header(
     title = "Calendar-Based Design",
     subtitle = "Calendar Spending"
   )

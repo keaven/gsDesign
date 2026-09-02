@@ -1,6 +1,8 @@
 ---
 title: "gsDesign package overview"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    css: vignette.css
 bibliography: gsDesign.bib
 nocite: |
   @JTBook, @PLWBook
@@ -62,10 +64,11 @@ $\alpha$ = 0.025, one-sided:
 
 ```{r}
 library(gsDesign)
+library(lt)
 
 x <- gsDesign(n.fix = 200)
 plot(x)
-gsBoundSummary(x)
+gsBoundSummary(x) |> lt()
 ```
 
 ## References

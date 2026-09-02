@@ -1,6 +1,8 @@
 ---
 title: "Two-sample normal sample size"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    css: vignette.css
 bibliography: gsDesign.bib
 vignette: >
   %\VignetteIndexEntry{Two-sample normal sample size}
@@ -27,6 +29,7 @@ knitr::opts_chunk$set(
 library(gsDesign)
 library(tidyr)
 library(knitr)
+library(lt)
 ```
 
 Limited support is provided for 2-sample design with a normally distributed random variable as the outcome.
@@ -184,7 +187,7 @@ d <- gsDesign(
 )
 d |>
   gsBoundSummary(deltaname = "Mean difference") |>
-  kable(row.names = FALSE)
+  lt()
 ```
 
 A textual summary of the design is given by:
@@ -202,7 +205,7 @@ gsDesign(
   delta1 = 0.8
 ) |>
   gsBoundSummary(deltaname = "Mean difference") |>
-  kable(row.names = FALSE)
+  lt()
 ```
 
 We leave it to the reader to verify the properties of the above design using simulation as in the fixed design example.

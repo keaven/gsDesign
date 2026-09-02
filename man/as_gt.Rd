@@ -12,7 +12,7 @@ as_gt(x, ...)
   ...,
   title = "Operating Characteristics for the Truncated SPRT Design",
   subtitle = "Assumes trial evaluated sequentially after each response",
-  theta_label = html("Underlying<br>response rate"),
+  theta_label = gt::html("Underlying<br>response rate"),
   bound_label = c("Futility bound", "Efficacy bound"),
   prob_decimals = 2,
   en_decimals = 1,
@@ -41,38 +41,17 @@ observations when bound is crossed or when trial ends without crossing.}
 }
 \value{
 A \code{gt_tbl} object that may be extended by overloaded versions of
-  \code{\link{as_gt}}.
+  \code{as_gt()}.
 }
 \description{
-Convert a summary table object created with \code{\link{as_table}}
-to a \code{gt_tbl} object; currently only implemented for
-\code{\link{gsBinomialExact}}.
-}
-\details{
-Currently only implemented for \code{\link{gsBinomialExact}} objects.
-Creates a table to summarize an object.
-For \code{\link{gsBinomialExact}}, this summarized operating characteristics
-across a range of effect sizes.
-}
-\examples{
-safety_design <- binomialSPRT(
-  p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 4, maxn = 75
-)
-safety_power <- gsBinomialExact(
-  k = length(safety_design$n.I),
-  theta = seq(.02, .16, .02),
-  n.I = safety_design$n.I,
-  a = safety_design$lower$bound,
-  b = safety_design$upper$bound
-)
-safety_power |>
-  as_table() |>
-  as_gt(
-    theta_label = gt::html("Underlying<br>AE rate"),
-    prob_decimals = 3,
-    bound_label = c("low rate", "high rate")
-  )
+\code{as_gt()} is deprecated in favor of \code{\link[lt]{lt}()}, which
+produces a lightweight HTML table without the heavy \pkg{gt} dependency.
+\code{as_gt()} is kept for one release so existing code that customizes the
+output with \pkg{gt} functions keeps working; it still returns a
+\code{gt_tbl} object and requires \pkg{gt} to be installed. New code should
+use \code{\link[lt]{lt}()}; see \code{\link{lt-methods}} for the available
+arguments, which mirror those of \code{as_gt()}.
 }
 \seealso{
-\code{vignette("binomialSPRTExample")}
+\code{\link[lt]{lt}()}, \code{\link{lt-methods}}
 }

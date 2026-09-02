@@ -1,7 +1,9 @@
 ---
 title: "Futility and harm bounds for overall survival monitoring"
 author: "Keaven Anderson"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    css: vignette.css
 bibliography: gsDesign.bib
 vignette: >
   %\VignetteIndexEntry{Futility and harm bounds for overall survival monitoring}
@@ -29,6 +31,7 @@ options(width = 68)
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(gsDesign)
 library(knitr)
+library(lt)
 ```
 
 When clinical trials include overall survival (OS) as a secondary or exploratory endpoint, 
@@ -151,14 +154,14 @@ but rather a signal that the trial may be unlikely to succeed if it continues.
 Crossing the harm bound is a stronger indication that the treatment may be harmful, and the trial should be at least paused with a recommendation to review the safety and other endpoint data.
 
 ```{r}
-gsBoundSummary(x8)
+gsBoundSummary(x8) |> lt()
 ```
 
 Conditional power (CP, CP H1) and predictive power (PP) can also be included in the summary.
 Below we show the full table with all statistics, including conditional and predictive power at each boundary:
 
 ```{r}
-gsBoundSummary(x8, exclude = c())
+gsBoundSummary(x8, exclude = c()) |> lt()
 ```
 
 ### Interpreting the boundaries
@@ -175,7 +178,9 @@ bounds <- data.frame(
   Futility = round(x8$lower$bound, 2),
   Efficacy = round(x8$upper$bound, 2)
 )
-kable(bounds, caption = "Z-value boundaries at each analysis")
+bounds |>
+  lt() |>
+  lt_header("Z-value boundaries at each analysis")
 ```
 
 **Decision rules at an analysis where all three bounds are active:**
@@ -210,7 +215,10 @@ probs <- data.frame(
   ),
   check.names = FALSE
 )
-kable(probs, digits = 4, caption = "Cumulative boundary crossing probabilities")
+probs |>
+  lt() |>
+  lt_format(columns = 2:7, decimals = 4) |>
+  lt_header("Cumulative boundary crossing probabilities")
 ```
 
 Under $H_0$, the cumulative probability of crossing the harm bound across all analyses is approximately `r round(sum(x8$harm$prob[, 1]), 4)`, reflecting the spending allocated to the harm boundary.
@@ -321,14 +329,16 @@ comparison <- data.frame(
   ),
   check.names = FALSE
 )
-kable(comparison, caption = "Comparison of binding vs. non-binding Z-value boundaries")
+comparison |>
+  lt() |>
+  lt_header("Comparison of binding vs. non-binding Z-value boundaries")
 ```
 
 Note that the efficacy bounds for `test.type = 7` (binding) are slightly lower (easier to cross) than for `test.type = 8` (non-binding).
 The maximum number of events for `test.type = 7` (`r ceiling(max(x7$n.I))`) is also slightly smaller than for `test.type = 8` (`r ceiling(max(x8$n.I))`), reflecting the assumption that the trial will stop at the lower bounds.
 
 ```{r}
-gsBoundSummary(x7)
+gsBoundSummary(x7) |> lt()
 ```
 
 ### Efficacy bounds at alternate $\alpha$ levels
@@ -338,7 +348,7 @@ Each alternate-alpha column retains the `testUpper` schedule from the design, so
 Here we show the non-binding design (`x8`) with efficacy bounds for both $\alpha = 0.0125$ (the design level) and $\alpha = 0.025$:
 
 ```{r}
-gsBoundSummary(x8, alpha = 0.025)
+gsBoundSummary(x8, alpha = 0.025) |> lt()
 ```
 
 Alternate-alpha summaries are supported for `test.type = 8`, where both

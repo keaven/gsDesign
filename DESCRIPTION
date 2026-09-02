@@ -1,5 +1,5 @@
 Package: gsDesign
-Version: 3.11.1
+Version: 3.11.1.9000
 Title: Group Sequential Design
 Authors@R: c(
     person("Keaven", "Anderson", email = "keaven_anderson@merck.com", role = c("aut", "cre")),
@@ -22,7 +22,7 @@ Imports:
     dplyr (>= 1.1.0),
     ggplot2 (>= 3.1.1),
     graphics,
-    gt,
+    lt (>= 0.4),
     methods,
     r2rtf,
     rlang,
@@ -35,6 +35,7 @@ Suggests:
     covr,
     data.table,
     gridExtra,
+    gt,
     kableExtra,
     knitr,
     mvtnorm,

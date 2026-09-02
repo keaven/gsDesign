@@ -1,6 +1,8 @@
 ---
 title: "Overview of survival endpoint design"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    css: vignette.css
 bibliography: gsDesign.bib
 vignette: >
   %\VignetteIndexEntry{Overview of survival endpoint design}
@@ -30,6 +32,7 @@ library(gsDesign)
 library(tidyr)
 library(knitr)
 library(tibble)
+library(lt)
 ```
 
 This article/vignette provides a summary of functions in the ***gsDesign*** package supporting design and evaluation of trial designs for time-to-event outcomes.
@@ -123,7 +126,7 @@ which, rounding up, matches (with tabular output):
 
 ```{r}
 nEvents(hr = hr, alpha = alpha, beta = beta, r = 1, tbl = TRUE) |>
-  kable()
+  lt()
 ```
 
 The notation `delta` in the above table changes the sign for the standardized treatment effect $\theta$ in the above:
@@ -155,7 +158,7 @@ Schoenfeld <- gsDesign(
 ) |> toInteger()
 Schoenfeld |>
   gsBoundSummary(deltaname = "HR", logdelta = TRUE, Nname = "Events") |>
-  kable(row.names = FALSE)
+  lt()
 ```
 
 ### Information based design
@@ -365,7 +368,7 @@ lfgs <- gsSurv(
 ) |> toInteger()
 lfgs |>
   gsBoundSummary() |>
-  kable(row.names = FALSE)
+  lt()
 ```
 
 Although we did not use the @Schoenfeld1981 for sample size, it is still used for the approximate HR at bound calculation above:
@@ -396,7 +399,7 @@ tibble::tibble(
   `Control events` = lfgs$eDC,
   `Experimental events` = lfgs$eDE
 ) |>
-  kable()
+  lt()
 ```
 
 It is worth noting that if events accrue at the same rate in both the null and alternate hypothesis, then the expected duration of time to achieve the targeted events would be shortened.

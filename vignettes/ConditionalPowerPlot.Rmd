@@ -1,6 +1,8 @@
 ---
 title: "Conditional power and conditional error"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    css: vignette.css
 bibliography: gsDesign.bib
 vignette: >
   %\VignetteIndexEntry{Conditional power and conditional error}
@@ -30,6 +32,7 @@ library(gsDesign)
 library(tidyr)
 library(knitr)
 library(tibble)
+library(lt)
 ```
 
 We provide a simple plot of conditional power at the time of interim analysis.
@@ -45,7 +48,7 @@ We use the `toInteger()` function to round sample size and event counts to appro
 
 ```{r}
 design <- gsSurv(hr = 0.7, lambdaC = log(2) / 12, minfup = 24, T = 36) |> toInteger()
-design |> gsBoundSummary()
+design |> gsBoundSummary() |> lt()
 ```
 
 We also provide a textual summary. 
@@ -87,7 +90,8 @@ gsBoundSummary(
     "B-value", "CP", "CP H1", "PP",
     paste0("P(Cross) if HR=", round(c(design$hr0, design$hr), digits = 2))
   )
-)
+) |>
+  lt()
 ```
 
 ## Testing and conditional power
