@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Vaccine efficacy trial design</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/v3.11.0/vignettes/VaccineEfficacy.Rmd" class="external-link"><code>vignettes/VaccineEfficacy.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/master/vignettes/VaccineEfficacy.Rmd" class="external-link"><code>vignettes/VaccineEfficacy.Rmd</code></a></small>
       <div class="d-none name"><code>VaccineEfficacy.Rmd</code></div>
     </div>
 
@@ -72,7 +72,7 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://keaven.github.io/gsDesign/">gsDesign</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gt.rstudio.com" class="external-link">gt</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/yihui/lt" class="external-link">lt</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -152,492 +152,698 @@ events in the experimental group:</p>
 <code class="sourceCode R"><span><span class="va">ve</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.6</span>, <span class="fl">.65</span>, <span class="fl">.7</span>, <span class="fl">.75</span>, <span class="fl">.8</span><span class="op">)</span></span>
 <span><span class="va">prob_experimental</span> <span class="op">&lt;-</span> <span class="va">ratio</span> <span class="op">/</span> <span class="op">(</span><span class="va">ratio</span> <span class="op">+</span> <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">ve</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>VE <span class="op">=</span> <span class="va">ve</span>, <span class="st">"P(Experimental)"</span> <span class="op">=</span> <span class="va">prob_experimental</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_options.html" class="external-link">tab_options</a></span><span class="op">(</span>data_row.padding <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>, decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mwlefoodfi table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>, decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<style>
+th, td{ padding: 5px; }
+.lt-wrap { overflow-x: auto; }
+.lt-table {
+  --bg: 4px solid transparent;
+  --bd: 1.5px solid #888;
 
-#mwlefoodfi thead, #mwlefoodfi tbody, #mwlefoodfi tfoot, #mwlefoodfi tr, #mwlefoodfi td, #mwlefoodfi th {
-  border-style: none;
-}
+  border-collapse: separate;
+  caption-side: top;
+  margin: 1em auto;
+  border-spacing: 0;
+  border-top: var(--bd);
+  border-bottom: var(--bd);
 
-#mwlefoodfi p {
-  margin: 0;
-  padding: 0;
-}
+  caption {
+    padding: .5em; text-align: center; border-top: var(--bd);
+    .lt-title    { font-size: 1.2em; }
+    .lt-subtitle { font-size: 0.9em; }
+  }
 
-#mwlefoodfi .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
+  th { font-weight: normal; }
+  tbody {
+    :not(:last-child) :is(td, th) { border-bottom: 1px   solid #ddd; }
+    .lt-row-group :is(td, th)     { border-bottom: 1.5px solid #ddd; }
+    .lt-row-group {
+      text-align: left;
+      &.lt-row-open { border-bottom-color: transparent; }
+    }
+  }
+  thead th {
+    border-bottom: 1px solid #888;
+    &:not(:first-child) { border-left: var(--bg); }
+    &:not(:last-child) { border-right: var(--bg); }
+  }
+  .lt-indent { padding-left: 1em; }
+  .lt-spanner-row {
+    .lt-spanner       { border-bottom: 1px solid #bbb; text-align: center; }
+    .lt-spanner-empty { border-bottom: none; }
+  }
 
-#mwlefoodfi .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
+  .lt-footer {
+    font-size: 0.85em;
+    .lt-footnote:first-child td { border-top: 1px solid #aaa; }
+    .lt-source-note:first-child td { border-top: 1px dashed #aaa; }
+    .lt-source-note td { font-style: italic; }
+  }
 
-#mwlefoodfi .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
+  .al-r { text-align: right; }
+  .al-c { text-align: center; }
 
-#mwlefoodfi .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
+  .lt-fnref {
+    color: #06c;
+    &::before { content: "\00a0["; }
+    &::after  { content: "]"; }
+  }
 }
-
-#mwlefoodfi .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#mwlefoodfi .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#mwlefoodfi .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#mwlefoodfi .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#mwlefoodfi .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#mwlefoodfi .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#mwlefoodfi .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#mwlefoodfi .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#mwlefoodfi .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#mwlefoodfi .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#mwlefoodfi .gt_row {
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#mwlefoodfi .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#mwlefoodfi .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#mwlefoodfi .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#mwlefoodfi .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#mwlefoodfi .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#mwlefoodfi .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_left {
-  text-align: left;
-}
-
-#mwlefoodfi .gt_center {
-  text-align: center;
-}
-
-#mwlefoodfi .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#mwlefoodfi .gt_font_normal {
-  font-weight: normal;
-}
-
-#mwlefoodfi .gt_font_bold {
-  font-weight: bold;
-}
-
-#mwlefoodfi .gt_font_italic {
-  font-style: italic;
-}
-
-#mwlefoodfi .gt_super {
-  font-size: 65%;
-}
-
-#mwlefoodfi .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#mwlefoodfi .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#mwlefoodfi .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#mwlefoodfi .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#mwlefoodfi .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#mwlefoodfi .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#mwlefoodfi .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#mwlefoodfi .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#mwlefoodfi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
+.lt-raw [title]::after {
+  content: " (" attr(title) ")";
+  background: lightyellow;
+  font-size: 0.85em;
 }
 </style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="VE">VE</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="P(Experimental)">P(Experimental)</th>
-    </tr></thead>
-<tbody class="gt_table_body">
-<tr>
-<td headers="VE" class="gt_row gt_right">0.50</td>
-<td headers="P(Experimental)" class="gt_row gt_right">0.600</td>
-</tr>
-<tr>
-<td headers="VE" class="gt_row gt_right">0.60</td>
-<td headers="P(Experimental)" class="gt_row gt_right">0.545</td>
-</tr>
-<tr>
-<td headers="VE" class="gt_row gt_right">0.65</td>
-<td headers="P(Experimental)" class="gt_row gt_right">0.512</td>
-</tr>
-<tr>
-<td headers="VE" class="gt_row gt_right">0.70</td>
-<td headers="P(Experimental)" class="gt_row gt_right">0.474</td>
-</tr>
-<tr>
-<td headers="VE" class="gt_row gt_right">0.75</td>
-<td headers="P(Experimental)" class="gt_row gt_right">0.429</td>
-</tr>
-<tr>
-<td headers="VE" class="gt_row gt_right">0.80</td>
-<td headers="P(Experimental)" class="gt_row gt_right">0.375</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Chapter 12 of <span class="citation">Jennison and Turnbull
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "VE": [0.5, 0.6, 0.65, 0.7, 0.75, 0.8],
+    "P(Experimental)": [0.6, 0.545454545454545, 0.51219512195122, 0.473684210526316, 0.428571428571429, 0.375]
+  },
+  "ops": [
+    {
+      "type": "fmt_number",
+      "columns": ["P(Experimental)"],
+      "decimals": 3
+    }
+  ]
+}
+})</script><script>
+/* lt.js — build a semantic <table> from a JSON spec.
+ * Call LT.build(spec) from an inline <script> to render a table in place.
+ * One runtime per page renders any number of tables.
+ */
+(root => {
+  "use strict";
+  if (root.LT?.buildHtml) return;  // duplicate inclusion is a no-op
+
+  // `[<]` (not `<`) avoids `</…` so this file is safe to inline in <script>.
+  const esc = s => String(s)
+    .replace(/&/g, "&amp;").replace(/[<]/g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  // Text fields (title, labels, footnotes, ...) arrive as a plain string
+  // (escape it) or, when the R side wrapped them in I(), a one-element array
+  // (emit verbatim as raw HTML). `txt` renders either form.
+  const txt = v => Array.isArray(v) ? String(v[0] ?? "") : esc(v);
+  // Raw (verbatim) if `raw`, else escaped — for values already stringified
+  // (e.g. body cells whose column is flagged raw via spec.html_cols).
+  const escIf = (raw, s) => raw ? String(s ?? "") : esc(s);
+  // Is column `c` flagged raw HTML? `hc` is spec.html_cols: true (all columns)
+  // or an array of column names.
+  const rawCol = (hc, c) => hc === true || (Array.isArray(hc) && hc.includes(c));
+  const sup = i => `<sup class="lt-fnref">${i}</sup>`;
+  // Stringify, mapping null/undefined to "" (0 and false stringify normally).
+  // ±Infinity render as ∞/-∞ (ASCII minus, as raw values); formatted columns get
+  // the typographic minus via fmtNumber.
+  const str = v => v === Infinity ? "∞" : v === -Infinity ? "-∞" : String(v ?? "");
+
+  // --- Number formatting ---
+  const isNum = v => typeof v === "number" && isFinite(v);
+  // Like isNum but also accepts ±Infinity (which fmtNumber renders as ∞/−∞).
+  const isNumInf = v => isNum(v) || Math.abs(v) === Infinity;
+  // A column is "numeric" if its first non-null value is a number.
+  const numCol = col => col?.length && typeof col.find(v => v != null) === "number";
+
+  // Column order. Prefer the explicit `spec.columns` sent by R: a JSON object
+  // reorders integer-like keys (e.g. "1", "2") ahead of string keys, so
+  // Object.keys(data) alone would scramble columns whose names are numbers.
+  const colOrder = spec => (spec.columns || Object.keys(spec.data || {}))
+    .filter(c => c in (spec.data || {}));
+
+  // Display label for a column: the last "label" op that names it, else `c`.
+  const colLabel = (ops, c) => {
+    let lbl = c;
+    for (const op of ops) if (op.type === "label" && op.labels?.[c] != null) lbl = op.labels[c];
+    return lbl;
+  };
+
+  // Expand JS exponential notation (e.g. "4.2e+3") to plain decimal,
+  // preserving the significant digits produced by toPrecision.
+  function expandExp(s) {
+    if (!/e/i.test(s)) return s;
+    const [, sign, int, frac = "", expStr] =
+      s.match(/^(-?)(\d+)(?:\.(\d+))?e([+-]?\d+)$/i);
+    const exp = +expStr, digits = int + frac, point = int.length + exp;
+    let out;
+    if (point <= 0) out = "0." + "0".repeat(-point) + digits;
+    else if (point >= digits.length) out = digits + "0".repeat(point - digits.length);
+    else out = digits.slice(0, point) + "." + digits.slice(point);
+    return sign + out;
+  }
+
+  function fmtNumber(v, decimals, bigMark, sigDigits) {
+    if (v === Infinity) return "∞";
+    if (v === -Infinity) return "−∞";
+    if (!isNum(v)) return null;
+    let s = sigDigits != null ? expandExp(v.toPrecision(sigDigits)) :
+            decimals != null ? v.toFixed(decimals) : String(v);
+    if (/^-0(\.0+)?$/.test(s)) s = s.slice(1);
+    if (bigMark) {
+      const parts = s.split(".");
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, bigMark);
+      s = parts.join(".");
+    }
+    if (s[0] === "-") s = "−" + s.slice(1);
+    return decimals != null || bigMark || sigDigits != null ? s : null;
+  }
+
+  // --- Pattern merge ---
+  function mergeVals(vals, pattern) {
+    if (!pattern) return vals.filter(v => v !== "").join(" ");
+    let remaining = pattern, result = "";
+    while (remaining) {
+      const m = remaining.match(/<<(.*?)>>/);
+      if (!m) { result += subRefs(remaining, vals); break; }
+      if (m.index > 0) result += subRefs(remaining.slice(0, m.index), vals);
+      const block = m[1],
+            refs = [...block.matchAll(/\{(\d+)\}/g)].map(x => +x[1]);
+      if (!refs.length || refs.every(i => vals[i - 1] !== ""))
+        result += subRefs(block, vals);
+      remaining = remaining.slice(m.index + m[0].length);
+    }
+    return result;
+  }
+  function subRefs(s, vals) {
+    for (let i = 0; i < vals.length; i++)
+      s = s.split("{" + (i + 1) + "}").join(vals[i]);
+    return s;
+  }
+
+  // --- Auto-format numeric columns ---
+  function autoFmt(spec, display, nRow) {
+    if (spec.auto_format === false) return;
+    const data = spec.data || {}, ops = spec.ops || [],
+          colNames = colOrder(spec);
+
+    const fmtCols = new Set();
+    for (const op of ops) {
+      if (op.type === "fmt_number") for (const c of (op.columns || colNames)) fmtCols.add(c);
+    }
+
+    for (const c of colNames) {
+      if (fmtCols.has(c)) continue;
+      const col = data[c];
+      if (!numCol(col)) continue;
+
+      const lbl = colLabel(ops, c),
+            pct = /%|[ _](pct|percent)$/i.test(lbl);
+
+      if (/year/i.test(lbl) && col.every(v => v == null || /^\d{4}$/.test(String(v)))) continue;
+
+      // Determine decimal places: find max significant decimals across column,
+      // then cap dynamically based on the largest integer-part width (targeting
+      // ~4 total significant digits): e.g., values <1 get up to 4 decimals,
+      // 10-99 get 2, >=1000 get 0.
+      let maxInt = 0, n = 0;
+      for (const v of col) {
+        if (!isNum(v)) continue;
+        // Number of digits before the decimal point
+        const a = Math.abs(pct ? v * 100 : v),
+              intW = a < 1 ? 0 : Math.floor(Math.log10(a)) + 1;
+        if (intW > maxInt) maxInt = intW;
+        // Significant decimals (strip trailing zeros; adjust for pct *100)
+        const m = String(v).match(/\.(\d+)/);
+        if (!m) continue;
+        const d = m[1].replace(/0+$/, "").length - (pct ? 2 : 0);
+        if (d > n) n = d;
+      }
+      // Cap: 4 decimals max, minus integer width (so large numbers get fewer).
+      // n is already >= 0, so only the upper cap is needed.
+      n = Math.min(n, Math.max(4 - maxInt, 0));
+
+      for (let i = 0; i < nRow; i++) {
+        const v = col[i];
+        if (!isNumInf(v)) continue;
+        const s = fmtNumber(pct ? v * 100 : v, n, " ");
+        if (s != null) display[c][i] = s + (pct ? "%" : "");
+      }
+    }
+  }
+
+  // --- Apply ops to data columns, return display strings per column ---
+  function applyOps(spec) {
+    const data = spec.data || {},
+          ops = spec.ops || [],
+          colNames = colOrder(spec),
+          nRow = colNames.length ? data[colNames[0]].length : 0;
+
+    // Working copy: display[col][row] = string
+    const display = {};
+    for (const c of colNames) {
+      display[c] = data[c].map(str);
+    }
+
+    autoFmt(spec, display, nRow);
+
+    // Run fn(col, row, rawValue) over each existing cell of the given columns.
+    const eachCell = (cols, fn) => {
+      for (const c of cols) {
+        if (!data[c]) continue;
+        for (let i = 0; i < nRow; i++) fn(c, i, data[c][i]);
+      }
+    };
+
+    for (const op of ops) {
+      const cols = op.columns || colNames;
+      switch (op.type) {
+        case "fmt_number":
+          eachCell(cols, (c, i, raw) => {
+            if (!isNumInf(raw)) return;
+            const v = op.percent === true ? raw * 100 : raw,
+                  psfx = op.percent ? "%" : "",
+                  f = fmtNumber(v, op.decimals, op.big_mark ?? "", op.sig_digits),
+                  pfx = op.prefix || "", sfx = (op.suffix || "") + psfx;
+            if (f != null) display[c][i] = pfx + f + sfx;
+            else if (pfx || sfx) display[c][i] = pfx + String(v) + sfx;
+          });
+          break;
+        case "fmt_date":
+          eachCell(cols, (c, i, raw) => {
+            if (raw == null) return;
+            const d = raw instanceof Date ? raw : new Date(raw);
+            if (isNaN(d)) return;
+            display[c][i] = op.method ? d[op.method]() :
+              op.options ? d.toLocaleDateString(op.locale, op.options) :
+              d.toLocaleDateString(op.locale);
+          });
+          break;
+        case "sub":
+          eachCell(cols, (c, i, raw) => {
+            if (op.small != null && isNum(raw) && raw !== 0 &&
+                Math.abs(raw) < op.small) {
+              display[c][i] = op.small_text ?? ("<" + op.small);
+            } else if (op.zero != null && raw === 0) {
+              display[c][i] = op.zero;
+            } else if (op.missing != null && raw == null) {
+              display[c][i] = op.missing;
+            }
+          });
+          break;
+        case "merge": {
+          const mCols = op.columns;
+          if (!mCols || mCols.length < 2) break;
+          const target = mCols[0];
+          for (let i = 0; i < nRow; i++) {
+            const vals = mCols.map(c => display[c]?.[i] ?? "");
+            display[target][i] = mergeVals(vals, op.pattern);
+          }
+          break;
+        }
+      }
+    }
+
+    // Default display for missing (null/NA) cells: an em dash unless spec.missing
+    // overrides it (set to "" to keep them blank). A per-column lt_sub(missing=)
+    // has already filled its cells above, so only still-empty null cells get the
+    // default; empty strings in the data stay empty.
+    const miss = spec.missing === undefined ? "—" : spec.missing;
+    if (miss) {
+      for (const c of colNames)
+        for (let i = 0; i < nRow; i++)
+          if (data[c][i] == null && display[c][i] === "") display[c][i] = miss;
+    }
+
+    return { display, nRow };
+  }
+
+  // --- Resolve structural spec fields from ops + data ---
+  function resolveSpec(spec) {
+    const data = spec.data || {},
+          ops = spec.ops || [],
+          colNames = colOrder(spec),
+          nRow = colNames.length ? data[colNames[0]].length : 0,
+          // Run fn on each op of the given type, in document order.
+          onOp = (t, fn) => { for (const op of ops) if (op.type === t) fn(op); };
+
+    // row_group: array → rowspan mode; string → separator-row mode
+    let rowGroupSep = typeof spec.row_group === "string";
+    const rowGroupCols = Array.isArray(spec.row_group) ? spec.row_group
+          : (spec.row_group ? [spec.row_group] : []);
+    if (!rowGroupSep && rowGroupCols.length === 1 && spec.auto_sep !== false &&
+        !numCol(data[rowGroupCols[0]]) &&
+        data[rowGroupCols[0]]?.some(v => (v + "").length > 20)) rowGroupSep = true;
+
+    // Hidden columns: row_group, merge sources
+    const hidden = new Set();
+    for (const g of rowGroupCols) hidden.add(g);
+    onOp("merge", op => {
+      if (op.hide !== false && op.columns)
+        op.columns.slice(1).forEach(c => hidden.add(c));
+    });
+
+    // Visible columns after hiding
+    let visible = colNames.filter(c => !hidden.has(c));
+
+    // Apply move
+    onOp("move", op => {
+      const toMove = (op.columns || []).filter(c => visible.includes(c));
+      if (!toMove.length) return;
+      const rest = visible.filter(c => !toMove.includes(c));
+      if (op.after == null) {
+        visible = [...toMove, ...rest];
+      } else {
+        const pos = rest.indexOf(op.after);
+        if (pos >= 0) visible = [...rest.slice(0, pos + 1), ...toMove, ...rest.slice(pos + 1)];
+      }
+    });
+
+    // Set arr[i] = val where i is the position of column c in `visible`.
+    const setByCol = (arr, c, val) => { const i = visible.indexOf(c); if (i >= 0) arr[i] = val; };
+
+    // Alignment: default from data type (number→right, else left), then overrides
+    const align = visible.map(c => numCol(data[c]) ? "right" : "left");
+    onOp("align", op => { for (const c of (op.columns || [])) setByCol(align, c, op.align); });
+
+    // Column labels
+    const autoLbl = s => spec.auto_label === false ? s : s.replace(/[._]/g, " ");
+    const colLabels = visible.map(autoLbl);
+    onOp("label", op => {
+      for (const [c, lbl] of Object.entries(op.labels || {})) setByCol(colLabels, c, lbl);
+    });
+
+    // Column widths + whole-table width
+    let colWidths, tableWidth;
+    onOp("width", op => {
+      if (op.table) tableWidth = op.table;
+      if (!op.widths) return;
+      if (!colWidths) colWidths = visible.map(() => "");
+      for (const [c, w] of Object.entries(op.widths)) setByCol(colWidths, c, w);
+    });
+
+    // Indent
+    const indent = new Array(nRow).fill(0);
+    onOp("indent", op => {
+      if (op.rows) for (const r of op.rows) indent[r - 1] = op.level ?? 1;
+    });
+
+    // Runs of equal consecutive values in col → [{ label, rows (1-based) }].
+    // Used for both separator-row groups and rowspan span sizes.
+    const runs = col => {
+      const out = [];
+      for (let i = 0; i < nRow;) {
+        const label = str(col[i]), rows = [i + 1];
+        while (++i < nRow && str(col[i]) === label) rows.push(i + 1);
+        out.push({ label, rows });
+      }
+      return out;
+    };
+
+    // Row groups from data column (separator-row mode only). A group label is
+    // raw HTML when its source column is flagged raw via html_cols.
+    let groups = [];
+    if (rowGroupSep && rowGroupCols.length && data[rowGroupCols[0]]) {
+      const raw = rawCol(spec.html_cols, rowGroupCols[0]);
+      groups.push(...runs(data[rowGroupCols[0]]).map(g => ({ ...g, raw })));
+    }
+    // Manual groups (labels always escaped; the label comes from an R argument
+    // name, which cannot carry an I() raw-HTML marker)
+    onOp("row_group", op => groups.push({ label: op.label, rows: op.rows }));
+    // Group ordering
+    onOp("group_order", op => {
+      if (!groups.length) return;
+      const ordered = [], rest = [];
+      for (const lbl of (op.order || [])) {
+        const g = groups.find(x => x.label === lbl);
+        if (g) ordered.push(g);
+      }
+      for (const g of groups) if (!ordered.includes(g)) rest.push(g);
+      groups = [...ordered, ...rest];
+    });
+
+    // Rowspan groups: compute span sizes for each group column
+    const rowSpans = [];
+    if (!rowGroupSep && rowGroupCols.length) {
+      for (const gc of rowGroupCols) {
+        const spans = new Array(nRow).fill(0);
+        for (const r of runs(data[gc] || [])) spans[r.rows[0] - 1] = r.rows.length;
+        rowSpans.push({ col: gc, label: colLabel(ops, gc), spans });
+      }
+    }
+
+    // Styles: the style ops are consumed directly (css/class/columns/rows/test).
+    const styles = ops.filter(op => op.type === "style");
+
+    // Auto-spanners: split column names on separator, group contiguous prefixes
+    let spanners = spec.spanners || [];
+    if (spec.auto_span) {
+      const sep = typeof spec.auto_span === "string" ? new RegExp(spec.auto_span) : /[._]/;
+      spanners = [...spanners];
+      for (let i = 0; i < visible.length;) {
+        const m = visible[i].match(sep);
+        if (!m) { i++; continue; }
+        const prefix = visible[i].slice(0, m.index);
+        let j = i + 1;
+        while (j < visible.length) {
+          const m2 = visible[j].match(sep);
+          if (!m2 || visible[j].slice(0, m2.index) !== prefix) break;
+          j++;
+        }
+        if (j - i >= 2) {
+          spanners.push({ label: prefix, columns: visible.slice(i, j) });
+          for (let k = i; k < j; k++) {
+            const mk = visible[k].match(sep);
+            if (mk) colLabels[k] = autoLbl(visible[k].slice(mk.index + mk[0].length));
+          }
+        }
+        i = j;
+      }
+    }
+
+    return {
+      visible, align, colLabels, colWidths, tableWidth, indent,
+      groups, rowSpans, styles, spanners,
+      footnotes: spec.footnotes || [],
+      notes: spec.notes || [],
+      header: spec.header || {},
+      nRow
+    };
+  }
+
+  // Footnotes: dedup by text, assign 1..N in first-seen order.
+  function indexFootnotes(fns) {
+    const order = [], idx = {};
+    fns.forEach(f => {
+      if (idx[f.text] == null) { idx[f.text] = order.length + 1; order.push(f.text); }
+    });
+    return { order, idx };
+  }
+
+  // Find the footnote index for a (type, value) location; 0 if none.
+  // `val` is a scalar: the title group, a single column, a spanner label,
+  // or a row-group label, depending on `type`.
+  const matcher = (fns, idx) => (type, val) => {
+    for (const f of fns) {
+      const loc = f.location;
+      if (loc.type !== type) continue;
+      const hit = idx[f.text];
+      if (type === "title" && loc.group === val) return hit;
+      if (type === "column_labels" && loc.columns.includes(val)) return hit;
+      if (type === "column_spanners" && loc.spanners.includes(val)) return hit;
+      if (type === "row_groups") {
+        if (loc.match === "all") return hit;
+        if (loc.match === "exact" && loc.values.includes(val)) return hit;
+        if (loc.match === "starts_with" && val.startsWith(loc.value)) return hit;
+      }
+    }
+    return 0;
+  };
+
+  function sortByGroups(spec) {
+    if (spec.sort === false || !spec.row_group) return;
+    const data = spec.data || {},
+          cols = [].concat(spec.row_group),
+          colNames = colOrder(spec),
+          nRow = colNames.length ? data[colNames[0]].length : 0;
+    if (!nRow) return;
+    const idx = Array.from({length: nRow}, (_, i) => i);
+    idx.sort((a, b) => {
+      for (const c of cols) {
+        const va = data[c]?.[a], vb = data[c]?.[b];
+        if (va == vb) continue;
+        if (va == null) return 1;
+        if (vb == null) return -1;
+        if (va < vb) return -1;
+        if (va > vb) return 1;
+      }
+      return 0;
+    });
+    for (const c of colNames) data[c] = idx.map(i => data[c][i]);
+    // Remap 1-based row indices in ops to reflect the new order
+    const newPos = new Array(nRow);
+    for (let i = 0; i < nRow; i++) newPos[idx[i]] = i + 1;
+    for (const op of (spec.ops || [])) {
+      if (op.rows) op.rows = op.rows.map(r => newPos[r - 1]);
+    }
+  }
+
+  function buildHtml(spec) {
+    sortByGroups(spec);
+    const data = spec.data || {},
+          { display, nRow } = applyOps(spec),
+          { visible: cols, align, colLabels, colWidths, tableWidth, indent,
+            groups, rowSpans, styles, spanners, footnotes: fns, notes, header: hdr } = resolveSpec(spec),
+          reg = indexFootnotes(fns),
+          fIdx = matcher(fns, reg.idx),
+          nGrp = rowSpans.length,
+          nCol = cols.length + nGrp,
+          // Whether column `c`'s body cells are raw HTML (see lt_html() on the
+          // R side); spec.html_cols is true (all columns) or a name array.
+          isRaw = c => rawCol(spec.html_cols, c),
+          out = [`<table class="lt-table"${tableWidth ? ` style="width:${tableWidth}"` : ""}>`];
+    const mark = (type, val) => { const i = fIdx(type, val); return i ? sup(i) : ""; };
+    const cell = (c, r) => display[c]?.[r - 1] ?? "";
+    // ` name="val"` for a truthy val, else "" — for optional HTML attributes.
+    const attr = (n, v) => v ? ` ${n}="${v}"` : "";
+    // Plain class names per column (alignment + leading-indent), "" if none.
+    const colCls = cols.map((_, i) => (
+      (i === 0 && groups.length ? "lt-indent " : "") +
+      ({right: "al-r", center: "al-c"}[align[i]] || "")
+    ).trimEnd());
+
+    // Visit each cell at (rows × cols) that exists in the table, calling
+    // fn(key, c, r). rows null = all rows; cols falls back to all columns.
+    const eachLoc = (rows, locCols, fn) => {
+      for (let r = 1; r <= nRow; r++) {
+        if (rows && !rows.includes(r)) continue;
+        for (const c of (locCols || cols)) {
+          const ci = cols.indexOf(c);
+          if (ci >= 0) fn(`${r},${ci}`, c, r);
+        }
+      }
+    };
+
+    // Style map: accumulate css (";") and class (" ") per cell.
+    const styleMap = {}, classMap = {};
+    const addTo = (map, key, val, sep) => { map[key] = map[key] ? map[key] + sep + val : val; };
+    for (const s of styles)
+      eachLoc(s.rows, s.columns ? [].concat(s.columns) : null, (key, c, r) => {
+        if (s.test && !s.test(data[c][r - 1])) return;
+        if (s.css) addTo(styleMap, key, s.css, ";");
+        if (s.class) addTo(classMap, key, s.class, " ");
+      });
+
+    // <colgroup>: leading empty <col>s for rowspan group columns, so widths
+    // align with the body columns (which are offset by nGrp on the left).
+    if (colWidths && colWidths.some(w => w)) {
+      out.push(`<colgroup>`);
+      for (let i = 0; i < nGrp; i++) out.push(`<col>`);
+      for (let i = 0; i < cols.length; i++)
+        out.push(`<col${attr("style", colWidths[i] ? "width:" + colWidths[i] : "")}>`);
+      out.push(`</colgroup>`);
+    }
+
+    // <caption>: title + subtitle, each a <div> rendered only when non-empty.
+    const caption = [["title", "lt-title"], ["subtitle", "lt-subtitle"]]
+      .filter(([g]) => hdr[g] != null && hdr[g] !== "")
+      .map(([g, cls]) => `<div class="${cls}">${txt(hdr[g])}${mark("title", g)}</div>`);
+    if (caption.length)
+      out.push(`<caption class="lt-caption">`, ...caption, `</caption>`);
+
+    // <thead>
+    out.push(`<thead>`);
+    if (spanners.length) {
+      const emptyTh = `<th class="lt-spanner-empty"></th>`;
+      out.push(`<tr class="lt-spanner-row">`);
+      out.push(emptyTh.repeat(nGrp));
+      for (let k = 0; k < cols.length;) {
+        const sp = spanners.find(s => s.columns[0] === cols[k]);
+        if (sp) {
+          out.push(`<th colspan="${sp.columns.length}" scope="colgroup" class="lt-spanner">${txt(sp.label)}${mark("column_spanners", sp.label)}</th>`);
+          k += sp.columns.length;
+        } else {
+          out.push(emptyTh);
+          k++;
+        }
+      }
+      out.push(`</tr>`);
+    }
+    out.push(`<tr>`);
+    for (const rs of rowSpans) out.push(`<th scope="col">${txt(rs.label)}</th>`);
+    for (let i = 0; i < cols.length; i++)
+      out.push(`<th scope="col"${attr("class", colCls[i])}>${txt(colLabels[i])}${mark("column_labels", cols[i])}</th>`);
+    out.push(`</tr></thead>`);
+
+    // Body footnote markers
+    const bodyMarks = {};
+    for (const f of fns) {
+      if (f.location.type !== "body") continue;
+      const fi = reg.idx[f.text];
+      eachLoc(f.location.rows, f.location.columns || [], key => { bodyMarks[key] = fi; });
+    }
+
+    // Row rendering
+    const pushRow = r => {
+      out.push(`<tr>`);
+      // Row-group cells. For a group spanning n > 1 rows, the label goes in a
+      // non-spanning cell on the first row — so vertical-align centers it
+      // within that row's height (matching the body cells) instead of across
+      // the whole span — followed by an empty filler cell spanning the
+      // remaining n - 1 rows. A single-row group is just the label cell.
+      for (const rs of rowSpans) {
+        const span = rs.spans[r - 1], fill = (rs.spans[r - 2] || 0) - 1;
+        if (span > 0)
+          out.push(`<th scope="row" class="lt-row-group${span > 1 ? " lt-row-open" : ""}">${escIf(isRaw(rs.col), cell(rs.col, r))}${mark("row_groups", str(data[rs.col][r - 1]))}</th>`);
+        else if (fill > 0)
+          out.push(`<th class="lt-row-group"${attr("rowspan", fill > 1 ? fill : 0)}></th>`);
+      }
+      const ind = indent[r - 1] || 0;
+      for (let ci = 0; ci < cols.length; ci++) {
+        const k = `${r},${ci}`, c = cols[ci],
+              m = bodyMarks[k], cc = classMap[k],
+              cls = [colCls[ci], cc].filter(Boolean).join(" ");
+        let s = styleMap[k] || "";
+        if (ci === 0 && ind) s = (s ? s + ";" : "") + `padding-left:${ind + 1}em`;
+        const raw = str(data[c][r - 1]), disp = display[c][r - 1],
+              tip = raw !== disp ? ` title="${esc(raw)}"` : "";
+        out.push(`<td${attr("class", cls)}${attr("style", s)}${tip}>${escIf(isRaw(c), disp)}${m ? sup(m) : ""}</td>`);
+      }
+      out.push(`</tr>`);
+    };
+
+    // <tbody>
+    out.push(`<tbody>`);
+    if (groups.length) {
+      const seen = {};
+      for (const g of groups) {
+        out.push(`<tr class="lt-row-group"><th colspan="${nCol}" scope="colgroup">${escIf(g.raw, g.label)}${mark("row_groups", g.label)}</th></tr>`);
+        for (const r of g.rows) { seen[r] = 1; pushRow(r); }
+      }
+      for (let r = 1; r <= nRow; r++) if (!seen[r]) pushRow(r);
+    } else {
+      for (let r = 1; r <= nRow; r++) pushRow(r);
+    }
+    out.push(`</tbody>`);
+
+    // <tfoot>: footnotes then source notes, each a full-width row.
+    if (reg.order.length || notes.length) {
+      const footRow = (cls, html) => `<tr class="${cls}"><td colspan="${nCol}">${html}</td></tr>`;
+      out.push(`<tfoot class="lt-footer">`);
+      reg.order.forEach((t, i) => out.push(footRow("lt-footnote", `${sup(i + 1)} ${txt(t)}`)));
+      for (const n of notes) out.push(footRow("lt-source-note", txt(n)));
+      out.push(`</tfoot>`);
+    }
+
+    out.push(`</table>`);
+    // Wrap in a div so a wide table can scroll horizontally (`overflow-x`)
+    // instead of overflowing the page.
+    return `<div class="lt-wrap">${out.join("")}</div>`;
+  }
+
+  const mount = (s, spec) => {
+    s.insertAdjacentHTML("afterend", buildHtml(spec));
+    const tbl = s.nextElementSibling.querySelector("table"),
+          raw = (e, el) => e.altKey && el.classList.toggle("lt-raw");
+    tbl.onclick = e => e.detail === 1 && raw(e, tbl);
+    tbl.ondblclick = e => raw(e, tbl.ownerDocument.documentElement);
+  };
+  // q.push renders immediately; replay any entries queued before we loaded.
+  const q = { push: e => mount(e.s, e.d) };
+  (root.LT?.q || []).forEach(q.push);
+  root.LT = { build: spec => mount(document.currentScript, spec), buildHtml, q };
+})(window);
+</script><p>Chapter 12 of <span class="citation">Jennison and Turnbull
 (2000)</span> walks through how to design and analyze such a study using
 a fixed or group sequential design. The time-to-event approximation
 provides an initial approximation to computing bounds; more importantly,
@@ -733,589 +939,25 @@ levels.</p>
 <span>  tdigits <span class="op">=</span> <span class="fl">1</span>, logdelta <span class="op">=</span> <span class="cn">TRUE</span>, deltaname <span class="op">=</span> <span class="st">"HR"</span>, Nname <span class="op">=</span> <span class="st">"Events"</span>,</span>
 <span>  exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B-value"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, <span class="st">"PP"</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Initial group sequential approximation"</span>,</span>
 <span>    subtitle <span class="op">=</span> <span class="st">"Integer event counts at analyses"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://gt.rstudio.com/reference/tab_options.html" class="external-link">tab_options</a></span><span class="op">(</span>data_row.padding <span class="op">=</span> <span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div id="eexombwkke" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#eexombwkke table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<span>  <span class="op">)</span></span></code></pre></div>
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Analysis": ["IA 1: 46%", "Events: 3632", "Events: 31", "Month: 13", "", "", "IA 2: 71%", "Events: 3632", "Events: 48", "Month: 18.1", "", "", "Final", "Events: 3632", "Events: 68", "Month: 24", "", ""],
+    "Value": ["Z", "p (1-sided)", "~HR at bound", "Spending", "P(Cross) if HR=0.7", "P(Cross) if HR=0.3", "Z", "p (1-sided)", "~HR at bound", "Spending", "P(Cross) if HR=0.7", "P(Cross) if HR=0.3", "Z", "p (1-sided)", "~HR at bound", "Spending", "P(Cross) if HR=0.7", "P(Cross) if HR=0.3"],
+    "Efficacy": [2.6664, 0.0038, 0.2316, 0.0038, 0.0038, 0.3438, 2.4301, 0.0075, 0.3114, 0.0057, 0.0096, 0.6635, 2.0322, 0.0211, 0.3962, 0.0154, 0.0239, 0.9018],
+    "Futility": [0.1028, 0.4591, 0.6708, 0.0153, 0.5409, 0.0153, 0.9679, 0.1665, 0.507, 0.023, 0.8419, 0.0383, 2.0322, 0.0211, 0.3962, 0.0617, 0.9761, 0.0982]
+  },
+  "header": {
+    "title": "Initial group sequential approximation",
+    "subtitle": "Integer event counts at analyses"
+  }
 }
-
-#eexombwkke thead, #eexombwkke tbody, #eexombwkke tfoot, #eexombwkke tr, #eexombwkke td, #eexombwkke th {
-  border-style: none;
-}
-
-#eexombwkke p {
-  margin: 0;
-  padding: 0;
-}
-
-#eexombwkke .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#eexombwkke .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#eexombwkke .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#eexombwkke .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#eexombwkke .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#eexombwkke .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#eexombwkke .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#eexombwkke .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#eexombwkke .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#eexombwkke .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#eexombwkke .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#eexombwkke .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#eexombwkke .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#eexombwkke .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#eexombwkke .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#eexombwkke .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#eexombwkke .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#eexombwkke .gt_row {
-  padding-top: 1px;
-  padding-bottom: 1px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#eexombwkke .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#eexombwkke .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#eexombwkke .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#eexombwkke .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#eexombwkke .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#eexombwkke .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#eexombwkke .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#eexombwkke .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#eexombwkke .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#eexombwkke .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#eexombwkke .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#eexombwkke .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#eexombwkke .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#eexombwkke .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#eexombwkke .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#eexombwkke .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#eexombwkke .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#eexombwkke .gt_left {
-  text-align: left;
-}
-
-#eexombwkke .gt_center {
-  text-align: center;
-}
-
-#eexombwkke .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#eexombwkke .gt_font_normal {
-  font-weight: normal;
-}
-
-#eexombwkke .gt_font_bold {
-  font-weight: bold;
-}
-
-#eexombwkke .gt_font_italic {
-  font-style: italic;
-}
-
-#eexombwkke .gt_super {
-  font-size: 65%;
-}
-
-#eexombwkke .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#eexombwkke .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#eexombwkke .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#eexombwkke .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#eexombwkke .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#eexombwkke .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#eexombwkke .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#eexombwkke .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#eexombwkke div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading">
-<td colspan="4" class="gt_heading gt_title gt_font_normal" style>Initial group sequential approximation</td>
-    </tr>
-<tr class="gt_heading">
-<td colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Integer event counts at analyses</td>
-    </tr>
-<tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Analysis">Analysis</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Value">Value</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Efficacy">Efficacy</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Futility">Futility</th>
-    </tr>
-</thead>
-<tbody class="gt_table_body">
-<tr>
-<td headers="Analysis" class="gt_row gt_left">IA 1: 46%</td>
-<td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.6664</td>
-<td headers="Futility" class="gt_row gt_right">0.1028</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Events: 3632</td>
-<td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0038</td>
-<td headers="Futility" class="gt_row gt_right">0.4591</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Events: 31</td>
-<td headers="Value" class="gt_row gt_left">~HR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.2316</td>
-<td headers="Futility" class="gt_row gt_right">0.6708</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Month: 13</td>
-<td headers="Value" class="gt_row gt_left">Spending</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0038</td>
-<td headers="Futility" class="gt_row gt_right">0.0153</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left"></td>
-<td headers="Value" class="gt_row gt_left">P(Cross) if HR=0.7</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0038</td>
-<td headers="Futility" class="gt_row gt_right">0.5409</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left"></td>
-<td headers="Value" class="gt_row gt_left">P(Cross) if HR=0.3</td>
-<td headers="Efficacy" class="gt_row gt_right">0.3438</td>
-<td headers="Futility" class="gt_row gt_right">0.0153</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">IA 2: 71%</td>
-<td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.4301</td>
-<td headers="Futility" class="gt_row gt_right">0.9679</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Events: 3632</td>
-<td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0075</td>
-<td headers="Futility" class="gt_row gt_right">0.1665</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Events: 48</td>
-<td headers="Value" class="gt_row gt_left">~HR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.3114</td>
-<td headers="Futility" class="gt_row gt_right">0.5070</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Month: 18.1</td>
-<td headers="Value" class="gt_row gt_left">Spending</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0057</td>
-<td headers="Futility" class="gt_row gt_right">0.0230</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left"></td>
-<td headers="Value" class="gt_row gt_left">P(Cross) if HR=0.7</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0096</td>
-<td headers="Futility" class="gt_row gt_right">0.8419</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left"></td>
-<td headers="Value" class="gt_row gt_left">P(Cross) if HR=0.3</td>
-<td headers="Efficacy" class="gt_row gt_right">0.6635</td>
-<td headers="Futility" class="gt_row gt_right">0.0383</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Final</td>
-<td headers="Value" class="gt_row gt_left">Z</td>
-<td headers="Efficacy" class="gt_row gt_right">2.0322</td>
-<td headers="Futility" class="gt_row gt_right">2.0322</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Events: 3632</td>
-<td headers="Value" class="gt_row gt_left">p (1-sided)</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0211</td>
-<td headers="Futility" class="gt_row gt_right">0.0211</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Events: 68</td>
-<td headers="Value" class="gt_row gt_left">~HR at bound</td>
-<td headers="Efficacy" class="gt_row gt_right">0.3962</td>
-<td headers="Futility" class="gt_row gt_right">0.3962</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left">Month: 24</td>
-<td headers="Value" class="gt_row gt_left">Spending</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0154</td>
-<td headers="Futility" class="gt_row gt_right">0.0617</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left"></td>
-<td headers="Value" class="gt_row gt_left">P(Cross) if HR=0.7</td>
-<td headers="Efficacy" class="gt_row gt_right">0.0239</td>
-<td headers="Futility" class="gt_row gt_right">0.9761</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_left"></td>
-<td headers="Value" class="gt_row gt_left">P(Cross) if HR=0.3</td>
-<td headers="Efficacy" class="gt_row gt_right">0.9018</td>
-<td headers="Futility" class="gt_row gt_right">0.0982</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>A textual summary for the design is:</p>
+})</script><p>A textual summary for the design is:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">xx</span>, timeunit <span class="op">=</span> <span class="st">"months"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Asymmetric two-sided group sequential design with non-binding
@@ -1367,579 +1009,110 @@ markdown for this vignette provided with the package. This combines
 information from the time-to-event design for calendar timing of
 analyses (Time) and expected sample size at each analysis (N) along with
 bounds and operating characteristics for the design.</p>
-<div id="ulbfdpbcyv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ulbfdpbcyv table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Analysis": [1, 2, 3],
+    "Time": [12.9313137425663, 17.9408328370967, 24],
+    "N": [3602, 3602, 3602],
+    "Cases": [31, 48, 68],
+    "Success": [13, 24, 37],
+    "Futility": [22, 30, 38],
+    "ve_efficacy": [0.759259259259259, 0.666666666666667, 0.602150537634409],
+    "ve_futility": [0.185185185185185, 0.444444444444445, 0.577777777777778],
+    "alpha": [0.00270323935262703, 0.00917677794724812, 0.0189821860610762],
+    "beta": [0.00676009289696649, 0.027359634015886, 0.0974110637539139],
+    "50%": [0.0319886107727559, 0.109499104280203, 0.220814815880535],
+    "60%": [0.109627888165078, 0.321363417031421, 0.550786957743079],
+    "65%": [0.196507202161284, 0.498978037763793, 0.748389205086998],
+    "70%": [0.336386222520954, 0.702371788937359, 0.902588936246086],
+    "75%": [0.534371097511076, 0.877375697847883, 0.979135968014377],
+    "80%": [0.758907333750295, 0.973145222458103, 0.998309042629827]
+  },
+  "ops": [
+    {
+      "type": "fmt_number",
+      "columns": ["Time"],
+      "decimals": 1
+    },
+    {
+      "type": "fmt_number",
+      "columns": ["ve_efficacy", "ve_futility", "50%", "60%", "65%", "70%", "75%", "80%"],
+      "decimals": 2
+    },
+    {
+      "type": "fmt_number",
+      "columns": ["alpha", "beta"],
+      "decimals": 4
+    },
+    {
+      "type": "label",
+      "labels": {
+        "ve_efficacy": "Efficacy",
+        "ve_futility": "Futility"
+      }
+    }
+  ],
+  "spanners": [
+    {
+      "label": "Experimental Cases at Bound",
+      "columns": ["Success", "Futility"]
+    },
+    {
+      "label": "Power by Vaccine Efficacy",
+      "columns": ["50%", "60%", "65%", "70%", "75%", "80%"]
+    },
+    {
+      "label": "Error Spending",
+      "columns": ["alpha", "beta"]
+    },
+    {
+      "label": "Vaccine Efficacy at Bound",
+      "columns": ["ve_efficacy", "ve_futility"]
+    }
+  ],
+  "footnotes": [
+    {
+      "text": "Cumulative spending at each analysis",
+      "location": {
+        "type": "column_spanners",
+        "spanners": ["Error Spending"]
+      }
+    },
+    {
+      "text": "Experimental case counts to cross between success and futility counts do not stop trial",
+      "location": {
+        "type": "column_spanners",
+        "spanners": ["Experimental Cases at Bound"]
+      }
+    },
+    {
+      "text": "Exact vaccine efficacy required to cross bound",
+      "location": {
+        "type": "column_spanners",
+        "spanners": ["Vaccine Efficacy at Bound"]
+      }
+    },
+    {
+      "text": "Cumulative power at each analysis by underlying vaccine efficacy",
+      "location": {
+        "type": "column_spanners",
+        "spanners": ["Power by Vaccine Efficacy"]
+      }
+    },
+    {
+      "text": "alpha-spending for efficacy ignores non-binding futility bound",
+      "location": {
+        "type": "column_labels",
+        "columns": ["alpha"]
+      }
+    }
+  ],
+  "header": {
+    "title": "Design Bounds and Operating Characteristics"
+  }
 }
-
-#ulbfdpbcyv thead, #ulbfdpbcyv tbody, #ulbfdpbcyv tfoot, #ulbfdpbcyv tr, #ulbfdpbcyv td, #ulbfdpbcyv th {
-  border-style: none;
-}
-
-#ulbfdpbcyv p {
-  margin: 0;
-  padding: 0;
-}
-
-#ulbfdpbcyv .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#ulbfdpbcyv .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#ulbfdpbcyv .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#ulbfdpbcyv .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#ulbfdpbcyv .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#ulbfdpbcyv .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#ulbfdpbcyv .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#ulbfdpbcyv .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#ulbfdpbcyv .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#ulbfdpbcyv .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#ulbfdpbcyv .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#ulbfdpbcyv .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#ulbfdpbcyv .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#ulbfdpbcyv .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#ulbfdpbcyv .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ulbfdpbcyv .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#ulbfdpbcyv .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#ulbfdpbcyv .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#ulbfdpbcyv .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ulbfdpbcyv .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#ulbfdpbcyv .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ulbfdpbcyv .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#ulbfdpbcyv .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ulbfdpbcyv .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ulbfdpbcyv .gt_left {
-  text-align: left;
-}
-
-#ulbfdpbcyv .gt_center {
-  text-align: center;
-}
-
-#ulbfdpbcyv .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#ulbfdpbcyv .gt_font_normal {
-  font-weight: normal;
-}
-
-#ulbfdpbcyv .gt_font_bold {
-  font-weight: bold;
-}
-
-#ulbfdpbcyv .gt_font_italic {
-  font-style: italic;
-}
-
-#ulbfdpbcyv .gt_super {
-  font-size: 65%;
-}
-
-#ulbfdpbcyv .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#ulbfdpbcyv .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#ulbfdpbcyv .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#ulbfdpbcyv .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#ulbfdpbcyv .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#ulbfdpbcyv .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#ulbfdpbcyv .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#ulbfdpbcyv .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#ulbfdpbcyv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading">
-<td colspan="16" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Design Bounds and Operating Characteristics</td>
-    </tr>
-<tr class="gt_col_headings gt_spanner_row">
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Analysis">Analysis</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Time">Time</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="N">N</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Cases">Cases</th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="cases">
-        <div class="gt_column_spanner">Experimental Cases at Bound<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
-</div>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="vebound">
-        <div class="gt_column_spanner">Vaccine Efficacy at Bound<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span>
-</div>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="spend">
-        <div class="gt_column_spanner">Error Spending<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>3</sup></span>
-</div>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="6" scope="colgroup" id="power">
-        <div class="gt_column_spanner">Power by Vaccine Efficacy<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>4</sup></span>
-</div>
-      </th>
-    </tr>
-<tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Success">Success</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Futility">Futility</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="ve_efficacy">Efficacy</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="ve_futility">Futility</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="alpha">alpha<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>5</sup></span>
-</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="beta">beta</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a50%">50%</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a60%">60%</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a65%">65%</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a70%">70%</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a75%">75%</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a80%">80%</th>
-    </tr>
-</thead>
-<tbody class="gt_table_body">
-<tr>
-<td headers="Analysis" class="gt_row gt_right">1</td>
-<td headers="Time" class="gt_row gt_right">12.9</td>
-<td headers="N" class="gt_row gt_right">3602</td>
-<td headers="Cases" class="gt_row gt_right">31</td>
-<td headers="Success" class="gt_row gt_right">13</td>
-<td headers="Futility" class="gt_row gt_right">22</td>
-<td headers="ve_efficacy" class="gt_row gt_right">0.76</td>
-<td headers="ve_futility" class="gt_row gt_right">0.19</td>
-<td headers="alpha" class="gt_row gt_right">0.0027</td>
-<td headers="beta" class="gt_row gt_right">0.0068</td>
-<td headers="50%" class="gt_row gt_right">0.03</td>
-<td headers="60%" class="gt_row gt_right">0.11</td>
-<td headers="65%" class="gt_row gt_right">0.20</td>
-<td headers="70%" class="gt_row gt_right">0.34</td>
-<td headers="75%" class="gt_row gt_right">0.53</td>
-<td headers="80%" class="gt_row gt_right">0.76</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_right">2</td>
-<td headers="Time" class="gt_row gt_right">17.9</td>
-<td headers="N" class="gt_row gt_right">3602</td>
-<td headers="Cases" class="gt_row gt_right">48</td>
-<td headers="Success" class="gt_row gt_right">24</td>
-<td headers="Futility" class="gt_row gt_right">30</td>
-<td headers="ve_efficacy" class="gt_row gt_right">0.67</td>
-<td headers="ve_futility" class="gt_row gt_right">0.44</td>
-<td headers="alpha" class="gt_row gt_right">0.0092</td>
-<td headers="beta" class="gt_row gt_right">0.0274</td>
-<td headers="50%" class="gt_row gt_right">0.11</td>
-<td headers="60%" class="gt_row gt_right">0.32</td>
-<td headers="65%" class="gt_row gt_right">0.50</td>
-<td headers="70%" class="gt_row gt_right">0.70</td>
-<td headers="75%" class="gt_row gt_right">0.88</td>
-<td headers="80%" class="gt_row gt_right">0.97</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_right">3</td>
-<td headers="Time" class="gt_row gt_right">24.0</td>
-<td headers="N" class="gt_row gt_right">3602</td>
-<td headers="Cases" class="gt_row gt_right">68</td>
-<td headers="Success" class="gt_row gt_right">37</td>
-<td headers="Futility" class="gt_row gt_right">38</td>
-<td headers="ve_efficacy" class="gt_row gt_right">0.60</td>
-<td headers="ve_futility" class="gt_row gt_right">0.58</td>
-<td headers="alpha" class="gt_row gt_right">0.0190</td>
-<td headers="beta" class="gt_row gt_right">0.0974</td>
-<td headers="50%" class="gt_row gt_right">0.22</td>
-<td headers="60%" class="gt_row gt_right">0.55</td>
-<td headers="65%" class="gt_row gt_right">0.75</td>
-<td headers="70%" class="gt_row gt_right">0.90</td>
-<td headers="75%" class="gt_row gt_right">0.98</td>
-<td headers="80%" class="gt_row gt_right">1.00</td>
-</tr>
-</tbody>
-<tfoot>
-<tr class="gt_footnotes">
-<td class="gt_footnote" colspan="16">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Experimental case counts to cross between success and futility counts do not stop trial</td>
-    </tr>
-<tr class="gt_footnotes">
-<td class="gt_footnote" colspan="16">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span> Exact vaccine efficacy required to cross bound</td>
-    </tr>
-<tr class="gt_footnotes">
-<td class="gt_footnote" colspan="16">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>3</sup></span> Cumulative spending at each analysis</td>
-    </tr>
-<tr class="gt_footnotes">
-<td class="gt_footnote" colspan="16">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>4</sup></span> Cumulative power at each analysis by underlying vaccine efficacy</td>
-    </tr>
-<tr class="gt_footnotes">
-<td class="gt_footnote" colspan="16">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>5</sup></span> alpha-spending for efficacy ignores non-binding futility bound</td>
-    </tr>
-</tfoot>
-</table>
-</div>
-<p>The initial approximation of bounds for the exact binomial design was
+})</script><p>The initial approximation of bounds for the exact binomial design was
 generated from the time-to-event design as follows. First, we computed
 nominal p-value 1-sided bounds under the null hypothesis for the
 efficacy bounds using the normal approximation that the time-to-event
@@ -2090,545 +1263,100 @@ timing are no longer needed.</p>
 <code class="sourceCode R"><span><span class="va">ebUpdate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toBinomialExact.html">toBinomialExact</a></span><span class="op">(</span><span class="va">xx</span>, observedEvents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">78</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We hide the code to produce the table; this is available in package
 vignette code.</p>
-<div id="kgufivjubq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kgufivjubq table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Analysis": [1, 2],
+    "Cases": [20, 78],
+    "Success": [6, 44],
+    "Futility": [16, 45],
+    "ve_efficacy": [0.857142857142857, 0.568627450980392],
+    "ve_futility": [-0.333333333333333, 0.545454545454545],
+    "alpha": [0.000604825191662421, 0.023931419967456],
+    "beta": [0.00297752115982567, 0.0450322420397321],
+    "65%": [0.0460768434734856, 0.846180422331971],
+    "75%": [0.17520059516027, 0.993467595509887],
+    "85%": [0.568131823323342, 0.999989957978155]
+  },
+  "ops": [
+    {
+      "type": "fmt_number",
+      "columns": ["ve_efficacy", "ve_futility", "65%", "75%", "85%"],
+      "decimals": 2
+    },
+    {
+      "type": "fmt_number",
+      "columns": ["alpha", "beta"],
+      "decimals": 4
+    },
+    {
+      "type": "label",
+      "labels": {
+        "ve_efficacy": "Efficacy",
+        "ve_futility": "Futility"
+      }
+    }
+  ],
+  "spanners": [
+    {
+      "label": "Cases at Bound",
+      "columns": ["Success", "Futility"]
+    },
+    {
+      "label": "Power by VE",
+      "columns": ["65%", "75%", "85%"]
+    },
+    {
+      "label": "Error Spending",
+      "columns": ["alpha", "beta"]
+    },
+    {
+      "label": "VE at Bound",
+      "columns": ["ve_efficacy", "ve_futility"]
+    }
+  ],
+  "footnotes": [
+    {
+      "text": "Cumulative spending at each analysis",
+      "location": {
+        "type": "column_spanners",
+        "spanners": ["Error Spending"]
+      }
+    },
+    {
+      "text": "Experimental case counts; counts between success and futility bounds do not stop trial",
+      "location": {
+        "type": "column_spanners",
+        "spanners": ["Cases at Bound"]
+      }
+    },
+    {
+      "text": "Exact vaccine efficacy required to cross bound",
+      "location": {
+        "type": "column_spanners",
+        "spanners": ["VE at Bound"]
+      }
+    },
+    {
+      "text": "Cumulative power at each analysis by underlying vaccine efficacy",
+      "location": {
+        "type": "column_spanners",
+        "spanners": ["Power by VE"]
+      }
+    },
+    {
+      "text": "Efficacy spending ignores non-binding futility bound",
+      "location": {
+        "type": "column_labels",
+        "columns": ["alpha"]
+      }
+    }
+  ],
+  "header": {
+    "title": "Updated Bounds for Actual Analyses from SPUTNIK trial"
+  }
 }
-
-#kgufivjubq thead, #kgufivjubq tbody, #kgufivjubq tfoot, #kgufivjubq tr, #kgufivjubq td, #kgufivjubq th {
-  border-style: none;
-}
-
-#kgufivjubq p {
-  margin: 0;
-  padding: 0;
-}
-
-#kgufivjubq .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#kgufivjubq .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#kgufivjubq .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#kgufivjubq .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#kgufivjubq .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#kgufivjubq .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#kgufivjubq .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#kgufivjubq .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#kgufivjubq .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#kgufivjubq .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#kgufivjubq .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#kgufivjubq .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#kgufivjubq .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#kgufivjubq .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#kgufivjubq .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#kgufivjubq .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#kgufivjubq .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#kgufivjubq .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#kgufivjubq .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#kgufivjubq .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#kgufivjubq .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#kgufivjubq .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#kgufivjubq .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#kgufivjubq .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#kgufivjubq .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#kgufivjubq .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#kgufivjubq .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#kgufivjubq .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#kgufivjubq .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#kgufivjubq .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#kgufivjubq .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#kgufivjubq .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#kgufivjubq .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#kgufivjubq .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#kgufivjubq .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#kgufivjubq .gt_left {
-  text-align: left;
-}
-
-#kgufivjubq .gt_center {
-  text-align: center;
-}
-
-#kgufivjubq .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#kgufivjubq .gt_font_normal {
-  font-weight: normal;
-}
-
-#kgufivjubq .gt_font_bold {
-  font-weight: bold;
-}
-
-#kgufivjubq .gt_font_italic {
-  font-style: italic;
-}
-
-#kgufivjubq .gt_super {
-  font-size: 65%;
-}
-
-#kgufivjubq .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#kgufivjubq .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#kgufivjubq .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#kgufivjubq .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#kgufivjubq .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#kgufivjubq .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#kgufivjubq .gt_indent_5 {
-  text-indent: 25px;
-}
-
-#kgufivjubq .katex-display {
-  display: inline-flex !important;
-  margin-bottom: 0.75em !important;
-}
-
-#kgufivjubq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
-  height: 0px !important;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading">
-<td colspan="11" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Updated Bounds for Actual Analyses from SPUTNIK trial</td>
-    </tr>
-<tr class="gt_col_headings gt_spanner_row">
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Analysis">Analysis</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="2" colspan="1" scope="col" id="Cases">Cases</th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="cases">
-        <div class="gt_column_spanner">Cases at Bound<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span>
-</div>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="vebound">
-        <div class="gt_column_spanner">VE at Bound<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span>
-</div>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="spend">
-        <div class="gt_column_spanner">Error Spending<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>3</sup></span>
-</div>
-      </th>
-      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3" scope="colgroup" id="power">
-        <div class="gt_column_spanner">Power by VE<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>4</sup></span>
-</div>
-      </th>
-    </tr>
-<tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Success">Success</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Futility">Futility</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="ve_efficacy">Efficacy</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="ve_futility">Futility</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="alpha">alpha<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>5</sup></span>
-</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="beta">beta</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a65%">65%</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a75%">75%</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="a85%">85%</th>
-    </tr>
-</thead>
-<tbody class="gt_table_body">
-<tr>
-<td headers="Analysis" class="gt_row gt_right">1</td>
-<td headers="Cases" class="gt_row gt_right">20</td>
-<td headers="Success" class="gt_row gt_right">6</td>
-<td headers="Futility" class="gt_row gt_right">16</td>
-<td headers="ve_efficacy" class="gt_row gt_right">0.86</td>
-<td headers="ve_futility" class="gt_row gt_right">−0.33</td>
-<td headers="alpha" class="gt_row gt_right">0.0006</td>
-<td headers="beta" class="gt_row gt_right">0.0030</td>
-<td headers="65%" class="gt_row gt_right">0.05</td>
-<td headers="75%" class="gt_row gt_right">0.18</td>
-<td headers="85%" class="gt_row gt_right">0.57</td>
-</tr>
-<tr>
-<td headers="Analysis" class="gt_row gt_right">2</td>
-<td headers="Cases" class="gt_row gt_right">78</td>
-<td headers="Success" class="gt_row gt_right">44</td>
-<td headers="Futility" class="gt_row gt_right">45</td>
-<td headers="ve_efficacy" class="gt_row gt_right">0.57</td>
-<td headers="ve_futility" class="gt_row gt_right">0.55</td>
-<td headers="alpha" class="gt_row gt_right">0.0239</td>
-<td headers="beta" class="gt_row gt_right">0.0450</td>
-<td headers="65%" class="gt_row gt_right">0.85</td>
-<td headers="75%" class="gt_row gt_right">0.99</td>
-<td headers="85%" class="gt_row gt_right">1.00</td>
-</tr>
-</tbody>
-<tfoot>
-<tr class="gt_footnotes">
-<td class="gt_footnote" colspan="11">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Experimental case counts; counts between success and futility bounds do not stop trial</td>
-    </tr>
-<tr class="gt_footnotes">
-<td class="gt_footnote" colspan="11">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span> Exact vaccine efficacy required to cross bound</td>
-    </tr>
-<tr class="gt_footnotes">
-<td class="gt_footnote" colspan="11">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>3</sup></span> Cumulative spending at each analysis</td>
-    </tr>
-<tr class="gt_footnotes">
-<td class="gt_footnote" colspan="11">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>4</sup></span> Cumulative power at each analysis by underlying vaccine efficacy</td>
-    </tr>
-<tr class="gt_footnotes">
-<td class="gt_footnote" colspan="11">
-<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>5</sup></span> Efficacy spending ignores non-binding futility bound</td>
-    </tr>
-</tfoot>
-</table>
-</div>
+})</script>
 </div>
 </div>
 </div>

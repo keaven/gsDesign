@@ -50,11 +50,5 @@ b_power <- gsBinomialExact(
 )
 b_power |>
   as_table() |>
-  as_gt()
-
-
-  
-
-
-Operating Characteristics for the Truncated SPRT Design
+  lt()
 ```

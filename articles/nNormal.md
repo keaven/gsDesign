@@ -204,21 +204,8 @@ d <- gsDesign(
 )
 d |>
   gsBoundSummary(deltaname = "Mean difference") |>
-  kable(row.names = FALSE)
+  lt()
 ```
-
-| Analysis  | Value                           | Efficacy | Futility |
-|:----------|:--------------------------------|---------:|---------:|
-| IA 1: 50% | Z                               |   2.7500 |   0.4122 |
-| N: 86     | p (1-sided)                     |   0.0030 |   0.3401 |
-|           | ~Mean difference at bound       |   0.9399 |   0.1409 |
-|           | P(Cross) if Mean difference=0   |   0.0030 |   0.6599 |
-|           | P(Cross) if Mean difference=0.8 |   0.3412 |   0.0269 |
-| Final     | Z                               |   1.9811 |   1.9811 |
-| N: 172    | p (1-sided)                     |   0.0238 |   0.0238 |
-|           | ~Mean difference at bound       |   0.4788 |   0.4788 |
-|           | P(Cross) if Mean difference=0   |   0.0239 |   0.9761 |
-|           | P(Cross) if Mean difference=0.8 |   0.9000 |   0.1000 |
 
 A textual summary of the design is given by:
 
@@ -244,21 +231,8 @@ gsDesign(
   delta1 = 0.8
 ) |>
   gsBoundSummary(deltaname = "Mean difference") |>
-  kable(row.names = FALSE)
+  lt()
 ```
-
-| Analysis  | Value                           | Efficacy | Futility |
-|:----------|:--------------------------------|---------:|---------:|
-| IA 1: 50% | Z                               |   2.7500 |   0.4122 |
-| N: 86     | p (1-sided)                     |   0.0030 |   0.3401 |
-|           | ~Mean difference at bound       |   0.9399 |   0.1409 |
-|           | P(Cross) if Mean difference=0   |   0.0030 |   0.6599 |
-|           | P(Cross) if Mean difference=0.8 |   0.3412 |   0.0269 |
-| Final     | Z                               |   1.9811 |   1.9811 |
-| N: 172    | p (1-sided)                     |   0.0238 |   0.0238 |
-|           | ~Mean difference at bound       |   0.4788 |   0.4788 |
-|           | P(Cross) if Mean difference=0   |   0.0239 |   0.9761 |
-|           | P(Cross) if Mean difference=0.8 |   0.9000 |   0.1000 |
 
 We leave it to the reader to verify the properties of the above design
 using simulation as in the fixed design example.

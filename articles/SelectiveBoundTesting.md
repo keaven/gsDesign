@@ -135,38 +135,8 @@ the futility bound shows as `NA`:
 
 ``` r
 
-gsBoundSummary(x1, exclude = NULL) |> gt::gt()
+gsBoundSummary(x1, exclude = NULL) |> lt()
 ```
-
-| Analysis    | Value              | Efficacy | Futility |
-|-------------|--------------------|----------|----------|
-| IA 1: 40%   | Z                  | NA       | 0.5659   |
-| N: 616      | p (1-sided)        | NA       | 0.2857   |
-| Events: 151 | ~HR at bound       | NA       | 0.9120   |
-| Month: 15   | Spending           | NA       | 0.0522   |
-|             | B-value            | NA       | 0.3579   |
-|             | CP                 | NA       | 0.0778   |
-|             | CP H1              | NA       | 0.7144   |
-|             | PP                 | NA       | 0.1851   |
-|             | P(Cross) if HR=1   | NA       | 0.7143   |
-|             | P(Cross) if HR=0.7 | NA       | 0.0522   |
-| IA 2: 70%   | Z                  | 2.4380   | NA       |
-| N: 690      | p (1-sided)        | 0.0074   | NA       |
-| Events: 265 | ~HR at bound       | 0.7408   | NA       |
-| Month: 20   | Spending           | 0.0074   | NA       |
-|             | B-value            | 2.0398   | NA       |
-|             | CP                 | 0.9524   | NA       |
-|             | CP H1              | 0.9756   | NA       |
-|             | PP                 | 0.9181   | NA       |
-|             | P(Cross) if HR=1   | 0.0073   | NA       |
-|             | P(Cross) if HR=0.7 | 0.6738   | NA       |
-| Final       | Z                  | 1.9999   | NA       |
-| N: 690      | p (1-sided)        | 0.0228   | NA       |
-| Events: 378 | ~HR at bound       | 0.8139   | NA       |
-| Month: 36   | Spending           | 0.0176   | NA       |
-|             | B-value            | 1.9999   | NA       |
-|             | P(Cross) if HR=1   | 0.0222   | NA       |
-|             | P(Cross) if HR=0.7 | 0.9000   | NA       |
 
 The probabilities under the null and alternative are recomputed
 accounting for the inactive bounds. The underlying cumulative futility
@@ -205,38 +175,8 @@ xs <- do.call(gsSurv, c(survival_args, list(
   testLower = c(TRUE, TRUE, FALSE)
 )))
 gsBoundSummary(xs, exclude = NULL) |>
-  gt::gt()
+  lt()
 ```
-
-| Analysis    | Value              | Efficacy | Futility |
-|-------------|--------------------|----------|----------|
-| IA 1: 40%   | Z                  | NA       | -1.4171  |
-| N: 548      | p (1-sided)        | NA       | 0.9218   |
-| Events: 135 | ~HR at bound       | NA       | 1.2774   |
-| Month: 15   | Spending           | NA       | 0.0782   |
-|             | B-value            | NA       | -0.8962  |
-|             | CP                 | NA       | 0.0000   |
-|             | CP H1              | NA       | 0.1130   |
-|             | PP                 | NA       | 0.0003   |
-|             | P(Cross) if HR=1   | NA       | 0.0782   |
-|             | P(Cross) if HR=0.7 | NA       | 0.0002   |
-| IA 2: 70%   | Z                  | 2.4380   | -1.4036  |
-| N: 612      | p (1-sided)        | 0.0074   | 0.9198   |
-| Events: 235 | ~HR at bound       | 0.7273   | 1.2012   |
-| Month: 20   | Spending           | 0.0074   | 0.0412   |
-|             | B-value            | 2.0398   | -1.1743  |
-|             | CP                 | 0.9524   | 0.0000   |
-|             | CP H1              | 0.9686   | 0.0000   |
-|             | PP                 | 0.9179   | 0.0000   |
-|             | P(Cross) if HR=1   | 0.0074   | 0.1195   |
-|             | P(Cross) if HR=0.7 | 0.6152   | 0.0003   |
-| Final       | Z                  | 1.9999   | NA       |
-| N: 612      | p (1-sided)        | 0.0228   | NA       |
-| Events: 336 | ~HR at bound       | 0.8037   | NA       |
-| Month: 36   | Spending           | 0.0176   | NA       |
-|             | B-value            | 1.9999   | NA       |
-|             | P(Cross) if HR=1   | 0.0250   | NA       |
-|             | P(Cross) if HR=0.7 | 0.9000   | NA       |
 
 ## Example 3: Selective harm monitoring (test.type 7/8)
 
@@ -263,38 +203,8 @@ xh <- do.call(gsSurv, c(survival_args, list(
   testUpper = c(FALSE, TRUE, TRUE),
   testHarm = c(TRUE, TRUE, FALSE)
 )))
-gsBoundSummary(xh, exclude = NULL) |> gt::gt()
+gsBoundSummary(xh, exclude = NULL) |> lt()
 ```
-
-| Analysis    | Value              | Harm    | Futility | Efficacy |
-|-------------|--------------------|---------|----------|----------|
-| IA 1: 40%   | Z                  | -1.4171 | 0.6540   | NA       |
-| N: 668      | p (1-sided)        | 0.9218  | 0.2566   | NA       |
-| Events: 164 | ~HR at bound       | 1.2483  | 0.9027   | NA       |
-| Month: 15   | Spending           | 0.0782  | 0.0522   | NA       |
-|             | B-value            | -0.8962 | 0.4136   | NA       |
-|             | CP                 | 0.0000  | 0.0776   | NA       |
-|             | CP H1              | 0.0305  | 0.6560   | NA       |
-|             | PP                 | 0.0000  | 0.1737   | NA       |
-|             | P(Cross) if HR=1   | 0.0782  | 0.6652   | NA       |
-|             | P(Cross) if HR=0.7 | 0.0001  | 0.0520   | NA       |
-| IA 2: 70%   | Z                  | -1.4036 | 1.3740   | 2.4380   |
-| N: 746      | p (1-sided)        | 0.9198  | 0.0847   | 0.0074   |
-| Events: 286 | ~HR at bound       | 1.1807  | 0.8499   | 0.7494   |
-| Month: 20   | Spending           | 0.0412  | 0.0275   | 0.0074   |
-|             | B-value            | -1.1743 | 1.1496   | 2.0398   |
-|             | CP                 | 0.0000  | 0.2569   | 0.9524   |
-|             | CP H1              | 0.0001  | 0.6629   | 0.9796   |
-|             | PP                 | 0.0000  | 0.2924   | 0.9182   |
-|             | P(Cross) if HR=1   | 0.0784  | 0.8500   | 0.0073   |
-|             | P(Cross) if HR=0.7 | 0.0001  | 0.0795   | 0.7132   |
-| Final       | Z                  | NA      | 1.9999   | 1.9999   |
-| N: 746      | p (1-sided)        | NA      | 0.0228   | 0.0228   |
-| Events: 409 | ~HR at bound       | NA      | 0.8204   | 0.8204   |
-| Month: 36   | Spending           | NA      | 0.0204   | 0.0176   |
-|             | B-value            | NA      | 1.9999   | 1.9999   |
-|             | P(Cross) if HR=1   | NA      | 0.9021   | 0.0195   |
-|             | P(Cross) if HR=0.7 | NA      | 0.0999   | 0.9000   |
 
 The harm bound is `NA` at the final analysis.
 
@@ -357,16 +267,11 @@ harm_comparison <- data.frame(
   `Both final lower bounds skipped` = x_matched_lower$harm$bound,
   check.names = FALSE
 )
-kable(harm_comparison, digits = 3, caption = "Harm bounds by final-analysis testing schedule")
+harm_comparison |>
+  lt() |>
+  lt_format(columns = 2:4, decimals = 3) |>
+  lt_header("Harm bounds by final-analysis testing schedule")
 ```
-
-| Analysis | All lower bounds active | Final harm only | Both final lower bounds skipped |
-|---:|---:|---:|---:|
-| 1 | -1.417 | -1.417 | -1.417 |
-| 2 | -1.404 | 0.206 | -1.404 |
-| 3 | -1.375 | 1.435 | -20.000 |
-
-Harm bounds by final-analysis testing schedule {.table}
 
 When final futility is skipped but final harm remains active, the
 lower-tail stopping partition changes. The joint calibration can
@@ -402,38 +307,8 @@ x5 <- do.call(gsSurv, c(survival_args, list(
   testUpper = c(FALSE, TRUE, TRUE),
   testLower = c(TRUE, FALSE, FALSE)
 )))
-gsBoundSummary(x5, exclude = NULL) |> gt::gt()
+gsBoundSummary(x5, exclude = NULL) |> lt()
 ```
-
-| Analysis    | Value              | Efficacy | Futility |
-|-------------|--------------------|----------|----------|
-| IA 1: 40%   | Z                  | NA       | 0.5659   |
-| N: 616      | p (1-sided)        | NA       | 0.2857   |
-| Events: 151 | ~HR at bound       | NA       | 0.9120   |
-| Month: 15   | Spending           | NA       | 0.0522   |
-|             | B-value            | NA       | 0.3579   |
-|             | CP                 | NA       | 0.0778   |
-|             | CP H1              | NA       | 0.7144   |
-|             | PP                 | NA       | 0.1851   |
-|             | P(Cross) if HR=1   | NA       | 0.7143   |
-|             | P(Cross) if HR=0.7 | NA       | 0.0522   |
-| IA 2: 70%   | Z                  | 2.4380   | NA       |
-| N: 690      | p (1-sided)        | 0.0074   | NA       |
-| Events: 265 | ~HR at bound       | 0.7408   | NA       |
-| Month: 20   | Spending           | 0.0074   | NA       |
-|             | B-value            | 2.0398   | NA       |
-|             | CP                 | 0.9524   | NA       |
-|             | CP H1              | 0.9756   | NA       |
-|             | PP                 | 0.9181   | NA       |
-|             | P(Cross) if HR=1   | 0.0073   | NA       |
-|             | P(Cross) if HR=0.7 | 0.6738   | NA       |
-| Final       | Z                  | 1.9999   | NA       |
-| N: 690      | p (1-sided)        | 0.0228   | NA       |
-| Events: 378 | ~HR at bound       | 0.8139   | NA       |
-| Month: 36   | Spending           | 0.0176   | NA       |
-|             | B-value            | 1.9999   | NA       |
-|             | P(Cross) if HR=1   | 0.0222   | NA       |
-|             | P(Cross) if HR=0.7 | 0.9000   | NA       |
 
 Note the `NA` values: efficacy is `NA` at IA1, and futility is `NA` at
 IA2 and the final analysis.

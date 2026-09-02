@@ -3,7 +3,7 @@
 ``` r
 
 library(gsDesign)
-library(gt)
+library(lt)
 ```
 
 ## Introduction
@@ -97,19 +97,9 @@ events in the experimental group:
 ve <- c(.5, .6, .65, .7, .75, .8)
 prob_experimental <- ratio / (ratio + 1 / (1 - ve))
 tibble::tibble(VE = ve, "P(Experimental)" = prob_experimental) |>
-  gt() |>
-  tab_options(data_row.padding = px(1)) |>
-  fmt_number(columns = 2, decimals = 3)
+  lt() |>
+  lt_format(columns = 2, decimals = 3)
 ```
-
-| VE   | P(Experimental) |
-|------|-----------------|
-| 0.50 | 0.600           |
-| 0.60 | 0.545           |
-| 0.65 | 0.512           |
-| 0.70 | 0.474           |
-| 0.75 | 0.429           |
-| 0.80 | 0.375           |
 
 Chapter 12 of Jennison and Turnbull (2000) walks through how to design
 and analyze such a study using a fixed or group sequential design. The
@@ -211,36 +201,12 @@ gsBoundSummary(xx,
   tdigits = 1, logdelta = TRUE, deltaname = "HR", Nname = "Events",
   exclude = c("B-value", "CP", "CP H1", "PP")
 ) |>
-  gt() |>
-  tab_header(
+  lt() |>
+  lt_header(
     title = "Initial group sequential approximation",
     subtitle = "Integer event counts at analyses"
-  ) |>
-  tab_options(data_row.padding = px(1))
+  )
 ```
-
-| Initial group sequential approximation |                    |          |          |
-|----------------------------------------|--------------------|----------|----------|
-| Integer event counts at analyses       |                    |          |          |
-| Analysis                               | Value              | Efficacy | Futility |
-| IA 1: 46%                              | Z                  | 2.6664   | 0.1028   |
-| Events: 3632                           | p (1-sided)        | 0.0038   | 0.4591   |
-| Events: 31                             | ~HR at bound       | 0.2316   | 0.6708   |
-| Month: 13                              | Spending           | 0.0038   | 0.0153   |
-|                                        | P(Cross) if HR=0.7 | 0.0038   | 0.5409   |
-|                                        | P(Cross) if HR=0.3 | 0.3438   | 0.0153   |
-| IA 2: 71%                              | Z                  | 2.4301   | 0.9679   |
-| Events: 3632                           | p (1-sided)        | 0.0075   | 0.1665   |
-| Events: 48                             | ~HR at bound       | 0.3114   | 0.5070   |
-| Month: 18.1                            | Spending           | 0.0057   | 0.0230   |
-|                                        | P(Cross) if HR=0.7 | 0.0096   | 0.8419   |
-|                                        | P(Cross) if HR=0.3 | 0.6635   | 0.0383   |
-| Final                                  | Z                  | 2.0322   | 2.0322   |
-| Events: 3632                           | p (1-sided)        | 0.0211   | 0.0211   |
-| Events: 68                             | ~HR at bound       | 0.3962   | 0.3962   |
-| Month: 24                              | Spending           | 0.0154   | 0.0617   |
-|                                        | P(Cross) if HR=0.7 | 0.0239   | 0.9761   |
-|                                        | P(Cross) if HR=0.3 | 0.9018   | 0.0982   |
 
 A textual summary for the design is:
 
@@ -297,8 +263,6 @@ for this vignette provided with the package. This combines information
 from the time-to-event design for calendar timing of analyses (Time) and
 expected sample size at each analysis (N) along with bounds and
 operating characteristics for the design.
-
-[TABLE]
 
 The initial approximation of bounds for the exact binomial design was
 generated from the time-to-event design as follows. First, we computed
@@ -503,8 +467,6 @@ ebUpdate <- toBinomialExact(xx, observedEvents = c(20, 78))
 
 We hide the code to produce the table; this is available in package
 vignette code.
-
-[TABLE]
 
 ## Summary
 

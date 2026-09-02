@@ -267,41 +267,12 @@ design_calendar <-
   )
 design_calendar |>
   gsBoundSummary(exclude = c("B-value", "CP", "CP H1", "PP")) |>
-  gt() |>
-  tab_header(
+  lt() |>
+  lt_header(
     title = "Calendar-Based Design",
     subtitle = "Calendar Spending"
   )
 ```
-
-| Calendar-Based Design |                    |          |          |
-|-----------------------|--------------------|----------|----------|
-| Calendar Spending     |                    |          |          |
-| Analysis              | Value              | Efficacy | Futility |
-| IA 1: 36%             | Z                  | 2.9057   | -1.3967  |
-| N: 892                | p (1-sided)        | 0.0018   | 0.9188   |
-| Events: 123           | ~HR at bound       | 0.5911   | 1.2875   |
-| Month: 14             | Spending           | 0.0018   | 0.0812   |
-|                       | P(Cross) if HR=1   | 0.0018   | 0.0812   |
-|                       | P(Cross) if HR=0.7 | 0.1740   | 0.0004   |
-| IA 2: 67%             | Z                  | 2.7193   | -1.3968  |
-| N: 892                | p (1-sided)        | 0.0033   | 0.9188   |
-| Events: 228           | ~HR at bound       | 0.6970   | 1.2037   |
-| Month: 24             | Spending           | 0.0027   | 0.0428   |
-|                       | P(Cross) if HR=1   | 0.0046   | 0.1240   |
-|                       | P(Cross) if HR=0.7 | 0.4991   | 0.0004   |
-| IA 3: 88%             | Z                  | 2.3641   | -1.2250  |
-| N: 892                | p (1-sided)        | 0.0090   | 0.8897   |
-| Events: 298           | ~HR at bound       | 0.7602   | 1.1527   |
-| Month: 36             | Spending           | 0.0066   | 0.0416   |
-|                       | P(Cross) if HR=1   | 0.0111   | 0.1656   |
-|                       | P(Cross) if HR=0.7 | 0.7683   | 0.0004   |
-| Final                 | Z                  | 2.0027   | -1.0838  |
-| N: 892                | p (1-sided)        | 0.0226   | 0.8608   |
-| Events: 337           | ~HR at bound       | 0.8039   | 1.1254   |
-| Month: 48             | Spending           | 0.0139   | 0.0344   |
-|                       | P(Cross) if HR=1   | 0.0250   | 0.2000   |
-|                       | P(Cross) if HR=0.7 | 0.9000   | 0.0004   |
 
 ## Considerations
 

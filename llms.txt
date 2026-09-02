@@ -301,6 +301,8 @@ For an overview of spending functions, see
 
 - [`as_table()`](https://keaven.github.io/gsDesign/reference/as_table.md)
   : Create a summary table
+- [`lt(`*`<gsBinomialExactTable>`*`)`](https://keaven.github.io/gsDesign/reference/lt-methods.md)
+  : Convert a summary table object to an lt table
 - [`as_gt()`](https://keaven.github.io/gsDesign/reference/as_gt.md) :
   Convert a summary table object to a gt object
 - [`as_rtf()`](https://keaven.github.io/gsDesign/reference/as_rtf.md) :

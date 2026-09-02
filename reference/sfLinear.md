@@ -242,12 +242,12 @@ z2 <- (s1 + s2) / (sqrt(178 + n2))
 # early or late depending on observed interim z1,
 # Type I error is now almost twice the planned .025
 sum(z1 >= x$upper$bound[1] | z2 >= x$upper$bound[2]) / 1000000
-#> [1] 0.046808
+#> [1] 0.046588
 # if stage 2 sample size is random and independent of z1 with same frequency,
 # this is not a problem
 s1alt <- rnorm(1000000, 0, sqrt(178))
 z1alt <- s1alt / sqrt(178)
 z2alt <- (s1alt + s2) / sqrt(178 + n2)
 sum(z1alt >= x$upper$bound[1] | z2alt >= x$upper$bound[2]) / 1000000
-#> [1] 0.02528
+#> [1] 0.024704
 ```

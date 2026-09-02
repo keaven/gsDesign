@@ -1,5 +1,32 @@
 # Changelog
 
+## gsDesign (development version)
+
+### Major changes
+
+- Replaced **gt** with the lightweight **lt** package (\>= 0.3) as the
+  default table-rendering framework throughout gsDesign. The package now
+  re-exports [`lt()`](https://rdrr.io/pkg/lt/man/lt.html), and its
+  table-output workflows use **lt** functions. Package-specific support
+  includes an [`lt()`](https://rdrr.io/pkg/lt/man/lt.html) method for
+  `gsBinomialExactTable` objects.
+  [`as_gt()`](https://keaven.github.io/gsDesign/reference/as_gt.md)
+  remains available for compatibility but is deprecated and requires the
+  suggested **gt** package.
+
+### Documentation
+
+- Updated package vignettes to use **lt** consistently for formatted
+  data-frame and matrix output, with compact row spacing for long tables
+  and no significant changes to the rendered HTML tables.
+
+### Testing
+
+- Reduced default test-suite runtime by using smaller stress-test grids,
+  fewer Monte Carlo iterations, and toy exact-binomial p-value event
+  counts. Set `GSDESIGN_RUN_STRESS_TESTS=true` to run the larger
+  stress-test settings.
+
 ## gsDesign 3.11.0 (August 2026)
 
 CRAN release: 2026-08-29

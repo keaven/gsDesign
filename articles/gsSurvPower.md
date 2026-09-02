@@ -717,26 +717,8 @@ pwr_slow_simple <- gsSurvPower(
 )
 
 
-pwr_slow_simple |> gsBoundSummary()
+pwr_slow_simple |> gsBoundSummary() |> lt()
 ```
-
-    ## Method: LachinFoulkes 
-    ##     Analysis              Value Efficacy Futility
-    ##    IA 1: 33%                  Z   3.0107  -0.2388
-    ##       N: 364        p (1-sided)   0.0013   0.5944
-    ##  Events: 118       ~HR at bound   0.5741   1.0450
-    ##    Month: 19   P(Cross) if HR=1   0.0013   0.4056
-    ##              P(Cross) if HR=0.7   0.1412   0.0148
-    ##    IA 2: 67%                  Z   2.5465   0.9410
-    ##       N: 556        p (1-sided)   0.0054   0.1733
-    ##  Events: 236       ~HR at bound   0.7176   0.8846
-    ##    Month: 28   P(Cross) if HR=1   0.0062   0.8347
-    ##              P(Cross) if HR=0.7   0.5815   0.0437
-    ##        Final                  Z   1.9992   1.9992
-    ##       N: 630        p (1-sided)   0.0228   0.0228
-    ##  Events: 354       ~HR at bound   0.8084   0.8084
-    ##    Month: 38   P(Cross) if HR=1   0.0233   0.9767
-    ##              P(Cross) if HR=0.7   0.9000   0.1000
 
 With `maxExtension = c(3, 12, 20)`, each analysis can extend beyond
 `plannedCalendarTime` by the specified amount while waiting for expected
@@ -1211,25 +1193,8 @@ cat("=== gsBoundSummary (alpha = 0.025) ===\n")
 
 ``` r
 
-print(gsBoundSummary(design_a0125, alpha = 0.025))
+gsBoundSummary(design_a0125, alpha = 0.025) |> lt()
 ```
-
-    ##     Analysis              Value α=0.0125 α=0.025 Futility
-    ##    IA 1: 33%                  Z   3.2153  3.0107  -0.0741
-    ##       N: 576        p (1-sided)   0.0007  0.0013   0.5295
-    ##  Events: 139       ~HR at bound   0.5791  0.5995   1.0127
-    ##    Month: 12   P(Cross) if HR=1   0.0007  0.0013   0.4705
-    ##              P(Cross) if HR=0.7   0.1324  0.1813   0.0148
-    ##    IA 2: 67%                  Z   2.7838  2.5465   1.1739
-    ##       N: 742        p (1-sided)   0.0027  0.0054   0.1202
-    ##  Events: 278       ~HR at bound   0.7157  0.7364   0.8685
-    ##    Month: 19   P(Cross) if HR=1   0.0031  0.0062   0.8857
-    ##              P(Cross) if HR=0.7   0.5790  0.6689   0.0437
-    ##        Final                  Z   2.2837  1.9992   2.2837
-    ##       N: 742        p (1-sided)   0.0112  0.0228   0.0112
-    ##  Events: 416       ~HR at bound   0.7993  0.8219   0.7993
-    ##    Month: 28   P(Cross) if HR=1   0.0116  0.0219   0.9884
-    ##              P(Cross) if HR=0.7   0.9000  0.9295   0.1000
 
 Note that
 [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
@@ -1584,26 +1549,8 @@ summary(bm_design)
 
 ``` r
 
-gsBoundSummary(bm_design)
+gsBoundSummary(bm_design) |> lt()
 ```
-
-    ## Method: LachinFoulkes 
-    ##     Analysis               Value Efficacy Futility
-    ##    IA 1: 24%                   Z   3.3706  -0.5564
-    ##       N: 300         p (1-sided)   0.0004   0.7110
-    ##   Events: 69        ~HR at bound   0.4424   1.1441
-    ##    Month: 12    P(Cross) if HR=1   0.0004   0.2890
-    ##              P(Cross) if HR=0.65   0.0563   0.0096
-    ##    IA 2: 72%                   Z   2.6841   1.3965
-    ##       N: 450         p (1-sided)   0.0036   0.0813
-    ##  Events: 206        ~HR at bound   0.6876   0.8229
-    ##    Month: 24    P(Cross) if HR=1   0.0039   0.9208
-    ##              P(Cross) if HR=0.65   0.6595   0.0504
-    ##        Final                   Z   2.2896   2.2896
-    ##       N: 450         p (1-sided)   0.0110   0.0110
-    ##  Events: 286        ~HR at bound   0.7625   0.7625
-    ##    Month: 36    P(Cross) if HR=1   0.0115   0.9885
-    ##              P(Cross) if HR=0.65   0.9000   0.1000
 
 #### Step 2: Power for the overall (stratified) population
 
@@ -1649,26 +1596,8 @@ summary(pwr_overall)
 
 ``` r
 
-gsBoundSummary(pwr_overall)
+gsBoundSummary(pwr_overall) |> lt()
 ```
-
-    ## Method: LachinFoulkes 
-    ##     Analysis               Value Efficacy Futility
-    ##    IA 1: 25%                   Z   3.3527  -0.4978
-    ##       N: 500         p (1-sided)   0.0004   0.6907
-    ##  Events: 128        ~HR at bound   0.5523   1.0921
-    ##    Month: 12    P(Cross) if HR=1   0.0004   0.3093
-    ##              P(Cross) if HR=0.75   0.0422   0.0168
-    ##    IA 2: 74%                   Z   2.6616   1.4525
-    ##       N: 748         p (1-sided)   0.0039   0.0732
-    ##  Events: 376        ~HR at bound   0.7598   0.8608
-    ##    Month: 24    P(Cross) if HR=1   0.0042   0.9288
-    ##              P(Cross) if HR=0.75   0.5527   0.0978
-    ##        Final                   Z   2.2919   2.2919
-    ##       N: 748         p (1-sided)   0.0110   0.0110
-    ##  Events: 511        ~HR at bound   0.8164   0.8164
-    ##    Month: 36    P(Cross) if HR=1   0.0115   0.9885
-    ##              P(Cross) if HR=0.75   0.8165   0.1835
 
 The overall design enrolls more patients (the full population rather
 than just the 60% biomarker-positive subgroup) and has a higher event

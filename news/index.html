@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,9 +35,24 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/keaven/gsDesign/blob/v3.11.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/keaven/gsDesign/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="gsdesign-development-version">gsDesign (development version)<a class="anchor" aria-label="anchor" href="#gsdesign-development-version"></a></h2>
+<div class="section level3">
+<h3 id="major-changes-development-version">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-development-version"></a></h3>
+<ul><li>Replaced <strong>gt</strong> with the lightweight <strong>lt</strong> package (&gt;= 0.3) as the default table-rendering framework throughout gsDesign. The package now re-exports <code><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt()</a></code>, and its table-output workflows use <strong>lt</strong> functions. Package-specific support includes an <code><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt()</a></code> method for <code>gsBinomialExactTable</code> objects. <code><a href="../reference/as_gt.html">as_gt()</a></code> remains available for compatibility but is deprecated and requires the suggested <strong>gt</strong> package.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<ul><li>Updated package vignettes to use <strong>lt</strong> consistently for formatted data-frame and matrix output, with compact row spacing for long tables and no significant changes to the rendered HTML tables.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing-development-version">Testing<a class="anchor" aria-label="anchor" href="#testing-development-version"></a></h3>
+<ul><li>Reduced default test-suite runtime by using smaller stress-test grids, fewer Monte Carlo iterations, and toy exact-binomial p-value event counts. Set <code>GSDESIGN_RUN_STRESS_TESTS=true</code> to run the larger stress-test settings.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.11.0" id="gsdesign-3110-august-2026">gsDesign 3.11.0 (August 2026)<a class="anchor" aria-label="anchor" href="#gsdesign-3110-august-2026"></a></h2><p class="text-muted">CRAN release: 2026-08-29</p>
 <div class="section level3">

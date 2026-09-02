@@ -3,6 +3,7 @@
 ``` r
 
 library(gsDesign)
+library(lt)
 ```
 
 ## Overview
@@ -168,19 +169,6 @@ the total time be derived.
 
 The translation used below is summarized as follows:
 
-| Quantity | SAS | gsDesign | Reason |
-|:---|:---|:---|:---|
-| Two-sided Type I error | alpha = 0.05 total | alpha = 0.025 per tail | gsDesign stores and spends one-sided alpha |
-| Symmetric two-sided design | Early stop to reject either side | test.type = 2 | Mirrors the upper and lower efficacy boundaries |
-| Analysis timing input | Information fractions 0.25, 0.50, 0.75, 1.00 | gsSurv(timing = c(.25, .50, .75, 1)) | Uses the SAS fractional information schedule |
-| Event formula | Schoenfeld log-rank information | method = “Schoenfeld” | Avoids Lachin-Foulkes default event calculation |
-| Accrual duration | ACCTIME = 18 | R = 18 | Keeps the same fixed accrual duration |
-| Total study duration | Total Time = 25.13323 | T = NULL | Lets gsSurv() solve total time from fixed accrual |
-| Follow-up after accrual | Derived as 7.133226 | minfup = NULL | Lets gsSurv() solve the follow-up duration |
-
-Translation from the SAS PROC SEQDESIGN example to gsDesign inputs.
-{.table}
-
 ## Reproducing the fractional-time design with `gsSurv()`
 
 ### `gsSurv()` with aligned parameters
@@ -312,20 +300,10 @@ gs_fractional <- data.frame(
   Z_gsDesign = des_2$upper$bound
 )
 
-knitr::kable(
-  round(gs_fractional, 5),
-  caption = "Fractional-time SAS output compared with gsSurv()."
-)
+round(gs_fractional, 5) |>
+  lt() |>
+  lt_header("Fractional-time SAS output compared with gsSurv().")
 ```
-
-| Analysis | Events_SAS | Events_gsDesign | Time_SAS | Time_gsDesign | N_SAS | N_gsDesign | Z_SAS | Z_gsDesign |
-|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | 22.26962 | 22.2696 | 11.26310 | 11.26306 | 168.95 | 168.9459 | 4.33263 | 4.33263 |
-| 2 | 44.53924 | 44.5392 | 16.28750 | 16.28746 | 244.31 | 244.3119 | 2.96333 | 2.96313 |
-| 3 | 66.80886 | 66.8088 | 20.49260 | 20.49260 | 270.00 | 270.0000 | 2.35902 | 2.35904 |
-| 4 | 89.07847 | 89.0784 | 25.13323 | 25.13321 | 270.00 | 270.0000 | 2.01409 | 2.01409 |
-
-Fractional-time SAS output compared with gsSurv(). {.table}
 
 The final event count is 89.07847 in both systems. The
 [`print()`](https://rdrr.io/r/base/print.html) and
@@ -384,20 +362,10 @@ fixed_followup_check <- data.frame(
 )
 fixed_followup_check[-1] <- lapply(fixed_followup_check[-1], round, digits = 5)
 
-knitr::kable(
-  fixed_followup_check,
-  caption = "Both fixed-accrual translations produce the same final design."
-)
+fixed_followup_check |>
+  lt() |>
+  lt_header("Both fixed-accrual translations produce the same final design.")
 ```
-
-| Quantity             | Solved_followup | Specified_followup |
-|:---------------------|----------------:|-------------------:|
-| Final study duration |        25.13321 |           25.13322 |
-| Accrual duration     |        18.00000 |           17.99999 |
-| Final events         |        89.07840 |           89.07840 |
-| Final N              |       270.00003 |          269.99988 |
-
-Both fixed-accrual translations produce the same final design. {.table}
 
 A third use case is to keep both the enrollment rates and enrollment
 duration fixed, then vary minimum follow-up and evaluate power. That is

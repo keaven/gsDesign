@@ -191,6 +191,7 @@ single interim analysis half way through the trial with
 ``` r
 
 library(gsDesign)
+library(lt)
 ```
 
 ``` r
@@ -321,20 +322,9 @@ xu <- gsDesign(
 ``` r
 
 # Summarize bounds
-gsBoundSummary(xu, Nname = "N", digits = 4, ddigits = 2, tdigits = 1)
+gsBoundSummary(xu, Nname = "N", digits = 4, ddigits = 2, tdigits = 1) |>
+  lt()
 ```
-
-    #>   Analysis               Value Efficacy Futility
-    #>  IA 1: 44%                   Z   2.2209  -0.2304
-    #>      N: 59         p (1-sided)   0.0132   0.5911
-    #>                ~delta at bound   4.3370  -0.4500
-    #>            P(Cross) if delta=0   0.0132   0.4089
-    #>            P(Cross) if delta=3   0.2468   0.0386
-    #>      Final                   Z   1.3047   1.3047
-    #>     N: 134         p (1-sided)   0.0960   0.0960
-    #>                ~delta at bound   1.6907   1.6907
-    #>            P(Cross) if delta=0   0.0965   0.9035
-    #>            P(Cross) if delta=3   0.8350   0.1650
 
 ## References
 
