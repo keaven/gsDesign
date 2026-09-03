@@ -465,26 +465,31 @@ tibble::tibble(
   lt_header("Exact Conditional Power after 9 of 20 Experimental-Group Events")
 ```
 
-The default `binding = TRUE` treats future futility or harm boundaries as
-stopping rules. For a design with non-binding futility,
-`binding = FALSE` instead reports conditional efficacy power when those
+The observed interim count is used only as the conditioning state. The
+calculation is therefore available even if that count has already crossed the
+current efficacy, futility, or harm boundary. This is a hypothetical
+projection of what would happen if follow-up continued, not a reversal of a
+stopping decision. The default `binding = TRUE` treats *future* futility or
+harm boundaries as stopping rules. For a design with non-binding futility,
+`binding = FALSE` instead reports conditional efficacy power when those future
 boundaries will not be enforced. The calculation accepts `theta` directly for
 conditional experimental-group event probabilities or `ve` for VE or PE
 assumptions.
 
 Conditional power can also be examined across a range of assumptions about
-future VE or PE. We compare three hypothetical interim outcomes: 16
-experimental-group events, exactly at the futility bound, and 12 and 9 events,
-both between the efficacy and futility bounds. Since the first outcome reaches
-the non-binding futility bound, all three curves assume that the trial
-continues by setting `binding = FALSE`.
+future VE or PE. At the first analysis the efficacy and futility bounds are 6
+and 16 experimental-group events, respectively. We compare four hypothetical
+outcomes that fall strictly below and above each boundary: 5, 7, 15, and 17
+events. Current boundary status is ignored for conditioning, while the default
+`binding = TRUE` continues to enforce future futility stopping.
 
 ```{r}
 future_ve <- seq(0, .9, by = .02)
 interim_outcomes <- c(
-  "Futility bound: 16 of 20" = 16,
-  "Between bounds: 12 of 20" = 12,
-  "Between bounds: 9 of 20" = 9
+  "Below efficacy bound: 5 of 20" = 5,
+  "Above efficacy bound: 7 of 20" = 7,
+  "Below futility bound: 15 of 20" = 15,
+  "Above futility bound: 17 of 20" = 17
 )
 
 conditional_power_plot_data <- do.call(
@@ -495,7 +500,7 @@ conditional_power_plot_data <- do.call(
       i = 1,
       x.i = interim_outcomes[[outcome]],
       ve = future_ve,
-      binding = FALSE
+      binding = TRUE
     )
     data.frame(
       VE = cp$efficacy,
@@ -528,10 +533,13 @@ ggplot2::ggplot(
     y = "Exact conditional power",
     color = "Interim outcome",
     title = "Conditional Power by Future VE / PE",
-    caption = "The trial is assumed to continue across the non-binding futility bound."
+    caption = paste(
+      "Current boundary status is ignored; future futility stopping is enforced."
+    )
   ) +
   ggplot2::theme_bw() +
-  ggplot2::theme(legend.position = "bottom")
+  ggplot2::theme(legend.position = "bottom") +
+  ggplot2::guides(color = ggplot2::guide_legend(nrow = 2, byrow = TRUE))
 ```
 
 ### Exact confidence intervals

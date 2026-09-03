@@ -40,14 +40,36 @@ test_that("VE assumptions are converted using the retained randomization ratio",
 })
 
 test_that("non-binding conditional power ignores future futility", {
-  design <- exact_cp_design()
+  design <- gsSurv(
+    k = 3, test.type = 4, alpha = .025, beta = .1, timing = c(.45, .7),
+    sfu = sfHSD, sfupar = -3, sfl = sfHSD, sflpar = -3,
+    ratio = 3, hr = .3, hr0 = .7
+  ) |>
+    toBinomialExact()
   observed <- design$lower$bound[1] + 1L
   binding <- gsCPBinomialExact(design, x.i = observed, ve = .7)
   nonbinding <- gsCPBinomialExact(design, x.i = observed, ve = .7, binding = FALSE)
 
-  expect_equal(nonbinding$upper$bound, design$n.I[2] + 1L)
+  expect_equal(nonbinding$upper$bound, design$n.I[2:3] + 1L)
   expect_equal(nonbinding$conditional_futility, 0)
-  expect_gte(nonbinding$conditional_power, binding$conditional_power)
+  expect_gt(binding$conditional_futility, 0)
+  expect_gt(nonbinding$conditional_power, binding$conditional_power)
+})
+
+test_that("current boundary crossing does not prevent conditioning", {
+  design <- exact_cp_design()
+  below_efficacy <- max(0L, design$lower$bound[1] - 1L)
+  above_futility <- min(design$n.I[1], design$upper$bound[1] + 1L)
+
+  efficacy_result <- gsCPBinomialExact(design, x.i = below_efficacy, ve = .7)
+  futility_result <- gsCPBinomialExact(design, x.i = above_futility, ve = .7)
+
+  expect_equal(efficacy_result$x.i, below_efficacy)
+  expect_equal(futility_result$x.i, above_futility)
+  expect_true(all(efficacy_result$conditional_power >= 0 &
+    efficacy_result$conditional_power <= 1))
+  expect_true(all(futility_result$conditional_power >= 0 &
+    futility_result$conditional_power <= 1))
 })
 
 test_that("default assumptions include observed, null, and alternative probabilities", {
@@ -68,7 +90,6 @@ test_that("exact conditional power validates inputs", {
   expect_error(gsCPBinomialExact(design, x.i = 1.5), "integer")
   expect_error(gsCPBinomialExact(design, x.i = observed, theta = .3, ve = .7), "at most one")
   expect_error(gsCPBinomialExact(design, x.i = observed, theta = -.1), "between 0 and 1")
-  expect_error(gsCPBinomialExact(design, x.i = design$lower$bound[1]), "continuation")
   expect_error(gsCPBinomialExact(design, x.i = observed, binding = NA), "TRUE or FALSE")
 })
 

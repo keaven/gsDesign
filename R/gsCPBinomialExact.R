@@ -19,7 +19,8 @@
 #'   supplied and is also used to report efficacy corresponding to `theta`.
 #' @param binding Logical indicating whether future futility or harm boundaries
 #'   stop the trial. With `FALSE`, conditional efficacy power ignores these
-#'   non-binding boundaries.
+#'   future non-binding boundaries. This argument does not restrict the
+#'   observed result at analysis `i`.
 #'
 #' @return An object of class `gsBinomialExactCP`. Components include future
 #'   absolute event counts, assumed conditional event probabilities and
@@ -33,10 +34,14 @@
 #' under the same conditional-binomial assumptions used by
 #' [gsBinomialExact()].
 #'
-#' The default conditions only on the statistic at analysis `i`, as [gsCP()]
-#' does. The observed count must be in the continuation region. For designs
-#' with non-binding futility, `binding = FALSE` gives conditional power when
-#' those boundaries will not be enforced.
+#' The calculation conditions only on the statistic at analysis `i`, as
+#' [gsCP()] does. It is computed regardless of whether the observed count has
+#' crossed a current efficacy, futility, or harm boundary. This gives a
+#' hypothetical projection if follow-up were to continue; it does not reverse
+#' a stopping decision. The `binding` argument controls only whether futility
+#' or harm boundaries at future analyses are enforced. Thus, the default
+#' `binding = TRUE` includes future non-efficacy stopping, whereas
+#' `binding = FALSE` ignores it.
 #'
 #' @seealso [gsCP()], [toBinomialExact()], [VEtable()]
 #'
@@ -115,9 +120,6 @@ gsCPBinomialExact <- function(
     upper_bound[!(test_futility | test_harm)] <- x$n.I[!(test_futility | test_harm)] + 1L
   }
   efficacy_bound[!test_efficacy] <- -1L
-  if (x.i <= efficacy_bound[i] || x.i >= upper_bound[i]) {
-    stop("x.i must be within the continuation region at analysis i", call. = FALSE)
-  }
 
   future <- (i + 1L):x$k
   probability <- lapply(theta, function(p) {
