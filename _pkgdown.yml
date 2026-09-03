@@ -63,6 +63,7 @@ reference:
   contents:
   - toBinomialExact
   - VEtable
+  - lt.gsVETable
   - ciBinomialExact
   - repeatedCIBinomialExact
   - sequentialCIBinomialExact
