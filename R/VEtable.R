@@ -17,11 +17,12 @@
 #'   is taken from \code{tteDesign} or from a design created by
 #'   \code{toBinomialExact()}.
 #'
-#' @return A tibble with one row per analysis. The columns contain analysis
-#'   number, optional timing and enrollment, total cases, exact efficacy and
-#'   futility bounds, efficacy at each bound, cumulative alpha and beta
-#'   spending, and cumulative efficacy-crossing probability under each value
-#'   in \code{ve}.
+#' @return A tibble of class \code{gsVETable} with one row per analysis. The
+#'   columns contain analysis number, optional timing and enrollment, total
+#'   cases, exact efficacy and futility bounds, efficacy at each bound,
+#'   cumulative alpha and beta spending, and cumulative efficacy-crossing
+#'   probability under each value in \code{ve}. Pass the result to
+#'   \code{\link[lt]{lt}()} for a formatted table with explanatory footnotes.
 #'
 #' @details
 #' Vaccine efficacy (VE), also termed prevention efficacy (PE) for non-vaccine
@@ -115,5 +116,9 @@ VEtable <- function(x, ve, tteDesign = NULL, ratio = NULL) {
     )
   }
 
-  dplyr::bind_cols(out, tibble::as_tibble(power, .name_repair = "minimal"))
+  out <- dplyr::bind_cols(out, tibble::as_tibble(power, .name_repair = "minimal"))
+  class(out) <- c("gsVETable", class(out))
+  attr(out, "ve") <- ve
+  attr(out, "alpha") <- x$alpha
+  out
 }

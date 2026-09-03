@@ -81,3 +81,102 @@ lt.gsBinomialExactTable <- function(
     lt::lt_format(columns = "theta", decimals = rr_decimals, percent = TRUE) |>
     lt::lt_header(title = title, subtitle = subtitle)
 }
+
+#' Format a vaccine or prevention efficacy summary table
+#'
+#' Applies standard labels, number formats, spanners, and explanatory
+#' footnotes to a table returned by \code{\link{VEtable}}.
+#'
+#' @param data A \code{gsVETable} object returned by \code{\link{VEtable}}.
+#' @param ... Additional arguments passed to \code{\link[lt]{lt}}.
+#' @param title Table title.
+#' @param subtitle Optional table subtitle.
+#' @param efficacy_label Whether to label efficacy as vaccine efficacy
+#'   (\code{"VE"}) or prevention efficacy (\code{"PE"}).
+#' @param time_decimals Number of decimal places for analysis time.
+#' @param efficacy_decimals Number of decimal places for efficacy at the
+#'   boundaries and power.
+#' @param spending_decimals Number of decimal places for alpha and beta
+#'   spending.
+#'
+#' @return An \code{lt_tbl} object.
+#'
+#' @rdname lt-gsVETable
+#' @exportS3Method lt::lt
+lt.gsVETable <- function(
+    data,
+    ...,
+    title = "Design Bounds and Operating Characteristics",
+    subtitle = NULL,
+    efficacy_label = c("VE", "PE"),
+    time_decimals = 1,
+    efficacy_decimals = 2,
+    spending_decimals = 4) {
+  efficacy_label <- match.arg(efficacy_label)
+  efficacy_name <- if (efficacy_label == "VE") {
+    "Vaccine Efficacy"
+  } else {
+    "Prevention Efficacy"
+  }
+  power_columns <- intersect(names(data), paste0(attr(data, "ve") * 100, "%"))
+  alpha <- attr(data, "alpha")
+
+  out <- lt::lt(as.data.frame(data), ...) |>
+    lt::lt_spanner(
+      label = "Experimental Cases at Bound",
+      columns = c("Success", "Futility")
+    ) |>
+    lt::lt_spanner(
+      label = paste("Power by", efficacy_name),
+      columns = power_columns
+    ) |>
+    lt::lt_spanner(label = "Error Spending", columns = c("alpha", "beta")) |>
+    lt::lt_spanner(
+      label = paste(efficacy_name, "at Bound"),
+      columns = c("ve_efficacy", "ve_futility")
+    ) |>
+    lt::lt_label(
+      ve_efficacy = "Efficacy",
+      ve_futility = "Futility"
+    ) |>
+    lt::lt_format(
+      columns = c("ve_efficacy", "ve_futility", power_columns),
+      decimals = efficacy_decimals
+    ) |>
+    lt::lt_format(
+      columns = c("alpha", "beta"),
+      decimals = spending_decimals
+    ) |>
+    lt::lt_footnote(
+      "Cumulative spending at each analysis",
+      where = "spanner", columns = "Error Spending"
+    ) |>
+    lt::lt_footnote(
+      paste0(
+        "Experimental case counts; counts between success and futility ",
+        "bounds do not stop the trial"
+      ),
+      where = "spanner", columns = "Experimental Cases at Bound"
+    ) |>
+    lt::lt_footnote(
+      paste("Exact", tolower(efficacy_name), "required to cross bound"),
+      where = "spanner", columns = paste(efficacy_name, "at Bound")
+    ) |>
+    lt::lt_footnote(
+      paste("Cumulative power at each analysis by underlying", tolower(efficacy_name)),
+      where = "spanner", columns = paste("Power by", efficacy_name)
+    ) |>
+    lt::lt_footnote(
+      paste0(
+        "Cumulative alpha-spending for efficacy ignores non-binding futility ",
+        "bound; final value < ", alpha, " due to discreteness"
+      ),
+      where = "column", columns = "alpha"
+    ) |>
+    lt::lt_header(title = title, subtitle = subtitle)
+
+  if ("Time" %in% names(data)) {
+    out <- lt::lt_format(out, columns = "Time", decimals = time_decimals)
+  }
+  out
+}

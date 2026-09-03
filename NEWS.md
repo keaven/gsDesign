@@ -4,7 +4,8 @@
 
 - Added exact conditional power, fixed-look Clopper--Pearson, repeated, and
   sequential confidence intervals for vaccine or prevention efficacy, plus
-  `VEtable()` summaries for exact binomial spending designs (#316).
+  `VEtable()` summaries and automatic `lt()` formatting for exact binomial
+  spending designs (#316).
 
 ## Major changes
 

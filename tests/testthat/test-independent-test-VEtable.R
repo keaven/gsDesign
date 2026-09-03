@@ -26,6 +26,7 @@ test_that("VEtable summarizes planned vaccine efficacy designs", {
   design <- ve_design()
   result <- VEtable(design$exact, ve = c(.5, .7), tteDesign = design$tte)
 
+  expect_s3_class(result, "gsVETable")
   expect_s3_class(result, "tbl_df")
   expect_s3_class(design$exact, "gsBinomialExactSpending")
   expect_named(result, c(
@@ -43,6 +44,8 @@ test_that("VEtable summarizes planned vaccine efficacy designs", {
     b = design$exact$n.I + 1
   )$lower$prob))
   expect_true(all(diff(result$`70%`) >= 0))
+  expect_equal(attr(result, "ve"), c(.5, .7))
+  expect_equal(attr(result, "alpha"), design$exact$alpha)
 })
 
 test_that("VEtable supports observed-event tables without timing columns", {
@@ -56,6 +59,45 @@ test_that("VEtable supports observed-event tables without timing columns", {
     "ve_futility", "alpha", "beta", "70%"
   ))
   expect_equal(updated$ratio, design$tte$ratio)
+})
+
+test_that("lt formats VE tables with standard annotations", {
+  design <- ve_design()
+  result <- VEtable(design$exact, ve = c(.5, .7), tteDesign = design$tte) |>
+    lt(efficacy_label = "PE")
+
+  expect_s3_class(result, "lt_tbl")
+  expect_equal(result$header$title, "Design Bounds and Operating Characteristics")
+  expect_equal(
+    vapply(result$spanners, `[[`, character(1), "label"),
+    c(
+      "Experimental Cases at Bound",
+      "Power by Prevention Efficacy",
+      "Error Spending",
+      "Prevention Efficacy at Bound"
+    )
+  )
+  expect_equal(length(result$footnotes), 5)
+  expect_match(result$footnotes[[5]]$text, "final value < 0.025 due to discreteness")
+  expect_true(any(vapply(
+    result$ops,
+    function(op) identical(op$type, "fmt_number") && "Time" %in% op$columns,
+    logical(1)
+  )))
+})
+
+test_that("lt formats observed-event VE tables without requiring timing", {
+  design <- ve_design()
+  updated <- toBinomialExact(design$tte, observedEvents = c(20, 78))
+  result <- VEtable(updated, ve = .7) |>
+    lt(title = "Updated design")
+
+  expect_equal(result$header$title, "Updated design")
+  expect_false(any(vapply(
+    result$ops,
+    function(op) identical(op$type, "fmt_number") && "Time" %in% op$columns,
+    logical(1)
+  )))
 })
 
 test_that("VEtable validates inputs", {

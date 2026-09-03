@@ -22,11 +22,12 @@ is taken from \code{tteDesign} or from a design created by
 \code{toBinomialExact()}.}
 }
 \value{
-A tibble with one row per analysis. The columns contain analysis
-  number, optional timing and enrollment, total cases, exact efficacy and
-  futility bounds, efficacy at each bound, cumulative alpha and beta
-  spending, and cumulative efficacy-crossing probability under each value
-  in \code{ve}.
+A tibble of class \code{gsVETable} with one row per analysis. The
+  columns contain analysis number, optional timing and enrollment, total
+  cases, exact efficacy and futility bounds, efficacy at each bound,
+  cumulative alpha and beta spending, and cumulative efficacy-crossing
+  probability under each value in \code{ve}. Pass the result to
+  \code{\link[lt]{lt}()} for a formatted table with explanatory footnotes.
 }
 \description{
 Creates a vaccine or prevention efficacy summary table from an exact
