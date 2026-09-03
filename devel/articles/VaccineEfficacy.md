@@ -754,16 +754,15 @@ Methods* 27 (6): 1305–22.
 
 Clopper, C. J., and E. S. Pearson. 1934. “The Use of Confidence or
 Fiducial Limits Illustrated in the Case of the Binomial.” *Biometrika*
-26 (4): 404–13. <https://doi.org/10.1093/biomet/26.4.404>.
+26 (4): 404–13.
 
-Coe, Paul R., and Ajit C. Tamhane. 1993. “Small Sample Confidence
-Intervals for the Difference, Ratio and Odds Ratio of Two Success
-Probabilities.” *Controlled Clinical Trials* 14 (4): 270–90.
-<https://doi.org/10.1016/0197-2456(93)90047-H>.
+Coe, Paul R., and Ajit C. Tamhane. 1993. “Exact Repeated Confidence
+Intervals for Bernoulli Parameters in a Group Sequential Clinical
+Trial.” *Controlled Clinical Trials* 14 (1): 19–29.
 
 Jennison, Christopher, and Bruce W. Turnbull. 1984. “Repeated Confidence
 Intervals for Group Sequential Clinical Trials.” *Controlled Clinical
-Trials* 5 (1): 33–45. <https://doi.org/10.1016/0197-2456(84)90148-X>.
+Trials* 5 (1): 33–45.
 
 Jennison, Christopher, and Bruce W. Turnbull. 2000. *Group Sequential
 Methods with Applications to Clinical Trials*. Chapman; Hall/CRC.
