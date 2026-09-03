@@ -8,7 +8,8 @@
   and sequential confidence intervals for vaccine or prevention
   efficacy, plus
   [`VEtable()`](https://keaven.github.io/gsDesign/devel/reference/VEtable.md)
-  summaries for exact binomial spending designs
+  summaries and automatic [`lt()`](https://rdrr.io/pkg/lt/man/lt.html)
+  formatting for exact binomial spending designs
   ([\#316](https://github.com/keaven/gsDesign/issues/316)).
 
 ### Major changes

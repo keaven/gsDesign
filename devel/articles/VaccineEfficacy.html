@@ -1024,42 +1024,7 @@ terminology, the supplied values can represent prevention efficacy for a
 non-vaccine preventive intervention.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/VEtable.html">VEtable</a></span><span class="op">(</span><span class="va">xb</span>, <span class="va">ve</span>, tteDesign <span class="op">=</span> <span class="va">x</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>, decimals <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span><span class="op">:</span><span class="fl">8</span>, <span class="fl">11</span><span class="op">:</span><span class="fl">16</span><span class="op">)</span>, decimals <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">9</span><span class="op">:</span><span class="fl">10</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_spanner.html" class="external-link">lt_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Experimental Cases at Bound"</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Success"</span>, <span class="st">"Futility"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_spanner.html" class="external-link">lt_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Power by Vaccine Efficacy"</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">ve</span> <span class="op">*</span> <span class="fl">100</span>, <span class="st">"%"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_spanner.html" class="external-link">lt_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Error Spending"</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"alpha"</span>, <span class="st">"beta"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_spanner.html" class="external-link">lt_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Vaccine Efficacy at Bound"</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ve_efficacy"</span>, <span class="st">"ve_futility"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_label.html" class="external-link">lt_label</a></span><span class="op">(</span></span>
-<span>    ve_efficacy <span class="op">=</span> <span class="st">"Efficacy"</span>,</span>
-<span>    ve_futility <span class="op">=</span> <span class="st">"Futility"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Cumulative spending at each analysis"</span>,</span>
-<span>    where <span class="op">=</span> <span class="st">"spanner"</span>, columns <span class="op">=</span> <span class="st">"Error Spending"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Experimental case counts to cross between success and futility counts do not stop trial"</span>,</span>
-<span>    where <span class="op">=</span> <span class="st">"spanner"</span>, columns <span class="op">=</span> <span class="st">"Experimental Cases at Bound"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Exact vaccine efficacy required to cross bound"</span>,</span>
-<span>    where <span class="op">=</span> <span class="st">"spanner"</span>, columns <span class="op">=</span> <span class="st">"Vaccine Efficacy at Bound"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Cumulative power at each analysis by underlying vaccine efficacy"</span>,</span>
-<span>    where <span class="op">=</span> <span class="st">"spanner"</span>, columns <span class="op">=</span> <span class="st">"Power by Vaccine Efficacy"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
-<span>      <span class="st">"Cumulative alpha-spending for efficacy ignores non-binding futility bound; "</span>,</span>
-<span>      <span class="st">"final value &lt; "</span>, <span class="va">xb</span><span class="op">$</span><span class="va">alpha</span>, <span class="st">" due to discreteness"</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    where <span class="op">=</span> <span class="st">"column"</span>, columns <span class="op">=</span> <span class="st">"alpha"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Design Bounds and Operating Characteristics"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
@@ -1082,9 +1047,11 @@ non-vaccine preventive intervention.</p>
   },
   "ops": [
     {
-      "type": "fmt_number",
-      "columns": ["Time"],
-      "decimals": 1
+      "type": "label",
+      "labels": {
+        "ve_efficacy": "Efficacy",
+        "ve_futility": "Futility"
+      }
     },
     {
       "type": "fmt_number",
@@ -1097,11 +1064,9 @@ non-vaccine preventive intervention.</p>
       "decimals": 4
     },
     {
-      "type": "label",
-      "labels": {
-        "ve_efficacy": "Efficacy",
-        "ve_futility": "Futility"
-      }
+      "type": "fmt_number",
+      "columns": ["Time"],
+      "decimals": 1
     }
   ],
   "spanners": [
@@ -1131,7 +1096,7 @@ non-vaccine preventive intervention.</p>
       }
     },
     {
-      "text": "Experimental case counts to cross between success and futility counts do not stop trial",
+      "text": "Experimental case counts; counts between success and futility bounds do not stop the trial",
       "location": {
         "type": "column_spanners",
         "spanners": ["Experimental Cases at Bound"]
@@ -1318,41 +1283,7 @@ table.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ve_update</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.65</span>, <span class="fl">.75</span>, <span class="fl">.85</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/VEtable.html">VEtable</a></span><span class="op">(</span><span class="va">ebUpdate</span>, <span class="va">ve_update</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">9</span><span class="op">:</span><span class="fl">11</span><span class="op">)</span>, decimals <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">7</span><span class="op">:</span><span class="fl">8</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_spanner.html" class="external-link">lt_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Cases at Bound"</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Success"</span>, <span class="st">"Futility"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_spanner.html" class="external-link">lt_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Power by VE"</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">ve_update</span> <span class="op">*</span> <span class="fl">100</span>, <span class="st">"%"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_spanner.html" class="external-link">lt_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Error Spending"</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"alpha"</span>, <span class="st">"beta"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_spanner.html" class="external-link">lt_spanner</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"VE at Bound"</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ve_efficacy"</span>, <span class="st">"ve_futility"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_label.html" class="external-link">lt_label</a></span><span class="op">(</span></span>
-<span>    ve_efficacy <span class="op">=</span> <span class="st">"Efficacy"</span>,</span>
-<span>    ve_futility <span class="op">=</span> <span class="st">"Futility"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Cumulative spending at each analysis"</span>,</span>
-<span>    where <span class="op">=</span> <span class="st">"spanner"</span>, columns <span class="op">=</span> <span class="st">"Error Spending"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Experimental case counts; counts between success and futility bounds do not stop trial"</span>,</span>
-<span>    where <span class="op">=</span> <span class="st">"spanner"</span>, columns <span class="op">=</span> <span class="st">"Cases at Bound"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Exact vaccine efficacy required to cross bound"</span>,</span>
-<span>    where <span class="op">=</span> <span class="st">"spanner"</span>, columns <span class="op">=</span> <span class="st">"VE at Bound"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
-<span>    <span class="st">"Cumulative power at each analysis by underlying vaccine efficacy"</span>,</span>
-<span>    where <span class="op">=</span> <span class="st">"spanner"</span>, columns <span class="op">=</span> <span class="st">"Power by VE"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
-<span>      <span class="st">"Cumulative alpha-spending for efficacy ignores non-binding futility bound; "</span>,</span>
-<span>      <span class="st">"final value &lt; "</span>, <span class="va">ebUpdate</span><span class="op">$</span><span class="va">alpha</span>, <span class="st">" due to discreteness"</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    where <span class="op">=</span> <span class="st">"column"</span>, columns <span class="op">=</span> <span class="st">"alpha"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Updated Bounds for Actual Analyses from SPUTNIK trial"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Updated Bounds for Actual Analyses from SPUTNIK trial"</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
@@ -1370,6 +1301,13 @@ table.</p>
   },
   "ops": [
     {
+      "type": "label",
+      "labels": {
+        "ve_efficacy": "Efficacy",
+        "ve_futility": "Futility"
+      }
+    },
+    {
       "type": "fmt_number",
       "columns": ["ve_efficacy", "ve_futility", "65%", "75%", "85%"],
       "decimals": 2
@@ -1378,22 +1316,15 @@ table.</p>
       "type": "fmt_number",
       "columns": ["alpha", "beta"],
       "decimals": 4
-    },
-    {
-      "type": "label",
-      "labels": {
-        "ve_efficacy": "Efficacy",
-        "ve_futility": "Futility"
-      }
     }
   ],
   "spanners": [
     {
-      "label": "Cases at Bound",
+      "label": "Experimental Cases at Bound",
       "columns": ["Success", "Futility"]
     },
     {
-      "label": "Power by VE",
+      "label": "Power by Vaccine Efficacy",
       "columns": ["65%", "75%", "85%"]
     },
     {
@@ -1401,7 +1332,7 @@ table.</p>
       "columns": ["alpha", "beta"]
     },
     {
-      "label": "VE at Bound",
+      "label": "Vaccine Efficacy at Bound",
       "columns": ["ve_efficacy", "ve_futility"]
     }
   ],
@@ -1414,24 +1345,24 @@ table.</p>
       }
     },
     {
-      "text": "Experimental case counts; counts between success and futility bounds do not stop trial",
+      "text": "Experimental case counts; counts between success and futility bounds do not stop the trial",
       "location": {
         "type": "column_spanners",
-        "spanners": ["Cases at Bound"]
+        "spanners": ["Experimental Cases at Bound"]
       }
     },
     {
       "text": "Exact vaccine efficacy required to cross bound",
       "location": {
         "type": "column_spanners",
-        "spanners": ["VE at Bound"]
+        "spanners": ["Vaccine Efficacy at Bound"]
       }
     },
     {
       "text": "Cumulative power at each analysis by underlying vaccine efficacy",
       "location": {
         "type": "column_spanners",
-        "spanners": ["Power by VE"]
+        "spanners": ["Power by Vaccine Efficacy"]
       }
     },
     {

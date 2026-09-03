@@ -37,10 +37,13 @@ VEtable(x, ve, tteDesign = NULL, ratio = NULL)
 
 ## Value
 
-A tibble with one row per analysis. The columns contain analysis number,
-optional timing and enrollment, total cases, exact efficacy and futility
-bounds, efficacy at each bound, cumulative alpha and beta spending, and
-cumulative efficacy-crossing probability under each value in `ve`.
+A tibble of class `gsVETable` with one row per analysis. The columns
+contain analysis number, optional timing and enrollment, total cases,
+exact efficacy and futility bounds, efficacy at each bound, cumulative
+alpha and beta spending, and cumulative efficacy-crossing probability
+under each value in `ve`. Pass the result to
+[`lt()`](https://rdrr.io/pkg/lt/man/lt.html) for a formatted table with
+explanatory footnotes.
 
 ## Details
 

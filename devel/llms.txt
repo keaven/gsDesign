@@ -197,6 +197,8 @@ and
   : Translate survival design bounds to exact binomial bounds
 - [`VEtable()`](https://keaven.github.io/gsDesign/devel/reference/VEtable.md)
   : Summarize an exact binomial vaccine or prevention efficacy design
+- [`lt(`*`<gsVETable>`*`)`](https://keaven.github.io/gsDesign/devel/reference/lt-gsVETable.md)
+  : Format a vaccine or prevention efficacy summary table
 - [`ciBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/ciBinomialExact.md)
   : Exact confidence intervals for vaccine or prevention efficacy
 - [`repeatedCIBinomialExact()`](https://keaven.github.io/gsDesign/devel/reference/repeatedCIBinomialExact.md)

@@ -88,11 +88,12 @@ is taken from <code>tteDesign</code> or from a design created by
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A tibble with one row per analysis. The columns contain analysis
-  number, optional timing and enrollment, total cases, exact efficacy and
-  futility bounds, efficacy at each bound, cumulative alpha and beta
-  spending, and cumulative efficacy-crossing probability under each value
-  in <code>ve</code>.</p>
+    <p>A tibble of class <code>gsVETable</code> with one row per analysis. The
+  columns contain analysis number, optional timing and enrollment, total
+  cases, exact efficacy and futility bounds, efficacy at each bound,
+  cumulative alpha and beta spending, and cumulative efficacy-crossing
+  probability under each value in <code>ve</code>. Pass the result to
+  <code><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt()</a></code> for a formatted table with explanatory footnotes.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
