@@ -55,8 +55,9 @@ gsCPBinomialExact(
 - binding:
 
   Logical indicating whether future futility or harm boundaries stop the
-  trial. With \`FALSE\`, conditional efficacy power ignores these
-  non-binding boundaries.
+  trial. With \`FALSE\`, conditional efficacy power ignores these future
+  non-binding boundaries. This argument does not restrict the observed
+  result at analysis \`i\`.
 
 ## Value
 
@@ -73,10 +74,14 @@ is propagated through the remaining integer boundaries. Thus the
 calculation is exact under the same conditional-binomial assumptions
 used by \[gsBinomialExact()\].
 
-The default conditions only on the statistic at analysis \`i\`, as
-\[gsCP()\] does. The observed count must be in the continuation region.
-For designs with non-binding futility, \`binding = FALSE\` gives
-conditional power when those boundaries will not be enforced.
+The calculation conditions only on the statistic at analysis \`i\`, as
+\[gsCP()\] does. It is computed regardless of whether the observed count
+has crossed a current efficacy, futility, or harm boundary. This gives a
+hypothetical projection if follow-up were to continue; it does not
+reverse a stopping decision. The \`binding\` argument controls only
+whether futility or harm boundaries at future analyses are enforced.
+Thus, the default \`binding = TRUE\` includes future non-efficacy
+stopping, whereas \`binding = FALSE\` ignores it.
 
 ## See also
 

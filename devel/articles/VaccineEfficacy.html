@@ -1502,25 +1502,31 @@ and the design alternative VE of 0.7:</p>
     "title": "Exact Conditional Power after 9 of 20 Experimental-Group Events"
   }
 }
-})</script><p>The default <code>binding = TRUE</code> treats future futility or
-harm boundaries as stopping rules. For a design with non-binding
-futility, <code>binding = FALSE</code> instead reports conditional
-efficacy power when those boundaries will not be enforced. The
-calculation accepts <code>theta</code> directly for conditional
-experimental-group event probabilities or <code>ve</code> for VE or PE
-assumptions.</p>
+})</script><p>The observed interim count is used only as the conditioning state.
+The calculation is therefore available even if that count has already
+crossed the current efficacy, futility, or harm boundary. This is a
+hypothetical projection of what would happen if follow-up continued, not
+a reversal of a stopping decision. The default
+<code>binding = TRUE</code> treats <em>future</em> futility or harm
+boundaries as stopping rules. For a design with non-binding futility,
+<code>binding = FALSE</code> instead reports conditional efficacy power
+when those future boundaries will not be enforced. The calculation
+accepts <code>theta</code> directly for conditional experimental-group
+event probabilities or <code>ve</code> for VE or PE assumptions.</p>
 <p>Conditional power can also be examined across a range of assumptions
-about future VE or PE. We compare three hypothetical interim outcomes:
-16 experimental-group events, exactly at the futility bound, and 12 and
-9 events, both between the efficacy and futility bounds. Since the first
-outcome reaches the non-binding futility bound, all three curves assume
-that the trial continues by setting <code>binding = FALSE</code>.</p>
+about future VE or PE. At the first analysis the efficacy and futility
+bounds are 6 and 16 experimental-group events, respectively. We compare
+four hypothetical outcomes that fall strictly below and above each
+boundary: 5, 7, 15, and 17 events. Current boundary status is ignored
+for conditioning, while the default <code>binding = TRUE</code>
+continues to enforce future futility stopping.</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">future_ve</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.9</span>, by <span class="op">=</span> <span class="fl">.02</span><span class="op">)</span></span>
 <span><span class="va">interim_outcomes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>  <span class="st">"Futility bound: 16 of 20"</span> <span class="op">=</span> <span class="fl">16</span>,</span>
-<span>  <span class="st">"Between bounds: 12 of 20"</span> <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  <span class="st">"Between bounds: 9 of 20"</span> <span class="op">=</span> <span class="fl">9</span></span>
+<span>  <span class="st">"Below efficacy bound: 5 of 20"</span> <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  <span class="st">"Above efficacy bound: 7 of 20"</span> <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  <span class="st">"Below futility bound: 15 of 20"</span> <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>  <span class="st">"Above futility bound: 17 of 20"</span> <span class="op">=</span> <span class="fl">17</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">conditional_power_plot_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span></span>
@@ -1531,7 +1537,7 @@ that the trial continues by setting <code>binding = FALSE</code>.</p>
 <span>      i <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>      x.i <span class="op">=</span> <span class="va">interim_outcomes</span><span class="op">[[</span><span class="va">outcome</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>      ve <span class="op">=</span> <span class="va">future_ve</span>,</span>
-<span>      binding <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>      binding <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>    <span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>      VE <span class="op">=</span> <span class="va">cp</span><span class="op">$</span><span class="va">efficacy</span>,</span>
@@ -1564,10 +1570,13 @@ that the trial continues by setting <code>binding = FALSE</code>.</p>
 <span>    y <span class="op">=</span> <span class="st">"Exact conditional power"</span>,</span>
 <span>    color <span class="op">=</span> <span class="st">"Interim outcome"</span>,</span>
 <span>    title <span class="op">=</span> <span class="st">"Conditional Power by Future VE / PE"</span>,</span>
-<span>    caption <span class="op">=</span> <span class="st">"The trial is assumed to continue across the non-binding futility bound."</span></span>
+<span>    caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Current boundary status is ignored; future futility stopping is enforced."</span></span>
+<span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="VaccineEfficacy_files/figure-html/unnamed-chunk-26-1.svg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
