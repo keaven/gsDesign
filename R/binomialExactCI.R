@@ -99,9 +99,9 @@ ciBinomialExact <- function(
 #' Jennison, C. and Turnbull, B. W. (1984). Repeated confidence intervals for
 #' group sequential clinical trials. *Controlled Clinical Trials*, 5, 33--45.
 #'
-#' Coe, P. R. and Tamhane, A. C. (1993). Small sample confidence intervals for
-#' the difference, ratio and odds ratio of two success probabilities.
-#' *Controlled Clinical Trials*, 14, 270--290.
+#' Coe, P. R. and Tamhane, A. C. (1993). Exact repeated confidence intervals
+#' for Bernoulli parameters in a group sequential clinical trial.
+#' *Controlled Clinical Trials*, 14, 19--29.
 #'
 #' @seealso [ciBinomialExact()], [sequentialCIBinomialExact()],
 #'   [repeatedPValueBinomialExact()]
