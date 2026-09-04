@@ -255,6 +255,8 @@ For an overview of spending functions, see
   [`sfXG2()`](https://keaven.github.io/gsDesign/devel/reference/sfXG.md)
   [`sfXG3()`](https://keaven.github.io/gsDesign/devel/reference/sfXG.md)
   : Xi and Gallo conditional error spending functions
+- [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/devel/reference/gsCPFutilitySpending.md)
+  : Calibrate Futility Spending to Conditional-Power Targets
 
 ## Conditional and Predictive Power
 

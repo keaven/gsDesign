@@ -282,8 +282,8 @@ preventive intervention.
 
 ``` r
 
-VEtable(xb, ve, tteDesign = x) |>
-  lt()
+gsDesign::VEtable(xb, ve, tteDesign = x) |>
+  lt::lt()
 ```
 
 The initial approximation of bounds for the exact binomial design was
