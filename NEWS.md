@@ -3,7 +3,7 @@
 ## New features
 
 - Added `gsCPFutilitySpending()` to calibrate beta-spending futility
-  parameters and statistical information to conditional-power targets at one
+  parameters and statistical information to conditional power targets at one
   or more interim analyses for `test.type` 3, 4, 7, and 8 (#318).
 - Added exact conditional power, fixed-look Clopper--Pearson, repeated, and
   sequential confidence intervals for vaccine or prevention efficacy, plus
