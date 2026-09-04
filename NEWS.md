@@ -2,6 +2,9 @@
 
 ## New features
 
+- Added `gsCPFutilitySpending()` to calibrate beta-spending futility
+  parameters and statistical information to conditional power targets at one
+  or more interim analyses for `test.type` 3, 4, 7, and 8 (#318).
 - Added exact conditional power, fixed-look Clopper--Pearson, repeated, and
   sequential confidence intervals for vaccine or prevention efficacy, plus
   `VEtable()` summaries and automatic `lt()` formatting for exact binomial
@@ -239,7 +242,7 @@
   row names (#274).
 - `Power.ssrCP()` now uses the interim efficacy bound when integrating the
   no-sample-size-re-estimation region and when falling back to the upper
-  conditional-power changepoint (#213).
+  conditional power changepoint (#213).
 - `nSurv()` and `gsSurv()` now use the requested survival sample size method
   when either `T` or `minfup` is `NULL`. `gsSurv()` also uses the input
   accrual rate and duration when both `T` and `minfup` are `NULL`, solving

@@ -418,6 +418,7 @@
 #'   \code{\link{gsSurv}}, \code{\link{gsSurvCalendar}},
 #'   \code{\link[gsDesign]{gsDesign}}, \code{\link[gsDesign]{gsProbability}}
 #'
+#' @aliases gsSurvPower-class
 #' @export
 gsSurvPower <- function(
     x = NULL,
