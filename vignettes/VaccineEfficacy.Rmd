@@ -238,8 +238,8 @@ the supplied values can represent prevention efficacy for a non-vaccine
 preventive intervention.
 
 ```{r}
-VEtable(xb, ve, tteDesign = x) |>
-  lt()
+gsDesign::VEtable(xb, ve, tteDesign = x) |>
+  lt::lt()
 ```
 The initial approximation of bounds for the exact binomial design was generated from the time-to-event design as follows.
 First, we computed nominal p-value 1-sided bounds under the null hypothesis for the efficacy bounds using the normal approximation that the time-to-event design used:
