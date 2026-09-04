@@ -1,5 +1,5 @@
 # gsCPFutilitySpending roxy [sinew] ----
-#' @title Calibrate Futility Spending to Conditional-Power Targets
+#' @title Calibrate Futility Spending to Conditional Power Targets
 #'
 #' @description
 #' \code{gsCPFutilitySpending()} selects parameters for a beta-spending futility
@@ -14,7 +14,7 @@
 #' \code{lower$bound[i] / sqrt(n.I[i])}, following the default convention in
 #' \code{\link{gsCP}()}. The calculation conditions on the interim statistic even though it
 #' is at a stopping boundary; future futility bounds remain part of the
-#' conditional-power calculation.
+#' conditional power calculation.
 #'
 #' One-target calibration supports the one-parameter families \code{sfHSD},
 #' \code{sfPower}, \code{sfExponential}, and \code{sfLDOF}. Two-target calibration supports
@@ -27,7 +27,7 @@
 #'
 #' With multiple targets, a latest-to-earliest coordinate solve supplies
 #' starting values for a final joint constrained optimization. A result is
-#' returned only when every conditional-power residual is within
+#' returned only when every conditional power residual is within
 #' \code{control$cp_tol}.
 #'
 #' The fitted lower spending parameters depend on the complete design,
@@ -38,7 +38,7 @@
 #' not trigger recalibration.
 #'
 #' @param x A fixed-timing \code{gsDesign} object with \code{test.type} 3, 4, 7, or 8.
-#' @param target_cp Numeric vector of conditional-power targets strictly between
+#' @param target_cp Numeric vector of conditional power targets strictly between
 #'   zero and one.
 #' @param i Interim analysis indices corresponding to \code{target_cp}. Values must
 #'   identify active futility bounds, be unique, and be in
@@ -208,7 +208,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
     best <- start_eval
     solver <- list(
       convergence = 0L,
-      message = "Starting values satisfied all conditional-power targets.",
+      message = "Starting values satisfied all conditional power targets.",
       method = "starting values",
       backward = spending$start,
       value = sum(start_eval$residual^2),
@@ -517,7 +517,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
     .gsCPFAbort(
       paste0(
         name, " has ", spec$npar, " free parameter", if (spec$npar == 1L) "" else "s",
-        " but ", n_target, " conditional-power target", if (n_target == 1L) " was" else "s were", " supplied."
+        " but ", n_target, " conditional power target", if (n_target == 1L) " was" else "s were", " supplied."
       ),
       "gsCPFutilitySpending_input_error"
     )
@@ -756,7 +756,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
 
 .gsCPFFailureMessage <- function(target_cp, best, max_residual, bound_reached, solver) {
   paste0(
-    "Conditional-power calibration did not meet tolerance. Requested CP: ",
+    "Conditional power calibration did not meet tolerance. Requested CP: ",
     paste(format(target_cp, digits = 6), collapse = ", "),
     "; closest CP: ", paste(format(best$achieved, digits = 6), collapse = ", "),
     "; maximum absolute residual: ", format(max_residual, digits = 6),

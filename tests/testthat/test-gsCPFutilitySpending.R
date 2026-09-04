@@ -45,7 +45,7 @@ test_that("one-parameter futility spending is recovered from conditional power",
   expect_no_error(suppressMessages(toInteger(fit)))
 })
 
-test_that("an explicit conditional-power effect is retained", {
+test_that("an explicit conditional power effect is retained", {
   x <- gsDesign(k = 3, test.type = 4, timing = c(.4, .7), sflpar = -1)
   target <- cp_at_futility(x, 1, theta = x$delta)
 

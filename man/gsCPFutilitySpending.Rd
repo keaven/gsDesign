@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsCPFutilitySpending.R
 \name{gsCPFutilitySpending}
 \alias{gsCPFutilitySpending}
-\title{Calibrate Futility Spending to Conditional-Power Targets}
+\title{Calibrate Futility Spending to Conditional Power Targets}
 \usage{
 gsCPFutilitySpending(
   x,
@@ -16,7 +16,7 @@ gsCPFutilitySpending(
 \arguments{
 \item{x}{A fixed-timing \code{gsDesign} object with \code{test.type} 3, 4, 7, or 8.}
 
-\item{target_cp}{Numeric vector of conditional-power targets strictly between
+\item{target_cp}{Numeric vector of conditional power targets strictly between
 zero and one.}
 
 \item{i}{Interim analysis indices corresponding to \code{target_cp}. Values must
@@ -60,7 +60,7 @@ is \code{NULL}, the future effect is the observed effect implied by that bound,
 \code{lower$bound[i] / sqrt(n.I[i])}, following the default convention in
 \code{\link{gsCP}()}. The calculation conditions on the interim statistic even though it
 is at a stopping boundary; future futility bounds remain part of the
-conditional-power calculation.
+conditional power calculation.
 
 One-target calibration supports the one-parameter families \code{sfHSD},
 \code{sfPower}, \code{sfExponential}, and \code{sfLDOF}. Two-target calibration supports
@@ -73,7 +73,7 @@ one.
 
 With multiple targets, a latest-to-earliest coordinate solve supplies
 starting values for a final joint constrained optimization. A result is
-returned only when every conditional-power residual is within
+returned only when every conditional power residual is within
 \code{control$cp_tol}.
 
 The fitted lower spending parameters depend on the complete design,
