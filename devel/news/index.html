@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
 <h2 class="pkg-version" data-toc-text="development version" id="gsdesign-development-version">gsDesign (development version)<a class="anchor" aria-label="anchor" href="#gsdesign-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li>Added <code><a href="../reference/gsCPFutilitySpending.html">gsCPFutilitySpending()</a></code> to calibrate beta-spending futility parameters and statistical information to conditional-power targets at one or more interim analyses for <code>test.type</code> 3, 4, 7, and 8 (<a href="https://github.com/keaven/gsDesign/issues/318" class="external-link">#318</a>).</li>
+<ul><li>Added <code><a href="../reference/gsCPFutilitySpending.html">gsCPFutilitySpending()</a></code> to calibrate beta-spending futility parameters and statistical information to conditional power targets at one or more interim analyses for <code>test.type</code> 3, 4, 7, and 8 (<a href="https://github.com/keaven/gsDesign/issues/318" class="external-link">#318</a>).</li>
 <li>Added exact conditional power, fixed-look Clopper–Pearson, repeated, and sequential confidence intervals for vaccine or prevention efficacy, plus <code><a href="../reference/VEtable.html">VEtable()</a></code> summaries and automatic <code><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt()</a></code> formatting for exact binomial spending designs (<a href="https://github.com/keaven/gsDesign/issues/316" class="external-link">#316</a>).</li>
 </ul></div>
 <div class="section level3">
@@ -51,7 +51,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
-<ul><li>Updated package vignettes to use <strong>lt</strong> consistently for formatted data-frame and matrix output, with compact row spacing for long tables and no significant changes to the rendered HTML tables.</li>
+<ul><li>Updated the <code><a href="../reference/gsCPFutilitySpending.html">gsCPFutilitySpending()</a></code> example to target conditional power 0.3 under the observed effect, reuse fitted futility spending parameters in <code><a href="../reference/gsDesign.html">gsDesign()</a></code> and <code><a href="../reference/nSurv.html">gsSurv()</a></code> with matching test type, timing, and spending, and verify conditional power using <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code>. The example uses <code>sfLDOF</code> efficacy spending and futility testing only at IA 1 (<a href="https://github.com/keaven/gsDesign/issues/318" class="external-link">#318</a>).</li>
+<li>Updated package vignettes to use <strong>lt</strong> consistently for formatted data-frame and matrix output, with compact row spacing for long tables and no significant changes to the rendered HTML tables.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -147,7 +148,7 @@
 <li>
 <code><a href="../reference/nSurv.html">nSurv()</a></code> and <code><a href="../reference/nSurv.html">gsSurv()</a></code> now validate fixed survival timing inputs before enrollment periods are adjusted, giving a clear error when <code>R</code>/<code>gamma</code> imply accrual beyond <code>T - minfup</code> instead of failing later while assigning row names (<a href="https://github.com/keaven/gsDesign/issues/274" class="external-link">#274</a>).</li>
 <li>
-<code><a href="../reference/ssrCP.html">Power.ssrCP()</a></code> now uses the interim efficacy bound when integrating the no-sample-size-re-estimation region and when falling back to the upper conditional-power changepoint (<a href="https://github.com/keaven/gsDesign/issues/213" class="external-link">#213</a>).</li>
+<code><a href="../reference/ssrCP.html">Power.ssrCP()</a></code> now uses the interim efficacy bound when integrating the no-sample-size-re-estimation region and when falling back to the upper conditional power changepoint (<a href="https://github.com/keaven/gsDesign/issues/213" class="external-link">#213</a>).</li>
 <li>
 <code><a href="../reference/nSurv.html">nSurv()</a></code> and <code><a href="../reference/nSurv.html">gsSurv()</a></code> now use the requested survival sample size method when either <code>T</code> or <code>minfup</code> is <code>NULL</code>. <code><a href="../reference/nSurv.html">gsSurv()</a></code> also uses the input accrual rate and duration when both <code>T</code> and <code>minfup</code> are <code>NULL</code>, solving follow-up duration against the final group-sequential event requirement. This allows Schoenfeld survival designs to reproduce SAS PROC SEQDESIGN’s fixed-accrual follow-up solve (<a href="https://github.com/keaven/gsDesign/issues/270" class="external-link">#270</a>).</li>
 <li>

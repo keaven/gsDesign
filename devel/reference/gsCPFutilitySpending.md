@@ -1,4 +1,4 @@
-# Calibrate Futility Spending to Conditional-Power Targets
+# Calibrate Futility Spending to Conditional Power Targets
 
 `gsCPFutilitySpending()` selects parameters for a beta-spending futility
 boundary so that conditional power at one or more interim futility
@@ -29,7 +29,7 @@ gsCPFutilitySpending(
 
 - target_cp:
 
-  Numeric vector of conditional-power targets strictly between zero and
+  Numeric vector of conditional power targets strictly between zero and
   one.
 
 - i:
@@ -79,7 +79,7 @@ convention in
 [`gsCP()`](https://keaven.github.io/gsDesign/devel/reference/gsCP.md).
 The calculation conditions on the interim statistic even though it is at
 a stopping boundary; future futility bounds remain part of the
-conditional-power calculation.
+conditional power calculation.
 
 One-target calibration supports the one-parameter families `sfHSD`,
 `sfPower`, `sfExponential`, and `sfLDOF`. Two-target calibration
@@ -92,7 +92,7 @@ strictly increasing and between zero and one.
 
 With multiple targets, a latest-to-earliest coordinate solve supplies
 starting values for a final joint constrained optimization. A result is
-returned only when every conditional-power residual is within
+returned only when every conditional power residual is within
 `control$cp_tol`.
 
 The fitted lower spending parameters depend on the complete design,
@@ -107,6 +107,7 @@ not trigger recalibration.
 ## See also
 
 [`gsDesign`](https://keaven.github.io/gsDesign/devel/reference/gsDesign.md),
+[`gsSurv`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md),
 [`gsCP`](https://keaven.github.io/gsDesign/devel/reference/gsCP.md),
 [`sfLinear`](https://keaven.github.io/gsDesign/devel/reference/sfLinear.md),
 [`toInteger`](https://keaven.github.io/gsDesign/devel/reference/toInteger.md)
@@ -114,33 +115,101 @@ not trigger recalibration.
 ## Examples
 
 ``` r
+# Lan-DeMets O'Brien-Fleming efficacy spending with futility only at IA 1.
 x <- gsDesign(
   k = 3, test.type = 4, timing = c(.5, .75),
-  sfu = sfHSD, sfupar = -4,
-  sfl = sfHSD, sflpar = 1
+  sfu = sfLDOF,
+  sfl = sfHSD, sflpar = 1,
+  testLower = c(TRUE, FALSE, FALSE)
 )
-observed_effect <- x$lower$bound[1] / sqrt(x$n.I[1])
-target <- sum(gsCP(
-  x, i = 1, zi = x$lower$bound[1], theta = observed_effect
-)$upper$prob)
-fit <- gsCPFutilitySpending(x, target_cp = target, i = 1)
+target_cp <- .3
+# With theta = NULL (the default), CP uses the observed effect implied
+# by the interim futility bound.
+fit <- gsCPFutilitySpending(x, target_cp = target_cp, i = 1)
 fit$cpFutilitySpending[c("target_cp", "achieved_cp", "sflpar")]
 #> $target_cp
-#> [1] 0.1629274
+#> [1] 0.3
 #> 
 #> $achieved_cp
-#> [1] 0.1629274
+#> [1] 0.3
 #> 
 #> $sflpar
-#> [1] 1
+#> [1] 2.430891
 #> 
 
-target_h1 <- sum(gsCP(
-  x, i = 1, zi = x$lower$bound[1], theta = x$delta
-)$upper$prob)
-fit_h1 <- gsCPFutilitySpending(
-  x, target_cp = target_h1, i = 1, theta = x$delta
+# Use the fitted spending parameter in the final gsDesign.
+final_design <- gsDesign(
+  k = 3, test.type = 4, timing = c(.5, .75),
+  sfu = sfLDOF,
+  sfl = sfHSD, sflpar = fit$cpFutilitySpending$sflpar,
+  testLower = c(TRUE, FALSE, FALSE)
 )
-fit_h1$cpFutilitySpending$theta
-#> [1] 3.241516
+
+# The final design has CP 0.3000 at the first interim futility bound.
+gsBoundSummary(
+  final_design,
+  exclude = "B-value"
+)
+#>                Analysis               Value Efficacy Futility
+#>               IA 1: 50%                   Z   2.9626   1.1538
+#>  N/Fixed design N: 0.63         p (1-sided)   0.0015   0.1243
+#>                             ~delta at bound   1.1490   0.4475
+#>                                    Spending   0.0015   0.0771
+#>                                          CP   0.9994   0.3000
+#>                                       CP H1   0.9979   0.8145
+#>                                          PP   0.9900   0.3552
+#>                         P(Cross) if delta=0   0.0015   0.8757
+#>                         P(Cross) if delta=1   0.3504   0.0771
+#>               IA 2: 75%                   Z   2.3590       NA
+#>  N/Fixed design N: 0.95         p (1-sided)   0.0092       NA
+#>                             ~delta at bound   0.7470       NA
+#>                                    Spending   0.0081       NA
+#>                                          CP   0.9222       NA
+#>                                       CP H1   0.9700       NA
+#>                                          PP   0.8901       NA
+#>                         P(Cross) if delta=0   0.0092       NA
+#>                         P(Cross) if delta=1   0.7801       NA
+#>                   Final                   Z   2.0141       NA
+#>  N/Fixed design N: 1.27         p (1-sided)   0.0220       NA
+#>                             ~delta at bound   0.5523       NA
+#>                                    Spending   0.0154       NA
+#>                         P(Cross) if delta=0   0.0196       NA
+#>                         P(Cross) if delta=1   0.9000       NA
+
+# Use the same test type, timing, and spending in a survival design.
+# Other survival inputs use gsSurv() defaults. The IA 1 futility CP row
+# again shows 0.3000, agreeing with target_cp up to numerical tolerance.
+surv_design <- gsSurv(
+  k = 3, test.type = 4, timing = c(.5, .75),
+  sfu = sfLDOF,
+  sfl = sfHSD, sflpar = fit$cpFutilitySpending$sflpar,
+  testLower = c(TRUE, FALSE, FALSE)
+)
+gsBoundSummary(surv_design, exclude = "B-value")
+#> Method: LachinFoulkes 
+#>     Analysis              Value Efficacy Futility
+#>    IA 1: 50%                  Z   2.9626   1.1538
+#>       N: 284        p (1-sided)   0.0015   0.1243
+#>  Events: 102       ~HR at bound   0.5554   0.7953
+#>    Month: 11           Spending   0.0015   0.0771
+#>                              CP   0.9994   0.3000
+#>                           CP H1   0.9979   0.8145
+#>                              PP   0.9900   0.3552
+#>                P(Cross) if HR=1   0.0015   0.8757
+#>              P(Cross) if HR=0.6   0.3504   0.0771
+#>    IA 2: 75%                  Z   2.3590       NA
+#>       N: 318        p (1-sided)   0.0092       NA
+#>  Events: 153       ~HR at bound   0.6823       NA
+#>    Month: 14           Spending   0.0081       NA
+#>                              CP   0.9222       NA
+#>                           CP H1   0.9700       NA
+#>                              PP   0.8901       NA
+#>                P(Cross) if HR=1   0.0092       NA
+#>              P(Cross) if HR=0.6   0.7801       NA
+#>        Final                  Z   2.0141       NA
+#>       N: 318        p (1-sided)   0.0220       NA
+#>  Events: 204       ~HR at bound   0.7538       NA
+#>    Month: 18           Spending   0.0154       NA
+#>                P(Cross) if HR=1   0.0196       NA
+#>              P(Cross) if HR=0.6   0.9000       NA
 ```
