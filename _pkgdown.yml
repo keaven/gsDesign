@@ -103,6 +103,7 @@ reference:
 - title: Conditional and Predictive Power
   contents:
   - gsCP
+  - gsCPFutilitySpending
   - gsCPz
   - gsBoundCP
   - gsBValue

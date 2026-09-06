@@ -43,6 +43,18 @@ test_that("one-parameter futility spending is recovered from conditional power",
   expect_equal(fit$upper$param, x$upper$param)
   expect_equal(fit$cpFutilitySpending$reference$upper$param, x$upper$param)
   expect_no_error(suppressMessages(toInteger(fit)))
+
+  rebuilt <- gsDesign(
+    k = 3,
+    test.type = 4,
+    n.fix = 200,
+    timing = c(.4, .7),
+    sfu = sfHSD,
+    sfupar = -4,
+    sfl = sfHSD,
+    sflpar = fit$cpFutilitySpending$sflpar
+  )
+  expect_equal(cp_at_futility(rebuilt, 1), target, tolerance = 1e-4)
 })
 
 test_that("an explicit conditional power effect is retained", {

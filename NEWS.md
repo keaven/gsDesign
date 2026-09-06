@@ -21,6 +21,11 @@
 
 ## Documentation
 
+- Updated the `gsCPFutilitySpending()` example to target conditional power 0.3
+  under the observed effect, reuse fitted futility spending parameters in
+  `gsDesign()` and `gsSurv()` with matching test type, timing, and spending,
+  and verify conditional power using `gsBoundSummary()`. The example uses
+  `sfLDOF` efficacy spending and futility testing only at IA 1 (#318).
 - Updated package vignettes to use **lt** consistently for formatted data-frame
   and matrix output, with compact row spacing for long tables and no significant
   changes to the rendered HTML tables.

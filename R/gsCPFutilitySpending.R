@@ -66,27 +66,45 @@
 #' \code{gsCPFutilitySpending_convergence_error}.
 #'
 #' @examples
+#' # Lan-DeMets O'Brien-Fleming efficacy spending with futility only at IA 1.
 #' x <- gsDesign(
 #'   k = 3, test.type = 4, timing = c(.5, .75),
-#'   sfu = sfHSD, sfupar = -4,
-#'   sfl = sfHSD, sflpar = 1
+#'   sfu = sfLDOF,
+#'   sfl = sfHSD, sflpar = 1,
+#'   testLower = c(TRUE, FALSE, FALSE)
 #' )
-#' observed_effect <- x$lower$bound[1] / sqrt(x$n.I[1])
-#' target <- sum(gsCP(
-#'   x, i = 1, zi = x$lower$bound[1], theta = observed_effect
-#' )$upper$prob)
-#' fit <- gsCPFutilitySpending(x, target_cp = target, i = 1)
+#' target_cp <- .3
+#' # With theta = NULL (the default), CP uses the observed effect implied
+#' # by the interim futility bound.
+#' fit <- gsCPFutilitySpending(x, target_cp = target_cp, i = 1)
 #' fit$cpFutilitySpending[c("target_cp", "achieved_cp", "sflpar")]
 #'
-#' target_h1 <- sum(gsCP(
-#'   x, i = 1, zi = x$lower$bound[1], theta = x$delta
-#' )$upper$prob)
-#' fit_h1 <- gsCPFutilitySpending(
-#'   x, target_cp = target_h1, i = 1, theta = x$delta
+#' # Use the fitted spending parameter in the final gsDesign.
+#' final_design <- gsDesign(
+#'   k = 3, test.type = 4, timing = c(.5, .75),
+#'   sfu = sfLDOF,
+#'   sfl = sfHSD, sflpar = fit$cpFutilitySpending$sflpar,
+#'   testLower = c(TRUE, FALSE, FALSE)
 #' )
-#' fit_h1$cpFutilitySpending$theta
 #'
-#' @seealso \code{\link{gsDesign}}, \code{\link{gsCP}}, \code{\link{sfLinear}},
+#' # The final design has CP 0.3000 at the first interim futility bound.
+#' gsBoundSummary(
+#'   final_design,
+#'   exclude = "B-value"
+#' )
+#'
+#' # Use the same test type, timing, and spending in a survival design.
+#' # Other survival inputs use gsSurv() defaults. The IA 1 futility CP row
+#' # again shows 0.3000, agreeing with target_cp up to numerical tolerance.
+#' surv_design <- gsSurv(
+#'   k = 3, test.type = 4, timing = c(.5, .75),
+#'   sfu = sfLDOF,
+#'   sfl = sfHSD, sflpar = fit$cpFutilitySpending$sflpar,
+#'   testLower = c(TRUE, FALSE, FALSE)
+#' )
+#' gsBoundSummary(surv_design, exclude = "B-value")
+#'
+#' @seealso \code{\link{gsDesign}}, \code{\link{gsSurv}}, \code{\link{gsCP}}, \code{\link{sfLinear}},
 #'   \code{\link{toInteger}}
 #' @export
 gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
