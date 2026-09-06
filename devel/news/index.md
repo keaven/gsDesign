@@ -32,6 +32,11 @@
 
 ### Documentation
 
+- Documented all
+  [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/devel/reference/gsCPFutilitySpending.md)
+  solver controls, defaults, and spending-family restrictions, with a
+  tighter CP tolerance example
+  ([\#318](https://github.com/keaven/gsDesign/issues/318)).
 - Updated the
   [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/devel/reference/gsCPFutilitySpending.md)
   example to target conditional power 0.3 under the observed effect,

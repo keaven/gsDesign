@@ -51,12 +51,53 @@ gsCPFutilitySpending(
 
 - control:
 
-  Optional named list with components `start`, `lower`, `upper`,
-  `cp_tol` (default `1e-4`), `maxit` (default 500), `reltol` (default
-  `1e-10`), `backward` (default `TRUE`), and `trace` (default `FALSE`).
-  For `sfLinear`, `start` is a vector of cumulative spending
-  proportions; for other families it contains the spending-function
-  parameters.
+  Optional named list of numerical solver settings. Unspecified
+  components retain their defaults; ordinary use does not require this
+  argument. These settings affect the search, not the effect assumption
+  or CP target. Unknown names and invalid values produce input errors.
+
+  `start`
+
+  :   Initial spending parameters (default `NULL`). When omitted, use
+      the reference design's parameters if its spending function and
+      parameter count match; otherwise use the family defaults below.
+      Custom spending functions require an explicit starting vector.
+
+  `lower`, `upper`
+
+  :   Search limits for the spending parameters, not Z-boundaries (both
+      default `NULL`, selecting the family defaults below). Supplied
+      start and limit vectors must be finite numeric vectors matching
+      the number of free parameters. Limits must satisfy `lower < upper`
+      and contain the starting values.
+
+  `cp_tol`
+
+  :   Maximum absolute difference between achieved and targeted CP at
+      every selected analysis (default `1e-4`). Must be a finite scalar
+      strictly between 0 and 0.1.
+
+  `maxit`
+
+  :   Positive integer iteration limit for the joint optimizer (default
+      500), not a global limit on design evaluations or the
+      one-parameter root search.
+
+  `reltol`
+
+  :   Positive finite scalar controlling internal numerical convergence
+      (default `1e-10`). This does not replace the final `cp_tol`
+      acceptance check.
+
+  `backward`
+
+  :   Use latest-to-earliest initialization before joint refinement for
+      multiple targets (default `TRUE`).
+
+  `trace`
+
+  :   Display joint-optimizer progress (default `FALSE`). Both
+      `backward` and `trace` must be nonmissing scalar logical values.
 
 ## Value
 
@@ -103,6 +144,29 @@ recalibration.
 carries the fitted spending function and parameters forward, but
 rounding information can change the achieved conditional power and does
 not trigger recalibration.
+
+## Spending-parameter search defaults
+
+When not supplied in `control`, parameter limits and fallback starting
+values are selected by family:
+
+|  |  |  |  |
+|----|----|----|----|
+| Family | Start | Lower | Upper |
+| `sfHSD` | -2 | -40 | 40 |
+| `sfPower` | 1 | 1e-4 | 50 |
+| `sfExponential` | 0.5 | 1e-4 | 1.5 |
+| `sfLDOF` | 1 | 0.005 | 20 |
+| `sfBetaDist` | c(1, 1) | c(1e-3, 1e-3) | c(50, 50) |
+| Other supported two-parameter families | c(0, 1) | c(-20, 1e-3) | c(20, 50) |
+| Custom function | Required | -20 per parameter | 20 per parameter |
+
+For `sfLinear`, `start` instead contains one cumulative spending
+proportion per target, strictly increasing and in (0, 1). When omitted,
+starting proportions are derived from the reference design's cumulative
+lower spending divided by beta and adjusted to satisfy these
+constraints. User-supplied `lower` and `upper` are not supported for its
+constrained parameterization.
 
 ## See also
 
@@ -212,4 +276,12 @@ gsBoundSummary(surv_design, exclude = "B-value")
 #>    Month: 18           Spending   0.0154       NA
 #>                P(Cross) if HR=1   0.0196       NA
 #>              P(Cross) if HR=0.6   0.9000       NA
+
+# Optionally require an absolute CP residual no larger than 0.000001.
+fit_tight <- gsCPFutilitySpending(
+  x, target_cp = target_cp, i = 1,
+  control = list(cp_tol = 1e-6)
+)
+abs(fit_tight$cpFutilitySpending$achieved_cp - target_cp) <= 1e-6
+#> [1] TRUE
 ```

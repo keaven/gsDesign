@@ -21,7 +21,7 @@ retain the reference design's unconditional power."><meta property="og:image" co
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,11 +98,48 @@ observed effect at each candidate lower bound is used.</p></dd>
 
 
 <dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
-<dd><p>Optional named list with components <code>start</code>, <code>lower</code>, <code>upper</code>,
-<code>cp_tol</code> (default <code>1e-4</code>), <code>maxit</code> (default 500), <code>reltol</code> (default
-<code>1e-10</code>), <code>backward</code> (default <code>TRUE</code>), and <code>trace</code> (default <code>FALSE</code>). For
-<code>sfLinear</code>, <code>start</code> is a vector of cumulative spending proportions; for
-other families it contains the spending-function parameters.</p></dd>
+<dd><p>Optional named list of numerical solver settings. Unspecified
+components retain their defaults; ordinary use does not require this argument.
+These settings affect the search, not the effect assumption or CP target.
+Unknown names and invalid values produce input errors.</p><dl><dt><code>start</code></dt>
+<dd><p>Initial spending parameters (default <code>NULL</code>).
+    When omitted, use the reference design's parameters if its spending
+    function and parameter count match; otherwise use the family defaults
+    below. Custom spending functions require an explicit starting vector.</p></dd>
+
+  <dt><code>lower</code>, <code>upper</code></dt>
+<dd><p>Search limits for the spending
+    parameters, not Z-boundaries (both default <code>NULL</code>, selecting the
+    family defaults below). Supplied start and limit vectors must be finite
+    numeric vectors matching the number of free parameters. Limits must
+    satisfy <code>lower &lt; upper</code> and contain the starting values.</p></dd>
+
+  <dt><code>cp_tol</code></dt>
+<dd><p>Maximum absolute difference between achieved and
+    targeted CP at every selected analysis (default <code>1e-4</code>). Must be
+    a finite scalar strictly between 0 and 0.1.</p></dd>
+
+  <dt><code>maxit</code></dt>
+<dd><p>Positive integer iteration limit for the joint
+    optimizer (default 500), not a global limit on design evaluations or
+    the one-parameter root search.</p></dd>
+
+  <dt><code>reltol</code></dt>
+<dd><p>Positive finite scalar controlling internal
+    numerical convergence (default <code>1e-10</code>). This does not replace
+    the final <code>cp_tol</code> acceptance check.</p></dd>
+
+  <dt><code>backward</code></dt>
+<dd><p>Use latest-to-earliest initialization before
+    joint refinement for multiple targets (default <code>TRUE</code>).</p></dd>
+
+  <dt><code>trace</code></dt>
+<dd><p>Display joint-optimizer progress (default
+    <code>FALSE</code>). Both <code>backward</code> and <code>trace</code> must be
+    nonmissing scalar logical values.</p></dd>
+
+
+</dl></dd>
 
 </dl></div>
     <div class="section level2">
@@ -142,6 +179,18 @@ harm spending. Changing any of those specifications requires recalibration.
 <code><a href="toInteger.html">toInteger()</a></code> carries the fitted spending function and parameters forward,
 but rounding information can change the achieved conditional power and does
 not trigger recalibration.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="spending-parameter-search-defaults">Spending-parameter search defaults<a class="anchor" aria-label="anchor" href="#spending-parameter-search-defaults"></a></h2>
+
+
+<p>When not supplied in <code>control</code>, parameter limits and fallback starting
+values are selected by family:</p><table class="table table"><tr><td>Family</td><td>Start</td><td>Lower</td><td>Upper</td></tr><tr><td><code>sfHSD</code></td><td>-2</td><td>-40</td><td>40</td></tr><tr><td><code>sfPower</code></td><td>1</td><td>1e-4</td><td>50</td></tr><tr><td><code>sfExponential</code></td><td>0.5</td><td>1e-4</td><td>1.5</td></tr><tr><td><code>sfLDOF</code></td><td>1</td><td>0.005</td><td>20</td></tr><tr><td><code>sfBetaDist</code></td><td>c(1, 1)</td><td>c(1e-3, 1e-3)</td><td>c(50, 50)</td></tr><tr><td>Other supported two-parameter families</td><td>c(0, 1)</td><td>c(-20, 1e-3)</td><td>c(20, 50)</td></tr><tr><td>Custom function</td><td>Required</td><td>-20 per parameter</td><td>20 per parameter</td></tr></table><p>For <code>sfLinear</code>, <code>start</code> instead contains one cumulative spending
+proportion per target, strictly increasing and in (0, 1). When omitted,
+starting proportions are derived from the reference design's cumulative
+lower spending divided by beta and adjusted to satisfy these constraints.
+User-supplied <code>lower</code> and <code>upper</code> are not supported for its
+constrained parameterization.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -248,6 +297,14 @@ not trigger recalibration.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Month: 18           Spending   0.0154       NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0196       NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.9000       NA</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Optionally require an absolute CP residual no larger than 0.000001.</span></span></span>
+<span class="r-in"><span><span class="va">fit_tight</span> <span class="op">&lt;-</span> <span class="fu">gsCPFutilitySpending</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span>, target_cp <span class="op">=</span> <span class="va">target_cp</span>, i <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>cp_tol <span class="op">=</span> <span class="fl">1e-6</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">fit_tight</span><span class="op">$</span><span class="va">cpFutilitySpending</span><span class="op">$</span><span class="va">achieved_cp</span> <span class="op">-</span> <span class="va">target_cp</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="fl">1e-6</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
