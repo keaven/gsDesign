@@ -13,7 +13,7 @@
   retaining the Jennison and Turnbull grid and numerical results. Research
   benchmarks measured roughly 20% to 35% faster core routines. R's normal
   tail calculations remain the default; `-DGS_USE_ERFC` enables an optional
-  C-library alternative.
+  C-library alternative (#322).
 
 ## Bug fixes
 
