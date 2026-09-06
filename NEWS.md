@@ -20,7 +20,8 @@
 ## Testing
 
 - Added regression fixtures, multivariate normal reference checks, and print
-  snapshots for the numerical integration routines and their R interfaces (#242).
+  snapshots for the numerical integration routines and their R interfaces
+  (#242, #320).
 - Reduced default test-suite runtime by using smaller stress-test grids,
   fewer Monte Carlo iterations, and toy exact-binomial p-value event counts.
   Set `GSDESIGN_RUN_STRESS_TESTS=true` to run the larger stress-test settings.
