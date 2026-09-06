@@ -21,6 +21,8 @@
 
 ## Documentation
 
+- Documented all `gsCPFutilitySpending()` solver controls, defaults, and
+  spending-family restrictions, with a tighter CP tolerance example (#318).
 - Updated the `gsCPFutilitySpending()` example to target conditional power 0.3
   under the observed effect, reuse fitted futility spending parameters in
   `gsDesign()` and `gsSurv()` with matching test type, timing, and spending,

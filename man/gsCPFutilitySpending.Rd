@@ -30,11 +30,35 @@ its character name. The default is \code{"sfHSD"}.}
 recycled; otherwise its length must equal \code{target_cp}. When \code{NULL}, the
 observed effect at each candidate lower bound is used.}
 
-\item{control}{Optional named list with components \code{start}, \code{lower}, \code{upper},
-\code{cp_tol} (default \code{1e-4}), \code{maxit} (default 500), \code{reltol} (default
-\code{1e-10}), \code{backward} (default \code{TRUE}), and \code{trace} (default \code{FALSE}). For
-\code{sfLinear}, \code{start} is a vector of cumulative spending proportions; for
-other families it contains the spending-function parameters.}
+\item{control}{Optional named list of numerical solver settings. Unspecified
+components retain their defaults; ordinary use does not require this argument.
+These settings affect the search, not the effect assumption or CP target.
+Unknown names and invalid values produce input errors.
+\describe{
+  \item{\code{start}}{Initial spending parameters (default \code{NULL}).
+    When omitted, use the reference design's parameters if its spending
+    function and parameter count match; otherwise use the family defaults
+    below. Custom spending functions require an explicit starting vector.}
+  \item{\code{lower}, \code{upper}}{Search limits for the spending
+    parameters, not Z-boundaries (both default \code{NULL}, selecting the
+    family defaults below). Supplied start and limit vectors must be finite
+    numeric vectors matching the number of free parameters. Limits must
+    satisfy \code{lower < upper} and contain the starting values.}
+  \item{\code{cp_tol}}{Maximum absolute difference between achieved and
+    targeted CP at every selected analysis (default \code{1e-4}). Must be
+    a finite scalar strictly between 0 and 0.1.}
+  \item{\code{maxit}}{Positive integer iteration limit for the joint
+    optimizer (default 500), not a global limit on design evaluations or
+    the one-parameter root search.}
+  \item{\code{reltol}}{Positive finite scalar controlling internal
+    numerical convergence (default \code{1e-10}). This does not replace
+    the final \code{cp_tol} acceptance check.}
+  \item{\code{backward}}{Use latest-to-earliest initialization before
+    joint refinement for multiple targets (default \code{TRUE}).}
+  \item{\code{trace}}{Display joint-optimizer progress (default
+    \code{FALSE}). Both \code{backward} and \code{trace} must be
+    nonmissing scalar logical values.}
+}}
 }
 \value{
 A calibrated design with class \code{c("gsCPFutilitySpending", "gsDesign")}.
@@ -83,6 +107,28 @@ harm spending. Changing any of those specifications requires recalibration.
 but rounding information can change the achieved conditional power and does
 not trigger recalibration.
 }
+\section{Spending-parameter search defaults}{
+
+When not supplied in \code{control}, parameter limits and fallback starting
+values are selected by family:
+\tabular{llll}{
+  Family \tab Start \tab Lower \tab Upper \cr
+  \code{sfHSD} \tab -2 \tab -40 \tab 40 \cr
+  \code{sfPower} \tab 1 \tab 1e-4 \tab 50 \cr
+  \code{sfExponential} \tab 0.5 \tab 1e-4 \tab 1.5 \cr
+  \code{sfLDOF} \tab 1 \tab 0.005 \tab 20 \cr
+  \code{sfBetaDist} \tab c(1, 1) \tab c(1e-3, 1e-3) \tab c(50, 50) \cr
+  Other supported two-parameter families \tab c(0, 1) \tab c(-20, 1e-3) \tab c(20, 50) \cr
+  Custom function \tab Required \tab -20 per parameter \tab 20 per parameter
+}
+For \code{sfLinear}, \code{start} instead contains one cumulative spending
+proportion per target, strictly increasing and in (0, 1). When omitted,
+starting proportions are derived from the reference design's cumulative
+lower spending divided by beta and adjusted to satisfy these constraints.
+User-supplied \code{lower} and \code{upper} are not supported for its
+constrained parameterization.
+}
+
 \examples{
 # Lan-DeMets O'Brien-Fleming efficacy spending with futility only at IA 1.
 x <- gsDesign(
@@ -121,6 +167,13 @@ surv_design <- gsSurv(
   testLower = c(TRUE, FALSE, FALSE)
 )
 gsBoundSummary(surv_design, exclude = "B-value")
+
+# Optionally require an absolute CP residual no larger than 0.000001.
+fit_tight <- gsCPFutilitySpending(
+  x, target_cp = target_cp, i = 1,
+  control = list(cp_tol = 1e-6)
+)
+abs(fit_tight$cpFutilitySpending$achieved_cp - target_cp) <= 1e-6
 
 }
 \seealso{

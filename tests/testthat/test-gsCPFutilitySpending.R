@@ -57,6 +57,41 @@ test_that("one-parameter futility spending is recovered from conditional power",
   expect_equal(cp_at_futility(rebuilt, 1), target, tolerance = 1e-4)
 })
 
+test_that("documented solver controls retain defaults and enforce CP tolerance", {
+  expect_equal(gsDesign:::.gsCPFControl(list()), list(
+    start = NULL, lower = NULL, upper = NULL, cp_tol = 1e-4,
+    maxit = 500L, reltol = 1e-10, backward = TRUE, trace = FALSE
+  ))
+  x <- gsDesign(
+    k = 3, test.type = 4, timing = c(.5, .75),
+    sfu = sfLDOF, sfl = sfHSD, sflpar = 1,
+    testLower = c(TRUE, FALSE, FALSE)
+  )
+  fit <- gsCPFutilitySpending(x, .3, i = 1, control = list(cp_tol = 1e-6))
+  expect_lte(abs(cp_at_futility(fit, 1) - .3), 1e-6)
+})
+
+test_that("invalid solver controls produce input errors", {
+  x <- gsDesign(k = 3, test.type = 4)
+  invalid_controls <- list(
+    list(unknown = 1), list(cp_tol = 0), list(cp_tol = .1),
+    list(maxit = 1.5), list(reltol = 0), list(backward = NA),
+    list(trace = 1), list(start = c(0, 1)),
+    list(start = 0, lower = 1, upper = 2)
+  )
+  for (ctl in invalid_controls) {
+    expect_error(
+      gsCPFutilitySpending(x, .3, i = 1, control = ctl),
+      class = "gsCPFutilitySpending_input_error"
+    )
+  }
+  expect_error(
+    gsCPFutilitySpending(x, c(.2, .3), i = 1:2, sfl = sfLinear,
+                        control = list(lower = c(0, 0))),
+    class = "gsCPFutilitySpending_input_error"
+  )
+})
+
 test_that("an explicit conditional power effect is retained", {
   x <- gsDesign(k = 3, test.type = 4, timing = c(.4, .7), sflpar = -1)
   target <- cp_at_futility(x, 1, theta = x$delta)
