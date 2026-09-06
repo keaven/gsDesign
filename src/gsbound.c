@@ -1,9 +1,12 @@
 #define DEBUG 0
-/* note: EXTREMEZ > 3 + log(r) +  Z(1-alpha) + Z(1-beta)
-   per bottom of p 349 in Jennison and Turnbull */
-/* TODO(issue-242): decouple the finite boundary sentinel from the Newton
-   iteration limit in a future numerics-focused change. */
-#define EXTREMEZ 20
+/* Maximum number of Newton-Raphson iterations per analysis, and the clamp on
+   the Newton iterates. Historically one constant (EXTREMEZ = 20) served both
+   purposes and also stood in for an absent bound; an absent bound is now
+   represented by -Inf/+Inf. The clamp only acts when a target probability
+   cannot be attained (for example when boundaries cross), where it keeps the
+   iterate finite so that the calling R code can repair the design. */
+#define GS_MAXITER 20
+#define GS_ZCLAMP 20.
 #define MAXR 83
 #include "R.h"
 #include "Rmath.h"
@@ -15,17 +18,21 @@
  *
  * Uses the Jennison & Turnbull numerical integration grid (p. 349) and a
  * Newton-Raphson iteration to find lower and upper Z cutoffs for each analysis.
+ * An analysis with a non-positive target probability has no bound on that
+ * side: the corresponding cutoff is returned as `-Inf` (lower) or `+Inf`
+ * (upper) and the Newton iteration is skipped for that side.
  * This routine is written with pointer arguments to support calling via R's
- * `.C()` interface.
+ * `.C()` interface; callers must pass `NAOK = TRUE` so that infinite values
+ * can be exchanged with R.
  *
  * @param[in] xnanal Number of analyses (`nanal = xnanal[0]`).
  * @param[in] I Statistical information at each analysis (length `nanal`).
  * @param[out] a Lower Z cutoffs at each analysis (length `nanal`).
  * @param[out] b Upper Z cutoffs at each analysis (length `nanal`).
  * @param[in] problo Target probability of crossing the lower boundary at each
- *   analysis (length `nanal`).
+ *   analysis (length `nanal`); a value `<= 0` means no lower bound.
  * @param[in] probhi Target probability of crossing the upper boundary at each
- *   analysis (length `nanal`).
+ *   analysis (length `nanal`); a value `<= 0` means no upper bound.
  * @param[in] xtol Relative convergence tolerance (`tol = xtol[0]`).
  * @param[in] xr Grid parameter controlling the number of integration points
  *   (`r = xr[0]`).
@@ -38,7 +45,7 @@
 void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
              double *probhi, double *xtol, int *xr, int *retval,
              int *printerr) {
-  int i, ii, j, m1, m2, r, nanal;
+  int i, ii, j, m1, m2, r, nanal, lo_active, hi_active;
   double plo, phi, dplo, dphi, btem = 0., atem = 0., atem2, btem2, rtdeltak,
                                rtIk, rtIkm1, xlo, xhi;
   double adelta, bdelta, tol;
@@ -66,11 +73,11 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
     return;
   }
   if (problo[0] <= 0)
-    a[0] = -EXTREMEZ;
+    a[0] = R_NegInf;
   else
     a[0] = qnorm(problo[0], 0., 1., 1, 0);
   if (probhi[0] <= 0)
-    b[0] = EXTREMEZ;
+    b[0] = R_PosInf;
   else
     b[0] = qnorm(probhi[0], 0., 1., 0, 0);
   /* set up work vectors */
@@ -88,18 +95,16 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
     rtIkm1 = rtIk;
     rtIk = sqrt(I[i]);
     rtdeltak = sqrt(I[i] - I[i - 1]);
-    if (problo[i] <= 0.)
-      atem2 = -EXTREMEZ;
-    else
-      atem2 = qnorm(problo[i], 0., 1., 1, 0);
-    if (probhi[i] <= 0.)
-      btem2 = EXTREMEZ;
-    else
-      btem2 = qnorm(probhi[i], 0., 1., 0, 0);
-    adelta = 1.;
-    bdelta = 1.;
+    lo_active = problo[i] > 0.;
+    hi_active = probhi[i] > 0.;
+    atem2 = lo_active ? qnorm(problo[i], 0., 1., 1, 0) : R_NegInf;
+    btem2 = hi_active ? qnorm(probhi[i], 0., 1., 0, 0) : R_PosInf;
+    atem = atem2;
+    btem = btem2;
+    adelta = lo_active ? 1. : 0.;
+    bdelta = hi_active ? 1. : 0.;
     j = 0;
-    while ((adelta > tol || bdelta > tol) && j++ < EXTREMEZ) {
+    while ((adelta > tol || bdelta > tol) && j++ < GS_MAXITER) {
       plo = 0.;
       phi = 0.;
       dplo = 0.;
@@ -107,47 +112,57 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
       atem = atem2;
       btem = btem2;
       /* compute probability of crossing boundaries & their derivatives */
-      for (ii = 0; ii <= m1; ii++) {
-        xlo = (z1[ii] * rtIkm1 - atem * rtIk) / rtdeltak;
-        xhi = (z1[ii] * rtIkm1 - btem * rtIk) / rtdeltak;
-        plo += h[ii] * pnorm(xlo, 0., 1., 0, 0);
-        phi += h[ii] * pnorm(xhi, 0., 1., 1, 0);
-        dplo += h[ii] * exp(-xlo * xlo / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
-        dphi -= h[ii] * exp(-xhi * xhi / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
+      if (lo_active) {
+        for (ii = 0; ii <= m1; ii++) {
+          xlo = (z1[ii] * rtIkm1 - atem * rtIk) / rtdeltak;
+          plo += h[ii] * pnorm(xlo, 0., 1., 0, 0);
+          dplo += h[ii] * exp(-xlo * xlo / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
+        }
+      }
+      if (hi_active) {
+        for (ii = 0; ii <= m1; ii++) {
+          xhi = (z1[ii] * rtIkm1 - btem * rtIk) / rtdeltak;
+          phi += h[ii] * pnorm(xhi, 0., 1., 1, 0);
+          dphi -= h[ii] * exp(-xhi * xhi / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
+        }
       }
       /* use 1st order Taylor's series to update boundaries */
       /* maximum allowed change is 1 */
-      /* maximum value allowed is z1[m1]*rtIk to keep within grid points */
-      adelta = problo[i] - plo;
-      if (adelta > dplo)
-        atem2 = atem + 1.;
-      else if (adelta < -dplo)
-        atem2 = atem - 1.;
-      else
-        atem2 = atem + (problo[i] - plo) / dplo;
-      if (atem2 > EXTREMEZ)
-        atem2 = EXTREMEZ;
-      else if (atem2 < -EXTREMEZ)
-        atem2 = -EXTREMEZ;
-      bdelta = probhi[i] - phi;
-      if (bdelta < dphi)
-        btem2 = btem + 1.;
-      else if (bdelta > -dphi)
-        btem2 = btem - 1.;
-      else
-        btem2 = btem + (probhi[i] - phi) / dphi;
-      if (btem2 > EXTREMEZ)
-        btem2 = EXTREMEZ;
-      else if (btem2 < -EXTREMEZ)
-        btem2 = -EXTREMEZ;
+      /* an exact hit (or a vanishing derivative) leaves the iterate unchanged */
+      if (lo_active) {
+        adelta = problo[i] - plo;
+        if (adelta > dplo)
+          atem2 = atem + 1.;
+        else if (adelta < -dplo)
+          atem2 = atem - 1.;
+        else if (adelta == 0.)
+          atem2 = atem;
+        else
+          atem2 = atem + adelta / dplo;
+        if (atem2 > GS_ZCLAMP)
+          atem2 = GS_ZCLAMP;
+        else if (atem2 < -GS_ZCLAMP)
+          atem2 = -GS_ZCLAMP;
+      }
+      if (hi_active) {
+        bdelta = probhi[i] - phi;
+        if (bdelta < dphi)
+          btem2 = btem + 1.;
+        else if (bdelta > -dphi)
+          btem2 = btem - 1.;
+        else if (bdelta == 0.)
+          btem2 = btem;
+        else
+          btem2 = btem + bdelta / dphi;
+        if (btem2 > GS_ZCLAMP)
+          btem2 = GS_ZCLAMP;
+        else if (btem2 < -GS_ZCLAMP)
+          btem2 = -GS_ZCLAMP;
+      }
       if (atem2 > btem2)
         atem2 = btem2;
-      adelta = atem2 - atem;
-      if (adelta < 0)
-        adelta = -adelta;
-      bdelta = btem2 - btem;
-      if (bdelta < 0)
-        bdelta = -bdelta;
+      adelta = lo_active ? fabs(atem2 - atem) : 0.;
+      bdelta = hi_active ? fabs(btem2 - btem) : 0.;
     }
     a[i] = atem;
     b[i] = btem;

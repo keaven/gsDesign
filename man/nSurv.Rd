@@ -292,7 +292,7 @@ Must be \code{TRUE} at the final analysis to achieve targeted power.
 At each analysis, at least one of \code{testUpper}, \code{testLower}, or
 \code{testHarm} must be \code{TRUE}.
 Where \code{testUpper} is \code{FALSE}, the upper bound is set to
-\code{+20} (effectively \code{Inf}) and displayed as \code{NA} in output.}
+\code{+Inf} and displayed as \code{NA} in output.}
 
 \item{testLower}{Indicator of which analyses should include a lower
 (futility) bound.
@@ -303,7 +303,7 @@ Ignored for \code{test.type} 1 (one-sided, no lower bound).
 Overridden to all \code{TRUE} for \code{test.type} 2 (symmetric).
 For \code{test.type} 3--8, at least one analysis must be \code{TRUE}.
 Where \code{testLower} is \code{FALSE}, the lower bound is set to
-\code{-20} (effectively \code{-Inf}) and displayed as \code{NA} in output.}
+\code{-Inf} and displayed as \code{NA} in output.}
 
 \item{testHarm}{Indicator of which analyses should include a harm bound.
 A single value of \code{TRUE} (default) indicates all analyses have a
@@ -312,7 +312,7 @@ Otherwise, a logical vector of length \code{k}.
 Only used for \code{test.type} 7 or 8; at least one analysis must be
 \code{TRUE} for those types.
 Where \code{testHarm} is \code{FALSE}, the harm bound is set to
-\code{-20} (effectively \code{-Inf}) and the bound is displayed as
+\code{-Inf} and the bound is displayed as
 \code{NA} in output. Cumulative harm crossing probability from earlier
 analyses is still displayed.}
 

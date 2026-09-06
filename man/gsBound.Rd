@@ -100,7 +100,7 @@ x
 
 #  use gsBound1 to set up boundary for a 1-sided test
 x <- gsBound1(
-  theta = 0, I = c(1, 2, 3) / 3, a = rep(-20, 3),
+  theta = 0, I = c(1, 2, 3) / 3, a = rep(-Inf, 3),
   probhi = c(.001, .009, .015)
 )
 x$b

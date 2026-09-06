@@ -1538,7 +1538,7 @@ gsSurvPower <- function(
     lower_bounds <- design_object$lower$bound
   }
 
-  if (length(lower_bounds) == 0) lower_bounds <- rep(-20, settings$k)
+  if (length(lower_bounds) == 0) lower_bounds <- rep(-Inf, settings$k)
 
   theta_assumed <- design_object$delta * .gsSurvPower_compute_delta_ratio(
     settings$hr,

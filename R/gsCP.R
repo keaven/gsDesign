@@ -256,7 +256,7 @@ gsCP <- function(x, theta = NULL, i = 1, zi = 0, r = 18) {
     # end update
   }
   else {
-    anew <- rep(-20, knew)
+    anew <- rep(-Inf, knew)
   }
 
   gsProbability(k = knew, theta = theta, n.I = Inew, a = anew, b = bnew, r = r, overrun = 0)
@@ -401,11 +401,17 @@ gsBoundCP <- function(x, theta = "thetahat", r = 18) {
   for (i in 1:len)
   {
     if (test.type > 1) {
-      xlow <- gsCP(x, thetalow[i], i, x$lower$bound[i])
-      CPlo[i] <- sum(xlow$upper$prob)
+      CPlo[i] <- if (is.finite(x$lower$bound[i])) {
+        sum(gsCP(x, thetalow[i], i, x$lower$bound[i])$upper$prob)
+      } else {
+        NA_real_ # no lower bound at this analysis
+      }
     }
-    xhi <- gsCP(x, thetahi[i], i, x$upper$bound[i])
-    CPhi[i] <- sum(xhi$upper$prob)
+    CPhi[i] <- if (is.finite(x$upper$bound[i])) {
+      sum(gsCP(x, thetahi[i], i, x$upper$bound[i])$upper$prob)
+    } else {
+      NA_real_ # no upper bound at this analysis
+    }
   }
 
   if (test.type > 1) {

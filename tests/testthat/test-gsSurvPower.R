@@ -1748,7 +1748,7 @@ test_that("alternate alpha preserves a selective efficacy schedule", {
   z_rows <- which(summary_a05$Value == "Z")
 
   expect_equal(pwr_a05$testUpper, c(FALSE, TRUE, TRUE))
-  expect_equal(pwr_a05$upper$bound[1], 20)
+  expect_equal(pwr_a05$upper$bound[1], Inf)
   expect_lt(max(pwr_a05$upper$prob[1, ]), 1e-20)
   expect_true(is.na(summary_a05[["\u03b1=0.05"]][z_rows[1]]))
   expect_equal(

@@ -1,5 +1,19 @@
 # gsDesign (development version)
 
+## Breaking changes
+
+- Absent lower and harm bounds now use `-Inf`, and absent upper bounds use
+  `Inf`, instead of the finite `-20`/`20` sentinel. This includes zero-spending
+  and skipped analyses. Use `is.finite()` to identify active bounds.
+  `gsBoundCP()` returns `NA` at an absent bound (#242).
+
+## Bug fixes
+
+- Guarded the Newton boundary search against `0/0` updates and separated its
+  iteration limit and finite iterate clamp from the absent-bound values (#242).
+- Updated the R interfaces and convergence checks to handle infinite bounds,
+  and fixed `gsDensity()` for one-sided designs (#242).
+
 ## Major changes
 
 - Replaced **gt** with the lightweight **lt** package (>= 0.3) as the default

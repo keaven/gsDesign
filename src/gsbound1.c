@@ -1,7 +1,7 @@
 #define DEBUG 0
-/* TODO(issue-242): keep the finite EXTREMEZ sentinel for now, but split it
-   conceptually from the hardcoded Newton iteration cap in a later change. */
-#define EXTREMEZ 20
+/* Newton-Raphson iteration limit and iterate clamp (see gsbound.c). */
+#define GS_MAXITER 20
+#define GS_ZCLAMP 20.
 #define MAXR 83
 #include "R.h"
 #include "Rmath.h"
@@ -14,8 +14,11 @@
  * For a given drift parameter @p xtheta and fixed lower cutoffs @p a, finds the
  * upper cutoffs @p b that match the target upper-tail crossing probabilities
  * @p probhi. The implied lower-tail crossing probabilities are returned in
- * @p problo. This routine is written with pointer arguments to support calling
- * via R's `.C()` interface.
+ * @p problo. An analysis with a non-positive target has no upper bound: `+Inf`
+ * is returned and the Newton iteration is skipped. Lower cutoffs may be
+ * `-Inf` (no lower bound). This routine is written with pointer arguments to
+ * support calling via R's `.C()` interface; callers must pass `NAOK = TRUE`
+ * so that infinite values can be exchanged with R.
  *
  * @param[in] xnanal Number of analyses (`nanal = xnanal[0]`).
  * @param[in] xtheta Drift parameter (`theta = xtheta[0]`).
@@ -24,7 +27,8 @@
  * @param[out] b Upper Z cutoffs at each analysis (length `nanal`).
  * @param[out] problo Output vector of lower-tail crossing probabilities (length
  *   `nanal`).
- * @param[in] probhi Target upper-tail crossing probabilities (length `nanal`).
+ * @param[in] probhi Target upper-tail crossing probabilities (length `nanal`);
+ *   a value `<= 0` means no upper bound.
  * @param[in] xtol Relative convergence tolerance (`tol = xtol[0]`).
  * @param[in] xr Grid parameter controlling the number of integration points
  *   (`r = xr[0]`).
@@ -37,7 +41,7 @@
 void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
               double *problo, double *probhi, double *xtol, int *xr,
               int *retval, int *printerr) {
-  int i, ii, j, m1, m2, r, nanal;
+  int i, ii, j, m1, m2, r, nanal, hi_active;
   double plo = 0., phi, dphi, btem = 0., btem2, rtdeltak, rtIk, rtIkm1, xlo,
          xhi, theta, mu, tol, bdelta;
   /* note: should allocate zwk & wwk dynamically...*/
@@ -68,7 +72,7 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
   problo[0] = pnorm(mu - a[0], 0., 1., 0,
                     0); /* probability of crossing lower bound at 1st interim */
   if (probhi[0] <= 0.)
-    b[0] = EXTREMEZ;
+    b[0] = R_PosInf;
   else
     b[0] = qnorm(probhi[0], mu, 1, 0, 0); /* upper bound at 1st interim */
   if (nanal == 1) {
@@ -93,13 +97,12 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
     rtIk = sqrt(I[i]);
     mu = rtIk * theta;
     rtdeltak = sqrt(I[i] - I[i - 1]);
-    if (probhi[i] <= 0.)
-      btem2 = EXTREMEZ;
-    else
-      btem2 = qnorm(probhi[i], mu, 1., 0, 0);
-    bdelta = 1.;
+    hi_active = probhi[i] > 0.;
+    btem2 = hi_active ? qnorm(probhi[i], mu, 1., 0, 0) : R_PosInf;
+    btem = btem2;
+    bdelta = hi_active ? 1. : 0.;
     j = 0;
-    while ((bdelta > tol) && j++ < 20) {
+    while ((bdelta > tol) && j++ < GS_MAXITER) {
       phi = 0.;
       dphi = 0.;
       plo = 0.;
@@ -121,7 +124,7 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
       }
       /* use 1st order Taylor's series to update boundaries */
       /* maximum allowed change is 1 */
-      /* maximum value allowed is EXTREMEZ */
+      /* an exact hit (or a vanishing derivative) leaves the iterate unchanged */
       if (DEBUG)
         Rprintf("i=%2d j=%2d plo=%lf btem=%lf phi=%lf dphi=%lf\n", i, j, plo,
                 btem, phi, dphi);
@@ -130,15 +133,25 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
         btem2 = btem + 1.;
       else if (bdelta > -dphi)
         btem2 = btem - 1.;
+      else if (bdelta == 0.)
+        btem2 = btem;
       else
-        btem2 = btem + (probhi[i] - phi) / dphi;
-      if (btem2 > EXTREMEZ)
-        btem2 = EXTREMEZ;
-      else if (btem2 < -EXTREMEZ)
-        btem2 = -EXTREMEZ;
-      bdelta = btem2 - btem;
-      if (bdelta < 0)
-        bdelta = -bdelta;
+        btem2 = btem + bdelta / dphi;
+      if (btem2 > GS_ZCLAMP)
+        btem2 = GS_ZCLAMP;
+      else if (btem2 < -GS_ZCLAMP)
+        btem2 = -GS_ZCLAMP;
+      bdelta = fabs(btem2 - btem);
+    }
+    if (!hi_active) {
+      /* no upper bound at this analysis: only the lower-tail probability is
+         needed */
+      plo = 0.;
+      for (ii = 0; ii <= m1; ii++) {
+        xlo = (z1[ii] * rtIkm1 - a[i] * rtIk + theta * (I[i] - I[i - 1])) /
+              rtdeltak;
+        plo += pnorm(xlo, 0., 1., 0, 0) * h[ii];
+      }
     }
     b[i] = btem;
     problo[i] = plo;

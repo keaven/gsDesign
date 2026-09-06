@@ -1,6 +1,6 @@
 testthat::context("testUpper/testLower/testHarm selective bound testing")
 
-EXTREMEZ <- 20
+EXTREMEZ <- Inf
 
 # ---- Validation tests ----
 
@@ -496,7 +496,8 @@ testthat::test_that("gsBoundSummary shows NA for zero futility spending from sfG
   final_rows <- z_rows[4]:nrow(r)
 
   testthat::expect_equal(x$lower$spend[c(2, 4)], c(0, 0), tolerance = 1e-12)
-  testthat::expect_true(all(is.finite(x$lower$bound[c(2, 4)])))
+  testthat::expect_true(is.infinite(x$lower$bound[2]))
+  testthat::expect_equal(x$lower$bound[4], x$upper$bound[4])
   testthat::expect_true(all(is.na(r$Futility[ia2_rows])))
   testthat::expect_true(all(is.na(r$Futility[final_rows])))
 })
