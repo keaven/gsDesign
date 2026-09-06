@@ -134,7 +134,9 @@ Turnbull (2000). Grid points are spread out in the tails for accurate
 probability calculations. Larger values provide more grid points and greater
 accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
 accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
-not changed by users.}
+not changed by users. With \code{options(gsDesign.quadrature = "gl")}
+(see the section on numerical integration below) \code{r} scales the
+number of Gauss-Legendre nodes relative to its default.}
 
 \item{n.I}{Used for re-setting bounds when timing of analyses changes from
 initial design; see examples.}
@@ -393,6 +395,26 @@ functions.
 The gsDesign technical manual is available at
   \url{https://keaven.github.io/gsd-tech-manual/}.
 }
+\section{Numerical integration}{
+
+Boundary crossing probabilities are computed by the recursive numerical
+integration of Jennison and Turnbull (2000, Chapter 19). By default the
+integration grid of that chapter is used (Simpson's rule on \code{12 r - 3}
+points concentrated around the mean of the test statistic), which gives
+probabilities accurate to about \eqn{10^{-7}} with the default
+\code{r = 18}. Setting \code{options(gsDesign.quadrature = "gl")} switches
+all computations (\code{gsDesign()}, \code{gsProbability()},
+\code{gsBound()}, \code{gsBound1()}, \code{gsDensity()} and everything
+built on them) to Gauss-Legendre quadrature on the continuation region of
+each analysis, with a number of nodes that adapts to the width of the
+region relative to the neighboring information increments. In benchmarked
+designs this is several times faster and accurate to about \eqn{10^{-12}},
+with differences from the default grid within the accuracy of that grid.
+The rule uses at most 992 nodes, so extremely small information increments
+can reduce accuracy. \code{normalGrid()} always returns the Jennison and
+Turnbull grid.
+}
+
 \examples{
 library(ggplot2)
 #  symmetric, 2-sided design with O'Brien-Fleming-like boundaries

@@ -34,14 +34,15 @@
  * @param[out] retval Error flag: 0 on success, 1 on illegal arguments or
  *   failure to converge.
  * @param[in] printerr If non-zero, print diagnostics via `Rprintf()`.
+ * @param[in] method Quadrature method (`GS_QUAD_JT` or `GS_QUAD_GL`).
  * @return Nothing.
  */
 void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
               double *problo, double *probhi, double *xtol, int *xr,
-              int *retval, int *printerr) {
-  int i, ii, j, m1, m2, r, nanal, hi_active;
+              int *retval, int *printerr, int *method) {
+  int i, ii, j, m1, m2, r, nanal, hi_active, meth;
   double plo, phi, dphi, btem = 0., btem2, rtdeltak, rtIk, rtIkm1, xlo, xhi,
-                             theta, mu, tol, bdelta, drift, scale;
+                             theta, mu, tol, bdelta, drift, scale, sig;
   /* note: should allocate zwk & wwk dynamically...*/
   double zwk[1000], wwk[1000], hwk[1000], zwk2[1000], wwk2[1000], hwk2[1000],
       *z1, *z2, *w1, *w2, *h, *h2, *tem;
@@ -49,6 +50,7 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
   nanal = xnanal[0];
   theta = xtheta[0];
   tol = xtol[0];
+  meth = method[0];
   if (nanal < 1 || r < 1 || r > MAXR) {
     retval[0] = 1;
     if (*printerr) {
@@ -79,7 +81,8 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
   z2 = zwk2;
   w2 = wwk2;
   h2 = hwk2;
-  m1 = gridpts(r, mu, a[0], b[0], z1, w1);
+  sig = gs_kernel_width(I, 0, nanal);
+  m1 = gsgrid(meth, r, mu, a[0], b[0], sig, z1, w1);
   h1(theta, m1, w1, I[0], z1, h);
   /* use Newton-Raphson to find subsequent interim analysis cutpoints */
   retval[0] = 0;
@@ -141,7 +144,8 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
       retval[0] = 1;
     }
     if (i < nanal - 1) {
-      m2 = gridpts(r, mu, a[i], b[i], z2, w2);
+      sig = gs_kernel_width(I, i, nanal);
+      m2 = gsgrid(meth, r, mu, a[i], b[i], sig, z2, w2);
       hupdate(theta, w2, m1, I[i - 1], z1, h, m2, I[i], z2, h2);
       m1 = m2;
       tem = z1;

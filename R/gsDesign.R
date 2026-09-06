@@ -1,3 +1,14 @@
+# gsQuadratureMethod: integer code of the quadrature scheme selected by the
+# option "gsDesign.quadrature" ("jt", the default, or "gl"); passed to the C
+# entry points. See ?gsDesign, section "Numerical integration".
+gsQuadratureMethod <- function() {
+  method <- getOption("gsDesign.quadrature", "jt")
+  if (!is.character(method) || length(method) != 1 || !(method %in% c("jt", "gl"))) {
+    stop("option gsDesign.quadrature must be \"jt\" (Jennison and Turnbull grid) or \"gl\" (Gauss-Legendre)")
+  }
+  if (method == "gl") 1L else 0L
+}
+
 # gsBound roxy [sinew] ----
 #' @title Boundary derivation - low level
 #' @description  \code{gsBound()} and \code{gsBound1()} are lower-level functions used to
@@ -139,7 +150,7 @@ gsBound <- function(I, trueneg, falsepos, tol = 0.000001, r = 18, printerr = 0) 
   a <- falsepos
   b <- falsepos
   retval <- as.integer(0)
-  xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval, printerr, NAOK = TRUE)
+  xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval, printerr, gsQuadratureMethod(), NAOK = TRUE)
   rates <- list(falsepos = xx[[6]], trueneg = xx[[5]])
 
   ## DSB question: do we need to do something here in case of an error? (similarly as in gsBound1)
@@ -184,7 +195,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
   b <- a
   retval <- as.integer(0)
 
-  xx <- .C("gsbound1", k, theta, I, a, b, problo, probhi, tol, r, retval, printerr, NAOK = TRUE)
+  xx <- .C("gsbound1", k, theta, I, a, b, problo, probhi, tol, r, retval, printerr, gsQuadratureMethod(), NAOK = TRUE)
 
   y <- list(
     k = xx[[1]], theta = xx[[2]], I = xx[[3]], a = xx[[4]], b = xx[[5]],
@@ -328,7 +339,9 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' probability calculations. Larger values provide more grid points and greater
 #' accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
 #' accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
-#' not changed by users.
+#' not changed by users. With \code{options(gsDesign.quadrature = "gl")}
+#' (see the section on numerical integration below) \code{r} scales the
+#' number of Gauss-Legendre nodes relative to its default.
 #' @param n.I Used for re-setting bounds when timing of analyses changes from
 #' initial design; see examples.
 #' @param maxn.IPlan Used for re-setting bounds when timing of analyses changes
@@ -393,6 +406,24 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' \code{-Inf} and the bound is displayed as
 #' \code{NA} in output. Cumulative harm crossing probability from earlier
 #' analyses is still displayed.
+#' @section Numerical integration:
+#' Boundary crossing probabilities are computed by the recursive numerical
+#' integration of Jennison and Turnbull (2000, Chapter 19). By default the
+#' integration grid of that chapter is used (Simpson's rule on \code{12 r - 3}
+#' points concentrated around the mean of the test statistic), which gives
+#' probabilities accurate to about \eqn{10^{-7}} with the default
+#' \code{r = 18}. Setting \code{options(gsDesign.quadrature = "gl")} switches
+#' all computations (\code{gsDesign()}, \code{gsProbability()},
+#' \code{gsBound()}, \code{gsBound1()}, \code{gsDensity()} and everything
+#' built on them) to Gauss-Legendre quadrature on the continuation region of
+#' each analysis, with a number of nodes that adapts to the width of the
+#' region relative to the neighboring information increments. In benchmarked
+#' designs this is several times faster and accurate to about \eqn{10^{-12}},
+#' with differences from the default grid within the accuracy of that grid.
+#' The rule uses at most 992 nodes, so extremely small information increments
+#' can reduce accuracy. \code{normalGrid()} always returns the Jennison and
+#' Turnbull grid.
+#'
 #' @return An object of the class \code{gsDesign}. This class has the following
 #' elements and upon return from \code{gsDesign()} contains: \item{k}{As
 #' input.} \item{test.type}{As input.} \item{alpha}{As input.} \item{beta}{As
@@ -814,7 +845,7 @@ gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0
   plo <- as.double(c(1:(k * ntheta)))
   xx <- .C(
     "probrej", k, ntheta, as.double(theta), as.double(n.I),
-    as.double(a), as.double(b), plo, phi, r, NAOK = TRUE
+    as.double(a), as.double(b), plo, phi, r, gsQuadratureMethod(), NAOK = TRUE
   )
   plo <- matrix(xx[[7]], k, ntheta)
   phi <- matrix(xx[[8]], k, ntheta)
@@ -952,7 +983,7 @@ gsDensity <- function(x, theta = 0, i = 1, zi = 0, r = 18) {
     "gsdensity", den, as.integer(i), length(theta),
     as.double(theta), as.double(x$n.I),
     as.double(if (is.null(x$lower)) rep(-Inf, x$k) else x$lower$bound), as.double(x$upper$bound),
-    as.double(zi), length(zi), as.integer(r), NAOK = TRUE
+    as.double(zi), length(zi), as.integer(r), gsQuadratureMethod(), NAOK = TRUE
   )
   list(zi = zi, theta = theta, density = matrix(xx[[1]], nrow = length(zi), ncol = length(theta)))
 }
@@ -1642,7 +1673,7 @@ gsprob <- function(theta, I, a, b, r = 18, overrun = 0) {
   plo <- as.double(c(1:(nanal * ntheta)))
   xx <- .C(
     "probrej", nanal, ntheta, as.double(theta), as.double(I),
-    as.double(a), as.double(b), plo, phi, as.integer(r), NAOK = TRUE
+    as.double(a), as.double(b), plo, phi, as.integer(r), gsQuadratureMethod(), NAOK = TRUE
   )
 
   plo <- matrix(xx[[7]], nanal, ntheta)
@@ -1856,7 +1887,7 @@ gsDProb <- function(theta, d) {
   plo <- as.double(c(1:(k * ntheta)))
   xx <- .C(
     "probrej", k, ntheta, as.double(theta), as.double(n.I),
-    as.double(a), as.double(b), plo, phi, r, NAOK = TRUE
+    as.double(a), as.double(b), plo, phi, r, gsQuadratureMethod(), NAOK = TRUE
   )
   plo <- matrix(xx[[7]], k, ntheta)
   phi <- matrix(xx[[8]], k, ntheta)
@@ -1884,7 +1915,7 @@ gsDProb <- function(theta, d) {
     harm_phi <- as.double(c(1:(k * ntheta)))
     xx2 <- .C(
       "probrej", k, ntheta, as.double(theta), as.double(n.I),
-      as.double(d$harm$bound), as.double(b), harm_plo, harm_phi, r, NAOK = TRUE
+      as.double(d$harm$bound), as.double(b), harm_plo, harm_phi, r, gsQuadratureMethod(), NAOK = TRUE
     )
     d$harm$prob <- matrix(xx2[[7]], k, ntheta)
   }

@@ -23,17 +23,20 @@
  * @param[in] xz Z values where the density is evaluated (length `zlen[0]`).
  * @param[in] zlen Length of @p xz (`nz = zlen[0]`).
  * @param[in] xr Grid parameter (`r = xr[0]`).
+ * @param[in] method Quadrature method (`GS_QUAD_JT` or `GS_QUAD_GL`).
  * @return Nothing.
  */
 void gsdensity(double *den, int *xnanal, int *ntheta, double *xtheta, double *I,
-               double *a, double *b, double *xz, int *zlen, int *xr) {
-  int r, i, j, k, m1, m2, nanal, nz, wklen;
-  double z, mu, theta;
+               double *a, double *b, double *xz, int *zlen, int *xr,
+               int *method) {
+  int r, i, j, k, m1, m2, nanal, nz, wklen, meth;
+  double z, mu, theta, sig;
   double *zwk, *wwk, *hwk, *zwk2, *wwk2, *hwk2;
   double *z1, *z2, *w1, *w2, *h, *h2, *tem;
   r = xr[0];
   nanal = xnanal[0];
   nz = zlen[0];
+  meth = method[0];
   wklen = 1000; /* work storage matching the other entry points */
   if (wklen < nz)
     wklen = nz;
@@ -65,7 +68,8 @@ void gsdensity(double *den, int *xnanal, int *ntheta, double *xtheta, double *I,
     z1 = zwk;
     w1 = wwk;
     h = hwk;
-    m1 = gridpts(r, mu, a[0], b[0], z1, w1);
+    sig = gs_kernel_width(I, 0, nanal);
+    m1 = gsgrid(meth, r, mu, a[0], b[0], sig, z1, w1);
     h1(theta, m1, w1, I[0], z1, h);
     z2 = zwk2;
     w2 = wwk2;
@@ -74,7 +78,8 @@ void gsdensity(double *den, int *xnanal, int *ntheta, double *xtheta, double *I,
     for (i = 1; i < nanal; i++) {
       mu = theta * sqrt(I[i]);
       if (i < nanal - 1) {
-        m2 = gridpts(r, mu, a[i], b[i], z2, w2);
+        sig = gs_kernel_width(I, i, nanal);
+        m2 = gsgrid(meth, r, mu, a[i], b[i], sig, z2, w2);
       } else {
         m2 = nz - 1;
         z2 = xz;

@@ -7,6 +7,15 @@
   and skipped analyses. Use `is.finite()` to identify active bounds.
   `gsBoundCP()` returns `NA` at an absent bound (#242, #321).
 
+## New features
+
+- Added opt-in Gauss-Legendre quadrature for boundary crossing calculations
+  via `options(gsDesign.quadrature = "gl")`. The node count adapts to the
+  continuation region and neighboring information increments, with `r`
+  controlling resolution. Research benchmarks show faster calculations and
+  smaller integration errors. The default Jennison and Turnbull grid
+  (`"jt"`) is unchanged; see the numerical integration section of `?gsDesign`.
+
 ## Performance
 
 - Reduced repeated work in the C density update and boundary searches while

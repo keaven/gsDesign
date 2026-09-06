@@ -161,7 +161,9 @@ Turnbull (2000). Grid points are spread out in the tails for accurate
 probability calculations. Larger values provide more grid points and greater
 accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
 accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
-not changed by users.}
+not changed by users. With \code{options(gsDesign.quadrature = "gl")}
+(see the section on numerical integration below) \code{r} scales the
+number of Gauss-Legendre nodes relative to its default.}
 
 \item{tol}{Tolerance for error passed to the \code{\link{gsDesign}} function.}
 
