@@ -14,7 +14,8 @@
   continuation region and neighboring information increments, with `r`
   controlling resolution. Research benchmarks show faster calculations and
   smaller integration errors. The default Jennison and Turnbull grid
-  (`"jt"`) is unchanged; see the numerical integration section of `?gsDesign`.
+  (`"jt"`) is unchanged; see the numerical integration section of `?gsDesign`
+  (#323).
 
 ## Performance
 
