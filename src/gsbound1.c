@@ -13,44 +13,38 @@
  *
  * For a given drift parameter @p xtheta and fixed lower cutoffs @p a, finds the
  * upper cutoffs @p b that match the target upper-tail crossing probabilities
- * @p probhi. The implied lower-tail crossing probabilities are returned in
- * @p problo. An analysis with a non-positive target has no upper bound: `+Inf`
- * is returned and the Newton iteration is skipped. Lower cutoffs may be
- * `-Inf` (no lower bound). This routine is written with pointer arguments to
- * support calling via R's `.C()` interface; callers must pass `NAOK = TRUE`
- * so that infinite values can be exchanged with R.
+ * @p probhi by Newton-Raphson iteration (Jennison & Turnbull, 2000, Section
+ * 19.4.1). The implied lower-tail crossing probabilities are returned in
+ * @p problo; they do not depend on the iterate and are evaluated once per
+ * analysis. An analysis with a non-positive target has no upper bound: `+Inf`
+ * is returned and the iteration is skipped. Lower cutoffs may be `-Inf`.
+ * Written with pointer arguments for R's `.C()` interface (call with
+ * `NAOK = TRUE`).
  *
  * @param[in] xnanal Number of analyses (`nanal = xnanal[0]`).
  * @param[in] xtheta Drift parameter (`theta = xtheta[0]`).
  * @param[in] I Statistical information at each analysis (length `nanal`).
  * @param[in] a Fixed lower Z cutoffs at each analysis (length `nanal`).
  * @param[out] b Upper Z cutoffs at each analysis (length `nanal`).
- * @param[out] problo Output vector of lower-tail crossing probabilities (length
- *   `nanal`).
+ * @param[out] problo Lower-tail crossing probabilities (length `nanal`).
  * @param[in] probhi Target upper-tail crossing probabilities (length `nanal`);
  *   a value `<= 0` means no upper bound.
- * @param[in] xtol Relative convergence tolerance (`tol = xtol[0]`).
- * @param[in] xr Grid parameter controlling the number of integration points
- *   (`r = xr[0]`).
- * @param[out] retval Error flag (`retval[0]`): 0 on success, 1 on illegal
- *   arguments or failure to converge.
- * @param[in] printerr If non-zero (`printerr[0] != 0`), print diagnostics via
- *   `Rprintf()`.
+ * @param[in] xtol Convergence tolerance on the bound (`tol = xtol[0]`).
+ * @param[in] xr Grid parameter (`r = xr[0]`).
+ * @param[out] retval Error flag: 0 on success, 1 on illegal arguments or
+ *   failure to converge.
+ * @param[in] printerr If non-zero, print diagnostics via `Rprintf()`.
  * @return Nothing.
  */
 void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
               double *problo, double *probhi, double *xtol, int *xr,
               int *retval, int *printerr) {
   int i, ii, j, m1, m2, r, nanal, hi_active;
-  double plo = 0., phi, dphi, btem = 0., btem2, rtdeltak, rtIk, rtIkm1, xlo,
-         xhi, theta, mu, tol, bdelta;
+  double plo, phi, dphi, btem = 0., btem2, rtdeltak, rtIk, rtIkm1, xlo, xhi,
+                             theta, mu, tol, bdelta, drift, scale;
   /* note: should allocate zwk & wwk dynamically...*/
   double zwk[1000], wwk[1000], hwk[1000], zwk2[1000], wwk2[1000], hwk2[1000],
       *z1, *z2, *w1, *w2, *h, *h2, *tem;
-  void h1(double, int, double *, double, double *, double *);
-  void hupdate(double, double *, int, double, double *, double *, int, double,
-               double *, double *);
-  int gridpts(int, double, double, double, double *, double *);
   r = xr[0];
   nanal = xnanal[0];
   theta = xtheta[0];
@@ -69,8 +63,7 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
   }
   rtIk = sqrt(I[0]);
   mu = rtIk * theta; /* mean of normalized statistic at 1st interim */
-  problo[0] = pnorm(mu - a[0], 0., 1., 0,
-                    0); /* probability of crossing lower bound at 1st interim */
+  problo[0] = GS_PNORM_UPPER(mu - a[0]); /* crossing lower bound at 1st interim */
   if (probhi[0] <= 0.)
     b[0] = R_PosInf;
   else
@@ -86,8 +79,6 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
   z2 = zwk2;
   w2 = wwk2;
   h2 = hwk2;
-  if (DEBUG)
-    Rprintf("r=%d mu=%lf a[0]=%lf b[0]=%lf\n", r, mu, a[0], b[0]);
   m1 = gridpts(r, mu, a[0], b[0], z1, w1);
   h1(theta, m1, w1, I[0], z1, h);
   /* use Newton-Raphson to find subsequent interim analysis cutpoints */
@@ -97,6 +88,8 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
     rtIk = sqrt(I[i]);
     mu = rtIk * theta;
     rtdeltak = sqrt(I[i] - I[i - 1]);
+    drift = theta * (I[i] - I[i - 1]);
+    scale = gs_inv_sqrt_2pi * rtIk / rtdeltak;
     hi_active = probhi[i] > 0.;
     btem2 = hi_active ? qnorm(probhi[i], mu, 1., 0, 0) : R_PosInf;
     btem = btem2;
@@ -105,29 +98,17 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
     while ((bdelta > tol) && j++ < GS_MAXITER) {
       phi = 0.;
       dphi = 0.;
-      plo = 0.;
       btem = btem2;
-      if (DEBUG)
-        Rprintf("i=%d m1=%d\n", i, m1);
-      /* compute probability of crossing boundaries & their derivatives */
+      /* compute probability of crossing the upper boundary & its derivative */
       for (ii = 0; ii <= m1; ii++) {
-        xhi = (z1[ii] * rtIkm1 - btem * rtIk + theta * (I[i] - I[i - 1])) /
-              rtdeltak;
-        phi += pnorm(xhi, 0., 1., 1, 0) * h[ii];
-        xlo = (z1[ii] * rtIkm1 - a[i] * rtIk + theta * (I[i] - I[i - 1])) /
-              rtdeltak;
-        plo += pnorm(xlo, 0., 1., 0, 0) * h[ii];
-        dphi -= h[ii] * exp(-xhi * xhi / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
-        if (DEBUG)
-          Rprintf("m1=%d ii=%d xhi=%lf phi=%lf xlo=%lf plo=%lf dphi=%lf\n", m1,
-                  ii, xhi, phi, xlo, plo, dphi);
+        xhi = (z1[ii] * rtIkm1 - btem * rtIk + drift) / rtdeltak;
+        phi += GS_PNORM_LOWER(xhi) * h[ii];
+        dphi -= h[ii] * exp(-xhi * xhi / 2);
       }
+      dphi *= scale;
       /* use 1st order Taylor's series to update boundaries */
       /* maximum allowed change is 1 */
       /* an exact hit (or a vanishing derivative) leaves the iterate unchanged */
-      if (DEBUG)
-        Rprintf("i=%2d j=%2d plo=%lf btem=%lf phi=%lf dphi=%lf\n", i, j, plo,
-                btem, phi, dphi);
       bdelta = probhi[i] - phi;
       if (bdelta < dphi)
         btem2 = btem + 1.;
@@ -143,15 +124,11 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
         btem2 = -GS_ZCLAMP;
       bdelta = fabs(btem2 - btem);
     }
-    if (!hi_active) {
-      /* no upper bound at this analysis: only the lower-tail probability is
-         needed */
-      plo = 0.;
-      for (ii = 0; ii <= m1; ii++) {
-        xlo = (z1[ii] * rtIkm1 - a[i] * rtIk + theta * (I[i] - I[i - 1])) /
-              rtdeltak;
-        plo += pnorm(xlo, 0., 1., 0, 0) * h[ii];
-      }
+    /* lower-tail crossing probability for the fixed lower bound */
+    plo = 0.;
+    for (ii = 0; ii <= m1; ii++) {
+      xlo = (z1[ii] * rtIkm1 - a[i] * rtIk + drift) / rtdeltak;
+      plo += GS_PNORM_UPPER(xlo) * h[ii];
     }
     b[i] = btem;
     problo[i] = plo;

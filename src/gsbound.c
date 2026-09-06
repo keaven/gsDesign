@@ -14,32 +14,28 @@
 
 /**
  * @brief Compute group sequential Z-boundaries from target crossing
- * probabilities.
+ * probabilities under the null hypothesis.
  *
- * Uses the Jennison & Turnbull numerical integration grid (p. 349) and a
- * Newton-Raphson iteration to find lower and upper Z cutoffs for each analysis.
- * An analysis with a non-positive target probability has no bound on that
- * side: the corresponding cutoff is returned as `-Inf` (lower) or `+Inf`
- * (upper) and the Newton iteration is skipped for that side.
- * This routine is written with pointer arguments to support calling via R's
- * `.C()` interface; callers must pass `NAOK = TRUE` so that infinite values
- * can be exchanged with R.
+ * Newton-Raphson iteration for lower and upper Z cutoffs at each analysis
+ * (Jennison & Turnbull, 2000, Section 19.4.1). An analysis with a
+ * non-positive target probability has no bound on that side: the cutoff is
+ * returned as `-Inf` (lower) or `+Inf` (upper) and the iteration is skipped
+ * for that side. Written with pointer arguments for R's `.C()` interface
+ * (call with `NAOK = TRUE`).
  *
  * @param[in] xnanal Number of analyses (`nanal = xnanal[0]`).
  * @param[in] I Statistical information at each analysis (length `nanal`).
  * @param[out] a Lower Z cutoffs at each analysis (length `nanal`).
  * @param[out] b Upper Z cutoffs at each analysis (length `nanal`).
- * @param[in] problo Target probability of crossing the lower boundary at each
- *   analysis (length `nanal`); a value `<= 0` means no lower bound.
- * @param[in] probhi Target probability of crossing the upper boundary at each
- *   analysis (length `nanal`); a value `<= 0` means no upper bound.
- * @param[in] xtol Relative convergence tolerance (`tol = xtol[0]`).
- * @param[in] xr Grid parameter controlling the number of integration points
- *   (`r = xr[0]`).
- * @param[out] retval Error flag (`retval[0]`): 0 on success, 1 on illegal
- *   arguments or failure to converge.
- * @param[in] printerr If non-zero (`printerr[0] != 0`), print diagnostics via
- *   `Rprintf()`.
+ * @param[in] problo Target lower crossing probabilities; `<= 0` means no
+ *   lower bound at that analysis.
+ * @param[in] probhi Target upper crossing probabilities; `<= 0` means no
+ *   upper bound at that analysis.
+ * @param[in] xtol Convergence tolerance on the bounds (`tol = xtol[0]`).
+ * @param[in] xr Grid parameter (`r = xr[0]`).
+ * @param[out] retval Error flag: 0 on success, 1 on illegal arguments or
+ *   failure to converge.
+ * @param[in] printerr If non-zero, print diagnostics via `Rprintf()`.
  * @return Nothing.
  */
 void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
@@ -47,15 +43,11 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
              int *printerr) {
   int i, ii, j, m1, m2, r, nanal, lo_active, hi_active;
   double plo, phi, dplo, dphi, btem = 0., atem = 0., atem2, btem2, rtdeltak,
-                               rtIk, rtIkm1, xlo, xhi;
+                               rtIk, rtIkm1, xlo, xhi, scale;
   double adelta, bdelta, tol;
   /* note: should allocate zwk & wwk dynamically...*/
   double zwk[1000], wwk[1000], hwk[1000], zwk2[1000], wwk2[1000], hwk2[1000],
       *z1, *z2, *w1, *w2, *h, *h2, *tem;
-  void h1(double, int, double *, double, double *, double *);
-  void hupdate(double, double *, int, double, double *, double *, int, double,
-               double *, double *);
-  int gridpts(int, double, double, double, double *, double *);
   r = xr[0];
   nanal = xnanal[0];
   tol = xtol[0];
@@ -80,6 +72,10 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
     b[0] = R_PosInf;
   else
     b[0] = qnorm(probhi[0], 0., 1., 0, 0);
+  if (nanal == 1) {
+    retval[0] = 0;
+    return;
+  }
   /* set up work vectors */
   z1 = zwk;
   w1 = wwk;
@@ -95,6 +91,7 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
     rtIkm1 = rtIk;
     rtIk = sqrt(I[i]);
     rtdeltak = sqrt(I[i] - I[i - 1]);
+    scale = gs_inv_sqrt_2pi * rtIk / rtdeltak;
     lo_active = problo[i] > 0.;
     hi_active = probhi[i] > 0.;
     atem2 = lo_active ? qnorm(problo[i], 0., 1., 1, 0) : R_NegInf;
@@ -115,16 +112,18 @@ void gsbound(int *xnanal, double *I, double *a, double *b, double *problo,
       if (lo_active) {
         for (ii = 0; ii <= m1; ii++) {
           xlo = (z1[ii] * rtIkm1 - atem * rtIk) / rtdeltak;
-          plo += h[ii] * pnorm(xlo, 0., 1., 0, 0);
-          dplo += h[ii] * exp(-xlo * xlo / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
+          plo += h[ii] * GS_PNORM_UPPER(xlo);
+          dplo += h[ii] * exp(-xlo * xlo / 2);
         }
+        dplo *= scale;
       }
       if (hi_active) {
         for (ii = 0; ii <= m1; ii++) {
           xhi = (z1[ii] * rtIkm1 - btem * rtIk) / rtdeltak;
-          phi += h[ii] * pnorm(xhi, 0., 1., 1, 0);
-          dphi -= h[ii] * exp(-xhi * xhi / 2) * gs_inv_sqrt_2pi * rtIk / rtdeltak;
+          phi += h[ii] * GS_PNORM_LOWER(xhi);
+          dphi -= h[ii] * exp(-xhi * xhi / 2);
         }
+        dphi *= scale;
       }
       /* use 1st order Taylor's series to update boundaries */
       /* maximum allowed change is 1 */

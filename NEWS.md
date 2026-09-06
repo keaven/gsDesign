@@ -7,6 +7,14 @@
   and skipped analyses. Use `is.finite()` to identify active bounds.
   `gsBoundCP()` returns `NA` at an absent bound (#242, #321).
 
+## Performance
+
+- Reduced repeated work in the C density update and boundary searches while
+  retaining the Jennison and Turnbull grid and numerical results. Research
+  benchmarks measured roughly 20% to 35% faster core routines. R's normal
+  tail calculations remain the default; `-DGS_USE_ERFC` enables an optional
+  C-library alternative.
+
 ## Bug fixes
 
 - Guarded the Newton boundary search against `0/0` updates and separated its
