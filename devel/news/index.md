@@ -5,6 +5,13 @@
 ### New features
 
 - Added
+  [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/devel/reference/gsPPFutilitySpending.md)
+  to calibrate futility spending to posterior predictive power targets
+  using a fixed discrete or continuous-grid prior, sharing the CP
+  calibration solver. The futility-spending vignette compares CP- and
+  PP-targeted survival designs using the default summary prior
+  ([\#326](https://github.com/keaven/gsDesign/issues/326)).
+- Added
   [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/devel/reference/gsCPFutilitySpending.md)
   to calibrate beta-spending futility parameters and statistical
   information to conditional power targets at one or more interim
