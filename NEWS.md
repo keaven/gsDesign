@@ -21,6 +21,12 @@
 
 ## Documentation
 
+- Added a futility-spending calibration vignette comparing all six
+  two-parameter families and piecewise-linear spending with three
+  conditional-power targets, including reconstructed designs and practical
+  guidance on early futility and sample-size inflation. Examples cover risk
+  differences, normal means, survival designs, and calibrated spending curves
+  with interpretation of effects at the bounds (#318).
 - Documented all `gsCPFutilitySpending()` solver controls, defaults, and
   spending-family restrictions, with a tighter CP tolerance example (#318).
 - Updated the `gsCPFutilitySpending()` example to target conditional power 0.3

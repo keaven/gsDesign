@@ -188,6 +188,98 @@ test_that("piecewise-linear spending remains valid while matching three targets"
   expect_equal(fit$lower$param[1:3], x$lower$sTime[1:3])
 })
 
+test_that("all two-parameter families attain explicit CP targets", {
+  n_fixed <- nBinomial(.15, .10, alpha = .025, beta = .1, ratio = 1)
+  x <- gsDesign(
+    k = 3, test.type = 4, timing = c(.4, .75), sfu = sfLDOF,
+    n.fix = n_fixed, delta1 = .05, endpoint = "Binomial",
+    testLower = c(TRUE, TRUE, FALSE)
+  )
+  families <- c("sfLogistic", "sfBetaDist", "sfCauchy", "sfNormal",
+                "sfExtremeValue", "sfExtremeValue2")
+  for (family in families) {
+    fit <- gsCPFutilitySpending(x, c(.3, .3), i = 1:2, sfl = family)
+    rebuilt <- gsDesign(
+      k = 3, test.type = 4, timing = c(.4, .75), sfu = sfLDOF,
+      n.fix = n_fixed, delta1 = .05, endpoint = "Binomial",
+      sfl = get(family, envir = asNamespace("gsDesign")),
+      sflpar = fit$cpFutilitySpending$sflpar,
+      testLower = c(TRUE, TRUE, FALSE)
+    )
+    expect_lte(max(abs(cp_at_futility(rebuilt, 1:2) - .3)), 1e-4)
+    expect_equal(fit$delta1, .05)
+    expect_equal(fit$n.fix, n_fixed)
+    expect_equal(fit$endpoint, "Binomial")
+    expect_equal(sum(rebuilt$upper$prob[, 2]), 1 - x$beta, tolerance = 2e-5)
+  }
+})
+
+test_that("piecewise-linear spending attains equal and varying explicit targets", {
+  times <- c(.3, .5, .7)
+  n_fixed <- nNormal(delta1 = .5, sd = 1.1, alpha = .025, beta = .1, ratio = 1)
+  x <- gsDesign(k = 4, test.type = 4, timing = times, sfu = sfLDOF,
+                n.fix = n_fixed, delta1 = .5, endpoint = "Normal",
+                testLower = c(TRUE, TRUE, TRUE, FALSE))
+  for (target in list(rep(.3, 3), c(.2, .3, .4))) {
+    fit <- gsCPFutilitySpending(
+      x, target, i = 1:3, sfl = sfLinear,
+      control = list(start = c(.85, .95, .98))
+    )
+    par <- fit$cpFutilitySpending$sflpar
+    expect_equal(par[1:3], times)
+    expect_true(all(par[4:6] > 0 & par[4:6] < 1))
+    expect_true(all(diff(par[4:6]) > 0))
+    rebuilt <- gsDesign(
+      k = 4, test.type = 4, timing = times, sfu = sfLDOF,
+      n.fix = n_fixed, delta1 = .5, endpoint = "Normal",
+      sfl = sfLinear, sflpar = par,
+      testLower = c(TRUE, TRUE, TRUE, FALSE)
+    )
+    expect_lte(max(abs(cp_at_futility(rebuilt, 1:3) - target)), 1e-4)
+    expect_equal(fit$delta1, .5)
+    expect_equal(fit$n.fix, n_fixed)
+    expect_equal(fit$endpoint, "Normal")
+    expect_equal(sum(rebuilt$upper$prob[, 2]), 1 - x$beta, tolerance = 2e-5)
+  }
+})
+
+test_that("survival designs can replay calibrated fixed-timing spending", {
+  x <- gsDesign(k = 3, test.type = 4, timing = c(.5, .75), sfu = sfLDOF,
+                sfl = sfHSD, sflpar = 1, testLower = c(TRUE, FALSE, FALSE))
+  fit <- gsCPFutilitySpending(x, .3, i = 1)
+  surv <- gsSurv(k = 3, test.type = 4, timing = c(.5, .75), sfu = sfLDOF,
+                 sfl = sfHSD, sflpar = fit$lower$param,
+                 testLower = c(TRUE, FALSE, FALSE), ratio = 1)
+  expect_lte(abs(cp_at_futility(surv, 1) - .3), 1e-4)
+  expect_equal(sum(surv$upper$prob[, 2]), .9, tolerance = 2e-5)
+  expect_error(gsCPFutilitySpending(surv, .3, i = 1),
+               class = "gsCPFutilitySpending_input_error")
+
+  args <- list(
+    calendarTime = c(18, 27, 36), spending = "information",
+    test.type = 4, sfu = sfLDOF, sfl = sfHSD, sflpar = 1,
+    testLower = c(TRUE, FALSE, FALSE), hr = .7, lambdaC = log(2) / 12,
+    R = 12, minfup = 12, ratio = 1
+  )
+  ref <- do.call(gsSurvCalendar, args)
+  statistical <- gsDesign(
+    k = ref$k, test.type = 4, alpha = ref$alpha, beta = ref$beta,
+    n.fix = ref$n.fix, timing = ref$timing,
+    usTime = ref$upper$sTime, lsTime = ref$lower$sTime,
+    delta0 = ref$delta0, delta1 = ref$delta1,
+    sfu = sfLDOF, sfl = sfHSD, sflpar = 1,
+    testLower = c(TRUE, FALSE, FALSE)
+  )
+  fit <- gsCPFutilitySpending(statistical, .3, i = 1)
+  args$sflpar <- fit$lower$param
+  calendar <- do.call(gsSurvCalendar, args)
+  expect_equal(calendar$timing, ref$timing, tolerance = 1e-6)
+  expect_lte(abs(cp_at_futility(calendar, 1) - .3), 1e-4)
+  expect_equal(sum(calendar$upper$prob[, 2]), .9, tolerance = 2e-5)
+  expect_error(gsCPFutilitySpending(ref, .3, i = 1),
+               class = "gsCPFutilitySpending_input_error")
+})
+
 test_that("invalid inputs have a distinct condition class", {
   x <- gsDesign(k = 3, test.type = 4)
 

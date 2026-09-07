@@ -187,4 +187,5 @@ articles:
       Interim decision support and adaptation-oriented examples.
     contents:
       - ConditionalPowerPlot
+      - CPFutilitySpending
       - ConditionalErrorSpending
