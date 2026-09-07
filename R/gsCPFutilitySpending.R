@@ -156,12 +156,21 @@
 #' abs(fit_tight$cpFutilitySpending$achieved_cp - target_cp) <= 1e-6
 #'
 #' @seealso \code{\link{gsDesign}}, \code{\link{gsSurv}}, \code{\link{gsCP}}, \code{\link{sfLinear}},
-#'   \code{\link{toInteger}}
+#'   \code{\link{toInteger}}, \code{\link{gsPPFutilitySpending}}
 #' @export
 gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
                                  sfl = "sfHSD", theta = NULL,
                                  control = list()) {
-  call <- match.call()
+  .gsFutilitySpending(
+    x, target_cp, i, sfl, theta, control,
+    call = match.call(), sfl_expr = substitute(sfl)
+  )
+}
+
+# Shared calibration engine. Internal CP names are retained for compatibility
+# with the original diagnostics; the PP front end translates its public output.
+.gsFutilitySpending <- function(x, target_cp, i, sfl, theta, control,
+                               call, sfl_expr, probability = NULL) {
   .gsCPFValidateReference(x)
 
   if (!is.numeric(target_cp) || length(target_cp) < 1L ||
@@ -204,7 +213,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
   ctl <- .gsCPFControl(control)
   spending <- .gsCPFResolveSpending(
     sfl = sfl,
-    sfl_expr = substitute(sfl),
+    sfl_expr = sfl_expr,
     n_target = length(target_cp),
     x = x,
     i = i,
@@ -227,7 +236,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
       } else {
         theta
       }
-      achieved <- vapply(seq_along(i), function(j) {
+      achieved <- if (!is.null(probability)) probability(candidate, i) else vapply(seq_along(i), function(j) {
         cp <- gsCP(
           candidate,
           i = i[j],
