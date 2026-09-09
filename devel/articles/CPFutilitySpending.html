@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Calibrating futility spending to conditional power</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/GitHub/326-pp-futility-spending/vignettes/CPFutilitySpending.Rmd" class="external-link"><code>vignettes/CPFutilitySpending.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/keaven/gsDesign/blob/master/vignettes/CPFutilitySpending.Rmd" class="external-link"><code>vignettes/CPFutilitySpending.Rmd</code></a></small>
       <div class="d-none name"><code>CPFutilitySpending.Rmd</code></div>
     </div>
 
@@ -93,10 +93,8 @@ the standardized effect scale. Its center is halfway between the null
 (zero) and the planned alternative (<code>x$delta</code>); it is updated
 using the interim result at the bound. Thus PP incorporates uncertainty
 about the effect rather than assuming one fixed value. CP H1 and PP
-provide context in the tables; the examples here primarily calibrate
-<strong>CP</strong>. A parallel survival example uses
-<code><a href="../reference/gsPPFutilitySpending.html">gsPPFutilitySpending()</a></code> to target <strong>PP</strong>
-instead.</p>
+provide context in the tables; the examples here calibrate
+<strong>CP</strong>, not those other measures.</p>
 <div class="section level2">
 <h2 id="a-design-warning-futility-sample-size-and-overall-power">A design warning: futility, sample size, and overall power<a class="anchor" aria-label="anchor" href="#a-design-warning-futility-sample-size-and-overall-power"></a>
 </h2>
@@ -985,113 +983,6 @@ aggressive and motivates considering a lower CP target even at 50%
 information.</p>
 </div>
 <div class="section level3">
-<h3 id="targeting-predictive-power-instead">Targeting predictive power instead<a class="anchor" aria-label="anchor" href="#targeting-predictive-power-instead"></a>
-</h3>
-<p><code><a href="../reference/gsPPFutilitySpending.html">gsPPFutilitySpending()</a></code> can target PP using the default
-summary prior described in the introduction. For comparison with the
-CP-targeted survival design, keep the same timing, testing indicators,
-spending families, and survival assumptions. First construct a matching
-statistical reference on the <strong>event-count scale</strong>. The
-prior’s numeric support must be on that same standardized-effect scale;
-the normalized <code>n.fix = 1</code> reference from the opening example
-is not interchangeable with it.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pp_reference</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
-<span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>, timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.75</span><span class="op">)</span>,</span>
-<span>  n.fix <span class="op">=</span> <span class="va">surv_design</span><span class="op">$</span><span class="va">n.fix</span>,</span>
-<span>  delta0 <span class="op">=</span> <span class="va">surv_design</span><span class="op">$</span><span class="va">delta0</span>, delta1 <span class="op">=</span> <span class="va">surv_design</span><span class="op">$</span><span class="va">delta1</span>,</span>
-<span>  sfu <span class="op">=</span> <span class="va">sfLDOF</span>, sfl <span class="op">=</span> <span class="va">sfHSD</span>, sflpar <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/normalGrid.html">normalGrid</a></span><span class="op">(</span></span>
-<span>  mu <span class="op">=</span> <span class="va">pp_reference</span><span class="op">$</span><span class="va">delta</span> <span class="op">/</span> <span class="fl">2</span>, sigma <span class="op">=</span> <span class="fl">10</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">pp_reference</span><span class="op">$</span><span class="va">n.fix</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">fit_pp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsPPFutilitySpending.html">gsPPFutilitySpending</a></span><span class="op">(</span><span class="va">pp_reference</span>, target_pp <span class="op">=</span> <span class="fl">.3</span>, i <span class="op">=</span> <span class="fl">1</span>, prior <span class="op">=</span> <span class="va">prior</span><span class="op">)</span></span>
-<span><span class="va">surv_pp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
-<span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>, timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.75</span><span class="op">)</span>,</span>
-<span>  sfu <span class="op">=</span> <span class="va">sfLDOF</span>, sfl <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sflpar <span class="op">=</span> <span class="va">fit_pp</span><span class="op">$</span><span class="va">ppFutilitySpending</span><span class="op">$</span><span class="va">sflpar</span>,</span>
-<span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span>, ratio <span class="op">=</span> <span class="fl">1</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">achieved_pp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsCP.html">gsPP</a></span><span class="op">(</span></span>
-<span>  <span class="va">surv_pp</span>, i <span class="op">=</span> <span class="fl">1</span>, zi <span class="op">=</span> <span class="va">surv_pp</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>  theta <span class="op">=</span> <span class="va">prior</span><span class="op">$</span><span class="va">z</span>, wgts <span class="op">=</span> <span class="va">prior</span><span class="op">$</span><span class="va">wgts</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">achieved_pp</span> <span class="op">-</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="fl">1e-4</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">surv_pp</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">-</span> <span class="fl">.9</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">2e-5</span><span class="op">)</span></span>
-<span><span class="co"># Verify that the explicit prior is also this survival design's default prior.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span></span>
-<span>  <span class="va">prior</span>, <span class="fu"><a href="../reference/normalGrid.html">normalGrid</a></span><span class="op">(</span>mu <span class="op">=</span> <span class="va">surv_pp</span><span class="op">$</span><span class="va">delta</span> <span class="op">/</span> <span class="fl">2</span>, sigma <span class="op">=</span> <span class="fl">10</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">surv_pp</span><span class="op">$</span><span class="va">n.fix</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">surv_pp</span>, prior <span class="op">=</span> <span class="va">prior</span>, digits <span class="op">=</span> <span class="fl">4</span>, exclude <span class="op">=</span> <span class="st">"B-value"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Efficacy"</span>, <span class="st">"Futility"</span><span class="op">)</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
-{
-  "data": {
-    "Analysis": ["IA 1: 50%", "N: 272", "Events: 98", "Month: 11", "", "", "", "", "", "IA 2: 75%", "N: 304", "Events: 146", "Month: 14", "", "", "", "", "", "Final", "N: 304", "Events: 195", "Month: 18", "", ""],
-    "Value": ["Z", "p (1-sided)", "~HR at bound", "Spending", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.6", "Z", "p (1-sided)", "~HR at bound", "Spending", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.6", "Z", "p (1-sided)", "~HR at bound", "Spending", "P(Cross) if HR=1", "P(Cross) if HR=0.6"],
-    "Efficacy": [2.9626, 0.0015, 0.5483, 0.0015, 0.9994, 0.9975, 0.99, 0.0015, 0.33, 2.359, 0.0092, 0.6766, 0.0081, 0.9222, 0.9672, 0.89, 0.0094, 0.7631, 2.0141, 0.022, 0.7491, 0.0154, 0.0206, 0.9],
-    "Futility": [1.0469, 0.1476, 0.8087, 0.07, 0.2293, 0.7673, 0.3, 0.8524, 0.07, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
-  },
-  "ops": [
-    {
-      "type": "fmt_number",
-      "columns": ["Efficacy", "Futility"],
-      "decimals": 4
-    }
-  ]
-}
-})</script><p>The <strong>PP</strong> row, not the CP or CP H1 row, now attains 0.3
-at the first futility bound. The prior stays fixed during fitting, but
-each candidate’s posterior uses that candidate’s bound and information.
-As with the CP example, this is statistical calibration followed by
-survival reconstruction, not direct calibration of a survival
-object.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">survival_comparison</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">design</span>, <span class="va">label</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    Target <span class="op">=</span> <span class="va">label</span>,</span>
-<span>    FutilityHR <span class="op">=</span> <span class="fu"><a href="../reference/gsBoundSummary.html">gsHR</a></span><span class="op">(</span><span class="va">design</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="fl">1</span>, <span class="va">design</span><span class="op">)</span>,</span>
-<span>    BetaSpending <span class="op">=</span> <span class="va">design</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">spend</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span>    IA1Events <span class="op">=</span> <span class="va">design</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, FinalEvents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">design</span><span class="op">$</span><span class="va">n.I</span><span class="op">)</span>,</span>
-<span>    MaximumN <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">design</span><span class="op">$</span><span class="va">N</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
-<span>  <span class="fu">survival_comparison</span><span class="op">(</span><span class="va">surv_design</span>, <span class="st">"CP = 0.3"</span><span class="op">)</span>,</span>
-<span>  <span class="fu">survival_comparison</span><span class="op">(</span><span class="va">surv_pp</span>, <span class="st">"PP = 0.3"</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FutilityHR"</span>, <span class="st">"BetaSpending"</span><span class="op">)</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"IA1Events"</span>, <span class="st">"FinalEvents"</span>, <span class="st">"MaximumN"</span><span class="op">)</span>, decimals <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
-{
-  "data": {
-    "Target": ["CP = 0.3", "PP = 0.3"],
-    "FutilityHR": [0.795330347741288, 0.808652301665717],
-    "BetaSpending": [0.0771261053815484, 0.0700087870079221],
-    "IA1Events": [101.544688564569, 97.1972359052638],
-    "FinalEvents": [203.089377129138, 194.394471810528],
-    "MaximumN": [316.940218267034, 303.370994566381]
-  },
-  "ops": [
-    {
-      "type": "fmt_number",
-      "columns": ["FutilityHR", "BetaSpending"],
-      "decimals": 4
-    },
-    {
-      "type": "fmt_number",
-      "columns": ["IA1Events", "FinalEvents", "MaximumN"],
-      "decimals": 1
-    }
-  ]
-}
-})</script><p>Equal numerical targets for CP and PP need not imply equal futility
-bounds or required event counts and sample sizes. The earlier cautions
-about beta spending and sample-size inflation apply to PP targets too;
-averaging over a prior does not remove these design trade-offs.</p>
-</div>
-<div class="section level3">
 <h3 id="fixed-calendar-analyses-with-gssurvcalendar">Fixed calendar analyses with <code>gsSurvCalendar()</code><a class="anchor" aria-label="anchor" href="#fixed-calendar-analyses-with-gssurvcalendar"></a>
 </h3>
 <p>For analyses at months 18, 27, and 36, the information fractions are
@@ -1107,7 +998,7 @@ information. A CP target of 0.3 also looks too stringent here. We
 therefore lower it to 0.2 and inspect the resulting bounds; this is a
 more cautious starting point, not an automatic endorsement of the
 design.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">calendar_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  calendarTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">27</span>, <span class="fl">36</span><span class="op">)</span>, spending <span class="op">=</span> <span class="st">"information"</span>,</span>
 <span>  test.type <span class="op">=</span> <span class="fl">4</span>, sfu <span class="op">=</span> <span class="va">sfLDOF</span>, sfl <span class="op">=</span> <span class="va">sfHSD</span>, sflpar <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -1122,7 +1013,7 @@ design.</p>
 spending times, fixed-design event count, and effect scale. This is an
 explicit reconstruction, not removal of the survival class to bypass
 validation.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">calendar_statistical</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">k</span>, test.type <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">alpha</span>, beta <span class="op">=</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">beta</span>,</span>
@@ -1148,7 +1039,7 @@ validation.</p>
     "Events": [159.6]
   }
 }
-})</script><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+})</script><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Analysis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">calendar_design</span><span class="op">$</span><span class="va">k</span><span class="op">)</span>,</span>
 <span>  Month <span class="op">=</span> <span class="va">calendar_design</span><span class="op">$</span><span class="cn">T</span>,</span>
@@ -1164,7 +1055,7 @@ validation.</p>
     "Events": [159.6, 311.8, 425.6]
   }
 }
-})</script><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+})</script><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">calendar_design</span>, digits <span class="op">=</span> <span class="fl">4</span>, exclude <span class="op">=</span> <span class="st">"B-value"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Efficacy"</span>, <span class="st">"Futility"</span><span class="op">)</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
@@ -1207,7 +1098,7 @@ calculations. Use <code>sfCauchy</code> for the worked example and
 compare all six families below. At 40% information, CP 0.3 would also be
 a stringent first futility target. We instead use CP 0.2 at 40% and CP
 0.3 at 75% information.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_binomial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varBinomial.html">nBinomial</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.15</span>, p2 <span class="op">=</span> <span class="fl">.10</span>, alpha <span class="op">=</span> <span class="fl">.025</span>, beta <span class="op">=</span> <span class="fl">.1</span>, ratio <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">n_binomial</span></span>
 <span><span class="co">#&gt; [1] 1834.641</span></span>
@@ -1232,7 +1123,7 @@ a stringent first futility target. We instead use CP 0.2 at 40% and CP
 })</script><p>Use the fitted parameter vector directly in a fresh
 <code><a href="../reference/gsDesign.html">gsDesign()</a></code> call; do not copy a rounded parameter vector
 from printed output.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">final2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>, timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">.75</span><span class="op">)</span>,</span>
 <span>  n.fix <span class="op">=</span> <span class="va">n_binomial</span>, delta0 <span class="op">=</span> <span class="fl">0</span>, delta1 <span class="op">=</span> <span class="fl">.05</span>, endpoint <span class="op">=</span> <span class="st">"Binomial"</span>,</span>
@@ -1251,7 +1142,7 @@ from printed output.</p>
     "Participants": [997.6, 1870.5]
   }
 }
-})</script><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+})</script><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">final2</span>, deltaname <span class="op">=</span> <span class="st">"p[C] - p[E]"</span>, Nname <span class="op">=</span> <span class="st">"Participants"</span>,</span>
 <span>               digits <span class="op">=</span> <span class="fl">4</span>, exclude <span class="op">=</span> <span class="st">"B-value"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Efficacy"</span>, <span class="st">"Futility"</span><span class="op">)</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
@@ -1279,7 +1170,7 @@ comparison, remove futility but keep the same efficacy spending, timing,
 alpha, and power. The difference between this efficacy-only design and
 the calibrated design shows the additional maximum sample size
 associated with the futility rule.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binomial_efficacy_only</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">1</span>, timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">.75</span><span class="op">)</span>, sfu <span class="op">=</span> <span class="va">sfLDOF</span>,</span>
 <span>  n.fix <span class="op">=</span> <span class="va">n_binomial</span>, delta0 <span class="op">=</span> <span class="fl">0</span>, delta1 <span class="op">=</span> <span class="fl">.05</span>, endpoint <span class="op">=</span> <span class="st">"Binomial"</span></span>
@@ -1330,7 +1221,7 @@ transformation used by <code><a href="../reference/gsBoundSummary.html">gsDelta(
 supply the clinical effect scale. For binomial data these boundary risk
 differences are normal-approximation translations using design-based
 information, not exact binomial boundaries.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,</span>
 <span>  Participants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">final2</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -1359,7 +1250,7 @@ conversion can change achieved CP.</p>
 <p>The same two targets are feasible for each supported two-parameter
 family in this example. Function names and function objects are both
 accepted.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">families</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"sfLogistic"</span>, <span class="st">"sfBetaDist"</span>, <span class="st">"sfCauchy"</span>, <span class="st">"sfNormal"</span>,</span>
 <span>  <span class="st">"sfExtremeValue"</span>, <span class="st">"sfExtremeValue2"</span></span>
@@ -1382,7 +1273,7 @@ across families. The spending curves are more informative: they meet, up
 to numerical tolerance, at the two specified interim times, but have
 different shapes around them. The black points mark the fitted
 <code>sfCauchy</code> spending at those looks.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">spending_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">spending_curves</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Time</span>, <span class="va">Spending</span>, colour <span class="op">=</span> <span class="va">Family</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">.75</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, colour <span class="op">=</span> <span class="st">"grey65"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">.8</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1438,7 +1329,7 @@ strictly increasing in (0, 1).</p>
 <strong>not</strong> CP targets and are <strong>not</strong> fixed final
 spending values. They may be omitted to use automatically derived
 starts; suitable explicit starts can speed up convergence.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_normal</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nNormal.html">nNormal</a></span><span class="op">(</span>delta1 <span class="op">=</span> <span class="fl">.5</span>, sd <span class="op">=</span> <span class="fl">1.1</span>, alpha <span class="op">=</span> <span class="fl">.025</span>, beta <span class="op">=</span> <span class="fl">.1</span>, ratio <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">n_normal</span></span>
 <span><span class="co">#&gt; [1] 203.4237</span></span>
@@ -1463,7 +1354,7 @@ starts; suitable explicit starts can speed up convergence.</p>
     "Participants": [102.4, 170.7, 238.9]
   }
 }
-})</script><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+})</script><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit3</span><span class="op">$</span><span class="va">cpFutilitySpending</span><span class="op">$</span><span class="va">sflpar</span></span>
 <span><span class="co">#&gt; [1] 0.3000000 0.5000000 0.7000000 0.7667615 0.9288363 0.9671979</span></span></code></pre></div>
 <p>For <code>sfLinear</code>, the <code>sflpar</code> vector contains
@@ -1471,7 +1362,7 @@ starts; suitable explicit starts can speed up convergence.</p>
 proportions</strong>. There are six entries here but only three free
 parameters. The endpoint (1, 1) is implicit. These proportions are not
 the incremental spending amounts and are not CP values.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
 <span>  Participants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fit3</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -1488,14 +1379,14 @@ the incremental spending amounts and are not CP values.</p>
     "CumulativeProportion": [0.766761512930468, 0.928836262218435, 0.967197891069839]
   }
 }
-})</script><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+})</script><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">knots</span><span class="op">$</span><span class="va">CumulativeProportion</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">knots</span><span class="op">$</span><span class="va">CumulativeProportion</span> <span class="op">&lt;</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">knots</span><span class="op">$</span><span class="va">CumulativeProportion</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>As with the two-parameter example, verify a newly constructed design
 with the entire fitted vector, including the knot times:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">final3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fl">4</span>, test.type <span class="op">=</span> <span class="fl">4</span>, timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.5</span>, <span class="fl">.7</span><span class="op">)</span>,</span>
 <span>  n.fix <span class="op">=</span> <span class="va">n_normal</span>, delta0 <span class="op">=</span> <span class="fl">0</span>, delta1 <span class="op">=</span> <span class="fl">.5</span>, endpoint <span class="op">=</span> <span class="st">"Normal"</span>,</span>
@@ -1514,7 +1405,7 @@ with the entire fitted vector, including the knot times:</p>
     "Participants": [102.4, 170.7, 238.9]
   }
 }
-})</script><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+})</script><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">final3</span>, deltaname <span class="op">=</span> <span class="st">"Mean difference"</span>, Nname <span class="op">=</span> <span class="st">"Participants"</span>,</span>
 <span>               digits <span class="op">=</span> <span class="fl">4</span>, exclude <span class="op">=</span> <span class="st">"B-value"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Efficacy"</span>, <span class="st">"Futility"</span><span class="op">)</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
@@ -1545,7 +1436,7 @@ supplied by <code><a href="../reference/nNormal.html">nNormal()</a></code>.</p>
 efficacy-only monitoring with the design that must also achieve the
 specified CP at three futility bounds, while keeping 90% overall
 power.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">normal_efficacy_only</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fl">4</span>, test.type <span class="op">=</span> <span class="fl">1</span>, timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.5</span>, <span class="fl">.7</span><span class="op">)</span>, sfu <span class="op">=</span> <span class="va">sfLDOF</span>,</span>
 <span>  n.fix <span class="op">=</span> <span class="va">n_normal</span>, delta0 <span class="op">=</span> <span class="fl">0</span>, delta1 <span class="op">=</span> <span class="fl">.5</span>, endpoint <span class="op">=</span> <span class="st">"Normal"</span></span>
@@ -1588,7 +1479,7 @@ sizes.</p>
 70%. We can also consider lower targets: here CP 0.1, 0.2, and 0.3 at
 the three futility bounds, retaining the same timing and efficacy
 spending.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">target_varying</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.2</span>, <span class="fl">.3</span><span class="op">)</span></span>
 <span><span class="va">fit_varying</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsCPFutilitySpending.html">gsCPFutilitySpending</a></span><span class="op">(</span></span>
 <span>  <span class="va">x3</span>, target_cp <span class="op">=</span> <span class="va">target_varying</span>, i <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, sfl <span class="op">=</span> <span class="st">"sfLinear"</span>,</span>
@@ -1605,7 +1496,7 @@ spending.</p>
     "Participants": [91, 151.6, 212.3]
   }
 }
-})</script><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+})</script><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">fit_varying</span>, deltaname <span class="op">=</span> <span class="st">"Mean difference"</span>, Nname <span class="op">=</span> <span class="st">"Participants"</span>,</span>
 <span>               digits <span class="op">=</span> <span class="fl">4</span>, exclude <span class="op">=</span> <span class="st">"B-value"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Efficacy"</span>, <span class="st">"Futility"</span><span class="op">)</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
@@ -1671,9 +1562,8 @@ but rounding can change achieved CP and does not automatically
 recalibrate the design.</li>
 <li>The calibration input must currently be a fixed-timing
 <code><a href="../reference/gsDesign.html">gsDesign()</a></code> object. Direct survival or calendar-time
-calibration is not implemented by either calibration function. Use
-<code><a href="../reference/gsPPFutilitySpending.html">gsPPFutilitySpending()</a></code> for prior-averaged predictive power
-rather than <code><a href="../reference/gsCPFutilitySpending.html">gsCPFutilitySpending()</a></code>.</li>
+calibration and prior-averaged predictive power calibration are not
+implemented by this function.</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

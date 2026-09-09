@@ -257,8 +257,6 @@ For an overview of spending functions, see
   : Xi and Gallo conditional error spending functions
 - [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/devel/reference/gsCPFutilitySpending.md)
   : Calibrate Futility Spending to Conditional Power Targets
-- [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/devel/reference/gsPPFutilitySpending.md)
-  : Calibrate Futility Spending to Predictive Power Targets
 
 ## Conditional and Predictive Power
 

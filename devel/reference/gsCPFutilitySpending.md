@@ -174,8 +174,7 @@ constrained parameterization.
 [`gsSurv`](https://keaven.github.io/gsDesign/devel/reference/nSurv.md),
 [`gsCP`](https://keaven.github.io/gsDesign/devel/reference/gsCP.md),
 [`sfLinear`](https://keaven.github.io/gsDesign/devel/reference/sfLinear.md),
-[`toInteger`](https://keaven.github.io/gsDesign/devel/reference/toInteger.md),
-[`gsPPFutilitySpending`](https://keaven.github.io/gsDesign/devel/reference/gsPPFutilitySpending.md)
+[`toInteger`](https://keaven.github.io/gsDesign/devel/reference/toInteger.md)
 
 ## Examples
 
