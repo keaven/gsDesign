@@ -1,6 +1,23 @@
 # gsDesign (development version)
 
+## Testing
+
+- Added tests for natural-effect calibration, joint boundary targets,
+  HR allocation/direction handling and design replay (#331).
+
 ## New features
+
+- Unified conditional-POS spending calibration in `gsCPOSFutilitySpending()`
+  with `mode = "preserve_power"` or `"fixed_information"`; retained
+  `gsCAFutilitySpending()` as a backward-compatible wrapper (#328, #329).
+
+- Added `gsEffectSpending()` to calibrate efficacy, futility and harm spending
+  to natural-scale effect targets separately or jointly, with difference,
+  risk-ratio and explicitly specified event-scale hazard-ratio mappings (#331).
+
+- Added fixed-information conditional-assurance calibration with `gsCAFutilitySpending()` (#329) and power-preserving unconditional-POS calibration with `gsPOSFutilitySpending()` (#330).
+
+- Added `gsCPOSFutilitySpending()` to calibrate futility spending to continuation-conditioned assurance while preserving reference power (#328).
 
 - Added `gsPPFutilitySpending()` to calibrate futility spending to posterior
   predictive power targets using a fixed discrete or continuous-grid prior,
@@ -24,6 +41,11 @@
   the suggested **gt** package.
 
 ## Documentation
+
+- Added an effect-spending vignette using the public interface for joint
+  boundaries, risk differences and explicitly event-scaled HRs (#331).
+
+- Added a separate vignette comparing conditional-assurance and unconditional-POS spending calibration, including the Dragalin fixed-information benchmark and operating-characteristic checks (#330).
 
 - Added a futility-spending calibration vignette comparing all six
   two-parameter families and piecewise-linear spending with three

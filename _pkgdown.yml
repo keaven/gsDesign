@@ -101,6 +101,10 @@ reference:
   - sfXG3
   - gsCPFutilitySpending
   - gsPPFutilitySpending
+  - gsCPOSFutilitySpending
+  - gsCAFutilitySpending
+  - gsPOSFutilitySpending
+  - gsEffectSpending
 - title: Conditional and Predictive Power
   contents:
   - gsCP
@@ -189,4 +193,6 @@ articles:
     contents:
       - ConditionalPowerPlot
       - CPFutilitySpending
+      - DragalinFutilitySpending
+      - EffectSpending
       - ConditionalErrorSpending

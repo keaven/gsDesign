@@ -170,7 +170,8 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
 # Shared calibration engine. Internal CP names are retained for compatibility
 # with the original diagnostics; the PP front end translates its public output.
 .gsFutilitySpending <- function(x, target_cp, i, sfl, theta, control,
-                               call, sfl_expr, probability = NULL) {
+                               call, sfl_expr, probability = NULL,
+                               design_builder = .gsCPFDesign) {
   .gsCPFValidateReference(x)
 
   if (!is.numeric(target_cp) || length(target_cp) < 1L ||
@@ -230,7 +231,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
 
     sflpar <- spending$decode(par)
     ans <- tryCatch({
-      candidate <- .gsCPFDesign(x, spending$fun, sflpar)
+      candidate <- design_builder(x, spending$fun, sflpar)
       theta_used <- if (is.null(theta)) {
         candidate$lower$bound[i] / sqrt(candidate$n.I[i])
       } else {
