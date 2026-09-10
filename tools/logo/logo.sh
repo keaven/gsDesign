@@ -21,6 +21,20 @@ if [[ -z "${CHROME_BIN:-}" ]]; then
                 CHROME_BIN="$candidate"
                 break
             fi
+
+            if [[ -z "${PYTHON_BIN:-}" ]]; then
+                for candidate in python3 python; do
+                    if command -v "$candidate" >/dev/null 2>&1; then
+                        PYTHON_BIN="$candidate"
+                        break
+                    fi
+                done
+
+                if [[ -z "${PYTHON_BIN:-}" ]]; then
+                    echo "Set PYTHON_BIN to a valid Python executable path." >&2
+                    exit 1
+                fi
+            fi
         done
 
         if [[ -z "${CHROME_BIN:-}" ]]; then
@@ -84,7 +98,7 @@ cat >"$WORK_DIR/logo-text.html" <<'EOF'
   </body>
 </html>
 EOF
-TEXT_HTML_URL="$(python -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve().as_uri())' "$WORK_DIR/logo-text.html")"
+TEXT_HTML_URL="$("$PYTHON_BIN" -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve().as_uri())' "$WORK_DIR/logo-text.html")"
 (
     cd "$WORK_DIR"
     "$CHROME_BIN" --headless \
