@@ -569,7 +569,7 @@ xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE),
   caption = "Table caption."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Wed Sep  2 15:51:47 2026
+#> % Thu Sep 10 17:51:57 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{llrr}
