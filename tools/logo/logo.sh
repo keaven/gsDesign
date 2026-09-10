@@ -9,12 +9,14 @@ OUTPUT_PNG="$PACKAGE_ROOT/man/figures/logo.png"
 WORK_DIR="$(mktemp -d)"
 trap 'rm -rf "$WORK_DIR"' EXIT
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-elif [[ "$OSTYPE" == msys* || "$OSTYPE" == cygwin* || "$OSTYPE" == win32* ]]; then
-    CHROME_BIN="/c/Program Files/Google/Chrome/Application/chrome.exe"
-else
-    CHROME_BIN="/usr/bin/google-chrome"
+if [[ -z "${CHROME_BIN:-}" ]]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+    elif [[ "$OSTYPE" == msys* || "$OSTYPE" == cygwin* || "$OSTYPE" == win32* ]]; then
+        CHROME_BIN="/c/Program Files/Google/Chrome/Application/chrome.exe"
+    else
+        CHROME_BIN="/usr/bin/google-chrome"
+    fi
 fi
 
 # Draw at 4x the final 553 x 640 resolution for smooth edges
@@ -62,7 +64,7 @@ EOF
         --no-margins \
         --no-pdf-header-footer \
         --print-to-pdf="$WORK_DIR/text.pdf" \
-        "logo-text.html"
+        "$WORK_DIR/logo-text.html"
 )
 
 pdfcrop --quiet "$WORK_DIR/text.pdf" "$WORK_DIR/text-cropped.pdf"
