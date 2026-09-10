@@ -13,7 +13,20 @@ if [[ -z "${CHROME_BIN:-}" ]]; then
     if [[ "$OSTYPE" == "darwin"* ]]; then
         CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
     elif [[ "$OSTYPE" == msys* || "$OSTYPE" == cygwin* || "$OSTYPE" == win32* ]]; then
-        CHROME_BIN="/c/Program Files/Google/Chrome/Application/chrome.exe"
+        for candidate in \
+            "/c/Program Files/Google/Chrome/Application/chrome.exe" \
+            "/c/Program Files (x86)/Google/Chrome/Application/chrome.exe" \
+            "${LOCALAPPDATA:-}/Google/Chrome/Application/chrome.exe"; do
+            if [[ -x "$candidate" ]]; then
+                CHROME_BIN="$candidate"
+                break
+            fi
+        done
+
+        if [[ -z "${CHROME_BIN:-}" ]]; then
+            echo "Set CHROME_BIN to a valid Chrome executable path." >&2
+            exit 1
+        fi
     else
         CHROME_BIN="/usr/bin/google-chrome"
     fi
@@ -28,21 +41,22 @@ TEAL="#00857C"
 CHARCOAL="#424242"
 HEXAGON="276.5,13 541.5,166 541.5,474 276.5,627 11.5,474 11.5,166"
 TRAPEZOID="0,169.5 553,240 553,400 0,470.5"
+DRAW_SCALE="scale $SCALE,$SCALE"
 
 # Charcoal background with a teal border
 magick -size "$CANVAS" xc:none \
     -fill "$CHARCOAL" -stroke "$TEAL" -strokewidth 22 \
-    -draw "scale 4,4 polygon $HEXAGON" "$WORK_DIR/background.png"
+    -draw "$DRAW_SCALE polygon $HEXAGON" "$WORK_DIR/background.png"
 
 # Offset a soft shadow downward: faint above, broader and darker below
 magick -size "$CANVAS" xc:black -fill white \
-    -draw "scale 4,4 polygon $TRAPEZOID" -blur 0x32 -roll +0+40 \
+    -draw "$DRAW_SCALE polygon $TRAPEZOID" -blur 0x32 -roll +0+40 \
     -evaluate multiply 0.55 \
     -alpha copy -channel RGB -evaluate set 0 +channel "$WORK_DIR/shadow.png"
 
 # Add the shadow and teal trapezoid, keeping both inside the hexagon
 magick -size "$CANVAS" xc:none -fill "$TEAL" \
-    -draw "scale 4,4 polygon $TRAPEZOID" "$WORK_DIR/trapezoid.png"
+    -draw "$DRAW_SCALE polygon $TRAPEZOID" "$WORK_DIR/trapezoid.png"
 magick "$WORK_DIR/background.png" "$WORK_DIR/shadow.png" \
     -compose SrcAtop -composite "$WORK_DIR/trapezoid.png" \
     -compose SrcAtop -composite -resize "${FINAL_WIDTH}x${FINAL_HEIGHT}!" "$WORK_DIR/background.png"
@@ -57,6 +71,7 @@ cat >"$WORK_DIR/logo-text.html" <<'EOF'
   </body>
 </html>
 EOF
+TEXT_HTML_URL="$(python -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve().as_uri())' "$WORK_DIR/logo-text.html")"
 (
     cd "$WORK_DIR"
     "$CHROME_BIN" --headless \
@@ -64,7 +79,7 @@ EOF
         --no-margins \
         --no-pdf-header-footer \
         --print-to-pdf="$WORK_DIR/text.pdf" \
-        "$WORK_DIR/logo-text.html"
+        "$TEXT_HTML_URL"
 )
 
 pdfcrop --quiet "$WORK_DIR/text.pdf" "$WORK_DIR/text-cropped.pdf"
