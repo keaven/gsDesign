@@ -42,13 +42,22 @@ magick "$WORK_DIR/background.png" "$WORK_DIR/shadow.png" \
     -compose SrcAtop -composite "$WORK_DIR/trapezoid.png" \
     -compose SrcAtop -composite -resize 553x640! "$WORK_DIR/background.png"
 
-# Render the wordmark using Chrome, then crop the PDF
+# Render the wordmark through a minimal HTML wrapper, then crop the PDF
+cp "$TEXT_SVG" "$WORK_DIR/logo-text.svg"
+cat >"$WORK_DIR/logo-text.html" <<'EOF'
+<!DOCTYPE html>
+<html>
+  <body style="margin: 0">
+    <img src="logo-text.svg" alt="" style="display: block; width: 600px; height: 200px;">
+  </body>
+</html>
+EOF
 "$CHROME_BIN" --headless \
     --disable-gpu \
     --no-margins \
     --no-pdf-header-footer \
     --print-to-pdf="$WORK_DIR/text.pdf" \
-    "$TEXT_SVG"
+    "file://$WORK_DIR/logo-text.html"
 
 pdfcrop --quiet "$WORK_DIR/text.pdf" "$WORK_DIR/text-cropped.pdf"
 
