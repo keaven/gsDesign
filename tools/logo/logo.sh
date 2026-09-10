@@ -28,7 +28,20 @@ if [[ -z "${CHROME_BIN:-}" ]]; then
             exit 1
         fi
     else
-        CHROME_BIN="/usr/bin/google-chrome"
+        for candidate in \
+            "/usr/bin/google-chrome" \
+            "/usr/bin/chromium" \
+            "/usr/bin/chromium-browser"; do
+            if [[ -x "$candidate" ]]; then
+                CHROME_BIN="$candidate"
+                break
+            fi
+        done
+
+        if [[ -z "${CHROME_BIN:-}" ]]; then
+            echo "Set CHROME_BIN to a valid Chrome executable path." >&2
+            exit 1
+        fi
     fi
 fi
 
