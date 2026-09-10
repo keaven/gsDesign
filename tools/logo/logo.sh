@@ -103,7 +103,7 @@ cat >"$WORK_DIR/logo-text.html" <<'EOF'
 <!DOCTYPE html>
 <html>
   <body style="margin: 0">
-    <img src="logo-text.svg" alt="" style="display: block; width: 600px; height: 200px;">
+    <img src="logo-text.svg" alt="gsDesign wordmark" style="display: block; width: 600px; height: 200px;">
   </body>
 </html>
 EOF
@@ -141,7 +141,9 @@ if ! magick "$WORK_DIR/background.png" "$WORK_DIR/text.png" \
     echo "Failed to render final logo PNG with ImageMagick." >&2
     exit 1
 fi
-if ! pngquant --force --speed 1 --strip --output "$OUTPUT_PNG" "$OUTPUT_PNG"; then
+OPTIMIZED_PNG="$WORK_DIR/logo-optimized.png"
+if ! pngquant --force --speed 1 --strip --output "$OPTIMIZED_PNG" "$OUTPUT_PNG"; then
     echo "Failed to optimize logo PNG with pngquant." >&2
     exit 1
 fi
+mv "$OPTIMIZED_PNG" "$OUTPUT_PNG"
