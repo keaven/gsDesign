@@ -138,4 +138,7 @@ fi
 # Center the wordmark on the trapezoid and optimize the PNG
 magick "$WORK_DIR/background.png" "$WORK_DIR/text.png" \
     -gravity center -compose Over -composite -strip "$OUTPUT_PNG"
-pngquant --force --speed 1 --strip --output "$OUTPUT_PNG" "$OUTPUT_PNG"
+if ! pngquant --force --speed 1 --strip --output "$OUTPUT_PNG" "$OUTPUT_PNG"; then
+    echo "Failed to optimize logo PNG with pngquant." >&2
+    exit 1
+fi
