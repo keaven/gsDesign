@@ -13,18 +13,11 @@ has_executable() {
     [[ -x "$1" ]] || command -v "$1" >/dev/null 2>&1
 }
 
-file_uri() {
-    local path="$1"
-    path="${path//%/%25}"
-    path="${path//#/%23}"
-    path="${path// /%20}"
-    printf 'file://%s\n' "$path"
-}
-
 resolve_bin() {
     local current="$1"
-    local error_message="$2"
-    shift 2
+    local invalid_override_message="$2"
+    local autodetect_failure_message="$3"
+    shift 3
 
     if [[ -n "$current" ]]; then
         if has_executable "$current"; then
@@ -32,7 +25,7 @@ resolve_bin() {
             return 0
         fi
 
-        echo "$error_message" >&2
+        echo "$invalid_override_message" >&2
         return 1
     fi
 
@@ -44,7 +37,7 @@ resolve_bin() {
         fi
     done
 
-    echo "$error_message" >&2
+    echo "$autodetect_failure_message" >&2
     return 1
 }
 
@@ -66,7 +59,14 @@ fi
 
 CHROME_BIN="$(resolve_bin "${CHROME_BIN:-}" \
     "Set CHROME_BIN to a valid Chrome executable path." \
+    "Failed to auto-detect Chrome; set CHROME_BIN to a valid Chrome executable path." \
     "${chrome_candidates[@]}")" || exit 1
+
+PYTHON_BIN="$(resolve_bin "${PYTHON_BIN:-}" \
+    "Set PYTHON_BIN to a valid Python executable path." \
+    "Failed to auto-detect Python; set PYTHON_BIN to a valid Python executable path." \
+    python3 \
+    python)" || exit 1
 
 # Draw at 4x the final 553 x 640 resolution for smooth edges
 FINAL_WIDTH=553
@@ -107,7 +107,7 @@ cat >"$WORK_DIR/logo-text.html" <<'EOF'
   </body>
 </html>
 EOF
-TEXT_HTML_URL="$(file_uri "$WORK_DIR/logo-text.html")"
+TEXT_HTML_URL="$("$PYTHON_BIN" -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve().as_uri())' "$WORK_DIR/logo-text.html")"
 if ! (
     cd "$WORK_DIR"
     "$CHROME_BIN" --headless \
@@ -121,13 +121,19 @@ if ! (
     exit 1
 fi
 
-pdfcrop --quiet "$WORK_DIR/text.pdf" "$WORK_DIR/text-cropped.pdf"
+if ! pdfcrop --quiet "$WORK_DIR/text.pdf" "$WORK_DIR/text-cropped.pdf"; then
+    echo "Failed to crop wordmark PDF with pdfcrop." >&2
+    exit 1
+fi
 
 # Convert black ink into white lettering with transparent antialiased edges
-magick -density 600 "$WORK_DIR/text-cropped.pdf" \
+if ! magick -density 600 "$WORK_DIR/text-cropped.pdf" \
     -background white -alpha remove -alpha off -trim +repage \
     -resize 370x -negate -alpha copy \
-    -channel RGB -evaluate set 100% +channel "$WORK_DIR/text.png"
+    -channel RGB -evaluate set 100% +channel "$WORK_DIR/text.png"; then
+    echo "Failed to convert cropped wordmark PDF with ImageMagick." >&2
+    exit 1
+fi
 
 # Center the wordmark on the trapezoid and optimize the PNG
 magick "$WORK_DIR/background.png" "$WORK_DIR/text.png" \
