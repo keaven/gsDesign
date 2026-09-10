@@ -119,7 +119,6 @@ TEXT_HTML_URL="$("$PYTHON_BIN" -c 'from pathlib import Path; import sys; print(P
     cd "$WORK_DIR"
     "$CHROME_BIN" --headless \
         --disable-gpu \
-        --no-margins \
         --no-pdf-header-footer \
         --print-to-pdf="$WORK_DIR/text.pdf" \
         "$TEXT_HTML_URL"

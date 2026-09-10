@@ -3,7 +3,7 @@
 From the package root, run:
 
 ```console
-sh tools/logo/logo.sh
+bash tools/logo/logo.sh
 ```
 
 Requires Chrome, a Python interpreter (`python3` or `python`), ImageMagick,
