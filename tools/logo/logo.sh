@@ -21,25 +21,25 @@ if [[ -z "${CHROME_BIN:-}" ]]; then
                 CHROME_BIN="$candidate"
                 break
             fi
-
-            if [[ -z "${PYTHON_BIN:-}" ]]; then
-                for candidate in python3 python; do
-                    if command -v "$candidate" >/dev/null 2>&1; then
-                        PYTHON_BIN="$candidate"
-                        break
-                    fi
-                done
-
-                if [[ -z "${PYTHON_BIN:-}" ]]; then
-                    echo "Set PYTHON_BIN to a valid Python executable path." >&2
-                    exit 1
-                fi
-            fi
         done
 
         if [[ -z "${CHROME_BIN:-}" ]]; then
             echo "Set CHROME_BIN to a valid Chrome executable path." >&2
             exit 1
+        fi
+
+        if [[ -z "${PYTHON_BIN:-}" ]]; then
+            for candidate in python3 python; do
+                if command -v "$candidate" >/dev/null 2>&1; then
+                    PYTHON_BIN="$candidate"
+                    break
+                fi
+            done
+
+            if [[ -z "${PYTHON_BIN:-}" ]]; then
+                echo "Set PYTHON_BIN to a valid Python executable path." >&2
+                exit 1
+            fi
         fi
     else
         for candidate in \
