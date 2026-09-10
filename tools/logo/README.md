@@ -6,8 +6,8 @@ From the package root, run:
 sh tools/logo/logo.sh
 ```
 
-Requires Chrome, Python 3 (or `python`), ImageMagick, Ghostscript,
-`pdfcrop`, and `pngquant`.
+Requires Chrome, a Python interpreter (`python3` or `python`), ImageMagick,
+Ghostscript, `pdfcrop`, and `pngquant`.
 The SVG wordmark embeds its font data directly so logo generation does not
 depend on remote assets or separate local font files.
 By default the script looks for Chrome at

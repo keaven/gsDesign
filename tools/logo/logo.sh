@@ -12,6 +12,10 @@ trap 'rm -rf "$WORK_DIR"' EXIT
 if [[ -z "${CHROME_BIN:-}" ]]; then
     if [[ "$OSTYPE" == "darwin"* ]]; then
         CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        if [[ ! -x "$CHROME_BIN" ]]; then
+            echo "Set CHROME_BIN to a valid Chrome executable path." >&2
+            exit 1
+        fi
     elif [[ "$OSTYPE" == msys* || "$OSTYPE" == cygwin* || "$OSTYPE" == win32* ]]; then
         for candidate in \
             "/c/Program Files/Google/Chrome/Application/chrome.exe" \
