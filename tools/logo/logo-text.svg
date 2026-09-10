@@ -4,9 +4,9 @@
     <style>
       @font-face {
         font-family: "Invention";
-        src: url("https://keaven.github.io/gsd-shiny/site_libs/bootstrap/fonts/InventionVF_W_Wght.woff2") format("woff2");
+        src: url("LiberationSans-Regular.ttf") format("truetype");
         font-style: normal;
-        font-weight: 300 700;
+        font-weight: 400;
       }
     </style>
   </defs>
