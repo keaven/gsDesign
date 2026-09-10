@@ -48,7 +48,7 @@ x <- gsDesign(n.fix = 200)
 plot(x)
 ```
 
-![](gsDesignPackageOverview_files/figure-html/unnamed-chunk-2-1.svg)
+![](gsDesignPackageOverview_files/figure-html/unnamed-chunk-2-1.png)
 
 ``` r
 

@@ -270,7 +270,7 @@ plot(x8)
 ```
 
 ![Z-value boundaries for non-binding harm bound
-design](HarmBound_files/figure-html/unnamed-chunk-9-1.svg)
+design](HarmBound_files/figure-html/unnamed-chunk-9-1.png)
 
 Z-value boundaries for non-binding harm bound design
 
@@ -297,7 +297,7 @@ plot(x8, plottype = 2)
 ```
 
 ![Boundary crossing probabilities for non-binding harm bound
-design](HarmBound_files/figure-html/unnamed-chunk-10-1.svg)
+design](HarmBound_files/figure-html/unnamed-chunk-10-1.png)
 
 Boundary crossing probabilities for non-binding harm bound design
 
@@ -313,7 +313,7 @@ plot(x8, plottype = 3)
 ```
 
 ![Approximate treatment effect at
-boundaries](HarmBound_files/figure-html/unnamed-chunk-11-1.svg)
+boundaries](HarmBound_files/figure-html/unnamed-chunk-11-1.png)
 
 Approximate treatment effect at boundaries
 
@@ -328,7 +328,7 @@ plot(x8, plottype = 4)
 ```
 
 ![Conditional power at
-boundaries](HarmBound_files/figure-html/unnamed-chunk-12-1.svg)
+boundaries](HarmBound_files/figure-html/unnamed-chunk-12-1.png)
 
 Conditional power at boundaries
 
@@ -343,7 +343,7 @@ plot(x8, plottype = 5)
 ```
 
 ![Spending functions for non-binding harm bound
-design](HarmBound_files/figure-html/unnamed-chunk-13-1.svg)
+design](HarmBound_files/figure-html/unnamed-chunk-13-1.png)
 
 Spending functions for non-binding harm bound design
 
@@ -365,7 +365,7 @@ plot(x8, plottype = 7)
 ```
 
 ![B-values at
-boundaries](HarmBound_files/figure-html/unnamed-chunk-14-1.svg)
+boundaries](HarmBound_files/figure-html/unnamed-chunk-14-1.png)
 
 B-values at boundaries
 

@@ -127,7 +127,7 @@ pwrn <- nNormal(delta1 = 0.8, sd = 1.6, sd2 = 1.25, alpha = 0.025, n = n, ratio 
 plot(n, pwrn, type = "l")
 ```
 
-![](nNormal_files/figure-html/unnamed-chunk-6-1.svg)
+![](nNormal_files/figure-html/unnamed-chunk-6-1.png)
 
 Alternatively, you could fix sample size at 200 and plot power under
 different treatment effect assumptions:
@@ -139,7 +139,7 @@ pwrdelta1 <- nNormal(delta1 = delta1, sd = 1.6, sd2 = 1.25, alpha = 0.025, n = 2
 plot(delta1, pwrdelta1, type = "l")
 ```
 
-![](nNormal_files/figure-html/unnamed-chunk-7-1.svg)
+![](nNormal_files/figure-html/unnamed-chunk-7-1.png)
 
 ### Verification with simulation
 

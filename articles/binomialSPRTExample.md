@@ -44,7 +44,7 @@ b <- binomialSPRT(p0 = .1, p1 = .35, alpha = .08, beta = .2, minn = 10, maxn = 2
 plot(b)
 ```
 
-![](binomialSPRTExample_files/figure-html/unnamed-chunk-3-1.svg)
+![](binomialSPRTExample_files/figure-html/unnamed-chunk-3-1.png)
 
 The above plot tests first after 10 patients. If 4/10 have responded,
 you can reject the null hypothesis of a 10% response rate. If 0 or 1 of
@@ -77,7 +77,7 @@ p <- plot(b, plottype = 2)
 p + scale_y_continuous(breaks = seq(0, 90, 10))
 ```
 
-![](binomialSPRTExample_files/figure-html/unnamed-chunk-5-1.svg)
+![](binomialSPRTExample_files/figure-html/unnamed-chunk-5-1.png)
 
 Probability of three possible outcomes are summarized by the underlying
 response rate:
@@ -131,7 +131,7 @@ safety_design <- binomialSPRT(p0 = .04, p1 = .1, alpha = .04, beta = .2, minn = 
 plot(safety_design)
 ```
 
-![](binomialSPRTExample_files/figure-html/unnamed-chunk-8-1.svg)
+![](binomialSPRTExample_files/figure-html/unnamed-chunk-8-1.png)
 
 We see above that if we have no serious rashes in the first 25
 experimental group patients or 1 in the first 40 that we reject the 10%
@@ -148,7 +148,7 @@ and a table.
 plot(safety_design, plottype = 2)
 ```
 
-![](binomialSPRTExample_files/figure-html/unnamed-chunk-9-1.svg)
+![](binomialSPRTExample_files/figure-html/unnamed-chunk-9-1.png)
 
 We see that there can be a fairly high possibility of an indeterminate
 outcome at the end of the trial. If we include more extreme values in

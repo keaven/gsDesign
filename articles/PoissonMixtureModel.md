@@ -134,7 +134,7 @@ to get more precise approximations of the above. However, given the
 uncertainty of the underlying assumptions, it is not clear that this
 provides any advantage.
 
-![](PoissonMixtureModel_files/figure-html/unnamed-chunk-7-1.svg)
+![](PoissonMixtureModel_files/figure-html/unnamed-chunk-7-1.png)
 
 ### Event accumulation
 

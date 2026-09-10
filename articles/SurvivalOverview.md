@@ -546,7 +546,7 @@ For a **ggplot2** version of this plot, use the default `base = FALSE`.
 plot(lfgs, pl = "hr", dgt = 2, base = TRUE)
 ```
 
-![](SurvivalOverview_files/figure-html/unnamed-chunk-26-1.svg)
+![](SurvivalOverview_files/figure-html/unnamed-chunk-26-1.png)
 
 ### Event accrual
 
@@ -589,7 +589,7 @@ plot(
 )
 ```
 
-![](SurvivalOverview_files/figure-html/unnamed-chunk-28-1.svg)
+![](SurvivalOverview_files/figure-html/unnamed-chunk-28-1.png)
 
 On the other hand, if you want to know the expected time to accrue 25%
 of the final events and what the expected enrollment accrual is at that

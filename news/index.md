@@ -22,6 +22,9 @@
 - Remastered the hex sticker logo with a reproducible parametric logo
   generation script
   ([\#327](https://github.com/keaven/gsDesign/issues/327)).
+- Reduced rendered HTML size in selected vignettes with figures by
+  switching from the base R SVG device to PNG device with optimized
+  parameters ([\#325](https://github.com/keaven/gsDesign/issues/325)).
 
 ### Testing
 
