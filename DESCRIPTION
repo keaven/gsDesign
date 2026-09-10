@@ -22,7 +22,7 @@ Imports:
     dplyr (>= 1.1.0),
     ggplot2 (>= 3.1.1),
     graphics,
-    lt (>= 0.3),
+    lt (>= 0.4),
     methods,
     r2rtf,
     rlang,

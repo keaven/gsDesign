@@ -137,7 +137,7 @@ rbind(
   lt_header("Confidence intervals for a binomial effect size",
     subtitle = "x1 = 20, n1 = 30, x2 = 10, n2 = 30"
   ) |>
-  lt_format(columns = c("lower", "upper", "Effect"), decimals = 3)
+  lt_format(columns = c("lower", "upper", "Effect"), sig_digits = 3)
 ```
 
 Again, how treatment groups are assigned makes a difference.
@@ -227,7 +227,7 @@ In any case, this produces a slightly conservative Type I error rate.
 zcut <- quantile(z, 0.975)
 tibble("Z cutoff" = zcut, "p cutoff" = pnorm(zcut, lower.tail = FALSE)) |>
   lt() |>
-  lt_format(columns = c("Z cutoff", "p cutoff"), decimals = 3) |>
+  lt_format(columns = c("Z cutoff", "p cutoff"), sig_digits = 3) |>
   lt_header("Exact cutoff for Type I error rate",
     subtitle = "Based on 1 million simulations"
   ) |>
@@ -260,7 +260,7 @@ ptab |>
   lt_header("Simulation power for sample size based on risk-difference and odds-ratio",
     subtitle = "pE = 0.2, pC = 0.1, alpha = 0.025, beta = 0.15"
   ) |>
-  lt_format(columns = c("n", "Power"), decimals = 3) |>
+  lt_format(columns = c("n", "Power"), sig_digits = 3) |>
   lt_label(Scale = "Scale", n = "Sample size", Power = "Power") |>
   lt_footnote("Power based on Z-test for risk-difference with no continuity correction.", where = "column", columns = "Power") |>
   lt_note("Power based on 100,000 simulated trials and nominal alpha = 0.025 test; 2 x simulation error = 0.002")
@@ -283,7 +283,7 @@ binomialPowerTable(
 ) |>
   rename("Type I error" = "Power") |>
   lt() |>
-  lt_format(columns = "Type I error", decimals = 3) |>
+  lt_format(columns = "Type I error", sig_digits = 3) |>
   lt_header("Type I error is not controlled with nominal p = 0.025 cutoff")
 ```
 
@@ -298,7 +298,7 @@ binomialPowerTable(
 ) |>
   rename("Type I error" = "Power") |>
   lt() |>
-  lt_format(columns = "Type I error", decimals = 3) |>
+  lt_format(columns = "Type I error", sig_digits = 3) |>
   lt_header("Type I error is controlled at 0.025 with nominal p = 0.023 cutoff")
 ```
 

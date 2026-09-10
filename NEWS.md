@@ -21,8 +21,8 @@
 - Updated package vignettes to use **lt** consistently for formatted data-frame
   and matrix output, with compact row spacing for long tables and no significant
   changes to the rendered HTML tables.
-
-# gsDesign 3.11.1 (August 2026)
+- Remastered the hex sticker logo with a reproducible parametric logo generation
+  script (#327).
 
 ## Testing
 
