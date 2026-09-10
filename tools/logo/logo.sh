@@ -9,6 +9,10 @@ OUTPUT_PNG="$PACKAGE_ROOT/man/figures/logo.png"
 WORK_DIR="$(mktemp -d)"
 trap 'rm -rf "$WORK_DIR"' EXIT
 
+has_executable() {
+    [[ -x "$1" ]] || command -v "$1" >/dev/null 2>&1
+}
+
 if [[ -z "${CHROME_BIN:-}" ]]; then
     if [[ "$OSTYPE" == "darwin"* ]]; then
         CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -49,6 +53,9 @@ if [[ -z "${CHROME_BIN:-}" ]]; then
         fi
     fi
 
+elif ! has_executable "$CHROME_BIN"; then
+    echo "Set CHROME_BIN to a valid Chrome executable path." >&2
+    exit 1
 fi
 
 if [[ -z "${PYTHON_BIN:-}" ]]; then
@@ -63,6 +70,9 @@ if [[ -z "${PYTHON_BIN:-}" ]]; then
         echo "Set PYTHON_BIN to a valid Python executable path." >&2
         exit 1
     fi
+elif ! has_executable "$PYTHON_BIN"; then
+    echo "Set PYTHON_BIN to a valid Python executable path." >&2
+    exit 1
 fi
 
 # Draw at 4x the final 553 x 640 resolution for smooth edges
