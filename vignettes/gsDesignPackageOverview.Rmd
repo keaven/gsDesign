@@ -16,8 +16,10 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  dev = "svg",
-  fig.ext = "svg",
+  dev = "png",
+  dev.args = list(type = "cairo", antialias = "gray"),
+  dpi = 80,
+  fig.retina = 2,
   fig.width = 7.2916667,
   fig.asp = 0.618,
   fig.align = "center",
