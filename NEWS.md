@@ -16,6 +16,8 @@
   changes to the rendered HTML tables.
 - Reduced rendered HTML size in selected vignettes with figures by switching
   from the base R SVG device to PNG device with optimized parameters (#325).
+- Remastered the hex sticker logo with a reproducible parametric logo generation
+  script (#327).
 
 ## Testing
 
