@@ -18,7 +18,10 @@ else
 fi
 
 # Draw at 4x the final 553 x 640 resolution for smooth edges
-CANVAS="2212x2560"
+FINAL_WIDTH=553
+FINAL_HEIGHT=640
+SCALE=4
+CANVAS="$((FINAL_WIDTH * SCALE))x$((FINAL_HEIGHT * SCALE))"
 TEAL="#00857C"
 CHARCOAL="#424242"
 HEXAGON="276.5,13 541.5,166 541.5,474 276.5,627 11.5,474 11.5,166"
@@ -40,7 +43,7 @@ magick -size "$CANVAS" xc:none -fill "$TEAL" \
     -draw "scale 4,4 polygon $TRAPEZOID" "$WORK_DIR/trapezoid.png"
 magick "$WORK_DIR/background.png" "$WORK_DIR/shadow.png" \
     -compose SrcAtop -composite "$WORK_DIR/trapezoid.png" \
-    -compose SrcAtop -composite -resize 553x640! "$WORK_DIR/background.png"
+    -compose SrcAtop -composite -resize "${FINAL_WIDTH}x${FINAL_HEIGHT}!" "$WORK_DIR/background.png"
 
 # Render the wordmark through a minimal HTML wrapper, then crop the PDF
 cp "$TEXT_SVG" "$WORK_DIR/logo-text.svg"
@@ -52,12 +55,15 @@ cat >"$WORK_DIR/logo-text.html" <<'EOF'
   </body>
 </html>
 EOF
-"$CHROME_BIN" --headless \
-    --disable-gpu \
-    --no-margins \
-    --no-pdf-header-footer \
-    --print-to-pdf="$WORK_DIR/text.pdf" \
-    "file://$WORK_DIR/logo-text.html"
+(
+    cd "$WORK_DIR"
+    "$CHROME_BIN" --headless \
+        --disable-gpu \
+        --no-margins \
+        --no-pdf-header-footer \
+        --print-to-pdf="$WORK_DIR/text.pdf" \
+        "logo-text.html"
+)
 
 pdfcrop --quiet "$WORK_DIR/text.pdf" "$WORK_DIR/text-cropped.pdf"
 
