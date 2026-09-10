@@ -42,3 +42,12 @@ An \code{lt_tbl} object.
 Applies standard labels, number formats, spanners, and explanatory
 footnotes to a table returned by \code{\link{VEtable}}.
 }
+\examples{
+design <- gsSurv(
+  k = 2, test.type = 4, timing = .6, ratio = 3,
+  hr = .3, hr0 = .7
+)
+VEtable(toBinomialExact(design), ve = c(.5, .7)) |>
+  lt()
+
+}

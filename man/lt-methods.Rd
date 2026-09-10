@@ -62,15 +62,13 @@ safety_power <- gsBinomialExact(
   a = safety_design$lower$bound,
   b = safety_design$upper$bound
 )
-if (interactive()) {
-  safety_power |>
-    as_table() |>
-    lt(
-      theta_label = I("Underlying<br>AE rate"),
-      prob_decimals = 3,
-      bound_label = c("low rate", "high rate")
-    )
-}
+safety_power |>
+  as_table() |>
+  lt(
+    theta_label = I("Underlying<br>AE rate"),
+    prob_decimals = 3,
+    bound_label = c("low rate", "high rate")
+  )
 
 }
 \seealso{

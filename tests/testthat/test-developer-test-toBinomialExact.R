@@ -54,3 +54,50 @@ test_that("toBinomialExact returns gsBinomialExact objects", {
   y <- toBinomialExact(x, observedEvents = obs)
   expect_s3_class(y, "gsBinomialExact")
 })
+
+test_that("toBinomialExact retains spending design metadata", {
+  design <- gsSurv(
+    k = 3,
+    test.type = 4,
+    alpha = .025,
+    beta = .1,
+    timing = c(.45, .7),
+    sfu = sfHSD,
+    sfupar = -4,
+    sfl = sfLDOF,
+    sflpar = 0,
+    lambdaC = .001,
+    hr = .3,
+    hr0 = .7,
+    eta = 5e-4,
+    gamma = 10,
+    R = 16,
+    T = 24,
+    minfup = 8,
+    ratio = 3
+  )
+  result <- toBinomialExact(
+    design,
+    observedEvents = c(20, 55, 75),
+    usTime = c(.25, .65, 1),
+    lsTime = c(.2, .6, 1),
+    maxSpend = TRUE
+  )
+
+  expect_s3_class(result, "gsBinomialExactSpending")
+  expect_s3_class(result, "gsBinomialExact")
+  expect_identical(
+    class(result),
+    c("gsBinomialExactSpending", "gsBinomialExact", "gsProbability")
+  )
+  expect_equal(result$alpha, design$alpha)
+  expect_equal(result$beta, design$beta)
+  expect_equal(result$ratio, design$ratio)
+  expect_equal(result$testUpper, design$testUpper)
+  expect_equal(result$testLower, design$testLower)
+  expect_equal(result$usTime, c(.25, .65, 1))
+  expect_equal(result$lsTime, c(.2, .6, 1))
+  expect_equal(result$maxn.IPlan, design$maxn.IPlan)
+  expect_true(result$maxSpend)
+  expect_identical(result$call[[1]], quote(toBinomialExact))
+})

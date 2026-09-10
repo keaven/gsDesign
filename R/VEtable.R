@@ -75,32 +75,43 @@ VEtable <- function(x, ve, tteDesign = NULL, ratio = NULL) {
   }
 
   prob_experimental <- ratio / (ratio + 1 / (1 - ve))
-  power <- gsBinomialExact(
-    k = x$k,
-    theta = prob_experimental,
-    n.I = x$n.I,
-    a = x$lower$bound,
-    b = x$upper$bound
-  )$lower$prob
-  power <- apply(power, 2, cumsum)
-  if (length(ve) == 1) power <- matrix(power, ncol = 1)
+  if (x$k == 1) {
+    power <- stats::pbinom(x$lower$bound, x$n.I, prob_experimental)
+    alpha <- stats::pbinom(x$lower$bound, x$n.I, x$theta[1])
+  } else {
+    power <- gsBinomialExact(
+      k = x$k,
+      theta = prob_experimental,
+      n.I = x$n.I,
+      a = x$lower$bound,
+      b = x$upper$bound
+    )$lower$prob
+    power <- apply(power, 2, cumsum)
+
+    alpha <- gsBinomialExact(
+      k = x$k,
+      theta = x$theta[1],
+      n.I = x$n.I,
+      a = x$lower$bound,
+      b = x$n.I + 1
+    )$lower$prob
+  }
+  power <- matrix(power, nrow = x$k, ncol = length(ve))
   colnames(power) <- paste0(ve * 100, "%")
 
-  alpha <- gsBinomialExact(
-    k = x$k,
-    theta = x$theta[1],
-    n.I = x$n.I,
-    a = x$lower$bound,
-    b = x$n.I + 1
-  )$lower$prob
+  efficacy_at_bound <- function(bound) {
+    value <- 1 - 1 / (ratio * (x$n.I / bound - 1))
+    value[bound < 0 | bound > x$n.I] <- NA_real_
+    value
+  }
 
   out <- tibble::tibble(
     Analysis = seq_len(x$k),
     Cases = x$n.I,
     Success = x$lower$bound,
     Futility = x$upper$bound,
-    ve_efficacy = 1 - 1 / (ratio * (x$n.I / x$lower$bound - 1)),
-    ve_futility = 1 - 1 / (ratio * (x$n.I / x$upper$bound - 1)),
+    ve_efficacy = efficacy_at_bound(x$lower$bound),
+    ve_futility = efficacy_at_bound(x$upper$bound),
     alpha = as.vector(cumsum(alpha)),
     beta = as.vector(cumsum(x$upper$prob[, 2]))
   )

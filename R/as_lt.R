@@ -47,15 +47,13 @@ lt::lt
 #'   a = safety_design$lower$bound,
 #'   b = safety_design$upper$bound
 #' )
-#' if (interactive()) {
-#'   safety_power |>
-#'     as_table() |>
-#'     lt(
-#'       theta_label = I("Underlying<br>AE rate"),
-#'       prob_decimals = 3,
-#'       bound_label = c("low rate", "high rate")
-#'     )
-#' }
+#' safety_power |>
+#'   as_table() |>
+#'   lt(
+#'     theta_label = I("Underlying<br>AE rate"),
+#'     prob_decimals = 3,
+#'     bound_label = c("low rate", "high rate")
+#'   )
 #'
 #' @exportS3Method lt::lt
 lt.gsBinomialExactTable <- function(
@@ -100,6 +98,14 @@ lt.gsBinomialExactTable <- function(
 #'   spending.
 #'
 #' @return An \code{lt_tbl} object.
+#'
+#' @examples
+#' design <- gsSurv(
+#'   k = 2, test.type = 4, timing = .6, ratio = 3,
+#'   hr = .3, hr0 = .7
+#' )
+#' VEtable(toBinomialExact(design), ve = c(.5, .7)) |>
+#'   lt()
 #'
 #' @rdname lt-gsVETable
 #' @exportS3Method lt::lt
@@ -169,7 +175,8 @@ lt.gsVETable <- function(
     lt::lt_footnote(
       paste0(
         "Cumulative alpha-spending for efficacy ignores non-binding futility ",
-        "bound; final value < ", alpha, " due to discreteness"
+        "bound; final value <= ", alpha,
+        " and may be smaller due to discreteness"
       ),
       where = "column", columns = "alpha"
     ) |>

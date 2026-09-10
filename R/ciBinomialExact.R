@@ -14,14 +14,16 @@
 #'   ratio, efficacy estimate, confidence limits, and confidence level.
 #'
 #' @details
-#' Conditional on `n`, `x` is binomial with event probability `p` in the
-#' experimental group. Clopper--Pearson limits for `p` are transformed using
-#' `efficacy = 1 - p / (ratio * (1 - p))`. Because this transformation is
+#' Conditional on \code{n}, \code{x} is binomial with event probability
+#' \code{p} in the experimental group. Clopper--Pearson limits for \code{p}
+#' are transformed using
+#' \code{efficacy = 1 - p / (ratio * (1 - p))}. Because this transformation is
 #' decreasing, the probability limits are reversed on the efficacy scale.
 #' The same calculation applies to vaccine efficacy (VE) and prevention
 #' efficacy (PE).
 #'
-#' @seealso [repeatedCIBinomialExact()], [sequentialCIBinomialExact()]
+#' @seealso \code{\link{repeatedCIBinomialExact}},
+#'   \code{\link{sequentialCIBinomialExact}}
 #'
 #' @export
 #'
@@ -67,10 +69,13 @@ ciBinomialExact <- function(
 #' Inverts exact binomial efficacy tests at each completed analysis to obtain
 #' repeated confidence intervals for vaccine or prevention efficacy.
 #'
-#' @param gsD A `gsSurv` object with non-binding `test.type` 1, 4, 6, or 8.
+#' @param gsD A \code{gsSurv} object with non-binding \code{test.type} 1, 4,
+#'   6, or 8.
 #' @param n.I Increasing integer total event counts at completed analyses. If
-#'   `NULL`, planned integer event counts from `toInteger(gsD)` are used.
-#' @param x Integer experimental-arm event counts at the analyses in `n.I`.
+#'   \code{NULL}, planned integer event counts from \code{toInteger(gsD)} are
+#'   used.
+#' @param x Integer experimental-arm event counts at the analyses in
+#'   \code{n.I}.
 #' @param conf.level Two-sided confidence level.
 #' @param tol Absolute tolerance for bisection on the conditional binomial
 #'   event-probability scale.
@@ -81,9 +86,9 @@ ciBinomialExact <- function(
 #'   level, and one-sided tail level.
 #'
 #' @details
-#' A two-sided interval with confidence level `1 - alpha` uses the same
+#' A two-sided interval with confidence level \code{1 - alpha} uses the same
 #' spending function, spending times, and count-path ordering in both
-#' directions, with `alpha / 2` in each tail. The lower efficacy limit inverts
+#' directions, with \code{alpha / 2} in each tail. The lower efficacy limit inverts
 #' the usual lower event-count efficacy test. The upper efficacy limit inverts
 #' its mirror image after exchanging experimental- and control-arm event
 #' counts. This mirrored test is not the design's futility boundary.
@@ -97,14 +102,16 @@ ciBinomialExact <- function(
 #'
 #' @references
 #' Jennison, C. and Turnbull, B. W. (1984). Repeated confidence intervals for
-#' group sequential clinical trials. *Controlled Clinical Trials*, 5, 33--45.
+#' group sequential clinical trials. \emph{Controlled Clinical Trials}, 5,
+#' 33--45.
 #'
 #' Coe, P. R. and Tamhane, A. C. (1993). Exact repeated confidence intervals
 #' for Bernoulli parameters in a group sequential clinical trial.
-#' *Controlled Clinical Trials*, 14, 19--29.
+#' \emph{Controlled Clinical Trials}, 14, 19--29.
 #'
-#' @seealso [ciBinomialExact()], [sequentialCIBinomialExact()],
-#'   [repeatedPValueBinomialExact()]
+#' @seealso \code{\link{ciBinomialExact}},
+#'   \code{\link{sequentialCIBinomialExact}},
+#'   \code{\link{repeatedPValueBinomialExact}}
 #'
 #' @export
 #'
@@ -205,14 +212,16 @@ repeatedCIBinomialExact <- function(
 #'   confidence level, and one-sided tail level.
 #'
 #' @details
-#' The interval is the inversion of [sequentialPValueBinomialExact()] applied
+#' The interval is the inversion of
+#' \code{\link{sequentialPValueBinomialExact}} applied
 #' in both directions: a candidate efficacy remains in the confidence set only
 #' when neither one-sided repeated test has rejected it at any completed
-#' analysis. Thus the sequential interval through analysis `j` is the
-#' intersection of repeated intervals 1 through `j`.
+#' analysis. Thus the sequential interval through analysis \code{j} is the
+#' intersection of repeated intervals 1 through \code{j}.
 #'
-#' @seealso [ciBinomialExact()], [repeatedCIBinomialExact()],
-#'   [sequentialPValueBinomialExact()]
+#' @seealso \code{\link{ciBinomialExact}},
+#'   \code{\link{repeatedCIBinomialExact}},
+#'   \code{\link{sequentialPValueBinomialExact}}
 #'
 #' @export
 #'

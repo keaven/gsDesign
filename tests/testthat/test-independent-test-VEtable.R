@@ -61,6 +61,29 @@ test_that("VEtable supports observed-event tables without timing columns", {
   expect_equal(updated$ratio, design$tte$ratio)
 })
 
+test_that("VEtable handles one-look designs and inactive bounds", {
+  one_look <- ve_design()$exact
+  one_look$k <- 1L
+  one_look$n.I <- one_look$n.I[1]
+  one_look$lower$bound <- one_look$lower$bound[1]
+  one_look$upper$bound <- one_look$upper$bound[1]
+  one_look$upper$prob <- one_look$upper$prob[1, , drop = FALSE]
+  one_look_result <- VEtable(one_look, ve = c(.5, .7))
+
+  expect_equal(dim(one_look_result), c(1, 10))
+  expect_named(one_look_result, c(
+    "Analysis", "Cases", "Success", "Futility", "ve_efficacy",
+    "ve_futility", "alpha", "beta", "50%", "70%"
+  ))
+
+  one_look$lower$bound <- -1L
+  one_look$upper$bound <- one_look$n.I + 1L
+  result <- VEtable(one_look, ve = .7)
+
+  expect_true(is.na(result$ve_efficacy[1]))
+  expect_true(is.na(result$ve_futility[1]))
+})
+
 test_that("lt formats VE tables with standard annotations", {
   design <- ve_design()
   result <- VEtable(design$exact, ve = c(.5, .7), tteDesign = design$tte) |>
@@ -78,7 +101,10 @@ test_that("lt formats VE tables with standard annotations", {
     )
   )
   expect_equal(length(result$footnotes), 5)
-  expect_match(result$footnotes[[5]]$text, "final value < 0.025 due to discreteness")
+  expect_match(
+    result$footnotes[[5]]$text,
+    "final value <= 0.025 and may be smaller due to discreteness"
+  )
   expect_true(any(vapply(
     result$ops,
     function(op) identical(op$type, "fmt_number") && "Time" %in% op$columns,
