@@ -13,67 +13,55 @@ has_executable() {
     [[ -x "$1" ]] || command -v "$1" >/dev/null 2>&1
 }
 
-if [[ -z "${CHROME_BIN:-}" ]]; then
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-        if [[ ! -x "$CHROME_BIN" ]]; then
-            echo "Set CHROME_BIN to a valid Chrome executable path." >&2
-            exit 1
-        fi
-    elif [[ "$OSTYPE" == msys* || "$OSTYPE" == cygwin* || "$OSTYPE" == win32* ]]; then
-        for candidate in \
-            "/c/Program Files/Google/Chrome/Application/chrome.exe" \
-            "/c/Program Files (x86)/Google/Chrome/Application/chrome.exe" \
-            "${LOCALAPPDATA:-}/Google/Chrome/Application/chrome.exe"; do
-            if [[ -x "$candidate" ]]; then
-                CHROME_BIN="$candidate"
-                break
-            fi
-        done
+resolve_bin() {
+    local current="$1"
+    local error_message="$2"
+    shift 2
 
-        if [[ -z "${CHROME_BIN:-}" ]]; then
-            echo "Set CHROME_BIN to a valid Chrome executable path." >&2
-            exit 1
+    if [[ -n "$current" ]]; then
+        if has_executable "$current"; then
+            printf '%s\n' "$current"
+            return 0
         fi
 
-    else
-        for candidate in \
-            "/usr/bin/google-chrome" \
-            "/usr/bin/chromium" \
-            "/usr/bin/chromium-browser"; do
-            if [[ -x "$candidate" ]]; then
-                CHROME_BIN="$candidate"
-                break
-            fi
-        done
-
-        if [[ -z "${CHROME_BIN:-}" ]]; then
-            echo "Set CHROME_BIN to a valid Chrome executable path." >&2
-            exit 1
-        fi
+        echo "$error_message" >&2
+        return 1
     fi
 
-elif ! has_executable "$CHROME_BIN"; then
-    echo "Set CHROME_BIN to a valid Chrome executable path." >&2
-    exit 1
-fi
-
-if [[ -z "${PYTHON_BIN:-}" ]]; then
-    for candidate in python3 python; do
-        if command -v "$candidate" >/dev/null 2>&1; then
-            PYTHON_BIN="$candidate"
-            break
+    local candidate
+    for candidate in "$@"; do
+        if [[ -n "$candidate" ]] && has_executable "$candidate"; then
+            printf '%s\n' "$candidate"
+            return 0
         fi
     done
 
-    if [[ -z "${PYTHON_BIN:-}" ]]; then
-        echo "Set PYTHON_BIN to a valid Python executable path." >&2
-        exit 1
-    fi
-elif ! has_executable "$PYTHON_BIN"; then
-    echo "Set PYTHON_BIN to a valid Python executable path." >&2
-    exit 1
+    echo "$error_message" >&2
+    return 1
+}
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    CHROME_BIN="$(resolve_bin "${CHROME_BIN:-}" \
+        "Set CHROME_BIN to a valid Chrome executable path." \
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")" || exit 1
+elif [[ "$OSTYPE" == msys* || "$OSTYPE" == cygwin* || "$OSTYPE" == win32* ]]; then
+    CHROME_BIN="$(resolve_bin "${CHROME_BIN:-}" \
+        "Set CHROME_BIN to a valid Chrome executable path." \
+        "/c/Program Files/Google/Chrome/Application/chrome.exe" \
+        "/c/Program Files (x86)/Google/Chrome/Application/chrome.exe" \
+        "${LOCALAPPDATA:-}/Google/Chrome/Application/chrome.exe")" || exit 1
+else
+    CHROME_BIN="$(resolve_bin "${CHROME_BIN:-}" \
+        "Set CHROME_BIN to a valid Chrome executable path." \
+        "/usr/bin/google-chrome" \
+        "/usr/bin/chromium" \
+        "/usr/bin/chromium-browser")" || exit 1
 fi
+
+PYTHON_BIN="$(resolve_bin "${PYTHON_BIN:-}" \
+    "Set PYTHON_BIN to a valid Python executable path." \
+    python3 \
+    python)" || exit 1
 
 # Draw at 4x the final 553 x 640 resolution for smooth edges
 FINAL_WIDTH=553
@@ -118,6 +106,7 @@ TEXT_HTML_URL="$("$PYTHON_BIN" -c 'from pathlib import Path; import sys; print(P
 (
     cd "$WORK_DIR"
     "$CHROME_BIN" --headless \
+        --allow-file-access-from-files \
         --disable-gpu \
         --no-pdf-header-footer \
         --print-to-pdf="$WORK_DIR/text.pdf" \
