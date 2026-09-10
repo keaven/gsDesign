@@ -13,6 +13,14 @@ has_executable() {
     [[ -x "$1" ]] || command -v "$1" >/dev/null 2>&1
 }
 
+file_uri() {
+    local path="$1"
+    path="${path//%/%25}"
+    path="${path//#/%23}"
+    path="${path// /%20}"
+    printf 'file://%s\n' "$path"
+}
+
 resolve_bin() {
     local current="$1"
     local error_message="$2"
@@ -40,28 +48,25 @@ resolve_bin() {
     return 1
 }
 
+chrome_candidates=(
+    "/c/Program Files/Google/Chrome/Application/chrome.exe"
+    "/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+    "${LOCALAPPDATA:-}/Google/Chrome/Application/chrome.exe"
+    "/usr/bin/google-chrome"
+    "/usr/bin/chromium"
+    "/usr/bin/chromium-browser"
+)
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    CHROME_BIN="$(resolve_bin "${CHROME_BIN:-}" \
-        "Set CHROME_BIN to a valid Chrome executable path." \
-        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")" || exit 1
-elif [[ "$OSTYPE" == msys* || "$OSTYPE" == cygwin* || "$OSTYPE" == win32* ]]; then
-    CHROME_BIN="$(resolve_bin "${CHROME_BIN:-}" \
-        "Set CHROME_BIN to a valid Chrome executable path." \
-        "/c/Program Files/Google/Chrome/Application/chrome.exe" \
-        "/c/Program Files (x86)/Google/Chrome/Application/chrome.exe" \
-        "${LOCALAPPDATA:-}/Google/Chrome/Application/chrome.exe")" || exit 1
-else
-    CHROME_BIN="$(resolve_bin "${CHROME_BIN:-}" \
-        "Set CHROME_BIN to a valid Chrome executable path." \
-        "/usr/bin/google-chrome" \
-        "/usr/bin/chromium" \
-        "/usr/bin/chromium-browser")" || exit 1
+    chrome_candidates=(
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        "${chrome_candidates[@]}"
+    )
 fi
 
-PYTHON_BIN="$(resolve_bin "${PYTHON_BIN:-}" \
-    "Set PYTHON_BIN to a valid Python executable path." \
-    python3 \
-    python)" || exit 1
+CHROME_BIN="$(resolve_bin "${CHROME_BIN:-}" \
+    "Set CHROME_BIN to a valid Chrome executable path." \
+    "${chrome_candidates[@]}")" || exit 1
 
 # Draw at 4x the final 553 x 640 resolution for smooth edges
 FINAL_WIDTH=553
@@ -102,8 +107,8 @@ cat >"$WORK_DIR/logo-text.html" <<'EOF'
   </body>
 </html>
 EOF
-TEXT_HTML_URL="$("$PYTHON_BIN" -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve().as_uri())' "$WORK_DIR/logo-text.html")"
-(
+TEXT_HTML_URL="$(file_uri "$WORK_DIR/logo-text.html")"
+if ! (
     cd "$WORK_DIR"
     "$CHROME_BIN" --headless \
         --allow-file-access-from-files \
@@ -111,7 +116,10 @@ TEXT_HTML_URL="$("$PYTHON_BIN" -c 'from pathlib import Path; import sys; print(P
         --no-pdf-header-footer \
         --print-to-pdf="$WORK_DIR/text.pdf" \
         "$TEXT_HTML_URL"
-)
+); then
+    echo "Failed to render wordmark with Chrome." >&2
+    exit 1
+fi
 
 pdfcrop --quiet "$WORK_DIR/text.pdf" "$WORK_DIR/text-cropped.pdf"
 

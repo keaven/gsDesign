@@ -6,8 +6,7 @@ From the package root, run:
 bash tools/logo/logo.sh
 ```
 
-Requires Chrome, a Python interpreter (`python3` or `python`), ImageMagick,
-Ghostscript, `pdfcrop`, and `pngquant`.
+Requires Chrome, ImageMagick, Ghostscript, `pdfcrop`, and `pngquant`.
 The SVG wordmark embeds its font data directly so logo generation does not
 depend on remote assets or separate local font files.
 By default the script looks for Chrome at
@@ -18,5 +17,3 @@ By default the script looks for Chrome at
 Git Bash/MSYS/Cygwin/Win32, and `/usr/bin/google-chrome`,
 `/usr/bin/chromium`, and `/usr/bin/chromium-browser` on Linux. Set
 `CHROME_BIN` to override the path.
-Set `PYTHON_BIN` to override the Python executable used to encode the local
-`file://` URL for Chrome.
