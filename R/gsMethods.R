@@ -120,6 +120,14 @@ summary.gsDesign <- function(object, information = FALSE, timeunit = "months", .
   }
   out <- paste(out, 100 * (1 - object$beta), " percent power, ", 100 * object$alpha, " percent (1-sided) Type I error", sep = "")
   if ("gsSurv" %in% class(object)) {
+    if (is.character(object$method) && length(object$method) == 1L &&
+        !is.na(object$method) && nzchar(object$method)) {
+      method_name <- switch(object$method,
+        LachinFoulkes = "Lachin-Foulkes", BernsteinLagakos = "Bernstein-Lagakos",
+        object$method
+      )
+      out <- paste0(out, " (sample size/power method: ", method_name, ")")
+    }
     out <- paste(out, " to detect a hazard ratio of ", round(object$hr, 2), sep = "")
     if (object$hr0 != 1) out <- paste(out, " with a null hypothesis hazard ratio of ", round(object$hr0, 2), sep = "")
     out <- paste(out, ". Enrollment and total study durations are assumed to be ", round(sum(object$R), 1),
@@ -565,34 +573,35 @@ gsBoundSummary0 <- function(
   statframe <- statframe[!(statframe$Value %in% exclude), ]
   # sort by analysis
   statframe <- statframe[order(statframe$i), ]
-  # add analysis and timing
-  statframe$Analysis <- ""
+  # Build annotations independently of the selected boundary statistics.
+  # A block must accommodate the longer of the two columns of information.
   aname <- paste("IA ", 1:x$k, ": ", round(100 * x$timing, 0), "%", sep = "")
   aname[x$k] <- "Final"
-  statframe[statframe$Value == statframe$Value[1], ]$Analysis <- aname
+  annotations <- as.list(aname)
   # sample size, events or information at analyses
   if (!("gsSurv" %in% class(x))) {
     if (x$n.fix > 1) N <- ceiling(x$n.I) else N <- round(x$n.I, 2)
     if (Nname == "Information") N <- round(x$n.I, 2)
     # Check if calendar time T is provided (for non-gsSurv objects like gsNB)
     if (inherits(x, "gsNB") && !is.null(x$T)) {
-      nstat <- 3
       Time <- round(x$T, tdigits)
-      statframe[statframe$Value == statframe$Value[3], ]$Analysis <- paste(timename, ": ", as.character(Time), sep = "")
-    } else {
-      nstat <- 2
     }
   } else {
-    nstat <- 4
     event_counts <- gsRoundNearInteger(x$n.I)
-    statframe[statframe$Value == statframe$Value[3], ]$Analysis <- paste("Events:", ceiling(event_counts))
     experimental_n <- gsRoundNearInteger(rowSums(x$eNE))
     control_n <- gsRoundNearInteger(rowSums(x$eNC))
     if (x$ratio == 1) N <- 2 * ceiling(experimental_n) else N <- ceiling(experimental_n) + ceiling(control_n)
     Time <- round(x$T, tdigits)
-    statframe[statframe$Value == statframe$Value[4], ]$Analysis <- paste(timename, ": ", as.character(Time), sep = "")
   }
-  statframe[statframe$Value == statframe$Value[2], ]$Analysis <- paste(Nname, ": ", N, sep = "")
+  for (i in seq_len(k)) {
+    annotations[[i]] <- c(annotations[[i]], paste0(Nname, ": ", N[i]))
+    if (inherits(x, "gsSurv")) {
+      annotations[[i]] <- c(annotations[[i]], paste("Events:", ceiling(event_counts[i])))
+    }
+    if (inherits(x, "gsSurv") || (inherits(x, "gsNB") && !is.null(x$T))) {
+      annotations[[i]] <- c(annotations[[i]], paste0(timename, ": ", Time[i]))
+    }
+  }
   # add POS and predictive POS, if requested
   if (POS) {
     if (x$k == 1) {
@@ -601,9 +610,9 @@ gsBoundSummary0 <- function(
           prior$z * sqrt(x$n.I[1]) - x$upper$bound[1]
         )
       )
-      statframe$Analysis[nrow(statframe)] <- paste0(
+      annotations[[1]] <- c(annotations[[1]], paste0(
         "Trial POS: ", round(100 * trial_pos, 1), "%"
-      )
+      ))
     } else {
       ppos <- rep("", x$k)
       for (i in seq_len(x$k - 1)) {
@@ -616,18 +625,31 @@ gsBoundSummary0 <- function(
           sep = ""
         )
       }
-      statframe[statframe$Value == statframe$Value[nstat + 1], ]$Analysis <- ppos
-      statframe[nstat + 2, ]$Analysis <- ppos[1]
-      statframe[nstat + 1, ]$Analysis <- paste(
+      annotations[[1]] <- c(annotations[[1]], paste(
         "Trial POS: ",
         as.character(round(100 * gsPOS(
           x = x, theta = prior$z, wgts = prior$wgts
         ), 1)),
         "%",
         sep = ""
-      )
+      ))
+      for (i in seq_len(k - 1L)) annotations[[i]] <- c(annotations[[i]], ppos[i])
     }
   }
+  blocks <- lapply(seq_len(k), function(i) {
+    block <- statframe[statframe$i == i, , drop = FALSE]
+    n <- max(nrow(block), length(annotations[[i]]))
+    if (n > nrow(block)) {
+      pad <- statframe[rep(NA_integer_, n - nrow(block)), , drop = FALSE]
+      pad$Value <- ""
+      pad$i <- i
+      block <- rbind(block, pad)
+    }
+    block$Analysis <- c(annotations[[i]], rep("", n - length(annotations[[i]])))
+    block
+  })
+  statframe <- do.call(rbind, blocks)
+  rownames(statframe) <- NULL
   # add futility and harm columns to data frame
   if (x$test.type %in% c(7, 8)) {
     # Order: Harm, Futility, Efficacy
@@ -673,6 +695,12 @@ gsBoundSummary0 <- function(
 }
 # gsBoundSummary roxy [sinew] ----
 #' @title Bound Summary and Z-transformations
+#' @details For survival designs, \code{summary()} identifies the stored
+#' sample size/power calculation method, when available. The method is not
+#' displayed by \code{gsBoundSummary()}. Each analysis block accommodates
+#' both its annotations and the selected boundary statistics, padding the
+#' shorter side. Padding has an empty \code{Value} and missing numeric values;
+#' the print method displays these cells as blanks.
 #' @description  A tabular summary of a group sequential design's bounds and their properties
 #' are often useful. The 'vintage' \code{print.gsDesign()} function provides a
 #' complete but minimally formatted summary of a group sequential design
@@ -1051,7 +1079,11 @@ gsBoundSummary <- function(
       # POS is only computed for original alpha level
       exclude = exclude, POS = FALSE, ratio = ratio, r = r, prior = prior
     )
-    out <- cbind(out, yout$Efficacy)
+    # POS annotations can require extra rows only in the original table.
+    # Match statistical rows within analyses instead of recycling columns.
+    row_match <- match(paste(analysis_i, out$Value),
+                       paste(attr(yout, "analysis_i"), yout$Value))
+    out <- cbind(out, yout$Efficacy[row_match])
     names(out)[ncol(out)] <- sprintf(efficacy_format, a)
 
     # now if test.type is not 1, we need to add futility bounds
@@ -1178,11 +1210,14 @@ xprint <- function(x, include.rownames = FALSE,
 #' @rdname gsBoundSummary
 # print.gsBoundSummary function [sinew] ----
 print.gsBoundSummary <- function(x, row.names = FALSE, digits = 4, ...) {
-  method <- attr(x, "method", exact = TRUE)
-  if (!is.null(method)) {
-    cat("Method:", method, "\n")
+  if (any(x$Value == "")) {
+    display <- format.data.frame(x, digits = digits)
+    display[x$Value == "", setdiff(names(x), "Analysis")] <- ""
+    print.data.frame(display, row.names = row.names, ...)
+  } else {
+    print.data.frame(x, row.names = row.names, digits = digits, ...)
   }
-  print.data.frame(x, row.names = row.names, digits = digits, ...)
+  invisible(x)
 }
 
 # gsLegendText function [sinew] ----

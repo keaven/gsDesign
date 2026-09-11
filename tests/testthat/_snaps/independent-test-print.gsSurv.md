@@ -9,7 +9,6 @@
       Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2.
     
     Analysis summary:
-    Method: LachinFoulkes 
        Analysis              Value Efficacy Futility
       IA 1: 33%                  Z   3.0107  -0.2388
           N: 44        p (1-sided)   0.0013   0.5944
@@ -47,7 +46,6 @@
       Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2.
     
     Analysis summary:
-    Method: LachinFoulkes 
        Analysis              Value Efficacy Futility
       IA 1: 33%                  Z   3.0107  -0.2388
           N: 24        p (1-sided)   0.0013   0.5944
@@ -85,7 +83,6 @@
       Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
     
     Analysis summary:
-    Method: LachinFoulkes 
         Analysis              Value Efficacy Futility
        IA 1: 25%                  Z   3.1554   0.1555
            N: 76        p (1-sided)   0.0008   0.4382
@@ -127,7 +124,6 @@
       Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
     
     Analysis summary:
-    Method: LachinFoulkes 
        Analysis              Value Efficacy
       IA 1: 25%                  Z   3.1554
           N: 64        p (1-sided)   0.0008
@@ -170,7 +166,6 @@
       Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
     
     Analysis summary:
-    Method: LachinFoulkes 
         Analysis              Value Efficacy Futility
        IA 1: 25%                  Z   3.1554   0.1555
            N: 80        p (1-sided)   0.0008   0.4382

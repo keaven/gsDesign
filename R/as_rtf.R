@@ -179,7 +179,7 @@ as_rtf.gsBoundSummary <- function(
   
   
   # Add a for first instance of "p (1-sided)" in Value column
-  if(!is.null(which(x$Value == "p (1-sided)")[1])) {
+  if(any(x$Value == "p (1-sided)")) {
     first_instance <- which(x$Value == "p (1-sided)")[1]
     x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^", letters[letter_order], "}")
     footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_p_onesided))
@@ -187,7 +187,7 @@ as_rtf.gsBoundSummary <- function(
   }
   
   # Add b for first instance of "~HR at bound" in Value column
-  if(!is.null(which(x$Value == "~HR at bound")[1])) {
+  if(any(x$Value == "~HR at bound")) {
     first_instance <- which(x$Value == "~HR at bound")[1]
     x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^", letters[letter_order], "}")
     footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_appx_effect_at_bound))
@@ -195,7 +195,7 @@ as_rtf.gsBoundSummary <- function(
   }
 
   # Add c for first instance of "P(Cross) if HR=1" in Value column
-  if(!is.null(which(x$Value == "P(Cross) if HR=1")[1])) {
+  if(any(x$Value == "P(Cross) if HR=1")) {
     first_instance <- which(x$Value == "P(Cross) if HR=1")[1]
     x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^", letters[letter_order], "}")
     footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_p_cross_h0))
@@ -203,7 +203,7 @@ as_rtf.gsBoundSummary <- function(
   }
 
   # Add d for first instance of "P(Cross) if HR=0.5" in Value column
-  if(!is.null(which(x$Value == "P(Cross) if HR=0.5")[1])) {
+  if(any(x$Value == "P(Cross) if HR=0.5")) {
     first_instance <- which(x$Value == "P(Cross) if HR=0.5")[1]
     x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^", letters[letter_order], "}")
     footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_p_cross_h1))
@@ -223,13 +223,13 @@ as_rtf.gsBoundSummary <- function(
   }
   
   # Insert blank row when Analysis column is null
-  idx <- which(x$Value == "Z")
+  idx <- which(grepl("^(IA [0-9]+:|Final$)", x$Analysis))
   blank_row <- data.frame(matrix(ncol = ncol(x), nrow = 1))
   colnames(blank_row) <- colnames(x)
 
-  x_sub <- x[1:(idx[2] - 1), ]
-  for (i in 2:length(idx)) {
-    row_end <- ifelse(i == length(idx), length(x$Value), (idx[i + 1] - 1))
+  x_sub <- x[seq_len(if (length(idx) > 1L) idx[2] - 1L else nrow(x)), ]
+  if (length(idx) > 1L) for (i in seq.int(2L, length(idx))) {
+    row_end <- ifelse(i == length(idx), nrow(x), (idx[i + 1] - 1))
     x_sub <- rbind(x_sub, blank_row, x[idx[i]:row_end, ])
   }
 
@@ -237,12 +237,12 @@ as_rtf.gsBoundSummary <- function(
   x |>
     rtf_title(title = title) |>
     rtf_colheader(
-      paste0("Analysis", " | ", "Value", " | ", "Efficacy", " | ", "Futility"),
-      col_rel_width = c(1, 1.5, 1, 1)
+      paste(names(x), collapse = " | "),
+      col_rel_width = c(1, 1.5, rep(1, ncol(x) - 2))
     ) |>
     rtf_body(
-      text_justification = c("l", rep("c", 3)),
-      col_rel_width = c(1, 1.5, 1, 1)
+      text_justification = c("l", rep("c", ncol(x) - 1)),
+      col_rel_width = c(1, 1.5, rep(1, ncol(x) - 2))
     ) |>
     rtf_footnote(footnote) |>
     rtf_encode() |>
