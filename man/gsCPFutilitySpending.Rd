@@ -8,7 +8,7 @@ gsCPFutilitySpending(
   x,
   target_cp,
   i = seq_along(target_cp),
-  sfl = "sfHSD",
+  sfl = x$lower$sf,
   theta = NULL,
   control = list()
 )
@@ -24,7 +24,8 @@ identify active futility bounds, be unique, and be in
 \code{1:(x$k - 1)}. Results are ordered by analysis.}
 
 \item{sfl}{Futility spending function, supplied as a supported function or
-its character name. The default is \code{"sfHSD"}.}
+its character name. By default, use \code{x$lower$sf}, the reference
+design's futility spending function. Supply \code{sfl} to override it.}
 
 \item{theta}{Optional future effect for conditional power. A scalar is
 recycled; otherwise its length must equal \code{target_cp}. When \code{NULL}, the
