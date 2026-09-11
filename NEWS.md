@@ -50,6 +50,8 @@
 
 ## Bug fixes
 
+- Exact binomial conversion preserves skipped futility looks without invalid
+  provisional boundaries during beta-spending calibration (#333).
 - Information-based boundary plots label actual information as `I=` with
   two decimal places, rather than rounding it to a sample size (#315).
 - Survival calculation methods are reported in `summary()`, not boundary
