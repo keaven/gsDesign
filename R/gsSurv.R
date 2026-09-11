@@ -329,9 +329,14 @@ print.gsSurv <- function(x, digits = 3, show_gsDesign = FALSE, show_strata = TRU
 
   # Spending function summary (extracted from summary())
   summ_text <- summary(x)
-  # Extract spending function sentences
-  spending_parts <- unlist(strsplit(summ_text, "\\."))
+  # Extract spending function sentences. Split on sentence boundaries (a period
+  # followed by whitespace) rather than bare periods so that decimal values in
+  # spending function parameters (e.g. the t-distribution parameters printed as
+  # "a = -1.63774, b = 2.96683, df = 3") are not truncated (GitHub issue #307).
+  spending_parts <- unlist(strsplit(summ_text, "(?<=\\.)\\s+", perl = TRUE))
   spending_parts <- grep("spending function", spending_parts, ignore.case = TRUE, value = TRUE)
+  # Drop any trailing period left on the final sentence for consistent formatting
+  spending_parts <- sub("\\.$", "", spending_parts)
   if (length(spending_parts) > 0) {
     cat("\nSpending functions:\n")
     for (part in spending_parts) {

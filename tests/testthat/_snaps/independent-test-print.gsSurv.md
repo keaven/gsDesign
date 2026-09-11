@@ -80,7 +80,7 @@
     
     Spending functions:
       Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
-      Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
+      Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.5.
     
     Analysis summary:
         Analysis              Value Efficacy Futility
@@ -163,7 +163,7 @@
     
     Spending functions:
       Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
-      Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
+      Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.5.
     
     Analysis summary:
         Analysis              Value Efficacy Futility
