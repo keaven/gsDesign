@@ -127,7 +127,7 @@ x <- gsDesign(
   sfupar = list(sf = sfHSD, param = 1, trange = c(.3, .9))
 )
 
-# first upper bound=20 means no testing there
+# first upper bound=Inf means no testing there
 gsBoundSummary(x)
 #>   Analysis               Value Efficacy Futility
 #>  IA 1: 25%                   Z       NA  -0.5316

@@ -41,6 +41,23 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gsdesign-development-version">gsDesign (development version)<a class="anchor" aria-label="anchor" href="#gsdesign-development-version"></a></h2>
 <div class="section level3">
+<h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>Absent lower and harm bounds now use <code>-Inf</code>, and absent upper bounds use <code>Inf</code>, instead of the finite <code>-20</code>/<code>20</code> sentinel. This includes zero-spending and skipped analyses. Use <code><a href="https://rdrr.io/r/base/is.finite.html" class="external-link">is.finite()</a></code> to identify active bounds. <code><a href="../reference/gsBoundCP.html">gsBoundCP()</a></code> returns <code>NA</code> at an absent bound (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/321" class="external-link">#321</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>Added opt-in Gauss-Legendre quadrature for boundary crossing calculations via <code>options(gsDesign.quadrature = "gl")</code>. The node count adapts to the continuation region and neighboring information increments, with <code>r</code> controlling resolution. Research benchmarks show faster calculations and smaller integration errors. The default Jennison and Turnbull grid (<code>"jt"</code>) is unchanged; see the numerical integration section of <code><a href="../reference/gsDesign.html">?gsDesign</a></code> (<a href="https://github.com/keaven/gsDesign/issues/323" class="external-link">#323</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="performance-development-version">Performance<a class="anchor" aria-label="anchor" href="#performance-development-version"></a></h3>
+<ul><li>Reduced repeated work in the C density update and boundary searches while retaining the Jennison and Turnbull grid and numerical results. Research benchmarks measured roughly 20% to 35% faster core routines. R’s normal tail calculations remain the default; <code>-DGS_USE_ERFC</code> enables an optional C-library alternative (<a href="https://github.com/keaven/gsDesign/issues/322" class="external-link">#322</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>Guarded the Newton boundary search against <code>0/0</code> updates and separated its iteration limit and finite iterate clamp from the absent-bound values (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/321" class="external-link">#321</a>).</li>
+<li>Updated the R interfaces and convergence checks to handle infinite bounds, and fixed <code><a href="../reference/gsDensity.html">gsDensity()</a></code> for one-sided designs (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/321" class="external-link">#321</a>).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="major-changes-development-version">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-development-version"></a></h3>
 <ul><li>Replaced <strong>gt</strong> with the lightweight <strong>lt</strong> package (&gt;= 0.3) as the default table-rendering framework throughout gsDesign. The package now re-exports <code><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt()</a></code>, and its table-output workflows use <strong>lt</strong> functions. Package-specific support includes an <code><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt()</a></code> method for <code>gsBinomialExactTable</code> objects. <code><a href="../reference/as_gt.html">as_gt()</a></code> remains available for compatibility but is deprecated and requires the suggested <strong>gt</strong> package.</li>
 </ul></div>
@@ -52,7 +69,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="testing-development-version">Testing<a class="anchor" aria-label="anchor" href="#testing-development-version"></a></h3>
-<ul><li>Reduced default test-suite runtime by using smaller stress-test grids, fewer Monte Carlo iterations, and toy exact-binomial p-value event counts. Set <code>GSDESIGN_RUN_STRESS_TESTS=true</code> to run the larger stress-test settings.</li>
+<ul><li>Added regression fixtures, multivariate normal reference checks, and print snapshots for the numerical integration routines and their R interfaces (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/320" class="external-link">#320</a>).</li>
+<li>Reduced default test-suite runtime by using smaller stress-test grids, fewer Monte Carlo iterations, and toy exact-binomial p-value event counts. Set <code>GSDESIGN_RUN_STRESS_TESTS=true</code> to run the larger stress-test settings.</li>
 </ul></div>
 </div>
     <div class="section level2">

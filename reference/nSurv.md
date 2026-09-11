@@ -377,7 +377,10 @@ print(x, digits = 3, show_gsDesign = FALSE, show_strata = TRUE, ...)
   probability calculations. Larger values provide more grid points and
   greater accuracy but slow down computation. Jennison and Turnbull
   (p. 350) note an accuracy of \\10^{-6}\\ with `r = 16`. This parameter
-  is normally not changed by users.
+  is normally not changed by users. With
+  `options(gsDesign.quadrature = "gl")` (see the section on numerical
+  integration below) `r` scales the number of Gauss-Legendre nodes
+  relative to its default.
 
 - usTime:
 
@@ -402,8 +405,8 @@ print(x, digits = 3, show_gsDesign = FALSE, show_strata = TRUE, ...)
   for `test.type` 1 and 2. Must be `TRUE` at the final analysis to
   achieve targeted power. At each analysis, at least one of `testUpper`,
   `testLower`, or `testHarm` must be `TRUE`. Where `testUpper` is
-  `FALSE`, the upper bound is set to `+20` (effectively `Inf`) and
-  displayed as `NA` in output.
+  `FALSE`, the upper bound is set to `+Inf` and displayed as `NA` in
+  output.
 
 - testLower:
 
@@ -413,8 +416,7 @@ print(x, digits = 3, show_gsDesign = FALSE, show_strata = TRUE, ...)
   `k`. Ignored for `test.type` 1 (one-sided, no lower bound). Overridden
   to all `TRUE` for `test.type` 2 (symmetric). For `test.type` 3–8, at
   least one analysis must be `TRUE`. Where `testLower` is `FALSE`, the
-  lower bound is set to `-20` (effectively `-Inf`) and displayed as `NA`
-  in output.
+  lower bound is set to `-Inf` and displayed as `NA` in output.
 
 - testHarm:
 
@@ -423,9 +425,8 @@ print(x, digits = 3, show_gsDesign = FALSE, show_strata = TRUE, ...)
   `FALSE` indicates none. Otherwise, a logical vector of length `k`.
   Only used for `test.type` 7 or 8; at least one analysis must be `TRUE`
   for those types. Where `testHarm` is `FALSE`, the harm bound is set to
-  `-20` (effectively `-Inf`) and the bound is displayed as `NA` in
-  output. Cumulative harm crossing probability from earlier analyses is
-  still displayed.
+  `-Inf` and the bound is displayed as `NA` in output. Cumulative harm
+  crossing probability from earlier analyses is still displayed.
 
 - show_gsDesign:
 
@@ -950,7 +951,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Thu Sep 10 22:06:06 2026
+#> % Fri Sep 11 00:33:03 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}

@@ -263,7 +263,9 @@ Turnbull (2000). Grid points are spread out in the tails for accurate
 probability calculations. Larger values provide more grid points and greater
 accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
 accuracy of \(10^{-6}\) with <code>r = 16</code>. This parameter is normally
-not changed by users.</p></dd>
+not changed by users. With <code>options(gsDesign.quadrature = "gl")</code>
+(see the section on numerical integration below) <code>r</code> scales the
+number of Gauss-Legendre nodes relative to its default.</p></dd>
 
 
 <dt id="arg-tol">tol<a class="anchor" aria-label="anchor" href="#arg-tol"></a></dt>
@@ -282,7 +284,7 @@ Must be <code>TRUE</code> at the final analysis to achieve targeted power.
 At each analysis, at least one of <code>testUpper</code>, <code>testLower</code>, or
 <code>testHarm</code> must be <code>TRUE</code>.
 Where <code>testUpper</code> is <code>FALSE</code>, the upper bound is set to
-<code>+20</code> (effectively <code>Inf</code>) and displayed as <code>NA</code> in output.</p></dd>
+<code>+Inf</code> and displayed as <code>NA</code> in output.</p></dd>
 
 
 <dt id="arg-testlower">testLower<a class="anchor" aria-label="anchor" href="#arg-testlower"></a></dt>
@@ -295,7 +297,7 @@ Ignored for <code>test.type</code> 1 (one-sided, no lower bound).
 Overridden to all <code>TRUE</code> for <code>test.type</code> 2 (symmetric).
 For <code>test.type</code> 3–8, at least one analysis must be <code>TRUE</code>.
 Where <code>testLower</code> is <code>FALSE</code>, the lower bound is set to
-<code>-20</code> (effectively <code>-Inf</code>) and displayed as <code>NA</code> in output.</p></dd>
+<code>-Inf</code> and displayed as <code>NA</code> in output.</p></dd>
 
 
 <dt id="arg-testharm">testHarm<a class="anchor" aria-label="anchor" href="#arg-testharm"></a></dt>
@@ -306,7 +308,7 @@ Otherwise, a logical vector of length <code>k</code>.
 Only used for <code>test.type</code> 7 or 8; at least one analysis must be
 <code>TRUE</code> for those types.
 Where <code>testHarm</code> is <code>FALSE</code>, the harm bound is set to
-<code>-20</code> (effectively <code>-Inf</code>) and the bound is displayed as
+<code>-Inf</code> and the bound is displayed as
 <code>NA</code> in output. Cumulative harm crossing probability from earlier
 analyses is still displayed.</p></dd>
 

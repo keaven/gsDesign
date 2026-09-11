@@ -346,7 +346,9 @@ Turnbull (2000). Grid points are spread out in the tails for accurate
 probability calculations. Larger values provide more grid points and greater
 accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
 accuracy of \(10^{-6}\) with <code>r = 16</code>. This parameter is normally
-not changed by users.</p></dd>
+not changed by users. With <code>options(gsDesign.quadrature = "gl")</code>
+(see the section on numerical integration below) <code>r</code> scales the
+number of Gauss-Legendre nodes relative to its default.</p></dd>
 
 
 <dt id="arg-n-i">n.I<a class="anchor" aria-label="anchor" href="#arg-n-i"></a></dt>
@@ -420,7 +422,7 @@ Must be <code>TRUE</code> at the final analysis to achieve targeted power.
 At each analysis, at least one of <code>testUpper</code>, <code>testLower</code>, or
 <code>testHarm</code> must be <code>TRUE</code>.
 Where <code>testUpper</code> is <code>FALSE</code>, the upper bound is set to
-<code>+20</code> (effectively <code>Inf</code>) and displayed as <code>NA</code> in output.</p></dd>
+<code>+Inf</code> and displayed as <code>NA</code> in output.</p></dd>
 
 
 <dt id="arg-testlower">testLower<a class="anchor" aria-label="anchor" href="#arg-testlower"></a></dt>
@@ -433,7 +435,7 @@ Ignored for <code>test.type</code> 1 (one-sided, no lower bound).
 Overridden to all <code>TRUE</code> for <code>test.type</code> 2 (symmetric).
 For <code>test.type</code> 3–8, at least one analysis must be <code>TRUE</code>.
 Where <code>testLower</code> is <code>FALSE</code>, the lower bound is set to
-<code>-20</code> (effectively <code>-Inf</code>) and displayed as <code>NA</code> in output.</p></dd>
+<code>-Inf</code> and displayed as <code>NA</code> in output.</p></dd>
 
 
 <dt id="arg-testharm">testHarm<a class="anchor" aria-label="anchor" href="#arg-testharm"></a></dt>
@@ -444,7 +446,7 @@ Otherwise, a logical vector of length <code>k</code>.
 Only used for <code>test.type</code> 7 or 8; at least one analysis must be
 <code>TRUE</code> for those types.
 Where <code>testHarm</code> is <code>FALSE</code>, the harm bound is set to
-<code>-20</code> (effectively <code>-Inf</code>) and the bound is displayed as
+<code>-Inf</code> and the bound is displayed as
 <code>NA</code> in output. Cumulative harm crossing probability from earlier
 analyses is still displayed.</p></dd>
 
@@ -649,6 +651,27 @@ includes the overrun at each interim.</p></dd>
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>The gsDesign technical manual is available at
   <a href="https://keaven.github.io/gsd-tech-manual/" class="external-link">https://keaven.github.io/gsd-tech-manual/</a>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="numerical-integration">Numerical integration<a class="anchor" aria-label="anchor" href="#numerical-integration"></a></h2>
+
+
+<p>Boundary crossing probabilities are computed by the recursive numerical
+integration of Jennison and Turnbull (2000, Chapter 19). By default the
+integration grid of that chapter is used (Simpson's rule on <code>12 r - 3</code>
+points concentrated around the mean of the test statistic), which gives
+probabilities accurate to about \(10^{-7}\) with the default
+<code>r = 18</code>. Setting <code>options(gsDesign.quadrature = "gl")</code> switches
+all computations (<code>gsDesign()</code>, <code><a href="gsProbability.html">gsProbability()</a></code>,
+<code><a href="gsBound.html">gsBound()</a></code>, <code><a href="gsBound.html">gsBound1()</a></code>, <code><a href="gsDensity.html">gsDensity()</a></code> and everything
+built on them) to Gauss-Legendre quadrature on the continuation region of
+each analysis, with a number of nodes that adapts to the width of the
+region relative to the neighboring information increments. In benchmarked
+designs this is several times faster and accurate to about \(10^{-12}\),
+with differences from the default grid within the accuracy of that grid.
+The rule uses at most 992 nodes, so extremely small information increments
+can reduce accuracy. <code><a href="normalGrid.html">normalGrid()</a></code> always returns the Jennison and
+Turnbull grid.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

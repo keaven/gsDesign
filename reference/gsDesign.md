@@ -228,7 +228,10 @@ xtable(
   probability calculations. Larger values provide more grid points and
   greater accuracy but slow down computation. Jennison and Turnbull
   (p. 350) note an accuracy of \\10^{-6}\\ with `r = 16`. This parameter
-  is normally not changed by users.
+  is normally not changed by users. With
+  `options(gsDesign.quadrature = "gl")` (see the section on numerical
+  integration below) `r` scales the number of Gauss-Legendre nodes
+  relative to its default.
 
 - n.I:
 
@@ -298,8 +301,8 @@ xtable(
   for `test.type` 1 and 2. Must be `TRUE` at the final analysis to
   achieve targeted power. At each analysis, at least one of `testUpper`,
   `testLower`, or `testHarm` must be `TRUE`. Where `testUpper` is
-  `FALSE`, the upper bound is set to `+20` (effectively `Inf`) and
-  displayed as `NA` in output.
+  `FALSE`, the upper bound is set to `+Inf` and displayed as `NA` in
+  output.
 
 - testLower:
 
@@ -309,8 +312,7 @@ xtable(
   `k`. Ignored for `test.type` 1 (one-sided, no lower bound). Overridden
   to all `TRUE` for `test.type` 2 (symmetric). For `test.type` 3–8, at
   least one analysis must be `TRUE`. Where `testLower` is `FALSE`, the
-  lower bound is set to `-20` (effectively `-Inf`) and displayed as `NA`
-  in output.
+  lower bound is set to `-Inf` and displayed as `NA` in output.
 
 - testHarm:
 
@@ -319,9 +321,8 @@ xtable(
   `FALSE` indicates none. Otherwise, a logical vector of length `k`.
   Only used for `test.type` 7 or 8; at least one analysis must be `TRUE`
   for those types. Where `testHarm` is `FALSE`, the harm bound is set to
-  `-20` (effectively `-Inf`) and the bound is displayed as `NA` in
-  output. Cumulative harm crossing probability from earlier analyses is
-  still displayed.
+  `-Inf` and the bound is displayed as `NA` in output. Cumulative harm
+  crossing probability from earlier analyses is still displayed.
 
 - x:
 
@@ -558,6 +559,29 @@ options for a table
 
 The gsDesign technical manual is available at
 <https://keaven.github.io/gsd-tech-manual/>.
+
+## Numerical integration
+
+Boundary crossing probabilities are computed by the recursive numerical
+integration of Jennison and Turnbull (2000, Chapter 19). By default the
+integration grid of that chapter is used (Simpson's rule on `12 r - 3`
+points concentrated around the mean of the test statistic), which gives
+probabilities accurate to about \\10^{-7}\\ with the default `r = 18`.
+Setting `options(gsDesign.quadrature = "gl")` switches all computations
+(`gsDesign()`,
+[`gsProbability()`](https://keaven.github.io/gsDesign/reference/gsProbability.md),
+[`gsBound()`](https://keaven.github.io/gsDesign/reference/gsBound.md),
+[`gsBound1()`](https://keaven.github.io/gsDesign/reference/gsBound.md),
+[`gsDensity()`](https://keaven.github.io/gsDesign/reference/gsDensity.md)
+and everything built on them) to Gauss-Legendre quadrature on the
+continuation region of each analysis, with a number of nodes that adapts
+to the width of the region relative to the neighboring information
+increments. In benchmarked designs this is several times faster and
+accurate to about \\10^{-12}\\, with differences from the default grid
+within the accuracy of that grid. The rule uses at most 992 nodes, so
+extremely small information increments can reduce accuracy.
+[`normalGrid()`](https://keaven.github.io/gsDesign/reference/normalGrid.md)
+always returns the Jennison and Turnbull grid.
 
 ## References
 

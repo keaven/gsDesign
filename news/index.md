@@ -2,6 +2,52 @@
 
 ## gsDesign (development version)
 
+### Breaking changes
+
+- Absent lower and harm bounds now use `-Inf`, and absent upper bounds
+  use `Inf`, instead of the finite `-20`/`20` sentinel. This includes
+  zero-spending and skipped analyses. Use
+  [`is.finite()`](https://rdrr.io/r/base/is.finite.html) to identify
+  active bounds.
+  [`gsBoundCP()`](https://keaven.github.io/gsDesign/reference/gsBoundCP.md)
+  returns `NA` at an absent bound
+  ([\#242](https://github.com/keaven/gsDesign/issues/242),
+  [\#321](https://github.com/keaven/gsDesign/issues/321)).
+
+### New features
+
+- Added opt-in Gauss-Legendre quadrature for boundary crossing
+  calculations via `options(gsDesign.quadrature = "gl")`. The node count
+  adapts to the continuation region and neighboring information
+  increments, with `r` controlling resolution. Research benchmarks show
+  faster calculations and smaller integration errors. The default
+  Jennison and Turnbull grid (`"jt"`) is unchanged; see the numerical
+  integration section of
+  [`?gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
+  ([\#323](https://github.com/keaven/gsDesign/issues/323)).
+
+### Performance
+
+- Reduced repeated work in the C density update and boundary searches
+  while retaining the Jennison and Turnbull grid and numerical results.
+  Research benchmarks measured roughly 20% to 35% faster core routines.
+  R’s normal tail calculations remain the default; `-DGS_USE_ERFC`
+  enables an optional C-library alternative
+  ([\#322](https://github.com/keaven/gsDesign/issues/322)).
+
+### Bug fixes
+
+- Guarded the Newton boundary search against `0/0` updates and separated
+  its iteration limit and finite iterate clamp from the absent-bound
+  values ([\#242](https://github.com/keaven/gsDesign/issues/242),
+  [\#321](https://github.com/keaven/gsDesign/issues/321)).
+- Updated the R interfaces and convergence checks to handle infinite
+  bounds, and fixed
+  [`gsDensity()`](https://keaven.github.io/gsDesign/reference/gsDensity.md)
+  for one-sided designs
+  ([\#242](https://github.com/keaven/gsDesign/issues/242),
+  [\#321](https://github.com/keaven/gsDesign/issues/321)).
+
 ### Major changes
 
 - Replaced **gt** with the lightweight **lt** package (\>= 0.3) as the
@@ -28,6 +74,10 @@
 
 ### Testing
 
+- Added regression fixtures, multivariate normal reference checks, and
+  print snapshots for the numerical integration routines and their R
+  interfaces ([\#242](https://github.com/keaven/gsDesign/issues/242),
+  [\#320](https://github.com/keaven/gsDesign/issues/320)).
 - Reduced default test-suite runtime by using smaller stress-test grids,
   fewer Monte Carlo iterations, and toy exact-binomial p-value event
   counts. Set `GSDESIGN_RUN_STRESS_TESTS=true` to run the larger
