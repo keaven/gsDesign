@@ -1,148 +1,119 @@
-test_that("minMedianFollowUp handles uniform enrollment", {
-  x <- gsSurv(
-    k = 2, gamma = 10, R = 12, T = 30, minfup = 18,
-    lambdaC = log(2) / 6, hr = 0.7
-  )
-
-  expect_equal(minMedianFollowUp(x, c(6, 12, 18)), c(3, 6, 12))
-  expect_equal(minMedianFollowUp(x), x$T - 6)
+test_that("follow-up uses all planned enrollment and inverts uniform enrollment", {
+  times <- c(0, 3, 6, 8, 12, 18)
+  expect_equal(medianFollowUp(T = times, gamma = 10, R = 12), pmax(0, times - 6), tolerance = 1e-8)
+  for (target in c(0, .1, 3, 6, 20)) {
+    cutoff <- minMedianFollowUp(target = target, gamma = 10, R = 12)
+    expect_equal(cutoff, if (target == 0) 0 else target + 6, tolerance = 1e-8)
+    expect_lte(abs(medianFollowUp(T = cutoff, gamma = 10, R = 12) - target), 1e-8)
+  }
+  eps <- 1e-6
+  expect_equal(medianFollowUp(T = 12 + c(-eps, 0, eps), gamma = 1, R = 12),
+               6 + c(-eps, 0, eps), tolerance = 1e-8)
 })
 
-test_that("minMedianFollowUp handles piecewise and stratified enrollment", {
-  x <- gsSurv(
-    k = 2,
-    gamma = matrix(c(1, 1, 3, 1), nrow = 2, byrow = TRUE),
-    R = c(4, 4), T = 16, minfup = 8,
-    lambdaC = matrix(log(2) / c(6, 9), nrow = 1),
-    hr = 0.7
-  )
-
-  # At time 5, 12 subjects are enrolled and the sixth entered at time 3.
-  # At full enrollment (time 8), the 12th entered at time 5.
-  expect_equal(minMedianFollowUp(x, c(5, 8, 12)), c(2, 3, 7))
+test_that("enrollment pauses use the lower median and earliest inverse cutoff", {
+  expect_equal(medianFollowUp(T = c(4, 6, 8, 10, 12), gamma = c(1, 0, 1), R = c(4, 4, 4)),
+               c(0, 0, 0, 2, 4), tolerance = 1e-8)
+  expect_equal(minMedianFollowUp(target = 4, gamma = c(1, 0, 1), R = c(4, 4, 4)), 12, tolerance = 1e-8)
+  expect_equal(minMedianFollowUp(target = 3, gamma = c(0, 1, 0), R = c(4, 4, 4)), 9, tolerance = 1e-8)
+  expect_equal(medianFollowUp(T = c(5, 8, 12), gamma = c(2, 4), R = c(4, 4)),
+               c(0, 3, 7), tolerance = 1e-8)
 })
 
-test_that("minMedianFollowUp uses enrollment to date", {
-  x <- gsSurv(k = 2, gamma = 10, R = 12, T = 30, minfup = 18)
-
-  expect_equal(minMedianFollowUp(x, c(0, 5, 6)), c(NA, 2.5, 3))
+test_that("dropout and event stopping match independent exponential calculations", {
+  expect_equal(medianFollowUp(T = 20, gamma = 10, R = 4, eta = .2), log(2) / .2, tolerance = 1e-8)
+  expect_equal(medianFollowUp(T = 20, gamma = 10, R = 4, eta = .1,
+    lambdaC = .2, hr = 1, stopAtEvent = TRUE), log(2) / .3, tolerance = 1e-8)
+  expected <- uniroot(function(u) (.25 * exp(-.1 * u) + .75 * exp(-.3 * u)) - .5,
+                       c(0, 20), tol = 1e-11)$root
+  expect_equal(medianFollowUp(T = 30, gamma = 10, R = 4, eta = .1, etaE = .3, ratio = 3),
+               expected, tolerance = 1e-8)
+  # Before enrollment completes, S(u) = (T-u)/12 * exp(-.1*u).
+  cutoff <- minMedianFollowUp(target = 2, gamma = 10, R = 12, eta = .1)
+  expect_equal(cutoff, 2 + 6 * exp(.2), tolerance = 1e-8)
+  expect_error(minMedianFollowUp(target = 8, gamma = 10, R = 12, eta = .1), "unattainable")
+  expect_equal(minMedianFollowUp(target = log(2) / .1, gamma = 10, R = 12, eta = .1),
+               12 + log(2) / .1, tolerance = 1e-8)
+  # Exactly half never drops out: a tiny positive tail must not round away.
+  expect_equal(medianFollowUp(T = 101, gamma = 1, R = 1, eta = 0, etaE = 1), 100, tolerance = 1e-8)
+  expect_equal(medianFollowUp(T = 1001, gamma = 1, R = 1, eta = 0, etaE = 1), 1000, tolerance = 1e-8)
 })
 
-test_that("minMedianFollowUp is continuous when enrollment completes", {
-  x <- gsSurv(k = 2, gamma = 10, R = 12, T = 30, minfup = 18)
-  epsilon <- 1e-6
-
-  observed <- minMedianFollowUp(x, 12 + c(-epsilon, 0, epsilon))
-  expected <- c(6 - epsilon / 2, 6, 6 + epsilon)
-  expect_equal(observed, expected, tolerance = 1e-12)
+test_that("piecewise participant-time hazards and flat hazard intervals work", {
+  expected <- 2 + (log(2) - .2) / .3
+  expect_equal(medianFollowUp(T = 20, gamma = c(1, 2, 1), R = c(1, 1, 1),
+    eta = c(.1, .3), S = 2), expected, tolerance = 1e-8)
+  expect_equal(medianFollowUp(T = 20, gamma = 1, R = 1, eta = c(log(2) / 2, 0), S = 2),
+               2, tolerance = 1e-8)
+  expect_error(minMedianFollowUp(target = 3, gamma = 1, R = 1,
+    eta = c(log(2) / 2, 0), S = 2), "unattainable")
 })
 
-test_that("minMedianFollowUp validates inputs", {
-  expect_error(minMedianFollowUp(list(), 1), "nSurv or gsSurv object")
-
-  x <- gsSurv(k = 2, gamma = 10, R = 12, T = 30, minfup = 18)
-  expect_error(minMedianFollowUp(x, -1), "finite, nonnegative")
-  expect_error(minMedianFollowUp(x, NA_real_), "finite, nonnegative")
-  expect_error(minMedianFollowUp(x, Inf), "finite, nonnegative")
-  expect_error(minMedianFollowUp(x, character()), "finite, nonnegative")
+test_that("stratum and arm weights follow planned enrollment and allocation", {
+  # Control enrollment weights: 1 and 3; experimental: 1 and 9.
+  eta <- matrix(c(.1, .2), nrow = 1)
+  etaE <- matrix(c(.3, .4), nrow = 1)
+  expected <- uniroot(function(u) sum(c(1, 3, 1, 9) * exp(-c(.1, .2, .3, .4) * u)) / 14 - .5,
+                       c(0, 20), tol = 1e-11)$root
+  expect_equal(medianFollowUp(T = 30, gamma = matrix(c(1, 3), nrow = 1), R = 4,
+    eta = eta, etaE = etaE, ratio = c(1, 3)), expected, tolerance = 1e-8)
 })
 
-test_that("minimum median follow-up supports nSurv objects", {
+test_that("design defaults, explicit inputs, NULL semantics and plots agree", {
+  for (make in list(nSurv, gsSurv,
+                    function(T, ...) gsSurvCalendar(calendarTime = c(12, 24, T), ...))) {
+    x <- make(lambdaC = c(.08, .04), hr = .7, S = 6, eta = c(.01, .02),
+              etaE = c(.02, .03), gamma = 10, R = 12, T = 30, minfup = 18)
+    for (events in c(FALSE, TRUE)) {
+      expected <- medianFollowUp(T = x$T, gamma = x$gamma, R = x$R,
+        eta = x$etaC, etaE = x$etaE, lambdaC = x$lambdaC, hr = x$hr,
+        S = x$S, ratio = x$ratio, stopAtEvent = events)
+      expect_equal(medianFollowUp(x, stopAtEvent = events), expected)
+      p <- plotMinMedianFollowUp(x, stopAtEvent = events)
+      expect_equal(p$layers[[2]]$data$minimumMedianFollowUp, expected)
+      expect_equal(p$layers[[2]]$data$calendarTime, x$T)
+    }
+    expect_equal(medianFollowUp(x, eta = 0, etaE = 0), pmax(0, x$T - 6), tolerance = 1e-8)
+    expect_equal(medianFollowUp(x, etaE = NULL), medianFollowUp(x, etaE = x$etaC))
+    expect_error(medianFollowUp(x, S = NULL), "incompatible interval")
+    expect_equal(medianFollowUp(x, eta = .1, etaE = NULL, S = NULL),
+                 medianFollowUp(T = x$T, gamma = x$gamma, R = x$R, eta = .1))
+    expect_equal(medianFollowUp(x, lambdaC = NA, hr = NA), medianFollowUp(x))
+  }
+})
+
+test_that("invalid inputs and old positional inverse calls fail clearly", {
+  expect_error(medianFollowUp(list(), 1), "nSurv or gsSurv")
+  expect_error(minMedianFollowUp(NULL, 12, gamma = 10, R = 12), "named target")
+  expect_error(minMedianFollowUp(gamma = 10, R = 12, calendarTime = 12), "named target")
+  for (bad in list(-1, NA_real_, Inf, numeric(), "1")) {
+    expect_error(medianFollowUp(T = bad, gamma = 10, R = 12), "finite, nonnegative")
+    expect_error(minMedianFollowUp(target = bad, gamma = 10, R = 12), "finite, nonnegative")
+  }
+  expect_error(medianFollowUp(T = 10, gamma = 1, R = 12, stopAtEvent = TRUE), "lambdaC and hr")
+  expect_error(medianFollowUp(T = 10, gamma = 1, R = 12, stopAtEvent = NA), "TRUE or FALSE")
+  expect_error(medianFollowUp(T = 10, gamma = 0, R = 12), "positive, finite planned enrollment")
+  expect_error(medianFollowUp(T = 10, gamma = 1:3, R = c(4, 4)), "incompatible interval")
+  expect_error(medianFollowUp(T = 10, gamma = 1, R = 12, eta = c(.1, .2)), "incompatible interval")
+  expect_error(medianFollowUp(T = 10, gamma = 1, R = 12, eta = -.1), "nonnegative rates")
+  expect_error(medianFollowUp(T = 10, gamma = 1, R = 12, tol = 0), "positive")
+  expect_error(medianFollowUp(T = 10, gamma = matrix(1, 1, 2), R = 12,
+    eta = matrix(.1, 1, 3)), "stratum dimensions")
+})
+
+test_that("plots retain calendar grids and time-unit controls", {
   x <- nSurv(gamma = 10, R = 12, T = 30, minfup = 18)
-
-  expect_s3_class(x, "nSurv")
-  expect_equal(minMedianFollowUp(x, c(6, 12, 18)), c(3, 6, 12))
-  expect_equal(minMedianFollowUp(x), x$T - 6)
-
   p <- plotMinMedianFollowUp(x)
   expect_s3_class(p, "ggplot")
-  expect_equal(p$layers[[2]]$data$calendarTime, x$T)
-  expect_equal(
-    p$layers[[2]]$data$minimumMedianFollowUp,
-    minMedianFollowUp(x)
-  )
-})
-
-test_that("plotMinMedianFollowUp plots the trajectory and analysis times", {
-  x <- gsSurv(
-    k = 2, gamma = 10, R = 12, T = 30, minfup = 18,
-    lambdaC = log(2) / 6, hr = 0.7
-  )
-
-  p <- plotMinMedianFollowUp(x)
-  expect_s3_class(p, "ggplot")
-  expect_equal(length(p$layers), 2)
-  expect_equal(p$layers[[2]]$data$calendarTime, x$T)
-  expect_equal(
-    p$layers[[2]]$data$minimumMedianFollowUp,
-    minMedianFollowUp(x)
-  )
-
-  p_line <- plotMinMedianFollowUp(
-    x,
-    calendarTime = seq(0, 18, by = 1),
-    showAnalysisTimes = FALSE
-  )
-  expect_s3_class(p_line, "ggplot")
-  expect_equal(length(p_line$layers), 1)
-  expect_equal(max(p_line$data$calendarTime), 18)
-})
-
-test_that("plotMinMedianFollowUp uses unit-specific x-axis breaks", {
-  x_months <- nSurv(gamma = 10, R = 12, T = 30, minfup = 18)
-  p_months <- plotMinMedianFollowUp(x_months)
-
-  expect_equal(
-    p_months$scales$get_scales("x")$breaks,
-    seq(0, 30, by = 6)
-  )
-  expect_equal(p_months$labels$x, "Calendar time (Months)")
-  expect_equal(p_months$labels$y, "Minimum median follow-up (Months)")
-
-  x_years <- nSurv(gamma = 120, R = 1, T = 2.5, minfup = 1.5)
-  p_years <- plotMinMedianFollowUp(x_years, timename = "Years")
-
-  expect_equal(
-    p_years$scales$get_scales("x")$breaks,
-    seq(0, 2.5, by = 0.5)
-  )
-  expect_equal(p_years$labels$x, "Calendar time (Years)")
-  expect_equal(p_years$labels$y, "Minimum median follow-up (Years)")
-
-  p_month <- plotMinMedianFollowUp(x_months, timename = "Month")
-  expect_equal(
-    p_month$scales$get_scales("x")$breaks,
-    seq(0, 30, by = 6)
-  )
-
-  p_weeks <- plotMinMedianFollowUp(x_months, timename = "Weeks")
-  expect_null(p_weeks$scales$get_scales("x"))
-  expect_equal(p_weeks$labels$x, "Calendar time (Weeks)")
-  expect_equal(p_weeks$labels$y, "Minimum median follow-up (Weeks)")
-})
-
-test_that("plotMinMedianFollowUp validates inputs", {
-  x <- gsSurv(k = 2, gamma = 10, R = 12, T = 30, minfup = 18)
-
-  expect_error(plotMinMedianFollowUp(list()), "nSurv or gsSurv object")
-  expect_error(
-    plotMinMedianFollowUp(x, showAnalysisTimes = NA),
-    "TRUE or FALSE"
-  )
-  expect_error(
-    plotMinMedianFollowUp(x, calendarTime = -1),
-    "finite, nonnegative"
-  )
-  expect_error(
-    plotMinMedianFollowUp(x, timename = ""),
-    "nonempty character scalar"
-  )
-  expect_error(
-    plotMinMedianFollowUp(x, timename = c("Months", "Years")),
-    "nonempty character scalar"
-  )
-  expect_error(
-    plotMinMedianFollowUp(x, timename = 1),
-    "nonempty character scalar"
-  )
+  expect_equal(p$scales$get_scales("x")$breaks, seq(0, 30, 6))
+  expect_identical(p$labels$y, "Median follow-up (Months)")
+  p <- plotMinMedianFollowUp(x, calendarTime = seq(0, 18), showAnalysisTimes = FALSE)
+  expect_length(p$layers, 1)
+  expect_equal(max(p$data$calendarTime), 18)
+  p <- plotMinMedianFollowUp(x, timename = "Weeks")
+  expect_null(p$scales$get_scales("x"))
+  p <- plotMinMedianFollowUp(calendarTime = c(0, 1, 2), gamma = 1, R = 1, timename = "Years")
+  expect_equal(p$scales$get_scales("x")$breaks, seq(0, 2, .5))
+  expect_error(plotMinMedianFollowUp(x, showAnalysisTimes = NA), "TRUE or FALSE")
+  expect_error(plotMinMedianFollowUp(x, timename = ""), "nonempty character")
 })

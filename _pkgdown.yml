@@ -57,6 +57,8 @@ reference:
   - tEventsIA
   - toInteger
   - minMedianFollowUp
+  - medianFollowUp
+  - plotMinMedianFollowUp
   - nSurvival
   - print.nSurvival
 - title: Vaccine/Prevention Efficacy
