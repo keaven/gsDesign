@@ -52,6 +52,11 @@
 #' If \code{x$testLower} is present (for example from \code{gsSurv()} with
 #' selective lower-bound looks), lower-bound spending is flattened at analyses
 #' where \code{testLower = FALSE}.
+#' For Type 4, the exact futility bound at a skipped look carries forward
+#' \code{n.I - b} from the preceding look (or uses \code{b = n.I + 1}
+#' at a skipped first look). It cannot be crossed by a continuing path and
+#' spends no additional beta. Efficacy calibration ignores these non-binding
+#' futility bounds.
 #' 
 #' @return An object with primary class \code{gsBinomialExactSpending},
 #'   inheriting from \code{gsBinomialExact} and \code{gsProbability}. In
@@ -320,32 +325,44 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
       bmax <- counts[j] + 1
       bmax <- ifelse(j == 1, bmax, min(bmax, counts[j] - counts[j - 1] + b[j - 1]))
       if (bmin > bmax) stop(paste("bmin > bmax: bmin =", bmin, "bmax =", bmax, "j =", j))
+      # Carry the gap counts - b forward at inactive looks. No path that
+      # continued at the preceding look can cross this bound, even if every
+      # additional event is on treatment.
+      if (!isTRUE(active_lower[j])) {
+        b[j] <- bmax
+        next
+      }
+      # Only evaluate calibrated looks. In particular, a provisional bound
+      # at look 2 can be invalid after updating look 1. Its value is irrelevant
+      # to the first-look probability, which is a simple binomial tail.
+      upper_probability <- function(candidate) {
+        if (j == 1L) {
+          return(stats::pbinom(candidate - 1, counts[j], p1, lower.tail = FALSE))
+        }
+        b_candidate <- b[seq_len(j)]
+        b_candidate[j] <- candidate
+        sum(gsBinomialExact(
+          k = j, theta = p1, n.I = counts[seq_len(j)],
+          a = a[seq_len(j)], b = b_candidate
+        )$upper$prob[, 1])
+      }
       b[j] <- ifelse(b[j] > bmax, bmax, b[j])
       b[j] <- ifelse(b[j] < bmin, bmin, b[j])
       btem[j] <- b[j]
-      upperprob <- sum(gsBinomialExact(
-        k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)],
-        a = a[1:max(j, 2)], b = b[1:max(j, 2)]
-      )$upper$prob[1:j])
+      upperprob <- upper_probability(b[j])
       if (upperprob < lower_spend[j]) {
         while (upperprob < lower_spend[j]) {
           b[j] <- btem[j]
           if (btem[j] == bmin) break # only lower if range allows
           btem[j] <- btem[j] - 1
-          upperprob <- sum(gsBinomialExact(
-            k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)],
-            a = a[1:max(j, 2)], b = btem[1:max(j, 2)]
-          )$upper$prob[1:j])
+          upperprob <- upper_probability(btem[j])
         }
         
       } else if (upperprob > lower_spend[j]) {
         while (upperprob > lower_spend[j] &&
                b[j] < bmax) {
           b[j] <- b[j] + 1
-          upperprob <- sum(gsBinomialExact(
-            k = max(j, 2), theta = p1, n.I = counts[1:max(j, 2)],
-            a = a[1:max(j, 2)], b = b[1:max(j, 2)]
-          )$upper$prob[1:j])
+          upperprob <- upper_probability(b[j])
         }
       }
     } else if (x$test.type == 6) {

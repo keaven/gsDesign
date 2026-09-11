@@ -88,6 +88,11 @@ spending time is set to 1 so all remaining spending is used at the last look.
 If \code{x$testLower} is present (for example from \code{gsSurv()} with
 selective lower-bound looks), lower-bound spending is flattened at analyses
 where \code{testLower = FALSE}.
+For Type 4, the exact futility bound at a skipped look carries forward
+\code{n.I - b} from the preceding look (or uses \code{b = n.I + 1}
+at a skipped first look). It cannot be crossed by a continuing path and
+spends no additional beta. Efficacy calibration ignores these non-binding
+futility bounds.
 }
 \examples{
 # The following code derives the group sequential design using the method
