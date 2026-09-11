@@ -50,6 +50,8 @@
 
 ## Bug fixes
 
+- `gsCPFutilitySpending()` inherits the reference design's futility spending
+  function when `sfl` is omitted; explicit overrides remain supported (#318).
 - Exact binomial conversion preserves skipped futility looks without invalid
   provisional boundaries during beta-spending calibration (#333).
 - Information-based boundary plots label actual information as `I=` with
