@@ -89,6 +89,17 @@
   for one-sided designs
   ([\#242](https://github.com/keaven/gsDesign/issues/242),
   [\#321](https://github.com/keaven/gsDesign/issues/321)).
+- Fixed
+  [`gsBoundCP()`](https://keaven.github.io/gsDesign/reference/gsBoundCP.md)
+  to return `NA` at absent harm bounds, including bounds with zero
+  spending. This also fixes
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+  when conditional power is requested for selective harm bound designs
+  ([\#335](https://github.com/keaven/gsDesign/issues/335)).
+- [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+  now skips conditional power calculations separately for excluded `CP`
+  and `CP H1` rows
+  ([\#335](https://github.com/keaven/gsDesign/issues/335)).
 
 ### Major changes
 

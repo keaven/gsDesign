@@ -41,17 +41,12 @@ gsBoundCP(x, theta = "thetahat", r = 18)
 
 ## Value
 
-A list containing two vectors, `CPlo` and `CPhi`.
-
-- CPlo:
-
-  A vector of length `x$k-1` with conditional powers of crossing upper
-  bounds given interim test statistics at each lower bound
-
-- CPhi:
-
-  A vector of length `x$k-1` with conditional powers of crossing upper
-  bounds given interim test statistics at each upper bound.
+For one-sided designs, a vector of length `x$k-1` containing conditional
+power at each interim upper bound. For two-sided designs, a matrix with
+`x$k-1` rows and columns `CPlo` and `CPhi`, containing conditional power
+at the lower and upper bounds, respectively. Designs with harm bounds
+(`test.type` 7 or 8) also have a `CPharm` column. An absent bound has
+conditional power `NA`.
 
 ## Note
 

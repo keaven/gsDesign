@@ -62,6 +62,9 @@
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>Guarded the Newton boundary search against <code>0/0</code> updates and separated its iteration limit and finite iterate clamp from the absent-bound values (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/321" class="external-link">#321</a>).</li>
 <li>Updated the R interfaces and convergence checks to handle infinite bounds, and fixed <code><a href="../reference/gsDensity.html">gsDensity()</a></code> for one-sided designs (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/321" class="external-link">#321</a>).</li>
+<li>Fixed <code><a href="../reference/gsBoundCP.html">gsBoundCP()</a></code> to return <code>NA</code> at absent harm bounds, including bounds with zero spending. This also fixes <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> when conditional power is requested for selective harm bound designs (<a href="https://github.com/keaven/gsDesign/issues/335" class="external-link">#335</a>).</li>
+<li>
+<code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> now skips conditional power calculations separately for excluded <code>CP</code> and <code>CP H1</code> rows (<a href="https://github.com/keaven/gsDesign/issues/335" class="external-link">#335</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="major-changes-development-version">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-development-version"></a></h3>

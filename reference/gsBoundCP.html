@@ -93,16 +93,13 @@ not changed by users.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list containing two vectors, <code>CPlo</code> and <code>CPhi</code>.</p>
-<dl><dt>CPlo</dt>
-<dd><p>A vector of length <code>x$k-1</code> with conditional powers of
-crossing upper bounds given interim test statistics at each lower bound</p></dd>
-
-<dt>CPhi</dt>
-<dd><p>A vector of length <code>x$k-1</code> with conditional powers of
-crossing upper bounds given interim test statistics at each upper bound.</p></dd>
-
-</dl></div>
+    <p>For one-sided designs, a vector of length <code>x$k-1</code> containing
+conditional power at each interim upper bound. For two-sided designs, a
+matrix with <code>x$k-1</code> rows and columns <code>CPlo</code> and <code>CPhi</code>,
+containing conditional power at the lower and upper bounds, respectively.
+Designs with harm bounds (<code>test.type</code> 7 or 8) also have a
+<code>CPharm</code> column. An absent bound has conditional power <code>NA</code>.</p>
+    </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>The gsDesign technical manual is available at
