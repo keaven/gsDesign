@@ -178,5 +178,5 @@ abs(fit_tight$cpFutilitySpending$achieved_cp - target_cp) <= 1e-6
 }
 \seealso{
 \code{\link{gsDesign}}, \code{\link{gsSurv}}, \code{\link{gsCP}}, \code{\link{sfLinear}},
-  \code{\link{toInteger}}
+  \code{\link{toInteger}}, \code{\link{gsPPFutilitySpending}}
 }
