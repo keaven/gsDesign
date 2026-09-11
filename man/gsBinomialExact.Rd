@@ -41,7 +41,8 @@ nBinomial1Sample(
 )
 }
 \arguments{
-\item{k}{Number of analyses planned, including interim and final.}
+\item{k}{Number of analyses planned, including interim and final.
+For \code{gsBinomialExact()}, \code{k = 1} supports a fixed design.}
 
 \item{theta}{Vector of possible underling binomial probabilities for a
 single binomial sample.}

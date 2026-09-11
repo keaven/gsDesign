@@ -9,6 +9,8 @@
 
 ## New features
 
+- `toBinomialExact()` supports fixed survival designs and single observed event
+  counts for them; `gsBinomialExact()` supports one-analysis probabilities (#222).
 - Added opt-in Gauss-Legendre quadrature for boundary crossing calculations
   via `options(gsDesign.quadrature = "gl")`. The node count adapts to the
   continuation region and neighboring information increments, with `r`
