@@ -251,7 +251,6 @@ surv_design <- gsSurv(
   testLower = c(TRUE, FALSE, FALSE)
 )
 gsBoundSummary(surv_design, exclude = "B-value")
-#> Method: LachinFoulkes 
 #>     Analysis              Value Efficacy Futility
 #>    IA 1: 50%                  Z   2.9626   1.1538
 #>       N: 284        p (1-sided)   0.0015   0.1243

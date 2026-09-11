@@ -79,6 +79,13 @@
 
 ### Bug fixes
 
+- Survival calculation methods are reported in
+  [`summary()`](https://rdrr.io/r/base/summary.html), not boundary
+  tables.
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+  keeps all analysis annotations when POS or excluded statistics require
+  unequal block sizes
+  ([\#332](https://github.com/keaven/gsDesign/issues/332)).
 - Guarded the Newton boundary search against `0/0` updates and separated
   its iteration limit and finite iterate clamp from the absent-bound
   values ([\#242](https://github.com/keaven/gsDesign/issues/242),

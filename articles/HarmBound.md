@@ -141,9 +141,10 @@ cat(strwrap(summary(x8), width = 65), sep = "\n")
 #> Asymmetric two-sided group sequential design with non-binding
 #> futility and harm bounds, 5 analyses, time-to-event outcome with
 #> sample size 1148 and 657 events required, 90 percent power, 1.25
-#> percent (1-sided) Type I error to detect a hazard ratio of 0.75.
-#> Enrollment and total study durations are assumed to be 18 and 60
-#> months, respectively. Efficacy bounds derived using a Lan-DeMets
+#> percent (1-sided) Type I error (sample size/power method:
+#> Lachin-Foulkes) to detect a hazard ratio of 0.75. Enrollment and
+#> total study durations are assumed to be 18 and 60 months,
+#> respectively. Efficacy bounds derived using a Lan-DeMets
 #> O'Brien-Fleming approximation spending function (no parameters).
 #> Futility bounds derived using a Hwang-Shih-DeCani spending
 #> function with gamma = -2. Harm bounds derived using a Lan-DeMets

@@ -333,6 +333,16 @@ is to make the default to not print row names. This is probably \`not
 good R style' but may be helpful for many lazy R programmers like the
 author.
 
+## Details
+
+For survival designs, [`summary()`](https://rdrr.io/r/base/summary.html)
+identifies the stored sample size/power calculation method, when
+available. The method is not displayed by `gsBoundSummary()`. Each
+analysis block accommodates both its annotations and the selected
+boundary statistics, padding the shorter side. Padding has an empty
+`Value` and missing numeric values; the print method displays these
+cells as blanks.
+
 ## Note
 
 The gsDesign technical manual is available at
@@ -362,7 +372,6 @@ library(ggplot2)
 # generally preferred over nSurv since time computations are shown
 xgs <- gsSurv(lambdaC = .2, hr = .5, eta = .1, T = 2, minfup = 1.5)
 gsBoundSummary(xgs, timename = "Year", tdigits = 1)
-#> Method: LachinFoulkes 
 #>    Analysis              Value Efficacy Futility
 #>   IA 1: 33%                  Z   3.0107  -0.2388
 #>      N: 460        p (1-sided)   0.0013   0.5944
@@ -380,7 +389,7 @@ gsBoundSummary(xgs, timename = "Year", tdigits = 1)
 #>     Year: 2   P(Cross) if HR=1   0.0233   0.9767
 #>             P(Cross) if HR=0.5   0.9000   0.1000
 summary(xgs)
-#> [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 460 and 97 events required, 90 percent power, 2.5 percent (1-sided) Type I error to detect a hazard ratio of 0.5. Enrollment and total study durations are assumed to be 0.5 and 2 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."
+#> [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 460 and 97 events required, 90 percent power, 2.5 percent (1-sided) Type I error (sample size/power method: Lachin-Foulkes) to detect a hazard ratio of 0.5. Enrollment and total study durations are assumed to be 0.5 and 2 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."
 
 # survival endpoint using nSurvival
 # NOTE: generally recommend gsSurv above for this!
@@ -570,7 +579,7 @@ xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE),
   caption = "Table caption."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Fri Sep 11 09:55:58 2026
+#> % Fri Sep 11 12:09:17 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{llrr}

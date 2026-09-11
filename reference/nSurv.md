@@ -914,7 +914,6 @@ print(x_gs)
 #>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
 #> 
 #> Analysis summary:
-#> Method: LachinFoulkes 
 #>     Analysis              Value Efficacy Futility
 #>    IA 1: 25%                  Z   3.1554   0.2264
 #>        N: 76        p (1-sided)   0.0008   0.4105
@@ -951,7 +950,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Fri Sep 11 09:56:20 2026
+#> % Fri Sep 11 12:09:40 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}
@@ -1043,7 +1042,6 @@ gsSurv(
 #>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
 #> 
 #> Analysis summary:
-#> Method: Schoenfeld 
 #>     Analysis              Value Efficacy Futility
 #>    IA 1: 25%                  Z   3.1554   0.2264
 #>        N: 78        p (1-sided)   0.0008   0.4105
@@ -1130,7 +1128,6 @@ gsSurv(
 #>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
 #> 
 #> Analysis summary:
-#> Method: Freedman 
 #>     Analysis              Value Efficacy Futility
 #>    IA 1: 25%                  Z   3.1554   0.2264
 #>        N: 84        p (1-sided)   0.0008   0.4105
@@ -1216,7 +1213,6 @@ gsSurv(
 #>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
 #> 
 #> Analysis summary:
-#> Method: LachinFoulkes 
 #>     Analysis              Value Efficacy Futility
 #>    IA 1: 25%                  Z   3.1554   0.2264
 #>      N: 1198        p (1-sided)   0.0008   0.4105
@@ -1305,7 +1301,6 @@ gsSurv(
 #>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
 #> 
 #> Analysis summary:
-#> Method: BernsteinLagakos 
 #>     Analysis              Value Efficacy Futility
 #>    IA 1: 25%                  Z   3.1554   0.2264
 #>       N: 166        p (1-sided)   0.0008   0.4105

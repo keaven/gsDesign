@@ -243,7 +243,6 @@ des_2
 #>   Bounds derived using a  Lan-DeMets O'Brien-Fleming approximation spending function (no parameters).
 #> 
 #> Analysis summary:
-#> Method: Schoenfeld 
 #>    Analysis              Value Efficacy Futility
 #>   IA 1: 25%                  Z   4.3326  -4.3326
 #>      N: 170        p (1-sided)   0.0000   0.0000

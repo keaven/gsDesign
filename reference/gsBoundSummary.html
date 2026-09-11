@@ -159,7 +159,7 @@ x retain the cumulative crossing information."><meta property="og:image" content
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9011</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9012</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -497,6 +497,15 @@ is to make the default to not print row names. This is probably `not good R
 style' but may be helpful for many lazy R programmers like the author.</p>
     </div>
     <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>For survival designs, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> identifies the stored
+sample size/power calculation method, when available. The method is not
+displayed by <code>gsBoundSummary()</code>. Each analysis block accommodates
+both its annotations and the selected boundary statistics, padding the
+shorter side. Padding has an empty <code>Value</code> and missing numeric values;
+the print method displays these cells as blanks.</p>
+    </div>
+    <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>The gsDesign technical manual is available at
   <a href="https://keaven.github.io/gsd-tech-manual/" class="external-link">https://keaven.github.io/gsd-tech-manual/</a>.</p>
@@ -523,7 +532,6 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span><span class="co"># generally preferred over nSurv since time computations are shown</span></span></span>
 <span class="r-in"><span><span class="va">xgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="nSurv.html">gsSurv</a></span><span class="op">(</span>lambdaC <span class="op">=</span> <span class="fl">.2</span>, hr <span class="op">=</span> <span class="fl">.5</span>, eta <span class="op">=</span> <span class="fl">.1</span>, T <span class="op">=</span> <span class="fl">2</span>, minfup <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">gsBoundSummary</span><span class="op">(</span><span class="va">xgs</span>, timename <span class="op">=</span> <span class="st">"Year"</span>, tdigits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Method: LachinFoulkes </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Analysis              Value Efficacy Futility</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   IA 1: 33%                  Z   3.0107  -0.2388</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      N: 460        p (1-sided)   0.0013   0.5944</span>
@@ -541,7 +549,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Year: 2   P(Cross) if HR=1   0.0233   0.9767</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             P(Cross) if HR=0.5   0.9000   0.1000</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">xgs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 460 and 97 events required, 90 percent power, 2.5 percent (1-sided) Type I error to detect a hazard ratio of 0.5. Enrollment and total study durations are assumed to be 0.5 and 2 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Asymmetric two-sided group sequential design with non-binding futility bound, 3 analyses, time-to-event outcome with sample size 460 and 97 events required, 90 percent power, 2.5 percent (1-sided) Type I error (sample size/power method: Lachin-Foulkes) to detect a hazard ratio of 0.5. Enrollment and total study durations are assumed to be 0.5 and 2 months, respectively. Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4. Futility bounds derived using a Hwang-Shih-DeCani spending function with gamma = -2."</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># survival endpoint using nSurvival</span></span></span>
 <span class="r-in"><span><span class="co"># NOTE: generally recommend gsSurv above for this!</span></span></span>
@@ -731,7 +739,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Table caption."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.6.1 by xtable 1.8-8 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Fri Sep 11 09:55:58 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Fri Sep 11 12:09:17 2026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{llrr}</span>

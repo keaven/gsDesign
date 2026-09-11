@@ -251,12 +251,13 @@ cat(summary(x))
 
 Asymmetric two-sided group sequential design with non-binding futility
 bound, 3 analyses, time-to-event outcome with sample size 676 and 443
-events required, 85 percent power, 2.5 percent (1-sided) Type I error to
-detect a hazard ratio of 0.75. Enrollment and total study durations are
-assumed to be 24 and 36 months, respectively. Efficacy bounds derived
-using a Lan-DeMets O’Brien-Fleming approximation spending function (no
-parameters). Futility bounds derived using a Hwang-Shih-DeCani spending
-function with gamma = -7.
+events required, 85 percent power, 2.5 percent (1-sided) Type I error
+(sample size/power method: Lachin-Foulkes) to detect a hazard ratio of
+0.75. Enrollment and total study durations are assumed to be 24 and 36
+months, respectively. Efficacy bounds derived using a Lan-DeMets
+O’Brien-Fleming approximation spending function (no parameters).
+Futility bounds derived using a Hwang-Shih-DeCani spending function with
+gamma = -7.
 
 An important addition not provided above is that the median
 time-to-event is assumed to be 12 months in the control group.
