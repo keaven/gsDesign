@@ -36,9 +36,9 @@
 
 - Fixed `gsBoundCP()` to return `NA` at absent harm bounds, including bounds
   with zero spending. This also fixes `gsBoundSummary()` when conditional
-  power is requested for selective harm-bound designs (#321).
+  power is requested for selective harm-bound designs (#335).
 - `gsBoundSummary()` now skips conditional-power calculations separately for
-  excluded `CP` and `CP H1` rows.
+  excluded `CP` and `CP H1` rows (#335).
 - Guarded the Newton boundary search against `0/0` updates and separated its
   iteration limit and finite iterate clamp from the absent-bound values
   (#242, #321).
