@@ -16,6 +16,22 @@
   smaller integration errors. The default Jennison and Turnbull grid
   (`"jt"`) is unchanged; see the numerical integration section of `?gsDesign`
   (#323).
+
+- Unified conditional-POS spending calibration in `gsCPOSFutilitySpending()`
+  with `mode = "preserve_power"` or `"fixed_information"`; retained
+  `gsCAFutilitySpending()` as a backward-compatible wrapper (#328, #329).
+
+- Added `gsEffectSpending()` to calibrate efficacy, futility and harm spending
+  to natural-scale effect targets separately or jointly, with difference,
+  risk-ratio and explicitly specified event-scale hazard-ratio mappings (#331).
+
+- Added power-preserving unconditional-POS calibration with
+  `gsPOSFutilitySpending()` (#330).
+
+- Added `gsPPFutilitySpending()` to calibrate futility spending to posterior
+  predictive power targets using a fixed discrete or continuous-grid prior,
+  sharing the CP calibration solver. The futility-spending vignette compares
+  CP- and PP-targeted survival designs using the default summary prior (#326).
 - Added `gsCPFutilitySpending()` to calibrate beta-spending futility
   parameters and statistical information to conditional power targets at one
   or more interim analyses for `test.type` 3, 4, 7, and 8 (#318).
@@ -51,6 +67,11 @@
 
 ## Documentation
 
+- Added an effect-spending vignette using the public interface for joint
+  boundaries, risk differences and explicitly event-scaled HRs (#331).
+
+- Added a separate vignette comparing conditional-assurance and unconditional-POS spending calibration, including the Dragalin fixed-information benchmark and operating-characteristic checks (#330).
+
 - Added a futility-spending calibration vignette comparing all six
   two-parameter families and piecewise-linear spending with three
   conditional-power targets, including reconstructed designs and practical
@@ -74,6 +95,8 @@
 
 ## Testing
 
+- Added tests for natural-effect calibration, joint boundary targets,
+  HR allocation/direction handling and design replay (#331).
 - Added regression fixtures, multivariate normal reference checks, and print
   snapshots for the numerical integration routines and their R interfaces
   (#242, #320).
