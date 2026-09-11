@@ -509,19 +509,22 @@ gsBoundSummary0 <- function(
   if ("PP" %in% exclude || x$k == 1) {
     pp <- NULL
   } else {
-    # predictive probability
-    Efficacy <- as.vector(1:(x$k - 1))
-    for (i in 1:(x$k - 1)) Efficacy[i] <- gsPP(x = x, i = i, zi = x$upper$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
+    # predictive probability at each bound (NA where an analysis has no bound)
+    pp_at <- function(bound) {
+      vapply(seq_len(x$k - 1), function(i) {
+        if (!is.finite(bound[i])) return(NA_real_)
+        gsPP(x = x, i = i, zi = bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
+      }, numeric(1))
+    }
+    Efficacy <- pp_at(x$upper$bound)
     if (x$test.type > 1) {
-      Futility <- Efficacy
-      for (i in 1:(x$k - 1)) Futility[i] <- gsPP(x = x, i = i, zi = x$lower$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
+      Futility <- pp_at(x$lower$bound)
     } else {
       Futility <- NULL
     }
     # Harm PP for test.type 7/8
     if (x$test.type %in% c(7, 8)) {
-      HarmPP <- as.vector(1:(x$k - 1))
-      for (i in 1:(x$k - 1)) HarmPP[i] <- gsPP(x = x, i = i, zi = x$harm$bound[i], theta = prior$z, wgts = prior$wgts, r = r, total = TRUE)
+      HarmPP <- pp_at(x$harm$bound)
     } else {
       HarmPP <- NULL
     }

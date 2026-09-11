@@ -382,8 +382,8 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
     if (x$upper$bound[x$k] == x$lower$bound[x$k]) {
       Ztxt[c(x$k, 2 * x$k)] <- round(z[x$k], max(dgt))
     }
-    indxu <- (1:x$k)[x$upper$bound < 20]
-    indxl <- (1:x$k)[x$lower$bound > -20]
+    indxu <- (1:x$k)[is.finite(x$upper$bound)]
+    indxl <- (1:x$k)[is.finite(x$lower$bound)]
     y <- data.frame(
       N = as.numeric(c(x$n.I[indxu], x$n.I[indxl])),
       Z = as.numeric(z[c(indxu, x$k + indxl)]),
@@ -397,7 +397,7 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
         ratio = ratio, delta0 = delta0, delta = delta
       )
       Ztxth <- as.character(round(zh, dgt[3]))
-      indxh <- (1:x$k)[x$harm$bound > -20]
+      indxh <- (1:x$k)[is.finite(x$harm$bound)]
       yh <- data.frame(
         N = as.numeric(x$n.I[indxh]),
         Z = as.numeric(zh[indxh]),

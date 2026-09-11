@@ -159,7 +159,7 @@ We also evaluate the failure rate over time for scenario 1, which is used below 
 Note that the piecewise intervals used to approximate changing hazard rates can be made arbitrarily small to get more precise approximations of the above.
 However, given the uncertainty of the underlying assumptions, it is not clear that this provides any advantage.
 
-```{r, echo = FALSE}
+```{r, echo=FALSE, dev="png", fig.ext="png", dev.args=list(type="cairo", antialias="gray"), dpi=80, fig.retina=2}
 hazard <- survival |>
   filter(Time > 0) |>
   group_by(Scenario, Treatment) |>
