@@ -26,11 +26,11 @@ toBinomialExact(
 - observedEvents:
 
   If NULL (default), targeted timing of analyses will come from `x$n.I`.
-  Otherwise, this should be vector of increasing positive integers with
-  at most 1 value `>= x$n.IPlan` and of length at least 2. Only one
-  value can be greater than or equal to `x$maxn.IPlan`. This determines
-  the case count at each analysis performed. Primarily, this is used for
-  updating a design at the time of analysis.
+  Otherwise, this should be a vector of increasing positive integers, of
+  length at least 2 for a sequential design or length 1 for a fixed
+  design. Only one value can be greater than or equal to `x$maxn.IPlan`.
+  This determines the case count at each analysis performed. Primarily,
+  this is used for updating a design at the time of analysis.
 
 - alpha:
 
@@ -77,6 +77,15 @@ partition those stops into mutually exclusive components.
 
 ## Details
 
+Fixed survival designs (`gsSurv(k = 1)`) are converted using the exact
+lower binomial tail under `hr0`. The largest integer efficacy cutoff
+with probability no greater than the available alpha spending is
+selected; discreteness may reduce achieved power. A single
+`observedEvents` value can update a fixed design. Spending still uses
+the original planned final event count as denominator, including under-
+and over-runs; `maxSpend` can request full spending for an under-run. No
+artificial interim is added.
+
 Test types 1 (one-sided), 4 (non-binding beta-spending futility), 6
 (non-binding lower-bound spending under the null), and 8 (non-binding
 futility and harm) are supported for full conversion. For Type 8, the
@@ -119,6 +128,28 @@ ignores these non-binding futility bounds.
 ## Examples
 
 ``` r
+# Fixed survival design: exact probabilities, without an artificial interim
+fixed <- gsSurv(k = 1, hr = .3, hr0 = .7, ratio = 1)
+toBinomialExact(fixed)
+#>              Bounds
+#>   Analysis   N   a   b
+#>          1  60  16  61
+#> 
+#> Boundary crossing probabilities and expected sample size assume
+#> any cross stops the trial
+#> 
+#> Upper boundary
+#>           Analysis
+#>    Theta 1 Total E{N}
+#>   0.4118 0     0   60
+#>   0.2308 0     0   60
+#> 
+#> Lower boundary
+#>           Analysis
+#>    Theta      1  Total
+#>   0.4118 0.0141 0.0141
+#>   0.2308 0.7947 0.7947
+
 # The following code derives the group sequential design using the method
 # of Lachin and Foulkes
 

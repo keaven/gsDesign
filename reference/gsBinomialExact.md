@@ -116,7 +116,8 @@ nBinomial1Sample(
 
 - k:
 
-  Number of analyses planned, including interim and final.
+  Number of analyses planned, including interim and final. For
+  `gsBinomialExact()`, `k = 1` supports a fixed design.
 
 - theta:
 

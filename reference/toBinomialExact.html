@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9015</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9017</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,8 @@ the <code><a href="nSurv.html">gsSurv()</a></code> function.</p></dd>
 
 <dt id="arg-observedevents">observedEvents<a class="anchor" aria-label="anchor" href="#arg-observedevents"></a></dt>
 <dd><p>If NULL (default), targeted timing of analyses will come from <code>x$n.I</code>.
-Otherwise, this should be vector of increasing positive integers with at most 1 value <code>&gt;= x$n.IPlan</code> and of length at least 2.
+Otherwise, this should be a vector of increasing positive integers, of length
+at least 2 for a sequential design or length 1 for a fixed design.
 Only one value can be greater than or equal to <code>x$maxn.IPlan</code>.
 This determines the case count at each analysis performed.
 Primarily, this is used for updating a design at the time of analysis.</p></dd>
@@ -118,7 +119,14 @@ unchanged and applies the override only at the last look.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Test types 1 (one-sided), 4 (non-binding beta-spending futility), 6
+    <p>Fixed survival designs (<code>gsSurv(k = 1)</code>) are converted using the exact
+lower binomial tail under <code>hr0</code>. The largest integer efficacy cutoff
+with probability no greater than the available alpha spending is selected;
+discreteness may reduce achieved power. A single <code>observedEvents</code> value
+can update a fixed design. Spending still uses the original planned final
+event count as denominator, including under- and over-runs; <code>maxSpend</code>
+can request full spending for an under-run. No artificial interim is added.</p>
+<p>Test types 1 (one-sided), 4 (non-binding beta-spending futility), 6
 (non-binding lower-bound spending under the null), and 8 (non-binding
 futility and harm) are supported for full conversion. For Type 8, the exact
 upper event-count stopping probability is partitioned into mutually
@@ -155,7 +163,29 @@ futility bounds.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># The following code derives the group sequential design using the method</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Fixed survival design: exact probabilities, without an artificial interim</span></span></span>
+<span class="r-in"><span><span class="va">fixed</span> <span class="op">&lt;-</span> <span class="fu"><a href="nSurv.html">gsSurv</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">1</span>, hr <span class="op">=</span> <span class="fl">.3</span>, hr0 <span class="op">=</span> <span class="fl">.7</span>, ratio <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">toBinomialExact</span><span class="op">(</span><span class="va">fixed</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              Bounds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Analysis   N   a   b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          1  60  16  61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Boundary crossing probabilities and expected sample size assume</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> any cross stops the trial</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Upper boundary</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Theta 1 Total E{N}</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.4118 0     0   60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.2308 0     0   60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lower boundary</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Theta      1  Total</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.4118 0.0141 0.0141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.2308 0.7947 0.7947</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The following code derives the group sequential design using the method</span></span></span>
 <span class="r-in"><span><span class="co"># of Lachin and Foulkes</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="nSurv.html">gsSurv</a></span><span class="op">(</span></span></span>

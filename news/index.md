@@ -4,6 +4,14 @@
 
 ### Breaking changes
 
+- Follow-up now refers to all planned participants, with dropout and
+  optional event stopping. Use
+  [`medianFollowUp()`](https://keaven.github.io/gsDesign/reference/medianFollowUp.md)
+  for a forward calculation;
+  [`minMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/medianFollowUp.md)
+  now solves for cutoff time with a named `target`. The plot uses the
+  revised definition
+  ([\#281](https://github.com/keaven/gsDesign/issues/281)).
 - Absent lower and harm bounds now use `-Inf`, and absent upper bounds
   use `Inf`, instead of the finite `-20`/`20` sentinel. This includes
   zero-spending and skipped analyses. Use
@@ -15,6 +23,13 @@
   [\#321](https://github.com/keaven/gsDesign/issues/321)).
 
 ### New features
+
+- [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
+  supports fixed survival designs and single observed event counts for
+  them;
+  [`gsBinomialExact()`](https://keaven.github.io/gsDesign/reference/gsBinomialExact.md)
+  supports one-analysis probabilities
+  ([\#222](https://github.com/keaven/gsDesign/issues/222)).
 
 - Added opt-in Gauss-Legendre quadrature for boundary crossing
   calculations via `options(gsDesign.quadrature = "gl")`. The node count
@@ -226,9 +241,9 @@ CRAN release: 2026-08-29
   now consistently keeps enrollment rates fixed and solves enrollment
   duration ([\#300](https://github.com/keaven/gsDesign/issues/300)).
 - Added
-  [`minMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/minMedianFollowUp.md)
+  [`minMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/medianFollowUp.md)
   and
-  [`plotMinMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/minMedianFollowUp.md)
+  [`plotMinMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/plotMinMedianFollowUp.md)
   to compute and plot minimum median follow-up at any calendar time from
   the piecewise enrollment assumptions in an `nSurv` or `gsSurv` design.
   The plot accepts arbitrary time-unit labels through `timename`; month
