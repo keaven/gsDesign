@@ -2,6 +2,10 @@
 
 ## Breaking changes
 
+- Follow-up now refers to all planned participants, with dropout and optional
+  event stopping. Use `medianFollowUp()` for a forward calculation;
+  `minMedianFollowUp()` now solves for cutoff time with a named `target`.
+  The plot uses the revised definition (#281).
 - Absent lower and harm bounds now use `-Inf`, and absent upper bounds use
   `Inf`, instead of the finite `-20`/`20` sentinel. This includes zero-spending
   and skipped analyses. Use `is.finite()` to identify active bounds.
