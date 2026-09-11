@@ -18,6 +18,9 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' values of \code{plottype}; one exception is that \code{type="l"} cannot be
 #' overridden when \code{plottype=2}. Default values for labels depend on
 #' \code{plottype} and the class of \code{x}.
+#' For \code{endpoint = "info"}, information annotations on boundary,
+#' treatment-effect, B-value, and conditional-power plots use \code{I=}
+#' and round information to two decimal places (without integer rounding).
 #'
 #' For test types 7 and 8, harm and futility probabilities stored on the
 #' design are mutually exclusive stopping outcomes. In a type 2 plot, the
@@ -359,17 +362,22 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
     if (length(dgt) < 3) dgt <- c(dgt, dgt[1])
   }
   is_surv <- inherits(x, "gsSurv")
-  if (x$n.fix == 1) {
+  is_info <- isTRUE(tolower(x$endpoint) == "info")
+  if (is_info) {
+    nround <- 2
+    ntx <- "I="
+    if (is.null(xlab)) xlab <- "Information"
+  } else if (x$n.fix == 1) {
     nround <- 3
     ntx <- "r="
     if (is.null(xlab)) xlab <- "Information relative to fixed sample design"
   } else if (is_surv || x$nFixSurv > 0) {
-    ntx <- "d="
+    ntx <- "N="
     nround <- 0
     if (is.null(xlab)) xlab <- "Events"
   } else {
     nround <- 0
-    ntx <- "n="
+    ntx <- "N="
     if (is.null(xlab)) xlab <- "Sample size"
   }
   if (x$test.type > 1) {
@@ -486,7 +494,7 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
     if (base) {
       graphics::text(x = y2$N, y = y$Z, y$Ztxt, cex = cex)
     }
-    if (x$n.fix == 1) {
+    if (x$n.fix == 1 && !is_info) {
       if (base) {
         graphics::text(x = y2$N, y = y2$Z, paste(rep("r=", x$k), y2$Ztxt, sep = ""), cex = cex)
       } else {
@@ -495,9 +503,9 @@ qplotit <- function(x, xlim = NULL, ylim = NULL, main = NULL, geom = c("line", "
       }
     } else {
       if (base) {
-        graphics::text(x = y2$N, y = y2$Z, paste(rep("N=", x$k), y2$Ztxt, sep = ""), cex = cex)
+        graphics::text(x = y2$N, y = y2$Z, paste0(ntx, y2$Ztxt), cex = cex)
       } else {
-        y2$Ztxt <- paste(rep("N=", x$k), y2$Ztxt, sep = "")
+        y2$Ztxt <- paste0(ntx, y2$Ztxt)
         p <- p + ggplot2::geom_text(data = y2, ggplot2::aes(group = factor(.data$Bound), label = Ztxt), size = cex * 5, show.legend = F, colour = getColor(1))
       }
     }
@@ -558,17 +566,22 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
     xlim <- xlim + c(-.05, .05) * (xlim[2] - xlim[1])
     if (x$k == 2) xlim <- xlim + c(-1, 1)
   }
-  if (x$n.fix == 1) {
+  is_info <- isTRUE(tolower(x$endpoint) == "info")
+  if (is_info) {
+    nround <- 2
+    ntx <- "I="
+    if (is.null(xlab)) xlab <- "Information"
+  } else if (x$n.fix == 1) {
     nround <- 3
     ntx <- "r="
     if (is.null(xlab)) xlab <- "Information relative to fixed sample design"
   } else if (inherits(x, "gsSurv")) {
     nround <- 0
-    ntx <- "d="
+    ntx <- "N="
     if (is.null(xlab)) xlab <- "Events"
   } else {
     nround <- 0
-    ntx <- "n="
+    ntx <- "N="
     if (is.null(xlab)) xlab <- "N"
   }
   test.type <- ifelse(inherits(x, "gsProbability"), 3, x$test.type)
@@ -688,7 +701,7 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
       Bound = rep("Lower", x$k - 1),
       Ztxt = as.character(round(x$n.I[1:(x$k - 1)], nround))
     )
-    if (x$n.fix == 1) {
+    if (x$n.fix == 1 && !is_info) {
       if (base) {
         graphics::text(x = y2$N, y = y2$CP, paste(rep("r=", length(y2$Ztxt)), y2$Ztxt, sep = ""), cex = cex)
       } else {
@@ -697,9 +710,9 @@ plotgsCP <- function(x, theta = "thetahat", main = "Conditional power at interim
       }
     } else {
       if (base) {
-        graphics::text(x = y2$N, y = y2$CP, paste(rep("N=", length(y2$Ztxt)), y2$Ztxt, sep = ""), cex = cex)
+        graphics::text(x = y2$N, y = y2$CP, paste0(ntx, y2$Ztxt), cex = cex)
       } else {
-        y2$Ztxt <- paste(rep("N=", x$k - 1), y2$Ztxt, sep = "")
+        y2$Ztxt <- paste0(ntx, y2$Ztxt)
         p <- p + geom_text(data = y2, aes(N, CP, group = factor(Bound), label = Ztxt), size = cex * 5, colour = getColor(1))
       }
     }
