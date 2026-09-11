@@ -50,6 +50,8 @@
 
 ## Bug fixes
 
+- Information-based boundary plots label actual information as `I=` with
+  two decimal places, rather than rounding it to a sample size (#315).
 - Survival calculation methods are reported in `summary()`, not boundary
   tables. `gsBoundSummary()` keeps all analysis annotations when POS or
   excluded statistics require unequal block sizes (#332).
