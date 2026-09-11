@@ -18,7 +18,8 @@ toBinomialExact(
 the \code{gsSurv()} function.}
 
 \item{observedEvents}{If NULL (default), targeted timing of analyses will come from \code{x$n.I}. 
-Otherwise, this should be vector of increasing positive integers with at most 1 value \code{>= x$n.IPlan} and of length at least 2.
+Otherwise, this should be a vector of increasing positive integers, of length
+at least 2 for a sequential design or length 1 for a fixed design.
 Only one value can be greater than or equal to \code{x$maxn.IPlan}. 
 This determines the case count at each analysis performed. 
 Primarily, this is used for updating a design at the time of analysis.}
@@ -62,6 +63,14 @@ An object with primary class \code{gsBinomialExactSpending},
 Translate survival design bounds to exact binomial bounds
 }
 \details{
+Fixed survival designs (\code{gsSurv(k = 1)}) are converted using the exact
+lower binomial tail under \code{hr0}. The largest integer efficacy cutoff
+with probability no greater than the available alpha spending is selected;
+discreteness may reduce achieved power. A single \code{observedEvents} value
+can update a fixed design. Spending still uses the original planned final
+event count as denominator, including under- and over-runs; \code{maxSpend}
+can request full spending for an under-run. No artificial interim is added.
+
 Test types 1 (one-sided), 4 (non-binding beta-spending futility), 6
 (non-binding lower-bound spending under the null), and 8 (non-binding
 futility and harm) are supported for full conversion. For Type 8, the exact
@@ -95,6 +104,10 @@ spends no additional beta. Efficacy calibration ignores these non-binding
 futility bounds.
 }
 \examples{
+# Fixed survival design: exact probabilities, without an artificial interim
+fixed <- gsSurv(k = 1, hr = .3, hr0 = .7, ratio = 1)
+toBinomialExact(fixed)
+
 # The following code derives the group sequential design using the method
 # of Lachin and Foulkes
 
