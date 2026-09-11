@@ -26,11 +26,12 @@ accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
 not changed by users.}
 }
 \value{
-A list containing two vectors, \code{CPlo} and \code{CPhi}.
-\item{CPlo}{A vector of length \code{x$k-1} with conditional powers of
-crossing upper bounds given interim test statistics at each lower bound}
-\item{CPhi}{A vector of length \code{x$k-1} with conditional powers of
-crossing upper bounds given interim test statistics at each upper bound.}
+For one-sided designs, a vector of length \code{x$k-1} containing
+conditional power at each interim upper bound. For two-sided designs, a
+matrix with \code{x$k-1} rows and columns \code{CPlo} and \code{CPhi},
+containing conditional power at the lower and upper bounds, respectively.
+Designs with harm bounds (\code{test.type} 7 or 8) also have a
+\code{CPharm} column. An absent bound has conditional power \code{NA}.
 }
 \description{
 \code{gsBoundCP()} computes the total probability of crossing future upper

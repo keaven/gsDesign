@@ -126,7 +126,8 @@ bound.}
 
 \item{exclude}{A list of test statistics to be excluded from design boundary
 summary produced; see details or examples for a list of all possible output
-values. A value of \code{NULL} produces all available summaries.}
+values. A value of \code{NULL} produces all available summaries.
+Excluded conditional and predictive power quantities are not computed.}
 
 \item{r}{See \code{\link{gsDesign}}. This is an integer used to control the
 degree of accuracy of group sequential calculations which will normally not

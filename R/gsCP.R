@@ -344,11 +344,12 @@ gsPI <- function(x, i = 1, zi = 0, j = 2, level = .95, theta = c(0, 3), wgts = c
 #' accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
 #' accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
 #' not changed by users.
-#' @return A list containing two vectors, \code{CPlo} and \code{CPhi}.
-#' \item{CPlo}{A vector of length \code{x$k-1} with conditional powers of
-#' crossing upper bounds given interim test statistics at each lower bound}
-#' \item{CPhi}{A vector of length \code{x$k-1} with conditional powers of
-#' crossing upper bounds given interim test statistics at each upper bound.}
+#' @return For one-sided designs, a vector of length \code{x$k-1} containing
+#' conditional power at each interim upper bound. For two-sided designs, a
+#' matrix with \code{x$k-1} rows and columns \code{CPlo} and \code{CPhi},
+#' containing conditional power at the lower and upper bounds, respectively.
+#' Designs with harm bounds (\code{test.type} 7 or 8) also have a
+#' \code{CPharm} column. An absent bound has conditional power \code{NA}.
 #' @examples
 #' 
 #' # set up a group sequential design
@@ -429,8 +430,11 @@ gsBoundCP <- function(x, theta = "thetahat", r = 18) {
       thetaharm <- x$harm$bound[1:len] / sqrt(x$n.I[1:len])
     }
     for (i in 1:len) {
-      xharm <- gsCP(x, thetaharm[i], i, x$harm$bound[i])
-      CPharm[i] <- sum(xharm$upper$prob)
+      CPharm[i] <- if (is.finite(x$harm$bound[i])) {
+        sum(gsCP(x, thetaharm[i], i, x$harm$bound[i])$upper$prob)
+      } else {
+        NA_real_ # no harm bound at this analysis
+      }
     }
     result <- cbind(result, CPharm)
   }
