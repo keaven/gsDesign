@@ -485,26 +485,26 @@ gsBoundSummary0 <- function(
     for (i in 1:length(x$theta)) pframe3 <- rbind(pframe3, data.frame("Harm" = cumsum(x$harm$prob[, i])))
     pframe <- data.frame(pframe, pframe3)
   }
-  if (x$k > 1) {
-    # conditional power at bound, theta=hat(theta)
-    cp <- data.frame(gsBoundCP(x, r = r))
-    # conditional power at bound, theta=theta[1]
-    cp1 <- data.frame(gsBoundCP(x, theta = x$delta, r = r))
+  cp_at <- function(theta, label) {
+    cp <- data.frame(gsBoundCP(x, theta = theta, r = r))
     if (x$test.type %in% c(7, 8)) {
       colnames(cp) <- c("Futility", "Efficacy", "Harm")
-      colnames(cp1) <- c("Futility", "Efficacy", "Harm")
     } else if (x$test.type > 1) {
       colnames(cp) <- c("Futility", "Efficacy")
-      colnames(cp1) <- c("Futility", "Efficacy")
     } else {
       colnames(cp) <- "Efficacy"
-      colnames(cp1) <- "Efficacy"
     }
-    cp <- data.frame(cp, "Value" = "CP", i = seq_len(x$k - 1))
-    cp1 <- data.frame(cp1, "Value" = "CP H1", i = seq_len(x$k - 1))
-  } else {
+    data.frame(cp, "Value" = label, i = seq_len(x$k - 1))
+  }
+  if ("CP" %in% exclude || x$k == 1) {
     cp <- NULL
+  } else {
+    cp <- cp_at("thetahat", "CP")
+  }
+  if ("CP H1" %in% exclude || x$k == 1) {
     cp1 <- NULL
+  } else {
+    cp1 <- cp_at(x$delta, "CP H1")
   }
   if ("PP" %in% exclude || x$k == 1) {
     pp <- NULL
@@ -803,6 +803,7 @@ gsBoundSummary0 <- function(
 #' @param exclude A list of test statistics to be excluded from design boundary
 #' summary produced; see details or examples for a list of all possible output
 #' values. A value of \code{NULL} produces all available summaries.
+#' Excluded conditional and predictive power quantities are not computed.
 #' @param POS This is an indicator of whether or not probability of success
 #' (POS) should be estimated at baseline or at each interim based on the prior
 #' distribution input in \code{prior}. The prior probability of success before
