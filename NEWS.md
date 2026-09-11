@@ -115,6 +115,8 @@
 
 ## Testing
 
+- Declare `svglite` as a test dependency for information-label rendering checks
+  (#315).
 - Added tests for natural-effect calibration, joint boundary targets,
   HR allocation/direction handling and design replay (#331).
 - Added regression fixtures, multivariate normal reference checks, and print

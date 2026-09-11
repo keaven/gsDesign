@@ -42,6 +42,7 @@ Suggests:
     rmarkdown,
     rpact,
     scales,
+    svglite,
     testthat,
     utils,
     vdiffr
