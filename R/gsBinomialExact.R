@@ -261,7 +261,7 @@ gsBinomialExact <- function(k = 2, theta = c(.1, .2), n.I = c(50, 100), a = c(3,
   if (min(b - a) <= 0) stop(paste("Input b-vector must be strictly greater than a\n a = ", paste(a, collapse = ", "), "\n b = ", paste(b, collapse = ", ")))
   if (any(diff(a) < 0)) stop(paste("a must contain a non-decreasing sequence of non-negative integers\n a =", paste(a, collapse = ", ")))
   if (any(diff(b) < 0)) stop(paste("b must contain a non-decreasing sequence of non-negative integers\n b =", paste(b, collapse = ", ")))
-  if (any(diff(n.I - b) < 0)) stop(paste("n.I - b must be non-decreasing\n n.I =", 
+  if (any(diff(n.I - b) < 0)) stop(paste("n.I - b must be non-decreasing\n n.I =",
                                          paste(n.I, collapse=", "), "\n b = ", paste(b, collapse=", "),
                                          "\n n.I - b = ", paste(n.I - b, collapse=", ")))
 
@@ -457,5 +457,4 @@ binomialPP <- function(a = .2, b = .8, theta = c(.2, .4), p1 = .4, PP = c(.025, 
   class(y) <- c("binomialPP", "gsBinomialExact", "gsProbability")
   return(y)
 }
-
 
