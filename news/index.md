@@ -25,6 +25,19 @@
   integration section of
   [`?gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
   ([\#323](https://github.com/keaven/gsDesign/issues/323)).
+- Added
+  [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
+  to calibrate beta-spending futility parameters and statistical
+  information to conditional power targets at one or more interim
+  analyses for `test.type` 3, 4, 7, and 8
+  ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+- Added exact conditional power, fixed-look Clopper–Pearson, repeated,
+  and sequential confidence intervals for vaccine or prevention
+  efficacy, plus
+  [`VEtable()`](https://keaven.github.io/gsDesign/reference/VEtable.md)
+  summaries and automatic [`lt()`](https://rdrr.io/pkg/lt/man/lt.html)
+  formatting for exact binomial spending designs
+  ([\#316](https://github.com/keaven/gsDesign/issues/316)).
 
 ### Performance
 
@@ -62,6 +75,29 @@
 
 ### Documentation
 
+- Added a futility-spending calibration vignette comparing all six
+  two-parameter families and piecewise-linear spending with three
+  conditional-power targets, including reconstructed designs and
+  practical guidance on early futility and sample-size inflation.
+  Examples cover risk differences, normal means, survival designs, and
+  calibrated spending curves with interpretation of effects at the
+  bounds ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+- Documented all
+  [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
+  solver controls, defaults, and spending-family restrictions, with a
+  tighter CP tolerance example
+  ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+- Updated the
+  [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
+  example to target conditional power 0.3 under the observed effect,
+  reuse fitted futility spending parameters in
+  [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
+  and [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  with matching test type, timing, and spending, and verify conditional
+  power using
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
+  The example uses `sfLDOF` efficacy spending and futility testing only
+  at IA 1 ([\#318](https://github.com/keaven/gsDesign/issues/318)).
 - Updated package vignettes to use **lt** consistently for formatted
   data-frame and matrix output, with compact row spacing for long tables
   and no significant changes to the rendered HTML tables.
@@ -420,7 +456,7 @@ CRAN release: 2026-07-03
 - [`Power.ssrCP()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
   now uses the interim efficacy bound when integrating the
   no-sample-size-re-estimation region and when falling back to the upper
-  conditional-power changepoint
+  conditional power changepoint
   ([\#213](https://github.com/keaven/gsDesign/issues/213)).
 - [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) now

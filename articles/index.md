@@ -65,5 +65,7 @@ Interim decision support and adaptation-oriented examples.
 
 - [Conditional power and conditional
   error](https://keaven.github.io/gsDesign/articles/ConditionalPowerPlot.md):
+- [Calibrating futility spending to conditional
+  power](https://keaven.github.io/gsDesign/articles/CPFutilitySpending.md):
 - [Conditional error spending
   functions](https://keaven.github.io/gsDesign/articles/ConditionalErrorSpending.md):

@@ -116,6 +116,20 @@ and
 
 - [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
   : Translate survival design bounds to exact binomial bounds
+- [`VEtable()`](https://keaven.github.io/gsDesign/reference/VEtable.md)
+  : Summarize an exact binomial vaccine or prevention efficacy design
+- [`lt(`*`<gsVETable>`*`)`](https://keaven.github.io/gsDesign/reference/lt-gsVETable.md)
+  : Format a vaccine or prevention efficacy summary table
+- [`ciBinomialExact()`](https://keaven.github.io/gsDesign/reference/ciBinomialExact.md)
+  : Exact confidence intervals for vaccine or prevention efficacy
+- [`repeatedCIBinomialExact()`](https://keaven.github.io/gsDesign/reference/repeatedCIBinomialExact.md)
+  : Exact repeated confidence intervals for vaccine or prevention
+  efficacy
+- [`sequentialCIBinomialExact()`](https://keaven.github.io/gsDesign/reference/sequentialCIBinomialExact.md)
+  : Exact sequential confidence intervals for vaccine or prevention
+  efficacy
+- [`gsCPBinomialExact()`](https://keaven.github.io/gsDesign/reference/gsCPBinomialExact.md)
+  : Exact conditional power for a group sequential binomial design
 - [`repeatedPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/repeatedPValueBinomialExact.md)
   : Exact binomial repeated p-values for a group sequential design
 - [`sequentialPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/sequentialPValueBinomialExact.md)
@@ -162,6 +176,8 @@ For an overview of spending functions, see
   [`sfXG2()`](https://keaven.github.io/gsDesign/reference/sfXG.md)
   [`sfXG3()`](https://keaven.github.io/gsDesign/reference/sfXG.md) : Xi
   and Gallo conditional error spending functions
+- [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
+  : Calibrate Futility Spending to Conditional Power Targets
 
 ## Conditional and Predictive Power
 
@@ -173,6 +189,8 @@ For an overview of spending functions, see
   [`gsCPOS()`](https://keaven.github.io/gsDesign/reference/gsCP.md) :
   Conditional and Predictive Power, Overall and Conditional Probability
   of Success
+- [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
+  : Calibrate Futility Spending to Conditional Power Targets
 - [`summary(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   [`print(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
