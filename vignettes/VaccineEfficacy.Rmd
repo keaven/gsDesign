@@ -238,7 +238,7 @@ the supplied values can represent prevention efficacy for a non-vaccine
 preventive intervention.
 
 ```{r}
-VEtable(xb, ve, tteDesign = x) |>
+gsDesign::VEtable(xb, ve, tteDesign = x) |>
   lt()
 ```
 The initial approximation of bounds for the exact binomial design was generated from the time-to-event design as follows.

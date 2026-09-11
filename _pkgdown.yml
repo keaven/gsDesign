@@ -99,9 +99,11 @@ reference:
   - sfXG1
   - sfXG2
   - sfXG3
+  - gsCPFutilitySpending
 - title: Conditional and Predictive Power
   contents:
   - gsCP
+  - gsCPFutilitySpending
   - gsCPz
   - gsBoundCP
   - gsBValue
@@ -185,4 +187,5 @@ articles:
       Interim decision support and adaptation-oriented examples.
     contents:
       - ConditionalPowerPlot
+      - CPFutilitySpending
       - ConditionalErrorSpending

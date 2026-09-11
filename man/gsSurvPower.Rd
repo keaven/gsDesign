@@ -2,6 +2,7 @@
 % Please edit documentation in R/gsSurvPower.R
 \name{gsSurvPower}
 \alias{gsSurvPower}
+\alias{gsSurvPower-class}
 \title{Compute power for a group sequential survival design}
 \usage{
 gsSurvPower(
