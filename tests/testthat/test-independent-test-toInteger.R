@@ -155,7 +155,7 @@ test_that("toInteger() throws an error when input is not a gsDesign object", {
   expect_error(toInteger(invalid_object), "must have class gsDesign or nSurv as input")
 })
 
-EXTREMEZ_TI <- 20
+EXTREMEZ_TI <- Inf
 
 test_that("toInteger() preserves selective testLower and inactive futility looks (gsDesign)", {
   x <- gsDesign(

@@ -243,7 +243,7 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
   xi$n.I <- counts # ensure these are integers as they became real in gsDesign call
   # Non-binding futility designs have x$test.type either 4 or 6
   if (x$test.type %in% c(4, 6)) {
-    xi$falseposnb <- as.vector(gsprob(0, xi$n.I, rep(-20, xi$k), xi$upper$bound, r = xi$r)$probhi)
+    xi$falseposnb <- as.vector(gsprob(0, xi$n.I, rep(-Inf, xi$k), xi$upper$bound, r = xi$r)$probhi)
   }
   if (inherits(x, "gsSurv") || x$nFixSurv > 0) {
     xi$hr0 <- x$hr0 # H0 hazard ratio

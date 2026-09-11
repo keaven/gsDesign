@@ -1,3 +1,14 @@
+# gsQuadratureMethod: integer code of the quadrature scheme selected by the
+# option "gsDesign.quadrature" ("jt", the default, or "gl"); passed to the C
+# entry points. See ?gsDesign, section "Numerical integration".
+gsQuadratureMethod <- function() {
+  method <- getOption("gsDesign.quadrature", "jt")
+  if (!is.character(method) || length(method) != 1 || !(method %in% c("jt", "gl"))) {
+    stop("option gsDesign.quadrature must be \"jt\" (Jennison and Turnbull grid) or \"gl\" (Gauss-Legendre)")
+  }
+  if (method == "gl") 1L else 0L
+}
+
 # gsBound roxy [sinew] ----
 #' @title Boundary derivation - low level
 #' @description  \code{gsBound()} and \code{gsBound1()} are lower-level functions used to
@@ -82,7 +93,7 @@
 #' 
 #' #  use gsBound1 to set up boundary for a 1-sided test
 #' x <- gsBound1(
-#'   theta = 0, I = c(1, 2, 3) / 3, a = rep(-20, 3),
+#'   theta = 0, I = c(1, 2, 3) / 3, a = rep(-Inf, 3),
 #'   probhi = c(.001, .009, .015)
 #' )
 #' x$b
@@ -126,9 +137,10 @@ gsBound <- function(I, trueneg, falsepos, tol = 0.000001, r = 18, printerr = 0) 
   checkScalar(r, "integer", c(1, 80))
   checkScalar(printerr, "integer")
   checkLengths(trueneg, falsepos, I)
+  if (anyNA(I) || anyNA(trueneg) || anyNA(falsepos)) stop("I, trueneg and falsepos must not contain missing values")
 
   k <- as.integer(length(I))
-  # Note: 0 final spend is allowed; C code returns +/-EXTREMEZ bound
+  # Note: 0 spending at an analysis is allowed; C code returns a -Inf/+Inf bound
   r <- as.integer(r)
   printerr <- as.integer(printerr)
   storage.mode(I) <- "double"
@@ -138,7 +150,7 @@ gsBound <- function(I, trueneg, falsepos, tol = 0.000001, r = 18, printerr = 0) 
   a <- falsepos
   b <- falsepos
   retval <- as.integer(0)
-  xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval, printerr)
+  xx <- .C("gsbound", k, I, a, b, trueneg, falsepos, tol, r, retval, printerr, gsQuadratureMethod(), NAOK = TRUE)
   rates <- list(falsepos = xx[[6]], trueneg = xx[[5]])
 
   ## DSB question: do we need to do something here in case of an error? (similarly as in gsBound1)
@@ -166,10 +178,11 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
   checkScalar(r, "integer", c(1, 80))
   checkScalar(printerr, "integer")
   checkLengths(a, probhi, I)
+  if (anyNA(theta) || anyNA(I) || anyNA(a) || anyNA(probhi)) stop("theta, I, a and probhi must not contain missing values")
 
   # coerce type
   k <- as.integer(length(I))
-  # Note: probhi[k] <= 0 is allowed; C code returns EXTREMEZ bound
+  # Note: probhi[k] <= 0 is allowed; C code returns an Inf bound
   r <- as.integer(r)
   printerr <- as.integer(printerr)
 
@@ -182,7 +195,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
   b <- a
   retval <- as.integer(0)
 
-  xx <- .C("gsbound1", k, theta, I, a, b, problo, probhi, tol, r, retval, printerr)
+  xx <- .C("gsbound1", k, theta, I, a, b, problo, probhi, tol, r, retval, printerr, gsQuadratureMethod(), NAOK = TRUE)
 
   y <- list(
     k = xx[[1]], theta = xx[[2]], I = xx[[3]], a = xx[[4]], b = xx[[5]],
@@ -326,7 +339,9 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' probability calculations. Larger values provide more grid points and greater
 #' accuracy but slow down computation. Jennison and Turnbull (p. 350) note an
 #' accuracy of \eqn{10^{-6}} with \code{r = 16}. This parameter is normally
-#' not changed by users.
+#' not changed by users. With \code{options(gsDesign.quadrature = "gl")}
+#' (see the section on numerical integration below) \code{r} scales the
+#' number of Gauss-Legendre nodes relative to its default.
 #' @param n.I Used for re-setting bounds when timing of analyses changes from
 #' initial design; see examples.
 #' @param maxn.IPlan Used for re-setting bounds when timing of analyses changes
@@ -370,7 +385,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' At each analysis, at least one of \code{testUpper}, \code{testLower}, or
 #' \code{testHarm} must be \code{TRUE}.
 #' Where \code{testUpper} is \code{FALSE}, the upper bound is set to
-#' \code{+20} (effectively \code{Inf}) and displayed as \code{NA} in output.
+#' \code{+Inf} and displayed as \code{NA} in output.
 #' @param testLower Indicator of which analyses should include a lower
 #' (futility) bound.
 #' A single value of \code{TRUE} (default) indicates all analyses have a
@@ -380,7 +395,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' Overridden to all \code{TRUE} for \code{test.type} 2 (symmetric).
 #' For \code{test.type} 3--8, at least one analysis must be \code{TRUE}.
 #' Where \code{testLower} is \code{FALSE}, the lower bound is set to
-#' \code{-20} (effectively \code{-Inf}) and displayed as \code{NA} in output.
+#' \code{-Inf} and displayed as \code{NA} in output.
 #' @param testHarm Indicator of which analyses should include a harm bound.
 #' A single value of \code{TRUE} (default) indicates all analyses have a
 #' harm bound; \code{FALSE} indicates none.
@@ -388,9 +403,27 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' Only used for \code{test.type} 7 or 8; at least one analysis must be
 #' \code{TRUE} for those types.
 #' Where \code{testHarm} is \code{FALSE}, the harm bound is set to
-#' \code{-20} (effectively \code{-Inf}) and the bound is displayed as
+#' \code{-Inf} and the bound is displayed as
 #' \code{NA} in output. Cumulative harm crossing probability from earlier
 #' analyses is still displayed.
+#' @section Numerical integration:
+#' Boundary crossing probabilities are computed by the recursive numerical
+#' integration of Jennison and Turnbull (2000, Chapter 19). By default the
+#' integration grid of that chapter is used (Simpson's rule on \code{12 r - 3}
+#' points concentrated around the mean of the test statistic), which gives
+#' probabilities accurate to about \eqn{10^{-7}} with the default
+#' \code{r = 18}. Setting \code{options(gsDesign.quadrature = "gl")} switches
+#' all computations (\code{gsDesign()}, \code{gsProbability()},
+#' \code{gsBound()}, \code{gsBound1()}, \code{gsDensity()} and everything
+#' built on them) to Gauss-Legendre quadrature on the continuation region of
+#' each analysis, with a number of nodes that adapts to the width of the
+#' region relative to the neighboring information increments. In benchmarked
+#' designs this is several times faster and accurate to about \eqn{10^{-12}},
+#' with differences from the default grid within the accuracy of that grid.
+#' The rule uses at most 992 nodes, so extremely small information increments
+#' can reduce accuracy. \code{normalGrid()} always returns the Jennison and
+#' Turnbull grid.
+#'
 #' @return An object of the class \code{gsDesign}. This class has the following
 #' elements and upon return from \code{gsDesign()} contains: \item{k}{As
 #' input.} \item{test.type}{As input.} \item{alpha}{As input.} \item{beta}{As
@@ -801,6 +834,7 @@ gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0
   if (k != length(a)) {
     stop("Lengths of n.I, a, and b must all equal k")
   }
+  if (anyNA(theta) || anyNA(n.I) || anyNA(a) || anyNA(b)) stop("theta, n.I, a and b must not contain missing values")
 
   # cast integer scalars
   ntheta <- as.integer(length(theta))
@@ -811,7 +845,7 @@ gsProbability <- function(k = 0, theta, n.I, a, b, r = 18, d = NULL, overrun = 0
   plo <- as.double(c(1:(k * ntheta)))
   xx <- .C(
     "probrej", k, ntheta, as.double(theta), as.double(n.I),
-    as.double(a), as.double(b), plo, phi, r
+    as.double(a), as.double(b), plo, phi, r, gsQuadratureMethod(), NAOK = TRUE
   )
   plo <- matrix(xx[[7]], k, ntheta)
   phi <- matrix(xx[[8]], k, ntheta)
@@ -943,12 +977,13 @@ gsDensity <- function(x, theta = 0, i = 1, zi = 0, r = 18) {
   checkScalar(i, "integer", c(0, x$k), c(FALSE, TRUE))
   checkVector(zi, "numeric")
   checkScalar(r, "integer", c(1, 80))
+  if (anyNA(theta) || anyNA(zi)) stop("theta and zi must not contain missing values")
   den <- rep(0, length(theta) * length(zi))
   xx <- .C(
     "gsdensity", den, as.integer(i), length(theta),
     as.double(theta), as.double(x$n.I),
-    as.double(x$lower$bound), as.double(x$upper$bound),
-    as.double(zi), length(zi), as.integer(r)
+    as.double(if (is.null(x$lower)) rep(-Inf, x$k) else x$lower$bound), as.double(x$upper$bound),
+    as.double(zi), length(zi), as.integer(r), gsQuadratureMethod(), NAOK = TRUE
   )
   list(zi = zi, theta = theta, density = matrix(xx[[1]], nrow = length(zi), ncol = length(theta)))
 }
@@ -964,8 +999,8 @@ gsDensity <- function(x, theta = 0, i = 1, zi = 0, r = 18) {
 gsDType1 <- function(x, ss = 1) {
   # gsDType1: calculate bound assuming one-sided rule (only upper bound)
 
-  # set lower bound
-  a <- rep(-20, x$k)
+  # set lower bound: none for a one-sided design
+  a <- rep(-Inf, x$k)
 
   # get Wang-Tsiatis bound, if desired
   if (is.element(x$upper$name, c("WT", "Pocock", "OF"))) {
@@ -1150,7 +1185,7 @@ gsDType3ss <- function(x) {
   jj <- 0
   while (flag > x$tol && jj < 100) {
     # if alpha <> power, go back to set upper bound, lower bound and I(max)
-    x4 <- gsBound1(0, I, c(x2$a[1:k - 1], -20), falsepos)
+    x4 <- gsBound1(0, I, c(x2$a[1:k - 1], -Inf), falsepos)
     Ilow <- x$n.fix / 3
     Ihigh <- 1.2 * x$n.fix
     while (0 > gsbetadiff1(
@@ -1272,13 +1307,13 @@ gsDType3b <- function(x) {
       aold <- x2$a
       bold <- x2$b
       alphaold <- x3$powr
-      a <- c(x2$a[1:(x2$k - 1)], -20)
+      a <- c(x2$a[1:(x2$k - 1)], -Inf)
       x4 <- gsBound1(0, x$n.I, a, falsepos)
       x2 <- gsBound1(theta = -x$delta, I = x$n.I, a = -x4$b, probhi = falseneg, tol = x$tol, r = x$r)
       x2$a[x2$k] <- x2$b[x2$k]
       x2 <- gsprob(x$delta, x$n.I, -x2$b, x4$b, r = x$r)
       x3 <- gsprob(0, x2$I, x2$a, x2$b)
-      flag <- max(abs(c(x2$a - aold, x2$b - bold, alphaold - x3$powr)))
+      flag <- max(c(gsBoundChange(x2$a, aold), gsBoundChange(x2$b, bold), abs(alphaold - x3$powr)))
     }
 
     # add bounds and information to x
@@ -1322,7 +1357,7 @@ gsDType4a <- function(x) {
   x$upper$spend <- falsepos
 
   # compute upper bound under H0
-  x1 <- gsBound1(theta = 0, I = x$n.I, a = rep(-20, x$k), probhi = falsepos, tol = x$tol, r = x$r)
+  x1 <- gsBound1(theta = 0, I = x$n.I, a = rep(-Inf, x$k), probhi = falsepos, tol = x$tol, r = x$r)
 
   # get lower bound
   x2 <- gsBound1(theta = -x$delta, I = x$n.I, a = -x1$b, probhi = falseneg, tol = x$tol, r = x$r)
@@ -1350,7 +1385,7 @@ gsDType4ss <- function(x) {
   falsepos <- x$upper$spend
   falsepos <- falsepos - c(0, falsepos[1:x$k - 1])
   x$upper$spend <- falsepos
-  x0 <- gsBound1(0., x$timing, rep(-20, x$k), falsepos, x$tol, x$r)
+  x0 <- gsBound1(0., x$timing, rep(-Inf, x$k), falsepos, x$tol, x$r)
 
   # get beta spending (falseneg)
   falseneg <- x$lower$spend
@@ -1378,7 +1413,7 @@ gsDType4ss <- function(x) {
 
   # compute additional error rates needed and add to x
   x$theta <- c(0, x$delta)
-  x$falseposnb <- as.vector(gsprob(0, xx$I, rep(-20, x$k), x0$b, r = x$r)$probhi)
+  x$falseposnb <- as.vector(gsprob(0, xx$I, rep(-Inf, x$k), x0$b, r = x$r)$probhi)
   x3 <- gsprob(x$theta, xx$I, xx$a, x0$b, r = x$r, overrun = x$overrun)
   x$upper$prob <- x3$probhi
   x$lower$prob <- x3$problo
@@ -1411,7 +1446,7 @@ gsDType6 <- function(x) {
   falsepos <- x$upper$spend
   falsepos <- falsepos - c(0, falsepos[1:x$k - 1])
   x$upper$spend <- falsepos
-  x0 <- gsBound1(0., x$timing, rep(-20, x$k), falsepos, x$tol, x$r)
+  x0 <- gsBound1(0., x$timing, rep(-Inf, x$k), falsepos, x$tol, x$r)
   x$upper$bound <- x0$b
 
   if (x$astar == 1 - x$alpha) {
@@ -1452,7 +1487,7 @@ gsDType6 <- function(x) {
 
   # compute error rates needed and add to x
   x$theta <- c(0, x$delta)
-  x$falseposnb <- as.vector(gsprob(0, x$n.I, rep(-20, x$k), x$upper$bound, r = x$r)$probhi)
+  x$falseposnb <- as.vector(gsprob(0, x$n.I, rep(-Inf, x$k), x$upper$bound, r = x$r)$probhi)
   x3 <- gsprob(x$theta, x$n.I, x$lower$bound, x$upper$bound, r = x$r, overrun = x$overrun)
   x$upper$prob <- x3$probhi
   x$lower$prob <- x3$problo
@@ -1547,6 +1582,15 @@ gsDType8 <- function(x) {
   x
 }
 
+# gsBoundChange: absolute change between successive bound vectors ----
+# An analysis without a bound is represented by -Inf or Inf; an infinite bound
+# that stays infinite is no change (Inf - Inf is NaN in floating point).
+gsBoundChange <- function(new, old) {
+  d <- abs(new - old)
+  d[is.nan(d)] <- 0
+  d
+}
+
 # gsbetadiff function [sinew] ----
 gsbetadiff <- function(Imax, theta, beta, time, a, b, tol = 0.000001, r = 18) {
   # compute difference between actual and desired Type II error
@@ -1629,7 +1673,7 @@ gsprob <- function(theta, I, a, b, r = 18, overrun = 0) {
   plo <- as.double(c(1:(nanal * ntheta)))
   xx <- .C(
     "probrej", nanal, ntheta, as.double(theta), as.double(I),
-    as.double(a), as.double(b), plo, phi, as.integer(r)
+    as.double(a), as.double(b), plo, phi, as.integer(r), gsQuadratureMethod(), NAOK = TRUE
   )
 
   plo <- matrix(xx[[7]], nanal, ntheta)
@@ -1657,7 +1701,7 @@ gsHarmProbability <- function(theta, d) {
 
   # A trial stops at the less extreme active lower boundary. When both lower
   # boundaries are active, harm is the subset at or below the harm boundary.
-  stop_bound <- rep(-20, k)
+  stop_bound <- rep(-Inf, k)
   stop_bound[test_harm] <- d$harm$bound[test_harm]
   stop_bound[test_lower] <- pmax(
     stop_bound[test_lower],
@@ -1715,25 +1759,25 @@ gsHarmBoundUpdate <- function(x) {
         )
         probability$problo[j, 1]
       }
-      low_probability <- crossing(-20)
+      low_probability <- crossing(-Inf)
       high_probability <- crossing(upper_limit)
       if (desired <= low_probability + x$tol) {
-        bound <- -20
+        bound <- -Inf
       } else if (desired >= high_probability - x$tol) {
         bound <- upper_limit
       } else {
         bound <- stats::uniroot(
           function(z) crossing(z) - desired,
-          interval = c(-20, upper_limit), tol = x$tol
+          interval = c(-20, min(upper_limit, 20)), tol = x$tol
         )$root
       }
       x$harm$bound[j] <- bound
       cumulative_harm <- cumulative_harm + crossing(bound)
     } else {
-      x$harm$bound[j] <- -20
+      x$harm$bound[j] <- -Inf
     }
 
-    stop_at_j <- -20
+    stop_at_j <- -Inf
     if (x$testHarm[j]) stop_at_j <- x$harm$bound[j]
     if (x$testLower[j]) stop_at_j <- max(stop_at_j, x$lower$bound[j])
     previous_stop <- c(previous_stop, stop_at_j)
@@ -1749,7 +1793,7 @@ gsFutilityBoundUpdate <- function(x) {
   cumulative_lower <- 0
 
   for (j in seq_len(x$k)) {
-    lower_limit <- if (x$testHarm[j]) x$harm$bound[j] else -20
+    lower_limit <- if (x$testHarm[j]) x$harm$bound[j] else -Inf
     crossing <- function(bound) {
       lower <- c(previous_stop, bound)
       probability <- gsprob(
@@ -1774,12 +1818,12 @@ gsFutilityBoundUpdate <- function(x) {
       } else {
         bound <- stats::uniroot(
           function(z) crossing(z) - desired,
-          interval = c(lower_limit, upper_limit), tol = x$tol
+          interval = c(max(lower_limit, -20), min(upper_limit, 20)), tol = x$tol
         )$root
       }
       x$lower$bound[j] <- bound
     } else {
-      x$lower$bound[j] <- -20
+      x$lower$bound[j] <- -Inf
       bound <- lower_limit
     }
 
@@ -1808,10 +1852,10 @@ gsJointHarmBounds <- function(x) {
         probhi = x$upper$spend, tol = x$tol, r = x$r
       )
       x$upper$bound <- upper$b
-      x$upper$bound[!x$testUpper] <- 20
+      x$upper$bound[!x$testUpper] <- Inf
     }
 
-    change <- max(abs(c(x$upper$bound, x$lower$bound, x$harm$bound) - old_bound))
+    change <- max(gsBoundChange(c(x$upper$bound, x$lower$bound, x$harm$bound), old_bound))
     if (change <= x$tol) break
   }
 
@@ -1833,7 +1877,7 @@ gsDProb <- function(theta, d) {
   k <- d$k
   n.I <- d$n.I
 
-  a <- if (d$test.type != 1) d$lower$bound else rep(-20, k)
+  a <- if (d$test.type != 1) d$lower$bound else rep(-Inf, k)
   b <- d$upper$bound
   r <- d$r
   ntheta <- as.integer(length(theta))
@@ -1843,7 +1887,7 @@ gsDProb <- function(theta, d) {
   plo <- as.double(c(1:(k * ntheta)))
   xx <- .C(
     "probrej", k, ntheta, as.double(theta), as.double(n.I),
-    as.double(a), as.double(b), plo, phi, r
+    as.double(a), as.double(b), plo, phi, r, gsQuadratureMethod(), NAOK = TRUE
   )
   plo <- matrix(xx[[7]], k, ntheta)
   phi <- matrix(xx[[8]], k, ntheta)
@@ -1871,7 +1915,7 @@ gsDProb <- function(theta, d) {
     harm_phi <- as.double(c(1:(k * ntheta)))
     xx2 <- .C(
       "probrej", k, ntheta, as.double(theta), as.double(n.I),
-      as.double(d$harm$bound), as.double(b), harm_plo, harm_phi, r
+      as.double(d$harm$bound), as.double(b), harm_plo, harm_phi, r, gsQuadratureMethod(), NAOK = TRUE
     )
     d$harm$prob <- matrix(xx2[[7]], k, ntheta)
   }
@@ -1937,7 +1981,7 @@ gsTestBoundsCheck <- function(k, test.type, testUpper, testLower, testHarm) {
 # gsModifySpend: flatten cumulative spending at inactive analyses ----
 # At skipped analyses, cumulative spend stays at the previous value (0 incremental).
 # At active analyses, cumulative spend remains at the spending function target.
-# This ensures the C code produces +/-EXTREMEZ at inactive analyses and
+# This ensures the C code produces -Inf/+Inf bounds at inactive analyses and
 # the correct bounds at active analyses, preserving cumulative alpha/beta.
 gsModifySpend <- function(cumspend, active) {
   for (i in seq_along(cumspend)) {
@@ -1952,7 +1996,7 @@ gsModifySpend <- function(cumspend, active) {
 # Strategy: after the initial design computation (which determines sample size),
 # reconstruct modified cumulative spending (flattened at inactive analyses) and
 # re-call the gsDType bound computation with fixed n.I.
-# At skipped analyses, incremental spend = 0 → C code returns ±EXTREMEZ bounds.
+# At skipped analyses, incremental spend = 0 → C code returns infinite bounds.
 # At active analyses, the incremental spend absorbs the skipped budget, so
 # bounds adjust and cumulative alpha/beta at performed analyses is preserved.
 gsApplyTestBounds <- function(x, testBounds) {
@@ -2009,14 +2053,13 @@ gsApplyTestBounds <- function(x, testBounds) {
     x$testLower <- testBounds$testLower
     x$testHarm  <- testBounds$testHarm
 
-    # Safety net: ensure inactive bounds are at ±EXTREMEZ.
+    # Safety net: ensure inactive bounds are infinite.
     # Most gsDType functions already produce this via 0 incremental spend,
     # but some (e.g. gsDType6) hardcode the final lower = upper.
-    EXTREMEZ <- 20
     for (i in seq_len(k)) {
-      if (!testBounds$testUpper[i]) x$upper$bound[i] <- EXTREMEZ
-      if (x$test.type > 2 && !testBounds$testLower[i]) x$lower$bound[i] <- -EXTREMEZ
-      if (x$test.type %in% c(7, 8) && !testBounds$testHarm[i]) x$harm$bound[i] <- -EXTREMEZ
+      if (!testBounds$testUpper[i]) x$upper$bound[i] <- Inf
+      if (x$test.type > 2 && !testBounds$testLower[i]) x$lower$bound[i] <- -Inf
+      if (x$test.type %in% c(7, 8) && !testBounds$testHarm[i]) x$harm$bound[i] <- -Inf
     }
   }
 
@@ -2030,7 +2073,7 @@ gsApplyTestBounds <- function(x, testBounds) {
     x$harm$prob <- probability$harm
     x$en <- probability$en
   } else if (x$test.type == 1) {
-    a <- rep(-20, x$k)
+    a <- rep(-Inf, x$k)
     y <- gsprob(x$theta, x$n.I, a, x$upper$bound, r = x$r, overrun = x$overrun)
     x$upper$prob <- y$probhi
     x$en <- as.vector(y$en)

@@ -93,14 +93,14 @@ sequentialPValue <- function(gsD = gsDesign(),
   probhi <- gsD$upper$sf(alpha=max(interval), t=usTime, param=gsD$upper$param)$spend
   # check upper end of p-value interval input
   if (length(Z)>1) probhi <- probhi - c(0,probhi[1:(length(Z)-1)])
-  if (min(gsBound1(I=n.I, theta=0, a=rep(-20,length(Z)),
+  if (min(gsBound1(I=n.I, theta=0, a=rep(-Inf, length(Z)),
                    probhi=probhi)$b-Z) > 0) return(max(interval))
   # check lower end of p-value interval input
   if(is.vector(interval,mode="numeric")!=TRUE||length(interval) != 2 || min(interval)<=0||max(interval)>=1){ 
     stop("interval must be 2 distinct values strictly between 0 and 1")}
   probhi <- gsD$upper$sf(alpha=min(interval), t=usTime, param=gsD$upper$param)$spend
   if (length(Z)>1) probhi <- probhi - c(0,probhi[1:(length(Z)-1)])
-  if (min(gsBound1(I=n.I, theta=0, a=rep(-20,length(Z)),
+  if (min(gsBound1(I=n.I, theta=0, a=rep(-Inf, length(Z)),
                    probhi=probhi)$b-Z) < 0) return(min(interval))
   # if answer is between interval bounds, find it with root-finding
   x <- try(uniroot(sequentialZdiff, interval = -qnorm(interval), gsD = gsD, n.I = n.I, Z = Z,
@@ -116,6 +116,6 @@ sequentialZdiff <- function(x,
   alpha <- pnorm(-x)
   probhi <- gsD$upper$sf(alpha=alpha, t=usTime, param=gsD$upper$param)$spend
   if (length(Z)>1) probhi <- probhi - c(0,probhi[1:(length(Z)-1)])
-  return(min(gsBound1(I=n.I, theta=0, a=rep(-20,length(Z)),
+  return(min(gsBound1(I=n.I, theta=0, a=rep(-Inf, length(Z)),
                       probhi=probhi)$b-Z))
 }

@@ -106,6 +106,7 @@ normalGrid <- function(r = 18, bounds = c(0, 0), mu = 0, sigma = 1) {
   if (length(bounds) != 2) {
     stop("bounds variable in normalGrid must be numeric and have length 2")
   }
+  if (anyNA(bounds)) stop("bounds must not contain missing values")
 
   # produce grid points and weights for numerical integration of normal density
   storage.mode(r) <- "integer"
@@ -122,7 +123,7 @@ normalGrid <- function(r = 18, bounds = c(0, 0), mu = 0, sigma = 1) {
   }
 
   b <- as.double((bounds - mu) / sigma)
-  xx <- .C("stdnorpts", r, b, z, w)
+  xx <- .C("stdnorpts", r, b, z, w, NAOK = TRUE)
   len <- sum(xx[[3]] <= b[2])
   z <- xx[[3]][1:len] * sigma + mu
   w <- xx[[4]][1:len] * sigma
