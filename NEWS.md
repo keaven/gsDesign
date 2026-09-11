@@ -16,6 +16,13 @@
   smaller integration errors. The default Jennison and Turnbull grid
   (`"jt"`) is unchanged; see the numerical integration section of `?gsDesign`
   (#323).
+- Added `gsCPFutilitySpending()` to calibrate beta-spending futility
+  parameters and statistical information to conditional power targets at one
+  or more interim analyses for `test.type` 3, 4, 7, and 8 (#318).
+- Added exact conditional power, fixed-look Clopper--Pearson, repeated, and
+  sequential confidence intervals for vaccine or prevention efficacy, plus
+  `VEtable()` summaries and automatic `lt()` formatting for exact binomial
+  spending designs (#316).
 
 ## Performance
 
@@ -44,6 +51,19 @@
 
 ## Documentation
 
+- Added a futility-spending calibration vignette comparing all six
+  two-parameter families and piecewise-linear spending with three
+  conditional-power targets, including reconstructed designs and practical
+  guidance on early futility and sample-size inflation. Examples cover risk
+  differences, normal means, survival designs, and calibrated spending curves
+  with interpretation of effects at the bounds (#318).
+- Documented all `gsCPFutilitySpending()` solver controls, defaults, and
+  spending-family restrictions, with a tighter CP tolerance example (#318).
+- Updated the `gsCPFutilitySpending()` example to target conditional power 0.3
+  under the observed effect, reuse fitted futility spending parameters in
+  `gsDesign()` and `gsSurv()` with matching test type, timing, and spending,
+  and verify conditional power using `gsBoundSummary()`. The example uses
+  `sfLDOF` efficacy spending and futility testing only at IA 1 (#318).
 - Updated package vignettes to use **lt** consistently for formatted data-frame
   and matrix output, with compact row spacing for long tables and no significant
   changes to the rendered HTML tables.
@@ -270,7 +290,7 @@
   row names (#274).
 - `Power.ssrCP()` now uses the interim efficacy bound when integrating the
   no-sample-size-re-estimation region and when falling back to the upper
-  conditional-power changepoint (#213).
+  conditional power changepoint (#213).
 - `nSurv()` and `gsSurv()` now use the requested survival sample size method
   when either `T` or `minfup` is `NULL`. `gsSurv()` also uses the input
   accrual rate and duration when both `T` and `minfup` are `NULL`, solving

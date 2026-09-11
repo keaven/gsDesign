@@ -45,9 +45,13 @@ spending under the null) at the final analysis even when
 unchanged and applies the override only at the last look.}
 }
 \value{
-An object of class \code{gsBinomialExact}. The returned object also
-  records `test.type`, `alpha`, applicable `astar`, `testLower`, and
-  applicable `testHarm`. For
+An object with primary class \code{gsBinomialExactSpending},
+  inheriting from \code{gsBinomialExact} and \code{gsProbability}. In
+  addition to the exact bounds and crossing probabilities, the returned
+  object records `test.type`, `alpha`, `beta`, `ratio`, applicable `astar`,
+  analysis-specific testing indicators, spending times, planned final event
+  count, `maxSpend`, and the evaluated conversion call. The retained
+  randomization ratio can be used by \code{\link{VEtable}}. For
   `test.type = 6`, the exact object's upper event-count bound represents the
   non-binding lower stopping bound, with its first probability column
   calibrated under the null hypothesis. For `test.type = 8`, `upper`
@@ -121,5 +125,5 @@ toBinomialExact(x, observedEvents = c(20, 55, 80), usTime = c(.25, .65, 1))
 toBinomialExact(x, observedEvents = c(20, 55, 75), maxSpend = TRUE)
 }
 \seealso{
-\code{\link{gsBinomialExact}}
+\code{\link{gsBinomialExact}}, \code{\link{VEtable}}
 }

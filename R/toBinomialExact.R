@@ -53,16 +53,20 @@
 #' selective lower-bound looks), lower-bound spending is flattened at analyses
 #' where \code{testLower = FALSE}.
 #' 
-#' @return An object of class \code{gsBinomialExact}. The returned object also
-#'   records `test.type`, `alpha`, applicable `astar`, `testLower`, and
-#'   applicable `testHarm`. For
+#' @return An object with primary class \code{gsBinomialExactSpending},
+#'   inheriting from \code{gsBinomialExact} and \code{gsProbability}. In
+#'   addition to the exact bounds and crossing probabilities, the returned
+#'   object records `test.type`, `alpha`, `beta`, `ratio`, applicable `astar`,
+#'   analysis-specific testing indicators, spending times, planned final event
+#'   count, `maxSpend`, and the evaluated conversion call. The retained
+#'   randomization ratio can be used by \code{\link{VEtable}}. For
 #'   `test.type = 6`, the exact object's upper event-count bound represents the
 #'   non-binding lower stopping bound, with its first probability column
 #'   calibrated under the null hypothesis. For `test.type = 8`, `upper`
 #'   represents all upper event-count stops, while `futility` and `harm`
 #'   partition those stops into mutually exclusive components.
 #'
-#' @seealso \code{\link{gsBinomialExact}}
+#' @seealso \code{\link{gsBinomialExact}}, \code{\link{VEtable}}
 #'
 #' @export
 #'
@@ -477,9 +481,18 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
   xxxx$init_approx <- init_approx
   xxxx$test.type <- x$test.type
   xxxx$alpha <- alpha
+  xxxx$beta <- x$beta
   xxxx$astar <- if (x$test.type %in% c(6, 8)) xx$astar else NULL
+  xxxx$testUpper <- if (is.null(x$testUpper)) rep(TRUE, k) else rep(x$testUpper, length.out = k)
   xxxx$testLower <- if (x$test.type == 1) NULL else active_lower
   xxxx$testHarm <- if (x$test.type == 8) active_harm else NULL
+  xxxx$usTime <- timing
+  xxxx$lsTime <- if (x$test.type == 1) NULL else timingl
+  xxxx$maxn.IPlan <- x$maxn.IPlan
+  xxxx$maxSpend <- maxSpend
+  xxxx$ratio <- x$ratio
+  xxxx$call <- match.call()
+  class(xxxx) <- c("gsBinomialExactSpending", class(xxxx))
   return(xxxx)
 }
 

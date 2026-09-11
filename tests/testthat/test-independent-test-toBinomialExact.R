@@ -80,10 +80,10 @@ test_that("toBinomialExact validates inputs", {
 })
 
 test_that("toBinomialExact documents its test.type support matrix", {
-  expect_s3_class(toBinomialExact(surv_design(test.type = 1)), "gsBinomialExact")
-  expect_s3_class(toBinomialExact(surv_design(test.type = 4)), "gsBinomialExact")
-  expect_s3_class(toBinomialExact(surv_design(test.type = 6)), "gsBinomialExact")
-  expect_s3_class(toBinomialExact(surv_design(test.type = 8)), "gsBinomialExact")
+  expect_s3_class(toBinomialExact(surv_design(test.type = 1)), "gsBinomialExactSpending")
+  expect_s3_class(toBinomialExact(surv_design(test.type = 4)), "gsBinomialExactSpending")
+  expect_s3_class(toBinomialExact(surv_design(test.type = 6)), "gsBinomialExactSpending")
+  expect_s3_class(toBinomialExact(surv_design(test.type = 8)), "gsBinomialExactSpending")
 
   expected_reason <- c(
     `2` = "symmetric two-sided boundaries",
