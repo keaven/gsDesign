@@ -200,7 +200,7 @@ minMedianFollowUp <- function(x = NULL, ..., target, gamma = NULL, R = NULL,
   exitC <- eta + lambdaC
   exitE <- etaE + lambdaC * hr
   if (any(!is.finite(exitC)) || any(!is.finite(exitE))) stop("Combined hazards exceed the finite numerical range")
-  list(gamma = gamma / total, R = R, startR = c(0, head(cumsum(R), -1L)),
+  list(gamma = gamma / total, R = R, startR = c(0, utils::head(cumsum(R), -1L)),
        S = c(S, Inf), startS = c(0, cumsum(S)), ratio = ratio,
        exitC = exitC, exitE = exitE)
 }
