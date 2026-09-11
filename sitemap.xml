@@ -5,6 +5,8 @@
 <url><loc>https://keaven.github.io/gsDesign//articles/CPFutilitySpending.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//articles/ConditionalErrorSpending.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//articles/ConditionalPowerPlot.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign//articles/DragalinFutilitySpending.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign//articles/EffectSpending.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//articles/GentleIntroductionToGSD.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//articles/GraphicalMultiplicity.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//articles/HarmBound.html</loc></url>
@@ -40,12 +42,17 @@
 <url><loc>https://keaven.github.io/gsDesign//reference/gsBound.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//reference/gsBoundCP.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//reference/gsBoundSummary.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign//reference/gsCAFutilitySpending.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//reference/gsCP.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//reference/gsCPBinomialExact.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//reference/gsCPFutilitySpending.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign//reference/gsCPOSFutilitySpending.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//reference/gsDensity.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//reference/gsDesign-package.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//reference/gsDesign.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign//reference/gsEffectSpending.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign//reference/gsPOSFutilitySpending.html</loc></url>
+<url><loc>https://keaven.github.io/gsDesign//reference/gsPPFutilitySpending.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//reference/gsProbability.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//reference/gsSurvCalendar.html</loc></url>
 <url><loc>https://keaven.github.io/gsDesign//reference/gsSurvPower.html</loc></url>

@@ -25,12 +25,41 @@
   integration section of
   [`?gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
   ([\#323](https://github.com/keaven/gsDesign/issues/323)).
+
+- Unified conditional-POS spending calibration in
+  [`gsCPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPOSFutilitySpending.md)
+  with `mode = "preserve_power"` or `"fixed_information"`; retained
+  [`gsCAFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCAFutilitySpending.md)
+  as a backward-compatible wrapper
+  ([\#328](https://github.com/keaven/gsDesign/issues/328),
+  [\#329](https://github.com/keaven/gsDesign/issues/329)).
+
+- Added
+  [`gsEffectSpending()`](https://keaven.github.io/gsDesign/reference/gsEffectSpending.md)
+  to calibrate efficacy, futility and harm spending to natural-scale
+  effect targets separately or jointly, with difference, risk-ratio and
+  explicitly specified event-scale hazard-ratio mappings
+  ([\#331](https://github.com/keaven/gsDesign/issues/331)).
+
+- Added power-preserving unconditional-POS calibration with
+  [`gsPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPOSFutilitySpending.md)
+  ([\#330](https://github.com/keaven/gsDesign/issues/330)).
+
+- Added
+  [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
+  to calibrate futility spending to posterior predictive power targets
+  using a fixed discrete or continuous-grid prior, sharing the CP
+  calibration solver. The futility-spending vignette compares CP- and
+  PP-targeted survival designs using the default summary prior
+  ([\#326](https://github.com/keaven/gsDesign/issues/326)).
+
 - Added
   [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
   to calibrate beta-spending futility parameters and statistical
   information to conditional power targets at one or more interim
   analyses for `test.type` 3, 4, 7, and 8
   ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+
 - Added exact conditional power, fixed-look Clopper–Pearson, repeated,
   and sequential confidence intervals for vaccine or prevention
   efficacy, plus
@@ -75,6 +104,15 @@
 
 ### Documentation
 
+- Added an effect-spending vignette using the public interface for joint
+  boundaries, risk differences and explicitly event-scaled HRs
+  ([\#331](https://github.com/keaven/gsDesign/issues/331)).
+
+- Added a separate vignette comparing conditional-assurance and
+  unconditional-POS spending calibration, including the Dragalin
+  fixed-information benchmark and operating-characteristic checks
+  ([\#330](https://github.com/keaven/gsDesign/issues/330)).
+
 - Added a futility-spending calibration vignette comparing all six
   two-parameter families and piecewise-linear spending with three
   conditional-power targets, including reconstructed designs and
@@ -82,11 +120,13 @@
   Examples cover risk differences, normal means, survival designs, and
   calibrated spending curves with interpretation of effects at the
   bounds ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+
 - Documented all
   [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
   solver controls, defaults, and spending-family restrictions, with a
   tighter CP tolerance example
   ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+
 - Updated the
   [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
   example to target conditional power 0.3 under the observed effect,
@@ -98,18 +138,24 @@
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
   The example uses `sfLDOF` efficacy spending and futility testing only
   at IA 1 ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+
 - Updated package vignettes to use **lt** consistently for formatted
   data-frame and matrix output, with compact row spacing for long tables
   and no significant changes to the rendered HTML tables.
+
 - Remastered the hex sticker logo with a reproducible parametric logo
   generation script
   ([\#327](https://github.com/keaven/gsDesign/issues/327)).
+
 - Reduced rendered HTML size in selected vignettes with figures by
   switching from the base R SVG device to PNG device with optimized
   parameters ([\#325](https://github.com/keaven/gsDesign/issues/325)).
 
 ### Testing
 
+- Added tests for natural-effect calibration, joint boundary targets, HR
+  allocation/direction handling and design replay
+  ([\#331](https://github.com/keaven/gsDesign/issues/331)).
 - Added regression fixtures, multivariate normal reference checks, and
   print snapshots for the numerical integration routines and their R
   interfaces ([\#242](https://github.com/keaven/gsDesign/issues/242),

@@ -30,8 +30,10 @@ standardized effect scale. Its center is halfway between the null (zero)
 and the planned alternative (`x$delta`); it is updated using the interim
 result at the bound. Thus PP incorporates uncertainty about the effect
 rather than assuming one fixed value. CP H1 and PP provide context in
-the tables; the examples here calibrate **CP**, not those other
-measures.
+the tables; the examples here primarily calibrate **CP**. A parallel
+survival example uses
+[`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
+to target **PP** instead.
 
 ## A design warning: futility, sample size, and overall power
 
@@ -205,6 +207,80 @@ that first analysis. Thus it may stop a trial showing approximately a
 there. For a trial planned with 90% overall power, this looks overly
 aggressive and motivates considering a lower CP target even at 50%
 information.
+
+### Targeting predictive power instead
+
+[`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
+can target PP using the default summary prior described in the
+introduction. For comparison with the CP-targeted survival design, keep
+the same timing, testing indicators, spending families, and survival
+assumptions. First construct a matching statistical reference on the
+**event-count scale**. The prior’s numeric support must be on that same
+standardized-effect scale; the normalized `n.fix = 1` reference from the
+opening example is not interchangeable with it.
+
+``` r
+
+pp_reference <- gsDesign(
+  k = 3, test.type = 4, timing = c(.5, .75),
+  n.fix = surv_design$n.fix,
+  delta0 = surv_design$delta0, delta1 = surv_design$delta1,
+  sfu = sfLDOF, sfl = sfHSD, sflpar = 1,
+  testLower = c(TRUE, FALSE, FALSE)
+)
+prior <- normalGrid(
+  mu = pp_reference$delta / 2, sigma = 10 / sqrt(pp_reference$n.fix)
+)
+fit_pp <- gsPPFutilitySpending(pp_reference, target_pp = .3, i = 1, prior = prior)
+surv_pp <- gsSurv(
+  k = 3, test.type = 4, timing = c(.5, .75),
+  sfu = sfLDOF, sfl = sfHSD,
+  sflpar = fit_pp$ppFutilitySpending$sflpar,
+  testLower = c(TRUE, FALSE, FALSE), ratio = 1
+)
+achieved_pp <- gsPP(
+  surv_pp, i = 1, zi = surv_pp$lower$bound[1],
+  theta = prior$z, wgts = prior$wgts
+)
+stopifnot(abs(achieved_pp - .3) <= 1e-4)
+stopifnot(abs(sum(surv_pp$upper$prob[, 2]) - .9) < 2e-5)
+# Verify that the explicit prior is also this survival design's default prior.
+stopifnot(isTRUE(all.equal(
+  prior, normalGrid(mu = surv_pp$delta / 2, sigma = 10 / sqrt(surv_pp$n.fix))
+)))
+gsBoundSummary(surv_pp, prior = prior, digits = 4, exclude = "B-value") |>
+  lt() |> lt_format(columns = c("Efficacy", "Futility"), decimals = 4)
+```
+
+The **PP** row, not the CP or CP H1 row, now attains 0.3 at the first
+futility bound. The prior stays fixed during fitting, but each
+candidate’s posterior uses that candidate’s bound and information. As
+with the CP example, this is statistical calibration followed by
+survival reconstruction, not direct calibration of a survival object.
+
+``` r
+
+survival_comparison <- function(design, label) {
+  data.frame(
+    Target = label,
+    FutilityHR = gsHR(design$lower$bound[1], 1, design),
+    BetaSpending = design$lower$spend[1],
+    IA1Events = design$n.I[1], FinalEvents = max(design$n.I),
+    MaximumN = max(design$N)
+  )
+}
+rbind(
+  survival_comparison(surv_design, "CP = 0.3"),
+  survival_comparison(surv_pp, "PP = 0.3")
+) |> lt() |>
+  lt_format(columns = c("FutilityHR", "BetaSpending"), decimals = 4) |>
+  lt_format(columns = c("IA1Events", "FinalEvents", "MaximumN"), decimals = 1)
+```
+
+Equal numerical targets for CP and PP need not imply equal futility
+bounds or required event counts and sample sizes. The earlier cautions
+about beta spending and sample-size inflation apply to PP targets too;
+averaging over a prior does not remove these design trade-offs.
 
 ### Fixed calendar analyses with `gsSurvCalendar()`
 
@@ -669,6 +745,8 @@ gsBoundSummary(fit_varying, deltaname = "Mean difference", Nname = "Participants
   achieved CP and does not automatically recalibrate the design.
 - The calibration input must currently be a fixed-timing
   [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
-  object. Direct survival or calendar-time calibration and
-  prior-averaged predictive power calibration are not implemented by
-  this function.
+  object. Direct survival or calendar-time calibration is not
+  implemented by either calibration function. Use
+  [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
+  for prior-averaged predictive power rather than
+  [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md).

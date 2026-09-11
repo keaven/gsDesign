@@ -67,5 +67,9 @@ Interim decision support and adaptation-oriented examples.
   error](https://keaven.github.io/gsDesign/articles/ConditionalPowerPlot.md):
 - [Calibrating futility spending to conditional
   power](https://keaven.github.io/gsDesign/articles/CPFutilitySpending.md):
+- [Futility spending calibrated to assurance and probability of
+  success](https://keaven.github.io/gsDesign/articles/DragalinFutilitySpending.md):
+- [Calibrating spending to effects at interim
+  bounds](https://keaven.github.io/gsDesign/articles/EffectSpending.md):
 - [Conditional error spending
   functions](https://keaven.github.io/gsDesign/articles/ConditionalErrorSpending.md):

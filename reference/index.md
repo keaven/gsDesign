@@ -178,6 +178,16 @@ For an overview of spending functions, see
   and Gallo conditional error spending functions
 - [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
   : Calibrate Futility Spending to Conditional Power Targets
+- [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
+  : Calibrate Futility Spending to Predictive Power Targets
+- [`gsCPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPOSFutilitySpending.md)
+  : Calibrate Futility Spending to Conditional Probability of Success
+- [`gsCAFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCAFutilitySpending.md)
+  : Calibrate Futility Spending at Fixed Information
+- [`gsPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPOSFutilitySpending.md)
+  : Calibrate Futility Spending to Unconditional Probability of Success
+- [`gsEffectSpending()`](https://keaven.github.io/gsDesign/reference/gsEffectSpending.md)
+  : Calibrate Spending to Natural-Scale Effects at Boundaries
 
 ## Conditional and Predictive Power
 
