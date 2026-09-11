@@ -20,6 +20,9 @@ ylab, lty, col, lwd, type, pch, cex have been tested and work for most
 values of plottype; one exception is that type="l" cannot be
 overridden when plottype=2. Default values for labels depend on
 plottype and the class of x.
+For endpoint = "info", information annotations on boundary,
+treatment-effect, B-value, and conditional-power plots use I=
+and round information to two decimal places (without integer rounding).
 For test types 7 and 8, harm and futility probabilities stored on the
 design are mutually exclusive stopping outcomes. In a type 2 plot, the
 futility-threshold curve is inclusive: it uses the sum of futility-only and
@@ -75,6 +78,9 @@ ylab, lty, col, lwd, type, pch, cex have been tested and work for most
 values of plottype; one exception is that type="l" cannot be
 overridden when plottype=2. Default values for labels depend on
 plottype and the class of x.
+For endpoint = "info", information annotations on boundary,
+treatment-effect, B-value, and conditional-power plots use I=
+and round information to two decimal places (without integer rounding).
 For test types 7 and 8, harm and futility probabilities stored on the
 design are mutually exclusive stopping outcomes. In a type 2 plot, the
 futility-threshold curve is inclusive: it uses the sum of futility-only and
@@ -123,7 +129,7 @@ that time. See Proschan, Lan and Wittes (2006).'><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9012</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9014</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -164,7 +170,10 @@ expected; exceptions to this rule exist. In particular, <code>main, xlab,
 ylab, lty, col, lwd, type, pch, cex</code> have been tested and work for most
 values of <code>plottype</code>; one exception is that <code>type="l"</code> cannot be
 overridden when <code>plottype=2</code>. Default values for labels depend on
-<code>plottype</code> and the class of <code>x</code>.</p>
+<code>plottype</code> and the class of <code>x</code>.
+For <code>endpoint = "info"</code>, information annotations on boundary,
+treatment-effect, B-value, and conditional-power plots use <code>I=</code>
+and round information to two decimal places (without integer rounding).</p>
 <p>For test types 7 and 8, harm and futility probabilities stored on the
 design are mutually exclusive stopping outcomes. In a type 2 plot, the
 futility-threshold curve is inclusive: it uses the sum of futility-only and

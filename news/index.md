@@ -79,6 +79,12 @@
 
 ### Bug fixes
 
+- Exact binomial conversion preserves skipped futility looks without
+  invalid provisional boundaries during beta-spending calibration
+  ([\#333](https://github.com/keaven/gsDesign/issues/333)).
+- Information-based boundary plots label actual information as `I=` with
+  two decimal places, rather than rounding it to a sample size
+  ([\#315](https://github.com/keaven/gsDesign/issues/315)).
 - Survival calculation methods are reported in
   [`summary()`](https://rdrr.io/r/base/summary.html), not boundary
   tables.

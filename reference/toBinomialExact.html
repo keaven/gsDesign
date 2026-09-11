@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9012</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9014</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -141,7 +141,12 @@ Type 6 lower bound) must be positive, non-decreasing, and strictly greater than 
 spending time is set to 1 so all remaining spending is used at the last look.
 If <code>x$testLower</code> is present (for example from <code><a href="nSurv.html">gsSurv()</a></code> with
 selective lower-bound looks), lower-bound spending is flattened at analyses
-where <code>testLower = FALSE</code>.</p>
+where <code>testLower = FALSE</code>.
+For Type 4, the exact futility bound at a skipped look carries forward
+<code>n.I - b</code> from the preceding look (or uses <code>b = n.I + 1</code>
+at a skipped first look). It cannot be crossed by a continuing path and
+spends no additional beta. Efficacy calibration ignores these non-binding
+futility bounds.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

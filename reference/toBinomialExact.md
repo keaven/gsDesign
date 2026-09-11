@@ -105,7 +105,11 @@ spending time is set to 1 so all remaining spending is used at the last
 look. If `x$testLower` is present (for example from
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) with
 selective lower-bound looks), lower-bound spending is flattened at
-analyses where `testLower = FALSE`.
+analyses where `testLower = FALSE`. For Type 4, the exact futility bound
+at a skipped look carries forward `n.I - b` from the preceding look (or
+uses `b = n.I + 1` at a skipped first look). It cannot be crossed by a
+continuing path and spends no additional beta. Efficacy calibration
+ignores these non-binding futility bounds.
 
 ## See also
 

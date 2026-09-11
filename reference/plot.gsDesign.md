@@ -19,7 +19,10 @@ function as expected; exceptions to this rule exist. In particular,
 `main, xlab, ylab, lty, col, lwd, type, pch, cex` have been tested and
 work for most values of `plottype`; one exception is that `type="l"`
 cannot be overridden when `plottype=2`. Default values for labels depend
-on `plottype` and the class of `x`.
+on `plottype` and the class of `x`. For `endpoint = "info"`, information
+annotations on boundary, treatment-effect, B-value, and
+conditional-power plots use `I=` and round information to two decimal
+places (without integer rounding).
 
 For test types 7 and 8, harm and futility probabilities stored on the
 design are mutually exclusive stopping outcomes. In a type 2 plot, the

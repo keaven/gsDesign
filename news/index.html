@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9012</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9014</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,9 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li>Survival calculation methods are reported in <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, not boundary tables. <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> keeps all analysis annotations when POS or excluded statistics require unequal block sizes (<a href="https://github.com/keaven/gsDesign/issues/332" class="external-link">#332</a>).</li>
+<ul><li>Exact binomial conversion preserves skipped futility looks without invalid provisional boundaries during beta-spending calibration (<a href="https://github.com/keaven/gsDesign/issues/333" class="external-link">#333</a>).</li>
+<li>Information-based boundary plots label actual information as <code>I=</code> with two decimal places, rather than rounding it to a sample size (<a href="https://github.com/keaven/gsDesign/issues/315" class="external-link">#315</a>).</li>
+<li>Survival calculation methods are reported in <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, not boundary tables. <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> keeps all analysis annotations when POS or excluded statistics require unequal block sizes (<a href="https://github.com/keaven/gsDesign/issues/332" class="external-link">#332</a>).</li>
 <li>Guarded the Newton boundary search against <code>0/0</code> updates and separated its iteration limit and finite iterate clamp from the absent-bound values (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/321" class="external-link">#321</a>).</li>
 <li>Updated the R interfaces and convergence checks to handle infinite bounds, and fixed <code><a href="../reference/gsDensity.html">gsDensity()</a></code> for one-sided designs (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/321" class="external-link">#321</a>).</li>
 <li>Fixed <code><a href="../reference/gsBoundCP.html">gsBoundCP()</a></code> to return <code>NA</code> at absent harm bounds, including bounds with zero spending. This also fixes <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> when conditional power is requested for selective harm bound designs (<a href="https://github.com/keaven/gsDesign/issues/335" class="external-link">#335</a>).</li>
