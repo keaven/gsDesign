@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9014</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,9 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li>Exact binomial conversion preserves skipped futility looks without invalid provisional boundaries during beta-spending calibration (<a href="https://github.com/keaven/gsDesign/issues/333" class="external-link">#333</a>).</li>
+<ul><li>
+<code><a href="../reference/gsCPFutilitySpending.html">gsCPFutilitySpending()</a></code> inherits the reference design’s futility spending function when <code>sfl</code> is omitted; explicit overrides remain supported (<a href="https://github.com/keaven/gsDesign/issues/318" class="external-link">#318</a>).</li>
+<li>Exact binomial conversion preserves skipped futility looks without invalid provisional boundaries during beta-spending calibration (<a href="https://github.com/keaven/gsDesign/issues/333" class="external-link">#333</a>).</li>
 <li>Information-based boundary plots label actual information as <code>I=</code> with two decimal places, rather than rounding it to a sample size (<a href="https://github.com/keaven/gsDesign/issues/315" class="external-link">#315</a>).</li>
 <li>Survival calculation methods are reported in <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, not boundary tables. <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> keeps all analysis annotations when POS or excluded statistics require unequal block sizes (<a href="https://github.com/keaven/gsDesign/issues/332" class="external-link">#332</a>).</li>
 <li>Guarded the Newton boundary search against <code>0/0</code> updates and separated its iteration limit and finite iterate clamp from the absent-bound values (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/321" class="external-link">#321</a>).</li>
@@ -86,7 +88,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="testing-development-version">Testing<a class="anchor" aria-label="anchor" href="#testing-development-version"></a></h3>
-<ul><li>Added tests for natural-effect calibration, joint boundary targets, HR allocation/direction handling and design replay (<a href="https://github.com/keaven/gsDesign/issues/331" class="external-link">#331</a>).</li>
+<ul><li>Declare <code>svglite</code> as a test dependency for information-label rendering checks (<a href="https://github.com/keaven/gsDesign/issues/315" class="external-link">#315</a>).</li>
+<li>Added tests for natural-effect calibration, joint boundary targets, HR allocation/direction handling and design replay (<a href="https://github.com/keaven/gsDesign/issues/331" class="external-link">#331</a>).</li>
 <li>Added regression fixtures, multivariate normal reference checks, and print snapshots for the numerical integration routines and their R interfaces (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/320" class="external-link">#320</a>).</li>
 <li>Reduced default test-suite runtime by using smaller stress-test grids, fewer Monte Carlo iterations, and toy exact-binomial p-value event counts. Set <code>GSDESIGN_RUN_STRESS_TESTS=true</code> to run the larger stress-test settings.</li>
 </ul></div>

@@ -79,6 +79,10 @@
 
 ### Bug fixes
 
+- [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
+  inherits the reference design’s futility spending function when `sfl`
+  is omitted; explicit overrides remain supported
+  ([\#318](https://github.com/keaven/gsDesign/issues/318)).
 - Exact binomial conversion preserves skipped futility looks without
   invalid provisional boundaries during beta-spending calibration
   ([\#333](https://github.com/keaven/gsDesign/issues/333)).
@@ -177,6 +181,8 @@
 
 ### Testing
 
+- Declare `svglite` as a test dependency for information-label rendering
+  checks ([\#315](https://github.com/keaven/gsDesign/issues/315)).
 - Added tests for natural-effect calibration, joint boundary targets, HR
   allocation/direction handling and design replay
   ([\#331](https://github.com/keaven/gsDesign/issues/331)).

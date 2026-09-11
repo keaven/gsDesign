@@ -21,7 +21,7 @@ retain the reference design's unconditional power."><meta property="og:image" co
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9014</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9015</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@ retain the reference design's unconditional power.</p>
 <span>  <span class="va">x</span>,</span>
 <span>  <span class="va">target_cp</span>,</span>
 <span>  i <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">target_cp</span><span class="op">)</span>,</span>
-<span>  sfl <span class="op">=</span> <span class="st">"sfHSD"</span>,</span>
+<span>  sfl <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">sf</span>,</span>
 <span>  theta <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -88,7 +88,8 @@ identify active futility bounds, be unique, and be in
 
 <dt id="arg-sfl">sfl<a class="anchor" aria-label="anchor" href="#arg-sfl"></a></dt>
 <dd><p>Futility spending function, supplied as a supported function or
-its character name. The default is <code>"sfHSD"</code>.</p></dd>
+its character name. By default, use <code>x$lower$sf</code>, the reference
+design's futility spending function. Supply <code>sfl</code> to override it.</p></dd>
 
 
 <dt id="arg-theta">theta<a class="anchor" aria-label="anchor" href="#arg-theta"></a></dt>

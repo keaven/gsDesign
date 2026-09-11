@@ -15,7 +15,7 @@ gsCPFutilitySpending(
   x,
   target_cp,
   i = seq_along(target_cp),
-  sfl = "sfHSD",
+  sfl = x$lower$sf,
   theta = NULL,
   control = list()
 )
@@ -41,7 +41,8 @@ gsCPFutilitySpending(
 - sfl:
 
   Futility spending function, supplied as a supported function or its
-  character name. The default is `"sfHSD"`.
+  character name. By default, use `x$lower$sf`, the reference design's
+  futility spending function. Supply `sfl` to override it.
 
 - theta:
 
