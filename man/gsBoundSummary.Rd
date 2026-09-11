@@ -277,6 +277,14 @@ including its cumulative crossing probability, is shown as \code{NA} at an
 analysis where that bound is inactive. The underlying probability arrays on
 \code{x} retain the cumulative crossing information.
 }
+\details{
+For survival designs, \code{summary()} identifies the stored
+sample size/power calculation method, when available. The method is not
+displayed by \code{gsBoundSummary()}. Each analysis block accommodates
+both its annotations and the selected boundary statistics, padding the
+shorter side. Padding has an empty \code{Value} and missing numeric values;
+the print method displays these cells as blanks.
+}
 \note{
 The gsDesign technical manual is available at
   \url{https://keaven.github.io/gsd-tech-manual/}.

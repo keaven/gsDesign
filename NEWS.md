@@ -50,6 +50,9 @@
 
 ## Bug fixes
 
+- Survival calculation methods are reported in `summary()`, not boundary
+  tables. `gsBoundSummary()` keeps all analysis annotations when POS or
+  excluded statistics require unequal block sizes (#332).
 - Guarded the Newton boundary search against `0/0` updates and separated its
   iteration limit and finite iterate clamp from the absent-bound values
   (#242, #321).
