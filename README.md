@@ -35,6 +35,9 @@ Thus, the intent of the gsDesign package is to easily create, fully characterize
 
 ## A little history
 
+See [A history of gsDesign](https://keaven.github.io/gsDesign/articles/gsDesignHistory.html)
+for a longer account of the methods, contributors, and software development.
+
 In 2026 we have updated survival sample size and power methods (`nSurv()` and `gsSurv()`) to allow methods by 1) Schoenfeld, 2) Freedman, and 3) Bernstein and Lagakos.
 While we still recommend the default Lachin and Foulkes method, these additions allow replication of results from other software.
 Updates in late 2018 and early 2019 largely enabled by Metrum Research Group (Devin Pastoor, Harsh Baid, Jonathan Sidi).

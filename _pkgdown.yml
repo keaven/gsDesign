@@ -159,6 +159,7 @@ articles:
     contents:
       - GentleIntroductionToGSD
       - gsDesignPackageOverview
+      - gsDesignHistory
       - SpendingFunctionOverview
       - nNormal
       - binomialTwoSample
