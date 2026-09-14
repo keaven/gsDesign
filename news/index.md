@@ -147,6 +147,10 @@
 
 ### Documentation
 
+- Added a historical vignette covering the package’s statistical
+  foundations, contributors, software modernization, and recent
+  development ([\#304](https://github.com/keaven/gsDesign/issues/304)).
+
 - Added an effect-spending vignette using the public interface for joint
   boundaries, risk differences and explicitly event-scaled HRs
   ([\#331](https://github.com/keaven/gsDesign/issues/331)).

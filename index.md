@@ -55,7 +55,12 @@ well as provide a tool to evaluate innovative designs.
 
 ## A little history
 
-In 2026 we have updated survival sample size and power methods
+See [A history of
+gsDesign](https://keaven.github.io/gsDesign/articles/gsDesignHistory.html)
+for a longer account of the methods, contributors, and software
+development.
+
+In 2026, we have updated survival sample size and power methods
 ([`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)) to
 allow methods by 1) Schoenfeld, 2) Freedman, and 3) Bernstein and
@@ -64,13 +69,13 @@ these additions allow replication of results from other software.
 Updates in late 2018 and early 2019 largely enabled by Metrum Research
 Group (Devin Pastoor, Harsh Baid, Jonathan Sidi). These include, but are
 not limited to, converting unit testing to use testthat package as well
-as developing the github web pages and implementing covrpage to document
-unit testing. Yilong Zhang implemented 3.1.1 continuous integration at
-github. 2020 collaborations with Cytel, Inc. increased unit testing
+as developing the GitHub web pages and implementing covrpage to document
+unit testing. Yilong Zhang implemented 3.1.1 continuous integration on
+GitHub. 2020 collaborations with Cytel, Inc. increased unit testing
 coverage to \> 80% in version 3.2.0 from essential unit testing done
 long ago. Much earlier development, testing and documentation help were
 lead largely by Bill Constantine and Rich Calaway while they were with
 Revolution Computing. Thanks to John Lueders for his excellent and
 extensive collaboration building the Shiny app; more recent Shiny
 development done by Nan Xiao adds significant features such as saving
-and reloading designs and creating default Rmarkdown reports.
+and reloading designs and creating default R Markdown reports.

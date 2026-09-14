@@ -8,6 +8,8 @@ Introductory and broad overview materials.
   design](https://keaven.github.io/gsDesign/articles/GentleIntroductionToGSD.md):
 - [gsDesign package
   overview](https://keaven.github.io/gsDesign/articles/gsDesignPackageOverview.md):
+- [A history of
+  gsDesign](https://keaven.github.io/gsDesign/articles/gsDesignHistory.md):
 - [Spending function
   overview](https://keaven.github.io/gsDesign/articles/SpendingFunctionOverview.md):
 - [Two-sample normal sample

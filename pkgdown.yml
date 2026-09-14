@@ -11,6 +11,7 @@ articles:
   EffectSpending: EffectSpending.html
   GentleIntroductionToGSD: GentleIntroductionToGSD.html
   GraphicalMultiplicity: GraphicalMultiplicity.html
+  gsDesignHistory: gsDesignHistory.html
   gsDesignPackageOverview: gsDesignPackageOverview.html
   gsSurvBasicExamples: gsSurvBasicExamples.html
   gsSurvPower: gsSurvPower.html
@@ -26,7 +27,7 @@ articles:
   SurvivalOverview: SurvivalOverview.html
   toInteger: toInteger.html
   VaccineEfficacy: VaccineEfficacy.html
-last_built: 2026-09-11T14:13Z
+last_built: 2026-09-14T04:20Z
 urls:
   reference: https://keaven.github.io/gsDesign//reference
   article: https://keaven.github.io/gsDesign//articles
