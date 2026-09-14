@@ -111,6 +111,7 @@
 #' \code{gsCPFutilitySpending_convergence_error}.
 #'
 #' @examples
+#' \donttest{
 #' # Lan-DeMets O'Brien-Fleming efficacy spending with futility only at IA 1.
 #' x <- gsDesign(
 #'   k = 3, test.type = 4, timing = c(.5, .75),
@@ -155,6 +156,7 @@
 #'   control = list(cp_tol = 1e-6)
 #' )
 #' abs(fit_tight$cpFutilitySpending$achieved_cp - target_cp) <= 1e-6
+#' }
 #'
 #' @seealso \code{\link{gsDesign}}, \code{\link{gsSurv}}, \code{\link{gsCP}}, \code{\link{sfLinear}},
 #'   \code{\link{toInteger}}, \code{\link{gsPPFutilitySpending}}

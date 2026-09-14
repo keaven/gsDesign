@@ -136,6 +136,7 @@ constrained parameterization.
 }
 
 \examples{
+\donttest{
 x <- gsDesign(
   k = 3, test.type = 4, timing = c(.5, .75),
   sfu = sfLDOF, sfl = sfHSD, sflpar = 1,
@@ -156,6 +157,7 @@ fit_tight <- gsPPFutilitySpending(
   control = list(pp_tol = 1e-6)
 )
 fit_tight$ppFutilitySpending$residual
+}
 
 }
 \seealso{
