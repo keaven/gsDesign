@@ -30,6 +30,7 @@ Imports:
     tibble,
     tidyr,
     tools,
+    utils,
     xtable
 Suggests:
     covr,
@@ -44,7 +45,6 @@ Suggests:
     scales,
     svglite,
     testthat,
-    utils,
     vdiffr
 VignetteBuilder:
     knitr
