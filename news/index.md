@@ -94,6 +94,11 @@
 
 ### Bug fixes
 
+- [`print.gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  no longer truncates spending function parameters with decimal values,
+  such as the t-distribution parameters printed as
+  `a = -1.63774, b = 2.96683, df = 3`
+  ([\#307](https://github.com/keaven/gsDesign/issues/307)).
 - [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
   inherits the reference design’s futility spending function when `sfl`
   is omitted; explicit overrides remain supported

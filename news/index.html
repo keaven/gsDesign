@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9017</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9018</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,6 +63,8 @@
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>
+<code><a href="../reference/nSurv.html">print.gsSurv()</a></code> no longer truncates spending function parameters with decimal values, such as the t-distribution parameters printed as <code>a = -1.63774, b = 2.96683, df = 3</code> (<a href="https://github.com/keaven/gsDesign/issues/307" class="external-link">#307</a>).</li>
+<li>
 <code><a href="../reference/gsCPFutilitySpending.html">gsCPFutilitySpending()</a></code> inherits the reference design’s futility spending function when <code>sfl</code> is omitted; explicit overrides remain supported (<a href="https://github.com/keaven/gsDesign/issues/318" class="external-link">#318</a>).</li>
 <li>Exact binomial conversion preserves skipped futility looks without invalid provisional boundaries during beta-spending calibration (<a href="https://github.com/keaven/gsDesign/issues/333" class="external-link">#333</a>).</li>
 <li>Information-based boundary plots label actual information as <code>I=</code> with two decimal places, rather than rounding it to a sample size (<a href="https://github.com/keaven/gsDesign/issues/315" class="external-link">#315</a>).</li>

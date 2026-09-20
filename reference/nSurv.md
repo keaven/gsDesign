@@ -911,7 +911,7 @@ print(x_gs)
 #> 
 #> Spending functions:
 #>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
-#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
+#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.5.
 #> 
 #> Analysis summary:
 #>     Analysis              Value Efficacy Futility
@@ -950,7 +950,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Mon Sep 14 04:22:30 2026
+#> % Sun Sep 20 11:46:03 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}
@@ -1039,7 +1039,7 @@ gsSurv(
 #> 
 #> Spending functions:
 #>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
-#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
+#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.5.
 #> 
 #> Analysis summary:
 #>     Analysis              Value Efficacy Futility
@@ -1125,7 +1125,7 @@ gsSurv(
 #> 
 #> Spending functions:
 #>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
-#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
+#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.5.
 #> 
 #> Analysis summary:
 #>     Analysis              Value Efficacy Futility
@@ -1210,7 +1210,7 @@ gsSurv(
 #> 
 #> Spending functions:
 #>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
-#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
+#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.5.
 #> 
 #> Analysis summary:
 #>     Analysis              Value Efficacy Futility
@@ -1298,7 +1298,7 @@ gsSurv(
 #> 
 #> Spending functions:
 #>   Efficacy bounds derived using a Hwang-Shih-DeCani spending function with gamma = -4.
-#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.
+#>   Futility bounds derived using a Kim-DeMets (power) spending function with rho = 0.5.
 #> 
 #> Analysis summary:
 #>     Analysis              Value Efficacy Futility
