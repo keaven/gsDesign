@@ -56,6 +56,9 @@
 
 ## Bug fixes
 
+- `print.gsSurv()` no longer truncates spending function parameters with
+  decimal values, such as the t-distribution parameters printed as
+  `a = -1.63774, b = 2.96683, df = 3` (#307).
 - `gsCPFutilitySpending()` inherits the reference design's futility spending
   function when `sfl` is omitted; explicit overrides remain supported (#318).
 - Exact binomial conversion preserves skipped futility looks without invalid
