@@ -125,7 +125,7 @@ hazard matches the piecewise exponential of the specified cure rate
 models by scenario. The piecewise failure model is used to derive the
 sample size and targeted events over time in the trial.
 
-![](PoissonMixtureModel_files/figure-html/unnamed-chunk-6-1.svg)
+![](PoissonMixtureModel_files/figure-html/unnamed-chunk-6-1.png)
 
 We also evaluate the failure rate over time for scenario 1, which is
 used below in the design derivation. Note that the piecewise intervals
@@ -156,7 +156,7 @@ is that targeted events will be achieved in less than 24 months under
 both the null and alternative hypotheses. Under Scenario 3, the expected
 events under the alternative do not reach the target even by 60 months.
 
-![](PoissonMixtureModel_files/figure-html/unnamed-chunk-8-1.svg)
+![](PoissonMixtureModel_files/figure-html/unnamed-chunk-8-1.png)
 
 ## Study design
 

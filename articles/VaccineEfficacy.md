@@ -613,7 +613,7 @@ ggplot2::ggplot(
   ggplot2::guides(color = ggplot2::guide_legend(nrow = 2, byrow = TRUE))
 ```
 
-![](VaccineEfficacy_files/figure-html/unnamed-chunk-26-1.svg)
+![](VaccineEfficacy_files/figure-html/unnamed-chunk-26-1.png)
 
 ### Exact confidence intervals
 

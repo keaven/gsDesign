@@ -201,7 +201,8 @@
 
 - Reduced rendered HTML size in selected vignettes with figures by
   switching from the base R SVG device to PNG device with optimized
-  parameters ([\#325](https://github.com/keaven/gsDesign/issues/325)).
+  parameters ([\#325](https://github.com/keaven/gsDesign/issues/325),
+  [\#344](https://github.com/keaven/gsDesign/issues/344)).
 
 ### Testing
 

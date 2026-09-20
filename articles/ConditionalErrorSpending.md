@@ -74,7 +74,7 @@ legend(
 )
 ```
 
-![](ConditionalErrorSpending_files/figure-html/unnamed-chunk-4-1.svg)
+![](ConditionalErrorSpending_files/figure-html/unnamed-chunk-4-1.png)
 
 ### Method 2
 
@@ -107,7 +107,7 @@ legend(
 )
 ```
 
-![](ConditionalErrorSpending_files/figure-html/unnamed-chunk-5-1.svg)
+![](ConditionalErrorSpending_files/figure-html/unnamed-chunk-5-1.png)
 
 ### Method 3
 
@@ -146,7 +146,7 @@ legend(
 )
 ```
 
-![](ConditionalErrorSpending_files/figure-html/unnamed-chunk-6-1.svg)
+![](ConditionalErrorSpending_files/figure-html/unnamed-chunk-6-1.png)
 
 ## Replicating published examples
 
