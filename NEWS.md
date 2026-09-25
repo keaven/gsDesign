@@ -139,6 +139,9 @@
 
 ## Testing
 
+- Update RTF summary tests to expect no warning when log-scale HR metadata
+  can be recovered, retaining the existing output snapshots (#347).
+
 - Declare `svglite` as a test dependency for information-label rendering checks
   (#315).
 - Added tests for natural-effect calibration, joint boundary targets,
