@@ -6,6 +6,9 @@
 #'
 #' @param x A \code{gsDesign}, \code{gsSurv}, \code{gsSurvCalendar}, or
 #'   \code{gsSurvPower} design with \code{test.type} 3 or 4.
+#'   The analysis information fractions in \code{x$timing} are held fixed.
+#'   These fractions are distinct from the times supplied to the spending
+#'   functions; see \strong{Information fractions and spending times} below.
 #' @param target_cpos Numeric conditional assurance targets strictly between
 #'   zero and one, one per selected interim.
 #' @param i Unique active interim futility indices, defaulting to
@@ -71,6 +74,7 @@
 #' timing, testing indicators or rounding need not retain exact target values.
 #'
 #' @inheritSection gsCPFutilitySpending Spending-parameter search defaults
+#' @inheritSection gsCPFutilitySpending Information fractions and spending times
 #' @inheritSection gsCPFutilitySpending Survival designs
 #' @return A \code{c("gsCPOSFutilitySpending", "gsDesign")} object, retaining
 #'   survival classes when applicable. Component

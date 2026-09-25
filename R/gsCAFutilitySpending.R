@@ -9,6 +9,7 @@
 #' terminal decision at the fixed efficacy boundary are consistent.
 #'
 #' @inheritParams gsCPOSFutilitySpending
+#' @inheritSection gsCPFutilitySpending Information fractions and spending times
 #' @inheritSection gsCPFutilitySpending Survival designs
 #' @param target_ca Conditional-assurance targets strictly between zero and one.
 #' @param i Unique active interim futility indices, one per target.

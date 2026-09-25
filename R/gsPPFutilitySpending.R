@@ -79,6 +79,7 @@
 #' can be constructed.
 #'
 #' @inheritSection gsCPFutilitySpending Spending-parameter search defaults
+#' @inheritSection gsCPFutilitySpending Information fractions and spending times
 #' @inheritSection gsCPFutilitySpending Survival designs
 #'
 #' @return A calibrated object with class

@@ -6,6 +6,7 @@
 #' information to preserve reference frequentist power.
 #'
 #' @inheritParams gsCPOSFutilitySpending
+#' @inheritSection gsCPFutilitySpending Information fractions and spending times
 #' @inheritSection gsCPFutilitySpending Survival designs
 #' @param target_pos A single probability of success strictly between zero and
 #'   one for the complete design. This is not an interim-specific target.

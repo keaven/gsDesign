@@ -6,6 +6,7 @@
 #' power while allowing maximum information to change.
 #'
 #' @inheritParams gsCPFutilitySpending
+#' @inheritSection gsCPFutilitySpending Information fractions and spending times
 #' @inheritSection gsCPFutilitySpending Survival designs
 #' @param target_effect Finite natural-scale effect targets.
 #' @param i Interim indices, one per target. Duplicate boundary/index pairs

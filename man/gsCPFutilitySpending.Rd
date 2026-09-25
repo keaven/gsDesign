@@ -15,10 +15,22 @@ gsCPFutilitySpending(
 }
 \arguments{
 \item{x}{A \code{gsDesign}, \code{gsSurv}, \code{gsSurvCalendar}, or
-\code{gsSurvPower} design with \code{test.type} 3, 4, 7, or 8.}
+\code{gsSurvPower} design with \code{test.type} 3, 4, 7, or 8.
+The analysis information fractions in \code{x$timing} are held fixed.
+These fractions are distinct from the times supplied to the spending
+functions; see \strong{Information fractions and spending times} below.}
 
 \item{target_cp}{Numeric vector of conditional power targets strictly between
-zero and one.}
+zero and one, one per interim index in \code{i}. Each target is the
+probability of crossing any future efficacy bound, from analysis
+\code{i + 1} through the final analysis \code{x$k}, conditional on the
+statistic at analysis \code{i} equaling its candidate futility bound.
+With \code{theta = NULL}, the future effect is the observed effect implied
+by that bound, \code{lower$bound[i] / sqrt(n.I[i])}; otherwise \code{theta}
+specifies the future effect. Future efficacy and futility boundaries
+remain in force.
+With multiple targets, each is a total future conditional power at its
+corresponding interim, not a next-analysis conditional power.}
 
 \item{i}{Interim analysis indices corresponding to \code{target_cp}. Values must
 identify active futility bounds, be unique, and be in
@@ -82,12 +94,24 @@ matches specified targets. Each candidate design is reconstructed with
 retain the reference design's unconditional power.
 }
 \details{
-Conditional power is evaluated at the candidate lower bound. When \code{theta}
+Conditional power is the probability of crossing any efficacy bound after
+the selected interim, through the final analysis, conditional on the interim
+statistic equaling the candidate lower bound. When \code{theta}
 is \code{NULL}, the future effect is the observed effect implied by that bound,
 \code{lower$bound[i] / sqrt(n.I[i])}, following the default convention in
 \code{\link{gsCP}()}. The calculation conditions on the interim statistic even though it
 is at a stopping boundary; future futility bounds remain part of the
 conditional power calculation.
+
+For a three-analysis design, \code{target_cp = .3, i = 1} targets probability
+0.3 of efficacy at analysis 2 or 3, conditional on \eqn{Z_1 = a_1}, where
+\eqn{a_1} is the fitted futility bound. With a two-parameter spending family,
+\code{target_cp = c(.3, .5), i = c(1, 2)} additionally targets probability
+0.5 of efficacy at analysis 3 conditional on \eqn{Z_2 = a_2}. Each target
+uses its own interim conditioning value and, when \code{theta = NULL}, its
+own bound-implied future effect. These are total future conditional powers,
+not probabilities of efficacy only at the next analysis or probabilities
+that are added together across targeted interims.
 
 One-target calibration supports the one-parameter families \code{sfHSD},
 \code{sfPower}, \code{sfExponential}, and \code{sfLDOF}. Two-target calibration supports
@@ -110,6 +134,28 @@ harm spending. Changing any of those specifications requires recalibration.
 but rounding information can change the achieved conditional power and does
 not trigger recalibration.
 }
+\section{Information fractions and spending times}{
+
+All six spending calibrators keep the reference analysis information
+fractions \code{x$timing} fixed. These are the cumulative information
+fractions \code{x$n.I / x$n.I[x$k]}, ending at 1. For example,
+\code{x$timing = c(.5, .75, 1)} keeps the analyses at 50\%, 75\%, and 100\%
+of the final information. Power-preserving calibration may change the
+maximum information and thus the absolute information \code{n.I} at every
+analysis while retaining these fractions. Fixed-information calibration
+(\code{gsCAFutilitySpending()} and
+\code{gsCPOSFutilitySpending(mode = "fixed_information")}) also holds
+\code{n.I} and the efficacy boundaries fixed.
+
+Spending times are the inputs to the spending functions, stored in
+\code{x$upper$sTime} and \code{x$lower$sTime}. These are also retained during
+calibration but may differ from the information fractions; for example,
+calendar-based spending uses fractions of calendar time. Thus fixed
+information fractions do not mean that spending must use information time,
+or that absolute calendar analysis dates must be fixed. See
+\strong{Survival designs} for how survival calendar times are handled.
+}
+
 \section{Spending-parameter search defaults}{
 
 When not supplied in \code{control}, parameter limits and fallback starting
@@ -210,6 +256,24 @@ fit_tight <- gsCPFutilitySpending(
   control = list(cp_tol = 1e-6)
 )
 abs(fit_tight$cpFutilitySpending$achieved_cp - target_cp) <= 1e-6
+
+# Two targets use a two-parameter family and active futility at both interims.
+x_two <- gsDesign(
+  k = 3, test.type = 4, timing = c(.5, .75),
+  sfl = sfLogistic, sflpar = c(0, 1)
+)
+fit_two <- gsCPFutilitySpending(
+  x_two, target_cp = c(.3, .5), i = c(1, 2), theta = NULL
+)
+# IA 1: efficacy at IA 2 or FA; IA 2: efficacy at FA.
+# Independently recompute total future CP using each fitted bound's effect.
+achieved <- vapply(1:2, function(j) {
+  cp <- gsCP(fit_two, i = j, zi = fit_two$lower$bound[j],
+             theta = fit_two$lower$bound[j] / sqrt(fit_two$n.I[j]))
+  sum(cp$upper$prob[, 1])
+}, numeric(1))
+stopifnot(max(abs(achieved - c(.3, .5))) <= 1e-4,
+          isTRUE(all.equal(fit_two$timing, x_two$timing)))
 }
 
 }

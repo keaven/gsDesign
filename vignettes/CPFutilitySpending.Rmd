@@ -100,6 +100,17 @@ stringent.
 
 ## What is being calibrated?
 
+Each CP target is the probability of crossing **any future efficacy bound**,
+from the analysis after the selected interim through the final analysis,
+conditional on the current statistic equaling the candidate futility bound.
+Future futility boundaries remain part of the calculation.
+In a three-analysis design, `target_cp = c(.3, .5), i = c(1, 2)` targets
+0.3 for efficacy at analysis 2 or 3 given the first futility-bound statistic,
+and 0.5 for efficacy at analysis 3 given the second futility-bound statistic.
+Each target is a total future probability under its own conditioning value;
+it is not restricted to the next analysis. Such a two-target fit requires a
+two-parameter spending family, such as `sfLogistic`.
+
 With `theta = NULL`, the default used below, CP assumes the observed effect
 implied by each candidate bound, `lower$bound[i] / sqrt(n.I[i])`. Thus we target
 the **CP** row in `gsBoundSummary()`, not **CP H1** or **PP**. A specified future
@@ -109,6 +120,15 @@ looks. This is a standardized effect on the scale used by `gsCP()`.
 The function supports beta-spending futility for `test.type` 3, 4, 7, and 8.
 The examples use type 4, fixed information fractions, and Lan-DeMets
 O'Brien-Fleming efficacy spending (`sfu = sfLDOF`), without `sfupar`.
+
+All six calibrators hold `x$timing` fixed: these are the information fractions
+`x$n.I / x$n.I[x$k]` at the analyses. Power-preserving calibration can change
+the final information and all absolute analysis information levels while
+keeping those fractions. Fixed-information CA/conditional-POS calibration
+also keeps the absolute information levels fixed. Spending-function times,
+stored in `x$upper$sTime` and `x$lower$sTime`, are retained separately and
+can differ from the information fractions, as with calendar-based spending.
+Fixed information fractions do not by themselves fix calendar analysis dates.
 
 | Number of CP targets | Supported spending families |
 | --- | --- |
@@ -326,6 +346,9 @@ monitoring. Alpha is 0.025 one-sided and power is 90% in both calculations.
 Use `sfCauchy` for the worked example and compare all six families below.
 At 40% information, CP 0.3 would also be a stringent first futility target.
 We instead use CP 0.2 at 40% and CP 0.3 at 75% information.
+The first target covers efficacy at either the second interim or the final
+analysis; the second covers efficacy at the final analysis, each conditional
+on its own fitted futility-bound statistic.
 
 ```{r two-parameter}
 n_binomial <- nBinomial(p1 = .15, p2 = .10, alpha = .025, beta = .1, ratio = 1)

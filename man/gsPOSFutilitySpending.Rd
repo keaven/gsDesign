@@ -8,7 +8,10 @@ gsPOSFutilitySpending(x, target_pos, sfl = "sfHSD", prior, control = list())
 }
 \arguments{
 \item{x}{A \code{gsDesign}, \code{gsSurv}, \code{gsSurvCalendar}, or
-\code{gsSurvPower} design with \code{test.type} 3 or 4.}
+\code{gsSurvPower} design with \code{test.type} 3 or 4.
+The analysis information fractions in \code{x$timing} are held fixed.
+These fractions are distinct from the times supplied to the spending
+functions; see \strong{Information fractions and spending times} below.}
 
 \item{target_pos}{A single probability of success strictly between zero and
 one for the complete design. This is not an interim-specific target.}
@@ -64,6 +67,28 @@ by that target. A valid starting solution can be returned, but does not imply
 uniqueness. Other priors can also produce flat or nonmonotone objectives.
 Inspect information inflation and all operating characteristics.
 }
+\section{Information fractions and spending times}{
+
+All six spending calibrators keep the reference analysis information
+fractions \code{x$timing} fixed. These are the cumulative information
+fractions \code{x$n.I / x$n.I[x$k]}, ending at 1. For example,
+\code{x$timing = c(.5, .75, 1)} keeps the analyses at 50\%, 75\%, and 100\%
+of the final information. Power-preserving calibration may change the
+maximum information and thus the absolute information \code{n.I} at every
+analysis while retaining these fractions. Fixed-information calibration
+(\code{gsCAFutilitySpending()} and
+\code{gsCPOSFutilitySpending(mode = "fixed_information")}) also holds
+\code{n.I} and the efficacy boundaries fixed.
+
+Spending times are the inputs to the spending functions, stored in
+\code{x$upper$sTime} and \code{x$lower$sTime}. These are also retained during
+calibration but may differ from the information fractions; for example,
+calendar-based spending uses fractions of calendar time. Thus fixed
+information fractions do not mean that spending must use information time,
+or that absolute calendar analysis dates must be fixed. See
+\strong{Survival designs} for how survival calendar times are handled.
+}
+
 \section{Survival designs}{
 
 Survival inputs retain their survival classes and endpoint assumptions.

@@ -98,6 +98,11 @@
 
 ## Documentation
 
+- Clarified that all six spending calibrators hold analysis information
+  fractions (`x$timing`) fixed, separately from spending times. Defined CP
+  targets in the argument documentation as total future efficacy probabilities
+  and added a verified two-target example (#346).
+
 - Added a historical vignette covering the package's statistical foundations,
   contributors, software modernization, and recent development (#304).
 - Added an effect-spending vignette using the public interface for joint
