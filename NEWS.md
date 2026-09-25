@@ -60,6 +60,12 @@
 
 ## Bug fixes
 
+- Log-scale HR summaries recover missing null and alternative hazard ratios
+  from retained `delta0` and `delta1`, avoiding a spurious warning after
+  survival designs are reconstructed with `gsDesign()` and preserving
+  non-unit null ratios and effect direction, including alternate alpha
+  summaries (#347).
+
 - Survival interim event calculations now use the experimental-arm dropout
   rate for experimental events, keeping calendar calibration consistent when
   dropout differs between arms (#345).

@@ -23,7 +23,7 @@ testthat::test_that(desc = "Test gsBoundSummary for gsSurv Object", code = {
   expect_snapshot_output(x = gsBoundSummary(xgs))
 })
 
-testthat::test_that(desc = "Test gsBoundSummary warns when hr0 is missing for HR summary", code = {
+testthat::test_that(desc = "Test gsBoundSummary recovers hr0 for log-scale HR summary", code = {
   x <- gsSurv(
     k = 2,
     test.type = 4,
@@ -53,10 +53,8 @@ testthat::test_that(desc = "Test gsBoundSummary warns when hr0 is missing for HR
   )
 
   expect_null(xu$hr0)
-  expect_warning(
-    missing_hr0 <- gsBoundSummary(xu, deltaname = "HR", logdelta = TRUE, Nname = "Events"),
-    "hr0 is not present",
-    fixed = TRUE
+  expect_no_warning(
+    missing_hr0 <- gsBoundSummary(xu, deltaname = "HR", logdelta = TRUE, Nname = "Events")
   )
 
   xu$hr0 <- x$hr0
@@ -66,7 +64,8 @@ testthat::test_that(desc = "Test gsBoundSummary warns when hr0 is missing for HR
 
   missing_bound <- missing_hr0[missing_hr0$Value == "~HR at bound", "Efficacy"]
   supplied_bound <- with_hr0[with_hr0$Value == "~HR at bound", "Efficacy"]
-  expect_false(isTRUE(all.equal(missing_bound, supplied_bound)))
+  expect_equal(missing_bound, supplied_bound)
+  expect_equal(supplied_bound, round(gsHR(x$upper$bound, seq_len(x$k), x), 4))
 })
 
 testthat::test_that(desc = "Test gsBoundSummary for gsDesign Object, test.type > 1", 
@@ -288,7 +287,7 @@ testthat::test_that(desc = "Test gsBoundSummary for correct use of spending time
     lsTime = lsTime
   )
 
-  xu2 <- expect_warning(
+  xu2 <- expect_no_warning(
     gsBoundSummary(
       xu,
       deltaname = "HR",
@@ -302,9 +301,7 @@ testthat::test_that(desc = "Test gsBoundSummary for correct use of spending time
         paste0("P(Cross) if HR=", round(c(x$hr0, x$hr), digits = 2))
       ),
       alpha = c(0.02, 0.025)
-    ),
-    "hr0 is not present",
-    fixed = TRUE
+    )
   )
 
   alpha_vec <- c(0.01, 0.02, 0.025)
