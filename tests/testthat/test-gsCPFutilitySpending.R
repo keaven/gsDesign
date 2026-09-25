@@ -252,8 +252,9 @@ test_that("survival designs can replay calibrated fixed-timing spending", {
                  testLower = c(TRUE, FALSE, FALSE), ratio = 1)
   expect_lte(abs(cp_at_futility(surv, 1) - .3), 1e-4)
   expect_equal(sum(surv$upper$prob[, 2]), .9, tolerance = 2e-5)
-  expect_error(gsCPFutilitySpending(surv, .3, i = 1),
-               class = "gsCPFutilitySpending_input_error")
+  direct <- gsCPFutilitySpending(surv, .3, i = 1)
+  expect_s3_class(direct, "gsSurv")
+  expect_lte(abs(cp_at_futility(direct, 1) - .3), 1e-4)
 
   args <- list(
     calendarTime = c(18, 27, 36), spending = "information",
@@ -276,8 +277,10 @@ test_that("survival designs can replay calibrated fixed-timing spending", {
   expect_equal(calendar$timing, ref$timing, tolerance = 1e-6)
   expect_lte(abs(cp_at_futility(calendar, 1) - .3), 1e-4)
   expect_equal(sum(calendar$upper$prob[, 2]), .9, tolerance = 2e-5)
-  expect_error(gsCPFutilitySpending(ref, .3, i = 1),
-               class = "gsCPFutilitySpending_input_error")
+  direct <- gsCPFutilitySpending(ref, .3, i = 1)
+  expect_s3_class(direct, "gsSurv")
+  expect_equal(direct$T, ref$T, tolerance = 1e-5)
+  expect_lte(abs(cp_at_futility(direct, 1) - .3), 1e-4)
 })
 
 test_that("invalid inputs have a distinct condition class", {

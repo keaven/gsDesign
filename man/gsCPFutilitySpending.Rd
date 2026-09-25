@@ -14,7 +14,8 @@ gsCPFutilitySpending(
 )
 }
 \arguments{
-\item{x}{A fixed-timing \code{gsDesign} object with \code{test.type} 3, 4, 7, or 8.}
+\item{x}{A \code{gsDesign}, \code{gsSurv}, \code{gsSurvCalendar}, or
+\code{gsSurvPower} design with \code{test.type} 3, 4, 7, or 8.}
 
 \item{target_cp}{Numeric vector of conditional power targets strictly between
 zero and one.}
@@ -62,7 +63,8 @@ Unknown names and invalid values produce input errors.
 }}
 }
 \value{
-A calibrated design with class \code{c("gsCPFutilitySpending", "gsDesign")}.
+A calibrated design inheriting from \code{gsCPFutilitySpending} and
+\code{gsDesign}, retaining \code{gsSurv} and \code{gsSurvPower} when applicable.
 The \code{cpFutilitySpending} component contains targets, achieved conditional
 powers, effects, fitted spending metadata, information, reference efficacy
 and harm specifications, and solver diagnostics.
@@ -130,6 +132,34 @@ User-supplied \code{lower} and \code{upper} are not supported for its
 constrained parameterization.
 }
 
+\section{Survival designs}{
+
+Survival inputs retain their survival classes and endpoint assumptions.
+Each candidate reconstructs the statistical design and its survival plan,
+so targets and diagnostics are evaluated on the returned event-count scale.
+For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
+spending times, and the enrollment/follow-up constraint are retained;
+enrollment rates or durations are recalculated as required. Calendar designs
+with fixed enrollment and follow-up retain their calendar schedule up to
+numerical tolerance. Stored calls are not evaluated.
+
+For \code{gsSurvPower()} inputs, power-preserving calibration fixes the
+realized calendar times and enrollment periods and rescales enrollment rates
+to attain the fitted event counts. The evaluated alternative \code{x$hr}
+and its achieved power are used, even if the original design alternative
+\code{x$hr1} differed. Original event-trigger and calendar-cap rules are not
+re-applied: the realized schedule becomes the new plan. Fixed-information
+conditional-POS/CA calibration instead retains the survival plan, event
+counts and efficacy bounds while updating futility and achieved power.
+
+Priors and explicit \code{theta} remain standardized drifts per square root
+event, not hazard ratios. Rounding with \code{toInteger()} after calibration
+can change the target; calibration of an already rounded reference may
+return noninteger event counts. The final analysis is not a valid target
+index for interim calibration: \code{i} identifies the interim bound or
+continuation event at which the target is evaluated.
+}
+
 \examples{
 \donttest{
 # Lan-DeMets O'Brien-Fleming efficacy spending with futility only at IA 1.
@@ -169,6 +199,10 @@ surv_design <- gsSurv(
   testLower = c(TRUE, FALSE, FALSE)
 )
 gsBoundSummary(surv_design, exclude = "B-value")
+
+# Survival designs can also be calibrated directly.
+surv_fit <- gsCPFutilitySpending(surv_design, target_cp = .7, i = 1)
+gsBoundSummary(surv_fit, exclude = "B-value")
 
 # Optionally require an absolute CP residual no larger than 0.000001.
 fit_tight <- gsCPFutilitySpending(

@@ -37,7 +37,8 @@
 #' but rounding information can change the achieved conditional power and does
 #' not trigger recalibration.
 #'
-#' @param x A fixed-timing \code{gsDesign} object with \code{test.type} 3, 4, 7, or 8.
+#' @param x A \code{gsDesign}, \code{gsSurv}, \code{gsSurvCalendar}, or
+#'   \code{gsSurvPower} design with \code{test.type} 3, 4, 7, or 8.
 #' @param target_cp Numeric vector of conditional power targets strictly between
 #'   zero and one.
 #' @param i Interim analysis indices corresponding to \code{target_cp}. Values must
@@ -99,8 +100,35 @@
 #' User-supplied \code{lower} and \code{upper} are not supported for its
 #' constrained parameterization.
 #'
+#' @section Survival designs:
+#' Survival inputs retain their survival classes and endpoint assumptions.
+#' Each candidate reconstructs the statistical design and its survival plan,
+#' so targets and diagnostics are evaluated on the returned event-count scale.
+#' For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
+#' spending times, and the enrollment/follow-up constraint are retained;
+#' enrollment rates or durations are recalculated as required. Calendar designs
+#' with fixed enrollment and follow-up retain their calendar schedule up to
+#' numerical tolerance. Stored calls are not evaluated.
+#'
+#' For \code{gsSurvPower()} inputs, power-preserving calibration fixes the
+#' realized calendar times and enrollment periods and rescales enrollment rates
+#' to attain the fitted event counts. The evaluated alternative \code{x$hr}
+#' and its achieved power are used, even if the original design alternative
+#' \code{x$hr1} differed. Original event-trigger and calendar-cap rules are not
+#' re-applied: the realized schedule becomes the new plan. Fixed-information
+#' conditional-POS/CA calibration instead retains the survival plan, event
+#' counts and efficacy bounds while updating futility and achieved power.
+#'
+#' Priors and explicit \code{theta} remain standardized drifts per square root
+#' event, not hazard ratios. Rounding with \code{toInteger()} after calibration
+#' can change the target; calibration of an already rounded reference may
+#' return noninteger event counts. The final analysis is not a valid target
+#' index for interim calibration: \code{i} identifies the interim bound or
+#' continuation event at which the target is evaluated.
+#'
 #' @return
-#' A calibrated design with class \code{c("gsCPFutilitySpending", "gsDesign")}.
+#' A calibrated design inheriting from \code{gsCPFutilitySpending} and
+#' \code{gsDesign}, retaining \code{gsSurv} and \code{gsSurvPower} when applicable.
 #' The \code{cpFutilitySpending} component contains targets, achieved conditional
 #' powers, effects, fitted spending metadata, information, reference efficacy
 #' and harm specifications, and solver diagnostics.
@@ -150,6 +178,10 @@
 #' )
 #' gsBoundSummary(surv_design, exclude = "B-value")
 #'
+#' # Survival designs can also be calibrated directly.
+#' surv_fit <- gsCPFutilitySpending(surv_design, target_cp = .7, i = 1)
+#' gsBoundSummary(surv_fit, exclude = "B-value")
+#'
 #' # Optionally require an absolute CP residual no larger than 0.000001.
 #' fit_tight <- gsCPFutilitySpending(
 #'   x, target_cp = target_cp, i = 1,
@@ -176,6 +208,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
                                call, sfl_expr, probability = NULL,
                                design_builder = .gsCPFDesign) {
   .gsCPFValidateReference(x)
+  x <- .gsSpendingReference(x)
 
   if (!is.numeric(target_cp) || length(target_cp) < 1L ||
       any(!is.finite(target_cp)) || any(target_cp <= 0 | target_cp >= 1)) {
@@ -404,19 +437,13 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
     call = call
   )
   candidate$call <- call
-  class(candidate) <- c("gsCPFutilitySpending", "gsDesign")
+  class(candidate) <- .gsSpendingClass(candidate, "gsCPFutilitySpending")
   candidate
 }
 
 .gsCPFValidateReference <- function(x) {
   if (!inherits(x, "gsDesign")) {
     .gsCPFAbort("x must inherit from gsDesign.", "gsCPFutilitySpending_input_error")
-  }
-  if (inherits(x, "gsSurv") || inherits(x, "gsSurvPower")) {
-    .gsCPFAbort(
-      "Only fixed-timing gsDesign objects are currently supported; gsSurv and gsSurvPower objects are not yet supported.",
-      "gsCPFutilitySpending_input_error"
-    )
   }
   if (!(x$test.type %in% c(3L, 4L, 7L, 8L))) {
     .gsCPFAbort(
@@ -670,7 +697,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
   harm_fun <- if (x$test.type %in% c(7L, 8L)) x$harm$sf else sfHSD
   harm_param <- if (x$test.type %in% c(7L, 8L)) x$harm$param else -2
 
-  gsDesign(
+  candidate <- gsDesign(
     k = x$k,
     test.type = x$test.type,
     alpha = x$alpha,
@@ -700,6 +727,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
     testLower = x$testLower,
     testHarm = x$testHarm
   )
+  .gsSpendingSurvival(x, candidate)
 }
 
 .gsCPFOneParameterSolve <- function(evaluate, objective, start, lower, upper, control) {

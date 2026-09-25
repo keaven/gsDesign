@@ -14,7 +14,8 @@ gsPPFutilitySpending(
 )
 }
 \arguments{
-\item{x}{A fixed-timing \code{gsDesign} object with \code{test.type} 3, 4, 7, or 8.}
+\item{x}{A \code{gsDesign}, \code{gsSurv}, \code{gsSurvCalendar}, or
+\code{gsSurvPower} design with \code{test.type} 3, 4, 7, or 8.}
 
 \item{target_pp}{Numeric vector of predictive power targets strictly between
 zero and one.}
@@ -63,7 +64,8 @@ input errors. These controls change the search, not the prior or target.
 }
 \value{
 A calibrated object with class
-  \code{c("gsPPFutilitySpending", "gsDesign")}. Its
+  \code{c("gsPPFutilitySpending", "gsDesign")}, with survival classes
+  retained when applicable. Its
   \code{ppFutilitySpending} component records \code{target_pp},
   \code{achieved_pp}, residuals, analysis indices, normalized prior,
   fitted spending parameters, information, unconditional power, reference
@@ -103,9 +105,7 @@ and joint refinement. Only fits meeting all target tolerances are returned.
 Preserve the complete reference design when replaying fitted parameters.
 Changing timing, efficacy or harm spending, or testing indicators requires
 recalibration. Use the same prior and effect scale when verifying PP with
-\code{gsBoundSummary()}. Direct survival-object calibration is unsupported;
-the vignette \code{vignette("CPFutilitySpending")} shows reconstruction of
-a survival design from a matching statistical reference.
+\code{gsBoundSummary()}. Survival designs can be calibrated directly.
 
 \code{toInteger()} retains the spending specification but does not
 recalibrate PP after rounding. Extremely remote prior support can make the
@@ -133,6 +133,34 @@ starting proportions are derived from the reference design's cumulative
 lower spending divided by beta and adjusted to satisfy these constraints.
 User-supplied \code{lower} and \code{upper} are not supported for its
 constrained parameterization.
+}
+
+\section{Survival designs}{
+
+Survival inputs retain their survival classes and endpoint assumptions.
+Each candidate reconstructs the statistical design and its survival plan,
+so targets and diagnostics are evaluated on the returned event-count scale.
+For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
+spending times, and the enrollment/follow-up constraint are retained;
+enrollment rates or durations are recalculated as required. Calendar designs
+with fixed enrollment and follow-up retain their calendar schedule up to
+numerical tolerance. Stored calls are not evaluated.
+
+For \code{gsSurvPower()} inputs, power-preserving calibration fixes the
+realized calendar times and enrollment periods and rescales enrollment rates
+to attain the fitted event counts. The evaluated alternative \code{x$hr}
+and its achieved power are used, even if the original design alternative
+\code{x$hr1} differed. Original event-trigger and calendar-cap rules are not
+re-applied: the realized schedule becomes the new plan. Fixed-information
+conditional-POS/CA calibration instead retains the survival plan, event
+counts and efficacy bounds while updating futility and achieved power.
+
+Priors and explicit \code{theta} remain standardized drifts per square root
+event, not hazard ratios. Rounding with \code{toInteger()} after calibration
+can change the target; calibration of an already rounded reference may
+return noninteger event counts. The final analysis is not a valid target
+index for interim calibration: \code{i} identifies the interim bound or
+continuation event at which the target is evaluated.
 }
 
 \examples{

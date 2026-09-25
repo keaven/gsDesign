@@ -16,8 +16,8 @@ gsEffectSpending(
 )
 }
 \arguments{
-\item{x}{Fixed-timing gsDesign reference with test.type 3, 4, 7 or 8.
-Direct survival objects are unsupported.}
+\item{x}{A \code{gsDesign}, \code{gsSurv}, \code{gsSurvCalendar}, or
+\code{gsSurvPower} design with \code{test.type} 3, 4, 7, or 8.}
 
 \item{target_effect}{Finite natural-scale effect targets.}
 
@@ -37,8 +37,10 @@ Difference/RR designs require nondegenerate delta0/delta1 metadata and
 n.fix > 1. For RR, delta0/delta1 must be log ratios.
 HR requires information = "events", ratio (experimental/control),
 hr0 (null HR), and hr1 (alternative HR), all explicitly supplied.
-The reference delta must agree with abs(log(hr1/hr0)) *
-sqrt(ratio)/(1 + ratio), verifying its event-count scale.}
+For statistical designs, the reference delta must agree with
+abs(log(hr1/hr0)) * sqrt(ratio)/(1 + ratio), verifying its event-count
+scale. For survival designs, metadata must match the stored allocation
+and hazard ratios; the selected survival method determines the drift.}
 
 \item{control}{Named solver list. start, lower and upper are parameter
 vectors for one boundary or named lists by boundary for joint fits.
@@ -52,7 +54,8 @@ proportions; user limits are unsupported for sfLinear, whose internal
 logit coordinates are searched over [-12, 12].}
 }
 \value{
-A gsDesign object also inheriting from gsEffectSpending. Component
+A gsDesign object also inheriting from gsEffectSpending, retaining
+  survival classes when applicable. Component
   effectSpending contains a target/achieved/residual table, named spending
   specifications and free parameters, effect metadata, solver diagnostics,
   information inflation, power and local identifiability diagnostics.
@@ -86,6 +89,34 @@ A failed search does not prove mathematical infeasibility. Inspect all
 operating characteristics and sample-size inflation before choosing a design.
 Changing timing or rounding need not retain the calibrated effects.
 }
+\section{Survival designs}{
+
+Survival inputs retain their survival classes and endpoint assumptions.
+Each candidate reconstructs the statistical design and its survival plan,
+so targets and diagnostics are evaluated on the returned event-count scale.
+For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
+spending times, and the enrollment/follow-up constraint are retained;
+enrollment rates or durations are recalculated as required. Calendar designs
+with fixed enrollment and follow-up retain their calendar schedule up to
+numerical tolerance. Stored calls are not evaluated.
+
+For \code{gsSurvPower()} inputs, power-preserving calibration fixes the
+realized calendar times and enrollment periods and rescales enrollment rates
+to attain the fitted event counts. The evaluated alternative \code{x$hr}
+and its achieved power are used, even if the original design alternative
+\code{x$hr1} differed. Original event-trigger and calendar-cap rules are not
+re-applied: the realized schedule becomes the new plan. Fixed-information
+conditional-POS/CA calibration instead retains the survival plan, event
+counts and efficacy bounds while updating futility and achieved power.
+
+Priors and explicit \code{theta} remain standardized drifts per square root
+event, not hazard ratios. Rounding with \code{toInteger()} after calibration
+can change the target; calibration of an already rounded reference may
+return noninteger event counts. The final analysis is not a valid target
+index for interim calibration: \code{i} identifies the interim bound or
+continuation event at which the target is evaluated.
+}
+
 \examples{
 x <- gsDesign(k = 3, test.type = 4, n.fix = 200, delta1 = .2, sflpar = 1)
 target <- gsDelta(x$lower$bound[1], 1, x)

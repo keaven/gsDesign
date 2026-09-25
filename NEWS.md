@@ -13,6 +13,10 @@
 
 ## New features
 
+- All six spending-calibration functions accept survival designs from
+  `gsSurv()`, `gsSurvCalendar()`, and `gsSurvPower()`, retaining survival
+  classes and rebuilding enrollment and event summaries (#345).
+
 - `toBinomialExact()` supports fixed survival designs and single observed event
   counts for them; `gsBinomialExact()` supports one-analysis probabilities (#222).
 - Added opt-in Gauss-Legendre quadrature for boundary crossing calculations
@@ -55,6 +59,10 @@
   C-library alternative (#322).
 
 ## Bug fixes
+
+- Survival interim event calculations now use the experimental-arm dropout
+  rate for experimental events, keeping calendar calibration consistent when
+  dropout differs between arms (#345).
 
 - `print.gsSurv()` no longer truncates spending function parameters with
   decimal values, such as the t-distribution parameters printed as

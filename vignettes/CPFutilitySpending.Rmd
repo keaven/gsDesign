@@ -187,9 +187,10 @@ gsBoundSummary(surv_design, digits = 4, exclude = "B-value") |>
   lt() |> lt_format(columns = c("Efficacy", "Futility"), decimals = 4)
 ```
 
-`gsCPFutilitySpending()` does not currently accept a `gsSurv` object directly.
-Here calibration is performed on `gsDesign()` and its fitted spending is
-then passed to `gsSurv()`. The survival summary reports approximate hazard
+Survival designs can also be calibrated directly:
+`gsCPFutilitySpending(surv_design, target_cp = .3, i = 1)`.
+Here the example illustrates transferring a statistical calibration to a
+survival design. The survival summary reports approximate hazard
 ratios at the bounds, rather than a generic standardized effect.
 
 This first survival example is deliberately a cautionary one. CP 0.3 after
@@ -207,29 +208,18 @@ at 50% information.
 `gsPPFutilitySpending()` can target PP using the default summary prior
 described in the introduction. For comparison with the CP-targeted survival
 design, keep the same timing, testing indicators, spending families, and
-survival assumptions. First construct a matching statistical reference on
-the **event-count scale**. The prior's numeric support must be on that same
+survival assumptions. Use the survival reference directly on the
+**event-count scale**. The prior's numeric support must be on that same
 standardized-effect scale; the normalized `n.fix = 1` reference from the
 opening example is not interchangeable with it.
 
 ```{r predictive-power-calibration}
-pp_reference <- gsDesign(
-  k = 3, test.type = 4, timing = c(.5, .75),
-  n.fix = surv_design$n.fix,
-  delta0 = surv_design$delta0, delta1 = surv_design$delta1,
-  sfu = sfLDOF, sfl = sfHSD, sflpar = 1,
-  testLower = c(TRUE, FALSE, FALSE)
-)
+pp_reference <- surv_design
 prior <- normalGrid(
   mu = pp_reference$delta / 2, sigma = 10 / sqrt(pp_reference$n.fix)
 )
 fit_pp <- gsPPFutilitySpending(pp_reference, target_pp = .3, i = 1, prior = prior)
-surv_pp <- gsSurv(
-  k = 3, test.type = 4, timing = c(.5, .75),
-  sfu = sfLDOF, sfl = sfHSD,
-  sflpar = fit_pp$ppFutilitySpending$sflpar,
-  testLower = c(TRUE, FALSE, FALSE), ratio = 1
-)
+surv_pp <- fit_pp
 achieved_pp <- gsPP(
   surv_pp, i = 1, zi = surv_pp$lower$bound[1],
   theta = prior$z, wgts = prior$wgts
@@ -246,9 +236,8 @@ gsBoundSummary(surv_pp, prior = prior, digits = 4, exclude = "B-value") |>
 
 The **PP** row, not the CP or CP H1 row, now attains 0.3 at the first futility
 bound. The prior stays fixed during fitting, but each candidate's posterior
-uses that candidate's bound and information. As with the CP example, this is
-statistical calibration followed by survival reconstruction, not direct
-calibration of a survival object.
+uses that candidate's bound and information. The returned design includes
+the recalculated survival enrollment and event summaries.
 
 ```{r compare-cp-pp-survival}
 survival_comparison <- function(design, label) {
@@ -299,26 +288,12 @@ calendar_args <- list(
 calendar_reference <- do.call(gsSurvCalendar, calendar_args)
 ```
 
-Direct calibration of this object is also unsupported (it has class
-`gsSurv`). Instead, construct a statistical `gsDesign()` reference with its
-information fractions, spending times, fixed-design event count, and effect
-scale. This is an explicit reconstruction, not removal of the survival class
-to bypass validation.
+Calibrate the calendar design directly, retaining its information fractions,
+spending times, and survival assumptions.
 
 ```{r calendar-calibration}
-calendar_statistical <- gsDesign(
-  k = calendar_reference$k, test.type = 4,
-  alpha = calendar_reference$alpha, beta = calendar_reference$beta,
-  n.fix = calendar_reference$n.fix, timing = calendar_reference$timing,
-  usTime = calendar_reference$upper$sTime,
-  lsTime = calendar_reference$lower$sTime,
-  delta0 = calendar_reference$delta0, delta1 = calendar_reference$delta1,
-  sfu = sfLDOF, sfl = sfHSD, sflpar = 1,
-  testLower = c(TRUE, FALSE, FALSE)
-)
-calendar_fit <- gsCPFutilitySpending(calendar_statistical, target_cp = .2, i = 1)
-calendar_args$sflpar <- calendar_fit$cpFutilitySpending$sflpar
-calendar_design <- do.call(gsSurvCalendar, calendar_args)
+calendar_fit <- gsCPFutilitySpending(calendar_reference, target_cp = .2, i = 1)
+calendar_design <- calendar_fit
 stopifnot(max(abs(calendar_design$timing - calendar_reference$timing)) < 1e-6)
 check_cp(calendar_design, .2) |> lt()
 data.frame(
@@ -654,7 +629,9 @@ gsBoundSummary(fit_varying, deltaname = "Mean difference", Nname = "Participants
   Changing those settings or efficacy spending requires recalibration.
 - `toInteger()` retains the fitted spending specification, but rounding can
   change achieved CP and does not automatically recalibrate the design.
-- The calibration input must currently be a fixed-timing `gsDesign()` object.
-  Direct survival or calendar-time calibration is not implemented by either
-  calibration function. Use `gsPPFutilitySpending()` for prior-averaged
-  predictive power rather than `gsCPFutilitySpending()`.
+- All six calibrators accept `gsSurv()`, `gsSurvCalendar()`, and
+  `gsSurvPower()` inputs. For power objects, power-preserving calibration
+  fixes the realized schedule and rescales enrollment; fixed-information
+  CA/conditional-POS calibration retains the event counts and enrollment.
+  See the Survival designs section of `?gsCPFutilitySpending` for details.
+  Use `gsPPFutilitySpending()` for prior-averaged predictive power.
