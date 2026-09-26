@@ -94,21 +94,30 @@
 
 ### Bug fixes
 
+- Power plots omit curves and annotations for inactive boundaries while
+  retaining cumulative probabilities and original analysis numbers. Use
+  `show_skipped = TRUE` to include skipped looks
+  ([\#349](https://github.com/keaven/gsDesign/issues/349)).
+
 - [`print.gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   no longer truncates spending function parameters with decimal values,
   such as the t-distribution parameters printed as
   `a = -1.63774, b = 2.96683, df = 3`
   ([\#307](https://github.com/keaven/gsDesign/issues/307)).
+
 - [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
   inherits the reference design’s futility spending function when `sfl`
   is omitted; explicit overrides remain supported
   ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+
 - Exact binomial conversion preserves skipped futility looks without
   invalid provisional boundaries during beta-spending calibration
   ([\#333](https://github.com/keaven/gsDesign/issues/333)).
+
 - Information-based boundary plots label actual information as `I=` with
   two decimal places, rather than rounding it to a sample size
   ([\#315](https://github.com/keaven/gsDesign/issues/315)).
+
 - Survival calculation methods are reported in
   [`summary()`](https://rdrr.io/r/base/summary.html), not boundary
   tables.
@@ -116,16 +125,19 @@
   keeps all analysis annotations when POS or excluded statistics require
   unequal block sizes
   ([\#332](https://github.com/keaven/gsDesign/issues/332)).
+
 - Guarded the Newton boundary search against `0/0` updates and separated
   its iteration limit and finite iterate clamp from the absent-bound
   values ([\#242](https://github.com/keaven/gsDesign/issues/242),
   [\#321](https://github.com/keaven/gsDesign/issues/321)).
+
 - Updated the R interfaces and convergence checks to handle infinite
   bounds, and fixed
   [`gsDensity()`](https://keaven.github.io/gsDesign/reference/gsDensity.md)
   for one-sided designs
   ([\#242](https://github.com/keaven/gsDesign/issues/242),
   [\#321](https://github.com/keaven/gsDesign/issues/321)).
+
 - Fixed
   [`gsBoundCP()`](https://keaven.github.io/gsDesign/reference/gsBoundCP.md)
   to return `NA` at absent harm bounds, including bounds with zero
@@ -133,6 +145,7 @@
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   when conditional power is requested for selective harm bound designs
   ([\#335](https://github.com/keaven/gsDesign/issues/335)).
+
 - [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   now skips conditional power calculations separately for excluded `CP`
   and `CP H1` rows

@@ -29,7 +29,14 @@ design are mutually exclusive stopping outcomes. In a type 2 plot, the
 futility-threshold curve is inclusive: it uses the sum of futility-only
 and harm crossing probabilities. The separate harm curve continues to
 show harm crossings only. This plotting convention does not modify the
-probabilities stored on `x`.
+probabilities stored on `x`. Power plots show cumulative crossing
+probabilities through each analysis. By default, a curve is shown only
+when its boundary is active at that analysis; the original analysis
+numbers are retained. Skipped boundaries still contribute their (zero)
+increments to the cumulative calculation. For types 7 and 8, the
+combined futility-or-harm curve is shown when either boundary is active.
+Use `show_skipped = TRUE` to also display curves at skipped looks, which
+may duplicate earlier curves or be constant.
 
 Note that there is some special behavior for values plotted and returned
 for power and expected sample size (ASN) plots for a `gsDesign` object.
@@ -125,6 +132,9 @@ plot(x, plottype = 2, base = FALSE, ...)
   `plot`.
 
   Other arguments include:
+
+  `show_skipped`, a logical value for power plots, defaults to `FALSE`.
+  Set it to `TRUE` to include inactive boundaries.
 
   `theta` which is used for `plottype=2`, `4`, `6`; normally defaults
   will be adequate; see details.
@@ -223,6 +233,14 @@ plot(x, plottype = 5)
 plot(x, plottype = 6)
 
 plot(x, plottype = 7)
+
+
+# Futility testing only at the first look: omit its skipped-look curves
+skipped <- gsDesign(testLower = c(TRUE, FALSE, FALSE))
+plot(skipped, plottype = "power")
+
+# Include all looks, including coincident cumulative curves
+plot(skipped, plottype = "power", show_skipped = TRUE)
 
 
 #  choose different parameter values for power plot

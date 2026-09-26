@@ -29,6 +29,13 @@ futility-threshold curve is inclusive: it uses the sum of futility-only and
 harm crossing probabilities. The separate harm curve continues to show
 harm crossings only. This plotting convention does not modify the
 probabilities stored on x.
+Power plots show cumulative crossing probabilities through each analysis.
+By default, a curve is shown only when its boundary is active at that
+analysis; the original analysis numbers are retained. Skipped boundaries
+still contribute their (zero) increments to the cumulative calculation.
+For types 7 and 8, the combined futility-or-harm curve is shown when either
+boundary is active. Use show_skipped = TRUE to also display curves
+at skipped looks, which may duplicate earlier curves or be constant.
 Note that there is some special behavior for values plotted and returned for
 power and expected sample size (ASN) plots for a gsDesign object. A
 call to x&amp;lt;-gsDesign() produces power and expected sample size for
@@ -87,6 +94,13 @@ futility-threshold curve is inclusive: it uses the sum of futility-only and
 harm crossing probabilities. The separate harm curve continues to show
 harm crossings only. This plotting convention does not modify the
 probabilities stored on x.
+Power plots show cumulative crossing probabilities through each analysis.
+By default, a curve is shown only when its boundary is active at that
+analysis; the original analysis numbers are retained. Skipped boundaries
+still contribute their (zero) increments to the cumulative calculation.
+For types 7 and 8, the combined futility-or-harm curve is shown when either
+boundary is active. Use show_skipped = TRUE to also display curves
+at skipped looks, which may duplicate earlier curves or be constant.
 Note that there is some special behavior for values plotted and returned for
 power and expected sample size (ASN) plots for a gsDesign object. A
 call to x&amp;lt;-gsDesign() produces power and expected sample size for
@@ -129,7 +143,7 @@ that time. See Proschan, Lan and Wittes (2006).'><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9018</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9019</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -179,7 +193,14 @@ design are mutually exclusive stopping outcomes. In a type 2 plot, the
 futility-threshold curve is inclusive: it uses the sum of futility-only and
 harm crossing probabilities. The separate harm curve continues to show
 harm crossings only. This plotting convention does not modify the
-probabilities stored on <code>x</code>.</p>
+probabilities stored on <code>x</code>.
+Power plots show cumulative crossing probabilities through each analysis.
+By default, a curve is shown only when its boundary is active at that
+analysis; the original analysis numbers are retained. Skipped boundaries
+still contribute their (zero) increments to the cumulative calculation.
+For types 7 and 8, the combined futility-or-harm curve is shown when either
+boundary is active. Use <code>show_skipped = TRUE</code> to also display curves
+at skipped looks, which may duplicate earlier curves or be constant.</p>
 <p>Note that there is some special behavior for values plotted and returned for
 power and expected sample size (ASN) plots for a <code>gsDesign</code> object. A
 call to <code>x&lt;-gsDesign()</code> produces power and expected sample size for
@@ -260,6 +281,8 @@ true, base graphics are used for plotting.</p></dd>
 <dd><p>This allows many optional arguments that are standard when
 calling <code>plot</code>.</p>
 <p>Other arguments include:</p>
+<p><code>show_skipped</code>, a logical value for power plots, defaults to
+<code>FALSE</code>. Set it to <code>TRUE</code> to include inactive boundaries.</p>
 <p><code>theta</code> which is used for <code>plottype=2</code>, <code>4</code>, <code>6</code>;
 normally defaults will be adequate; see details.</p>
 <p><code>ses=TRUE</code> which applies only when <code>plottype=3</code> and</p>
@@ -354,6 +377,14 @@ Clinical Trials. A Unified Approach</em>.  New York: Springer.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, plottype <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot.gsDesign-7.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Futility testing only at the first look: omit its skipped-look curves</span></span></span>
+<span class="r-in"><span><span class="va">skipped</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span>testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">skipped</span>, plottype <span class="op">=</span> <span class="st">"power"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="plot.gsDesign-8.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># Include all looks, including coincident cumulative curves</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">skipped</span>, plottype <span class="op">=</span> <span class="st">"power"</span>, show_skipped <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="plot.gsDesign-9.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#  choose different parameter values for power plot</span></span></span>
 <span class="r-in"><span><span class="co">#  start with design in x from above</span></span></span>
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsProbability.html">gsProbability</a></span><span class="op">(</span></span></span>
@@ -364,7 +395,7 @@ Clinical Trials. A Unified Approach</em>.  New York: Springer.</p>
 <span class="r-in"><span><span class="co"># the following translates to a call to plot.gsProbability since</span></span></span>
 <span class="r-in"><span><span class="co"># y has that type</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot.gsDesign-8.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="plot.gsDesign-10.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
