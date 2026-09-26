@@ -220,6 +220,8 @@ print.gsDesign <- function(x, ...) {
   if (x$test.type > 1) {
     if (x$test.type %in% c(4, 6, 8)) {
       cat("Upper bound spending computations assume\ntrial continues if lower bound is crossed.\n\n")
+    } else if (x$test.type == 7) {
+      cat("Upper bound spending computations assume trial stops\nif a bound is crossed.\n\n")
     } else {
       cat("Spending computations assume trial stops\nif a bound is crossed.\n\n")
     }
@@ -295,7 +297,7 @@ print.gsDesign <- function(x, ...) {
   cat(format(round(sum(x$upper$spend), 4), nsmall = 4), "\n")
 
   if (x$test.type %in% c(7, 8)) {
-    cat("# harm bound spending (under H0):\n ")
+    cat("# harm bound spending (under H0, ignoring futility stopping):\n ")
     cat(summary(x$harm), ".\n", sep = "")
     cat("+ futility bound beta spending (under H1):\n ")
     cat(summary(x$lower), ".\n", sep = "")
@@ -760,6 +762,10 @@ gsBoundSummary0 <- function(
 #' \code{Spending: }Incremental error spending at each given analysis. For
 #' asymmetric designs, futility bound will have beta-spending summarized.
 #' Efficacy bound always has alpha-spending summarized.
+#' For types 7 and 8, harm spending is calibrated under the null ignoring
+#' futility stopping (but retaining efficacy stopping); capping at an active
+#' futility bound can reduce attained spending. It need not equal the
+#' increment in the reported harm crossing probability.
 #'
 #' \code{B-value: }\code{sqrt(t)*Z} where \code{t} is the proportion of
 #' information at the analysis divided by the final analysis planned
@@ -781,7 +787,10 @@ gsBoundSummary0 <- function(
 #' effect is computed. This value is cumulative for each bound. For example,
 #' the probability of crossing the efficacy bound at or before the analysis of
 #' interest. For test types 7 and 8, harm, futility, and efficacy crossing
-#' probabilities are mutually exclusive. Every characteristic for a bound,
+#' probabilities are mutually exclusive and assume all active stopping rules
+#' are followed, including futility even for a non-binding design. Harm
+#' crossing probabilities can therefore be below the harm spending targets.
+#' Every characteristic for a bound,
 #' including its cumulative crossing probability, is shown as \code{NA} at an
 #' analysis where that bound is inactive. The underlying probability arrays on
 #' \code{x} retain the cumulative crossing information.

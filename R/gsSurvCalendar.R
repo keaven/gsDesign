@@ -83,7 +83,7 @@ gsSurvCalendar <- function(
   test.type = 4, alpha = 0.025, sided = 1, beta = 0.1, astar = 0,
   sfu = gsDesign::sfHSD, sfupar = -4,
   sfl = gsDesign::sfHSD, sflpar = -2,
-  sfharm = gsDesign::sfHSD, sfharmparam = -2,
+  sfharm = gsDesign::sfLDPocock, sfharmparam = -2,
   calendarTime = c(12, 24, 36),
   spending = c("information", "calendar"),
   lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,

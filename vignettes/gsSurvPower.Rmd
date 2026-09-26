@@ -127,7 +127,10 @@ bound and therefore affects achieved power. The same distinction between
 design beta and achieved beta applies to the beta-spending futility bounds in
 `test.type` 3, 7, and 8. Test types 5 and 6 instead spend lower-bound
 probability under the null, and harm spending for test types 7 and 8 is a
-separate null-based calculation.
+separate null-based calculation that ignores futility stopping while retaining
+efficacy stopping. Actual harm probabilities include futility stopping and may
+be below the spending targets. New harm designs default to total spending
+0.1 and `sfLDPocock`; a supplied reference design retains its stored choices.
 
 When a reference design `x` is supplied, futility-bound handling follows these
 rules:
