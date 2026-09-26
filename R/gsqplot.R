@@ -28,6 +28,13 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' harm crossing probabilities. The separate harm curve continues to show
 #' harm crossings only. This plotting convention does not modify the
 #' probabilities stored on \code{x}.
+#' Power plots show cumulative crossing probabilities through each analysis.
+#' By default, a curve is shown only when its boundary is active at that
+#' analysis; the original analysis numbers are retained. Skipped boundaries
+#' still contribute their (zero) increments to the cumulative calculation.
+#' For types 7 and 8, the combined futility-or-harm curve is shown when either
+#' boundary is active. Use \code{show_skipped = TRUE} to also display curves
+#' at skipped looks, which may duplicate earlier curves or be constant.
 #'
 #' Note that there is some special behavior for values plotted and returned for
 #' power and expected sample size (ASN) plots for a \code{gsDesign} object. A
@@ -100,6 +107,9 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #'
 #' Other arguments include:
 #'
+#' \code{show_skipped}, a logical value for power plots, defaults to
+#' \code{FALSE}. Set it to \code{TRUE} to include inactive boundaries.
+#'
 #' \code{theta} which is used for \code{plottype=2}, \code{4}, \code{6};
 #' normally defaults will be adequate; see details.
 #'
@@ -131,6 +141,12 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' plot(x, plottype = 5)
 #' plot(x, plottype = 6)
 #' plot(x, plottype = 7)
+#'
+#' # Futility testing only at the first look: omit its skipped-look curves
+#' skipped <- gsDesign(testLower = c(TRUE, FALSE, FALSE))
+#' plot(skipped, plottype = "power")
+#' # Include all looks, including coincident cumulative curves
+#' plot(skipped, plottype = "power", show_skipped = TRUE)
 #' 
 #' #  choose different parameter values for power plot
 #' #  start with design in x from above
@@ -935,6 +951,21 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
   }
 }
 
+# Boundary activity controls display only, never probability calculations.
+gsPowerPlotActive <- function(x, show_skipped = FALSE) {
+  active <- function(bound, flag) {
+    if (is.null(bound) || is.null(bound$bound)) return(rep(FALSE, x$k))
+    if (show_skipped) return(rep(TRUE, x$k))
+    keep <- is.finite(bound$bound)
+    if (!is.null(flag)) keep <- keep & rep_len(flag, x$k)
+    keep
+  }
+  upper <- active(x$upper, x$testUpper)
+  lower <- active(x$lower, x$testLower)
+  harm <- active(x$harm, x$testHarm)
+  cbind(upper, lower = lower | harm, harm)
+}
+
 # plotgsPower roxy [sinew] ----
 #' @importFrom stats reshape setNames
 #' @importFrom dplyr group_by reframe
@@ -954,9 +985,10 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
                         xlab = NULL, lty = NULL, col = NULL, lwd = 1, cex = 1,
                         theta = NULL,
                         xval = NULL, base = FALSE, outtype = 1, offset = 0,
-                        titleAnalysisLegend = NULL, ...) {
+                        titleAnalysisLegend = NULL, show_skipped = FALSE, ...) {
 
   stopifnot(
+    is.logical(show_skipped) && length(show_skipped) == 1L && !is.na(show_skipped),
     is.numeric(offset) && length(offset) == 1,
     is.null(titleAnalysisLegend) ||
       (is.character(titleAnalysisLegend) && length(titleAnalysisLegend) == 1)
@@ -991,6 +1023,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     }
   }
   if (is.null(xlab)) xlab <- ""
+  active <- gsPowerPlotActive(x, show_skipped)
   x <- if (inherits(x, "gsDesign")) {
     gsProbability(d = x, theta = theta)
   } else {
@@ -1026,7 +1059,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     
     y2 <- y |>
              dplyr::group_by(Bound, thetaidx) |>
-             dplyr::reframe(Probability = cumsum(Probability))
+             dplyr::reframe(Probability = cumsum(Probability), Analysis = .data$id + offset)
     
     lower_label <- if (has_harm) "1-(Futility or harm)" else "1-Lower bound"
     y2$Probability[y2$Bound == lower_label] <- 1 - y2$Probability[y2$Bound == lower_label]
@@ -1034,7 +1067,8 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       y2$Probability[y2$Bound == "1-Harm"] <- 1 - y2$Probability[y2$Bound == "1-Harm"]
     }
     
-    y2$Analysis <- factor(y$id + offset)
+    analysis <- y2$Analysis - offset
+    y2$Analysis <- factor(y2$Analysis, levels = seq_len(x$k) + offset)
     
     # Determine title of Analysis legend
     titleAnalysis <- "Analysis"
@@ -1045,7 +1079,13 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       titleAnalysis <- titleAnalysisLegend
     }
 
-    y2$delta <- xval[y$thetaidx]
+    y2$delta <- xval[y2$thetaidx]
+    bound_index <- match(y2$Bound, c("Upper bound", lower_label, "1-Harm"))
+    # Name scales before filtering so surviving analyses/bounds keep their style.
+    if (is.null(names(lty))) names(lty) <- levels(y2$Analysis)[seq_along(lty)]
+    colors <- getColor(col)
+    if (is.null(names(colors))) names(colors) <- sort(unique(y2$Bound))[seq_along(colors)]
+    y2 <- y2[active[cbind(analysis, bound_index)], ]
     
     p <- ggplot2::ggplot(y2, 
                          ggplot2::aes(
@@ -1059,7 +1099,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
       ggplot2::guides(color = ggplot2::guide_legend(title = "Probability")) + 
       ggplot2::xlab(xlab) +
       ggplot2::scale_linetype_manual(values = lty, name = titleAnalysis) +
-      ggplot2::scale_color_manual(values = getColor(col)) +
+      ggplot2::scale_color_manual(values = colors) +
       ggplot2::scale_y_continuous(breaks = seq(0, 1, .2))
     
     return(p + ggplot2::ggtitle(label = main))
@@ -1094,7 +1134,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
   prob <- boundprob
   yval <- min(mean(range(x$upper$prob[1, ])))
   xv <- ifelse(xval[2] > xval[1], min(xval[boundprob >= yval]), max(xval[boundprob >= yval]))
-  for (j in 2:x$k)
+  for (j in seq_len(x$k)[-1L])
   {
     theta <- c(theta, xval)
     interim <- c(interim, rep(j, length(xval)))
@@ -1105,13 +1145,13 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     xv <- c(xv, ifelse(xval[2] > xval[1], min(xval[boundprob >= ymid]), max(xval[boundprob >= ymid])))
   }
   itxt <- rep("Interim", x$k - 1)
-  itxt <- paste(itxt, 1:(x$k - 1), sep = " ")
+  itxt <- paste(itxt, seq_len(x$k - 1), sep = " ")
 
   if (inherits(x, "gsProbability") || (inherits(x, "gsDesign") && test.type > 1)) {
     itxt <- c(itxt, "Final", itxt)
     boundprob <- rep(1, length(xval))
     bound <- c(bound, rep(2, length(xval) * (x$k - 1)))
-    for (j in 1:(x$k - 1))
+    for (j in seq_len(x$k - 1))
     {
       theta <- c(theta, xval)
       interim <- c(interim, rep(j, length(xval)))
@@ -1128,7 +1168,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
   if (has_harm) {
     boundprob_harm <- rep(1, length(xval))
     bound <- c(bound, rep(3, length(xval) * (x$k - 1)))
-    for (j in 1:(x$k - 1))
+    for (j in seq_len(x$k - 1))
     {
       theta <- c(theta, xval)
       interim <- c(interim, rep(j, length(xval)))
@@ -1145,16 +1185,28 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
   interim <- 1:x$k
   if (test.type > 1) {
     bound <- c(bound, rep(2, x$k - 1))
-    interim <- c(interim, 1:(x$k - 1))
+    interim <- c(interim, seq_len(x$k - 1))
   }
   yt <- data.frame(theta = xv, interim = interim, bound = bound, prob = yval, itxt = itxt)
-  bound <- rep(1, x$k)
-  interim <- 1:x$k
-  if (test.type > 1) {
-    bound <- c(bound, rep(2, x$k - 1))
-    interim <- c(interim, 1:(x$k - 1))
+  if (!base && test.type > 1) {
+    # The annotated layout historically omitted final lower/harm curves.
+    # Keep active final looks, just as in the other two rendering modes.
+    final_prob <- list(`2` = 1 - colSums(lower_prob))
+    if (has_harm) final_prob[["3"]] <- 1 - colSums(x$harm$prob)
+    for (b in names(final_prob)) {
+      values <- final_prob[[b]]
+      b <- as.integer(b)
+      y <- rbind(y, data.frame(theta = xval, interim = x$k, bound = b,
+        prob = values, itxt = as.character(round(values, 2)), group = b * x$k))
+      # At a closing lower bound this is the same curve as final efficacy.
+      if (b == 2L && isTRUE(all.equal(values, colSums(x$upper$prob), tolerance = 1e-6))) next
+      mid <- which.min(abs(values - mean(range(values))))
+      yt <- rbind(yt, data.frame(theta = xval[mid], interim = x$k,
+        bound = b, prob = values[mid], itxt = "Final"))
+    }
   }
-  yt <- data.frame(theta = xv, interim = interim, bound = bound, prob = yval, itxt = itxt)
+  y <- y[active[cbind(y$interim, y$bound)], ]
+  yt <- yt[active[cbind(yt$interim, yt$bound)], ]
   if (base) {
     col2 <- ifelse(length(col) > 1, col[2], col)
     lwd2 <- ifelse(length(lwd) > 1, lwd[2], lwd)
@@ -1164,7 +1216,8 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
 
     graphics::plot(xval, x$upper$prob[1, ],
       xlab = xlab, main = main, ylab = ylab,
-      ylim = ylim, type = "l", col = col[1], lty = lty[1], lwd = lwd[1], yaxt = "n"
+      ylim = ylim, type = if (active[1, 1]) "l" else "n",
+      col = col[1], lty = lty[1], lwd = lwd[1], yaxt = "n"
     )
 
     if (inherits(x, "gsDesign") && test.type <= 2) {
@@ -1181,13 +1234,13 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     }
 
     if ((inherits(x, "gsDesign") && test.type > 2) || !inherits(x, "gsDesign")) {
-      graphics::lines(xval, 1 - lower_prob[1, ], lty = lty2, col = col2, lwd = lwd2)
+      if (active[1, 2]) graphics::lines(xval, 1 - lower_prob[1, ], lty = lty2, col = col2, lwd = lwd2)
       plo <- lower_prob[1, ]
 
       for (i in 2:x$k)
       {
         plo <- plo + lower_prob[i, ]
-        graphics::lines(xval, 1 - plo, lty = lty2, col = col2, lwd = lwd2)
+        if (active[i, 2]) graphics::lines(xval, 1 - plo, lty = lty2, col = col2, lwd = lwd2)
       }
 
       # Add harm bound lines for test.type 7/8
@@ -1195,11 +1248,11 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
         col3 <- col[3]
         lwd3 <- lwd[3]
         lty3 <- lty[3]
-        graphics::lines(xval, 1 - x$harm$prob[1, ], lty = lty3, col = col3, lwd = lwd3)
+        if (active[1, 3]) graphics::lines(xval, 1 - x$harm$prob[1, ], lty = lty3, col = col3, lwd = lwd3)
         plo_harm <- x$harm$prob[1, ]
         for (i in 2:x$k) {
           plo_harm <- plo_harm + x$harm$prob[i, ]
-          graphics::lines(xval, 1 - plo_harm, lty = lty3, col = col3, lwd = lwd3)
+          if (active[i, 3]) graphics::lines(xval, 1 - plo_harm, lty = lty3, col = col3, lwd = lwd3)
         }
       }
 
@@ -1214,7 +1267,12 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
         leg_lwd <- lwd[1:2]
         leg_lty <- lty[1:2]
       }
-      temp <- legend("topleft",
+      shown <- colSums(active[, seq_along(leg_labels), drop = FALSE]) > 0
+      leg_labels <- leg_labels[shown]
+      leg_col <- leg_col[shown]
+      leg_lwd <- leg_lwd[shown]
+      leg_lty <- leg_lty[shown]
+      temp <- graphics::legend("topleft",
         legend = rep(" ", length(leg_labels)), col = leg_col,
         text.width = max(graphics::strwidth(leg_labels)), lwd = leg_lwd,
         lty = leg_lty, xjust = 1, yjust = 1,
@@ -1232,14 +1290,15 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     for (i in 2:x$k)
     {
       phi <- phi + x$upper$prob[i, ]
-      graphics::lines(xval, phi, col = col[1], lwd = lwd[1], lty = lty[1])
+      if (active[i, 1]) graphics::lines(xval, phi, col = col[1], lwd = lwd[1], lty = lty[1])
     }
-    colr <- rep(col[1], x$k)
-    if (length(yt$theta) > x$k) colr <- c(colr, rep(col[2], x$k - 1))
-    graphics::text(x = yt$theta, y = yt$prob, col = colr, yt$itxt, cex = cex)
+    graphics::text(x = yt$theta, y = yt$prob, col = col[yt$bound], yt$itxt, cex = cex)
     invisible(x)
   }
   else {
+    bound_colors <- stats::setNames(getColor(col), seq_along(col))
+    bound_lty <- stats::setNames(lty, seq_along(lty))
+    visible_bounds <- as.character(sort(unique(y$bound)))
     p <- ggplot2::ggplot(
       data = subset(y, interim == 1),
       ggplot2::aes(
@@ -1247,22 +1306,20 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
         col = factor(bound), lty = factor(bound)
       )
     ) +
-      ggplot2::geom_line() +
+      ggplot2::geom_line(show.legend = TRUE) +
       ggplot2::scale_x_continuous(xlab) + 
-      ggplot2::scale_y_continuous(ylab) +
-      ggplot2::scale_colour_manual(name = "Bound", values = getColor(col)) +
-      ggplot2::scale_linetype_manual(name = "Bound", values = lty)
+      ggplot2::scale_y_continuous(ylab)
 
       p <- p + ggplot2::ggtitle(label = main)
 
     if (test.type == 1) {
       p <- p + 
         ggplot2::scale_colour_manual(
-        name = "Probability", values = getColor(col), breaks = 1,
+        name = "Probability", values = bound_colors, breaks = 1, limits = visible_bounds,
         labels = "Upper bound"
       ) +
         ggplot2::scale_linetype_manual(
-          name = "Probability", values = lty[1], breaks = 1,
+          name = "Probability", values = bound_lty[1], breaks = 1, limits = visible_bounds,
           labels = "Upper bound"
         )
 
@@ -1271,40 +1328,41 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     } else if (has_harm) {
       p <- p + 
         ggplot2::scale_colour_manual(
-        name = "Probability", values = getColor(col[1:3]), breaks = 1:3,
+        name = "Probability", values = bound_colors[1:3], breaks = 1:3, limits = visible_bounds,
         labels = c("Upper bound", "1-(Futility or harm)", "1-Harm")
       ) +
         ggplot2::scale_linetype_manual(
-          name = "Probability", values = lty[1:3], breaks = 1:3,
+          name = "Probability", values = bound_lty[1:3], breaks = 1:3, limits = visible_bounds,
           labels = c("Upper bound", "1-(Futility or harm)", "1-Harm")
         )
     } else {
       p <- p + 
         ggplot2::scale_colour_manual(
-        name = "Probability", values = getColor(col), breaks = 1:2,
+        name = "Probability", values = bound_colors, breaks = 1:2, limits = visible_bounds,
         labels = c("Upper bound", "1-Lower bound")
       ) +
         ggplot2::scale_linetype_manual(
-          name = "Probability", values = lty, breaks = 1:2,
+          name = "Probability", values = bound_lty, breaks = 1:2, limits = visible_bounds,
           labels = c("Upper bound", "1-Lower bound")
         )
     }
     p <- p + 
       ggplot2::geom_text(data = yt, ggplot2::aes(theta, prob, colour = factor(bound), group = 1, label = itxt), size = cex * 5, show.legend = F)
-    for (i in 1:x$k) p <- p + ggplot2::geom_line(
-        data = subset(y, interim == i & bound == 1),
-        colour = getColor(col[1]), lty = lty[1], lwd = lwd[1]
-      )
     if (test.type > 2) {
-      for (i in 1:(x$k - 1)) {
+      for (i in seq_len(x$k)) {
         p <- p + ggplot2::geom_line(data = subset(y, interim == i & bound == 2), colour = getColor(col[2]), lty = lty[2], lwd = lwd[2])
       }
     }
     if (has_harm) {
-      for (i in 1:(x$k - 1)) {
+      for (i in seq_len(x$k)) {
         p <- p + ggplot2::geom_line(data = subset(y, interim == i & bound == 3), colour = getColor(col[3]), lty = lty[3], lwd = lwd[3])
       }
     }
+    # Draw efficacy last so coincident final curves retain the efficacy style.
+    for (i in seq_len(x$k)) p <- p + ggplot2::geom_line(
+        data = subset(y, interim == i & bound == 1),
+        colour = getColor(col[1]), lty = lty[1], lwd = lwd[1]
+      )
     return(p)
   }
 }

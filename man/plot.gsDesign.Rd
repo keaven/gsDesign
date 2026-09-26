@@ -43,6 +43,9 @@ calling \code{plot}.
 
 Other arguments include:
 
+\code{show_skipped}, a logical value for power plots, defaults to
+\code{FALSE}. Set it to \code{TRUE} to include inactive boundaries.
+
 \code{theta} which is used for \code{plottype=2}, \code{4}, \code{6};
 normally defaults will be adequate; see details.
 
@@ -87,6 +90,13 @@ futility-threshold curve is inclusive: it uses the sum of futility-only and
 harm crossing probabilities. The separate harm curve continues to show
 harm crossings only. This plotting convention does not modify the
 probabilities stored on \code{x}.
+Power plots show cumulative crossing probabilities through each analysis.
+By default, a curve is shown only when its boundary is active at that
+analysis; the original analysis numbers are retained. Skipped boundaries
+still contribute their (zero) increments to the cumulative calculation.
+For types 7 and 8, the combined futility-or-harm curve is shown when either
+boundary is active. Use \code{show_skipped = TRUE} to also display curves
+at skipped looks, which may duplicate earlier curves or be constant.
 
 Note that there is some special behavior for values plotted and returned for
 power and expected sample size (ASN) plots for a \code{gsDesign} object. A
@@ -150,6 +160,12 @@ plot(x, plottype = 4)
 plot(x, plottype = 5)
 plot(x, plottype = 6)
 plot(x, plottype = 7)
+
+# Futility testing only at the first look: omit its skipped-look curves
+skipped <- gsDesign(testLower = c(TRUE, FALSE, FALSE))
+plot(skipped, plottype = "power")
+# Include all looks, including coincident cumulative curves
+plot(skipped, plottype = "power", show_skipped = TRUE)
 
 #  choose different parameter values for power plot
 #  start with design in x from above
