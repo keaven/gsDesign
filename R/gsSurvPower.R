@@ -197,16 +197,20 @@
 #'   \code{nSurv()}. When \code{x} is provided and \code{sided} is omitted,
 #'   \code{gsSurvPower()} reuses the stored sided value from the design call
 #'   when available.
-#' @param astar Lower bound total crossing probability for \code{test.type}
-#'   5 or 6. Default 0.
+#' @param astar Total lower-bound spending for types 5 or 6, or harm spending
+#'   for types 7 or 8. Without a reference design, 0 selects \code{1 - alpha / sided}
+#'   for types 5 or 6 and \code{0.1} for types 7 or 8. Harm calibration ignores
+#'   futility stopping; reported stopping probabilities include it. With a
+#'   reference design, its stored value is used unless overridden.
 #' @param sfu Upper bound spending function (default \code{sfHSD}).
 #' @param sfupar Parameter for \code{sfu} (default -4).
 #' @param sfl Lower bound spending function (default \code{sfHSD}).
 #' @param sflpar Parameter for \code{sfl} (default -2).
 #' @param sfharm Spending function for the harm bound, used with
-#'   \code{test.type = 7} or \code{test.type = 8}. Default \code{sfHSD}.
+#'   \code{test.type = 7} or \code{test.type = 8}. Default \code{sfLDPocock}
+#'   without a reference design; otherwise uses its stored harm spending function.
 #' @param sfharmparam Real value, default \eqn{-2}. Parameter for the harm
-#'   bound spending function \code{sfharm}.
+#'   bound spending function \code{sfharm}; ignored by \code{sfLDPocock}.
 #' @param testUpper Indicator of which analyses include an efficacy test.
 #'   \code{TRUE} (default) for all analyses. A logical vector of length
 #'   \code{k} may be specified. Missing values are not allowed; use
@@ -481,7 +485,7 @@ gsSurvPower <- function(
     if (is.null(sfl)) sfl <- x$lower$sf
     if (is.null(sflpar)) sflpar <- x$lower$param
     if (is.null(sfharm)) {
-      sfharm <- if (!is.null(x$harm) && is.function(x$harm$sf)) x$harm$sf else gsDesign::sfHSD
+      sfharm <- if (!is.null(x$harm) && is.function(x$harm$sf)) x$harm$sf else gsDesign::sfLDPocock
     }
     if (is.null(sfharmparam)) {
       sfharmparam <- if (!is.null(x$harm) && !is.null(x$harm$param)) x$harm$param else -2
@@ -513,7 +517,7 @@ gsSurvPower <- function(
     if (is.null(sfupar)) sfupar <- -4
     if (is.null(sfl)) sfl <- gsDesign::sfHSD
     if (is.null(sflpar)) sflpar <- -2
-    if (is.null(sfharm)) sfharm <- gsDesign::sfHSD
+    if (is.null(sfharm)) sfharm <- gsDesign::sfLDPocock
     if (is.null(sfharmparam)) sfharmparam <- -2
     if (is.null(testUpper)) testUpper <- TRUE
     if (is.null(testLower)) testLower <- TRUE

@@ -83,8 +83,11 @@ calculations, matching the convention of \code{gsSurv()} and
 \code{gsSurvPower()} reuses the stored sided value from the design call
 when available.}
 
-\item{astar}{Lower bound total crossing probability for \code{test.type}
-5 or 6. Default 0.}
+\item{astar}{Total lower-bound spending for types 5 or 6, or harm spending
+for types 7 or 8. Without a reference design, 0 selects \code{1 - alpha / sided}
+for types 5 or 6 and \code{0.1} for types 7 or 8. Harm calibration ignores
+futility stopping; reported stopping probabilities include it. With a
+reference design, its stored value is used unless overridden.}
 
 \item{sfu}{Upper bound spending function (default \code{sfHSD}).}
 
@@ -95,10 +98,11 @@ when available.}
 \item{sflpar}{Parameter for \code{sfl} (default -2).}
 
 \item{sfharm}{Spending function for the harm bound, used with
-\code{test.type = 7} or \code{test.type = 8}. Default \code{sfHSD}.}
+\code{test.type = 7} or \code{test.type = 8}. Default \code{sfLDPocock}
+without a reference design; otherwise uses its stored harm spending function.}
 
 \item{sfharmparam}{Real value, default \eqn{-2}. Parameter for the harm
-bound spending function \code{sfharm}.}
+bound spending function \code{sfharm}; ignored by \code{sfLDPocock}.}
 
 \item{r}{Integer grid parameter for numerical integration (default 18).}
 

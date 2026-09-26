@@ -18,7 +18,7 @@ gsDesign(
   sfupar = -4,
   sfl = sfHSD,
   sflpar = -2,
-  sfharm = sfHSD,
+  sfharm = sfLDPocock,
   sfharmparam = -2,
   tol = 1e-06,
   r = 18,
@@ -67,9 +67,14 @@ lower bound spending under the null hypothesis with non-binding lower bound
 (test.type 7 or 8) bound under the null hypothesis. Default is 0.
 For \code{test.type} 5 or 6, \code{astar} specifies the total probability
 of crossing a lower bound at all analyses combined.
-For \code{test.type} 7 or 8, \code{astar} specifies the total probability
-of crossing the harm bound at all analyses combined under the null hypothesis.
-If \code{astar = 0}, it will be changed to \eqn{1 - }\code{alpha}.}
+For \code{test.type} 7 or 8, \code{astar} specifies total harm spending
+under the null, calibrated ignoring futility stopping but retaining efficacy
+stopping. The default input \code{astar = 0} selects \code{0.1} for harm
+designs and \eqn{1 - }\code{alpha} for types 5 and 6.
+Actual harm stopping probabilities account for futility and can be smaller
+than the spending targets. Capping harm at an active futility bound can also
+reduce attained spending. See the harm-monitoring section in
+\code{\link{gsDesign}}.}
 
 \item{delta}{Effect size for theta under alternative hypothesis. This can be
 set to the standardized effect size to generate a sample size if
@@ -119,10 +124,10 @@ rate than the default for the upper bound.}
 
 \item{sfharm}{A spending function for the harm bound, used with
 \code{test.type = 7} or \code{test.type = 8}.
-Default is \code{sfHSD}. See \code{\link{spendingFunction}} for details.}
+Default is \code{sfLDPocock}. See \code{\link{spendingFunction}} for details.}
 
 \item{sfharmparam}{Real value, default is \eqn{-2}. Parameter for the harm
-bound spending function \code{sfharm}.}
+bound spending function \code{sfharm}; ignored by \code{sfLDPocock}.}
 
 \item{tol}{Tolerance for error (default is 0.000001). Normally this will not
 be changed by the user.  This does not translate directly to number of
@@ -280,7 +285,8 @@ elements and upon return from \code{gsDesign()} contains: \item{k}{As
 input.} \item{test.type}{As input.} \item{alpha}{As input.} \item{beta}{As
 input.} \item{astar}{As input, except when \code{test.type=5} or \code{6}
 and \code{astar} is input as 0; in this case \code{astar} is changed to
-\code{1-alpha}.} \item{delta}{The standardized effect size for which the
+\code{1-alpha}; for types 7 and 8, input 0 is changed to \code{0.1}.}
+\item{delta}{The standardized effect size for which the
 design is powered. Will be as input to \code{gsDesign()} unless it was input
 as 0; in that case, value will be computed to give desired power for fixed
 design with input sample size \code{n.fix}.} \item{n.fix}{Sample size
@@ -321,7 +327,8 @@ hypothesis. For \code{test.type=1}, output value is \code{NULL}. See
 \code{test.type=7} or \code{8}, crossing probabilities exclude harm
 crossings.} \item{harm}{Harm bound spending function, boundary, and crossing
 probabilities at each analysis for \code{test.type=7} or \code{8}. Harm,
-lower, and upper crossing probabilities are mutually exclusive.}
+lower, and upper crossing probabilities are mutually exclusive and include
+futility stopping, unlike the harm spending calibration.}
 \item{theta}{Standarized
 effect size under null (0) and alternate hypothesis. If \code{delta} is
 input, \code{theta[1]=delta}. If \code{n.fix} is input, \code{theta[1]} is
@@ -413,6 +420,32 @@ with differences from the default grid within the accuracy of that grid.
 The rule uses at most 992 nodes, so extremely small information increments
 can reduce accuracy. \code{normalGrid()} always returns the Jennison and
 Turnbull grid.
+}
+
+\section{Harm monitoring}{
+
+For types 7 and 8, harm spending is calibrated under the null as if futility
+stopping were ignored. Earlier harm and efficacy stops are retained.
+This convention is separate from binding versus non-binding efficacy
+calibration: type 7 protects alpha assuming both lower stopping rules are
+followed, whereas type 8 protects alpha even if they are ignored.
+Reported \code{harm$prob}, power, expected information, and
+\code{gsBoundSummary()} crossing probabilities assume all active stopping
+rules are followed. Thus actual harm probabilities may be smaller than
+\code{cumsum(harm$spend)}. Where both lower bounds are active, harm is capped
+at futility to retain their ordering; this can also prevent full spending.
+
+The defaults \code{astar = 0.1} (selected by input 0) and
+\code{sfharm = sfLDPocock} provide relatively early spending and aim to flag
+moderately small one-sided p-values favoring harm. At harm boundary \eqn{h},
+that nominal p-value is \eqn{\Phi(h)}, not the cumulative spending and not
+the efficacy-direction p-value displayed by \code{gsBoundSummary()}.
+There is no fixed nominal p-value cutoff guaranteed at every analysis.
+With more analyses, a larger total harm spending \code{astar} may be desired
+to retain similarly permissive nominal harm thresholds, at the cost of more
+false harm signals under the null. This changes harm spending, not futility
+beta spending. Inspect the resulting nominal thresholds for the actual
+analysis schedule. See \code{vignette("HarmBound")} for examples.
 }
 
 \examples{
