@@ -70,7 +70,7 @@ gsDesign(
   sfupar = -4,
   sfl = sfHSD,
   sflpar = -2,
-  sfharm = sfHSD,
+  sfharm = sfLDPocock,
   sfharmparam = -2,
   tol = 1e-06,
   r = 18,
@@ -137,9 +137,13 @@ xtable(
   or 8) bound under the null hypothesis. Default is 0. For `test.type` 5
   or 6, `astar` specifies the total probability of crossing a lower
   bound at all analyses combined. For `test.type` 7 or 8, `astar`
-  specifies the total probability of crossing the harm bound at all
-  analyses combined under the null hypothesis. If `astar = 0`, it will
-  be changed to \\1 - \\`alpha`.
+  specifies total harm spending under the null, calibrated ignoring
+  futility stopping but retaining efficacy stopping. The default input
+  `astar = 0` selects `0.1` for harm designs and \\1 - \\`alpha` for
+  types 5 and 6. Actual harm stopping probabilities account for futility
+  and can be smaller than the spending targets. Capping harm at an
+  active futility bound can also reduce attained spending. See the
+  harm-monitoring section in `gsDesign`.
 
 - delta:
 
@@ -205,14 +209,14 @@ xtable(
 - sfharm:
 
   A spending function for the harm bound, used with `test.type = 7` or
-  `test.type = 8`. Default is `sfHSD`. See
+  `test.type = 8`. Default is `sfLDPocock`. See
   [`spendingFunction`](https://keaven.github.io/gsDesign/reference/spendingFunction.md)
   for details.
 
 - sfharmparam:
 
   Real value, default is \\-2\\. Parameter for the harm bound spending
-  function `sfharm`.
+  function `sfharm`; ignored by `sfLDPocock`.
 
 - tol:
 
@@ -413,7 +417,8 @@ and upon return from `gsDesign()` contains:
 - astar:
 
   As input, except when `test.type=5` or `6` and `astar` is input as 0;
-  in this case `astar` is changed to `1-alpha`.
+  in this case `astar` is changed to `1-alpha`; for types 7 and 8, input
+  0 is changed to `0.1`.
 
 - delta:
 
@@ -528,7 +533,8 @@ and upon return from `gsDesign()` contains:
 
   Harm bound spending function, boundary, and crossing probabilities at
   each analysis for `test.type=7` or `8`. Harm, lower, and upper
-  crossing probabilities are mutually exclusive.
+  crossing probabilities are mutually exclusive and include futility
+  stopping, unlike the harm spending calibration.
 
 - theta:
 
@@ -582,6 +588,35 @@ within the accuracy of that grid. The rule uses at most 992 nodes, so
 extremely small information increments can reduce accuracy.
 [`normalGrid()`](https://keaven.github.io/gsDesign/reference/normalGrid.md)
 always returns the Jennison and Turnbull grid.
+
+## Harm monitoring
+
+For types 7 and 8, harm spending is calibrated under the null as if
+futility stopping were ignored. Earlier harm and efficacy stops are
+retained. This convention is separate from binding versus non-binding
+efficacy calibration: type 7 protects alpha assuming both lower stopping
+rules are followed, whereas type 8 protects alpha even if they are
+ignored. Reported `harm$prob`, power, expected information, and
+[`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+crossing probabilities assume all active stopping rules are followed.
+Thus actual harm probabilities may be smaller than `cumsum(harm$spend)`.
+Where both lower bounds are active, harm is capped at futility to retain
+their ordering; this can also prevent full spending.
+
+The defaults `astar = 0.1` (selected by input 0) and
+`sfharm = sfLDPocock` provide relatively early spending and aim to flag
+moderately small one-sided p-values favoring harm. At harm boundary
+\\h\\, that nominal p-value is \\\Phi(h)\\, not the cumulative spending
+and not the efficacy-direction p-value displayed by
+[`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
+There is no fixed nominal p-value cutoff guaranteed at every analysis.
+With more analyses, a larger total harm spending `astar` may be desired
+to retain similarly permissive nominal harm thresholds, at the cost of
+more false harm signals under the null. This changes harm spending, not
+futility beta spending. Inspect the resulting nominal thresholds for the
+actual analysis schedule. See
+[`vignette("HarmBound")`](https://keaven.github.io/gsDesign/articles/HarmBound.md)
+for examples.
 
 ## References
 

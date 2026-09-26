@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9019</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1003,7 +1003,7 @@ for harm spending and skip efficacy testing at IA1:</p>
 }
 })</script><p>The harm bound is <code>NA</code> at the final analysis.</p>
 <div class="section level3">
-<h3 id="why-skipping-final-futility-can-change-an-earlier-harm-bound">Why skipping final futility can change an earlier harm bound<a class="anchor" aria-label="anchor" href="#why-skipping-final-futility-can-change-an-earlier-harm-bound"></a>
+<h3 id="harm-calibration-when-futility-is-skipped">Harm calibration when futility is skipped<a class="anchor" aria-label="anchor" href="#harm-calibration-when-futility-is-skipped"></a>
 </h3>
 <p>For <code>test.type = 7</code> and <code>8</code>, harm and futility
 are mutually exclusive lower-tail stopping outcomes. When both bounds
@@ -1014,10 +1014,13 @@ remains active, harm becomes the only active lower stopping boundary at
 that analysis.</p>
 <p>This distinction applies even to <code>test.type = 8</code>.
 Non-binding means that futility and harm stopping are ignored when Type
-I error is protected; it does not mean that the reported harm and
-futility boundaries are derived independently. The boundaries are
-jointly calibrated to their spending targets and active testing
-schedules.</p>
+I error is protected; it does not mean that futility is ignored in
+reported stopping probabilities. Harm spending is now calibrated
+ignoring futility stopping for both types 7 and 8, while retaining
+efficacy stopping. Actual harm probabilities still include earlier
+futility stopping and can be below the spending targets. The harm bound
+is capped at an active futility bound if needed to retain their
+ordering.</p>
 <p>The following three designs skip efficacy testing at IA1. They differ
 only in whether futility and harm are tested at the final analysis:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -1069,7 +1072,7 @@ only in whether futility and harm are tested at the final analysis:</p>
   "data": {
     "Analysis": [1, 2, 3],
     "All lower bounds active": [-1.41706541712503, -1.40357973088108, -1.37487485081551],
-    "Final harm only": [-1.41708105040892, 0.206089918632331, 1.43488233629249],
+    "Final harm only": [-1.41708104794145, -1.40356684836874, -1.3748776496807],
     "Both final lower bounds skipped": [-1.41706541712503, -1.40357973088108, -Infinity]
   },
   "ops": [
@@ -1083,21 +1086,22 @@ only in whether futility and harm are tested at the final analysis:</p>
     "title": "Harm bounds by final-analysis testing schedule"
   }
 }
-})</script><p>When final futility is skipped but final harm remains active, the
-lower-tail stopping partition changes. The joint calibration can
-therefore change an earlier harm bound even though <code>testHarm</code>
-itself was not changed. This is expected when harm monitoring is
-genuinely intended at the final analysis.</p>
+})</script><p>Skipping final futility changes the actual lower-tail stopping
+partition, but does not reallocate harm spending among survivors of
+futility monitoring. At fixed information fractions, spending times,
+efficacy boundaries, and inactive caps, changing futility testing alone
+leaves harm boundaries unchanged. Re-sizing a design, an active cap, or
+re-calibrating binding efficacy bounds can still change the boundaries
+indirectly.</p>
 <p>If neither futility nor harm will be assessed at the final analysis,
 specify both schedules explicitly:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">testLower</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">testHarm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p>Matching these schedules leaves the earlier harm bounds unchanged
-relative to the design with all lower bounds active. Conversely, retain
-<code>testHarm = c(TRUE, TRUE, TRUE)</code> when a final harm assessment
-is intended and interpret the recalibrated harm bounds as part of that
-testing strategy.</p>
+<p>Conversely, retain <code>testHarm = c(TRUE, TRUE, TRUE)</code> when a
+final harm assessment is intended and interpret its actual stopping
+probability separately from the harm spending target. See the
+<code>HarmBound</code> vignette for a worked comparison.</p>
 </div>
 </div>
 <div class="section level2">

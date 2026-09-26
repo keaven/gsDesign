@@ -20,7 +20,7 @@ gsSurvCalendar(
   sfupar = -4,
   sfl = gsDesign::sfHSD,
   sflpar = -2,
-  sfharm = gsDesign::sfHSD,
+  sfharm = gsDesign::sfLDPocock,
   sfharmparam = -2,
   calendarTime = c(12, 24, 36),
   spending = c("information", "calendar"),
@@ -81,9 +81,14 @@ gsSurvCalendar(
   or 8) bound under the null hypothesis. Default is 0. For `test.type` 5
   or 6, `astar` specifies the total probability of crossing a lower
   bound at all analyses combined. For `test.type` 7 or 8, `astar`
-  specifies the total probability of crossing the harm bound at all
-  analyses combined under the null hypothesis. If `astar = 0`, it will
-  be changed to \\1 - \\`alpha`.
+  specifies total harm spending under the null, calibrated ignoring
+  futility stopping but retaining efficacy stopping. The default input
+  `astar = 0` selects `0.1` for harm designs and \\1 - \\`alpha` for
+  types 5 and 6. Actual harm stopping probabilities account for futility
+  and can be smaller than the spending targets. Capping harm at an
+  active futility bound can also reduce attained spending. See the
+  harm-monitoring section in
+  [`gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md).
 
 - sfu:
 
@@ -128,14 +133,14 @@ gsSurvCalendar(
 - sfharm:
 
   A spending function for the harm bound, used with `test.type = 7` or
-  `test.type = 8`. Default is `sfHSD`. See
+  `test.type = 8`. Default is `sfLDPocock`. See
   [`spendingFunction`](https://keaven.github.io/gsDesign/reference/spendingFunction.md)
   for details.
 
 - sfharmparam:
 
   Real value, default is \\-2\\. Parameter for the harm bound spending
-  function `sfharm`.
+  function `sfharm`; ignored by `sfLDPocock`.
 
 - calendarTime:
 

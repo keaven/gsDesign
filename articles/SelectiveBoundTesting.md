@@ -208,7 +208,7 @@ gsBoundSummary(xh, exclude = NULL) |> lt()
 
 The harm bound is `NA` at the final analysis.
 
-### Why skipping final futility can change an earlier harm bound
+### Harm calibration when futility is skipped
 
 For `test.type = 7` and `8`, harm and futility are mutually exclusive
 lower-tail stopping outcomes. When both bounds are active, observations
@@ -219,9 +219,12 @@ harm becomes the only active lower stopping boundary at that analysis.
 
 This distinction applies even to `test.type = 8`. Non-binding means that
 futility and harm stopping are ignored when Type I error is protected;
-it does not mean that the reported harm and futility boundaries are
-derived independently. The boundaries are jointly calibrated to their
-spending targets and active testing schedules.
+it does not mean that futility is ignored in reported stopping
+probabilities. Harm spending is now calibrated ignoring futility
+stopping for both types 7 and 8, while retaining efficacy stopping.
+Actual harm probabilities still include earlier futility stopping and
+can be below the spending targets. The harm bound is capped at an active
+futility bound if needed to retain their ordering.
 
 The following three designs skip efficacy testing at IA1. They differ
 only in whether futility and harm are tested at the final analysis:
@@ -273,11 +276,13 @@ harm_comparison |>
   lt_header("Harm bounds by final-analysis testing schedule")
 ```
 
-When final futility is skipped but final harm remains active, the
-lower-tail stopping partition changes. The joint calibration can
-therefore change an earlier harm bound even though `testHarm` itself was
-not changed. This is expected when harm monitoring is genuinely intended
-at the final analysis.
+Skipping final futility changes the actual lower-tail stopping
+partition, but does not reallocate harm spending among survivors of
+futility monitoring. At fixed information fractions, spending times,
+efficacy boundaries, and inactive caps, changing futility testing alone
+leaves harm boundaries unchanged. Re-sizing a design, an active cap, or
+re-calibrating binding efficacy bounds can still change the boundaries
+indirectly.
 
 If neither futility nor harm will be assessed at the final analysis,
 specify both schedules explicitly:
@@ -288,11 +293,10 @@ testLower = c(TRUE, TRUE, FALSE)
 testHarm = c(TRUE, TRUE, FALSE)
 ```
 
-Matching these schedules leaves the earlier harm bounds unchanged
-relative to the design with all lower bounds active. Conversely, retain
-`testHarm = c(TRUE, TRUE, TRUE)` when a final harm assessment is
-intended and interpret the recalibrated harm bounds as part of that
-testing strategy.
+Conversely, retain `testHarm = c(TRUE, TRUE, TRUE)` when a final harm
+assessment is intended and interpret its actual stopping probability
+separately from the harm spending target. See the `HarmBound` vignette
+for a worked comparison.
 
 ## Example 4: Combining selective efficacy and futility
 

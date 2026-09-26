@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9019</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,8 +42,10 @@
 <h2 class="pkg-version" data-toc-text="development version" id="gsdesign-development-version">gsDesign (development version)<a class="anchor" aria-label="anchor" href="#gsdesign-development-version"></a></h2>
 <div class="section level3">
 <h3 id="breaking-changes-development-version">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
-<ul><li>Follow-up now refers to all planned participants, with dropout and optional event stopping. Use <code><a href="../reference/medianFollowUp.html">medianFollowUp()</a></code> for a forward calculation; <code><a href="../reference/medianFollowUp.html">minMedianFollowUp()</a></code> now solves for cutoff time with a named <code>target</code>. The plot uses the revised definition (<a href="https://github.com/keaven/gsDesign/issues/281" class="external-link">#281</a>).</li>
-<li>Absent lower and harm bounds now use <code>-Inf</code>, and absent upper bounds use <code>Inf</code>, instead of the finite <code>-20</code>/<code>20</code> sentinel. This includes zero-spending and skipped analyses. Use <code><a href="https://rdrr.io/r/base/is.finite.html" class="external-link">is.finite()</a></code> to identify active bounds. <code><a href="../reference/gsBoundCP.html">gsBoundCP()</a></code> returns <code>NA</code> at an absent bound (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/321" class="external-link">#321</a>).</li>
+<ul><li><p>Harm spending for <code>test.type = 7</code> and <code>8</code> is now calibrated ignoring futility stopping, while retaining efficacy stopping. Reported harm probabilities still assume all active stopping rules are followed and can be below the spending targets. This also applies to type 8 exact binomial conversion. Harm remains capped at futility where both are active.</p></li>
+<li><p>Harm designs now default to total spending <code>astar = 0.1</code> (also selected by input <code>astar = 0</code>) and <code>sfharm = sfLDPocock</code>, including survival interfaces. Types 5 and 6 retain their <code>astar = 0</code> convention of <code>1 - alpha</code>. Explicit harm spending choices are preserved.</p></li>
+<li><p>Follow-up now refers to all planned participants, with dropout and optional event stopping. Use <code><a href="../reference/medianFollowUp.html">medianFollowUp()</a></code> for a forward calculation; <code><a href="../reference/medianFollowUp.html">minMedianFollowUp()</a></code> now solves for cutoff time with a named <code>target</code>. The plot uses the revised definition (<a href="https://github.com/keaven/gsDesign/issues/281" class="external-link">#281</a>).</p></li>
+<li><p>Absent lower and harm bounds now use <code>-Inf</code>, and absent upper bounds use <code>Inf</code>, instead of the finite <code>-20</code>/<code>20</code> sentinel. This includes zero-spending and skipped analyses. Use <code><a href="https://rdrr.io/r/base/is.finite.html" class="external-link">is.finite()</a></code> to identify active bounds. <code><a href="../reference/gsBoundCP.html">gsBoundCP()</a></code> returns <code>NA</code> at an absent bound (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/321" class="external-link">#321</a>).</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
@@ -79,7 +81,9 @@
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
-<ul><li><p>Added a historical vignette covering the package’s statistical foundations, contributors, software modernization, and recent development (<a href="https://github.com/keaven/gsDesign/issues/304" class="external-link">#304</a>).</p></li>
+<ul><li><p>Added a sparse-event mortality example using type 6 non-binding harm monitoring without separate futility, exact-binomial integer boundaries, harm-detection sensitivity, and a fixed-analysis precision illustration. Distinguished detecting harm from ruling it out and corrected the FDA reference to the August 2025 draft guidance.</p></li>
+<li><p>Explained harm calibration versus actual stopping probabilities in the help and harm/selective-monitoring vignettes, with a worked skipped-look example. Documented the 0.1/Pocock rationale, nominal harm-tail p-values, and the tradeoff in increasing total harm spending when more analyses are planned.</p></li>
+<li><p>Added a historical vignette covering the package’s statistical foundations, contributors, software modernization, and recent development (<a href="https://github.com/keaven/gsDesign/issues/304" class="external-link">#304</a>).</p></li>
 <li><p>Added an effect-spending vignette using the public interface for joint boundaries, risk differences and explicitly event-scaled HRs (<a href="https://github.com/keaven/gsDesign/issues/331" class="external-link">#331</a>).</p></li>
 <li><p>Added a separate vignette comparing conditional-assurance and unconditional-POS spending calibration, including the Dragalin fixed-information benchmark and operating-characteristic checks (<a href="https://github.com/keaven/gsDesign/issues/330" class="external-link">#330</a>).</p></li>
 <li><p>Added a futility-spending calibration vignette comparing all six two-parameter families and piecewise-linear spending with three conditional-power targets, including reconstructed designs and practical guidance on early futility and sample-size inflation. Examples cover risk differences, normal means, survival designs, and calibrated spending curves with interpretation of effects at the bounds (<a href="https://github.com/keaven/gsDesign/issues/318" class="external-link">#318</a>).</p></li>
@@ -91,10 +95,11 @@
 </ul></div>
 <div class="section level3">
 <h3 id="testing-development-version">Testing<a class="anchor" aria-label="anchor" href="#testing-development-version"></a></h3>
-<ul><li>Declare <code>svglite</code> as a test dependency for information-label rendering checks (<a href="https://github.com/keaven/gsDesign/issues/315" class="external-link">#315</a>).</li>
-<li>Added tests for natural-effect calibration, joint boundary targets, HR allocation/direction handling and design replay (<a href="https://github.com/keaven/gsDesign/issues/331" class="external-link">#331</a>).</li>
-<li>Added regression fixtures, multivariate normal reference checks, and print snapshots for the numerical integration routines and their R interfaces (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/320" class="external-link">#320</a>).</li>
-<li>Reduced default test-suite runtime by using smaller stress-test grids, fewer Monte Carlo iterations, and toy exact-binomial p-value event counts. Set <code>GSDESIGN_RUN_STRESS_TESTS=true</code> to run the larger stress-test settings.</li>
+<ul><li><p>Added harm-calibration checks against an independent boundary solver and bivariate integration, plus default propagation, selective-bound, and exact binomial checks. Regenerated only the four affected harm-design numerical fixtures for the intentional new calibration and defaults.</p></li>
+<li><p>Declare <code>svglite</code> as a test dependency for information-label rendering checks (<a href="https://github.com/keaven/gsDesign/issues/315" class="external-link">#315</a>).</p></li>
+<li><p>Added tests for natural-effect calibration, joint boundary targets, HR allocation/direction handling and design replay (<a href="https://github.com/keaven/gsDesign/issues/331" class="external-link">#331</a>).</p></li>
+<li><p>Added regression fixtures, multivariate normal reference checks, and print snapshots for the numerical integration routines and their R interfaces (<a href="https://github.com/keaven/gsDesign/issues/242" class="external-link">#242</a>, <a href="https://github.com/keaven/gsDesign/issues/320" class="external-link">#320</a>).</p></li>
+<li><p>Reduced default test-suite runtime by using smaller stress-test grids, fewer Monte Carlo iterations, and toy exact-binomial p-value event counts. Set <code>GSDESIGN_RUN_STRESS_TESTS=true</code> to run the larger stress-test settings.</p></li>
 </ul></div>
 </div>
     <div class="section level2">

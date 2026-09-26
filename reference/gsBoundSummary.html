@@ -58,6 +58,10 @@ when the relative risk is the natural parameter.
 Spending: Incremental error spending at each given analysis. For
 asymmetric designs, futility bound will have beta-spending summarized.
 Efficacy bound always has alpha-spending summarized.
+For types 7 and 8, harm spending is calibrated under the null ignoring
+futility stopping (but retaining efficacy stopping); capping at an active
+futility bound can reduce attained spending. It need not equal the
+increment in the reported harm crossing probability.
 B-value: sqrt(t)*Z where t is the proportion of
 information at the analysis divided by the final analysis planned
 information. The expected value for B-values is directly proportional to
@@ -75,7 +79,10 @@ x, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
 interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive. Every characteristic for a bound,
+probabilities are mutually exclusive and assume all active stopping rules
+are followed, including futility even for a non-binding design. Harm
+crossing probabilities can therefore be below the harm spending targets.
+Every characteristic for a bound,
 including its cumulative crossing probability, is shown as NA at an
 analysis where that bound is inactive. The underlying probability arrays on
 x retain the cumulative crossing information."><meta property="og:description" content="A tabular summary of a group sequential design's bounds and their properties
@@ -131,6 +138,10 @@ when the relative risk is the natural parameter.
 Spending: Incremental error spending at each given analysis. For
 asymmetric designs, futility bound will have beta-spending summarized.
 Efficacy bound always has alpha-spending summarized.
+For types 7 and 8, harm spending is calibrated under the null ignoring
+futility stopping (but retaining efficacy stopping); capping at an active
+futility bound can reduce attained spending. It need not equal the
+increment in the reported harm crossing probability.
 B-value: sqrt(t)*Z where t is the proportion of
 information at the analysis divided by the final analysis planned
 information. The expected value for B-values is directly proportional to
@@ -148,7 +159,10 @@ x, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
 interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive. Every characteristic for a bound,
+probabilities are mutually exclusive and assume all active stopping rules
+are followed, including futility even for a non-binding design. Harm
+crossing probabilities can therefore be below the harm spending targets.
+Every characteristic for a bound,
 including its cumulative crossing probability, is shown as NA at an
 analysis where that bound is inactive. The underlying probability arrays on
 x retain the cumulative crossing information."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
@@ -159,7 +173,7 @@ x retain the cumulative crossing information."><meta property="og:image" content
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9019</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -238,7 +252,11 @@ computed instead by <code>gsHR()</code> to be consistent with
 when the relative risk is the natural parameter.</p>
 <p><code>Spending: </code>Incremental error spending at each given analysis. For
 asymmetric designs, futility bound will have beta-spending summarized.
-Efficacy bound always has alpha-spending summarized.</p>
+Efficacy bound always has alpha-spending summarized.
+For types 7 and 8, harm spending is calibrated under the null ignoring
+futility stopping (but retaining efficacy stopping); capping at an active
+futility bound can reduce attained spending. It need not equal the
+increment in the reported harm crossing probability.</p>
 <p><code>B-value: </code><code>sqrt(t)*Z</code> where <code>t</code> is the proportion of
 information at the analysis divided by the final analysis planned
 information. The expected value for B-values is directly proportional to
@@ -256,7 +274,10 @@ value. <code>P{Cross if delta=xx}: </code>For each of the parameter values in
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
 interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive. Every characteristic for a bound,
+probabilities are mutually exclusive and assume all active stopping rules
+are followed, including futility even for a non-binding design. Harm
+crossing probabilities can therefore be below the harm spending targets.
+Every characteristic for a bound,
 including its cumulative crossing probability, is shown as <code>NA</code> at an
 analysis where that bound is inactive. The underlying probability arrays on
 <code>x</code> retain the cumulative crossing information.</p>
@@ -739,7 +760,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Table caption."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.6.1 by xtable 1.8-8 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Sat Sep 26 10:43:06 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Sat Sep 26 20:44:02 2026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{llrr}</span>

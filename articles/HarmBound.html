@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9019</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,44 +84,44 @@ demonstrates how the <strong>gsDesign</strong> package supports group
 sequential designs with three boundaries: an <strong>efficacy</strong>
 (upper) bound, a <strong>futility</strong> (lower) bound, and a
 <strong>harm</strong> bound, using <code>test.type = 7</code> (binding)
-and <code>test.type = 8</code> (non-binding).</p>
+and <code>test.type = 8</code> (non-binding). For sparse mortality data
+without a separate futility rule, the section <a href="#sparse-event-mortality-monitoring">Sparse-event mortality
+monitoring</a> uses <code>test.type = 6</code> and exact-binomial
+boundary calculations.</p>
 <div class="section level3">
 <h3 id="regulatory-context-fda-guidance-on-os-monitoring-in-oncology">Regulatory context: FDA guidance on OS monitoring in oncology<a class="anchor" aria-label="anchor" href="#regulatory-context-fda-guidance-on-os-monitoring-in-oncology"></a>
 </h3>
-<p>The FDA draft guidance <em>Assessment of Overall Survival Evidence in
-Support of Accelerated Approval of Oncology Therapeutics</em> <span class="citation">(U.S. Food and Drug Administration 2024)</span>
-describes expectations for monitoring OS in the context of trials that
-may receive accelerated approval based on surrogate endpoints. The
-guidance states that sponsors should specify pre-planned boundaries for
-interim OS monitoring, including criteria for stopping a trial early if
-there is evidence of a <em>detrimental effect on OS</em>. Key points
-include:</p>
+<p>The August 2025 FDA draft guidance <em>Approaches to Assessment of
+Overall Survival in Oncology Clinical Trials</em> <span class="citation">(U.S. Food and Drug Administration 2025)</span>
+discusses OS as a safety endpoint even when another endpoint establishes
+efficacy. It remains draft, nonbinding guidance, not a requirement to
+use the method illustrated here. Sections II, III.A, and III.B.2
+discuss:</p>
 <ul>
-<li>Sponsors should include a <strong>pre-specified statistical analysis
-plan</strong> for interim OS analyses, including the timing and number
-of interim looks.</li>
-<li>At a minimum, the guidance expects monitoring for <strong>OS
-harm</strong> (i.e., a detrimental trend in overall survival) using
-pre-specified boundaries.</li>
-<li>Separate from the harm boundary, the sponsor should establish a
-<strong>futility boundary</strong> to stop the trial if the experimental
-treatment is unlikely to demonstrate an OS benefit.</li>
-<li>The statistical plan should describe the spending functions used for
-each boundary and how the overall Type I error and Type II error are
-controlled.</li>
+<li>Indolent diseases and long survival, where demonstrating OS
+superiority may be impractical.</li>
+<li>Prespecified harm assessments, justified thresholds, sufficient
+events, and precision to assess clinically relevant mortality
+detriment.</li>
+<li>Event-driven interim analyses when appropriate, with independent
+data monitoring. Some small or low-event-rate trials may not warrant
+interim OS analyses.</li>
+<li>The distinction between identifying a harm signal and ruling out an
+unacceptable degree of harm.</li>
 </ul>
-<p>This motivates the design framework with <code>test.type = 7</code>
-(binding futility and harm bounds) and <code>test.type = 8</code>
-(non-binding futility and harm bounds), where three boundaries are
-simultaneously specified using spending functions.</p>
+<p>The guidance does not prescribe 0.1/Pocock spending or a separate
+futility boundary in every trial. Types 7 and 8 are useful when both
+futility and harm are wanted; type 6 can instead supply a non-binding
+harm bound alone on the lower side. The design and its assumptions
+require context-specific justification.</p>
 <p>The harm bound implemented in gsDesign is a new method that is easy
 to use — a principled, straightforward extension of the widely used
 group sequential spending function framework. While we believe this
 approach is understandable, useful, and flexible, other methods for
 monitoring potential harm may also be considered. However, there are
-limitations with this approach. The example presented here has higher
-mortality risk than many cases. With lower mortality risk, modifications
-of this approach or other approaches may be preferable.</p>
+limitations with this approach. The first example has higher mortality
+risk than many cases. The later sparse-event example examines what the
+approach can and cannot establish when deaths are uncommon.</p>
 </div>
 <div class="section level3">
 <h3 id="design-framework-overview">Design framework overview<a class="anchor" aria-label="anchor" href="#design-framework-overview"></a>
@@ -161,11 +161,12 @@ the trial.</li>
 <li>
 <strong>Cross the harm bound</strong> (below): Stop for harm.</li>
 </ol>
-<p>The harm bound is intended so that if a small observed p-value
-<em>favoring control</em> is observed, the harm bound will be crossed.
-That is, the harm bound flags evidence that the experimental treatment
-may be <em>worsening</em> survival — a negative treatment effect on the
-log hazard ratio scale.</p>
+<p>The harm bound is intended to flag sufficiently small observed
+p-values <em>favoring control</em>. The nominal threshold depends on the
+analysis schedule and spending specification; it is not a fixed p-value
+cutoff at every look. That is, the harm bound flags evidence that the
+experimental treatment may be <em>worsening</em> survival — a negative
+treatment effect on the log hazard ratio scale.</p>
 </div>
 </div>
 <div class="section level2">
@@ -195,9 +196,16 @@ component of a trial with multiplicity adjustment).</li>
 analyses at years 1, 2, 3, 4, and 5 from start of enrollment.</li>
 </ul>
 <p>The <code>astar</code> parameter controls the total spending for the
-harm bound under <span class="math inline">\(H_0\)</span>. We set
-<code>astar = 0.1</code>, meaning the total probability of crossing the
-harm bound under <span class="math inline">\(H_0\)</span> is 10%.</p>
+harm bound under <span class="math inline">\(H_0\)</span>. The defaults
+are <code>astar = 0.1</code> (also selected by input
+<code>astar = 0</code>) and <code>sfharm = sfLDPocock</code>. We specify
+these explicitly below for clarity. The 10% target describes harm
+crossing under <span class="math inline">\(H_0\)</span> <strong>if
+futility stopping is ignored</strong>, while still accounting for
+earlier efficacy and harm stops. Actual harm stopping can be less
+frequent when futility is followed. The existing cap that keeps harm at
+or below an active futility boundary can also reduce the attainable
+spending.</p>
 <div class="section level3">
 <h3 id="spending-function-specification">Spending function specification<a class="anchor" aria-label="anchor" href="#spending-function-specification"></a>
 </h3>
@@ -1017,10 +1025,10 @@ harm.</li>
 </ul>
 <p>When both lower bounds are active, the harm bound is always at or
 below the futility bound. If futility is skipped but harm is tested, the
-harm bound is the sole active lower stopping boundary. At early
-analyses, the harm and futility bounds may coincide when the harm
-spending function has not yet allocated sufficient spending to
-differentiate them.</p>
+harm bound is the sole active lower stopping boundary. The harm and
+futility bounds may coincide when the uncapped harm boundary would
+exceed the futility boundary; the cap can prevent full harm
+spending.</p>
 </div>
 <div class="section level3">
 <h3 id="boundary-crossing-probabilities">Boundary crossing probabilities<a class="anchor" aria-label="anchor" href="#boundary-crossing-probabilities"></a>
@@ -1071,12 +1079,84 @@ the futility threshold is the sum of the two lower-tail components.</p>
     "title": "Cumulative boundary crossing probabilities"
   }
 }
-})</script><p>Under <span class="math inline">\(H_0\)</span>, the cumulative
-probability of crossing the harm bound across all analyses is
-approximately 0.0417, reflecting the spending allocated to the harm
-boundary. The cumulative probability of crossing the futility threshold,
-inclusive of harm, is approximately 0.9888. Under <span class="math inline">\(H_1\)</span> (HR = 0.75), crossing the harm bound
+})</script><p>Under <span class="math inline">\(H_0\)</span>, the actual cumulative
+probability of stopping for harm is approximately 0.0417 when all active
+stopping rules are followed. This need not equal <code>astar</code>:
+trials that stop for futility cannot subsequently stop for harm. The
+cumulative probability of crossing the futility threshold, inclusive of
+harm, is approximately 0.9888. Under <span class="math inline">\(H_1\)</span> (HR = 0.75), crossing the harm bound
 is very unlikely (4^{-4}), since the treatment is beneficial.</p>
+</div>
+<div class="section level3">
+<h3 id="harm-calibration-versus-actual-stopping">Harm calibration versus actual stopping<a class="anchor" aria-label="anchor" href="#harm-calibration-versus-actual-stopping"></a>
+</h3>
+<p>For both binding and non-binding designs, harm calibration ignores
+futility stopping. This avoids making a harm threshold near zero merely
+to spend a specified amount among the selected trials that survived
+earlier futility monitoring. Efficacy and earlier harm stopping are
+still included.</p>
+<p>The following example tests harm at all three looks, skips efficacy
+at IA1, and tests futility only at IA1. It uses the new harm defaults.
+We compare the target spending, harm crossing without futility, and
+actual harm stopping:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">xh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
+<span>  test.type <span class="op">=</span> <span class="fl">8</span>, timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.75</span><span class="op">)</span>,</span>
+<span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  testHarm <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">harm_without_futility</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsProbability.html">gsProbability</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="va">xh</span><span class="op">$</span><span class="va">k</span>, theta <span class="op">=</span> <span class="fl">0</span>, n.I <span class="op">=</span> <span class="va">xh</span><span class="op">$</span><span class="va">n.I</span>,</span>
+<span>  a <span class="op">=</span> <span class="va">xh</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">bound</span>, b <span class="op">=</span> <span class="va">xh</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  Analysis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"IA1"</span>, <span class="st">"IA2"</span>, <span class="st">"Final"</span><span class="op">)</span>,</span>
+<span>  `Harm Z` <span class="op">=</span> <span class="va">xh</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">bound</span>,</span>
+<span>  `Nominal harm p` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">xh</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">bound</span><span class="op">)</span>,</span>
+<span>  `Cumulative target` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">xh</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">spend</span><span class="op">)</span>,</span>
+<span>  `Harm without futility` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">harm_without_futility</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  `Harm with futility` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">xh</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">6</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Analysis": ["IA1", "IA2", "Final"],
+    "Harm Z": [-1.53810524148121, -1.64734355993004, -1.63629051479235],
+    "Nominal harm p": [0.0620114423191964, 0.0497437245886887, 0.050889400151042],
+    "Cumulative target": [0.0620114506958278, 0.082798893924287, 0.1],
+    "Harm without futility": [0.0620114423191964, 0.0827988939318137, 0.099999999392106],
+    "Harm with futility": [0.0620114423191964, 0.062028612292275, 0.0623160610259185]
+  },
+  "ops": [
+    {
+      "type": "fmt_number",
+      "columns": ["Harm Z", "Nominal harm p", "Cumulative target", "Harm without futility", "Harm with futility"],
+      "decimals": 4
+    }
+  ]
+}
+})</script><p>At IA2 the probability of an actual harm stop includes only paths
+that continued past IA1. Thus the cumulative harm probability is <span class="math inline">\(P_0(Z_1 \le h_1) + P_0(Z_1 &gt; f_1, Z_2 \le
+h_2)\)</span>, where <span class="math inline">\(h_i\)</span> denotes a
+harm boundary and <span class="math inline">\(f_1\)</span> the IA1
+futility boundary. Calibration without futility instead uses <span class="math inline">\(h_1\)</span> in place of <span class="math inline">\(f_1\)</span> in the second term.</p>
+<p><code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> reports <strong>actual cumulative
+stopping probabilities</strong>, not the hypothetical probabilities used
+to calibrate harm spending. Its optional <code>Spending</code> rows
+report the spending targets, so these two rows need not agree. Also, its
+<code>p (1-sided)</code> rows use the efficacy direction; the nominal
+p-value favoring harm is <code>pnorm(xh$harm$bound)</code>, the
+complement of that displayed p-value. <code>print(xh)</code> labels the
+harm-direction values as <code>Nominal p</code>.</p>
+<p>Changing the example to <code>test.type = 7</code> retains the same
+harm-calibration convention. Binding status changes efficacy
+calibration: type 7 accounts for both lower stopping rules in protecting
+alpha, whereas type 8 ignores them for that purpose. Power and actual
+stopping probabilities include both rules in either design. Ignoring a
+binding futility rule in practice can inflate efficacy Type I error,
+even though it was ignored for harm calibration.</p>
 </div>
 <div class="section level3">
 <h3 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a>
@@ -1090,10 +1170,10 @@ is very unlikely (4^{-4}), since the treatment is beneficial.</p>
 <p>The default plot shows Z-value boundaries at each analysis. Three
 boundaries are displayed: efficacy (upper), futility (lower), and harm
 (below futility).</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x8</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="HarmBound_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="Z-value boundaries for non-binding harm bound design" width="80%"><p class="caption">
+<img src="HarmBound_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="Z-value boundaries for non-binding harm bound design" width="80%"><p class="caption">
 Z-value boundaries for non-binding harm bound design
 </p>
 </div>
@@ -1116,10 +1196,10 @@ futility-only, and harm outcomes add without double counting. When the
 underlying treatment effect favors control, the high probability of
 crossing the harm bound indicates that the harm bound is sensitive and
 serves its intended purpose.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x8</span>, plottype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="HarmBound_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="Boundary crossing probabilities for non-binding harm bound design" width="80%"><p class="caption">
+<img src="HarmBound_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="Boundary crossing probabilities for non-binding harm bound design" width="80%"><p class="caption">
 Boundary crossing probabilities for non-binding harm bound design
 </p>
 </div>
@@ -1130,10 +1210,10 @@ Boundary crossing probabilities for non-binding harm bound design
 <p>The effect size plot (<code>plottype = 3</code>) shows the
 approximate treatment effect at each boundary. For survival designs,
 this is expressed as the approximate hazard ratio at the boundary.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x8</span>, plottype <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="HarmBound_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="Approximate treatment effect at boundaries" width="80%"><p class="caption">
+<img src="HarmBound_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="Approximate treatment effect at boundaries" width="80%"><p class="caption">
 Approximate treatment effect at boundaries
 </p>
 </div>
@@ -1144,10 +1224,10 @@ Approximate treatment effect at boundaries
 <p>Conditional power (<code>plottype = 4</code>) at each interim
 analysis is shown for all three boundaries. This is generally not a very
 useful plot.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x8</span>, plottype <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="HarmBound_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="Conditional power at boundaries" width="80%"><p class="caption">
+<img src="HarmBound_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="Conditional power at boundaries" width="80%"><p class="caption">
 Conditional power at boundaries
 </p>
 </div>
@@ -1159,10 +1239,10 @@ Conditional power at boundaries
 three spending functions: <span class="math inline">\(\alpha\)</span>
 (efficacy), <span class="math inline">\(\beta\)</span> (futility), and
 harm.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x8</span>, plottype <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="HarmBound_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="Spending functions for non-binding harm bound design" width="80%"><p class="caption">
+<img src="HarmBound_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="Spending functions for non-binding harm bound design" width="80%"><p class="caption">
 Spending functions for non-binding harm bound design
 </p>
 </div>
@@ -1179,10 +1259,10 @@ for visual assessment of treatment effect trends across interim
 analyses: departures from linearity may suggest non-proportional hazards
 or other changes in treatment effect over time. Three boundary lines are
 shown: efficacy, futility, and harm.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x8</span>, plottype <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="HarmBound_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="B-values at boundaries" width="80%"><p class="caption">
+<img src="HarmBound_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="B-values at boundaries" width="80%"><p class="caption">
 B-values at boundaries
 </p>
 </div>
@@ -1200,7 +1280,7 @@ but at the cost of inflated Type I error if the stopping rule is not
 strictly followed.</p>
 <p>We first create a binding design with <span class="math inline">\(\alpha = 0.0125\)</span> to compare with the
 non-binding design above:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvCalendar.html">gsSurvCalendar</a></span><span class="op">(</span></span>
 <span>  test.type <span class="op">=</span> <span class="fl">7</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.0125</span>,</span>
@@ -1218,7 +1298,7 @@ non-binding design above:</p>
 <div class="section level3">
 <h3 id="comparing-binding-and-non-binding">Comparing binding and non-binding<a class="anchor" aria-label="anchor" href="#comparing-binding-and-non-binding"></a>
 </h3>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Bound <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Efficacy"</span>, <span class="st">"Futility"</span>, <span class="st">"Harm"</span><span class="op">)</span>,</span>
 <span>  `Binding (type 7)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -1253,7 +1333,7 @@ non-binding design above:</p>
 for <code>test.type = 7</code> (639) is also slightly smaller than for
 <code>test.type = 8</code> (657), reflecting the assumption that the
 trial will stop at the lower bounds.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x7</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
@@ -1280,7 +1360,7 @@ that analysis, including cumulative crossing probability, is
 <code>NA</code>. Here we show the non-binding design (<code>x8</code>)
 with efficacy bounds for both <span class="math inline">\(\alpha =
 0.0125\)</span> (the design level) and <span class="math inline">\(\alpha = 0.025\)</span>:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x8</span>, alpha <span class="op">=</span> <span class="fl">0.025</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
@@ -1299,6 +1379,196 @@ non-binding. They are not supported for <code>test.type = 7</code>: a
 binding harm or futility bound is outside the non-binding
 sequential-p-value framework used for Maurer–Bretz graphical multiple
 testing.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="sparse-event-mortality-monitoring">Sparse-event mortality monitoring<a class="anchor" aria-label="anchor" href="#sparse-event-mortality-monitoring"></a>
+</h2>
+<div class="section level3">
+<h3 id="a-harm-bound-without-a-separate-futility-bound">A harm bound without a separate futility bound<a class="anchor" aria-label="anchor" href="#a-harm-bound-without-a-separate-futility-bound"></a>
+</h3>
+<p>Consider a randomized trial with a primary efficacy endpoint other
+than OS, such as progression-free survival, and relatively few expected
+deaths. A prespecified mortality harm signal can be useful without
+requiring a separate rule for stopping because OS benefit appears
+unlikely. This is a hypothetical illustration, not an FDA-specified
+disease scenario or recommended protocol.</p>
+<p>Use <code>test.type = 6</code>: its lower Z-bound spends under the
+null hypothesis and is <strong>non-binding for efficacy Type I
+error</strong>. Here we interpret that lower bound as harm; there is no
+additional beta-spending futility bound. For type 6 the inputs are
+<code>astar = 0.1</code> and <code>sfl = sfLDPocock</code>,
+<strong>not</strong> <code>sfharm</code>. They must be supplied
+explicitly: type 6 retains its general-purpose defaults of
+<code>astar = 1 - alpha</code> (selected by input 0) and HSD lower
+spending. The lower boundary is stored in <code>lower</code>, even if a
+generic summary labels it as futility. Its clinical interpretation in
+this example is harm.</p>
+<p>We plan analyses at 6, 23, and 40 total deaths, with 1:1
+randomization, enrollment of 100 participants per month for 16 months,
+no dropout, and a constant control mortality hazard of 0.001 per month.
+An HR of 0.8 is used only as a planning scenario for the expected timing
+and power, not as evidence of mortality benefit.
+<code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> evaluates this fixed event schedule; it does
+not increase the event target to obtain 90% OS power.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sparse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">6</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">.025</span>, sided <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  astar <span class="op">=</span> <span class="fl">.1</span>, sfl <span class="op">=</span> <span class="va">sfLDPocock</span>,</span>
+<span>  targetEvents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">23</span>, <span class="fl">40</span><span class="op">)</span>,</span>
+<span>  lambdaC <span class="op">=</span> <span class="fl">.001</span>, hr <span class="op">=</span> <span class="fl">.8</span>, hr0 <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  gamma <span class="op">=</span> <span class="fl">100</span>, R <span class="op">=</span> <span class="fl">16</span>, ratio <span class="op">=</span> <span class="fl">1</span>, eta <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># Use the planned final event count as the explicit spending denominator.</span></span>
+<span><span class="va">event_fraction</span> <span class="op">&lt;-</span> <span class="va">sparse</span><span class="op">$</span><span class="va">n.I</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">sparse</span><span class="op">$</span><span class="va">n.I</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">sparse_exact</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toBinomialExact.html">toBinomialExact</a></span><span class="op">(</span></span>
+<span>  <span class="va">sparse</span>, usTime <span class="op">=</span> <span class="va">event_fraction</span>, lsTime <span class="op">=</span> <span class="va">event_fraction</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The example retains an OS efficacy boundary to illustrate non-binding
+harm monitoring alongside an alpha-controlled efficacy test. It does not
+allocate alpha to another primary endpoint or supply a multiple-endpoint
+testing strategy. If OS is solely a safety endpoint, the efficacy
+stopping rules and operating characteristics should be specified
+accordingly rather than claiming an OS efficacy objective that the trial
+does not have.</p>
+</div>
+<div class="section level3">
+<h3 id="integer-death-count-boundaries">Integer death-count boundaries<a class="anchor" aria-label="anchor" href="#integer-death-count-boundaries"></a>
+</h3>
+<p>In the exact-binomial representation the direction reverses: a high
+count of experimental-arm deaths signals harm. <code>upper$bound</code>
+is therefore the harm cutoff, while <code>lower$bound</code> is the
+efficacy cutoff. The probabilities account for stopping at any earlier
+active boundary.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  `Total deaths` <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">n.I</span>,</span>
+<span>  `Experimental deaths for harm (at least)` <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>,</span>
+<span>  `Cumulative harm probability under HR=1` <span class="op">=</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">sparse_exact</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">3</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Total deaths": [6, 23, 40],
+    "Experimental deaths for harm (at least)": [6, 16, 26],
+    "Cumulative harm probability under HR=1": [0.015625, 0.0572803020477295, 0.0778019226836476]
+  },
+  "ops": [
+    {
+      "type": "fmt_number",
+      "columns": ["Cumulative harm probability under HR=1"],
+      "decimals": 4
+    }
+  ]
+}
+})</script><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Efficacy Type I error is evaluated ignoring the non-binding harm boundary.</span></span>
+<span><span class="va">efficacy_without_harm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsBinomialExact.html">gsBinomialExact</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">k</span>, theta <span class="op">=</span> <span class="fl">.5</span>, n.I <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">n.I</span>,</span>
+<span>  a <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>, b <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">n.I</span> <span class="op">+</span> <span class="fl">1L</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">efficacy_without_harm</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="va">sparse</span><span class="op">$</span><span class="va">alpha</span> <span class="op">+</span> <span class="fl">1e-10</span><span class="op">)</span></span></code></pre></div>
+<p>At the first look, a signal requires all six deaths to be in the
+experimental arm. At later looks the cumulative cutoff is applied only
+if no earlier stopping boundary has been crossed. The total null
+harm-crossing probability is 7.8%, below the 10% target because only
+integer death counts are available. The efficacy Type I error without
+harm stopping is 1.96%, below 2.5%.</p>
+</div>
+<div class="section level3">
+<h3 id="sensitivity-to-excess-mortality">Sensitivity to excess mortality<a class="anchor" aria-label="anchor" href="#sensitivity-to-excess-mortality"></a>
+</h3>
+<p>For balanced exposure and uncommon events, approximate the
+probability that a death is in the experimental arm by <span class="math inline">\(p = HR/(1 + HR)\)</span>, where <span class="math inline">\(HR = \lambda_E/\lambda_C\)</span>. More generally
+the corresponding conditional Poisson model uses <span class="math inline">\(p = HR\,r/(1 + HR\,r)\)</span> with exposure ratio
+<span class="math inline">\(r\)</span>. The recursion below is exact for
+independent binomial event increments with constant <span class="math inline">\(p\)</span>, <strong>not automatically exact for
+arbitrary censored survival data</strong>. Risk-set imbalance,
+differential censoring, or changing hazards can invalidate the simple
+mapping from randomization ratio and HR. Such settings need appropriate
+survival-model calculations or simulation.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">harm_hr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1.25</span>, <span class="fl">1.5</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">harm_oc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsBinomialExact.html">gsBinomialExact</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">k</span>, theta <span class="op">=</span> <span class="va">harm_hr</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">harm_hr</span><span class="op">)</span>,</span>
+<span>  n.I <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">n.I</span>,</span>
+<span>  a <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>, b <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  `True mortality HR` <span class="op">=</span> <span class="va">harm_hr</span>,</span>
+<span>  `Probability of a harm signal` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">harm_oc</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">)</span>,</span>
+<span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>, decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "True mortality HR": [1, 1.25, 1.5, 2],
+    "Probability of a harm signal": [0.0778019226836476, 0.210055484641085, 0.387533755062264, 0.707559461726862]
+  },
+  "ops": [
+    {
+      "type": "fmt_number",
+      "columns": ["Probability of a harm signal"],
+      "decimals": 3
+    }
+  ]
+}
+})</script><p>Even at HR = 1.5, the chance of a signal is only 38.8% in this
+example. Failure to cross the boundary therefore cannot establish that a
+clinically important mortality increase has been excluded. Increasing
+harm spending can improve sensitivity, but also increases false signals;
+it cannot replace information from additional deaths and follow-up. A
+non-binding designation concerns efficacy alpha calculations, not the
+clinical importance of reviewing a signal.</p>
+</div>
+<div class="section level3">
+<h3 id="detecting-harm-versus-ruling-out-harm">Detecting harm versus ruling out harm<a class="anchor" aria-label="anchor" href="#detecting-harm-versus-ruling-out-harm"></a>
+</h3>
+<p>A harm-monitoring test asks whether data provide evidence of excess
+mortality relative to HR = 1. A reassurance objective instead asks
+whether the data can exclude a prespecified unacceptable HR, such as
+1.5. The latter value is an illustration, not a universal safety margin.
+One approach is to require an appropriately constructed upper confidence
+bound to fall below that margin.</p>
+<p>To illustrate the lack of precision, suppose a <strong>single fixed
+analysis</strong> has 20 deaths in each arm. Under the same binomial
+model, transform a one-sided 95% upper bound for the experimental share
+into an upper HR bound:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p_upper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/binom.test.html" class="external-link">binom.test</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">40</span>, alternative <span class="op">=</span> <span class="st">"less"</span>, conf.level <span class="op">=</span> <span class="fl">.95</span><span class="op">)</span><span class="op">$</span><span class="va">conf.int</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
+<span><span class="va">hr_upper</span> <span class="op">&lt;-</span> <span class="va">p_upper</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">p_upper</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  `Experimental deaths` <span class="op">=</span> <span class="fl">20</span>, `Control deaths` <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  `One-sided 95% upper HR bound` <span class="op">=</span> <span class="va">hr_upper</span>,</span>
+<span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">3</span>, decimals <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Experimental deaths": [20],
+    "Control deaths": [20],
+    "One-sided 95% upper HR bound": [1.76937994082888]
+  },
+  "ops": [
+    {
+      "type": "fmt_number",
+      "columns": ["One-sided 95% upper HR bound"],
+      "decimals": 2
+    }
+  ]
+}
+})</script><p>Despite a balanced observed count, this upper bound exceeds 1.5. This
+is a fixed-analysis precision illustration, <strong>not a sequentially
+adjusted interval</strong> for the monitored trial. Repeated or
+stopping-selected reassurance assessments require an interval or test
+valid for that monitoring plan. A vignette example must not turn “no
+harm signal” into a claim of safety: the harm margin, precision, event
+target, follow-up, and operating characteristics for ruling out harm all
+need their own justification.</p>
 </div>
 </div>
 <div class="section level2">
@@ -1327,20 +1597,69 @@ safety.</li>
 </ul>
 </div>
 <div class="section level3">
+<h3 id="total-harm-spending-and-the-number-of-analyses">Total harm spending and the number of analyses<a class="anchor" aria-label="anchor" href="#total-harm-spending-and-the-number-of-analyses"></a>
+</h3>
+<p>Lan–DeMets Pocock spending with total 0.1 allocates cumulative
+probability <span class="math inline">\(A(t) = 0.1\log\{1 +
+(e-1)t\}\)</span> by spending time <span class="math inline">\(t\)</span>. It allocates relatively more spending
+early than a conservative O’Brien–Fleming choice, helping to flag
+moderately small nominal p-values favoring harm throughout monitoring.
+The total 0.1 is a repeated-monitoring probability under the null,
+<strong>not</strong> a nominal 0.1 cutoff at every analysis. Neither the
+total nor the spending function guarantees that any particular nominal
+p-value will trigger harm stopping at every look.</p>
+<p>With more analyses, a user may wish to choose a <strong>larger total
+harm spending</strong> (<code>astar</code>) to retain similarly
+permissive nominal thresholds. This increases the allowed probability of
+a false harm signal under the null. It does not mean increasing futility
+spending (<code>beta</code>), which has a different purpose and is
+calibrated under the design alternative. Inspect the actual thresholds
+for the intended timing and number of analyses. For example:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">harm_nominal</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">k</span>, <span class="va">astar</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="va">k</span>, test.type <span class="op">=</span> <span class="fl">8</span>, astar <span class="op">=</span> <span class="va">astar</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    Analyses <span class="op">=</span> <span class="va">k</span>, Total <span class="op">=</span> <span class="va">astar</span>, Look <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">k</span><span class="op">)</span>,</span>
+<span>    `Nominal harm p` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">bound</span><span class="op">)</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu">harm_nominal</span><span class="op">(</span><span class="fl">3</span>, <span class="fl">.1</span><span class="op">)</span>, <span class="fu">harm_nominal</span><span class="op">(</span><span class="fl">6</span>, <span class="fl">.1</span><span class="op">)</span>, <span class="fu">harm_nominal</span><span class="op">(</span><span class="fl">6</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">4</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Analyses": [3, 3, 3, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+    "Total": [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
+    "Look": [1, 2, 3, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6],
+    "Nominal harm p": [0.0452832425263942, 0.0497089062453337, 0.0536116182634278, 0.0251832308957803, 0.0294707209641292, 0.0333940037586887, 0.0367196351725341, 0.0395606111879052, 0.042025386258997, 0.0503664617915606, 0.0632801334814885, 0.0749440842503336, 0.0851802913863292, 0.0942754443054311, 0.10247428915311]
+  },
+  "ops": [
+    {
+      "type": "fmt_number",
+      "columns": ["Nominal harm p"],
+      "decimals": 4
+    }
+  ]
+}
+})</script><p>The larger total in this illustration is a sensitivity analysis, not
+a universal recommendation. The choice requires considering both
+sensitivity to potential harm and false harm signals.</p>
+</div>
+<div class="section level3">
 <h3 id="interpreting-the-harm-bound">Interpreting the harm bound<a class="anchor" aria-label="anchor" href="#interpreting-the-harm-bound"></a>
 </h3>
-<p>The harm bound is intended so that if a small observed p-value
-<em>favoring control</em> is observed, the harm bound will be crossed.
-In terms of the test statistic, a negative Z-value indicates that the
-hazard rate is higher in the experimental arm than the control arm —
-i.e., the experimental treatment appears to be worsening survival. When
-the Z-value falls below the harm bound, this constitutes a statistical
-signal that the treatment may be harmful, and the trial should be
-stopped with a recommendation to review the safety data.</p>
-<p>The harm spending is computed under <span class="math inline">\(H_0\)</span> (no treatment effect), reflecting the
-probability of observing an apparent harmful effect <em>by chance</em>
-when there is actually no true effect. This controls the probability of
-a false harm signal.</p>
+<p>The harm bound is crossed when the observed p-value <em>favoring
+control</em> is at or below the analysis-specific nominal harm
+threshold. In terms of the test statistic, a negative Z-value indicates
+that the hazard rate is higher in the experimental arm than the control
+arm — i.e., the experimental treatment appears to be worsening survival.
+When the Z-value falls below the harm bound, this constitutes a
+statistical signal that the treatment may be harmful, and the trial
+should be stopped with a recommendation to review the safety data.</p>
+<p>The harm spending is computed under <span class="math inline">\(H_0\)</span> (no treatment effect), ignoring
+futility stopping but retaining efficacy stopping. It budgets the
+probability of a false harm signal under those assumptions; following
+futility can reduce the actual probability further.</p>
 </div>
 <div class="section level3">
 <h3 id="harm-bound-capping">Harm bound capping<a class="anchor" aria-label="anchor" href="#harm-bound-capping"></a>
@@ -1425,10 +1744,10 @@ Proschan, Michael A., K. K. Gordon Lan, and Janet Turk Wittes. 2006.
 <em>Statistical Monitoring of Clinical Trials: A Unified Approach</em>.
 Springer.
 </div>
-<div id="ref-FDAOS2024" class="csl-entry">
-U.S. Food and Drug Administration. 2024. <em>Assessment of Overall
-Survival Evidence in Support of Accelerated Approval of Oncology
-Therapeutics: Draft Guidance for Industry</em>. <a href="https://www.fda.gov/media/188274/download" class="external-link uri">Https://www.fda.gov/media/188274/download</a>.
+<div id="ref-FDAOS2025" class="csl-entry">
+U.S. Food and Drug Administration. 2025. <em>Approaches to Assessment of
+Overall Survival in Oncology Clinical Trials: Draft Guidance for
+Industry</em>. <a href="https://www.fda.gov/media/188274/download" class="external-link uri">Https://www.fda.gov/media/188274/download</a>.
 </div>
 </div>
 </div>

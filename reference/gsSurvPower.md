@@ -114,8 +114,12 @@ gsSurvPower(
 
 - astar:
 
-  Lower bound total crossing probability for `test.type` 5 or 6. Default
-  0.
+  Total lower-bound spending for types 5 or 6, or harm spending for
+  types 7 or 8. Without a reference design, 0 selects
+  `1 - alpha / sided` for types 5 or 6 and `0.1` for types 7 or 8. Harm
+  calibration ignores futility stopping; reported stopping probabilities
+  include it. With a reference design, its stored value is used unless
+  overridden.
 
 - sfu:
 
@@ -136,12 +140,13 @@ gsSurvPower(
 - sfharm:
 
   Spending function for the harm bound, used with `test.type = 7` or
-  `test.type = 8`. Default `sfHSD`.
+  `test.type = 8`. Default `sfLDPocock` without a reference design;
+  otherwise uses its stored harm spending function.
 
 - sfharmparam:
 
   Real value, default \\-2\\. Parameter for the harm bound spending
-  function `sfharm`.
+  function `sfharm`; ignored by `sfLDPocock`.
 
 - r:
 

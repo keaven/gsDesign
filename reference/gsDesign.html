@@ -105,7 +105,7 @@ functions."><meta property="og:image" content="https://keaven.github.io/gsDesign
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9019</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -196,7 +196,7 @@ functions.</p>
 <span>  sfupar <span class="op">=</span> <span class="op">-</span><span class="fl">4</span>,</span>
 <span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>,</span>
 <span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
-<span>  sfharm <span class="op">=</span> <span class="va">sfHSD</span>,</span>
+<span>  sfharm <span class="op">=</span> <span class="va">sfLDPocock</span>,</span>
 <span>  sfharmparam <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,</span>
 <span>  tol <span class="op">=</span> <span class="fl">1e-06</span>,</span>
 <span>  r <span class="op">=</span> <span class="fl">18</span>,</span>
@@ -257,9 +257,14 @@ lower bound spending under the null hypothesis with non-binding lower bound
 (test.type 7 or 8) bound under the null hypothesis. Default is 0.
 For <code>test.type</code> 5 or 6, <code>astar</code> specifies the total probability
 of crossing a lower bound at all analyses combined.
-For <code>test.type</code> 7 or 8, <code>astar</code> specifies the total probability
-of crossing the harm bound at all analyses combined under the null hypothesis.
-If <code>astar = 0</code>, it will be changed to \(1 - \)<code>alpha</code>.</p></dd>
+For <code>test.type</code> 7 or 8, <code>astar</code> specifies total harm spending
+under the null, calibrated ignoring futility stopping but retaining efficacy
+stopping. The default input <code>astar = 0</code> selects <code>0.1</code> for harm
+designs and \(1 - \)<code>alpha</code> for types 5 and 6.
+Actual harm stopping probabilities account for futility and can be smaller
+than the spending targets. Capping harm at an active futility bound can also
+reduce attained spending. See the harm-monitoring section in
+<code>gsDesign</code>.</p></dd>
 
 
 <dt id="arg-delta">delta<a class="anchor" aria-label="anchor" href="#arg-delta"></a></dt>
@@ -325,12 +330,12 @@ rate than the default for the upper bound.</p></dd>
 <dt id="arg-sfharm">sfharm<a class="anchor" aria-label="anchor" href="#arg-sfharm"></a></dt>
 <dd><p>A spending function for the harm bound, used with
 <code>test.type = 7</code> or <code>test.type = 8</code>.
-Default is <code>sfHSD</code>. See <code><a href="spendingFunction.html">spendingFunction</a></code> for details.</p></dd>
+Default is <code>sfLDPocock</code>. See <code><a href="spendingFunction.html">spendingFunction</a></code> for details.</p></dd>
 
 
 <dt id="arg-sfharmparam">sfharmparam<a class="anchor" aria-label="anchor" href="#arg-sfharmparam"></a></dt>
 <dd><p>Real value, default is \(-2\). Parameter for the harm
-bound spending function <code>sfharm</code>.</p></dd>
+bound spending function <code>sfharm</code>; ignored by <code>sfLDPocock</code>.</p></dd>
 
 
 <dt id="arg-tol">tol<a class="anchor" aria-label="anchor" href="#arg-tol"></a></dt>
@@ -540,8 +545,9 @@ input.</p></dd>
  <dt>astar</dt>
 <dd><p>As input, except when <code>test.type=5</code> or <code>6</code>
 and <code>astar</code> is input as 0; in this case <code>astar</code> is changed to
-<code>1-alpha</code>.</p></dd>
- <dt>delta</dt>
+<code>1-alpha</code>; for types 7 and 8, input 0 is changed to <code>0.1</code>.</p></dd>
+
+<dt>delta</dt>
 <dd><p>The standardized effect size for which the
 design is powered. Will be as input to <code>gsDesign()</code> unless it was input
 as 0; in that case, value will be computed to give desired power for fixed
@@ -623,7 +629,8 @@ crossings.</p></dd>
  <dt>harm</dt>
 <dd><p>Harm bound spending function, boundary, and crossing
 probabilities at each analysis for <code>test.type=7</code> or <code>8</code>. Harm,
-lower, and upper crossing probabilities are mutually exclusive.</p></dd>
+lower, and upper crossing probabilities are mutually exclusive and include
+futility stopping, unlike the harm spending calibration.</p></dd>
 
 <dt>theta</dt>
 <dd><p>Standarized
@@ -672,6 +679,32 @@ with differences from the default grid within the accuracy of that grid.
 The rule uses at most 992 nodes, so extremely small information increments
 can reduce accuracy. <code><a href="normalGrid.html">normalGrid()</a></code> always returns the Jennison and
 Turnbull grid.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="harm-monitoring">Harm monitoring<a class="anchor" aria-label="anchor" href="#harm-monitoring"></a></h2>
+
+
+<p>For types 7 and 8, harm spending is calibrated under the null as if futility
+stopping were ignored. Earlier harm and efficacy stops are retained.
+This convention is separate from binding versus non-binding efficacy
+calibration: type 7 protects alpha assuming both lower stopping rules are
+followed, whereas type 8 protects alpha even if they are ignored.
+Reported <code>harm$prob</code>, power, expected information, and
+<code><a href="gsBoundSummary.html">gsBoundSummary()</a></code> crossing probabilities assume all active stopping
+rules are followed. Thus actual harm probabilities may be smaller than
+<code>cumsum(harm$spend)</code>. Where both lower bounds are active, harm is capped
+at futility to retain their ordering; this can also prevent full spending.</p>
+<p>The defaults <code>astar = 0.1</code> (selected by input 0) and
+<code>sfharm = sfLDPocock</code> provide relatively early spending and aim to flag
+moderately small one-sided p-values favoring harm. At harm boundary \(h\),
+that nominal p-value is \(\Phi(h)\), not the cumulative spending and not
+the efficacy-direction p-value displayed by <code><a href="gsBoundSummary.html">gsBoundSummary()</a></code>.
+There is no fixed nominal p-value cutoff guaranteed at every analysis.
+With more analyses, a larger total harm spending <code>astar</code> may be desired
+to retain similarly permissive nominal harm thresholds, at the cost of more
+false harm signals under the null. This changes harm spending, not futility
+beta spending. Inspect the resulting nominal thresholds for the actual
+analysis schedule. See <code><a href="../articles/HarmBound.html">vignette("HarmBound")</a></code> for examples.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

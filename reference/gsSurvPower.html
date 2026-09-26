@@ -37,7 +37,7 @@ toInteger and gsBoundSummary."><meta property="og:image" content="https://keaven
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9019</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9021</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -174,8 +174,11 @@ when available.</p></dd>
 
 
 <dt id="arg-astar">astar<a class="anchor" aria-label="anchor" href="#arg-astar"></a></dt>
-<dd><p>Lower bound total crossing probability for <code>test.type</code>
-5 or 6. Default 0.</p></dd>
+<dd><p>Total lower-bound spending for types 5 or 6, or harm spending
+for types 7 or 8. Without a reference design, 0 selects <code>1 - alpha / sided</code>
+for types 5 or 6 and <code>0.1</code> for types 7 or 8. Harm calibration ignores
+futility stopping; reported stopping probabilities include it. With a
+reference design, its stored value is used unless overridden.</p></dd>
 
 
 <dt id="arg-sfu">sfu<a class="anchor" aria-label="anchor" href="#arg-sfu"></a></dt>
@@ -196,12 +199,13 @@ when available.</p></dd>
 
 <dt id="arg-sfharm">sfharm<a class="anchor" aria-label="anchor" href="#arg-sfharm"></a></dt>
 <dd><p>Spending function for the harm bound, used with
-<code>test.type = 7</code> or <code>test.type = 8</code>. Default <code>sfHSD</code>.</p></dd>
+<code>test.type = 7</code> or <code>test.type = 8</code>. Default <code>sfLDPocock</code>
+without a reference design; otherwise uses its stored harm spending function.</p></dd>
 
 
 <dt id="arg-sfharmparam">sfharmparam<a class="anchor" aria-label="anchor" href="#arg-sfharmparam"></a></dt>
 <dd><p>Real value, default \(-2\). Parameter for the harm
-bound spending function <code>sfharm</code>.</p></dd>
+bound spending function <code>sfharm</code>; ignored by <code>sfLDPocock</code>.</p></dd>
 
 
 <dt id="arg-r">r<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
