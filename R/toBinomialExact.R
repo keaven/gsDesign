@@ -39,7 +39,11 @@
 #' (non-binding lower-bound spending under the null), and 8 (non-binding
 #' futility and harm) are supported for full conversion. For Type 8, the exact
 #' upper event-count stopping probability is partitioned into mutually
-#' exclusive futility and harm components. Binding
+#' exclusive futility and harm components. Harm spending is calibrated under
+#' the null ignoring futility stopping, but retaining efficacy stopping.
+#' Reported harm probabilities assume futility is followed and can be smaller
+#' than spending targets. Discreteness and the requirement that the harm region
+#' be nested within the active futility region can also reduce spending. Binding
 #' designs (types 2, 3, 5, and 7) are outside the non-binding exact-efficacy
 #' framework. Exact repeated and sequential efficacy
 #' p-values can nevertheless be computed for non-binding types 1, 4, 6, and 8
@@ -505,7 +509,7 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
             a = a[seq_len(j)],
             futility = b[seq_len(j)],
             harm = h_candidate,
-            testLower = active_lower[seq_len(j)],
+            testLower = rep(FALSE, j),
             testHarm = active_harm[seq_len(j)]
           )
           sum(probability$harm$prob[, 1])

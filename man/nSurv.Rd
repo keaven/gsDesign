@@ -62,7 +62,7 @@ gsSurv(
   sfupar = -4,
   sfl = sfHSD,
   sflpar = -2,
-  sfharm = sfHSD,
+  sfharm = sfLDPocock,
   sfharmparam = -2,
   r = 18,
   lambdaC = log(2)/6,
@@ -221,9 +221,14 @@ lower bound spending under the null hypothesis with non-binding lower bound
 (test.type 7 or 8) bound under the null hypothesis. Default is 0.
 For \code{test.type} 5 or 6, \code{astar} specifies the total probability
 of crossing a lower bound at all analyses combined.
-For \code{test.type} 7 or 8, \code{astar} specifies the total probability
-of crossing the harm bound at all analyses combined under the null hypothesis.
-If \code{astar = 0}, it will be changed to \eqn{1 - }\code{alpha}.}
+For \code{test.type} 7 or 8, \code{astar} specifies total harm spending
+under the null, calibrated ignoring futility stopping but retaining efficacy
+stopping. The default input \code{astar = 0} selects \code{0.1} for harm
+designs and \eqn{1 - }\code{alpha} for types 5 and 6.
+Actual harm stopping probabilities account for futility and can be smaller
+than the spending targets. Capping harm at an active futility bound can also
+reduce attained spending. See the harm-monitoring section in
+\code{\link{gsDesign}}.}
 
 \item{sfu}{A spending function or a character string indicating a boundary
 type (that is, \dQuote{WT} for Wang-Tsiatis bounds, \dQuote{OF} for
@@ -258,10 +263,10 @@ rate than the default for the upper bound.}
 
 \item{sfharm}{A spending function for the harm bound, used with
 \code{test.type = 7} or \code{test.type = 8}.
-Default is \code{sfHSD}. See \code{\link{spendingFunction}} for details.}
+Default is \code{sfLDPocock}. See \code{\link{spendingFunction}} for details.}
 
 \item{sfharmparam}{Real value, default is \eqn{-2}. Parameter for the harm
-bound spending function \code{sfharm}.}
+bound spending function \code{sfharm}; ignored by \code{sfLDPocock}.}
 
 \item{r}{Integer value (>= 1 and <= 80) controlling the number of numerical
 integration grid points. Default is 18, as recommended by Jennison and

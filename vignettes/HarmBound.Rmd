@@ -43,37 +43,42 @@ be *worsening* survival relative to control.
 This article demonstrates how the **gsDesign** package supports group sequential designs with 
 three boundaries: an **efficacy** (upper) bound, a **futility** (lower) bound, and a **harm** bound, 
 using `test.type = 7` (binding) and `test.type = 8` (non-binding).
+For sparse mortality data without a separate futility rule, the section
+[Sparse-event mortality monitoring](#sparse-event-mortality-monitoring)
+uses `test.type = 6` and exact-binomial boundary calculations.
 
 
 ### Regulatory context: FDA guidance on OS monitoring in oncology
 
-The FDA draft guidance *Assessment of Overall Survival Evidence in Support of Accelerated Approval of Oncology 
-Therapeutics* [@FDAOS2024] describes expectations for monitoring OS in the context of trials that may receive 
-accelerated approval based on surrogate endpoints.
-The guidance states that sponsors should specify pre-planned boundaries for interim OS monitoring, 
-including criteria for stopping a trial early if there is evidence of a *detrimental effect on OS*.
-Key points include:
+The August 2025 FDA draft guidance *Approaches to Assessment of Overall
+Survival in Oncology Clinical Trials* [@FDAOS2025] discusses OS as a safety
+endpoint even when another endpoint establishes efficacy. It remains draft,
+nonbinding guidance, not a requirement to use the method illustrated here.
+Sections II, III.A, and III.B.2 discuss:
 
-- Sponsors should include a **pre-specified statistical analysis plan** for interim OS analyses, 
-including the timing and number of interim looks.
-- At a minimum, the guidance expects monitoring for **OS harm** (i.e., a detrimental trend in overall survival) 
-using pre-specified boundaries.
-- Separate from the harm boundary, the sponsor should establish a **futility boundary** to stop the trial if 
-the experimental treatment is unlikely to demonstrate an OS benefit.
-- The statistical plan should describe the spending functions used for each boundary and how the overall 
-Type I error and Type II error are controlled.
+- Indolent diseases and long survival, where demonstrating OS superiority
+  may be impractical.
+- Prespecified harm assessments, justified thresholds, sufficient events, and
+  precision to assess clinically relevant mortality detriment.
+- Event-driven interim analyses when appropriate, with independent data
+  monitoring. Some small or low-event-rate trials may not warrant interim OS
+  analyses.
+- The distinction between identifying a harm signal and ruling out an
+  unacceptable degree of harm.
 
-This motivates the design framework with `test.type = 7` (binding futility and harm bounds) and 
-`test.type = 8` (non-binding futility and harm bounds), where three boundaries are simultaneously 
-specified using spending functions.
+The guidance does not prescribe 0.1/Pocock spending or a separate futility
+boundary in every trial. Types 7 and 8 are useful when both futility and harm
+are wanted; type 6 can instead supply a non-binding harm bound alone on the
+lower side. The design and its assumptions require context-specific justification.
 
 The harm bound implemented in gsDesign is a new method that is easy to use --- a principled, straightforward 
 extension of the widely used group sequential spending function framework.
 While we believe this approach is understandable, useful, and flexible, other methods for monitoring potential 
 harm may also be considered.
 However, there are limitations with this approach.
-The example presented here has higher mortality risk than many cases.
-With lower mortality risk, modifications of this approach or other approaches may be preferable.
+The first example has higher mortality risk than many cases. The later
+sparse-event example examines what the approach can and cannot establish
+when deaths are uncommon.
 
 ### Design framework overview
 
@@ -94,7 +99,9 @@ At each analysis, there are four possible outcomes:
 3. **Cross the futility bound but not the harm bound** (between futility and harm): Stop for futility.
 4. **Cross the harm bound** (below): Stop for harm.
 
-The harm bound is intended so that if a small observed p-value *favoring control* is observed, the harm bound will be crossed.
+The harm bound is intended to flag sufficiently small observed p-values
+*favoring control*. The nominal threshold depends on the analysis schedule
+and spending specification; it is not a fixed p-value cutoff at every look.
 That is, the harm bound flags evidence that the experimental treatment may be *worsening* survival --- a negative treatment effect on the log hazard ratio scale.
 
 ## Design with non-binding bounds (`test.type = 8`)
@@ -110,7 +117,13 @@ The scenario is based on a 1:1 randomized trial monitoring overall survival with
 - **Study duration**: 5 years (60 months) with planned analyses at years 1, 2, 3, 4, and 5 from start of enrollment.
 
 The `astar` parameter controls the total spending for the harm bound under $H_0$.
-We set `astar = 0.1`, meaning the total probability of crossing the harm bound under $H_0$ is 10%.
+The defaults are `astar = 0.1` (also selected by input `astar = 0`) and
+`sfharm = sfLDPocock`. We specify these explicitly below for clarity.
+The 10% target describes harm crossing under $H_0$ **if futility stopping is
+ignored**, while still accounting for earlier efficacy and harm stops.
+Actual harm stopping can be less frequent when futility is followed.
+The existing cap that keeps harm at or below an active futility boundary can
+also reduce the attainable spending.
 
 ### Spending function specification
 
@@ -194,7 +207,8 @@ bounds |>
 
 When both lower bounds are active, the harm bound is always at or below the futility bound.
 If futility is skipped but harm is tested, the harm bound is the sole active lower stopping boundary.
-At early analyses, the harm and futility bounds may coincide when the harm spending function has not yet allocated sufficient spending to differentiate them.
+The harm and futility bounds may coincide when the uncapped harm boundary
+would exceed the futility boundary; the cap can prevent full harm spending.
 
 ### Boundary crossing probabilities
 
@@ -223,9 +237,65 @@ probs |>
   lt_header("Cumulative boundary crossing probabilities")
 ```
 
-Under $H_0$, the cumulative probability of crossing the harm bound across all analyses is approximately `r round(sum(x8$harm$prob[, 1]), 4)`, reflecting the spending allocated to the harm boundary.
+Under $H_0$, the actual cumulative probability of stopping for harm is
+approximately `r round(sum(x8$harm$prob[, 1]), 4)` when all active stopping
+rules are followed. This need not equal `astar`: trials that stop for futility
+cannot subsequently stop for harm.
 The cumulative probability of crossing the futility threshold, inclusive of harm, is approximately `r round(sum(x8$lower$prob[, 1] + x8$harm$prob[, 1]), 4)`.
 Under $H_1$ (HR = 0.75), crossing the harm bound is very unlikely (`r round(sum(x8$harm$prob[, 2]), 4)`), since the treatment is beneficial.
+
+### Harm calibration versus actual stopping
+
+For both binding and non-binding designs, harm calibration ignores futility
+stopping. This avoids making a harm threshold near zero merely to spend a
+specified amount among the selected trials that survived earlier futility
+monitoring. Efficacy and earlier harm stopping are still included.
+
+The following example tests harm at all three looks, skips efficacy at IA1,
+and tests futility only at IA1. It uses the new harm defaults. We compare the
+target spending, harm crossing without futility, and actual harm stopping:
+
+```{r}
+xh <- gsDesign(
+  test.type = 8, timing = c(.5, .75),
+  testUpper = c(FALSE, TRUE, TRUE),
+  testLower = c(TRUE, FALSE, FALSE),
+  testHarm = TRUE
+)
+harm_without_futility <- gsProbability(
+  k = xh$k, theta = 0, n.I = xh$n.I,
+  a = xh$harm$bound, b = xh$upper$bound
+)
+data.frame(
+  Analysis = c("IA1", "IA2", "Final"),
+  `Harm Z` = xh$harm$bound,
+  `Nominal harm p` = pnorm(xh$harm$bound),
+  `Cumulative target` = cumsum(xh$harm$spend),
+  `Harm without futility` = cumsum(harm_without_futility$lower$prob[, 1]),
+  `Harm with futility` = cumsum(xh$harm$prob[, 1]),
+  check.names = FALSE
+) |> lt() |> lt_format(columns = 2:6, decimals = 4)
+```
+
+At IA2 the probability of an actual harm stop includes only paths that
+continued past IA1. Thus the cumulative harm probability is
+$P_0(Z_1 \le h_1) + P_0(Z_1 > f_1, Z_2 \le h_2)$, where $h_i$ denotes a
+harm boundary and $f_1$ the IA1 futility boundary. Calibration without
+futility instead uses $h_1$ in place of $f_1$ in the second term.
+
+`gsBoundSummary()` reports **actual cumulative stopping probabilities**, not
+the hypothetical probabilities used to calibrate harm spending. Its optional
+`Spending` rows report the spending targets, so these two rows need not agree.
+Also, its `p (1-sided)` rows use the efficacy direction; the nominal p-value
+favoring harm is `pnorm(xh$harm$bound)`, the complement of that displayed
+p-value. `print(xh)` labels the harm-direction values as `Nominal p`.
+
+Changing the example to `test.type = 7` retains the same harm-calibration
+convention. Binding status changes efficacy calibration: type 7 accounts for
+both lower stopping rules in protecting alpha, whereas type 8 ignores them
+for that purpose. Power and actual stopping probabilities include both rules
+in either design. Ignoring a binding futility rule in practice can inflate
+efficacy Type I error, even though it was ignored for harm calibration.
 
 ### Visualization
 
@@ -358,6 +428,151 @@ futility and harm bounds are non-binding. They are not supported for
 `test.type = 7`: a binding harm or futility bound is outside the non-binding
 sequential-p-value framework used for Maurer--Bretz graphical multiple testing.
 
+## Sparse-event mortality monitoring
+
+### A harm bound without a separate futility bound
+
+Consider a randomized trial with a primary efficacy endpoint other than OS,
+such as progression-free survival, and relatively few expected deaths. A
+prespecified mortality harm signal can be useful without requiring a separate
+rule for stopping because OS benefit appears unlikely. This is a hypothetical
+illustration, not an FDA-specified disease scenario or recommended protocol.
+
+Use `test.type = 6`: its lower Z-bound spends under the null hypothesis and
+is **non-binding for efficacy Type I error**. Here we interpret that lower
+bound as harm; there is no additional beta-spending futility bound.
+For type 6 the inputs are `astar = 0.1` and `sfl = sfLDPocock`, **not**
+`sfharm`. They must be supplied explicitly: type 6 retains its general-purpose
+defaults of `astar = 1 - alpha` (selected by input 0) and HSD lower spending.
+The lower boundary is stored in `lower`, even if a generic summary labels it
+as futility. Its clinical interpretation in this example is harm.
+
+We plan analyses at 6, 23, and 40 total deaths, with 1:1 randomization,
+enrollment of 100 participants per month for 16 months, no dropout, and a
+constant control mortality hazard of 0.001 per month. An HR of 0.8 is used
+only as a planning scenario for the expected timing and power, not as evidence
+of mortality benefit. `gsSurvPower()` evaluates this fixed event schedule;
+it does not increase the event target to obtain 90% OS power.
+
+```{r sparse-design}
+sparse <- gsSurvPower(
+  k = 3, test.type = 6,
+  alpha = .025, sided = 1,
+  astar = .1, sfl = sfLDPocock,
+  targetEvents = c(6, 23, 40),
+  lambdaC = .001, hr = .8, hr0 = 1,
+  gamma = 100, R = 16, ratio = 1, eta = 0
+)
+# Use the planned final event count as the explicit spending denominator.
+event_fraction <- sparse$n.I / tail(sparse$n.I, 1)
+sparse_exact <- toBinomialExact(
+  sparse, usTime = event_fraction, lsTime = event_fraction
+)
+```
+
+The example retains an OS efficacy boundary to illustrate non-binding harm
+monitoring alongside an alpha-controlled efficacy test. It does not allocate
+alpha to another primary endpoint or supply a multiple-endpoint testing
+strategy. If OS is solely a safety endpoint, the efficacy stopping rules and
+operating characteristics should be specified accordingly rather than
+claiming an OS efficacy objective that the trial does not have.
+
+### Integer death-count boundaries
+
+In the exact-binomial representation the direction reverses: a high count
+of experimental-arm deaths signals harm. `upper$bound` is therefore the
+harm cutoff, while `lower$bound` is the efficacy cutoff. The probabilities
+account for stopping at any earlier active boundary.
+
+```{r sparse-boundaries}
+data.frame(
+  `Total deaths` = sparse_exact$n.I,
+  `Experimental deaths for harm (at least)` = sparse_exact$upper$bound,
+  `Cumulative harm probability under HR=1` =
+    cumsum(sparse_exact$upper$prob[, 1]),
+  check.names = FALSE
+) |> lt() |> lt_format(columns = 3, decimals = 4)
+
+# Efficacy Type I error is evaluated ignoring the non-binding harm boundary.
+efficacy_without_harm <- gsBinomialExact(
+  k = sparse_exact$k, theta = .5, n.I = sparse_exact$n.I,
+  a = sparse_exact$lower$bound, b = sparse_exact$n.I + 1L
+)
+stopifnot(sum(efficacy_without_harm$lower$prob) <= sparse$alpha + 1e-10)
+```
+
+At the first look, a signal requires all six deaths to be in the experimental
+arm. At later looks the cumulative cutoff is applied only if no earlier
+stopping boundary has been crossed. The total null harm-crossing probability
+is `r round(100 * sum(sparse_exact$upper$prob[, 1]), 1)`%, below the 10% target
+because only integer death counts are available. The efficacy Type I error
+without harm stopping is
+`r round(100 * sum(efficacy_without_harm$lower$prob), 2)`%, below 2.5%.
+
+### Sensitivity to excess mortality
+
+For balanced exposure and uncommon events, approximate the probability that
+a death is in the experimental arm by $p = HR/(1 + HR)$, where
+$HR = \lambda_E/\lambda_C$. More generally the corresponding conditional
+Poisson model uses $p = HR\,r/(1 + HR\,r)$ with exposure ratio $r$.
+The recursion below is exact for independent binomial event increments with
+constant $p$, **not automatically exact for arbitrary censored survival data**.
+Risk-set imbalance, differential censoring, or changing hazards can invalidate
+the simple mapping from randomization ratio and HR. Such settings need
+appropriate survival-model calculations or simulation.
+
+```{r sparse-sensitivity}
+harm_hr <- c(1, 1.25, 1.5, 2)
+harm_oc <- gsBinomialExact(
+  k = sparse_exact$k, theta = harm_hr / (1 + harm_hr),
+  n.I = sparse_exact$n.I,
+  a = sparse_exact$lower$bound, b = sparse_exact$upper$bound
+)
+data.frame(
+  `True mortality HR` = harm_hr,
+  `Probability of a harm signal` = colSums(harm_oc$upper$prob),
+  check.names = FALSE
+) |> lt() |> lt_format(columns = 2, decimals = 3)
+```
+
+Even at HR = 1.5, the chance of a signal is only
+`r round(100 * sum(harm_oc$upper$prob[, 3]), 1)`% in this example. Failure to
+cross the boundary therefore cannot establish that a clinically important
+mortality increase has been excluded. Increasing harm spending can improve
+sensitivity, but also increases false signals; it cannot replace information
+from additional deaths and follow-up. A non-binding designation concerns
+efficacy alpha calculations, not the clinical importance of reviewing a signal.
+
+### Detecting harm versus ruling out harm
+
+A harm-monitoring test asks whether data provide evidence of excess mortality
+relative to HR = 1. A reassurance objective instead asks whether the data can
+exclude a prespecified unacceptable HR, such as 1.5. The latter value is an
+illustration, not a universal safety margin. One approach is to require an
+appropriately constructed upper confidence bound to fall below that margin.
+
+To illustrate the lack of precision, suppose a **single fixed analysis** has
+20 deaths in each arm. Under the same binomial model, transform a one-sided
+95% upper bound for the experimental share into an upper HR bound:
+
+```{r sparse-precision}
+p_upper <- binom.test(20, 40, alternative = "less", conf.level = .95)$conf.int[2]
+hr_upper <- p_upper / (1 - p_upper)
+data.frame(
+  `Experimental deaths` = 20, `Control deaths` = 20,
+  `One-sided 95% upper HR bound` = hr_upper,
+  check.names = FALSE
+) |> lt() |> lt_format(columns = 3, decimals = 2)
+```
+
+Despite a balanced observed count, this upper bound exceeds 1.5. This is a
+fixed-analysis precision illustration, **not a sequentially adjusted interval**
+for the monitored trial. Repeated or stopping-selected reassurance assessments
+require an interval or test valid for that monitoring plan. A vignette example
+must not turn "no harm signal" into a claim of safety: the harm margin,
+precision, event target, follow-up, and operating characteristics for ruling
+out harm all need their own justification.
+
 ## Practical considerations
 
 ### Choice of spending functions
@@ -368,14 +583,51 @@ The choice of spending functions for the three boundaries should reflect regulat
 - **Futility**: Moderate spending (e.g., HSD with $\gamma = -2$) allows early stopping for futility when the treatment effect is clearly absent.
 - **Harm**: The Lan-DeMets Pocock (`sfLDPocock`) spending function provides more aggressive spending at early analyses, which is appropriate for harm monitoring since detecting a detrimental effect early is critical for patient safety.
 
+### Total harm spending and the number of analyses
+
+Lan--DeMets Pocock spending with total 0.1 allocates cumulative probability
+$A(t) = 0.1\log\{1 + (e-1)t\}$ by spending time $t$. It allocates relatively
+more spending early than a conservative O'Brien--Fleming choice, helping to
+flag moderately small nominal p-values favoring harm throughout monitoring.
+The total 0.1 is a repeated-monitoring probability under the null, **not** a
+nominal 0.1 cutoff at every analysis. Neither the total nor the spending
+function guarantees that any particular nominal p-value will trigger harm
+stopping at every look.
+
+With more analyses, a user may wish to choose a **larger total harm spending**
+(`astar`) to retain similarly permissive nominal thresholds. This increases
+the allowed probability of a false harm signal under the null. It does not
+mean increasing futility spending (`beta`), which has a different purpose and
+is calibrated under the design alternative. Inspect the actual thresholds
+for the intended timing and number of analyses. For example:
+
+```{r}
+harm_nominal <- function(k, astar) {
+  d <- gsDesign(k = k, test.type = 8, astar = astar)
+  data.frame(
+    Analyses = k, Total = astar, Look = seq_len(k),
+    `Nominal harm p` = pnorm(d$harm$bound), check.names = FALSE
+  )
+}
+rbind(harm_nominal(3, .1), harm_nominal(6, .1), harm_nominal(6, .2)) |>
+  lt() |> lt_format(columns = 4, decimals = 4)
+```
+
+The larger total in this illustration is a sensitivity analysis, not a
+universal recommendation. The choice requires considering both sensitivity
+to potential harm and false harm signals.
+
 ### Interpreting the harm bound
 
-The harm bound is intended so that if a small observed p-value *favoring control* is observed, the harm bound will be crossed.
+The harm bound is crossed when the observed p-value *favoring control* is at
+or below the analysis-specific nominal harm threshold.
 In terms of the test statistic, a negative Z-value indicates that the hazard rate is higher in the experimental arm than the control arm --- i.e., the experimental treatment appears to be worsening survival.
 When the Z-value falls below the harm bound, this constitutes a statistical signal that the treatment may be harmful, and the trial should be stopped with a recommendation to review the safety data.
 
-The harm spending is computed under $H_0$ (no treatment effect), reflecting the probability of observing an apparent harmful effect *by chance* when there is actually no true effect.
-This controls the probability of a false harm signal.
+The harm spending is computed under $H_0$ (no treatment effect), ignoring
+futility stopping but retaining efficacy stopping. It budgets the probability
+of a false harm signal under those assumptions; following futility can reduce
+the actual probability further.
 
 ### Harm bound capping
 

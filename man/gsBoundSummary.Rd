@@ -258,6 +258,10 @@ is issued and HR-at-bound calculations assume \code{hr0 = 1}.
 \code{Spending: }Incremental error spending at each given analysis. For
 asymmetric designs, futility bound will have beta-spending summarized.
 Efficacy bound always has alpha-spending summarized.
+For types 7 and 8, harm spending is calibrated under the null ignoring
+futility stopping (but retaining efficacy stopping); capping at an active
+futility bound can reduce attained spending. It need not equal the
+increment in the reported harm crossing probability.
 
 \code{B-value: }\code{sqrt(t)*Z} where \code{t} is the proportion of
 information at the analysis divided by the final analysis planned
@@ -279,7 +283,10 @@ value. \code{P{Cross if delta=xx}: }For each of the parameter values in
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
 interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive. Every characteristic for a bound,
+probabilities are mutually exclusive and assume all active stopping rules
+are followed, including futility even for a non-binding design. Harm
+crossing probabilities can therefore be below the harm spending targets.
+Every characteristic for a bound,
 including its cumulative crossing probability, is shown as \code{NA} at an
 analysis where that bound is inactive. The underlying probability arrays on
 \code{x} retain the cumulative crossing information.

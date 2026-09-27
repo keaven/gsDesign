@@ -154,6 +154,24 @@ test_that("effect calibration supports survival HRs and harm boundaries", {
   expect_equal(survival_spending_cp(fit), .3, tolerance = 1e-4)
 })
 
+test_that("survival CP calibration preserves harm defaults and calibration", {
+  for (type in c(7, 8)) {
+    x <- gsSurv(test.type = type, timing = c(.5, .75), sfu = sfLDOF,
+                testLower = c(TRUE, FALSE, FALSE))
+    fit <- gsCPFutilitySpending(x, .3)
+    expect_survival_spending_plan(fit)
+    expect_equal(fit$astar, .1)
+    expect_identical(fit$harm$sf, sfLDPocock)
+    expect_identical(fit$testLower, x$testLower)
+    expect_equal(survival_spending_cp(fit), .3, tolerance = 1e-4)
+    harm_only <- gsProbability(k = fit$k, theta = 0, n.I = fit$n.I,
+                              a = fit$harm$bound, b = fit$upper$bound)
+    expect_equal(cumsum(harm_only$lower$prob[, 1]), cumsum(fit$harm$spend),
+                 tolerance = 2e-5)
+    expect_lte(sum(fit$harm$prob[, 1]), sum(fit$harm$spend) + 2e-5)
+  }
+})
+
 test_that("multi-target and joint-boundary survival fits retain their targets", {
   x <- gsSurvCalendar(sfl = sfLogistic, sflpar = c(0, 1), spending = "calendar")
   target <- vapply(1:2, function(i) sum(gsCP(x, i = i,

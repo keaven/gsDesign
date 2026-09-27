@@ -270,13 +270,13 @@ testthat::test_that("gsLegendText for test.type=8", {
 
 testthat::test_that("gsDErrorCheck sets astar for test.type=7", {
   x <- gsDesign(k = 3, test.type = 7, alpha = 0.025, beta = 0.1, astar = 0)
-  # astar should be set to 1 - alpha when input as 0
-  testthat::expect_equal(x$astar, 1 - x$alpha)
+  # Zero selects the harm-specific default, not the type 5/6 default.
+  testthat::expect_equal(x$astar, 0.1)
 })
 
 testthat::test_that("gsDErrorCheck sets astar for test.type=8", {
   x <- gsDesign(k = 3, test.type = 8, alpha = 0.025, beta = 0.1, astar = 0)
-  testthat::expect_equal(x$astar, 1 - x$alpha)
+  testthat::expect_equal(x$astar, 0.1)
 })
 
 # ---- Test with different k values ----
@@ -334,4 +334,3 @@ testthat::test_that("gsBound1 handles 0 final spend (returns EXTREMEZ)", {
   )
   testthat::expect_true(result$b[3] >= 19)  # near +EXTREMEZ
 })
-

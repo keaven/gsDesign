@@ -2,6 +2,16 @@
 
 ## Breaking changes
 
+- Harm spending for `test.type = 7` and `8` is now calibrated ignoring
+  futility stopping, while retaining efficacy stopping. Reported harm
+  probabilities still assume all active stopping rules are followed and can
+  be below the spending targets. This also applies to type 8 exact binomial
+  conversion. Harm remains capped at futility where both are active.
+- Harm designs now default to total spending `astar = 0.1` (also selected by
+  input `astar = 0`) and `sfharm = sfLDPocock`, including survival interfaces.
+  Types 5 and 6 retain their `astar = 0` convention of `1 - alpha`.
+  Explicit harm spending choices are preserved.
+
 - Follow-up now refers to all planned participants, with dropout and optional
   event stopping. Use `medianFollowUp()` for a forward calculation;
   `minMedianFollowUp()` now solves for cutoff time with a named `target`.
@@ -70,6 +80,10 @@
   rate for experimental events, keeping calendar calibration consistent when
   dropout differs between arms (#345).
 
+- Power plots omit curves and annotations for inactive boundaries while
+  retaining cumulative probabilities and original analysis numbers. Use
+  `show_skipped = TRUE` to include skipped looks (#349).
+
 - `print.gsSurv()` no longer truncates spending function parameters with
   decimal values, such as the t-distribution parameters printed as
   `a = -1.63774, b = 2.96683, df = 3` (#307).
@@ -109,6 +123,17 @@
   targets in the argument documentation as total future efficacy probabilities
   and added a verified two-target example (#346).
 
+- Added a sparse-event mortality example using type 6 non-binding harm
+  monitoring without separate futility, exact-binomial integer boundaries,
+  harm-detection sensitivity, and a fixed-analysis precision illustration.
+  Distinguished detecting harm from ruling it out and corrected the FDA
+  reference to the August 2025 draft guidance.
+
+- Explained harm calibration versus actual stopping probabilities in the help
+  and harm/selective-monitoring vignettes, with a worked skipped-look example.
+  Documented the 0.1/Pocock rationale, nominal harm-tail p-values, and the
+  tradeoff in increasing total harm spending when more analyses are planned.
+
 - Added a historical vignette covering the package's statistical foundations,
   contributors, software modernization, and recent development (#304).
 - Added an effect-spending vignette using the public interface for joint
@@ -139,8 +164,15 @@
 
 ## Testing
 
+- Verify survival CP calibration retains the 0.1/Pocock harm defaults and
+  harm calibration independent of futility stopping (#345).
 - Update RTF summary tests to expect no warning when log-scale HR metadata
   can be recovered, retaining the existing output snapshots (#347).
+
+- Added harm-calibration checks against an independent boundary solver and
+  bivariate integration, plus default propagation, selective-bound, and exact
+  binomial checks. Regenerated only the four affected harm-design numerical
+  fixtures for the intentional new calibration and defaults.
 
 - Declare `svglite` as a test dependency for information-label rendering checks
   (#315).

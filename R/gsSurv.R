@@ -6,7 +6,7 @@
 gsSurv <- function(
   k = 3, test.type = 4, alpha = 0.025, sided = 1,
   beta = 0.1, astar = 0, timing = 1, sfu = sfHSD, sfupar = -4,
-  sfl = sfHSD, sflpar = -2, sfharm = sfHSD, sfharmparam = -2, r = 18,
+  sfl = sfHSD, sflpar = -2, sfharm = sfLDPocock, sfharmparam = -2, r = 18,
   lambdaC = log(2) / 6, hr = .6, hr0 = 1, eta = 0, etaE = NULL,
   gamma = 1, R = 12, S = NULL, T = 18, minfup = 6, ratio = 1,
   tol = .Machine$double.eps^0.25,

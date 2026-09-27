@@ -154,6 +154,29 @@ test_that("test.type 8 honors selective futility and harm looks", {
   expect_equal(result$upper$prob, result$futility$prob + result$harm$prob)
 })
 
+test_that("exact harm calibration ignores earlier futility stopping", {
+  design <- surv_design(test.type = 8, astar = .1, testLower = c(TRUE, FALSE, FALSE))
+  result <- toBinomialExact(design)
+  target <- design$harm$sf(design$astar, result$lsTime, design$harm$param)$spend
+  without_futility <- gsBinomialExact(
+    k = result$k, theta = result$theta[1], n.I = result$n.I,
+    a = result$lower$bound, b = result$harm$bound
+  )
+  expect_true(all(cumsum(without_futility$upper$prob[, 1]) <= target + 1e-10))
+  expect_lt(sum(result$harm$prob[, 1]), sum(without_futility$upper$prob[, 1]))
+  # At later looks no futility cap applies: the next more permissive integer
+  # harm cutoff must overspend the target under the no-futility recursion.
+  for (j in 2:result$k) {
+    h <- result$harm$bound[seq_len(j)]
+    h[j] <- h[j] - 1L
+    next_cutoff <- gsBinomialExact(
+      k = j, theta = result$theta[1], n.I = result$n.I[seq_len(j)],
+      a = result$lower$bound[seq_len(j)], b = h
+    )
+    expect_gt(sum(next_cutoff$upper$prob[, 1]), target[j])
+  }
+})
+
 test_that("test.type 8 supports analysis-time overrides", {
   design <- surv_design(test.type = 8)
   observed <- c(20L, 55L, 75L)
@@ -168,7 +191,7 @@ test_that("test.type 8 supports analysis-time overrides", {
 
   expect_equal(result$n.I, observed)
   expect_equal(result$alpha, 0.01)
-  expect_equal(result$astar, 0.99)
+  expect_equal(result$astar, 0.1)
   expect_equal(result$upper$prob, result$futility$prob + result$harm$prob)
 })
 
