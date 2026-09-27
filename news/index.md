@@ -37,6 +37,14 @@
 
 ### New features
 
+- All six spending-calibration functions accept survival designs from
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md),
+  [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md),
+  and
+  [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md),
+  retaining survival classes and rebuilding enrollment and event
+  summaries ([\#345](https://github.com/keaven/gsDesign/issues/345)).
+
 - [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
   supports fixed survival designs and single observed event counts for
   them;
@@ -106,6 +114,19 @@
   ([\#322](https://github.com/keaven/gsDesign/issues/322)).
 
 ### Bug fixes
+
+- Log-scale HR summaries recover missing null and alternative hazard
+  ratios from retained `delta0` and `delta1`, avoiding a spurious
+  warning after survival designs are reconstructed with
+  [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
+  and preserving non-unit null ratios and effect direction, including
+  alternate alpha summaries
+  ([\#347](https://github.com/keaven/gsDesign/issues/347)).
+
+- Survival interim event calculations now use the experimental-arm
+  dropout rate for experimental events, keeping calendar calibration
+  consistent when dropout differs between arms
+  ([\#345](https://github.com/keaven/gsDesign/issues/345)).
 
 - Power plots omit curves and annotations for inactive boundaries while
   retaining cumulative probabilities and original analysis numbers. Use
@@ -178,6 +199,12 @@
 
 ### Documentation
 
+- Clarified that all six spending calibrators hold analysis information
+  fractions (`x$timing`) fixed, separately from spending times. Defined
+  CP targets in the argument documentation as total future efficacy
+  probabilities and added a verified two-target example
+  ([\#346](https://github.com/keaven/gsDesign/issues/346)).
+
 - Added a sparse-event mortality example using type 6 non-binding harm
   monitoring without separate futility, exact-binomial integer
   boundaries, harm-detection sensitivity, and a fixed-analysis precision
@@ -243,6 +270,14 @@
   [\#344](https://github.com/keaven/gsDesign/issues/344)).
 
 ### Testing
+
+- Verify survival CP calibration retains the 0.1/Pocock harm defaults
+  and harm calibration independent of futility stopping
+  ([\#345](https://github.com/keaven/gsDesign/issues/345)).
+
+- Update RTF summary tests to expect no warning when log-scale HR
+  metadata can be recovered, retaining the existing output snapshots
+  ([\#347](https://github.com/keaven/gsDesign/issues/347)).
 
 - Added harm-calibration checks against an independent boundary solver
   and bivariate integration, plus default propagation, selective-bound,

@@ -19,7 +19,7 @@ reference design's target unconditional power."><meta property="og:image" conten
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9021</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,11 @@ reference design's target unconditional power.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A fixed-timing <code>gsDesign</code> object with <code>test.type</code> 3, 4, 7, or 8.</p></dd>
+<dd><p>A <code>gsDesign</code>, <code>gsSurv</code>, <code>gsSurvCalendar</code>, or
+<code>gsSurvPower</code> design with <code>test.type</code> 3, 4, 7, or 8.
+The analysis information fractions in <code>x$timing</code> are held fixed.
+These fractions are distinct from the times supplied to the spending
+functions; see <strong>Information fractions and spending times</strong> below.</p></dd>
 
 
 <dt id="arg-target-pp">target_pp<a class="anchor" aria-label="anchor" href="#arg-target-pp"></a></dt>
@@ -143,7 +147,8 @@ input errors. These controls change the search, not the prior or target.</p><dl>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A calibrated object with class
-  <code>c("gsPPFutilitySpending", "gsDesign")</code>. Its
+  <code>c("gsPPFutilitySpending", "gsDesign")</code>, with survival classes
+  retained when applicable. Its
   <code>ppFutilitySpending</code> component records <code>target_pp</code>,
   <code>achieved_pp</code>, residuals, analysis indices, normalized prior,
   fitted spending parameters, information, unconditional power, reference
@@ -176,9 +181,7 @@ and joint refinement. Only fits meeting all target tolerances are returned.</p>
 <p>Preserve the complete reference design when replaying fitted parameters.
 Changing timing, efficacy or harm spending, or testing indicators requires
 recalibration. Use the same prior and effect scale when verifying PP with
-<code><a href="gsBoundSummary.html">gsBoundSummary()</a></code>. Direct survival-object calibration is unsupported;
-the vignette <code><a href="../articles/CPFutilitySpending.html">vignette("CPFutilitySpending")</a></code> shows reconstruction of
-a survival design from a matching statistical reference.</p>
+<code><a href="gsBoundSummary.html">gsBoundSummary()</a></code>. Survival designs can be calibrated directly.</p>
 <p><code><a href="toInteger.html">toInteger()</a></code> retains the spending specification but does not
 recalibrate PP after rounding. Extremely remote prior support can make the
 likelihood normalization in <code><a href="gsCP.html">gsPP()</a></code> numerically undefined; such
@@ -196,6 +199,55 @@ starting proportions are derived from the reference design's cumulative
 lower spending divided by beta and adjusted to satisfy these constraints.
 User-supplied <code>lower</code> and <code>upper</code> are not supported for its
 constrained parameterization.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="information-fractions-and-spending-times">Information fractions and spending times<a class="anchor" aria-label="anchor" href="#information-fractions-and-spending-times"></a></h2>
+
+
+<p>All six spending calibrators keep the reference analysis information
+fractions <code>x$timing</code> fixed. These are the cumulative information
+fractions <code>x$n.I / x$n.I[x$k]</code>, ending at 1. For example,
+<code>x$timing = c(.5, .75, 1)</code> keeps the analyses at 50%, 75%, and 100%
+of the final information. Power-preserving calibration may change the
+maximum information and thus the absolute information <code>n.I</code> at every
+analysis while retaining these fractions. Fixed-information calibration
+(<code><a href="gsCAFutilitySpending.html">gsCAFutilitySpending()</a></code> and
+<code>gsCPOSFutilitySpending(mode = "fixed_information")</code>) also holds
+<code>n.I</code> and the efficacy boundaries fixed.</p>
+<p>Spending times are the inputs to the spending functions, stored in
+<code>x$upper$sTime</code> and <code>x$lower$sTime</code>. These are also retained during
+calibration but may differ from the information fractions; for example,
+calendar-based spending uses fractions of calendar time. Thus fixed
+information fractions do not mean that spending must use information time,
+or that absolute calendar analysis dates must be fixed. See
+<strong>Survival designs</strong> for how survival calendar times are handled.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="survival-designs">Survival designs<a class="anchor" aria-label="anchor" href="#survival-designs"></a></h2>
+
+
+<p>Survival inputs retain their survival classes and endpoint assumptions.
+Each candidate reconstructs the statistical design and its survival plan,
+so targets and diagnostics are evaluated on the returned event-count scale.
+For <code><a href="nSurv.html">gsSurv()</a></code> and <code><a href="gsSurvCalendar.html">gsSurvCalendar()</a></code> inputs, information fractions,
+spending times, and the enrollment/follow-up constraint are retained;
+enrollment rates or durations are recalculated as required. Calendar designs
+with fixed enrollment and follow-up retain their calendar schedule up to
+numerical tolerance. Stored calls are not evaluated.</p>
+<p>For <code><a href="gsSurvPower.html">gsSurvPower()</a></code> inputs, power-preserving calibration fixes the
+realized calendar times and enrollment periods and rescales enrollment rates
+to attain the fitted event counts. The evaluated alternative <code>x$hr</code>
+and its achieved power are used, even if the original design alternative
+<code>x$hr1</code> differed. Original event-trigger and calendar-cap rules are not
+re-applied: the realized schedule becomes the new plan. Fixed-information
+conditional-POS/CA calibration instead retains the survival plan, event
+counts and efficacy bounds while updating futility and achieved power.</p>
+<p>Priors and explicit <code>theta</code> remain standardized drifts per square root
+event, not hazard ratios. Rounding with <code><a href="toInteger.html">toInteger()</a></code> after calibration
+can change the target; calibration of an already rounded reference may
+return noninteger event counts. The final analysis is not a valid target
+index for interim calibration: <code>i</code> identifies the interim bound or
+continuation event at which the target is evaluated.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

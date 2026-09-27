@@ -528,9 +528,10 @@ been excluded.
 
 ## Scope and practical limits
 
-- Current assurance/POS calibration supports fixed-timing statistical
-  `gsDesign` objects with test types 3 and 4, not direct survival
-  objects.
+- Assurance/POS calibration supports `gsDesign` and direct survival
+  objects with test types 3 and 4. Fixed-information calibration retains
+  the survival plan and efficacy bounds; power-preserving calibration
+  recalculates enrollment.
 - Harm-bound designs are excluded: current
   [`gsCPOS()`](https://keaven.github.io/gsDesign/reference/gsCP.md) does
   not include harm stopping in its continuation denominator.

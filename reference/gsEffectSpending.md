@@ -24,8 +24,11 @@ gsEffectSpending(
 
 - x:
 
-  Fixed-timing gsDesign reference with test.type 3, 4, 7 or 8. Direct
-  survival objects are unsupported.
+  A `gsDesign`, `gsSurv`, `gsSurvCalendar`, or `gsSurvPower` design with
+  `test.type` 3, 4, 7, or 8. The analysis information fractions in
+  `x$timing` are held fixed. These fractions are distinct from the times
+  supplied to the spending functions; see **Information fractions and
+  spending times** below.
 
 - target_effect:
 
@@ -56,9 +59,11 @@ gsEffectSpending(
   Difference/RR designs require nondegenerate delta0/delta1 metadata and
   n.fix \> 1. For RR, delta0/delta1 must be log ratios. HR requires
   information = "events", ratio (experimental/control), hr0 (null HR),
-  and hr1 (alternative HR), all explicitly supplied. The reference delta
-  must agree with abs(log(hr1/hr0)) \* sqrt(ratio)/(1 + ratio),
-  verifying its event-count scale.
+  and hr1 (alternative HR), all explicitly supplied. For statistical
+  designs, the reference delta must agree with abs(log(hr1/hr0)) \*
+  sqrt(ratio)/(1 + ratio), verifying its event-count scale. For survival
+  designs, metadata must match the stored allocation and hazard ratios;
+  the selected survival method determines the drift.
 
 - control:
 
@@ -75,14 +80,14 @@ gsEffectSpending(
 
 ## Value
 
-A gsDesign object also inheriting from gsEffectSpending. Component
-effectSpending contains a target/achieved/residual table, named spending
-specifications and free parameters, effect metadata, solver diagnostics,
-information inflation, power and local identifiability diagnostics.
-replay contains arguments for do.call(gsDesign, ...); for HR, also
-restore the returned hr/hr0/ratio metadata for HR summaries. Errors
-inherit from gsEffectSpending_error with input_error or
-convergence_error suffixes.
+A gsDesign object also inheriting from gsEffectSpending, retaining
+survival classes when applicable. Component effectSpending contains a
+target/achieved/residual table, named spending specifications and free
+parameters, effect metadata, solver diagnostics, information inflation,
+power and local identifiability diagnostics. replay contains arguments
+for do.call(gsDesign, ...); for HR, also restore the returned
+hr/hr0/ratio metadata for HR summaries. Errors inherit from
+gsEffectSpending_error with input_error or convergence_error suffixes.
 
 ## Details
 
@@ -105,6 +110,61 @@ capping. A failed search does not prove mathematical infeasibility.
 Inspect all operating characteristics and sample-size inflation before
 choosing a design. Changing timing or rounding need not retain the
 calibrated effects.
+
+## Information fractions and spending times
+
+All six spending calibrators keep the reference analysis information
+fractions `x$timing` fixed. These are the cumulative information
+fractions `x$n.I / x$n.I[x$k]`, ending at 1. For example,
+`x$timing = c(.5, .75, 1)` keeps the analyses at 50%, 75%, and 100% of
+the final information. Power-preserving calibration may change the
+maximum information and thus the absolute information `n.I` at every
+analysis while retaining these fractions. Fixed-information calibration
+([`gsCAFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCAFutilitySpending.md)
+and `gsCPOSFutilitySpending(mode = "fixed_information")`) also holds
+`n.I` and the efficacy boundaries fixed.
+
+Spending times are the inputs to the spending functions, stored in
+`x$upper$sTime` and `x$lower$sTime`. These are also retained during
+calibration but may differ from the information fractions; for example,
+calendar-based spending uses fractions of calendar time. Thus fixed
+information fractions do not mean that spending must use information
+time, or that absolute calendar analysis dates must be fixed. See
+**Survival designs** for how survival calendar times are handled.
+
+## Survival designs
+
+Survival inputs retain their survival classes and endpoint assumptions.
+Each candidate reconstructs the statistical design and its survival
+plan, so targets and diagnostics are evaluated on the returned
+event-count scale. For
+[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+[`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
+inputs, information fractions, spending times, and the
+enrollment/follow-up constraint are retained; enrollment rates or
+durations are recalculated as required. Calendar designs with fixed
+enrollment and follow-up retain their calendar schedule up to numerical
+tolerance. Stored calls are not evaluated.
+
+For
+[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+inputs, power-preserving calibration fixes the realized calendar times
+and enrollment periods and rescales enrollment rates to attain the
+fitted event counts. The evaluated alternative `x$hr` and its achieved
+power are used, even if the original design alternative `x$hr1`
+differed. Original event-trigger and calendar-cap rules are not
+re-applied: the realized schedule becomes the new plan.
+Fixed-information conditional-POS/CA calibration instead retains the
+survival plan, event counts and efficacy bounds while updating futility
+and achieved power.
+
+Priors and explicit `theta` remain standardized drifts per square root
+event, not hazard ratios. Rounding with
+[`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+after calibration can change the target; calibration of an already
+rounded reference may return noninteger event counts. The final analysis
+is not a valid target index for interim calibration: `i` identifies the
+interim bound or continuation event at which the target is evaluated.
 
 ## See also
 

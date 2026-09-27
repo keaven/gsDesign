@@ -21,7 +21,7 @@ retain the reference design's unconditional power."><meta property="og:image" co
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9021</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,12 +72,25 @@ retain the reference design's unconditional power.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A fixed-timing <code>gsDesign</code> object with <code>test.type</code> 3, 4, 7, or 8.</p></dd>
+<dd><p>A <code>gsDesign</code>, <code>gsSurv</code>, <code>gsSurvCalendar</code>, or
+<code>gsSurvPower</code> design with <code>test.type</code> 3, 4, 7, or 8.
+The analysis information fractions in <code>x$timing</code> are held fixed.
+These fractions are distinct from the times supplied to the spending
+functions; see <strong>Information fractions and spending times</strong> below.</p></dd>
 
 
 <dt id="arg-target-cp">target_cp<a class="anchor" aria-label="anchor" href="#arg-target-cp"></a></dt>
 <dd><p>Numeric vector of conditional power targets strictly between
-zero and one.</p></dd>
+zero and one, one per interim index in <code>i</code>. Each target is the
+probability of crossing any future efficacy bound, from analysis
+<code>i + 1</code> through the final analysis <code>x$k</code>, conditional on the
+statistic at analysis <code>i</code> equaling its candidate futility bound.
+With <code>theta = NULL</code>, the future effect is the observed effect implied
+by that bound, <code>lower$bound[i] / sqrt(n.I[i])</code>; otherwise <code>theta</code>
+specifies the future effect. Future efficacy and futility boundaries
+remain in force.
+With multiple targets, each is a total future conditional power at its
+corresponding interim, not a next-analysis conditional power.</p></dd>
 
 
 <dt id="arg-i">i<a class="anchor" aria-label="anchor" href="#arg-i"></a></dt>
@@ -145,7 +158,8 @@ Unknown names and invalid values produce input errors.</p><dl><dt><code>start</c
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A calibrated design with class <code>c("gsCPFutilitySpending", "gsDesign")</code>.
+    <p>A calibrated design inheriting from <code>gsCPFutilitySpending</code> and
+<code>gsDesign</code>, retaining <code>gsSurv</code> and <code>gsSurvPower</code> when applicable.
 The <code>cpFutilitySpending</code> component contains targets, achieved conditional
 powers, effects, fitted spending metadata, information, reference efficacy
 and harm specifications, and solver diagnostics.</p>
@@ -156,12 +170,23 @@ target that cannot be attained raises a
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Conditional power is evaluated at the candidate lower bound. When <code>theta</code>
+    <p>Conditional power is the probability of crossing any efficacy bound after
+the selected interim, through the final analysis, conditional on the interim
+statistic equaling the candidate lower bound. When <code>theta</code>
 is <code>NULL</code>, the future effect is the observed effect implied by that bound,
 <code>lower$bound[i] / sqrt(n.I[i])</code>, following the default convention in
 <code><a href="gsCP.html">gsCP()</a></code>. The calculation conditions on the interim statistic even though it
 is at a stopping boundary; future futility bounds remain part of the
 conditional power calculation.</p>
+<p>For a three-analysis design, <code>target_cp = .3, i = 1</code> targets probability
+0.3 of efficacy at analysis 2 or 3, conditional on \(Z_1 = a_1\), where
+\(a_1\) is the fitted futility bound. With a two-parameter spending family,
+<code>target_cp = c(.3, .5), i = c(1, 2)</code> additionally targets probability
+0.5 of efficacy at analysis 3 conditional on \(Z_2 = a_2\). Each target
+uses its own interim conditioning value and, when <code>theta = NULL</code>, its
+own bound-implied future effect. These are total future conditional powers,
+not probabilities of efficacy only at the next analysis or probabilities
+that are added together across targeted interims.</p>
 <p>One-target calibration supports the one-parameter families <code>sfHSD</code>,
 <code>sfPower</code>, <code>sfExponential</code>, and <code>sfLDOF</code>. Two-target calibration supports
 <code>sfLogistic</code>, <code>sfBetaDist</code>, <code>sfCauchy</code>, <code>sfNormal</code>, <code>sfExtremeValue</code>, and
@@ -182,6 +207,28 @@ but rounding information can change the achieved conditional power and does
 not trigger recalibration.</p>
     </div>
     <div class="section level2">
+    <h2 id="information-fractions-and-spending-times">Information fractions and spending times<a class="anchor" aria-label="anchor" href="#information-fractions-and-spending-times"></a></h2>
+
+
+<p>All six spending calibrators keep the reference analysis information
+fractions <code>x$timing</code> fixed. These are the cumulative information
+fractions <code>x$n.I / x$n.I[x$k]</code>, ending at 1. For example,
+<code>x$timing = c(.5, .75, 1)</code> keeps the analyses at 50%, 75%, and 100%
+of the final information. Power-preserving calibration may change the
+maximum information and thus the absolute information <code>n.I</code> at every
+analysis while retaining these fractions. Fixed-information calibration
+(<code><a href="gsCAFutilitySpending.html">gsCAFutilitySpending()</a></code> and
+<code>gsCPOSFutilitySpending(mode = "fixed_information")</code>) also holds
+<code>n.I</code> and the efficacy boundaries fixed.</p>
+<p>Spending times are the inputs to the spending functions, stored in
+<code>x$upper$sTime</code> and <code>x$lower$sTime</code>. These are also retained during
+calibration but may differ from the information fractions; for example,
+calendar-based spending uses fractions of calendar time. Thus fixed
+information fractions do not mean that spending must use information time,
+or that absolute calendar analysis dates must be fixed. See
+<strong>Survival designs</strong> for how survival calendar times are handled.</p>
+    </div>
+    <div class="section level2">
     <h2 id="spending-parameter-search-defaults">Spending-parameter search defaults<a class="anchor" aria-label="anchor" href="#spending-parameter-search-defaults"></a></h2>
 
 
@@ -192,6 +239,33 @@ starting proportions are derived from the reference design's cumulative
 lower spending divided by beta and adjusted to satisfy these constraints.
 User-supplied <code>lower</code> and <code>upper</code> are not supported for its
 constrained parameterization.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="survival-designs">Survival designs<a class="anchor" aria-label="anchor" href="#survival-designs"></a></h2>
+
+
+<p>Survival inputs retain their survival classes and endpoint assumptions.
+Each candidate reconstructs the statistical design and its survival plan,
+so targets and diagnostics are evaluated on the returned event-count scale.
+For <code><a href="nSurv.html">gsSurv()</a></code> and <code><a href="gsSurvCalendar.html">gsSurvCalendar()</a></code> inputs, information fractions,
+spending times, and the enrollment/follow-up constraint are retained;
+enrollment rates or durations are recalculated as required. Calendar designs
+with fixed enrollment and follow-up retain their calendar schedule up to
+numerical tolerance. Stored calls are not evaluated.</p>
+<p>For <code><a href="gsSurvPower.html">gsSurvPower()</a></code> inputs, power-preserving calibration fixes the
+realized calendar times and enrollment periods and rescales enrollment rates
+to attain the fitted event counts. The evaluated alternative <code>x$hr</code>
+and its achieved power are used, even if the original design alternative
+<code>x$hr1</code> differed. Original event-trigger and calendar-cap rules are not
+re-applied: the realized schedule becomes the new plan. Fixed-information
+conditional-POS/CA calibration instead retains the survival plan, event
+counts and efficacy bounds while updating futility and achieved power.</p>
+<p>Priors and explicit <code>theta</code> remain standardized drifts per square root
+event, not hazard ratios. Rounding with <code><a href="toInteger.html">toInteger()</a></code> after calibration
+can change the target; calibration of an already rounded reference may
+return noninteger event counts. The final analysis is not a valid target
+index for interim calibration: <code>i</code> identifies the interim bound or
+continuation event at which the target is evaluated.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -299,6 +373,35 @@ constrained parameterization.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0196       NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.9000       NA</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Survival designs can also be calibrated directly.</span></span></span>
+<span class="r-in"><span><span class="va">surv_fit</span> <span class="op">&lt;-</span> <span class="fu">gsCPFutilitySpending</span><span class="op">(</span><span class="va">surv_design</span>, target_cp <span class="op">=</span> <span class="fl">.7</span>, i <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">surv_fit</span>, exclude <span class="op">=</span> <span class="st">"B-value"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Analysis              Value Efficacy Futility</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    IA 1: 50%                  Z   2.9626   1.6677</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       N: 374        p (1-sided)   0.0015   0.0477</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 135       ~HR at bound   0.5999   0.7500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Month: 11           Spending   0.0015   0.0969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              CP   0.9994   0.7000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                           CP H1   0.9994   0.9651</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              PP   0.9901   0.6457</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0015   0.9523</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.5018   0.0969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    IA 2: 75%                  Z   2.3590       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       N: 420        p (1-sided)   0.0092       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 202       ~HR at bound   0.7173       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Month: 14           Spending   0.0081       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              CP   0.9222       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                           CP H1   0.9845       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              PP   0.8904       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0078       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.8606       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Final                  Z   2.0141       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       N: 420        p (1-sided)   0.0220       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Events: 269       ~HR at bound   0.7822       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Month: 18           Spending   0.0154       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                P(Cross) if HR=1   0.0135       NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              P(Cross) if HR=0.6   0.9000       NA</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Optionally require an absolute CP residual no larger than 0.000001.</span></span></span>
 <span class="r-in"><span><span class="va">fit_tight</span> <span class="op">&lt;-</span> <span class="fu">gsCPFutilitySpending</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">x</span>, target_cp <span class="op">=</span> <span class="va">target_cp</span>, i <span class="op">=</span> <span class="fl">1</span>,</span></span>
@@ -306,6 +409,24 @@ constrained parameterization.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">fit_tight</span><span class="op">$</span><span class="va">cpFutilitySpending</span><span class="op">$</span><span class="va">achieved_cp</span> <span class="op">-</span> <span class="va">target_cp</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="fl">1e-6</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Two targets use a two-parameter family and active futility at both interims.</span></span></span>
+<span class="r-in"><span><span class="va">x_two</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsDesign.html">gsDesign</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>, timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.75</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  sfl <span class="op">=</span> <span class="va">sfLogistic</span>, sflpar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit_two</span> <span class="op">&lt;-</span> <span class="fu">gsCPFutilitySpending</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">x_two</span>, target_cp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.5</span><span class="op">)</span>, i <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, theta <span class="op">=</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># IA 1: efficacy at IA 2 or FA; IA 2: efficacy at FA.</span></span></span>
+<span class="r-in"><span><span class="co"># Independently recompute total future CP using each fitted bound's effect.</span></span></span>
+<span class="r-in"><span><span class="va">achieved</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">cp</span> <span class="op">&lt;-</span> <span class="fu"><a href="gsCP.html">gsCP</a></span><span class="op">(</span><span class="va">fit_two</span>, i <span class="op">=</span> <span class="va">j</span>, zi <span class="op">=</span> <span class="va">fit_two</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="va">j</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>             theta <span class="op">=</span> <span class="va">fit_two</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="va">j</span><span class="op">]</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">fit_two</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">j</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">cp</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">achieved</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="fl">1e-4</span>,</span></span>
+<span class="r-in"><span>          <span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">fit_two</span><span class="op">$</span><span class="va">timing</span>, <span class="va">x_two</span><span class="op">$</span><span class="va">timing</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

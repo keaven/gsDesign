@@ -84,8 +84,6 @@ gsBoundSummary(
   )
 ) |>
   lt()
-#> Warning: gsBoundSummary: hr0 is not present; using hr0 =
-#> 1 for HR at bound calculations.
 ```
 
 ## Testing and conditional power

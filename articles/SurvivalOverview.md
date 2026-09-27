@@ -196,8 +196,6 @@ Schoenfeld <- gsDesign(
 Schoenfeld |>
   gsBoundSummary(deltaname = "HR", logdelta = TRUE, Nname = "Events") |>
   lt()
-#> Warning: gsBoundSummary: hr0 is not present; using hr0 =
-#> 1 for HR at bound calculations.
 ```
 
 ### Information based design

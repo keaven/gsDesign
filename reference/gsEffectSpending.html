@@ -19,7 +19,7 @@ power while allowing maximum information to change."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9021</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,8 +71,11 @@ power while allowing maximum information to change.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Fixed-timing gsDesign reference with test.type 3, 4, 7 or 8.
-Direct survival objects are unsupported.</p></dd>
+<dd><p>A <code>gsDesign</code>, <code>gsSurv</code>, <code>gsSurvCalendar</code>, or
+<code>gsSurvPower</code> design with <code>test.type</code> 3, 4, 7, or 8.
+The analysis information fractions in <code>x$timing</code> are held fixed.
+These fractions are distinct from the times supplied to the spending
+functions; see <strong>Information fractions and spending times</strong> below.</p></dd>
 
 
 <dt id="arg-target-effect">target_effect<a class="anchor" aria-label="anchor" href="#arg-target-effect"></a></dt>
@@ -104,8 +107,10 @@ Difference/RR designs require nondegenerate delta0/delta1 metadata and
 n.fix &gt; 1. For RR, delta0/delta1 must be log ratios.
 HR requires information = "events", ratio (experimental/control),
 hr0 (null HR), and hr1 (alternative HR), all explicitly supplied.
-The reference delta must agree with abs(log(hr1/hr0)) *
-sqrt(ratio)/(1 + ratio), verifying its event-count scale.</p></dd>
+For statistical designs, the reference delta must agree with
+abs(log(hr1/hr0)) * sqrt(ratio)/(1 + ratio), verifying its event-count
+scale. For survival designs, metadata must match the stored allocation
+and hazard ratios; the selected survival method determines the drift.</p></dd>
 
 
 <dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
@@ -123,7 +128,8 @@ logit coordinates are searched over [-12, 12].</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A gsDesign object also inheriting from gsEffectSpending. Component
+    <p>A gsDesign object also inheriting from gsEffectSpending, retaining
+  survival classes when applicable. Component
   effectSpending contains a target/achieved/residual table, named spending
   specifications and free parameters, effect metadata, solver diagnostics,
   information inflation, power and local identifiability diagnostics.
@@ -149,6 +155,55 @@ uniqueness. Harm/futility coincidence is reported and may indicate capping.
 A failed search does not prove mathematical infeasibility. Inspect all
 operating characteristics and sample-size inflation before choosing a design.
 Changing timing or rounding need not retain the calibrated effects.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="information-fractions-and-spending-times">Information fractions and spending times<a class="anchor" aria-label="anchor" href="#information-fractions-and-spending-times"></a></h2>
+
+
+<p>All six spending calibrators keep the reference analysis information
+fractions <code>x$timing</code> fixed. These are the cumulative information
+fractions <code>x$n.I / x$n.I[x$k]</code>, ending at 1. For example,
+<code>x$timing = c(.5, .75, 1)</code> keeps the analyses at 50%, 75%, and 100%
+of the final information. Power-preserving calibration may change the
+maximum information and thus the absolute information <code>n.I</code> at every
+analysis while retaining these fractions. Fixed-information calibration
+(<code><a href="gsCAFutilitySpending.html">gsCAFutilitySpending()</a></code> and
+<code>gsCPOSFutilitySpending(mode = "fixed_information")</code>) also holds
+<code>n.I</code> and the efficacy boundaries fixed.</p>
+<p>Spending times are the inputs to the spending functions, stored in
+<code>x$upper$sTime</code> and <code>x$lower$sTime</code>. These are also retained during
+calibration but may differ from the information fractions; for example,
+calendar-based spending uses fractions of calendar time. Thus fixed
+information fractions do not mean that spending must use information time,
+or that absolute calendar analysis dates must be fixed. See
+<strong>Survival designs</strong> for how survival calendar times are handled.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="survival-designs">Survival designs<a class="anchor" aria-label="anchor" href="#survival-designs"></a></h2>
+
+
+<p>Survival inputs retain their survival classes and endpoint assumptions.
+Each candidate reconstructs the statistical design and its survival plan,
+so targets and diagnostics are evaluated on the returned event-count scale.
+For <code><a href="nSurv.html">gsSurv()</a></code> and <code><a href="gsSurvCalendar.html">gsSurvCalendar()</a></code> inputs, information fractions,
+spending times, and the enrollment/follow-up constraint are retained;
+enrollment rates or durations are recalculated as required. Calendar designs
+with fixed enrollment and follow-up retain their calendar schedule up to
+numerical tolerance. Stored calls are not evaluated.</p>
+<p>For <code><a href="gsSurvPower.html">gsSurvPower()</a></code> inputs, power-preserving calibration fixes the
+realized calendar times and enrollment periods and rescales enrollment rates
+to attain the fitted event counts. The evaluated alternative <code>x$hr</code>
+and its achieved power are used, even if the original design alternative
+<code>x$hr1</code> differed. Original event-trigger and calendar-cap rules are not
+re-applied: the realized schedule becomes the new plan. Fixed-information
+conditional-POS/CA calibration instead retains the survival plan, event
+counts and efficacy bounds while updating futility and achieved power.</p>
+<p>Priors and explicit <code>theta</code> remain standardized drifts per square root
+event, not hazard ratios. Rounding with <code><a href="toInteger.html">toInteger()</a></code> after calibration
+can change the target; calibration of an already rounded reference may
+return noninteger event counts. The final analysis is not a valid target
+index for interim calibration: <code>i</code> identifies the interim bound or
+continuation event at which the target is evaluated.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

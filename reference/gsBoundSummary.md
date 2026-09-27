@@ -60,7 +60,14 @@ relative risks, hazard ratios or when the user specifies
 instead by `gsHR()` to be consistent with
 [`plot.gsDesign()`](https://keaven.github.io/gsDesign/reference/plot.gsDesign.md).
 Similarly, the value is computed by `gsRR()` when the relative risk is
-the natural parameter.
+the natural parameter. For HR summaries with `logdelta = TRUE` (or class
+`gsSurv`), missing `x$hr0` and `x$hr` are recovered from `exp(x$delta0)`
+and `exp(x$delta1)`, respectively, when finite and positive. This
+preserves the null HR and effect direction when a survival design is
+reconstructed with
+[`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md).
+Explicit HR fields take precedence. If the null HR cannot be recovered,
+a warning is issued and HR-at-bound calculations assume `hr0 = 1`.
 
 `Spending: `Incremental error spending at each given analysis. For
 asymmetric designs, futility bound will have beta-spending summarized.
@@ -406,7 +413,6 @@ ss <- nSurvival(
 )
 xs <- gsDesign(nFixSurv = ss$n, n.fix = ss$nEvents, delta1 = log(ss$lambda2 / ss$lambda1))
 gsBoundSummary(xs, logdelta = TRUE, ratio = ss$ratio)
-#> Warning: gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.
 #>   Analysis              Value Efficacy Futility
 #>  IA 1: 33%                  Z   3.0107  -0.2387
 #>      N: 34        p (1-sided)   0.0013   0.5943
@@ -586,7 +592,7 @@ xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE),
   caption = "Table caption."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Sat Sep 26 20:44:02 2026
+#> % Sun Sep 27 11:22:47 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{llrr}

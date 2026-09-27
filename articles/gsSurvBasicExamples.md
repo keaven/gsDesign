@@ -432,8 +432,6 @@ gsBoundSummary(
     "HR bounds are approximations; decisions on crossing are based solely on p-values.",
     where = "body", columns = 2, rows = c(3, 6, 9)
   )
-#> Warning: gsBoundSummary: hr0 is not present; using hr0 =
-#> 1 for HR at bound calculations.
 ```
 
 ### Evaluating interim results

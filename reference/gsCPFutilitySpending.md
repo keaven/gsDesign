@@ -25,12 +25,24 @@ gsCPFutilitySpending(
 
 - x:
 
-  A fixed-timing `gsDesign` object with `test.type` 3, 4, 7, or 8.
+  A `gsDesign`, `gsSurv`, `gsSurvCalendar`, or `gsSurvPower` design with
+  `test.type` 3, 4, 7, or 8. The analysis information fractions in
+  `x$timing` are held fixed. These fractions are distinct from the times
+  supplied to the spending functions; see **Information fractions and
+  spending times** below.
 
 - target_cp:
 
   Numeric vector of conditional power targets strictly between zero and
-  one.
+  one, one per interim index in `i`. Each target is the probability of
+  crossing any future efficacy bound, from analysis `i + 1` through the
+  final analysis `x$k`, conditional on the statistic at analysis `i`
+  equaling its candidate futility bound. With `theta = NULL`, the future
+  effect is the observed effect implied by that bound,
+  `lower$bound[i] / sqrt(n.I[i])`; otherwise `theta` specifies the
+  future effect. Future efficacy and futility boundaries remain in
+  force. With multiple targets, each is a total future conditional power
+  at its corresponding interim, not a next-analysis conditional power.
 
 - i:
 
@@ -102,10 +114,11 @@ gsCPFutilitySpending(
 
 ## Value
 
-A calibrated design with class `c("gsCPFutilitySpending", "gsDesign")`.
-The `cpFutilitySpending` component contains targets, achieved
-conditional powers, effects, fitted spending metadata, information,
-reference efficacy and harm specifications, and solver diagnostics.
+A calibrated design inheriting from `gsCPFutilitySpending` and
+`gsDesign`, retaining `gsSurv` and `gsSurvPower` when applicable. The
+`cpFutilitySpending` component contains targets, achieved conditional
+powers, effects, fitted spending metadata, information, reference
+efficacy and harm specifications, and solver diagnostics.
 
 Invalid inputs raise a `gsCPFutilitySpending_input_error`. A well-formed
 target that cannot be attained raises a
@@ -114,14 +127,26 @@ target that cannot be attained raises a
 
 ## Details
 
-Conditional power is evaluated at the candidate lower bound. When
-`theta` is `NULL`, the future effect is the observed effect implied by
-that bound, `lower$bound[i] / sqrt(n.I[i])`, following the default
-convention in
-[`gsCP()`](https://keaven.github.io/gsDesign/reference/gsCP.md). The
+Conditional power is the probability of crossing any efficacy bound
+after the selected interim, through the final analysis, conditional on
+the interim statistic equaling the candidate lower bound. When `theta`
+is `NULL`, the future effect is the observed effect implied by that
+bound, `lower$bound[i] / sqrt(n.I[i])`, following the default convention
+in [`gsCP()`](https://keaven.github.io/gsDesign/reference/gsCP.md). The
 calculation conditions on the interim statistic even though it is at a
 stopping boundary; future futility bounds remain part of the conditional
 power calculation.
+
+For a three-analysis design, `target_cp = .3, i = 1` targets probability
+0.3 of efficacy at analysis 2 or 3, conditional on \\Z_1 = a_1\\, where
+\\a_1\\ is the fitted futility bound. With a two-parameter spending
+family, `target_cp = c(.3, .5), i = c(1, 2)` additionally targets
+probability 0.5 of efficacy at analysis 3 conditional on \\Z_2 = a_2\\.
+Each target uses its own interim conditioning value and, when
+`theta = NULL`, its own bound-implied future effect. These are total
+future conditional powers, not probabilities of efficacy only at the
+next analysis or probabilities that are added together across targeted
+interims.
 
 One-target calibration supports the one-parameter families `sfHSD`,
 `sfPower`, `sfExponential`, and `sfLDOF`. Two-target calibration
@@ -146,6 +171,27 @@ carries the fitted spending function and parameters forward, but
 rounding information can change the achieved conditional power and does
 not trigger recalibration.
 
+## Information fractions and spending times
+
+All six spending calibrators keep the reference analysis information
+fractions `x$timing` fixed. These are the cumulative information
+fractions `x$n.I / x$n.I[x$k]`, ending at 1. For example,
+`x$timing = c(.5, .75, 1)` keeps the analyses at 50%, 75%, and 100% of
+the final information. Power-preserving calibration may change the
+maximum information and thus the absolute information `n.I` at every
+analysis while retaining these fractions. Fixed-information calibration
+([`gsCAFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCAFutilitySpending.md)
+and `gsCPOSFutilitySpending(mode = "fixed_information")`) also holds
+`n.I` and the efficacy boundaries fixed.
+
+Spending times are the inputs to the spending functions, stored in
+`x$upper$sTime` and `x$lower$sTime`. These are also retained during
+calibration but may differ from the information fractions; for example,
+calendar-based spending uses fractions of calendar time. Thus fixed
+information fractions do not mean that spending must use information
+time, or that absolute calendar analysis dates must be fixed. See
+**Survival designs** for how survival calendar times are handled.
+
 ## Spending-parameter search defaults
 
 When not supplied in `control`, parameter limits and fallback starting
@@ -168,6 +214,40 @@ starting proportions are derived from the reference design's cumulative
 lower spending divided by beta and adjusted to satisfy these
 constraints. User-supplied `lower` and `upper` are not supported for its
 constrained parameterization.
+
+## Survival designs
+
+Survival inputs retain their survival classes and endpoint assumptions.
+Each candidate reconstructs the statistical design and its survival
+plan, so targets and diagnostics are evaluated on the returned
+event-count scale. For
+[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+[`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
+inputs, information fractions, spending times, and the
+enrollment/follow-up constraint are retained; enrollment rates or
+durations are recalculated as required. Calendar designs with fixed
+enrollment and follow-up retain their calendar schedule up to numerical
+tolerance. Stored calls are not evaluated.
+
+For
+[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+inputs, power-preserving calibration fixes the realized calendar times
+and enrollment periods and rescales enrollment rates to attain the
+fitted event counts. The evaluated alternative `x$hr` and its achieved
+power are used, even if the original design alternative `x$hr1`
+differed. Original event-trigger and calendar-cap rules are not
+re-applied: the realized schedule becomes the new plan.
+Fixed-information conditional-POS/CA calibration instead retains the
+survival plan, event counts and efficacy bounds while updating futility
+and achieved power.
+
+Priors and explicit `theta` remain standardized drifts per square root
+event, not hazard ratios. Rounding with
+[`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+after calibration can change the target; calibration of an already
+rounded reference may return noninteger event counts. The final analysis
+is not a valid target index for interim calibration: `i` identifies the
+interim bound or continuation event at which the target is evaluated.
 
 ## See also
 
@@ -279,6 +359,35 @@ gsBoundSummary(surv_design, exclude = "B-value")
 #>                P(Cross) if HR=1   0.0196       NA
 #>              P(Cross) if HR=0.6   0.9000       NA
 
+# Survival designs can also be calibrated directly.
+surv_fit <- gsCPFutilitySpending(surv_design, target_cp = .7, i = 1)
+gsBoundSummary(surv_fit, exclude = "B-value")
+#>     Analysis              Value Efficacy Futility
+#>    IA 1: 50%                  Z   2.9626   1.6677
+#>       N: 374        p (1-sided)   0.0015   0.0477
+#>  Events: 135       ~HR at bound   0.5999   0.7500
+#>    Month: 11           Spending   0.0015   0.0969
+#>                              CP   0.9994   0.7000
+#>                           CP H1   0.9994   0.9651
+#>                              PP   0.9901   0.6457
+#>                P(Cross) if HR=1   0.0015   0.9523
+#>              P(Cross) if HR=0.6   0.5018   0.0969
+#>    IA 2: 75%                  Z   2.3590       NA
+#>       N: 420        p (1-sided)   0.0092       NA
+#>  Events: 202       ~HR at bound   0.7173       NA
+#>    Month: 14           Spending   0.0081       NA
+#>                              CP   0.9222       NA
+#>                           CP H1   0.9845       NA
+#>                              PP   0.8904       NA
+#>                P(Cross) if HR=1   0.0078       NA
+#>              P(Cross) if HR=0.6   0.8606       NA
+#>        Final                  Z   2.0141       NA
+#>       N: 420        p (1-sided)   0.0220       NA
+#>  Events: 269       ~HR at bound   0.7822       NA
+#>    Month: 18           Spending   0.0154       NA
+#>                P(Cross) if HR=1   0.0135       NA
+#>              P(Cross) if HR=0.6   0.9000       NA
+
 # Optionally require an absolute CP residual no larger than 0.000001.
 fit_tight <- gsCPFutilitySpending(
   x, target_cp = target_cp, i = 1,
@@ -286,5 +395,23 @@ fit_tight <- gsCPFutilitySpending(
 )
 abs(fit_tight$cpFutilitySpending$achieved_cp - target_cp) <= 1e-6
 #> [1] TRUE
+
+# Two targets use a two-parameter family and active futility at both interims.
+x_two <- gsDesign(
+  k = 3, test.type = 4, timing = c(.5, .75),
+  sfl = sfLogistic, sflpar = c(0, 1)
+)
+fit_two <- gsCPFutilitySpending(
+  x_two, target_cp = c(.3, .5), i = c(1, 2), theta = NULL
+)
+# IA 1: efficacy at IA 2 or FA; IA 2: efficacy at FA.
+# Independently recompute total future CP using each fitted bound's effect.
+achieved <- vapply(1:2, function(j) {
+  cp <- gsCP(fit_two, i = j, zi = fit_two$lower$bound[j],
+             theta = fit_two$lower$bound[j] / sqrt(fit_two$n.I[j]))
+  sum(cp$upper$prob[, 1])
+}, numeric(1))
+stopifnot(max(abs(achieved - c(.3, .5))) <= 1e-4,
+          isTRUE(all.equal(fit_two$timing, x_two$timing)))
 # }
 ```

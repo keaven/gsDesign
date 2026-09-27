@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9021</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -789,9 +789,10 @@ possible software defect has been excluded.</p>
 <h2 id="scope-and-practical-limits">Scope and practical limits<a class="anchor" aria-label="anchor" href="#scope-and-practical-limits"></a>
 </h2>
 <ul>
-<li>Current assurance/POS calibration supports fixed-timing statistical
-<code>gsDesign</code> objects with test types 3 and 4, not direct
-survival objects.</li>
+<li>Assurance/POS calibration supports <code>gsDesign</code> and direct
+survival objects with test types 3 and 4. Fixed-information calibration
+retains the survival plan and efficacy bounds; power-preserving
+calibration recalculates enrollment.</li>
 <li>Harm-bound designs are excluded: current <code><a href="../reference/gsCP.html">gsCPOS()</a></code> does
 not include harm stopping in its continuation denominator.</li>
 <li>Conditional-assurance fits support the existing one-/two-parameter

@@ -25,7 +25,11 @@ gsCAFutilitySpending(
 
 - x:
 
-  A fixed-timing `gsDesign` object with `test.type` 3 or 4.
+  A `gsDesign`, `gsSurv`, `gsSurvCalendar`, or `gsSurvPower` design with
+  `test.type` 3 or 4. The analysis information fractions in `x$timing`
+  are held fixed. These fractions are distinct from the times supplied
+  to the spending functions; see **Information fractions and spending
+  times** below.
 
 - target_ca:
 
@@ -105,6 +109,61 @@ fitted free parameters. A usual power-preserving
 call is not an equivalent reconstruction. The internally fitted beta and
 spending parameters together specify the lower spending rule at the
 fixed information.
+
+## Information fractions and spending times
+
+All six spending calibrators keep the reference analysis information
+fractions `x$timing` fixed. These are the cumulative information
+fractions `x$n.I / x$n.I[x$k]`, ending at 1. For example,
+`x$timing = c(.5, .75, 1)` keeps the analyses at 50%, 75%, and 100% of
+the final information. Power-preserving calibration may change the
+maximum information and thus the absolute information `n.I` at every
+analysis while retaining these fractions. Fixed-information calibration
+(`gsCAFutilitySpending()` and
+`gsCPOSFutilitySpending(mode = "fixed_information")`) also holds `n.I`
+and the efficacy boundaries fixed.
+
+Spending times are the inputs to the spending functions, stored in
+`x$upper$sTime` and `x$lower$sTime`. These are also retained during
+calibration but may differ from the information fractions; for example,
+calendar-based spending uses fractions of calendar time. Thus fixed
+information fractions do not mean that spending must use information
+time, or that absolute calendar analysis dates must be fixed. See
+**Survival designs** for how survival calendar times are handled.
+
+## Survival designs
+
+Survival inputs retain their survival classes and endpoint assumptions.
+Each candidate reconstructs the statistical design and its survival
+plan, so targets and diagnostics are evaluated on the returned
+event-count scale. For
+[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+[`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
+inputs, information fractions, spending times, and the
+enrollment/follow-up constraint are retained; enrollment rates or
+durations are recalculated as required. Calendar designs with fixed
+enrollment and follow-up retain their calendar schedule up to numerical
+tolerance. Stored calls are not evaluated.
+
+For
+[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+inputs, power-preserving calibration fixes the realized calendar times
+and enrollment periods and rescales enrollment rates to attain the
+fitted event counts. The evaluated alternative `x$hr` and its achieved
+power are used, even if the original design alternative `x$hr1`
+differed. Original event-trigger and calendar-cap rules are not
+re-applied: the realized schedule becomes the new plan.
+Fixed-information conditional-POS/CA calibration instead retains the
+survival plan, event counts and efficacy bounds while updating futility
+and achieved power.
+
+Priors and explicit `theta` remain standardized drifts per square root
+event, not hazard ratios. Rounding with
+[`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+after calibration can change the target; calibration of an already
+rounded reference may return noninteger event counts. The final analysis
+is not a valid target index for interim calibration: `i` identifies the
+interim bound or continuation event at which the target is evaluated.
 
 ## See also
 

@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9021</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9023</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -147,6 +147,18 @@ targets are too stringent.</p>
 <div class="section level2">
 <h2 id="what-is-being-calibrated">What is being calibrated?<a class="anchor" aria-label="anchor" href="#what-is-being-calibrated"></a>
 </h2>
+<p>Each CP target is the probability of crossing <strong>any future
+efficacy bound</strong>, from the analysis after the selected interim
+through the final analysis, conditional on the current statistic
+equaling the candidate futility bound. Future futility boundaries remain
+part of the calculation. In a three-analysis design,
+<code>target_cp = c(.3, .5), i = c(1, 2)</code> targets 0.3 for efficacy
+at analysis 2 or 3 given the first futility-bound statistic, and 0.5 for
+efficacy at analysis 3 given the second futility-bound statistic. Each
+target is a total future probability under its own conditioning value;
+it is not restricted to the next analysis. Such a two-target fit
+requires a two-parameter spending family, such as
+<code>sfLogistic</code>.</p>
 <p>With <code>theta = NULL</code>, the default used below, CP assumes
 the observed effect implied by each candidate bound,
 <code>lower$bound[i] / sqrt(n.I[i])</code>. Thus we target the
@@ -159,6 +171,16 @@ targeted looks. This is a standardized effect on the scale used by
 <code>test.type</code> 3, 4, 7, and 8. The examples use type 4, fixed
 information fractions, and Lan-DeMets O’Brien-Fleming efficacy spending
 (<code>sfu = sfLDOF</code>), without <code>sfupar</code>.</p>
+<p>All six calibrators hold <code>x$timing</code> fixed: these are the
+information fractions <code>x$n.I / x$n.I[x$k]</code> at the analyses.
+Power-preserving calibration can change the final information and all
+absolute analysis information levels while keeping those fractions.
+Fixed-information CA/conditional-POS calibration also keeps the absolute
+information levels fixed. Spending-function times, stored in
+<code>x$upper$sTime</code> and <code>x$lower$sTime</code>, are retained
+separately and can differ from the information fractions, as with
+calendar-based spending. Fixed information fractions do not by
+themselves fix calendar analysis dates.</p>
 <table class="table">
 <colgroup>
 <col width="50%">
@@ -970,11 +992,11 @@ differences.</p>
     }
   ]
 }
-})</script><p><code><a href="../reference/gsCPFutilitySpending.html">gsCPFutilitySpending()</a></code> does not currently accept a
-<code>gsSurv</code> object directly. Here calibration is performed on
-<code><a href="../reference/gsDesign.html">gsDesign()</a></code> and its fitted spending is then passed to
-<code><a href="../reference/nSurv.html">gsSurv()</a></code>. The survival summary reports approximate hazard
-ratios at the bounds, rather than a generic standardized effect.</p>
+})</script><p>Survival designs can also be calibrated directly:
+<code>gsCPFutilitySpending(surv_design, target_cp = .3, i = 1)</code>.
+Here the example illustrates transferring a statistical calibration to a
+survival design. The survival summary reports approximate hazard ratios
+at the bounds, rather than a generic standardized effect.</p>
 <p>This first survival example is deliberately a cautionary one. CP 0.3
 after 50% of the planned events gives a futility HR of about 0.8 and
 spends 7.7 percentage points of the total 10% Type II error budget at
@@ -990,29 +1012,18 @@ information.</p>
 <p><code><a href="../reference/gsPPFutilitySpending.html">gsPPFutilitySpending()</a></code> can target PP using the default
 summary prior described in the introduction. For comparison with the
 CP-targeted survival design, keep the same timing, testing indicators,
-spending families, and survival assumptions. First construct a matching
-statistical reference on the <strong>event-count scale</strong>. The
-prior’s numeric support must be on that same standardized-effect scale;
-the normalized <code>n.fix = 1</code> reference from the opening example
-is not interchangeable with it.</p>
+spending families, and survival assumptions. Use the survival reference
+directly on the <strong>event-count scale</strong>. The prior’s numeric
+support must be on that same standardized-effect scale; the normalized
+<code>n.fix = 1</code> reference from the opening example is not
+interchangeable with it.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pp_reference</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
-<span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>, timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.75</span><span class="op">)</span>,</span>
-<span>  n.fix <span class="op">=</span> <span class="va">surv_design</span><span class="op">$</span><span class="va">n.fix</span>,</span>
-<span>  delta0 <span class="op">=</span> <span class="va">surv_design</span><span class="op">$</span><span class="va">delta0</span>, delta1 <span class="op">=</span> <span class="va">surv_design</span><span class="op">$</span><span class="va">delta1</span>,</span>
-<span>  sfu <span class="op">=</span> <span class="va">sfLDOF</span>, sfl <span class="op">=</span> <span class="va">sfHSD</span>, sflpar <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">pp_reference</span> <span class="op">&lt;-</span> <span class="va">surv_design</span></span>
 <span><span class="va">prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/normalGrid.html">normalGrid</a></span><span class="op">(</span></span>
 <span>  mu <span class="op">=</span> <span class="va">pp_reference</span><span class="op">$</span><span class="va">delta</span> <span class="op">/</span> <span class="fl">2</span>, sigma <span class="op">=</span> <span class="fl">10</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">pp_reference</span><span class="op">$</span><span class="va">n.fix</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">fit_pp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsPPFutilitySpending.html">gsPPFutilitySpending</a></span><span class="op">(</span><span class="va">pp_reference</span>, target_pp <span class="op">=</span> <span class="fl">.3</span>, i <span class="op">=</span> <span class="fl">1</span>, prior <span class="op">=</span> <span class="va">prior</span><span class="op">)</span></span>
-<span><span class="va">surv_pp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
-<span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">4</span>, timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.75</span><span class="op">)</span>,</span>
-<span>  sfu <span class="op">=</span> <span class="va">sfLDOF</span>, sfl <span class="op">=</span> <span class="va">sfHSD</span>,</span>
-<span>  sflpar <span class="op">=</span> <span class="va">fit_pp</span><span class="op">$</span><span class="va">ppFutilitySpending</span><span class="op">$</span><span class="va">sflpar</span>,</span>
-<span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span>, ratio <span class="op">=</span> <span class="fl">1</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">surv_pp</span> <span class="op">&lt;-</span> <span class="va">fit_pp</span></span>
 <span><span class="va">achieved_pp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsCP.html">gsPP</a></span><span class="op">(</span></span>
 <span>  <span class="va">surv_pp</span>, i <span class="op">=</span> <span class="fl">1</span>, zi <span class="op">=</span> <span class="va">surv_pp</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
 <span>  theta <span class="op">=</span> <span class="va">prior</span><span class="op">$</span><span class="va">z</span>, wgts <span class="op">=</span> <span class="va">prior</span><span class="op">$</span><span class="va">wgts</span></span>
@@ -1044,9 +1055,8 @@ is not interchangeable with it.</p>
 })</script><p>The <strong>PP</strong> row, not the CP or CP H1 row, now attains 0.3
 at the first futility bound. The prior stays fixed during fitting, but
 each candidate’s posterior uses that candidate’s bound and information.
-As with the CP example, this is statistical calibration followed by
-survival reconstruction, not direct calibration of a survival
-object.</p>
+The returned design includes the recalculated survival enrollment and
+event summaries.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">survival_comparison</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">design</span>, <span class="va">label</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -1067,11 +1077,11 @@ object.</p>
 {
   "data": {
     "Target": ["CP = 0.3", "PP = 0.3"],
-    "FutilityHR": [0.795330347741288, 0.808652301665717],
-    "BetaSpending": [0.0771261053815484, 0.0700087870079223],
-    "IA1Events": [101.544688564569, 97.1972359052637],
-    "FinalEvents": [203.089377129138, 194.394471810527],
-    "MaximumN": [316.940218267034, 303.370994566381]
+    "FutilityHR": [0.795330347741288, 0.808656781952971],
+    "BetaSpending": [0.0771261053815484, 0.0700064041908282],
+    "IA1Events": [101.544688564569, 97.1959758372861],
+    "FinalEvents": [203.089377129138, 194.391951674572],
+    "MaximumN": [316.940218267034, 303.367061655408]
   },
   "ops": [
     {
@@ -1116,26 +1126,11 @@ design.</p>
 <span>  R <span class="op">=</span> <span class="fl">12</span>, minfup <span class="op">=</span> <span class="fl">12</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">calendar_reference</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurvCalendar</span>, <span class="va">calendar_args</span><span class="op">)</span></span></code></pre></div>
-<p>Direct calibration of this object is also unsupported (it has class
-<code>gsSurv</code>). Instead, construct a statistical
-<code><a href="../reference/gsDesign.html">gsDesign()</a></code> reference with its information fractions,
-spending times, fixed-design event count, and effect scale. This is an
-explicit reconstruction, not removal of the survival class to bypass
-validation.</p>
+<p>Calibrate the calendar design directly, retaining its information
+fractions, spending times, and survival assumptions.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">calendar_statistical</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
-<span>  k <span class="op">=</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">k</span>, test.type <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">alpha</span>, beta <span class="op">=</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">beta</span>,</span>
-<span>  n.fix <span class="op">=</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">n.fix</span>, timing <span class="op">=</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">timing</span>,</span>
-<span>  usTime <span class="op">=</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">sTime</span>,</span>
-<span>  lsTime <span class="op">=</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">sTime</span>,</span>
-<span>  delta0 <span class="op">=</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">delta0</span>, delta1 <span class="op">=</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">delta1</span>,</span>
-<span>  sfu <span class="op">=</span> <span class="va">sfLDOF</span>, sfl <span class="op">=</span> <span class="va">sfHSD</span>, sflpar <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  testLower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">calendar_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsCPFutilitySpending.html">gsCPFutilitySpending</a></span><span class="op">(</span><span class="va">calendar_statistical</span>, target_cp <span class="op">=</span> <span class="fl">.2</span>, i <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">calendar_args</span><span class="op">$</span><span class="va">sflpar</span> <span class="op">&lt;-</span> <span class="va">calendar_fit</span><span class="op">$</span><span class="va">cpFutilitySpending</span><span class="op">$</span><span class="va">sflpar</span></span>
-<span><span class="va">calendar_design</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">gsSurvCalendar</span>, <span class="va">calendar_args</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">calendar_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsCPFutilitySpending.html">gsCPFutilitySpending</a></span><span class="op">(</span><span class="va">calendar_reference</span>, target_cp <span class="op">=</span> <span class="fl">.2</span>, i <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">calendar_design</span> <span class="op">&lt;-</span> <span class="va">calendar_fit</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">calendar_design</span><span class="op">$</span><span class="va">timing</span> <span class="op">-</span> <span class="va">calendar_reference</span><span class="op">$</span><span class="va">timing</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">1e-6</span><span class="op">)</span></span>
 <span><span class="fu">check_cp</span><span class="op">(</span><span class="va">calendar_design</span>, <span class="fl">.2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
@@ -1143,8 +1138,8 @@ validation.</p>
   "data": {
     "Analysis": [1],
     "Target": [0.2],
-    "CP": [0.199992031932681],
-    "Residual": [-7.96806731889754e-06],
+    "CP": [0.19999999999721],
+    "Residual": [-2.79021250548794e-12],
     "Events": [159.6]
   }
 }
@@ -1160,7 +1155,7 @@ validation.</p>
   "data": {
     "Analysis": [1, 2, 3],
     "Month": [18, 27, 36],
-    "InformationFraction": [0.375050395142474, 0.732421644669053, 1],
+    "InformationFraction": [0.375050395142474, 0.732421644669052, 1],
     "Events": [159.6, 311.8, 425.6]
   }
 }
@@ -1173,7 +1168,7 @@ validation.</p>
     "Analysis": ["IA 1: 38%", "N: 480", "Events: 160", "Month: 18", "", "", "", "", "", "IA 2: 73%", "N: 638", "Events: 312", "Month: 27", "", "", "", "", "", "Final", "N: 638", "Events: 426", "Month: 36", "", ""],
     "Value": ["Z", "p (1-sided)", "~HR at bound", "Spending", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.7", "Z", "p (1-sided)", "~HR at bound", "Spending", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.7", "Z", "p (1-sided)", "~HR at bound", "Spending", "P(Cross) if HR=1", "P(Cross) if HR=0.7"],
     "Efficacy": [3.4783, 3e-04, 0.5766, 3e-04, 1, 0.9994, 0.9984, 3e-04, 0.1108, 2.3767, 0.0087, 0.764, 0.0086, 0.9315, 0.9748, 0.898, 0.0083, 0.7648, 2.0079, 0.0223, 0.8231, 0.0162, 0.02, 0.9],
-    "Futility": [0.8134, 0.208, 0.8792, 0.0746, 0.2, 0.8445, 0.3033, 0.792, 0.0746, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+    "Futility": [0.8135, 0.208, 0.8792, 0.0746, 0.2, 0.8445, 0.3033, 0.792, 0.0746, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
   },
   "ops": [
     {
@@ -1206,7 +1201,10 @@ sequential monitoring. Alpha is 0.025 one-sided and power is 90% in both
 calculations. Use <code>sfCauchy</code> for the worked example and
 compare all six families below. At 40% information, CP 0.3 would also be
 a stringent first futility target. We instead use CP 0.2 at 40% and CP
-0.3 at 75% information.</p>
+0.3 at 75% information. The first target covers efficacy at either the
+second interim or the final analysis; the second covers efficacy at the
+final analysis, each conditional on its own fitted futility-bound
+statistic.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_binomial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varBinomial.html">nBinomial</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.15</span>, p2 <span class="op">=</span> <span class="fl">.10</span>, alpha <span class="op">=</span> <span class="fl">.025</span>, beta <span class="op">=</span> <span class="fl">.1</span>, ratio <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">n_binomial</span></span>
@@ -1669,11 +1667,14 @@ recalibration.</li>
 <code><a href="../reference/toInteger.html">toInteger()</a></code> retains the fitted spending specification,
 but rounding can change achieved CP and does not automatically
 recalibrate the design.</li>
-<li>The calibration input must currently be a fixed-timing
-<code><a href="../reference/gsDesign.html">gsDesign()</a></code> object. Direct survival or calendar-time
-calibration is not implemented by either calibration function. Use
-<code><a href="../reference/gsPPFutilitySpending.html">gsPPFutilitySpending()</a></code> for prior-averaged predictive power
-rather than <code><a href="../reference/gsCPFutilitySpending.html">gsCPFutilitySpending()</a></code>.</li>
+<li>All six calibrators accept <code><a href="../reference/nSurv.html">gsSurv()</a></code>,
+<code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>, and <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> inputs.
+For power objects, power-preserving calibration fixes the realized
+schedule and rescales enrollment; fixed-information CA/conditional-POS
+calibration retains the event counts and enrollment. See the Survival
+designs section of <code><a href="../reference/gsCPFutilitySpending.html">?gsCPFutilitySpending</a></code> for details. Use
+<code><a href="../reference/gsPPFutilitySpending.html">gsPPFutilitySpending()</a></code> for prior-averaged predictive
+power.</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

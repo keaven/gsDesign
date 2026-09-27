@@ -324,10 +324,12 @@ metadata. It also supports an alternative HR above the null; the effect
 direction is explicit, rather than assuming HR below 1 is always the
 favorable direction.
 
-This is a statistical event-driven design, not an accrual/calendar-time
-survival design. Direct gsSurv()/gsSurvCalendar() objects remain
-unsupported. An accrual model and its reconstruction require separate
-validation.
+This example uses a statistical event-driven design.
+[`gsEffectSpending()`](https://keaven.github.io/gsDesign/reference/gsEffectSpending.md)
+also accepts survival objects directly and recalculates their enrollment
+and event summaries. HR calibration still requires explicit event-scale
+metadata, which must match the survival object’s allocation and hazard
+ratios. Its chosen survival method determines the event-count drift.
 
 For risk ratios, use scale = “rr” with correctly specified **log-ratio**
 delta0/delta1 reference metadata, but supply target_effect as a ratio.
