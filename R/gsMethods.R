@@ -758,6 +758,13 @@ gsBoundSummary0 <- function(
 #' computed instead by \code{gsHR()} to be consistent with
 #' \code{plot.gsDesign()}. Similarly, the value is computed by \code{gsRR()}
 #' when the relative risk is the natural parameter.
+#' For HR summaries with \code{logdelta = TRUE} (or class \code{gsSurv}),
+#' missing \code{x$hr0} and \code{x$hr} are recovered from
+#' \code{exp(x$delta0)} and \code{exp(x$delta1)}, respectively, when finite
+#' and positive. This preserves the null HR and effect direction when a
+#' survival design is reconstructed with \code{gsDesign()}. Explicit HR
+#' fields take precedence. If the null HR cannot be recovered, a warning
+#' is issued and HR-at-bound calculations assume \code{hr0 = 1}.
 #'
 #' \code{Spending: }Incremental error spending at each given analysis. For
 #' asymmetric designs, futility bound will have beta-spending summarized.
@@ -1001,8 +1008,21 @@ gsBoundSummary <- function(
     r = 18,
     alpha = NULL,
     ...) {
-  if (gsBoundSummaryUsesHR(x, deltaname) && is.null(x$hr0)) {
-    warning("gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.", call. = FALSE)
+  if (gsBoundSummaryUsesHR(x, deltaname)) {
+    # gsDesign() retains natural-scale parameters, but not survival HR fields.
+    # Only interpret these as log HRs when the summary uses the log scale.
+    if (logdelta || inherits(x, "gsSurv")) {
+      for (field in c("hr0", "hr")) {
+        delta <- x[[if (field == "hr0") "delta0" else "delta1"]]
+        if (is.null(x[[field]]) && is.numeric(delta) && length(delta) == 1L &&
+            is.finite(delta) && is.finite(exp(delta)) && exp(delta) > 0) {
+          x[[field]] <- exp(delta)
+        }
+      }
+    }
+    if (is.null(x$hr0)) {
+      warning("gsBoundSummary: hr0 is not present; using hr0 = 1 for HR at bound calculations.", call. = FALSE)
+    }
   }
 
   # Get initial table
@@ -1081,6 +1101,9 @@ gsBoundSummary <- function(
 
     # Create design with new alpha and the original efficacy testing schedule
     y <- gsAlternateAlphaDesign(x = x, alpha = a, r = r)
+    # Retain recovered or explicitly supplied HR metadata at alternate alpha.
+    y$hr0 <- x$hr0
+    y$hr <- x$hr
 
     # Get summary for design with new alpha
     yout <- gsBoundSummary0(

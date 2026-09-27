@@ -6,7 +6,7 @@
 #' is rebuilt with \code{gsDesign()}, recalculating information to preserve the
 #' reference design's target unconditional power.
 #'
-#' @param x A fixed-timing \code{gsDesign} object with \code{test.type} 3, 4, 7, or 8.
+#' @inheritParams gsCPFutilitySpending
 #' @param target_pp Numeric vector of predictive power targets strictly between
 #'   zero and one.
 #' @param i Unique active interim futility analysis indices, one per target,
@@ -70,9 +70,7 @@
 #' Preserve the complete reference design when replaying fitted parameters.
 #' Changing timing, efficacy or harm spending, or testing indicators requires
 #' recalibration. Use the same prior and effect scale when verifying PP with
-#' \code{gsBoundSummary()}. Direct survival-object calibration is unsupported;
-#' the vignette \code{vignette("CPFutilitySpending")} shows reconstruction of
-#' a survival design from a matching statistical reference.
+#' \code{gsBoundSummary()}. Survival designs can be calibrated directly.
 #'
 #' \code{toInteger()} retains the spending specification but does not
 #' recalibrate PP after rounding. Extremely remote prior support can make the
@@ -81,9 +79,12 @@
 #' can be constructed.
 #'
 #' @inheritSection gsCPFutilitySpending Spending-parameter search defaults
+#' @inheritSection gsCPFutilitySpending Information fractions and spending times
+#' @inheritSection gsCPFutilitySpending Survival designs
 #'
 #' @return A calibrated object with class
-#'   \code{c("gsPPFutilitySpending", "gsDesign")}. Its
+#'   \code{c("gsPPFutilitySpending", "gsDesign")}, with survival classes
+#'   retained when applicable. Its
 #'   \code{ppFutilitySpending} component records \code{target_pp},
 #'   \code{achieved_pp}, residuals, analysis indices, normalized prior,
 #'   fitted spending parameters, information, unconditional power, reference
@@ -171,7 +172,7 @@ gsPPFutilitySpending <- function(x, target_pp, i = seq_along(target_pp),
     meta$solver$message <- .gsPPFMessage(meta$solver$message)
     result$cpFutilitySpending <- NULL
     result$ppFutilitySpending <- meta
-    class(result) <- c("gsPPFutilitySpending", "gsDesign")
+    class(result) <- .gsSpendingClass(result, "gsPPFutilitySpending")
     result
   }, gsCPFutilitySpending_error = function(e) {
     if (!startsWith(conditionMessage(e), "Unknown control component")) {

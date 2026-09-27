@@ -157,6 +157,8 @@ test_that("PP-targeted survival reconstruction uses the matching default prior",
   expect_equal(prior, normalGrid(mu = surv$delta / 2, sigma = 10 / sqrt(surv$n.fix)))
   expect_lte(abs(pp_at_futility(surv, 1, prior) - .3), 1e-4)
   expect_equal(sum(surv$upper$prob[, 2]), .9, tolerance = 2e-5)
-  expect_error(gsPPFutilitySpending(reference, .3, prior = prior),
-               class = "gsPPFutilitySpending_input_error")
+  direct <- gsPPFutilitySpending(reference, .3, prior = prior)
+  expect_s3_class(direct, "gsSurv")
+  expect_lte(abs(pp_at_futility(direct, 1, prior) - .3), 1e-4)
+  expect_equal(direct$n.I, surv$n.I, tolerance = 1e-4)
 })

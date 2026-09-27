@@ -9,6 +9,8 @@
 #' terminal decision at the fixed efficacy boundary are consistent.
 #'
 #' @inheritParams gsCPOSFutilitySpending
+#' @inheritSection gsCPFutilitySpending Information fractions and spending times
+#' @inheritSection gsCPFutilitySpending Survival designs
 #' @param target_ca Conditional-assurance targets strictly between zero and one.
 #' @param i Unique active interim futility indices, one per target.
 #' @param control Named numerical controls. Use \code{ca_tol} for the maximum
@@ -93,7 +95,8 @@ gsCAFutilitySpending <- function(x, target_ca, i = seq_along(target_ca),
     meta$solver$message <- .gsCAFMessage(meta$solver$message)
     result$cposFutilitySpending <- NULL
     result$caFutilitySpending <- meta
-    class(result) <- c("gsCAFutilitySpending", "gsDesign")
+    result$call <- call
+    class(result) <- .gsSpendingClass(result, "gsCAFutilitySpending")
     result
   }, error = function(e) {
     if (!inherits(e, c("gsCPFutilitySpending_error", "gsCPOSFutilitySpending_error"))) stop(e)
@@ -153,6 +156,9 @@ gsCAFutilitySpending <- function(x, target_ca, i = seq_along(target_ca),
     candidate$lower$spend <- increments
     candidate$upper$prob <- p$upper$prob
     candidate$en <- p$en
+    if (inherits(candidate, "gsSurvPower")) {
+      candidate$power <- sum(p$upper$prob[, 2L])
+    }
     candidate
   }
   # Search feasible beta values before root refinement. Extreme spending shapes

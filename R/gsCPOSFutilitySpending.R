@@ -4,7 +4,11 @@
 #' Select beta-spending parameters to match \code{gsCPOS()} targets at selected
 #' interims, either preserving reference power or fixing reference information.
 #'
-#' @param x A fixed-timing \code{gsDesign} object with \code{test.type} 3 or 4.
+#' @param x A \code{gsDesign}, \code{gsSurv}, \code{gsSurvCalendar}, or
+#'   \code{gsSurvPower} design with \code{test.type} 3 or 4.
+#'   The analysis information fractions in \code{x$timing} are held fixed.
+#'   These fractions are distinct from the times supplied to the spending
+#'   functions; see \strong{Information fractions and spending times} below.
 #' @param target_cpos Numeric conditional assurance targets strictly between
 #'   zero and one, one per selected interim.
 #' @param i Unique active interim futility indices, defaulting to
@@ -64,14 +68,16 @@
 #' Candidate continuation probabilities at or below
 #' \code{sqrt(.Machine$double.eps)} are rejected to avoid unstable conditioning.
 #' Harm-bound designs are unsupported because \code{gsCPOS()} does not account
-#' for their harm stopping probability in its denominator. Direct survival
-#' objects are unsupported; use a matching fixed-timing statistical design.
+#' for their harm stopping probability in its denominator.
 #' Replay parameters with the complete reference design and the same prior.
 #' Spending functions retain their usual timing flexibility, but changed
 #' timing, testing indicators or rounding need not retain exact target values.
 #'
 #' @inheritSection gsCPFutilitySpending Spending-parameter search defaults
-#' @return A \code{c("gsCPOSFutilitySpending", "gsDesign")} object. Component
+#' @inheritSection gsCPFutilitySpending Information fractions and spending times
+#' @inheritSection gsCPFutilitySpending Survival designs
+#' @return A \code{c("gsCPOSFutilitySpending", "gsDesign")} object, retaining
+#'   survival classes when applicable. Component
 #'   \code{cposFutilitySpending} contains targets (\code{target_cpos}), achieved
 #'   values (\code{achieved_cpos}), residuals, indices, normalized prior, fitted
 #'   parameters, information and power, reference settings and solver diagnostics.
@@ -159,7 +165,7 @@ gsCPOSFutilitySpending <- function(x, target_cpos, i = seq_along(target_cpos),
     meta$solver$message <- .gsCPOSFMessage(meta$solver$message)
     result$cpFutilitySpending <- NULL
     result$cposFutilitySpending <- meta
-    class(result) <- c("gsCPOSFutilitySpending", "gsDesign")
+    class(result) <- .gsSpendingClass(result, "gsCPOSFutilitySpending")
     result
   }, gsCPFutilitySpending_error = function(e) {
     if (!startsWith(conditionMessage(e), "Unknown control component")) {

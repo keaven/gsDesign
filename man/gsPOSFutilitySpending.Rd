@@ -7,7 +7,11 @@
 gsPOSFutilitySpending(x, target_pos, sfl = "sfHSD", prior, control = list())
 }
 \arguments{
-\item{x}{A fixed-timing \code{gsDesign} object with \code{test.type} 3 or 4.}
+\item{x}{A \code{gsDesign}, \code{gsSurv}, \code{gsSurvCalendar}, or
+\code{gsSurvPower} design with \code{test.type} 3 or 4.
+The analysis information fractions in \code{x$timing} are held fixed.
+These fractions are distinct from the times supplied to the spending
+functions; see \strong{Information fractions and spending times} below.}
 
 \item{target_pos}{A single probability of success strictly between zero and
 one for the complete design. This is not an interim-specific target.}
@@ -32,7 +36,8 @@ Other controls and defaults are as in \code{\link{gsCPOSFutilitySpending}}:
 \code{backward}, and \code{trace}. Unknown or invalid controls are errors.}
 }
 \value{
-A \code{c("gsPOSFutilitySpending", "gsDesign")} object with
+A \code{c("gsPOSFutilitySpending", "gsDesign")} object, retaining
+  survival classes when applicable, with
   \code{posFutilitySpending} diagnostics. These include \code{target_pos},
   \code{achieved_pos}, residual, normalized prior, fitted parameters,
   information, frequentist power, reference settings and solver diagnostics
@@ -62,6 +67,56 @@ by that target. A valid starting solution can be returned, but does not imply
 uniqueness. Other priors can also produce flat or nonmonotone objectives.
 Inspect information inflation and all operating characteristics.
 }
+\section{Information fractions and spending times}{
+
+All six spending calibrators keep the reference analysis information
+fractions \code{x$timing} fixed. These are the cumulative information
+fractions \code{x$n.I / x$n.I[x$k]}, ending at 1. For example,
+\code{x$timing = c(.5, .75, 1)} keeps the analyses at 50\%, 75\%, and 100\%
+of the final information. Power-preserving calibration may change the
+maximum information and thus the absolute information \code{n.I} at every
+analysis while retaining these fractions. Fixed-information calibration
+(\code{gsCAFutilitySpending()} and
+\code{gsCPOSFutilitySpending(mode = "fixed_information")}) also holds
+\code{n.I} and the efficacy boundaries fixed.
+
+Spending times are the inputs to the spending functions, stored in
+\code{x$upper$sTime} and \code{x$lower$sTime}. These are also retained during
+calibration but may differ from the information fractions; for example,
+calendar-based spending uses fractions of calendar time. Thus fixed
+information fractions do not mean that spending must use information time,
+or that absolute calendar analysis dates must be fixed. See
+\strong{Survival designs} for how survival calendar times are handled.
+}
+
+\section{Survival designs}{
+
+Survival inputs retain their survival classes and endpoint assumptions.
+Each candidate reconstructs the statistical design and its survival plan,
+so targets and diagnostics are evaluated on the returned event-count scale.
+For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
+spending times, and the enrollment/follow-up constraint are retained;
+enrollment rates or durations are recalculated as required. Calendar designs
+with fixed enrollment and follow-up retain their calendar schedule up to
+numerical tolerance. Stored calls are not evaluated.
+
+For \code{gsSurvPower()} inputs, power-preserving calibration fixes the
+realized calendar times and enrollment periods and rescales enrollment rates
+to attain the fitted event counts. The evaluated alternative \code{x$hr}
+and its achieved power are used, even if the original design alternative
+\code{x$hr1} differed. Original event-trigger and calendar-cap rules are not
+re-applied: the realized schedule becomes the new plan. Fixed-information
+conditional-POS/CA calibration instead retains the survival plan, event
+counts and efficacy bounds while updating futility and achieved power.
+
+Priors and explicit \code{theta} remain standardized drifts per square root
+event, not hazard ratios. Rounding with \code{toInteger()} after calibration
+can change the target; calibration of an already rounded reference may
+return noninteger event counts. The final analysis is not a valid target
+index for interim calibration: \code{i} identifies the interim bound or
+continuation event at which the target is evaluated.
+}
+
 \examples{
 x <- gsDesign(k = 3, test.type = 4, sflpar = 1)
 prior <- list(z = c(0, x$delta / 2, x$delta), wgts = c(.1, .4, .5))

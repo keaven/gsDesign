@@ -6,6 +6,8 @@
 #' information to preserve reference frequentist power.
 #'
 #' @inheritParams gsCPOSFutilitySpending
+#' @inheritSection gsCPFutilitySpending Information fractions and spending times
+#' @inheritSection gsCPFutilitySpending Survival designs
 #' @param target_pos A single probability of success strictly between zero and
 #'   one for the complete design. This is not an interim-specific target.
 #' @param sfl A supported one-parameter lower spending function or its name.
@@ -36,7 +38,8 @@
 #' uniqueness. Other priors can also produce flat or nonmonotone objectives.
 #' Inspect information inflation and all operating characteristics.
 #'
-#' @return A \code{c("gsPOSFutilitySpending", "gsDesign")} object with
+#' @return A \code{c("gsPOSFutilitySpending", "gsDesign")} object, retaining
+#'   survival classes when applicable, with
 #'   \code{posFutilitySpending} diagnostics. These include \code{target_pos},
 #'   \code{achieved_pos}, residual, normalized prior, fitted parameters,
 #'   information, frequentist power, reference settings and solver diagnostics
@@ -105,7 +108,7 @@ gsPOSFutilitySpending <- function(x, target_pos,
     meta$solver$message <- .gsPOSFMessage(meta$solver$message)
     result$cpFutilitySpending <- NULL
     result$posFutilitySpending <- meta
-    class(result) <- c("gsPOSFutilitySpending", "gsDesign")
+    class(result) <- .gsSpendingClass(result, "gsPOSFutilitySpending")
     result
   }, gsCPFutilitySpending_error = function(e) {
     if (!startsWith(conditionMessage(e), "Unknown control component")) {

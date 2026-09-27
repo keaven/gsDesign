@@ -247,6 +247,13 @@ specifies \code{logdelta=TRUE}. In the case of hazard ratios, the value is
 computed instead by \code{gsHR()} to be consistent with
 \code{plot.gsDesign()}. Similarly, the value is computed by \code{gsRR()}
 when the relative risk is the natural parameter.
+For HR summaries with \code{logdelta = TRUE} (or class \code{gsSurv}),
+missing \code{x$hr0} and \code{x$hr} are recovered from
+\code{exp(x$delta0)} and \code{exp(x$delta1)}, respectively, when finite
+and positive. This preserves the null HR and effect direction when a
+survival design is reconstructed with \code{gsDesign()}. Explicit HR
+fields take precedence. If the null HR cannot be recovered, a warning
+is issued and HR-at-bound calculations assume \code{hr0 = 1}.
 
 \code{Spending: }Incremental error spending at each given analysis. For
 asymmetric designs, futility bound will have beta-spending summarized.

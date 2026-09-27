@@ -26,7 +26,7 @@ nEventsIA <- function(tIA = 5, x = NULL, target = 0, simple = TRUE) {
     Tfinal = x$T[length(x$T)], minfup = x$minfup
   )
   eDE <- eEvents(
-    lambda = x$lambdaC * x$hr, eta = x$etaC,
+    lambda = x$lambdaC * x$hr, eta = x$etaE,
     gamma = x$gamma * Qe, R = x$R, S = x$S, T = tIA,
     Tfinal = x$T[length(x$T)], minfup = x$minfup
   )

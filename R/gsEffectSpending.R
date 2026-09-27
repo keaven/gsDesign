@@ -5,8 +5,9 @@
 #' are rebuilt with gsDesign(), preserving nominal error budgets and planned
 #' power while allowing maximum information to change.
 #'
-#' @param x Fixed-timing gsDesign reference with test.type 3, 4, 7 or 8.
-#'   Direct survival objects are unsupported.
+#' @inheritParams gsCPFutilitySpending
+#' @inheritSection gsCPFutilitySpending Information fractions and spending times
+#' @inheritSection gsCPFutilitySpending Survival designs
 #' @param target_effect Finite natural-scale effect targets.
 #' @param i Interim indices, one per target. Duplicate boundary/index pairs
 #'   and inactive boundaries are not allowed.
@@ -20,8 +21,10 @@
 #'   n.fix > 1. For RR, delta0/delta1 must be log ratios.
 #'   HR requires information = "events", ratio (experimental/control),
 #'   hr0 (null HR), and hr1 (alternative HR), all explicitly supplied.
-#'   The reference delta must agree with abs(log(hr1/hr0)) *
-#'   sqrt(ratio)/(1 + ratio), verifying its event-count scale.
+#'   For statistical designs, the reference delta must agree with
+#'   abs(log(hr1/hr0)) * sqrt(ratio)/(1 + ratio), verifying its event-count
+#'   scale. For survival designs, metadata must match the stored allocation
+#'   and hazard ratios; the selected survival method determines the drift.
 #' @param control Named solver list. start, lower and upper are parameter
 #'   vectors for one boundary or named lists by boundary for joint fits.
 #'   Defaults use the reference/family settings described in
@@ -52,7 +55,8 @@
 #' operating characteristics and sample-size inflation before choosing a design.
 #' Changing timing or rounding need not retain the calibrated effects.
 #'
-#' @return A gsDesign object also inheriting from gsEffectSpending. Component
+#' @return A gsDesign object also inheriting from gsEffectSpending, retaining
+#'   survival classes when applicable. Component
 #'   effectSpending contains a target/achieved/residual table, named spending
 #'   specifications and free parameters, effect metadata, solver diagnostics,
 #'   information inflation, power and local identifiability diagnostics.
@@ -76,6 +80,7 @@ gsEffectSpending <- function(x, target_effect, i = seq_along(target_effect),
                              control = list()) {
   call <- match.call()
   tryCatch({
+    x <- .gsSpendingReference(x)
     targets <- .gsEffectTargets(x, target_effect, i, bound)
     if (length(scale) != 1L || !is.character(scale) || is.na(scale) ||
         !scale %in% c("difference", "rr", "hr")) .gsEffectAbort("Invalid effect scale.")
@@ -211,7 +216,7 @@ gsEffectSpending <- function(x, target_effect, i = seq_along(target_effect),
       reference = list(alpha = x$alpha, beta = x$beta, astar = x$astar, n.I = x$n.I),
       replay = replay, call = call)
     d$call <- call
-    class(d) <- c("gsEffectSpending", "gsDesign")
+    class(d) <- .gsSpendingClass(d, "gsEffectSpending")
     d
   }, gsCPFutilitySpending_error = function(e) {
     e$message <- gsub("conditional power", "effect", conditionMessage(e), fixed = TRUE)
@@ -286,7 +291,12 @@ gsEffectSpending <- function(x, target_effect, i = seq_along(target_effect),
         effect$hr0 == effect$hr1) .gsEffectAbort("Invalid HR metadata.")
     psi <- effect$ratio / (1 + effect$ratio)^2
     expected <- abs(log(effect$hr1 / effect$hr0)) * sqrt(psi)
-    if (length(x$delta) != 1L || !is.finite(x$delta) ||
+    if (inherits(x, "gsSurv")) {
+      if (!isTRUE(all.equal(c(effect$ratio, effect$hr0, effect$hr1),
+                           c(x$ratio, x$hr0, x$hr), tolerance = 1e-7))) {
+        .gsEffectAbort("HR metadata is inconsistent with the survival reference.")
+      }
+    } else if (length(x$delta) != 1L || !is.finite(x$delta) ||
         abs(x$delta - expected) > 1e-7 * max(1, expected)) {
       .gsEffectAbort("Reference delta is inconsistent with HR metadata on the event-count scale.")
     }
