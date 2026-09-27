@@ -68,7 +68,7 @@
 
 - Power plots omit curves and annotations for inactive boundaries while
   retaining cumulative probabilities and original analysis numbers. Use
-  `show_skipped = TRUE` to include skipped looks (#349).
+  `showSkipped = TRUE` to include skipped looks (#349).
 
 - `print.gsSurv()` no longer truncates spending function parameters with
   decimal values, such as the t-distribution parameters printed as
