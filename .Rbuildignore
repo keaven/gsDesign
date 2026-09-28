@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.gitattributes$
+^\.git$
 ^_pkgdown\.yml$
 ^pkgdown$
 ^\.github$

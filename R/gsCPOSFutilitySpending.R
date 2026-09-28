@@ -13,8 +13,9 @@
 #'   zero and one, one per selected interim.
 #' @param i Unique active interim futility indices, defaulting to
 #'   \code{seq_along(target_cpos)}. Results are ordered by analysis.
-#' @param sfl Supported lower spending function or its name; default
-#'   \code{"sfHSD"}. See Details.
+#' @param sfl Supported lower spending function or its name. Defaults to
+#'   \code{x$lower$sf}, the reference futility spending function. Supply
+#'   \code{sfl} to override it. See Details.
 #' @param prior List with finite numeric vectors \code{z} (standardized effects
 #'   on the \code{gsCPOS()} theta scale) and \code{wgts} (nonnegative prior masses
 #'   or density-weighted quadrature weights). Weights must have positive total
@@ -106,7 +107,7 @@
 #'   \code{\link{gsPPFutilitySpending}}, \code{\link{gsCPFutilitySpending}}
 #' @export
 gsCPOSFutilitySpending <- function(x, target_cpos, i = seq_along(target_cpos),
-                                 sfl = "sfHSD", prior, control = list(),
+                                 sfl = x$lower$sf, prior, control = list(),
                                  mode = c("preserve_power", "fixed_information")) {
   call <- match.call()
   sfl_expr <- substitute(sfl)

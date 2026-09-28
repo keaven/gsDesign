@@ -67,7 +67,7 @@
 #'   \code{\link{gsPOS}}, \code{\link{gsBound1}}
 #' @export
 gsCAFutilitySpending <- function(x, target_ca, i = seq_along(target_ca),
-                                 sfl = "sfHSD", prior, control = list()) {
+                                 sfl = x$lower$sf, prior, control = list()) {
   call <- match.call()
   tryCatch({
     if (missing(prior)) {

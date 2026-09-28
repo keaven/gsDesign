@@ -7,65 +7,99 @@ template:
   math-rendering: "mathjax"
 
 reference:
-- title: Group Sequential Computation
+# Select each shared help topic once; pkgdown lists its function aliases together.
+- title: Group Sequential Design
   desc: >
-    For an overview of the gsDesign package, see
-    `vignette("gsDesignPackageOverview")`.
+    Start with `vignette("gsDesignPackageOverview")`. Derive a design,
+    inspect its operating characteristics, and round the design for implementation.
   contents:
+  - gsDesign-package
   - gsDesign
   - plot.gsDesign
   - gsProbability
-  - gsBound1
-  - gsBound
-  - sequentialPValue
-- title: Design Characterization
+  - toInteger
+- title: Design Summaries and Effect Scales
+  desc: >
+    Summarize boundaries, power, spending, and approximate treatment effects.
+    The shared `gsBoundSummary()` topic also documents `summary()`, `gsDelta()`,
+    `gsHR()`, `gsRR()`, and related boundary transformations.
   contents:
   - gsBoundSummary
-  - print.gsBoundSummary
-  - gsDelta
   - xtable
-  - xprint
+  - as_table
+  - lt
+  - lt-methods
+  - lt.gsVETable
+  - as_rtf
+  - as_gt
+- title: Calibrating Spending to Interim Targets
+  desc: >
+    Translate CP, predictive power, probability of success, or approximate
+    treatment-effect targets into spending-function parameters. Start with
+    `vignette("CPFutilitySpending")`, `vignette("DragalinFutilitySpending")`,
+    or `vignette("EffectSpending")`. For conditional probability of success,
+    `gsCPOSFutilitySpending()` supports both preserve-power and fixed-information
+    modes; `gsCAFutilitySpending()` is the fixed-information compatibility wrapper.
+  contents:
+  - gsCPFutilitySpending
+  - gsPPFutilitySpending
+  - gsEffectSpending
+  - gsPOSFutilitySpending
+  - gsCPOSFutilitySpending
+  - gsCAFutilitySpending
+- title: Conditional Power and Probability of Success
+  desc: >
+    Calculate CP and predictive power at an observed interim result, prior
+    probability of success, or conditional probability of success given
+    continuation. The shared `gsCP()` topic includes `gsPP()`, `gsPOS()`,
+    `gsCPOS()`, `gsPosterior()`, and `gsPI()`.
+  contents:
+  - gsCP
+  - gsBoundCP
+  - normalGrid
+  - gsDensity
+- title: Sample Size Adaptation
+  desc: >
+    Conditional-power-based sample size re-estimation and combination tests.
+  contents:
+  - ssrCP
+- title: Spending Functions
+  desc: >
+    Standard spending families, flexible piecewise spending, and spending
+    modifications. See `vignette("SpendingFunctionOverview")`; calibration
+    functions for clinical interim targets are listed separately above.
+  contents:
+  - spendingFunction
+  - sfLDOF
+  - sfHSD
+  - sfPower
+  - sfExponential
+  - sfLogistic
+  - sfTDist
+  - sfLinear
+  - sfPoints
+  - sfTruncated
+  - sfXG1
 - title: Normal Endpoint Design
   contents:
   - nNormal
-- title: Binomial Endpoint Design
+- title: Two-Arm Binomial Endpoint Design
   contents:
   - nBinomial
-  - gsRR
-  - simBinomial
-  - testBinomial
-  - varBinomial
-  - ciBinomial
   - binomialPowerTable
-- title: Time-to-Event Endpoint Design
+- title: Single-Arm Exact Binomial Design
   desc: >
-    Early, independent and more limited implementation of Lachin and Foulkes
-    methods are in `nSurvival()` and `print.nSurvival()`.
+    Exact binomial group sequential designs, sequential probability ratio tests,
+    and fixed-design sample sizes.
   contents:
-  - gsSurv
-  - print.gsSurv
-  - gsSurvCalendar
-  - gsSurvPower
-  - nSurv
-  - nEvents
-  - gsHR
-  - zn2hr
-  - hrn2z
-  - hrz2n
-  - eEvents
-  - nEventsIA
-  - tEventsIA
-  - toInteger
-  - minMedianFollowUp
-  - medianFollowUp
-  - plotMinMedianFollowUp
-  - nSurvival
-  - print.nSurvival
-- title: Vaccine/Prevention Efficacy
+  - gsBinomialExact
+- title: Exact Binomial Monitoring and Vaccine/Prevention Efficacy
+  desc: >
+    Transform survival designs to exact binomial monitoring, evaluate conditional
+    power and sequential inference, and simulate seasonal rare-event trials.
   contents:
   - toBinomialExact
   - VEtable
-  - lt.gsVETable
   - ciBinomialExact
   - repeatedCIBinomialExact
   - sequentialCIBinomialExact
@@ -73,87 +107,32 @@ reference:
   - repeatedPValueBinomialExact
   - sequentialPValueBinomialExact
   - simBinomialSeasonalExact
-- title: Spending Functions
+- title: Time-to-Event Design and Power
   desc: >
-    For an overview of spending functions, see
-    `vignette("SpendingFunctionOverview")`.
+    Use `gsSurv()` for information-driven designs, `gsSurvCalendar()` for
+    calendar-time looks, and `gsSurvPower()` for power under a fixed plan.
+    The shared `gsSurv()` topic includes `nSurv()`, `nEventsIA()`, and `tEventsIA()`.
+    The earlier, more limited Lachin-Foulkes implementation and additional
+    event-count and hazard-ratio conversions are documented in `nSurvival()`.
   contents:
-  - spendingFunction
-  - summary.spendfn
-  - sfLDPocock
-  - sfLDOF
-  - sfHSD
-  - sfPower
-  - sfExponential
-  - sfNormal
-  - sfCauchy
-  - sfTDist
-  - sfLogistic
-  - sfBetaDist
-  - sfExtremeValue
-  - sfExtremeValue2
-  - sfLinear
-  - sfStep
-  - sfPoints
-  - sfTrimmed
-  - sfTruncated
-  - sfGapped
-  - sfXG1
-  - sfXG2
-  - sfXG3
-  - gsCPFutilitySpending
-  - gsPPFutilitySpending
-  - gsCPOSFutilitySpending
-  - gsCAFutilitySpending
-  - gsPOSFutilitySpending
-  - gsEffectSpending
-- title: Conditional and Predictive Power
+  - gsSurv
+  - gsSurvCalendar
+  - gsSurvPower
+  - nSurvival
+- title: Survival Event Counts and Follow-Up
   contents:
-  - gsCP
-  - gsCPFutilitySpending
-  - gsCPz
-  - gsBoundCP
-  - gsBValue
-  - normalGrid
-  - gsDensity
-  - gsPosterior
-  - gsPOS
-  - gsPP
-  - gsCPOS
-  - gsPI
-- title: Sample Size Adaptation
+  - eEvents
+  - medianFollowUp
+  - plotMinMedianFollowUp
+- title: Low-Level Boundary Computation and Input Checking
   contents:
-  - ssrCP
-  - condPower
-  - Power.ssrCP
-  - z2Fisher
-  - z2Z
-  - z2NC
-- title: Single Arm Binomial Design
-  contents:
-  - gsBinomialExact
-  - plot.gsBinomialExact
-  - binomialSPRT
-  - plot.binomialSPRT
-  - nBinomial1Sample
-- title: Input Checking
-  contents:
-  - isInteger
+  - gsBound
+  - sequentialPValue
   - checkLengths
-  - checkRange
-  - checkScalar
-  - checkVector
-- title: Summary tables
-  contents:
-  - as_table
-  - as_table.gsBinomialExact
-  - lt-methods
-  - as_gt
-  - as_rtf
-  - as_rtf.gsBinomialExactTable
 
 articles:
   - title: "General information"
+    navbar: "Getting started"
     desc: >
       Introductory and broad overview materials.
     contents:
@@ -164,6 +143,7 @@ articles:
       - nNormal
       - binomialTwoSample
   - title: "Designing for time-to-event endpoints"
+    navbar: "Time-to-event designs"
     desc: >
       These vignettes provide an introduction to designing group sequential trials with
       time-to-event endpoints using gsDesign.
@@ -178,6 +158,7 @@ articles:
       - PoissonMixtureModel
       - SeqDesignSurvival
   - title: "Exact binomial designs with spending"
+    navbar: "Exact binomial designs"
     desc: >
       Exact binomial workflows, including spending-function-based designs.
     contents:
@@ -185,12 +166,14 @@ articles:
       - MultiSeasonRareEvents
       - binomialSPRTExample
   - title: "Multiple hypothesis testing"
+    navbar: "Multiple testing"
     desc: >
       Graphical and related multiple testing workflows.
     contents:
       - hGraph
       - GraphicalMultiplicity
   - title: "Conditional power and adaptation"
+    navbar: "Interim targets and adaptation"
     desc: >
       Interim decision support and adaptation-oriented examples.
     contents:

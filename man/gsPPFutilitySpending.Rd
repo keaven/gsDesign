@@ -8,8 +8,8 @@ gsPPFutilitySpending(
   x,
   target_pp,
   i = seq_along(target_pp),
-  sfl = "sfHSD",
-  prior,
+  sfl = x$lower$sf,
+  prior = normalGrid(mu = x$delta/2, sigma = 10/sqrt(x$n.fix)),
   control = list()
 )
 }
@@ -26,16 +26,21 @@ zero and one.}
 \item{i}{Unique active interim futility analysis indices, one per target,
 in \code{1:(x$k - 1)}. Results are ordered by analysis.}
 
-\item{sfl}{Supported lower spending function or its character name. Default
-\code{"sfHSD"}. See Details for supported families.}
+\item{sfl}{Supported lower spending function or its character name. Defaults
+to \code{x$lower$sf}, the reference futility spending function. Supply
+\code{sfl} to override it. See Details for supported families.}
 
 \item{prior}{A list containing finite numeric vectors \code{z} and
 \code{wgts} of the same positive length. \code{z} gives standardized effect
 values on the \code{gsPP()} theta scale. \code{wgts} gives nonnegative prior
 masses or density-weighted quadrature weights, with positive total weight.
-For example, use \code{normalGrid(mu = x$delta / 2,
-sigma = 10 / sqrt(x$n.fix))} for the default prior in
-\code{gsBoundSummary(x)}. Weights are normalized internally; the normalized
+Defaults to \code{normalGrid(mu = x$delta / 2,
+sigma = 10 / sqrt(x$n.fix))}, the same prior as in
+\code{gsBoundSummary(x)}: a normal prior centered halfway between the null
+and alternative, with information equivalent to 1 percent of the
+fixed-design sample size (or event count). The default is constructed from
+the reference design \code{x} and held fixed during calibration.
+Weights are normalized internally; the normalized
 prior is retained in the result. A one-point prior targets fixed-effect CP.}
 
 \item{control}{Optional named list of numerical solver settings. Unspecified
@@ -195,18 +200,18 @@ x <- gsDesign(
   sfu = sfLDOF, sfl = sfHSD, sflpar = 1,
   testLower = c(TRUE, FALSE, FALSE)
 )
-prior <- normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix))
-fit <- gsPPFutilitySpending(x, target_pp = .3, i = 1, prior = prior)
+# Both calibration and summary use the same default prior.
+fit <- gsPPFutilitySpending(x, target_pp = .3, i = 1)
 final_design <- gsDesign(
   k = 3, test.type = 4, timing = c(.5, .75),
   sfu = sfLDOF, sfl = sfHSD,
   sflpar = fit$ppFutilitySpending$sflpar,
   testLower = c(TRUE, FALSE, FALSE)
 )
-gsBoundSummary(final_design, prior = prior, exclude = "B-value")
+gsBoundSummary(final_design, exclude = "B-value")
 # Optional tighter predictive power acceptance tolerance:
 fit_tight <- gsPPFutilitySpending(
-  x, target_pp = .3, i = 1, prior = prior,
+  x, target_pp = .3, i = 1,
   control = list(pp_tol = 1e-6)
 )
 fit_tight$ppFutilitySpending$residual

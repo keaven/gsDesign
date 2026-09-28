@@ -4,7 +4,7 @@
 \alias{gsPOSFutilitySpending}
 \title{Calibrate Futility Spending to Unconditional Probability of Success}
 \usage{
-gsPOSFutilitySpending(x, target_pos, sfl = "sfHSD", prior, control = list())
+gsPOSFutilitySpending(x, target_pos, sfl = x$lower$sf, prior, control = list())
 }
 \arguments{
 \item{x}{A \code{gsDesign}, \code{gsSurv}, \code{gsSurvCalendar}, or
@@ -17,7 +17,9 @@ functions; see \strong{Information fractions and spending times} below.}
 one for the complete design. This is not an interim-specific target.}
 
 \item{sfl}{A supported one-parameter lower spending function or its name.
-Default \code{"sfHSD"}. A custom function must expose exactly one free
+Defaults to \code{x$lower$sf}, the reference futility spending function.
+Supply \code{sfl} to override it; a two-parameter reference family requires
+an explicit one-parameter choice. A custom function must expose exactly one free
 parameter. For \code{sfLinear}, a single free knot is placed at the first
 active interim futility spending time.}
 

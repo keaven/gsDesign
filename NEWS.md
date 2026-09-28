@@ -23,6 +23,9 @@
 
 ## New features
 
+- `gsPPFutilitySpending()` now defaults to the same normal prior as
+  `gsBoundSummary()`, while continuing to accept user-specified priors.
+
 - All six spending-calibration functions accept survival designs from
   `gsSurv()`, `gsSurvCalendar()`, and `gsSurvPower()`, retaining survival
   classes and rebuilding enrollment and event summaries (#345).
@@ -69,6 +72,11 @@
   C-library alternative (#322).
 
 ## Bug fixes
+
+- PP, CA, CPOS, and POS futility calibration now inherit the reference
+  futility spending function by default, matching CP calibration. This fixes
+  multi-target PP calibration with a two-parameter reference family; explicit
+  spending overrides and the one-parameter requirement for POS remain supported.
 
 - Log-scale HR summaries recover missing null and alternative hazard ratios
   from retained `delta0` and `delta1`, avoiding a spurious warning after
@@ -117,6 +125,10 @@
   the suggested **gt** package.
 
 ## Documentation
+
+- Reorganized the pkgdown reference index by workflow, highlighting spending
+  calibration and keeping shared help topics together. The Articles menu now
+  lists every article directly under category headings.
 
 - Clarified that all six spending calibrators hold analysis information
   fractions (`x$timing`) fixed, separately from spending times. Defined CP
