@@ -1,10 +1,14 @@
 # Package index
 
-## Group Sequential Computation
+## Group Sequential Design
 
-For an overview of the gsDesign package, see
+Start with
 [`vignette("gsDesignPackageOverview")`](https://keaven.github.io/gsDesign/articles/gsDesignPackageOverview.md).
+Derive a design, inspect its operating characteristics, and round the
+design for implementation.
 
+- [`gsDesign-package`](https://keaven.github.io/gsDesign/reference/gsDesign-package.md)
+  : gsDesign: Group Sequential Design
 - [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
   [`xtable(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
   : Design Derivation
@@ -14,13 +18,20 @@ For an overview of the gsDesign package, see
 - [`gsProbability()`](https://keaven.github.io/gsDesign/reference/gsProbability.md)
   [`print(`*`<gsProbability>`*`)`](https://keaven.github.io/gsDesign/reference/gsProbability.md)
   : Boundary Crossing Probabilities
-- [`gsBound()`](https://keaven.github.io/gsDesign/reference/gsBound.md)
-  [`gsBound1()`](https://keaven.github.io/gsDesign/reference/gsBound.md)
-  : Boundary derivation - low level
-- [`sequentialPValue()`](https://keaven.github.io/gsDesign/reference/sequentiaPValue.md)
-  : Sequential p-value computation
+- [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+  : Translate group sequential design to integer events (survival
+  designs) or sample size (other designs)
 
-## Design Characterization
+## Design Summaries and Effect Scales
+
+Summarize boundaries, power, spending, and approximate treatment
+effects. The shared
+[`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+topic also documents [`summary()`](https://rdrr.io/r/base/summary.html),
+[`gsDelta()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
+[`gsHR()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
+[`gsRR()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
+and related boundary transformations.
 
 - [`summary(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   [`print(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
@@ -35,114 +46,95 @@ For an overview of the gsDesign package, see
   : Bound Summary and Z-transformations
 - [`xtable`](https://keaven.github.io/gsDesign/reference/xtable.md) :
   xtable
-
-## Normal Endpoint Design
-
-- [`nNormal()`](https://keaven.github.io/gsDesign/reference/nNormal.md)
-  : Normal distribution sample size (2-sample)
-
-## Binomial Endpoint Design
-
-- [`ciBinomial()`](https://keaven.github.io/gsDesign/reference/varBinomial.md)
-  [`nBinomial()`](https://keaven.github.io/gsDesign/reference/varBinomial.md)
-  [`simBinomial()`](https://keaven.github.io/gsDesign/reference/varBinomial.md)
-  [`testBinomial()`](https://keaven.github.io/gsDesign/reference/varBinomial.md)
-  [`varBinomial()`](https://keaven.github.io/gsDesign/reference/varBinomial.md)
-  : Testing, Confidence Intervals, Sample Size and Power for Comparing
-  Two Binomial Rates
-- [`summary(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`print(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`xprint()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`print(`*`<gsBoundSummary>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsBValue()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsDelta()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsRR()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsHR()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsCPz()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  : Bound Summary and Z-transformations
-- [`binomialPowerTable()`](https://keaven.github.io/gsDesign/reference/binomialPowerTable.md)
-  : Power Table for Binomial Tests
-
-## Time-to-Event Endpoint Design
-
-Early, independent and more limited implementation of Lachin and Foulkes
-methods are in
-[`nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-and
-[`print.nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md).
-
-- [`tEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  [`nEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  [`print(`*`<nSurv>`*`)`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  [`xtable(`*`<gsSurv>`*`)`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  [`print(`*`<gsSurv>`*`)`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  : Advanced time-to-event sample size calculation
-- [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
-  : Group sequential design with calendar-based timing of analyses
-- [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
-  : Compute power for a group sequential survival design
-- [`print(`*`<nSurvival>`*`)`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`nEvents()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`zn2hr()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`hrn2z()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  [`hrz2n()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
-  : Time-to-event sample size calculation (Lachin-Foulkes)
-- [`summary(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`print(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`xprint()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`print(`*`<gsBoundSummary>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsBValue()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsDelta()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsRR()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsHR()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsCPz()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  : Bound Summary and Z-transformations
-- [`eEvents()`](https://keaven.github.io/gsDesign/reference/eEvents.md)
-  [`print(`*`<eEvents>`*`)`](https://keaven.github.io/gsDesign/reference/eEvents.md)
-  : Expected number of events for a time-to-event study
-- [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
-  : Translate group sequential design to integer events (survival
-  designs) or sample size (other designs)
-- [`medianFollowUp()`](https://keaven.github.io/gsDesign/reference/medianFollowUp.md)
-  [`minMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/medianFollowUp.md)
-  : Median follow-up across all planned participants
-- [`plotMinMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/plotMinMedianFollowUp.md)
-  : Plot median follow-up across all planned participants
-
-## Vaccine/Prevention Efficacy
-
-- [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
-  : Translate survival design bounds to exact binomial bounds
-- [`VEtable()`](https://keaven.github.io/gsDesign/reference/VEtable.md)
-  : Summarize an exact binomial vaccine or prevention efficacy design
+- [`as_table()`](https://keaven.github.io/gsDesign/reference/as_table.md)
+  : Create a summary table
+- [`reexports`](https://keaven.github.io/gsDesign/reference/reexports.md)
+  [`lt`](https://keaven.github.io/gsDesign/reference/reexports.md) :
+  Objects exported from other packages
+- [`lt(`*`<gsBinomialExactTable>`*`)`](https://keaven.github.io/gsDesign/reference/lt-methods.md)
+  : Convert a summary table object to an lt table
 - [`lt(`*`<gsVETable>`*`)`](https://keaven.github.io/gsDesign/reference/lt-gsVETable.md)
   : Format a vaccine or prevention efficacy summary table
-- [`ciBinomialExact()`](https://keaven.github.io/gsDesign/reference/ciBinomialExact.md)
-  : Exact confidence intervals for vaccine or prevention efficacy
-- [`repeatedCIBinomialExact()`](https://keaven.github.io/gsDesign/reference/repeatedCIBinomialExact.md)
-  : Exact repeated confidence intervals for vaccine or prevention
-  efficacy
-- [`sequentialCIBinomialExact()`](https://keaven.github.io/gsDesign/reference/sequentialCIBinomialExact.md)
-  : Exact sequential confidence intervals for vaccine or prevention
-  efficacy
-- [`gsCPBinomialExact()`](https://keaven.github.io/gsDesign/reference/gsCPBinomialExact.md)
-  : Exact conditional power for a group sequential binomial design
-- [`repeatedPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/repeatedPValueBinomialExact.md)
-  : Exact binomial repeated p-values for a group sequential design
-- [`sequentialPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/sequentialPValueBinomialExact.md)
-  : Exact binomial sequential p-value for a group sequential design
-- [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
-  : Simulate exact-binomial seasonal monitoring scenarios
+- [`as_rtf()`](https://keaven.github.io/gsDesign/reference/as_rtf.md) :
+  Save a summary table object as an RTF file
+- [`as_gt()`](https://keaven.github.io/gsDesign/reference/as_gt.md) :
+  Convert a summary table object to a gt object
+
+## Calibrating Spending to Interim Targets
+
+Translate CP, predictive power, probability of success, or approximate
+treatment-effect targets into spending-function parameters. Start with
+[`vignette("CPFutilitySpending")`](https://keaven.github.io/gsDesign/articles/CPFutilitySpending.md),
+[`vignette("DragalinFutilitySpending")`](https://keaven.github.io/gsDesign/articles/DragalinFutilitySpending.md),
+or
+[`vignette("EffectSpending")`](https://keaven.github.io/gsDesign/articles/EffectSpending.md).
+For conditional probability of success,
+[`gsCPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPOSFutilitySpending.md)
+supports both preserve-power and fixed-information modes;
+[`gsCAFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCAFutilitySpending.md)
+is the fixed-information compatibility wrapper.
+
+- [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
+  : Calibrate Futility Spending to Conditional Power Targets
+- [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
+  : Calibrate Futility Spending to Predictive Power Targets
+- [`gsEffectSpending()`](https://keaven.github.io/gsDesign/reference/gsEffectSpending.md)
+  : Calibrate Spending to Natural-Scale Effects at Boundaries
+- [`gsPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPOSFutilitySpending.md)
+  : Calibrate Futility Spending to Unconditional Probability of Success
+- [`gsCPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPOSFutilitySpending.md)
+  : Calibrate Futility Spending to Conditional Probability of Success
+- [`gsCAFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCAFutilitySpending.md)
+  : Calibrate Futility Spending at Fixed Information
+
+## Conditional Power and Probability of Success
+
+Calculate CP and predictive power at an observed interim result, prior
+probability of success, or conditional probability of success given
+continuation. The shared
+[`gsCP()`](https://keaven.github.io/gsDesign/reference/gsCP.md) topic
+includes
+[`gsPP()`](https://keaven.github.io/gsDesign/reference/gsCP.md),
+[`gsPOS()`](https://keaven.github.io/gsDesign/reference/gsCP.md),
+[`gsCPOS()`](https://keaven.github.io/gsDesign/reference/gsCP.md),
+[`gsPosterior()`](https://keaven.github.io/gsDesign/reference/gsCP.md),
+and [`gsPI()`](https://keaven.github.io/gsDesign/reference/gsCP.md).
+
+- [`gsCP()`](https://keaven.github.io/gsDesign/reference/gsCP.md)
+  [`gsPP()`](https://keaven.github.io/gsDesign/reference/gsCP.md)
+  [`gsPI()`](https://keaven.github.io/gsDesign/reference/gsCP.md)
+  [`gsPosterior()`](https://keaven.github.io/gsDesign/reference/gsCP.md)
+  [`gsPOS()`](https://keaven.github.io/gsDesign/reference/gsCP.md)
+  [`gsCPOS()`](https://keaven.github.io/gsDesign/reference/gsCP.md) :
+  Conditional and Predictive Power, Overall and Conditional Probability
+  of Success
+- [`gsBoundCP()`](https://keaven.github.io/gsDesign/reference/gsBoundCP.md)
+  : Conditional Power at Interim Boundaries
+- [`normalGrid()`](https://keaven.github.io/gsDesign/reference/normalGrid.md)
+  : Normal Density Grid
+- [`gsDensity()`](https://keaven.github.io/gsDesign/reference/gsDensity.md)
+  : Group sequential design interim density function
+
+## Sample Size Adaptation
+
+Conditional-power-based sample size re-estimation and combination tests.
+
+- [`condPower()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
+  [`ssrCP()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
+  [`plot(`*`<ssrCP>`*`)`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
+  [`z2NC()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
+  [`z2Z()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
+  [`z2Fisher()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
+  [`Power.ssrCP()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
+  : Sample size re-estimation based on conditional power
 
 ## Spending Functions
 
-For an overview of spending functions, see
-[`vignette("SpendingFunctionOverview")`](https://keaven.github.io/gsDesign/articles/SpendingFunctionOverview.md).
+Standard spending families, flexible piecewise spending, and spending
+modifications. See
+[`vignette("SpendingFunctionOverview")`](https://keaven.github.io/gsDesign/articles/SpendingFunctionOverview.md);
+calibration functions for clinical interim targets are listed separately
+above.
 
 - [`summary(`*`<spendfn>`*`)`](https://keaven.github.io/gsDesign/reference/spendingFunction.md)
   [`spendingFunction()`](https://keaven.github.io/gsDesign/reference/spendingFunction.md)
@@ -178,61 +170,28 @@ For an overview of spending functions, see
   [`sfXG2()`](https://keaven.github.io/gsDesign/reference/sfXG.md)
   [`sfXG3()`](https://keaven.github.io/gsDesign/reference/sfXG.md) : Xi
   and Gallo conditional error spending functions
-- [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
-  : Calibrate Futility Spending to Conditional Power Targets
-- [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
-  : Calibrate Futility Spending to Predictive Power Targets
-- [`gsCPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPOSFutilitySpending.md)
-  : Calibrate Futility Spending to Conditional Probability of Success
-- [`gsCAFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCAFutilitySpending.md)
-  : Calibrate Futility Spending at Fixed Information
-- [`gsPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPOSFutilitySpending.md)
-  : Calibrate Futility Spending to Unconditional Probability of Success
-- [`gsEffectSpending()`](https://keaven.github.io/gsDesign/reference/gsEffectSpending.md)
-  : Calibrate Spending to Natural-Scale Effects at Boundaries
 
-## Conditional and Predictive Power
+## Normal Endpoint Design
 
-- [`gsCP()`](https://keaven.github.io/gsDesign/reference/gsCP.md)
-  [`gsPP()`](https://keaven.github.io/gsDesign/reference/gsCP.md)
-  [`gsPI()`](https://keaven.github.io/gsDesign/reference/gsCP.md)
-  [`gsPosterior()`](https://keaven.github.io/gsDesign/reference/gsCP.md)
-  [`gsPOS()`](https://keaven.github.io/gsDesign/reference/gsCP.md)
-  [`gsCPOS()`](https://keaven.github.io/gsDesign/reference/gsCP.md) :
-  Conditional and Predictive Power, Overall and Conditional Probability
-  of Success
-- [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
-  : Calibrate Futility Spending to Conditional Power Targets
-- [`summary(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`print(`*`<gsDesign>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`xprint()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`print(`*`<gsBoundSummary>`*`)`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsBValue()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsDelta()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsRR()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsHR()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  [`gsCPz()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  : Bound Summary and Z-transformations
-- [`gsBoundCP()`](https://keaven.github.io/gsDesign/reference/gsBoundCP.md)
-  : Conditional Power at Interim Boundaries
-- [`normalGrid()`](https://keaven.github.io/gsDesign/reference/normalGrid.md)
-  : Normal Density Grid
-- [`gsDensity()`](https://keaven.github.io/gsDesign/reference/gsDensity.md)
-  : Group sequential design interim density function
+- [`nNormal()`](https://keaven.github.io/gsDesign/reference/nNormal.md)
+  : Normal distribution sample size (2-sample)
 
-## Sample Size Adaptation
+## Two-Arm Binomial Endpoint Design
 
-- [`condPower()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
-  [`ssrCP()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
-  [`plot(`*`<ssrCP>`*`)`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
-  [`z2NC()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
-  [`z2Z()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
-  [`z2Fisher()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
-  [`Power.ssrCP()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
-  : Sample size re-estimation based on conditional power
+- [`ciBinomial()`](https://keaven.github.io/gsDesign/reference/varBinomial.md)
+  [`nBinomial()`](https://keaven.github.io/gsDesign/reference/varBinomial.md)
+  [`simBinomial()`](https://keaven.github.io/gsDesign/reference/varBinomial.md)
+  [`testBinomial()`](https://keaven.github.io/gsDesign/reference/varBinomial.md)
+  [`varBinomial()`](https://keaven.github.io/gsDesign/reference/varBinomial.md)
+  : Testing, Confidence Intervals, Sample Size and Power for Comparing
+  Two Binomial Rates
+- [`binomialPowerTable()`](https://keaven.github.io/gsDesign/reference/binomialPowerTable.md)
+  : Power Table for Binomial Tests
 
-## Single Arm Binomial Design
+## Single-Arm Exact Binomial Design
+
+Exact binomial group sequential designs, sequential probability ratio
+tests, and fixed-design sample sizes.
 
 - [`gsBinomialExact()`](https://keaven.github.io/gsDesign/reference/gsBinomialExact.md)
   [`binomialSPRT()`](https://keaven.github.io/gsDesign/reference/gsBinomialExact.md)
@@ -241,22 +200,92 @@ For an overview of spending functions, see
   [`nBinomial1Sample()`](https://keaven.github.io/gsDesign/reference/gsBinomialExact.md)
   : One-Sample Binomial Routines
 
-## Input Checking
+## Exact Binomial Monitoring and Vaccine/Prevention Efficacy
 
+Transform survival designs to exact binomial monitoring, evaluate
+conditional power and sequential inference, and simulate seasonal
+rare-event trials.
+
+- [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
+  : Translate survival design bounds to exact binomial bounds
+- [`VEtable()`](https://keaven.github.io/gsDesign/reference/VEtable.md)
+  : Summarize an exact binomial vaccine or prevention efficacy design
+- [`ciBinomialExact()`](https://keaven.github.io/gsDesign/reference/ciBinomialExact.md)
+  : Exact confidence intervals for vaccine or prevention efficacy
+- [`repeatedCIBinomialExact()`](https://keaven.github.io/gsDesign/reference/repeatedCIBinomialExact.md)
+  : Exact repeated confidence intervals for vaccine or prevention
+  efficacy
+- [`sequentialCIBinomialExact()`](https://keaven.github.io/gsDesign/reference/sequentialCIBinomialExact.md)
+  : Exact sequential confidence intervals for vaccine or prevention
+  efficacy
+- [`gsCPBinomialExact()`](https://keaven.github.io/gsDesign/reference/gsCPBinomialExact.md)
+  : Exact conditional power for a group sequential binomial design
+- [`repeatedPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/repeatedPValueBinomialExact.md)
+  : Exact binomial repeated p-values for a group sequential design
+- [`sequentialPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/sequentialPValueBinomialExact.md)
+  : Exact binomial sequential p-value for a group sequential design
+- [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
+  : Simulate exact-binomial seasonal monitoring scenarios
+
+## Time-to-Event Design and Power
+
+Use [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+for information-driven designs,
+[`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
+for calendar-time looks, and
+[`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+for power under a fixed plan. The shared
+[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) topic
+includes
+[`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md),
+[`nEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md),
+and
+[`tEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md).
+The earlier, more limited Lachin-Foulkes implementation and additional
+event-count and hazard-ratio conversions are documented in
+[`nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md).
+
+- [`tEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  [`nEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  [`print(`*`<nSurv>`*`)`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  [`xtable(`*`<gsSurv>`*`)`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  [`print(`*`<gsSurv>`*`)`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  : Advanced time-to-event sample size calculation
+- [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
+  : Group sequential design with calendar-based timing of analyses
+- [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
+  : Compute power for a group sequential survival design
+- [`print(`*`<nSurvival>`*`)`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`nEvents()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`zn2hr()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`hrn2z()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  [`hrz2n()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
+  : Time-to-event sample size calculation (Lachin-Foulkes)
+
+## Survival Event Counts and Follow-Up
+
+- [`eEvents()`](https://keaven.github.io/gsDesign/reference/eEvents.md)
+  [`print(`*`<eEvents>`*`)`](https://keaven.github.io/gsDesign/reference/eEvents.md)
+  : Expected number of events for a time-to-event study
+- [`medianFollowUp()`](https://keaven.github.io/gsDesign/reference/medianFollowUp.md)
+  [`minMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/medianFollowUp.md)
+  : Median follow-up across all planned participants
+- [`plotMinMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/plotMinMedianFollowUp.md)
+  : Plot median follow-up across all planned participants
+
+## Low-Level Boundary Computation and Input Checking
+
+- [`gsBound()`](https://keaven.github.io/gsDesign/reference/gsBound.md)
+  [`gsBound1()`](https://keaven.github.io/gsDesign/reference/gsBound.md)
+  : Boundary derivation - low level
+- [`sequentialPValue()`](https://keaven.github.io/gsDesign/reference/sequentiaPValue.md)
+  : Sequential p-value computation
 - [`checkLengths()`](https://keaven.github.io/gsDesign/reference/checkScalar.md)
   [`checkRange()`](https://keaven.github.io/gsDesign/reference/checkScalar.md)
   [`checkScalar()`](https://keaven.github.io/gsDesign/reference/checkScalar.md)
   [`checkVector()`](https://keaven.github.io/gsDesign/reference/checkScalar.md)
   [`isInteger()`](https://keaven.github.io/gsDesign/reference/checkScalar.md)
   : Utility functions to verify variable properties
-
-## Summary tables
-
-- [`as_table()`](https://keaven.github.io/gsDesign/reference/as_table.md)
-  : Create a summary table
-- [`lt(`*`<gsBinomialExactTable>`*`)`](https://keaven.github.io/gsDesign/reference/lt-methods.md)
-  : Convert a summary table object to an lt table
-- [`as_gt()`](https://keaven.github.io/gsDesign/reference/as_gt.md) :
-  Convert a summary table object to a gt object
-- [`as_rtf()`](https://keaven.github.io/gsDesign/reference/as_rtf.md) :
-  Save a summary table object as an RTF file

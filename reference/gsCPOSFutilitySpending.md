@@ -12,7 +12,7 @@ gsCPOSFutilitySpending(
   x,
   target_cpos,
   i = seq_along(target_cpos),
-  sfl = "sfHSD",
+  sfl = x$lower$sf,
   prior,
   control = list(),
   mode = c("preserve_power", "fixed_information")
@@ -41,8 +41,9 @@ gsCPOSFutilitySpending(
 
 - sfl:
 
-  Supported lower spending function or its name; default `"sfHSD"`. See
-  Details.
+  Supported lower spending function or its name. Defaults to
+  `x$lower$sf`, the reference futility spending function. Supply `sfl`
+  to override it. See Details.
 
 - prior:
 

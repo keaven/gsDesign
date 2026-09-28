@@ -8,7 +8,7 @@ Recalculate maximum information to preserve reference frequentist power.
 ## Usage
 
 ``` r
-gsPOSFutilitySpending(x, target_pos, sfl = "sfHSD", prior, control = list())
+gsPOSFutilitySpending(x, target_pos, sfl = x$lower$sf, prior, control = list())
 ```
 
 ## Arguments
@@ -28,10 +28,12 @@ gsPOSFutilitySpending(x, target_pos, sfl = "sfHSD", prior, control = list())
 
 - sfl:
 
-  A supported one-parameter lower spending function or its name. Default
-  `"sfHSD"`. A custom function must expose exactly one free parameter.
-  For `sfLinear`, a single free knot is placed at the first active
-  interim futility spending time.
+  A supported one-parameter lower spending function or its name.
+  Defaults to `x$lower$sf`, the reference futility spending function.
+  Supply `sfl` to override it; a two-parameter reference family requires
+  an explicit one-parameter choice. A custom function must expose
+  exactly one free parameter. For `sfLinear`, a single free knot is
+  placed at the first active interim futility spending time.
 
 - prior:
 

@@ -15,7 +15,7 @@ gsCAFutilitySpending(
   x,
   target_ca,
   i = seq_along(target_ca),
-  sfl = "sfHSD",
+  sfl = x$lower$sf,
   prior,
   control = list()
 )
@@ -41,8 +41,9 @@ gsCAFutilitySpending(
 
 - sfl:
 
-  Supported lower spending function or its name; default `"sfHSD"`. See
-  Details.
+  Supported lower spending function or its name. Defaults to
+  `x$lower$sf`, the reference futility spending function. Supply `sfl`
+  to override it. See Details.
 
 - prior:
 

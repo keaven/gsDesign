@@ -230,33 +230,30 @@ information.
 ### Targeting predictive power instead
 
 [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
-can target PP using the default summary prior described in the
-introduction. For comparison with the CP-targeted survival design, keep
-the same timing, testing indicators, spending families, and survival
-assumptions. Use the survival reference directly on the **event-count
-scale**. The prior’s numeric support must be on that same
-standardized-effect scale; the normalized `n.fix = 1` reference from the
-opening example is not interchangeable with it.
+uses the same default prior as
+[`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
+described in the introduction; neither call requires a `prior` argument.
+For comparison with the CP-targeted survival design, keep the same
+timing, testing indicators, spending families, and survival assumptions.
+Use the survival reference directly on the **event-count scale**. The
+prior’s numeric support must be on that same standardized-effect scale;
+the normalized `n.fix = 1` reference from the opening example is not
+interchangeable with it.
 
 ``` r
 
 pp_reference <- surv_design
-prior <- normalGrid(
-  mu = pp_reference$delta / 2, sigma = 10 / sqrt(pp_reference$n.fix)
-)
-fit_pp <- gsPPFutilitySpending(pp_reference, target_pp = .3, i = 1, prior = prior)
+fit_pp <- gsPPFutilitySpending(pp_reference, target_pp = .3, i = 1)
 surv_pp <- fit_pp
+# The normalized prior is retained for independent verification with gsPP().
+prior <- fit_pp$ppFutilitySpending$prior
 achieved_pp <- gsPP(
   surv_pp, i = 1, zi = surv_pp$lower$bound[1],
   theta = prior$z, wgts = prior$wgts
 )
 stopifnot(abs(achieved_pp - .3) <= 1e-4)
 stopifnot(abs(sum(surv_pp$upper$prob[, 2]) - .9) < 2e-5)
-# Verify that the explicit prior is also this survival design's default prior.
-stopifnot(isTRUE(all.equal(
-  prior, normalGrid(mu = surv_pp$delta / 2, sigma = 10 / sqrt(surv_pp$n.fix))
-)))
-gsBoundSummary(surv_pp, prior = prior, digits = 4, exclude = "B-value") |>
+gsBoundSummary(surv_pp, digits = 4, exclude = "B-value") |>
   lt() |> lt_format(columns = c("Efficacy", "Futility"), decimals = 4)
 ```
 

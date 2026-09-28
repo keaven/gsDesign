@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9023</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9026</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,7 +22,44 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Getting started</h6></li>
+    <li><a class="dropdown-item" href="../articles/GentleIntroductionToGSD.html">A gentle introduction to group sequential design</a></li>
+    <li><a class="dropdown-item" href="../articles/gsDesignPackageOverview.html">gsDesign package overview</a></li>
+    <li><a class="dropdown-item" href="../articles/gsDesignHistory.html">A history of gsDesign</a></li>
+    <li><a class="dropdown-item" href="../articles/SpendingFunctionOverview.html">Spending function overview</a></li>
+    <li><a class="dropdown-item" href="../articles/nNormal.html">Two-sample normal sample size</a></li>
+    <li><a class="dropdown-item" href="../articles/binomialTwoSample.html">Binomial two arm trial design and analysis</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Time-to-event designs</h6></li>
+    <li><a class="dropdown-item" href="../articles/SurvivalOverview.html">Overview of survival endpoint design</a></li>
+    <li><a class="dropdown-item" href="../articles/gsSurvBasicExamples.html">Basic time-to-event group sequential design using gsSurv</a></li>
+    <li><a class="dropdown-item" href="../articles/SurvivalEnrollmentPlanning.html">Planning enrollment and follow-up for survival designs</a></li>
+    <li><a class="dropdown-item" href="../articles/SelectiveBoundTesting.html">Selective bound testing at interim analyses</a></li>
+    <li><a class="dropdown-item" href="../articles/toInteger.html">Integer sample size and event counts</a></li>
+    <li><a class="dropdown-item" href="../articles/gsSurvPower.html">Power Computation for Group Sequential Survival Designs</a></li>
+    <li><a class="dropdown-item" href="../articles/HarmBound.html">Futility and harm bounds for overall survival monitoring</a></li>
+    <li><a class="dropdown-item" href="../articles/PoissonMixtureModel.html">A cure model calendar-based design</a></li>
+    <li><a class="dropdown-item" href="../articles/SeqDesignSurvival.html">Reproducing SAS PROC SEQDESIGN survival designs in gsDesign</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Exact binomial designs</h6></li>
+    <li><a class="dropdown-item" href="../articles/VaccineEfficacy.html">Vaccine efficacy trial design</a></li>
+    <li><a class="dropdown-item" href="../articles/MultiSeasonRareEvents.html">Multi-season studies for rare events</a></li>
+    <li><a class="dropdown-item" href="../articles/binomialSPRTExample.html">Binomial SPRT</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Multiple testing</h6></li>
+    <li><a class="dropdown-item" href="../articles/hGraph.html">Multiplicity graphs</a></li>
+    <li><a class="dropdown-item" href="../articles/GraphicalMultiplicity.html">Graphical testing for group sequential design</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Interim targets and adaptation</h6></li>
+    <li><a class="dropdown-item" href="../articles/ConditionalPowerPlot.html">Conditional power and conditional error</a></li>
+    <li><a class="dropdown-item" href="../articles/CPFutilitySpending.html">Calibrating futility spending to conditional power</a></li>
+    <li><a class="dropdown-item" href="../articles/DragalinFutilitySpending.html">Futility spending calibrated to assurance and probability of success</a></li>
+    <li><a class="dropdown-item" href="../articles/EffectSpending.html">Calibrating spending to effects at interim bounds</a></li>
+    <li><a class="dropdown-item" href="../articles/ConditionalErrorSpending.html">Conditional error spending functions</a></li>
+  </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -49,7 +86,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li><p>All six spending-calibration functions accept survival designs from <code><a href="../reference/nSurv.html">gsSurv()</a></code>, <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>, and <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code>, retaining survival classes and rebuilding enrollment and event summaries (<a href="https://github.com/keaven/gsDesign/issues/345" class="external-link">#345</a>).</p></li>
+<ul><li><p><code><a href="../reference/gsPPFutilitySpending.html">gsPPFutilitySpending()</a></code> now defaults to the same normal prior as <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code>, while continuing to accept user-specified priors.</p></li>
+<li><p>All six spending-calibration functions accept survival designs from <code><a href="../reference/nSurv.html">gsSurv()</a></code>, <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>, and <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code>, retaining survival classes and rebuilding enrollment and event summaries (<a href="https://github.com/keaven/gsDesign/issues/345" class="external-link">#345</a>).</p></li>
 <li><p><code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> supports fixed survival designs and single observed event counts for them; <code><a href="../reference/gsBinomialExact.html">gsBinomialExact()</a></code> supports one-analysis probabilities (<a href="https://github.com/keaven/gsDesign/issues/222" class="external-link">#222</a>).</p></li>
 <li><p>Added opt-in Gauss-Legendre quadrature for boundary crossing calculations via <code>options(gsDesign.quadrature = "gl")</code>. The node count adapts to the continuation region and neighboring information increments, with <code>r</code> controlling resolution. Research benchmarks show faster calculations and smaller integration errors. The default Jennison and Turnbull grid (<code>"jt"</code>) is unchanged; see the numerical integration section of <code><a href="../reference/gsDesign.html">?gsDesign</a></code> (<a href="https://github.com/keaven/gsDesign/issues/323" class="external-link">#323</a>).</p></li>
 <li><p>Unified conditional-POS spending calibration in <code><a href="../reference/gsCPOSFutilitySpending.html">gsCPOSFutilitySpending()</a></code> with <code>mode = "preserve_power"</code> or <code>"fixed_information"</code>; retained <code><a href="../reference/gsCAFutilitySpending.html">gsCAFutilitySpending()</a></code> as a backward-compatible wrapper (<a href="https://github.com/keaven/gsDesign/issues/328" class="external-link">#328</a>, <a href="https://github.com/keaven/gsDesign/issues/329" class="external-link">#329</a>).</p></li>
@@ -65,7 +103,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li><p>Log-scale HR summaries recover missing null and alternative hazard ratios from retained <code>delta0</code> and <code>delta1</code>, avoiding a spurious warning after survival designs are reconstructed with <code><a href="../reference/gsDesign.html">gsDesign()</a></code> and preserving non-unit null ratios and effect direction, including alternate alpha summaries (<a href="https://github.com/keaven/gsDesign/issues/347" class="external-link">#347</a>).</p></li>
+<ul><li><p>PP, CA, CPOS, and POS futility calibration now inherit the reference futility spending function by default, matching CP calibration. This fixes multi-target PP calibration with a two-parameter reference family; explicit spending overrides and the one-parameter requirement for POS remain supported.</p></li>
+<li><p>Log-scale HR summaries recover missing null and alternative hazard ratios from retained <code>delta0</code> and <code>delta1</code>, avoiding a spurious warning after survival designs are reconstructed with <code><a href="../reference/gsDesign.html">gsDesign()</a></code> and preserving non-unit null ratios and effect direction, including alternate alpha summaries (<a href="https://github.com/keaven/gsDesign/issues/347" class="external-link">#347</a>).</p></li>
 <li><p>Survival interim event calculations now use the experimental-arm dropout rate for experimental events, keeping calendar calibration consistent when dropout differs between arms (<a href="https://github.com/keaven/gsDesign/issues/345" class="external-link">#345</a>).</p></li>
 <li><p>Power plots omit curves and annotations for inactive boundaries while retaining cumulative probabilities and original analysis numbers. Use <code>show_skipped = TRUE</code> to include skipped looks (<a href="https://github.com/keaven/gsDesign/issues/349" class="external-link">#349</a>).</p></li>
 <li><p><code><a href="../reference/nSurv.html">print.gsSurv()</a></code> no longer truncates spending function parameters with decimal values, such as the t-distribution parameters printed as <code>a = -1.63774, b = 2.96683, df = 3</code> (<a href="https://github.com/keaven/gsDesign/issues/307" class="external-link">#307</a>).</p></li>
@@ -84,7 +123,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
-<ul><li><p>Clarified that all six spending calibrators hold analysis information fractions (<code>x$timing</code>) fixed, separately from spending times. Defined CP targets in the argument documentation as total future efficacy probabilities and added a verified two-target example (<a href="https://github.com/keaven/gsDesign/issues/346" class="external-link">#346</a>).</p></li>
+<ul><li><p>Reorganized the pkgdown reference index by workflow, highlighting spending calibration and keeping shared help topics together. The Articles menu now lists every article directly under category headings.</p></li>
+<li><p>Clarified that all six spending calibrators hold analysis information fractions (<code>x$timing</code>) fixed, separately from spending times. Defined CP targets in the argument documentation as total future efficacy probabilities and added a verified two-target example (<a href="https://github.com/keaven/gsDesign/issues/346" class="external-link">#346</a>).</p></li>
 <li><p>Added a sparse-event mortality example using type 6 non-binding harm monitoring without separate futility, exact-binomial integer boundaries, harm-detection sensitivity, and a fixed-analysis precision illustration. Distinguished detecting harm from ruling it out and corrected the FDA reference to the August 2025 draft guidance.</p></li>
 <li><p>Explained harm calibration versus actual stopping probabilities in the help and harm/selective-monitoring vignettes, with a worked skipped-look example. Documented the 0.1/Pocock rationale, nominal harm-tail p-values, and the tradeoff in increasing total harm spending when more analyses are planned.</p></li>
 <li><p>Added a historical vignette covering the package’s statistical foundations, contributors, software modernization, and recent development (<a href="https://github.com/keaven/gsDesign/issues/304" class="external-link">#304</a>).</p></li>

@@ -37,6 +37,11 @@
 
 ### New features
 
+- [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
+  now defaults to the same normal prior as
+  [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
+  while continuing to accept user-specified priors.
+
 - All six spending-calibration functions accept survival designs from
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md),
   [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md),
@@ -114,6 +119,12 @@
   ([\#322](https://github.com/keaven/gsDesign/issues/322)).
 
 ### Bug fixes
+
+- PP, CA, CPOS, and POS futility calibration now inherit the reference
+  futility spending function by default, matching CP calibration. This
+  fixes multi-target PP calibration with a two-parameter reference
+  family; explicit spending overrides and the one-parameter requirement
+  for POS remain supported.
 
 - Log-scale HR summaries recover missing null and alternative hazard
   ratios from retained `delta0` and `delta1`, avoiding a spurious
@@ -198,6 +209,11 @@
   suggested **gt** package.
 
 ### Documentation
+
+- Reorganized the pkgdown reference index by workflow, highlighting
+  spending calibration and keeping shared help topics together. The
+  Articles menu now lists every article directly under category
+  headings.
 
 - Clarified that all six spending calibrators hold analysis information
   fractions (`x$timing`) fixed, separately from spending times. Defined
