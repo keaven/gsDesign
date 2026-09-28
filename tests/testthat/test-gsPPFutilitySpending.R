@@ -7,8 +7,14 @@ test_that("default-grid PP targets survive reconstruction and tighter tolerance"
   x <- gsDesign(k = 3, test.type = 4, timing = c(.5, .75), sfu = sfLDOF,
                 sfl = sfHSD, sflpar = 1, testLower = c(TRUE, FALSE, FALSE))
   prior <- normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix))
-  fit <- gsPPFutilitySpending(x, .3, i = 1, prior = prior,
+  expect_identical(formals(gsPPFutilitySpending)$prior, formals(gsBoundSummary)$prior)
+  fit <- gsPPFutilitySpending(x, .3, i = 1,
                              control = list(pp_tol = 1e-6))
+  explicit <- gsPPFutilitySpending(x, .3, i = 1, prior = prior,
+                                  control = list(pp_tol = 1e-6))
+  expect_equal(fit$lower$param, explicit$lower$param)
+  expect_equal(fit$n.I, explicit$n.I)
+  expect_equal(fit$ppFutilitySpending$prior, explicit$ppFutilitySpending$prior)
   expect_s3_class(fit, "gsPPFutilitySpending")
   expect_s3_class(fit, "gsDesign")
   expect_null(fit$cpFutilitySpending)
@@ -22,7 +28,7 @@ test_that("default-grid PP targets survive reconstruction and tighter tolerance"
                       testLower = c(TRUE, FALSE, FALSE))
   expect_lte(abs(pp_at_futility(rebuilt, 1, prior) - .3), 1e-6)
   expect_equal(sum(rebuilt$upper$prob[, 2]), .9, tolerance = 2e-5)
-  tab <- gsBoundSummary(rebuilt, prior = prior, exclude = "B-value", digits = 6)
+  tab <- gsBoundSummary(rebuilt, exclude = "B-value", digits = 6)
   expect_equal(tab$Futility[tab$Value == "PP"][1], .3, tolerance = 1e-6)
   rounded <- suppressMessages(toInteger(fit))
   expect_equal(rounded$lower$param, fit$lower$param)
@@ -109,7 +115,7 @@ test_that("invalid priors and controls raise PP-specific input errors", {
     expect_error(gsPPFutilitySpending(x, .3, prior = prior),
                  class = "gsPPFutilitySpending_input_error")
   }
-  expect_error(gsPPFutilitySpending(x, .3), "prior must be supplied",
+  expect_error(gsPPFutilitySpending(NULL, .3), "x must inherit from gsDesign",
                class = "gsPPFutilitySpending_input_error")
   prior <- list(z = x$delta, wgts = 1)
   for (ctl in list(list(cp_tol = 1e-6), list(pp_tol = 0), list(maxit = 0),
@@ -157,8 +163,11 @@ test_that("PP-targeted survival reconstruction uses the matching default prior",
   expect_equal(prior, normalGrid(mu = surv$delta / 2, sigma = 10 / sqrt(surv$n.fix)))
   expect_lte(abs(pp_at_futility(surv, 1, prior) - .3), 1e-4)
   expect_equal(sum(surv$upper$prob[, 2]), .9, tolerance = 2e-5)
-  direct <- gsPPFutilitySpending(reference, .3, prior = prior)
+  direct <- gsPPFutilitySpending(reference, .3)
   expect_s3_class(direct, "gsSurv")
   expect_lte(abs(pp_at_futility(direct, 1, prior) - .3), 1e-4)
   expect_equal(direct$n.I, surv$n.I, tolerance = 1e-4)
+  expect_equal(direct$ppFutilitySpending$prior, fit$ppFutilitySpending$prior)
+  tab <- gsBoundSummary(direct, exclude = "B-value", digits = 6)
+  expect_equal(tab$Futility[tab$Value == "PP"][1], .3, tolerance = 1e-4)
 })

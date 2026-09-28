@@ -23,6 +23,9 @@
 
 ## New features
 
+- `gsPPFutilitySpending()` now defaults to the same normal prior as
+  `gsBoundSummary()`, while continuing to accept user-specified priors.
+
 - All six spending-calibration functions accept survival designs from
   `gsSurv()`, `gsSurvCalendar()`, and `gsSurvPower()`, retaining survival
   classes and rebuilding enrollment and event summaries (#345).
@@ -117,6 +120,10 @@
   the suggested **gt** package.
 
 ## Documentation
+
+- Reorganized the pkgdown reference index by workflow, highlighting spending
+  calibration and keeping shared help topics together. The Articles menu now
+  lists every article directly under category headings.
 
 - Clarified that all six spending calibrators hold analysis information
   fractions (`x$timing`) fixed, separately from spending times. Defined CP

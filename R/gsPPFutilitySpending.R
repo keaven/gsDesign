@@ -17,9 +17,13 @@
 #'   \code{wgts} of the same positive length. \code{z} gives standardized effect
 #'   values on the \code{gsPP()} theta scale. \code{wgts} gives nonnegative prior
 #'   masses or density-weighted quadrature weights, with positive total weight.
-#'   For example, use \code{normalGrid(mu = x$delta / 2,
-#'   sigma = 10 / sqrt(x$n.fix))} for the default prior in
-#'   \code{gsBoundSummary(x)}. Weights are normalized internally; the normalized
+#'   Defaults to \code{normalGrid(mu = x$delta / 2,
+#'   sigma = 10 / sqrt(x$n.fix))}, the same prior as in
+#'   \code{gsBoundSummary(x)}: a normal prior centered halfway between the null
+#'   and alternative, with information equivalent to 1 percent of the
+#'   fixed-design sample size (or event count). The default is constructed from
+#'   the reference design \code{x} and held fixed during calibration.
+#'   Weights are normalized internally; the normalized
 #'   prior is retained in the result. A one-point prior targets fixed-effect CP.
 #' @param control Optional named list of numerical solver settings. Unspecified
 #'   settings retain their defaults; unknown names and invalid values cause
@@ -103,18 +107,18 @@
 #'   sfu = sfLDOF, sfl = sfHSD, sflpar = 1,
 #'   testLower = c(TRUE, FALSE, FALSE)
 #' )
-#' prior <- normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix))
-#' fit <- gsPPFutilitySpending(x, target_pp = .3, i = 1, prior = prior)
+#' # Both calibration and summary use the same default prior.
+#' fit <- gsPPFutilitySpending(x, target_pp = .3, i = 1)
 #' final_design <- gsDesign(
 #'   k = 3, test.type = 4, timing = c(.5, .75),
 #'   sfu = sfLDOF, sfl = sfHSD,
 #'   sflpar = fit$ppFutilitySpending$sflpar,
 #'   testLower = c(TRUE, FALSE, FALSE)
 #' )
-#' gsBoundSummary(final_design, prior = prior, exclude = "B-value")
+#' gsBoundSummary(final_design, exclude = "B-value")
 #' # Optional tighter predictive power acceptance tolerance:
 #' fit_tight <- gsPPFutilitySpending(
-#'   x, target_pp = .3, i = 1, prior = prior,
+#'   x, target_pp = .3, i = 1,
 #'   control = list(pp_tol = 1e-6)
 #' )
 #' fit_tight$ppFutilitySpending$residual
@@ -124,14 +128,13 @@
 #'   \code{\link{normalGrid}}, \code{\link{gsBoundSummary}}
 #' @export
 gsPPFutilitySpending <- function(x, target_pp, i = seq_along(target_pp),
-                                 sfl = "sfHSD", prior, control = list()) {
+                                 sfl = "sfHSD",
+                                 prior = normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix)),
+                                 control = list()) {
   call <- match.call()
   sfl_expr <- substitute(sfl)
   tryCatch({
     .gsCPFValidateReference(x)
-    if (missing(prior)) {
-      .gsCPFAbort("prior must be supplied.", "gsCPFutilitySpending_input_error")
-    }
     prior <- .gsPPFValidatePrior(prior)
     positive <- prior$wgts > 0
     if (!is.list(control) || (length(control) &&
