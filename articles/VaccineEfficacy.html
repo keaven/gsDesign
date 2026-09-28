@@ -1128,7 +1128,16 @@ non-vaccine preventive intervention.</p>
     "title": "Design Bounds and Operating Characteristics"
   }
 }
-})</script><p>The initial approximation of bounds for the exact binomial design was
+})</script><p>When a design skips a futility look (<code>testLower = FALSE</code>
+at a look, e.g. from <code><a href="../reference/nSurv.html">gsSurv()</a></code>), the exact futility bound is
+a non-crossable carry-forward at the skipped look.
+<code><a href="../reference/VEtable.html">VEtable()</a></code> marks these cells as missing, and
+<code><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt()</a></code> renders them as an em dash (—) for the futility bound
+and the efficacy at that bound. Cumulative beta spending stays numeric
+at a skipped look: no additional beta is spent, so the value is flat
+(unchanged from the preceding look). Efficacy is tested at every look,
+so the efficacy bound and cumulative alpha spending are unaffected.</p>
+<p>The initial approximation of bounds for the exact binomial design was
 generated from the time-to-event design as follows. First, we computed
 nominal p-value 1-sided bounds under the null hypothesis for the
 efficacy bounds using the normal approximation that the time-to-event

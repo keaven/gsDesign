@@ -285,6 +285,20 @@ gsDesign::VEtable(xb, ve, tteDesign = x) |>
   lt()
 ```
 
+When a design skips a futility look (`testLower = FALSE` at a look,
+e.g. from
+[`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)), the
+exact futility bound is a non-crossable carry-forward at the skipped
+look.
+[`VEtable()`](https://keaven.github.io/gsDesign/reference/VEtable.md)
+marks these cells as missing, and
+[`lt()`](https://rdrr.io/pkg/lt/man/lt.html) renders them as an em dash
+(—) for the futility bound and the efficacy at that bound. Cumulative
+beta spending stays numeric at a skipped look: no additional beta is
+spent, so the value is flat (unchanged from the preceding look).
+Efficacy is tested at every look, so the efficacy bound and cumulative
+alpha spending are unaffected.
+
 The initial approximation of bounds for the exact binomial design was
 generated from the time-to-event design as follows. First, we computed
 nominal p-value 1-sided bounds under the null hypothesis for the
