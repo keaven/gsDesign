@@ -73,6 +73,11 @@
 
 ## Bug fixes
 
+- PP, CA, CPOS, and POS futility calibration now inherit the reference
+  futility spending function by default, matching CP calibration. This fixes
+  multi-target PP calibration with a two-parameter reference family; explicit
+  spending overrides and the one-parameter requirement for POS remain supported.
+
 - Log-scale HR summaries recover missing null and alternative hazard ratios
   from retained `delta0` and `delta1`, avoiding a spurious warning after
   survival designs are reconstructed with `gsDesign()` and preserving

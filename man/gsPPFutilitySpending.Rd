@@ -8,7 +8,7 @@ gsPPFutilitySpending(
   x,
   target_pp,
   i = seq_along(target_pp),
-  sfl = "sfHSD",
+  sfl = x$lower$sf,
   prior = normalGrid(mu = x$delta/2, sigma = 10/sqrt(x$n.fix)),
   control = list()
 )
@@ -26,8 +26,9 @@ zero and one.}
 \item{i}{Unique active interim futility analysis indices, one per target,
 in \code{1:(x$k - 1)}. Results are ordered by analysis.}
 
-\item{sfl}{Supported lower spending function or its character name. Default
-\code{"sfHSD"}. See Details for supported families.}
+\item{sfl}{Supported lower spending function or its character name. Defaults
+to \code{x$lower$sf}, the reference futility spending function. Supply
+\code{sfl} to override it. See Details for supported families.}
 
 \item{prior}{A list containing finite numeric vectors \code{z} and
 \code{wgts} of the same positive length. \code{z} gives standardized effect

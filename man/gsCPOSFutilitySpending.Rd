@@ -8,7 +8,7 @@ gsCPOSFutilitySpending(
   x,
   target_cpos,
   i = seq_along(target_cpos),
-  sfl = "sfHSD",
+  sfl = x$lower$sf,
   prior,
   control = list(),
   mode = c("preserve_power", "fixed_information")
@@ -27,8 +27,9 @@ zero and one, one per selected interim.}
 \item{i}{Unique active interim futility indices, defaulting to
 \code{seq_along(target_cpos)}. Results are ordered by analysis.}
 
-\item{sfl}{Supported lower spending function or its name; default
-\code{"sfHSD"}. See Details.}
+\item{sfl}{Supported lower spending function or its name. Defaults to
+\code{x$lower$sf}, the reference futility spending function. Supply
+\code{sfl} to override it. See Details.}
 
 \item{prior}{List with finite numeric vectors \code{z} (standardized effects
 on the \code{gsCPOS()} theta scale) and \code{wgts} (nonnegative prior masses
