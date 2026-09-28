@@ -33,7 +33,7 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' analysis; the original analysis numbers are retained. Skipped boundaries
 #' still contribute their (zero) increments to the cumulative calculation.
 #' For types 7 and 8, the combined futility-or-harm curve is shown when either
-#' boundary is active. Use \code{show_skipped = TRUE} to also display curves
+#' boundary is active. Use \code{showSkipped = TRUE} to also display curves
 #' at skipped looks, which may duplicate earlier curves or be constant.
 #'
 #' Note that there is some special behavior for values plotted and returned for
@@ -107,7 +107,7 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #'
 #' Other arguments include:
 #'
-#' \code{show_skipped}, a logical value for power plots, defaults to
+#' \code{showSkipped}, a logical value for power plots, defaults to
 #' \code{FALSE}. Set it to \code{TRUE} to include inactive boundaries.
 #'
 #' \code{theta} which is used for \code{plottype=2}, \code{4}, \code{6};
@@ -146,7 +146,7 @@ globalVariables(c("y", "N", "Z", "Bound", "thetaidx", "Probability", "delta", "A
 #' skipped <- gsDesign(testLower = c(TRUE, FALSE, FALSE))
 #' plot(skipped, plottype = "power")
 #' # Include all looks, including coincident cumulative curves
-#' plot(skipped, plottype = "power", show_skipped = TRUE)
+#' plot(skipped, plottype = "power", showSkipped = TRUE)
 #' 
 #' #  choose different parameter values for power plot
 #' #  start with design in x from above
@@ -952,10 +952,10 @@ plotASN <- function(x, xlab = NULL, ylab = NULL, main = NULL, theta = NULL, xval
 }
 
 # Boundary activity controls display only, never probability calculations.
-gsPowerPlotActive <- function(x, show_skipped = FALSE) {
+gsPowerPlotActive <- function(x, showSkipped = FALSE) {
   active <- function(bound, flag) {
     if (is.null(bound) || is.null(bound$bound)) return(rep(FALSE, x$k))
-    if (show_skipped) return(rep(TRUE, x$k))
+    if (showSkipped) return(rep(TRUE, x$k))
     keep <- is.finite(bound$bound)
     if (!is.null(flag)) keep <- keep & rep_len(flag, x$k)
     keep
@@ -985,10 +985,10 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
                         xlab = NULL, lty = NULL, col = NULL, lwd = 1, cex = 1,
                         theta = NULL,
                         xval = NULL, base = FALSE, outtype = 1, offset = 0,
-                        titleAnalysisLegend = NULL, show_skipped = FALSE, ...) {
+                        titleAnalysisLegend = NULL, showSkipped = FALSE, ...) {
 
   stopifnot(
-    is.logical(show_skipped) && length(show_skipped) == 1L && !is.na(show_skipped),
+    is.logical(showSkipped) && length(showSkipped) == 1L && !is.na(showSkipped),
     is.numeric(offset) && length(offset) == 1,
     is.null(titleAnalysisLegend) ||
       (is.character(titleAnalysisLegend) && length(titleAnalysisLegend) == 1)
@@ -1023,7 +1023,7 @@ plotgsPower <- function(x, main = "Boundary crossing probabilities by effect siz
     }
   }
   if (is.null(xlab)) xlab <- ""
-  active <- gsPowerPlotActive(x, show_skipped)
+  active <- gsPowerPlotActive(x, showSkipped)
   x <- if (inherits(x, "gsDesign")) {
     gsProbability(d = x, theta = theta)
   } else {

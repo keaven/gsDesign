@@ -43,7 +43,7 @@ calling \code{plot}.
 
 Other arguments include:
 
-\code{show_skipped}, a logical value for power plots, defaults to
+\code{showSkipped}, a logical value for power plots, defaults to
 \code{FALSE}. Set it to \code{TRUE} to include inactive boundaries.
 
 \code{theta} which is used for \code{plottype=2}, \code{4}, \code{6};
@@ -95,7 +95,7 @@ By default, a curve is shown only when its boundary is active at that
 analysis; the original analysis numbers are retained. Skipped boundaries
 still contribute their (zero) increments to the cumulative calculation.
 For types 7 and 8, the combined futility-or-harm curve is shown when either
-boundary is active. Use \code{show_skipped = TRUE} to also display curves
+boundary is active. Use \code{showSkipped = TRUE} to also display curves
 at skipped looks, which may duplicate earlier curves or be constant.
 
 Note that there is some special behavior for values plotted and returned for
@@ -165,7 +165,7 @@ plot(x, plottype = 7)
 skipped <- gsDesign(testLower = c(TRUE, FALSE, FALSE))
 plot(skipped, plottype = "power")
 # Include all looks, including coincident cumulative curves
-plot(skipped, plottype = "power", show_skipped = TRUE)
+plot(skipped, plottype = "power", showSkipped = TRUE)
 
 #  choose different parameter values for power plot
 #  start with design in x from above

@@ -12,7 +12,7 @@ test_that("power curves omit skipped boundaries without changing probabilities",
     before <- x
     theta <- c(0, x$delta / 2, x$delta)
     p <- plot(x, plottype = "power", theta = theta, xval = theta)
-    all <- plot(x, plottype = "power", theta = theta, xval = theta, show_skipped = TRUE)
+    all <- plot(x, plottype = "power", theta = theta, xval = theta, showSkipped = TRUE)
     expected <- all$data
     i <- as.integer(as.character(expected$Analysis))
     keep <- ifelse(expected$Bound == "Upper bound", x$testUpper[i], x$testLower[i])
@@ -118,7 +118,7 @@ test_that("base graphics draw only active curves and retain full returned probab
   expect_equal(result$lower$prob, ref$lower$prob)
   expect_equal(labels[[2]][[2]], c("Interim 2", "Final", "Interim 1"))
   curves <- list()
-  plot.gsDesign(x, plottype = "power", base = TRUE, theta = theta, show_skipped = TRUE)
+  plot.gsDesign(x, plottype = "power", base = TRUE, theta = theta, showSkipped = TRUE)
   expect_identical(initial_type, "l")
   expect_length(curves, 5)
 })
@@ -162,13 +162,13 @@ test_that("alternate layout respects harm activity without hiding active futilit
   expect_no_warning(ggplot2::ggplot_build(p))
 })
 
-test_that("show_skipped does not alter fully active designs and validates its input", {
+test_that("showSkipped does not alter fully active designs and validates its input", {
   for (type in c(1, 2, 4, 8)) {
     x <- gsDesign(test.type = type)
     expect_equal(plot(x, plottype = "power")$data,
-                 plot(x, plottype = "power", show_skipped = TRUE)$data)
+                 plot(x, plottype = "power", showSkipped = TRUE)$data)
   }
   for (bad in list(NA, 1, c(TRUE, FALSE), NULL)) {
-    expect_error(plot(gsDesign(), plottype = "power", show_skipped = bad), "show_skipped")
+    expect_error(plot(gsDesign(), plottype = "power", showSkipped = bad), "showSkipped")
   }
 })
