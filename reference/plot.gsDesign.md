@@ -35,7 +35,7 @@ when its boundary is active at that analysis; the original analysis
 numbers are retained. Skipped boundaries still contribute their (zero)
 increments to the cumulative calculation. For types 7 and 8, the
 combined futility-or-harm curve is shown when either boundary is active.
-Use `show_skipped = TRUE` to also display curves at skipped looks, which
+Use `showSkipped = TRUE` to also display curves at skipped looks, which
 may duplicate earlier curves or be constant.
 
 Note that there is some special behavior for values plotted and returned
@@ -133,7 +133,7 @@ plot(x, plottype = 2, base = FALSE, ...)
 
   Other arguments include:
 
-  `show_skipped`, a logical value for power plots, defaults to `FALSE`.
+  `showSkipped`, a logical value for power plots, defaults to `FALSE`.
   Set it to `TRUE` to include inactive boundaries.
 
   `theta` which is used for `plottype=2`, `4`, `6`; normally defaults
@@ -240,7 +240,7 @@ skipped <- gsDesign(testLower = c(TRUE, FALSE, FALSE))
 plot(skipped, plottype = "power")
 
 # Include all looks, including coincident cumulative curves
-plot(skipped, plottype = "power", show_skipped = TRUE)
+plot(skipped, plottype = "power", showSkipped = TRUE)
 
 
 #  choose different parameter values for power plot

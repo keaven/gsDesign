@@ -141,7 +141,7 @@
 
 - Power plots omit curves and annotations for inactive boundaries while
   retaining cumulative probabilities and original analysis numbers. Use
-  `show_skipped = TRUE` to include skipped looks
+  `showSkipped = TRUE` to include skipped looks
   ([\#349](https://github.com/keaven/gsDesign/issues/349)).
 
 - [`print.gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
