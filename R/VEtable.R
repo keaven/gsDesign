@@ -128,6 +128,20 @@ VEtable <- function(x, ve, tteDesign = NULL, ratio = NULL) {
   }
 
   out <- dplyr::bind_cols(out, tibble::as_tibble(power, .name_repair = "minimal"))
+
+  # At skipped futility looks (testLower = FALSE) the exact futility bound is a
+  # non-crossable carry-forward, so blank the futility bound and the efficacy at
+  # that bound. lt() renders NA as an em dash. Beta spending stays numeric: it
+  # is flat (no incremental spend) but still defined at a skipped look, as does
+  # alpha (efficacy is tested at every look).
+  if (!is.null(x$testLower)) {
+    skip <- !x$testLower
+    if (any(skip)) {
+      out$Futility[skip] <- NA_integer_
+      out$ve_futility[skip] <- NA_real_
+    }
+  }
+
   class(out) <- c("gsVETable", class(out))
   attr(out, "ve") <- ve
   attr(out, "alpha") <- x$alpha
