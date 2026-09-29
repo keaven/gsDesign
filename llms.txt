@@ -77,8 +77,9 @@ long ago. Much earlier development, testing and documentation help were
 lead largely by Bill Constantine and Rich Calaway while they were with
 Revolution Computing. Thanks to John Lueders for his excellent and
 extensive collaboration building the Shiny app; more recent Shiny
-development done by Nan Xiao adds significant features such as saving
-and reloading designs and creating default R Markdown reports.
+development done by Nan Xiao and Yihui Xie adds significant features
+such as saving and reloading designs and creating default R Markdown
+reports.
 
 # Package index
 
