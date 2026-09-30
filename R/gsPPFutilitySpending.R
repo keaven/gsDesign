@@ -47,8 +47,8 @@
 #'       one-parameter root search.}
 #'     \item{\code{reltol}}{Positive finite internal convergence tolerance
 #'       (default \code{1e-10}); does not replace the \code{pp_tol} check.}
-#'     \item{\code{backward}}{Initialize multiple-target fitting from the
-#'       latest interim backward before joint refinement (default \code{TRUE}).}
+#'     \item{\code{backward}}{Allow a latest-to-earliest coordinate fallback
+#'       if the initial joint fit misses the targets (default \code{TRUE}).}
 #'     \item{\code{trace}}{Display joint-optimizer progress (default
 #'       \code{FALSE}). Both logical controls must be nonmissing scalars.}
 #'   }
@@ -69,8 +69,10 @@
 #' \code{sfExtremeValue2}. \code{sfLinear} supports one or more targets with
 #' fixed knots at their lower spending times. The target count must equal the
 #' number of free parameters. The solver is shared with
-#' \code{gsCPFutilitySpending()}, including its latest-to-earliest initialization
-#' and joint refinement. Only fits meeting all target tolerances are returned.
+#' \code{gsCPFutilitySpending()}, including its joint fit and optional
+#' latest-to-earliest fallback. Only fits meeting all target tolerances are
+#' returned. Searches can stop once all residuals are at most
+#' \code{min(control$pp_tol / 10, 1e-7)}, while retaining double precision.
 #'
 #' Preserve the complete reference design when replaying fitted parameters.
 #' Changing timing, efficacy or harm spending, or testing indicators requires

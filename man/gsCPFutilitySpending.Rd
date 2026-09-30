@@ -67,8 +67,8 @@ Unknown names and invalid values produce input errors.
   \item{\code{reltol}}{Positive finite scalar controlling internal
     numerical convergence (default \code{1e-10}). This does not replace
     the final \code{cp_tol} acceptance check.}
-  \item{\code{backward}}{Use latest-to-earliest initialization before
-    joint refinement for multiple targets (default \code{TRUE}).}
+  \item{\code{backward}}{Allow a latest-to-earliest coordinate fallback
+    if the initial joint fit misses the targets (default \code{TRUE}).}
   \item{\code{trace}}{Display joint-optimizer progress (default
     \code{FALSE}). Both \code{backward} and \code{trace} must be
     nonmissing scalar logical values.}
@@ -122,10 +122,12 @@ spending times for the targeted analyses; the fitted cumulative spending
 proportions are constrained to be strictly increasing and between zero and
 one.
 
-With multiple targets, a latest-to-earliest coordinate solve supplies
-starting values for a final joint constrained optimization. A result is
-returned only when every conditional power residual is within
-\code{control$cp_tol}.
+With multiple targets, joint constrained optimization first uses the
+reference or supplied starting parameters. If needed, a latest-to-earliest
+coordinate solve supplies alternative starting values for another joint fit.
+A result is returned only when every conditional power residual is within
+\code{control$cp_tol}. Searches may stop early once all residuals are at most
+\code{min(control$cp_tol / 10, 1e-7)}; computations retain double precision.
 
 The fitted lower spending parameters depend on the complete design,
 including efficacy spending. For \code{test.type} 7 and 8 they may also depend on
@@ -181,8 +183,14 @@ constrained parameterization.
 \section{Survival designs}{
 
 Survival inputs retain their survival classes and endpoint assumptions.
-Each candidate reconstructs the statistical design and its survival plan,
-so targets and diagnostics are evaluated on the returned event-count scale.
+Candidate probabilities are evaluated on the statistical event-count scale.
+Power-preserving probability calibration of fixed-duration, rate-scaled
+designs rebuilds the survival plan only for the selected fit and checks all
+targets again on the returned object. If the deferred search or that check
+fails, calibration retries once with full survival reconstruction, retaining
+the best available internal parameters as starting values. Effect calibration
+and accrual- or follow-up-duration solves reconstruct the plan for every
+candidate.
 For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
 enrollment rates or durations are recalculated as required. Calendar designs

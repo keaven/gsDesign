@@ -139,7 +139,7 @@ test_that("supported test types preserve efficacy and harm specifications", {
   }
 })
 
-test_that("two-parameter spending uses backward initialization and joint refinement", {
+test_that("two-parameter spending uses joint refinement with a backward fallback", {
   x <- gsDesign(
     k = 3,
     test.type = 4,
@@ -159,7 +159,7 @@ test_that("two-parameter spending uses backward initialization and joint refinem
 
   expect_equal(fit$lower$param, c(0, 1), tolerance = 2e-3)
   expect_equal(fit$cpFutilitySpending$achieved_cp, target, tolerance = 1e-4)
-  expect_match(fit$cpFutilitySpending$solver$method, "latest-to-earliest")
+  expect_match(fit$cpFutilitySpending$solver$method, "joint refinement")
   expect_length(fit$cpFutilitySpending$solver$backward_residual, 2)
 })
 

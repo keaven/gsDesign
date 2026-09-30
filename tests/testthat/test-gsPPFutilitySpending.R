@@ -68,7 +68,7 @@ test_that("discrete priors support multiple targets and ordered output", {
   expect_equal(fit$ppFutilitySpending$target_pp, targets)
   expect_lte(max(abs(pp_at_futility(fit, 1:2, prior) - targets)), 1e-4)
   expect_equal(fit$lower$param, c(0, 1), tolerance = 2e-3)
-  expect_match(fit$ppFutilitySpending$solver$method, "latest-to-earliest")
+  expect_match(fit$ppFutilitySpending$solver$method, "joint refinement")
   expect_length(fit$ppFutilitySpending$solver$backward_pp, 2)
 })
 

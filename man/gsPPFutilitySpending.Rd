@@ -64,8 +64,8 @@ input errors. These controls change the search, not the prior or target.
     one-parameter root search.}
   \item{\code{reltol}}{Positive finite internal convergence tolerance
     (default \code{1e-10}); does not replace the \code{pp_tol} check.}
-  \item{\code{backward}}{Initialize multiple-target fitting from the
-    latest interim backward before joint refinement (default \code{TRUE}).}
+  \item{\code{backward}}{Allow a latest-to-earliest coordinate fallback
+    if the initial joint fit misses the targets (default \code{TRUE}).}
   \item{\code{trace}}{Display joint-optimizer progress (default
     \code{FALSE}). Both logical controls must be nonmissing scalars.}
 }}
@@ -107,8 +107,10 @@ One target supports \code{sfHSD}, \code{sfPower}, \code{sfExponential}, and
 \code{sfExtremeValue2}. \code{sfLinear} supports one or more targets with
 fixed knots at their lower spending times. The target count must equal the
 number of free parameters. The solver is shared with
-\code{gsCPFutilitySpending()}, including its latest-to-earliest initialization
-and joint refinement. Only fits meeting all target tolerances are returned.
+\code{gsCPFutilitySpending()}, including its joint fit and optional
+latest-to-earliest fallback. Only fits meeting all target tolerances are
+returned. Searches can stop once all residuals are at most
+\code{min(control$pp_tol / 10, 1e-7)}, while retaining double precision.
 
 Preserve the complete reference design when replaying fitted parameters.
 Changing timing, efficacy or harm spending, or testing indicators requires
@@ -168,8 +170,14 @@ or that absolute calendar analysis dates must be fixed. See
 \section{Survival designs}{
 
 Survival inputs retain their survival classes and endpoint assumptions.
-Each candidate reconstructs the statistical design and its survival plan,
-so targets and diagnostics are evaluated on the returned event-count scale.
+Candidate probabilities are evaluated on the statistical event-count scale.
+Power-preserving probability calibration of fixed-duration, rate-scaled
+designs rebuilds the survival plan only for the selected fit and checks all
+targets again on the returned object. If the deferred search or that check
+fails, calibration retries once with full survival reconstruction, retaining
+the best available internal parameters as starting values. Effect calibration
+and accrual- or follow-up-duration solves reconstruct the plan for every
+candidate.
 For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
 enrollment rates or durations are recalculated as required. Calendar designs
