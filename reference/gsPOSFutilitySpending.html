@@ -17,7 +17,7 @@ information to preserve reference frequentist power."><meta property="og:image" 
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9028</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -190,8 +190,14 @@ or that absolute calendar analysis dates must be fixed. See
 
 
 <p>Survival inputs retain their survival classes and endpoint assumptions.
-Each candidate reconstructs the statistical design and its survival plan,
-so targets and diagnostics are evaluated on the returned event-count scale.
+Candidate probabilities are evaluated on the statistical event-count scale.
+Power-preserving probability calibration of fixed-duration, rate-scaled
+designs rebuilds the survival plan only for the selected fit and checks all
+targets again on the returned object. If the deferred search or that check
+fails, calibration retries once with full survival reconstruction, retaining
+the best available internal parameters as starting values. Effect calibration
+and accrual- or follow-up-duration solves reconstruct the plan for every
+candidate.
 For <code><a href="nSurv.html">gsSurv()</a></code> and <code><a href="gsSurvCalendar.html">gsSurvCalendar()</a></code> inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
 enrollment rates or durations are recalculated as required. Calendar designs
@@ -226,7 +232,7 @@ continuation event at which the target is evaluated.</p>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">gsPOSFutilitySpending</span><span class="op">(</span><span class="va">x</span>, <span class="va">target</span>, prior <span class="op">=</span> <span class="va">prior</span>,</span></span>
 <span class="r-in"><span>                            control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>start <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit</span><span class="op">$</span><span class="va">posFutilitySpending</span><span class="op">$</span><span class="va">sflpar</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -2.07866</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-in"><span><span class="fu"><a href="gsCP.html">gsPOS</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">prior</span><span class="op">$</span><span class="va">z</span>, <span class="va">prior</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5978036</span>
 </code></pre></div>

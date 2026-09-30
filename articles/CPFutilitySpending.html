@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9028</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -255,8 +255,9 @@ per target</td>
 </table>
 <p>The number of targets must match the number of free spending
 parameters. Targeted looks must be active interim futility analyses; the
-final analysis is not a calibration target. Multiple-target fitting uses
-latest-to-earliest initialization followed by joint refinement. A fit is
+final analysis is not a calibration target. Multiple-target fitting
+first tries a joint fit from the reference parameters, with
+latest-to-earliest initialization as a fallback when needed. A fit is
 returned only when every residual meets <code>control$cp_tol</code>
 (default <code>1e-4</code>).</p>
 <p>We independently recompute CP from each returned or reconstructed
@@ -367,8 +368,8 @@ th, td{ padding: 5px; }
   "data": {
     "Analysis": [1],
     "Target": [0.3],
-    "CP": [0.300000000000748],
-    "Residual": [7.47735207085043e-13],
+    "CP": [0.299999997748815],
+    "Residual": [-2.25118490515541e-09],
     "Information": [0.6]
   }
 }
@@ -1007,8 +1008,8 @@ differences.</p>
   "data": {
     "Analysis": [1],
     "Target": [0.3],
-    "CP": [0.299994368862271],
-    "Residual": [-5.63113772922286e-06],
+    "CP": [0.299994366609064],
+    "Residual": [-5.63339093578863e-06],
     "Events": [101.5]
   }
 }
@@ -1112,11 +1113,11 @@ event summaries.</p>
 {
   "data": {
     "Target": ["CP = 0.3", "PP = 0.3"],
-    "FutilityHR": [0.795330347741288, 0.808656781952971],
-    "BetaSpending": [0.0771261053815484, 0.0700064041908282],
-    "IA1Events": [101.544688564569, 97.1959758372861],
-    "FinalEvents": [203.089377129138, 194.391951674572],
-    "MaximumN": [316.940218267034, 303.367061655408]
+    "FutilityHR": [0.795330348117712, 0.808656781952971],
+    "BetaSpending": [0.0771261051811542, 0.0700064041908282],
+    "IA1Events": [101.544688422185, 97.195975837286],
+    "FinalEvents": [203.08937684437, 194.391951674572],
+    "MaximumN": [316.940217822627, 303.367061655408]
   },
   "ops": [
     {
@@ -1174,7 +1175,7 @@ fractions, spending times, and survival assumptions.</p>
     "Analysis": [1],
     "Target": [0.2],
     "CP": [0.19999999999721],
-    "Residual": [-2.79021250548794e-12],
+    "Residual": [-2.78957412724878e-12],
     "Events": [159.6]
   }
 }
@@ -1257,8 +1258,8 @@ statistic.</p>
   "data": {
     "Analysis": [1, 2],
     "Target": [0.2, 0.3],
-    "CP": [0.20000003711426, 0.300000039041962],
-    "Residual": [3.71142599708829e-08, 3.90419618856441e-08],
+    "CP": [0.199998202281037, 0.300001179218098],
+    "Residual": [-1.79771896330339e-06, 1.17921809761334e-06],
     "Participants": [997.6, 1870.5]
   }
 }
@@ -1279,8 +1280,8 @@ from printed output.</p>
   "data": {
     "Analysis": [1, 2],
     "Target": [0.2, 0.3],
-    "CP": [0.20000003711426, 0.300000039041962],
-    "Residual": [3.71142599708829e-08, 3.90419618856441e-08],
+    "CP": [0.199998202281037, 0.300001179218098],
+    "Residual": [-1.79771896330339e-06, 1.17921809761334e-06],
     "Participants": [997.6, 1870.5]
   }
 }
@@ -1327,8 +1328,8 @@ associated with the futility rule.</p>
 {
   "data": {
     "Design": ["Fixed, no interims", "Efficacy only", "Efficacy and CP-based futility"],
-    "MaximumTotalN": [1834.64126785673, 1866.56554372258, 2494.02387327022],
-    "InflationPercent": [0, 1.74008273035029, 35.9406831714738]
+    "MaximumTotalN": [1834.64126785673, 1866.56554372258, 2494.02151016598],
+    "InflationPercent": [0, 1.74008273035029, 35.9405543667703]
   },
   "ops": [
     {
@@ -1375,8 +1376,8 @@ information, not exact binomial boundaries.</p>
   "data": {
     "Analysis": [1, 2],
     "Participants": [997.6, 1870.5],
-    "FutilityRiskDifference": [0.0194221195453673, 0.0231557050806149],
-    "EfficacyRiskDifference": [0.0702185108227504, 0.0358213698470819]
+    "FutilityRiskDifference": [0.0194220710448773, 0.0231557377424088],
+    "EfficacyRiskDifference": [0.0702185440890276, 0.0358213868175873]
   }
 }
 })</script><p>At a futility boundary, the default CP calculation assumes that this
@@ -1491,14 +1492,14 @@ starts; suitable explicit starts can speed up convergence.</p>
   "data": {
     "Analysis": [1, 2, 3],
     "Target": [0.2, 0.3, 0.3],
-    "CP": [0.200000021421777, 0.300000002434522, 0.299999993126878],
-    "Residual": [2.14217773797376e-08, 2.43452180637149e-09, -6.87312201597123e-09],
+    "CP": [0.200000002131155, 0.299999964087437, 0.300000009684229],
+    "Residual": [2.13115508573836e-09, -3.59125626459011e-08, 9.68422864122687e-09],
     "Participants": [102.4, 170.7, 238.9]
   }
 }
 })</script><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit3</span><span class="op">$</span><span class="va">cpFutilitySpending</span><span class="op">$</span><span class="va">sflpar</span></span>
-<span><span class="co">#&gt; [1] 0.3000000 0.5000000 0.7000000 0.7667615 0.9288363 0.9671979</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.3000000 0.5000000 0.7000000 0.7667615 0.9288362 0.9671979</span></span></code></pre></div>
 <p>For <code>sfLinear</code>, the <code>sflpar</code> vector contains
 <strong>all knot times first, followed by all fitted cumulative spending
 proportions</strong>. There are six entries here but only three free
@@ -1518,7 +1519,7 @@ the incremental spending amounts and are not CP values.</p>
     "Analysis": [1, 2, 3],
     "Participants": [102.4, 170.7, 238.9],
     "Time": [0.3, 0.5, 0.7],
-    "CumulativeProportion": [0.766761512930542, 0.928836262218529, 0.967197891069862]
+    "CumulativeProportion": [0.766761497935901, 0.928836246214954, 0.967197886049992]
   }
 }
 })</script><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
@@ -1542,8 +1543,8 @@ with the entire fitted vector, including the knot times:</p>
   "data": {
     "Analysis": [1, 2, 3],
     "Target": [0.2, 0.3, 0.3],
-    "CP": [0.200000021421777, 0.300000002434522, 0.299999993126878],
-    "Residual": [2.14217773797376e-08, 2.43452180637149e-09, -6.87312201597123e-09],
+    "CP": [0.200000002131155, 0.299999964087437, 0.300000009684229],
+    "Residual": [2.13115508573836e-09, -3.59125626459011e-08, 9.68422864122687e-09],
     "Participants": [102.4, 170.7, 238.9]
   }
 }
@@ -1593,8 +1594,8 @@ power.</p>
 {
   "data": {
     "Design": ["Fixed, no interims", "Efficacy only", "Efficacy and CP-based futility"],
-    "MaximumTotalN": [203.42371046949, 206.454624569973, 341.342828886832],
-    "InflationPercent": [0, 1.48995124191169, 67.7989395135072]
+    "MaximumTotalN": [203.42371046949, 206.454624569973, 341.342820523698],
+    "InflationPercent": [0, 1.48995124191169, 67.7989354023177]
   },
   "ops": [
     {
@@ -1633,8 +1634,8 @@ spending.</p>
   "data": {
     "Analysis": [1, 2, 3],
     "Target": [0.1, 0.2, 0.3],
-    "CP": [0.100000010288141, 0.200000002330665, 0.29999999425136],
-    "Residual": [1.02881405478206e-08, 2.33066516086566e-09, -5.74864006397391e-09],
+    "CP": [0.100000091519475, 0.200000020881496, 0.300000044485641],
+    "Residual": [9.15194748735138e-08, 2.08814955326986e-08, 4.44856408376992e-08],
     "Participants": [91, 151.6, 212.3]
   }
 }

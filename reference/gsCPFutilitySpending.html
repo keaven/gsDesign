@@ -21,7 +21,7 @@ retain the reference design's unconditional power."><meta property="og:image" co
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9028</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -181,8 +181,8 @@ Unknown names and invalid values produce input errors.</p><dl><dt><code>start</c
     the final <code>cp_tol</code> acceptance check.</p></dd>
 
   <dt><code>backward</code></dt>
-<dd><p>Use latest-to-earliest initialization before
-    joint refinement for multiple targets (default <code>TRUE</code>).</p></dd>
+<dd><p>Allow a latest-to-earliest coordinate fallback
+    if the initial joint fit misses the targets (default <code>TRUE</code>).</p></dd>
 
   <dt><code>trace</code></dt>
 <dd><p>Display joint-optimizer progress (default
@@ -232,10 +232,12 @@ the intended choice for more than two. Its knot times are fixed at the lower
 spending times for the targeted analyses; the fitted cumulative spending
 proportions are constrained to be strictly increasing and between zero and
 one.</p>
-<p>With multiple targets, a latest-to-earliest coordinate solve supplies
-starting values for a final joint constrained optimization. A result is
-returned only when every conditional power residual is within
-<code>control$cp_tol</code>.</p>
+<p>With multiple targets, joint constrained optimization first uses the
+reference or supplied starting parameters. If needed, a latest-to-earliest
+coordinate solve supplies alternative starting values for another joint fit.
+A result is returned only when every conditional power residual is within
+<code>control$cp_tol</code>. Searches may stop early once all residuals are at most
+<code>min(control$cp_tol / 10, 1e-7)</code>; computations retain double precision.</p>
 <p>The fitted lower spending parameters depend on the complete design,
 including efficacy spending. For <code>test.type</code> 7 and 8 they may also depend on
 harm spending. Changing any of those specifications requires recalibration.
@@ -282,8 +284,14 @@ constrained parameterization.</p>
 
 
 <p>Survival inputs retain their survival classes and endpoint assumptions.
-Each candidate reconstructs the statistical design and its survival plan,
-so targets and diagnostics are evaluated on the returned event-count scale.
+Candidate probabilities are evaluated on the statistical event-count scale.
+Power-preserving probability calibration of fixed-duration, rate-scaled
+designs rebuilds the survival plan only for the selected fit and checks all
+targets again on the returned object. If the deferred search or that check
+fails, calibration retries once with full survival reconstruction, retaining
+the best available internal parameters as starting values. Effect calibration
+and accrual- or follow-up-duration solves reconstruct the plan for every
+candidate.
 For <code><a href="nSurv.html">gsSurv()</a></code> and <code><a href="gsSurvCalendar.html">gsSurvCalendar()</a></code> inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
 enrollment rates or durations are recalculated as required. Calendar designs

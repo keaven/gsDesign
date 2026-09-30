@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9028</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,11 +99,13 @@
 </ul></div>
 <div class="section level3">
 <h3 id="performance-development-version">Performance<a class="anchor" aria-label="anchor" href="#performance-development-version"></a></h3>
-<ul><li>Reduced repeated work in the C density update and boundary searches while retaining the Jennison and Turnbull grid and numerical results. Research benchmarks measured roughly 20% to 35% faster core routines. R’s normal tail calculations remain the default; <code>-DGS_USE_ERFC</code> enables an optional C-library alternative (<a href="https://github.com/keaven/gsDesign/issues/322" class="external-link">#322</a>).</li>
+<ul><li><p>Accelerated futility calibration by searching near reference parameters first, avoiding unnecessary optimizer restarts, and deferring rate-scaled survival reconstruction until the final fit. Target tolerances remain enforced on the returned design, with full reconstruction as a fallback. Earlier stopping can slightly change fitted spending parameters compared with previous versions while retaining the requested probability accuracy.</p></li>
+<li><p>Reduced repeated work in the C density update and boundary searches while retaining the Jennison and Turnbull grid and numerical results. Research benchmarks measured roughly 20% to 35% faster core routines. R’s normal tail calculations remain the default; <code>-DGS_USE_ERFC</code> enables an optional C-library alternative (<a href="https://github.com/keaven/gsDesign/issues/322" class="external-link">#322</a>).</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
-<ul><li><p>PP, CA, CPOS, and POS futility calibration now inherit the reference futility spending function by default, matching CP calibration. This fixes multi-target PP calibration with a two-parameter reference family; explicit spending overrides and the one-parameter requirement for POS remain supported.</p></li>
+<ul><li><p>Futility calibration retries unsuccessful deferred survival searches with full reconstruction and preserves internal <code>sfLinear</code> warm starts near spending limits. Starting diagnostics remain available when the backward sweep is skipped, and scalar root searches bracket consecutive valid grid points even when an intermediate grid point is infeasible.</p></li>
+<li><p>PP, CA, CPOS, and POS futility calibration now inherit the reference futility spending function by default, matching CP calibration. This fixes multi-target PP calibration with a two-parameter reference family; explicit spending overrides and the one-parameter requirement for POS remain supported.</p></li>
 <li><p>Log-scale HR summaries recover missing null and alternative hazard ratios from retained <code>delta0</code> and <code>delta1</code>, avoiding a spurious warning after survival designs are reconstructed with <code><a href="../reference/gsDesign.html">gsDesign()</a></code> and preserving non-unit null ratios and effect direction, including alternate alpha summaries (<a href="https://github.com/keaven/gsDesign/issues/347" class="external-link">#347</a>).</p></li>
 <li><p>Survival interim event calculations now use the experimental-arm dropout rate for experimental events, keeping calendar calibration consistent when dropout differs between arms (<a href="https://github.com/keaven/gsDesign/issues/345" class="external-link">#345</a>).</p></li>
 <li><p>Power plots omit curves and annotations for inactive boundaries while retaining cumulative probabilities and original analysis numbers. Use <code>showSkipped = TRUE</code> to include skipped looks (<a href="https://github.com/keaven/gsDesign/issues/349" class="external-link">#349</a>).</p></li>

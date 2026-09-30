@@ -101,8 +101,8 @@ gsPPFutilitySpending(
 
   `backward`
 
-  :   Initialize multiple-target fitting from the latest interim
-      backward before joint refinement (default `TRUE`).
+  :   Allow a latest-to-earliest coordinate fallback if the initial
+      joint fit misses the targets (default `TRUE`).
 
   `trace`
 
@@ -143,8 +143,10 @@ two targets support `sfLogistic`, `sfBetaDist`, `sfCauchy`, `sfNormal`,
 targets with fixed knots at their lower spending times. The target count
 must equal the number of free parameters. The solver is shared with
 [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md),
-including its latest-to-earliest initialization and joint refinement.
-Only fits meeting all target tolerances are returned.
+including its joint fit and optional latest-to-earliest fallback. Only
+fits meeting all target tolerances are returned. Searches can stop once
+all residuals are at most `min(control$pp_tol / 10, 1e-7)`, while
+retaining double precision.
 
 Preserve the complete reference design when replaying fitted parameters.
 Changing timing, efficacy or harm spending, or testing indicators
@@ -208,9 +210,14 @@ time, or that absolute calendar analysis dates must be fixed. See
 ## Survival designs
 
 Survival inputs retain their survival classes and endpoint assumptions.
-Each candidate reconstructs the statistical design and its survival
-plan, so targets and diagnostics are evaluated on the returned
-event-count scale. For
+Candidate probabilities are evaluated on the statistical event-count
+scale. Power-preserving probability calibration of fixed-duration,
+rate-scaled designs rebuilds the survival plan only for the selected fit
+and checks all targets again on the returned object. If the deferred
+search or that check fails, calibration retries once with full survival
+reconstruction, retaining the best available internal parameters as
+starting values. Effect calibration and accrual- or follow-up-duration
+solves reconstruct the plan for every candidate. For
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
 inputs, information fractions, spending times, and the
@@ -295,6 +302,6 @@ fit_tight <- gsPPFutilitySpending(
   control = list(pp_tol = 1e-6)
 )
 fit_tight$ppFutilitySpending$residual
-#> [1] 2.668129e-10
+#> [1] 1.613498e-11
 # }
 ```

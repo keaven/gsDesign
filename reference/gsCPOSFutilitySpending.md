@@ -191,9 +191,14 @@ time, or that absolute calendar analysis dates must be fixed. See
 ## Survival designs
 
 Survival inputs retain their survival classes and endpoint assumptions.
-Each candidate reconstructs the statistical design and its survival
-plan, so targets and diagnostics are evaluated on the returned
-event-count scale. For
+Candidate probabilities are evaluated on the statistical event-count
+scale. Power-preserving probability calibration of fixed-duration,
+rate-scaled designs rebuilds the survival plan only for the selected fit
+and checks all targets again on the returned object. If the deferred
+search or that check fails, calibration retries once with full survival
+reconstruction, retaining the best available internal parameters as
+starting values. Effect calibration and accrual- or follow-up-duration
+solves reconstruct the plan for every candidate. For
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
 inputs, information fractions, spending times, and the

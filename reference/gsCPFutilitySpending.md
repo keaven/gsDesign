@@ -104,8 +104,8 @@ gsCPFutilitySpending(
 
   `backward`
 
-  :   Use latest-to-earliest initialization before joint refinement for
-      multiple targets (default `TRUE`).
+  :   Allow a latest-to-earliest coordinate fallback if the initial
+      joint fit misses the targets (default `TRUE`).
 
   `trace`
 
@@ -157,10 +157,13 @@ times are fixed at the lower spending times for the targeted analyses;
 the fitted cumulative spending proportions are constrained to be
 strictly increasing and between zero and one.
 
-With multiple targets, a latest-to-earliest coordinate solve supplies
-starting values for a final joint constrained optimization. A result is
-returned only when every conditional power residual is within
-`control$cp_tol`.
+With multiple targets, joint constrained optimization first uses the
+reference or supplied starting parameters. If needed, a
+latest-to-earliest coordinate solve supplies alternative starting values
+for another joint fit. A result is returned only when every conditional
+power residual is within `control$cp_tol`. Searches may stop early once
+all residuals are at most `min(control$cp_tol / 10, 1e-7)`; computations
+retain double precision.
 
 The fitted lower spending parameters depend on the complete design,
 including efficacy spending. For `test.type` 7 and 8 they may also
@@ -218,9 +221,14 @@ constrained parameterization.
 ## Survival designs
 
 Survival inputs retain their survival classes and endpoint assumptions.
-Each candidate reconstructs the statistical design and its survival
-plan, so targets and diagnostics are evaluated on the returned
-event-count scale. For
+Candidate probabilities are evaluated on the statistical event-count
+scale. Power-preserving probability calibration of fixed-duration,
+rate-scaled designs rebuilds the survival plan only for the selected fit
+and checks all targets again on the returned object. If the deferred
+search or that check fails, calibration retries once with full survival
+reconstruction, retaining the best available internal parameters as
+starting values. Effect calibration and accrual- or follow-up-duration
+solves reconstruct the plan for every candidate. For
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
 inputs, information fractions, spending times, and the

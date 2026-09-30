@@ -132,10 +132,10 @@ information fractions do not by themselves fix calendar analysis dates.
 
 The number of targets must match the number of free spending parameters.
 Targeted looks must be active interim futility analyses; the final
-analysis is not a calibration target. Multiple-target fitting uses
-latest-to-earliest initialization followed by joint refinement. A fit is
-returned only when every residual meets `control$cp_tol` (default
-`1e-4`).
+analysis is not a calibration target. Multiple-target fitting first
+tries a joint fit from the reference parameters, with latest-to-earliest
+initialization as a fallback when needed. A fit is returned only when
+every residual meets `control$cp_tol` (default `1e-4`).
 
 We independently recompute CP from each returned or reconstructed
 design, rather than relying only on the calibration metadata:
@@ -589,7 +589,7 @@ check_cp(fit3, target3) |> lt()
 ``` r
 
 fit3$cpFutilitySpending$sflpar
-#> [1] 0.3000000 0.5000000 0.7000000 0.7667615 0.9288363 0.9671979
+#> [1] 0.3000000 0.5000000 0.7000000 0.7667615 0.9288362 0.9671979
 ```
 
 For `sfLinear`, the `sflpar` vector contains **all knot times first,

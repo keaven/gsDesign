@@ -19,7 +19,7 @@ power while allowing maximum information to change."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">gsDesign</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9026</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.11.1.9028</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -220,8 +220,14 @@ or that absolute calendar analysis dates must be fixed. See
 
 
 <p>Survival inputs retain their survival classes and endpoint assumptions.
-Each candidate reconstructs the statistical design and its survival plan,
-so targets and diagnostics are evaluated on the returned event-count scale.
+Candidate probabilities are evaluated on the statistical event-count scale.
+Power-preserving probability calibration of fixed-duration, rate-scaled
+designs rebuilds the survival plan only for the selected fit and checks all
+targets again on the returned object. If the deferred search or that check
+fails, calibration retries once with full survival reconstruction, retaining
+the best available internal parameters as starting values. Effect calibration
+and accrual- or follow-up-duration solves reconstruct the plan for every
+candidate.
 For <code><a href="nSurv.html">gsSurv()</a></code> and <code><a href="gsSurvCalendar.html">gsSurvCalendar()</a></code> inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
 enrollment rates or durations are recalculated as required. Calendar designs

@@ -111,6 +111,14 @@
 
 ### Performance
 
+- Accelerated futility calibration by searching near reference
+  parameters first, avoiding unnecessary optimizer restarts, and
+  deferring rate-scaled survival reconstruction until the final fit.
+  Target tolerances remain enforced on the returned design, with full
+  reconstruction as a fallback. Earlier stopping can slightly change
+  fitted spending parameters compared with previous versions while
+  retaining the requested probability accuracy.
+
 - Reduced repeated work in the C density update and boundary searches
   while retaining the Jennison and Turnbull grid and numerical results.
   Research benchmarks measured roughly 20% to 35% faster core routines.
@@ -119,6 +127,13 @@
   ([\#322](https://github.com/keaven/gsDesign/issues/322)).
 
 ### Bug fixes
+
+- Futility calibration retries unsuccessful deferred survival searches
+  with full reconstruction and preserves internal `sfLinear` warm starts
+  near spending limits. Starting diagnostics remain available when the
+  backward sweep is skipped, and scalar root searches bracket
+  consecutive valid grid points even when an intermediate grid point is
+  infeasible.
 
 - PP, CA, CPOS, and POS futility calibration now inherit the reference
   futility spending function by default, matching CP calibration. This
