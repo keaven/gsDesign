@@ -151,9 +151,11 @@
 #' Candidate probabilities are evaluated on the statistical event-count scale.
 #' Power-preserving probability calibration of fixed-duration, rate-scaled
 #' designs rebuilds the survival plan only for the selected fit and checks all
-#' targets again on the returned object. If that check fails, calibration
-#' retries with full survival reconstruction. Effect calibration and accrual-
-#' or follow-up-duration solves reconstruct the plan for every candidate.
+#' targets again on the returned object. If the deferred search or that check
+#' fails, calibration retries once with full survival reconstruction, retaining
+#' the best available internal parameters as starting values. Effect calibration
+#' and accrual- or follow-up-duration solves reconstruct the plan for every
+#' candidate.
 #' For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
 #' spending times, and the enrollment/follow-up constraint are retained;
 #' enrollment rates or durations are recalculated as required. Calendar designs
@@ -394,56 +396,59 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
     sum(residual^2)
   }
 
-  start_eval <- evaluate(spending$start)
-  if (start_eval$valid && max(abs(start_eval$residual)) <= ctl$cp_tol) {
-    best <- start_eval
-    solver <- list(
-      convergence = 0L,
-      message = "Starting values satisfied all conditional power targets.",
-      method = "starting values",
-      backward = spending$start,
-      value = sum(start_eval$residual^2),
-      counts = 1L
-    )
-  } else if (length(target_cp) == 1L) {
-    solution <- .gsCPFOneParameterSolve(
-      evaluate = evaluate,
-      objective = objective,
-      start = spending$start,
-      lower = spending$lower,
-      upper = spending$upper,
-      control = ctl
-    )
-    best <- solution$best
-    solver <- solution$solver
-  } else {
-    solution <- .gsCPFMultipleSolve(
-      evaluate = evaluate,
-      objective = objective,
-      start = spending$start,
-      lower = spending$solver_lower,
-      upper = spending$solver_upper,
-      control = ctl,
-      target_order = rev(seq_along(target_cp)),
-      bounded = spending$bounded
-    )
-    best <- solution$best
-    solver <- solution$solver
-  }
-
-  if (defer_survival && !is.null(best) && best$valid &&
-      max(abs(best$residual)) <= ctl$cp_tol) {
-    rebuilt <- evaluate(best$par, rebuild = TRUE)
-    if (!rebuilt$valid || max(abs(rebuilt$residual)) > ctl$cp_tol) {
-      # Numerical differences in the survival constructor must not silently
-      # relax acceptance. Retry using full reconstruction and a warm start.
-      control$start <- spending$free(best$par)
-      return(.gsFutilitySpending(
-        x, target_cp, i, sfl, theta, control, call, sfl_expr, probability,
-        design_builder = function(x, sfl, sflpar) .gsCPFDesign(x, sfl, sflpar)
-      ))
+  repeat {
+    start_eval <- evaluate(spending$start)
+    if (start_eval$valid && max(abs(start_eval$residual)) <= ctl$cp_tol) {
+      best <- start_eval
+      solver <- list(
+        convergence = 0L,
+        message = "Starting values satisfied all conditional power targets.",
+        method = "starting values",
+        backward = spending$start,
+        value = sum(start_eval$residual^2),
+        counts = 1L
+      )
+    } else if (length(target_cp) == 1L) {
+      solution <- .gsCPFOneParameterSolve(
+        evaluate = evaluate,
+        objective = objective,
+        start = spending$start,
+        lower = spending$lower,
+        upper = spending$upper,
+        control = ctl
+      )
+      best <- solution$best
+      solver <- solution$solver
+    } else {
+      solution <- .gsCPFMultipleSolve(
+        evaluate = evaluate,
+        objective = objective,
+        start = spending$start,
+        lower = spending$solver_lower,
+        upper = spending$solver_upper,
+        control = ctl,
+        target_order = rev(seq_along(target_cp)),
+        bounded = spending$bounded
+      )
+      best <- solution$best
+      solver <- solution$solver
     }
-    best <- rebuilt
+    if (!defer_survival) break
+
+    if (!is.null(best) && best$valid && max(abs(best$residual)) <= ctl$cp_tol) {
+      rebuilt <- evaluate(best$par, rebuild = TRUE)
+      if (rebuilt$valid && max(abs(rebuilt$residual)) <= ctl$cp_tol) {
+        best <- rebuilt
+        break
+      }
+    }
+    # Retry any unsuccessful deferred search once with fully rebuilt designs.
+    # Keep encoded parameters: decoding/re-encoding sfLinear would clamp near
+    # one, or reject proportions rounded to one as invalid user input.
+    if (!is.null(best) && best$valid) spending$start <- best$par
+    defer_survival <- FALSE
+    cache <- new.env(parent = emptyenv())
+    last_error <- NULL
   }
 
   if (is.null(best) || !best$valid) {
@@ -850,10 +855,13 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
     values[[j]] <- collect(grid[j])
     if (.gsCPFTargetMet(values[[j]], control)) return(finish())
     if (!values[[j]]$valid) next
-    for (neighbor in intersect(c(j - 1L, j + 1L), seq_along(grid))) {
+    valid <- which(vapply(values, function(z) isTRUE(z$valid), logical(1)))
+    # Adjacent valid points can bracket a root even if a grid point between
+    # them is infeasible. Failed root searches still fall back to minimization.
+    neighbors <- c(utils::tail(valid[valid < j], 1L), utils::head(valid[valid > j], 1L))
+    for (neighbor in neighbors) {
       other <- values[[neighbor]]
-      if (is.null(other) || !other$valid ||
-          values[[j]]$residual[1L] * other$residual[1L] >= 0) next
+      if (values[[j]]$residual[1L] * other$residual[1L] >= 0) next
       ends <- sort(c(j, neighbor))
       root <- tryCatch(stats::uniroot(
         function(p) collect(p)$residual[1L], interval = grid[ends],
@@ -884,7 +892,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
 .gsCPFMultipleSolve <- function(evaluate, objective, start, lower, upper,
                                 control, target_order, bounded) {
   backward <- start
-  backward_eval <- NULL
+  backward_eval <- evaluate(backward)
   backward_used <- FALSE
 
   run_joint <- function(initial) {

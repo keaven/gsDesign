@@ -97,9 +97,11 @@ Survival inputs retain their survival classes and endpoint assumptions.
 Candidate probabilities are evaluated on the statistical event-count scale.
 Power-preserving probability calibration of fixed-duration, rate-scaled
 designs rebuilds the survival plan only for the selected fit and checks all
-targets again on the returned object. If that check fails, calibration
-retries with full survival reconstruction. Effect calibration and accrual-
-or follow-up-duration solves reconstruct the plan for every candidate.
+targets again on the returned object. If the deferred search or that check
+fails, calibration retries once with full survival reconstruction, retaining
+the best available internal parameters as starting values. Effect calibration
+and accrual- or follow-up-duration solves reconstruct the plan for every
+candidate.
 For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
 enrollment rates or durations are recalculated as required. Calendar designs
