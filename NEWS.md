@@ -23,6 +23,11 @@
 
 ## New features
 
+- Accelerated futility calibration by searching near reference parameters
+  first, avoiding unnecessary optimizer restarts, and deferring rate-scaled
+  survival reconstruction until the final fit. Target tolerances remain
+  enforced on the returned design, with full reconstruction as a fallback.
+
 - `gsPPFutilitySpending()` now defaults to the same normal prior as
   `gsBoundSummary()`, while continuing to accept user-specified priors.
 

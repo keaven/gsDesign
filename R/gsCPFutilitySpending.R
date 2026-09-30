@@ -37,10 +37,12 @@
 #' proportions are constrained to be strictly increasing and between zero and
 #' one.
 #'
-#' With multiple targets, a latest-to-earliest coordinate solve supplies
-#' starting values for a final joint constrained optimization. A result is
-#' returned only when every conditional power residual is within
-#' \code{control$cp_tol}.
+#' With multiple targets, joint constrained optimization first uses the
+#' reference or supplied starting parameters. If needed, a latest-to-earliest
+#' coordinate solve supplies alternative starting values for another joint fit.
+#' A result is returned only when every conditional power residual is within
+#' \code{control$cp_tol}. Searches may stop early once all residuals are at most
+#' \code{min(control$cp_tol / 10, 1e-7)}; computations retain double precision.
 #'
 #' The fitted lower spending parameters depend on the complete design,
 #' including efficacy spending. For \code{test.type} 7 and 8 they may also depend on
@@ -97,8 +99,8 @@
 #'     \item{\code{reltol}}{Positive finite scalar controlling internal
 #'       numerical convergence (default \code{1e-10}). This does not replace
 #'       the final \code{cp_tol} acceptance check.}
-#'     \item{\code{backward}}{Use latest-to-earliest initialization before
-#'       joint refinement for multiple targets (default \code{TRUE}).}
+#'     \item{\code{backward}}{Allow a latest-to-earliest coordinate fallback
+#'       if the initial joint fit misses the targets (default \code{TRUE}).}
 #'     \item{\code{trace}}{Display joint-optimizer progress (default
 #'       \code{FALSE}). Both \code{backward} and \code{trace} must be
 #'       nonmissing scalar logical values.}
@@ -146,8 +148,12 @@
 #'
 #' @section Survival designs:
 #' Survival inputs retain their survival classes and endpoint assumptions.
-#' Each candidate reconstructs the statistical design and its survival plan,
-#' so targets and diagnostics are evaluated on the returned event-count scale.
+#' Candidate probabilities are evaluated on the statistical event-count scale.
+#' Power-preserving probability calibration of fixed-duration, rate-scaled
+#' designs rebuilds the survival plan only for the selected fit and checks all
+#' targets again on the returned object. If that check fails, calibration
+#' retries with full survival reconstruction. Effect calibration and accrual-
+#' or follow-up-duration solves reconstruct the plan for every candidate.
 #' For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
 #' spending times, and the enrollment/follow-up constraint are retained;
 #' enrollment rates or durations are recalculated as required. Calendar designs
@@ -321,15 +327,23 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
 
   cache <- new.env(parent = emptyenv())
   last_error <- NULL
-  evaluate <- function(par) {
+  # For a fixed survival schedule, candidate event counts can be optimized on
+  # their statistical scale. Rebuild the enrollment plan only for the accepted
+  # fit, then verify its probabilities; duration solves still need full rebuilds.
+  defer_survival <- identical(design_builder, .gsCPFDesign) &&
+    inherits(x, "gsSurv") &&
+    (inherits(x, "gsSurvPower") || identical(x$variable, "Accrual rate"))
+  evaluate <- function(par, rebuild = FALSE) {
     key <- paste(formatC(par, digits = 14L, format = "fg"), collapse = "|")
-    if (exists(key, envir = cache, inherits = FALSE)) {
+    if (!rebuild && exists(key, envir = cache, inherits = FALSE)) {
       return(get(key, envir = cache, inherits = FALSE))
     }
 
     sflpar <- spending$decode(par)
     ans <- tryCatch({
-      candidate <- design_builder(x, spending$fun, sflpar)
+      candidate <- if (defer_survival && !rebuild) {
+        .gsCPFDesign(x, spending$fun, sflpar, rebuild_survival = FALSE)
+      } else design_builder(x, spending$fun, sflpar)
       theta_used <- if (is.null(theta)) {
         candidate$lower$bound[i] / sqrt(candidate$n.I[i])
       } else {
@@ -369,7 +383,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
         error = conditionMessage(e)
       )
     })
-    assign(key, ans, envir = cache)
+    if (!rebuild) assign(key, ans, envir = cache)
     ans
   }
 
@@ -415,6 +429,21 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
     )
     best <- solution$best
     solver <- solution$solver
+  }
+
+  if (defer_survival && !is.null(best) && best$valid &&
+      max(abs(best$residual)) <= ctl$cp_tol) {
+    rebuilt <- evaluate(best$par, rebuild = TRUE)
+    if (!rebuilt$valid || max(abs(rebuilt$residual)) > ctl$cp_tol) {
+      # Numerical differences in the survival constructor must not silently
+      # relax acceptance. Retry using full reconstruction and a warm start.
+      control$start <- spending$free(best$par)
+      return(.gsFutilitySpending(
+        x, target_cp, i, sfl, theta, control, call, sfl_expr, probability,
+        design_builder = function(x, sfl, sflpar) .gsCPFDesign(x, sfl, sflpar)
+      ))
+    }
+    best <- rebuilt
   }
 
   if (is.null(best) || !best$valid) {
@@ -753,7 +782,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
   p
 }
 
-.gsCPFDesign <- function(x, sfl, sflpar) {
+.gsCPFDesign <- function(x, sfl, sflpar, rebuild_survival = TRUE) {
   upper_param <- x$upper$param
   if (is.null(upper_param)) upper_param <- -4
   harm_fun <- if (x$test.type %in% c(7L, 8L)) x$harm$sf else sfHSD
@@ -789,37 +818,52 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
     testLower = x$testLower,
     testHarm = x$testHarm
   )
-  .gsSpendingSurvival(x, candidate)
+  if (rebuild_survival) .gsSpendingSurvival(x, candidate) else candidate
 }
 
 .gsCPFOneParameterSolve <- function(evaluate, objective, start, lower, upper, control) {
-  candidates <- list(evaluate(start))
-  grid <- unique(c(lower, seq(lower, upper, length.out = 41L), start, upper))
-  values <- lapply(grid, evaluate)
-  valid <- vapply(values, `[[`, logical(1), "valid")
-  candidates <- c(candidates, values[valid])
-
-  roots <- list()
-  if (sum(valid) >= 2L) {
-    valid_grid <- grid[valid]
-    residual <- vapply(values[valid], function(z) z$residual[1L], numeric(1))
-    exact <- which(abs(residual) <= control$cp_tol)
-    if (length(exact)) roots <- c(roots, values[valid][exact])
-    changes <- which(residual[-length(residual)] * residual[-1L] < 0)
-    for (j in changes) {
-      root <- tryCatch(
-        stats::uniroot(
-          function(p) evaluate(p)$residual[1L],
-          interval = valid_grid[c(j, j + 1L)],
-          tol = min(control$cp_tol / 10, 1e-7)
-        )$root,
-        error = function(e) NULL
-      )
-      if (!is.null(root)) roots[[length(roots) + 1L]] <- evaluate(root)
+  candidates <- list()
+  collect <- function(p) {
+    z <- evaluate(p)
+    candidates[[length(candidates) + 1L]] <<- z
+    z
+  }
+  finish <- function() {
+    valid <- Filter(function(z) isTRUE(z$valid), candidates)
+    best <- if (length(valid)) valid[[which.min(vapply(valid,
+      function(z) sum(z$residual^2), numeric(1)))]] else NULL
+    list(best = best, solver = list(
+      convergence = if (!is.null(best)) 0L else 1L,
+      message = if (!is.null(best)) "One-parameter root search completed." else "No valid one-parameter candidate was found.",
+      method = "expanding grid and uniroot; optimize fallback",
+      backward = start,
+      value = if (!is.null(best)) sum(best$residual^2) else Inf,
+      counts = length(candidates)
+    ))
+  }
+  grid <- sort(unique(c(seq(lower, upper, length.out = 41L), start)))
+  # Start close to the reference parameter, expanding only as needed. Retain
+  # the full bounded scan and minimization for invalid or unbracketed targets.
+  grid_order <- order(abs(grid - start))
+  values <- vector("list", length(grid))
+  for (j in grid_order) {
+    values[[j]] <- collect(grid[j])
+    if (.gsCPFTargetMet(values[[j]], control)) return(finish())
+    if (!values[[j]]$valid) next
+    for (neighbor in intersect(c(j - 1L, j + 1L), seq_along(grid))) {
+      other <- values[[neighbor]]
+      if (is.null(other) || !other$valid ||
+          values[[j]]$residual[1L] * other$residual[1L] >= 0) next
+      ends <- sort(c(j, neighbor))
+      root <- tryCatch(stats::uniroot(
+        function(p) collect(p)$residual[1L], interval = grid[ends],
+        f.lower = values[[ends[1L]]]$residual[1L],
+        f.upper = values[[ends[2L]]]$residual[1L],
+        tol = min(control$cp_tol / 10, 1e-7)
+      )$root, error = function(e) NULL)
+      if (!is.null(root) && .gsCPFTargetMet(collect(root), control)) return(finish())
     }
   }
-  candidates <- c(candidates, roots)
-
   opt <- tryCatch(
     stats::optimize(
       function(p) objective(p),
@@ -828,46 +872,33 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
     ),
     error = function(e) NULL
   )
-  if (!is.null(opt)) candidates[[length(candidates) + 1L]] <- evaluate(opt$minimum)
-  candidates <- Filter(function(z) isTRUE(z$valid), candidates)
-  best <- if (length(candidates)) candidates[[which.min(vapply(candidates, function(z) sum(z$residual^2), numeric(1)))]] else NULL
-  list(
-    best = best,
-    solver = list(
-      convergence = if (!is.null(best)) 0L else 1L,
-      message = if (!is.null(best)) "One-parameter root search completed." else "No valid one-parameter candidate was found.",
-      method = "grid, uniroot, and optimize",
-      backward = start,
-      value = if (!is.null(best)) sum(best$residual^2) else Inf,
-      counts = length(grid)
-    )
-  )
+  if (!is.null(opt)) collect(opt$minimum)
+  finish()
+}
+
+.gsCPFTargetMet <- function(candidate, control) {
+  isTRUE(candidate$valid) &&
+    max(abs(candidate$residual)) <= min(control$cp_tol / 10, 1e-7)
 }
 
 .gsCPFMultipleSolve <- function(evaluate, objective, start, lower, upper,
                                 control, target_order, bounded) {
   backward <- start
-  if (control$backward) {
-    for (j in target_order) {
-      interval <- c(lower[j], upper[j])
-      opt <- tryCatch(
-        stats::optimize(
-          function(value) {
-            candidate <- backward
-            candidate[j] <- value
-            objective(candidate, target_index = j)
-          },
-          interval = interval,
-          tol = sqrt(control$reltol)
-        ),
-        error = function(e) NULL
-      )
-      if (!is.null(opt)) backward[j] <- opt$minimum
-    }
-  }
-  backward_eval <- evaluate(backward)
+  backward_eval <- NULL
+  backward_used <- FALSE
 
   run_joint <- function(initial) {
+    evaluations <- 0L
+    fn <- function(par) {
+      evaluations <<- evaluations + 1L
+      z <- evaluate(par)
+      if (.gsCPFTargetMet(z, control)) {
+        stop(structure(list(message = "All target residuals satisfied the search tolerance.",
+          call = NULL, candidate = z),
+          class = c("gsCPFTargetReached", "error", "condition")))
+      }
+      objective(par)
+    }
     optimizer_control <- list(
       maxit = control$maxit,
       trace = if (control$trace) 1L else 0L
@@ -881,11 +912,16 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
     tryCatch(
       stats::optim(
         par = initial,
-        fn = objective,
+        fn = fn,
         method = if (bounded) "L-BFGS-B" else "BFGS",
         lower = if (bounded) lower else -Inf,
         upper = if (bounded) upper else Inf,
         control = optimizer_control
+      ),
+      gsCPFTargetReached = function(e) list(
+        par = e$candidate$par, value = sum(e$candidate$residual^2),
+        counts = c("function" = evaluations, gradient = NA_integer_),
+        convergence = 0L, message = conditionMessage(e)
       ),
       error = function(e) list(
         par = initial, value = objective(initial), counts = NA_integer_,
@@ -893,8 +929,26 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
       )
     )
   }
-  fits <- list(run_joint(backward))
-  if (!isTRUE(all.equal(backward, start))) fits[[2L]] <- run_joint(start)
+  # Try the reference parameters first. An acceptable joint solution needs no
+  # coordinate sweep over extreme (often invalid) spending shapes.
+  fits <- list(run_joint(start))
+  initial_fit <- evaluate(fits[[1L]]$par)
+  if (control$backward &&
+      (!initial_fit$valid || max(abs(initial_fit$residual)) > control$cp_tol)) {
+    backward_used <- TRUE
+    for (j in target_order) {
+      opt <- tryCatch(stats::optimize(
+        function(value) {
+          candidate <- backward
+          candidate[j] <- value
+          objective(candidate, target_index = j)
+        }, interval = c(lower[j], upper[j]), tol = sqrt(control$reltol)
+      ), error = function(e) NULL)
+      if (!is.null(opt)) backward[j] <- opt$minimum
+    }
+    backward_eval <- evaluate(backward)
+    if (!isTRUE(all.equal(backward, start))) fits[[2L]] <- run_joint(backward)
+  }
   best_fit <- fits[[which.min(vapply(fits, `[[`, numeric(1), "value"))]]
   best <- evaluate(best_fit$par)
   list(
@@ -903,13 +957,14 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
       convergence = best_fit$convergence,
       message = if (is.null(best_fit$message)) "Joint optimization completed." else best_fit$message,
       method = paste0(
-        if (control$backward) "latest-to-earliest initialization; " else "",
+        if (backward_used) "latest-to-earliest fallback; " else "",
         if (bounded) "L-BFGS-B" else "BFGS",
         " joint refinement"
       ),
       backward = backward,
-      backward_cp = if (backward_eval$valid) backward_eval$achieved else rep(NA_real_, length(target_order)),
-      backward_residual = if (backward_eval$valid) backward_eval$residual else rep(NA_real_, length(target_order)),
+      backward_used = backward_used,
+      backward_cp = if (isTRUE(backward_eval$valid)) backward_eval$achieved else rep(NA_real_, length(target_order)),
+      backward_residual = if (isTRUE(backward_eval$valid)) backward_eval$residual else rep(NA_real_, length(target_order)),
       value = best_fit$value,
       counts = best_fit$counts
     )
