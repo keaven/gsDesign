@@ -1,4 +1,4 @@
-#' Calibrate Spending to Natural-Scale Effects at Boundaries
+#' Calibrate Spending to Natural Scale Effects at Boundaries
 #'
 #' Select efficacy, futility or harm spending parameters, separately or jointly,
 #' to match approximate observed effects at interim boundaries. Candidate designs
@@ -8,7 +8,7 @@
 #' @inheritParams gsCPFutilitySpending
 #' @inheritSection gsCPFutilitySpending Information fractions and spending times
 #' @inheritSection gsCPFutilitySpending Survival designs
-#' @param target_effect Finite natural-scale effect targets.
+#' @param target_effect Finite natural scale effect targets.
 #' @param i Interim indices, one per target. Duplicate boundary/index pairs
 #'   and inactive boundaries are not allowed.
 #' @param bound "efficacy", "futility" or "harm", scalar or one per target.
@@ -22,7 +22,7 @@
 #'   HR requires information = "events", ratio (experimental/control),
 #'   hr0 (null HR), and hr1 (alternative HR), all explicitly supplied.
 #'   For statistical designs, the reference delta must agree with
-#'   abs(log(hr1/hr0)) * sqrt(ratio)/(1 + ratio), verifying its event-count
+#'   abs(log(hr1/hr0)) * sqrt(ratio)/(1 + ratio), verifying its event count
 #'   scale. For survival designs, metadata must match the stored allocation
 #'   and hazard ratios; the selected survival method determines the drift.
 #' @param control Named solver list. start, lower and upper are parameter
@@ -43,7 +43,7 @@
 #' all targets simultaneously. Untargeted spending specifications remain fixed,
 #' but numerical boundaries may change as information is recalculated.
 #'
-#' These are approximate effects at bounds, not true-effect assumptions,
+#' These are approximate effects at bounds, not true effect assumptions,
 #' posterior estimates or bias-adjusted sequential estimates. HRs and RRs are
 #' supplied as ratios, not logs. Risk differences must lie in [-1, 1].
 #' An effect is transformed using each candidate's information.
@@ -52,7 +52,7 @@
 #' and condition number are returned as local diagnostics, not proofs of
 #' uniqueness. Harm/futility coincidence is reported and may indicate capping.
 #' A failed search does not prove mathematical infeasibility. Inspect all
-#' operating characteristics and sample-size inflation before choosing a design.
+#' operating characteristics and sample size inflation before choosing a design.
 #' Changing timing or rounding need not retain the calibrated effects.
 #'
 #' @return A gsDesign object also inheriting from gsEffectSpending, retaining
@@ -185,7 +185,7 @@ gsEffectSpending <- function(x, target_effect, i = seq_along(target_effect),
         class = c("gsEffectSpending_convergence_error", "gsEffectSpending_error", "error", "condition")))
     }
     solution <- best
-    # Local finite-difference sensitivity; preserve the accepted solution.
+    # Local finite difference sensitivity; preserve the accepted solution.
     jac <- vapply(seq_along(start), function(j) {
       h <- 1e-4 * max(1, abs(solution$par[j]))
       lo <- hi <- solution$par
@@ -298,7 +298,7 @@ gsEffectSpending <- function(x, target_effect, i = seq_along(target_effect),
       }
     } else if (length(x$delta) != 1L || !is.finite(x$delta) ||
         abs(x$delta - expected) > 1e-7 * max(1, expected)) {
-      .gsEffectAbort("Reference delta is inconsistent with HR metadata on the event-count scale.")
+      .gsEffectAbort("Reference delta is inconsistent with HR metadata on the event count scale.")
     }
     x$hr <- effect$hr1; x$hr0 <- effect$hr0
     slots <- c(efficacy = "upper", futility = "lower", harm = "harm")
@@ -337,7 +337,7 @@ gsEffectSpending <- function(x, target_effect, i = seq_along(target_effect),
     .gsEffectAbort("Candidate information must be finite and positive.")
   }
   if (identical(endpoint, "risk_difference") && any(abs(c(x$delta0, x$delta1)) > 1))
-    .gsEffectAbort("Risk-difference null and alternative must lie in [-1, 1].")
+    .gsEffectAbort("Risk difference null and alternative must lie in [-1, 1].")
   if (scale == "rr" && any(!is.finite(exp(c(x$delta0, x$delta1))) |
                            exp(c(x$delta0, x$delta1)) <= 0))
     .gsEffectAbort("RR null and alternative must define finite positive ratios.")
@@ -346,7 +346,7 @@ gsEffectSpending <- function(x, target_effect, i = seq_along(target_effect),
   z <- vapply(seq_along(i), function(j) x[[slots[[bound[j]]]]]$bound[i[j]], numeric(1))
   value <- if (scale == "rr") gsRR(z, i, x) else gsDelta(z, i, x)
   if (any(!is.finite(value)) || (scale == "rr" && any(value <= 0))) {
-    .gsEffectAbort("Natural-scale boundary effects are undefined.")
+    .gsEffectAbort("Natural scale boundary effects are undefined.")
   }
   if (identical(endpoint, "risk_difference") && any(abs(value) > 1)) {
     .gsEffectAbort("Approximate risk difference at a boundary is outside [-1, 1].")

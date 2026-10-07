@@ -47,8 +47,8 @@ A \code{c("gsPOSFutilitySpending", "gsDesign")} object, retaining
   Error classes use the prefix \code{gsPOSFutilitySpending}.
 }
 \description{
-Select one free beta-spending parameter to match the unconditional
-prior-predictive probability of success \code{gsPOS()}. Recalculate maximum
+Select one free beta spending parameter to match the unconditional
+prior predictive probability of success \code{gsPOS()}. Recalculate maximum
 information to preserve reference frequentist power.
 }
 \details{
@@ -60,7 +60,7 @@ entire trial. Consequently, an unconstrained two-parameter spending family
 cannot be identified from POS alone and is rejected. A custom one-parameter
 wrapper may fix the other parameters explicitly.
 
-Unconditional POS calibration is not Dragalin's conditional-assurance
+Unconditional POS calibration is not Dragalin's conditional assurance
 criterion. Compare \code{\link{gsCPOSFutilitySpending}} and
 \code{\link{gsCAFutilitySpending}} for continuation-conditioned targets.
 For a point prior at the planned alternative, POS equals the power already
@@ -77,7 +77,7 @@ fractions \code{x$n.I / x$n.I[x$k]}, ending at 1. For example,
 \code{x$timing = c(.5, .75, 1)} keeps the analyses at 50\%, 75\%, and 100\%
 of the final information. Power-preserving calibration may change the
 maximum information and thus the absolute information \code{n.I} at every
-analysis while retaining these fractions. Fixed-information calibration
+analysis while retaining these fractions. Fixed information calibration
 (\code{gsCAFutilitySpending()} and
 \code{gsCPOSFutilitySpending(mode = "fixed_information")}) also holds
 \code{n.I} and the efficacy boundaries fixed.
@@ -94,13 +94,13 @@ or that absolute calendar analysis dates must be fixed. See
 \section{Survival designs}{
 
 Survival inputs retain their survival classes and endpoint assumptions.
-Candidate probabilities are evaluated on the statistical event-count scale.
-Power-preserving probability calibration of fixed-duration, rate-scaled
+Candidate probabilities are evaluated on the statistical event count scale.
+Power-preserving probability calibration of fixed duration, rate-scaled
 designs rebuilds the survival plan only for the selected fit and checks all
 targets again on the returned object. If the deferred search or that check
 fails, calibration retries once with full survival reconstruction, retaining
 the best available internal parameters as starting values. Effect calibration
-and accrual- or follow-up-duration solves reconstruct the plan for every
+and accrual or follow-up duration solves reconstruct the plan for every
 candidate.
 For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
@@ -112,9 +112,9 @@ For \code{gsSurvPower()} inputs, power-preserving calibration fixes the
 realized calendar times and enrollment periods and rescales enrollment rates
 to attain the fitted event counts. The evaluated alternative \code{x$hr}
 and its achieved power are used, even if the original design alternative
-\code{x$hr1} differed. Original event-trigger and calendar-cap rules are not
-re-applied: the realized schedule becomes the new plan. Fixed-information
-conditional-POS/CA calibration instead retains the survival plan, event
+\code{x$hr1} differed. Original event trigger and calendar cap rules are not
+reapplied: the realized schedule becomes the new plan. Fixed information
+conditional POS/CA calibration instead retains the survival plan, event
 counts and efficacy bounds while updating futility and achieved power.
 
 Priors and explicit \code{theta} remain standardized drifts per square root

@@ -110,7 +110,7 @@ test_that("repeatedPValueBinomialExact validates inputs", {
 
   expect_error(
     repeatedPValueBinomialExact(gsD = design, n.I = counts, x = NULL),
-    "x must contain observed experimental-arm event counts"
+    "x must contain observed experimental arm event counts"
   )
   expect_error(
     repeatedPValueBinomialExact(gsD = design, n.I = counts, x = c(1.5, 2, 3)),

@@ -163,7 +163,7 @@ test_that("two-parameter spending uses joint refinement with a backward fallback
   expect_length(fit$cpFutilitySpending$solver$backward_residual, 2)
 })
 
-test_that("piecewise-linear spending remains valid while matching three targets", {
+test_that("piecewise linear spending remains valid while matching three targets", {
   x <- gsDesign(
     k = 4,
     test.type = 4,
@@ -214,7 +214,7 @@ test_that("all two-parameter families attain explicit CP targets", {
   }
 })
 
-test_that("piecewise-linear spending attains equal and varying explicit targets", {
+test_that("piecewise linear spending attains equal and varying explicit targets", {
   times <- c(.3, .5, .7)
   n_fixed <- nNormal(delta1 = .5, sd = 1.1, alpha = .025, beta = .1, ratio = 1)
   x <- gsDesign(k = 4, test.type = 4, timing = times, sfu = sfLDOF,
@@ -243,7 +243,7 @@ test_that("piecewise-linear spending attains equal and varying explicit targets"
   }
 })
 
-test_that("survival designs can replay calibrated fixed-timing spending", {
+test_that("survival designs can replay calibrated fixed timing spending", {
   x <- gsDesign(k = 3, test.type = 4, timing = c(.5, .75), sfu = sfLDOF,
                 sfl = sfHSD, sflpar = 1, testLower = c(TRUE, FALSE, FALSE))
   fit <- gsCPFutilitySpending(x, .3, i = 1)

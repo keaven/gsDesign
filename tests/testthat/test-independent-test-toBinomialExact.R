@@ -177,7 +177,7 @@ test_that("exact harm calibration ignores earlier futility stopping", {
   }
 })
 
-test_that("test.type 8 supports analysis-time overrides", {
+test_that("test.type 8 supports analysis time overrides", {
   design <- surv_design(test.type = 8)
   observed <- c(20L, 55L, 75L)
   result <- toBinomialExact(
@@ -264,7 +264,7 @@ test_that("test.type 6 honors selective lower looks", {
   expect_equal(unname(result$upper$prob[2, ]), c(0, 0), tolerance = 1e-12)
 })
 
-test_that("test.type 6 supports alpha and spending-time overrides", {
+test_that("test.type 6 supports alpha and spending time overrides", {
   design_default <- surv_design(test.type = 6)
   observed <- c(20L, 55L, 75L)
   updated <- toBinomialExact(

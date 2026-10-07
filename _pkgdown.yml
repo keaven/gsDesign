@@ -35,11 +35,11 @@ reference:
 - title: Calibrating Spending to Interim Targets
   desc: >
     Translate CP, predictive power, probability of success, or approximate
-    treatment-effect targets into spending-function parameters. Start with
+    treatment effect targets into spending function parameters. Start with
     `vignette("CPFutilitySpending")`, `vignette("DragalinFutilitySpending")`,
     or `vignette("EffectSpending")`. For conditional probability of success,
-    `gsCPOSFutilitySpending()` supports both preserve-power and fixed-information
-    modes; `gsCAFutilitySpending()` is the fixed-information compatibility wrapper.
+    `gsCPOSFutilitySpending()` supports both preserve power and fixed information
+    modes; `gsCAFutilitySpending()` is the fixed information compatibility wrapper.
   contents:
   - gsCPFutilitySpending
   - gsPPFutilitySpending
@@ -60,7 +60,7 @@ reference:
   - gsDensity
 - title: Sample Size Adaptation
   desc: >
-    Conditional-power-based sample size re-estimation and combination tests.
+    Sample size re-estimation using conditional power and combination tests.
   contents:
   - ssrCP
 - title: Spending Functions
@@ -90,7 +90,7 @@ reference:
 - title: Single-Arm Exact Binomial Design
   desc: >
     Exact binomial group sequential designs, sequential probability ratio tests,
-    and fixed-design sample sizes.
+    and fixed design sample sizes.
   contents:
   - gsBinomialExact
 - title: Exact Binomial Monitoring and Vaccine/Prevention Efficacy
@@ -110,10 +110,10 @@ reference:
 - title: Time-to-Event Design and Power
   desc: >
     Use `gsSurv()` for information-driven designs, `gsSurvCalendar()` for
-    calendar-time looks, and `gsSurvPower()` for power under a fixed plan.
+    calendar time looks, and `gsSurvPower()` for power under a fixed plan.
     The shared `gsSurv()` topic includes `nSurv()`, `nEventsIA()`, and `tEventsIA()`.
     The earlier, more limited Lachin-Foulkes implementation and additional
-    event-count and hazard-ratio conversions are documented in `nSurvival()`.
+    event count and hazard ratio conversions are documented in `nSurvival()`.
   contents:
   - gsSurv
   - gsSurvCalendar
@@ -160,7 +160,7 @@ articles:
   - title: "Exact binomial designs with spending"
     navbar: "Exact binomial designs"
     desc: >
-      Exact binomial workflows, including spending-function-based designs.
+      Exact binomial workflows, including designs based on spending functions.
     contents:
       - VaccineEfficacy
       - MultiSeasonRareEvents

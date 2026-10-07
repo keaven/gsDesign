@@ -3,7 +3,7 @@
 #' @description
 #' Compatibility wrapper for \code{gsCPOSFutilitySpending(mode = "fixed_information")},
 #' retaining the legacy argument, diagnostic and error names.
-#' Fit beta-spending parameters to conditional-assurance targets while holding
+#' Fit beta spending parameters to conditional assurance targets while holding
 #' the reference information and efficacy boundaries fixed. Overall power may
 #' change. Total beta is solved internally so that the spending rule and the
 #' terminal decision at the fixed efficacy boundary are consistent.
@@ -11,7 +11,7 @@
 #' @inheritParams gsCPOSFutilitySpending
 #' @inheritSection gsCPFutilitySpending Information fractions and spending times
 #' @inheritSection gsCPFutilitySpending Survival designs
-#' @param target_ca Conditional-assurance targets strictly between zero and one.
+#' @param target_ca Conditional assurance targets strictly between zero and one.
 #' @param i Unique active interim futility indices, one per target.
 #' @param control Named numerical controls. Use \code{ca_tol} for the maximum
 #'   absolute target residual (default \code{1e-4}, finite and in (0, 0.1)).
@@ -20,7 +20,7 @@
 #'   \code{backward}, and \code{trace}. Unknown or invalid controls are errors.
 #'
 #' @details
-#' This is the fixed-information counterpart of
+#' This is the fixed information counterpart of
 #' \code{\link{gsCPOSFutilitySpending}}. The prior, information, efficacy
 #' boundaries, spending times and testing indicators are held fixed.
 #' For each candidate spending parameter set, \code{gsBound1()} derives interim
@@ -29,10 +29,10 @@
 #' agree with the beta used by the spending function.
 #'
 #' The probability target conditions on continuation through an analysis, not
-#' on an observed statistic at a boundary. An externally calculated fixed-design
+#' on an observed statistic at a boundary. An externally calculated fixed design
 #' \code{gsPOS()} benchmark can be supplied as a target. This implements a
-#' spending-based fixed-information conditional-assurance rule, not a full
-#' sample-size re-estimation procedure.
+#' spending-based fixed information conditional assurance rule, not a full
+#' sample size re-estimation procedure.
 #'
 #' With nonbinding futility (\code{test.type = 4}), the efficacy-only type I
 #' error specification is unchanged. With binding futility (\code{test.type = 3}),
@@ -183,7 +183,7 @@ gsCAFutilitySpending <- function(x, target_ca, i = seq_along(target_ca),
   if (is.null(root)) stop("Unable to solve total beta at fixed information for this spending shape.")
   candidate <- evaluate_beta(root, return_design = TRUE)
   if (abs(candidate$beta - root) > max(5 * x$tol, 1e-7)) {
-    stop("Fixed-information beta consistency check failed.")
+    stop("Fixed information beta consistency check failed.")
   }
   candidate
 }

@@ -1,4 +1,4 @@
-test_that("fixed-information CA recovers spending and changes power for new targets", {
+test_that("fixed information CA recovers spending and changes power for new targets", {
   x <- gsDesign(k = 2, test.type = 4, sflpar = 0)
   prior <- list(z = c(0, x$delta), wgts = c(.2, .8))
   target <- gsCPOS(1, x, prior$z, prior$wgts)
@@ -73,7 +73,7 @@ test_that("fixed CA supports linear spending and binding reference boundaries", 
   expect_equal(fit$beta, x$beta, tolerance = 1e-5)
 })
 
-test_that("Dragalin fixed-information benchmark gives the expected effect boundary", {
+test_that("Dragalin fixed information benchmark gives the expected effect boundary", {
   x <- gsDesign(k = 2, test.type = 4, delta = 33 / 140,
                 n.I = c(72, 144), maxn.IPlan = 144,
                 testUpper = c(FALSE, TRUE), sflpar = 0, r = 32)

@@ -23,7 +23,7 @@ testthat::test_that(desc = "Test gsBoundSummary for gsSurv Object", code = {
   expect_snapshot_output(x = gsBoundSummary(xgs))
 })
 
-testthat::test_that(desc = "Test gsBoundSummary recovers hr0 for log-scale HR summary", code = {
+testthat::test_that(desc = "Test gsBoundSummary recovers hr0 for log scale HR summary", code = {
   x <- gsSurv(
     k = 2,
     test.type = 4,

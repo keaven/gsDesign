@@ -10,7 +10,7 @@
 #' are also supported; see Details.
 #' \code{gsSurv()} combines \code{nSurv()} with \code{gsDesign()} to derive a
 #' group sequential design for a study with a time-to-event endpoint.
-#' When \code{k = 1}, \code{gsSurv()} uses the fixed-design calculations from
+#' When \code{k = 1}, \code{gsSurv()} uses the fixed design calculations from
 #' \code{nSurv()} directly and returns a normalized single-analysis
 #' \code{gsSurv} object for use with functions such as
 #' \code{\link{toInteger}} and \code{\link{gsBoundSummary}}.
@@ -93,14 +93,14 @@
 #' method will fail if the specified enrollment rates and durations either
 #' over-powers the trial with no additional follow-up or underpowers the trial
 #' with infinite follow-up. This method produces a corresponding error message
-#' in such cases. For methods other than Lachin and Foulkes, these fixed-rate
-#' duration solves use the selected method for the fixed-design event
+#' in such cases. For methods other than Lachin and Foulkes, these fixed rate
+#' duration solves use the selected method for the fixed design event
 #' calculation.
 #'
 #' The input to \code{gsSurv} is a combination of the input to \code{nSurv()}
 #' and \code{gsDesign()}.
 #' The original call is stored in \code{call}. The \code{inputs} component
-#' retains evaluated survival-model inputs used for printing and the applicable
+#' retains evaluated survival model inputs used for printing and the applicable
 #' \code{testUpper}, \code{testLower}, and \code{testHarm} arguments. The
 #' normalized testing schedules used by the design are stored directly in the
 #' corresponding top-level components.
@@ -633,7 +633,7 @@ print.nSurv <- function(x, digits = 3, show_strata = TRUE, ...) {
   }
 
   cat(
-    "nSurv fixed-design summary ",
+    "nSurv fixed design summary ",
     "(method=", x$method, "; target=", x$variable, ")\n",
     sep = ""
   )

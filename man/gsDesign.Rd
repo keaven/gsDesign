@@ -73,7 +73,7 @@ stopping. The default input \code{astar = 0} selects \code{0.1} for harm
 designs and \eqn{1 - }\code{alpha} for types 5 and 6.
 Actual harm stopping probabilities account for futility and can be smaller
 than the spending targets. Capping harm at an active futility bound can also
-reduce attained spending. See the harm-monitoring section in
+reduce attained spending. See the harm monitoring section in
 \code{\link{gsDesign}}.}
 
 \item{delta}{Effect size for theta under alternative hypothesis. This can be
@@ -392,10 +392,10 @@ the maximum sample size through an iterative process for all options. Since
 options 3 and 4 must compute boundary crossing probabilities under both the
 null and alternative hypotheses, deriving these designs can take longer than
 other options. Options 5 and 6 compute lower bound spending under the null
-hypothesis. Options 7 and 8 add a harm bound to beta-spending futility:
+hypothesis. Options 7 and 8 add a harm bound to beta spending futility:
 option 7 treats both futility and harm bounds as binding for Type I error,
 while option 8 treats both as non-binding. Futility and harm are mutually
-exclusive lower-tail stopping outcomes with separately specified spending
+exclusive lower tail stopping outcomes with separately specified spending
 functions.
 }
 \note{
@@ -439,7 +439,7 @@ The defaults \code{astar = 0.1} (selected by input 0) and
 \code{sfharm = sfLDPocock} provide relatively early spending and aim to flag
 moderately small one-sided p-values favoring harm. At harm boundary \eqn{h},
 that nominal p-value is \eqn{\Phi(h)}, not the cumulative spending and not
-the efficacy-direction p-value displayed by \code{gsBoundSummary()}.
+the efficacy direction p-value displayed by \code{gsBoundSummary()}.
 There is no fixed nominal p-value cutoff guaranteed at every analysis.
 With more analyses, a larger total harm spending \code{astar} may be desired
 to retain similarly permissive nominal harm thresholds, at the cost of more

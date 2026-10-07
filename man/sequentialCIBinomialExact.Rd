@@ -21,13 +21,13 @@ sequentialCIBinomialExact(
 \code{NULL}, planned integer event counts from \code{toInteger(gsD)} are
 used.}
 
-\item{x}{Integer experimental-arm event counts at the analyses in
+\item{x}{Integer experimental arm event counts at the analyses in
 \code{n.I}.}
 
 \item{conf.level}{Two-sided confidence level.}
 
 \item{tol}{Absolute tolerance for bisection on the conditional binomial
-event-probability scale.}
+event probability scale.}
 
 \item{maxiter}{Maximum bisection iterations for each confidence limit.}
 }

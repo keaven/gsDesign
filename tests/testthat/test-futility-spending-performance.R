@@ -70,8 +70,8 @@ test_that("disabling backward search retains starting diagnostics and failure de
   err <- expect_error(gsCPFutilitySpending(x, c(.1, .2), sfl = sfLogistic,
     control = list(backward = FALSE, lower = c(0, .99), upper = c(.01, 1.01), cp_tol = 1e-8)),
     class = "gsCPFutilitySpending_error")
-  expect_match(conditionMessage(err), "backward-pass maximum absolute residual")
-  # The full-reconstruction retry starts from the best deferred candidate.
+  expect_match(conditionMessage(err), "backward pass maximum absolute residual")
+  # The full reconstruction retry starts from the best deferred candidate.
   retry_start <- gsDesign:::.gsCPFDesign(x, sfLogistic, err$solver$backward)
   retry_cp <- vapply(1:2, function(i) sum(gsCP(retry_start, i = i,
     zi = retry_start$lower$bound[i],

@@ -1,8 +1,8 @@
 #' Plot median follow-up across all planned participants
 #'
 #' Plot the forward calculation from \code{medianFollowUp()}, optionally
-#' marking a design's analysis times. Dropout and event-stopping conventions,
-#' input overrides and the planned-population definition are shared with that
+#' marking a design's analysis times. Dropout and event stopping conventions,
+#' input overrides and the planned population definition are shared with that
 #' function. The historical plot name is retained.
 #'
 #' @inheritParams medianFollowUp
@@ -10,7 +10,7 @@
 #'   creates a grid from trial start to its final analysis; without \code{x},
 #'   supply this vector explicitly. Passed as \code{T} to the calculation.
 #' @param showAnalysisTimes Whether to mark the analysis times in \code{x}.
-#' @param timename Nonempty time-unit label. Month(s) and year(s) use axis
+#' @param timename Nonempty time unit label. Month(s) and year(s) use axis
 #'   breaks every 6 months and 0.5 years, respectively.
 #' @return A \code{ggplot} object.
 #' @seealso \code{\link{medianFollowUp}}

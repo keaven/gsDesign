@@ -77,7 +77,7 @@ LFPWE <- function(
   pE1 <- eDE$d / nE
   pC0 <- eDC0 / sum(eDC0_list$n)
   pE0 <- eDE0 / sum(eDE0_list$n)
-  # Inverse-variance weighting across strata
+  # Inverse variance weighting across strata
   v1_strata <- (1 / pC1) + (1 / pE1)
   v1_strat <- 1 / sum(1 / v1_strata)
   v0_strata <- (1 / pC0) + (1 / pE0)
@@ -121,7 +121,7 @@ LFPWE <- function(
     if (hr0 != 1) {
       stop("Schoenfeld method only supports superiority testing (hr0 = 1)")
     }
-    # For stratified: use inverse-variance weighted variance
+    # For stratified: use inverse variance weighted variance
     # Check for single vs multiple strata
     if (!is.matrix(lambdaC) || ncol(lambdaC) == 1) {
       # Single stratum: use standard formula
@@ -149,7 +149,7 @@ LFPWE <- function(
       total_events_H1 <- eDC$d + eDE$d
       eDC0_sch <- total_events_H1 * Qc # Control events under H0
       eDE0_sch <- total_events_H1 * Qe # Experimental events under H0
-      # var0sch then inverse-variance weighted
+      # var0sch then inverse variance weighted
       var0sch <- 1 / sum((1 / eDC0_sch + 1 / eDE0_sch)^(-1))
       # H1 variance uses actual H1 events
       var1sch <- var0sch
@@ -201,7 +201,7 @@ LFPWE <- function(
     # For H1 variance we compute 1/e_events using the input failure rates
     # times the input hr; for H0 variance we set experimental rate to control
     # when computing e_events.
-    # Both H0 and H1 are inverse-variance weighted across strata
+    # Both H0 and H1 are inverse variance weighted across strata
     # Compute eDE0 for BernsteinLagakos H0 variance
     # For superiority (hr0 = 1): use lambdaC for experimental group
     # For non-inferiority/super-superiority (hr0 != 1): use lambdaC * hr0
@@ -221,11 +221,11 @@ LFPWE <- function(
     eDE0_bl <- eDE0_bl_list$d
     # H1 variance per stratum: 1/c_events + 1/e_events (using H1 events)
     var1_bl_strata <- 1 / eDC$d + 1 / eDE$d
-    var1_bl <- 1 / sum(1 / var1_bl_strata) # Inverse-variance weighted
+    var1_bl <- 1 / sum(1 / var1_bl_strata) # Inverse variance weighted
     # H0 variance per stratum: 1/c_events + 1/e_events (using H0 events)
     # where experimental uses control rates (superiority) or control * hr0
     var0_bl_strata <- 1 / eDC0 + 1 / eDE0_bl
-    var0_bl <- 1 / sum(1 / var0_bl_strata) # Inverse-variance weighted
+    var0_bl <- 1 / sum(1 / var0_bl_strata) # Inverse variance weighted
     delta_log <- abs(log(hr / hr0))
     power_val <- NULL
     if (is.null(beta)) {

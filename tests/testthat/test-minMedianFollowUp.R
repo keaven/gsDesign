@@ -39,7 +39,7 @@ test_that("dropout and event stopping match independent exponential calculations
   expect_equal(medianFollowUp(T = 1001, gamma = 1, R = 1, eta = 0, etaE = 1), 1000, tolerance = 1e-8)
 })
 
-test_that("piecewise participant-time hazards and flat hazard intervals work", {
+test_that("piecewise participant time hazards and flat hazard intervals work", {
   expected <- 2 + (log(2) - .2) / .3
   expect_equal(medianFollowUp(T = 20, gamma = c(1, 2, 1), R = c(1, 1, 1),
     eta = c(.1, .3), S = 2), expected, tolerance = 1e-8)
@@ -101,7 +101,7 @@ test_that("invalid inputs and old positional inverse calls fail clearly", {
     eta = matrix(.1, 1, 3)), "stratum dimensions")
 })
 
-test_that("plots retain calendar grids and time-unit controls", {
+test_that("plots retain calendar grids and time unit controls", {
   x <- nSurv(gamma = 10, R = 12, T = 30, minfup = 18)
   p <- plotMinMedianFollowUp(x)
   expect_s3_class(p, "ggplot")

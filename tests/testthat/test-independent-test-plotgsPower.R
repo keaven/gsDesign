@@ -99,7 +99,7 @@ test_that("plotgsPower: plots are correctly rendered, test.type = 2", {
   )
 })
 
-test_that("plotgsPower includes harm in the futility-threshold curve", {
+test_that("plotgsPower includes harm in the futility threshold curve", {
   for (test_type in c(7, 8)) {
     x <- gsDesign(
       k = 3, test.type = test_type, alpha = 0.025, beta = 0.1,
