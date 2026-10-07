@@ -212,10 +212,10 @@ cat(summary(xx, timeunit = "months"))
 
 We now convert this to an exact binomial design.
 Full conversion with `toBinomialExact()` is available for non-binding
-`test.type = 1`, `4`, `6`, and `8`. For type 4, the upper event-count stopping
+`test.type = 1`, `4`, `6`, and `8`. For type 4, the upper event count stopping
 boundary targets beta spending under the alternative; for type 6 it targets
-lower-bound spending under the null using `astar`. For type 8, `upper`
-contains all upper event-count stops and the additional `futility` and `harm`
+lower bound spending under the null using `astar`. For type 8, `upper`
+contains all upper event count stops and the additional `futility` and `harm`
 components partition those stops into mutually exclusive regions. The exact
 futility boundary targets beta spending under the alternative, while the harm
 boundary targets `astar` spending under the null. Exact efficacy repeated and
@@ -380,8 +380,8 @@ VEtable(ebUpdate, ve_update) |>
 Like `gsCP()` for asymptotic group sequential designs,
 `gsCPBinomialExact()` conditions on the interim statistic and calculates the
 probability of crossing each future boundary. Here the sufficient interim
-statistic is the cumulative number of experimental-group events among the
-total events. Conditional on that count, future experimental-group event
+statistic is the cumulative number of experimental group events among the
+total events. Conditional on that count, future experimental group event
 increments follow an exact binomial distribution.
 
 For a single interim analysis, suppose that 9 of the first 20 events were in
@@ -405,7 +405,7 @@ tibble::tibble(
 ) |>
   lt() |>
   lt_format(columns = 1:3, decimals = 3) |>
-  lt_header("Exact Conditional Power after 9 of 20 Experimental-Group Events")
+  lt_header("Exact Conditional Power after 9 of 20 Experimental Group Events")
 ```
 
 The observed interim count is used only as the conditioning state. The
@@ -416,12 +416,12 @@ stopping decision. The default `binding = TRUE` treats *future* futility or
 harm boundaries as stopping rules. For a design with non-binding futility,
 `binding = FALSE` instead reports conditional efficacy power when those future
 boundaries will not be enforced. The calculation accepts `theta` directly for
-conditional experimental-group event probabilities or `ve` for VE or PE
+conditional experimental group event probabilities or `ve` for VE or PE
 assumptions.
 
 Conditional power can also be examined across a range of assumptions about
 future VE or PE. At the first analysis the efficacy and futility bounds are 6
-and 16 experimental-group events, respectively. We compare four hypothetical
+and 16 experimental group events, respectively. We compare four hypothetical
 outcomes that fall strictly below and above each boundary: 5, 7, 15, and 17
 events. Current boundary status is ignored for conditioning, while the default
 `binding = TRUE` continues to enforce future futility stopping.
@@ -491,8 +491,8 @@ At a fixed analysis, `ciBinomialExact()` computes a Clopper--Pearson interval
 [@ClopperPearson1934]
 for the conditional probability that an event is in the experimental group
 and transforms it to the VE or PE scale. The transformation is decreasing, so
-the two probability endpoints are reversed. For the 16 experimental-group
-events among 78 total events reported above, the fixed-look interval is:
+the two probability endpoints are reversed. For the 16 experimental group
+events among 78 total events reported above, the fixed look interval is:
 
 ```{r}
 ciBinomialExact(x = 16, n = 78, ratio = ratio) |>
@@ -504,12 +504,12 @@ Repeated intervals are obtained by inverting the exact group sequential test
 at each analysis [@JennisonTurnbull1984; @CoeTamhane1993]. As in the
 corresponding asymptotic construction, a two-sided $1-\alpha$ interval uses
 $\alpha/2$ in each direction with the same spending function, spending times,
-and count-path ordering. The upper direction mirrors experimental and control
+and count path ordering. The upper direction mirrors experimental and control
 event counts; it does not use the futility boundary. The resulting intervals
 can be conservative because event counts are discrete.
 
-The complete experimental-group event-count path is required. Since the first
-experimental-group count is not reported in this example, the following uses
+The complete experimental group event count path is required. Since the first
+experimental group count is not reported in this example, the following uses
 9 events at the first look only to illustrate the calculation:
 
 ```{r}

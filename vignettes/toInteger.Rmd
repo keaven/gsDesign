@@ -20,7 +20,7 @@ This has a couple of implications on design characteristics:
 - Power on output will not be exactly as input.
 
 This document goes through examples to demonstrate the calculations.
-We begin with a summary of the current method, then use binomial endpoint designs to introduce the basic sample-size rounding behavior.
+We begin with a summary of the current method, then use binomial endpoint designs to introduce the basic sample size rounding behavior.
 The final section covers time-to-event designs, where event counts and enrollment are both converted to integer-compatible plans.
 
 ## Summary of method
@@ -34,11 +34,11 @@ library(gsDesign)
   - For 2:1 randomization, set `ratio = 2` to round to a multiple of 3.
   - For 3:2 randomization, set `ratio = 4` to round to a multiple of 5.
   - Note that for the final analysis the sample size is rounded up to the nearest multiple of `ratio + 1` when `roundUpFinal = TRUE` is specified. If `roundUpFinal = FALSE`, the final sample size is rounded to the nearest multiple of `ratio + 1`.
-- For a `gsSurv` object, `n.I` is an event-count schedule rather than a sample-size schedule.
+- For a `gsSurv` object, `n.I` is an event count schedule rather than a sample size schedule.
   Interim event counts are rounded to the nearest integer, while the final event count is rounded up when `roundUpFinal = TRUE`.
-- Survival-design sample size is rounded separately to an allocation-compatible total sample size.
-  In seasonal or piecewise event-rate designs, `toInteger()` may adjust that rounded sample size by allocation multiples, with a warning, when needed to make the final integer event target achievable.
-  See `vignette("MultiSeasonRareEvents", package = "gsDesign")` for a complete seasonal exact-binomial monitoring workflow.
+- Survival design sample size is rounded separately to an allocation-compatible total sample size.
+  In seasonal or piecewise event rate designs, `toInteger()` may adjust that rounded sample size by allocation multiples, with a warning, when needed to make the final integer event target achievable.
+  See `vignette("MultiSeasonRareEvents", package = "gsDesign")` for a complete seasonal exact binomial monitoring workflow.
 
 ## Binomial endpoint designs
 
@@ -185,7 +185,7 @@ sum(xnbi$upper$prob[, 2])
 
 ## Time-to-event endpoint designs
 
-For a `gsSurv` object, `n.I` is the event-count schedule.
+For a `gsSurv` object, `n.I` is the event count schedule.
 The `toInteger()` algorithm first converts event counts to integers.
 Interim event counts are rounded to the nearest integer.
 The final event count is rounded up when `roundUpFinal = TRUE`; otherwise, it is rounded to the nearest integer.
@@ -196,7 +196,7 @@ Total sample size is handled separately.
 The final expected enrollment is rounded to a multiple of `ratio + 1`, rounded up by default or to the nearest multiple if `roundUpFinal = FALSE`.
 Enrollment rates are scaled to achieve that rounded sample size over the original calendar plan.
 If that normally rounded sample size cannot support the final integer event target, `toInteger()` increases or decreases the final sample size by allocation multiples until the event target is achievable, with a warning.
-Finally, the survival quantities are rebuilt: the final analysis time is solved to match the final integer event target, and the interim calendar times are solved to match the integer-design information fractions.
+Finally, the survival quantities are rebuilt: the final analysis time is solved to match the final integer event target, and the interim calendar times are solved to match the integer design information fractions.
 
 ```{r}
 x <- gsSurv(ratio = 1, hr = .74)
@@ -215,12 +215,12 @@ z <- x |> toInteger(roundUpFinal = FALSE)
 as.numeric(z$eNE + z$eNC)
 ```
 
-### Seasonal design with a final zero event-rate period
+### Seasonal design with a final zero event rate period
 
 Seasonal rare-event designs often use piecewise event rates with nonzero rates during seasons and zero rates outside seasons.
-The example below has three 6-month seasons separated by off-season zero event-rate periods; the final piecewise event-rate period is zero.
+The example below has three 6-month seasons separated by off-season zero event rate periods; the final piecewise event rate period is zero.
 This is the setting where it is especially important that `roundUpFinal = TRUE` applies to the final event count.
-For a complete seasonal exact-binomial monitoring workflow, see `vignette("MultiSeasonRareEvents", package = "gsDesign")`.
+For a complete seasonal exact binomial monitoring workflow, see `vignette("MultiSeasonRareEvents", package = "gsDesign")`.
 
 ```{r}
 seasonal_event_rate_control <- 0.003
@@ -261,8 +261,8 @@ seasonal_design$T
 
 The final continuous event target is just under 36 events, so with the default `roundUpFinal = TRUE` the integer event target is 36.
 The final expected sample size is just over 4099, which rounds up to 4100 for 3:1 randomization.
-For this design, the rounded sample size supports the rounded-up final event target, so no sample-size feasibility warning is needed.
-The final analysis time moves later because the rounded-up event target requires additional follow-up under the late zero event-rate period.
+For this design, the rounded sample size supports the rounded-up final event target, so no sample size feasibility warning is needed.
+The final analysis time moves later because the rounded-up event target requires additional follow-up under the late zero event rate period.
 
 ```{r}
 seasonal_integer <- toInteger(seasonal_design)
@@ -280,8 +280,8 @@ data.frame(
 rowSums(seasonal_integer$eNC + seasonal_integer$eNE)[seasonal_integer$k]
 ```
 
-The important point is that final event-count rounding is not interchangeable with final sample-size rounding.
-Integer event targets define the information schedule; the enrollment plan and analysis times are then adjusted only as much as needed to keep those integer event targets attainable under the piecewise event-rate model.
+The important point is that final event count rounding is not interchangeable with final sample size rounding.
+Integer event targets define the information schedule; the enrollment plan and analysis times are then adjusted only as much as needed to keep those integer event targets attainable under the piecewise event rate model.
 
 The feasibility adjustment is easier to see in a rare-event design where the rounded-up event target is too high for the initially rounded sample size.
 In the next example, the final event target rounds up to 43, but the rounded final sample size of 5038 cannot ever produce that many expected events.

@@ -34,7 +34,7 @@ library(ggplot2)
 
 **gsEffectSpending()** selects spending parameters so that approximate observed
 treatment effects at specified interim efficacy, futility or harm bounds match
-natural-scale targets. A single function supports one boundary or a joint fit.
+natural scale targets. A single function supports one boundary or a joint fit.
 It builds on the established gsDesign boundary and probability calculations.
 
 This answers a different question from CP, PP or conditional assurance:
@@ -43,7 +43,7 @@ The result still specifies spending functions, rather than only isolated
 boundary values. Planned power and nominal error budgets are retained by
 recalculating information. Maximum sample size may therefore change.
 
-Effects at bounds are normal-theory approximations, not bias-adjusted
+Effects at bounds are normal theory approximations, not bias-adjusted
 sequential estimates. The candidate's information must be used in each
 transformation. A target cannot generally be converted to a fixed Z boundary
 once, using the original sample size.
@@ -105,7 +105,7 @@ stopifnot(max(abs(achieved - fit$effectSpending$targets$target_effect)) < 1e-5)
 
 p <- gsProbability(d = replay, theta = c(0, replay$delta))
 knitr::kable(data.frame(
-  Quantity = c("Fixed-design N", "Reference maximum N", "Fitted maximum N",
+  Quantity = c("Fixed design N", "Reference maximum N", "Fitted maximum N",
                "Inflation over fixed design (%)", "Actual type I error",
                "Power at planned alternative"),
   Value = c(n_fixed, tail(x$n.I, 1), tail(replay$n.I, 1),
@@ -117,7 +117,7 @@ knitr::kable(data.frame(
 Actual type I error with lower stopping enforced can differ from the nominal
 efficacy budget. Check the design's binding/nonbinding conventions, not merely
 its stored alpha. A successful effect match also does not establish that its
-sample-size inflation is acceptable; a practical limit such as 20% over a
+sample size inflation is acceptable; a practical limit such as 20% over a
 fixed design may be part of design selection.
 
 Sample sizes here are continuous planning values. After rounding, recheck
@@ -139,7 +139,7 @@ gsBoundSummary(replay, exclude = "B-value", digits = 4)
 CP, CP H1 and PP in the summary give additional perspectives on these
 boundaries; none was directly targeted. The default PP prior is the broad
 normal prior used by gsBoundSummary(), centered halfway between the null and
-planned alternative on the standardized-effect scale.
+planned alternative on the standardized effect scale.
 
 ## Compare the fitted spending shapes
 
@@ -179,7 +179,7 @@ unrestricted refitting after observing unblinded results.
 For a response endpoint, let the control response probability be 0.1 and
 experimental response probability 0.2. The alternative risk difference is 0.1.
 nBinomial() supplies the fixed sample size; delta0 and delta1 define the
-natural-scale interpretation.
+natural scale interpretation.
 
 ```{r risk-difference}
 n_binomial <- nBinomial(p1 = .1, p2 = .2)
@@ -206,11 +206,11 @@ One target per free parameter is required for each selected family. Piecewise
 linear spending is also supported, with knots fixed at the selected spending
 times. Equal numbers of parameters and targets do not prove uniqueness.
 
-The risk-difference mapping is approximate: it does not identify an exact
-observed 2-by-2 table. Invalid risk-difference targets are rejected, and
+The risk difference mapping is approximate: it does not identify an exact
+observed 2-by-2 table. Invalid risk difference targets are rejected, and
 out-of-range achieved approximations are not silently clipped.
 
-## Hazard ratios require explicit event-scale metadata
+## Hazard ratios require explicit event scale metadata
 
 An HR transformation must distinguish event information from patient sample
 size. Here ratio = 2 is experimental/control allocation, the null HR is 1.1
@@ -237,17 +237,17 @@ data.frame(
 ) |> knitr::kable(digits = 4)
 ```
 
-The function checks the event-scale drift against the supplied HR metadata.
+The function checks the event scale drift against the supplied HR metadata.
 It also supports an alternative HR above the null; the effect direction is
 explicit, rather than assuming HR below 1 is always the favorable direction.
 
 This example uses a statistical event-driven design. `gsEffectSpending()` also
 accepts survival objects directly and recalculates their enrollment and event
-summaries. HR calibration still requires explicit event-scale metadata,
+summaries. HR calibration still requires explicit event scale metadata,
 which must match the survival object's allocation and hazard ratios. Its
-chosen survival method determines the event-count drift.
+chosen survival method determines the event count drift.
 
-For risk ratios, use scale = "rr" with correctly specified **log-ratio**
+For risk ratios, use scale = "rr" with correctly specified **log ratio**
 delta0/delta1 reference metadata, but supply target_effect as a ratio.
 
 ## Diagnostics and interpretation
@@ -270,9 +270,9 @@ characteristics, sample size, and every boundary before choosing a design.
 
 ## Built on established computational tools
 
-The new interface reuses gsDesign(), spending families, effect-at-bound
+The new interface reuses gsDesign(), spending families, effect at bound
 transformations and joint probability calculations. Its innovation is the
-clinical-scale calibration request and coordinated parameter search.
+clinical scale calibration request and coordinated parameter search.
 Tests reconstruct designs and verify their properties using these existing
 tools, including joint targets, ratio direction and allocation, and error
 handling.
