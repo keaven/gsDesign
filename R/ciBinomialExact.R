@@ -1,6 +1,6 @@
 #' Exact confidence intervals for vaccine or prevention efficacy
 #'
-#' Computes a fixed-look Clopper--Pearson confidence interval for vaccine or
+#' Computes a fixed look Clopper--Pearson confidence interval for vaccine or
 #' prevention efficacy after conditioning on the total number of events.
 #'
 #' @param x Number of events in the experimental group.
@@ -74,11 +74,11 @@ ciBinomialExact <- function(
 #' @param n.I Increasing integer total event counts at completed analyses. If
 #'   \code{NULL}, planned integer event counts from \code{toInteger(gsD)} are
 #'   used.
-#' @param x Integer experimental-arm event counts at the analyses in
+#' @param x Integer experimental arm event counts at the analyses in
 #'   \code{n.I}.
 #' @param conf.level Two-sided confidence level.
 #' @param tol Absolute tolerance for bisection on the conditional binomial
-#'   event-probability scale.
+#'   event probability scale.
 #' @param maxiter Maximum bisection iterations for each confidence limit.
 #'
 #' @return A data frame with one row per completed analysis containing the
@@ -87,17 +87,17 @@ ciBinomialExact <- function(
 #'
 #' @details
 #' A two-sided interval with confidence level \code{1 - alpha} uses the same
-#' spending function, spending times, and count-path ordering in both
+#' spending function, spending times, and count path ordering in both
 #' directions, with \code{alpha / 2} in each tail. The lower efficacy limit inverts
-#' the usual lower event-count efficacy test. The upper efficacy limit inverts
-#' its mirror image after exchanging experimental- and control-arm event
+#' the usual lower event count efficacy test. The upper efficacy limit inverts
+#' its mirror image after exchanging experimental and control arm event
 #' counts. This mirrored test is not the design's futility boundary.
 #'
 #' Non-binding futility and harm are ignored in both directions. Coverage is
 #' generally conservative because the exact rejection regions are discrete.
 #' Spending time remains relative to the planned final event count.
 #'
-#' This follows the repeated-confidence-interval construction of Jennison and
+#' This follows the repeated confidence interval construction of Jennison and
 #' Turnbull (1984), using exact Bernoulli ordering as in Coe and Tamhane (1993).
 #'
 #' @references
@@ -286,7 +286,7 @@ validateExactSequentialCIInputs <- function(gsD, n.I, x, conf.level, tol, maxite
   }
   if (is.null(x) || !is.numeric(x) || length(x) < 1 ||
       any(!is.finite(x)) || any(x != floor(x)) || any(x < 0)) {
-    stop("x must contain non-negative integer experimental-arm event counts", call. = FALSE)
+    stop("x must contain non-negative integer experimental arm event counts", call. = FALSE)
   }
   if (is.null(n.I)) n.I <- toInteger(gsD)$n.I
   if (!is.numeric(n.I) || length(n.I) != length(x) || any(!is.finite(n.I)) ||

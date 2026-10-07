@@ -12,9 +12,9 @@
  * boundaries.
  *
  * For a given drift parameter @p xtheta and fixed lower cutoffs @p a, finds the
- * upper cutoffs @p b that match the target upper-tail crossing probabilities
+ * upper cutoffs @p b that match the target upper tail crossing probabilities
  * @p probhi by Newton-Raphson iteration (Jennison & Turnbull, 2000, Section
- * 19.4.1). The implied lower-tail crossing probabilities are returned in
+ * 19.4.1). The implied lower tail crossing probabilities are returned in
  * @p problo; they do not depend on the iterate and are evaluated once per
  * analysis. An analysis with a non-positive target has no upper bound: `+Inf`
  * is returned and the iteration is skipped. Lower cutoffs may be `-Inf`.
@@ -26,8 +26,8 @@
  * @param[in] I Statistical information at each analysis (length `nanal`).
  * @param[in] a Fixed lower Z cutoffs at each analysis (length `nanal`).
  * @param[out] b Upper Z cutoffs at each analysis (length `nanal`).
- * @param[out] problo Lower-tail crossing probabilities (length `nanal`).
- * @param[in] probhi Target upper-tail crossing probabilities (length `nanal`);
+ * @param[out] problo Lower tail crossing probabilities (length `nanal`).
+ * @param[in] probhi Target upper tail crossing probabilities (length `nanal`);
  *   a value `<= 0` means no upper bound.
  * @param[in] xtol Convergence tolerance on the bound (`tol = xtol[0]`).
  * @param[in] xr Grid parameter (`r = xr[0]`).
@@ -127,7 +127,7 @@ void gsbound1(int *xnanal, double *xtheta, double *I, double *a, double *b,
         btem2 = -GS_ZCLAMP;
       bdelta = fabs(btem2 - btem);
     }
-    /* lower-tail crossing probability for the fixed lower bound */
+    /* lower tail crossing probability for the fixed lower bound */
     plo = 0.;
     for (ii = 0; ii <= m1; ii++) {
       xlo = (z1[ii] * rtIkm1 - a[i] * rtIk + drift) / rtdeltak;

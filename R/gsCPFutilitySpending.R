@@ -2,7 +2,7 @@
 #' @title Calibrate Futility Spending to Conditional Power Targets
 #'
 #' @description
-#' \code{gsCPFutilitySpending()} selects parameters for a beta-spending futility
+#' \code{gsCPFutilitySpending()} selects parameters for a beta spending futility
 #' boundary so that conditional power at one or more interim futility bounds
 #' matches specified targets. Each candidate design is reconstructed with
 #' \code{gsDesign()}, which recalculates the statistical information required to
@@ -66,7 +66,7 @@
 #'   specifies the future effect. Future efficacy and futility boundaries
 #'   remain in force.
 #'   With multiple targets, each is a total future conditional power at its
-#'   corresponding interim, not a next-analysis conditional power.
+#'   corresponding interim, not a next analysis conditional power.
 #' @param i Interim analysis indices corresponding to \code{target_cp}. Values must
 #'   identify active futility bounds, be unique, and be in
 #'   \code{1:(x$k - 1)}. Results are ordered by analysis.
@@ -101,7 +101,7 @@
 #'       the final \code{cp_tol} acceptance check.}
 #'     \item{\code{backward}}{Allow a latest-to-earliest coordinate fallback
 #'       if the initial joint fit misses the targets (default \code{TRUE}).}
-#'     \item{\code{trace}}{Display joint-optimizer progress (default
+#'     \item{\code{trace}}{Display joint optimizer progress (default
 #'       \code{FALSE}). Both \code{backward} and \code{trace} must be
 #'       nonmissing scalar logical values.}
 #'   }
@@ -113,7 +113,7 @@
 #' \code{x$timing = c(.5, .75, 1)} keeps the analyses at 50\%, 75\%, and 100\%
 #' of the final information. Power-preserving calibration may change the
 #' maximum information and thus the absolute information \code{n.I} at every
-#' analysis while retaining these fractions. Fixed-information calibration
+#' analysis while retaining these fractions. Fixed information calibration
 #' (\code{gsCAFutilitySpending()} and
 #' \code{gsCPOSFutilitySpending(mode = "fixed_information")}) also holds
 #' \code{n.I} and the efficacy boundaries fixed.
@@ -126,7 +126,7 @@
 #' or that absolute calendar analysis dates must be fixed. See
 #' \strong{Survival designs} for how survival calendar times are handled.
 #'
-#' @section Spending-parameter search defaults:
+#' @section Spending parameter search defaults:
 #' When not supplied in \code{control}, parameter limits and fallback starting
 #' values are selected by family:
 #' \tabular{llll}{
@@ -148,13 +148,13 @@
 #'
 #' @section Survival designs:
 #' Survival inputs retain their survival classes and endpoint assumptions.
-#' Candidate probabilities are evaluated on the statistical event-count scale.
-#' Power-preserving probability calibration of fixed-duration, rate-scaled
+#' Candidate probabilities are evaluated on the statistical event count scale.
+#' Power-preserving probability calibration of fixed duration, rate-scaled
 #' designs rebuilds the survival plan only for the selected fit and checks all
 #' targets again on the returned object. If the deferred search or that check
 #' fails, calibration retries once with full survival reconstruction, retaining
 #' the best available internal parameters as starting values. Effect calibration
-#' and accrual- or follow-up-duration solves reconstruct the plan for every
+#' and accrual or follow-up duration solves reconstruct the plan for every
 #' candidate.
 #' For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
 #' spending times, and the enrollment/follow-up constraint are retained;
@@ -166,9 +166,9 @@
 #' realized calendar times and enrollment periods and rescales enrollment rates
 #' to attain the fitted event counts. The evaluated alternative \code{x$hr}
 #' and its achieved power are used, even if the original design alternative
-#' \code{x$hr1} differed. Original event-trigger and calendar-cap rules are not
-#' re-applied: the realized schedule becomes the new plan. Fixed-information
-#' conditional-POS/CA calibration instead retains the survival plan, event
+#' \code{x$hr1} differed. Original event trigger and calendar cap rules are not
+#' reapplied: the realized schedule becomes the new plan. Fixed information
+#' conditional POS/CA calibration instead retains the survival plan, event
 #' counts and efficacy bounds while updating futility and achieved power.
 #'
 #' Priors and explicit \code{theta} remain standardized drifts per square root
@@ -543,7 +543,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
   }
   if (!(x$test.type %in% c(3L, 4L, 7L, 8L))) {
     .gsCPFAbort(
-      "x$test.type must be 3, 4, 7, or 8 for beta-spending futility calibration.",
+      "x$test.type must be 3, 4, 7, or 8 for beta spending futility calibration.",
       "gsCPFutilitySpending_input_error"
     )
   }
@@ -623,7 +623,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
     name <- unname(if (sfl %in% names(aliases)) aliases[[sfl]] else sfl)
     if (!name %in% names(registry)) {
       .gsCPFAbort(
-        paste0("Unsupported spending-function name: ", sfl, "."),
+        paste0("Unsupported spending function name: ", sfl, "."),
         "gsCPFutilitySpending_input_error"
       )
     }
@@ -999,7 +999,7 @@ gsCPFutilitySpending <- function(x, target_cp, i = seq_along(target_cp),
     "; candidate maximum information: ", format(best$design$n.I[best$design$k], digits = 7),
     "; parameter bound reached: ", bound_reached,
     if (!is.null(solver$backward_residual) && any(is.finite(solver$backward_residual))) paste0(
-      "; backward-pass maximum absolute residual: ",
+      "; backward pass maximum absolute residual: ",
       format(max(abs(solver$backward_residual), na.rm = TRUE), digits = 6)
     ) else "",
     "; solver: ", solver$message

@@ -22,7 +22,7 @@ repeatedPValueBinomialExact(
 This must have at most 1 value greater than or equal to planned
 final events (`gsD$maxn.IPlan` if available, otherwise `max(gsD$n.I)`).}
 
-\item{x}{Integer experimental-arm event counts at the analyses in `n.I`.}
+\item{x}{Integer experimental arm event counts at the analyses in `n.I`.}
 
 \item{interval}{Search interval for the p-values. As in [sequentialPValue()],
 values outside this interval are truncated to the nearest endpoint.}
@@ -40,7 +40,7 @@ A data frame with one row per completed analysis containing:
 \describe{
   \item{`Analysis`}{Analysis index.}
   \item{`n.I`}{Total events at analysis.}
-  \item{`x`}{Observed experimental-arm events.}
+  \item{`x`}{Observed experimental arm events.}
   \item{`repeated_p_value`}{Repeated p-value for the analysis.}
   \item{`bound_at_repeated_p_value`}{Integer efficacy bound at the repeated p-value.}
 }
@@ -48,7 +48,7 @@ A data frame with one row per completed analysis containing:
 \description{
 Computes repeated p-values for the exact binomial design implied by a
 [gsSurv()] object. The p-value at analysis `j` is the smallest local
-one-sided alpha level for which the observed experimental-arm event count
+one-sided alpha level for which the observed experimental arm event count
 crosses the exact lower efficacy bound at that analysis. Non-binding
 futility and harm bounds are ignored for the Type I error calculation.
 }

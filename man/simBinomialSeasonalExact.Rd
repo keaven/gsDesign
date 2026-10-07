@@ -2,7 +2,7 @@
 % Please edit documentation in R/simBinomialSeasonalExact.R
 \name{simBinomialSeasonalExact}
 \alias{simBinomialSeasonalExact}
-\title{Simulate exact-binomial seasonal monitoring scenarios}
+\title{Simulate exact binomial seasonal monitoring scenarios}
 \usage{
 simBinomialSeasonalExact(
   gsD,
@@ -31,7 +31,7 @@ simBinomialSeasonalExact(
 \item{ve}{Numeric vector of vaccine efficacy (or prevention efficacy)
 scenarios to simulate. Each value must be finite and less than 1.
 `ve = 0` corresponds to equal event rates (superiority null); `ve < 0`
-corresponds to experimental-arm event rates above control (non-inferiority
+corresponds to experimental arm event rates above control (non-inferiority
 margin or harmful scenarios).}
 
 \item{nsim}{Integer scalar or vector giving the number of simulations per
@@ -48,14 +48,14 @@ event probabilities corresponding to `ve`.}
 cumulative events at analyses. If `NULL`, these are derived from
 `timing * toInteger(gsD)$n.I[k]`.}
 
-\item{timing}{Optional increasing cumulative spending-time vector ending at 1
+\item{timing}{Optional increasing cumulative spending time vector ending at 1
 used to derive `planned_counts` when `planned_counts = NULL`.}
 
-\item{enroll_control_per_look}{Optional control-arm enrollment by look
+\item{enroll_control_per_look}{Optional control arm enrollment by look
 (scalar or length `k` integer vector). If both enrollment vectors are
 `NULL`, defaults are derived from the seasonal accrual pattern in `gsD`.}
 
-\item{enroll_experimental_per_look}{Optional experimental-arm enrollment by
+\item{enroll_experimental_per_look}{Optional experimental arm enrollment by
 look (scalar or length `k` integer vector). If `NULL` and
 `enroll_control_per_look` is supplied, this is set using `gsD$ratio`.}
 
@@ -68,11 +68,11 @@ be applied (default: all interim looks).}
 \item{max_multiplier}{Maximum multiplicative enrollment increase at a look
 when adaptation is enabled.}
 
-\item{usTime}{Optional upper spending-time override passed to
+\item{usTime}{Optional upper spending time override passed to
 [toBinomialExact()]. If `NULL`, spending time defaults to
 `1 / k, 2 / k, ..., 1`.}
 
-\item{lsTime}{Optional lower spending-time override for `test.type = 4`.
+\item{lsTime}{Optional lower spending time override for `test.type = 4`.
 If `NULL`, this defaults to `usTime`.}
 
 \item{final_full_spending}{Logical scalar. If `TRUE`, force full alpha
@@ -96,7 +96,7 @@ A list with:
 }
 }
 \description{
-Simulate seasonal rare-event trials monitored with exact-binomial efficacy
+Simulate seasonal rare-event trials monitored with exact binomial efficacy
 bounds derived from a `gsSurv` design. This helper supports fixed enrollment
 and a simple blinded information-adaptive enrollment rule while keeping the
 spending framework fixed through the original `gsSurv` design object.

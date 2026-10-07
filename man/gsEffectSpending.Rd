@@ -2,7 +2,7 @@
 % Please edit documentation in R/gsEffectSpending.R
 \name{gsEffectSpending}
 \alias{gsEffectSpending}
-\title{Calibrate Spending to Natural-Scale Effects at Boundaries}
+\title{Calibrate Spending to Natural Scale Effects at Boundaries}
 \usage{
 gsEffectSpending(
   x,
@@ -22,7 +22,7 @@ The analysis information fractions in \code{x$timing} are held fixed.
 These fractions are distinct from the times supplied to the spending
 functions; see \strong{Information fractions and spending times} below.}
 
-\item{target_effect}{Finite natural-scale effect targets.}
+\item{target_effect}{Finite natural scale effect targets.}
 
 \item{i}{Interim indices, one per target. Duplicate boundary/index pairs
 and inactive boundaries are not allowed.}
@@ -41,7 +41,7 @@ n.fix > 1. For RR, delta0/delta1 must be log ratios.
 HR requires information = "events", ratio (experimental/control),
 hr0 (null HR), and hr1 (alternative HR), all explicitly supplied.
 For statistical designs, the reference delta must agree with
-abs(log(hr1/hr0)) * sqrt(ratio)/(1 + ratio), verifying its event-count
+abs(log(hr1/hr0)) * sqrt(ratio)/(1 + ratio), verifying its event count
 scale. For survival designs, metadata must match the stored allocation
 and hazard ratios; the selected survival method determines the drift.}
 
@@ -80,7 +80,7 @@ two-parameter functions and piecewise linear spending. Joint fits check
 all targets simultaneously. Untargeted spending specifications remain fixed,
 but numerical boundaries may change as information is recalculated.
 
-These are approximate effects at bounds, not true-effect assumptions,
+These are approximate effects at bounds, not true effect assumptions,
 posterior estimates or bias-adjusted sequential estimates. HRs and RRs are
 supplied as ratios, not logs. Risk differences must lie in [-1, 1].
 An effect is transformed using each candidate's information.
@@ -89,7 +89,7 @@ Count equality does not ensure identifiability. A numerical Jacobian rank
 and condition number are returned as local diagnostics, not proofs of
 uniqueness. Harm/futility coincidence is reported and may indicate capping.
 A failed search does not prove mathematical infeasibility. Inspect all
-operating characteristics and sample-size inflation before choosing a design.
+operating characteristics and sample size inflation before choosing a design.
 Changing timing or rounding need not retain the calibrated effects.
 }
 \section{Information fractions and spending times}{
@@ -100,7 +100,7 @@ fractions \code{x$n.I / x$n.I[x$k]}, ending at 1. For example,
 \code{x$timing = c(.5, .75, 1)} keeps the analyses at 50\%, 75\%, and 100\%
 of the final information. Power-preserving calibration may change the
 maximum information and thus the absolute information \code{n.I} at every
-analysis while retaining these fractions. Fixed-information calibration
+analysis while retaining these fractions. Fixed information calibration
 (\code{gsCAFutilitySpending()} and
 \code{gsCPOSFutilitySpending(mode = "fixed_information")}) also holds
 \code{n.I} and the efficacy boundaries fixed.
@@ -117,13 +117,13 @@ or that absolute calendar analysis dates must be fixed. See
 \section{Survival designs}{
 
 Survival inputs retain their survival classes and endpoint assumptions.
-Candidate probabilities are evaluated on the statistical event-count scale.
-Power-preserving probability calibration of fixed-duration, rate-scaled
+Candidate probabilities are evaluated on the statistical event count scale.
+Power-preserving probability calibration of fixed duration, rate-scaled
 designs rebuilds the survival plan only for the selected fit and checks all
 targets again on the returned object. If the deferred search or that check
 fails, calibration retries once with full survival reconstruction, retaining
 the best available internal parameters as starting values. Effect calibration
-and accrual- or follow-up-duration solves reconstruct the plan for every
+and accrual or follow-up duration solves reconstruct the plan for every
 candidate.
 For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
@@ -135,9 +135,9 @@ For \code{gsSurvPower()} inputs, power-preserving calibration fixes the
 realized calendar times and enrollment periods and rescales enrollment rates
 to attain the fitted event counts. The evaluated alternative \code{x$hr}
 and its achieved power are used, even if the original design alternative
-\code{x$hr1} differed. Original event-trigger and calendar-cap rules are not
-re-applied: the realized schedule becomes the new plan. Fixed-information
-conditional-POS/CA calibration instead retains the survival plan, event
+\code{x$hr1} differed. Original event trigger and calendar cap rules are not
+reapplied: the realized schedule becomes the new plan. Fixed information
+conditional POS/CA calibration instead retains the survival plan, event
 counts and efficacy bounds while updating futility and achieved power.
 
 Priors and explicit \code{theta} remain standardized drifts per square root

@@ -27,20 +27,20 @@ Primarily, this is used for updating a design at the time of analysis.}
 \item{alpha}{Optional alpha level for deriving updated exact efficacy bounds.
 If \code{NULL}, the alpha level from \code{x} is used.}
 
-\item{usTime}{Optional upper spending-time override (length \code{k} or
+\item{usTime}{Optional upper spending time override (length \code{k} or
 \code{k - 1}, with final value appended as 1 if needed). If \code{NULL},
 this defaults to \code{observedEvents / x$maxn.IPlan} (capped at 1) when
 \code{observedEvents} is supplied, or to the planned design timing
 otherwise.}
 
-\item{lsTime}{Optional lower spending-time override for \code{test.type = 4},
+\item{lsTime}{Optional lower spending time override for \code{test.type = 4},
 \code{6}, or \code{8}
 (same length and monotonicity requirements as \code{usTime}). If
 \code{NULL}, it defaults to \code{usTime}.}
 
 \item{maxSpend}{Logical scalar. If `TRUE`, force full alpha spending (and, for
 `test.type = 4` or `8`, full beta spending; for `test.type = 6`, full
-lower-bound spending under the null; and, for `test.type = 8`, full harm
+lower bound spending under the null; and, for `test.type = 8`, full harm
 spending under the null) at the final analysis even when
 `observedEvents[k] < x$maxn.IPlan`. This keeps earlier analysis spending
 unchanged and applies the override only at the last look.}
@@ -53,10 +53,10 @@ An object with primary class \code{gsBinomialExactSpending},
   analysis-specific testing indicators, spending times, planned final event
   count, `maxSpend`, and the evaluated conversion call. The retained
   randomization ratio can be used by \code{\link{VEtable}}. For
-  `test.type = 6`, the exact object's upper event-count bound represents the
+  `test.type = 6`, the exact object's upper event count bound represents the
   non-binding lower stopping bound, with its first probability column
   calibrated under the null hypothesis. For `test.type = 8`, `upper`
-  represents all upper event-count stops, while `futility` and `harm`
+  represents all upper event count stops, while `futility` and `harm`
   partition those stops into mutually exclusive components.
 }
 \description{
@@ -71,16 +71,16 @@ can update a fixed design. Spending still uses the original planned final
 event count as denominator, including under- and over-runs; \code{maxSpend}
 can request full spending for an under-run. No artificial interim is added.
 
-Test types 1 (one-sided), 4 (non-binding beta-spending futility), 6
-(non-binding lower-bound spending under the null), and 8 (non-binding
+Test types 1 (one-sided), 4 (non-binding beta spending futility), 6
+(non-binding lower bound spending under the null), and 8 (non-binding
 futility and harm) are supported for full conversion. For Type 8, the exact
-upper event-count stopping probability is partitioned into mutually
+upper event count stopping probability is partitioned into mutually
 exclusive futility and harm components. Harm spending is calibrated under
 the null ignoring futility stopping, but retaining efficacy stopping.
 Reported harm probabilities assume futility is followed and can be smaller
 than spending targets. Discreteness and the requirement that the harm region
 be nested within the active futility region can also reduce spending. Binding
-designs (types 2, 3, 5, and 7) are outside the non-binding exact-efficacy
+designs (types 2, 3, 5, and 7) are outside the non-binding exact efficacy
 framework. Exact repeated and sequential efficacy
 p-values can nevertheless be computed for non-binding types 1, 4, 6, and 8
 with \code{repeatedPValueBinomialExact()} and
@@ -91,7 +91,7 @@ The exact binomial routine \code{gsBinomialExact} has requirements that may not 
 by the initial asymptotic approximation. 
 Thus, the approximations are updated to satisfy the following requirements of \code{gsBinomialExact}:
 \code{a} (the efficacy bound) must be positive, non-decreasing, and strictly less than n.I
-\code{b} (the upper event-count stopping bound for futility, harm, or the
+\code{b} (the upper event count stopping bound for futility, harm, or the
 Type 6 lower bound) must be positive, non-decreasing, and strictly greater than a
 \code{n.I - b} must be non-decreasing and >= 0
 
@@ -99,7 +99,7 @@ With `observedEvents`, spending times are based on
 \code{observedEvents / x$maxn.IPlan}. If \code{maxSpend = TRUE}, the final
 spending time is set to 1 so all remaining spending is used at the last look.
 If \code{x$testLower} is present (for example from \code{gsSurv()} with
-selective lower-bound looks), lower-bound spending is flattened at analyses
+selective lower bound looks), lower bound spending is flattened at analyses
 where \code{testLower = FALSE}.
 For Type 4, the exact futility bound at a skipped look carries forward
 \code{n.I - b} from the preceding look (or uses \code{b = n.I + 1}
@@ -141,7 +141,7 @@ toBinomialExact(x)
 toBinomialExact(x, observedEvents = c(20,55,80))
 # Update exact efficacy bounds using a different alpha level
 toBinomialExact(x, observedEvents = c(20,55,80), alpha = 0.01)
-# Explicit spending-time override
+# Explicit spending time override
 toBinomialExact(x, observedEvents = c(20, 55, 80), usTime = c(.25, .65, 1))
 # Optionally force full spending at final look when final events are below plan
 toBinomialExact(x, observedEvents = c(20, 55, 75), maxSpend = TRUE)

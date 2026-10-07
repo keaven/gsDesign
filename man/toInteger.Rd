@@ -61,7 +61,7 @@ single-analysis \code{gsSurv} representation and returned as an
 same way as the final event count for a \code{gsSurv} object, and its total
 sample size \code{n} is rounded according to \code{ratio}.
 
-For a \code{gsSurv} object, \code{x$n.I} is an event-count schedule.
+For a \code{gsSurv} object, \code{x$n.I} is an event count schedule.
 \code{toInteger()} rounds the final planned event count (up when
 \code{roundUpFinal = TRUE}; otherwise to nearest integer, with a 0.01
 tolerance), then derives interim integer event targets from
@@ -70,23 +70,23 @@ and strictly increasing. Group sequential boundaries and spending are
 recomputed with \code{gsDesign()} at the integer event counts.
 For a single-analysis survival design, the fixed efficacy boundary is
 retained and its power is recomputed at the integer final event count
-without invoking multi-look group-sequential calculations.
+without invoking multi-look group sequential calculations.
 
 Total sample size for a survival design is then updated under a fixed
 calendar plan (same enrollment periods, study duration, and minimum
-follow-up). Enrollment rates are scaled proportionally to the final-event
+follow-up). Enrollment rates are scaled proportionally to the final event
 inflation factor and rounded to the nearest allocation multiple
 \code{ratio + 1} (or rounded up when \code{roundUpFinal = TRUE}), with
-additional allocation-step adjustment only if needed to make the integer
+additional allocation step adjustment only if needed to make the integer
 final event target achievable.
 
-If fixed-calendar enrollment-rate inflation cannot make the integer final
+If fixed calendar enrollment rate inflation cannot make the integer final
 event target feasible, \code{toInteger()} falls back to a variable-duration
 solve and issues a warning.
-For a complete seasonal exact-binomial monitoring workflow, see
+For a complete seasonal exact binomial monitoring workflow, see
 \code{vignette("MultiSeasonRareEvents", package = "gsDesign")}.
 
-Selective-bound settings (\code{testUpper}, \code{testLower}, \code{testHarm},
+Selective bound settings (\code{testUpper}, \code{testLower}, \code{testHarm},
 and harm spending for \code{test.type} 7 or 8) are carried from the input
 design into the internal \code{gsDesign()} recomputation so skipped looks stay
 skipped after integer rounding.

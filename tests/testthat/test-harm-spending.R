@@ -23,7 +23,7 @@ test_that("harm calibration ignores futility but actual probabilities include it
         testUpper = c(FALSE, TRUE, TRUE),
         testLower = c(TRUE, FALSE, FALSE)
       )
-      # Independent lower-bound construction by reflecting the upper-bound solver.
+      # Independent lower bound construction by reflecting the upper bound solver.
       reference <- gsBound1(
         theta = 0, I = x$n.I, a = -x$upper$bound,
         probhi = x$harm$spend, tol = 1e-10, r = x$r

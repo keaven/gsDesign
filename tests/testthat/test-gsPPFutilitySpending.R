@@ -3,7 +3,7 @@ pp_at_futility <- function(x, i, prior) {
                             theta = prior$z, wgts = prior$wgts), numeric(1))
 }
 
-test_that("default-grid PP targets survive reconstruction and tighter tolerance", {
+test_that("default grid PP targets survive reconstruction and tighter tolerance", {
   x <- gsDesign(k = 3, test.type = 4, timing = c(.5, .75), sfu = sfLDOF,
                 sfl = sfHSD, sflpar = 1, testLower = c(TRUE, FALSE, FALSE))
   prior <- normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix))
@@ -34,7 +34,7 @@ test_that("default-grid PP targets survive reconstruction and tighter tolerance"
   expect_equal(rounded$lower$param, fit$lower$param)
 })
 
-test_that("point priors reproduce specified-effect CP and scale invariant weights", {
+test_that("point priors reproduce specified effect CP and scale invariant weights", {
   x <- gsDesign(k = 3, test.type = 4, timing = c(.4, .75), sflpar = -1)
   prior <- list(z = x$delta, wgts = 1)
   target <- pp_at_futility(x, 1, prior)
@@ -72,7 +72,7 @@ test_that("discrete priors support multiple targets and ordered output", {
   expect_length(fit$ppFutilitySpending$solver$backward_pp, 2)
 })
 
-test_that("piecewise-linear PP calibration supports three targets", {
+test_that("piecewise linear PP calibration supports three targets", {
   times <- c(.3, .5, .7)
   x <- gsDesign(k = 4, test.type = 4, timing = times, sfl = sfLinear,
                 sflpar = c(times, .05, .25, .65))

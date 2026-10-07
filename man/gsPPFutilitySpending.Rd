@@ -38,10 +38,10 @@ Defaults to \code{normalGrid(mu = x$delta / 2,
 sigma = 10 / sqrt(x$n.fix))}, the same prior as in
 \code{gsBoundSummary(x)}: a normal prior centered halfway between the null
 and alternative, with information equivalent to 1 percent of the
-fixed-design sample size (or event count). The default is constructed from
+fixed design sample size (or event count). The default is constructed from
 the reference design \code{x} and held fixed during calibration.
 Weights are normalized internally; the normalized
-prior is retained in the result. A one-point prior targets fixed-effect CP.}
+prior is retained in the result. A one-point prior targets fixed effect CP.}
 
 \item{control}{Optional named list of numerical solver settings. Unspecified
 settings retain their defaults; unknown names and invalid values cause
@@ -52,21 +52,21 @@ input errors. These controls change the search, not the prior or target.
     Custom functions require explicit starts. For \code{sfLinear}, supply
     one strictly increasing cumulative spending proportion in (0, 1) per
     target, not the full spending parameter vector.}
-  \item{\code{lower}, \code{upper}}{Spending-parameter search limits,
+  \item{\code{lower}, \code{upper}}{Spending parameter search limits,
     not Z-boundaries (default \code{NULL}, selecting family defaults).
     Start and limit vectors must be finite and match the free parameter
     count; \code{lower < upper} must hold and contain the start.
     Supplied limits are not supported for constrained \code{sfLinear}.}
   \item{\code{pp_tol}}{Maximum absolute predictive power residual at
     every target (default \code{1e-4}); a finite scalar in (0, 0.1).}
-  \item{\code{maxit}}{Positive integer joint-optimizer iteration limit
+  \item{\code{maxit}}{Positive integer joint optimizer iteration limit
     (default 500), not a global limit on design evaluations or the
     one-parameter root search.}
   \item{\code{reltol}}{Positive finite internal convergence tolerance
     (default \code{1e-10}); does not replace the \code{pp_tol} check.}
   \item{\code{backward}}{Allow a latest-to-earliest coordinate fallback
     if the initial joint fit misses the targets (default \code{TRUE}).}
-  \item{\code{trace}}{Display joint-optimizer progress (default
+  \item{\code{trace}}{Display joint optimizer progress (default
     \code{FALSE}). Both logical controls must be nonmissing scalars.}
 }}
 }
@@ -86,7 +86,7 @@ A calibrated object with class
   not a global certificate of mathematical infeasibility.
 }
 \description{
-Select beta-spending futility parameters so that posterior predictive power
+Select beta spending futility parameters so that posterior predictive power
 at selected interim lower bounds matches the requested targets. Each candidate
 is rebuilt with \code{gsDesign()}, recalculating information to preserve the
 reference design's target unconditional power.
@@ -94,7 +94,7 @@ reference design's target unconditional power.
 \details{
 \code{gsPP()} averages conditional power over the posterior effect
 distribution to give the probability of future efficacy rejection. This is
-not the posterior probability of a positive effect, observed-effect CP, or
+not the posterior probability of a positive effect, observed effect CP, or
 CP H1. The prior is held fixed throughout calibration, but the posterior is
 recomputed at each candidate lower bound using its information. As in
 \code{gsPP()}, conditioning uses the interim statistic, not additionally the
@@ -123,7 +123,7 @@ likelihood normalization in \code{gsPP()} numerically undefined; such
 candidates are rejected and the diagnostic reports this if no valid design
 can be constructed.
 }
-\section{Spending-parameter search defaults}{
+\section{Spending parameter search defaults}{
 
 When not supplied in \code{control}, parameter limits and fallback starting
 values are selected by family:
@@ -153,7 +153,7 @@ fractions \code{x$n.I / x$n.I[x$k]}, ending at 1. For example,
 \code{x$timing = c(.5, .75, 1)} keeps the analyses at 50\%, 75\%, and 100\%
 of the final information. Power-preserving calibration may change the
 maximum information and thus the absolute information \code{n.I} at every
-analysis while retaining these fractions. Fixed-information calibration
+analysis while retaining these fractions. Fixed information calibration
 (\code{gsCAFutilitySpending()} and
 \code{gsCPOSFutilitySpending(mode = "fixed_information")}) also holds
 \code{n.I} and the efficacy boundaries fixed.
@@ -170,13 +170,13 @@ or that absolute calendar analysis dates must be fixed. See
 \section{Survival designs}{
 
 Survival inputs retain their survival classes and endpoint assumptions.
-Candidate probabilities are evaluated on the statistical event-count scale.
-Power-preserving probability calibration of fixed-duration, rate-scaled
+Candidate probabilities are evaluated on the statistical event count scale.
+Power-preserving probability calibration of fixed duration, rate-scaled
 designs rebuilds the survival plan only for the selected fit and checks all
 targets again on the returned object. If the deferred search or that check
 fails, calibration retries once with full survival reconstruction, retaining
 the best available internal parameters as starting values. Effect calibration
-and accrual- or follow-up-duration solves reconstruct the plan for every
+and accrual or follow-up duration solves reconstruct the plan for every
 candidate.
 For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
@@ -188,9 +188,9 @@ For \code{gsSurvPower()} inputs, power-preserving calibration fixes the
 realized calendar times and enrollment periods and rescales enrollment rates
 to attain the fitted event counts. The evaluated alternative \code{x$hr}
 and its achieved power are used, even if the original design alternative
-\code{x$hr1} differed. Original event-trigger and calendar-cap rules are not
-re-applied: the realized schedule becomes the new plan. Fixed-information
-conditional-POS/CA calibration instead retains the survival plan, event
+\code{x$hr1} differed. Original event trigger and calendar cap rules are not
+reapplied: the realized schedule becomes the new plan. Fixed information
+conditional POS/CA calibration instead retains the survival plan, event
 counts and efficacy bounds while updating futility and achieved power.
 
 Priors and explicit \code{theta} remain standardized drifts per square root

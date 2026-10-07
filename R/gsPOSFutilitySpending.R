@@ -1,8 +1,8 @@
 #' Calibrate Futility Spending to Unconditional Probability of Success
 #'
 #' @description
-#' Select one free beta-spending parameter to match the unconditional
-#' prior-predictive probability of success \code{gsPOS()}. Recalculate maximum
+#' Select one free beta spending parameter to match the unconditional
+#' prior predictive probability of success \code{gsPOS()}. Recalculate maximum
 #' information to preserve reference frequentist power.
 #'
 #' @inheritParams gsCPOSFutilitySpending
@@ -31,7 +31,7 @@
 #' cannot be identified from POS alone and is rejected. A custom one-parameter
 #' wrapper may fix the other parameters explicitly.
 #'
-#' Unconditional POS calibration is not Dragalin's conditional-assurance
+#' Unconditional POS calibration is not Dragalin's conditional assurance
 #' criterion. Compare \code{\link{gsCPOSFutilitySpending}} and
 #' \code{\link{gsCAFutilitySpending}} for continuation-conditioned targets.
 #' For a point prior at the planned alternative, POS equals the power already

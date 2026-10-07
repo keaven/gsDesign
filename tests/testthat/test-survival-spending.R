@@ -172,7 +172,7 @@ test_that("survival CP calibration preserves harm defaults and calibration", {
   }
 })
 
-test_that("multi-target and joint-boundary survival fits retain their targets", {
+test_that("multi-target and joint boundary survival fits retain their targets", {
   x <- gsSurvCalendar(sfl = sfLogistic, sflpar = c(0, 1), spending = "calendar")
   target <- vapply(1:2, function(i) sum(gsCP(x, i = i,
     zi = x$lower$bound[i], theta = x$lower$bound[i] / sqrt(x$n.I[i]))$upper$prob),

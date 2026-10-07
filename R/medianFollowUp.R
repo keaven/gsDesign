@@ -9,13 +9,13 @@
 #' @param x Optional \code{nSurv} or \code{gsSurv} design supplying defaults.
 #' @param T Finite, nonnegative calendar cutoff vector. Defaults to \code{x$T};
 #'   required without a design. Time is measured from trial start.
-#' @param gamma Enrollment rates, using the control-arm rate convention of
+#' @param gamma Enrollment rates, using the control arm rate convention of
 #'   \code{gsSurv()}. Rows are calendar enrollment periods, columns are strata.
 #'   A scalar is constant over periods and strata; a vector specifies periods.
-#' @param R Positive enrollment-period durations. Enrollment stops at
+#' @param R Positive enrollment period durations. Enrollment stops at
 #'   \code{sum(R)}. Required with \code{gamma} when not supplied by \code{x}.
 #' @param eta Control dropout hazards; finite and nonnegative. Rows are
-#'   participant-time hazard intervals, columns are strata. A scalar is
+#'   participant time hazard intervals, columns are strata. A scalar is
 #'   constant over intervals and strata; a vector specifies intervals.
 #'   Standalone default is zero.
 #' @param etaE Experimental dropout hazards, in the same form as \code{eta}.
@@ -38,9 +38,9 @@
 #' @param stopAtEvent Nonmissing logical scalar. If \code{FALSE} (default),
 #'   follow-up stops at dropout or cutoff, ignoring events. If \code{TRUE},
 #'   it stops at the first of event, dropout and cutoff.
-#' @param tol Positive absolute numerical tolerance in follow-up-time units,
+#' @param tol Positive absolute numerical tolerance in follow-up time units,
 #'   default \code{1e-8}.
-#' @param target Required named nonnegative scalar median-follow-up target.
+#' @param target Required named nonnegative scalar median follow-up target.
 #' @param ... Must be empty. In \code{minMedianFollowUp()}, this guard prevents
 #'   old positional cutoff arguments from being silently interpreted as targets.
 #'
@@ -50,13 +50,13 @@
 #' Incompatible dimensions are errors, not silently truncated inputs.
 #'
 #' Within each arm and stratum, event/dropout survival is calculated from
-#' piecewise-constant hazards on participant time. For follow-up \code{u >= 0},
-#' the proportion with follow-up greater than \code{u} is the planned-population
+#' piecewise constant hazards on participant time. For follow-up \code{u >= 0},
+#' the proportion with follow-up greater than \code{u} is the planned population
 #' fraction enrolled before \code{T - u}, multiplied by the probability of
 #' remaining uncensored through \code{u}, and summed over arms and strata.
 #' Arm/stratum weights reflect planned enrollment and randomization.
 #' This is a population quantile, not the median of individual expected times,
-#' the expected finite-sample median, or a reverse Kaplan-Meier estimate.
+#' the expected finite sample median, or a reverse Kaplan-Meier estimate.
 #'
 #' The lower 0.5 quantile resolves non-unique medians. In particular, the
 #' median is zero until more than half the planned population has enrolled.
