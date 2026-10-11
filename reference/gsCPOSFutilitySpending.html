@@ -5,8 +5,8 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calibrate Futility Spending to Conditional Probability of Success — gsCPOSFutilitySpending"><meta name="description" content="Select beta-spending parameters to match gsCPOS() targets at selected
-interims, either preserving reference power or fixing reference information."><meta property="og:description" content="Select beta-spending parameters to match gsCPOS() targets at selected
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calibrate Futility Spending to Conditional Probability of Success — gsCPOSFutilitySpending"><meta name="description" content="Select beta spending parameters to match gsCPOS() targets at selected
+interims, either preserving reference power or fixing reference information."><meta property="og:description" content="Select beta spending parameters to match gsCPOS() targets at selected
 interims, either preserving reference power or fixing reference information."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -79,7 +79,7 @@ interims, either preserving reference power or fixing reference information."><m
     </div>
 
     <div class="ref-description section level2">
-    <p>Select beta-spending parameters to match <code><a href="gsCP.html">gsCPOS()</a></code> targets at selected
+    <p>Select beta spending parameters to match <code><a href="gsCP.html">gsCPOS()</a></code> targets at selected
 interims, either preserving reference power or fixing reference information.</p>
     </div>
 
@@ -168,7 +168,7 @@ solving total beta internally and allowing overall power to change.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Both modes target the existing <code><a href="gsCP.html">gsCPOS()</a></code> calculation. In fixed-information
+    <p>Both modes target the existing <code><a href="gsCP.html">gsCPOS()</a></code> calculation. In fixed information
 mode, <code><a href="gsBound.html">gsBound1()</a></code> derives lower bounds and an internal beta solve makes
 spending consistent with the final decision. For binding futility, changing
 lower bounds while fixing efficacy can increase actual type I error above
@@ -181,28 +181,29 @@ rejection given that neither stopping boundary has been crossed through
 interim <code>i</code>. It includes the entire previous stopping history.
 Conditioning on continuation reweights the effect distribution; this differs
 from <code><a href="gsCP.html">gsPP()</a></code>, which conditions on an exact interim statistic, and from
-unconditional <code><a href="gsCP.html">gsPOS()</a></code>. A point prior gives fixed-effect success
+unconditional <code><a href="gsCP.html">gsPOS()</a></code>. A point prior gives fixed effect success
 conditional on continuation, not conditional power at the futility bound.</p>
-<p>A fixed-design <code><a href="gsCP.html">gsPOS()</a></code> value at a separately chosen feasible sample
+<p>A fixed design <code><a href="gsCP.html">gsPOS()</a></code> value at a separately chosen feasible sample
 size can be computed once and supplied as a benchmark target. The benchmark
 must not be recomputed from candidates. Preserving power while adjusting
-information is an extension of a fixed-information conditional-assurance
-rule, not an implementation of sample-size re-estimation. Inspect sample-size
+information is an extension of a fixed information conditional assurance
+rule, not an implementation of sample size re-estimation. Inspect sample size
 inflation, overall operating characteristics and effect sizes at all bounds.</p>
-<p>The supported spending families and one-target-per-free-parameter rule are
-the same as for <code><a href="gsPPFutilitySpending.html">gsPPFutilitySpending</a></code>, including two-parameter
-families and <code>sfLinear</code>. The shared solver accepts only fits meeting
-every target tolerance; failure is not a proof of global infeasibility.</p>
+<p>The supported spending families and requirement for one target per free
+parameter are the same as for <code><a href="gsPPFutilitySpending.html">gsPPFutilitySpending</a></code>, including
+two-parameter families and <code>sfLinear</code>. The shared solver accepts only
+fits meeting every target tolerance; failure is not a proof of global
+infeasibility.</p>
 <p>Candidate continuation probabilities at or below
 <code>sqrt(.Machine$double.eps)</code> are rejected to avoid unstable conditioning.
-Harm-bound designs are unsupported because <code><a href="gsCP.html">gsCPOS()</a></code> does not account
+Harm bound designs are unsupported because <code><a href="gsCP.html">gsCPOS()</a></code> does not account
 for their harm stopping probability in its denominator.
 Replay parameters with the complete reference design and the same prior.
 Spending functions retain their usual timing flexibility, but changed
 timing, testing indicators or rounding need not retain exact target values.</p>
     </div>
     <div class="section level2">
-    <h2 id="spending-parameter-search-defaults">Spending-parameter search defaults<a class="anchor" aria-label="anchor" href="#spending-parameter-search-defaults"></a></h2>
+    <h2 id="spending-parameter-search-defaults">Spending parameter search defaults<a class="anchor" aria-label="anchor" href="#spending-parameter-search-defaults"></a></h2>
 
 
 <p>When not supplied in <code>control</code>, parameter limits and fallback starting
@@ -223,7 +224,7 @@ fractions <code>x$n.I / x$n.I[x$k]</code>, ending at 1. For example,
 <code>x$timing = c(.5, .75, 1)</code> keeps the analyses at 50%, 75%, and 100%
 of the final information. Power-preserving calibration may change the
 maximum information and thus the absolute information <code>n.I</code> at every
-analysis while retaining these fractions. Fixed-information calibration
+analysis while retaining these fractions. Fixed information calibration
 (<code><a href="gsCAFutilitySpending.html">gsCAFutilitySpending()</a></code> and
 <code>gsCPOSFutilitySpending(mode = "fixed_information")</code>) also holds
 <code>n.I</code> and the efficacy boundaries fixed.</p>
@@ -240,13 +241,13 @@ or that absolute calendar analysis dates must be fixed. See
 
 
 <p>Survival inputs retain their survival classes and endpoint assumptions.
-Candidate probabilities are evaluated on the statistical event-count scale.
-Power-preserving probability calibration of fixed-duration, rate-scaled
+Candidate probabilities are evaluated on the statistical event count scale.
+Power-preserving probability calibration of fixed duration, rate-scaled
 designs rebuilds the survival plan only for the selected fit and checks all
 targets again on the returned object. If the deferred search or that check
 fails, calibration retries once with full survival reconstruction, retaining
 the best available internal parameters as starting values. Effect calibration
-and accrual- or follow-up-duration solves reconstruct the plan for every
+and accrual or follow-up duration solves reconstruct the plan for every
 candidate.
 For <code><a href="nSurv.html">gsSurv()</a></code> and <code><a href="gsSurvCalendar.html">gsSurvCalendar()</a></code> inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
@@ -257,9 +258,9 @@ numerical tolerance. Stored calls are not evaluated.</p>
 realized calendar times and enrollment periods and rescales enrollment rates
 to attain the fitted event counts. The evaluated alternative <code>x$hr</code>
 and its achieved power are used, even if the original design alternative
-<code>x$hr1</code> differed. Original event-trigger and calendar-cap rules are not
-re-applied: the realized schedule becomes the new plan. Fixed-information
-conditional-POS/CA calibration instead retains the survival plan, event
+<code>x$hr1</code> differed. Original event trigger and calendar cap rules are not
+reapplied: the realized schedule becomes the new plan. Fixed information
+conditional POS/CA calibration instead retains the survival plan, event
 counts and efficacy bounds while updating futility and achieved power.</p>
 <p>Priors and explicit <code>theta</code> remain standardized drifts per square root
 event, not hazard ratios. Rounding with <code><a href="toInteger.html">toInteger()</a></code> after calibration

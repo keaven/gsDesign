@@ -86,8 +86,8 @@ gsSurvCalendar(
   `astar = 0` selects `0.1` for harm designs and \\1 - \\`alpha` for
   types 5 and 6. Actual harm stopping probabilities account for futility
   and can be smaller than the spending targets. Capping harm at an
-  active futility bound can also reduce attained spending. See the
-  harm-monitoring section in
+  active futility bound can also reduce attained spending. See the harm
+  monitoring section in
   [`gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md).
 
 - sfu:

@@ -127,7 +127,7 @@ rounding.</li>
 </ul>
 <p>This document goes through examples to demonstrate the calculations.
 We begin with a summary of the current method, then use binomial
-endpoint designs to introduce the basic sample-size rounding behavior.
+endpoint designs to introduce the basic sample size rounding behavior.
 The final section covers time-to-event designs, where event counts and
 enrollment are both converted to integer-compatible plans.</p>
 </div>
@@ -153,17 +153,17 @@ the nearest multiple of <code>ratio + 1</code> when
 the nearest multiple of <code>ratio + 1</code>.</li>
 </ul>
 </li>
-<li>For a <code>gsSurv</code> object, <code>n.I</code> is an event-count
-schedule rather than a sample-size schedule. Interim event counts are
+<li>For a <code>gsSurv</code> object, <code>n.I</code> is an event count
+schedule rather than a sample size schedule. Interim event counts are
 rounded to the nearest integer, while the final event count is rounded
 up when <code>roundUpFinal = TRUE</code>.</li>
-<li>Survival-design sample size is rounded separately to an
-allocation-compatible total sample size. In seasonal or piecewise
-event-rate designs, <code><a href="../reference/toInteger.html">toInteger()</a></code> may adjust that rounded
-sample size by allocation multiples, with a warning, when needed to make
-the final integer event target achievable. See
+<li>Survival design sample size is rounded separately to an
+allocation-compatible total sample size. In seasonal or piecewise event
+rate designs, <code><a href="../reference/toInteger.html">toInteger()</a></code> may adjust that rounded sample
+size by allocation multiples, with a warning, when needed to make the
+final integer event target achievable. See
 <code><a href="../articles/MultiSeasonRareEvents.html">vignette("MultiSeasonRareEvents", package = "gsDesign")</a></code> for
-a complete seasonal exact-binomial monitoring workflow.</li>
+a complete seasonal exact binomial monitoring workflow.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -343,7 +343,7 @@ trial to greater than 0.8 as seen below.</p>
 <div class="section level2">
 <h2 id="time-to-event-endpoint-designs">Time-to-event endpoint designs<a class="anchor" aria-label="anchor" href="#time-to-event-endpoint-designs"></a>
 </h2>
-<p>For a <code>gsSurv</code> object, <code>n.I</code> is the event-count
+<p>For a <code>gsSurv</code> object, <code>n.I</code> is the event count
 schedule. The <code><a href="../reference/toInteger.html">toInteger()</a></code> algorithm first converts event
 counts to integers. Interim event counts are rounded to the nearest
 integer. The final event count is rounded up when
@@ -364,7 +364,7 @@ target, <code><a href="../reference/toInteger.html">toInteger()</a></code> incre
 size by allocation multiples until the event target is achievable, with
 a warning. Finally, the survival quantities are rebuilt: the final
 analysis time is solved to match the final integer event target, and the
-interim calendar times are solved to match the integer-design
+interim calendar times are solved to match the integer design
 information fractions.</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span>ratio <span class="op">=</span> <span class="fl">1</span>, hr <span class="op">=</span> <span class="fl">.74</span><span class="op">)</span></span>
@@ -391,15 +391,15 @@ information fractions.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">z</span><span class="op">$</span><span class="va">eNE</span> <span class="op">+</span> <span class="va">z</span><span class="op">$</span><span class="va">eNC</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 511.8246 732.0000 732.0000</span></span></code></pre>
 <div class="section level3">
-<h3 id="seasonal-design-with-a-final-zero-event-rate-period">Seasonal design with a final zero event-rate period<a class="anchor" aria-label="anchor" href="#seasonal-design-with-a-final-zero-event-rate-period"></a>
+<h3 id="seasonal-design-with-a-final-zero-event-rate-period">Seasonal design with a final zero event rate period<a class="anchor" aria-label="anchor" href="#seasonal-design-with-a-final-zero-event-rate-period"></a>
 </h3>
 <p>Seasonal rare-event designs often use piecewise event rates with
 nonzero rates during seasons and zero rates outside seasons. The example
-below has three 6-month seasons separated by off-season zero event-rate
-periods; the final piecewise event-rate period is zero. This is the
+below has three 6-month seasons separated by off-season zero event rate
+periods; the final piecewise event rate period is zero. This is the
 setting where it is especially important that
 <code>roundUpFinal = TRUE</code> applies to the final event count. For a
-complete seasonal exact-binomial monitoring workflow, see
+complete seasonal exact binomial monitoring workflow, see
 <code><a href="../articles/MultiSeasonRareEvents.html">vignette("MultiSeasonRareEvents", package = "gsDesign")</a></code>.</p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seasonal_event_rate_control</span> <span class="op">&lt;-</span> <span class="fl">0.003</span></span>
@@ -445,10 +445,10 @@ complete seasonal exact-binomial monitoring workflow, see
 the default <code>roundUpFinal = TRUE</code> the integer event target is
 36. The final expected sample size is just over 4099, which rounds up to
 4100 for 3:1 randomization. For this design, the rounded sample size
-supports the rounded-up final event target, so no sample-size
+supports the rounded-up final event target, so no sample size
 feasibility warning is needed. The final analysis time moves later
 because the rounded-up event target requires additional follow-up under
-the late zero event-rate period.</p>
+the late zero event rate period.</p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seasonal_integer</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/toInteger.html">toInteger</a></span><span class="op">(</span><span class="va">seasonal_design</span><span class="op">)</span></span>
 <span></span>
@@ -472,11 +472,11 @@ the late zero event-rate period.</p>
 <code class="sourceCode R"><span><span class="co"># Final integer sample size remains a multiple of ratio + 1.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">seasonal_integer</span><span class="op">$</span><span class="va">eNC</span> <span class="op">+</span> <span class="va">seasonal_integer</span><span class="op">$</span><span class="va">eNE</span><span class="op">)</span><span class="op">[</span><span class="va">seasonal_integer</span><span class="op">$</span><span class="va">k</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 4116</span></span></code></pre>
-<p>The important point is that final event-count rounding is not
-interchangeable with final sample-size rounding. Integer event targets
+<p>The important point is that final event count rounding is not
+interchangeable with final sample size rounding. Integer event targets
 define the information schedule; the enrollment plan and analysis times
 are then adjusted only as much as needed to keep those integer event
-targets attainable under the piecewise event-rate model.</p>
+targets attainable under the piecewise event rate model.</p>
 <p>The feasibility adjustment is easier to see in a rare-event design
 where the rounded-up event target is too high for the initially rounded
 sample size. In the next example, the final event target rounds up to

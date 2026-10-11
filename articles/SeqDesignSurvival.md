@@ -20,7 +20,7 @@ and hazard ratio assumptions are fixed and the goal is to compute
 achieved power, see
 [`vignette("gsSurvPower")`](https://keaven.github.io/gsDesign/articles/gsSurvPower.md).
 
-We first reproduce the SAS fractional-time table to printed precision.
+We first reproduce the SAS fractional time table to printed precision.
 We then show options that may lead to confusion when translating SAS
 PROC SEQDESIGN calls to gsDesign, including the event formula, alpha
 convention, and accrual and follow-up assumptions. The examples below
@@ -93,7 +93,7 @@ the event formula; it is implied directly by the fixed accrual rate and
 accrual duration:
 `15 subjects/time unit * 18 time units = 270 subjects`.
 
-The fractional-time design reports analyses at information fractions
+The fractional time design reports analyses at information fractions
 0.25, 0.50, 0.75, and 1.00. We focus on that design, where the analysis
 times are not rounded.
 
@@ -122,7 +122,7 @@ the example above.
 
 ### 1. Event formula
 
-- **SAS:** Schoenfeld (1981). Uses only the null-hypothesis variance.
+- **SAS:** Schoenfeld (1981). Uses only the null hypothesis variance.
 - **gsDesign:** Lachin and Foulkes (1986) by default. Use
   `method = "Schoenfeld"` to match the SAS event formula. The default
   Lachin-Foulkes method is slightly more conservative for this example,
@@ -159,7 +159,7 @@ keep the input accrual rate and accrual duration fixed, then solve the
 follow-up duration needed for the final group sequential event
 requirement.
 
-This is a common source of apparent disagreement. For a fixed-duration
+This is a common source of apparent disagreement. For a fixed duration
 survival design, `T` is the total study duration and `minfup` is the
 minimum follow-up after enrollment closes. Specifying both can therefore
 change which quantity
@@ -169,12 +169,12 @@ the total time be derived.
 
 The translation used below is summarized as follows:
 
-## Reproducing the fractional-time design with `gsSurv()`
+## Reproducing the fractional time design with `gsSurv()`
 
 ### `gsSurv()` with aligned parameters
 
 Let’s start our work with gsDesign by defining parameters to match the
-SAS fractional-time design:
+SAS fractional time design:
 
 ``` r
 
@@ -279,7 +279,7 @@ des_2
 
 Using [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
 with parameters that align with SAS settings, the event counts, sample
-size, and analysis times reproduce the SAS fractional-time output to the
+size, and analysis times reproduce the SAS fractional time output to the
 printed precision available. The final follow-up duration is 7.13321,
 giving total study duration 25.13321. Small fifth-decimal differences in
 Z-boundary comparisons may reflect limited SAS printed precision unless
@@ -301,7 +301,7 @@ gs_fractional <- data.frame(
 
 round(gs_fractional, 5) |>
   lt() |>
-  lt_header("Fractional-time SAS output compared with gsSurv().")
+  lt_header("Fractional time SAS output compared with gsSurv().")
 ```
 
 The final event count is 89.07847 in both systems. The
@@ -317,7 +317,7 @@ minimum follow-up fixed, how long must enrollment continue to power the
 trial? The translation is `T = NULL` with `minfup` set to the fixed
 follow-up time. In this SAS example, the solution returns the same
 accrual duration because the fixed follow-up time is the one SAS solved
-from the fixed-accrual design:
+from the fixed accrual design:
 
 ``` r
 
@@ -363,7 +363,7 @@ fixed_followup_check[-1] <- lapply(fixed_followup_check[-1], round, digits = 5)
 
 fixed_followup_check |>
   lt() |>
-  lt_header("Both fixed-accrual translations produce the same final design.")
+  lt_header("Both fixed accrual translations produce the same final design.")
 ```
 
 A third use case is to keep both the enrollment rates and enrollment

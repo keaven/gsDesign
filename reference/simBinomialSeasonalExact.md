@@ -1,6 +1,6 @@
-# Simulate exact-binomial seasonal monitoring scenarios
+# Simulate exact binomial seasonal monitoring scenarios
 
-Simulate seasonal rare-event trials monitored with exact-binomial
+Simulate seasonal rare-event trials monitored with exact binomial
 efficacy bounds derived from a \`gsSurv\` design. This helper supports
 fixed enrollment and a simple blinded information-adaptive enrollment
 rule while keeping the spending framework fixed through the original
@@ -47,7 +47,7 @@ simBinomialSeasonalExact(
   Numeric vector of vaccine efficacy (or prevention efficacy) scenarios
   to simulate. Each value must be finite and less than 1. \`ve = 0\`
   corresponds to equal event rates (superiority null); \`ve \< 0\`
-  corresponds to experimental-arm event rates above control
+  corresponds to experimental arm event rates above control
   (non-inferiority margin or harmful scenarios).
 
 - nsim:
@@ -76,18 +76,18 @@ simBinomialSeasonalExact(
 
 - timing:
 
-  Optional increasing cumulative spending-time vector ending at 1 used
+  Optional increasing cumulative spending time vector ending at 1 used
   to derive \`planned_counts\` when \`planned_counts = NULL\`.
 
 - enroll_control_per_look:
 
-  Optional control-arm enrollment by look (scalar or length \`k\`
+  Optional control arm enrollment by look (scalar or length \`k\`
   integer vector). If both enrollment vectors are \`NULL\`, defaults are
   derived from the seasonal accrual pattern in \`gsD\`.
 
 - enroll_experimental_per_look:
 
-  Optional experimental-arm enrollment by look (scalar or length \`k\`
+  Optional experimental arm enrollment by look (scalar or length \`k\`
   integer vector). If \`NULL\` and \`enroll_control_per_look\` is
   supplied, this is set using \`gsD\$ratio\`.
 
@@ -108,12 +108,12 @@ simBinomialSeasonalExact(
 
 - usTime:
 
-  Optional upper spending-time override passed to \[toBinomialExact()\].
+  Optional upper spending time override passed to \[toBinomialExact()\].
   If \`NULL\`, spending time defaults to \`1 / k, 2 / k, ..., 1\`.
 
 - lsTime:
 
-  Optional lower spending-time override for \`test.type = 4\`. If
+  Optional lower spending time override for \`test.type = 4\`. If
   \`NULL\`, this defaults to \`usTime\`.
 
 - final_full_spending:

@@ -63,23 +63,23 @@ and related boundary transformations.
 ## Calibrating Spending to Interim Targets
 
 Translate CP, predictive power, probability of success, or approximate
-treatment-effect targets into spending-function parameters. Start with
+treatment effect targets into spending function parameters. Start with
 [`vignette("CPFutilitySpending")`](https://keaven.github.io/gsDesign/articles/CPFutilitySpending.md),
 [`vignette("DragalinFutilitySpending")`](https://keaven.github.io/gsDesign/articles/DragalinFutilitySpending.md),
 or
 [`vignette("EffectSpending")`](https://keaven.github.io/gsDesign/articles/EffectSpending.md).
 For conditional probability of success,
 [`gsCPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPOSFutilitySpending.md)
-supports both preserve-power and fixed-information modes;
+supports both preserve power and fixed information modes;
 [`gsCAFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCAFutilitySpending.md)
-is the fixed-information compatibility wrapper.
+is the fixed information compatibility wrapper.
 
 - [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
   : Calibrate Futility Spending to Conditional Power Targets
 - [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
   : Calibrate Futility Spending to Predictive Power Targets
 - [`gsEffectSpending()`](https://keaven.github.io/gsDesign/reference/gsEffectSpending.md)
-  : Calibrate Spending to Natural-Scale Effects at Boundaries
+  : Calibrate Spending to Natural Scale Effects at Boundaries
 - [`gsPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPOSFutilitySpending.md)
   : Calibrate Futility Spending to Unconditional Probability of Success
 - [`gsCPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPOSFutilitySpending.md)
@@ -117,7 +117,7 @@ and [`gsPI()`](https://keaven.github.io/gsDesign/reference/gsCP.md).
 
 ## Sample Size Adaptation
 
-Conditional-power-based sample size re-estimation and combination tests.
+Sample size re-estimation using conditional power and combination tests.
 
 - [`condPower()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
   [`ssrCP()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
@@ -191,7 +191,7 @@ above.
 ## Single-Arm Exact Binomial Design
 
 Exact binomial group sequential designs, sequential probability ratio
-tests, and fixed-design sample sizes.
+tests, and fixed design sample sizes.
 
 - [`gsBinomialExact()`](https://keaven.github.io/gsDesign/reference/gsBinomialExact.md)
   [`binomialSPRT()`](https://keaven.github.io/gsDesign/reference/gsBinomialExact.md)
@@ -225,14 +225,14 @@ rare-event trials.
 - [`sequentialPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/sequentialPValueBinomialExact.md)
   : Exact binomial sequential p-value for a group sequential design
 - [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
-  : Simulate exact-binomial seasonal monitoring scenarios
+  : Simulate exact binomial seasonal monitoring scenarios
 
 ## Time-to-Event Design and Power
 
 Use [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
 for information-driven designs,
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
-for calendar-time looks, and
+for calendar time looks, and
 [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
 for power under a fixed plan. The shared
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) topic
@@ -242,7 +242,7 @@ includes
 and
 [`tEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md).
 The earlier, more limited Lachin-Foulkes implementation and additional
-event-count and hazard-ratio conversions are documented in
+event count and hazard ratio conversions are documented in
 [`nSurvival()`](https://keaven.github.io/gsDesign/reference/nSurvival.md).
 
 - [`tEventsIA()`](https://keaven.github.io/gsDesign/reference/nSurv.md)

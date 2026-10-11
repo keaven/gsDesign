@@ -30,7 +30,7 @@ sequentialCIBinomialExact(
 
 - x:
 
-  Integer experimental-arm event counts at the analyses in `n.I`.
+  Integer experimental arm event counts at the analyses in `n.I`.
 
 - conf.level:
 
@@ -38,8 +38,8 @@ sequentialCIBinomialExact(
 
 - tol:
 
-  Absolute tolerance for bisection on the conditional binomial
-  event-probability scale.
+  Absolute tolerance for bisection on the conditional binomial event
+  probability scale.
 
 - maxiter:
 

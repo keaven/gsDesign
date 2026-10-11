@@ -140,19 +140,19 @@ required without a design. Time is measured from trial start.</p></dd>
 
 
 <dt id="arg-gamma">gamma<a class="anchor" aria-label="anchor" href="#arg-gamma"></a></dt>
-<dd><p>Enrollment rates, using the control-arm rate convention of
+<dd><p>Enrollment rates, using the control arm rate convention of
 <code><a href="nSurv.html">gsSurv()</a></code>. Rows are calendar enrollment periods, columns are strata.
 A scalar is constant over periods and strata; a vector specifies periods.</p></dd>
 
 
 <dt id="arg-r">R<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
-<dd><p>Positive enrollment-period durations. Enrollment stops at
+<dd><p>Positive enrollment period durations. Enrollment stops at
 <code>sum(R)</code>. Required with <code>gamma</code> when not supplied by <code>x</code>.</p></dd>
 
 
 <dt id="arg-eta">eta<a class="anchor" aria-label="anchor" href="#arg-eta"></a></dt>
 <dd><p>Control dropout hazards; finite and nonnegative. Rows are
-participant-time hazard intervals, columns are strata. A scalar is
+participant time hazard intervals, columns are strata. A scalar is
 constant over intervals and strata; a vector specifies intervals.
 Standalone default is zero.</p></dd>
 
@@ -196,7 +196,7 @@ it stops at the first of event, dropout and cutoff.</p></dd>
 
 
 <dt id="arg-tol">tol<a class="anchor" aria-label="anchor" href="#arg-tol"></a></dt>
-<dd><p>Positive absolute numerical tolerance in follow-up-time units,
+<dd><p>Positive absolute numerical tolerance in follow-up time units,
 default <code>1e-8</code>.</p></dd>
 
 
@@ -206,7 +206,7 @@ old positional cutoff arguments from being silently interpreted as targets.</p><
 
 
 <dt id="arg-target">target<a class="anchor" aria-label="anchor" href="#arg-target"></a></dt>
-<dd><p>Required named nonnegative scalar median-follow-up target.</p></dd>
+<dd><p>Required named nonnegative scalar median follow-up target.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -221,13 +221,13 @@ explicit non-NULL inputs override them. The exceptions with meaningful
 explicit NULL values are <code>S</code> and <code>etaE</code>, as documented above.
 Incompatible dimensions are errors, not silently truncated inputs.</p>
 <p>Within each arm and stratum, event/dropout survival is calculated from
-piecewise-constant hazards on participant time. For follow-up <code>u &gt;= 0</code>,
-the proportion with follow-up greater than <code>u</code> is the planned-population
+piecewise constant hazards on participant time. For follow-up <code>u &gt;= 0</code>,
+the proportion with follow-up greater than <code>u</code> is the planned population
 fraction enrolled before <code>T - u</code>, multiplied by the probability of
 remaining uncensored through <code>u</code>, and summed over arms and strata.
 Arm/stratum weights reflect planned enrollment and randomization.
 This is a population quantile, not the median of individual expected times,
-the expected finite-sample median, or a reverse Kaplan-Meier estimate.</p>
+the expected finite sample median, or a reverse Kaplan-Meier estimate.</p>
 <p>The lower 0.5 quantile resolves non-unique medians. In particular, the
 median is zero until more than half the planned population has enrolled.
 Quantile bisection retains this convention across enrollment pauses and flat

@@ -33,7 +33,7 @@ sequentialPValueBinomialExact(
 
 - x:
 
-  Integer experimental-arm event counts at the analyses in \`n.I\`.
+  Integer experimental arm event counts at the analyses in \`n.I\`.
 
 - interval:
 

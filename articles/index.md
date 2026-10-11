@@ -43,7 +43,7 @@ trials with time-to-event endpoints using gsDesign.
 
 ### Exact binomial designs with spending
 
-Exact binomial workflows, including spending-function-based designs.
+Exact binomial workflows, including designs based on spending functions.
 
 - [Vaccine efficacy trial
   design](https://keaven.github.io/gsDesign/articles/VaccineEfficacy.md):

@@ -1,6 +1,6 @@
 # Exact confidence intervals for vaccine or prevention efficacy
 
-Computes a fixed-look Clopper–Pearson confidence interval for vaccine or
+Computes a fixed look Clopper–Pearson confidence interval for vaccine or
 prevention efficacy after conditioning on the total number of events.
 
 ## Usage

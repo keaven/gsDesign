@@ -14,7 +14,7 @@ Schoenfeld (1981), Freedman (1982), and Bernstein and Lagakos (1989) methods
 are also supported; see Details.
 gsSurv() combines nSurv() with gsDesign() to derive a
 group sequential design for a study with a time-to-event endpoint.
-When k = 1, gsSurv() uses the fixed-design calculations from
+When k = 1, gsSurv() uses the fixed design calculations from
 nSurv() directly and returns a normalized single-analysis
 gsSurv object for use with functions such as
 toInteger and gsBoundSummary."><meta property="og:description" content="nSurv() is used to calculate the sample size for a two-arm clinical trial
@@ -26,7 +26,7 @@ Schoenfeld (1981), Freedman (1982), and Bernstein and Lagakos (1989) methods
 are also supported; see Details.
 gsSurv() combines nSurv() with gsDesign() to derive a
 group sequential design for a study with a time-to-event endpoint.
-When k = 1, gsSurv() uses the fixed-design calculations from
+When k = 1, gsSurv() uses the fixed design calculations from
 nSurv() directly and returns a normalized single-analysis
 gsSurv object for use with functions such as
 toInteger and gsBoundSummary."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
@@ -110,7 +110,7 @@ Schoenfeld (1981), Freedman (1982), and Bernstein and Lagakos (1989) methods
 are also supported; see Details.
 <code>gsSurv()</code> combines <code>nSurv()</code> with <code><a href="gsDesign.html">gsDesign()</a></code> to derive a
 group sequential design for a study with a time-to-event endpoint.
-When <code>k = 1</code>, <code>gsSurv()</code> uses the fixed-design calculations from
+When <code>k = 1</code>, <code>gsSurv()</code> uses the fixed design calculations from
 <code>nSurv()</code> directly and returns a normalized single-analysis
 <code>gsSurv</code> object for use with functions such as
 <code><a href="toInteger.html">toInteger</a></code> and <code><a href="gsBoundSummary.html">gsBoundSummary</a></code>.</p>
@@ -408,7 +408,7 @@ stopping. The default input <code>astar = 0</code> selects <code>0.1</code> for 
 designs and \(1 - \)<code>alpha</code> for types 5 and 6.
 Actual harm stopping probabilities account for futility and can be smaller
 than the spending targets. Capping harm at an active futility bound can also
-reduce attained spending. See the harm-monitoring section in
+reduce attained spending. See the harm monitoring section in
 <code><a href="gsDesign.html">gsDesign</a></code>.</p></dd>
 
 
@@ -836,13 +836,13 @@ enrollment duration(s) specified in <code>R</code> are considered fixed and
 method will fail if the specified enrollment rates and durations either
 over-powers the trial with no additional follow-up or underpowers the trial
 with infinite follow-up. This method produces a corresponding error message
-in such cases. For methods other than Lachin and Foulkes, these fixed-rate
-duration solves use the selected method for the fixed-design event
+in such cases. For methods other than Lachin and Foulkes, these fixed rate
+duration solves use the selected method for the fixed design event
 calculation.</p>
 <p>The input to <code>gsSurv</code> is a combination of the input to <code>nSurv()</code>
 and <code><a href="gsDesign.html">gsDesign()</a></code>.
 The original call is stored in <code>call</code>. The <code>inputs</code> component
-retains evaluated survival-model inputs used for printing and the applicable
+retains evaluated survival model inputs used for printing and the applicable
 <code>testUpper</code>, <code>testLower</code>, and <code>testHarm</code> arguments. The
 normalized testing schedules used by the design are stored directly in the
 corresponding top-level components.
@@ -909,7 +909,7 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Demonstrate print method</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x_nsurv</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> nSurv fixed-design summary (method=LachinFoulkes; target=Accrual rate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nSurv fixed design summary (method=LachinFoulkes; target=Accrual rate)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> HR=0.500 vs HR0=1.000 | alpha=0.020 (sided=1) | power=85.0%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> N=95.7 subjects | D=78.1 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -972,7 +972,7 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Caption example for xtable output."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.6.1 by xtable 1.8-8 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Wed Oct  7 19:56:40 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Sun Oct 11 19:09:33 2026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{rllll}</span>
@@ -1036,7 +1036,7 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
 <span class="r-in"><span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">6</span>, hr <span class="op">=</span> <span class="fl">.5</span>, eta <span class="op">=</span> <span class="fl">.001</span>, gamma <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>  alpha <span class="op">=</span> <span class="fl">.025</span>, beta <span class="op">=</span> <span class="fl">.1</span>, minfup <span class="op">=</span> <span class="fl">12</span>, T <span class="op">=</span> <span class="cn">NULL</span>, method <span class="op">=</span> <span class="st">"Schoenfeld"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> nSurv fixed-design summary (method=Schoenfeld; target=Accrual duration)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nSurv fixed design summary (method=Schoenfeld; target=Accrual duration)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> N=110.9 subjects | D=87.5 events | T=30.5 study duration | accrual=18.5 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -1122,7 +1122,7 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
 <span class="r-in"><span>  lambdaC <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">6</span>, hr <span class="op">=</span> <span class="fl">.5</span>, eta <span class="op">=</span> <span class="fl">.001</span>, gamma <span class="op">=</span> <span class="fl">6</span>, R <span class="op">=</span> <span class="fl">25</span>,</span></span>
 <span class="r-in"><span>  alpha <span class="op">=</span> <span class="fl">.025</span>, beta <span class="op">=</span> <span class="fl">.1</span>, minfup <span class="op">=</span> <span class="cn">NULL</span>, T <span class="op">=</span> <span class="cn">NULL</span>, method <span class="op">=</span> <span class="st">"Freedman"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> nSurv fixed-design summary (method=Freedman; target=Follow-up duration)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nSurv fixed design summary (method=Freedman; target=Follow-up duration)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> N=150.0 subjects | D=94.6 events | T=27.0 study duration | accrual=25.0 Accrual duration | minfup=2.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -1194,7 +1194,7 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
 <span class="r-in"><span>  minfup <span class="op">=</span> <span class="fl">3</span>, T <span class="op">=</span> <span class="fl">5</span>, <span class="co"># 5-year trial duration with 3-year minimum follow-up</span></span></span>
 <span class="r-in"><span>  alpha <span class="op">=</span> <span class="fl">.025</span>, beta <span class="op">=</span> <span class="fl">.1</span>, method <span class="op">=</span> <span class="st">"LachinFoulkes"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> nSurv fixed-design summary (method=LachinFoulkes; target=Accrual rate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nSurv fixed design summary (method=LachinFoulkes; target=Accrual rate)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> N=1088.8 subjects | D=91.1 events | T=5.0 study duration | accrual=2.0 Accrual duration | minfup=3.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -1281,7 +1281,7 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
 <span class="r-in"><span>  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, R <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>, T <span class="op">=</span> <span class="fl">27</span>, minfup <span class="op">=</span> <span class="fl">12</span>,</span></span>
 <span class="r-in"><span>  alpha <span class="op">=</span> <span class="fl">.025</span>, beta <span class="op">=</span> <span class="fl">.1</span>, method <span class="op">=</span> <span class="st">"BernsteinLagakos"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> nSurv fixed-design summary (method=BernsteinLagakos; target=Accrual rate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nSurv fixed design summary (method=BernsteinLagakos; target=Accrual rate)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> N=196.0 subjects | D=79.0 events | T=27.0 study duration | accrual=15.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -1376,7 +1376,7 @@ Trials Using the Logrank Test. <em>Statistics in Medicine</em>, 1, 121-129.</p>
 <span class="r-in"><span>  alpha <span class="op">=</span> <span class="fl">.025</span>, beta <span class="op">=</span> <span class="cn">NULL</span>, minfup <span class="op">=</span> <span class="fl">12</span>, T <span class="op">=</span> <span class="fl">36</span>, method <span class="op">=</span> <span class="st">"LachinFoulkes"</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> nSurv fixed-design summary (method=LachinFoulkes; target=Power)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nSurv fixed design summary (method=LachinFoulkes; target=Power)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=96.5%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> N=144.0 subjects | D=117.5 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

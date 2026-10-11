@@ -29,7 +29,7 @@ repeatedCIBinomialExact(
 
 - x:
 
-  Integer experimental-arm event counts at the analyses in `n.I`.
+  Integer experimental arm event counts at the analyses in `n.I`.
 
 - conf.level:
 
@@ -37,8 +37,8 @@ repeatedCIBinomialExact(
 
 - tol:
 
-  Absolute tolerance for bisection on the conditional binomial
-  event-probability scale.
+  Absolute tolerance for bisection on the conditional binomial event
+  probability scale.
 
 - maxiter:
 
@@ -53,19 +53,19 @@ and one-sided tail level.
 ## Details
 
 A two-sided interval with confidence level `1 - alpha` uses the same
-spending function, spending times, and count-path ordering in both
+spending function, spending times, and count path ordering in both
 directions, with `alpha / 2` in each tail. The lower efficacy limit
-inverts the usual lower event-count efficacy test. The upper efficacy
-limit inverts its mirror image after exchanging experimental- and
-control-arm event counts. This mirrored test is not the design's
-futility boundary.
+inverts the usual lower event count efficacy test. The upper efficacy
+limit inverts its mirror image after exchanging experimental and control
+arm event counts. This mirrored test is not the design's futility
+boundary.
 
 Non-binding futility and harm are ignored in both directions. Coverage
 is generally conservative because the exact rejection regions are
 discrete. Spending time remains relative to the planned final event
 count.
 
-This follows the repeated-confidence-interval construction of Jennison
+This follows the repeated confidence interval construction of Jennison
 and Turnbull (1984), using exact Bernoulli ordering as in Coe and
 Tamhane (1993).
 

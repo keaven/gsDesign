@@ -44,7 +44,7 @@ some trials even when the planned treatment effect is real. Recovering
 that lost power among trials that continue can be expensive in sample
 size. An alternative is to accept lower overall power by increasing the
 design’s beta and recalibrating, rather than insisting on 90% power at
-any sample-size cost.
+any sample size cost.
 
 An aggressive futility analysis can be viewed as a Phase II
 proof-of-concept gate embedded in a Phase III confirmatory trial. For
@@ -61,12 +61,12 @@ realistic compromise than 90% with stringent futility. This is a design
 choice to justify in context, not a universal recommendation. Compare
 the maximum sample size, expected sample size, and probability of
 stopping a truly effective treatment. The examples below retain 90%
-power to make the sample-size cost visible; the binomial and normal
+power to make the sample size cost visible; the binomial and normal
 examples compare a fixed design, efficacy-only monitoring, and
 monitoring with calibrated futility.
 
 A useful planning constraint is to limit the maximum sample size to,
-say, 120% of the fixed-design size at the same alpha, beta, and effect
+say, 120% of the fixed design size at the same alpha, beta, and effect
 assumptions. Rather than selecting interim CP targets in isolation, seek
 targets compatible with that inflation budget. This may require lower CP
 thresholds (less aggressive futility), different interim timing, or
@@ -75,7 +75,7 @@ targets jointly: the constraint applies to the complete design, not
 separately to each look. The 20% limit is an illustrative planning
 choice, not a default constraint enforced by
 [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md).
-The sample-size comparisons below show whether the chosen targets meet
+The sample size comparisons below show whether the chosen targets meet
 that illustrative budget; lowering an early CP target does not by itself
 guarantee inflation below 20%.
 
@@ -83,7 +83,7 @@ As cautious starting points for these examples, avoid CP targets above
 0.2 before 50% information and consider up to 0.3 at or after 50%. These
 are planning heuristics, not universal cutoffs or assurances of
 acceptable futility. Inspect the effect estimates at the bounds, beta
-spending, and sample-size inflation before deciding whether even these
+spending, and sample size inflation before deciding whether even these
 targets are too stringent.
 
 ## What is being calibrated?
@@ -94,8 +94,8 @@ analysis, conditional on the current statistic equaling the candidate
 futility bound. Future futility boundaries remain part of the
 calculation. In a three-analysis design,
 `target_cp = c(.3, .5), i = c(1, 2)` targets 0.3 for efficacy at
-analysis 2 or 3 given the first futility-bound statistic, and 0.5 for
-efficacy at analysis 3 given the second futility-bound statistic. Each
+analysis 2 or 3 given the first futility bound statistic, and 0.5 for
+efficacy at analysis 3 given the second futility bound statistic. Each
 target is a total future probability under its own conditioning value;
 it is not restricted to the next analysis. Such a two-target fit
 requires a two-parameter spending family, such as `sfLogistic`.
@@ -109,7 +109,7 @@ supplied with `theta`; a scalar is used at all targeted looks. This is a
 standardized effect on the scale used by
 [`gsCP()`](https://keaven.github.io/gsDesign/reference/gsCP.md).
 
-The function supports beta-spending futility for `test.type` 3, 4, 7,
+The function supports beta spending futility for `test.type` 3, 4, 7,
 and 8. The examples use type 4, fixed information fractions, and
 Lan-DeMets O’Brien-Fleming efficacy spending (`sfu = sfLDOF`), without
 `sfupar`.
@@ -117,9 +117,9 @@ Lan-DeMets O’Brien-Fleming efficacy spending (`sfu = sfLDOF`), without
 All six calibrators hold `x$timing` fixed: these are the information
 fractions `x$n.I / x$n.I[x$k]` at the analyses. Power-preserving
 calibration can change the final information and all absolute analysis
-information levels while keeping those fractions. Fixed-information
-CA/conditional-POS calibration also keeps the absolute information
-levels fixed. Spending-function times, stored in `x$upper$sTime` and
+information levels while keeping those fractions. Fixed information
+CA/conditional POS calibration also keeps the absolute information
+levels fixed. Spending function times, stored in `x$upper$sTime` and
 `x$lower$sTime`, are retained separately and can differ from the
 information fractions, as with calendar-based spending. Fixed
 information fractions do not by themselves fix calendar analysis dates.
@@ -235,8 +235,8 @@ uses the same default prior as
 described in the introduction; neither call requires a `prior` argument.
 For comparison with the CP-targeted survival design, keep the same
 timing, testing indicators, spending families, and survival assumptions.
-Use the survival reference directly on the **event-count scale**. The
-prior’s numeric support must be on that same standardized-effect scale;
+Use the survival reference directly on the **event count scale**. The
+prior’s numeric support must be on that same standardized effect scale;
 the normalized `n.fix = 1` reference from the opening example is not
 interchangeable with it.
 
@@ -284,7 +284,7 @@ rbind(
 
 Equal numerical targets for CP and PP need not imply equal futility
 bounds or required event counts and sample sizes. The earlier cautions
-about beta spending and sample-size inflation apply to PP targets too;
+about beta spending and sample size inflation apply to PP targets too;
 averaging over a prior does not remove these design trade-offs.
 
 ### Fixed calendar analyses with `gsSurvCalendar()`
@@ -351,15 +351,15 @@ information-based spending here; calendar-based spending would require
 retaining its distinct spending times as well. Do not simply reuse
 `fit1`’s parameter with different information fractions.
 
-## Two parameters: a risk-difference design
+## Two parameters: a risk difference design
 
 We now enable futility at both interims. A two-parameter spending
-function allows us to specify two CP targets. Consider adverse-event
+function allows us to specify two CP targets. Consider adverse event
 probabilities 0.15 on control and 0.10 on experimental treatment, with
 equal randomization. The benefit is the risk difference
 `p[C] - p[E] = 0.05`.
 [`nBinomial()`](https://keaven.github.io/gsDesign/reference/varBinomial.md)
-gives the fixed-design total sample size;
+gives the fixed design total sample size;
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
 inflates it for sequential monitoring. Alpha is 0.025 one-sided and
 power is 90% in both calculations. Use `sfCauchy` for the worked example
@@ -368,7 +368,7 @@ also be a stringent first futility target. We instead use CP 0.2 at 40%
 and CP 0.3 at 75% information. The first target covers efficacy at
 either the second interim or the final analysis; the second covers
 efficacy at the final analysis, each conditional on its own fitted
-futility-bound statistic.
+futility bound statistic.
 
 ``` r
 
@@ -410,7 +410,7 @@ gsBoundSummary(final2, deltaname = "p[C] - p[E]", Nname = "Participants",
 
 ### Fixed sample size and inflation from futility
 
-The fixed-design total is 1834.6 participants across both groups. For
+The fixed design total is 1834.6 participants across both groups. For
 comparison, remove futility but keep the same efficacy spending, timing,
 alpha, and power. The difference between this efficacy-only design and
 the calibrated design shows the additional maximum sample size
@@ -431,7 +431,7 @@ data.frame(
 ```
 
 Here the maximum sample size with calibrated futility is 1.36 times the
-fixed-design size. The comparison attributes most of the inflation to
+fixed design size. The comparison attributes most of the inflation to
 retaining 90% power in the presence of the futility bounds, rather than
 to the efficacy monitoring alone. These are unrounded planning sample
 sizes, not expected enrollment: early stopping can reduce the average
@@ -450,9 +450,9 @@ is
 \sqrt{n.I_i}}{\texttt{x\\delta}}. \\
 
 Here `x$delta` is the standardized alternative, whereas `delta1` is the
-clinical effect. Thus setting `n.fix` alone supplies a sample-size scale
+clinical effect. Thus setting `n.fix` alone supplies a sample size scale
 but does not supply the clinical effect scale. For binomial data these
-boundary risk differences are normal-approximation translations using
+boundary risk differences are normal approximation translations using
 design-based information, not exact binomial boundaries.
 
 ``` r
@@ -549,13 +549,13 @@ are to be retained. The plot describes the spending rule away from the
 planned looks, not a guarantee of the targeted CP at an unplanned early
 look.
 
-## Piecewise-linear spending: comparing two normal means
+## Piecewise linear spending: comparing two normal means
 
 Consider equal-sized groups with a planned mean difference of 0.5 and
 common standard deviation 1.1.
 [`nNormal()`](https://keaven.github.io/gsDesign/reference/nNormal.md)
-supplies the fixed-design total sample size for a one-sided alpha of
-0.025 and 90% power. This uses a known-variance normal approximation,
+supplies the fixed design total sample size for a one-sided alpha of
+0.025 and 90% power. This uses a known variance normal approximation,
 not a sequential t-test with estimated variance.
 
 With three targets, use `sfLinear`. Its knot times are fixed at the
@@ -639,14 +639,14 @@ gsBoundSummary(final3, deltaname = "Mean difference", Nname = "Participants",
   lt() |> lt_format(columns = c("Efficacy", "Futility"), decimals = 4)
 ```
 
-Because `delta1 = .5`, the effect-at-bound rows are in mean-difference
+Because `delta1 = .5`, the effect at bound rows are in mean difference
 units. They are not standardized mean differences or CP values. Sample
 sizes are totals across both groups, with their scale supplied by
 [`nNormal()`](https://keaven.github.io/gsDesign/reference/nNormal.md).
 
 ### Fixed sample size and inflation from futility
 
-The fixed-design total is 203.4 participants. Again, compare
+The fixed design total is 203.4 participants. Again, compare
 efficacy-only monitoring with the design that must also achieve the
 specified CP at three futility bounds, while keeping 90% overall power.
 
@@ -665,7 +665,7 @@ data.frame(
 ```
 
 The calibrated design requires a maximum sample size 1.68 times the
-fixed-design size. As in the binomial example, most of the increase
+fixed design size. As in the binomial example, most of the increase
 comes from compensating for futility stopping under the alternative, not
 from efficacy monitoring alone. This illustrates why a lower overall
 power target can be worth considering with aggressive futility. A
@@ -708,7 +708,7 @@ gsBoundSummary(fit_varying, deltaname = "Mean difference", Nname = "Participants
   spending function to the first interim CP target may be adequate. Keep
   later desired futility looks enabled in `testLower`, fit only `i = 1`,
   and inspect every resulting bound, its CP, effect estimate, beta
-  spending, and sample-size implications. Later CP values are implied by
+  spending, and sample size implications. Later CP values are implied by
   the fitted spending function, not independently targeted. Use extra
   parameters only when the resulting later bounds do not meet the design
   objectives.
@@ -731,7 +731,7 @@ gsBoundSummary(fit_varying, deltaname = "Mean difference", Nname = "Participants
   return a calibrated design.
 - All examples verify unconditional power as well as CP. In a general
   reconstruction, retain all reference settings, including alpha, beta,
-  effect assumptions, testing indicators, and any harm-spending inputs.
+  effect assumptions, testing indicators, and any harm spending inputs.
   Changing those settings or efficacy spending requires recalibration.
 - [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
   retains the fitted spending specification, but rounding can change
@@ -742,8 +742,8 @@ gsBoundSummary(fit_varying, deltaname = "Mean difference", Nname = "Participants
   and
   [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
   inputs. For power objects, power-preserving calibration fixes the
-  realized schedule and rescales enrollment; fixed-information
-  CA/conditional-POS calibration retains the event counts and
+  realized schedule and rescales enrollment; fixed information
+  CA/conditional POS calibration retains the event counts and
   enrollment. See the Survival designs section of
   [`?gsCPFutilitySpending`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
   for details. Use

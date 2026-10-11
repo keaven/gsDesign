@@ -27,7 +27,7 @@
 
 - Absent lower and harm bounds now use `-Inf`, and absent upper bounds
   use `Inf`, instead of the finite `-20`/`20` sentinel. This includes
-  zero-spending and skipped analyses. Use
+  zero spending and skipped analyses. Use
   [`is.finite()`](https://rdrr.io/r/base/is.finite.html) to identify
   active bounds.
   [`gsBoundCP()`](https://keaven.github.io/gsDesign/reference/gsBoundCP.md)
@@ -42,7 +42,7 @@
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
   while continuing to accept user-specified priors.
 
-- All six spending-calibration functions accept survival designs from
+- All six spending calibration functions accept survival designs from
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md),
   [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md),
   and
@@ -67,7 +67,7 @@
   [`?gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
   ([\#323](https://github.com/keaven/gsDesign/issues/323)).
 
-- Unified conditional-POS spending calibration in
+- Unified conditional POS spending calibration in
   [`gsCPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPOSFutilitySpending.md)
   with `mode = "preserve_power"` or `"fixed_information"`; retained
   [`gsCAFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCAFutilitySpending.md)
@@ -77,31 +77,31 @@
 
 - Added
   [`gsEffectSpending()`](https://keaven.github.io/gsDesign/reference/gsEffectSpending.md)
-  to calibrate efficacy, futility and harm spending to natural-scale
-  effect targets separately or jointly, with difference, risk-ratio and
-  explicitly specified event-scale hazard-ratio mappings
+  to calibrate efficacy, futility and harm spending to natural scale
+  effect targets separately or jointly, with difference, risk ratio and
+  explicitly specified event scale hazard ratio mappings
   ([\#331](https://github.com/keaven/gsDesign/issues/331)).
 
-- Added power-preserving unconditional-POS calibration with
+- Added power-preserving unconditional POS calibration with
   [`gsPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPOSFutilitySpending.md)
   ([\#330](https://github.com/keaven/gsDesign/issues/330)).
 
 - Added
   [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
   to calibrate futility spending to posterior predictive power targets
-  using a fixed discrete or continuous-grid prior, sharing the CP
-  calibration solver. The futility-spending vignette compares CP- and
+  using a fixed discrete or continuous grid prior, sharing the CP
+  calibration solver. The futility spending vignette compares CP- and
   PP-targeted survival designs using the default summary prior
   ([\#326](https://github.com/keaven/gsDesign/issues/326)).
 
 - Added
   [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
-  to calibrate beta-spending futility parameters and statistical
+  to calibrate beta spending futility parameters and statistical
   information to conditional power targets at one or more interim
   analyses for `test.type` 3, 4, 7, and 8
   ([\#318](https://github.com/keaven/gsDesign/issues/318)).
 
-- Added exact conditional power, fixed-look Clopper–Pearson, repeated,
+- Added exact conditional power, fixed look Clopper–Pearson, repeated,
   and sequential confidence intervals for vaccine or prevention
   efficacy, plus
   [`VEtable()`](https://keaven.github.io/gsDesign/reference/VEtable.md)
@@ -141,7 +141,7 @@
   family; explicit spending overrides and the one-parameter requirement
   for POS remain supported.
 
-- Log-scale HR summaries recover missing null and alternative hazard
+- Log scale HR summaries recover missing null and alternative hazard
   ratios from retained `delta0` and `delta1`, avoiding a spurious
   warning after survival designs are reconstructed with
   [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
@@ -149,7 +149,7 @@
   alternate alpha summaries
   ([\#347](https://github.com/keaven/gsDesign/issues/347)).
 
-- Survival interim event calculations now use the experimental-arm
+- Survival interim event calculations now use the experimental arm
   dropout rate for experimental events, keeping calendar calibration
   consistent when dropout differs between arms
   ([\#345](https://github.com/keaven/gsDesign/issues/345)).
@@ -171,7 +171,7 @@
   ([\#318](https://github.com/keaven/gsDesign/issues/318)).
 
 - Exact binomial conversion preserves skipped futility looks without
-  invalid provisional boundaries during beta-spending calibration
+  invalid provisional boundaries during beta spending calibration
   ([\#333](https://github.com/keaven/gsDesign/issues/333)).
 
 - Information-based boundary plots label actual information as `I=` with
@@ -187,7 +187,7 @@
   ([\#332](https://github.com/keaven/gsDesign/issues/332)).
 
 - Guarded the Newton boundary search against `0/0` updates and separated
-  its iteration limit and finite iterate clamp from the absent-bound
+  its iteration limit and finite iterate clamp from the absent bound
   values ([\#242](https://github.com/keaven/gsDesign/issues/242),
   [\#321](https://github.com/keaven/gsDesign/issues/321)).
 
@@ -225,6 +225,10 @@
 
 ### Documentation
 
+- Removed unnecessary hyphens introduced in 2026 across help text,
+  vignettes, navigation, comments, and messages, preserving wording used
+  before 2026.
+
 - Reorganized the pkgdown reference index by workflow, highlighting
   spending calibration and keeping shared help topics together. The
   Articles menu now lists every article directly under category
@@ -237,41 +241,41 @@
   ([\#346](https://github.com/keaven/gsDesign/issues/346)).
 
 - Added a sparse-event mortality example using type 6 non-binding harm
-  monitoring without separate futility, exact-binomial integer
-  boundaries, harm-detection sensitivity, and a fixed-analysis precision
+  monitoring without separate futility, exact binomial integer
+  boundaries, harm detection sensitivity, and a fixed analysis precision
   illustration. Distinguished detecting harm from ruling it out and
   corrected the FDA reference to the August 2025 draft guidance.
 
 - Explained harm calibration versus actual stopping probabilities in the
-  help and harm/selective-monitoring vignettes, with a worked
+  help and harm/selective monitoring vignettes, with a worked
   skipped-look example. Documented the 0.1/Pocock rationale, nominal
-  harm-tail p-values, and the tradeoff in increasing total harm spending
+  harm tail p-values, and the tradeoff in increasing total harm spending
   when more analyses are planned.
 
 - Added a historical vignette covering the package’s statistical
   foundations, contributors, software modernization, and recent
   development ([\#304](https://github.com/keaven/gsDesign/issues/304)).
 
-- Added an effect-spending vignette using the public interface for joint
-  boundaries, risk differences and explicitly event-scaled HRs
+- Added an effect spending vignette using the public interface for joint
+  boundaries, risk differences and HRs explicitly scaled to events
   ([\#331](https://github.com/keaven/gsDesign/issues/331)).
 
-- Added a separate vignette comparing conditional-assurance and
-  unconditional-POS spending calibration, including the Dragalin
-  fixed-information benchmark and operating-characteristic checks
+- Added a separate vignette comparing conditional assurance and
+  unconditional POS spending calibration, including the Dragalin fixed
+  information benchmark and operating characteristic checks
   ([\#330](https://github.com/keaven/gsDesign/issues/330)).
 
-- Added a futility-spending calibration vignette comparing all six
-  two-parameter families and piecewise-linear spending with three
-  conditional-power targets, including reconstructed designs and
-  practical guidance on early futility and sample-size inflation.
+- Added a futility spending calibration vignette comparing all six
+  two-parameter families and piecewise linear spending with three
+  conditional power targets, including reconstructed designs and
+  practical guidance on early futility and sample size inflation.
   Examples cover risk differences, normal means, survival designs, and
   calibrated spending curves with interpretation of effects at the
   bounds ([\#318](https://github.com/keaven/gsDesign/issues/318)).
 
 - Documented all
   [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
-  solver controls, defaults, and spending-family restrictions, with a
+  solver controls, defaults, and spending family restrictions, with a
   tighter CP tolerance example
   ([\#318](https://github.com/keaven/gsDesign/issues/318)).
 
@@ -288,7 +292,7 @@
   at IA 1 ([\#318](https://github.com/keaven/gsDesign/issues/318)).
 
 - Updated package vignettes to use **lt** consistently for formatted
-  data-frame and matrix output, with compact row spacing for long tables
+  data frame and matrix output, with compact row spacing for long tables
   and no significant changes to the rendered HTML tables.
 
 - Remastered the hex sticker logo with a reproducible parametric logo
@@ -306,20 +310,20 @@
   and harm calibration independent of futility stopping
   ([\#345](https://github.com/keaven/gsDesign/issues/345)).
 
-- Update RTF summary tests to expect no warning when log-scale HR
+- Update RTF summary tests to expect no warning when log scale HR
   metadata can be recovered, retaining the existing output snapshots
   ([\#347](https://github.com/keaven/gsDesign/issues/347)).
 
-- Added harm-calibration checks against an independent boundary solver
-  and bivariate integration, plus default propagation, selective-bound,
-  and exact binomial checks. Regenerated only the four affected
-  harm-design numerical fixtures for the intentional new calibration and
+- Added harm calibration checks against an independent boundary solver
+  and bivariate integration, plus default propagation, selective bound,
+  and exact binomial checks. Regenerated only the four affected harm
+  design numerical fixtures for the intentional new calibration and
   defaults.
 
-- Declare `svglite` as a test dependency for information-label rendering
+- Declare `svglite` as a test dependency for information label rendering
   checks ([\#315](https://github.com/keaven/gsDesign/issues/315)).
 
-- Added tests for natural-effect calibration, joint boundary targets, HR
+- Added tests for natural effect calibration, joint boundary targets, HR
   allocation/direction handling and design replay
   ([\#331](https://github.com/keaven/gsDesign/issues/331)).
 
@@ -328,8 +332,8 @@
   interfaces ([\#242](https://github.com/keaven/gsDesign/issues/242),
   [\#320](https://github.com/keaven/gsDesign/issues/320)).
 
-- Reduced default test-suite runtime by using smaller stress-test grids,
-  fewer Monte Carlo iterations, and toy exact-binomial p-value event
+- Reduced default test suite runtime by using smaller stress-test grids,
+  fewer Monte Carlo iterations, and toy exact binomial p-value event
   counts. Set `GSDESIGN_RUN_STRESS_TESTS=true` to run the larger
   stress-test settings.
 
@@ -346,20 +350,20 @@ CRAN release: 2026-08-29
   identify and reproduce power calculations
   ([\#313](https://github.com/keaven/gsDesign/issues/313)).
 - [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
-  now aligns its expected analysis-cut grammar with
+  now aligns its expected analysis cut grammar with
   `simtrial::get_analysis_date()`: overall and per-stratum event and
   enrollment requirements can be combined, `maxCalendarTime` provides an
-  absolute cap, and `spending = "min_planned_actual"` supports
-  reference-design planned-versus-actual spending. Existing unstratified
+  absolute cap, and `spending = "min_planned_actual"` supports reference
+  design planned-versus-actual spending. Existing unstratified
   `targetEvents`, `minN`, and relative `maxExtension` behavior is
   retained ([\#303](https://github.com/keaven/gsDesign/issues/303)).
 - All `gsSurv` objects now include `N`, the cumulative total expected
   enrollment at each analysis. `nSurv` objects retain scalar `n` and
   also return identical scalar `N` as a non-breaking alias
   ([\#299](https://github.com/keaven/gsDesign/issues/299)).
-- Added survival enrollment-planning documentation for four-period
+- Added survival enrollment planning documentation for four-period
   ramp-up, the three combinations of fixed or solved enrollment and
-  follow-up duration, calendar-time analyses, power sensitivity, integer
+  follow-up duration, calendar time analyses, power sensitivity, integer
   conversion, and stratified designs. `gsSurv(T = NULL, minfup = ...)`
   now consistently keeps enrollment rates fixed and solves enrollment
   duration ([\#300](https://github.com/keaven/gsDesign/issues/300)).
@@ -369,19 +373,19 @@ CRAN release: 2026-08-29
   [`plotMinMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/plotMinMedianFollowUp.md)
   to compute and plot minimum median follow-up at any calendar time from
   the piecewise enrollment assumptions in an `nSurv` or `gsSurv` design.
-  The plot accepts arbitrary time-unit labels through `timename`; month
+  The plot accepts arbitrary time unit labels through `timename`; month
   and year labels default to x-axis breaks every 6 months and 0.5 years,
   respectively, while other units use automatic breaks
   ([\#281](https://github.com/keaven/gsDesign/issues/281)).
-- Sequential p-values, including exact-binomial repeated and sequential
+- Sequential p-values, including exact binomial repeated and sequential
   efficacy p-values, now support `test.type = 8` by ignoring its
   non-binding futility and harm bounds.
   [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
   now provides full exact conversion for non-binding test types 1, 4, 6,
-  and 8. For type 6, the upper event-count boundary targets lower-bound
-  spending under the null hypothesis. For type 8, exact upper
-  event-count stops are partitioned into mutually exclusive futility and
-  harm regions, targeting beta spending under the alternative and harm
+  and 8. For type 6, the upper event count boundary targets lower bound
+  spending under the null hypothesis. For type 8, exact upper event
+  count stops are partitioned into mutually exclusive futility and harm
+  regions, targeting beta spending under the alternative and harm
   spending under the null, respectively
   ([\#287](https://github.com/keaven/gsDesign/issues/287)).
 
@@ -394,15 +398,15 @@ CRAN release: 2026-08-29
   ([\#308](https://github.com/keaven/gsDesign/issues/308)).
 - Clarified the two intended uses of
   [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md),
-  expanded guidance for scenario and combined timing-rule analyses,
+  expanded guidance for scenario and combined timing rule analyses,
   including mixed-`NA` rules by analysis, added survival workflow
-  routing, and documented that expected-value calculations do not
+  routing, and documented that expected value calculations do not
   replace simulation of stochastic trial execution
   ([\#303](https://github.com/keaven/gsDesign/issues/303)).
 - Clarified beta spending in
   [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
   scenario analyses, distinguishing design beta from achieved beta and
-  defining `informationRates` as planned information-fraction caps used
+  defining `informationRates` as planned information fraction caps used
   to derive effective spending time
   ([\#303](https://github.com/keaven/gsDesign/issues/303)).
 - Expanded the
@@ -414,9 +418,9 @@ CRAN release: 2026-08-29
   [\#295](https://github.com/keaven/gsDesign/issues/295),
   [\#296](https://github.com/keaven/gsDesign/issues/296)).
 - Explained why skipping futility while retaining harm monitoring can
-  recalibrate earlier harm bounds, and documented recommended
-  final-analysis testing schedules using common event-driven
-  survival-design assumptions for all selective-bound examples
+  recalibrate earlier harm bounds, and documented recommended final
+  analysis testing schedules using common event-driven survival design
+  assumptions for all selective bound examples
   ([\#306](https://github.com/keaven/gsDesign/issues/306)).
 
 ### Testing
@@ -448,9 +452,9 @@ CRAN release: 2026-08-29
   scheduled before the end of enrollment plus minimum follow-up
   ([\#291](https://github.com/keaven/gsDesign/issues/291)).
 - `gsSurvPower(targetN = ...)` now works when `R` is omitted by
-  expanding and rescaling enrollment-period durations to match the
+  expanding and rescaling enrollment period durations to match the
   supplied `gamma` periods. Documentation now clarifies that `targetN`
-  changes enrollment duration; for fixed-duration enrollment, specify
+  changes enrollment duration; for fixed duration enrollment, specify
   `R` and scale `gamma` directly
   ([\#293](https://github.com/keaven/gsDesign/issues/293)).
 - [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
@@ -466,52 +470,51 @@ CRAN release: 2026-08-29
   ([\#296](https://github.com/keaven/gsDesign/issues/296)).
 - [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
   now retains exact event totals when `targetEvents` determines an
-  analysis, rather than exposing small root-finding residuals that could
+  analysis, rather than exposing small root finding residuals that could
   make
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   round an integer event target up by one
   ([\#294](https://github.com/keaven/gsDesign/issues/294)).
-- Survival sample-size outputs now normalize machine-precision
+- Survival sample size outputs now normalize machine-precision
   representations of integers before applying display rounding, so
   [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
   and
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   preserve exact arm and total sample sizes
   ([\#290](https://github.com/keaven/gsDesign/issues/290)).
-- Single-analysis survival designs now use a fixed-design
+- Single-analysis survival designs now use a fixed design
   [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) path
   in `gsSurv(k = 1)` and `gsSurvPower(k = 1)`. The resulting objects
   work with
   [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
   and
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
-  including alternate-alpha summaries and use all alpha at the sole
+  including alternate alpha summaries and use all alpha at the sole
   analysis without displaying an irrelevant spending function in
   [`summary()`](https://rdrr.io/r/base/summary.html). An
   [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   object can now also be passed directly to
   [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
-  and is returned as an `nSurv` object with integer event and
-  sample-size targets
-  ([\#289](https://github.com/keaven/gsDesign/issues/289)).
+  and is returned as an `nSurv` object with integer event and sample
+  size targets ([\#289](https://github.com/keaven/gsDesign/issues/289)).
 - Power plots for test types 7 and 8 now treat crossing the futility
   threshold as the union of futility-only and harm stops. The separate
   harm curve remains harm-only, and the mutually exclusive probabilities
   stored on the design are unchanged
   ([\#287](https://github.com/keaven/gsDesign/issues/287)).
-- Sample-size derivation now accounts for analyses where efficacy,
+- Sample size derivation now accounts for analyses where efficacy,
   futility, or harm testing is skipped, avoiding power above the
   requested target. Harm, futility, and efficacy crossing probabilities
-  are reported as mutually exclusive outcomes. Alternate-alpha summaries
+  are reported as mutually exclusive outcomes. Alternate alpha summaries
   and power calculations retain the planned efficacy testing schedule,
-  and survival-design inputs retain the applicable testing flags.
+  and survival design inputs retain the applicable testing flags.
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   reports every characteristic, including cumulative crossing
   probability, as `NA` when its bound is not tested at an analysis
   ([\#287](https://github.com/keaven/gsDesign/issues/287)).
-- Alternate-alpha summaries are now limited to one-sided and non-binding
+- Alternate alpha summaries are now limited to one-sided and non-binding
   test types 1, 4, 6, and 8. Binding test type 7 is no longer presented
-  as compatible with the Maurer–Bretz graphical multiple-testing
+  as compatible with the Maurer–Bretz graphical multiple testing
   framework ([\#287](https://github.com/keaven/gsDesign/issues/287)).
 
 ## gsDesign 3.10.1
@@ -593,7 +596,7 @@ CRAN release: 2026-07-03
   [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
   which solve for sample size,
   [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
-  takes fixed assumptions and computes power. Supports calendar-time and
+  takes fixed assumptions and computes power. Supports calendar time and
   event-driven timing, stratified designs, all test types (1–8 including
   harm bounds), and flexible analysis timing criteria (`targetEvents`,
   `plannedCalendarTime`, `maxExtension`, `minTimeFromPreviousAnalysis`,
@@ -624,17 +627,17 @@ CRAN release: 2026-07-03
   [`repeatedPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/repeatedPValueBinomialExact.md)
   and
   [`sequentialPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/sequentialPValueBinomialExact.md)
-  to compute repeated and sequential exact-binomial p-values under
+  to compute repeated and sequential exact binomial p-values under
   spending function designs derived from
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   objects ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - Added
   [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
   to run fixed and blinded-adaptive seasonal rare-event simulations with
-  exact-binomial efficacy monitoring summaries
+  exact binomial efficacy monitoring summaries
   ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
-  now supports explicit spending-time overrides via `usTime` and
+  now supports explicit spending time overrides via `usTime` and
   `lsTime` (for `test.type = 4`) to align with
   [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
   and [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
@@ -648,17 +651,17 @@ CRAN release: 2026-07-03
   probabilities (`futility_stop_rate` with `futility_mc_se`) in scenario
   summaries ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
-  now accepts `ve = 0` and `ve < 0`, allowing null-hypothesis (`ve = 0`)
+  now accepts `ve = 0` and `ve < 0`, allowing null hypothesis (`ve = 0`)
   and non-inferiority margin (`ve < 0`) scenarios. Validation now
   requires only that `ve` values are finite and less than 1. A
-  feasibility check verifies that the implied experimental-arm event
+  feasibility check verifies that the implied experimental arm event
   rates (`control_event_rate * (1 - ve)`) remain in `[0, 1)`
   ([\#267](https://github.com/keaven/gsDesign/issues/267)).
 
 ### Bug fixes
 
 - [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-  now warns before defaulting missing `hr0` to 1 for hazard-ratio
+  now warns before defaulting missing `hr0` to 1 for hazard ratio
   boundary summaries
   ([\#42](https://github.com/keaven/gsDesign/issues/42)).
 - [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
@@ -668,8 +671,8 @@ CRAN release: 2026-07-03
   `T - minfup` instead of failing later while assigning row names
   ([\#274](https://github.com/keaven/gsDesign/issues/274)).
 - [`Power.ssrCP()`](https://keaven.github.io/gsDesign/reference/ssrCP.md)
-  now uses the interim efficacy bound when integrating the
-  no-sample-size-re-estimation region and when falling back to the upper
+  now uses the interim efficacy bound when integrating the region
+  without sample size re-estimation and when falling back to the upper
   conditional power changepoint
   ([\#213](https://github.com/keaven/gsDesign/issues/213)).
 - [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
@@ -679,29 +682,29 @@ CRAN release: 2026-07-03
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   also uses the input accrual rate and duration when both `T` and
   `minfup` are `NULL`, solving follow-up duration against the final
-  group-sequential event requirement. This allows Schoenfeld survival
-  designs to reproduce SAS PROC SEQDESIGN’s fixed-accrual follow-up
+  group sequential event requirement. This allows Schoenfeld survival
+  designs to reproduce SAS PROC SEQDESIGN’s fixed accrual follow-up
   solve ([\#270](https://github.com/keaven/gsDesign/issues/270)).
 - [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
   now stops simulated trials at the first efficacy or futility boundary
   crossing for reporting stopping time, total events, and total
   enrollment, while preserving the non-binding futility convention for
-  efficacy crossing probability. The simulation also updates
-  exact-binomial bounds within each trial using the observed total event
+  efficacy crossing probability. The simulation also updates exact
+  binomial bounds within each trial using the observed total event
   counts and defaults fixed per-season enrollment to the design’s
   planned seasonal enrollment
   ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
-  now preserves selective-bound flags (`testUpper`, `testLower`,
-  `testHarm`) and harm-bound spending (`sfharm`, `sfharmparam` for
+  now preserves selective bound flags (`testUpper`, `testLower`,
+  `testHarm`) and harm bound spending (`sfharm`, `sfharmparam` for
   `test.type` 7 or 8) when recomputing the design after integer sample
-  size or event-count rounding. Previously the internal
+  size or event count rounding. Previously the internal
   [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
   call omitted these settings, so inactive looks could incorrectly
   become active
   ([\#261](https://github.com/keaven/gsDesign/issues/261)).
 - [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
-  now preserves the intended survival-design behavior that
+  now preserves the intended survival design behavior that
   `roundUpFinal = TRUE` rounds the final event count up. If the
   independently rounded final sample size, using the usual `ratio + 1`
   allocation multiple, cannot support the integer event target,
@@ -714,10 +717,10 @@ CRAN release: 2026-07-03
   survival integerization now keeps the calendar design fixed while
   deriving interim integer events from timing and final integer event
   target. Enrollment is inflated minimally by scaling accrual rates and
-  then rounded to allocation multiples, avoiding unnecessary
-  calendar-extension-driven enrollment increases for small final-event
-  rounding changes. A variable-duration fallback is retained with a
-  warning when fixed-calendar inflation is infeasible
+  then rounded to allocation multiples, avoiding unnecessary enrollment
+  increases driven by calendar extensions for small final event rounding
+  changes. A variable-duration fallback is retained with a warning when
+  fixed calendar inflation is infeasible
   ([\#271](https://github.com/keaven/gsDesign/issues/271)).
 - Fixed sign inconsistency in
   [`hrn2z()`](https://keaven.github.io/gsDesign/reference/nSurvival.md)
@@ -728,8 +731,8 @@ CRAN release: 2026-07-03
   [\#251](https://github.com/keaven/gsDesign/issues/251)).
 - Fixed
   [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
-  one-sided (`test.type = 1`) updating with `observedEvents` so
-  futility-adjustment code is only executed when `test.type = 4`
+  one-sided (`test.type = 1`) updating with `observedEvents` so futility
+  adjustment code is only executed when `test.type = 4`
   ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
   now respects selective futility testing (`testLower`) when present on
@@ -747,20 +750,20 @@ CRAN release: 2026-07-03
   ([\#271](https://github.com/keaven/gsDesign/issues/271)).
 - Updated the `SeqDesignSurvival` vignette to use the one-sided
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-  alpha convention when reproducing SAS PROC SEQDESIGN fractional-time
+  alpha convention when reproducing SAS PROC SEQDESIGN fractional time
   survival output
   ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - Corrected and generalized the multi-season rare-event vignette so
-  enrollment timing, planned counts, and simulation event-rate inputs
+  enrollment timing, planned counts, and simulation event rate inputs
   are derived from the stated design specifications, with calendar-timed
   seasonal analyses, piecewise seasonal failure hazards, and
-  cross-references to the exact binomial vaccine-efficacy vignette
+  cross-references to the exact binomial vaccine efficacy vignette
   ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - Expanded
   [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
-  help and vignette guidance for survival-design final event rounding,
-  final sample-size feasibility adjustment, and seasonal designs with a
-  final zero event-rate period
+  help and vignette guidance for survival design final event rounding,
+  final sample size feasibility adjustment, and seasonal designs with a
+  final zero event rate period
   ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - Documented `test.type` restriction in
   [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md):
@@ -790,31 +793,31 @@ CRAN release: 2026-07-03
   ([\#258](https://github.com/keaven/gsDesign/issues/258)).
 - Clarified the PROC SEQDESIGN survival vignette comparison by using
   `test.type = 2`, `alpha = 0.025`, `method = "Schoenfeld"`, and
-  `T = minfup = NULL` to match SAS’s symmetric two-sided fixed-accrual
-  design, with guidance on fractional-time information schedules
+  `T = minfup = NULL` to match SAS’s symmetric two-sided fixed accrual
+  design, with guidance on fractional time information schedules
   ([\#270](https://github.com/keaven/gsDesign/issues/270)).
 - Added vignette “Multi-season studies for rare events”
   ([`vignette("MultiSeasonRareEvents")`](https://keaven.github.io/gsDesign/articles/MultiSeasonRareEvents.md))
-  demonstrating exact-binomial seasonal monitoring, analysis-time bound
+  demonstrating exact binomial seasonal monitoring, analysis time bound
   updates via `toBinomialExact(observedEvents = ...)`, and blinded
   information-adaptive enrollment scenarios
   ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - Expanded the multi-season vignette with: initial
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   output, IA1-only futility illustration, VE and nominal one-sided
-  p-values at exact-binomial bounds, and clearer simulation tables
+  p-values at exact binomial bounds, and clearer simulation tables
   including efficacy and futility stopping probabilities with
   non-binding Type I interpretation notes
   ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - Reorganized pkgdown article sections to separate general materials,
-  exact binomial workflows, and multiple-hypothesis-testing content
+  exact binomial workflows, and multiple hypothesis testing content
   ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 
 ### Testing
 
 - Added
   [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
-  regression tests for selective-bound preservation on `gsDesign` and
+  regression tests for selective bound preservation on `gsDesign` and
   `gsSurv` objects, including `test.type` 8 with custom harm spending
   ([\#261](https://github.com/keaven/gsDesign/issues/261)).
 - Added focused
@@ -822,7 +825,7 @@ CRAN release: 2026-07-03
   regression tests for `informationRates`, `fullSpendingAtFinal`, and
   inherited sidedness behavior from existing time-to-event designs
   ([\#258](https://github.com/keaven/gsDesign/issues/258)).
-- Added independent tests for exact-binomial repeated/sequential
+- Added independent tests for exact binomial repeated/sequential
   p-values and for
   [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
   input validation, reproducibility, and adaptive enrollment behavior
@@ -833,7 +836,7 @@ CRAN release: 2026-07-03
   ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - Added regression tests for
   [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
-  `usTime`/`lsTime` overrides and selective-futility behavior, plus
+  `usTime`/`lsTime` overrides and selective futility behavior, plus
   tests for new futility stopping summary outputs from
   [`simBinomialSeasonalExact()`](https://keaven.github.io/gsDesign/reference/simBinomialSeasonalExact.md)
   ([\#264](https://github.com/keaven/gsDesign/issues/264)).
@@ -842,7 +845,7 @@ CRAN release: 2026-07-03
   stopping summaries, design-based fixed enrollment defaults, and the
   rare-event
   [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
-  equal-allocation path
+  equal allocation path
   ([\#264](https://github.com/keaven/gsDesign/issues/264)).
 - Expanded
   [`nSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and

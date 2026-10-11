@@ -1,8 +1,8 @@
 # Summarize an exact binomial vaccine or prevention efficacy design
 
 Creates a vaccine or prevention efficacy summary table from an exact
-binomial design. The table includes event-count bounds, efficacy at each
-bound, cumulative error spending, and cumulative efficacy-crossing
+binomial design. The table includes event count bounds, efficacy at each
+bound, cumulative error spending, and cumulative efficacy crossing
 probabilities for selected efficacy assumptions. Optional time-to-event
 design information adds planned analysis times and expected enrollment.
 
@@ -40,7 +40,7 @@ VEtable(x, ve, tteDesign = NULL, ratio = NULL)
 A tibble of class `gsVETable` with one row per analysis. The columns
 contain analysis number, optional timing and enrollment, total cases,
 exact efficacy and futility bounds, efficacy at each bound, cumulative
-alpha and beta spending, and cumulative efficacy-crossing probability
+alpha and beta spending, and cumulative efficacy crossing probability
 under each value in `ve`. Pass the result to
 [`lt()`](https://rdrr.io/pkg/lt/man/lt.html) for a formatted table with
 explanatory footnotes.

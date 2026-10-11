@@ -5,10 +5,10 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calibrate Futility Spending to Predictive Power Targets — gsPPFutilitySpending"><meta name="description" content="Select beta-spending futility parameters so that posterior predictive power
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calibrate Futility Spending to Predictive Power Targets — gsPPFutilitySpending"><meta name="description" content="Select beta spending futility parameters so that posterior predictive power
 at selected interim lower bounds matches the requested targets. Each candidate
 is rebuilt with gsDesign(), recalculating information to preserve the
-reference design's target unconditional power."><meta property="og:description" content="Select beta-spending futility parameters so that posterior predictive power
+reference design's target unconditional power."><meta property="og:description" content="Select beta spending futility parameters so that posterior predictive power
 at selected interim lower bounds matches the requested targets. Each candidate
 is rebuilt with gsDesign(), recalculating information to preserve the
 reference design's target unconditional power."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
@@ -83,7 +83,7 @@ reference design's target unconditional power."><meta property="og:image" conten
     </div>
 
     <div class="ref-description section level2">
-    <p>Select beta-spending futility parameters so that posterior predictive power
+    <p>Select beta spending futility parameters so that posterior predictive power
 at selected interim lower bounds matches the requested targets. Each candidate
 is rebuilt with <code><a href="gsDesign.html">gsDesign()</a></code>, recalculating information to preserve the
 reference design's target unconditional power.</p>
@@ -138,10 +138,10 @@ Defaults to <code>normalGrid(mu = x$delta / 2,
 sigma = 10 / sqrt(x$n.fix))</code>, the same prior as in
 <code>gsBoundSummary(x)</code>: a normal prior centered halfway between the null
 and alternative, with information equivalent to 1 percent of the
-fixed-design sample size (or event count). The default is constructed from
+fixed design sample size (or event count). The default is constructed from
 the reference design <code>x</code> and held fixed during calibration.
 Weights are normalized internally; the normalized
-prior is retained in the result. A one-point prior targets fixed-effect CP.</p></dd>
+prior is retained in the result. A one-point prior targets fixed effect CP.</p></dd>
 
 
 <dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
@@ -155,7 +155,7 @@ input errors. These controls change the search, not the prior or target.</p><dl>
     target, not the full spending parameter vector.</p></dd>
 
   <dt><code>lower</code>, <code>upper</code></dt>
-<dd><p>Spending-parameter search limits,
+<dd><p>Spending parameter search limits,
     not Z-boundaries (default <code>NULL</code>, selecting family defaults).
     Start and limit vectors must be finite and match the free parameter
     count; <code>lower &lt; upper</code> must hold and contain the start.
@@ -166,7 +166,7 @@ input errors. These controls change the search, not the prior or target.</p><dl>
     every target (default <code>1e-4</code>); a finite scalar in (0, 0.1).</p></dd>
 
   <dt><code>maxit</code></dt>
-<dd><p>Positive integer joint-optimizer iteration limit
+<dd><p>Positive integer joint optimizer iteration limit
     (default 500), not a global limit on design evaluations or the
     one-parameter root search.</p></dd>
 
@@ -179,7 +179,7 @@ input errors. These controls change the search, not the prior or target.</p><dl>
     if the initial joint fit misses the targets (default <code>TRUE</code>).</p></dd>
 
   <dt><code>trace</code></dt>
-<dd><p>Display joint-optimizer progress (default
+<dd><p>Display joint optimizer progress (default
     <code>FALSE</code>). Both logical controls must be nonmissing scalars.</p></dd>
 
 
@@ -206,7 +206,7 @@ input errors. These controls change the search, not the prior or target.</p><dl>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code><a href="gsCP.html">gsPP()</a></code> averages conditional power over the posterior effect
 distribution to give the probability of future efficacy rejection. This is
-not the posterior probability of a positive effect, observed-effect CP, or
+not the posterior probability of a positive effect, observed effect CP, or
 CP H1. The prior is held fixed throughout calibration, but the posterior is
 recomputed at each candidate lower bound using its information. As in
 <code><a href="gsCP.html">gsPP()</a></code>, conditioning uses the interim statistic, not additionally the
@@ -233,7 +233,7 @@ candidates are rejected and the diagnostic reports this if no valid design
 can be constructed.</p>
     </div>
     <div class="section level2">
-    <h2 id="spending-parameter-search-defaults">Spending-parameter search defaults<a class="anchor" aria-label="anchor" href="#spending-parameter-search-defaults"></a></h2>
+    <h2 id="spending-parameter-search-defaults">Spending parameter search defaults<a class="anchor" aria-label="anchor" href="#spending-parameter-search-defaults"></a></h2>
 
 
 <p>When not supplied in <code>control</code>, parameter limits and fallback starting
@@ -254,7 +254,7 @@ fractions <code>x$n.I / x$n.I[x$k]</code>, ending at 1. For example,
 <code>x$timing = c(.5, .75, 1)</code> keeps the analyses at 50%, 75%, and 100%
 of the final information. Power-preserving calibration may change the
 maximum information and thus the absolute information <code>n.I</code> at every
-analysis while retaining these fractions. Fixed-information calibration
+analysis while retaining these fractions. Fixed information calibration
 (<code><a href="gsCAFutilitySpending.html">gsCAFutilitySpending()</a></code> and
 <code>gsCPOSFutilitySpending(mode = "fixed_information")</code>) also holds
 <code>n.I</code> and the efficacy boundaries fixed.</p>
@@ -271,13 +271,13 @@ or that absolute calendar analysis dates must be fixed. See
 
 
 <p>Survival inputs retain their survival classes and endpoint assumptions.
-Candidate probabilities are evaluated on the statistical event-count scale.
-Power-preserving probability calibration of fixed-duration, rate-scaled
+Candidate probabilities are evaluated on the statistical event count scale.
+Power-preserving probability calibration of fixed duration, rate-scaled
 designs rebuilds the survival plan only for the selected fit and checks all
 targets again on the returned object. If the deferred search or that check
 fails, calibration retries once with full survival reconstruction, retaining
 the best available internal parameters as starting values. Effect calibration
-and accrual- or follow-up-duration solves reconstruct the plan for every
+and accrual or follow-up duration solves reconstruct the plan for every
 candidate.
 For <code><a href="nSurv.html">gsSurv()</a></code> and <code><a href="gsSurvCalendar.html">gsSurvCalendar()</a></code> inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
@@ -288,9 +288,9 @@ numerical tolerance. Stored calls are not evaluated.</p>
 realized calendar times and enrollment periods and rescales enrollment rates
 to attain the fitted event counts. The evaluated alternative <code>x$hr</code>
 and its achieved power are used, even if the original design alternative
-<code>x$hr1</code> differed. Original event-trigger and calendar-cap rules are not
-re-applied: the realized schedule becomes the new plan. Fixed-information
-conditional-POS/CA calibration instead retains the survival plan, event
+<code>x$hr1</code> differed. Original event trigger and calendar cap rules are not
+reapplied: the realized schedule becomes the new plan. Fixed information
+conditional POS/CA calibration instead retains the survival plan, event
 counts and efficacy bounds while updating futility and achieved power.</p>
 <p>Priors and explicit <code>theta</code> remain standardized drifts per square root
 event, not hazard ratios. Rounding with <code><a href="toInteger.html">toInteger()</a></code> after calibration

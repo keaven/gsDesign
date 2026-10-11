@@ -1026,10 +1026,10 @@ derived using a Hwang-Shih-DeCani spending function with gamma = -3.</p>
 <p>We now convert this to an exact binomial design. Full conversion with
 <code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> is available for non-binding
 <code>test.type = 1</code>, <code>4</code>, <code>6</code>, and
-<code>8</code>. For type 4, the upper event-count stopping boundary
-targets beta spending under the alternative; for type 6 it targets
-lower-bound spending under the null using <code>astar</code>. For type
-8, <code>upper</code> contains all upper event-count stops and the
+<code>8</code>. For type 4, the upper event count stopping boundary
+targets beta spending under the alternative; for type 6 it targets lower
+bound spending under the null using <code>astar</code>. For type 8,
+<code>upper</code> contains all upper event count stops and the
 additional <code>futility</code> and <code>harm</code> components
 partition those stops into mutually exclusive regions. The exact
 futility boundary targets beta spending under the alternative, while the
@@ -1438,10 +1438,10 @@ table.</p>
 <p>Like <code><a href="../reference/gsCP.html">gsCP()</a></code> for asymptotic group sequential designs,
 <code><a href="../reference/gsCPBinomialExact.html">gsCPBinomialExact()</a></code> conditions on the interim statistic and
 calculates the probability of crossing each future boundary. Here the
-sufficient interim statistic is the cumulative number of
-experimental-group events among the total events. Conditional on that
-count, future experimental-group event increments follow an exact
-binomial distribution.</p>
+sufficient interim statistic is the cumulative number of experimental
+group events among the total events. Conditional on that count, future
+experimental group event increments follow an exact binomial
+distribution.</p>
 <p>For a single interim analysis, suppose that 9 of the first 20 events
 were in the experimental group. This count is within the continuation
 region of 7 to 15 events for the updated design. We calculate
@@ -1462,7 +1462,7 @@ and the design alternative VE of 0.7:</p>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Exact Conditional Power after 9 of 20 Experimental-Group Events"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Exact Conditional Power after 9 of 20 Experimental Group Events"</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
@@ -1478,7 +1478,7 @@ and the design alternative VE of 0.7:</p>
     }
   ],
   "header": {
-    "title": "Exact Conditional Power after 9 of 20 Experimental-Group Events"
+    "title": "Exact Conditional Power after 9 of 20 Experimental Group Events"
   }
 }
 })</script><p>The observed interim count is used only as the conditioning state.
@@ -1490,11 +1490,11 @@ a reversal of a stopping decision. The default
 boundaries as stopping rules. For a design with non-binding futility,
 <code>binding = FALSE</code> instead reports conditional efficacy power
 when those future boundaries will not be enforced. The calculation
-accepts <code>theta</code> directly for conditional experimental-group
+accepts <code>theta</code> directly for conditional experimental group
 event probabilities or <code>ve</code> for VE or PE assumptions.</p>
 <p>Conditional power can also be examined across a range of assumptions
 about future VE or PE. At the first analysis the efficacy and futility
-bounds are 6 and 16 experimental-group events, respectively. We compare
+bounds are 6 and 16 experimental group events, respectively. We compare
 four hypothetical outcomes that fall strictly below and above each
 boundary: 5, 7, 15, and 17 events. Current boundary status is ignored
 for conditioning, while the default <code>binding = TRUE</code>
@@ -1566,8 +1566,8 @@ Clopper–Pearson interval <span class="citation">(Clopper and Pearson
 1934)</span> for the conditional probability that an event is in the
 experimental group and transforms it to the VE or PE scale. The
 transformation is decreasing, so the two probability endpoints are
-reversed. For the 16 experimental-group events among 78 total events
-reported above, the fixed-look interval is:</p>
+reversed. For the 16 experimental group events among 78 total events
+reported above, the fixed look interval is:</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ciBinomialExact.html">ciBinomialExact</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">16</span>, n <span class="op">=</span> <span class="fl">78</span>, ratio <span class="op">=</span> <span class="va">ratio</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -1596,12 +1596,12 @@ reported above, the fixed-look interval is:</p>
 sequential test at each analysis <span class="citation">(Jennison and
 Turnbull 1984; Coe and Tamhane 1993)</span>. As in the corresponding
 asymptotic construction, a two-sided <span class="math inline">\(1-\alpha\)</span> interval uses <span class="math inline">\(\alpha/2\)</span> in each direction with the same
-spending function, spending times, and count-path ordering. The upper
+spending function, spending times, and count path ordering. The upper
 direction mirrors experimental and control event counts; it does not use
 the futility boundary. The resulting intervals can be conservative
 because event counts are discrete.</p>
-<p>The complete experimental-group event-count path is required. Since
-the first experimental-group count is not reported in this example, the
+<p>The complete experimental group event count path is required. Since
+the first experimental group count is not reported in this example, the
 following uses 9 events at the first look only to illustrate the
 calculation:</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">

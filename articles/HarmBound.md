@@ -13,7 +13,7 @@ and a **harm** bound, using `test.type = 7` (binding) and
 `test.type = 8` (non-binding). For sparse mortality data without a
 separate futility rule, the section [Sparse-event mortality
 monitoring](#sparse-event-mortality-monitoring) uses `test.type = 6` and
-exact-binomial boundary calculations.
+exact binomial boundary calculations.
 
 ### Regulatory context: FDA guidance on OS monitoring in oncology
 
@@ -30,8 +30,8 @@ III.B.2 discuss:
   events, and precision to assess clinically relevant mortality
   detriment.
 - Event-driven interim analyses when appropriate, with independent data
-  monitoring. Some small or low-event-rate trials may not warrant
-  interim OS analyses.
+  monitoring. Some small trials or trials with low event rates may not
+  warrant interim OS analyses.
 - The distinction between identifying a harm signal and ruling out an
   unacceptable degree of harm.
 
@@ -231,7 +231,7 @@ treatment effect (HR = 1, i.e., under \\H_0\\) and the design
 alternative (HR = 0.75). When harm and futility are both active,
 `x8$lower$prob` and `x8$harm$prob` are reported as mutually exclusive
 stopping outcomes. Thus, the probability of crossing the futility
-threshold is the sum of the two lower-tail components.
+threshold is the sum of the two lower tail components.
 
 ``` r
 
@@ -310,16 +310,16 @@ hypothetical probabilities used to calibrate harm spending. Its optional
 `Spending` rows report the spending targets, so these two rows need not
 agree. Also, its `p (1-sided)` rows use the efficacy direction; the
 nominal p-value favoring harm is `pnorm(xh$harm$bound)`, the complement
-of that displayed p-value. `print(xh)` labels the harm-direction values
+of that displayed p-value. `print(xh)` labels the harm direction values
 as `Nominal p`.
 
-Changing the example to `test.type = 7` retains the same
-harm-calibration convention. Binding status changes efficacy
-calibration: type 7 accounts for both lower stopping rules in protecting
-alpha, whereas type 8 ignores them for that purpose. Power and actual
-stopping probabilities include both rules in either design. Ignoring a
-binding futility rule in practice can inflate efficacy Type I error,
-even though it was ignored for harm calibration.
+Changing the example to `test.type = 7` retains the same harm
+calibration convention. Binding status changes efficacy calibration:
+type 7 accounts for both lower stopping rules in protecting alpha,
+whereas type 8 ignores them for that purpose. Power and actual stopping
+probabilities include both rules in either design. Ignoring a binding
+futility rule in practice can inflate efficacy Type I error, even though
+it was ignored for harm calibration.
 
 ### Visualization
 
@@ -507,7 +507,7 @@ The
 [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
 function accepts an `alpha` argument to display efficacy bounds at one
 or more alternate \\\alpha\\ levels alongside the original design. Each
-alternate-alpha column retains the `testUpper` schedule from the design,
+alternate alpha column retains the `testUpper` schedule from the design,
 so an efficacy analysis that was skipped remains inactive and every
 efficacy characteristic at that analysis, including cumulative crossing
 probability, is `NA`. Here we show the non-binding design (`x8`) with
@@ -519,10 +519,10 @@ efficacy bounds for both \\\alpha = 0.0125\\ (the design level) and
 gsBoundSummary(x8, alpha = 0.025) |> lt()
 ```
 
-Alternate-alpha summaries are supported for `test.type = 8`, where both
+Alternate alpha summaries are supported for `test.type = 8`, where both
 futility and harm bounds are non-binding. They are not supported for
 `test.type = 7`: a binding harm or futility bound is outside the
-non-binding sequential-p-value framework used for Maurer–Bretz graphical
+non-binding sequential p-value framework used for Maurer–Bretz graphical
 multiple testing.
 
 ## Sparse-event mortality monitoring
@@ -538,7 +538,7 @@ disease scenario or recommended protocol.
 
 Use `test.type = 6`: its lower Z-bound spends under the null hypothesis
 and is **non-binding for efficacy Type I error**. Here we interpret that
-lower bound as harm; there is no additional beta-spending futility
+lower bound as harm; there is no additional beta spending futility
 bound. For type 6 the inputs are `astar = 0.1` and `sfl = sfLDPocock`,
 **not** `sfharm`. They must be supplied explicitly: type 6 retains its
 general-purpose defaults of `astar = 1 - alpha` (selected by input 0)
@@ -574,16 +574,16 @@ sparse_exact <- toBinomialExact(
 
 The example retains an OS efficacy boundary to illustrate non-binding
 harm monitoring alongside an alpha-controlled efficacy test. It does not
-allocate alpha to another primary endpoint or supply a multiple-endpoint
+allocate alpha to another primary endpoint or supply a multiple endpoint
 testing strategy. If OS is solely a safety endpoint, the efficacy
 stopping rules and operating characteristics should be specified
 accordingly rather than claiming an OS efficacy objective that the trial
 does not have.
 
-### Integer death-count boundaries
+### Integer death count boundaries
 
-In the exact-binomial representation the direction reverses: a high
-count of experimental-arm deaths signals harm. `upper$bound` is
+In the exact binomial representation the direction reverses: a high
+count of experimental arm deaths signals harm. `upper$bound` is
 therefore the harm cutoff, while `lower$bound` is the efficacy cutoff.
 The probabilities account for stopping at any earlier active boundary.
 
@@ -611,10 +611,10 @@ stopifnot(sum(efficacy_without_harm$lower$prob) <= sparse$alpha + 1e-10)
 
 At the first look, a signal requires all six deaths to be in the
 experimental arm. At later looks the cumulative cutoff is applied only
-if no earlier stopping boundary has been crossed. The total null
-harm-crossing probability is 7.8%, below the 10% target because only
-integer death counts are available. The efficacy Type I error without
-harm stopping is 1.96%, below 2.5%.
+if no earlier stopping boundary has been crossed. The total null harm
+crossing probability is 7.8%, below the 10% target because only integer
+death counts are available. The efficacy Type I error without harm
+stopping is 1.96%, below 2.5%.
 
 ### Sensitivity to excess mortality
 
@@ -624,9 +624,9 @@ that a death is in the experimental arm by \\p = HR/(1 + HR)\\, where
 conditional Poisson model uses \\p = HR\\r/(1 + HR\\r)\\ with exposure
 ratio \\r\\. The recursion below is exact for independent binomial event
 increments with constant \\p\\, **not automatically exact for arbitrary
-censored survival data**. Risk-set imbalance, differential censoring, or
+censored survival data**. Risk set imbalance, differential censoring, or
 changing hazards can invalidate the simple mapping from randomization
-ratio and HR. Such settings need appropriate survival-model calculations
+ratio and HR. Such settings need appropriate survival model calculations
 or simulation.
 
 ``` r
@@ -654,7 +654,7 @@ clinical importance of reviewing a signal.
 
 ### Detecting harm versus ruling out harm
 
-A harm-monitoring test asks whether data provide evidence of excess
+A harm monitoring test asks whether data provide evidence of excess
 mortality relative to HR = 1. A reassurance objective instead asks
 whether the data can exclude a prespecified unacceptable HR, such as
 1.5. The latter value is an illustration, not a universal safety margin.
@@ -678,7 +678,7 @@ data.frame(
 ```
 
 Despite a balanced observed count, this upper bound exceeds 1.5. This is
-a fixed-analysis precision illustration, **not a sequentially adjusted
+a fixed analysis precision illustration, **not a sequentially adjusted
 interval** for the monitored trial. Repeated or stopping-selected
 reassurance assessments require an interval or test valid for that
 monitoring plan. A vignette example must not turn “no harm signal” into
@@ -711,7 +711,7 @@ probability \\A(t) = 0.1\log\\1 + (e-1)t\\\\ by spending time \\t\\. It
 allocates relatively more spending early than a conservative
 O’Brien–Fleming choice, helping to flag moderately small nominal
 p-values favoring harm throughout monitoring. The total 0.1 is a
-repeated-monitoring probability under the null, **not** a nominal 0.1
+repeated monitoring probability under the null, **not** a nominal 0.1
 cutoff at every analysis. Neither the total nor the spending function
 guarantees that any particular nominal p-value will trigger harm
 stopping at every look.
@@ -794,8 +794,8 @@ into mutually exclusive harm, futility, and efficacy outcomes.
 
 When harm is tested at an analysis where futility is skipped, the harm
 boundary is the active lower stopping boundary. This stopping
-probability is included in sample-size derivation and, for
-`test.type = 7`, in the binding efficacy-bound calculation. For
+probability is included in sample size derivation and, for
+`test.type = 7`, in the binding efficacy bound calculation. For
 `test.type = 8`, efficacy bounds continue to use the non-binding Type I
 error convention, while power and expected information account for
 actual harm and futility stopping.

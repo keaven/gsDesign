@@ -67,7 +67,7 @@ preserves the null HR and effect direction when a survival design is
 reconstructed with
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md).
 Explicit HR fields take precedence. If the null HR cannot be recovered,
-a warning is issued and HR-at-bound calculations assume `hr0 = 1`.
+a warning is issued and HR at bound calculations assume `hr0 = 1`.
 
 `Spending: `Incremental error spending at each given analysis. For
 asymmetric designs, futility bound will have beta-spending summarized.
@@ -279,8 +279,8 @@ gsCPz(z, i, x, theta = NULL, ylab = NULL, ...)
   efficacy bound columns are headed by individual alpha levels. The
   alpha level of the input design is always included as the first
   column. Alternate alpha levels retain the efficacy testing schedule in
-  `x$testUpper`. Binding lower-bound designs, including test type 7, are
-  not supported for alternate-alpha summaries because they do not
+  `x$testUpper`. Binding lower bound designs, including test type 7, are
+  not supported for alternate alpha summaries because they do not
   satisfy the non-binding framework used for Maurer–Bretz graphical
   multiple testing.
 
@@ -592,7 +592,7 @@ xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE),
   caption = "Table caption."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Wed Oct  7 19:56:28 2026
+#> % Sun Oct 11 19:09:20 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{llrr}

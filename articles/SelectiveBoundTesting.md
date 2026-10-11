@@ -4,12 +4,12 @@
 
 All examples use a common time-to-event design. Enrollment lasts 16
 months, with the relative enrollment rate increasing over the first 6
-months and then remaining constant. The trial lasts 36 months.
-Control-group survival is 50%, 40%, and 35% at 1, 2, and 3 years,
-respectively. We convert each interval’s change in log survival to a
-piecewise exponential failure rate. Dropout is exponential at an annual
-rate of 0.02, and the hazard ratio under the alternative is 0.7.
-Analyses occur after 40%, 70%, and 100% of planned events.
+months and then remaining constant. The trial lasts 36 months. Control
+group survival is 50%, 40%, and 35% at 1, 2, and 3 years, respectively.
+We convert each interval’s change in log survival to a piecewise
+exponential failure rate. Dropout is exponential at an annual rate of
+0.02, and the hazard ratio under the alternative is 0.7. Analyses occur
+after 40%, 70%, and 100% of planned events.
 
 ``` r
 
@@ -48,10 +48,10 @@ from 1 to 6 over the first 6 months; its sixth value then applies
 through month 16. Because total duration and minimum follow-up are
 fixed,
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
-scales this relative enrollment-rate pattern to attain 90% power.
+scales this relative enrollment rate pattern to attain 90% power.
 Designs with different stopping rules can therefore show different
 fitted enrollment rates while retaining the same timing, survival,
-dropout, and enrollment-ramp assumptions.
+dropout, and enrollment ramp assumptions.
 
 The Lan–DeMets O’Brien–Fleming spending function, `sfLDOF`, sets a high
 bar for early efficacy stopping that is generally acceptable to
@@ -154,7 +154,7 @@ default,
 [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
 uses a normal prior centered halfway between the null and alternative,
 with standard deviation `10 / sqrt(x$n.fix)`. Its variance is equivalent
-to observing 1% of the fixed-design information, so it is intended to be
+to observing 1% of the fixed design information, so it is intended to be
 relatively weak. This means that the posterior used to determine
 predictive power is dominated by the interim data and primarily reflects
 variability in the interim observed treatment effect.
@@ -211,7 +211,7 @@ The harm bound is `NA` at the final analysis.
 ### Harm calibration when futility is skipped
 
 For `test.type = 7` and `8`, harm and futility are mutually exclusive
-lower-tail stopping outcomes. When both bounds are active, observations
+lower tail stopping outcomes. When both bounds are active, observations
 at or below the harm bound are classified as harm stops, while
 observations between the harm and futility bounds are classified as
 futility-only stops. If futility is inactive but harm remains active,
@@ -273,10 +273,10 @@ harm_comparison <- data.frame(
 harm_comparison |>
   lt() |>
   lt_format(columns = 2:4, decimals = 3) |>
-  lt_header("Harm bounds by final-analysis testing schedule")
+  lt_header("Harm bounds by final analysis testing schedule")
 ```
 
-Skipping final futility changes the actual lower-tail stopping
+Skipping final futility changes the actual lower tail stopping
 partition, but does not reallocate harm spending among survivors of
 futility monitoring. At fixed information fractions, spending times,
 efficacy boundaries, and inactive caps, changing futility testing alone
@@ -379,7 +379,7 @@ reporting. For
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
 objects, `x$call` records the original call and `x$inputs` retains
-evaluated survival-model inputs plus the applicable testing-schedule
+evaluated survival model inputs plus the applicable testing schedule
 arguments. The normalized logical vectors above remain the authoritative
 schedule used in calculations and summaries.
 
@@ -497,7 +497,7 @@ When
 is used with alternate alpha levels, every efficacy column retains the
 original `testUpper` schedule. An efficacy look that was not planned is
 not reintroduced merely because another alpha level is displayed.
-Alternate-alpha summaries are available for the one-sided or non-binding
+Alternate alpha summaries are available for the one-sided or non-binding
 test types 1, 4, 6, and 8. They are intentionally not offered for
 binding types 2, 3, 5, or 7, which are outside the Maurer–Bretz
-non-binding multiple-testing framework.
+non-binding multiple testing framework.

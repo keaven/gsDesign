@@ -1,6 +1,6 @@
 # Calibrate Futility Spending to Predictive Power Targets
 
-Select beta-spending futility parameters so that posterior predictive
+Select beta spending futility parameters so that posterior predictive
 power at selected interim lower bounds matches the requested targets.
 Each candidate is rebuilt with
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md),
@@ -56,10 +56,10 @@ gsPPFutilitySpending(
   `normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix))`, the same
   prior as in `gsBoundSummary(x)`: a normal prior centered halfway
   between the null and alternative, with information equivalent to 1
-  percent of the fixed-design sample size (or event count). The default
+  percent of the fixed design sample size (or event count). The default
   is constructed from the reference design `x` and held fixed during
   calibration. Weights are normalized internally; the normalized prior
-  is retained in the result. A one-point prior targets fixed-effect CP.
+  is retained in the result. A one-point prior targets fixed effect CP.
 
 - control:
 
@@ -77,7 +77,7 @@ gsPPFutilitySpending(
 
   `lower`, `upper`
 
-  :   Spending-parameter search limits, not Z-boundaries (default
+  :   Spending parameter search limits, not Z-boundaries (default
       `NULL`, selecting family defaults). Start and limit vectors must
       be finite and match the free parameter count; `lower < upper` must
       hold and contain the start. Supplied limits are not supported for
@@ -90,7 +90,7 @@ gsPPFutilitySpending(
 
   `maxit`
 
-  :   Positive integer joint-optimizer iteration limit (default 500),
+  :   Positive integer joint optimizer iteration limit (default 500),
       not a global limit on design evaluations or the one-parameter root
       search.
 
@@ -106,7 +106,7 @@ gsPPFutilitySpending(
 
   `trace`
 
-  :   Display joint-optimizer progress (default `FALSE`). Both logical
+  :   Display joint optimizer progress (default `FALSE`). Both logical
       controls must be nonmissing scalars.
 
 ## Value
@@ -129,7 +129,7 @@ a global certificate of mathematical infeasibility.
 [`gsPP()`](https://keaven.github.io/gsDesign/reference/gsCP.md) averages
 conditional power over the posterior effect distribution to give the
 probability of future efficacy rejection. This is not the posterior
-probability of a positive effect, observed-effect CP, or CP H1. The
+probability of a positive effect, observed effect CP, or CP H1. The
 prior is held fixed throughout calibration, but the posterior is
 recomputed at each candidate lower bound using its information. As in
 [`gsPP()`](https://keaven.github.io/gsDesign/reference/gsCP.md),
@@ -163,7 +163,7 @@ normalization in
 numerically undefined; such candidates are rejected and the diagnostic
 reports this if no valid design can be constructed.
 
-## Spending-parameter search defaults
+## Spending parameter search defaults
 
 When not supplied in `control`, parameter limits and fallback starting
 values are selected by family:
@@ -194,7 +194,7 @@ fractions `x$n.I / x$n.I[x$k]`, ending at 1. For example,
 `x$timing = c(.5, .75, 1)` keeps the analyses at 50%, 75%, and 100% of
 the final information. Power-preserving calibration may change the
 maximum information and thus the absolute information `n.I` at every
-analysis while retaining these fractions. Fixed-information calibration
+analysis while retaining these fractions. Fixed information calibration
 ([`gsCAFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCAFutilitySpending.md)
 and `gsCPOSFutilitySpending(mode = "fixed_information")`) also holds
 `n.I` and the efficacy boundaries fixed.
@@ -210,13 +210,13 @@ time, or that absolute calendar analysis dates must be fixed. See
 ## Survival designs
 
 Survival inputs retain their survival classes and endpoint assumptions.
-Candidate probabilities are evaluated on the statistical event-count
-scale. Power-preserving probability calibration of fixed-duration,
+Candidate probabilities are evaluated on the statistical event count
+scale. Power-preserving probability calibration of fixed duration,
 rate-scaled designs rebuilds the survival plan only for the selected fit
 and checks all targets again on the returned object. If the deferred
 search or that check fails, calibration retries once with full survival
 reconstruction, retaining the best available internal parameters as
-starting values. Effect calibration and accrual- or follow-up-duration
+starting values. Effect calibration and accrual or follow-up duration
 solves reconstruct the plan for every candidate. For
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
@@ -232,11 +232,10 @@ inputs, power-preserving calibration fixes the realized calendar times
 and enrollment periods and rescales enrollment rates to attain the
 fitted event counts. The evaluated alternative `x$hr` and its achieved
 power are used, even if the original design alternative `x$hr1`
-differed. Original event-trigger and calendar-cap rules are not
-re-applied: the realized schedule becomes the new plan.
-Fixed-information conditional-POS/CA calibration instead retains the
-survival plan, event counts and efficacy bounds while updating futility
-and achieved power.
+differed. Original event trigger and calendar cap rules are not
+reapplied: the realized schedule becomes the new plan. Fixed information
+conditional POS/CA calibration instead retains the survival plan, event
+counts and efficacy bounds while updating futility and achieved power.
 
 Priors and explicit `theta` remain standardized drifts per square root
 event, not hazard ratios. Rounding with

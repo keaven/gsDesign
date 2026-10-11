@@ -125,7 +125,7 @@ sequential designs with three boundaries: an <strong>efficacy</strong>
 <strong>harm</strong> bound, using <code>test.type = 7</code> (binding)
 and <code>test.type = 8</code> (non-binding). For sparse mortality data
 without a separate futility rule, the section <a href="#sparse-event-mortality-monitoring">Sparse-event mortality
-monitoring</a> uses <code>test.type = 6</code> and exact-binomial
+monitoring</a> uses <code>test.type = 6</code> and exact binomial
 boundary calculations.</p>
 <div class="section level3">
 <h3 id="regulatory-context-fda-guidance-on-os-monitoring-in-oncology">Regulatory context: FDA guidance on OS monitoring in oncology<a class="anchor" aria-label="anchor" href="#regulatory-context-fda-guidance-on-os-monitoring-in-oncology"></a>
@@ -143,8 +143,8 @@ superiority may be impractical.</li>
 events, and precision to assess clinically relevant mortality
 detriment.</li>
 <li>Event-driven interim analyses when appropriate, with independent
-data monitoring. Some small or low-event-rate trials may not warrant
-interim OS analyses.</li>
+data monitoring. Some small trials or trials with low event rates may
+not warrant interim OS analyses.</li>
 <li>The distinction between identifying a harm signal and ruling out an
 unacceptable degree of harm.</li>
 </ul>
@@ -1077,7 +1077,7 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 0.75). When harm and futility are both active,
 <code>x8$lower$prob</code> and <code>x8$harm$prob</code> are reported as
 mutually exclusive stopping outcomes. Thus, the probability of crossing
-the futility threshold is the sum of the two lower-tail components.</p>
+the futility threshold is the sum of the two lower tail components.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Scenario <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Under H0 (HR=1)"</span>, <span class="va">x8</span><span class="op">$</span><span class="va">k</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Under H1 (HR=0.75)"</span>, <span class="va">x8</span><span class="op">$</span><span class="va">k</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -1188,9 +1188,9 @@ report the spending targets, so these two rows need not agree. Also, its
 <code>p (1-sided)</code> rows use the efficacy direction; the nominal
 p-value favoring harm is <code>pnorm(xh$harm$bound)</code>, the
 complement of that displayed p-value. <code>print(xh)</code> labels the
-harm-direction values as <code>Nominal p</code>.</p>
+harm direction values as <code>Nominal p</code>.</p>
 <p>Changing the example to <code>test.type = 7</code> retains the same
-harm-calibration convention. Binding status changes efficacy
+harm calibration convention. Binding status changes efficacy
 calibration: type 7 accounts for both lower stopping rules in protecting
 alpha, whereas type 8 ignores them for that purpose. Power and actual
 stopping probabilities include both rules in either design. Ignoring a
@@ -1392,7 +1392,7 @@ trial will stop at the lower bounds.</p>
 <p>The <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> function accepts an
 <code>alpha</code> argument to display efficacy bounds at one or more
 alternate <span class="math inline">\(\alpha\)</span> levels alongside
-the original design. Each alternate-alpha column retains the
+the original design. Each alternate alpha column retains the
 <code>testUpper</code> schedule from the design, so an efficacy analysis
 that was skipped remains inactive and every efficacy characteristic at
 that analysis, including cumulative crossing probability, is
@@ -1412,12 +1412,11 @@ with efficacy bounds for both <span class="math inline">\(\alpha =
     "Harm": [-2.1121, 0.9827, 1.6434, 0.0173, 4e-04, -1.7667, 0.9614, 1.2491, 0.0416, 4e-04, -1.7256, 0.9578, 1.1846, 0.0417, 4e-04, -1.717, 0.957, 1.158, 0.0417, 4e-04, -1.7149, 0.9568, 1.1433, 0.0417, 4e-04]
   }
 }
-})</script><p>Alternate-alpha summaries are supported for
+})</script><p>Alternate alpha summaries are supported for
 <code>test.type = 8</code>, where both futility and harm bounds are
 non-binding. They are not supported for <code>test.type = 7</code>: a
-binding harm or futility bound is outside the non-binding
-sequential-p-value framework used for Maurer–Bretz graphical multiple
-testing.</p>
+binding harm or futility bound is outside the non-binding sequential
+p-value framework used for Maurer–Bretz graphical multiple testing.</p>
 </div>
 </div>
 <div class="section level2">
@@ -1435,7 +1434,7 @@ disease scenario or recommended protocol.</p>
 <p>Use <code>test.type = 6</code>: its lower Z-bound spends under the
 null hypothesis and is <strong>non-binding for efficacy Type I
 error</strong>. Here we interpret that lower bound as harm; there is no
-additional beta-spending futility bound. For type 6 the inputs are
+additional beta spending futility bound. For type 6 the inputs are
 <code>astar = 0.1</code> and <code>sfl = sfLDPocock</code>,
 <strong>not</strong> <code>sfharm</code>. They must be supplied
 explicitly: type 6 retains its general-purpose defaults of
@@ -1466,17 +1465,17 @@ not increase the event target to obtain 90% OS power.</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>The example retains an OS efficacy boundary to illustrate non-binding
 harm monitoring alongside an alpha-controlled efficacy test. It does not
-allocate alpha to another primary endpoint or supply a multiple-endpoint
+allocate alpha to another primary endpoint or supply a multiple endpoint
 testing strategy. If OS is solely a safety endpoint, the efficacy
 stopping rules and operating characteristics should be specified
 accordingly rather than claiming an OS efficacy objective that the trial
 does not have.</p>
 </div>
 <div class="section level3">
-<h3 id="integer-death-count-boundaries">Integer death-count boundaries<a class="anchor" aria-label="anchor" href="#integer-death-count-boundaries"></a>
+<h3 id="integer-death-count-boundaries">Integer death count boundaries<a class="anchor" aria-label="anchor" href="#integer-death-count-boundaries"></a>
 </h3>
-<p>In the exact-binomial representation the direction reverses: a high
-count of experimental-arm deaths signals harm. <code>upper$bound</code>
+<p>In the exact binomial representation the direction reverses: a high
+count of experimental arm deaths signals harm. <code>upper$bound</code>
 is therefore the harm cutoff, while <code>lower$bound</code> is the
 efficacy cutoff. The probabilities account for stopping at any earlier
 active boundary.</p>
@@ -1513,10 +1512,10 @@ active boundary.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">efficacy_without_harm</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="va">sparse</span><span class="op">$</span><span class="va">alpha</span> <span class="op">+</span> <span class="fl">1e-10</span><span class="op">)</span></span></code></pre></div>
 <p>At the first look, a signal requires all six deaths to be in the
 experimental arm. At later looks the cumulative cutoff is applied only
-if no earlier stopping boundary has been crossed. The total null
-harm-crossing probability is 7.8%, below the 10% target because only
-integer death counts are available. The efficacy Type I error without
-harm stopping is 1.96%, below 2.5%.</p>
+if no earlier stopping boundary has been crossed. The total null harm
+crossing probability is 7.8%, below the 10% target because only integer
+death counts are available. The efficacy Type I error without harm
+stopping is 1.96%, below 2.5%.</p>
 </div>
 <div class="section level3">
 <h3 id="sensitivity-to-excess-mortality">Sensitivity to excess mortality<a class="anchor" aria-label="anchor" href="#sensitivity-to-excess-mortality"></a>
@@ -1526,10 +1525,10 @@ probability that a death is in the experimental arm by <span class="math inline"
 the corresponding conditional Poisson model uses <span class="math inline">\(p = HR\,r/(1 + HR\,r)\)</span> with exposure ratio
 <span class="math inline">\(r\)</span>. The recursion below is exact for
 independent binomial event increments with constant <span class="math inline">\(p\)</span>, <strong>not automatically exact for
-arbitrary censored survival data</strong>. Risk-set imbalance,
+arbitrary censored survival data</strong>. Risk set imbalance,
 differential censoring, or changing hazards can invalidate the simple
 mapping from randomization ratio and HR. Such settings need appropriate
-survival-model calculations or simulation.</p>
+survival model calculations or simulation.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">harm_hr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1.25</span>, <span class="fl">1.5</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">harm_oc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsBinomialExact.html">gsBinomialExact</a></span><span class="op">(</span></span>
@@ -1567,7 +1566,7 @@ clinical importance of reviewing a signal.</p>
 <div class="section level3">
 <h3 id="detecting-harm-versus-ruling-out-harm">Detecting harm versus ruling out harm<a class="anchor" aria-label="anchor" href="#detecting-harm-versus-ruling-out-harm"></a>
 </h3>
-<p>A harm-monitoring test asks whether data provide evidence of excess
+<p>A harm monitoring test asks whether data provide evidence of excess
 mortality relative to HR = 1. A reassurance objective instead asks
 whether the data can exclude a prespecified unacceptable HR, such as
 1.5. The latter value is an illustration, not a universal safety margin.
@@ -1601,7 +1600,7 @@ into an upper HR bound:</p>
   ]
 }
 })</script><p>Despite a balanced observed count, this upper bound exceeds 1.5. This
-is a fixed-analysis precision illustration, <strong>not a sequentially
+is a fixed analysis precision illustration, <strong>not a sequentially
 adjusted interval</strong> for the monitored trial. Repeated or
 stopping-selected reassurance assessments require an interval or test
 valid for that monitoring plan. A vignette example must not turn “no
@@ -1643,7 +1642,7 @@ probability <span class="math inline">\(A(t) = 0.1\log\{1 +
 (e-1)t\}\)</span> by spending time <span class="math inline">\(t\)</span>. It allocates relatively more spending
 early than a conservative O’Brien–Fleming choice, helping to flag
 moderately small nominal p-values favoring harm throughout monitoring.
-The total 0.1 is a repeated-monitoring probability under the null,
+The total 0.1 is a repeated monitoring probability under the null,
 <strong>not</strong> a nominal 0.1 cutoff at every analysis. Neither the
 total nor the spending function guarantees that any particular nominal
 p-value will trigger harm stopping at every look.</p>
@@ -1745,8 +1744,8 @@ partitioned into mutually exclusive harm, futility, and efficacy
 outcomes.</p>
 <p>When harm is tested at an analysis where futility is skipped, the
 harm boundary is the active lower stopping boundary. This stopping
-probability is included in sample-size derivation and, for
-<code>test.type = 7</code>, in the binding efficacy-bound calculation.
+probability is included in sample size derivation and, for
+<code>test.type = 7</code>, in the binding efficacy bound calculation.
 For <code>test.type = 8</code>, efficacy bounds continue to use the
 non-binding Type I error convention, while power and expected
 information account for actual harm and futility stopping.</p>

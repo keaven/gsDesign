@@ -112,7 +112,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://keaven.github.io/gsDesign/">gsDesign</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
-<p>The functions in this vignette translate probability-of-success
+<p>The functions in this vignette translate probability of success
 requirements into <strong>futility spending functions</strong>. They
 build on established computational tools in gsDesign: boundary
 construction, joint crossing probabilities, and prior-averaged
@@ -157,7 +157,7 @@ not replacement of the underlying group sequential calculations.</p>
 complete design, and diagnostics. They differ from
 <code><a href="../reference/gsCPFutilitySpending.html">gsCPFutilitySpending()</a></code> and
 <code><a href="../reference/gsPPFutilitySpending.html">gsPPFutilitySpending()</a></code>, which target probabilities at an
-exact interim futility bound. Those methods are described in the <a href="CPFutilitySpending.html">conditional-power vignette</a>.</p>
+exact interim futility bound. Those methods are described in the <a href="CPFutilitySpending.html">conditional power vignette</a>.</p>
 <div class="section level2">
 <h2 id="what-is-conditioned-on">What is conditioned on?<a class="anchor" aria-label="anchor" href="#what-is-conditioned-on"></a>
 </h2>
@@ -186,12 +186,12 @@ averaging, but not this distinction between a continuation event and an
 exact observed statistic.</p>
 </div>
 <div class="section level2">
-<h2 id="a-dragalin-related-fixed-information-example">A Dragalin-related fixed-information example<a class="anchor" aria-label="anchor" href="#a-dragalin-related-fixed-information-example"></a>
+<h2 id="a-dragalin-related-fixed-information-example">A Dragalin-related fixed information example<a class="anchor" aria-label="anchor" href="#a-dragalin-related-fixed-information-example"></a>
 </h2>
 <p>Dragalin’s <em>Informative Futility Rules Based on Conditional
 Assurance</em> motivates comparing assurance among continuing trials
 with the assurance of a larger, feasible fixed design. Here we use the
-paper’s normal-outcome setting: interim sample size 72, maximum sample
+paper’s normal outcome setting: interim sample size 72, maximum sample
 size 144, equal allocation, common standard deviation 70, and an effect
 prior <span class="math inline">\(N(33,16^2)\)</span>. These are total
 sample sizes across both treatment groups.</p>
@@ -291,9 +291,9 @@ threshold of approximately 7.274, rather than the illustrative threshold
 of 10 in the paper (which exceeds the benchmark). The sample sizes
 remain 72 and 144; the achieved overall power at effect 33 is about
 79.3%.</p>
-<p>This is a spending-based implementation of the fixed-information
+<p>This is a spending-based implementation of the fixed information
 assurance criterion. It is <strong>not</strong> a reproduction of an
-entire sample-size re-estimation procedure or an inverse-normal
+entire sample size re-estimation procedure or an inverse normal
 combination test.</p>
 </div>
 <div class="section level2">
@@ -327,7 +327,7 @@ every bound.</p>
 </tr></tbody>
 </table>
 <div class="section level3">
-<h3 id="same-conditional-assurance-different-sample-size-and-power-constraints">Same conditional assurance, different sample-size and power
+<h3 id="same-conditional-assurance-different-sample-size-and-power-constraints">Same conditional assurance, different sample size and power
 constraints<a class="anchor" aria-label="anchor" href="#same-conditional-assurance-different-sample-size-and-power-constraints"></a>
 </h3>
 <p>Both fits below target conditional assurance of 0.80 at the first
@@ -349,7 +349,7 @@ wrapper for <code>mode = "fixed_information"</code>.</p>
 <span>          <span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">fit_ca</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>, <span class="va">x</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The first fit increases information to retain 85% power. The second
 freezes the reference information and efficacy boundaries, allowing
-power to fall. The fixed-information solver also determines total beta:
+power to fall. The fixed information solver also determines total beta:
 using the reference beta unchanged would generally not produce a
 consistent spending rule at the fixed final efficacy boundary.</p>
 </div>
@@ -357,7 +357,7 @@ consistent spending rule at the fixed final efficacy boundary.</p>
 <h3 id="unconditional-pos-is-a-different-requirement">Unconditional POS is a different requirement<a class="anchor" aria-label="anchor" href="#unconditional-pos-is-a-different-requirement"></a>
 </h3>
 <p>POS is a single scalar for the whole design, so this interface fits
-one free parameter and has no interim-index argument. It rejects an
+one free parameter and has no interim index argument. It rejects an
 unconstrained two-parameter family; one target cannot determine two
 parameters uniquely.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -381,7 +381,7 @@ example, because POS then equals the power already being preserved.</p>
 information, rather than just the optimizer’s reported residuals.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">verification</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  Method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Power-preserving CA"</span>, <span class="st">"Fixed-information CA"</span>, <span class="st">"Unconditional POS"</span><span class="op">)</span>,</span>
+<span>  Method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Power-preserving CA"</span>, <span class="st">"Fixed information CA"</span>, <span class="st">"Unconditional POS"</span><span class="op">)</span>,</span>
 <span>  Target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.80</span>, <span class="fl">.80</span>, <span class="fl">.7206</span><span class="op">)</span>,</span>
 <span>  Achieved <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/gsCP.html">gsCPOS</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">fit_cpos</span>, <span class="va">prior</span><span class="op">$</span><span class="va">z</span>, <span class="va">prior</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span>,</span>
 <span>               <span class="fu"><a href="../reference/gsCP.html">gsCPOS</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">fit_ca</span>, <span class="va">prior</span><span class="op">$</span><span class="va">z</span>, <span class="va">prior</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span>,</span>
@@ -401,7 +401,7 @@ information, rather than just the optimizer’s reported residuals.</p>
 <td align="right">0.8000</td>
 </tr>
 <tr class="even">
-<td align="left">Fixed-information CA</td>
+<td align="left">Fixed information CA</td>
 <td align="right">0.8000</td>
 <td align="right">0.8000</td>
 </tr>
@@ -435,7 +435,7 @@ specification:</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/gsCP.html">gsCPOS</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">replay</span>, <span class="va">prior</span><span class="op">$</span><span class="va">z</span>, <span class="va">prior</span><span class="op">$</span><span class="va">wgts</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.8</span></span></code></pre></div>
-<p>For the fixed-information fit, replay with
+<p>For the fixed information fit, replay with
 <code>gsCPOSFutilitySpending(mode = "fixed_information")</code> and the
 original reference, using the fitted free parameters as the start. An
 ordinary power-preserving reconstruction is not equivalent.</p>
@@ -446,7 +446,7 @@ ordinary power-preserving reconstruction is not equivalent.</p>
 </h2>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">designs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Reference <span class="op">=</span> <span class="va">x</span>, <span class="st">"Power-preserving CA"</span> <span class="op">=</span> <span class="va">fit_cpos</span>,</span>
-<span>                <span class="st">"Fixed-information CA"</span> <span class="op">=</span> <span class="va">fit_ca</span>, <span class="st">"Unconditional POS"</span> <span class="op">=</span> <span class="va">fit_pos</span><span class="op">)</span></span>
+<span>                <span class="st">"Fixed information CA"</span> <span class="op">=</span> <span class="va">fit_ca</span>, <span class="st">"Unconditional POS"</span> <span class="op">=</span> <span class="va">fit_pos</span><span class="op">)</span></span>
 <span><span class="va">operating</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">designs</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">label</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">designs</span><span class="op">[[</span><span class="va">label</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsProbability.html">gsProbability</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">d</span>, theta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">x</span><span class="op">$</span><span class="va">delta</span><span class="op">)</span><span class="op">)</span></span>
@@ -495,7 +495,7 @@ ordinary power-preserving reconstruction is not equivalent.</p>
 <td align="right">0.8500</td>
 </tr>
 <tr class="odd">
-<td align="left">Fixed-information CA</td>
+<td align="left">Fixed information CA</td>
 <td align="right">168.8726</td>
 <td align="right">4.5038</td>
 <td align="right">0.0222</td>
@@ -537,7 +537,7 @@ ordinary power-preserving reconstruction is not equivalent.</p>
 <td align="right">0.0666</td>
 </tr>
 <tr class="odd">
-<td align="left">Fixed-information CA</td>
+<td align="left">Fixed information CA</td>
 <td align="right">0.7010</td>
 <td align="right">0.8000</td>
 <td align="right">0.7192</td>
@@ -572,7 +572,7 @@ ordinary power-preserving reconstruction is not equivalent.</p>
 <td align="right">138.56</td>
 </tr>
 <tr class="odd">
-<td align="left">Fixed-information CA</td>
+<td align="left">Fixed information CA</td>
 <td align="right">95.58</td>
 <td align="right">129.47</td>
 </tr>
@@ -595,7 +595,7 @@ none of these functions automatically enforces such a cap.</p>
 0.025, while actual type I error with futility enforced may be smaller.
 With a binding reference (<code>test.type = 3</code>), freezing efficacy
 while changing futility can increase actual type I error above the
-reference alpha. The fixed-information method reports that probability;
+reference alpha. The fixed information method reports that probability;
 it does not guarantee alpha preservation.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">effect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">10</span>, <span class="fl">66</span>, length.out <span class="op">=</span> <span class="fl">101</span><span class="op">)</span></span>
@@ -616,7 +616,7 @@ it does not guarantee alpha preservation.</p>
 <p>A probability target is not a substitute for judging whether the
 effect at a futility boundary is clinically reasonable. Approximate mean
 differences below are <span class="math inline">\(Z \times
-2\,SD/\sqrt{N}\)</span>; they are normal-theory approximations, not
+2\,SD/\sqrt{N}\)</span>; they are normal theory approximations, not
 bias-adjusted sequential estimates. Inactive futility analyses have no
 reported futility effect.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -688,21 +688,21 @@ reported futility effect.</p>
 <td align="right">NA</td>
 </tr>
 <tr class="odd">
-<td align="left">Fixed-information CA</td>
+<td align="left">Fixed information CA</td>
 <td align="right">1</td>
 <td align="right">67.549</td>
 <td align="right">57.181</td>
 <td align="right">9.886</td>
 </tr>
 <tr class="even">
-<td align="left">Fixed-information CA</td>
+<td align="left">Fixed information CA</td>
 <td align="right">2</td>
 <td align="right">126.654</td>
 <td align="right">29.170</td>
 <td align="right">NA</td>
 </tr>
 <tr class="odd">
-<td align="left">Fixed-information CA</td>
+<td align="left">Fixed information CA</td>
 <td align="right">3</td>
 <td align="right">168.873</td>
 <td align="right">21.681</td>
@@ -786,10 +786,10 @@ whenever a target is quoted.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="DragalinFutilitySpending_files/figure-html/spending-curves-1.png" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p>These curves need not cross at the calibration time: the target is
-conditional assurance or POS, not cumulative beta spending. The
-fixed-information design can also have a different total beta. The
-curves describe the spending family; actual spending is deferred at
-inactive futility analyses.</p>
+conditional assurance or POS, not cumulative beta spending. The fixed
+information design can also have a different total beta. The curves
+describe the spending family; actual spending is deferred at inactive
+futility analyses.</p>
 <p>Spending functions retain the original motivation of the Lan–DeMets
 approach: the specification can accommodate different information times
 and, under an appropriate monitoring plan, a different number of
@@ -809,7 +809,7 @@ justification.</p>
 <h2 id="building-on-established-computational-tools-with-ai">Building on established computational tools with AI<a class="anchor" aria-label="anchor" href="#building-on-established-computational-tools-with-ai"></a>
 </h2>
 <p>The calibration framework builds on existing gsDesign tools rather
-than new probability-integration machinery. Most of the initial CP/PP
+than new probability integration machinery. Most of the initial CP/PP
 development was done interactively with AI using <strong>GPT-6 Astra
 High in Codex over a long weekend</strong>. The later assurance
 extensions follow the same principle: rapidly build new design
@@ -819,7 +819,7 @@ generated code. Reconstruct fitted designs and check their properties
 with <code><a href="../reference/gsDesign.html">gsDesign()</a></code>, <code><a href="../reference/gsProbability.html">gsProbability()</a></code>,
 <code><a href="../reference/gsCP.html">gsCPOS()</a></code>, <code><a href="../reference/gsCP.html">gsPOS()</a></code> and
 <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code>. Unit tests also check independent
-bivariate-normal integration, the numerical Dragalin benchmark,
+bivariate normal integration, the numerical Dragalin benchmark,
 parameter replay, input errors and numerical failure handling. These
 checks support the statistical results; they do not establish that every
 possible software defect has been excluded.</p>
@@ -829,12 +829,12 @@ possible software defect has been excluded.</p>
 </h2>
 <ul>
 <li>Assurance/POS calibration supports <code>gsDesign</code> and direct
-survival objects with test types 3 and 4. Fixed-information calibration
+survival objects with test types 3 and 4. Fixed information calibration
 retains the survival plan and efficacy bounds; power-preserving
 calibration recalculates enrollment.</li>
-<li>Harm-bound designs are excluded: current <code><a href="../reference/gsCP.html">gsCPOS()</a></code> does
+<li>Harm bound designs are excluded: current <code><a href="../reference/gsCP.html">gsCPOS()</a></code> does
 not include harm stopping in its continuation denominator.</li>
-<li>Conditional-assurance fits support the existing one-/two-parameter
+<li>Conditional assurance fits support the existing one-/two-parameter
 families and piecewise linear spending, with one target per free
 parameter.</li>
 <li>POS has only one design-wide target and fits one free

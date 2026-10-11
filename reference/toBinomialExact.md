@@ -39,14 +39,14 @@ toBinomialExact(
 
 - usTime:
 
-  Optional upper spending-time override (length `k` or `k - 1`, with
+  Optional upper spending time override (length `k` or `k - 1`, with
   final value appended as 1 if needed). If `NULL`, this defaults to
   `observedEvents / x$maxn.IPlan` (capped at 1) when `observedEvents` is
   supplied, or to the planned design timing otherwise.
 
 - lsTime:
 
-  Optional lower spending-time override for `test.type = 4`, `6`, or `8`
+  Optional lower spending time override for `test.type = 4`, `6`, or `8`
   (same length and monotonicity requirements as `usTime`). If `NULL`, it
   defaults to `usTime`.
 
@@ -54,7 +54,7 @@ toBinomialExact(
 
   Logical scalar. If \`TRUE\`, force full alpha spending (and, for
   \`test.type = 4\` or \`8\`, full beta spending; for \`test.type = 6\`,
-  full lower-bound spending under the null; and, for \`test.type = 8\`,
+  full lower bound spending under the null; and, for \`test.type = 8\`,
   full harm spending under the null) at the final analysis even when
   \`observedEvents\[k\] \< x\$maxn.IPlan\`. This keeps earlier analysis
   spending unchanged and applies the override only at the last look.
@@ -69,10 +69,10 @@ testing indicators, spending times, planned final event count,
 \`maxSpend\`, and the evaluated conversion call. The retained
 randomization ratio can be used by
 [`VEtable`](https://keaven.github.io/gsDesign/reference/VEtable.md). For
-\`test.type = 6\`, the exact object's upper event-count bound represents
+\`test.type = 6\`, the exact object's upper event count bound represents
 the non-binding lower stopping bound, with its first probability column
 calibrated under the null hypothesis. For \`test.type = 8\`, \`upper\`
-represents all upper event-count stops, while \`futility\` and \`harm\`
+represents all upper event count stops, while \`futility\` and \`harm\`
 partition those stops into mutually exclusive components.
 
 ## Details
@@ -86,17 +86,17 @@ the original planned final event count as denominator, including under-
 and over-runs; `maxSpend` can request full spending for an under-run. No
 artificial interim is added.
 
-Test types 1 (one-sided), 4 (non-binding beta-spending futility), 6
-(non-binding lower-bound spending under the null), and 8 (non-binding
+Test types 1 (one-sided), 4 (non-binding beta spending futility), 6
+(non-binding lower bound spending under the null), and 8 (non-binding
 futility and harm) are supported for full conversion. For Type 8, the
-exact upper event-count stopping probability is partitioned into
+exact upper event count stopping probability is partitioned into
 mutually exclusive futility and harm components. Harm spending is
 calibrated under the null ignoring futility stopping, but retaining
 efficacy stopping. Reported harm probabilities assume futility is
 followed and can be smaller than spending targets. Discreteness and the
 requirement that the harm region be nested within the active futility
 region can also reduce spending. Binding designs (types 2, 3, 5, and 7)
-are outside the non-binding exact-efficacy framework. Exact repeated and
+are outside the non-binding exact efficacy framework. Exact repeated and
 sequential efficacy p-values can nevertheless be computed for
 non-binding types 1, 4, 6, and 8 with
 [`repeatedPValueBinomialExact()`](https://keaven.github.io/gsDesign/reference/repeatedPValueBinomialExact.md)
@@ -108,7 +108,7 @@ The exact binomial routine `gsBinomialExact` has requirements that may
 not be satisfied by the initial asymptotic approximation. Thus, the
 approximations are updated to satisfy the following requirements of
 `gsBinomialExact`: `a` (the efficacy bound) must be positive,
-non-decreasing, and strictly less than n.I `b` (the upper event-count
+non-decreasing, and strictly less than n.I `b` (the upper event count
 stopping bound for futility, harm, or the Type 6 lower bound) must be
 positive, non-decreasing, and strictly greater than a `n.I - b` must be
 non-decreasing and \>= 0
@@ -118,7 +118,7 @@ With \`observedEvents\`, spending times are based on
 spending time is set to 1 so all remaining spending is used at the last
 look. If `x$testLower` is present (for example from
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) with
-selective lower-bound looks), lower-bound spending is flattened at
+selective lower bound looks), lower bound spending is flattened at
 analyses where `testLower = FALSE`. For Type 4, the exact futility bound
 at a skipped look carries forward `n.I - b` from the preceding look (or
 uses `b = n.I + 1` at a skipped first look). It cannot be crossed by a
@@ -244,7 +244,7 @@ toBinomialExact(x, observedEvents = c(20,55,80), alpha = 0.01)
 #>    Theta      1      2      3  Total
 #>   0.6774 0.0001 0.0031 0.0043 0.0075
 #>   0.4737 0.0355 0.6177 0.2386 0.8919
-# Explicit spending-time override
+# Explicit spending time override
 toBinomialExact(x, observedEvents = c(20, 55, 80), usTime = c(.25, .65, 1))
 #>              Bounds
 #>   Analysis   N   a   b

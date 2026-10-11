@@ -6,7 +6,7 @@ library(gsDesign)
 library(ggplot2)
 ```
 
-The functions in this vignette translate probability-of-success
+The functions in this vignette translate probability of success
 requirements into **futility spending functions**. They build on
 established computational tools in gsDesign: boundary construction,
 joint crossing probabilities, and prior-averaged probabilities. The new
@@ -27,7 +27,7 @@ design, and diagnostics. They differ from
 and
 [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md),
 which target probabilities at an exact interim futility bound. Those
-methods are described in the [conditional-power
+methods are described in the [conditional power
 vignette](https://keaven.github.io/gsDesign/articles/CPFutilitySpending.md).
 
 ## What is conditioned on?
@@ -61,13 +61,13 @@ must exclude those earlier successes. A point prior changes the
 averaging, but not this distinction between a continuation event and an
 exact observed statistic.
 
-## A Dragalin-related fixed-information example
+## A Dragalin-related fixed information example
 
 Dragalin’s *Informative Futility Rules Based on Conditional Assurance*
 motivates comparing assurance among continuing trials with the assurance
-of a larger, feasible fixed design. Here we use the paper’s
-normal-outcome setting: interim sample size 72, maximum sample size 144,
-equal allocation, common standard deviation 70, and an effect prior
+of a larger, feasible fixed design. Here we use the paper’s normal
+outcome setting: interim sample size 72, maximum sample size 144, equal
+allocation, common standard deviation 70, and an effect prior
 \\N(33,16^2)\\. These are total sample sizes across both treatment
 groups.
 
@@ -153,10 +153,9 @@ of 10 in the paper (which exceeds the benchmark). The sample sizes
 remain 72 and 144; the achieved overall power at effect 33 is about
 79.3%.
 
-This is a spending-based implementation of the fixed-information
-assurance criterion. It is **not** a reproduction of an entire
-sample-size re-estimation procedure or an inverse-normal combination
-test.
+This is a spending-based implementation of the fixed information
+assurance criterion. It is **not** a reproduction of an entire sample
+size re-estimation procedure or an inverse normal combination test.
 
 ## Compare all three methods on the same reference
 
@@ -185,7 +184,7 @@ data.frame(Fixed_design_N = n_fixed, Sequential_reference_N = tail(x$n.I, 1)) |>
 |---------------:|-----------------------:|
 |         161.59 |                 168.87 |
 
-### Same conditional assurance, different sample-size and power constraints
+### Same conditional assurance, different sample size and power constraints
 
 Both fits below target conditional assurance of 0.80 at the first
 interim. This is a continuation-conditioned target, **not CP = 0.80 at a
@@ -211,14 +210,14 @@ stopifnot(identical(fit_ca$n.I, x$n.I),
 
 The first fit increases information to retain 85% power. The second
 freezes the reference information and efficacy boundaries, allowing
-power to fall. The fixed-information solver also determines total beta:
+power to fall. The fixed information solver also determines total beta:
 using the reference beta unchanged would generally not produce a
 consistent spending rule at the fixed final efficacy boundary.
 
 ### Unconditional POS is a different requirement
 
 POS is a single scalar for the whole design, so this interface fits one
-free parameter and has no interim-index argument. It rejects an
+free parameter and has no interim index argument. It rejects an
 unconstrained two-parameter family; one target cannot determine two
 parameters uniquely.
 
@@ -247,7 +246,7 @@ rather than just the optimizer’s reported residuals.
 ``` r
 
 verification <- data.frame(
-  Method = c("Power-preserving CA", "Fixed-information CA", "Unconditional POS"),
+  Method = c("Power-preserving CA", "Fixed information CA", "Unconditional POS"),
   Target = c(.80, .80, .7206),
   Achieved = c(gsCPOS(1, fit_cpos, prior$z, prior$wgts),
                gsCPOS(1, fit_ca, prior$z, prior$wgts),
@@ -259,7 +258,7 @@ knitr::kable(verification, digits = 6)
 | Method               | Target | Achieved |
 |:---------------------|-------:|---------:|
 | Power-preserving CA  | 0.8000 |   0.8000 |
-| Fixed-information CA | 0.8000 |   0.8000 |
+| Fixed information CA | 0.8000 |   0.8000 |
 | Unconditional POS    | 0.7206 |   0.7206 |
 
 ``` r
@@ -293,7 +292,7 @@ gsCPOS(1, replay, prior$z, prior$wgts)
 #> [1] 0.8
 ```
 
-For the fixed-information fit, replay with
+For the fixed information fit, replay with
 `gsCPOSFutilitySpending(mode = "fixed_information")` and the original
 reference, using the fitted free parameters as the start. An ordinary
 power-preserving reconstruction is not equivalent.
@@ -303,7 +302,7 @@ power-preserving reconstruction is not equivalent.
 ``` r
 
 designs <- list(Reference = x, "Power-preserving CA" = fit_cpos,
-                "Fixed-information CA" = fit_ca, "Unconditional POS" = fit_pos)
+                "Fixed information CA" = fit_ca, "Unconditional POS" = fit_pos)
 operating <- do.call(rbind, lapply(names(designs), function(label) {
   d <- designs[[label]]
   p <- gsProbability(d = d, theta = c(0, x$delta))
@@ -327,7 +326,7 @@ knitr::kable(operating[c("Method", "Max_N", "Inflation_percent",
 |:---------------------|---------:|------------------:|--------------:|---------:|
 | Reference            | 168.8726 |            4.5038 |        0.0243 |   0.8500 |
 | Power-preserving CA  | 180.7590 |           11.8595 |        0.0226 |   0.8500 |
-| Fixed-information CA | 168.8726 |            4.5038 |        0.0222 |   0.8192 |
+| Fixed information CA | 168.8726 |            4.5038 |        0.0222 |   0.8192 |
 | Unconditional POS    | 179.2358 |           10.9169 |        0.0228 |   0.8500 |
 
 ``` r
@@ -340,7 +339,7 @@ knitr::kable(operating[c("Method", "POS", "CA_at_IA1",
 |:---------------------|-------:|----------:|------------:|------------:|
 | Reference            | 0.7210 |    0.7444 |      0.5152 |      0.0288 |
 | Power-preserving CA  | 0.7206 |    0.8000 |      0.6925 |      0.0666 |
-| Fixed-information CA | 0.7010 |    0.8000 |      0.7192 |      0.0874 |
+| Fixed information CA | 0.7010 |    0.8000 |      0.7192 |      0.0874 |
 | Unconditional POS    | 0.7206 |    0.7947 |      0.6790 |      0.0629 |
 
 ``` r
@@ -352,7 +351,7 @@ knitr::kable(operating[c("Method", "EN_H0", "EN_H1")], digits = 2)
 |:---------------------|-------:|-------:|
 | Reference            | 116.24 | 135.14 |
 | Power-preserving CA  | 105.20 | 138.56 |
-| Fixed-information CA |  95.58 | 129.47 |
+| Fixed information CA |  95.58 | 129.47 |
 | Unconditional POS    | 105.76 | 138.04 |
 
 The fixed design requires about 161.6 participants. Sample sizes are
@@ -368,7 +367,7 @@ For nonbinding futility, the nominal efficacy-only alpha remains 0.025,
 while actual type I error with futility enforced may be smaller. With a
 binding reference (`test.type = 3`), freezing efficacy while changing
 futility can increase actual type I error above the reference alpha. The
-fixed-information method reports that probability; it does not guarantee
+fixed information method reports that probability; it does not guarantee
 alpha preservation.
 
 ``` r
@@ -392,9 +391,9 @@ ggplot(curves, aes(Effect, Power, colour = Method, linetype = Method)) +
 
 A probability target is not a substitute for judging whether the effect
 at a futility boundary is clinically reasonable. Approximate mean
-differences below are \\Z \times 2\\SD/\sqrt{N}\\; they are
-normal-theory approximations, not bias-adjusted sequential estimates.
-Inactive futility analyses have no reported futility effect.
+differences below are \\Z \times 2\\SD/\sqrt{N}\\; they are normal
+theory approximations, not bias-adjusted sequential estimates. Inactive
+futility analyses have no reported futility effect.
 
 ``` r
 
@@ -417,9 +416,9 @@ knitr::kable(bounds, digits = 3)
 | Power-preserving CA  |        1 |  72.304 |          55.269 |           8.280 |
 | Power-preserving CA  |        2 | 135.569 |          28.195 |              NA |
 | Power-preserving CA  |        3 | 180.759 |          20.956 |              NA |
-| Fixed-information CA |        1 |  67.549 |          57.181 |           9.886 |
-| Fixed-information CA |        2 | 126.654 |          29.170 |              NA |
-| Fixed-information CA |        3 | 168.873 |          21.681 |              NA |
+| Fixed information CA |        1 |  67.549 |          57.181 |           9.886 |
+| Fixed information CA |        2 | 126.654 |          29.170 |              NA |
+| Fixed information CA |        3 | 168.873 |          21.681 |              NA |
 | Unconditional POS    |        1 |  71.694 |          55.503 |           7.688 |
 | Unconditional POS    |        2 | 134.427 |          28.315 |              NA |
 | Unconditional POS    |        3 | 179.236 |          21.045 |              NA |
@@ -484,10 +483,10 @@ ggplot(spending, aes(Time, Spend, colour = Method, linetype = Method)) +
 ![](DragalinFutilitySpending_files/figure-html/spending-curves-1.png)
 
 These curves need not cross at the calibration time: the target is
-conditional assurance or POS, not cumulative beta spending. The
-fixed-information design can also have a different total beta. The
-curves describe the spending family; actual spending is deferred at
-inactive futility analyses.
+conditional assurance or POS, not cumulative beta spending. The fixed
+information design can also have a different total beta. The curves
+describe the spending family; actual spending is deferred at inactive
+futility analyses.
 
 Spending functions retain the original motivation of the Lan–DeMets
 approach: the specification can accommodate different information times
@@ -507,7 +506,7 @@ informed by unblinded outcomes need additional justification.
 ## Building on established computational tools with AI
 
 The calibration framework builds on existing gsDesign tools rather than
-new probability-integration machinery. Most of the initial CP/PP
+new probability integration machinery. Most of the initial CP/PP
 development was done interactively with AI using **GPT-6 Astra High in
 Codex over a long weekend**. The later assurance extensions follow the
 same principle: rapidly build new design interfaces on established
@@ -520,7 +519,7 @@ code. Reconstruct fitted designs and check their properties with
 [`gsCPOS()`](https://keaven.github.io/gsDesign/reference/gsCP.md),
 [`gsPOS()`](https://keaven.github.io/gsDesign/reference/gsCP.md) and
 [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
-Unit tests also check independent bivariate-normal integration, the
+Unit tests also check independent bivariate normal integration, the
 numerical Dragalin benchmark, parameter replay, input errors and
 numerical failure handling. These checks support the statistical
 results; they do not establish that every possible software defect has
@@ -529,13 +528,13 @@ been excluded.
 ## Scope and practical limits
 
 - Assurance/POS calibration supports `gsDesign` and direct survival
-  objects with test types 3 and 4. Fixed-information calibration retains
+  objects with test types 3 and 4. Fixed information calibration retains
   the survival plan and efficacy bounds; power-preserving calibration
   recalculates enrollment.
-- Harm-bound designs are excluded: current
+- Harm bound designs are excluded: current
   [`gsCPOS()`](https://keaven.github.io/gsDesign/reference/gsCP.md) does
   not include harm stopping in its continuation denominator.
-- Conditional-assurance fits support the existing one-/two-parameter
+- Conditional assurance fits support the existing one-/two-parameter
   families and piecewise linear spending, with one target per free
   parameter.
 - POS has only one design-wide target and fits one free parameter.

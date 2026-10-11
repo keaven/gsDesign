@@ -7,12 +7,12 @@
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calibrate Futility Spending at Fixed Information — gsCAFutilitySpending"><meta name="description" content='Compatibility wrapper for gsCPOSFutilitySpending(mode = "fixed_information"),
 retaining the legacy argument, diagnostic and error names.
-Fit beta-spending parameters to conditional-assurance targets while holding
+Fit beta spending parameters to conditional assurance targets while holding
 the reference information and efficacy boundaries fixed. Overall power may
 change. Total beta is solved internally so that the spending rule and the
 terminal decision at the fixed efficacy boundary are consistent.'><meta property="og:description" content='Compatibility wrapper for gsCPOSFutilitySpending(mode = "fixed_information"),
 retaining the legacy argument, diagnostic and error names.
-Fit beta-spending parameters to conditional-assurance targets while holding
+Fit beta spending parameters to conditional assurance targets while holding
 the reference information and efficacy boundaries fixed. Overall power may
 change. Total beta is solved internally so that the spending rule and the
 terminal decision at the fixed efficacy boundary are consistent.'><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
@@ -89,7 +89,7 @@ terminal decision at the fixed efficacy boundary are consistent.'><meta property
     <div class="ref-description section level2">
     <p>Compatibility wrapper for <code>gsCPOSFutilitySpending(mode = "fixed_information")</code>,
 retaining the legacy argument, diagnostic and error names.
-Fit beta-spending parameters to conditional-assurance targets while holding
+Fit beta spending parameters to conditional assurance targets while holding
 the reference information and efficacy boundaries fixed. Overall power may
 change. Total beta is solved internally so that the spending rule and the
 terminal decision at the fixed efficacy boundary are consistent.</p>
@@ -120,7 +120,7 @@ functions; see <strong>Information fractions and spending times</strong> below.<
 
 
 <dt id="arg-target-ca">target_ca<a class="anchor" aria-label="anchor" href="#arg-target-ca"></a></dt>
-<dd><p>Conditional-assurance targets strictly between zero and one.</p></dd>
+<dd><p>Conditional assurance targets strictly between zero and one.</p></dd>
 
 
 <dt id="arg-i">i<a class="anchor" aria-label="anchor" href="#arg-i"></a></dt>
@@ -163,7 +163,7 @@ All other controls and defaults are as in <code><a href="gsCPOSFutilitySpending.
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This is the fixed-information counterpart of
+    <p>This is the fixed information counterpart of
 <code><a href="gsCPOSFutilitySpending.html">gsCPOSFutilitySpending</a></code>. The prior, information, efficacy
 boundaries, spending times and testing indicators are held fixed.
 For each candidate spending parameter set, <code><a href="gsBound.html">gsBound1()</a></code> derives interim
@@ -171,10 +171,10 @@ futility bounds, and <code><a href="gsProbability.html">gsProbability()</a></cod
 lower and upper bounds coincide. An internal scalar solve makes that beta
 agree with the beta used by the spending function.</p>
 <p>The probability target conditions on continuation through an analysis, not
-on an observed statistic at a boundary. An externally calculated fixed-design
+on an observed statistic at a boundary. An externally calculated fixed design
 <code><a href="gsCP.html">gsPOS()</a></code> benchmark can be supplied as a target. This implements a
-spending-based fixed-information conditional-assurance rule, not a full
-sample-size re-estimation procedure.</p>
+spending-based fixed information conditional assurance rule, not a full
+sample size re-estimation procedure.</p>
 <p>With nonbinding futility (<code>test.type = 4</code>), the efficacy-only type I
 error specification is unchanged. With binding futility (<code>test.type = 3</code>),
 changing futility while freezing efficacy can change actual type I error,
@@ -197,7 +197,7 @@ fractions <code>x$n.I / x$n.I[x$k]</code>, ending at 1. For example,
 <code>x$timing = c(.5, .75, 1)</code> keeps the analyses at 50%, 75%, and 100%
 of the final information. Power-preserving calibration may change the
 maximum information and thus the absolute information <code>n.I</code> at every
-analysis while retaining these fractions. Fixed-information calibration
+analysis while retaining these fractions. Fixed information calibration
 (<code>gsCAFutilitySpending()</code> and
 <code>gsCPOSFutilitySpending(mode = "fixed_information")</code>) also holds
 <code>n.I</code> and the efficacy boundaries fixed.</p>
@@ -214,13 +214,13 @@ or that absolute calendar analysis dates must be fixed. See
 
 
 <p>Survival inputs retain their survival classes and endpoint assumptions.
-Candidate probabilities are evaluated on the statistical event-count scale.
-Power-preserving probability calibration of fixed-duration, rate-scaled
+Candidate probabilities are evaluated on the statistical event count scale.
+Power-preserving probability calibration of fixed duration, rate-scaled
 designs rebuilds the survival plan only for the selected fit and checks all
 targets again on the returned object. If the deferred search or that check
 fails, calibration retries once with full survival reconstruction, retaining
 the best available internal parameters as starting values. Effect calibration
-and accrual- or follow-up-duration solves reconstruct the plan for every
+and accrual or follow-up duration solves reconstruct the plan for every
 candidate.
 For <code><a href="nSurv.html">gsSurv()</a></code> and <code><a href="gsSurvCalendar.html">gsSurvCalendar()</a></code> inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
@@ -231,9 +231,9 @@ numerical tolerance. Stored calls are not evaluated.</p>
 realized calendar times and enrollment periods and rescales enrollment rates
 to attain the fitted event counts. The evaluated alternative <code>x$hr</code>
 and its achieved power are used, even if the original design alternative
-<code>x$hr1</code> differed. Original event-trigger and calendar-cap rules are not
-re-applied: the realized schedule becomes the new plan. Fixed-information
-conditional-POS/CA calibration instead retains the survival plan, event
+<code>x$hr1</code> differed. Original event trigger and calendar cap rules are not
+reapplied: the realized schedule becomes the new plan. Fixed information
+conditional POS/CA calibration instead retains the survival plan, event
 counts and efficacy bounds while updating futility and achieved power.</p>
 <p>Priors and explicit <code>theta</code> remain standardized drifts per square root
 event, not hazard ratios. Rounding with <code><a href="toInteger.html">toInteger()</a></code> after calibration

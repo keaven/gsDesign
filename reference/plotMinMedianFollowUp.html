@@ -6,11 +6,11 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Plot median follow-up across all planned participants — plotMinMedianFollowUp"><meta name="description" content="Plot the forward calculation from medianFollowUp(), optionally
-marking a design's analysis times. Dropout and event-stopping conventions,
-input overrides and the planned-population definition are shared with that
+marking a design's analysis times. Dropout and event stopping conventions,
+input overrides and the planned population definition are shared with that
 function. The historical plot name is retained."><meta property="og:description" content="Plot the forward calculation from medianFollowUp(), optionally
-marking a design's analysis times. Dropout and event-stopping conventions,
-input overrides and the planned-population definition are shared with that
+marking a design's analysis times. Dropout and event stopping conventions,
+input overrides and the planned population definition are shared with that
 function. The historical plot name is retained."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -84,8 +84,8 @@ function. The historical plot name is retained."><meta property="og:image" conte
 
     <div class="ref-description section level2">
     <p>Plot the forward calculation from <code><a href="medianFollowUp.html">medianFollowUp()</a></code>, optionally
-marking a design's analysis times. Dropout and event-stopping conventions,
-input overrides and the planned-population definition are shared with that
+marking a design's analysis times. Dropout and event stopping conventions,
+input overrides and the planned population definition are shared with that
 function. The historical plot name is retained.</p>
     </div>
 
@@ -128,24 +128,24 @@ supply this vector explicitly. Passed as <code>T</code> to the calculation.</p><
 
 
 <dt id="arg-timename">timename<a class="anchor" aria-label="anchor" href="#arg-timename"></a></dt>
-<dd><p>Nonempty time-unit label. Month(s) and year(s) use axis
+<dd><p>Nonempty time unit label. Month(s) and year(s) use axis
 breaks every 6 months and 0.5 years, respectively.</p></dd>
 
 
 <dt id="arg-gamma">gamma<a class="anchor" aria-label="anchor" href="#arg-gamma"></a></dt>
-<dd><p>Enrollment rates, using the control-arm rate convention of
+<dd><p>Enrollment rates, using the control arm rate convention of
 <code><a href="nSurv.html">gsSurv()</a></code>. Rows are calendar enrollment periods, columns are strata.
 A scalar is constant over periods and strata; a vector specifies periods.</p></dd>
 
 
 <dt id="arg-r">R<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
-<dd><p>Positive enrollment-period durations. Enrollment stops at
+<dd><p>Positive enrollment period durations. Enrollment stops at
 <code>sum(R)</code>. Required with <code>gamma</code> when not supplied by <code>x</code>.</p></dd>
 
 
 <dt id="arg-eta">eta<a class="anchor" aria-label="anchor" href="#arg-eta"></a></dt>
 <dd><p>Control dropout hazards; finite and nonnegative. Rows are
-participant-time hazard intervals, columns are strata. A scalar is
+participant time hazard intervals, columns are strata. A scalar is
 constant over intervals and strata; a vector specifies intervals.
 Standalone default is zero.</p></dd>
 
@@ -189,7 +189,7 @@ it stops at the first of event, dropout and cutoff.</p></dd>
 
 
 <dt id="arg-tol">tol<a class="anchor" aria-label="anchor" href="#arg-tol"></a></dt>
-<dd><p>Positive absolute numerical tolerance in follow-up-time units,
+<dd><p>Positive absolute numerical tolerance in follow-up time units,
 default <code>1e-8</code>.</p></dd>
 
 </dl></div>

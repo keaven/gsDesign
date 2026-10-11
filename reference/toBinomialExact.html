@@ -116,7 +116,7 @@ If <code>NULL</code>, the alpha level from <code>x</code> is used.</p></dd>
 
 
 <dt id="arg-ustime">usTime<a class="anchor" aria-label="anchor" href="#arg-ustime"></a></dt>
-<dd><p>Optional upper spending-time override (length <code>k</code> or
+<dd><p>Optional upper spending time override (length <code>k</code> or
 <code>k - 1</code>, with final value appended as 1 if needed). If <code>NULL</code>,
 this defaults to <code>observedEvents / x$maxn.IPlan</code> (capped at 1) when
 <code>observedEvents</code> is supplied, or to the planned design timing
@@ -124,7 +124,7 @@ otherwise.</p></dd>
 
 
 <dt id="arg-lstime">lsTime<a class="anchor" aria-label="anchor" href="#arg-lstime"></a></dt>
-<dd><p>Optional lower spending-time override for <code>test.type = 4</code>,
+<dd><p>Optional lower spending time override for <code>test.type = 4</code>,
 <code>6</code>, or <code>8</code>
 (same length and monotonicity requirements as <code>usTime</code>). If
 <code>NULL</code>, it defaults to <code>usTime</code>.</p></dd>
@@ -133,7 +133,7 @@ otherwise.</p></dd>
 <dt id="arg-maxspend">maxSpend<a class="anchor" aria-label="anchor" href="#arg-maxspend"></a></dt>
 <dd><p>Logical scalar. If `TRUE`, force full alpha spending (and, for
 `test.type = 4` or `8`, full beta spending; for `test.type = 6`, full
-lower-bound spending under the null; and, for `test.type = 8`, full harm
+lower bound spending under the null; and, for `test.type = 8`, full harm
 spending under the null) at the final analysis even when
 `observedEvents[k] &lt; x$maxn.IPlan`. This keeps earlier analysis spending
 unchanged and applies the override only at the last look.</p></dd>
@@ -148,10 +148,10 @@ unchanged and applies the override only at the last look.</p></dd>
   analysis-specific testing indicators, spending times, planned final event
   count, `maxSpend`, and the evaluated conversion call. The retained
   randomization ratio can be used by <code><a href="VEtable.html">VEtable</a></code>. For
-  `test.type = 6`, the exact object's upper event-count bound represents the
+  `test.type = 6`, the exact object's upper event count bound represents the
   non-binding lower stopping bound, with its first probability column
   calibrated under the null hypothesis. For `test.type = 8`, `upper`
-  represents all upper event-count stops, while `futility` and `harm`
+  represents all upper event count stops, while `futility` and `harm`
   partition those stops into mutually exclusive components.</p>
     </div>
     <div class="section level2">
@@ -163,16 +163,16 @@ discreteness may reduce achieved power. A single <code>observedEvents</code> val
 can update a fixed design. Spending still uses the original planned final
 event count as denominator, including under- and over-runs; <code>maxSpend</code>
 can request full spending for an under-run. No artificial interim is added.</p>
-<p>Test types 1 (one-sided), 4 (non-binding beta-spending futility), 6
-(non-binding lower-bound spending under the null), and 8 (non-binding
+<p>Test types 1 (one-sided), 4 (non-binding beta spending futility), 6
+(non-binding lower bound spending under the null), and 8 (non-binding
 futility and harm) are supported for full conversion. For Type 8, the exact
-upper event-count stopping probability is partitioned into mutually
+upper event count stopping probability is partitioned into mutually
 exclusive futility and harm components. Harm spending is calibrated under
 the null ignoring futility stopping, but retaining efficacy stopping.
 Reported harm probabilities assume futility is followed and can be smaller
 than spending targets. Discreteness and the requirement that the harm region
 be nested within the active futility region can also reduce spending. Binding
-designs (types 2, 3, 5, and 7) are outside the non-binding exact-efficacy
+designs (types 2, 3, 5, and 7) are outside the non-binding exact efficacy
 framework. Exact repeated and sequential efficacy
 p-values can nevertheless be computed for non-binding types 1, 4, 6, and 8
 with <code><a href="repeatedPValueBinomialExact.html">repeatedPValueBinomialExact()</a></code> and
@@ -182,14 +182,14 @@ non-binding lower and harm bounds.</p>
 by the initial asymptotic approximation.
 Thus, the approximations are updated to satisfy the following requirements of <code>gsBinomialExact</code>:
 <code>a</code> (the efficacy bound) must be positive, non-decreasing, and strictly less than n.I
-<code>b</code> (the upper event-count stopping bound for futility, harm, or the
+<code>b</code> (the upper event count stopping bound for futility, harm, or the
 Type 6 lower bound) must be positive, non-decreasing, and strictly greater than a
 <code>n.I - b</code> must be non-decreasing and &gt;= 0</p>
 <p>With `observedEvents`, spending times are based on
 <code>observedEvents / x$maxn.IPlan</code>. If <code>maxSpend = TRUE</code>, the final
 spending time is set to 1 so all remaining spending is used at the last look.
 If <code>x$testLower</code> is present (for example from <code><a href="nSurv.html">gsSurv()</a></code> with
-selective lower-bound looks), lower-bound spending is flattened at analyses
+selective lower bound looks), lower bound spending is flattened at analyses
 where <code>testLower = FALSE</code>.
 For Type 4, the exact futility bound at a skipped look carries forward
 <code>n.I - b</code> from the preceding look (or uses <code>b = n.I + 1</code>
@@ -315,7 +315,7 @@ futility bounds.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Theta      1      2      3  Total</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.6774 0.0001 0.0031 0.0043 0.0075</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.4737 0.0355 0.6177 0.2386 0.8919</span>
-<span class="r-in"><span><span class="co"># Explicit spending-time override</span></span></span>
+<span class="r-in"><span><span class="co"># Explicit spending time override</span></span></span>
 <span class="r-in"><span><span class="fu">toBinomialExact</span><span class="op">(</span><span class="va">x</span>, observedEvents <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">55</span>, <span class="fl">80</span><span class="op">)</span>, usTime <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.25</span>, <span class="fl">.65</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              Bounds</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Analysis   N   a   b</span>

@@ -8,10 +8,10 @@ timing. Unlike
 which solve for sample size to achieve target power, `gsSurvPower()`
 takes fixed design assumptions and computes the resulting power. Its two
 primary uses are computing achieved power when sample size is not being
-derived and evaluating alternative enrollment, failure,
-treatment-effect, and analysis timing scenarios. It computes one set of
+derived and evaluating alternative enrollment, failure, treatment
+effect, and analysis timing scenarios. It computes one set of
 assumptions at a time; scenario grids are evaluated with separate calls.
-For `k = 1`, power is computed through the fixed-design
+For `k = 1`, power is computed through the fixed design
 `nSurv(beta = NULL)` path. The returned object is normalized as a
 single-analysis `gsSurv` object so it can be passed to
 [`toInteger`](https://keaven.github.io/gsDesign/reference/toInteger.md)
@@ -114,7 +114,7 @@ gsSurvPower(
 
 - astar:
 
-  Total lower-bound spending for types 5 or 6, or harm spending for
+  Total lower bound spending for types 5 or 6, or harm spending for
   types 7 or 8. Without a reference design, 0 selects
   `1 - alpha / sided` for types 5 or 6 and `0.1` for types 7 or 8. Harm
   calibration ignores futility stopping; reported stopping probabilities
@@ -249,7 +249,7 @@ gsSurvPower(
 
 - method:
 
-  Sample-size variance formulation. One of `"LachinFoulkes"` (default),
+  Sample size variance formulation. One of `"LachinFoulkes"` (default),
   `"Schoenfeld"`, `"Freedman"`, or `"BernsteinLagakos"`. Affects `n.fix`
   computation when `x` is not provided.
 
@@ -308,24 +308,24 @@ gsSurvPower(
 
 - informationRates:
 
-  Numeric vector of length `k` specifying planned information-fraction
+  Numeric vector of length `k` specifying planned information fraction
   caps, with no missing values. At each analysis, the effective upper
   and lower spending time is `pmin(informationRates, actual_timing)`,
   where `actual_timing` is expected events divided by maximum expected
   events. This prevents spending ahead of either the planned information
   schedule or the information actually accumulated. When supplied,
   `informationRates` takes precedence over `spending`, `usTime`, and
-  `lsTime`; upper and lower spending use the same effective
-  spending-time vector. Default `NULL` uses actual information fractions
-  (or calendar fractions when `spending = "calendar"`).
+  `lsTime`; upper and lower spending use the same effective spending
+  time vector. Default `NULL` uses actual information fractions (or
+  calendar fractions when `spending = "calendar"`).
 
 - fullSpendingAtFinal:
 
   Logical. When `TRUE`, the final element of the effective upper and
-  lower spending-time vectors is forced to 1 after applying
+  lower spending time vectors is forced to 1 after applying
   `informationRates`, calendar or planned-versus-actual spending, or
-  user-supplied `usTime`/`lsTime`. This ensures full upper- and
-  lower-bound spending whenever a selected spending-time vector would
+  user-supplied `usTime`/`lsTime`. This ensures full upper and lower
+  bound spending whenever a selected spending time vector would
   otherwise end below 1. Default `FALSE`.
 
 - tol:
@@ -342,10 +342,10 @@ gsSurvPower(
 
 - maxCalendarTime:
 
-  Absolute calendar-time cap for each analysis. Scalar or vector of
+  Absolute calendar time cap for each analysis. Scalar or vector of
   length `k`. When supplied with `maxExtension`, the earlier cap
   applies. This corresponds to `max_extension_for_target_event` in
-  simtrial. Use `NA` for analyses without an absolute calendar-time cap.
+  simtrial. Use `NA` for analyses without an absolute calendar time cap.
 
 - minNPerStratum:
 
@@ -391,7 +391,7 @@ An object of class `c("gsSurvPower", "gsSurv", "gsDesign")` containing:
 
 - harm:
 
-  Harm-bound information when `test.type` is 7 or 8.
+  Harm bound information when `test.type` is 7 or 8.
 
 - en, theta:
 
@@ -404,7 +404,7 @@ An object of class `c("gsSurvPower", "gsSurv", "gsDesign")` containing:
 
 - power:
 
-  Overall power (sum of upper-bound crossing probabilities under the
+  Overall power (sum of upper bound crossing probabilities under the
   assumed HR).
 
 - beta:
@@ -429,7 +429,7 @@ An object of class `c("gsSurvPower", "gsSurv", "gsDesign")` containing:
 
 - informationRates, fullSpendingAtFinal:
 
-  Planned information-fraction caps and final effective-spending-time
+  Planned information fraction caps and final effective spending time
   setting used for bound spending.
 
 - testUpper, testLower, testHarm:
@@ -472,7 +472,7 @@ bounds (for `test.type` 3, 4, 7, 8). It is not used for `test.type` 5 or
 calibrated to the original design even when power is evaluated under a
 different `hr`.
 
-**Beta spending in scenario analyses:** For beta-spending test types 3,
+**Beta spending in scenario analyses:** For beta spending test types 3,
 4, 7, and 8, `x$beta` is the design beta used with `hr1`, `sfl`, and
 `sflpar` to calibrate futility bounds. The `beta` returned by
 `gsSurvPower()` instead equals `1 - power` under the scenario
@@ -485,20 +485,20 @@ assumptions and can differ substantially from the design beta.
   are recomputed on the new schedule using the design beta and `hr1`;
   achieved beta is then evaluated under `hr`.
 
-- When only alpha or upper-bound spending changes with timing fixed,
+- When only alpha or upper bound spending changes with timing fixed,
   futility bounds from `x` are preserved, apart from clipping a lower
   bound that exceeds the new efficacy bound.
 
-Test types 5 and 6 spend lower-bound probability under the null rather
+Test types 5 and 6 spend lower bound probability under the null rather
 than beta under the alternative. Harm spending for test types 7 and 8 is
 also a separate null-based calculation.
 
 **Analysis timing:** Analysis times are determined by per-analysis
-criteria. Except for the final-analysis-only scalar `minfup`, each
-timing-rule parameter can be a scalar (recycled to all `k` analyses), a
-vector of length `k`, or `NA` at position `i` to indicate that the rule
-does not apply to analysis `i`. For the per-stratum matrix arguments,
-`NA` deactivates only that analysis-by-stratum requirement.
+criteria. The scalar `minfup` applies only to the final analysis. Each
+other timing rule parameter can be a scalar (recycled to all `k`
+analyses), a vector of length `k`, or `NA` at position `i` to indicate
+that the rule does not apply to analysis `i`. For the per-stratum matrix
+arguments, `NA` deactivates only that analysis-by-stratum requirement.
 
 The choice between `plannedCalendarTime` and overall `targetEvents` has
 an important consequence for sensitivity analyses:
@@ -543,11 +543,11 @@ analysis time `T[i]` is determined as:
     `minN + minFollowUp` would require a later time. Each analysis using
     `maxExtension` must have a floor timing criterion such as
     `plannedCalendarTime`, `minTimeFromPreviousAnalysis`, `minN`,
-    `minNPerStratum`, or explicit final-analysis `minfup`.
+    `minNPerStratum`, or explicit final analysis `minfup`.
 
-6.  Finally, `maxCalendarTime[i]` applies an absolute calendar-time cap.
+6.  Finally, `maxCalendarTime[i]` applies an absolute calendar time cap.
     If both cap types are supplied, the earlier cap applies. This
-    mirrors the realized-cut grammar in simtrial, where the argument
+    mirrors the realized cut grammar in simtrial, where the argument
     named `max_extension_for_target_event` is applied as an absolute
     analysis date.
 
@@ -570,7 +570,7 @@ event requirements and `minNPerStratum` for per-stratum enrollment
 requirements. Overall and per-stratum requirements may be combined and
 all active requirements must be met unless a cap intervenes. `NA` omits
 a requirement. A matrix passed through `targetEvents` is a deprecated
-alias for `targetEventsPerStratum`; unlike the earlier row-sum
+alias for `targetEventsPerStratum`; unlike the earlier row sum
 interpretation, its entries are enforced by stratum.
 
 **Bound recalculation when parameters change:** When `x` is provided,
@@ -580,20 +580,20 @@ the original design:
 - **No bound parameters changed** (same `alpha`, `sfu`, `sfupar`) and
   timing matches: both bounds are reused from `x` exactly.
 
-- **Upper-bound parameters changed** (`alpha`, `sfu`, or `sfupar`) but
+- **Upper bound parameters changed** (`alpha`, `sfu`, or `sfupar`) but
   timing matches: new efficacy bounds are computed using the non-binding
   efficacy convention at the new alpha while preserving the original
   `testUpper` schedule and futility bounds from `x`. Any futility bound
   that exceeds the new efficacy bound is clipped. This follows the same
   convention as
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
-  Lower-bound spending settings from `x` are intentionally kept in this
+  Lower bound spending settings from `x` are intentionally kept in this
   branch, which avoids complications with `astar` validation for binding
   types. For non-binding test types 1, 4, 6, and 8, this calculation can
-  be used to evaluate alpha propagated by a graphical multiple-testing
+  be used to evaluate alpha propagated by a graphical multiple testing
   procedure. For binding test types 2, 3, 5, and 7, it is a planning
-  sensitivity calculation only; it is not a Maurer–Bretz
-  sequential-p-value or graphical alpha-recycling procedure.
+  sensitivity calculation only; it is not a Maurer–Bretz sequential
+  p-value or graphical alpha recycling procedure.
 
 - **Timing changed** (different target events or calendar times): both
   bounds are recomputed from scratch using the full `test.type` and all

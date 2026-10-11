@@ -36,7 +36,7 @@ during trial execution.
 |----|----|----|
 | What event-driven design achieves target power? | [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) | Solves the required sample size, enrollment, or follow-up component |
 | What design achieves target power at specified calendar looks? | [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md) | Fixes calendar analysis times and solves the powered design |
-| What power does a specified plan achieve under a scenario? | [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md) | Keeps supplied enrollment, failure, treatment-effect, and timing assumptions fixed |
+| What power does a specified plan achieve under a scenario? | [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md) | Keeps supplied enrollment, failure, treatment effect, and timing assumptions fixed |
 | How variable are analysis dates and operating characteristics in execution? | Simulation, such as [**simtrial**](https://merck.github.io/simtrial/) | Generates trial realizations under stochastic enrollment, failure, dropout, and timing |
 
 [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
@@ -192,7 +192,7 @@ When this solve is infeasible, revise the fixed enrollment plan, target
 power, or event assumptions rather than interpreting the error as a
 numerical failure.
 
-## Calendar-time analyses
+## Calendar time analyses
 
 Use
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)

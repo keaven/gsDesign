@@ -2,8 +2,8 @@
 
 Compatibility wrapper for
 `gsCPOSFutilitySpending(mode = "fixed_information")`, retaining the
-legacy argument, diagnostic and error names. Fit beta-spending
-parameters to conditional-assurance targets while holding the reference
+legacy argument, diagnostic and error names. Fit beta spending
+parameters to conditional assurance targets while holding the reference
 information and efficacy boundaries fixed. Overall power may change.
 Total beta is solved internally so that the spending rule and the
 terminal decision at the fixed efficacy boundary are consistent.
@@ -33,7 +33,7 @@ gsCAFutilitySpending(
 
 - target_ca:
 
-  Conditional-assurance targets strictly between zero and one.
+  Conditional assurance targets strictly between zero and one.
 
 - i:
 
@@ -76,7 +76,7 @@ the reference beta. Error classes use the prefix `gsCAFutilitySpending`.
 
 ## Details
 
-This is the fixed-information counterpart of
+This is the fixed information counterpart of
 [`gsCPOSFutilitySpending`](https://keaven.github.io/gsDesign/reference/gsCPOSFutilitySpending.md).
 The prior, information, efficacy boundaries, spending times and testing
 indicators are held fixed. For each candidate spending parameter set,
@@ -89,10 +89,10 @@ spending function.
 
 The probability target conditions on continuation through an analysis,
 not on an observed statistic at a boundary. An externally calculated
-fixed-design
+fixed design
 [`gsPOS()`](https://keaven.github.io/gsDesign/reference/gsCP.md)
 benchmark can be supplied as a target. This implements a spending-based
-fixed-information conditional-assurance rule, not a full sample-size
+fixed information conditional assurance rule, not a full sample size
 re-estimation procedure.
 
 With nonbinding futility (`test.type = 4`), the efficacy-only type I
@@ -119,7 +119,7 @@ fractions `x$n.I / x$n.I[x$k]`, ending at 1. For example,
 `x$timing = c(.5, .75, 1)` keeps the analyses at 50%, 75%, and 100% of
 the final information. Power-preserving calibration may change the
 maximum information and thus the absolute information `n.I` at every
-analysis while retaining these fractions. Fixed-information calibration
+analysis while retaining these fractions. Fixed information calibration
 (`gsCAFutilitySpending()` and
 `gsCPOSFutilitySpending(mode = "fixed_information")`) also holds `n.I`
 and the efficacy boundaries fixed.
@@ -135,13 +135,13 @@ time, or that absolute calendar analysis dates must be fixed. See
 ## Survival designs
 
 Survival inputs retain their survival classes and endpoint assumptions.
-Candidate probabilities are evaluated on the statistical event-count
-scale. Power-preserving probability calibration of fixed-duration,
+Candidate probabilities are evaluated on the statistical event count
+scale. Power-preserving probability calibration of fixed duration,
 rate-scaled designs rebuilds the survival plan only for the selected fit
 and checks all targets again on the returned object. If the deferred
 search or that check fails, calibration retries once with full survival
 reconstruction, retaining the best available internal parameters as
-starting values. Effect calibration and accrual- or follow-up-duration
+starting values. Effect calibration and accrual or follow-up duration
 solves reconstruct the plan for every candidate. For
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
@@ -157,11 +157,10 @@ inputs, power-preserving calibration fixes the realized calendar times
 and enrollment periods and rescales enrollment rates to attain the
 fitted event counts. The evaluated alternative `x$hr` and its achieved
 power are used, even if the original design alternative `x$hr1`
-differed. Original event-trigger and calendar-cap rules are not
-re-applied: the realized schedule becomes the new plan.
-Fixed-information conditional-POS/CA calibration instead retains the
-survival plan, event counts and efficacy bounds while updating futility
-and achieved power.
+differed. Original event trigger and calendar cap rules are not
+reapplied: the realized schedule becomes the new plan. Fixed information
+conditional POS/CA calibration instead retains the survival plan, event
+counts and efficacy bounds while updating futility and achieved power.
 
 Priors and explicit `theta` remain standardized drifts per square root
 event, not hazard ratios. Rounding with

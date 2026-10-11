@@ -48,10 +48,10 @@ through an iterative process for all options. Since options 3 and 4 must
 compute boundary crossing probabilities under both the null and
 alternative hypotheses, deriving these designs can take longer than
 other options. Options 5 and 6 compute lower bound spending under the
-null hypothesis. Options 7 and 8 add a harm bound to beta-spending
+null hypothesis. Options 7 and 8 add a harm bound to beta spending
 futility: option 7 treats both futility and harm bounds as binding for
 Type I error, while option 8 treats both as non-binding. Futility and
-harm are mutually exclusive lower-tail stopping outcomes with separately
+harm are mutually exclusive lower tail stopping outcomes with separately
 specified spending functions.
 
 ## Usage
@@ -142,8 +142,8 @@ xtable(
   `astar = 0` selects `0.1` for harm designs and \\1 - \\`alpha` for
   types 5 and 6. Actual harm stopping probabilities account for futility
   and can be smaller than the spending targets. Capping harm at an
-  active futility bound can also reduce attained spending. See the
-  harm-monitoring section in `gsDesign`.
+  active futility bound can also reduce attained spending. See the harm
+  monitoring section in `gsDesign`.
 
 - delta:
 
@@ -607,7 +607,7 @@ The defaults `astar = 0.1` (selected by input 0) and
 `sfharm = sfLDPocock` provide relatively early spending and aim to flag
 moderately small one-sided p-values favoring harm. At harm boundary
 \\h\\, that nominal p-value is \\\Phi(h)\\, not the cumulative spending
-and not the efficacy-direction p-value displayed by
+and not the efficacy direction p-value displayed by
 [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
 There is no fixed nominal p-value cutoff guaranteed at every analysis.
 With more analyses, a larger total harm spending `astar` may be desired

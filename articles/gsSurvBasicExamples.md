@@ -118,7 +118,7 @@ be shown.
 ``` r
 
 x
-#> nSurv fixed-design summary (method=LachinFoulkes; target=Accrual rate)
+#> nSurv fixed design summary (method=LachinFoulkes; target=Accrual rate)
 #> HR=0.750 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
 #> N=775.0 subjects | D=507.2 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
 #> 

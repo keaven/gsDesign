@@ -116,8 +116,8 @@
 <ol style="list-style-type: decimal">
 <li>
 <strong>Compute achieved power without deriving sample
-size.</strong> Given enrollment, failure, dropout, treatment-effect, and
-analysis-timing assumptions, what power does the design achieve?</li>
+size.</strong> Given enrollment, failure, dropout, treatment effect, and
+analysis timing assumptions, what power does the design achieve?</li>
 <li>
 <strong>Evaluate scenarios for an existing design.</strong> What
 happens when enrollment, failure rates, the hazard ratio, or operational
@@ -242,7 +242,7 @@ error. It helps to separate two quantities:</p>
 <li>
 <strong>Design beta</strong> (<code>x$beta</code>) is allocated
 across analyses by <code>sfl</code>, <code>sflpar</code>, and the lower
-spending-time vector. For beta-spending designs, the futility bounds are
+spending time vector. For beta spending designs, the futility bounds are
 calibrated under <code>hr1</code>, the design alternative.</li>
 <li>
 <strong>Achieved beta</strong> (<code>1 - power</code>, returned as
@@ -254,15 +254,15 @@ analysis timing. It can be much larger or smaller than design beta.</li>
 that the futility bound is ignored when controlling Type I error. It
 remains an operational stopping bound and therefore affects achieved
 power. The same distinction between design beta and achieved beta
-applies to the beta-spending futility bounds in <code>test.type</code>
-3, 7, and 8. Test types 5 and 6 instead spend lower-bound probability
+applies to the beta spending futility bounds in <code>test.type</code>
+3, 7, and 8. Test types 5 and 6 instead spend lower bound probability
 under the null, and harm spending for test types 7 and 8 is a separate
 null-based calculation that ignores futility stopping while retaining
 efficacy stopping. Actual harm probabilities include futility stopping
 and may be below the spending targets. New harm designs default to total
 spending 0.1 and <code>sfLDPocock</code>; a supplied reference design
 retains its stored choices.</p>
-<p>When a reference design <code>x</code> is supplied, futility-bound
+<p>When a reference design <code>x</code> is supplied, futility bound
 handling follows these rules:</p>
 <table class="table">
 <colgroup>
@@ -271,7 +271,7 @@ handling follows these rules:</p>
 </colgroup>
 <thead><tr class="header">
 <th>Scenario change</th>
-<th>Futility-bound handling</th>
+<th>Futility bound handling</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -295,7 +295,7 @@ bound exceeds the new efficacy bound</td>
 <td>
 <code>informationRates</code>, calendar or planned-versus-actual
 spending, or <code>lsTime</code> is supplied</td>
-<td>Derive the selected lower effective spending-time vector and
+<td>Derive the selected lower effective spending time vector and
 recompute the bounds</td>
 </tr>
 </tbody>
@@ -304,7 +304,7 @@ recompute the bounds</td>
 preserves the original information fractions and futility bounds.
 Changing <code>hr</code> at fixed calendar times can change expected
 event fractions, causing the bounds to be recalibrated on the new
-information schedule while retaining the original design-beta
+information schedule while retaining the original design beta
 calibration.</p>
 <p>For instance, the following comparison evaluates the design
 assumptions and then HR = 0.8 with either fixed event targets or fixed
@@ -368,7 +368,7 @@ counts are held constant, the information fractions do not change with
 HR, and the resulting power matches the <code>gsDesign</code> power plot
 (<code>plot(x, plottype = 2)</code>) to numerical precision.</p></li>
 </ul>
-<p>Both modes are useful. Calendar-time analyses are natural when the
+<p>Both modes are useful. Calendar time analyses are natural when the
 protocol specifies analysis dates; event-driven analyses are natural
 when the protocol specifies event targets.</p>
 <p>When both <code>plannedCalendarTime</code> and
@@ -383,13 +383,13 @@ cap is reached first, the analysis proceeds with fewer expected events
 than targeted. Other applicable floor criteria can require an even later
 analysis, subject to the same hard extension cap.</p>
 <p><code>maxCalendarTime</code> supplies a different kind of deadline:
-it is an absolute calendar-time cap rather than an extension measured
+it is an absolute calendar time cap rather than an extension measured
 from a timing anchor. After combining all floor and event requirements,
 the expected analysis time is capped at <code>maxCalendarTime</code>. If
 both <code>maxExtension</code> and <code>maxCalendarTime</code> are
 supplied, the earlier deadline applies. This distinction preserves the
 existing meaning of <code>maxExtension</code> while matching the
-absolute-cap behavior of simtrial’s
+absolute cap behavior of simtrial’s
 <code>max_extension_for_target_event</code>.</p>
 </div>
 <div class="section level3">
@@ -446,7 +446,7 @@ met</td>
 <td>Require final minimum follow-up</td>
 <td>explicit <code>minfup</code>
 </td>
-<td>Final-analysis floor after enrollment ends</td>
+<td>Final analysis floor after enrollment ends</td>
 </tr>
 <tr class="even">
 <td>Cap delay relative to a timing anchor</td>
@@ -504,7 +504,7 @@ met</td>
 <code>k</code> with <code>NA</code> for “not applicable”:</p>
 <ul>
 <li>
-<code>plannedCalendarTime</code>: Calendar-time floor for the
+<code>plannedCalendarTime</code>: Calendar time floor for the
 analysis.</li>
 <li>
 <code>targetEvents</code>: Overall event requirement for the
@@ -513,7 +513,7 @@ analysis.</li>
 <code>maxExtension</code>: Maximum time beyond the floor to wait for
 target events.</li>
 <li>
-<code>maxCalendarTime</code>: Absolute calendar-time deadline for an
+<code>maxCalendarTime</code>: Absolute calendar time deadline for an
 analysis.</li>
 <li>
 <code>minTimeFromPreviousAnalysis</code>: Minimum elapsed time since
@@ -540,13 +540,13 @@ stratum requirement.</li>
 requirement. The mixed-<code>NA</code> convention is specific to timing
 rules. For selective bounds, use <code>FALSE</code> rather than
 <code>NA</code> in <code>testUpper</code>, <code>testLower</code>, or
-<code>testHarm</code>. Spending-time inputs
+<code>testHarm</code>. Spending time inputs
 (<code>informationRates</code>, <code>usTime</code>, and
 <code>lsTime</code>) describe a complete spending schedule and therefore
 must not contain <code>NA</code>.</p>
 <p>When multiple criteria apply to a single analysis, the analysis time
 is the maximum of all floor criteria and all overall or per-stratum
-event-target times. Thus, active requirements use AND logic.
+event target times. Thus, active requirements use AND logic.
 <code>maxExtension</code> defines a hard deadline: the analysis time
 never exceeds <code>plannedCalendarTime + maxExtension</code> (or
 <code>T[i-1] + maxExtension</code> when no calendar time is specified),
@@ -579,7 +579,7 @@ imply identical analysis dates in any one simulated trial.</p>
 <tr class="odd">
 <td><code>planned_calendar_time</code></td>
 <td><code>plannedCalendarTime</code></td>
-<td>Calendar-time floor when combined</td>
+<td>Calendar time floor when combined</td>
 </tr>
 <tr class="even">
 <td><code>target_event_overall</code></td>
@@ -625,7 +625,7 @@ vector for its per-stratum requirements. <code><a href="../reference/gsSurvPower
 specifies all <code>k</code> analyses in one call and uses a
 <code>k</code>-by-<code>nstrata</code> matrix; use <code>NA</code> for
 an inactive stratum at a look. <code>maxExtension</code> remains
-available for the older gsDesign relative-cap convention and has no
+available for the older gsDesign relative cap convention and has no
 exact simtrial counterpart.</p>
 </div>
 <div class="section level3">
@@ -635,7 +635,7 @@ exact simtrial counterpart.</p>
 operational plan. They do not solve the study design to achieve power
 the way <code><a href="../reference/nSurv.html">gsSurv()</a></code> does. Several inputs are therefore easy to
 misread.</p>
-<p><strong><code>minfup</code> is a final-analysis floor, not a target
+<p><strong><code>minfup</code> is a final analysis floor, not a target
 event rule.</strong> If <code>minfup</code> is explicitly supplied, the
 final analysis cannot occur before enrollment has ended and the last
 enrolled subject has at least that much follow-up. For an event-driven
@@ -722,7 +722,7 @@ duration.</strong> Use it when the operational rule is “analyze no later
 than month 30,” including when there is an event requirement but no
 natural floor from which to measure an extension. If a target or floor
 is not reached by that date, the analysis proceeds at the cap under the
-expected-value calculation. This matches how simtrial applies
+expected value calculation. This matches how simtrial applies
 <code>max_extension_for_target_event</code>, despite the latter
 argument’s name. When a relative extension and an absolute deadline are
 both part of the plan, supply both cap arguments; the earlier one
@@ -773,32 +773,32 @@ last active overall or per-stratum enrollment threshold is reached.</p>
 <code>"min_planned_actual"</code>. Information-based spending tracks the
 fraction of statistical information accumulated; calendar-based spending
 sets <code>usTime = lsTime = T / max(T)</code>. With a reference design
-<code>x</code>, planned-versus-actual spending sets both spending-time
+<code>x</code>, planned-versus-actual spending sets both spending time
 vectors to <code>pmin(x$n.I, actual events) / x$n.I[k]</code>, matching
 simtrial’s <code>ia_alpha_spending = "min_planned_actual"</code>
 convention. Custom spending times can also be passed via
 <code>usTime</code> and <code>lsTime</code>, but they are ignored for
 the latter two modes.</p></li>
 <li><p><strong><code>informationRates</code></strong>: Planned
-information-fraction caps (complete vector of length <code>k</code>,
+information fraction caps (complete vector of length <code>k</code>,
 without missing values). At each analysis, the effective spending time
 is <code>pmin(informationRates, actual_timing)</code>. Thus, spending
 cannot run ahead of either the planned information schedule or the
 information actually accumulated. <code>informationRates</code> takes
 precedence over <code>spending</code>, <code>usTime</code>, and
 <code>lsTime</code>; upper and lower spending both use the same
-effective spending-time vector.</p></li>
+effective spending time vector.</p></li>
 <li><p><strong><code>fullSpendingAtFinal</code></strong>: When
-<code>TRUE</code>, the final element of the upper and lower
-spending-time vectors is forced to 1 after applying
+<code>TRUE</code>, the final element of the upper and lower spending
+time vectors is forced to 1 after applying
 <code>informationRates</code>, calendar spending, or user-supplied
 <code>usTime</code> / <code>lsTime</code>. This is useful when a
-selected spending-time vector would otherwise leave either upper- or
-lower-bound spending incomplete.</p></li>
+selected spending time vector would otherwise leave either upper or
+lower bound spending incomplete.</p></li>
 <li><p><strong><code>method</code></strong>: One of
 <code>"LachinFoulkes"</code> (default), <code>"Schoenfeld"</code>,
 <code>"Freedman"</code>, or <code>"BernsteinLagakos"</code>. Controls
-how fixed-design events (<code>n.fix</code>) and drift parameter <span class="math inline">\(\theta\)</span> are computed when <code>x</code>
+how fixed design events (<code>n.fix</code>) and drift parameter <span class="math inline">\(\theta\)</span> are computed when <code>x</code>
 is not provided. When <code>x</code> is provided, <code>x$n.fix</code>
 and, implicitly, <span class="math inline">\(\theta\)</span> are used
 directly for exact consistency with the design.</p></li>
@@ -900,7 +900,7 @@ practice, a protocol may specify target event counts, planned calendar
 times, minimum follow-up after enrollment completes, and caps on how
 long analyses can be delayed. <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> lets you
 combine all of these in a single call. As noted above, these are
-expected-value calculations; simulation is needed to characterize
+expected value calculations; simulation is needed to characterize
 variability in when the rules are met. For instance, the following
 examples show the impact of slower enrollment and faster control
 failures when timing floors and extension caps are applied together.</p>
@@ -955,7 +955,7 @@ analyses are planned at months 12.4, 18.9, 28, so IA1 occurs
 </table>
 <p>The floor for each analysis is the <em>latest</em> of the applicable
 <code>plannedCalendarTime</code>, <code>minN + minFollowUp</code>, and
-previous-analysis constraints. If expected events have not reached the
+previous analysis constraints. If expected events have not reached the
 target at the floor, the analysis can be extended until the time that
 expected events reach the target, up to
 <code>plannedCalendarTime + maxExtension</code>.</p>
@@ -1786,7 +1786,7 @@ bounds are computed at the scenario’s information fractions,
 <code>n.I / max(n.I)</code>, which always end at 1. With a reference
 design <code>x</code>, <code>spending = "min_planned_actual"</code>
 instead uses <code>pmin(x$n.I, scenario n.I) / x$n.I[k]</code>. This is
-the expected-value analogue of simtrial’s planned-versus-actual spending
+the expected value analogue of simtrial’s planned-versus-actual spending
 option: spending cannot run ahead of the planned event count at a look
 or the events expected under the scenario.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
@@ -1816,18 +1816,18 @@ or the events expected under the scenario.</p>
 <span><span class="co">## 1        1          117.7            86.1                   0.244</span></span>
 <span><span class="co">## 2        2          235.5           189.3                   0.536</span></span>
 <span><span class="co">## 3        3          353.2           233.6                   0.661</span></span></code></pre>
-<p>The same effective spending-time vector is used for the upper and
+<p>The same effective spending time vector is used for the upper and
 lower bounds. Set <code>fullSpendingAtFinal = TRUE</code> to spend fully
 at the final analysis, corresponding to simtrial’s
 <code>fa_alpha_spending = "full_alpha"</code>; leave it
-<code>FALSE</code> for information-fraction final spending.</p>
+<code>FALSE</code> for information fraction final spending.</p>
 <div class="section level4">
-<h4 id="user-specified-spending-time-caps-with-informationrates">User-specified spending-time caps with
+<h4 id="user-specified-spending-time-caps-with-informationrates">User-specified spending time caps with
 <code>informationRates</code><a class="anchor" aria-label="anchor" href="#user-specified-spending-time-caps-with-informationrates"></a>
 </h4>
 <p>For a spending schedule specified directly rather than through the
 reference design’s planned event counts, <code>informationRates</code>
-supplies planned information-fraction caps. The effective spending time
+supplies planned information fraction caps. The effective spending time
 is <code>pmin(informationRates, actual_timing)</code> at each analysis.
 This prevents spending ahead of the planned information schedule when
 events arrive faster than planned and ahead of the information actually
@@ -1836,8 +1836,8 @@ is supplied, it takes precedence over <code>spending = "calendar"</code>
 and over manual <code>usTime</code> / <code>lsTime</code> overrides.</p>
 <p>Setting <code>fullSpendingAtFinal = TRUE</code> forces both the upper
 and lower effective spending times at the final analysis to 1 after the
-caps are applied. The example below uses a final planned
-information-fraction cap of 0.95 to show the effect explicitly. Without
+caps are applied. The example below uses a final planned information
+fraction cap of 0.95 to show the effect explicitly. Without
 <code>fullSpendingAtFinal</code>, the final effective spending time
 would remain 0.95 rather than 1.</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
@@ -2034,7 +2034,7 @@ efficacy testing schedule and futility bounds</strong> from
 new efficacy bound is clipped.</p>
 <p>For test types 1, 4, 6, and 8 this non-binding calculation is
 appropriate for evaluating alpha propagated by a Maurer–Bretz graphical
-multiple-testing procedure. For binding test types 2, 3, 5, and 7, the
+multiple testing procedure. For binding test types 2, 3, 5, and 7, the
 calculation below is a planning sensitivity analysis only and should not
 be interpreted as graphical alpha recycling or as a sequential
 p-value.</p>
@@ -2183,14 +2183,14 @@ therefore reduces power.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Original final expected events:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_design</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">design</span><span class="op">$</span><span class="va">k</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Original final expected events: 353.2</span></span></code></pre>
 <div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Slower-enrollment final events:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_slow_enroll</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">design</span><span class="op">$</span><span class="va">k</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Slower-enrollment final events: 176.6</span></span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Slower enrollment final events:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_slow_enroll</span><span class="op">$</span><span class="va">n.I</span><span class="op">[</span><span class="va">design</span><span class="op">$</span><span class="va">k</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Slower enrollment final events: 176.6</span></span></code></pre>
 <div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Original power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_design</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Original power: 90 %</span></span></code></pre>
 <div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Slower-enrollment power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_slow_enroll</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Slower-enrollment power: 62.9 %</span></span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Slower enrollment power:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pwr_slow_enroll</span><span class="op">$</span><span class="va">power</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"%\n"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Slower enrollment power: 62.9 %</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="calendar-based-spending">Calendar-based spending<a class="anchor" aria-label="anchor" href="#calendar-based-spending"></a>

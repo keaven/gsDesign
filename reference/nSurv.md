@@ -10,7 +10,7 @@ Freedman (1982), and Bernstein and Lagakos (1989) methods are also
 supported; see Details. `gsSurv()` combines `nSurv()` with
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
 to derive a group sequential design for a study with a time-to-event
-endpoint. When `k = 1`, `gsSurv()` uses the fixed-design calculations
+endpoint. When `k = 1`, `gsSurv()` uses the fixed design calculations
 from `nSurv()` directly and returns a normalized single-analysis
 `gsSurv` object for use with functions such as
 [`toInteger`](https://keaven.github.io/gsDesign/reference/toInteger.md)
@@ -318,8 +318,8 @@ print(x, digits = 3, show_gsDesign = FALSE, show_strata = TRUE, ...)
   `astar = 0` selects `0.1` for harm designs and \\1 - \\`alpha` for
   types 5 and 6. Actual harm stopping probabilities account for futility
   and can be smaller than the spending targets. Capping harm at an
-  active futility bound can also reduce attained spending. See the
-  harm-monitoring section in
+  active futility bound can also reduce attained spending. See the harm
+  monitoring section in
   [`gsDesign`](https://keaven.github.io/gsDesign/reference/gsDesign.md).
 
 - sfu:
@@ -806,14 +806,14 @@ are computed to derive the desired power. This method will fail if the
 specified enrollment rates and durations either over-powers the trial
 with no additional follow-up or underpowers the trial with infinite
 follow-up. This method produces a corresponding error message in such
-cases. For methods other than Lachin and Foulkes, these fixed-rate
-duration solves use the selected method for the fixed-design event
+cases. For methods other than Lachin and Foulkes, these fixed rate
+duration solves use the selected method for the fixed design event
 calculation.
 
 The input to `gsSurv` is a combination of the input to `nSurv()` and
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md).
 The original call is stored in `call`. The `inputs` component retains
-evaluated survival-model inputs used for printing and the applicable
+evaluated survival model inputs used for printing and the applicable
 `testUpper`, `testLower`, and `testHarm` arguments. The normalized
 testing schedules used by the design are stored directly in the
 corresponding top-level components. When `T = NULL` and `minfup` is
@@ -892,7 +892,7 @@ x_nsurv <- nSurv(
 )
 # Demonstrate print method
 print(x_nsurv)
-#> nSurv fixed-design summary (method=LachinFoulkes; target=Accrual rate)
+#> nSurv fixed design summary (method=LachinFoulkes; target=Accrual rate)
 #> HR=0.500 vs HR0=1.000 | alpha=0.020 (sided=1) | power=85.0%
 #> N=95.7 subjects | D=78.1 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
 #> 
@@ -955,7 +955,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Wed Oct  7 19:56:40 2026
+#> % Sun Oct 11 19:09:33 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}
@@ -1019,7 +1019,7 @@ nSurv(
   lambdaC = log(2) / 6, hr = .5, eta = .001, gamma = 6,
   alpha = .025, beta = .1, minfup = 12, T = NULL, method = "Schoenfeld"
 )
-#> nSurv fixed-design summary (method=Schoenfeld; target=Accrual duration)
+#> nSurv fixed design summary (method=Schoenfeld; target=Accrual duration)
 #> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
 #> N=110.9 subjects | D=87.5 events | T=30.5 study duration | accrual=18.5 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
 #> 
@@ -1105,7 +1105,7 @@ nSurv(
   lambdaC = log(2) / 6, hr = .5, eta = .001, gamma = 6, R = 25,
   alpha = .025, beta = .1, minfup = NULL, T = NULL, method = "Freedman"
 )
-#> nSurv fixed-design summary (method=Freedman; target=Follow-up duration)
+#> nSurv fixed design summary (method=Freedman; target=Follow-up duration)
 #> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
 #> N=150.0 subjects | D=94.6 events | T=27.0 study duration | accrual=25.0 Accrual duration | minfup=2.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
 #> 
@@ -1177,7 +1177,7 @@ nSurv(
   minfup = 3, T = 5, # 5-year trial duration with 3-year minimum follow-up
   alpha = .025, beta = .1, method = "LachinFoulkes"
 )
-#> nSurv fixed-design summary (method=LachinFoulkes; target=Accrual rate)
+#> nSurv fixed design summary (method=LachinFoulkes; target=Accrual rate)
 #> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
 #> N=1088.8 subjects | D=91.1 events | T=5.0 study duration | accrual=2.0 Accrual duration | minfup=3.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
 #> 
@@ -1264,7 +1264,7 @@ nSurv(
   gamma = matrix(c(3, 6, 5, 7), ncol = 2), R = c(5, 10), T = 27, minfup = 12,
   alpha = .025, beta = .1, method = "BernsteinLagakos"
 )
-#> nSurv fixed-design summary (method=BernsteinLagakos; target=Accrual rate)
+#> nSurv fixed design summary (method=BernsteinLagakos; target=Accrual rate)
 #> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=90.0%
 #> N=196.0 subjects | D=79.0 events | T=27.0 study duration | accrual=15.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
 #> 
@@ -1359,7 +1359,7 @@ nSurv(
   alpha = .025, beta = NULL, minfup = 12, T = 36, method = "LachinFoulkes"
 ) |>
   print()
-#> nSurv fixed-design summary (method=LachinFoulkes; target=Power)
+#> nSurv fixed design summary (method=LachinFoulkes; target=Power)
 #> HR=0.500 vs HR0=1.000 | alpha=0.025 (sided=1) | power=96.5%
 #> N=144.0 subjects | D=117.5 events | T=36.0 study duration | accrual=24.0 Accrual duration | minfup=12.0 minimum follow-up | ratio=1 randomization ratio (experimental/control)
 #> 

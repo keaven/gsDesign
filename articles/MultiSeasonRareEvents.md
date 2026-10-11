@@ -13,7 +13,7 @@ This vignette demonstrates a practical design workflow for rare seasonal
 events. The motivating use case is a vaccine efficacy trial with annual
 high-risk seasons. The same ideas can be adapted to infectious disease
 studies where simple superiority or non-inferiority may be considered.
-For a general introduction to exact-binomial vaccine efficacy
+For a general introduction to exact binomial vaccine efficacy
 monitoring, see
 [`vignette("VaccineEfficacy", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/VaccineEfficacy.md).
 
@@ -95,10 +95,10 @@ c(p0 = p0, p1 = p1)
 
 ## Initial group sequential setup
 
-To define spending-function monitoring, we first construct a
-calendar-time `gsSurvCalendar` object and then convert to integer event
-looks and exact binomial bounds. Here we use 3 looks at months 8, 20,
-32, corresponding to the end of each season after that year’s enrollment
+To define spending function monitoring, we first construct a calendar
+time `gsSurvCalendar` object and then convert to integer event looks and
+exact binomial bounds. Here we use 3 looks at months 8, 20, 32,
+corresponding to the end of each season after that year’s enrollment
 period. Enrollment is modeled as 2 months on and 10 months off each year
 for 3 years. The `gsSurvCalendar` inputs use months as the time unit, so
 seasonal event and dropout probabilities are converted to monthly
@@ -113,7 +113,7 @@ S <- season_length_months
 eta <- -log(1 - dropout_6mo) / season_length_months
 
 # Integer conversion can slightly adjust total enrollment so the final integer
-# event target is achievable with the seasonal piecewise event-rate model.
+# event target is achievable with the seasonal piecewise event rate model.
 design_calendar <- gsSurvCalendar(
   test.type = 4,                  # Non-binding lower bound framework
   alpha = alpha,                  # One-sided Type I error
@@ -125,7 +125,7 @@ design_calendar <- gsSurvCalendar(
   sfl = sfHSD,                    # Futility spending function
   sflpar = -2,                    # Futility spending parameter
   lambdaC = lambdaC,              # Control hazard rate per month by period
-  S = S,                          # Event-rate period duration in months
+  S = S,                          # Event rate period duration in months
   hr = hr1,                       # Alternative hypothesis HR
   hr0 = hr0,                      # Null hypothesis HR
   eta = eta,                      # Dropout hazard rate per month
@@ -162,7 +162,7 @@ planned_enrollment_experimental <- planned_enrollment_by_season - planned_enroll
 planned_cum_enrollment <- cumsum(planned_enrollment_by_season)
 ```
 
-The table above is the initial survival-design approximation and
+The table above is the initial survival design approximation and
 includes the approximate futility `Z`-boundary. The table below
 summarizes planned event looks and exact binomial efficacy/futility
 bounds. In this table, `x` is the cumulative number of observed events
@@ -182,7 +182,7 @@ achieved_alpha_spend <- cumsum(
     theta = design_exact$theta[1], # Null event probability in experimental arm
     n.I = design_exact$n.I,        # Cumulative events by analysis
     a = design_exact$lower$bound,  # Efficacy bounds (x <= a crosses)
-    b = design_exact$n.I + 1       # Non-binding upper bound for alpha-spend check
+    b = design_exact$n.I + 1       # Non-binding upper bound for alpha spending check
   )$lower$prob[, 1]
 )
 
@@ -355,7 +355,7 @@ sequentialPValueBinomialExact(
 
 ## Update exact bounds at analysis time
 
-The official package path for updating exact-binomial bounds at analysis
+The official package path for updating exact binomial bounds at analysis
 time is to call
 [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
 with `observedEvents`.
@@ -374,7 +374,7 @@ spending time to 1 and leaves earlier looks unchanged.
 For explicit control, you can pass `usTime` (and for `test.type = 4`,
 `lsTime`) directly to
 [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md),
-following the same spending-time conventions as
+following the same spending time conventions as
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md),
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md), and
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md).
@@ -460,7 +460,7 @@ oc |>
   lt_format(columns = 6:8, decimals = 2) |>
   lt_header(
     title = "Lightweight simulation results",
-    subtitle = "Exact-binomial monitoring with seasonal analyses"
+    subtitle = "Exact binomial monitoring with seasonal analyses"
   ) |>
   lt_footnote(
     "For VE=30% scenarios, efficacy crossing probability is Type I error under the non-binding futility convention (futility crossings do not block later efficacy crossings).",
@@ -548,7 +548,7 @@ tibble(
 
 This table provides side-by-side comparisons of Type I error, power, and
 futility stopping probability without and with adaptation under the
-lower-than-planned event-rate scenario.
+lower-than-planned event rate scenario.
 
 ## Larger offline runs (template)
 
@@ -594,7 +594,7 @@ sim_power_big <- simBinomialSeasonalExact(
 ## Notes and extensions
 
 - The adaptive pathway shown here is blinded because it uses total event
-  counts only; treatment-group differences are not used to update
+  counts only; treatment group differences are not used to update
   enrollment.
 - Spending fractions are set by `timing`; with the current specification
   they are 0.333, 0.667, 1.

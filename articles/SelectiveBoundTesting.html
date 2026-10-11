@@ -116,12 +116,12 @@ Anderson</h4>
 </h2>
 <p>All examples use a common time-to-event design. Enrollment lasts 16
 months, with the relative enrollment rate increasing over the first 6
-months and then remaining constant. The trial lasts 36 months.
-Control-group survival is 50%, 40%, and 35% at 1, 2, and 3 years,
-respectively. We convert each interval’s change in log survival to a
-piecewise exponential failure rate. Dropout is exponential at an annual
-rate of 0.02, and the hazard ratio under the alternative is 0.7.
-Analyses occur after 40%, 70%, and 100% of planned events.</p>
+months and then remaining constant. The trial lasts 36 months. Control
+group survival is 50%, 40%, and 35% at 1, 2, and 3 years, respectively.
+We convert each interval’s change in log survival to a piecewise
+exponential failure rate. Dropout is exponential at an annual rate of
+0.02, and the hazard ratio under the alternative is 0.7. Analyses occur
+after 40%, 70%, and 100% of planned events.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">survival_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">12</span>, <span class="fl">24</span>, <span class="fl">36</span><span class="op">)</span></span>
 <span><span class="va">control_survival</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">.50</span>, <span class="fl">.40</span>, <span class="fl">.35</span><span class="op">)</span></span>
@@ -154,10 +154,10 @@ these survival and enrollment assumptions from
 <code>survival_args</code>. The <code>gamma</code> input changes from 1
 to 6 over the first 6 months; its sixth value then applies through month
 16. Because total duration and minimum follow-up are fixed,
-<code><a href="../reference/nSurv.html">gsSurv()</a></code> scales this relative enrollment-rate pattern to
+<code><a href="../reference/nSurv.html">gsSurv()</a></code> scales this relative enrollment rate pattern to
 attain 90% power. Designs with different stopping rules can therefore
 show different fitted enrollment rates while retaining the same timing,
-survival, dropout, and enrollment-ramp assumptions.</p>
+survival, dropout, and enrollment ramp assumptions.</p>
 <p>The Lan–DeMets O’Brien–Fleming spending function,
 <code>sfLDOF</code>, sets a high bar for early efficacy stopping that is
 generally acceptable to regulators. The first interim is delayed until
@@ -972,7 +972,7 @@ argument; it is sometimes referred to as average conditional power. By
 default, <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> uses a normal prior centered
 halfway between the null and alternative, with standard deviation
 <code>10 / sqrt(x$n.fix)</code>. Its variance is equivalent to observing
-1% of the fixed-design information, so it is intended to be relatively
+1% of the fixed design information, so it is intended to be relatively
 weak. This means that the posterior used to determine predictive power
 is dominated by the interim data and primarily reflects variability in
 the interim observed treatment effect.</p>
@@ -1045,7 +1045,7 @@ for harm spending and skip efficacy testing at IA1:</p>
 <h3 id="harm-calibration-when-futility-is-skipped">Harm calibration when futility is skipped<a class="anchor" aria-label="anchor" href="#harm-calibration-when-futility-is-skipped"></a>
 </h3>
 <p>For <code>test.type = 7</code> and <code>8</code>, harm and futility
-are mutually exclusive lower-tail stopping outcomes. When both bounds
+are mutually exclusive lower tail stopping outcomes. When both bounds
 are active, observations at or below the harm bound are classified as
 harm stops, while observations between the harm and futility bounds are
 classified as futility-only stops. If futility is inactive but harm
@@ -1105,7 +1105,7 @@ only in whether futility and harm are tested at the final analysis:</p>
 <span><span class="va">harm_comparison</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Harm bounds by final-analysis testing schedule"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Harm bounds by final analysis testing schedule"</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
@@ -1122,10 +1122,10 @@ only in whether futility and harm are tested at the final analysis:</p>
     }
   ],
   "header": {
-    "title": "Harm bounds by final-analysis testing schedule"
+    "title": "Harm bounds by final analysis testing schedule"
   }
 }
-})</script><p>Skipping final futility changes the actual lower-tail stopping
+})</script><p>Skipping final futility changes the actual lower tail stopping
 partition, but does not reallocate harm spending among survivors of
 futility monitoring. At fixed information fractions, spending times,
 efficacy boundaries, and inactive caps, changing futility testing alone
@@ -1233,8 +1233,8 @@ analysis.</li>
 <p>These can be inspected programmatically for downstream analyses or
 reporting. For <code><a href="../reference/nSurv.html">gsSurv()</a></code> and <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>
 objects, <code>x$call</code> records the original call and
-<code>x$inputs</code> retains evaluated survival-model inputs plus the
-applicable testing-schedule arguments. The normalized logical vectors
+<code>x$inputs</code> retains evaluated survival model inputs plus the
+applicable testing schedule arguments. The normalized logical vectors
 above remain the authoritative schedule used in calculations and
 summaries.</p>
 </div>
@@ -1343,10 +1343,10 @@ efficacy or lower analyses do not leave the design over-powered.</p>
 levels, every efficacy column retains the original
 <code>testUpper</code> schedule. An efficacy look that was not planned
 is not reintroduced merely because another alpha level is displayed.
-Alternate-alpha summaries are available for the one-sided or non-binding
+Alternate alpha summaries are available for the one-sided or non-binding
 test types 1, 4, 6, and 8. They are intentionally not offered for
 binding types 2, 3, 5, or 7, which are outside the Maurer–Bretz
-non-binding multiple-testing framework.</p>
+non-binding multiple testing framework.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

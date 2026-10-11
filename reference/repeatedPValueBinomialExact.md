@@ -2,7 +2,7 @@
 
 Computes repeated p-values for the exact binomial design implied by a
 \[gsSurv()\] object. The p-value at analysis \`j\` is the smallest local
-one-sided alpha level for which the observed experimental-arm event
+one-sided alpha level for which the observed experimental arm event
 count crosses the exact lower efficacy bound at that analysis.
 Non-binding futility and harm bounds are ignored for the Type I error
 calculation.
@@ -37,7 +37,7 @@ repeatedPValueBinomialExact(
 
 - x:
 
-  Integer experimental-arm event counts at the analyses in \`n.I\`.
+  Integer experimental arm event counts at the analyses in \`n.I\`.
 
 - interval:
 
@@ -72,7 +72,7 @@ A data frame with one row per completed analysis containing:
 
 - \`x\`:
 
-  Observed experimental-arm events.
+  Observed experimental arm events.
 
 - \`repeated_p_value\`:
 

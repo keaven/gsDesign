@@ -126,7 +126,7 @@ not tied to SAS output, see
 where enrollment, dropout, analysis timing, and hazard ratio assumptions
 are fixed and the goal is to compute achieved power, see
 <code><a href="../articles/gsSurvPower.html">vignette("gsSurvPower")</a></code>.</p>
-<p>We first reproduce the SAS fractional-time table to printed
+<p>We first reproduce the SAS fractional time table to printed
 precision. We then show options that may lead to confusion when
 translating SAS PROC SEQDESIGN calls to gsDesign, including the event
 formula, alpha convention, and accrual and follow-up assumptions. The
@@ -198,7 +198,7 @@ Summary” table for the <code>ACCTIME=18</code> case, it reports
 calculated from the event formula; it is implied directly by the fixed
 accrual rate and accrual duration:
 <code>15 subjects/time unit * 18 time units = 270 subjects</code>.</p>
-<p>The fractional-time design reports analyses at information fractions
+<p>The fractional time design reports analyses at information fractions
 0.25, 0.50, 0.75, and 1.00. We focus on that design, where the analysis
 times are not rounded.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -227,7 +227,7 @@ from the example above.</p>
 <ul>
 <li>
 <strong>SAS:</strong> <span class="citation">Schoenfeld
-(1981)</span>. Uses only the null-hypothesis variance.</li>
+(1981)</span>. Uses only the null hypothesis variance.</li>
 <li>
 <strong>gsDesign:</strong> <span class="citation">Lachin and Foulkes
 (1986)</span> by default. Use <code>method = "Schoenfeld"</code> to
@@ -264,10 +264,10 @@ and <code>minfup = NULL</code>. This tells <code><a href="../reference/nSurv.htm
 the input accrual rate and accrual duration fixed, then solve the
 follow-up duration needed for the final group sequential event
 requirement.</p>
-<p>This is a common source of apparent disagreement. For a
-fixed-duration survival design, <code>T</code> is the total study
-duration and <code>minfup</code> is the minimum follow-up after
-enrollment closes. Specifying both can therefore change which quantity
+<p>This is a common source of apparent disagreement. For a fixed
+duration survival design, <code>T</code> is the total study duration and
+<code>minfup</code> is the minimum follow-up after enrollment closes.
+Specifying both can therefore change which quantity
 <code><a href="../reference/nSurv.html">gsSurv()</a></code> solves for. The SAS comparison fixes accrual at 18
 time units and lets the total time be derived.</p>
 <p>The translation used below is summarized as follows:</p>
@@ -962,7 +962,7 @@ th, td{ padding: 5px; }
 </div>
 </div>
 <div class="section level2">
-<h2 id="reproducing-the-fractional-time-design-with-gssurv">Reproducing the fractional-time design with
+<h2 id="reproducing-the-fractional-time-design-with-gssurv">Reproducing the fractional time design with
 <code>gsSurv()</code><a class="anchor" aria-label="anchor" href="#reproducing-the-fractional-time-design-with-gssurv"></a>
 </h2>
 <div class="section level3">
@@ -970,7 +970,7 @@ th, td{ padding: 5px; }
 <code>gsSurv()</code> with aligned parameters<a class="anchor" aria-label="anchor" href="#gssurv-with-aligned-parameters"></a>
 </h3>
 <p>Let’s start our work with gsDesign by defining parameters to match
-the SAS fractional-time design:</p>
+the SAS fractional time design:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
 <span><span class="va">alpha_sas</span> <span class="op">&lt;-</span> <span class="fl">0.05</span> <span class="co"># Two-sided total alpha (SAS convention)</span></span>
@@ -1065,7 +1065,7 @@ solves the follow-up duration.</li>
 <p><strong>Observations:</strong></p>
 <p>Using <code><a href="../reference/nSurv.html">gsSurv()</a></code> with parameters that align with SAS
 settings, the event counts, sample size, and analysis times reproduce
-the SAS fractional-time output to the printed precision available. The
+the SAS fractional time output to the printed precision available. The
 final follow-up duration is 7.13321, giving total study duration
 25.13321. Small fifth-decimal differences in Z-boundary comparisons may
 reflect limited SAS printed precision unless the SAS output is rerun
@@ -1085,7 +1085,7 @@ with more digits.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">gs_fractional</span>, <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Fractional-time SAS output compared with gsSurv()."</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Fractional time SAS output compared with gsSurv()."</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
@@ -1100,7 +1100,7 @@ with more digits.</p>
     "Z_gsDesign": [4.33263, 2.96313, 2.35904, 2.01409]
   },
   "header": {
-    "title": "Fractional-time SAS output compared with gsSurv()."
+    "title": "Fractional time SAS output compared with gsSurv()."
   }
 }
 })</script><p>The final event count is 89.07847 in both systems. The
@@ -1113,7 +1113,7 @@ minimum follow-up fixed, how long must enrollment continue to power the
 trial? The translation is <code>T = NULL</code> with <code>minfup</code>
 set to the fixed follow-up time. In this SAS example, the solution
 returns the same accrual duration because the fixed follow-up time is
-the one SAS solved from the fixed-accrual design:</p>
+the one SAS solved from the fixed accrual design:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">des_fixed_followup</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nSurv.html">gsSurv</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -1157,7 +1157,7 @@ the one SAS solved from the fixed-accrual design:</p>
 <span></span>
 <span><span class="va">fixed_followup_check</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Both fixed-accrual translations produce the same final design."</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Both fixed accrual translations produce the same final design."</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
@@ -1166,7 +1166,7 @@ the one SAS solved from the fixed-accrual design:</p>
     "Specified_followup": [25.13322, 17.99999, 89.0784, 269.99988]
   },
   "header": {
-    "title": "Both fixed-accrual translations produce the same final design."
+    "title": "Both fixed accrual translations produce the same final design."
   }
 }
 })</script><p>A third use case is to keep both the enrollment rates and enrollment

@@ -6,12 +6,12 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Summarize an exact binomial vaccine or prevention efficacy design — VEtable"><meta name="description" content="Creates a vaccine or prevention efficacy summary table from an exact
-binomial design. The table includes event-count bounds, efficacy at each bound,
-cumulative error spending, and cumulative efficacy-crossing probabilities
+binomial design. The table includes event count bounds, efficacy at each bound,
+cumulative error spending, and cumulative efficacy crossing probabilities
 for selected efficacy assumptions. Optional time-to-event design
 information adds planned analysis times and expected enrollment."><meta property="og:description" content="Creates a vaccine or prevention efficacy summary table from an exact
-binomial design. The table includes event-count bounds, efficacy at each bound,
-cumulative error spending, and cumulative efficacy-crossing probabilities
+binomial design. The table includes event count bounds, efficacy at each bound,
+cumulative error spending, and cumulative efficacy crossing probabilities
 for selected efficacy assumptions. Optional time-to-event design
 information adds planned analysis times and expected enrollment."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -86,8 +86,8 @@ information adds planned analysis times and expected enrollment."><meta property
 
     <div class="ref-description section level2">
     <p>Creates a vaccine or prevention efficacy summary table from an exact
-binomial design. The table includes event-count bounds, efficacy at each bound,
-cumulative error spending, and cumulative efficacy-crossing probabilities
+binomial design. The table includes event count bounds, efficacy at each bound,
+cumulative error spending, and cumulative efficacy crossing probabilities
 for selected efficacy assumptions. Optional time-to-event design
 information adds planned analysis times and expected enrollment.</p>
     </div>
@@ -128,7 +128,7 @@ is taken from <code>tteDesign</code> or from a design created by
     <p>A tibble of class <code>gsVETable</code> with one row per analysis. The
   columns contain analysis number, optional timing and enrollment, total
   cases, exact efficacy and futility bounds, efficacy at each bound,
-  cumulative alpha and beta spending, and cumulative efficacy-crossing
+  cumulative alpha and beta spending, and cumulative efficacy crossing
   probability under each value in <code>ve</code>. Pass the result to
   <code><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt()</a></code> for a formatted table with explanatory footnotes.</p>
     </div>

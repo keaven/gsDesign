@@ -47,10 +47,10 @@ the maximum sample size through an iterative process for all options. Since
 options 3 and 4 must compute boundary crossing probabilities under both the
 null and alternative hypotheses, deriving these designs can take longer than
 other options. Options 5 and 6 compute lower bound spending under the null
-hypothesis. Options 7 and 8 add a harm bound to beta-spending futility:
+hypothesis. Options 7 and 8 add a harm bound to beta spending futility:
 option 7 treats both futility and harm bounds as binding for Type I error,
 while option 8 treats both as non-binding. Futility and harm are mutually
-exclusive lower-tail stopping outcomes with separately specified spending
+exclusive lower tail stopping outcomes with separately specified spending
 functions."><meta property="og:description" content="gsDesign() is used to find boundaries and trial size required for a
 group sequential design.
 Many parameters normally take on default values and thus do not require
@@ -93,10 +93,10 @@ the maximum sample size through an iterative process for all options. Since
 options 3 and 4 must compute boundary crossing probabilities under both the
 null and alternative hypotheses, deriving these designs can take longer than
 other options. Options 5 and 6 compute lower bound spending under the null
-hypothesis. Options 7 and 8 add a harm bound to beta-spending futility:
+hypothesis. Options 7 and 8 add a harm bound to beta spending futility:
 option 7 treats both futility and harm bounds as binding for Type I error,
 while option 8 treats both as non-binding. Futility and harm are mutually
-exclusive lower-tail stopping outcomes with separately specified spending
+exclusive lower tail stopping outcomes with separately specified spending
 functions."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -211,10 +211,10 @@ the maximum sample size through an iterative process for all options. Since
 options 3 and 4 must compute boundary crossing probabilities under both the
 null and alternative hypotheses, deriving these designs can take longer than
 other options. Options 5 and 6 compute lower bound spending under the null
-hypothesis. Options 7 and 8 add a harm bound to beta-spending futility:
+hypothesis. Options 7 and 8 add a harm bound to beta spending futility:
 option 7 treats both futility and harm bounds as binding for Type I error,
 while option 8 treats both as non-binding. Futility and harm are mutually
-exclusive lower-tail stopping outcomes with separately specified spending
+exclusive lower tail stopping outcomes with separately specified spending
 functions.</p>
     </div>
 
@@ -300,7 +300,7 @@ stopping. The default input <code>astar = 0</code> selects <code>0.1</code> for 
 designs and \(1 - \)<code>alpha</code> for types 5 and 6.
 Actual harm stopping probabilities account for futility and can be smaller
 than the spending targets. Capping harm at an active futility bound can also
-reduce attained spending. See the harm-monitoring section in
+reduce attained spending. See the harm monitoring section in
 <code>gsDesign</code>.</p></dd>
 
 
@@ -735,7 +735,7 @@ at futility to retain their ordering; this can also prevent full spending.</p>
 <code>sfharm = sfLDPocock</code> provide relatively early spending and aim to flag
 moderately small one-sided p-values favoring harm. At harm boundary \(h\),
 that nominal p-value is \(\Phi(h)\), not the cumulative spending and not
-the efficacy-direction p-value displayed by <code><a href="gsBoundSummary.html">gsBoundSummary()</a></code>.
+the efficacy direction p-value displayed by <code><a href="gsBoundSummary.html">gsBoundSummary()</a></code>.
 There is no fixed nominal p-value cutoff guaranteed at every analysis.
 With more analyses, a larger total harm spending <code>astar</code> may be desired
 to retain similarly permissive nominal harm thresholds, at the cost of more

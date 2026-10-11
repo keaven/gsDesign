@@ -1,6 +1,6 @@
 # Calibrate Futility Spending to Conditional Power Targets
 
-`gsCPFutilitySpending()` selects parameters for a beta-spending futility
+`gsCPFutilitySpending()` selects parameters for a beta spending futility
 boundary so that conditional power at one or more interim futility
 bounds matches specified targets. Each candidate design is reconstructed
 with
@@ -42,7 +42,7 @@ gsCPFutilitySpending(
   `lower$bound[i] / sqrt(n.I[i])`; otherwise `theta` specifies the
   future effect. Future efficacy and futility boundaries remain in
   force. With multiple targets, each is a total future conditional power
-  at its corresponding interim, not a next-analysis conditional power.
+  at its corresponding interim, not a next analysis conditional power.
 
 - i:
 
@@ -109,7 +109,7 @@ gsCPFutilitySpending(
 
   `trace`
 
-  :   Display joint-optimizer progress (default `FALSE`). Both
+  :   Display joint optimizer progress (default `FALSE`). Both
       `backward` and `trace` must be nonmissing scalar logical values.
 
 ## Value
@@ -182,7 +182,7 @@ fractions `x$n.I / x$n.I[x$k]`, ending at 1. For example,
 `x$timing = c(.5, .75, 1)` keeps the analyses at 50%, 75%, and 100% of
 the final information. Power-preserving calibration may change the
 maximum information and thus the absolute information `n.I` at every
-analysis while retaining these fractions. Fixed-information calibration
+analysis while retaining these fractions. Fixed information calibration
 ([`gsCAFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCAFutilitySpending.md)
 and `gsCPOSFutilitySpending(mode = "fixed_information")`) also holds
 `n.I` and the efficacy boundaries fixed.
@@ -195,7 +195,7 @@ information fractions do not mean that spending must use information
 time, or that absolute calendar analysis dates must be fixed. See
 **Survival designs** for how survival calendar times are handled.
 
-## Spending-parameter search defaults
+## Spending parameter search defaults
 
 When not supplied in `control`, parameter limits and fallback starting
 values are selected by family:
@@ -221,13 +221,13 @@ constrained parameterization.
 ## Survival designs
 
 Survival inputs retain their survival classes and endpoint assumptions.
-Candidate probabilities are evaluated on the statistical event-count
-scale. Power-preserving probability calibration of fixed-duration,
+Candidate probabilities are evaluated on the statistical event count
+scale. Power-preserving probability calibration of fixed duration,
 rate-scaled designs rebuilds the survival plan only for the selected fit
 and checks all targets again on the returned object. If the deferred
 search or that check fails, calibration retries once with full survival
 reconstruction, retaining the best available internal parameters as
-starting values. Effect calibration and accrual- or follow-up-duration
+starting values. Effect calibration and accrual or follow-up duration
 solves reconstruct the plan for every candidate. For
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
 [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
@@ -243,11 +243,10 @@ inputs, power-preserving calibration fixes the realized calendar times
 and enrollment periods and rescales enrollment rates to attain the
 fitted event counts. The evaluated alternative `x$hr` and its achieved
 power are used, even if the original design alternative `x$hr1`
-differed. Original event-trigger and calendar-cap rules are not
-re-applied: the realized schedule becomes the new plan.
-Fixed-information conditional-POS/CA calibration instead retains the
-survival plan, event counts and efficacy bounds while updating futility
-and achieved power.
+differed. Original event trigger and calendar cap rules are not
+reapplied: the realized schedule becomes the new plan. Fixed information
+conditional POS/CA calibration instead retains the survival plan, event
+counts and efficacy bounds while updating futility and achieved power.
 
 Priors and explicit `theta` remain standardized drifts per square root
 event, not hazard ratios. Rounding with

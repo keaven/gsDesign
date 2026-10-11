@@ -2,8 +2,8 @@
 
 Plot the forward calculation from
 [`medianFollowUp()`](https://keaven.github.io/gsDesign/reference/medianFollowUp.md),
-optionally marking a design's analysis times. Dropout and event-stopping
-conventions, input overrides and the planned-population definition are
+optionally marking a design's analysis times. Dropout and event stopping
+conventions, input overrides and the planned population definition are
 shared with that function. The historical plot name is retained.
 
 ## Usage
@@ -45,27 +45,27 @@ plotMinMedianFollowUp(
 
 - timename:
 
-  Nonempty time-unit label. Month(s) and year(s) use axis breaks every 6
+  Nonempty time unit label. Month(s) and year(s) use axis breaks every 6
   months and 0.5 years, respectively.
 
 - gamma:
 
-  Enrollment rates, using the control-arm rate convention of
+  Enrollment rates, using the control arm rate convention of
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md).
   Rows are calendar enrollment periods, columns are strata. A scalar is
   constant over periods and strata; a vector specifies periods.
 
 - R:
 
-  Positive enrollment-period durations. Enrollment stops at `sum(R)`.
+  Positive enrollment period durations. Enrollment stops at `sum(R)`.
   Required with `gamma` when not supplied by `x`.
 
 - eta:
 
-  Control dropout hazards; finite and nonnegative. Rows are
-  participant-time hazard intervals, columns are strata. A scalar is
-  constant over intervals and strata; a vector specifies intervals.
-  Standalone default is zero.
+  Control dropout hazards; finite and nonnegative. Rows are participant
+  time hazard intervals, columns are strata. A scalar is constant over
+  intervals and strata; a vector specifies intervals. Standalone default
+  is zero.
 
 - etaE:
 
@@ -106,7 +106,7 @@ plotMinMedianFollowUp(
 
 - tol:
 
-  Positive absolute numerical tolerance in follow-up-time units, default
+  Positive absolute numerical tolerance in follow-up time units, default
   `1e-8`.
 
 ## Value

@@ -44,7 +44,7 @@ serves a stated objective.
 An important organizing idea is error spending. Lan and DeMets (Lan and
 DeMets 1983) provided a way to specify cumulative error expenditure as
 information accumulates, rather than fixing a boundary only for a single
-predetermined analysis schedule. In gsDesign, alpha- and beta-spending
+predetermined analysis schedule. In gsDesign, alpha and beta spending
 help separate a monitoring policy from its boundaries at particular
 analyses. They allow the design to be evaluated at revised information
 times, subject to the assumptions of the sequential procedure. This is
@@ -65,7 +65,7 @@ minimum of planned and actual information. When minimum follow-up,
 accrual, or dropout means that an analysis requires more events than
 originally planned, this cap prevents the earlier analysis from spending
 alpha as though all of that extra information had been scheduled in
-advance. It retains adequate alpha-spending for the final analysis while
+advance. It retains adequate alpha spending for the final analysis while
 still allowing the interim calculation to use the information actually
 observed.
 
@@ -104,7 +104,7 @@ publication.
 | 2017 / 3.0-4 | First GitHub-based release | A transition from the earlier R-Forge workflow. |
 | 2019 / 3.1.0 | testthat, roxygen2, R Markdown, and pkgdown | Tests, help, examples, and a website became a more integrated development workflow. |
 | 2020–2021 / 3.1.1–3.2.0 | Continuous integration and expanded tests | More systematic checking, with reported coverage above 80% in 3.2.0. |
-| 2022–2023 / 3.3.0–3.6.0 | Vaccine efficacy examples, exact binomial conversion, integer conversion, and calendar-time survival designs | More direct connections between statistical designs and trial implementation. |
+| 2022–2023 / 3.3.0–3.6.0 | Vaccine efficacy examples, exact binomial conversion, integer conversion, and calendar time survival designs | More direct connections between statistical designs and trial implementation. |
 | 2026 / 3.9.0 | Schoenfeld and Freedman survival sample size options | Easier comparisons with other software while retaining the Lachin-Foulkes default. |
 | 2026 / 3.10.0–3.11.0 and subsequent development | Survival scenario evaluation, selective monitoring, harm bounds, and target-based spending calibration | A broader set of design questions built on established computational tools. |
 

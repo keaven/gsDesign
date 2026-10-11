@@ -6,7 +6,7 @@
 has two primary uses:
 
 1.  **Compute achieved power without deriving sample size.** Given
-    enrollment, failure, dropout, treatment-effect, and analysis-timing
+    enrollment, failure, dropout, treatment effect, and analysis timing
     assumptions, what power does the design achieve?
 2.  **Evaluate scenarios for an existing design.** What happens when
     enrollment, failure rates, the hazard ratio, or operational timing
@@ -116,7 +116,7 @@ promise that every scenario evaluated will have the design’s Type II
 error. It helps to separate two quantities:
 
 - **Design beta** (`x$beta`) is allocated across analyses by `sfl`,
-  `sflpar`, and the lower spending-time vector. For beta-spending
+  `sflpar`, and the lower spending time vector. For beta spending
   designs, the futility bounds are calibrated under `hr1`, the design
   alternative.
 - **Achieved beta** (`1 - power`, returned as `beta`) is the probability
@@ -128,29 +128,29 @@ For `test.type = 4`, the non-binding designation means that the futility
 bound is ignored when controlling Type I error. It remains an
 operational stopping bound and therefore affects achieved power. The
 same distinction between design beta and achieved beta applies to the
-beta-spending futility bounds in `test.type` 3, 7, and 8. Test types 5
-and 6 instead spend lower-bound probability under the null, and harm
+beta spending futility bounds in `test.type` 3, 7, and 8. Test types 5
+and 6 instead spend lower bound probability under the null, and harm
 spending for test types 7 and 8 is a separate null-based calculation
 that ignores futility stopping while retaining efficacy stopping. Actual
 harm probabilities include futility stopping and may be below the
 spending targets. New harm designs default to total spending 0.1 and
 `sfLDPocock`; a supplied reference design retains its stored choices.
 
-When a reference design `x` is supplied, futility-bound handling follows
+When a reference design `x` is supplied, futility bound handling follows
 these rules:
 
-| Scenario change | Futility-bound handling |
+| Scenario change | Futility bound handling |
 |----|----|
 | Information fractions and spending inputs unchanged | Reuse the bounds from `x` |
 | Only alpha or the upper spending function changes, with timing unchanged | Preserve the bounds from `x`, clipping only if a lower bound exceeds the new efficacy bound |
 | Information fractions or spending times change | Recompute the bounds on the new schedule using design beta, `hr1`, `sfl`, and `sflpar` |
-| `informationRates`, calendar or planned-versus-actual spending, or `lsTime` is supplied | Derive the selected lower effective spending-time vector and recompute the bounds |
+| `informationRates`, calendar or planned-versus-actual spending, or `lsTime` is supplied | Derive the selected lower effective spending time vector and recompute the bounds |
 
 Thus, changing `hr` with fixed event targets generally preserves the
 original information fractions and futility bounds. Changing `hr` at
 fixed calendar times can change expected event fractions, causing the
 bounds to be recalibrated on the new information schedule while
-retaining the original design-beta calibration.
+retaining the original design beta calibration.
 
 For instance, the following comparison evaluates the design assumptions
 and then HR = 0.8 with either fixed event targets or fixed calendar
@@ -218,7 +218,7 @@ consequence for sensitivity analyses:
   matches the `gsDesign` power plot (`plot(x, plottype = 2)`) to
   numerical precision.
 
-Both modes are useful. Calendar-time analyses are natural when the
+Both modes are useful. Calendar time analyses are natural when the
 protocol specifies analysis dates; event-driven analyses are natural
 when the protocol specifies event targets.
 
@@ -234,12 +234,12 @@ applicable floor criteria can require an even later analysis, subject to
 the same hard extension cap.
 
 `maxCalendarTime` supplies a different kind of deadline: it is an
-absolute calendar-time cap rather than an extension measured from a
+absolute calendar time cap rather than an extension measured from a
 timing anchor. After combining all floor and event requirements, the
 expected analysis time is capped at `maxCalendarTime`. If both
 `maxExtension` and `maxCalendarTime` are supplied, the earlier deadline
 applies. This distinction preserves the existing meaning of
-`maxExtension` while matching the absolute-cap behavior of simtrial’s
+`maxExtension` while matching the absolute cap behavior of simtrial’s
 `max_extension_for_target_event`.
 
 ### Quick decision guide
@@ -252,7 +252,7 @@ applies. This distinction preserves the existing meaning of
 | Require spacing between looks | `minTimeFromPreviousAnalysis` | Earliest time relative to the previous analysis |
 | Require enrollment plus follow-up | `minN`, `minFollowUp` | Earliest time satisfying both criteria |
 | Require enrollment by stratum plus follow-up | `minNPerStratum`, `minFollowUp` | Earliest time every active stratum requirement plus follow-up is met |
-| Require final minimum follow-up | explicit `minfup` | Final-analysis floor after enrollment ends |
+| Require final minimum follow-up | explicit `minfup` | Final analysis floor after enrollment ends |
 | Cap delay relative to a timing anchor | `maxExtension` | Relative hard cap preserving the existing gsDesign convention |
 | Stop at an absolute calendar deadline | `maxCalendarTime` | Absolute hard cap, corresponding to simtrial cut behavior |
 
@@ -271,11 +271,11 @@ Per-analysis timing rules can be combined, each specified as a scalar
 (recycled to all `k` analyses) or a vector of length `k` with `NA` for
 “not applicable”:
 
-- `plannedCalendarTime`: Calendar-time floor for the analysis.
+- `plannedCalendarTime`: Calendar time floor for the analysis.
 - `targetEvents`: Overall event requirement for the analysis.
 - `maxExtension`: Maximum time beyond the floor to wait for target
   events.
-- `maxCalendarTime`: Absolute calendar-time deadline for an analysis.
+- `maxCalendarTime`: Absolute calendar time deadline for an analysis.
 - `minTimeFromPreviousAnalysis`: Minimum elapsed time since the previous
   analysis.
 - `minN`: Minimum sample size enrolled before analysis.
@@ -291,14 +291,14 @@ Per-analysis timing rules can be combined, each specified as a scalar
 Each analysis must retain at least one active floor or event
 requirement. The mixed-`NA` convention is specific to timing rules. For
 selective bounds, use `FALSE` rather than `NA` in `testUpper`,
-`testLower`, or `testHarm`. Spending-time inputs (`informationRates`,
+`testLower`, or `testHarm`. Spending time inputs (`informationRates`,
 `usTime`, and `lsTime`) describe a complete spending schedule and
 therefore must not contain `NA`.
 
 When multiple criteria apply to a single analysis, the analysis time is
-the maximum of all floor criteria and all overall or per-stratum
-event-target times. Thus, active requirements use AND logic.
-`maxExtension` defines a hard deadline: the analysis time never exceeds
+the maximum of all floor criteria and all overall or per-stratum event
+target times. Thus, active requirements use AND logic. `maxExtension`
+defines a hard deadline: the analysis time never exceeds
 `plannedCalendarTime + maxExtension` (or `T[i-1] + maxExtension` when no
 calendar time is specified), even if other criteria such as
 `minTimeFromPreviousAnalysis` or enrollment plus follow-up would push it
@@ -318,7 +318,7 @@ simulated trial.
 
 | simtrial cut argument | [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md) argument | Relationship |
 |----|----|----|
-| `planned_calendar_time` | `plannedCalendarTime` | Calendar-time floor when combined |
+| `planned_calendar_time` | `plannedCalendarTime` | Calendar time floor when combined |
 | `target_event_overall` | `targetEvents` | Overall event requirement |
 | `target_event_per_stratum` | `targetEventsPerStratum` | Per-stratum requirement; rows index analyses and columns index strata |
 | `min_time_after_previous_analysis` | `minTimeFromPreviousAnalysis` | Minimum gap from the preceding analysis |
@@ -332,7 +332,7 @@ for its per-stratum requirements.
 [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
 specifies all `k` analyses in one call and uses a `k`-by-`nstrata`
 matrix; use `NA` for an inactive stratum at a look. `maxExtension`
-remains available for the older gsDesign relative-cap convention and has
+remains available for the older gsDesign relative cap convention and has
 no exact simtrial counterpart.
 
 ### Common timing pitfalls
@@ -344,7 +344,7 @@ achieve power the way
 [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) does.
 Several inputs are therefore easy to misread.
 
-**`minfup` is a final-analysis floor, not a target event rule.** If
+**`minfup` is a final analysis floor, not a target event rule.** If
 `minfup` is explicitly supplied, the final analysis cannot occur before
 enrollment has ended and the last enrolled subject has at least that
 much follow-up. For an event-driven design with enrollment durations
@@ -445,7 +445,7 @@ round(pwr_extension$T, 1)
 the operational rule is “analyze no later than month 30,” including when
 there is an event requirement but no natural floor from which to measure
 an extension. If a target or floor is not reached by that date, the
-analysis proceeds at the cap under the expected-value calculation. This
+analysis proceeds at the cap under the expected value calculation. This
 matches how simtrial applies `max_extension_for_target_event`, despite
 the latter argument’s name. When a relative extension and an absolute
 deadline are both part of the plan, supply both cap arguments; the
@@ -498,28 +498,28 @@ data.frame(
   `"min_planned_actual"`. Information-based spending tracks the fraction
   of statistical information accumulated; calendar-based spending sets
   `usTime = lsTime = T / max(T)`. With a reference design `x`,
-  planned-versus-actual spending sets both spending-time vectors to
+  planned-versus-actual spending sets both spending time vectors to
   `pmin(x$n.I, actual events) / x$n.I[k]`, matching simtrial’s
   `ia_alpha_spending = "min_planned_actual"` convention. Custom spending
   times can also be passed via `usTime` and `lsTime`, but they are
   ignored for the latter two modes.
 
-- **`informationRates`**: Planned information-fraction caps (complete
+- **`informationRates`**: Planned information fraction caps (complete
   vector of length `k`, without missing values). At each analysis, the
   effective spending time is `pmin(informationRates, actual_timing)`.
   Thus, spending cannot run ahead of either the planned information
   schedule or the information actually accumulated. `informationRates`
   takes precedence over `spending`, `usTime`, and `lsTime`; upper and
-  lower spending both use the same effective spending-time vector.
+  lower spending both use the same effective spending time vector.
 
 - **`fullSpendingAtFinal`**: When `TRUE`, the final element of the upper
-  and lower spending-time vectors is forced to 1 after applying
+  and lower spending time vectors is forced to 1 after applying
   `informationRates`, calendar spending, or user-supplied `usTime` /
-  `lsTime`. This is useful when a selected spending-time vector would
-  otherwise leave either upper- or lower-bound spending incomplete.
+  `lsTime`. This is useful when a selected spending time vector would
+  otherwise leave either upper or lower bound spending incomplete.
 
 - **`method`**: One of `"LachinFoulkes"` (default), `"Schoenfeld"`,
-  `"Freedman"`, or `"BernsteinLagakos"`. Controls how fixed-design
+  `"Freedman"`, or `"BernsteinLagakos"`. Controls how fixed design
   events (`n.fix`) and drift parameter \\\theta\\ are computed when `x`
   is not provided. When `x` is provided, `x$n.fix` and, implicitly,
   \\\theta\\ are used directly for exact consistency with the design.
@@ -629,7 +629,7 @@ times, minimum follow-up after enrollment completes, and caps on how
 long analyses can be delayed.
 [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md)
 lets you combine all of these in a single call. As noted above, these
-are expected-value calculations; simulation is needed to characterize
+are expected value calculations; simulation is needed to characterize
 variability in when the rules are met. For instance, the following
 examples show the impact of slower enrollment and faster control
 failures when timing floors and extension caps are applied together.
@@ -651,7 +651,7 @@ We layer four criteria:
 | `maxExtension`        | 3 mo  | 12 mo               | 20 mo                |
 
 The floor for each analysis is the *latest* of the applicable
-`plannedCalendarTime`, `minN + minFollowUp`, and previous-analysis
+`plannedCalendarTime`, `minN + minFollowUp`, and previous analysis
 constraints. If expected events have not reached the target at the
 floor, the analysis can be extended until the time that expected events
 reach the target, up to `plannedCalendarTime + maxExtension`.
@@ -827,7 +827,7 @@ event count at each analysis may be lower than planned. By default,
 bounds are computed at the scenario’s information fractions,
 `n.I / max(n.I)`, which always end at 1. With a reference design `x`,
 `spending = "min_planned_actual"` instead uses
-`pmin(x$n.I, scenario n.I) / x$n.I[k]`. This is the expected-value
+`pmin(x$n.I, scenario n.I) / x$n.I[k]`. This is the expected value
 analogue of simtrial’s planned-versus-actual spending option: spending
 cannot run ahead of the planned event count at a look or the events
 expected under the scenario.
@@ -867,17 +867,17 @@ data.frame(
     ## 2        2          235.5           189.3                   0.536
     ## 3        3          353.2           233.6                   0.661
 
-The same effective spending-time vector is used for the upper and lower
+The same effective spending time vector is used for the upper and lower
 bounds. Set `fullSpendingAtFinal = TRUE` to spend fully at the final
 analysis, corresponding to simtrial’s
-`fa_alpha_spending = "full_alpha"`; leave it `FALSE` for
-information-fraction final spending.
+`fa_alpha_spending = "full_alpha"`; leave it `FALSE` for information
+fraction final spending.
 
-#### User-specified spending-time caps with `informationRates`
+#### User-specified spending time caps with `informationRates`
 
 For a spending schedule specified directly rather than through the
 reference design’s planned event counts, `informationRates` supplies
-planned information-fraction caps. The effective spending time is
+planned information fraction caps. The effective spending time is
 `pmin(informationRates, actual_timing)` at each analysis. This prevents
 spending ahead of the planned information schedule when events arrive
 faster than planned and ahead of the information actually accumulated
@@ -887,7 +887,7 @@ precedence over `spending = "calendar"` and over manual `usTime` /
 
 Setting `fullSpendingAtFinal = TRUE` forces both the upper and lower
 effective spending times at the final analysis to 1 after the caps are
-applied. The example below uses a final planned information-fraction cap
+applied. The example below uses a final planned information fraction cap
 of 0.95 to show the effect explicitly. Without `fullSpendingAtFinal`,
 the final effective spending time would remain 0.95 rather than 1.
 
@@ -1117,7 +1117,7 @@ Any futility bound that would exceed the new efficacy bound is clipped.
 
 For test types 1, 4, 6, and 8 this non-binding calculation is
 appropriate for evaluating alpha propagated by a Maurer–Bretz graphical
-multiple-testing procedure. For binding test types 2, 3, 5, and 7, the
+multiple testing procedure. For binding test types 2, 3, 5, and 7, the
 calculation below is a planning sensitivity analysis only and should not
 be interpreted as graphical alpha recycling or as a sequential p-value.
 
@@ -1340,10 +1340,10 @@ cat("Original final expected events:", round(pwr_design$n.I[design$k], 1), "\n")
 
 ``` r
 
-cat("Slower-enrollment final events:", round(pwr_slow_enroll$n.I[design$k], 1), "\n")
+cat("Slower enrollment final events:", round(pwr_slow_enroll$n.I[design$k], 1), "\n")
 ```
 
-    ## Slower-enrollment final events: 176.6
+    ## Slower enrollment final events: 176.6
 
 ``` r
 
@@ -1354,10 +1354,10 @@ cat("Original power:", round(pwr_design$power * 100, 1), "%\n")
 
 ``` r
 
-cat("Slower-enrollment power:", round(pwr_slow_enroll$power * 100, 1), "%\n")
+cat("Slower enrollment power:", round(pwr_slow_enroll$power * 100, 1), "%\n")
 ```
 
-    ## Slower-enrollment power: 62.9 %
+    ## Slower enrollment power: 62.9 %
 
 ### Calendar-based spending
 

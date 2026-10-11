@@ -117,7 +117,7 @@
 </h2>
 <p><strong>gsEffectSpending()</strong> selects spending parameters so
 that approximate observed treatment effects at specified interim
-efficacy, futility or harm bounds match natural-scale targets. A single
+efficacy, futility or harm bounds match natural scale targets. A single
 function supports one boundary or a joint fit. It builds on the
 established gsDesign boundary and probability calculations.</p>
 <p>This answers a different question from CP, PP or conditional
@@ -126,7 +126,7 @@ stopping boundary?” The result still specifies spending functions,
 rather than only isolated boundary values. Planned power and nominal
 error budgets are retained by recalculating information. Maximum sample
 size may therefore change.</p>
-<p>Effects at bounds are normal-theory approximations, not bias-adjusted
+<p>Effects at bounds are normal theory approximations, not bias-adjusted
 sequential estimates. The candidate’s information must be used in each
 transformation. A target cannot generally be converted to a fixed Z
 boundary once, using the original sample size.</p>
@@ -226,7 +226,7 @@ requested effects simultaneously.</p>
 <span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsProbability.html">gsProbability</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">replay</span>, theta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">replay</span><span class="op">$</span><span class="va">delta</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  Quantity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fixed-design N"</span>, <span class="st">"Reference maximum N"</span>, <span class="st">"Fitted maximum N"</span>,</span>
+<span>  Quantity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fixed design N"</span>, <span class="st">"Reference maximum N"</span>, <span class="st">"Fitted maximum N"</span>,</span>
 <span>               <span class="st">"Inflation over fixed design (%)"</span>, <span class="st">"Actual type I error"</span>,</span>
 <span>               <span class="st">"Power at planned alternative"</span><span class="op">)</span>,</span>
 <span>  Value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_fixed</span>, <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">n.I</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">replay</span><span class="op">$</span><span class="va">n.I</span>, <span class="fl">1</span><span class="op">)</span>,</span>
@@ -240,7 +240,7 @@ requested effects simultaneously.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">Fixed-design N</td>
+<td align="left">Fixed design N</td>
 <td align="right">1050.7423</td>
 </tr>
 <tr class="even">
@@ -268,7 +268,7 @@ requested effects simultaneously.</p>
 <p>Actual type I error with lower stopping enforced can differ from the
 nominal efficacy budget. Check the design’s binding/nonbinding
 conventions, not merely its stored alpha. A successful effect match also
-does not establish that its sample-size inflation is acceptable; a
+does not establish that its sample size inflation is acceptable; a
 practical limit such as 20% over a fixed design may be part of design
 selection.</p>
 <p>Sample sizes here are continuous planning values. After rounding,
@@ -347,7 +347,7 @@ recheck effects and operating characteristics.</p>
 <p>CP, CP H1 and PP in the summary give additional perspectives on these
 boundaries; none was directly targeted. The default PP prior is the
 broad normal prior used by gsBoundSummary(), centered halfway between
-the null and planned alternative on the standardized-effect scale.</p>
+the null and planned alternative on the standardized effect scale.</p>
 </div>
 </div>
 <div class="section level2">
@@ -389,7 +389,7 @@ results.</p>
 <p>For a response endpoint, let the control response probability be 0.1
 and experimental response probability 0.2. The alternative risk
 difference is 0.1. nBinomial() supplies the fixed sample size; delta0
-and delta1 define the natural-scale interpretation.</p>
+and delta1 define the natural scale interpretation.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_binomial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/varBinomial.html">nBinomial</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">.1</span>, p2 <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span></span>
 <span><span class="va">rd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
@@ -451,13 +451,13 @@ and delta1 define the natural-scale interpretation.</p>
 Piecewise linear spending is also supported, with knots fixed at the
 selected spending times. Equal numbers of parameters and targets do not
 prove uniqueness.</p>
-<p>The risk-difference mapping is approximate: it does not identify an
-exact observed 2-by-2 table. Invalid risk-difference targets are
+<p>The risk difference mapping is approximate: it does not identify an
+exact observed 2-by-2 table. Invalid risk difference targets are
 rejected, and out-of-range achieved approximations are not silently
 clipped.</p>
 </div>
 <div class="section level2">
-<h2 id="hazard-ratios-require-explicit-event-scale-metadata">Hazard ratios require explicit event-scale metadata<a class="anchor" aria-label="anchor" href="#hazard-ratios-require-explicit-event-scale-metadata"></a>
+<h2 id="hazard-ratios-require-explicit-event-scale-metadata">Hazard ratios require explicit event scale metadata<a class="anchor" aria-label="anchor" href="#hazard-ratios-require-explicit-event-scale-metadata"></a>
 </h2>
 <p>An HR transformation must distinguish event information from patient
 sample size. Here ratio = 2 is experimental/control allocation, the null
@@ -523,18 +523,18 @@ allocation.</p>
 </tr>
 </tbody>
 </table>
-<p>The function checks the event-scale drift against the supplied HR
+<p>The function checks the event scale drift against the supplied HR
 metadata. It also supports an alternative HR above the null; the effect
 direction is explicit, rather than assuming HR below 1 is always the
 favorable direction.</p>
 <p>This example uses a statistical event-driven design.
 <code><a href="../reference/gsEffectSpending.html">gsEffectSpending()</a></code> also accepts survival objects directly
 and recalculates their enrollment and event summaries. HR calibration
-still requires explicit event-scale metadata, which must match the
+still requires explicit event scale metadata, which must match the
 survival object’s allocation and hazard ratios. Its chosen survival
-method determines the event-count drift.</p>
+method determines the event count drift.</p>
 <p>For risk ratios, use scale = “rr” with correctly specified
-<strong>log-ratio</strong> delta0/delta1 reference metadata, but supply
+<strong>log ratio</strong> delta0/delta1 reference metadata, but supply
 target_effect as a ratio.</p>
 </div>
 <div class="section level2">
@@ -568,11 +568,11 @@ choosing a design.</p>
 <div class="section level2">
 <h2 id="built-on-established-computational-tools">Built on established computational tools<a class="anchor" aria-label="anchor" href="#built-on-established-computational-tools"></a>
 </h2>
-<p>The new interface reuses gsDesign(), spending families,
-effect-at-bound transformations and joint probability calculations. Its
-innovation is the clinical-scale calibration request and coordinated
-parameter search. Tests reconstruct designs and verify their properties
-using these existing tools, including joint targets, ratio direction and
+<p>The new interface reuses gsDesign(), spending families, effect at
+bound transformations and joint probability calculations. Its innovation
+is the clinical scale calibration request and coordinated parameter
+search. Tests reconstruct designs and verify their properties using
+these existing tools, including joint targets, ratio direction and
 allocation, and error handling.</p>
 <p>This is the same development principle as the CP/PP and assurance
 methods: rapid AI-assisted development <strong>on top of established

@@ -1,7 +1,7 @@
 # Exact conditional power for a group sequential binomial design
 
 Computes exact conditional probabilities of crossing future boundaries,
-given the cumulative experimental-arm event count at an interim
+given the cumulative experimental arm event count at an interim
 analysis.
 
 ## Usage
@@ -31,7 +31,7 @@ gsCPBinomialExact(
 
 - x.i:
 
-  Cumulative experimental-arm events observed at analysis \`i\`.
+  Cumulative experimental arm events observed at analysis \`i\`.
 
 - theta:
 
@@ -68,10 +68,10 @@ continuation probabilities, and total conditional power and futility.
 
 ## Details
 
-Conditional on the interim count, future experimental-arm event
+Conditional on the interim count, future experimental arm event
 increments are independent binomial random variables. Their distribution
 is propagated through the remaining integer boundaries. Thus the
-calculation is exact under the same conditional-binomial assumptions
+calculation is exact under the same conditional binomial assumptions
 used by \[gsBinomialExact()\].
 
 The calculation conditions only on the statistic at analysis \`i\`, as

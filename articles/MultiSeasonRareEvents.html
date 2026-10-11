@@ -120,7 +120,7 @@
 seasonal events. The motivating use case is a vaccine efficacy trial
 with annual high-risk seasons. The same ideas can be adapted to
 infectious disease studies where simple superiority or non-inferiority
-may be considered. For a general introduction to exact-binomial vaccine
+may be considered. For a general introduction to exact binomial vaccine
 efficacy monitoring, see
 <code><a href="../articles/VaccineEfficacy.html">vignette("VaccineEfficacy", package = "gsDesign")</a></code>.</p>
 <p>We focus on exact binomial monitoring with spending functions:</p>
@@ -197,15 +197,15 @@ is in the experimental group is</p>
 <div class="section level2">
 <h2 id="initial-group-sequential-setup">Initial group sequential setup<a class="anchor" aria-label="anchor" href="#initial-group-sequential-setup"></a>
 </h2>
-<p>To define spending-function monitoring, we first construct a
-calendar-time <code>gsSurvCalendar</code> object and then convert to
-integer event looks and exact binomial bounds. Here we use 3 looks at
-months 8, 20, 32, corresponding to the end of each season after that
-year’s enrollment period. Enrollment is modeled as 2 months on and 10
-months off each year for 3 years. The <code>gsSurvCalendar</code> inputs
-use months as the time unit, so seasonal event and dropout probabilities
-are converted to monthly hazards before fitting the design. Since events
-are seasonal, the control event hazard is modeled as piecewise constant:
+<p>To define spending function monitoring, we first construct a calendar
+time <code>gsSurvCalendar</code> object and then convert to integer
+event looks and exact binomial bounds. Here we use 3 looks at months 8,
+20, 32, corresponding to the end of each season after that year’s
+enrollment period. Enrollment is modeled as 2 months on and 10 months
+off each year for 3 years. The <code>gsSurvCalendar</code> inputs use
+months as the time unit, so seasonal event and dropout probabilities are
+converted to monthly hazards before fitting the design. Since events are
+seasonal, the control event hazard is modeled as piecewise constant:
 positive for the 6-month high-risk season and zero afterward.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lambdaC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">seasonal_event_rate_control</span><span class="op">)</span> <span class="op">/</span> <span class="va">season_length_months</span>, <span class="fl">0</span><span class="op">)</span></span>
@@ -213,7 +213,7 @@ positive for the 6-month high-risk season and zero afterward.</p>
 <span><span class="va">eta</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">dropout_6mo</span><span class="op">)</span> <span class="op">/</span> <span class="va">season_length_months</span></span>
 <span></span>
 <span><span class="co"># Integer conversion can slightly adjust total enrollment so the final integer</span></span>
-<span><span class="co"># event target is achievable with the seasonal piecewise event-rate model.</span></span>
+<span><span class="co"># event target is achievable with the seasonal piecewise event rate model.</span></span>
 <span><span class="va">design_calendar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvCalendar.html">gsSurvCalendar</a></span><span class="op">(</span></span>
 <span>  test.type <span class="op">=</span> <span class="fl">4</span>,                  <span class="co"># Non-binding lower bound framework</span></span>
 <span>  alpha <span class="op">=</span> <span class="va">alpha</span>,                  <span class="co"># One-sided Type I error</span></span>
@@ -225,7 +225,7 @@ positive for the 6-month high-risk season and zero afterward.</p>
 <span>  sfl <span class="op">=</span> <span class="va">sfHSD</span>,                    <span class="co"># Futility spending function</span></span>
 <span>  sflpar <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>,                    <span class="co"># Futility spending parameter</span></span>
 <span>  lambdaC <span class="op">=</span> <span class="va">lambdaC</span>,              <span class="co"># Control hazard rate per month by period</span></span>
-<span>  S <span class="op">=</span> <span class="va">S</span>,                          <span class="co"># Event-rate period duration in months</span></span>
+<span>  S <span class="op">=</span> <span class="va">S</span>,                          <span class="co"># Event rate period duration in months</span></span>
 <span>  hr <span class="op">=</span> <span class="va">hr1</span>,                       <span class="co"># Alternative hypothesis HR</span></span>
 <span>  hr0 <span class="op">=</span> <span class="va">hr0</span>,                      <span class="co"># Null hypothesis HR</span></span>
 <span>  eta <span class="op">=</span> <span class="va">eta</span>,                      <span class="co"># Dropout hazard rate per month</span></span>
@@ -941,7 +941,7 @@ th, td{ padding: 5px; }
 <span><span class="va">planned_enrollment_control</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">planned_enrollment_by_season</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">ratio</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">planned_enrollment_experimental</span> <span class="op">&lt;-</span> <span class="va">planned_enrollment_by_season</span> <span class="op">-</span> <span class="va">planned_enrollment_control</span></span>
 <span><span class="va">planned_cum_enrollment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">planned_enrollment_by_season</span><span class="op">)</span></span></code></pre></div>
-<p>The table above is the initial survival-design approximation and
+<p>The table above is the initial survival design approximation and
 includes the approximate futility <code>Z</code>-boundary. The table
 below summarizes planned event looks and exact binomial
 efficacy/futility bounds. In this table, <code>x</code> is the
@@ -960,7 +960,7 @@ analysis.</p>
 <span>    theta <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">theta</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="co"># Null event probability in experimental arm</span></span>
 <span>    n.I <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span>,        <span class="co"># Cumulative events by analysis</span></span>
 <span>    a <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">bound</span>,  <span class="co"># Efficacy bounds (x &lt;= a crosses)</span></span>
-<span>    b <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span> <span class="op">+</span> <span class="fl">1</span>       <span class="co"># Non-binding upper bound for alpha-spend check</span></span>
+<span>    b <span class="op">=</span> <span class="va">design_exact</span><span class="op">$</span><span class="va">n.I</span> <span class="op">+</span> <span class="fl">1</span>       <span class="co"># Non-binding upper bound for alpha spending check</span></span>
 <span>  <span class="op">)</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -1203,7 +1203,7 @@ demonstrate that the repeated p-value is greater than 0.025.</p>
 <div class="section level2">
 <h2 id="update-exact-bounds-at-analysis-time">Update exact bounds at analysis time<a class="anchor" aria-label="anchor" href="#update-exact-bounds-at-analysis-time"></a>
 </h2>
-<p>The official package path for updating exact-binomial bounds at
+<p>The official package path for updating exact binomial bounds at
 analysis time is to call <code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code> with
 <code>observedEvents</code>.</p>
 <p>The spending denominator remains the original planned final event
@@ -1218,7 +1218,7 @@ changes the final spending time to 1 and leaves earlier looks
 unchanged.</p>
 <p>For explicit control, you can pass <code>usTime</code> (and for
 <code>test.type = 4</code>, <code>lsTime</code>) directly to
-<code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code>, following the same spending-time
+<code><a href="../reference/toBinomialExact.html">toBinomialExact()</a></code>, following the same spending time
 conventions as <code><a href="../reference/gsDesign.html">gsDesign()</a></code>, <code><a href="../reference/nSurv.html">gsSurv()</a></code>, and
 <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>. As above, setting <code>x</code> one
 event above an updated efficacy bound at a look gives a repeated p-value
@@ -1310,7 +1310,7 @@ event count is below plan.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span>, decimals <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Lightweight simulation results"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"Exact-binomial monitoring with seasonal analyses"</span></span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Exact binomial monitoring with seasonal analyses"</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
 <span>    <span class="st">"For VE=30% scenarios, efficacy crossing probability is Type I error under the non-binding futility convention (futility crossings do not block later efficacy crossings)."</span>,</span>
@@ -1342,7 +1342,7 @@ event count is below plan.</p>
   ],
   "header": {
     "title": "Lightweight simulation results",
-    "subtitle": "Exact-binomial monitoring with seasonal analyses"
+    "subtitle": "Exact binomial monitoring with seasonal analyses"
   },
   "footnotes": [
     {
@@ -1469,7 +1469,7 @@ monitoring for both <code>VE = 30%</code> and <code>VE = 80%</code>.</p>
 }
 })</script><p>This table provides side-by-side comparisons of Type I error, power,
 and futility stopping probability without and with adaptation under the
-lower-than-planned event-rate scenario.</p>
+lower-than-planned event rate scenario.</p>
 </div>
 <div class="section level2">
 <h2 id="larger-offline-runs-template">Larger offline runs (template)<a class="anchor" aria-label="anchor" href="#larger-offline-runs-template"></a>
@@ -1515,7 +1515,7 @@ lower-than-planned event-rate scenario.</p>
 </h2>
 <ul>
 <li>The adaptive pathway shown here is blinded because it uses total
-event counts only; treatment-group differences are not used to update
+event counts only; treatment group differences are not used to update
 enrollment.</li>
 <li>Spending fractions are set by <code>timing</code>; with the current
 specification they are 0.333, 0.667, 1.</li>

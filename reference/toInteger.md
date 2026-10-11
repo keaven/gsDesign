@@ -62,7 +62,7 @@ event count `d` is rounded in the same way as the final event count for
 a `gsSurv` object, and its total sample size `n` is rounded according to
 `ratio`.
 
-For a `gsSurv` object, `x$n.I` is an event-count schedule. `toInteger()`
+For a `gsSurv` object, `x$n.I` is an event count schedule. `toInteger()`
 rounds the final planned event count (up when `roundUpFinal = TRUE`;
 otherwise to nearest integer, with a 0.01 tolerance), then derives
 interim integer event targets from `x$timing * final_events`. Interim
@@ -71,24 +71,24 @@ sequential boundaries and spending are recomputed with
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
 at the integer event counts. For a single-analysis survival design, the
 fixed efficacy boundary is retained and its power is recomputed at the
-integer final event count without invoking multi-look group-sequential
+integer final event count without invoking multi-look group sequential
 calculations.
 
 Total sample size for a survival design is then updated under a fixed
 calendar plan (same enrollment periods, study duration, and minimum
-follow-up). Enrollment rates are scaled proportionally to the
-final-event inflation factor and rounded to the nearest allocation
-multiple `ratio + 1` (or rounded up when `roundUpFinal = TRUE`), with
-additional allocation-step adjustment only if needed to make the integer
-final event target achievable.
+follow-up). Enrollment rates are scaled proportionally to the final
+event inflation factor and rounded to the nearest allocation multiple
+`ratio + 1` (or rounded up when `roundUpFinal = TRUE`), with additional
+allocation step adjustment only if needed to make the integer final
+event target achievable.
 
-If fixed-calendar enrollment-rate inflation cannot make the integer
+If fixed calendar enrollment rate inflation cannot make the integer
 final event target feasible, `toInteger()` falls back to a
 variable-duration solve and issues a warning. For a complete seasonal
-exact-binomial monitoring workflow, see
+exact binomial monitoring workflow, see
 [`vignette("MultiSeasonRareEvents", package = "gsDesign")`](https://keaven.github.io/gsDesign/articles/MultiSeasonRareEvents.md).
 
-Selective-bound settings (`testUpper`, `testLower`, `testHarm`, and harm
+Selective bound settings (`testUpper`, `testLower`, `testHarm`, and harm
 spending for `test.type` 7 or 8) are carried from the input design into
 the internal
 [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
