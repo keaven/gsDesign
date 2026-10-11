@@ -65,7 +65,7 @@ stopping. The default input \code{astar = 0} selects \code{0.1} for harm
 designs and \eqn{1 - }\code{alpha} for types 5 and 6.
 Actual harm stopping probabilities account for futility and can be smaller
 than the spending targets. Capping harm at an active futility bound can also
-reduce attained spending. See the harm-monitoring section in
+reduce attained spending. See the harm monitoring section in
 \code{\link{gsDesign}}.}
 
 \item{sfu}{A spending function or a character string indicating a boundary

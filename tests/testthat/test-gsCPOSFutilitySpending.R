@@ -80,7 +80,7 @@ test_that("CPOS inputs and controls use dedicated errors", {
   for (type in c(7, 8)) {
     harm <- gsDesign(k = 3, test.type = type)
     expect_error(gsCPOSFutilitySpending(harm, .8, prior = prior),
-                  "harm-bound", class = "gsCPOSFutilitySpending_input_error")
+                  "harm bound", class = "gsCPOSFutilitySpending_input_error")
   }
   expect_error(gsCPOSFutilitySpending(x, 1, prior = prior),
                 "target_cpos", class = "gsCPOSFutilitySpending_input_error")

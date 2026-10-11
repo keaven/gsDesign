@@ -8,7 +8,7 @@ numint_print_output <- function(x) {
   x[nzchar(x)]
 }
 
-testthat::test_that("printing designs with zero-spend analyses is stable", {
+testthat::test_that("printing designs with zero spending analyses is stable", {
   testthat::local_edition(3)
   x <- gsDesign(k = 4, test.type = 1, sfu = sfTruncated, sfupar = list(sf = sfHSD, param = -4, trange = c(0.4, 1)))
   testthat::expect_snapshot(print(x), transform = numint_print_output)

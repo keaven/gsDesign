@@ -22,7 +22,7 @@ sequentialPValueBinomialExact(
 This must have at most 1 value greater than or equal to planned
 final events (`gsD$maxn.IPlan` if available, otherwise `max(gsD$n.I)`).}
 
-\item{x}{Integer experimental-arm event counts at the analyses in `n.I`.}
+\item{x}{Integer experimental arm event counts at the analyses in `n.I`.}
 
 \item{interval}{Search interval for the p-values. As in [sequentialPValue()],
 values outside this interval are truncated to the nearest endpoint.}

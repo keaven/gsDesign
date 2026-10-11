@@ -764,7 +764,7 @@ gsBoundSummary0 <- function(
 #' and positive. This preserves the null HR and effect direction when a
 #' survival design is reconstructed with \code{gsDesign()}. Explicit HR
 #' fields take precedence. If the null HR cannot be recovered, a warning
-#' is issued and HR-at-bound calculations assume \code{hr0 = 1}.
+#' is issued and HR at bound calculations assume \code{hr0 = 1}.
 #'
 #' \code{Spending: }Incremental error spending at each given analysis. For
 #' asymmetric designs, futility bound will have beta-spending summarized.
@@ -865,8 +865,8 @@ gsBoundSummary0 <- function(
 #' efficacy bound
 #' columns are headed by individual alpha levels. The alpha level of the input
 #' design is always included as the first column. Alternate alpha levels retain
-#' the efficacy testing schedule in \code{x$testUpper}. Binding lower-bound
-#' designs, including test type 7, are not supported for alternate-alpha
+#' the efficacy testing schedule in \code{x$testUpper}. Binding lower bound
+#' designs, including test type 7, are not supported for alternate alpha
 #' summaries because they do not satisfy the non-binding framework used for
 #' Maurer--Bretz graphical multiple testing.
 #' @param row.names indicator of whether or not to print row names
@@ -1009,7 +1009,7 @@ gsBoundSummary <- function(
     alpha = NULL,
     ...) {
   if (gsBoundSummaryUsesHR(x, deltaname)) {
-    # gsDesign() retains natural-scale parameters, but not survival HR fields.
+    # gsDesign() retains natural scale parameters, but not survival HR fields.
     # Only interpret these as log HRs when the summary uses the log scale.
     if (logdelta || inherits(x, "gsSurv")) {
       for (field in c("hr0", "hr")) {
@@ -1155,7 +1155,7 @@ gsBoundSummary <- function(
     }
   }
 
-  # Reapply the original efficacy schedule after alternate-alpha probability
+  # Reapply the original efficacy schedule after alternate alpha probability
   # rows are recomputed so no characteristic is reintroduced at a skipped look.
   inactive_upper <- which(gsBoundDisplayInactive(x$upper, x$testUpper))
   if (length(inactive_upper) > 0) {

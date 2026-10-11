@@ -261,10 +261,10 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' options 3 and 4 must compute boundary crossing probabilities under both the
 #' null and alternative hypotheses, deriving these designs can take longer than
 #' other options. Options 5 and 6 compute lower bound spending under the null
-#' hypothesis. Options 7 and 8 add a harm bound to beta-spending futility:
+#' hypothesis. Options 7 and 8 add a harm bound to beta spending futility:
 #' option 7 treats both futility and harm bounds as binding for Type I error,
 #' while option 8 treats both as non-binding. Futility and harm are mutually
-#' exclusive lower-tail stopping outcomes with separately specified spending
+#' exclusive lower tail stopping outcomes with separately specified spending
 #' functions.
 #'
 #' @param k Number of analyses planned, including interim and final.
@@ -289,7 +289,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' designs and \eqn{1 - }\code{alpha} for types 5 and 6.
 #' Actual harm stopping probabilities account for futility and can be smaller
 #' than the spending targets. Capping harm at an active futility bound can also
-#' reduce attained spending. See the harm-monitoring section in
+#' reduce attained spending. See the harm monitoring section in
 #' \code{\link{gsDesign}}.
 #' @param delta Effect size for theta under alternative hypothesis. This can be
 #' set to the standardized effect size to generate a sample size if
@@ -445,7 +445,7 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' \code{sfharm = sfLDPocock} provide relatively early spending and aim to flag
 #' moderately small one-sided p-values favoring harm. At harm boundary \eqn{h},
 #' that nominal p-value is \eqn{\Phi(h)}, not the cumulative spending and not
-#' the efficacy-direction p-value displayed by \code{gsBoundSummary()}.
+#' the efficacy direction p-value displayed by \code{gsBoundSummary()}.
 #' There is no fixed nominal p-value cutoff guaranteed at every analysis.
 #' With more analyses, a larger total harm spending \code{astar} may be desired
 #' to retain similarly permissive nominal harm thresholds, at the cost of more
@@ -1539,7 +1539,7 @@ gsDType6 <- function(x) {
 # gsDType7 function [sinew] ----
 gsDType7 <- function(x) {
   # test.type 7: binding futility (test.type 3) + binding harm bound (test.type 5)
-  # Step 1: Compute design as test.type 3 (binding beta-spending futility bound)
+  # Step 1: Compute design as test.type 3 (binding beta spending futility bound)
   saved_test_type <- x$test.type
   saved_harm <- x$harm
   saved_preserve_k <- x$preserve.k
@@ -1580,7 +1580,7 @@ gsDType7 <- function(x) {
 # gsDType8 function [sinew] ----
 gsDType8 <- function(x) {
   # test.type 8: non-binding futility (test.type 4) + non-binding harm bound (test.type 6)
-  # Step 1: Compute design as test.type 4 (non-binding beta-spending futility bound)
+  # Step 1: Compute design as test.type 4 (non-binding beta spending futility bound)
   saved_test_type <- x$test.type
   saved_harm <- x$harm
   x$test.type <- 4L
@@ -2068,7 +2068,7 @@ gsApplyTestBounds <- function(x, testBounds) {
     }
 
     # Re-call gsDType with fixed n.I (length(x$n.I) == k triggers the
-    # bound-recomputation path in each gsDType variant)
+    # bound recomputation path in each gsDType variant)
     x <- switch(x$test.type,
       gsDType1(x),
       gsDType2and5(x),

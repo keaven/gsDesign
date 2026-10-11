@@ -67,7 +67,7 @@ test_that("HR summaries retain fallback warnings without usable log parameters",
   }
 })
 
-test_that("log-scale non-HR summaries keep their existing transformations", {
+test_that("log scale non-HR summaries keep their existing transformations", {
   for (label in c("RR", "OR")) {
     x <- gsDesign(k = 2, delta0 = log(1.2), delta1 = log(.8), endpoint = "Binomial")
     out <- expect_no_warning(gsBoundSummary(x, deltaname = label, logdelta = TRUE))

@@ -1,8 +1,8 @@
 #' Summarize an exact binomial vaccine or prevention efficacy design
 #'
 #' Creates a vaccine or prevention efficacy summary table from an exact
-#' binomial design. The table includes event-count bounds, efficacy at each bound,
-#' cumulative error spending, and cumulative efficacy-crossing probabilities
+#' binomial design. The table includes event count bounds, efficacy at each bound,
+#' cumulative error spending, and cumulative efficacy crossing probabilities
 #' for selected efficacy assumptions. Optional time-to-event design
 #' information adds planned analysis times and expected enrollment.
 #'
@@ -20,7 +20,7 @@
 #' @return A tibble of class \code{gsVETable} with one row per analysis. The
 #'   columns contain analysis number, optional timing and enrollment, total
 #'   cases, exact efficacy and futility bounds, efficacy at each bound,
-#'   cumulative alpha and beta spending, and cumulative efficacy-crossing
+#'   cumulative alpha and beta spending, and cumulative efficacy crossing
 #'   probability under each value in \code{ve}. Pass the result to
 #'   \code{\link[lt]{lt}()} for a formatted table with explanatory footnotes.
 #'

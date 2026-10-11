@@ -10,18 +10,18 @@
 #' Primarily, this is used for updating a design at the time of analysis.
 #' @param alpha Optional alpha level for deriving updated exact efficacy bounds.
 #'   If \code{NULL}, the alpha level from \code{x} is used.
-#' @param usTime Optional upper spending-time override (length \code{k} or
+#' @param usTime Optional upper spending time override (length \code{k} or
 #'   \code{k - 1}, with final value appended as 1 if needed). If \code{NULL},
 #'   this defaults to \code{observedEvents / x$maxn.IPlan} (capped at 1) when
 #'   \code{observedEvents} is supplied, or to the planned design timing
 #'   otherwise.
-#' @param lsTime Optional lower spending-time override for \code{test.type = 4},
+#' @param lsTime Optional lower spending time override for \code{test.type = 4},
 #'   \code{6}, or \code{8}
 #'   (same length and monotonicity requirements as \code{usTime}). If
 #'   \code{NULL}, it defaults to \code{usTime}.
 #' @param maxSpend Logical scalar. If `TRUE`, force full alpha spending (and, for
 #'   `test.type = 4` or `8`, full beta spending; for `test.type = 6`, full
-#'   lower-bound spending under the null; and, for `test.type = 8`, full harm
+#'   lower bound spending under the null; and, for `test.type = 8`, full harm
 #'   spending under the null) at the final analysis even when
 #'   `observedEvents[k] < x$maxn.IPlan`. This keeps earlier analysis spending
 #'   unchanged and applies the override only at the last look.
@@ -35,16 +35,16 @@
 #' event count as denominator, including under- and over-runs; \code{maxSpend}
 #' can request full spending for an under-run. No artificial interim is added.
 #'
-#' Test types 1 (one-sided), 4 (non-binding beta-spending futility), 6
-#' (non-binding lower-bound spending under the null), and 8 (non-binding
+#' Test types 1 (one-sided), 4 (non-binding beta spending futility), 6
+#' (non-binding lower bound spending under the null), and 8 (non-binding
 #' futility and harm) are supported for full conversion. For Type 8, the exact
-#' upper event-count stopping probability is partitioned into mutually
+#' upper event count stopping probability is partitioned into mutually
 #' exclusive futility and harm components. Harm spending is calibrated under
 #' the null ignoring futility stopping, but retaining efficacy stopping.
 #' Reported harm probabilities assume futility is followed and can be smaller
 #' than spending targets. Discreteness and the requirement that the harm region
 #' be nested within the active futility region can also reduce spending. Binding
-#' designs (types 2, 3, 5, and 7) are outside the non-binding exact-efficacy
+#' designs (types 2, 3, 5, and 7) are outside the non-binding exact efficacy
 #' framework. Exact repeated and sequential efficacy
 #' p-values can nevertheless be computed for non-binding types 1, 4, 6, and 8
 #' with \code{repeatedPValueBinomialExact()} and
@@ -55,7 +55,7 @@
 #' by the initial asymptotic approximation. 
 #' Thus, the approximations are updated to satisfy the following requirements of \code{gsBinomialExact}:
 #' \code{a} (the efficacy bound) must be positive, non-decreasing, and strictly less than n.I
-#' \code{b} (the upper event-count stopping bound for futility, harm, or the
+#' \code{b} (the upper event count stopping bound for futility, harm, or the
 #' Type 6 lower bound) must be positive, non-decreasing, and strictly greater than a
 #' \code{n.I - b} must be non-decreasing and >= 0
 #'
@@ -63,7 +63,7 @@
 #' \code{observedEvents / x$maxn.IPlan}. If \code{maxSpend = TRUE}, the final
 #' spending time is set to 1 so all remaining spending is used at the last look.
 #' If \code{x$testLower} is present (for example from \code{gsSurv()} with
-#' selective lower-bound looks), lower-bound spending is flattened at analyses
+#' selective lower bound looks), lower bound spending is flattened at analyses
 #' where \code{testLower = FALSE}.
 #' For Type 4, the exact futility bound at a skipped look carries forward
 #' \code{n.I - b} from the preceding look (or uses \code{b = n.I + 1}
@@ -78,10 +78,10 @@
 #'   analysis-specific testing indicators, spending times, planned final event
 #'   count, `maxSpend`, and the evaluated conversion call. The retained
 #'   randomization ratio can be used by \code{\link{VEtable}}. For
-#'   `test.type = 6`, the exact object's upper event-count bound represents the
+#'   `test.type = 6`, the exact object's upper event count bound represents the
 #'   non-binding lower stopping bound, with its first probability column
 #'   calibrated under the null hypothesis. For `test.type = 8`, `upper`
-#'   represents all upper event-count stops, while `futility` and `harm`
+#'   represents all upper event count stops, while `futility` and `harm`
 #'   partition those stops into mutually exclusive components.
 #'
 #' @seealso \code{\link{gsBinomialExact}}, \code{\link{VEtable}}
@@ -122,7 +122,7 @@
 #' toBinomialExact(x, observedEvents = c(20,55,80))
 #' # Update exact efficacy bounds using a different alpha level
 #' toBinomialExact(x, observedEvents = c(20,55,80), alpha = 0.01)
-#' # Explicit spending-time override
+#' # Explicit spending time override
 #' toBinomialExact(x, observedEvents = c(20, 55, 80), usTime = c(.25, .65, 1))
 #' # Optionally force full spending at final look when final events are below plan
 #' toBinomialExact(x, observedEvents = c(20, 55, 75), maxSpend = TRUE)
@@ -131,10 +131,10 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
   if (!(x$test.type %in% c(1, 4, 6, 8))) {
     reason <- switch(
       as.character(x$test.type),
-      `2` = "symmetric two-sided boundaries are not represented by the exact lower-tail efficacy conversion",
-      `3` = "binding futility bounds are outside the non-binding exact-efficacy framework",
-      `5` = "binding lower bounds are outside the non-binding exact-efficacy framework",
-      `7` = "binding futility and harm bounds are outside the non-binding exact-efficacy framework",
+      `2` = "symmetric two-sided boundaries are not represented by the exact lower tail efficacy conversion",
+      `3` = "binding futility bounds are outside the non-binding exact efficacy framework",
+      `5` = "binding lower bounds are outside the non-binding exact efficacy framework",
+      `7` = "binding futility and harm bounds are outside the non-binding exact efficacy framework",
       "this test type is not supported"
     )
     stop(
@@ -268,16 +268,16 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
   }
   alpha_spend <- xx$upper$sf(alpha = alpha, t = timing, param = xx$upper$param)$spend
   if (x$test.type != 1) {
-    # Upper event-count probabilities represent the non-binding lower stopping
-    # bound (beta-spending futility for Types 4 and 8; H0 spending for Type 6).
+    # Upper event count probabilities represent the non-binding lower stopping
+    # bound (beta spending futility for Types 4 and 8; H0 spending for Type 6).
     b <- qbinom(p = pnorm(-xx$lower$bound), size = counts, prob = p0)
-    init_approx$b <- b # save initial upper event-count bound approximation
+    init_approx$b <- b # save initial upper event count bound approximation
 
     # check that b is non-decreasing, > a, and n.I - b is non-decreasing
     b <- pmin(b, counts + 1)
     b <- pmax(a + 1, b)
     b <- pmin(b, counts - dplyr::lag(counts, def = 0) + dplyr::lag(b, def = 1))
-    # Type 4 targets beta spending under H1. Type 6 targets lower-bound
+    # Type 4 targets beta spending under H1. Type 6 targets lower bound
     # spending under H0.
     lower_spend_total <- if (x$test.type %in% c(4, 8)) xx$beta else xx$astar
     lower_spend <- xx$lower$sf(
@@ -375,7 +375,7 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
       }
       # Only evaluate calibrated looks. In particular, a provisional bound
       # at look 2 can be invalid after updating look 1. Its value is irrelevant
-      # to the first-look probability, which is a simple binomial tail.
+      # to the first look probability, which is a simple binomial tail.
       upper_probability <- function(candidate) {
         if (j == 1L) {
           return(stats::pbinom(candidate - 1, counts[j], p1, lower.tail = FALSE))
@@ -408,7 +408,7 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
       }
     } else if (x$test.type == 6) {
       # Type 6 uses the same exact two-bound recursion, but chooses the upper
-      # event-count boundary to spend under H0 rather than under H1.
+      # event count boundary to spend under H0 rather than under H1.
       bmin <- a[j] + 1
       bmin <- ifelse(j == 1, bmin, max(bmin, b[j - 1]))
       bmax <- counts[j] + 1
@@ -461,9 +461,9 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
         }
       }
     } else if (x$test.type == 8) {
-      # Type 8 has three clinical regions in event-count space: efficacy at
+      # Type 8 has three clinical regions in event count space: efficacy at
       # or below a, futility above b but below h, and harm at or above h.
-      # Efficacy remains non-binding. The first upper event-count stop is
+      # Efficacy remains non-binding. The first upper event count stop is
       # calibrated to beta spending under H1, and h is calibrated to harm
       # spending under H0.
       if (isTRUE(active_lower[j])) {
@@ -555,8 +555,8 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
 }
 
 # Exact binomial recursion with mutually exclusive futility and harm regions.
-# The upper event-count stopping probability is partitioned at the harm bound;
-# continuation depends only on the first active upper event-count stop.
+# The upper event count stopping probability is partitioned at the harm bound;
+# continuation depends only on the first active upper event count stop.
 gsBinomialExactHarm <- function(theta, n.I, a, futility, harm, testLower, testHarm) {
   k <- length(n.I)
   ntheta <- length(theta)

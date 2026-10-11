@@ -67,11 +67,11 @@ A \code{c("gsCPOSFutilitySpending", "gsDesign")} object, retaining
   \code{achieved_beta} and \code{achieved_type1}.
 }
 \description{
-Select beta-spending parameters to match \code{gsCPOS()} targets at selected
+Select beta spending parameters to match \code{gsCPOS()} targets at selected
 interims, either preserving reference power or fixing reference information.
 }
 \details{
-Both modes target the existing \code{gsCPOS()} calculation. In fixed-information
+Both modes target the existing \code{gsCPOS()} calculation. In fixed information
 mode, \code{gsBound1()} derives lower bounds and an internal beta solve makes
 spending consistent with the final decision. For binding futility, changing
 lower bounds while fixing efficacy can increase actual type I error above
@@ -85,30 +85,31 @@ rejection given that neither stopping boundary has been crossed through
 interim \code{i}. It includes the entire previous stopping history.
 Conditioning on continuation reweights the effect distribution; this differs
 from \code{gsPP()}, which conditions on an exact interim statistic, and from
-unconditional \code{gsPOS()}. A point prior gives fixed-effect success
+unconditional \code{gsPOS()}. A point prior gives fixed effect success
 conditional on continuation, not conditional power at the futility bound.
 
-A fixed-design \code{gsPOS()} value at a separately chosen feasible sample
+A fixed design \code{gsPOS()} value at a separately chosen feasible sample
 size can be computed once and supplied as a benchmark target. The benchmark
 must not be recomputed from candidates. Preserving power while adjusting
-information is an extension of a fixed-information conditional-assurance
-rule, not an implementation of sample-size re-estimation. Inspect sample-size
+information is an extension of a fixed information conditional assurance
+rule, not an implementation of sample size re-estimation. Inspect sample size
 inflation, overall operating characteristics and effect sizes at all bounds.
 
-The supported spending families and one-target-per-free-parameter rule are
-the same as for \code{\link{gsPPFutilitySpending}}, including two-parameter
-families and \code{sfLinear}. The shared solver accepts only fits meeting
-every target tolerance; failure is not a proof of global infeasibility.
+The supported spending families and requirement for one target per free
+parameter are the same as for \code{\link{gsPPFutilitySpending}}, including
+two-parameter families and \code{sfLinear}. The shared solver accepts only
+fits meeting every target tolerance; failure is not a proof of global
+infeasibility.
 
 Candidate continuation probabilities at or below
 \code{sqrt(.Machine$double.eps)} are rejected to avoid unstable conditioning.
-Harm-bound designs are unsupported because \code{gsCPOS()} does not account
+Harm bound designs are unsupported because \code{gsCPOS()} does not account
 for their harm stopping probability in its denominator.
 Replay parameters with the complete reference design and the same prior.
 Spending functions retain their usual timing flexibility, but changed
 timing, testing indicators or rounding need not retain exact target values.
 }
-\section{Spending-parameter search defaults}{
+\section{Spending parameter search defaults}{
 
 When not supplied in \code{control}, parameter limits and fallback starting
 values are selected by family:
@@ -138,7 +139,7 @@ fractions \code{x$n.I / x$n.I[x$k]}, ending at 1. For example,
 \code{x$timing = c(.5, .75, 1)} keeps the analyses at 50\%, 75\%, and 100\%
 of the final information. Power-preserving calibration may change the
 maximum information and thus the absolute information \code{n.I} at every
-analysis while retaining these fractions. Fixed-information calibration
+analysis while retaining these fractions. Fixed information calibration
 (\code{gsCAFutilitySpending()} and
 \code{gsCPOSFutilitySpending(mode = "fixed_information")}) also holds
 \code{n.I} and the efficacy boundaries fixed.
@@ -155,13 +156,13 @@ or that absolute calendar analysis dates must be fixed. See
 \section{Survival designs}{
 
 Survival inputs retain their survival classes and endpoint assumptions.
-Candidate probabilities are evaluated on the statistical event-count scale.
-Power-preserving probability calibration of fixed-duration, rate-scaled
+Candidate probabilities are evaluated on the statistical event count scale.
+Power-preserving probability calibration of fixed duration, rate-scaled
 designs rebuilds the survival plan only for the selected fit and checks all
 targets again on the returned object. If the deferred search or that check
 fails, calibration retries once with full survival reconstruction, retaining
 the best available internal parameters as starting values. Effect calibration
-and accrual- or follow-up-duration solves reconstruct the plan for every
+and accrual or follow-up duration solves reconstruct the plan for every
 candidate.
 For \code{gsSurv()} and \code{gsSurvCalendar()} inputs, information fractions,
 spending times, and the enrollment/follow-up constraint are retained;
@@ -173,9 +174,9 @@ For \code{gsSurvPower()} inputs, power-preserving calibration fixes the
 realized calendar times and enrollment periods and rescales enrollment rates
 to attain the fitted event counts. The evaluated alternative \code{x$hr}
 and its achieved power are used, even if the original design alternative
-\code{x$hr1} differed. Original event-trigger and calendar-cap rules are not
-re-applied: the realized schedule becomes the new plan. Fixed-information
-conditional-POS/CA calibration instead retains the survival plan, event
+\code{x$hr1} differed. Original event trigger and calendar cap rules are not
+reapplied: the realized schedule becomes the new plan. Fixed information
+conditional POS/CA calibration instead retains the survival plan, event
 counts and efficacy bounds while updating futility and achieved power.
 
 Priors and explicit \code{theta} remain standardized drifts per square root

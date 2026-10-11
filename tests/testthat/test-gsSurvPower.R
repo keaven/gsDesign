@@ -279,7 +279,7 @@ test_that("gsSurvPower respects maxExtension", {
   expect_true(pwr_capped$T[1] <= pwr_uncapped$T[1])
 })
 
-test_that("maxCalendarTime is an absolute analysis-time cap", {
+test_that("maxCalendarTime is an absolute analysis time cap", {
   base_args <- list(
     k = 1, test.type = 1, alpha = 0.025, sided = 1,
     lambdaC = log(2) / 6, hr = 0.7, hr0 = 1,
@@ -1316,7 +1316,7 @@ test_that("gsSurvPower recalculates bounds when alpha changes (test.type 1, one-
   expect_true(pwr_new$power > pwr_orig$power)
 })
 
-test_that("gsSurvPower recalculates bounds when alpha changes (test.type 5, binding alpha-spending lower)", {
+test_that("gsSurvPower recalculates bounds when alpha changes (test.type 5, binding alpha spending lower)", {
   # Default gsSurv test.type 5 sets astar = 1 - alpha (= 0.975).
   # gsSurvPower now uses test.type = 1 for efficacy, avoiding astar issues.
   design <- gsSurv(

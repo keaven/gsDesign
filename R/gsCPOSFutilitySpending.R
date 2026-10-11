@@ -1,7 +1,7 @@
 #' Calibrate Futility Spending to Conditional Probability of Success
 #'
 #' @description
-#' Select beta-spending parameters to match \code{gsCPOS()} targets at selected
+#' Select beta spending parameters to match \code{gsCPOS()} targets at selected
 #' interims, either preserving reference power or fixing reference information.
 #'
 #' @param x A \code{gsDesign}, \code{gsSurv}, \code{gsSurvCalendar}, or
@@ -37,7 +37,7 @@
 #'   solving total beta internally and allowing overall power to change.
 #'
 #' @details
-#' Both modes target the existing \code{gsCPOS()} calculation. In fixed-information
+#' Both modes target the existing \code{gsCPOS()} calculation. In fixed information
 #' mode, \code{gsBound1()} derives lower bounds and an internal beta solve makes
 #' spending consistent with the final decision. For binding futility, changing
 #' lower bounds while fixing efficacy can increase actual type I error above
@@ -51,30 +51,31 @@
 #' interim \code{i}. It includes the entire previous stopping history.
 #' Conditioning on continuation reweights the effect distribution; this differs
 #' from \code{gsPP()}, which conditions on an exact interim statistic, and from
-#' unconditional \code{gsPOS()}. A point prior gives fixed-effect success
+#' unconditional \code{gsPOS()}. A point prior gives fixed effect success
 #' conditional on continuation, not conditional power at the futility bound.
 #'
-#' A fixed-design \code{gsPOS()} value at a separately chosen feasible sample
+#' A fixed design \code{gsPOS()} value at a separately chosen feasible sample
 #' size can be computed once and supplied as a benchmark target. The benchmark
 #' must not be recomputed from candidates. Preserving power while adjusting
-#' information is an extension of a fixed-information conditional-assurance
-#' rule, not an implementation of sample-size re-estimation. Inspect sample-size
+#' information is an extension of a fixed information conditional assurance
+#' rule, not an implementation of sample size re-estimation. Inspect sample size
 #' inflation, overall operating characteristics and effect sizes at all bounds.
 #'
-#' The supported spending families and one-target-per-free-parameter rule are
-#' the same as for \code{\link{gsPPFutilitySpending}}, including two-parameter
-#' families and \code{sfLinear}. The shared solver accepts only fits meeting
-#' every target tolerance; failure is not a proof of global infeasibility.
+#' The supported spending families and requirement for one target per free
+#' parameter are the same as for \code{\link{gsPPFutilitySpending}}, including
+#' two-parameter families and \code{sfLinear}. The shared solver accepts only
+#' fits meeting every target tolerance; failure is not a proof of global
+#' infeasibility.
 #'
 #' Candidate continuation probabilities at or below
 #' \code{sqrt(.Machine$double.eps)} are rejected to avoid unstable conditioning.
-#' Harm-bound designs are unsupported because \code{gsCPOS()} does not account
+#' Harm bound designs are unsupported because \code{gsCPOS()} does not account
 #' for their harm stopping probability in its denominator.
 #' Replay parameters with the complete reference design and the same prior.
 #' Spending functions retain their usual timing flexibility, but changed
 #' timing, testing indicators or rounding need not retain exact target values.
 #'
-#' @inheritSection gsCPFutilitySpending Spending-parameter search defaults
+#' @inheritSection gsCPFutilitySpending Spending parameter search defaults
 #' @inheritSection gsCPFutilitySpending Information fractions and spending times
 #' @inheritSection gsCPFutilitySpending Survival designs
 #' @return A \code{c("gsCPOSFutilitySpending", "gsDesign")} object, retaining
@@ -120,7 +121,7 @@ gsCPOSFutilitySpending <- function(x, target_cpos, i = seq_along(target_cpos),
     }
     .gsCPFValidateReference(x)
     if (!x$test.type %in% c(3L, 4L)) {
-      .gsCPFAbort("x$test.type must be 3 or 4; harm-bound continuation is unsupported.",
+      .gsCPFAbort("x$test.type must be 3 or 4; harm bound continuation is unsupported.",
                   "gsCPFutilitySpending_input_error")
     }
     if (missing(prior)) {

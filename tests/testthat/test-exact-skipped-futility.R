@@ -48,7 +48,7 @@ test_that("all patterns of skipped Type 4 looks preserve exact spending", {
   patterns <- expand.grid(rep(list(c(FALSE, TRUE)), 3))
   for (i in seq_len(nrow(patterns))) {
     flags <- as.logical(patterns[i, ])
-    if (!any(flags)) next # Type 4 requires at least one lower-bound test.
+    if (!any(flags)) next # Type 4 requires at least one lower bound test.
     x <- skipped_futility_design(flags)
     out <- toBinomialExact(x)
     check_exact_skipped_futility(x, out)
@@ -60,7 +60,7 @@ test_that("all patterns of skipped Type 4 looks preserve exact spending", {
   }
 })
 
-test_that("skipped futility is retained with actual-event and spending overrides", {
+test_that("skipped futility is retained with actual event and spending overrides", {
   x <- skipped_futility_design()
   for (alpha in c(.025, .01)) {
     out <- toBinomialExact(x, observedEvents = c(25, 45, 60), alpha = alpha,

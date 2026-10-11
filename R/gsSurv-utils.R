@@ -74,7 +74,7 @@ gsSurvAddN <- function(x) {
 }
 
 # Construct the gsDesign portion of a single-analysis survival design without
-# calling gsDesign(), whose group-sequential validation requires k >= 2.
+# calling gsDesign(), whose group sequential validation requires k >= 2.
 gsSurvFixedDesignObject <- function(
     alpha,
     design_beta,

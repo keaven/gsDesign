@@ -1,4 +1,4 @@
-# Shared survival adapters for the spending-calibration front ends.
+# Shared survival adapters for the spending calibration front ends.
 .gsSpendingClass <- function(x, calibration) {
   c(calibration, intersect(c("gsSurvPower", "gsSurv", "gsDesign"), class(x)))
 }

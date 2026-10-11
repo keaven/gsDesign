@@ -1,4 +1,4 @@
-# printing designs with zero-spend analyses is stable
+# printing designs with zero spending analyses is stable
 
     Code
       print(x)

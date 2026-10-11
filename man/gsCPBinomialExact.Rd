@@ -21,7 +21,7 @@ gsCPBinomialExact(
 \item{i}{Interim analysis at which conditioning occurs; must be less than
 `x$k`.}
 
-\item{x.i}{Cumulative experimental-arm events observed at analysis `i`.}
+\item{x.i}{Cumulative experimental arm events observed at analysis `i`.}
 
 \item{theta}{Conditional probabilities that a future event occurs in the
 experimental arm. If `NULL`, the observed probability and the values in
@@ -48,13 +48,13 @@ An object of class `gsBinomialExactCP`. Components include future
 }
 \description{
 Computes exact conditional probabilities of crossing future boundaries,
-given the cumulative experimental-arm event count at an interim analysis.
+given the cumulative experimental arm event count at an interim analysis.
 }
 \details{
-Conditional on the interim count, future experimental-arm event increments
+Conditional on the interim count, future experimental arm event increments
 are independent binomial random variables. Their distribution is propagated
 through the remaining integer boundaries. Thus the calculation is exact
-under the same conditional-binomial assumptions used by
+under the same conditional binomial assumptions used by
 [gsBinomialExact()].
 
 The calculation conditions only on the statistic at analysis `i`, as

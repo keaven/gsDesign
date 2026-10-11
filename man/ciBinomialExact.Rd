@@ -29,7 +29,7 @@ A one-row data frame containing the observed counts, randomization
   ratio, efficacy estimate, confidence limits, and confidence level.
 }
 \description{
-Computes a fixed-look Clopper--Pearson confidence interval for vaccine or
+Computes a fixed look Clopper--Pearson confidence interval for vaccine or
 prevention efficacy after conditioning on the total number of events.
 }
 \details{

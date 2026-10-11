@@ -1,7 +1,7 @@
 #' Calibrate Futility Spending to Predictive Power Targets
 #'
 #' @description
-#' Select beta-spending futility parameters so that posterior predictive power
+#' Select beta spending futility parameters so that posterior predictive power
 #' at selected interim lower bounds matches the requested targets. Each candidate
 #' is rebuilt with \code{gsDesign()}, recalculating information to preserve the
 #' reference design's target unconditional power.
@@ -22,10 +22,10 @@
 #'   sigma = 10 / sqrt(x$n.fix))}, the same prior as in
 #'   \code{gsBoundSummary(x)}: a normal prior centered halfway between the null
 #'   and alternative, with information equivalent to 1 percent of the
-#'   fixed-design sample size (or event count). The default is constructed from
+#'   fixed design sample size (or event count). The default is constructed from
 #'   the reference design \code{x} and held fixed during calibration.
 #'   Weights are normalized internally; the normalized
-#'   prior is retained in the result. A one-point prior targets fixed-effect CP.
+#'   prior is retained in the result. A one-point prior targets fixed effect CP.
 #' @param control Optional named list of numerical solver settings. Unspecified
 #'   settings retain their defaults; unknown names and invalid values cause
 #'   input errors. These controls change the search, not the prior or target.
@@ -35,28 +35,28 @@
 #'       Custom functions require explicit starts. For \code{sfLinear}, supply
 #'       one strictly increasing cumulative spending proportion in (0, 1) per
 #'       target, not the full spending parameter vector.}
-#'     \item{\code{lower}, \code{upper}}{Spending-parameter search limits,
+#'     \item{\code{lower}, \code{upper}}{Spending parameter search limits,
 #'       not Z-boundaries (default \code{NULL}, selecting family defaults).
 #'       Start and limit vectors must be finite and match the free parameter
 #'       count; \code{lower < upper} must hold and contain the start.
 #'       Supplied limits are not supported for constrained \code{sfLinear}.}
 #'     \item{\code{pp_tol}}{Maximum absolute predictive power residual at
 #'       every target (default \code{1e-4}); a finite scalar in (0, 0.1).}
-#'     \item{\code{maxit}}{Positive integer joint-optimizer iteration limit
+#'     \item{\code{maxit}}{Positive integer joint optimizer iteration limit
 #'       (default 500), not a global limit on design evaluations or the
 #'       one-parameter root search.}
 #'     \item{\code{reltol}}{Positive finite internal convergence tolerance
 #'       (default \code{1e-10}); does not replace the \code{pp_tol} check.}
 #'     \item{\code{backward}}{Allow a latest-to-earliest coordinate fallback
 #'       if the initial joint fit misses the targets (default \code{TRUE}).}
-#'     \item{\code{trace}}{Display joint-optimizer progress (default
+#'     \item{\code{trace}}{Display joint optimizer progress (default
 #'       \code{FALSE}). Both logical controls must be nonmissing scalars.}
 #'   }
 #'
 #' @details
 #' \code{gsPP()} averages conditional power over the posterior effect
 #' distribution to give the probability of future efficacy rejection. This is
-#' not the posterior probability of a positive effect, observed-effect CP, or
+#' not the posterior probability of a positive effect, observed effect CP, or
 #' CP H1. The prior is held fixed throughout calibration, but the posterior is
 #' recomputed at each candidate lower bound using its information. As in
 #' \code{gsPP()}, conditioning uses the interim statistic, not additionally the
@@ -85,7 +85,7 @@
 #' candidates are rejected and the diagnostic reports this if no valid design
 #' can be constructed.
 #'
-#' @inheritSection gsCPFutilitySpending Spending-parameter search defaults
+#' @inheritSection gsCPFutilitySpending Spending parameter search defaults
 #' @inheritSection gsCPFutilitySpending Information fractions and spending times
 #' @inheritSection gsCPFutilitySpending Survival designs
 #'

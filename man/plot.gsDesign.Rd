@@ -81,12 +81,12 @@ values of \code{plottype}; one exception is that \code{type="l"} cannot be
 overridden when \code{plottype=2}. Default values for labels depend on
 \code{plottype} and the class of \code{x}.
 For \code{endpoint = "info"}, information annotations on boundary,
-treatment-effect, B-value, and conditional-power plots use \code{I=}
+treatment effect, B-value, and conditional power plots use \code{I=}
 and round information to two decimal places (without integer rounding).
 
 For test types 7 and 8, harm and futility probabilities stored on the
 design are mutually exclusive stopping outcomes. In a type 2 plot, the
-futility-threshold curve is inclusive: it uses the sum of futility-only and
+futility threshold curve is inclusive: it uses the sum of futility-only and
 harm crossing probabilities. The separate harm curve continues to show
 harm crossings only. This plotting convention does not modify the
 probabilities stored on \code{x}.
@@ -94,7 +94,7 @@ Power plots show cumulative crossing probabilities through each analysis.
 By default, a curve is shown only when its boundary is active at that
 analysis; the original analysis numbers are retained. Skipped boundaries
 still contribute their (zero) increments to the cumulative calculation.
-For types 7 and 8, the combined futility-or-harm curve is shown when either
+For types 7 and 8, the combined futility or harm curve is shown when either
 boundary is active. Use \code{showSkipped = TRUE} to also display curves
 at skipped looks, which may duplicate earlier curves or be constant.
 

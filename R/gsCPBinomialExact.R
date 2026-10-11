@@ -1,13 +1,13 @@
 #' Exact conditional power for a group sequential binomial design
 #'
 #' Computes exact conditional probabilities of crossing future boundaries,
-#' given the cumulative experimental-arm event count at an interim analysis.
+#' given the cumulative experimental arm event count at an interim analysis.
 #'
 #' @param x An exact binomial spending design returned by
 #'   [toBinomialExact()].
 #' @param i Interim analysis at which conditioning occurs; must be less than
 #'   `x$k`.
-#' @param x.i Cumulative experimental-arm events observed at analysis `i`.
+#' @param x.i Cumulative experimental arm events observed at analysis `i`.
 #' @param theta Conditional probabilities that a future event occurs in the
 #'   experimental arm. If `NULL`, the observed probability and the values in
 #'   `x$theta` are used.
@@ -28,10 +28,10 @@
 #'   continuation probabilities, and total conditional power and futility.
 #'
 #' @details
-#' Conditional on the interim count, future experimental-arm event increments
+#' Conditional on the interim count, future experimental arm event increments
 #' are independent binomial random variables. Their distribution is propagated
 #' through the remaining integer boundaries. Thus the calculation is exact
-#' under the same conditional-binomial assumptions used by
+#' under the same conditional binomial assumptions used by
 #' [gsBinomialExact()].
 #'
 #' The calculation conditions only on the statistic at analysis `i`, as

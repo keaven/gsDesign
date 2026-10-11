@@ -2,7 +2,7 @@
 #'
 #' Computes repeated p-values for the exact binomial design implied by a
 #' [gsSurv()] object. The p-value at analysis `j` is the smallest local
-#' one-sided alpha level for which the observed experimental-arm event count
+#' one-sided alpha level for which the observed experimental arm event count
 #' crosses the exact lower efficacy bound at that analysis. Non-binding
 #' futility and harm bounds are ignored for the Type I error calculation.
 #'
@@ -11,7 +11,7 @@
 #'   `NULL`, the planned integer event counts from `toInteger(gsD)` are used.
 #'   This must have at most 1 value greater than or equal to planned
 #'   final events (`gsD$maxn.IPlan` if available, otherwise `max(gsD$n.I)`).
-#' @param x Integer experimental-arm event counts at the analyses in `n.I`.
+#' @param x Integer experimental arm event counts at the analyses in `n.I`.
 #' @param interval Search interval for the p-values. As in [sequentialPValue()],
 #'   values outside this interval are truncated to the nearest endpoint.
 #' @param tol Relative tolerance for the monotone bisection search on the
@@ -24,7 +24,7 @@
 #' \describe{
 #'   \item{`Analysis`}{Analysis index.}
 #'   \item{`n.I`}{Total events at analysis.}
-#'   \item{`x`}{Observed experimental-arm events.}
+#'   \item{`x`}{Observed experimental arm events.}
 #'   \item{`repeated_p_value`}{Repeated p-value for the analysis.}
 #'   \item{`bound_at_repeated_p_value`}{Integer efficacy bound at the repeated p-value.}
 #' }
@@ -59,7 +59,7 @@ repeatedPValueBinomialExact <- function(
     stop("gsD$test.type must be 1, 4, 6, or 8", call. = FALSE)
   }
   if (is.null(x)) {
-    stop("x must contain observed experimental-arm event counts", call. = FALSE)
+    stop("x must contain observed experimental arm event counts", call. = FALSE)
   }
   if (!is.numeric(x) || any(!is.finite(x)) || any(x != floor(x))) {
     stop("x must be a numeric vector of non-negative integers", call. = FALSE)
@@ -185,9 +185,9 @@ repeatedPValueBinomialExact <- function(
 
 #' Exact lower efficacy bounds for a binomial group sequential design
 #'
-#' Computes the alpha-indexed exact lower-tail event-count efficacy bounds used
+#' Computes the alpha-indexed exact lower tail event count efficacy bounds used
 #' by [repeatedPValueBinomialExact()]. This helper intentionally ignores
-#' non-binding futility and harm bounds and avoids the normal-theory design checks in
+#' non-binding futility and harm bounds and avoids the normal theory design checks in
 #' [gsDesign()], since very small alpha values may be needed while searching
 #' for exact p-values.
 #'
@@ -198,7 +198,7 @@ repeatedPValueBinomialExact <- function(
 #' @param fullSpendFinal Logical scalar. If `TRUE`, force spending time to 1 at
 #'   the final analysis (while keeping earlier timings based on
 #'   `n.I / maxn.IPlan`).
-#' @param spendingTime Optional upper spending-time vector (length equal to
+#' @param spendingTime Optional upper spending time vector (length equal to
 #'   `length(n.I)`) used directly for alpha spending. If `NULL`, spending time
 #'   is derived from `n.I / maxn.IPlan`.
 #'

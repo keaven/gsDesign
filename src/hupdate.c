@@ -26,7 +26,7 @@
 void hupdate(double theta, double *wgt, int m1, double Ikm1, double *zkm1,
              double *hkm1, int m2, double Ik, double *zk, double *hk) {
   double deltak, rtIk, rtIkm1, rtdeltak, scale, u, x, s;
-  double c[1000]; /* scaled previous grid, fixed-size work storage */
+  double c[1000]; /* scaled previous grid, fixed size work storage */
   int i, ii;
   deltak = Ik - Ikm1; /* incremental information */
   rtdeltak = sqrt(deltak);

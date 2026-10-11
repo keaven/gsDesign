@@ -48,7 +48,7 @@ test_that("VEtable summarizes planned vaccine efficacy designs", {
   expect_equal(attr(result, "alpha"), design$exact$alpha)
 })
 
-test_that("VEtable supports observed-event tables without timing columns", {
+test_that("VEtable supports observed event tables without timing columns", {
   design <- ve_design()
   updated <- toBinomialExact(design$tte, observedEvents = c(20, 78))
   result <- VEtable(updated, ve = .7)
@@ -112,7 +112,7 @@ test_that("lt formats VE tables with standard annotations", {
   )))
 })
 
-test_that("lt formats observed-event VE tables without requiring timing", {
+test_that("lt formats observed event VE tables without requiring timing", {
   design <- ve_design()
   updated <- toBinomialExact(design$tte, observedEvents = c(20, 78))
   result <- VEtable(updated, ve = .7) |>

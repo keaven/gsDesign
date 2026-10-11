@@ -93,7 +93,7 @@ test_that("exact conditional power validates inputs", {
   expect_error(gsCPBinomialExact(design, x.i = observed, binding = NA), "TRUE or FALSE")
 })
 
-test_that("updated observed-event designs have stable activity flags", {
+test_that("updated observed event designs have stable activity flags", {
   scaffold <- gsSurv(
     k = 3, test.type = 4, alpha = .025, beta = .1, timing = c(.45, .7),
     ratio = 3, hr = .3, hr0 = .7

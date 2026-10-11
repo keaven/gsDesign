@@ -6,10 +6,10 @@
 #' size to achieve target power, \code{gsSurvPower()} takes fixed design
 #' assumptions and computes the resulting power. Its two primary uses are
 #' computing achieved power when sample size is not being derived and
-#' evaluating alternative enrollment, failure, treatment-effect, and analysis
+#' evaluating alternative enrollment, failure, treatment effect, and analysis
 #' timing scenarios. It computes one set of assumptions at a time; scenario
 #' grids are evaluated with separate calls.
-#' For \code{k = 1}, power is computed through the fixed-design
+#' For \code{k = 1}, power is computed through the fixed design
 #' \code{nSurv(beta = NULL)} path. The returned object is normalized as a
 #' single-analysis \code{gsSurv} object so it can be passed to
 #' \code{\link{toInteger}} and \code{\link{gsBoundSummary}}.
@@ -45,7 +45,7 @@
 #' even when power is evaluated under a different \code{hr}.
 #'
 #' \strong{Beta spending in scenario analyses:}
-#' For beta-spending test types 3, 4, 7, and 8, \code{x$beta} is the design
+#' For beta spending test types 3, 4, 7, and 8, \code{x$beta} is the design
 #' beta used with \code{hr1}, \code{sfl}, and \code{sflpar} to calibrate
 #' futility bounds. The \code{beta} returned by \code{gsSurvPower()} instead
 #' equals \code{1 - power} under the scenario assumptions and can differ
@@ -56,21 +56,21 @@
 #'   \item When information fractions or spending times change, futility
 #'     bounds are recomputed on the new schedule using the design beta and
 #'     \code{hr1}; achieved beta is then evaluated under \code{hr}.
-#'   \item When only alpha or upper-bound spending changes with timing fixed,
+#'   \item When only alpha or upper bound spending changes with timing fixed,
 #'     futility bounds from \code{x} are preserved, apart from clipping a
 #'     lower bound that exceeds the new efficacy bound.
 #' }
-#' Test types 5 and 6 spend lower-bound probability under the null rather than
+#' Test types 5 and 6 spend lower bound probability under the null rather than
 #' beta under the alternative. Harm spending for test types 7 and 8 is also a
 #' separate null-based calculation.
 #'
 #' \strong{Analysis timing:}
-#' Analysis times are determined by per-analysis criteria. Except for the
-#' final-analysis-only scalar \code{minfup}, each timing-rule parameter can be
-#' a scalar (recycled to all \code{k} analyses), a vector of length \code{k},
-#' or \code{NA} at position \code{i} to indicate that the rule does not apply
-#' to analysis \code{i}. For the per-stratum matrix arguments, \code{NA}
-#' deactivates only that analysis-by-stratum requirement.
+#' Analysis times are determined by per-analysis criteria. The scalar
+#' \code{minfup} applies only to the final analysis. Each other timing rule
+#' parameter can be a scalar (recycled to all \code{k} analyses), a vector of
+#' length \code{k}, or \code{NA} at position \code{i} to indicate that the rule
+#' does not apply to analysis \code{i}. For the per-stratum matrix arguments,
+#' \code{NA} deactivates only that analysis-by-stratum requirement.
 #'
 #' The choice between \code{plannedCalendarTime} and overall
 #' \code{targetEvents} has an important consequence for sensitivity analyses:
@@ -115,11 +115,11 @@
 #'     or \code{minN + minFollowUp} would require a later time. Each analysis
 #'     using \code{maxExtension} must have a floor timing criterion such as
 #'     \code{plannedCalendarTime}, \code{minTimeFromPreviousAnalysis},
-#'     \code{minN}, \code{minNPerStratum}, or explicit final-analysis
+#'     \code{minN}, \code{minNPerStratum}, or explicit final analysis
 #'     \code{minfup}.
-#'   \item Finally, \code{maxCalendarTime[i]} applies an absolute calendar-time
+#'   \item Finally, \code{maxCalendarTime[i]} applies an absolute calendar time
 #'     cap. If both cap types are supplied, the earlier cap applies. This
-#'     mirrors the realized-cut grammar in \pkg{simtrial}, where the argument
+#'     mirrors the realized cut grammar in \pkg{simtrial}, where the argument
 #'     named \code{max_extension_for_target_event} is applied as an absolute
 #'     analysis date.
 #' }
@@ -143,7 +143,7 @@
 #' per-stratum requirements may be combined and all active requirements must
 #' be met unless a cap intervenes. \code{NA} omits a requirement. A matrix
 #' passed through \code{targetEvents} is a deprecated alias for
-#' \code{targetEventsPerStratum}; unlike the earlier row-sum interpretation,
+#' \code{targetEventsPerStratum}; unlike the earlier row sum interpretation,
 #' its entries are enforced by stratum.
 #'
 #' \strong{Bound recalculation when parameters change:}
@@ -153,20 +153,20 @@
 #'   \item \strong{No bound parameters changed} (same \code{alpha}, \code{sfu},
 #'     \code{sfupar}) and timing matches: both bounds are reused from \code{x}
 #'     exactly.
-#'   \item \strong{Upper-bound parameters changed} (\code{alpha}, \code{sfu},
+#'   \item \strong{Upper bound parameters changed} (\code{alpha}, \code{sfu},
 #'     or \code{sfupar}) but timing matches: new efficacy bounds are computed
 #'     using the non-binding efficacy convention at the new alpha while
 #'     preserving the original \code{testUpper} schedule and futility bounds
 #'     from \code{x}. Any futility bound that exceeds the new efficacy bound
 #'     is clipped. This follows the same convention as
-#'     \code{gsBoundSummary()}. Lower-bound spending settings from \code{x}
+#'     \code{gsBoundSummary()}. Lower bound spending settings from \code{x}
 #'     are intentionally kept in this branch, which avoids complications with
 #'     \code{astar} validation for binding types.
 #'     For non-binding test types 1, 4, 6, and 8, this calculation can be used
-#'     to evaluate alpha propagated by a graphical multiple-testing procedure.
+#'     to evaluate alpha propagated by a graphical multiple testing procedure.
 #'     For binding test types 2, 3, 5, and 7, it is a planning sensitivity
-#'     calculation only; it is not a Maurer--Bretz sequential-p-value or
-#'     graphical alpha-recycling procedure.
+#'     calculation only; it is not a Maurer--Bretz sequential p-value or
+#'     graphical alpha recycling procedure.
 #'   \item \strong{Timing changed} (different target events or calendar
 #'     times): both bounds are recomputed from scratch using the full
 #'     \code{test.type} and all spending parameters.
@@ -197,7 +197,7 @@
 #'   \code{nSurv()}. When \code{x} is provided and \code{sided} is omitted,
 #'   \code{gsSurvPower()} reuses the stored sided value from the design call
 #'   when available.
-#' @param astar Total lower-bound spending for types 5 or 6, or harm spending
+#' @param astar Total lower bound spending for types 5 or 6, or harm spending
 #'   for types 7 or 8. Without a reference design, 0 selects \code{1 - alpha / sided}
 #'   for types 5 or 6 and \code{0.1} for types 7 or 8. Harm calibration ignores
 #'   futility stopping; reported stopping probabilities include it. With a
@@ -259,7 +259,7 @@
 #' @param minfup Minimum follow-up time. When explicitly supplied,
 #'   event-driven analyses cannot place the final analysis before the end of
 #'   enrollment plus \code{minfup}.
-#' @param method Sample-size variance formulation. One of
+#' @param method Sample size variance formulation. One of
 #'   \code{"LachinFoulkes"} (default), \code{"Schoenfeld"},
 #'   \code{"Freedman"}, or \code{"BernsteinLagakos"}. Affects \code{n.fix}
 #'   computation when \code{x} is not provided.
@@ -287,11 +287,11 @@
 #'   floor timing criterion for the affected analysis, most commonly
 #'   \code{plannedCalendarTime}. Use \code{NA} for analyses without a relative
 #'   extension cap.
-#' @param maxCalendarTime Absolute calendar-time cap for each analysis. Scalar
+#' @param maxCalendarTime Absolute calendar time cap for each analysis. Scalar
 #'   or vector of length \code{k}. When supplied with \code{maxExtension}, the
 #'   earlier cap applies. This corresponds to
 #'   \code{max_extension_for_target_event} in \pkg{simtrial}. Use \code{NA}
-#'   for analyses without an absolute calendar-time cap.
+#'   for analyses without an absolute calendar time cap.
 #' @param minTimeFromPreviousAnalysis Minimum elapsed time since the previous
 #'   analysis. Scalar or vector of length \code{k}. Ignored for the first
 #'   analysis. Use \code{NA} for later analyses without a spacing requirement.
@@ -309,7 +309,7 @@
 #'   at an analysis. Each non-missing value requires an active \code{minN} or
 #'   \code{minNPerStratum} requirement at the same analysis.
 #' @param informationRates Numeric vector of length \code{k} specifying
-#'   planned information-fraction caps, with no missing values. At each
+#'   planned information fraction caps, with no missing values. At each
 #'   analysis, the effective upper and lower spending time is
 #'   \code{pmin(informationRates, actual_timing)}, where
 #'   \code{actual_timing} is expected events divided by maximum expected
@@ -317,17 +317,16 @@
 #'   schedule or the information actually accumulated. When supplied,
 #'   \code{informationRates} takes precedence over \code{spending},
 #'   \code{usTime}, and \code{lsTime}; upper and lower spending use the same
-#'   effective spending-time vector. Default \code{NULL} uses actual
+#'   effective spending time vector. Default \code{NULL} uses actual
 #'   information fractions (or calendar fractions when
 #'   \code{spending = "calendar"}).
 #' @param fullSpendingAtFinal Logical. When \code{TRUE}, the final element of
-#'   the effective upper and lower spending-time vectors is forced to 1 after
+#'   the effective upper and lower spending time vectors is forced to 1 after
 #'   applying
 #'   \code{informationRates}, calendar or planned-versus-actual spending, or
-#'   user-supplied \code{usTime}/\code{lsTime}. This ensures full upper- and
-#'   lower-bound
-#'   spending whenever a selected spending-time vector would otherwise end
-#'   below 1.
+#'   user-supplied \code{usTime}/\code{lsTime}. This ensures full upper and lower
+#'   bound spending whenever a selected spending time vector would otherwise
+#'   end below 1.
 #'   Default \code{FALSE}.
 #' @param tol Tolerance for \code{\link[stats]{uniroot}} when solving for
 #'   analysis times.
@@ -342,11 +341,11 @@
 #' \item{eNC, eNE}{Expected sample sizes by stratum (control, experimental).}
 #' \item{N}{Cumulative total expected enrollment at each analysis.}
 #' \item{upper, lower}{Bounds and crossing probabilities.}
-#' \item{harm}{Harm-bound information when \code{test.type} is 7 or 8.}
+#' \item{harm}{Harm bound information when \code{test.type} is 7 or 8.}
 #' \item{en, theta}{Expected sample size summary and drift values returned by
 #'   \code{gsDesign::gsProbability()}.}
 #' \item{hr, hr0, hr1}{Assumed, null, and design hazard ratios.}
-#' \item{power}{Overall power (sum of upper-bound crossing probabilities
+#' \item{power}{Overall power (sum of upper bound crossing probabilities
 #'   under the assumed HR).}
 #' \item{beta}{Type II error (\code{1 - power}).}
 #' \item{variable}{Always \code{"Power"}.}
@@ -357,8 +356,8 @@
 #'   \code{do.call(gsSurvPower, inputs)}. When \code{x} is supplied, the
 #'   evaluated reference design is retained so that inherited design settings
 #'   and planned-versus-actual spending can be reproduced.}
-#' \item{informationRates, fullSpendingAtFinal}{Planned information-fraction
-#'   caps and final effective-spending-time setting used for bound spending.}
+#' \item{informationRates, fullSpendingAtFinal}{Planned information fraction
+#'   caps and final effective spending time setting used for bound spending.}
 #' \item{testUpper, testLower, testHarm}{Logical indicators of which analyses
 #'   include each bound type, when relevant.}
 #' \item{lambdaC, etaC, etaE, gamma, R, S, ratio, minfup}{Rate and timing inputs
@@ -1011,7 +1010,7 @@ gsSurvPower <- function(
         "Analysis ", analysis_index,
         " has no active timing criterion; supply plannedCalendarTime, ",
         "targetEvents, targetEventsPerStratum, minTimeFromPreviousAnalysis, ",
-        "minN, minNPerStratum, or final-analysis minfup"
+        "minN, minNPerStratum, or final analysis minfup"
       )
     }
   }
@@ -1276,7 +1275,7 @@ gsSurvPower <- function(
     experimental_enrollment <- rbind(experimental_enrollment, expected_counts$eNE)
   }
 
-  # Retain exact event targets instead of exposing small root-solver residuals.
+  # Retain exact event targets instead of exposing small root solver residuals.
   # Adjust one component so component counts remain consistent with the total.
   target_rows <- which(target_determines_analysis)
   if (length(target_rows) > 0) {
