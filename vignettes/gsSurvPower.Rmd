@@ -1,10 +1,10 @@
 ---
-title: "Power Computation for Group Sequential Survival Designs"
+title: "Power computation for group sequential survival designs"
 output:
   rmarkdown::html_vignette:
     css: vignette.css
 vignette: >
-  %\VignetteIndexEntry{Power Computation for Group Sequential Survival Designs}
+  %\VignetteIndexEntry{Power computation for group sequential survival designs}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
