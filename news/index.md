@@ -1,6 +1,6 @@
 # Changelog
 
-## gsDesign (development version)
+## gsDesign 4.0.0 (October 2026)
 
 ### Breaking changes
 
@@ -19,12 +19,14 @@
   probabilities still assume all active stopping rules are followed and
   can be below the spending targets. This also applies to type 8 exact
   binomial conversion. Harm remains capped at futility where both are
-  active ([\#352](https://github.com/keaven/gsDesign/issues/352)).
+  active ([@keaven](https://github.com/keaven),
+  [\#352](https://github.com/keaven/gsDesign/issues/352)).
 - Harm designs now default to total spending `astar = 0.1` (also
   selected by input `astar = 0`) and `sfharm = sfLDPocock`, including
   survival interfaces. Types 5 and 6 retain their `astar = 0` convention
   of `1 - alpha`. Explicit harm spending choices are preserved
-  ([\#352](https://github.com/keaven/gsDesign/issues/352)).
+  ([@keaven](https://github.com/keaven),
+  [\#352](https://github.com/keaven/gsDesign/issues/352)).
 - Median follow-up now refers to all planned participants, with dropout
   and optional event stopping. Use
   [`medianFollowUp()`](https://keaven.github.io/gsDesign/reference/medianFollowUp.md)
@@ -32,8 +34,8 @@
   [`minMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/medianFollowUp.md)
   now solves for cutoff time with a named `target`.
   [`plotMinMedianFollowUp()`](https://keaven.github.io/gsDesign/reference/plotMinMedianFollowUp.md)
-  uses the revised definition
-  ([\#281](https://github.com/keaven/gsDesign/issues/281)).
+  uses the revised definition ([@keaven](https://github.com/keaven),
+  [\#281](https://github.com/keaven/gsDesign/issues/281)).
 
 ### Major changes
 
@@ -57,42 +59,49 @@
   to calibrate beta spending futility parameters and statistical
   information to conditional power targets at one or more interim
   analyses for `test.type` 3, 4, 7, and 8
-  ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+  ([@keaven](https://github.com/keaven),
+  [\#318](https://github.com/keaven/gsDesign/issues/318)).
 - Added
   [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
   to calibrate futility spending to posterior predictive power targets
   using a fixed discrete or continuous grid prior, sharing the CP
   calibration solver. The futility spending vignette compares CP- and
   PP-targeted survival designs using the default summary prior
-  ([\#326](https://github.com/keaven/gsDesign/issues/326)).
+  ([@keaven](https://github.com/keaven),
+  [\#326](https://github.com/keaven/gsDesign/issues/326)).
 - [`gsPPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPPFutilitySpending.md)
   now defaults to the same normal prior as
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md),
   while continuing to accept user-specified priors
-  ([\#354](https://github.com/keaven/gsDesign/issues/354)).
+  ([@keaven](https://github.com/keaven),
+  [\#354](https://github.com/keaven/gsDesign/issues/354)).
 - Unified conditional POS spending calibration in
   [`gsCPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPOSFutilitySpending.md)
   with `mode = "preserve_power"` or `"fixed_information"`; retained
   [`gsCAFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCAFutilitySpending.md)
   as a backward-compatible wrapper
-  ([\#328](https://github.com/keaven/gsDesign/issues/328),
+  ([@keaven](https://github.com/keaven),
+  [\#328](https://github.com/keaven/gsDesign/issues/328),
   [\#329](https://github.com/keaven/gsDesign/issues/329)).
 - Added power-preserving unconditional POS calibration with
   [`gsPOSFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsPOSFutilitySpending.md)
-  ([\#330](https://github.com/keaven/gsDesign/issues/330)).
+  ([@keaven](https://github.com/keaven),
+  [\#330](https://github.com/keaven/gsDesign/issues/330)).
 - Added
   [`gsEffectSpending()`](https://keaven.github.io/gsDesign/reference/gsEffectSpending.md)
   to calibrate efficacy, futility and harm spending to natural scale
   effect targets separately or jointly, with difference, risk ratio and
   explicitly specified event scale hazard ratio mappings
-  ([\#331](https://github.com/keaven/gsDesign/issues/331)).
+  ([@keaven](https://github.com/keaven),
+  [\#331](https://github.com/keaven/gsDesign/issues/331)).
 - All six spending calibration functions accept survival designs from
   [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md),
   [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md),
   and
   [`gsSurvPower()`](https://keaven.github.io/gsDesign/reference/gsSurvPower.md),
   retaining survival classes and rebuilding enrollment and event
-  summaries ([\#345](https://github.com/keaven/gsDesign/issues/345)).
+  summaries ([@keaven](https://github.com/keaven),
+  [\#345](https://github.com/keaven/gsDesign/issues/345)).
 
 #### Exact binomial designs
 
@@ -102,13 +111,15 @@
   [`VEtable()`](https://keaven.github.io/gsDesign/reference/VEtable.md)
   summaries and automatic [`lt()`](https://rdrr.io/pkg/lt/man/lt.html)
   formatting for exact binomial spending designs
-  ([\#316](https://github.com/keaven/gsDesign/issues/316)).
+  ([@keaven](https://github.com/keaven),
+  [\#316](https://github.com/keaven/gsDesign/issues/316)).
 - [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
   supports fixed survival designs and single observed event counts for
   them;
   [`gsBinomialExact()`](https://keaven.github.io/gsDesign/reference/gsBinomialExact.md)
   supports one-analysis probabilities
-  ([\#222](https://github.com/keaven/gsDesign/issues/222)).
+  ([@keaven](https://github.com/keaven),
+  [\#222](https://github.com/keaven/gsDesign/issues/222)).
 
 #### Numerical integration
 
@@ -139,7 +150,8 @@
   reconstruction as a fallback. Earlier stopping can slightly change
   fitted spending parameters compared with previous versions while
   retaining the requested probability accuracy
-  ([\#356](https://github.com/keaven/gsDesign/issues/356)).
+  ([@keaven](https://github.com/keaven),
+  [\#356](https://github.com/keaven/gsDesign/issues/356)).
 
 ### Bug fixes
 
@@ -148,19 +160,21 @@
 - [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
   inherits the reference design’s futility spending function when `sfl`
   is omitted; explicit overrides remain supported
-  ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+  ([@keaven](https://github.com/keaven),
+  [\#318](https://github.com/keaven/gsDesign/issues/318)).
 - PP, CA, CPOS, and POS futility calibration now inherit the reference
   futility spending function by default, matching CP calibration. This
   fixes multi-target PP calibration with a two-parameter reference
   family; explicit spending overrides and the one-parameter requirement
-  for POS remain supported
-  ([\#354](https://github.com/keaven/gsDesign/issues/354)).
+  for POS remain supported ([@keaven](https://github.com/keaven),
+  [\#354](https://github.com/keaven/gsDesign/issues/354)).
 - Futility calibration retries unsuccessful deferred survival searches
   with full reconstruction and preserves internal `sfLinear` warm starts
   near spending limits. Starting diagnostics remain available when the
   backward sweep is skipped, and scalar root searches bracket
   consecutive valid grid points even when an intermediate grid point is
-  infeasible ([\#356](https://github.com/keaven/gsDesign/issues/356)).
+  infeasible ([@keaven](https://github.com/keaven),
+  [\#356](https://github.com/keaven/gsDesign/issues/356)).
 
 #### Design calculations
 
@@ -177,11 +191,13 @@
   [\#321](https://github.com/keaven/gsDesign/issues/321)).
 - Exact binomial conversion preserves skipped futility looks without
   invalid provisional boundaries during beta spending calibration
-  ([\#333](https://github.com/keaven/gsDesign/issues/333)).
+  ([@keaven](https://github.com/keaven),
+  [\#333](https://github.com/keaven/gsDesign/issues/333)).
 - Survival interim event calculations now use the experimental arm
   dropout rate for experimental events, keeping calendar calibration
   consistent when dropout differs between arms
-  ([\#345](https://github.com/keaven/gsDesign/issues/345)).
+  ([@keaven](https://github.com/keaven),
+  [\#345](https://github.com/keaven/gsDesign/issues/345)).
 
 #### Summaries, printing, and plots
 
@@ -202,15 +218,15 @@
   tables.
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
   keeps all analysis annotations when POS or excluded statistics require
-  unequal block sizes
-  ([\#332](https://github.com/keaven/gsDesign/issues/332)).
+  unequal block sizes ([@keaven](https://github.com/keaven),
+  [\#332](https://github.com/keaven/gsDesign/issues/332)).
 - Log scale HR summaries recover missing null and alternative hazard
   ratios from retained `delta0` and `delta1`, avoiding a spurious
   warning after survival designs are reconstructed with
   [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
   and preserving non-unit null ratios and effect direction, including
-  alternate alpha summaries
-  ([\#347](https://github.com/keaven/gsDesign/issues/347)).
+  alternate alpha summaries ([@keaven](https://github.com/keaven),
+  [\#347](https://github.com/keaven/gsDesign/issues/347)).
 - [`print.gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
   no longer truncates spending function parameters with decimal values,
   such as the t-distribution parameters printed as
@@ -219,11 +235,13 @@
   [\#307](https://github.com/keaven/gsDesign/issues/307)).
 - Information-based boundary plots label actual information as `I=` with
   two decimal places, rather than rounding it to a sample size
-  ([\#315](https://github.com/keaven/gsDesign/issues/315)).
+  ([@keaven](https://github.com/keaven),
+  [\#315](https://github.com/keaven/gsDesign/issues/315)).
 - Power plots omit curves and annotations for inactive boundaries while
   retaining cumulative probabilities and original analysis numbers. Use
   `showSkipped = TRUE` to include skipped looks
-  ([\#349](https://github.com/keaven/gsDesign/issues/349)).
+  ([@keaven](https://github.com/keaven),
+  [\#349](https://github.com/keaven/gsDesign/issues/349)).
 
 ### Documentation
 
@@ -231,7 +249,8 @@
 
 - Added a historical vignette covering the package’s statistical
   foundations, contributors, software modernization, and recent
-  development ([\#304](https://github.com/keaven/gsDesign/issues/304)).
+  development ([@keaven](https://github.com/keaven),
+  [\#304](https://github.com/keaven/gsDesign/issues/304)).
 - Updated package vignettes to use **lt** consistently for formatted
   data frame and matrix output, with compact row spacing for long tables
   and no significant changes to the rendered HTML tables
@@ -240,7 +259,8 @@
 - Reorganized the pkgdown reference index by workflow, highlighting
   spending calibration and keeping shared help topics together. The
   Articles menu now lists every article directly under category headings
-  ([\#354](https://github.com/keaven/gsDesign/issues/354)).
+  ([@keaven](https://github.com/keaven),
+  [\#354](https://github.com/keaven/gsDesign/issues/354)).
 - Reduced rendered HTML size in selected vignettes with figures by
   switching from the base R SVG device to PNG device with optimized
   parameters ([@nanxstats](https://github.com/nanxstats),
@@ -258,12 +278,13 @@
   practical guidance on early futility and sample size inflation.
   Examples cover risk differences, normal means, survival designs, and
   calibrated spending curves with interpretation of effects at the
-  bounds ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+  bounds ([@keaven](https://github.com/keaven),
+  [\#318](https://github.com/keaven/gsDesign/issues/318)).
 - Documented all
   [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
   solver controls, defaults, and spending family restrictions, with a
-  tighter CP tolerance example
-  ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+  tighter CP tolerance example ([@keaven](https://github.com/keaven),
+  [\#318](https://github.com/keaven/gsDesign/issues/318)).
 - Updated the
   [`gsCPFutilitySpending()`](https://keaven.github.io/gsDesign/reference/gsCPFutilitySpending.md)
   example to target conditional power 0.3 under the observed effect,
@@ -274,19 +295,23 @@
   power using
   [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
   The example uses `sfLDOF` efficacy spending and futility testing only
-  at IA 1 ([\#318](https://github.com/keaven/gsDesign/issues/318)).
+  at IA 1 ([@keaven](https://github.com/keaven),
+  [\#318](https://github.com/keaven/gsDesign/issues/318)).
 - Added a separate vignette comparing conditional assurance and
   unconditional POS spending calibration, including the Dragalin fixed
   information benchmark and operating characteristic checks
-  ([\#330](https://github.com/keaven/gsDesign/issues/330)).
+  ([@keaven](https://github.com/keaven),
+  [\#330](https://github.com/keaven/gsDesign/issues/330)).
 - Added an effect spending vignette using the public interface for joint
   boundaries, risk differences and HRs explicitly scaled to events
-  ([\#331](https://github.com/keaven/gsDesign/issues/331)).
+  ([@keaven](https://github.com/keaven),
+  [\#331](https://github.com/keaven/gsDesign/issues/331)).
 - Clarified that all six spending calibrators hold analysis information
   fractions (`x$timing`) fixed, separately from spending times. Defined
   CP targets in the argument documentation as total future efficacy
   probabilities and added a verified two-target example
-  ([\#346](https://github.com/keaven/gsDesign/issues/346)).
+  ([@keaven](https://github.com/keaven),
+  [\#346](https://github.com/keaven/gsDesign/issues/346)).
 
 #### Harm monitoring
 
@@ -294,21 +319,22 @@
   help and harm/selective monitoring vignettes, with a worked
   skipped-look example. Documented the 0.1/Pocock rationale, nominal
   harm tail p-values, and the tradeoff in increasing total harm spending
-  when more analyses are planned
-  ([\#352](https://github.com/keaven/gsDesign/issues/352)).
+  when more analyses are planned ([@keaven](https://github.com/keaven),
+  [\#352](https://github.com/keaven/gsDesign/issues/352)).
 - Added a sparse-event mortality example using type 6 non-binding harm
   monitoring without separate futility, exact binomial integer
   boundaries, harm detection sensitivity, and a fixed analysis precision
   illustration. Distinguished detecting harm from ruling it out and
   corrected the FDA reference to the August 2025 draft guidance
-  ([\#352](https://github.com/keaven/gsDesign/issues/352)).
+  ([@keaven](https://github.com/keaven),
+  [\#352](https://github.com/keaven/gsDesign/issues/352)).
 
 ### Testing
 
 - Reduced default test suite runtime by using smaller stress test grids,
   fewer Monte Carlo iterations, and toy exact binomial p-value event
   counts. Set `GSDESIGN_RUN_STRESS_TESTS=true` to run the larger stress
-  test settings (35e606e).
+  test settings ([@keaven](https://github.com/keaven), 35e606e).
 - Added regression fixtures, multivariate normal reference checks, and
   print snapshots for the numerical integration routines and their R
   interfaces ([@nanxstats](https://github.com/nanxstats),
@@ -316,21 +342,25 @@
   [\#320](https://github.com/keaven/gsDesign/issues/320)).
 - Added tests for natural effect calibration, joint boundary targets, HR
   allocation/direction handling and design replay
-  ([\#331](https://github.com/keaven/gsDesign/issues/331)).
+  ([@keaven](https://github.com/keaven),
+  [\#331](https://github.com/keaven/gsDesign/issues/331)).
 - Verified survival CP calibration retains the 0.1/Pocock harm defaults
   and harm calibration independent of futility stopping
-  ([\#345](https://github.com/keaven/gsDesign/issues/345)).
+  ([@keaven](https://github.com/keaven),
+  [\#345](https://github.com/keaven/gsDesign/issues/345)).
 - Added harm calibration checks against an independent boundary solver
   and bivariate integration, plus default propagation, selective bound,
   and exact binomial checks. Regenerated only the four affected harm
   design numerical fixtures for the intentional new calibration and
-  defaults ([\#352](https://github.com/keaven/gsDesign/issues/352)).
+  defaults ([@keaven](https://github.com/keaven),
+  [\#352](https://github.com/keaven/gsDesign/issues/352)).
 - Updated RTF summary tests to expect no warning when log scale HR
   metadata can be recovered, retaining the existing output snapshots
-  ([\#347](https://github.com/keaven/gsDesign/issues/347)).
+  ([@keaven](https://github.com/keaven),
+  [\#347](https://github.com/keaven/gsDesign/issues/347)).
 - Declared `svglite` as a test dependency for information label
-  rendering checks
-  ([\#315](https://github.com/keaven/gsDesign/issues/315)).
+  rendering checks ([@keaven](https://github.com/keaven),
+  [\#315](https://github.com/keaven/gsDesign/issues/315)).
 
 ## gsDesign 3.11.0 (August 2026)
 
@@ -512,7 +542,7 @@ CRAN release: 2026-08-29
   as compatible with the Maurer–Bretz graphical multiple testing
   framework ([\#287](https://github.com/keaven/gsDesign/issues/287)).
 
-## gsDesign 3.10.1
+## gsDesign 3.10.1 (July 2026)
 
 CRAN release: 2026-07-20
 
@@ -522,7 +552,7 @@ CRAN release: 2026-07-20
   analysis; skipping futility no longer also removes an active harm
   bound ([\#284](https://github.com/keaven/gsDesign/issues/284)).
 
-## gsDesign 3.10.0
+## gsDesign 3.10.0 (July 2026)
 
 CRAN release: 2026-07-03
 
