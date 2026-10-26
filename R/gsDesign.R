@@ -1869,7 +1869,7 @@ gsFutilityBoundUpdate <- function(x) {
 
 # gsJointHarmBounds: jointly derive selective futility, harm, and efficacy bounds ----
 gsJointHarmBounds <- function(x) {
-  if (!any(x$testHarm & !x$testLower)) return(x)
+  if (!(x$test.type %in% c(7, 8)) || all(x$testLower)) return(x)
 
   x$lower$bound <- pmin(x$lower$bound, x$upper$bound)
   for (iteration in seq_len(100)) {

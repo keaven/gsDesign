@@ -1,3 +1,11 @@
+# gsDesign (development version)
+
+## Bug fixes
+
+- Preserved interim harm bounds and summary table results when final harm
+  monitoring is disabled for designs with selective futility monitoring
+  (`test.type = 7` or `8`), retaining the final-harm-enabled calibration (#366).
+
 # gsDesign 4.0.0 (October 2026)
 
 ## Breaking changes
