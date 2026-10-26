@@ -1,0 +1,74 @@
+/* navbar dropdowns ========================================================= */
+
+// pkgdown caps dropdown menus at 280px so long menus stay reachable under
+// the fixed navbar, which shows only a few entries of the Articles menu.
+// When the navbar is expanded, let the menu use the rest of the viewport.
+@include media-breakpoint-up(lg) {
+  .navbar .dropdown-menu {
+    max-height: calc(100vh - #{$pkgdown-nav-height} - 1rem);
+  }
+}
+
+// If the menu still overflows, fade out the bottom entries above a down
+// chevron. The cue sticks to the bottom edge while scrolling. At the end of
+// the list it comes to rest behind the last entry and the space below it,
+// which are opaque and stacked above the cue.
+$dropdown-more-fade: 0.75rem;
+$dropdown-more-strip: 1.5rem;
+$dropdown-more-height: $dropdown-more-fade + $dropdown-more-strip;
+$dropdown-more-end: 0.75rem;
+$dropdown-more-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='#{$dropdown-header-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
+
+.navbar .dropdown-menu {
+  padding-bottom: 0;
+  scroll-padding-bottom: $dropdown-more-height;
+
+  // pkgdown puts a divider before every section heading, including the first
+  >li:first-child>.dropdown-divider {
+    display: none;
+  }
+
+  &::after {
+    content: "";
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    display: block;
+    height: $dropdown-more-height;
+    margin-top: $dropdown-more-end - $dropdown-more-height;
+    background-image:
+      escape-svg($dropdown-more-icon),
+      linear-gradient(transparent, var(--bs-dropdown-bg) $dropdown-more-fade);
+    // Center the 1rem icon in the opaque strip below the fade
+    background-position: center bottom ($dropdown-more-strip - 1rem) * 0.5, 0 0;
+    background-repeat: no-repeat;
+    background-size: 1rem, 100% 100%;
+    pointer-events: none;
+  }
+
+  >li:last-child {
+    position: relative;
+    z-index: 2;
+    background-color: var(--bs-dropdown-bg);
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      right: 0;
+      left: 0;
+      height: $dropdown-more-end;
+      background-color: var(--bs-dropdown-bg);
+    }
+  }
+
+  // Keep the scrollbar visible where overlay scrollbars would hide it
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--bs-body-color-rgb), 0.3);
+    border-radius: 0.25rem;
+  }
+}
