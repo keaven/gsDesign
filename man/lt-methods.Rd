@@ -3,6 +3,7 @@
 \name{lt-methods}
 \alias{lt-methods}
 \alias{lt.gsBinomialExactTable}
+\alias{lt.gsBoundSummary}
 \title{Convert a summary table object to an lt table}
 \usage{
 \method{lt}{gsBinomialExactTable}(
@@ -16,6 +17,8 @@
   en_decimals = 1,
   rr_decimals = 0
 )
+
+\method{lt}{gsBoundSummary}(data, ...)
 }
 \arguments{
 \item{data}{Object to be converted.}
@@ -43,11 +46,12 @@ An \code{lt_tbl} object.
 \description{
 Convert a summary table object created with \code{\link{as_table}}
 to an \code{lt_tbl} object; currently only implemented for
-\code{\link{gsBinomialExact}}.
+\code{\link{gsBinomialExact}} and \code{\link{gsBoundSummary}}.
 }
 \details{
-Currently only implemented for \code{\link{gsBinomialExact}} objects.
-Creates a table to summarize an object.
+Creates a table to summarize an object. Tables from
+\code{\link{gsBoundSummary}} include an explanatory footnote when harm
+crossing probabilities are displayed.
 For \code{\link{gsBinomialExact}}, this summarized operating characteristics
 across a range of effect sizes.
 }

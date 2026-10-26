@@ -491,8 +491,14 @@ gsBoundSummary0 <- function(
     pframe <- data.frame("Value" = pframe[, 1], pframe2, pframe[, -1])
   }
   if (x$test.type %in% c(7, 8)) {
+    harm_probability <- gsProbability(
+      k = x$k, theta = x$theta, n.I = x$n.I,
+      a = x$harm$bound, b = x$upper$bound, r = r
+    )$lower$prob
     pframe3 <- NULL
-    for (i in 1:length(x$theta)) pframe3 <- rbind(pframe3, data.frame("Harm" = cumsum(x$harm$prob[, i])))
+    for (theta_index in seq_along(x$theta)) {
+      pframe3 <- rbind(pframe3, data.frame("Harm" = cumsum(harm_probability[, theta_index])))
+    }
     pframe <- data.frame(pframe, pframe3)
   }
   cp_at <- function(theta, label) {
@@ -690,6 +696,15 @@ gsBoundSummary0 <- function(
 
   class(rval) <- c("gsBoundSummary", "data.frame")
   attr(rval, "analysis_i") <- analysis_i
+  if (x$test.type %in% c(7, 8) && any(grepl("^P\\(Cross\\)", rval$Value))) {
+    attr(rval, "footnote") <- paste(
+      "Harm P(Cross) ignores futility stopping, retaining earlier harm and efficacy stops.",
+      "Capping at futility may prevent full harm spending.",
+      "Actual harm stopping probabilities follow all active rules and may be smaller:",
+      "for design x, use cumsum(x$harm$prob[, j]) at x$theta[j].",
+      "Displayed Harm and Futility probabilities are not mutually exclusive."
+    )
+  }
   if ("gsSurv" %in% class(x) && !is.null(x$method)) {
     attr(rval, "method") <- x$method
   }
@@ -703,6 +718,15 @@ gsBoundSummary0 <- function(
 #' both its annotations and the selected boundary statistics, padding the
 #' shorter side. Padding has an empty \code{Value} and missing numeric values;
 #' the print method displays these cells as blanks.
+#'
+#' For types 7 and 8, the Harm \code{P(Cross)} entries ignore futility
+#' stopping but retain earlier harm and efficacy stops. Under the null they
+#' track cumulative harm spending unless capping prevents full spending.
+#' Console output and tables rendered with \code{\link[lt]{lt}()} include
+#' an explanatory footnote. Actual harm stopping probabilities, following
+#' all active stopping rules, remain in \code{x$harm$prob}; use
+#' \code{cumsum(x$harm$prob[, j])} for the parameter value \code{x$theta[j]}.
+#' Displayed Harm and Futility probabilities are not mutually exclusive.
 #' @description  A tabular summary of a group sequential design's bounds and their properties
 #' are often useful. The 'vintage' \code{print.gsDesign()} function provides a
 #' complete but minimally formatted summary of a group sequential design
@@ -793,10 +817,11 @@ gsBoundSummary0 <- function(
 #' \code{x}, the probability of crossing either bound given that treatment
 #' effect is computed. This value is cumulative for each bound. For example,
 #' the probability of crossing the efficacy bound at or before the analysis of
-#' interest. For test types 7 and 8, harm, futility, and efficacy crossing
-#' probabilities are mutually exclusive and assume all active stopping rules
-#' are followed, including futility even for a non-binding design. Harm
-#' crossing probabilities can therefore be below the harm spending targets.
+#' interest. Efficacy and futility crossing probabilities assume all active
+#' stopping rules are followed, including futility for a non-binding design.
+#' For test types 7 and 8, harm crossing probabilities instead ignore futility
+#' stopping, retaining earlier harm and efficacy stops. Displayed Harm and
+#' Futility probabilities are therefore not mutually exclusive.
 #' Every characteristic for a bound,
 #' including its cumulative crossing probability, is shown as \code{NA} at an
 #' analysis where that bound is inactive. The underlying probability arrays on
@@ -1030,6 +1055,7 @@ gsBoundSummary <- function(
     x, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
     exclude = exclude, POS = POS, ratio = ratio, r = r, prior = prior
   )
+  footnote <- attr(out, "footnote")
   analysis_i <- attr(out, "analysis_i")
   attr(out, "analysis_i") <- NULL
   # Return unchanged if alpha is NULL or if test.type is not supported
@@ -1172,6 +1198,7 @@ gsBoundSummary <- function(
   }
 
   class(out) <- c("gsBoundSummary", "data.frame")
+  attr(out, "footnote") <- footnote
   return(out)
 }
 
@@ -1249,6 +1276,8 @@ print.gsBoundSummary <- function(x, row.names = FALSE, digits = 4, ...) {
   } else {
     print.data.frame(x, row.names = row.names, digits = digits, ...)
   }
+  footnote <- attr(x, "footnote")
+  if (!is.null(footnote)) cat("\n", footnote, "\n", sep = "")
   invisible(x)
 }
 

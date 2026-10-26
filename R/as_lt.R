@@ -11,7 +11,7 @@ lt::lt
 #'
 #' Convert a summary table object created with \code{\link{as_table}}
 #' to an \code{lt_tbl} object; currently only implemented for
-#' \code{\link{gsBinomialExact}}.
+#' \code{\link{gsBinomialExact}} and \code{\link{gsBoundSummary}}.
 #'
 #' @param data Object to be converted.
 #' @param ... Other parameters that may be specific to the object.
@@ -29,8 +29,9 @@ lt::lt
 #' @seealso \code{vignette("binomialSPRTExample")}
 #'
 #' @details
-#' Currently only implemented for \code{\link{gsBinomialExact}} objects.
-#' Creates a table to summarize an object.
+#' Creates a table to summarize an object. Tables from
+#' \code{\link{gsBoundSummary}} include an explanatory footnote when harm
+#' crossing probabilities are displayed.
 #' For \code{\link{gsBinomialExact}}, this summarized operating characteristics
 #' across a range of effect sizes.
 #'
@@ -78,6 +79,17 @@ lt.gsBinomialExactTable <- function(
     lt::lt_format(columns = "en", decimals = en_decimals) |>
     lt::lt_format(columns = "theta", decimals = rr_decimals, percent = TRUE) |>
     lt::lt_header(title = title, subtitle = subtitle)
+}
+
+#' @rdname lt-methods
+#' @exportS3Method lt::lt
+lt.gsBoundSummary <- function(data, ...) {
+  table <- lt::lt(as.data.frame(data), ...)
+  footnote <- attr(data, "footnote")
+  if (!is.null(footnote)) {
+    table <- lt::lt_footnote(table, footnote, where = "column", columns = "Harm")
+  }
+  table
 }
 
 #' Format a vaccine or prevention efficacy summary table

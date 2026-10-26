@@ -274,7 +274,15 @@ data.frame(
   `Harm without futility` = cumsum(harm_without_futility$lower$prob[, 1]),
   `Harm with futility` = cumsum(xh$harm$prob[, 1]),
   check.names = FALSE
-) |> lt() |> lt_format(columns = 2:6, decimals = 4)
+) |> lt() |> lt_format(columns = 2:6, decimals = 4) |>
+  lt::lt_footnote(
+    paste(
+      "Harm without futility retains earlier harm and efficacy stops.",
+      "Harm with futility follows all active stopping rules;",
+      "the latter is the cumulative harm$prob stored in the design."
+    ),
+    where = "column", columns = "Harm without futility"
+  )
 ```
 
 At IA2 the probability of an actual harm stop includes only paths that
@@ -283,9 +291,14 @@ $P_0(Z_1 \le h_1) + P_0(Z_1 > f_1, Z_2 \le h_2)$, where $h_i$ denotes a
 harm boundary and $f_1$ the IA1 futility boundary. Calibration without
 futility instead uses $h_1$ in place of $f_1$ in the second term.
 
-`gsBoundSummary()` reports **actual cumulative stopping probabilities**, not
-the hypothetical probabilities used to calibrate harm spending. Its optional
-`Spending` rows report the spending targets, so these two rows need not agree.
+`gsBoundSummary()` reports **harm crossing probabilities ignoring futility**,
+retaining earlier harm and efficacy stops, so its null harm probabilities track
+cumulative harm spending unless capping prevents full spending. The table
+footnote distinguishes these from actual harm stops, available as
+`cumsum(xh$harm$prob[, 1])` under the null. Its efficacy and futility probabilities
+still assume all active stopping rules are followed; the displayed harm and
+futility probabilities must not be added as mutually exclusive outcomes.
+Its optional `Spending` rows report the incremental spending targets.
 Also, its `p (1-sided)` rows use the efficacy direction; the nominal p-value
 favoring harm is `pnorm(xh$harm$bound)`, the complement of that displayed
 p-value. `print(xh)` labels the harm direction values as `Nominal p`.

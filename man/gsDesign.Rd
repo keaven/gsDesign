@@ -429,11 +429,13 @@ stopping were ignored. Earlier harm and efficacy stops are retained.
 This convention is separate from binding versus non-binding efficacy
 calibration: type 7 protects alpha assuming both lower stopping rules are
 followed, whereas type 8 protects alpha even if they are ignored.
-Reported \code{harm$prob}, power, expected information, and
-\code{gsBoundSummary()} crossing probabilities assume all active stopping
-rules are followed. Thus actual harm probabilities may be smaller than
+Reported \code{harm$prob}, power, and expected information assume all
+active stopping rules are followed. Thus actual harm probabilities may be smaller than
 \code{cumsum(harm$spend)}. Where both lower bounds are active, harm is capped
 at futility to retain their ordering; this can also prevent full spending.
+In \code{gsBoundSummary()}, harm crossing probabilities instead ignore
+futility stopping, as in the calibration. An explanatory footnote is
+included in console output and tables rendered with \code{\link[lt]{lt}()}.
 
 The defaults \code{astar = 0.1} (selected by input 0) and
 \code{sfharm = sfLDPocock} provide relatively early spending and aim to flag

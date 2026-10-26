@@ -131,6 +131,10 @@
 
 ### Summaries, printing, and plots
 
+- `gsBoundSummary()` harm crossing probabilities for types 7 and 8 now ignore
+  futility stopping, matching harm calibration. Console and `lt()` tables
+  explain the alternate actual-stopping calculation in a footnote; stored
+  `harm$prob`, power, and expected information are unchanged (#366, #367).
 - Fixed `gsBoundCP()` to return `NA` at absent harm bounds, including bounds
   with zero spending. This also fixes `gsBoundSummary()` when conditional
   power is requested for selective harm bound designs (@nanxstats, #335).

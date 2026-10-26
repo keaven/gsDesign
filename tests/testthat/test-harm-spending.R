@@ -49,7 +49,11 @@ test_that("harm calibration ignores futility but actual probabilities include it
       }
       summary <- gsBoundSummary(x, digits = 8, exclude = NULL)
       rows <- summary$Value == "P(Cross) if delta=0"
-      expect_equal(summary$Harm[rows], cumsum(x$harm$prob[, 1]), tolerance = 1e-7)
+      expect_equal(summary$Harm[rows], cumsum(ignored$lower$prob[, 1]), tolerance = 1e-7)
+      expect_gt(tail(summary$Harm[rows], 1), sum(x$harm$prob[, 1]))
+      expect_match(attr(summary, "footnote"), "ignores futility stopping")
+      expect_match(attr(summary, "footnote"), "cumsum(x$harm$prob[, j])", fixed = TRUE)
+      expect_output(print(summary), "ignores futility stopping")
       expect_equal(summary$Harm[summary$Value == "Spending"], x$harm$spend, tolerance = 1e-7)
     }
   }

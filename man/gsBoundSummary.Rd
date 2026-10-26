@@ -282,10 +282,11 @@ value. \code{P{Cross if delta=xx}: }For each of the parameter values in
 \code{x}, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
-interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive and assume all active stopping rules
-are followed, including futility even for a non-binding design. Harm
-crossing probabilities can therefore be below the harm spending targets.
+interest. Efficacy and futility crossing probabilities assume all active
+stopping rules are followed, including futility for a non-binding design.
+For test types 7 and 8, harm crossing probabilities instead ignore futility
+stopping, retaining earlier harm and efficacy stops. Displayed Harm and
+Futility probabilities are therefore not mutually exclusive.
 Every characteristic for a bound,
 including its cumulative crossing probability, is shown as \code{NA} at an
 analysis where that bound is inactive. The underlying probability arrays on
@@ -298,6 +299,15 @@ displayed by \code{gsBoundSummary()}. Each analysis block accommodates
 both its annotations and the selected boundary statistics, padding the
 shorter side. Padding has an empty \code{Value} and missing numeric values;
 the print method displays these cells as blanks.
+
+For types 7 and 8, the Harm \code{P(Cross)} entries ignore futility
+stopping but retain earlier harm and efficacy stops. Under the null they
+track cumulative harm spending unless capping prevents full spending.
+Console output and tables rendered with \code{\link[lt]{lt}()} include
+an explanatory footnote. Actual harm stopping probabilities, following
+all active stopping rules, remain in \code{x$harm$prob}; use
+\code{cumsum(x$harm$prob[, j])} for the parameter value \code{x$theta[j]}.
+Displayed Harm and Futility probabilities are not mutually exclusive.
 }
 \note{
 The gsDesign technical manual is available at
