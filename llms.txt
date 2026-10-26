@@ -407,8 +407,8 @@ trials with time-to-event endpoints using gsDesign.
   analyses](https://keaven.github.io/gsDesign/articles/SelectiveBoundTesting.md):
 - [Integer sample size and event
   counts](https://keaven.github.io/gsDesign/articles/toInteger.md):
-- [Power Computation for Group Sequential Survival
-  Designs](https://keaven.github.io/gsDesign/articles/gsSurvPower.md):
+- [Power computation for group sequential survival
+  designs](https://keaven.github.io/gsDesign/articles/gsSurvPower.md):
 - [Futility and harm bounds for overall survival
   monitoring](https://keaven.github.io/gsDesign/articles/HarmBound.md):
 - [A cure model calendar-based

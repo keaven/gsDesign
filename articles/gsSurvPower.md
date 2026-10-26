@@ -1,4 +1,4 @@
-# Power Computation for Group Sequential Survival Designs
+# Power computation for group sequential survival designs
 
 ## Motivation
 
