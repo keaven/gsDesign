@@ -1,11 +1,3 @@
-# gsDesign (development version)
-
-## Bug fixes
-
-- Preserved interim harm bounds and summary table results when final harm
-  monitoring is disabled for designs with selective futility monitoring
-  (`test.type = 7` or `8`), retaining the final-harm-enabled calibration (#366).
-
 # gsDesign 4.0.0 (October 2026)
 
 ## Breaking changes
@@ -132,6 +124,10 @@
 - Survival interim event calculations now use the experimental arm dropout
   rate for experimental events, keeping calendar calibration consistent when
   dropout differs between arms (@keaven, #345).
+- Preserved interim harm bounds and summary table results when final harm
+  monitoring is disabled for designs with selective futility monitoring
+  (`test.type = 7` or `8`), matching the calibration with final harm
+  monitoring enabled (@keaven, #366, #367).
 
 ### Summaries, printing, and plots
 
