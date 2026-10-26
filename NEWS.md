@@ -1,4 +1,4 @@
-# gsDesign (development version)
+# gsDesign 4.0.0 (October 2026)
 
 ## Breaking changes
 
@@ -340,14 +340,14 @@
   compatible with the Maurer--Bretz graphical multiple testing framework
   (#287).
 
-# gsDesign 3.10.1
+# gsDesign 3.10.1 (July 2026)
 
 ## Bug fixes
 
 - Futility and harm bounds can now be skipped independently at an analysis;
   skipping futility no longer also removes an active harm bound (#284).
 
-# gsDesign 3.10.0
+# gsDesign 3.10.0 (July 2026)
 
 ## New features
 
