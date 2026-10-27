@@ -51,17 +51,17 @@ test_that("harm boundary summaries render their explanatory footnote", {
   for (test_type in 7:8) {
     design <- gsDesign(test.type = test_type)
     alpha <- if (test_type == 8) c(.025, .02) else NULL
-    summary <- gsBoundSummary(design, alpha = alpha)
+    summary <- gsBoundSummary(design, alpha = alpha, exclude = NULL)
     table <- lt::lt(summary)
     html <- format(table)
 
     expect_s3_class(table, "lt_tbl")
     expect_equal(table$data$Harm, summary$Harm)
-    expect_match(html, "ignores futility stopping", fixed = TRUE)
-    expect_match(html, "Actual harm stopping probabilities", fixed = TRUE)
-    expect_match(html, "not mutually exclusive", fixed = TRUE)
+    expect_match(html, "ignoring futility stopping", fixed = TRUE)
+    expect_match(html, "not actual stopping probabilities", fixed = TRUE)
+    expect_match(html, "must not be added", fixed = TRUE)
   }
 
   ordinary <- lt::lt(gsBoundSummary(gsDesign(test.type = 4)))
-  expect_false(grepl("ignores futility stopping", format(ordinary), fixed = TRUE))
+  expect_false(grepl("ignoring futility stopping", format(ordinary), fixed = TRUE))
 })

@@ -15,6 +15,42 @@ test_that("harm defaults are 0.1 and Lan-DeMets Pocock only for harm designs", {
   }
 })
 
+test_that("harm designs without interim futility match paired null-spending lower bounds", {
+  for (test_type in 5:6) {
+    for (spending in list(sfLDPocock, sfHSD)) {
+      reference <- gsDesign(
+        test.type = test_type, astar = .1, timing = c(.5, .75),
+        sfl = spending, sflpar = -2, tol = 1e-8
+      )
+      harm <- gsDesign(
+        test.type = test_type + 2, astar = .1, n.I = reference$n.I,
+        sfharm = spending, sfharmparam = -2,
+        testLower = c(rep(FALSE, reference$k - 1), TRUE), tol = 1e-8
+      )
+      expect_equal(harm$n.I, reference$n.I)
+      expect_equal(harm$upper$bound, reference$upper$bound, tolerance = 2e-6)
+      expect_equal(harm$harm$bound, reference$lower$bound, tolerance = 2e-6)
+      expect_equal(harm$harm$spend, reference$lower$spend, tolerance = 1e-8)
+    }
+  }
+})
+
+test_that("non-binding harm matches type 6 with active uncapped futility", {
+  for (spending in list(sfLDPocock, sfHSD)) {
+    reference <- gsDesign(
+      test.type = 6, astar = .1, timing = c(.5, .75),
+      sfl = spending, sflpar = -2, tol = 1e-8
+    )
+    harm <- gsDesign(
+      test.type = 8, astar = .1, n.I = reference$n.I,
+      sfharm = spending, sfharmparam = -2, tol = 1e-8
+    )
+    expect_true(all(harm$harm$bound < harm$lower$bound))
+    expect_equal(harm$upper$bound, reference$upper$bound, tolerance = 2e-6)
+    expect_equal(harm$harm$bound, reference$lower$bound, tolerance = 2e-6)
+  }
+})
+
 test_that("harm calibration ignores futility but actual probabilities include it", {
   for (tt in 7:8) {
     for (fun in list(sfLDPocock, sfHSD)) {
@@ -49,11 +85,17 @@ test_that("harm calibration ignores futility but actual probabilities include it
       }
       summary <- gsBoundSummary(x, digits = 8, exclude = NULL)
       rows <- summary$Value == "P(Cross) if delta=0"
-      expect_equal(summary$Harm[rows], cumsum(ignored$lower$prob[, 1]), tolerance = 1e-7)
-      expect_gt(tail(summary$Harm[rows], 1), sum(x$harm$prob[, 1]))
-      expect_match(attr(summary, "footnote"), "ignores futility stopping")
-      expect_match(attr(summary, "footnote"), "cumsum(x$harm$prob[, j])", fixed = TRUE)
-      expect_output(print(summary), "ignores futility stopping")
+      expect_equal(summary$Harm[rows], cumsum(x$harm$prob[, 1]), tolerance = 1e-7)
+      no_futility <- summary$Value == "P(Cross, no futility) if delta=0"
+      expect_equal(summary$Harm[no_futility], cumsum(ignored$lower$prob[, 1]), tolerance = 1e-7)
+      expect_true(all(is.na(summary$Futility[no_futility])))
+      expect_true(all(is.na(summary$Efficacy[no_futility])))
+      expect_gt(tail(summary$Harm[no_futility], 1), sum(x$harm$prob[, 1]))
+      expect_match(attr(summary, "footnote"), "ignoring futility stopping")
+      expect_output(print(summary), "No-futility rows")
+      default <- gsBoundSummary(x)
+      expect_false(any(grepl("no futility", default$Value, fixed = TRUE)))
+      expect_null(attr(default, "footnote"))
       expect_equal(summary$Harm[summary$Value == "Spending"], x$harm$spend, tolerance = 1e-7)
     }
   }
@@ -70,6 +112,33 @@ test_that("harm spending excludes skipped looks and handles all-active designs",
       expect_true(all(x$harm$spend[!harm] == 0))
       expect_true(all(x$harm$bound[!harm] == -Inf))
       expect_true(all(x$harm$bound <= x$lower$bound))
+    }
+  }
+})
+
+test_that("final futility does not change interim bounds under cumulative harm spending", {
+  for (test_type in 7:8) {
+    for (futility_parameter in c(-2, -8)) {
+      reference <- gsDesign(
+        test.type = test_type, astar = .1, timing = c(.25, .75),
+        sfl = sfHSD, sflpar = futility_parameter
+      )
+      revised <- gsDesign(
+        test.type = test_type, astar = .1, n.I = reference$n.I,
+        sfl = sfHSD, sflpar = futility_parameter,
+        testLower = c(TRUE, TRUE, FALSE)
+      )
+      for (boundary in c("harm", "lower", "upper")) {
+        expect_equal(revised[[boundary]]$bound[1:2], reference[[boundary]]$bound[1:2], tolerance = 2e-6)
+      }
+      if (futility_parameter == -8) {
+        expect_equal(reference$harm$bound[1], reference$lower$bound[1], tolerance = 2e-6)
+      }
+      probability <- gsProbability(
+        k = reference$k, theta = 0, n.I = reference$n.I,
+        a = reference$harm$bound, b = reference$upper$bound
+      )
+      expect_equal(sum(probability$lower$prob), reference$astar, tolerance = 2e-6)
     }
   }
 })
@@ -102,6 +171,8 @@ test_that("interim harm results do not depend on final harm monitoring", {
 
       for (design in list(fixed, resized)) {
         expect_equal(design$n.I, reference$n.I, tolerance = 2e-6)
+        expect_equal(design$upper$bound[1:4], reference$upper$bound[1:4], tolerance = 2e-6)
+        expect_equal(design$lower$bound[1:4], reference$lower$bound[1:4], tolerance = 2e-6)
         expect_equal(design$harm$bound[1:4], reference$harm$bound[1:4], tolerance = 2e-6)
         expect_equal(design$harm$prob[1:4, ], reference$harm$prob[1:4, ], tolerance = 2e-6)
         summary <- gsBoundSummary(design, deltaname = "HR", logdelta = TRUE)

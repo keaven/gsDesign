@@ -409,8 +409,8 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' \code{TRUE} for those types.
 #' Where \code{testHarm} is \code{FALSE}, the harm bound is set to
 #' \code{-Inf} and the bound is displayed as
-#' \code{NA} in output. Cumulative harm crossing probability from earlier
-#' analyses is still displayed.
+#' \code{NA} in output, including cumulative crossing probabilities at that
+#' inactive look. Earlier crossings remain in the design probability arrays.
 #' @section Numerical integration:
 #' Boundary crossing probabilities are computed by the recursive numerical
 #' integration of Jennison and Turnbull (2000, Chapter 19). By default the
@@ -435,13 +435,26 @@ gsBound1 <- function(theta, I, a, probhi, tol = 0.000001, r = 18, printerr = 0) 
 #' This convention is separate from binding versus non-binding efficacy
 #' calibration: type 7 protects alpha assuming both lower stopping rules are
 #' followed, whereas type 8 protects alpha even if they are ignored.
-#' Reported \code{harm$prob}, power, and expected information assume all
-#' active stopping rules are followed. Thus actual harm probabilities may be smaller than
+#' Reported \code{harm$prob}, power, expected information, and ordinary
+#' \code{gsBoundSummary()} crossing probabilities assume all active stopping
+#' rules are followed. Thus actual harm probabilities may be smaller than
 #' \code{cumsum(harm$spend)}. Where both lower bounds are active, harm is capped
-#' at futility to retain their ordering; this can also prevent full spending.
-#' In \code{gsBoundSummary()}, harm crossing probabilities instead ignore
-#' futility stopping, as in the calibration. An explanatory footnote is
-#' included in console output and tables rendered with \code{\link[lt]{lt}()}.
+#' at futility to retain their ordering. All type 7 and 8 designs use the
+#' joint cumulative-spending calibration: a shortfall caused by capping is
+#' carried forward to later active harm analyses. Capping may still prevent
+#' full spending if the remaining active analyses cannot attain the target.
+#' Optional \code{P(Cross, no futility)} rows in \code{gsBoundSummary()}
+#' describe the calibration procedure separately; see that function for
+#' their interpretation and how to request them.
+#'
+#' Types 5 and 7 use the same null-spending construction for the lower and
+#' harm bounds, respectively; the corresponding non-binding pair is 6 and 8.
+#' Match \code{astar}, \code{sfl}/\code{sflpar} to
+#' \code{sfharm}/\code{sfharmparam}, spending times, active lower/harm looks,
+#' and information fractions. The bounds agree when efficacy bounds also
+#' match and harm is not capped at futility. Additional binding futility in
+#' type 7 can change the efficacy bounds. Types 5 and 6 default to
+#' \code{astar = 1 - alpha}, unlike the 0.1 default for types 7 and 8.
 #'
 #' The defaults \code{astar = 0.1} (selected by input 0) and
 #' \code{sfharm = sfLDPocock} provide relatively early spending and aim to flag
@@ -1545,7 +1558,7 @@ gsDType7 <- function(x) {
   saved_test_type <- x$test.type
   saved_harm <- x$harm
   saved_preserve_k <- x$preserve.k
-  if (length(x$n.I) == x$k && any(x$testHarm & !x$testLower)) {
+  if (length(x$n.I) == x$k) {
     x$preserve.k <- TRUE
   }
   x$test.type <- 3L
@@ -1871,7 +1884,7 @@ gsFutilityBoundUpdate <- function(x) {
 
 # gsJointHarmBounds: jointly derive selective futility, harm, and efficacy bounds ----
 gsJointHarmBounds <- function(x) {
-  if (!(x$test.type %in% c(7, 8)) || all(x$testLower)) return(x)
+  if (!(x$test.type %in% c(7, 8))) return(x)
 
   x$lower$bound <- pmin(x$lower$bound, x$upper$bound)
   for (iteration in seq_len(100)) {

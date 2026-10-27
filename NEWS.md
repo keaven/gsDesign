@@ -124,17 +124,19 @@
 - Survival interim event calculations now use the experimental arm dropout
   rate for experimental events, keeping calendar calibration consistent when
   dropout differs between arms (@keaven, #345).
-- Preserved interim harm bounds and summary table results when final harm
-  monitoring is disabled for designs with selective futility monitoring
-  (`test.type = 7` or `8`), matching the calibration with final harm
-  monitoring enabled (@keaven, #366, #367).
+- Types 7 and 8 now use one joint cumulative-spending calibration routine.
+  Harm spending lost to a futility cap is carried to later active harm looks,
+  and changing only final harm or futility monitoring does not change interim
+  bounds. Capped designs can consequently differ from earlier calculations
+  (@keaven, #366, #367).
 
 ### Summaries, printing, and plots
 
-- `gsBoundSummary()` harm crossing probabilities for types 7 and 8 now ignore
-  futility stopping, matching harm calibration. Console and `lt()` tables
-  explain the alternate actual-stopping calculation in a footnote; stored
-  `harm$prob`, power, and expected information are unchanged (#366, #367).
+- `gsBoundSummary()` retains actual stopping probabilities in all ordinary
+  `P(Cross)` rows. Optional `P(Cross, no futility)` Harm rows, requested by
+  omitting `"No futility"` from `exclude`, show the calibration procedure
+  separately. Console, `lt()`, RTF, and `xprint()` explain this distinction
+  (@keaven, #366, #367).
 - Fixed `gsBoundCP()` to return `NA` at absent harm bounds, including bounds
   with zero spending. This also fixes `gsBoundSummary()` when conditional
   power is requested for selective harm bound designs (@nanxstats, #335).
@@ -204,6 +206,10 @@
 
 ### Harm monitoring
 
+- Streamlined the harm monitoring vignette with titled tables, decimal
+  probabilities, and a direct comparison of actual harm stopping,
+  no-futility harm crossing, and null spending. Removed redundant output
+  and marked the worked binding design as optional (@keaven, #366, #367).
 - Explained harm calibration versus actual stopping probabilities in the help
   and harm/selective monitoring vignettes, with a worked skipped-look example.
   Documented the 0.1/Pocock rationale, nominal harm tail p-values, and the

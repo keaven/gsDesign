@@ -29,7 +29,7 @@ gsBoundSummary(
   prior = normalGrid(mu = x$delta/2, sigma = 10/sqrt(x$n.fix)),
   POS = FALSE,
   ratio = NULL,
-  exclude = c("B-value", "Spending", "CP", "CP H1", "PP"),
+  exclude = c("B-value", "Spending", "CP", "CP H1", "PP", "No futility"),
   r = 18,
   alpha = NULL,
   ...
@@ -39,6 +39,7 @@ xprint(
   x,
   include.rownames = FALSE,
   hline.after = c(-1, which(x$Value == x[1, ]$Value) - 1, nrow(x)),
+  add.to.row = NULL,
   ...
 )
 
@@ -127,6 +128,8 @@ bound.}
 \item{exclude}{A list of test statistics to be excluded from design boundary
 summary produced; see details or examples for a list of all possible output
 values. A value of \code{NULL} produces all available summaries.
+The default includes \code{"No futility"}, suppressing the optional
+harm-calibration rows; omit this entry to request them.
 Excluded conditional and predictive power quantities are not computed.}
 
 \item{r}{See \code{\link{gsDesign}}. This is an integer used to control the
@@ -149,6 +152,9 @@ output.}
 \item{hline.after}{table lines after which horizontal separation lines
 should be set; default is to put lines between each analysis as well as at
 the top and bottom of the table.}
+
+\item{add.to.row}{Optional row additions passed to \code{xtable::print.xtable()}.
+The no-futility explanation, when present, is appended to these additions.}
 
 \item{row.names}{indicator of whether or not to print row names}
 
@@ -282,15 +288,27 @@ value. \code{P{Cross if delta=xx}: }For each of the parameter values in
 \code{x}, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
-interest. Efficacy and futility crossing probabilities assume all active
+interest. All boundary crossing probabilities assume all active
 stopping rules are followed, including futility for a non-binding design.
-For test types 7 and 8, harm crossing probabilities instead ignore futility
-stopping, retaining earlier harm and efficacy stops. Displayed Harm and
-Futility probabilities are therefore not mutually exclusive.
 Every characteristic for a bound,
 including its cumulative crossing probability, is shown as \code{NA} at an
 analysis where that bound is inactive. The underlying probability arrays on
 \code{x} retain the cumulative crossing information.
+
+\code{P(Cross, no futility): }Optional rows for types 7 and 8, omitted
+by default through \code{exclude = "No futility"}. These rows contain
+only Harm values: crossing probabilities at the fixed design boundaries
+with futility stopping ignored, retaining earlier harm and efficacy stops.
+Under the null, these describe the harm-calibration probability, which may
+fall below cumulative spending when a cap binds; any shortfall is carried
+to later active harm looks. Under other parameter values, they describe
+a hypothetical monitoring procedure, not a calibration target or the
+actual stopping probability. Do not add these values to ordinary
+\code{P(Cross)} values. Console, \code{lt()}, RTF, and \code{xprint()}
+output include an explanatory note when these rows are requested.
+For example, use
+\code{exclude = c("B-value", "Spending", "CP", "CP H1", "PP")}
+to add these rows while retaining the other default exclusions.
 }
 \details{
 For survival designs, \code{summary()} identifies the stored
@@ -299,15 +317,6 @@ displayed by \code{gsBoundSummary()}. Each analysis block accommodates
 both its annotations and the selected boundary statistics, padding the
 shorter side. Padding has an empty \code{Value} and missing numeric values;
 the print method displays these cells as blanks.
-
-For types 7 and 8, the Harm \code{P(Cross)} entries ignore futility
-stopping but retain earlier harm and efficacy stops. Under the null they
-track cumulative harm spending unless capping prevents full spending.
-Console output and tables rendered with \code{\link[lt]{lt}()} include
-an explanatory footnote. Actual harm stopping probabilities, following
-all active stopping rules, remain in \code{x$harm$prob}; use
-\code{cumsum(x$harm$prob[, j])} for the parameter value \code{x$theta[j]}.
-Displayed Harm and Futility probabilities are not mutually exclusive.
 }
 \note{
 The gsDesign technical manual is available at

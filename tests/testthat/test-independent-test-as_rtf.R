@@ -1,3 +1,20 @@
+test_that("optional no-futility rows retain their explanation in RTF and LaTeX", {
+  design <- gsDesign(test.type = 8, delta1 = log(.65))
+  summary <- gsBoundSummary(
+    design, deltaname = "HR", logdelta = TRUE,
+    exclude = c("B-value", "Spending", "CP", "CP H1", "PP")
+  )
+  path <- tempfile(fileext = ".rtf")
+  as_rtf(summary, file = path)
+  rtf <- paste(readLines(path, warn = FALSE), collapse = "\n")
+  expect_match(rtf, "No-futility rows", fixed = TRUE)
+  expect_match(rtf, "Actual cumulative stopping probability under the null", fixed = TRUE)
+  expect_match(rtf, "Actual cumulative stopping probability under the alternative", fixed = TRUE)
+  latex <- paste(capture.output(xprint(xtable::xtable(summary), comment = FALSE)), collapse = "\n")
+  expect_match(latex, "No-futility rows", fixed = TRUE)
+  expect_match(latex, "must not be added", fixed = TRUE)
+})
+
 test_that("Snapshot test for gsSurv gsBoundSummary as_rtf", {
   skip_on_cran()
 
