@@ -15,6 +15,42 @@ test_that("harm defaults are 0.1 and Lan-DeMets Pocock only for harm designs", {
   }
 })
 
+test_that("harm designs without interim futility match paired null-spending lower bounds", {
+  for (test_type in 5:6) {
+    for (spending in list(sfLDPocock, sfHSD)) {
+      reference <- gsDesign(
+        test.type = test_type, astar = .1, timing = c(.5, .75),
+        sfl = spending, sflpar = -2, tol = 1e-8
+      )
+      harm <- gsDesign(
+        test.type = test_type + 2, astar = .1, n.I = reference$n.I,
+        sfharm = spending, sfharmparam = -2,
+        testLower = c(rep(FALSE, reference$k - 1), TRUE), tol = 1e-8
+      )
+      expect_equal(harm$n.I, reference$n.I)
+      expect_equal(harm$upper$bound, reference$upper$bound, tolerance = 2e-6)
+      expect_equal(harm$harm$bound, reference$lower$bound, tolerance = 2e-6)
+      expect_equal(harm$harm$spend, reference$lower$spend, tolerance = 1e-8)
+    }
+  }
+})
+
+test_that("non-binding harm matches type 6 with active uncapped futility", {
+  for (spending in list(sfLDPocock, sfHSD)) {
+    reference <- gsDesign(
+      test.type = 6, astar = .1, timing = c(.5, .75),
+      sfl = spending, sflpar = -2, tol = 1e-8
+    )
+    harm <- gsDesign(
+      test.type = 8, astar = .1, n.I = reference$n.I,
+      sfharm = spending, sfharmparam = -2, tol = 1e-8
+    )
+    expect_true(all(harm$harm$bound < harm$lower$bound))
+    expect_equal(harm$upper$bound, reference$upper$bound, tolerance = 2e-6)
+    expect_equal(harm$harm$bound, reference$lower$bound, tolerance = 2e-6)
+  }
+})
+
 test_that("harm calibration ignores futility but actual probabilities include it", {
   for (tt in 7:8) {
     for (fun in list(sfLDPocock, sfHSD)) {
@@ -50,6 +86,16 @@ test_that("harm calibration ignores futility but actual probabilities include it
       summary <- gsBoundSummary(x, digits = 8, exclude = NULL)
       rows <- summary$Value == "P(Cross) if delta=0"
       expect_equal(summary$Harm[rows], cumsum(x$harm$prob[, 1]), tolerance = 1e-7)
+      no_futility <- summary$Value == "P(Cross, no futility) if delta=0"
+      expect_equal(summary$Harm[no_futility], cumsum(ignored$lower$prob[, 1]), tolerance = 1e-7)
+      expect_true(all(is.na(summary$Futility[no_futility])))
+      expect_true(all(is.na(summary$Efficacy[no_futility])))
+      expect_gt(tail(summary$Harm[no_futility], 1), sum(x$harm$prob[, 1]))
+      expect_match(attr(summary, "footnote"), "ignoring futility stopping")
+      expect_output(print(summary), "No-futility rows")
+      default <- gsBoundSummary(x)
+      expect_false(any(grepl("no futility", default$Value, fixed = TRUE)))
+      expect_null(attr(default, "footnote"))
       expect_equal(summary$Harm[summary$Value == "Spending"], x$harm$spend, tolerance = 1e-7)
     }
   }
@@ -67,6 +113,101 @@ test_that("harm spending excludes skipped looks and handles all-active designs",
       expect_true(all(x$harm$bound[!harm] == -Inf))
       expect_true(all(x$harm$bound <= x$lower$bound))
     }
+  }
+})
+
+test_that("final futility does not change interim bounds under cumulative harm spending", {
+  for (test_type in 7:8) {
+    for (futility_parameter in c(-2, -8)) {
+      reference <- gsDesign(
+        test.type = test_type, astar = .1, timing = c(.25, .75),
+        sfl = sfHSD, sflpar = futility_parameter
+      )
+      revised <- gsDesign(
+        test.type = test_type, astar = .1, n.I = reference$n.I,
+        sfl = sfHSD, sflpar = futility_parameter,
+        testLower = c(TRUE, TRUE, FALSE)
+      )
+      for (boundary in c("harm", "lower", "upper")) {
+        expect_equal(revised[[boundary]]$bound[1:2], reference[[boundary]]$bound[1:2], tolerance = 2e-6)
+      }
+      if (futility_parameter == -8) {
+        expect_equal(reference$harm$bound[1], reference$lower$bound[1], tolerance = 2e-6)
+      }
+      probability <- gsProbability(
+        k = reference$k, theta = 0, n.I = reference$n.I,
+        a = reference$harm$bound, b = reference$upper$bound
+      )
+      expect_equal(sum(probability$lower$prob), reference$astar, tolerance = 2e-6)
+    }
+  }
+})
+
+test_that("interim harm results do not depend on final harm monitoring", {
+  sparse_efficacy <- function(alpha, t, param) {
+    spending <- sfLDOF(alpha - 1e-10, t, param)
+    spending$spend[1:2] <- c(1e-10, 2e-10)
+    spending
+  }
+
+  for (test_type in 7:8) {
+    for (harm_spending in list(sfLDPocock, sfHSD)) {
+      arguments <- list(
+        k = 5, test.type = test_type, alpha = .02, beta = .32,
+        astar = .1, timing = c(.42, .5, .64, .83),
+        sfu = sparse_efficacy, sfupar = 1, sfl = sfHSD, sflpar = -10,
+        sfharm = harm_spending, sfharmparam = -2, delta1 = log(.65),
+        testUpper = c(FALSE, FALSE, TRUE, TRUE, TRUE),
+        testLower = c(TRUE, TRUE, TRUE, TRUE, FALSE),
+        tol = .Machine$double.eps^.25
+      )
+      reference <- do.call(gsDesign, arguments)
+      arguments$testHarm <- c(TRUE, TRUE, TRUE, TRUE, FALSE)
+      resized <- do.call(gsDesign, arguments)
+      arguments$n.I <- reference$n.I
+      fixed <- do.call(gsDesign, arguments)
+      reference_summary <- gsBoundSummary(reference, deltaname = "HR", logdelta = TRUE)
+      interim_rows <- seq_len(which(reference_summary$Value == "Z")[5] - 1)
+
+      for (design in list(fixed, resized)) {
+        expect_equal(design$n.I, reference$n.I, tolerance = 2e-6)
+        expect_equal(design$upper$bound[1:4], reference$upper$bound[1:4], tolerance = 2e-6)
+        expect_equal(design$lower$bound[1:4], reference$lower$bound[1:4], tolerance = 2e-6)
+        expect_equal(design$harm$bound[1:4], reference$harm$bound[1:4], tolerance = 2e-6)
+        expect_equal(design$harm$prob[1:4, ], reference$harm$prob[1:4, ], tolerance = 2e-6)
+        summary <- gsBoundSummary(design, deltaname = "HR", logdelta = TRUE)
+        expect_equal(summary$Harm[interim_rows], reference_summary$Harm[interim_rows])
+        expect_identical(design$harm$bound[5], -Inf)
+        expect_equal(design$harm$spend[5], 0)
+        expect_true(all(design$harm$prob[5, ] == 0))
+      }
+    }
+  }
+})
+
+test_that("survival harm tables do not depend on final harm monitoring", {
+  for (harm_spending in list(sfLDPocock, sfHSD)) {
+    arguments <- list(
+      k = 5, test.type = 8, alpha = .02, beta = .32, astar = .1,
+      timing = c(.42, .5, .64, .83), sfu = sfLDOF, sfupar = 1,
+      sfl = sfHSD, sflpar = -10, sfharm = harm_spending, sfharmparam = -2,
+      lambdaC = log(2) / 209, hr = .65, hr0 = 1, eta = -log(.98) / 12,
+      gamma = c(5, 10, 15, 20), R = c(2, 2, 2, 25),
+      T = NULL, minfup = NULL, ratio = 1,
+      testUpper = c(FALSE, FALSE, TRUE, TRUE, TRUE),
+      testLower = c(TRUE, TRUE, TRUE, TRUE, FALSE)
+    )
+    reference <- do.call(gsSurv, arguments)
+    arguments$testHarm <- c(TRUE, TRUE, TRUE, TRUE, FALSE)
+    revised <- do.call(gsSurv, arguments)
+    reference_summary <- gsBoundSummary(reference)
+    revised_summary <- gsBoundSummary(revised)
+    interim_rows <- seq_len(which(reference_summary$Value == "Z")[5] - 1)
+
+    expect_equal(revised$n.I, reference$n.I, tolerance = 2e-6)
+    expect_equal(revised$harm$bound[1:4], reference$harm$bound[1:4], tolerance = 2e-6)
+    expect_equal(revised$harm$prob[1:4, ], reference$harm$prob[1:4, ], tolerance = 2e-6)
+    expect_equal(revised_summary$Harm[interim_rows], reference_summary$Harm[interim_rows])
   }
 })
 

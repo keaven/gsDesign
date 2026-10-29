@@ -204,8 +204,8 @@ Only used for \code{test.type} 7 or 8; at least one analysis must be
 \code{TRUE} for those types.
 Where \code{testHarm} is \code{FALSE}, the harm bound is set to
 \code{-Inf} and the bound is displayed as
-\code{NA} in output. Cumulative harm crossing probability from earlier
-analyses is still displayed.}
+\code{NA} in output, including cumulative crossing probabilities at that
+inactive look. Earlier crossings remain in the design probability arrays.}
 
 \item{method}{One of \code{"LachinFoulkes"} (default), \code{"Schoenfeld"},
 \code{"Freedman"}, or \code{"BernsteinLagakos"}.

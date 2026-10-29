@@ -426,7 +426,7 @@ gsBoundSummaryUsesHR <- function(x, deltaname) {
 gsBoundSummary0 <- function(
     x, deltaname = NULL, logdelta = FALSE, Nname = NULL, digits = 4, ddigits = 2, tdigits = 0, timename = "Month",
     prior = normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix)),
-    POS = FALSE, ratio = NULL, exclude = c("B-value", "Spending", "CP", "CP H1", "PP"), r = 18, ...) {
+    POS = FALSE, ratio = NULL, exclude = c("B-value", "Spending", "CP", "CP H1", "PP", "No futility"), r = 18, ...) {
   k <- x$k
   if (is.null(Nname)) {
     if (x$n.fix == 1) {
@@ -492,8 +492,23 @@ gsBoundSummary0 <- function(
   }
   if (x$test.type %in% c(7, 8)) {
     pframe3 <- NULL
-    for (i in 1:length(x$theta)) pframe3 <- rbind(pframe3, data.frame("Harm" = cumsum(x$harm$prob[, i])))
+    for (theta_index in seq_along(x$theta)) {
+      pframe3 <- rbind(pframe3, data.frame("Harm" = cumsum(x$harm$prob[, theta_index])))
+    }
     pframe <- data.frame(pframe, pframe3)
+    if (!("No futility" %in% exclude)) {
+      harm_probability <- gsProbability(
+        k = x$k, theta = x$theta, n.I = x$n.I,
+        a = x$harm$bound, b = x$upper$bound, r = r
+      )$lower$prob
+      no_futility <- pframe
+      no_futility$Value <- sub("P(Cross)", "P(Cross, no futility)", pframe$Value, fixed = TRUE)
+      no_futility[c("Efficacy", "Futility")] <- NA_real_
+      no_futility$Harm <- unlist(lapply(seq_along(x$theta), function(theta_index) {
+        cumsum(harm_probability[, theta_index])
+      }), use.names = FALSE)
+      pframe <- rbind(pframe, no_futility)
+    }
   }
   cp_at <- function(theta, label) {
     cp <- data.frame(gsBoundCP(x, theta = theta, r = r))
@@ -690,6 +705,12 @@ gsBoundSummary0 <- function(
 
   class(rval) <- c("gsBoundSummary", "data.frame")
   attr(rval, "analysis_i") <- analysis_i
+  if (any(grepl("^P\\(Cross, no futility\\)", rval$Value))) {
+    attr(rval, "footnote") <- paste(
+      "No-futility rows give harm crossing probabilities ignoring futility stopping, retaining earlier harm and efficacy stops.",
+      "They are not actual stopping probabilities and must not be added to other boundary probabilities."
+    )
+  }
   if ("gsSurv" %in% class(x) && !is.null(x$method)) {
     attr(rval, "method") <- x$method
   }
@@ -793,14 +814,27 @@ gsBoundSummary0 <- function(
 #' \code{x}, the probability of crossing either bound given that treatment
 #' effect is computed. This value is cumulative for each bound. For example,
 #' the probability of crossing the efficacy bound at or before the analysis of
-#' interest. For test types 7 and 8, harm, futility, and efficacy crossing
-#' probabilities are mutually exclusive and assume all active stopping rules
-#' are followed, including futility even for a non-binding design. Harm
-#' crossing probabilities can therefore be below the harm spending targets.
+#' interest. All boundary crossing probabilities assume all active
+#' stopping rules are followed, including futility for a non-binding design.
 #' Every characteristic for a bound,
 #' including its cumulative crossing probability, is shown as \code{NA} at an
 #' analysis where that bound is inactive. The underlying probability arrays on
 #' \code{x} retain the cumulative crossing information.
+#'
+#' \code{P(Cross, no futility): }Optional rows for types 7 and 8, omitted
+#' by default through \code{exclude = "No futility"}. These rows contain
+#' only Harm values: crossing probabilities at the fixed design boundaries
+#' with futility stopping ignored, retaining earlier harm and efficacy stops.
+#' Under the null, these describe the harm-calibration probability, which may
+#' fall below cumulative spending when a cap binds; any shortfall is carried
+#' to later active harm looks. Under other parameter values, they describe
+#' a hypothetical monitoring procedure, not a calibration target or the
+#' actual stopping probability. Do not add these values to ordinary
+#' \code{P(Cross)} values. Console, \code{lt()}, RTF, and \code{xprint()}
+#' output include an explanatory note when these rows are requested.
+#' For example, use
+#' \code{exclude = c("B-value", "Spending", "CP", "CP H1", "PP")}
+#' to add these rows while retaining the other default exclusions.
 #'
 #' @param x An item of class \code{gsDesign} or \code{gsSurv}, except for
 #' \code{print.gsBoundSummary()} where \code{x} is an object created by
@@ -847,7 +881,11 @@ gsBoundSummary0 <- function(
 #' @param exclude A list of test statistics to be excluded from design boundary
 #' summary produced; see details or examples for a list of all possible output
 #' values. A value of \code{NULL} produces all available summaries.
+#' The default includes \code{"No futility"}, suppressing the optional
+#' harm-calibration rows; omit this entry to request them.
 #' Excluded conditional and predictive power quantities are not computed.
+#' @param add.to.row Optional row additions passed to \code{xtable::print.xtable()}.
+#' The no-futility explanation, when present, is appended to these additions.
 #' @param POS This is an indicator of whether or not probability of success
 #' (POS) should be estimated at baseline or at each interim based on the prior
 #' distribution input in \code{prior}. The prior probability of success before
@@ -1004,7 +1042,7 @@ gsBoundSummary <- function(
     prior = normalGrid(mu = x$delta / 2, sigma = 10 / sqrt(x$n.fix)),
     POS = FALSE,
     ratio = NULL,
-    exclude = c("B-value", "Spending", "CP", "CP H1", "PP"),
+    exclude = c("B-value", "Spending", "CP", "CP H1", "PP", "No futility"),
     r = 18,
     alpha = NULL,
     ...) {
@@ -1030,6 +1068,7 @@ gsBoundSummary <- function(
     x, deltaname, logdelta, Nname, digits, ddigits, tdigits, timename,
     exclude = exclude, POS = POS, ratio = ratio, r = r, prior = prior
   )
+  footnote <- attr(out, "footnote")
   analysis_i <- attr(out, "analysis_i")
   attr(out, "analysis_i") <- NULL
   # Return unchanged if alpha is NULL or if test.type is not supported
@@ -1172,6 +1211,7 @@ gsBoundSummary <- function(
   }
 
   class(out) <- c("gsBoundSummary", "data.frame")
+  attr(out, "footnote") <- footnote
   return(out)
 }
 
@@ -1233,8 +1273,21 @@ gsAlternateAlphaDesign <- function(
 # xprint function [sinew] ----
 xprint <- function(x, include.rownames = FALSE,
                    hline.after = c(-1, which(x$Value == x[1, ]$Value) - 1, nrow(x)),
-                   ...) {
-  xtable::print.xtable(x, hline.after = hline.after, include.rownames = include.rownames, ...)
+                   add.to.row = NULL, ...) {
+  footnote <- attr(x, "footnote")
+  if (!is.null(footnote)) {
+    columns <- ncol(x) + as.integer(include.rownames)
+    html <- identical(list(...)$type, "html")
+    note <- if (html) {
+      sprintf('<tr><td colspan="%d">%s</td></tr>\n', columns, footnote)
+    } else {
+      sprintf("\\multicolumn{%d}{l}{\\parbox{0.95\\linewidth}{\\footnotesize %s}} \\\\\n", columns, footnote)
+    }
+    if (is.null(add.to.row)) add.to.row <- list(pos = list(), command = character())
+    add.to.row$pos <- c(add.to.row$pos, list(nrow(x)))
+    add.to.row$command <- c(add.to.row$command, note)
+  }
+  xtable::print.xtable(x, hline.after = hline.after, include.rownames = include.rownames, add.to.row = add.to.row, ...)
 }
 
 # print.gsBoundSummary roxy [sinew] ----
@@ -1249,6 +1302,8 @@ print.gsBoundSummary <- function(x, row.names = FALSE, digits = 4, ...) {
   } else {
     print.data.frame(x, row.names = row.names, digits = digits, ...)
   }
+  footnote <- attr(x, "footnote")
+  if (!is.null(footnote)) cat("\n", paste(strwrap(footnote), collapse = "\n"), "\n", sep = "")
   invisible(x)
 }
 

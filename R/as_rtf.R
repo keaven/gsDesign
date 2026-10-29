@@ -153,7 +153,16 @@ as_rtf.gsBoundSummary <- function(
     footnote_specify = NULL,
     footnote_text = NULL) {
   x_out <- x
-  
+
+  if ("Harm" %in% names(x)) {
+    if (missing(footnote_p_cross_h0)) {
+      footnote_p_cross_h0 <- "Actual cumulative stopping probability under the null hypothesis"
+    }
+    if (missing(footnote_p_cross_h1)) {
+      footnote_p_cross_h1 <- "Actual cumulative stopping probability under the alternative hypothesis"
+    }
+  }
+
   if (is.null(footnote_appx_effect_at_bound)) {
     footnote_appx_effect_at_bound <- ifelse(!is.null(which(x$Value == "~HR at bound")),
                                             "Hazard ratio required to cross bound",
@@ -203,13 +212,23 @@ as_rtf.gsBoundSummary <- function(
   }
 
   # Add d for first instance of "P(Cross) if HR=0.5" in Value column
-  if(any(x$Value == "P(Cross) if HR=0.5")) {
-    first_instance <- which(x$Value == "P(Cross) if HR=0.5")[1]
+  alternative_rows <- grepl("^P\\(Cross\\) if HR=", x$Value) &
+    !grepl("^P\\(Cross\\) if HR=1($|\\{)", x$Value)
+  if(any(alternative_rows)) {
+    first_instance <- which(alternative_rows)[1]
     x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^", letters[letter_order], "}")
     footnote <- c(footnote, paste0("{^", letters[letter_order], "}", footnote_p_cross_h1))
     letter_order <- letter_order + 1
   }
-  
+
+  probability_note <- attr(x_out, "footnote")
+  if (!is.null(probability_note)) {
+    first_instance <- which(grepl("^P\\(Cross, no futility\\)", x$Value))[1]
+    x[first_instance, "Value"] <- paste0(x[first_instance, "Value"], "{^", letters[letter_order], "}")
+    footnote <- c(footnote, paste0("{^", letters[letter_order], "}", probability_note))
+    letter_order <- letter_order + 1
+  }
+
   if(!is.null(footnote_specify) & !is.null(footnote_text)){
     for(k in 1:length(footnote_specify)) {
       if(length(which(x == footnote_specify[k], arr.ind = TRUE)) == 0){
