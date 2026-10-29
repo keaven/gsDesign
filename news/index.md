@@ -178,6 +178,27 @@
 
 #### Design calculations
 
+- [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md) and
+  [`gsSurvCalendar()`](https://keaven.github.io/gsDesign/reference/gsSurvCalendar.md)
+  now forward the numerical integration grid parameter `r` to their
+  internal
+  [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
+  calls, including the follow-up duration search in
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  when both `T` and `minfup` are `NULL`. Previously, multi-look survival
+  designs silently used the default `r = 18` and out of range values
+  were not rejected.
+  [`toInteger()`](https://keaven.github.io/gsDesign/reference/toInteger.md)
+  and
+  [`toBinomialExact()`](https://keaven.github.io/gsDesign/reference/toBinomialExact.md)
+  now retain the input design’s `r` when rebuilding the design, and
+  single-look
+  [`gsSurv()`](https://keaven.github.io/gsDesign/reference/nSurv.md)
+  designs validate `r` as
+  [`gsDesign()`](https://keaven.github.io/gsDesign/reference/gsDesign.md)
+  does ([@nanxstats](https://github.com/nanxstats),
+  [\#369](https://github.com/keaven/gsDesign/issues/369),
+  [\#370](https://github.com/keaven/gsDesign/issues/370)).
 - Guarded the Newton boundary search against `0/0` updates and separated
   its iteration limit and finite iterate clamp from the absent bound
   values ([@nanxstats](https://github.com/nanxstats),
