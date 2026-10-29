@@ -82,6 +82,23 @@ every look. That is, the harm bound flags evidence that the experimental
 treatment may be *worsening* survival — a negative treatment effect on
 the log hazard ratio scale.
 
+## Relationship to types 5 and 6
+
+The lower bound for `test.type = 5` and the harm bound for
+`test.type = 7` use the same null-spending construction. The
+corresponding non-binding pair is `test.type = 6` and `test.type = 8`.
+Compare `lower$bound` for types 5/6 with `harm$bound` for types 7/8, not
+their separate futility bounds.
+
+For equality, match `astar`, `sfl`/`sflpar` to `sfharm`/`sfharmparam`,
+spending times, active lower/harm looks, information fractions, and
+efficacy bounds; harm must not be capped at futility. Types 6 and 8
+retain matching efficacy bounds because lower stopping is non-binding.
+Additional binding futility in type 7 can change the efficacy bounds, so
+equality with type 5 is not unconditional. Types 5/6 also default to
+`astar = 1 - alpha`, whereas types 7/8 default to `astar = 0.1`; specify
+the same value explicitly.
+
 ## Design with non-binding bounds (`test.type = 8`)
 
 We demonstrate a survival design using
@@ -107,7 +124,10 @@ below for clarity. The 10% target describes harm crossing under \\H_0\\
 **if futility stopping is ignored**, while still accounting for earlier
 efficacy and harm stops. Actual harm stopping can be less frequent when
 futility is followed. The existing cap that keeps harm at or below an
-active futility boundary can also reduce the attainable spending.
+active futility boundary can reduce spending at that look. The joint
+calibration carries the shortfall to later active harm looks, where the
+cumulative target is sought again. Full spending is not guaranteed if
+later caps or the absence of further active harm looks prevent recovery.
 
 ### Spending function specification
 
@@ -164,30 +184,23 @@ cat(strwrap(summary(x8), width = 65), sep = "\n")
 The
 [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
 function produces a tabular summary with columns for each boundary. By
-default, `B-value`, `Spending`, `CP`, `CP H1`, and `PP` are excluded. We
-note that for the first interim analysis, the efficacy bound is so
-extreme it is effectively impossible to cross. However, the harm and
-futility bounds are more moderate, allowing for early stopping if there
-is evidence of harm or futility. The futility bound is an indicator of
-why bounds are often non-binding — the futility bound is not intended to
-be a strict stopping rule, but rather a signal that the trial may be
-unlikely to succeed if it continues. Crossing the harm bound is a
-stronger indication that the treatment may be harmful, and the trial
-should be at least paused with a recommendation to review the safety and
-other endpoint data.
+default, `B-value`, `Spending`, `CP`, `CP H1`, `PP`, and the optional
+no-futility probability rows are excluded. We note that for the first
+interim analysis, the efficacy bound is so extreme it is effectively
+impossible to cross. However, the harm and futility bounds are more
+moderate, allowing for early stopping if there is evidence of harm or
+futility. The futility bound is an indicator of why bounds are often
+non-binding — the futility bound is not intended to be a strict stopping
+rule, but rather a signal that the trial may be unlikely to succeed if
+it continues. Crossing the harm bound is a stronger indication that the
+treatment may be harmful, and the trial should be at least paused with a
+recommendation to review the safety and other endpoint data.
 
 ``` r
 
-gsBoundSummary(x8) |> lt()
-```
-
-Conditional power (CP, CP H1) and predictive power (PP) can also be
-included in the summary. Below we show the full table with all
-statistics, including conditional and predictive power at each boundary:
-
-``` r
-
-gsBoundSummary(x8, exclude = c()) |> lt()
+gsBoundSummary(x8) |>
+  lt() |>
+  lt_header("Non-binding design: boundary summary")
 ```
 
 ### Interpreting the boundaries
@@ -231,10 +244,18 @@ treatment effect (HR = 1, i.e., under \\H_0\\) and the design
 alternative (HR = 0.75). When harm and futility are both active,
 `x8$lower$prob` and `x8$harm$prob` are reported as mutually exclusive
 stopping outcomes. Thus, the probability of crossing the futility
-threshold is the sum of the two lower tail components.
+threshold is the sum of the two lower tail components. For comparison,
+we also show harm crossing when futility is ignored and the cumulative
+harm spending target. The target is defined under \\H_0\\ only; under
+\\H_1\\, the no-futility column describes a hypothetical procedure, not
+a spending target or an actual stopping probability.
 
 ``` r
 
+harm_no_futility <- gsProbability(
+  k = x8$k, theta = x8$theta, n.I = x8$n.I,
+  a = x8$harm$bound, b = x8$upper$bound
+)$lower$prob
 probs <- data.frame(
   Scenario = c(rep("Under H0 (HR=1)", x8$k), rep("Under H1 (HR=0.75)", x8$k)),
   Analysis = rep(1:x8$k, 2),
@@ -242,6 +263,10 @@ probs <- data.frame(
   `P(Efficacy)` = c(cumsum(x8$upper$prob[, 1]), cumsum(x8$upper$prob[, 2])),
   `P(Futility only)` = c(cumsum(x8$lower$prob[, 1]), cumsum(x8$lower$prob[, 2])),
   `P(Harm)` = c(cumsum(x8$harm$prob[, 1]), cumsum(x8$harm$prob[, 2])),
+  `P(Harm, no futility)` = c(
+    cumsum(harm_no_futility[, 1]), cumsum(harm_no_futility[, 2])
+  ),
+  `Harm spending (H0)` = c(cumsum(x8$harm$spend), rep(NA_real_, x8$k)),
   `P(Futility or Harm)` = c(
     cumsum(x8$lower$prob[, 1] + x8$harm$prob[, 1]),
     cumsum(x8$lower$prob[, 2] + x8$harm$prob[, 2])
@@ -250,8 +275,16 @@ probs <- data.frame(
 )
 probs |>
   lt() |>
-  lt_format(columns = 2:7, decimals = 4) |>
-  lt_header("Cumulative boundary crossing probabilities")
+  lt_format(columns = 4:9, decimals = 4) |>
+  lt_header("Cumulative boundary crossing probabilities") |>
+  lt_footnote(
+    paste(
+      "No-futility harm probabilities retain earlier harm and efficacy stops.",
+      "Compare with the cumulative harm spending target under H0 only.",
+      "Do not add this column to actual stopping probabilities."
+    ),
+    where = "column", columns = "P(Harm, no futility)"
+  )
 ```
 
 Under \\H_0\\, the actual cumulative probability of stopping for harm is
@@ -259,7 +292,7 @@ approximately 0.0417 when all active stopping rules are followed. This
 need not equal `astar`: trials that stop for futility cannot
 subsequently stop for harm. The cumulative probability of crossing the
 futility threshold, inclusive of harm, is approximately 0.9888. Under
-\\H_1\\ (HR = 0.75), crossing the harm bound is very unlikely (4^{-4}),
+\\H_1\\ (HR = 0.75), crossing the harm bound is very unlikely (0.0004),
 since the treatment is beneficial.
 
 ### Harm calibration versus actual stopping
@@ -295,7 +328,16 @@ data.frame(
   `Harm without futility` = cumsum(harm_without_futility$lower$prob[, 1]),
   `Harm with futility` = cumsum(xh$harm$prob[, 1]),
   check.names = FALSE
-) |> lt() |> lt_format(columns = 2:6, decimals = 4)
+) |> lt() |> lt_format(columns = 2:6, decimals = 4) |>
+  lt_header("Harm calibration versus actual stopping under H0") |>
+  lt::lt_footnote(
+    paste(
+      "Harm without futility retains earlier harm and efficacy stops.",
+      "Harm with futility follows all active stopping rules;",
+      "the latter is the cumulative harm$prob stored in the design."
+    ),
+    where = "column", columns = "Harm without futility"
+  )
 ```
 
 At IA2 the probability of an actual harm stop includes only paths that
@@ -305,13 +347,37 @@ boundary and \\f_1\\ the IA1 futility boundary. Calibration without
 futility instead uses \\h_1\\ in place of \\f_1\\ in the second term.
 
 [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
-reports **actual cumulative stopping probabilities**, not the
-hypothetical probabilities used to calibrate harm spending. Its optional
-`Spending` rows report the spending targets, so these two rows need not
-agree. Also, its `p (1-sided)` rows use the efficacy direction; the
-nominal p-value favoring harm is `pnorm(xh$harm$bound)`, the complement
-of that displayed p-value. `print(xh)` labels the harm direction values
-as `Nominal p`.
+reports **actual cumulative stopping probabilities** in ordinary
+`P(Cross)` rows for all bounds. These follow all active stopping rules
+and agree with the design’s probability arrays.
+
+To inspect calibration separately, request the optional
+`P(Cross, no futility)` rows by omitting `"No futility"` from `exclude`:
+
+``` r
+
+gsBoundSummary(
+  xh, exclude = c("B-value", "Spending", "CP", "CP H1", "PP")
+) |> lt() |>
+  lt_header("Boundary summary with optional no-futility harm probabilities")
+```
+
+Only the Harm column is populated in these rows. The values retain
+earlier harm and efficacy stops but ignore futility. Under the null they
+describe the harm-calibration probability; a cap may delay spending to a
+later active look or prevent full spending. Under the alternative they
+describe a hypothetical procedure without futility, not the actual
+harm-stop probability or a calibration target. Never add these optional
+values to ordinary stopping probabilities. The table footnote explains
+the difference and is also available in console, RTF, and LaTeX output
+through
+[`xprint()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
+
+The optional `Spending` rows report incremental spending targets, not
+these cumulative crossing probabilities. Also, its `p (1-sided)` rows
+use the efficacy direction; the nominal p-value favoring harm is
+`pnorm(xh$harm$bound)`, the complement of that displayed p-value.
+`print(xh)` labels the harm direction values as `Nominal p`.
 
 Changing the example to `test.type = 7` retains the same harm
 calibration convention. Binding status changes efficacy calibration:
@@ -386,21 +452,6 @@ boundaries](HarmBound_files/figure-html/unnamed-chunk-12-1.png)
 
 Approximate treatment effect at boundaries
 
-#### Conditional power at boundaries
-
-Conditional power (`plottype = 4`) at each interim analysis is shown for
-all three boundaries. This is generally not a very useful plot.
-
-``` r
-
-plot(x8, plottype = 4)
-```
-
-![Conditional power at
-boundaries](HarmBound_files/figure-html/unnamed-chunk-13-1.png)
-
-Conditional power at boundaries
-
 #### Spending function plot
 
 The spending function plot (`plottype = 5`) shows the three spending
@@ -412,7 +463,7 @@ plot(x8, plottype = 5)
 ```
 
 ![Spending functions for non-binding harm bound
-design](HarmBound_files/figure-html/unnamed-chunk-14-1.png)
+design](HarmBound_files/figure-html/unnamed-chunk-13-1.png)
 
 Spending functions for non-binding harm bound design
 
@@ -434,11 +485,16 @@ plot(x8, plottype = 7)
 ```
 
 ![B-values at
-boundaries](HarmBound_files/figure-html/unnamed-chunk-15-1.png)
+boundaries](HarmBound_files/figure-html/unnamed-chunk-14-1.png)
 
 B-values at boundaries
 
 ## Design with binding bounds (`test.type = 7`)
+
+Most readers can skip this worked binding design and continue with
+[efficacy bounds at alternate alpha levels](#alternate-alpha-levels).
+The later [practical guidance](#binding-versus-non-binding) discusses
+when to choose binding rather than non-binding bounds.
 
 For `test.type = 7`, both the futility and harm bounds are **binding** —
 meaning the computation of the efficacy bound assumes the trial *will*
@@ -498,7 +554,9 @@ the trial will stop at the lower bounds.
 
 ``` r
 
-gsBoundSummary(x7) |> lt()
+gsBoundSummary(x7) |>
+  lt() |>
+  lt_header("Binding design: boundary summary")
 ```
 
 ### Efficacy bounds at alternate \\\alpha\\ levels
@@ -516,7 +574,9 @@ efficacy bounds for both \\\alpha = 0.0125\\ (the design level) and
 
 ``` r
 
-gsBoundSummary(x8, alpha = 0.025) |> lt()
+gsBoundSummary(x8, alpha = 0.025) |>
+  lt() |>
+  lt_header("Non-binding design: efficacy bounds at alternate alpha levels")
 ```
 
 Alternate alpha summaries are supported for `test.type = 8`, where both
@@ -595,7 +655,8 @@ data.frame(
   `Cumulative harm probability under HR=1` =
     cumsum(sparse_exact$upper$prob[, 1]),
   check.names = FALSE
-) |> lt() |> lt_format(columns = 3, decimals = 4)
+) |> lt() |> lt_format(columns = 3, decimals = 4) |>
+  lt_header("Exact harm boundaries and cumulative null crossing probabilities")
 ```
 
 ``` r
@@ -641,7 +702,8 @@ data.frame(
   `True mortality HR` = harm_hr,
   `Probability of a harm signal` = colSums(harm_oc$upper$prob),
   check.names = FALSE
-) |> lt() |> lt_format(columns = 2, decimals = 3)
+) |> lt() |> lt_format(columns = 2, decimals = 3) |>
+  lt_header("Probability of a harm signal by mortality hazard ratio")
 ```
 
 Even at HR = 1.5, the chance of a signal is only 38.8% in this example.
@@ -674,7 +736,8 @@ data.frame(
   `Experimental deaths` = 20, `Control deaths` = 20,
   `One-sided 95% upper HR bound` = hr_upper,
   check.names = FALSE
-) |> lt() |> lt_format(columns = 3, decimals = 2)
+) |> lt() |> lt_format(columns = 3, decimals = 2) |>
+  lt_header("Mortality precision at a single fixed analysis")
 ```
 
 Despite a balanced observed count, this upper bound exceeds 1.5. This is
@@ -734,7 +797,8 @@ harm_nominal <- function(k, astar) {
   )
 }
 rbind(harm_nominal(3, .1), harm_nominal(6, .1), harm_nominal(6, .2)) |>
-  lt() |> lt_format(columns = 4, decimals = 4)
+  lt() |> lt_format(columns = 4, decimals = 4) |>
+  lt_header("Nominal harm thresholds by number of analyses and total spending")
 ```
 
 The larger total in this illustration is a sensitivity analysis, not a

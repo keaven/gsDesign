@@ -209,6 +209,26 @@ treatment effect on the log hazard ratio scale.</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="relationship-to-types-5-and-6">Relationship to types 5 and 6<a class="anchor" aria-label="anchor" href="#relationship-to-types-5-and-6"></a>
+</h2>
+<p>The lower bound for <code>test.type = 5</code> and the harm bound for
+<code>test.type = 7</code> use the same null-spending construction. The
+corresponding non-binding pair is <code>test.type = 6</code> and
+<code>test.type = 8</code>. Compare <code>lower$bound</code> for types
+5/6 with <code>harm$bound</code> for types 7/8, not their separate
+futility bounds.</p>
+<p>For equality, match <code>astar</code>,
+<code>sfl</code>/<code>sflpar</code> to
+<code>sfharm</code>/<code>sfharmparam</code>, spending times, active
+lower/harm looks, information fractions, and efficacy bounds; harm must
+not be capped at futility. Types 6 and 8 retain matching efficacy bounds
+because lower stopping is non-binding. Additional binding futility in
+type 7 can change the efficacy bounds, so equality with type 5 is not
+unconditional. Types 5/6 also default to <code>astar = 1 - alpha</code>,
+whereas types 7/8 default to <code>astar = 0.1</code>; specify the same
+value explicitly.</p>
+</div>
+<div class="section level2">
 <h2 id="design-with-non-binding-bounds-test-type-8">Design with non-binding bounds (<code>test.type = 8</code>)<a class="anchor" aria-label="anchor" href="#design-with-non-binding-bounds-test-type-8"></a>
 </h2>
 <p>We demonstrate a survival design using <code><a href="../reference/gsSurvCalendar.html">gsSurvCalendar()</a></code>
@@ -243,8 +263,11 @@ crossing under <span class="math inline">\(H_0\)</span> <strong>if
 futility stopping is ignored</strong>, while still accounting for
 earlier efficacy and harm stops. Actual harm stopping can be less
 frequent when futility is followed. The existing cap that keeps harm at
-or below an active futility boundary can also reduce the attainable
-spending.</p>
+or below an active futility boundary can reduce spending at that look.
+The joint calibration carries the shortfall to later active harm looks,
+where the cumulative target is sought again. Full spending is not
+guaranteed if later caps or the absence of further active harm looks
+prevent recovery.</p>
 <div class="section level3">
 <h3 id="spending-function-specification">Spending function specification<a class="anchor" aria-label="anchor" href="#spending-function-specification"></a>
 </h3>
@@ -302,19 +325,22 @@ the design:</p>
 </h3>
 <p>The <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> function produces a tabular summary
 with columns for each boundary. By default, <code>B-value</code>,
-<code>Spending</code>, <code>CP</code>, <code>CP H1</code>, and
-<code>PP</code> are excluded. We note that for the first interim
-analysis, the efficacy bound is so extreme it is effectively impossible
-to cross. However, the harm and futility bounds are more moderate,
-allowing for early stopping if there is evidence of harm or futility.
-The futility bound is an indicator of why bounds are often non-binding —
-the futility bound is not intended to be a strict stopping rule, but
-rather a signal that the trial may be unlikely to succeed if it
-continues. Crossing the harm bound is a stronger indication that the
-treatment may be harmful, and the trial should be at least paused with a
-recommendation to review the safety and other endpoint data.</p>
+<code>Spending</code>, <code>CP</code>, <code>CP H1</code>,
+<code>PP</code>, and the optional no-futility probability rows are
+excluded. We note that for the first interim analysis, the efficacy
+bound is so extreme it is effectively impossible to cross. However, the
+harm and futility bounds are more moderate, allowing for early stopping
+if there is evidence of harm or futility. The futility bound is an
+indicator of why bounds are often non-binding — the futility bound is
+not intended to be a strict stopping rule, but rather a signal that the
+trial may be unlikely to succeed if it continues. Crossing the harm
+bound is a stronger indication that the treatment may be harmful, and
+the trial should be at least paused with a recommendation to review the
+safety and other endpoint data.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x8</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x8</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Non-binding design: boundary summary"</span><span class="op">)</span></span></code></pre></div>
 <style>
 th,td{padding:5px}.lt-wrap{overflow-x:auto}.lt-table{--bg:4px solid transparent;--bd:1.5px solid #888;border-collapse:separate;caption-side:top;border-spacing:0;border-top:var(--bd);border-bottom:var(--bd);margin:1em auto;& caption{text-align:center;border-top:var(--bd);padding:.5em;& .lt-title{font-size:1.2em}& .lt-subtitle{font-size:.9em}}& th{font-weight:400}& tbody{& :not(:last-child) :is(td,th){border-bottom:1px solid #ddd}& .lt-row-group :is(td,th){border-bottom:1.5px solid #ddd}& .lt-row-group{text-align:left;&.lt-row-open{border-bottom-color:#0000}}}& thead th{border-bottom:1px solid #888;&:not(:first-child){border-left:var(--bg)}&:not(:last-child){border-right:var(--bg)}}& .lt-indent{padding-left:1em}& .lt-spanner-row{& .lt-spanner{text-align:center;border-bottom:1px solid #bbb}& .lt-spanner-empty{border-bottom:none}}& .lt-footer{font-size:.85em;& .lt-footnote:first-child td{border-top:1px solid #aaa}& .lt-source-note:first-child td{border-top:1px dashed #aaa}& .lt-source-note td{font-style:italic}}& .al-r{text-align:right}& .al-c{text-align:center}& .lt-fnref{color:#06c;&:before{content:" ["}&:after{content:"]"}}}.lt-raw [title]:after{content:" (" attr(title) ")";background:#ffffe0;font-size:.85em}
 </style>
@@ -326,27 +352,14 @@ th,td{padding:5px}.lt-wrap{overflow-x:auto}.lt-table{--bg:4px solid transparent;
     "Harm": [-2.1121, 0.9827, 1.6434, 0.0173, 4e-04, -1.7667, 0.9614, 1.2491, 0.0416, 4e-04, -1.7256, 0.9578, 1.1846, 0.0417, 4e-04, -1.717, 0.957, 1.158, 0.0417, 4e-04, -1.7149, 0.9568, 1.1433, 0.0417, 4e-04],
     "Futility": [-1.4408, 0.9252, 1.4034, 0.0575, 0.0034, 0.1212, 0.4518, 0.9849, 0.5138, 0.0177, 1.0566, 0.1454, 0.9015, 0.8224, 0.0394, 1.7357, 0.0413, 0.8622, 0.9214, 0.067, 2.3072, 0.0105, 0.8352, 0.9471, 0.0996],
     "Efficacy": [null, null, null, null, null, 3.8622, 1e-04, 0.6149, 1e-04, 0.0574, 2.9347, 0.0017, 0.7497, 0.0017, 0.499, 2.5278, 0.0057, 0.8057, 0.0062, 0.7996, 2.3072, 0.0105, 0.8352, 0.0112, 0.9]
+  },
+  "header": {
+    "title": "Non-binding design: boundary summary"
   }
 }
 })</script><script>
 (t=>{"use strict";if(t.LT?.buildHtml)return;const o=(t,o)=>t.querySelector(o),n=t.LT?.cells||{},e=t=>String(t).replace(/&/g,"&amp;").replace(/[<]/g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"),l=t=>Array.isArray(t)?String(t[0]??""):e(t),s=(t,o)=>t?String(o??""):e(o),r=(t,o)=>!0===t||Array.isArray(t)&&t.includes(o),c=t=>`<sup class="lt-fnref">${t}</sup>`,i=t=>t===1/0?"∞":t===-1/0?"-∞":String(t??""),a=t=>"number"==typeof t&&isFinite(t),u=t=>a(t)||Math.abs(t)===1/0,f=t=>t?.length&&"number"==typeof t.find(t=>null!=t),p=t=>(t.columns||Object.keys(t.data||{})).filter(o=>o in(t.data||{})),h=(t,o)=>{let n=o;for(const e of t)"label"===e.type&&null!=e.labels?.[o]&&(n=e.labels[o]);return n};function d(t,o,n,e){if(t===1/0)return"∞";if(t===-1/0)return"−∞";if(!a(t))return null;let l=null!=e?function(t){if(!/e/i.test(t))return t;const[,o,n,e="",l]=t.match(/^(-?)(\d+)(?:\.(\d+))?e([+-]?\d+)$/i),s=+l,r=n+e,c=n.length+s;let i;return i=c<=0?`0.${"0".repeat(-c)}${r}`:c>=r.length?r+"0".repeat(c-r.length):`${r.slice(0,c)}.${r.slice(c)}`,o+i}(t.toPrecision(e)):null!=o?t.toFixed(o):String(t);if(/^-0(\.0+)?$/.test(l)&&(l=l.slice(1)),n){const t=l.split(".");t[0]=t[0].replace(/\B(?=(\d{3})+(?!\d))/g,n),l=t.join(".")}return"-"===l[0]&&(l=`−${l.slice(1)}`),null!=o||n||null!=e?l:null}function g(t,o){if(!o)return t.filter(t=>""!==t).join(" ");let n=o,e="";for(;n;){const o=n.match(/<<(.*?)>>/);if(!o){e+=m(n,t);break}o.index>0&&(e+=m(n.slice(0,o.index),t));const l=o[1],s=[...l.matchAll(/\{(\d+)\}/g)].map(t=>+t[1]);s.length&&!s.every(o=>""!==t[o-1])||(e+=m(l,t)),n=n.slice(o.index+o[0].length)}return e}function m(t,o){return o.forEach((o,n)=>t=t.split(`{${n+1}}`).join(o)),t}function w(t){const o=t.data||{},n=t.ops||[],e=p(t),l=e.length?o[e[0]].length:0,s={};for(const t of e)s[t]=o[t].map(i);!function(t,o,n){if(!1===t.auto_format)return;const e=t.data||{},l=t.ops||[],s=p(t),r=new Set;for(const t of l)if("fmt_number"===t.type)for(const o of t.columns||s)r.add(o);for(const t of s){if(r.has(t))continue;const s=e[t];if(!f(s))continue;const c=h(l,t),i=/%|[ _](pct|percent)$/i.test(c);if(/year/i.test(c)&&s.every(t=>null==t||/^\d{4}$/.test(String(t))))continue;let p=0,g=0;for(const t of s){if(!a(t))continue;const o=Math.abs(i?100*t:t),n=o<1?0:Math.floor(Math.log10(o))+1;n>p&&(p=n);const e=String(t).match(/\.(\d+)/);if(!e)continue;const l=e[1].replace(/0+$/,"").length-(i?2:0);l>g&&(g=l)}g=Math.min(g,Math.max(4-p,0));for(let e=0;e<n;e++){const n=s[e];if(!u(n))continue;const l=d(i?100*n:n,g," ");null!=l&&(o[t][e]=l+(i?"%":""))}}}(t,s,l);const r=(t,n)=>{for(const e of t)if(o[e])for(let t=0;t<l;t++)n(e,t,o[e][t])};for(const t of n){const o=t.columns||e;switch(t.type){case"fmt_number":r(o,(o,n,e)=>{if(!u(e))return;const l=!0===t.percent?100*e:e,r=t.percent?"%":"",c=d(l,t.decimals,t.big_mark??"",t.sig_digits),i=t.prefix||"",a=(t.suffix||"")+r;null!=c?s[o][n]=i+c+a:(i||a)&&(s[o][n]=i+String(l)+a)});break;case"fmt_date":r(o,(o,n,e)=>{if(null==e)return;const l=e instanceof Date?e:new Date(e);isNaN(l)||(s[o][n]=t.method?l[t.method]():t.options?l.toLocaleDateString(t.locale,t.options):l.toLocaleDateString(t.locale))});break;case"sub":r(o,(o,n,e)=>{null!=t.small&&a(e)&&0!==e&&Math.abs(e)<t.small?s[o][n]=t.small_text??`<${t.small}`:null!=t.zero&&0===e?s[o][n]=t.zero:null!=t.missing&&null==e&&(s[o][n]=t.missing)});break;case"merge":{const o=t.columns;if(!o||o.length<2)break;const n=o[0];for(let e=0;e<l;e++){const l=o.map(t=>s[t]?.[e]??"");s[n][e]=g(l,t.pattern)}break}}}const c=void 0===t.missing?"—":t.missing;if(c)for(const t of e)for(let n=0;n<l;n++)null==o[t][n]&&""===s[t][n]&&(s[t][n]=c);return{display:s,nRow:l}}function b(o){!function(t){if(!1===t.sort||!t.row_group)return;const o=t.data||{},n=[].concat(t.row_group),e=p(t),l=e.length?o[e[0]].length:0;if(!l)return;const s=Array.from({length:l},(t,o)=>o);s.sort((t,e)=>{for(const l of n){const n=o[l]?.[t],s=o[l]?.[e];if(n!=s){if(null==n)return 1;if(null==s)return-1;if(n<s)return-1;if(n>s)return 1}}return 0});for(const t of e)o[t]=s.map(n=>o[t][n]);const r=new Array(l);for(let t=0;t<l;t++)r[s[t]]=t+1;for(const o of t.ops||[])o.rows&&(o.rows=o.rows.map(t=>r[t-1]))}(o),function(t){const o=t.data||(t.data={}),n=o[p(t)[0]]?.length||0;for(const e of t.ops||[])"add_col"===e.type&&e.column&&!(e.column in o)&&(o[e.column]=new Array(n).fill(e.value??""),t.columns&&!t.columns.includes(e.column)&&(t.columns=[...t.columns,e.column]))}(o);const u=o.data||{},{display:d,nRow:g}=w(o),{visible:m,align:b,colLabels:$,colWidths:y,tableWidth:_,indent:x,groups:v,rowSpans:S,styles:j,spanners:A,cellMap:E,footnotes:k,notes:L,header:M}=function(t){const o=t.data||{},e=t.ops||[],l=p(t),s=l.length?o[l[0]].length:0,c=(t,o)=>{for(const n of e)n.type===t&&o(n)};let a="string"==typeof t.row_group;const u=Array.isArray(t.row_group)?t.row_group:t.row_group?[t.row_group]:[];a||1!==u.length||!1===t.auto_sep||f(o[u[0]])||!o[u[0]]?.some(t=>(t+"").length>20)||(a=!0);const d=new Set;for(const t of u)d.add(t);c("merge",t=>{!1!==t.hide&&t.columns&&t.columns.slice(1).forEach(t=>d.add(t))}),c("hide",t=>(t.columns||[]).forEach(t=>d.add(t)));let g=l.filter(t=>!d.has(t));c("move",t=>{const o=(t.columns||[]).filter(t=>g.includes(t));if(!o.length)return;const n=g.filter(t=>!o.includes(t));if(null==t.after)g=[...o,...n];else{const e=n.indexOf(t.after);e>=0&&(g=[...n.slice(0,e+1),...o,...n.slice(e+1)])}});const m=(t,o,n)=>{const e=g.indexOf(o);e>=0&&(t[e]=n)},w=g.map(t=>f(o[t])?"right":"left");c("align",t=>{for(const o of t.columns||[])m(w,o,t.align)});const b=o=>!1===t.auto_label?o:o.replace(/[._]/g," "),$=g.map(b);let y,_;c("label",t=>{for(const[o,n]of Object.entries(t.labels||{}))m($,o,n)}),c("width",t=>{if(t.table&&(_=t.table),t.widths){y||(y=g.map(()=>""));for(const[o,n]of Object.entries(t.widths))m(y,o,n)}});const x=new Array(s).fill(0);c("indent",t=>{if(t.rows)for(const o of t.rows)x[o-1]=t.level??1});const v=t=>{const o=[];for(let n=0;n<s;){const e=i(t[n]),l=[n+1];for(;++n<s&&i(t[n])===e;)l.push(n+1);o.push({label:e,rows:l})}return o};let S=[];if(a&&u.length&&o[u[0]]){const n=r(t.html_cols,u[0]);S.push(...v(o[u[0]]).map(t=>({...t,raw:n})))}c("row_group",t=>S.push({label:t.label,rows:t.rows})),c("group_order",t=>{if(!S.length)return;const o=[],n=[];for(const n of t.order||[]){const t=S.find(t=>t.label===n);t&&o.push(t)}for(const t of S)o.includes(t)||n.push(t);S=[...o,...n]});const j=[];if(!a&&u.length)for(const t of u){const n=new Array(s).fill(0);for(const e of v(o[t]||[]))n[e.rows[0]-1]=e.rows.length;j.push({col:t,label:h(e,t),spans:n})}const A=e.filter(t=>"style"===t.type);let E=(t.spanners||[]).map(t=>{const o=t.columns.slice().sort((t,o)=>g.indexOf(t)-g.indexOf(o));return{...t,columns:o}});if(t.auto_span){const o="string"==typeof t.auto_span?new RegExp(t.auto_span):/[._]/;E=[...E];for(let t=0;t<g.length;){const n=g[t].match(o);if(!n){t++;continue}const e=g[t].slice(0,n.index);let l=t+1;for(;l<g.length;){const t=g[l].match(o);if(!t||g[l].slice(0,t.index)!==e)break;l++}if(l-t>=2){E.push({label:e,columns:g.slice(t,l)});for(let n=t;n<l;n++){const t=g[n].match(o);t&&($[n]=b(g[n].slice(t.index+t[0].length)))}}t=l}}const k={};for(const t of e){const o=n[t.type];if(!o)continue;const e=o.resolve(t)||{};for(const t of Object.keys(e))k[t]={rnd:o,cfg:e[t]}}return{visible:g,align:w,colLabels:$,colWidths:y,tableWidth:_,indent:x,groups:S,rowSpans:j,styles:A,spanners:E,cellMap:k,footnotes:t.footnotes||[],notes:t.notes||[],header:t.header||{},nRow:s}}(o),O={esc:e,isNum:a,str:i},T=function(t){const o=[],n={};return t.forEach(t=>{null==n[t.text]&&(n[t.text]=o.length+1,o.push(t.text))}),{order:o,idx:n}}(k),H=((t,o)=>(n,e)=>{for(const l of t){const t=l.location;if(t.type!==n)continue;const s=o[l.text];if("title"===n&&t.group===e)return s;if("column_labels"===n&&t.columns.includes(e))return s;if("column_spanners"===n&&t.spanners.includes(e))return s;if("row_groups"===n){if("all"===t.match)return s;if("exact"===t.match&&t.values.includes(e))return s;if("starts_with"===t.match&&e.startsWith(t.value))return s}}return 0})(k,T.idx),R=S.length,D=m.length+R,W=t=>r(o.html_cols,t),q=[`<table class="lt-table"${_?` style="width:${_}"`:""}>`],B=t.LT?.plugins?.interactive&&o.interactive?.pager,N=!o._viewRows&&Array.isArray(B)&&B[0]?B[0]:0,z=(t,o)=>{const n=H(t,o);return n?c(n):""},C=(t,o)=>d[t]?.[o-1]??"",F=(t,o)=>o?` ${t}="${o}"`:"",K=m.map((t,o)=>((0===o&&v.length?"lt-indent ":"")+({right:"al-r",center:"al-c"}[b[o]]||"")).trimEnd()),P=(t,o,n)=>{for(let e=1;e<=g;e++)if(!t||t.includes(e))for(const t of o||m){const o=m.indexOf(t);o>=0&&n(`${e},${o}`,t,e)}},G={},I={},J=(t,o,n,e)=>{t[o]=t[o]?t[o]+e+n:n};for(const t of j)P(t.rows,t.columns?[].concat(t.columns):null,(o,n,e)=>{t.test&&!t.test(u[n][e-1])||(t.css&&J(G,o,t.css,";"),t.class&&J(I,o,t.class," "))});y&&y.some(t=>t)&&(q.push("<colgroup>"),R&&q.push("<col>".repeat(R)),y.forEach(t=>q.push(`<col${F("style",t?`width:${t}`:"")}>`)),q.push("</colgroup>"));const Q=[["title","lt-title"],["subtitle","lt-subtitle"]].filter(([t])=>null!=M[t]&&""!==M[t]).map(([t,o])=>`<div class="${o}">${l(M[t])}${z("title",t)}</div>`);if(Q.length&&q.push('<caption class="lt-caption">',...Q,"</caption>"),q.push("<thead>"),A.length){const t='<th class="lt-spanner-empty"></th>';q.push('<tr class="lt-spanner-row">'),q.push(t.repeat(R));for(let o=0;o<m.length;){const n=A.find(t=>t.columns[0]===m[o]);n?(q.push(`<th colspan="${n.columns.length}" scope="colgroup" class="lt-spanner">${l(n.label)}${z("column_spanners",n.label)}</th>`),o+=n.columns.length):(q.push(t),o++)}q.push("</tr>")}q.push("<tr>");for(const t of S)q.push(`<th scope="col" class="lt-row-group">${l(t.label)}</th>`);m.forEach((t,o)=>q.push(`<th scope="col"${F("class",K[o])}>${l($[o])}${z("column_labels",t)}</th>`)),q.push("</tr></thead>");const U={};for(const t of k){if("body"!==t.location.type)continue;const o=T.idx[t.text];P(t.location.rows,t.location.columns||[],t=>{U[t]=o})}const V=(t,o)=>{q.push("<tr>");for(let n=0;n<S.length;n++){const e=S[n];let l=o?o[n]:null;if(!o){const o=e.spans[t-1],n=(e.spans[t-2]||0)-1;l=o>0?{label:!0,open:o>1}:n>0?{fill:n}:null}l&&(l.label?q.push(`<th scope="row" class="lt-row-group${l.open?" lt-row-open":""}">${s(W(e.col),C(e.col,t))}${z("row_groups",i(u[e.col][t-1]))}</th>`):q.push(`<th class="lt-row-group"${F("rowspan",l.fill>1?l.fill:0)}></th>`))}const n=x[t-1]||0;for(let o=0;o<m.length;o++){const l=`${t},${o}`,r=m[o],a=U[l],f=I[l],p=[K[o],f].filter(Boolean).join(" ");let h=G[l]||"";0===o&&n&&(h=(h?h+";":"")+`padding-left:${n+1}em`);const g=E[r];if(g){const o=[p,g.rnd.cellClass?.(g.cfg)||""].filter(Boolean).join(" ");q.push(`<td${F("class",o)}${F("style",h)}>${g.rnd.cell(g.cfg,u,t,O)}${a?c(a):""}</td>`);continue}const w=i(u[r][t-1]),b=d[r][t-1],$=w!==b?` title="${e(w)}"`:"";q.push(`<td${F("class",p)}${F("style",h)}${$}>${s(W(r),b)}${a?c(a):""}</td>`)}q.push("</tr>")},X=(t,o)=>`<tr class="lt-row-group"><th colspan="${D}" scope="colgroup">${s(o,t)}${z("row_groups",t)}</th></tr>`;if(q.push("<tbody>"),o._viewRows){const t=S.length?(t=>{const o=t.map(()=>[]);for(let n=0;n<S.length;n++){const e=t=>S.slice(0,n+1).map(o=>i(u[o.col][t-1])).join("\0");for(let l=0;l<t.length;){let s=l+1;const r=e(t[l]);for(;s<t.length&&e(t[s])===r;)s++;const c=s-l;o[l][n]={label:!0,open:c>1},c>1&&(o[l+1][n]={fill:c-1}),l=s}}return o})(o._viewRows.filter(t=>"number"==typeof t)):null;let n=0;for(const e of o._viewRows)e&&"object"==typeof e?q.push(X(e.label,e.raw)):V(e,t?t[n++]:null)}else if(v.length){const t={};let o=0;for(const n of v){if(N&&o>=N)break;q.push(X(n.label,n.raw));for(const e of n.rows)if(t[e]=1,V(e),N&&++o>=N)break}for(let n=1;n<=g&&(!N||o<N);n++)t[n]||(V(n),o++)}else{const t=N?Math.min(g,N):g;for(let o=1;o<=t;o++)V(o)}q.push("</tbody>");const Y=m.map(t=>E[t]&&E[t].rnd.foot?.(E[t].cfg,O)||""),Z=Y.some(t=>t);if(T.order.length||L.length||Z){const t=(t,o)=>`<tr class="${t}"><td colspan="${D}">${o}</td></tr>`;q.push('<tfoot class="lt-footer">'),Z&&(q.push('<tr class="lt-plot-foot">'),q.push("<td></td>".repeat(R)),m.forEach((t,o)=>{const n=E[t],e=Y[o]&&n&&n.rnd.cellClass?.(n.cfg)||"",l=[K[o],e].filter(Boolean).join(" ");q.push(`<td${F("class",l)}>${Y[o]}</td>`)}),q.push("</tr>")),T.order.forEach((o,n)=>q.push(t("lt-footnote",`${c(n+1)} ${l(o)}`)));for(const o of L)q.push(t("lt-source-note",l(o)));q.push("</tfoot>")}q.push("</table>"),o._cols=m,o._display=d,o._groups=v.length?v:null,o._indent=x.some(t=>t)?x:null,o._rowspan=S.length?S.map(t=>t.col):null;const tt=o.wrap||{},ot=["lt-wrap"].concat(tt.class||[]).join(" "),nt=Object.keys(tt).filter(t=>"class"!==t).map(t=>F(t,e(tt[t]))).join("");return`<div${F("class",ot)}${nt}>${q.join("")}</div>`}const $=t.LT?.plugins||{},y=t.LT?.onMount||[],_=(t,o)=>{t._ltSpec=o;const n=t.tHead&&[...t.tHead.rows].pop(),e=(o._rowspan||[]).length;if(n){const l=t._ltHead={};(o._cols||[]).forEach((t,o)=>l[t]=n.cells[e+o])}return(t=>{const o=(t,o)=>{t.altKey&&o.classList.toggle("lt-raw")};t.onclick=n=>{1===n.detail&&o(n,t)},t.ondblclick=n=>{o(n,t.ownerDocument.documentElement)}})(t),y.forEach(n=>n(t,o)),t},x=(t,n)=>{t.insertAdjacentHTML("afterend",b(n)),_(o(t.nextElementSibling,"table"),n)},v={push:t=>x(t.s,t.d)};(t.LT?.q||[]).forEach(v.push),t.LT={build:t=>x(document.currentScript,t),render:(t,n)=>(t.innerHTML=b(n),_(o(t,"table"),n)),refresh:t=>{const n=t?._ltSpec,e=t?.closest(".lt-wrap");if(!n||!e)return;e.insertAdjacentHTML("afterend",b(n));const l=e.nextElementSibling;return e.remove(),_(o(l,"table"),n)},buildHtml:b,plugins:$,onMount:y,cells:n,q:v}})(window);
-</script><p>Conditional power (CP, CP H1) and predictive power (PP) can also be
-included in the summary. Below we show the full table with all
-statistics, including conditional and predictive power at each
-boundary:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x8</span>, exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
-{
-  "data": {
-    "Analysis": ["IA 1: 11%", "N: 766", "Events: 73", "Month: 12", "", "", "", "", "", "", "IA 2: 38%", "N: 1148", "Events: 253", "Month: 24", "", "", "", "", "", "", "IA 3: 63%", "N: 1148", "Events: 416", "Month: 36", "", "", "", "", "", "", "IA 4: 83%", "N: 1148", "Events: 548", "Month: 48", "", "", "", "", "", "", "Final", "N: 1148", "Events: 657", "Month: 60", "", "", ""],
-    "Value": ["Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.75", "Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.75", "Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.75", "Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "CP", "CP H1", "PP", "P(Cross) if HR=1", "P(Cross) if HR=0.75", "Z", "p (1-sided)", "~HR at bound", "Spending", "B-value", "P(Cross) if HR=1", "P(Cross) if HR=0.75"],
-    "Harm": [-2.1121, 0.9827, 1.6434, 0.0173, -0.7011, 0, 0.4619, 0.0011, 0.0173, 4e-04, -1.7667, 0.9614, 1.2491, 0.0334, -1.0954, 0, 0.0097, 0, 0.0416, 4e-04, -1.7256, 0.9578, 1.1846, 0.0229, -1.3725, 0, 0, 0, 0.0417, 4e-04, -1.717, 0.957, 1.158, 0.0154, -1.5689, 0, 0, 0, 0.0417, 4e-04, -1.7149, 0.9568, 1.1433, 0.011, -1.7149, 0.0417, 4e-04],
-    "Futility": [-1.4408, 0.9252, 1.4034, 0.0039, -0.4782, 0, 0.5942, 0.0097, 0.0575, 0.0034, 0.1212, 0.4518, 0.9849, 0.0143, 0.0751, 0.0024, 0.4033, 0.0358, 0.5138, 0.0177, 1.0566, 0.1454, 0.9015, 0.0217, 0.8404, 0.0396, 0.3449, 0.0776, 0.8224, 0.0394, 1.7357, 0.0413, 0.8622, 0.0277, 1.586, 0.1578, 0.3906, 0.1793, 0.9214, 0.067, 2.3072, 0.0105, 0.8352, 0.0325, 2.3072, 0.9471, 0.0996],
-    "Efficacy": [null, null, null, null, null, null, null, null, null, null, 3.8622, 1e-04, 0.6149, 1e-04, 2.3947, 1, 0.9994, 0.9994, 1e-04, 0.0574, 2.9347, 0.0017, 0.7497, 0.0016, 2.3343, 0.9928, 0.9928, 0.9759, 0.0017, 0.499, 2.5278, 0.0057, 0.8057, 0.0046, 2.3098, 0.8708, 0.9337, 0.8485, 0.0062, 0.7996, 2.3072, 0.0105, 0.8352, 0.0062, 2.3072, 0.0112, 0.9]
-  }
-}
-})</script>
+</script>
 </div>
 <div class="section level3">
 <h3 id="interpreting-the-boundaries">Interpreting the boundaries<a class="anchor" aria-label="anchor" href="#interpreting-the-boundaries"></a>
@@ -354,7 +367,7 @@ boundary:</p>
 <p>The design has five analyses at calendar times of 12, 24, 36, 48, and
 60 months. At each analysis, the test statistic (Z-value) is compared
 against three boundaries:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bounds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Analysis <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">x8</span><span class="op">$</span><span class="va">k</span>,</span>
 <span>  Month <span class="op">=</span> <span class="va">x8</span><span class="op">$</span><span class="cn">T</span>,</span>
@@ -407,15 +420,27 @@ treatment effect (HR = 1, i.e., under <span class="math inline">\(H_0\)</span>) 
 0.75). When harm and futility are both active,
 <code>x8$lower$prob</code> and <code>x8$harm$prob</code> are reported as
 mutually exclusive stopping outcomes. Thus, the probability of crossing
-the futility threshold is the sum of the two lower tail components.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+the futility threshold is the sum of the two lower tail components. For
+comparison, we also show harm crossing when futility is ignored and the
+cumulative harm spending target. The target is defined under <span class="math inline">\(H_0\)</span> only; under <span class="math inline">\(H_1\)</span>, the no-futility column describes a
+hypothetical procedure, not a spending target or an actual stopping
+probability.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">harm_no_futility</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsProbability.html">gsProbability</a></span><span class="op">(</span></span>
+<span>  k <span class="op">=</span> <span class="va">x8</span><span class="op">$</span><span class="va">k</span>, theta <span class="op">=</span> <span class="va">x8</span><span class="op">$</span><span class="va">theta</span>, n.I <span class="op">=</span> <span class="va">x8</span><span class="op">$</span><span class="va">n.I</span>,</span>
+<span>  a <span class="op">=</span> <span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">bound</span>, b <span class="op">=</span> <span class="va">x8</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span></span>
+<span><span class="op">)</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span></span>
+<span><span class="va">probs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Scenario <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Under H0 (HR=1)"</span>, <span class="va">x8</span><span class="op">$</span><span class="va">k</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Under H1 (HR=0.75)"</span>, <span class="va">x8</span><span class="op">$</span><span class="va">k</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  Analysis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">x8</span><span class="op">$</span><span class="va">k</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  Month <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="cn">T</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  `P(Efficacy)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  `P(Futility only)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  `P(Harm)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  `P(Harm, no futility)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">harm_no_futility</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">harm_no_futility</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  `Harm spending (H0)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">spend</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA_real_</span>, <span class="va">x8</span><span class="op">$</span><span class="va">k</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  `P(Futility or Harm)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">x8</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="va">x8</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
@@ -424,29 +449,48 @@ the futility threshold is the sum of the two lower tail components.</p>
 <span><span class="op">)</span></span>
 <span><span class="va">probs</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">7</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Cumulative boundary crossing probabilities"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">9</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Cumulative boundary crossing probabilities"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>      <span class="st">"No-futility harm probabilities retain earlier harm and efficacy stops."</span>,</span>
+<span>      <span class="st">"Compare with the cumulative harm spending target under H0 only."</span>,</span>
+<span>      <span class="st">"Do not add this column to actual stopping probabilities."</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    where <span class="op">=</span> <span class="st">"column"</span>, columns <span class="op">=</span> <span class="st">"P(Harm, no futility)"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
     "Scenario": ["Under H0 (HR=1)", "Under H0 (HR=1)", "Under H0 (HR=1)", "Under H0 (HR=1)", "Under H0 (HR=1)", "Under H1 (HR=0.75)", "Under H1 (HR=0.75)", "Under H1 (HR=0.75)", "Under H1 (HR=0.75)", "Under H1 (HR=0.75)"],
     "Analysis": [1, 2, 3, 4, 5, 1, 2, 3, 4, 5],
     "Month": [12, 24, 36, 48, 60, 12, 24, 36, 48, 60],
-    "P(Efficacy)": [5.28466159721576e-14, 5.61814592038679e-05, 0.00168664430484525, 0.00618203690731499, 0.011157998640551, 2.64608679527935e-10, 0.0574046454229568, 0.498983869817821, 0.799592143960951, 0.899999999999765],
-    "P(Futility only)": [0.0574813894648129, 0.51383939884375, 0.822353995060853, 0.92135274759418, 0.947095828081962, 0.00343280330442015, 0.0176724844229542, 0.0393789904799703, 0.0670451269970226, 0.099557362734436],
-    "P(Harm)": [0.0173379938512221, 0.0415927250285509, 0.0417463378236973, 0.0417463385837399, 0.0417463385837399, 0.000425699514090011, 0.000442723597480087, 0.000442732384173344, 0.000442732384179617, 0.000442732384179617],
-    "P(Futility or Harm)": [0.074819383316035, 0.555432123872301, 0.864100332884551, 0.96309908617792, 0.988842166665702, 0.00385850281851016, 0.0181152080204343, 0.0398217228641437, 0.0674878593812023, 0.100000095118616]
+    "P(Efficacy)": [5.28466159721576e-14, 5.61814592081338e-05, 0.00168664431993025, 0.00618203790436388, 0.0111580141305814, 2.64608679527935e-10, 0.0574046454261306, 0.498983872222066, 0.799592187696413, 0.90000024388464],
+    "P(Futility only)": [0.0574812279068368, 0.513838876206244, 0.822354672968181, 0.921353608574975, 0.94709698556361, 0.00343278810748108, 0.0176723139598443, 0.0393787660403251, 0.0670446517018315, 0.0995571219428995],
+    "P(Harm)": [0.0173379480887701, 0.0415915666227306, 0.0417451648520049, 0.0417451656120615, 0.0417451656120615, 0.000425697879904201, 0.000442720505414582, 0.000442729290755665, 0.000442729290761939, 0.000442729290761939],
+    "P(Harm, no futility)": [0.0173379480887701, 0.0507173747298003, 0.0735760048431093, 0.0889828286822368, 0.099999386281346, 0.000425697879904201, 0.000448300904540909, 0.00044931647570772, 0.000449403116605557, 0.00044941534978648],
+    "Harm spending (H0)": [0.0173379938512221, 0.0507174417992006, 0.0735770032121078, 0.0889828084549617, 0.1, null, null, null, null, null],
+    "P(Futility or Harm)": [0.0748191759956069, 0.555430442828974, 0.864099837820186, 0.963098774187037, 0.988842151175672, 0.00385848598738528, 0.0181150344652589, 0.0398214953310808, 0.0674873809925934, 0.0999998512336614]
   },
   "ops": [
     {
       "type": "fmt_number",
-      "columns": ["Analysis", "Month", "P(Efficacy)", "P(Futility only)", "P(Harm)", "P(Futility or Harm)"],
+      "columns": ["P(Efficacy)", "P(Futility only)", "P(Harm)", "P(Harm, no futility)", "Harm spending (H0)", "P(Futility or Harm)"],
       "decimals": 4
     }
   ],
   "header": {
     "title": "Cumulative boundary crossing probabilities"
-  }
+  },
+  "footnotes": [
+    {
+      "text": "No-futility harm probabilities retain earlier harm and efficacy stops. Compare with the cumulative harm spending target under H0 only. Do not add this column to actual stopping probabilities.",
+      "location": {
+        "type": "column_labels",
+        "columns": ["P(Harm, no futility)"]
+      }
+    }
+  ]
 }
 })</script><p>Under <span class="math inline">\(H_0\)</span>, the actual cumulative
 probability of stopping for harm is approximately 0.0417 when all active
@@ -454,7 +498,7 @@ stopping rules are followed. This need not equal <code>astar</code>:
 trials that stop for futility cannot subsequently stop for harm. The
 cumulative probability of crossing the futility threshold, inclusive of
 harm, is approximately 0.9888. Under <span class="math inline">\(H_1\)</span> (HR = 0.75), crossing the harm bound
-is very unlikely (4^{-4}), since the treatment is beneficial.</p>
+is very unlikely (0.0004), since the treatment is beneficial.</p>
 </div>
 <div class="section level3">
 <h3 id="harm-calibration-versus-actual-stopping">Harm calibration versus actual stopping<a class="anchor" aria-label="anchor" href="#harm-calibration-versus-actual-stopping"></a>
@@ -468,7 +512,7 @@ still included.</p>
 at IA1, and tests futility only at IA1. It uses the new harm defaults.
 We compare the target spending, harm crossing without futility, and
 actual harm stopping:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">xh</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span></span>
 <span>  test.type <span class="op">=</span> <span class="fl">8</span>, timing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">.75</span><span class="op">)</span>,</span>
 <span>  testUpper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -487,7 +531,16 @@ actual harm stopping:</p>
 <span>  `Harm without futility` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">harm_without_futility</span><span class="op">$</span><span class="va">lower</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>  `Harm with futility` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">xh</span><span class="op">$</span><span class="va">harm</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">6</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">6</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Harm calibration versus actual stopping under H0"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">lt</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_footnote.html" class="external-link">lt_footnote</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Harm without futility retains earlier harm and efficacy stops."</span>,</span>
+<span>      <span class="st">"Harm with futility follows all active stopping rules;"</span>,</span>
+<span>      <span class="st">"the latter is the cumulative harm$prob stored in the design."</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    where <span class="op">=</span> <span class="st">"column"</span>, columns <span class="op">=</span> <span class="st">"Harm without futility"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
@@ -504,6 +557,18 @@ actual harm stopping:</p>
       "columns": ["Harm Z", "Nominal harm p", "Cumulative target", "Harm without futility", "Harm with futility"],
       "decimals": 4
     }
+  ],
+  "header": {
+    "title": "Harm calibration versus actual stopping under H0"
+  },
+  "footnotes": [
+    {
+      "text": "Harm without futility retains earlier harm and efficacy stops. Harm with futility follows all active stopping rules; the latter is the cumulative harm$prob stored in the design.",
+      "location": {
+        "type": "column_labels",
+        "columns": ["Harm without futility"]
+      }
+    }
   ]
 }
 })</script><p>At IA2 the probability of an actual harm stop includes only paths
@@ -512,9 +577,50 @@ h_2)\)</span>, where <span class="math inline">\(h_i\)</span> denotes a
 harm boundary and <span class="math inline">\(f_1\)</span> the IA1
 futility boundary. Calibration without futility instead uses <span class="math inline">\(h_1\)</span> in place of <span class="math inline">\(f_1\)</span> in the second term.</p>
 <p><code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> reports <strong>actual cumulative
-stopping probabilities</strong>, not the hypothetical probabilities used
-to calibrate harm spending. Its optional <code>Spending</code> rows
-report the spending targets, so these two rows need not agree. Also, its
+stopping probabilities</strong> in ordinary <code>P(Cross)</code> rows
+for all bounds. These follow all active stopping rules and agree with
+the design’s probability arrays.</p>
+<p>To inspect calibration separately, request the optional
+<code>P(Cross, no futility)</code> rows by omitting
+<code>"No futility"</code> from <code>exclude</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span></span>
+<span>  <span class="va">xh</span>, exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B-value"</span>, <span class="st">"Spending"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, <span class="st">"PP"</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Boundary summary with optional no-futility harm probabilities"</span><span class="op">)</span></span></code></pre></div>
+<script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
+{
+  "data": {
+    "Analysis": ["IA 1: 50%", "N/Fixed design N: 0.52", "", "", "", "", "", "IA 2: 75%", "N/Fixed design N: 0.79", "", "", "", "", "", "Final", "N/Fixed design N: 1.05", "", "", "", "", ""],
+    "Value": ["Z", "p (1-sided)", "~delta at bound", "P(Cross) if delta=0", "P(Cross) if delta=1", "P(Cross, no futility) if delta=0", "P(Cross, no futility) if delta=1", "Z", "p (1-sided)", "~delta at bound", "P(Cross) if delta=0", "P(Cross) if delta=1", "P(Cross, no futility) if delta=0", "P(Cross, no futility) if delta=1", "Z", "p (1-sided)", "~delta at bound", "P(Cross) if delta=0", "P(Cross) if delta=1", "P(Cross, no futility) if delta=0", "P(Cross, no futility) if delta=1"],
+    "Harm": [-1.5381, 0.938, -0.6555, 0.062, 1e-04, 0.062, 1e-04, -1.6473, 0.9503, -0.5732, 0.062, 1e-04, 0.0828, 1e-04, -1.6363, 0.9491, -0.4931, 0.0623, 1e-04, 0.1, 1e-04],
+    "Futility": [0.4179, 0.338, 0.1781, 0.6, 0.0268, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    "Efficacy": [null, null, null, null, null, null, null, 2.3697, 0.0089, 0.8246, 0.0089, 0.6926, null, null, 2.0043, 0.0225, 0.604, 0.024, 0.9, null, null]
+  },
+  "footnotes": [
+    {
+      "text": "No-futility rows give harm crossing probabilities ignoring futility stopping, retaining earlier harm and efficacy stops. They are not actual stopping probabilities and must not be added to other boundary probabilities.",
+      "location": {
+        "type": "column_labels",
+        "columns": ["Harm"]
+      }
+    }
+  ],
+  "header": {
+    "title": "Boundary summary with optional no-futility harm probabilities"
+  }
+}
+})</script><p>Only the Harm column is populated in these rows. The values retain
+earlier harm and efficacy stops but ignore futility. Under the null they
+describe the harm-calibration probability; a cap may delay spending to a
+later active look or prevent full spending. Under the alternative they
+describe a hypothetical procedure without futility, not the actual
+harm-stop probability or a calibration target. Never add these optional
+values to ordinary stopping probabilities. The table footnote explains
+the difference and is also available in console, RTF, and LaTeX output
+through <code><a href="../reference/gsBoundSummary.html">xprint()</a></code>.</p>
+<p>The optional <code>Spending</code> rows report incremental spending
+targets, not these cumulative crossing probabilities. Also, its
 <code>p (1-sided)</code> rows use the efficacy direction; the nominal
 p-value favoring harm is <code>pnorm(xh$harm$bound)</code>, the
 complement of that displayed p-value. <code>print(xh)</code> labels the
@@ -588,30 +694,16 @@ Approximate treatment effect at boundaries
 </div>
 </div>
 <div class="section level4">
-<h4 id="conditional-power-at-boundaries">Conditional power at boundaries<a class="anchor" aria-label="anchor" href="#conditional-power-at-boundaries"></a>
-</h4>
-<p>Conditional power (<code>plottype = 4</code>) at each interim
-analysis is shown for all three boundaries. This is generally not a very
-useful plot.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x8</span>, plottype <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<div class="figure" style="text-align: center">
-<img src="HarmBound_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="Conditional power at boundaries" width="80%"><p class="caption">
-Conditional power at boundaries
-</p>
-</div>
-</div>
-<div class="section level4">
 <h4 id="spending-function-plot">Spending function plot<a class="anchor" aria-label="anchor" href="#spending-function-plot"></a>
 </h4>
 <p>The spending function plot (<code>plottype = 5</code>) shows the
 three spending functions: <span class="math inline">\(\alpha\)</span>
 (efficacy), <span class="math inline">\(\beta\)</span> (futility), and
 harm.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x8</span>, plottype <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="HarmBound_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="Spending functions for non-binding harm bound design" width="80%"><p class="caption">
+<img src="HarmBound_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="Spending functions for non-binding harm bound design" width="80%"><p class="caption">
 Spending functions for non-binding harm bound design
 </p>
 </div>
@@ -628,10 +720,10 @@ for visual assessment of treatment effect trends across interim
 analyses: departures from linearity may suggest non-proportional hazards
 or other changes in treatment effect over time. Three boundary lines are
 shown: efficacy, futility, and harm.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x8</span>, plottype <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="HarmBound_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="B-values at boundaries" width="80%"><p class="caption">
+<img src="HarmBound_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="B-values at boundaries" width="80%"><p class="caption">
 B-values at boundaries
 </p>
 </div>
@@ -641,6 +733,10 @@ B-values at boundaries
 <div class="section level2">
 <h2 id="design-with-binding-bounds-test-type-7">Design with binding bounds (<code>test.type = 7</code>)<a class="anchor" aria-label="anchor" href="#design-with-binding-bounds-test-type-7"></a>
 </h2>
+<p>Most readers can skip this worked binding design and continue with <a href="#alternate-alpha-levels">efficacy bounds at alternate alpha
+levels</a>. The later <a href="#binding-versus-non-binding">practical
+guidance</a> discusses when to choose binding rather than non-binding
+bounds.</p>
 <p>For <code>test.type = 7</code>, both the futility and harm bounds are
 <strong>binding</strong> — meaning the computation of the efficacy bound
 assumes the trial <em>will</em> stop if either bound is crossed. This
@@ -649,7 +745,7 @@ but at the cost of inflated Type I error if the stopping rule is not
 strictly followed.</p>
 <p>We first create a binding design with <span class="math inline">\(\alpha = 0.0125\)</span> to compare with the
 non-binding design above:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvCalendar.html">gsSurvCalendar</a></span><span class="op">(</span></span>
 <span>  test.type <span class="op">=</span> <span class="fl">7</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.0125</span>,</span>
@@ -667,7 +763,7 @@ non-binding design above:</p>
 <div class="section level3">
 <h3 id="comparing-binding-and-non-binding">Comparing binding and non-binding<a class="anchor" aria-label="anchor" href="#comparing-binding-and-non-binding"></a>
 </h3>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  Bound <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Efficacy"</span>, <span class="st">"Futility"</span>, <span class="st">"Harm"</span><span class="op">)</span>,</span>
 <span>  `Binding (type 7)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -702,8 +798,10 @@ non-binding design above:</p>
 for <code>test.type = 7</code> (639) is also slightly smaller than for
 <code>test.type = 8</code> (657), reflecting the assumption that the
 trial will stop at the lower bounds.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x7</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x7</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Binding design: boundary summary"</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
@@ -711,13 +809,16 @@ trial will stop at the lower bounds.</p>
     "Value": ["Z", "p (1-sided)", "~HR at bound", "P(Cross) if HR=1", "P(Cross) if HR=0.75", "Z", "p (1-sided)", "~HR at bound", "P(Cross) if HR=1", "P(Cross) if HR=0.75", "Z", "p (1-sided)", "~HR at bound", "P(Cross) if HR=1", "P(Cross) if HR=0.75", "Z", "p (1-sided)", "~HR at bound", "P(Cross) if HR=1", "P(Cross) if HR=0.75", "Z", "p (1-sided)", "~HR at bound", "P(Cross) if HR=1", "P(Cross) if HR=0.75"],
     "Harm": [-2.1121, 0.9827, 1.655, 0.0173, 5e-04, -1.7667, 0.9614, 1.2531, 0.0419, 5e-04, -1.7256, 0.9578, 1.1874, 0.0421, 5e-04, -1.717, 0.957, 1.1604, 0.0421, 5e-04, -1.7149, 0.9568, 1.1454, 0.0421, 5e-04],
     "Futility": [-1.4578, 0.9275, 1.4158, 0.0551, 0.0034, 0.0895, 0.4643, 0.9886, 0.5011, 0.0176, 1.0159, 0.1548, 0.9038, 0.8131, 0.0393, 1.689, 0.0456, 0.8639, 0.9172, 0.067, 2.248, 0.0123, 0.837, 0.9455, 0.0995],
-    "Efficacy": [null, null, null, null, null, 3.8622, 1e-04, 0.6107, 1e-04, 0.0539, 2.9344, 0.0017, 0.7467, 0.0017, 0.4829, 2.5229, 0.0058, 0.8037, 0.0063, 0.7881, 2.248, 0.0123, 0.837, 0.0125, 0.9]
+    "Efficacy": [null, null, null, null, null, 3.8622, 1e-04, 0.6107, 1e-04, 0.0539, 2.9343, 0.0017, 0.7467, 0.0017, 0.483, 2.5228, 0.0058, 0.8037, 0.0063, 0.7881, 2.248, 0.0123, 0.837, 0.0125, 0.9]
+  },
+  "header": {
+    "title": "Binding design: boundary summary"
   }
 }
 })</script>
 </div>
 <div class="section level3">
-<h3 id="efficacy-bounds-at-alternate-alpha-levels">Efficacy bounds at alternate <span class="math inline">\(\alpha\)</span> levels<a class="anchor" aria-label="anchor" href="#efficacy-bounds-at-alternate-alpha-levels"></a>
+<h3 id="alternate-alpha-levels">Efficacy bounds at alternate <span class="math inline">\(\alpha\)</span> levels<a class="anchor" aria-label="anchor" href="#alternate-alpha-levels"></a>
 </h3>
 <p>The <code><a href="../reference/gsBoundSummary.html">gsBoundSummary()</a></code> function accepts an
 <code>alpha</code> argument to display efficacy bounds at one or more
@@ -729,8 +830,10 @@ that analysis, including cumulative crossing probability, is
 <code>NA</code>. Here we show the non-binding design (<code>x8</code>)
 with efficacy bounds for both <span class="math inline">\(\alpha =
 0.0125\)</span> (the design level) and <span class="math inline">\(\alpha = 0.025\)</span>:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x8</span>, alpha <span class="op">=</span> <span class="fl">0.025</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">x8</span>, alpha <span class="op">=</span> <span class="fl">0.025</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Non-binding design: efficacy bounds at alternate alpha levels"</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
@@ -740,6 +843,9 @@ with efficacy bounds for both <span class="math inline">\(\alpha =
     "α=0.025": [null, null, null, null, null, 3.4312, 3e-04, 0.6492, 3e-04, 0.1259, 2.5948, 0.0047, 0.7751, 0.0048, 0.6323, 2.2359, 0.0127, 0.8261, 0.0138, 0.8684, 2.0432, 0.0205, 0.8526, 0.0201, 0.9218],
     "Futility": [-1.4408, 0.9252, 1.4034, 0.0575, 0.0034, 0.1212, 0.4518, 0.9849, 0.5138, 0.0177, 1.0566, 0.1454, 0.9015, 0.8224, 0.0394, 1.7357, 0.0413, 0.8622, 0.9214, 0.067, 2.3072, 0.0105, 0.8352, 0.9471, 0.0996],
     "Harm": [-2.1121, 0.9827, 1.6434, 0.0173, 4e-04, -1.7667, 0.9614, 1.2491, 0.0416, 4e-04, -1.7256, 0.9578, 1.1846, 0.0417, 4e-04, -1.717, 0.957, 1.158, 0.0417, 4e-04, -1.7149, 0.9568, 1.1433, 0.0417, 4e-04]
+  },
+  "header": {
+    "title": "Non-binding design: efficacy bounds at alternate alpha levels"
   }
 }
 })</script><p>Alternate alpha summaries are supported for
@@ -779,7 +885,7 @@ An HR of 0.8 is used only as a planning scenario for the expected timing
 and power, not as evidence of mortality benefit.
 <code><a href="../reference/gsSurvPower.html">gsSurvPower()</a></code> evaluates this fixed event schedule; it does
 not increase the event target to obtain 90% OS power.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sparse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsSurvPower.html">gsSurvPower</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="fl">3</span>, test.type <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">.025</span>, sided <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -809,14 +915,15 @@ count of experimental arm deaths signals harm. <code>upper$bound</code>
 is therefore the harm cutoff, while <code>lower$bound</code> is the
 efficacy cutoff. The probabilities account for stopping at any earlier
 active boundary.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  `Total deaths` <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">n.I</span>,</span>
 <span>  `Experimental deaths for harm (at least)` <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">bound</span>,</span>
 <span>  `Cumulative harm probability under HR=1` <span class="op">=</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="va">sparse_exact</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">3</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">3</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Exact harm boundaries and cumulative null crossing probabilities"</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
@@ -830,9 +937,12 @@ active boundary.</p>
       "columns": ["Cumulative harm probability under HR=1"],
       "decimals": 4
     }
-  ]
+  ],
+  "header": {
+    "title": "Exact harm boundaries and cumulative null crossing probabilities"
+  }
 }
-})</script><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+})</script><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Efficacy Type I error is evaluated ignoring the non-binding harm boundary.</span></span>
 <span><span class="va">efficacy_without_harm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsBinomialExact.html">gsBinomialExact</a></span><span class="op">(</span></span>
@@ -859,7 +969,7 @@ arbitrary censored survival data</strong>. Risk set imbalance,
 differential censoring, or changing hazards can invalidate the simple
 mapping from randomization ratio and HR. Such settings need appropriate
 survival model calculations or simulation.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">harm_hr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1.25</span>, <span class="fl">1.5</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">harm_oc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsBinomialExact.html">gsBinomialExact</a></span><span class="op">(</span></span>
 <span>  k <span class="op">=</span> <span class="va">sparse_exact</span><span class="op">$</span><span class="va">k</span>, theta <span class="op">=</span> <span class="va">harm_hr</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">harm_hr</span><span class="op">)</span>,</span>
@@ -870,7 +980,8 @@ survival model calculations or simulation.</p>
 <span>  `True mortality HR` <span class="op">=</span> <span class="va">harm_hr</span>,</span>
 <span>  `Probability of a harm signal` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">harm_oc</span><span class="op">$</span><span class="va">upper</span><span class="op">$</span><span class="va">prob</span><span class="op">)</span>,</span>
 <span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>, decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">2</span>, decimals <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Probability of a harm signal by mortality hazard ratio"</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
@@ -883,7 +994,10 @@ survival model calculations or simulation.</p>
       "columns": ["Probability of a harm signal"],
       "decimals": 3
     }
-  ]
+  ],
+  "header": {
+    "title": "Probability of a harm signal by mortality hazard ratio"
+  }
 }
 })</script><p>Even at HR = 1.5, the chance of a signal is only 38.8% in this
 example. Failure to cross the boundary therefore cannot establish that a
@@ -906,14 +1020,15 @@ bound to fall below that margin.</p>
 analysis</strong> has 20 deaths in each arm. Under the same binomial
 model, transform a one-sided 95% upper bound for the experimental share
 into an upper HR bound:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_upper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/binom.test.html" class="external-link">binom.test</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">40</span>, alternative <span class="op">=</span> <span class="st">"less"</span>, conf.level <span class="op">=</span> <span class="fl">.95</span><span class="op">)</span><span class="op">$</span><span class="va">conf.int</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
 <span><span class="va">hr_upper</span> <span class="op">&lt;-</span> <span class="va">p_upper</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">p_upper</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  `Experimental deaths` <span class="op">=</span> <span class="fl">20</span>, `Control deaths` <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>  `One-sided 95% upper HR bound` <span class="op">=</span> <span class="va">hr_upper</span>,</span>
 <span>  check.names <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">3</span>, decimals <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">3</span>, decimals <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Mortality precision at a single fixed analysis"</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
@@ -927,7 +1042,10 @@ into an upper HR bound:</p>
       "columns": ["One-sided 95% upper HR bound"],
       "decimals": 2
     }
-  ]
+  ],
+  "header": {
+    "title": "Mortality precision at a single fixed analysis"
+  }
 }
 })</script><p>Despite a balanced observed count, this upper bound exceeds 1.5. This
 is a fixed analysis precision illustration, <strong>not a sequentially
@@ -983,7 +1101,7 @@ a false harm signal under the null. It does not mean increasing futility
 spending (<code>beta</code>), which has a different purpose and is
 calibrated under the design alternative. Inspect the actual thresholds
 for the intended timing and number of analyses. For example:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">harm_nominal</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">k</span>, <span class="va">astar</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gsDesign.html">gsDesign</a></span><span class="op">(</span>k <span class="op">=</span> <span class="va">k</span>, test.type <span class="op">=</span> <span class="fl">8</span>, astar <span class="op">=</span> <span class="va">astar</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -992,14 +1110,15 @@ for the intended timing and number of analyses. For example:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu">harm_nominal</span><span class="op">(</span><span class="fl">3</span>, <span class="fl">.1</span><span class="op">)</span>, <span class="fu">harm_nominal</span><span class="op">(</span><span class="fl">6</span>, <span class="fl">.1</span><span class="op">)</span>, <span class="fu">harm_nominal</span><span class="op">(</span><span class="fl">6</span>, <span class="fl">.2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">4</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_format.html" class="external-link">lt_format</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">4</span>, decimals <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt_header.html" class="external-link">lt_header</a></span><span class="op">(</span><span class="st">"Nominal harm thresholds by number of analyses and total spending"</span><span class="op">)</span></span></code></pre></div>
 <script>((window.LT=window.LT||{}).q=window.LT.q||[]).push({s:document.currentScript,d:
 {
   "data": {
     "Analyses": [3, 3, 3, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
     "Total": [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
     "Look": [1, 2, 3, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6],
-    "Nominal harm p": [0.0452832425263942, 0.0497089062453337, 0.0536116182634278, 0.0251832308957803, 0.0294707209641292, 0.0333940037586887, 0.0367196351725341, 0.0395606111879052, 0.042025386258997, 0.0503664617915606, 0.0632801334814885, 0.0749440842503336, 0.0851802913863292, 0.0942754443054311, 0.10247428915311]
+    "Nominal harm p": [0.045283239525242, 0.0497089069422766, 0.0536116204841159, 0.0251832307879145, 0.029470737637366, 0.0333939901375105, 0.0367195535858799, 0.0395605756941231, 0.0420253475930341, 0.0503664590050371, 0.0632801352823295, 0.0749440992232134, 0.0851802459303747, 0.0942754213974685, 0.102474272140263]
   },
   "ops": [
     {
@@ -1007,7 +1126,10 @@ for the intended timing and number of analyses. For example:</p>
       "columns": ["Nominal harm p"],
       "decimals": 4
     }
-  ]
+  ],
+  "header": {
+    "title": "Nominal harm thresholds by number of analyses and total spending"
+  }
 }
 })</script><p>The larger total in this illustration is a sensitivity analysis, not
 a universal recommendation. The choice requires considering both
@@ -1039,8 +1161,8 @@ three are tested, while allowing harm to be the active lower boundary
 when futility is skipped.</p>
 </div>
 <div class="section level3">
-<h3 id="when-to-use-test-type-7-vs--test-type-8">When to use <code>test.type = 7</code>
-vs. <code>test.type = 8</code><a class="anchor" aria-label="anchor" href="#when-to-use-test-type-7-vs--test-type-8"></a>
+<h3 id="binding-versus-non-binding">When to use <code>test.type = 7</code>
+vs. <code>test.type = 8</code><a class="anchor" aria-label="anchor" href="#binding-versus-non-binding"></a>
 </h3>
 <ul>
 <li>

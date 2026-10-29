@@ -3,7 +3,9 @@
 Convert a summary table object created with
 [`as_table`](https://keaven.github.io/gsDesign/reference/as_table.md) to
 an `lt_tbl` object; currently only implemented for
-[`gsBinomialExact`](https://keaven.github.io/gsDesign/reference/gsBinomialExact.md).
+[`gsBinomialExact`](https://keaven.github.io/gsDesign/reference/gsBinomialExact.md)
+and
+[`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md).
 
 ## Usage
 
@@ -20,6 +22,9 @@ lt(
   en_decimals = 1,
   rr_decimals = 0
 )
+
+# S3 method for class 'gsBoundSummary'
+lt(data, ...)
 ```
 
 ## Arguments
@@ -67,9 +72,10 @@ An `lt_tbl` object.
 
 ## Details
 
-Currently only implemented for
-[`gsBinomialExact`](https://keaven.github.io/gsDesign/reference/gsBinomialExact.md)
-objects. Creates a table to summarize an object. For
+Creates a table to summarize an object. Tables from
+[`gsBoundSummary`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+include an explanatory footnote when harm crossing probabilities are
+displayed. For
 [`gsBinomialExact`](https://keaven.github.io/gsDesign/reference/gsBinomialExact.md),
 this summarized operating characteristics across a range of effect
 sizes.

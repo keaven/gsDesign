@@ -95,14 +95,27 @@ value. `P{Cross if delta=xx}: `For each of the parameter values in `x`,
 the probability of crossing either bound given that treatment effect is
 computed. This value is cumulative for each bound. For example, the
 probability of crossing the efficacy bound at or before the analysis of
-interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive and assume all active stopping
-rules are followed, including futility even for a non-binding design.
-Harm crossing probabilities can therefore be below the harm spending
-targets. Every characteristic for a bound, including its cumulative
-crossing probability, is shown as `NA` at an analysis where that bound
-is inactive. The underlying probability arrays on `x` retain the
-cumulative crossing information.
+interest. All boundary crossing probabilities assume all active stopping
+rules are followed, including futility for a non-binding design. Every
+characteristic for a bound, including its cumulative crossing
+probability, is shown as `NA` at an analysis where that bound is
+inactive. The underlying probability arrays on `x` retain the cumulative
+crossing information.
+
+`P(Cross, no futility): `Optional rows for types 7 and 8, omitted by
+default through `exclude = "No futility"`. These rows contain only Harm
+values: crossing probabilities at the fixed design boundaries with
+futility stopping ignored, retaining earlier harm and efficacy stops.
+Under the null, these describe the harm-calibration probability, which
+may fall below cumulative spending when a cap binds; any shortfall is
+carried to later active harm looks. Under other parameter values, they
+describe a hypothetical monitoring procedure, not a calibration target
+or the actual stopping probability. Do not add these values to ordinary
+`P(Cross)` values. Console,
+[`lt()`](https://rdrr.io/pkg/lt/man/lt.html), RTF, and `xprint()` output
+include an explanatory note when these rows are requested. For example,
+use `exclude = c("B-value", "Spending", "CP", "CP H1", "PP")` to add
+these rows while retaining the other default exclusions.
 
 ## Usage
 
@@ -125,7 +138,7 @@ gsBoundSummary(
   prior = normalGrid(mu = x$delta/2, sigma = 10/sqrt(x$n.fix)),
   POS = FALSE,
   ratio = NULL,
-  exclude = c("B-value", "Spending", "CP", "CP H1", "PP"),
+  exclude = c("B-value", "Spending", "CP", "CP H1", "PP", "No futility"),
   r = 18,
   alpha = NULL,
   ...
@@ -135,6 +148,7 @@ xprint(
   x,
   include.rownames = FALSE,
   hline.after = c(-1, which(x$Value == x[1, ]$Value) - 1, nrow(x)),
+  add.to.row = NULL,
   ...
 )
 
@@ -262,7 +276,9 @@ gsCPz(z, i, x, theta = NULL, ylab = NULL, ...)
 
   A list of test statistics to be excluded from design boundary summary
   produced; see details or examples for a list of all possible output
-  values. A value of `NULL` produces all available summaries. Excluded
+  values. A value of `NULL` produces all available summaries. The
+  default includes `"No futility"`, suppressing the optional
+  harm-calibration rows; omit this entry to request them. Excluded
   conditional and predictive power quantities are not computed.
 
 - r:
@@ -293,6 +309,13 @@ gsCPz(z, i, x, theta = NULL, ylab = NULL, ...)
   table lines after which horizontal separation lines should be set;
   default is to put lines between each analysis as well as at the top
   and bottom of the table.
+
+- add.to.row:
+
+  Optional row additions passed to
+  [`xtable::print.xtable()`](https://rdrr.io/pkg/xtable/man/print.xtable.html).
+  The no-futility explanation, when present, is appended to these
+  additions.
 
 - row.names:
 
@@ -592,7 +615,7 @@ xprint(xtable::xtable(gsBoundSummary(xOR, deltaname = "OR", logdelta = TRUE),
   caption = "Table caption."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Thu Oct 29 11:20:16 2026
+#> % Thu Oct 29 15:02:10 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{llrr}

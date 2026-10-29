@@ -204,7 +204,7 @@ standardized effects.</p>
 <span><span class="co">#&gt; [1] 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $harm</span></span>
-<span><span class="co">#&gt; [1] 1.000015</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 1.000016</span></span></code></pre></div>
 <p>Efficacy requires evidence of benefit; futility stops for an
 insufficiently promising result; harm is further in the unfavorable
 direction. These are three targets on the <strong>same endpoint
@@ -319,31 +319,42 @@ recheck effects and operating characteristics.</p>
 </table>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gsBoundSummary.html">gsBoundSummary</a></span><span class="op">(</span><span class="va">replay</span>, exclude <span class="op">=</span> <span class="st">"B-value"</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Analysis                 Value    Harm Futility Efficacy</span></span>
-<span><span class="co">#&gt;  IA 1: 40%                     Z -1.9419   0.7767   2.2251</span></span>
-<span><span class="co">#&gt;     N: 577           p (1-sided)  0.9739   0.2187   0.0130</span></span>
-<span><span class="co">#&gt;                  ~delta at bound -0.1618   0.0647   0.1853</span></span>
-<span><span class="co">#&gt;                         Spending  0.0261   0.0522   0.0130</span></span>
-<span><span class="co">#&gt;                               CP  0.0000   0.0724   0.9473</span></span>
-<span><span class="co">#&gt;                            CP H1  0.0071   0.6380   0.9654</span></span>
-<span><span class="co">#&gt;                               PP  0.0000   0.1656   0.8585</span></span>
-<span><span class="co">#&gt;              P(Cross) if delta=0  0.0261   0.7552   0.0130</span></span>
-<span><span class="co">#&gt;            P(Cross) if delta=0.2  0.0000   0.0521   0.5698</span></span>
-<span><span class="co">#&gt;  IA 2: 75%                     Z -1.9622   1.7051   2.2688</span></span>
-<span><span class="co">#&gt;    N: 1081           p (1-sided)  0.9751   0.0441   0.0116</span></span>
-<span><span class="co">#&gt;                  ~delta at bound -0.1194   0.1037   0.1380</span></span>
-<span><span class="co">#&gt;                         Spending  0.0157   0.0313   0.0078</span></span>
-<span><span class="co">#&gt;                               CP  0.0000   0.2315   0.7150</span></span>
-<span><span class="co">#&gt;                            CP H1  0.0000   0.5714   0.8762</span></span>
-<span><span class="co">#&gt;                               PP  0.0000   0.2622   0.6877</span></span>
-<span><span class="co">#&gt;              P(Cross) if delta=0  0.0261   0.9310   0.0202</span></span>
-<span><span class="co">#&gt;            P(Cross) if delta=0.2  0.0000   0.0835   0.8480</span></span>
-<span><span class="co">#&gt;      Final                     Z -2.0185   2.3358   2.3358</span></span>
-<span><span class="co">#&gt;    N: 1442           p (1-sided)  0.9782   0.0098   0.0098</span></span>
-<span><span class="co">#&gt;                  ~delta at bound -0.1063   0.1231   0.1231</span></span>
-<span><span class="co">#&gt;                         Spending  0.0083   0.0165   0.0041</span></span>
-<span><span class="co">#&gt;              P(Cross) if delta=0  0.0261   0.9514   0.0225</span></span>
-<span><span class="co">#&gt;            P(Cross) if delta=0.2  0.0000   0.1000   0.9000</span></span></code></pre></div>
+<span><span class="co">#&gt;   Analysis                              Value    Harm Futility Efficacy</span></span>
+<span><span class="co">#&gt;  IA 1: 40%                                  Z -1.9419   0.7767   2.2251</span></span>
+<span><span class="co">#&gt;     N: 577                        p (1-sided)  0.9739   0.2187   0.0130</span></span>
+<span><span class="co">#&gt;                               ~delta at bound -0.1618   0.0647   0.1853</span></span>
+<span><span class="co">#&gt;                                      Spending  0.0261   0.0522   0.0130</span></span>
+<span><span class="co">#&gt;                                            CP  0.0000   0.0724   0.9473</span></span>
+<span><span class="co">#&gt;                                         CP H1  0.0071   0.6380   0.9654</span></span>
+<span><span class="co">#&gt;                                            PP  0.0000   0.1656   0.8585</span></span>
+<span><span class="co">#&gt;                           P(Cross) if delta=0  0.0261   0.7552   0.0130</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0.2  0.0000   0.0521   0.5698</span></span>
+<span><span class="co">#&gt;              P(Cross, no futility) if delta=0  0.0261       NA       NA</span></span>
+<span><span class="co">#&gt;            P(Cross, no futility) if delta=0.2  0.0000       NA       NA</span></span>
+<span><span class="co">#&gt;  IA 2: 75%                                  Z -1.9622   1.7051   2.2688</span></span>
+<span><span class="co">#&gt;    N: 1081                        p (1-sided)  0.9751   0.0441   0.0116</span></span>
+<span><span class="co">#&gt;                               ~delta at bound -0.1194   0.1037   0.1380</span></span>
+<span><span class="co">#&gt;                                      Spending  0.0157   0.0313   0.0078</span></span>
+<span><span class="co">#&gt;                                            CP  0.0000   0.2315   0.7150</span></span>
+<span><span class="co">#&gt;                                         CP H1  0.0000   0.5714   0.8762</span></span>
+<span><span class="co">#&gt;                                            PP  0.0000   0.2622   0.6877</span></span>
+<span><span class="co">#&gt;                           P(Cross) if delta=0  0.0261   0.9310   0.0202</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0.2  0.0000   0.0835   0.8480</span></span>
+<span><span class="co">#&gt;              P(Cross, no futility) if delta=0  0.0417       NA       NA</span></span>
+<span><span class="co">#&gt;            P(Cross, no futility) if delta=0.2  0.0000       NA       NA</span></span>
+<span><span class="co">#&gt;      Final                                  Z -2.0185   2.3358   2.3358</span></span>
+<span><span class="co">#&gt;    N: 1442                        p (1-sided)  0.9782   0.0098   0.0098</span></span>
+<span><span class="co">#&gt;                               ~delta at bound -0.1063   0.1231   0.1231</span></span>
+<span><span class="co">#&gt;                                      Spending  0.0083   0.0165   0.0041</span></span>
+<span><span class="co">#&gt;                           P(Cross) if delta=0  0.0261   0.9514   0.0225</span></span>
+<span><span class="co">#&gt;                         P(Cross) if delta=0.2  0.0000   0.1000   0.9000</span></span>
+<span><span class="co">#&gt;              P(Cross, no futility) if delta=0  0.0500       NA       NA</span></span>
+<span><span class="co">#&gt;            P(Cross, no futility) if delta=0.2  0.0000       NA       NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; No-futility rows give harm crossing probabilities ignoring futility</span></span>
+<span><span class="co">#&gt; stopping, retaining earlier harm and efficacy stops. They are not actual</span></span>
+<span><span class="co">#&gt; stopping probabilities and must not be added to other boundary</span></span>
+<span><span class="co">#&gt; probabilities.</span></span></code></pre></div>
 <p>CP, CP H1 and PP in the summary give additional perspectives on these
 boundaries; none was directly targeted. The default PP prior is the
 broad normal prior used by gsBoundSummary(), centered halfway between
@@ -550,7 +561,7 @@ target_effect as a ratio.</p>
 <span><span class="co">#&gt; [1] TRUE</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $condition_number</span></span>
-<span><span class="co">#&gt; [1] 2.234075</span></span>
+<span><span class="co">#&gt; [1] 2.234054</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $harm_futility_coincidence</span></span>
 <span><span class="co">#&gt; integer(0)</span></span></code></pre></div>

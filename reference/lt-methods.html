@@ -7,9 +7,9 @@
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Convert a summary table object to an lt table — lt-methods"><meta name="description" content="Convert a summary table object created with as_table
 to an lt_tbl object; currently only implemented for
-gsBinomialExact."><meta property="og:description" content="Convert a summary table object created with as_table
+gsBinomialExact and gsBoundSummary."><meta property="og:description" content="Convert a summary table object created with as_table
 to an lt_tbl object; currently only implemented for
-gsBinomialExact."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
+gsBinomialExact and gsBoundSummary."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -83,7 +83,7 @@ gsBinomialExact."><meta property="og:image" content="https://keaven.github.io/gs
     <div class="ref-description section level2">
     <p>Convert a summary table object created with <code><a href="as_table.html">as_table</a></code>
 to an <code>lt_tbl</code> object; currently only implemented for
-<code><a href="gsBinomialExact.html">gsBinomialExact</a></code>.</p>
+<code><a href="gsBinomialExact.html">gsBinomialExact</a></code> and <code><a href="gsBoundSummary.html">gsBoundSummary</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -99,7 +99,10 @@ to an <code>lt_tbl</code> object; currently only implemented for
 <span>  prob_decimals <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  en_decimals <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  rr_decimals <span class="op">=</span> <span class="fl">0</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'gsBoundSummary'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -149,8 +152,9 @@ observations when bound is crossed or when trial ends without crossing.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Currently only implemented for <code><a href="gsBinomialExact.html">gsBinomialExact</a></code> objects.
-Creates a table to summarize an object.
+    <p>Creates a table to summarize an object. Tables from
+<code><a href="gsBoundSummary.html">gsBoundSummary</a></code> include an explanatory footnote when harm
+crossing probabilities are displayed.
 For <code><a href="gsBinomialExact.html">gsBinomialExact</a></code>, this summarized operating characteristics
 across a range of effect sizes.</p>
     </div>

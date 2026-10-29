@@ -219,9 +219,26 @@
   consistent when dropout differs between arms
   ([@keaven](https://github.com/keaven),
   [\#345](https://github.com/keaven/gsDesign/issues/345)).
+- Types 7 and 8 now use one joint cumulative-spending calibration
+  routine. Harm spending lost to a futility cap is carried to later
+  active harm looks, and changing only final harm or futility monitoring
+  does not change interim bounds. Capped designs can consequently differ
+  from earlier calculations ([@keaven](https://github.com/keaven),
+  [\#366](https://github.com/keaven/gsDesign/issues/366),
+  [\#367](https://github.com/keaven/gsDesign/issues/367)).
 
 #### Summaries, printing, and plots
 
+- [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+  retains actual stopping probabilities in all ordinary `P(Cross)` rows.
+  Optional `P(Cross, no futility)` Harm rows, requested by omitting
+  `"No futility"` from `exclude`, show the calibration procedure
+  separately. Console, [`lt()`](https://rdrr.io/pkg/lt/man/lt.html),
+  RTF, and
+  [`xprint()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+  explain this distinction ([@keaven](https://github.com/keaven),
+  [\#366](https://github.com/keaven/gsDesign/issues/366),
+  [\#367](https://github.com/keaven/gsDesign/issues/367)).
 - Fixed
   [`gsBoundCP()`](https://keaven.github.io/gsDesign/reference/gsBoundCP.md)
   to return `NA` at absent harm bounds, including bounds with zero
@@ -336,6 +353,13 @@
 
 #### Harm monitoring
 
+- Streamlined the harm monitoring vignette with titled tables, decimal
+  probabilities, and a direct comparison of actual harm stopping,
+  no-futility harm crossing, and null spending. Removed redundant output
+  and marked the worked binding design as optional
+  ([@keaven](https://github.com/keaven),
+  [\#366](https://github.com/keaven/gsDesign/issues/366),
+  [\#367](https://github.com/keaven/gsDesign/issues/367)).
 - Explained harm calibration versus actual stopping probabilities in the
   help and harm/selective monitoring vignettes, with a worked
   skipped-look example. Documented the 0.1/Pocock rationale, nominal

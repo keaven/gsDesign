@@ -430,8 +430,9 @@ print(x, digits = 3, show_gsDesign = FALSE, show_strata = TRUE, ...)
   `FALSE` indicates none. Otherwise, a logical vector of length `k`.
   Only used for `test.type` 7 or 8; at least one analysis must be `TRUE`
   for those types. Where `testHarm` is `FALSE`, the harm bound is set to
-  `-Inf` and the bound is displayed as `NA` in output. Cumulative harm
-  crossing probability from earlier analyses is still displayed.
+  `-Inf` and the bound is displayed as `NA` in output, including
+  cumulative crossing probabilities at that inactive look. Earlier
+  crossings remain in the design probability arrays.
 
 - show_gsDesign:
 
@@ -955,7 +956,7 @@ print(xtable::xtable(x_gs,
   caption = "Caption example for xtable output."
 ))
 #> % latex table generated in R 4.6.1 by xtable 1.8-8 package
-#> % Thu Oct 29 11:20:29 2026
+#> % Thu Oct 29 15:02:23 2026
 #> \begin{table}[ht]
 #> \centering
 #> \begin{tabular}{rllll}

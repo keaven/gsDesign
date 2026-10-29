@@ -85,14 +85,26 @@ value. P{Cross if delta=xx}: For each of the parameter values in
 x, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
-interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive and assume all active stopping rules
-are followed, including futility even for a non-binding design. Harm
-crossing probabilities can therefore be below the harm spending targets.
+interest. All boundary crossing probabilities assume all active
+stopping rules are followed, including futility for a non-binding design.
 Every characteristic for a bound,
 including its cumulative crossing probability, is shown as NA at an
 analysis where that bound is inactive. The underlying probability arrays on
-x retain the cumulative crossing information."><meta property="og:description" content="A tabular summary of a group sequential design's bounds and their properties
+x retain the cumulative crossing information.
+P(Cross, no futility): Optional rows for types 7 and 8, omitted
+by default through exclude = &quot;No futility&quot;. These rows contain
+only Harm values: crossing probabilities at the fixed design boundaries
+with futility stopping ignored, retaining earlier harm and efficacy stops.
+Under the null, these describe the harm-calibration probability, which may
+fall below cumulative spending when a cap binds; any shortfall is carried
+to later active harm looks. Under other parameter values, they describe
+a hypothetical monitoring procedure, not a calibration target or the
+actual stopping probability. Do not add these values to ordinary
+P(Cross) values. Console, lt(), RTF, and xprint()
+output include an explanatory note when these rows are requested.
+For example, use
+exclude = c(&quot;B-value&quot;, &quot;Spending&quot;, &quot;CP&quot;, &quot;CP H1&quot;, &quot;PP&quot;)
+to add these rows while retaining the other default exclusions."><meta property="og:description" content="A tabular summary of a group sequential design's bounds and their properties
 are often useful. The 'vintage' print.gsDesign() function provides a
 complete but minimally formatted summary of a group sequential design
 derived by gsDesign(). A brief description of the overall design can
@@ -172,14 +184,26 @@ value. P{Cross if delta=xx}: For each of the parameter values in
 x, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
-interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive and assume all active stopping rules
-are followed, including futility even for a non-binding design. Harm
-crossing probabilities can therefore be below the harm spending targets.
+interest. All boundary crossing probabilities assume all active
+stopping rules are followed, including futility for a non-binding design.
 Every characteristic for a bound,
 including its cumulative crossing probability, is shown as NA at an
 analysis where that bound is inactive. The underlying probability arrays on
-x retain the cumulative crossing information."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
+x retain the cumulative crossing information.
+P(Cross, no futility): Optional rows for types 7 and 8, omitted
+by default through exclude = &quot;No futility&quot;. These rows contain
+only Harm values: crossing probabilities at the fixed design boundaries
+with futility stopping ignored, retaining earlier harm and efficacy stops.
+Under the null, these describe the harm-calibration probability, which may
+fall below cumulative spending when a cap binds; any shortfall is carried
+to later active harm looks. Under other parameter values, they describe
+a hypothetical monitoring procedure, not a calibration target or the
+actual stopping probability. Do not add these values to ordinary
+P(Cross) values. Console, lt(), RTF, and xprint()
+output include an explanatory note when these rows are requested.
+For example, use
+exclude = c(&quot;B-value&quot;, &quot;Spending&quot;, &quot;CP&quot;, &quot;CP H1&quot;, &quot;PP&quot;)
+to add these rows while retaining the other default exclusions."><meta property="og:image" content="https://keaven.github.io/gsDesign/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -331,14 +355,26 @@ value. <code>P{Cross if delta=xx}: </code>For each of the parameter values in
 <code>x</code>, the probability of crossing either bound given that treatment
 effect is computed. This value is cumulative for each bound. For example,
 the probability of crossing the efficacy bound at or before the analysis of
-interest. For test types 7 and 8, harm, futility, and efficacy crossing
-probabilities are mutually exclusive and assume all active stopping rules
-are followed, including futility even for a non-binding design. Harm
-crossing probabilities can therefore be below the harm spending targets.
+interest. All boundary crossing probabilities assume all active
+stopping rules are followed, including futility for a non-binding design.
 Every characteristic for a bound,
 including its cumulative crossing probability, is shown as <code>NA</code> at an
 analysis where that bound is inactive. The underlying probability arrays on
 <code>x</code> retain the cumulative crossing information.</p>
+<p><code>P(Cross, no futility): </code>Optional rows for types 7 and 8, omitted
+by default through <code>exclude = "No futility"</code>. These rows contain
+only Harm values: crossing probabilities at the fixed design boundaries
+with futility stopping ignored, retaining earlier harm and efficacy stops.
+Under the null, these describe the harm-calibration probability, which may
+fall below cumulative spending when a cap binds; any shortfall is carried
+to later active harm looks. Under other parameter values, they describe
+a hypothetical monitoring procedure, not a calibration target or the
+actual stopping probability. Do not add these values to ordinary
+<code>P(Cross)</code> values. Console, <code><a href="https://rdrr.io/pkg/lt/man/lt.html" class="external-link">lt()</a></code>, RTF, and <code>xprint()</code>
+output include an explanatory note when these rows are requested.
+For example, use
+<code>exclude = c("B-value", "Spending", "CP", "CP H1", "PP")</code>
+to add these rows while retaining the other default exclusions.</p>
     </div>
 
     <div class="section level2">
@@ -361,7 +397,7 @@ analysis where that bound is inactive. The underlying probability arrays on
 <span>  prior <span class="op">=</span> <span class="fu"><a href="normalGrid.html">normalGrid</a></span><span class="op">(</span>mu <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">delta</span><span class="op">/</span><span class="fl">2</span>, sigma <span class="op">=</span> <span class="fl">10</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">n.fix</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  POS <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ratio <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B-value"</span>, <span class="st">"Spending"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, <span class="st">"PP"</span><span class="op">)</span>,</span>
+<span>  exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B-value"</span>, <span class="st">"Spending"</span>, <span class="st">"CP"</span>, <span class="st">"CP H1"</span>, <span class="st">"PP"</span>, <span class="st">"No futility"</span><span class="op">)</span>,</span>
 <span>  r <span class="op">=</span> <span class="fl">18</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -371,6 +407,7 @@ analysis where that bound is inactive. The underlying probability arrays on
 <span>  <span class="va">x</span>,</span>
 <span>  include.rownames <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  hline.after <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">Value</span> <span class="op">==</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span><span class="op">$</span><span class="va">Value</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  add.to.row <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -495,6 +532,8 @@ bound.</p></dd>
 <dd><p>A list of test statistics to be excluded from design boundary
 summary produced; see details or examples for a list of all possible output
 values. A value of <code>NULL</code> produces all available summaries.
+The default includes <code>"No futility"</code>, suppressing the optional
+harm-calibration rows; omit this entry to request them.
 Excluded conditional and predictive power quantities are not computed.</p></dd>
 
 
@@ -525,6 +564,11 @@ output.</p></dd>
 <dd><p>table lines after which horizontal separation lines
 should be set; default is to put lines between each analysis as well as at
 the top and bottom of the table.</p></dd>
+
+
+<dt id="arg-add-to-row">add.to.row<a class="anchor" aria-label="anchor" href="#arg-add-to-row"></a></dt>
+<dd><p>Optional row additions passed to <code><a href="https://rdrr.io/pkg/xtable/man/print.xtable.html" class="external-link">xtable::print.xtable()</a></code>.
+The no-futility explanation, when present, is appended to these additions.</p></dd>
 
 
 <dt id="arg-row-names">row.names<a class="anchor" aria-label="anchor" href="#arg-row-names"></a></dt>
@@ -817,7 +861,7 @@ Methods with Applications to Clinical Trials</em>. Boca Raton: Chapman and Hall.
 <span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"Table caption."</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> % latex table generated in R 4.6.1 by xtable 1.8-8 package</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> % Thu Oct 29 11:20:16 2026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> % Thu Oct 29 15:02:10 2026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{table}[ht]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \centering</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> \begin{tabular}{llrr}</span>

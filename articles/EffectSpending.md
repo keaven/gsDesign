@@ -81,7 +81,7 @@ fit$effectSpending$free_parameters
 #> [1] 1
 #> 
 #> $harm
-#> [1] 1.000015
+#> [1] 1.000016
 ```
 
 Efficacy requires evidence of benefit; futility stops for an
@@ -156,31 +156,42 @@ knitr::kable(bounds, digits = 4)
 ``` r
 
 gsBoundSummary(replay, exclude = "B-value", digits = 4)
-#>   Analysis                 Value    Harm Futility Efficacy
-#>  IA 1: 40%                     Z -1.9419   0.7767   2.2251
-#>     N: 577           p (1-sided)  0.9739   0.2187   0.0130
-#>                  ~delta at bound -0.1618   0.0647   0.1853
-#>                         Spending  0.0261   0.0522   0.0130
-#>                               CP  0.0000   0.0724   0.9473
-#>                            CP H1  0.0071   0.6380   0.9654
-#>                               PP  0.0000   0.1656   0.8585
-#>              P(Cross) if delta=0  0.0261   0.7552   0.0130
-#>            P(Cross) if delta=0.2  0.0000   0.0521   0.5698
-#>  IA 2: 75%                     Z -1.9622   1.7051   2.2688
-#>    N: 1081           p (1-sided)  0.9751   0.0441   0.0116
-#>                  ~delta at bound -0.1194   0.1037   0.1380
-#>                         Spending  0.0157   0.0313   0.0078
-#>                               CP  0.0000   0.2315   0.7150
-#>                            CP H1  0.0000   0.5714   0.8762
-#>                               PP  0.0000   0.2622   0.6877
-#>              P(Cross) if delta=0  0.0261   0.9310   0.0202
-#>            P(Cross) if delta=0.2  0.0000   0.0835   0.8480
-#>      Final                     Z -2.0185   2.3358   2.3358
-#>    N: 1442           p (1-sided)  0.9782   0.0098   0.0098
-#>                  ~delta at bound -0.1063   0.1231   0.1231
-#>                         Spending  0.0083   0.0165   0.0041
-#>              P(Cross) if delta=0  0.0261   0.9514   0.0225
-#>            P(Cross) if delta=0.2  0.0000   0.1000   0.9000
+#>   Analysis                              Value    Harm Futility Efficacy
+#>  IA 1: 40%                                  Z -1.9419   0.7767   2.2251
+#>     N: 577                        p (1-sided)  0.9739   0.2187   0.0130
+#>                               ~delta at bound -0.1618   0.0647   0.1853
+#>                                      Spending  0.0261   0.0522   0.0130
+#>                                            CP  0.0000   0.0724   0.9473
+#>                                         CP H1  0.0071   0.6380   0.9654
+#>                                            PP  0.0000   0.1656   0.8585
+#>                           P(Cross) if delta=0  0.0261   0.7552   0.0130
+#>                         P(Cross) if delta=0.2  0.0000   0.0521   0.5698
+#>              P(Cross, no futility) if delta=0  0.0261       NA       NA
+#>            P(Cross, no futility) if delta=0.2  0.0000       NA       NA
+#>  IA 2: 75%                                  Z -1.9622   1.7051   2.2688
+#>    N: 1081                        p (1-sided)  0.9751   0.0441   0.0116
+#>                               ~delta at bound -0.1194   0.1037   0.1380
+#>                                      Spending  0.0157   0.0313   0.0078
+#>                                            CP  0.0000   0.2315   0.7150
+#>                                         CP H1  0.0000   0.5714   0.8762
+#>                                            PP  0.0000   0.2622   0.6877
+#>                           P(Cross) if delta=0  0.0261   0.9310   0.0202
+#>                         P(Cross) if delta=0.2  0.0000   0.0835   0.8480
+#>              P(Cross, no futility) if delta=0  0.0417       NA       NA
+#>            P(Cross, no futility) if delta=0.2  0.0000       NA       NA
+#>      Final                                  Z -2.0185   2.3358   2.3358
+#>    N: 1442                        p (1-sided)  0.9782   0.0098   0.0098
+#>                               ~delta at bound -0.1063   0.1231   0.1231
+#>                                      Spending  0.0083   0.0165   0.0041
+#>                           P(Cross) if delta=0  0.0261   0.9514   0.0225
+#>                         P(Cross) if delta=0.2  0.0000   0.1000   0.9000
+#>              P(Cross, no futility) if delta=0  0.0500       NA       NA
+#>            P(Cross, no futility) if delta=0.2  0.0000       NA       NA
+#> 
+#> No-futility rows give harm crossing probabilities ignoring futility
+#> stopping, retaining earlier harm and efficacy stops. They are not actual
+#> stopping probabilities and must not be added to other boundary
+#> probabilities.
 ```
 
 CP, CP H1 and PP in the summary give additional perspectives on these
@@ -347,7 +358,7 @@ fit$effectSpending[c("local_rank", "locally_identified", "condition_number",
 #> [1] TRUE
 #> 
 #> $condition_number
-#> [1] 2.234075
+#> [1] 2.234054
 #> 
 #> $harm_futility_coincidence
 #> integer(0)

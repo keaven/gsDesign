@@ -135,6 +135,7 @@ and related boundary transformations.
   [`lt`](https://keaven.github.io/gsDesign/reference/reexports.md) :
   Objects exported from other packages
 - [`lt(`*`<gsBinomialExactTable>`*`)`](https://keaven.github.io/gsDesign/reference/lt-methods.md)
+  [`lt(`*`<gsBoundSummary>`*`)`](https://keaven.github.io/gsDesign/reference/lt-methods.md)
   : Convert a summary table object to an lt table
 - [`lt(`*`<gsVETable>`*`)`](https://keaven.github.io/gsDesign/reference/lt-gsVETable.md)
   : Format a vaccine or prevention efficacy summary table

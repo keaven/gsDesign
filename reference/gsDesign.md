@@ -325,8 +325,9 @@ xtable(
   `FALSE` indicates none. Otherwise, a logical vector of length `k`.
   Only used for `test.type` 7 or 8; at least one analysis must be `TRUE`
   for those types. Where `testHarm` is `FALSE`, the harm bound is set to
-  `-Inf` and the bound is displayed as `NA` in output. Cumulative harm
-  crossing probability from earlier analyses is still displayed.
+  `-Inf` and the bound is displayed as `NA` in output, including
+  cumulative crossing probabilities at that inactive look. Earlier
+  crossings remain in the design probability arrays.
 
 - x:
 
@@ -596,12 +597,28 @@ futility stopping were ignored. Earlier harm and efficacy stops are
 retained. This convention is separate from binding versus non-binding
 efficacy calibration: type 7 protects alpha assuming both lower stopping
 rules are followed, whereas type 8 protects alpha even if they are
-ignored. Reported `harm$prob`, power, expected information, and
+ignored. Reported `harm$prob`, power, expected information, and ordinary
 [`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
 crossing probabilities assume all active stopping rules are followed.
 Thus actual harm probabilities may be smaller than `cumsum(harm$spend)`.
 Where both lower bounds are active, harm is capped at futility to retain
-their ordering; this can also prevent full spending.
+their ordering. All type 7 and 8 designs use the joint
+cumulative-spending calibration: a shortfall caused by capping is
+carried forward to later active harm analyses. Capping may still prevent
+full spending if the remaining active analyses cannot attain the target.
+Optional `P(Cross, no futility)` rows in
+[`gsBoundSummary()`](https://keaven.github.io/gsDesign/reference/gsBoundSummary.md)
+describe the calibration procedure separately; see that function for
+their interpretation and how to request them.
+
+Types 5 and 7 use the same null-spending construction for the lower and
+harm bounds, respectively; the corresponding non-binding pair is 6 and
+8. Match `astar`, `sfl`/`sflpar` to `sfharm`/`sfharmparam`, spending
+times, active lower/harm looks, and information fractions. The bounds
+agree when efficacy bounds also match and harm is not capped at
+futility. Additional binding futility in type 7 can change the efficacy
+bounds. Types 5 and 6 default to `astar = 1 - alpha`, unlike the 0.1
+default for types 7 and 8.
 
 The defaults `astar = 0.1` (selected by input 0) and
 `sfharm = sfLDPocock` provide relatively early spending and aim to flag
