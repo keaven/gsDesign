@@ -217,7 +217,8 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
       maxn.IPlan = planned_final_events,
       delta = x$delta,
       delta1 = x$delta1,
-      delta0 = x$delta0
+      delta0 = x$delta0,
+      r = x$r
     )
     if (x$test.type == 8) {
       design_args$sfharm <- x$harm$sf

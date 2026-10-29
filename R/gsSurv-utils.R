@@ -89,6 +89,9 @@ gsSurvFixedDesignObject <- function(
     sided = 1,
     tol = .Machine$double.eps^0.25,
     r = 18) {
+  checkScalar(r, "integer", c(1, 80))
+  r <- as.integer(r)
+
   z_alpha <- stats::qnorm(1 - alpha)
 
   if (is.character(sfu)) {

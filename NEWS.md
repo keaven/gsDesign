@@ -114,6 +114,14 @@
 
 ### Design calculations
 
+- `gsSurv()` and `gsSurvCalendar()` now forward the numerical integration
+  grid parameter `r` to their internal `gsDesign()` calls, including the
+  follow-up duration search in `gsSurv()` when both `T` and `minfup` are
+  `NULL`. Previously, multi-look survival designs silently used the default
+  `r = 18` and out of range values were not rejected. `toInteger()` and
+  `toBinomialExact()` now retain the input design's `r` when rebuilding the
+  design, and single-look `gsSurv()` designs validate `r` as `gsDesign()`
+  does (@nanxstats, #370).
 - Guarded the Newton boundary search against `0/0` updates and separated its
   iteration limit and finite iterate clamp from the absent bound values
   (@nanxstats, #242, #321).

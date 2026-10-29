@@ -234,7 +234,7 @@ toInteger <- function(x, ratio = x$ratio, roundUpFinal = TRUE) {
       alpha = x$alpha, beta = x$beta, astar = x$astar,
       delta = x$delta, delta1 = x$delta1, delta0 = x$delta0, endpoint = x$endpoint,
       sfu = x$upper$sf, sfupar = x$upper$param, sfl = lower_sf, sflpar = lower_par,
-      sfharm = sfharm_arg, sfharmparam = sfharmparam_arg,
+      sfharm = sfharm_arg, sfharmparam = sfharmparam_arg, r = x$r,
       lsTime = x$lsTime, usTime = x$usTime,
       testUpper = test_upper_arg, testLower = test_lower_arg, testHarm = test_harm_arg
     )
