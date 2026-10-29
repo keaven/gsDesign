@@ -121,7 +121,7 @@
   `r = 18` and out of range values were not rejected. `toInteger()` and
   `toBinomialExact()` now retain the input design's `r` when rebuilding the
   design, and single-look `gsSurv()` designs validate `r` as `gsDesign()`
-  does (@nanxstats, #370).
+  does (@nanxstats, #369, #370).
 - Guarded the Newton boundary search against `0/0` updates and separated its
   iteration limit and finite iterate clamp from the absent bound values
   (@nanxstats, #242, #321).
