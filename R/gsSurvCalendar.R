@@ -145,7 +145,7 @@ gsSurvCalendar <- function(
     k = k, test.type = test.type, alpha = alpha / sided,
     beta = beta, astar = astar, n.fix = x$d, timing = timing,
     sfu = sfu, sfupar = sfupar, sfl = sfl, sflpar = sflpar,
-    sfharm = sfharm, sfharmparam = sfharmparam, tol = tol,
+    sfharm = sfharm, sfharmparam = sfharmparam, tol = tol, r = r,
     delta1 = log(hr), delta0 = log(hr0),
     usTime = usTime, lsTime = lsTime,
     testUpper = testUpper, testLower = testLower, testHarm = testHarm
