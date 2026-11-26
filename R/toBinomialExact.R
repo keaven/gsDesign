@@ -60,7 +60,11 @@
 #' \code{n.I - b} must be non-decreasing and >= 0
 #'
 #' With `observedEvents`, spending times are based on
-#' \code{observedEvents / x$maxn.IPlan}. If \code{maxSpend = TRUE}, the final
+#' \code{observedEvents / x$maxn.IPlan}. Survival designs typically store
+#' \code{maxn.IPlan = 0}, meaning unspecified; the planned final event count
+#' \code{x$n.I[k]}, after integer conversion with \code{toInteger()} when
+#' needed, is then used for this denominator, for the default spending times,
+#' and for the observed event count check. If \code{maxSpend = TRUE}, the final
 #' spending time is set to 1 so all remaining spending is used at the last look.
 #' If \code{x$testLower} is present (for example from \code{gsSurv()} with
 #' selective lower bound looks), lower bound spending is flattened at analyses
@@ -165,7 +169,16 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
   }
   # Round interim sample size (or events for gsSurv object)
   xx <- if (max(round(x$n.I) != x$n.I)) toInteger(x) else x
-  planned_final_events <- xx$n.I[x$k]
+  # maxn.IPlan = 0 means unspecified (e.g., gsSurvPower() with integer
+  # targetEvents); the planned final event count is then n.I[k].
+  planned_final_events <- if (
+    is.numeric(xx$maxn.IPlan) && length(xx$maxn.IPlan) == 1 &&
+      is.finite(xx$maxn.IPlan) && xx$maxn.IPlan > 0
+  ) {
+    xx$maxn.IPlan
+  } else {
+    xx$n.I[x$k]
+  }
   if(is.null(observedEvents)){
     counts <- xx$n.I
     k <- xx$k
@@ -174,7 +187,7 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
     if (min(observedEvents - dplyr::lag(observedEvents, default = 0)) < 1) 
       stop("toBinomialExact: observedEvents must be a vector of increasing positive integers")
     counts <- observedEvents
-    if (sum(observedEvents >= xx$maxn.IPlan) > 1) stop("toBinomialExact: at most 1 value in observedEvents can be >= maximum planned (x$maxn.IPlan)")
+    if (sum(observedEvents >= planned_final_events) > 1) stop("toBinomialExact: at most 1 value in observedEvents can be >= maximum planned (x$maxn.IPlan)")
     k <- length(observedEvents)
     if (k < 2 && x$k != 1) stop("toBinomialExact: must have at least 2 values in observedEvents for a sequential design")
   }
@@ -244,7 +257,7 @@ toBinomialExact <- function(x, observedEvents = NULL, alpha = NULL, usTime = NUL
   a <- pmin(a, counts - 1)
 
   atem <- a
-  default_timing <- pmin(counts / xx$maxn.IPlan, 1)
+  default_timing <- pmin(counts / planned_final_events, 1)
   timing <- resolveSpendingTime(
     spendingTime = usTime,
     defaultTime = default_timing,

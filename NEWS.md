@@ -129,6 +129,11 @@
   and fixed `gsDensity()` for one-sided designs (@nanxstats, #242, #321).
 - Exact binomial conversion preserves skipped futility looks without invalid
   provisional boundaries during beta spending calibration (@keaven, #333).
+- `toBinomialExact()` uses the final planned event count `n.I[k]` when
+  `maxn.IPlan` is unset (`0`), as for `gsSurvPower()` designs with integer
+  `targetEvents`. Previously, default spending times and the `observedEvents`
+  check used `0` as the planned final count, so conversion failed
+  (@keaven, #372).
 - Survival interim event calculations now use the experimental arm dropout
   rate for experimental events, keeping calendar calibration consistent when
   dropout differs between arms (@keaven, #345).
