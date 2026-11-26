@@ -96,7 +96,11 @@ Type 6 lower bound) must be positive, non-decreasing, and strictly greater than 
 \code{n.I - b} must be non-decreasing and >= 0
 
 With `observedEvents`, spending times are based on
-\code{observedEvents / x$maxn.IPlan}. If \code{maxSpend = TRUE}, the final
+\code{observedEvents / x$maxn.IPlan}. Survival designs typically store
+\code{maxn.IPlan = 0}, meaning unspecified; the planned final event count
+\code{x$n.I[k]}, after integer conversion with \code{toInteger()} when
+needed, is then used for this denominator, for the default spending times,
+and for the observed event count check. If \code{maxSpend = TRUE}, the final
 spending time is set to 1 so all remaining spending is used at the last look.
 If \code{x$testLower} is present (for example from \code{gsSurv()} with
 selective lower bound looks), lower bound spending is flattened at analyses

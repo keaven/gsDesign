@@ -416,3 +416,40 @@ test_that("toBinomialExact honors selective futility looks from gsSurv", {
   expect_gte(result_sel$upper$bound[2], result_all$upper$bound[2])
   expect_gte(result_sel$upper$bound[3], result_all$upper$bound[3])
 })
+
+test_that("integer event count designs use n.I[k] when maxn.IPlan is unset (#372)", {
+  # gsSurvPower() with integer targetEvents skips toInteger() and stores
+  # maxn.IPlan = 0, so the planned final event count must come from n.I[k].
+  design <- gsSurvPower(
+    k = 3, test.type = 6, alpha = 0.025, sided = 1, astar = 0.1,
+    sfl = sfLDPocock, targetEvents = c(6, 23, 40), lambdaC = 0.001,
+    hr = 0.8, hr0 = 1, gamma = 100, R = 16, ratio = 1, eta = 0
+  )
+  planned_time <- design$n.I / 40
+
+  result_default <- toBinomialExact(design)
+  result_explicit <- toBinomialExact(
+    design,
+    usTime = planned_time,
+    lsTime = planned_time
+  )
+  expect_equal(result_default$usTime, planned_time)
+  expect_equal(result_default$lsTime, planned_time)
+  expect_equal(result_default$lower$bound, result_explicit$lower$bound)
+  expect_equal(result_default$upper$bound, result_explicit$upper$bound)
+
+  observed <- c(8, 21, 38)
+  design_planned <- design
+  design_planned$maxn.IPlan <- 40
+  result_observed <- toBinomialExact(design, observedEvents = observed)
+  result_planned <- toBinomialExact(design_planned, observedEvents = observed)
+  expect_equal(result_observed$n.I, observed)
+  expect_equal(result_observed$usTime, observed / 40)
+  expect_equal(result_observed$lower$bound, result_planned$lower$bound)
+  expect_equal(result_observed$upper$bound, result_planned$upper$bound)
+
+  expect_error(
+    toBinomialExact(design, observedEvents = c(6, 40, 41)),
+    "at most 1 value in observedEvents"
+  )
+})
