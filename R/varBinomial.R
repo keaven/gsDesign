@@ -275,14 +275,14 @@ varBinomial <- function(x, n, delta0 = 0, ratio = 1, scale = "Difference") { # c
     p1 <- p + ratio * delta0 / (ratio + 1)
     p2 <- p1 - delta0
     a <- 1 + ratio
-    b <- -(a + p1 + ratio * p2 - delta0 * (ratio + 2))
-    c <- delta0^2 - delta0 * (2 * p1 + a) + p1 + ratio * p2
-    d <- p1 * delta0 * (1 - delta0)
+    b <- -(a + p1 + ratio * p2 + delta0 * (ratio + 2))
+    c <- delta0^2 + delta0 * (2 * p1 + a) + p1 + ratio * p2
+    d <- -p1 * delta0 * (1 + delta0)
     v <- (b / (3 * a))^3 - b * c / 6 / a^2 + d / 2 / a
-    u <- sign(v) * sqrt((b / 3 / a)^2 - c / 3 / a)
-    w <- (pi + acos(v / u^3)) / 3
+    u <- (sign(v) + (v == 0)) * sqrt((b / 3 / a)^2 - c / 3 / a)
+    w <- (pi + acos(pmin(pmax(v / u^3, -1), 1))) / 3
     p10 <- 2 * u * cos(w) - b / 3 / a
-    p20 <- p10 + delta0
+    p20 <- p10 - delta0
     phi <- (p10 * (1 - p10) + p20 * (1 - p20) / ratio) * (ratio + 1)
     phi[delta0 == 0] <- p * (1 - p) / ratio * (1 + ratio)^2
   }
