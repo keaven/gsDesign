@@ -155,3 +155,24 @@ testthat::test_that(
     expect_equal(res, expected_res)
   }
 )
+
+testthat::test_that(
+  desc = "Test : output Validation scale = 'Difference' with non-zero delta0",
+  code = {
+    for (ratio in c(1, 2)) {
+      for (delta0 in c(0.1, -0.1)) {
+        x <- 60
+        n <- 300
+        p <- x / n
+        p1 <- p + ratio * delta0 / (ratio + 1)
+        p2 <- p1 - delta0
+        n1 <- n / (1 + ratio)
+        n2 <- n - n1
+        expected <- p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2
+
+        res <- varBinomial(x = x, n = n, delta0 = delta0, ratio = ratio, scale = "Difference")
+        expect_equal(res, expected, tolerance = 1e-10)
+      }
+    }
+  }
+)
